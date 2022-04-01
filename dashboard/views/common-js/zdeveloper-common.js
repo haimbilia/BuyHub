@@ -10,12 +10,12 @@ $(window).on("load", function () {
     ) {
         var scrollPosition = $(".menu__item.is-active").position().top - ($(window).height() / 2 - 100);
         $('#scrollElement-js').animate({ scrollTop: scrollPosition }, 1000);
-    }   
-    
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
-});
+    }
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
 });
 
 $(window).scroll(function () {
@@ -124,20 +124,13 @@ checkEmpty = function (element) {
 
 copyText = function (obj, applyToolTipInfo = true) {
     var title = $(obj).data("title");
-    /*
-      document.addEventListener('copy', function(e) {
-          e.clipboardData.setData('text/plain', copyText);
-          e.preventDefault();
-      }, true);
-      */
-
     if (!navigator.clipboard) {
         console.warn('clipboard API only works on localhost and https');
         // Clipboard API  only works on localhost anf https as per doc
         return;
     }
     try {
-        navigator.clipboard.writeText(copyText);
+        navigator.clipboard.writeText(title);
         if (applyToolTipInfo) {
             tooltipCopyHelper(obj, title);
         }
@@ -145,6 +138,23 @@ copyText = function (obj, applyToolTipInfo = true) {
         console.error("Failed to copy!", err);
     }
 };
+
+tooltipCopyHelper = function (obj, title) {
+    $(obj)
+        .tooltip("hide")
+        .attr("data-original-title", langLbl.copied + ": " + title)
+        .tooltip("update")
+        .tooltip("show");
+
+    $(obj).mouseout(function () {
+        $(obj)
+            .tooltip("hide")
+            .attr("data-original-title", langLbl.clickToCopy)
+            .tooltip("update");
+        $(obj).unbind("mouseout");
+    });
+};
+
 var otpIntervalObj;
 startOtpInterval = function (parent = "", callback = "", params = []) {
     if ("undefined" != typeof otpIntervalObj) {

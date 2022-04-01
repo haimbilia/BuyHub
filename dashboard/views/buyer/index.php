@@ -182,8 +182,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
                                                                         </use>
                                                                     </svg></a></li> <?php } ?>
-                                                        <?php if ($canSubmitFeedback && $isValidForReview) { ?> <li><a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderFeedback', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Feedback', $siteLangId); ?>"><svg class="svg btn-icon-start" width="18" height="18">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#feedback">
+                                                        <?php if ($canSubmitFeedback && $isValidForReview) { ?> <li><a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderFeedback', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Feedback', $siteLangId); ?>">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#comment">
                                                                         </use>
                                                                     </svg></a>
                                                             </li> <?php } ?> <?php if ($canReturnRefund) { ?> <li><a href="<?php echo UrlHelper::generateUrl('Buyer', 'orderReturnRequest', array($row['op_id'])); ?>" title="<?php echo Labels::getLabel('LBL_Refund', $siteLangId); ?>"><svg class="svg btn-icon-start" width="18" height="18">

@@ -13,113 +13,20 @@
 }
 
 .product-detail-gallery {
+    position: relative;
     margin-bottom: 4rem;
+    min-width: 0;
     .badges-wrap {
+        z-index: 1;
         position: absolute;
-        #{$end-direction}: 0;
-        width: 500px;
+        #{$end-direction}: 1rem;
+        top: 1rem;
     }
     .product-gallery {
         position: sticky;
         top: $header-height;
         display: flex;
-    }
-    .slider-for {
-        // max-width: 500px;
-        flex: 1;
-        order: 2;
-        margin: 0;
-        //max-width: 500px;
-        @include media-breakpoint-down(lg) {
-            padding: 0;
-        }
-        img {
-            margin: 0 auto !important;
-            float: none !important;
-        }
-    }
-    .main-thumb {
-        outline: $outline;
-        background-color: $bg-placeholder;
-        //@include placeholder;
-        //@include responsive-ratio(1, 1);
-        img {
-            //@include img-absolute;
-        }
-    }
-    .thumb {
-        margin: 1.125rem 0;
-        text-align: center;
-        border: $border !important;
-        overflow: hidden;
-        @include placeholder;
-        @include responsive-ratio(1, 1);
-        position: relative;
-        img {
-            max-width: 100%;
-            margin: 0 auto;
-            @include img-absolute;
-        }
-        &.slick-current {
-            border-color: $brand-color;
-        }
-        @include media-breakpoint-down(lg) {
-            margin: 0 0.5rem;
-        }
-    }
-    .slider-nav {
-        position: relative;
-        padding: 0;
-        width: 100px;
-        overflow: hidden;
-        margin-#{$end-direction}: 2.5rem;
-        @include media-breakpoint-down(lg) {
-            width: 100%;
-            display: flex;
-        }
-        @include media-breakpoint-down(md) {
-            margin-top: 1.5rem;
-        }
-        .slick-list {
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .slick-arrow {
-            background-color: #fff;
-            border: $border-black;
-            padding: 0;
-            width: 100px;
-            height: 100px;
-            display: block;
-            border-radius: 0;
-            //text-indent: -9999px;
-            font-size: 0;
-            position: relative;
-
-            &:before {
-                content: "";
-                display: inline-block;
-                border-right: $border-black;
-                border-bottom: $border-black;
-                width: 20px;
-                height: 20px;
-                position: absolute;
-                #{$start-direction}: calc(50% - 10px);
-            }
-        }
-        .slick-prev {
-            &:before {
-                transform: rotate(226deg);
-                top: calc(50% - 5px);
-            }
-        }
-        .slick-next {
-            &:before {
-                transform: rotate(45deg);
-                top: calc(50% - 15px);
-            }
-        }
+        flex-direction: column;
     }
 }
 
@@ -131,24 +38,21 @@
         font-weight: $font-weight-light;
         color: $txt-gray;
     }
-    .products-title {
+
+    .product-title {
+        font-size: 1.625rem;
+        line-height: 1.5;
+        font-weight: $font-weight-light;
+        color: #000;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        word-break: break-word;
+        hyphens: auto;
+        margin-bottom: 1.5rem;
         padding: 0;
-        margin: 0;
-        .h1 {
-            font-size: 1.625rem;
-            line-height: 1.5;
-            font-weight: $font-weight-light;
-            color: #000;
-            overflow-wrap: break-word;
-            word-wrap: break-word;
-            word-break: break-all;
-            word-break: break-word;
-            hyphens: auto;
-            margin-bottom: 1.5rem;
-            padding: 0;
-            //display: flex;
-            //align-items: center;
-        }
+        //display: flex;
+        //align-items: center;
         &_badge {
             margin-top: 4px;
             margin-#{$end-direction}: 8px;

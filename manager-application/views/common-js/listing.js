@@ -326,10 +326,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
         fcom.displayProcessing();
         e.stopPropagation();
-        /* if (!confirm(langLbl.confirmUpdateStatus)) {
-            e.preventDefault();
-            return false;
-        } */
 
         var oldStatus = $(obj).attr("data-old-status");
         $(listingTableJs).prepend(fcom.getLoader());

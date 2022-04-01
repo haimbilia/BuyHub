@@ -35,7 +35,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement(
                     'plaintext',
                     array('style' => 'text-align:center'),
-                    '<a class="thumbnail featherLightJs" href="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, ImageDimension::VIEW_ORIGINAL), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" data-featherlight="image"><img   data-aspect-ratio = "' . $imageBrandDimensions[ImageDimension::VIEW_MINI_THUMB]['aspectRatio'] . '" class="max-img"  src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"></a>',
+                    '<a class="thumbnail" href="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, ImageDimension::VIEW_ORIGINAL), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" data-featherlight="image"><img   data-aspect-ratio = "' . $imageBrandDimensions[ImageDimension::VIEW_MINI_THUMB]['aspectRatio'] . '" class="max-img"  src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '"></a>',
                     true
                 );
                 break;

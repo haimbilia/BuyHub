@@ -21,8 +21,8 @@ if ($isWishList) {
             </nav>
         </div>
         <div class="card-body">
-            <div class="featured">
-                <?php if ($shops) { ?>
+            <?php if ($shops) { ?>
+                <div class="featured">
                     <?php foreach ($shops as $shop) {
                         $uploadedTime = AttachedFile::setTimeParam($shop['shop_updated_on']);
                     ?>
@@ -37,7 +37,7 @@ if ($isWishList) {
                                 </div>
                                 <div class="featured_logo"><img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0, false), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shop['shop_name']; ?>"></div>
                                 <div class="featured_detail">
-                                    <div class="featured_name"><a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($shop['shop_id'])); ?>"><?php echo $shop['shop_name']; ?></a>
+                                    <div class="featured_name"><a href="<?php echo UrlHelper::generateUrl('shops', 'view', [$shop['shop_id']], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId); ?>"><?php echo $shop['shop_name']; ?></a>
                                     </div>
                                     <div class="featured_location">
                                         <?php echo $shop['state_name']; ?><?php echo ($shop['country_name'] && $shop['state_name']) ? ', ' : ''; ?><?php echo $shop['country_name']; ?>
@@ -60,22 +60,23 @@ if ($isWishList) {
                                                 </svg></i> <span class="rate"><?php echo  round($shop['shopRating'], 1); ?><span></span></span>
                                         </div>
                                     <?php } ?>
-                                    <a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($shop['shop_id'])); ?>" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('LBL_Shop_Now', $siteLangId); ?></a>
+                                    <a href="<?php echo UrlHelper::generateUrl('shops', 'view', [$shop['shop_id']], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId); ?>" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('LBL_Shop_Now', $siteLangId); ?></a>
                                 </div>
                             </div>
 
                         </div>
                     <?php } ?>
-                <?php } else {
-                    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
-                }
-                $postedData['page'] = $page;
-                echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmFavShopSearchPaging'));
+                    <?php
+                    $postedData['page'] = $page;
+                    echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmFavShopSearchPaging'));
 
-                $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'callBackJsFunc' => 'goToFavoriteShopSearchPage');
-                $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
-                ?>
-            </div>
+                    $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'callBackJsFunc' => 'goToFavoriteShopSearchPage');
+                    $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+                    ?>
+                </div>
+            <?php } else {
+                $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
+            } ?>
         </div>
     </div>
 </div>

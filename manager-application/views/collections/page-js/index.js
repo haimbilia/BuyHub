@@ -66,7 +66,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "layoutSelectorForm"), "", function (t) {
             fcom.closeProcessing();
-            $.ykmodal(t.html, false);
+            $.ykmodal(t.html, false, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
     }
@@ -99,10 +99,13 @@ $(document).on('change', '.prefDimensionsJs', function () {
             type: 'POST',
             data: { collection_id, record_id, fIsAjax: 1 }
         });
+        
+        try {
+            response = JSON.parse(response);
+        } catch (e) {}
 
-        res = $.parseJSON(response)
-        if (0 == res.status) {
-            fcom.displayErrorMessage(res.msg);
+        if ('undefined' != response.status && 0 == response.status) {
+            fcom.displayErrorMessage(response.msg);
             return;
         }
 
@@ -296,7 +299,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
         });
     };
 
-    removeBannerImage = function (collectionId,recordId, afile_id, lang_id, slide_screen) {
+    removeBannerImage = function (collectionId, recordId, afile_id, lang_id, slide_screen) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) {
             return false;
@@ -309,7 +312,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
             }
 
             fcom.displaySuccessMessage(ans.msg);
-            loadBannerImages(collectionId ,recordId);
+            loadBannerImages(collectionId, recordId);
         });
     }
 
@@ -357,15 +360,15 @@ $(document).on('change', '.prefDimensionsJs', function () {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "langSetup"), data, function (t) {
             fcom.removeLoader();
             fcom.closeProcessing();
-           
+
             if (t.langId == langLbl.defaultFormLangId) {
                 reloadList();
             }
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
-            } else if("banners" in t){
+            } else if ("banners" in t) {
                 banners(t.recordId);
-            } else if("recordForm" in t){ 
+            } else if ("recordForm" in t) {
                 recordForm(t.recordId, frm.collection_type.value);
             }
         });

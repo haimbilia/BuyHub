@@ -25,7 +25,7 @@ $formFields = $frm->getAllFields();
                             <div class="replaced"> <?php echo $frm->getFieldHtml('qfeedback_questionnaire_id'); ?>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <div class="field-set">
+                                        <div class="form-group">
                                             <div class="caption-wraper">
                                                 <label class="form-label"><?php echo Labels::getLabel('Lbl_Name', $siteLangId); ?>
                                                     <span class="mandatory">*</span></label>
@@ -39,7 +39,7 @@ $formFields = $frm->getAllFields();
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="field-set">
+                                        <div class="form-group">
                                             <div class="caption-wraper">
                                                 <label class="form-label"><?php echo Labels::getLabel('Lbl_Email', $siteLangId); ?>
                                                     <span class="mandatory">*</span></label>
@@ -53,7 +53,7 @@ $formFields = $frm->getAllFields();
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="field-set">
+                                        <div class="form-group">
                                             <div class="caption-wraper">
                                                 <label class="form-label"><?php echo Labels::getLabel('Lbl_Gender', $siteLangId); ?>
                                                     <span class="mandatory">*</span></label>

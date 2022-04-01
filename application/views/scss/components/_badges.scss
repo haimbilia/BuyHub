@@ -21,13 +21,13 @@
         color: $brand-color-inverse;
         white-space: nowrap;
         overflow: hidden;
-        text-overflow: ellipsis; 
+        text-overflow: ellipsis;
     }
     &-1 {
         //background-color: $brand-color;
-        //color:lighten($brand-color, 55%);        
+        //color:lighten($brand-color, 55%);
         @include bg-brand();
-        border-radius: $radius4;
+        border-radius: 1px;
         padding: 4px 8px;
         .text {
             position: static;
@@ -40,7 +40,7 @@
         height: 70px;
         .text {
             font-weight: 600;
-            transform: rotate( 45deg);
+            transform: rotate(45deg);
             position: absolute;
             left: 20px;
             right: 0;
@@ -69,7 +69,7 @@
         width: 60px;
         height: 60px;
         .text {
-            transform: rotate( 45deg);
+            transform: rotate(45deg);
             left: 10px;
             right: 0;
             line-height: 30px;

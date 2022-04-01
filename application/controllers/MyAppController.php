@@ -8,23 +8,16 @@ class MyAppController extends FatController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->action = $action;
-
-        if ('updateUserCookies' != $action && FatApp::getConfig("CONF_MAINTENANCE", FatUtility::VAR_INT, 0) && (get_class($this) != "MaintenanceController") && (get_class($this) != ' Home' && $action != 'setLanguage')) {
-            if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
-            }
-            FatApp::redirectUser(UrlHelper::generateUrl('maintenance'));
-        }
-
-        CommonHelper::initCommonVariables();
-        $this->initCommonVariables();
-        $this->tempTokenLogin();
+        $this->checkMaintenance();
+        $this->setCommonVariables();
+        $this->checkTempTokenLogin();
         $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');
     }
 
-    public function initCommonVariables()
+    private function setCommonVariables()
     {
+        CommonHelper::initCommonVariables();
+
         $this->siteLangId = CommonHelper::getLangId();
         $this->siteLangCode = CommonHelper::getLangCode();
         $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
@@ -221,12 +214,11 @@ class MyAppController extends FatController
         $this->set('jsVariables', $jsVariables);
         $this->set('controllerName', $controllerName);
         $this->set('isAppUser', CommonHelper::isAppUser());
-        $this->set('action', $this->action);
+        $this->set('action', $this->_actionName);
     }
 
     private function setApiVariables()
     {
-        $this->db = FatApp::getDb();
         $post = FatApp::getPostedData();
 
         $this->appToken = CommonHelper::getAppToken();
@@ -237,7 +229,7 @@ class MyAppController extends FatController
         }
 
         $forTempTokenBasedActions = array('send_to_web');
-        if (('1.0' == MOBILE_APP_API_VERSION || in_array($this->action, $forTempTokenBasedActions) || empty($this->appToken)) && array_key_exists('_token', $post)) {
+        if (('1.0' == MOBILE_APP_API_VERSION || in_array($this->_actionName, $forTempTokenBasedActions) || empty($this->appToken)) && array_key_exists('_token', $post)) {
             $this->appToken = ($post['_token'] != '') ? $post['_token'] : '';
         }
 
@@ -279,27 +271,33 @@ class MyAppController extends FatController
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
-        $this->user_details = $this->db->fetch($rs, 'user_id');
+        $this->user_details = FatApp::getDb()->fetch($rs, 'user_id');
         /*$cObj = new Cart($user_id, 0, $this->app_user['temp_user_id']);
         $this->cartItemsCount = $cObj->countProducts();
         $this->set('cartItemsCount', $this->cartItemsCount);*/
 
-        $this->totalFavouriteItems = UserFavorite::getUserFavouriteItemCount($user_id);
-        $this->set('totalFavouriteItems', $this->totalFavouriteItems);
-
-        $this->totalUnreadMessageCount = 0;
-        if (0 < $user_id) {
-            $threadObj = new Thread();
-            $this->totalUnreadMessageCount = $threadObj->getMessageCount($user_id);
+        if (array_key_exists('favouriteItemsCount', $post)) {
+            $this->totalFavouriteItems = UserFavorite::getUserFavouriteItemCount($user_id);
+            $this->set('totalFavouriteItems', $this->totalFavouriteItems);
         }
-        $this->set('totalUnreadMessageCount', $this->totalUnreadMessageCount);
 
-        $this->totalUnreadNotificationCount = 0;
-        if (0 < $user_id) {
-            $notificationObj = new Notifications();
-            $this->totalUnreadNotificationCount = $notificationObj->getUnreadNotificationCount($user_id);
+        if (array_key_exists('unreadMessageCount', $post)) {
+            $this->totalUnreadMessageCount = 0;
+            if (0 < $user_id) {
+                $threadObj = new Thread();
+                $this->totalUnreadMessageCount = $threadObj->getMessageCount($user_id);
+            }
+            $this->set('totalUnreadMessageCount', $this->totalUnreadMessageCount);
         }
-        $this->set('totalUnreadNotificationCount', $this->totalUnreadNotificationCount);
+
+        if (array_key_exists('unreadNotificationCount', $post)) {
+            $this->totalUnreadNotificationCount = 0;
+            if (0 < $user_id) {
+                $notificationObj = new Notifications();
+                $this->totalUnreadNotificationCount = $notificationObj->getUnreadNotificationCount($user_id);
+            }
+            $this->set('totalUnreadNotificationCount', $this->totalUnreadNotificationCount);
+        }
     }
 
     private function getAppLoggedUserId()
@@ -521,7 +519,7 @@ class MyAppController extends FatController
         }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $siteLangId));
         $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $siteLangId));
-        
+
         return $frm;
     }
 
@@ -745,10 +743,9 @@ class MyAppController extends FatController
         return $this->app_user['temp_user_id'] = $generatedTempId;
     }
 
-    public function tempTokenLogin()
+    private function checkTempTokenLogin()
     {
-        $forTempTokenBasedGetActions = array('downloadDigitalFile');
-        if (!in_array($this->action, $forTempTokenBasedGetActions)) {
+        if (!in_array($this->_actionName, ['downloadDigitalFile'])) {
             return;
         }
 
@@ -760,7 +757,7 @@ class MyAppController extends FatController
         $ttk = ($get['ttk'] != '') ? $get['ttk'] : '';
 
         if (strlen($ttk) != UserAuthentication::TOKEN_LENGTH) {
-            FatUtility::dieJSONError(Labels::getLabel('LBL_Invalid_Temp_Token', CommonHelper::getLangId()));
+            FatUtility::dieJSONError(Labels::getLabel('ERR_INVALID_TEMP_TOKEN', CommonHelper::getLangId()));
         }
 
         $userId = 0;
@@ -769,12 +766,12 @@ class MyAppController extends FatController
         }
 
         $uObj = new User($userId);
-        if (!$user_temp_token_data = $uObj->validateAPITempToken($ttk)) {
-            FatUtility::dieJSONError(Labels::getLabel('LBL_Invalid_Token_Data', CommonHelper::getLangId()));
+        if (!$uObj->validateAPITempToken($ttk)) {
+            FatUtility::dieJSONError(Labels::getLabel('ERR_INVALID_TOKEN_DATA', CommonHelper::getLangId()));
         }
 
         if (!$user = $uObj->getUserInfo(array('credential_username', 'credential_password', 'user_id'), true, true)) {
-            FatUtility::dieJSONError(Labels::getLabel('LBL_Invalid_Request', CommonHelper::getLangId()));
+            FatUtility::dieJSONError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
         }
 
         $authentication = new UserAuthentication();
@@ -905,5 +902,23 @@ class MyAppController extends FatController
     {
         $this->_template->addJs(['js/featherlight/featherlight.min.js', 'js/featherlight/featherlight.gallery.min.js', 'js/featherlight/jquery.detect_swipe.min.js']);
         $this->_template->addCss(['css/featherlight/featherlight.min.css', 'css/featherlight/featherlight.gallery.min.css']);
+    }
+
+    private function checkMaintenance()
+    {
+        if (FatApp::getConfig("CONF_MAINTENANCE", FatUtility::VAR_INT, 0) == ApplicationConstants::NO) {
+            return true;
+        }
+
+        if (in_array($this->_controllerName, ['MaintenanceController'])) {
+            return true;
+        }
+
+        if (in_array($this->_actionName, ['setLanguage', 'updateUserCookies'])) {
+            return true;
+        }
+
+        LibHelper::exitWithError(Labels::getLabel('MSG_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
+        FatApp::redirectUser(UrlHelper::generateUrl('maintenance'));
     }
 }

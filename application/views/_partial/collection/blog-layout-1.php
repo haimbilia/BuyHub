@@ -1,7 +1,7 @@
 <?php if (isset($collection['blogs']) && count($collection['blogs']) > 0) { ?>
     <section class="section">
         <div class="container">
-            <div class="section-head">
+            <div class="section-head section-head-center">
                 <?php echo (isset($collection['collection_name']) && $collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
             </div>
             <div class="row">
@@ -34,17 +34,8 @@
                                             </span>
                                         </a>
                                     </h3>
-                                    <div class="article-des">
-                                        <?php /* echo FatUtility::decodeHtmlEntities($blog['post_description']); */ ?>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="post-foot">
-                                <!-- <a class="link-underline" href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blog['post_id'])); ?>">
-                                    <?php echo Labels::getLabel('LBL_READ_MORE', $siteLangId); ?>
-                                </a>  -->
-                            </div>
-
                         </div>
                     </div>
                 <?php } ?>
@@ -54,7 +45,7 @@
                 <?php if (isset($collection['totBlogs']) && $collection['totBlogs'] > Collections::LIMIT_BLOG_LAYOUT1) { ?>
                     <div class="section-action">
                         <a class="link-underline" href="<?php echo UrlHelper::generateUrl('blog'); ?>">
-                            <?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?>
+                            <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
                         </a>
                     </div>
                 <?php } ?>

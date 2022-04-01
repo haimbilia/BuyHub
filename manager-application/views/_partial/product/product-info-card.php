@@ -16,7 +16,7 @@ $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $produc
 
 <div class="product-profile">
     <div class="product-profile__thumbnail" data-ratio="<?php echo $getproductAspectRatio[ImageDimension::VIEW_SMALL]['aspectRatio']; ?>">
-        <a class="featherLightJs" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_ORIGINAL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" data-featherlight="image">
+        <a href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_ORIGINAL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" data-featherlight="image">
             <img data-aspect-ratio="<?php echo $getproductAspectRatio[ImageDimension::VIEW_SMALL]['aspectRatio']; ?>" src="<?php echo $imgSrc; ?>"></a>
     </div>
     <div class="product-profile__data">

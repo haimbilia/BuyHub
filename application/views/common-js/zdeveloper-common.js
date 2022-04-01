@@ -27,7 +27,7 @@ $(function () {
         showFormActionsBtns();
     });
     if (0 < $(".js-widget-scroll").length) {
-        slickWidgetScroll();
+        // slickWidgetScroll();
     }
     $(document).on("click", ".accordianheader", function () {
         $(this).next(".accordianbody").slideToggle();
@@ -66,7 +66,7 @@ installJsColor();
 unlinkSlick = function () {
     $(".js-widget-scroll").slick("unslick");
 };
-slickWidgetScroll = function () {
+/*slickWidgetScroll = function () {
     var slides = $(".widget-stats").length > 2 ? 3 : 2;
     $(".js-widget-scroll").slick(
         getSlickSliderSettings(slides, 1, langLbl.layoutDirection, false, {
@@ -74,9 +74,9 @@ slickWidgetScroll = function () {
             1023: 2,
             767: 1,
             480: 1,
-        })
+        });
     );
-};
+};*/
 invalidOtpField = function () {
     $("input.otpVal-js")
         .val("")
@@ -246,9 +246,9 @@ function recentlyViewedProducts(selprodId) {
         function (ans) {
             fcom.removeLoader();
             $("#recentlyViewedProductsDiv").html(ans);
-            $(".js-collection-corner:not(.slick-initialized)").slick(
+            /*$(".js-collection-corner:not(.slick-initialized)").slick(
                 getSlickSliderSettings(5, 1, langLbl.layoutDirection, true)
-            );
+            );*/
         }
     );
 }
@@ -486,7 +486,7 @@ function submitSiteSearch(frm, page) {
     document.location.href = url;
 }
 
-function getSlickGallerySettings(
+/*function getSlickGallerySettings(
     imagesForNav,
     layoutDirection,
     slidesToShow = 4,
@@ -508,29 +508,25 @@ function getSlickGallerySettings(
             focusOnSelect: true,
             autoplay: true,
             arrows: true,
-            vertical: true,
-            verticalSwiping: true,
             responsive: [
                 {
                     breakpoint: 1499,
                     settings: {
-                        slidesToShow: 3,
+                        slidesToShow: 4,
                     },
                 },
                 {
                     breakpoint: 1199,
                     settings: {
                         slidesToShow: 4,
-                        vertical: false,
-                        verticalSwiping: false,
+
                     },
                 },
                 {
                     breakpoint: 767,
                     settings: {
                         slidesToShow: 2,
-                        vertical: false,
-                        verticalSwiping: false,
+
                     },
                 },
             ],
@@ -634,7 +630,7 @@ function getSlickSliderSettings(
         sliderSettings["rtl"] = true;
     }
     return sliderSettings;
-}
+}*/
 
 function codeLatLng(lat, lng, callback) {
     initialize();
@@ -1361,7 +1357,7 @@ $(function () {
         if (page == "product-view") {
             return false;
         }
-        
+
         var section = "";
         if (0 < $(".checkout-content-js").length) {
             section = $(".checkout-content-js");
@@ -1442,7 +1438,7 @@ $(function () {
             return false;
         }
         var fulfillmentType = $("input[name='fulfillment_type']:checked").val();
-        
+
         var section = "";
         if (0 < $(".checkout-content-js").length) {
             section = $(".checkout-content-js");
@@ -1568,18 +1564,6 @@ function setSiteDefaultCurrency(currencyId) {
             document.location.reload();
         }
     );
-}
-
-function quickDetail(selprod_id) {
-    $.facebox(function () {
-        fcom.ajax(
-            fcom.makeUrl("Products", "productQuickDetail", [selprod_id]),
-            "",
-            function (t) {
-                fcom.updateFaceboxContent(t);
-            }
-        );
-    });
 }
 
 function stylePhoneNumberFld(
@@ -2012,19 +1996,20 @@ function loadMoreImages(obj, e) {
     return false;
 }
 
-function bindFeatherLight(element = '') {
-    element = '' == element ? 'featherLightJs' : element;
-    if (0 < $('.' + element).length) {
+function bindFeatherLight() {
+    if (0 < $('.featherLightGalleryJs').length) {
         if ('undefined' == typeof $.fn.featherlightGallery) {
             fcom.displayErrorMessage('Please Include Feather Light JS Library Files.');
             return;
         }
 
-        $('.' + element).featherlightGallery({
-            previousIcon: '«',
-            nextIcon: '»',
-            galleryFadeIn: 300,
-            openSpeed: 300
+        $('.featherLightGalleryJs').each(function () {
+            $(this).find('[data-featherlight]').featherlightGallery({
+                previousIcon: '«',
+                nextIcon: '»',
+                galleryFadeIn: 300,
+                openSpeed: 300
+            });
         });
     }
 }

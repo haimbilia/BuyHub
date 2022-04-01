@@ -12,7 +12,7 @@ if (!isset($error)) : ?>
     <?php echo $frm->getFormTag(); ?>
     <div class="row">
         <div class="col-md-12">
-            <div class="field-set">
+            <div class="form-group">
                 <div class="caption-wraper">
                     <label class="form-label"></label>
                 </div>

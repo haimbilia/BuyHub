@@ -398,6 +398,7 @@ class AccountController extends LoggedUserController
         $this->set('userWalletBalance', User::getUserBalance($this->userId));
         $this->set('codMinWalletBalance', $codMinWalletBalance);
         $this->set('frmSearch', $frm);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TRANSACTION_ID,_ORDER_ID_OR_COMMENT', $this->siteLangId));
         $this->set('accountSummary', $accountSummary);
         $this->set('frmRechargeWallet', $this->getRechargeWalletForm($this->siteLangId));
         $this->set('canAddMoneyToWallet', $canAddMoneyToWallet);
@@ -3252,8 +3253,7 @@ class AccountController extends LoggedUserController
         if (!$userReqObj->save()) {
             FatUtility::dieJsonError($userReqObj->getError());
         }
-        Message::addMessage(Labels::getLabel('MSG_Request_sent_successfully', $this->siteLangId));
-        FatUtility::dieJsonSuccess(Message::getHtml());
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Request_sent_successfully', $this->siteLangId));
     }
 
     private function getRequestDataForm()
@@ -3314,8 +3314,7 @@ class AccountController extends LoggedUserController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row) {
-            Message::addErrorMessage(Labels::getLabel('LBL_You_have_alrady_submitted_the_data_request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieJsonError(Labels::getLabel('LBL_You_have_alrady_submitted_the_data_request', $this->siteLangId));
         }
 
         $assignValues = array(

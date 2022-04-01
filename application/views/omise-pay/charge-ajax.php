@@ -8,7 +8,7 @@ if (!isset($error)) {
     echo $frm->getFormTag(); ?>
     <div class="row">
         <div class="col-md-12">
-            <div class="field-set">
+            <div class="form-group">
                 <div class="caption-wraper">
                     <label class="form-label"><?php echo Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $siteLangId); ?></label>
                 </div>
@@ -20,7 +20,7 @@ if (!isset($error)) {
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="field-set">
+            <div class="form-group">
                 <div class="caption-wraper">
                     <label class="form-label"><?php echo Labels::getLabel('LBL_CARD_HOLDER_NAME', $siteLangId); ?></label>
                 </div>
@@ -32,7 +32,7 @@ if (!isset($error)) {
     </div>
     <div class="row">
         <div class="col-md-4">
-            <div class="field-set">
+            <div class="form-group">
                 <div class="caption-wraper">
                     <label class="form-label"><?php echo Labels::getLabel('LBL_Expiry_Month', $siteLangId); ?></label>
                 </div>
@@ -49,7 +49,7 @@ if (!isset($error)) {
             </div>
         </div>
         <div class="col-md-4">
-            <div class="field-set">
+            <div class="form-group">
                 <div class="caption-wraper">
                     <label class="form-label"><?php echo Labels::getLabel('LBL_Expiry_year', $siteLangId); ?></label>
                 </div>
@@ -66,7 +66,7 @@ if (!isset($error)) {
             </div>
         </div>
         <div class="col-md-4">
-            <div class="field-set">
+            <div class="form-group">
                 <div class="caption-wraper">
                     <label class="form-label"><?php echo Labels::getLabel('LBL_CVV_SECURITY_CODE', $siteLangId); ?></label>
                 </div>
@@ -81,7 +81,7 @@ if (!isset($error)) {
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="field-set">
+            <div class="form-group">
                 <div class="caption-wraper">
                     <label class="form-label"></label>
                 </div>

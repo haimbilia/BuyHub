@@ -22,7 +22,7 @@ if ($recentViewedProducts) {
                     </div>
                 </div>
             </div>
-            <div class="product-listing js-carousel recently-viewed-products" id="product-listing-rvp" data-view="4" data-slides="4,4,3,2,2" data-destroy="0,1,1,1,1" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class="product-listing js-carousel recently-viewed-products" id="product-listing-rvp"  data-slides="4,4,3,2" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tLeftRibbons = isset($recentlyViewedRibbons['tLeftRibbons']) ? $recentlyViewedRibbons['tLeftRibbons'] : [];
                 $tRightRibbons = isset($recentlyViewedRibbons['tRightRibbons']) ? $recentlyViewedRibbons['tRightRibbons'] : [];
@@ -38,7 +38,6 @@ if ($recentViewedProducts) {
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>
                     <div class="item">
                         <div class="products">
-                            <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $rProduct,  'siteLangId' => $siteLangId], false); ?>
                             <div class="products-body">
                                 <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $rProduct) && 0 == $rProduct['availableInLocation']) { ?>
                                     <div class="not-available"><svg class="svg">
@@ -59,15 +58,12 @@ if ($recentViewedProducts) {
                                             'siteLangId' => $siteLangId,
                                             'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $rProduct['prodcat_name'],
                                         ];
-
-
                                         $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
                                         ?>
                                     </a>
                                 </div>
                             </div>
                             <div class="products-foot">
-
                                 <div class="products-category"><a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>"><?php echo $rProduct['prodcat_name']; ?>
                                     </a></div>
                                 <div class="products-title"><a title="<?php echo $rProduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>"><?php echo (mb_strlen($rProduct['selprod_title']) > 50) ? mb_substr($rProduct['selprod_title'], 0, 50) . "..." : $rProduct['selprod_title']; ?>

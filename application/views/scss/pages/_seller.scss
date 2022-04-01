@@ -94,11 +94,10 @@
 }
 .hero-banner {
     color: #fff;
-    background-repeat: repeat;
     background-position: center;
     position: relative;
     background-attachment: fixed;
-    background-size: 25%;
+    //background-size: 25%;
     //background-color: var(--brand-color);
     // color: var(--brand-color-inverse);
     &:after {
@@ -163,13 +162,13 @@
 
 .seller-register-form {
     margin: 3.125rem 0;
-    padding: 20px;
+    padding: 3rem;
     background: rgba(255, 255, 255, 0.95);
     color: $txt-body;
     width: 100%;
     border-radius: $radius4;
     h2 {
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
     }
 }
 

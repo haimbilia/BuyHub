@@ -21,6 +21,8 @@ class UserFavorite extends SearchBase
     {
         $getFavouriteProducts = new SearchBase('(' . UserFavoriteProductSearch::joinFavouriteUserProductsCount($userId) . ') as productCount');
         $getFavouriteProducts->addfld('count(userFavProductcount_user_id) as totalFavouriteItems');
+        $getFavouriteProducts->doNotCalculateRecords();
+        $getFavouriteProducts->doNotLimitRecords();
         $countFavouriteItemsRs = $getFavouriteProducts->getResultSet();
         $totalFavouriteItems = FatApp::getDb()->fetch($countFavouriteItemsRs, 'totalFavouriteItems');
         return $totalFavouriteItems['totalFavouriteItems'];

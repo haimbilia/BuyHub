@@ -14,7 +14,6 @@ $(function () {
             var tabDist = ($('.nav-detail-js a[href="' + value + '"]').offset().top) - scrollTop;
             var contentDist = (($(value).offset().top) - scrollTop) - tabDist;
             var headerHeight = $("#header").height();
-
             if ((headerHeight + 20) > tabDist && 130 > contentDist) {
                 $(".nav-scroll-js").removeClass('is-active');
                 $('a[href="' + value + '"]').addClass('is-active');
@@ -39,7 +38,7 @@ $(function () {
         $(".item__main").find('img').attr('src', mainSrc);
     });
 
-    $('.js-collection-corner').slick(getSlickSliderSettings(5, 1, langLbl.layoutDirection));
+    // $('.js-collection-corner').slick(getSlickSliderSettings(5, 1, langLbl.layoutDirection));
 
     /* for on scoll jump navigation fix */
     /* var elementPosition = $('.nav--jumps').offset();
@@ -77,6 +76,48 @@ $(function () {
 
     /* bannerAdds(); */
     reviews(document.frmReviewSearch);
+
+
+    /* Product Gallery */
+    $("#detail .main-img-slider").slick({
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        infinite: true,
+        arrows: true,
+        fade: true,
+        autoplay: true,
+        autoplaySpeed: 4000,
+        speed: 300,
+        lazyLoad: "ondemand",
+        asNavFor: ".thumb-nav",
+        prevArrow: '<button class="btn btn-prev"><span></span> </button>',
+        nextArrow: '<button class="btn btn-next"><span></span> </button>',
+    });
+
+    /* Thumbnail/alternates slider for product page */
+    $(".thumb-nav").slick({
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        infinite: true,
+        centerPadding: "0px",
+        asNavFor: ".main-img-slider",
+        dots: false,
+        centerMode: false,
+        draggable: true,
+        speed: 200,
+        focusOnSelect: true,
+        prevArrow: '<button class="btn btn-prev"><span></span> </button>',
+        nextArrow: '<button class="btn btn-next"><span></span> </button>',
+    });
+
+    /* keeps thumbnails active when changing main image, via mouse/touch drag/swipe */
+    $(".main-img-slider").on("afterChange", function (event, slick, currentSlide, nextSlide) {
+        /* remove all active class */
+        $(".thumb-nav .slick-slide").removeClass("slick-current");
+        /* set active class for current slide */
+        $(".thumb-nav .slick-slide:not(.slick-cloned)").eq(currentSlide).addClass("slick-current");
+    });
+    /* Product Gallery */
 });
 
 function moreSellerRows(selprodCode, sellerId) {

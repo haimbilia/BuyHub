@@ -34,7 +34,6 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                 <div class="item productsListItemsJs" data-shopId="<?php echo $product['shop_id']; ?>">
                     <!--product tile-->
                     <div class="products">
-                        <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $product, 'siteLangId' => $siteLangId], false); ?>
                         <?php if ($product['in_stock'] == 0) { ?>
                             <span class="tag-soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
                         <?php } ?>
@@ -120,10 +119,10 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
 <script>
     $(function() {
         var e = document.getElementById("pageSizeSelect");
-        if(e != null){
+        if (e != null) {
             var pageSize = e.options[e.selectedIndex].value;
             $('#pageSize').val(pageSize);
         }
-        
+
     })
 </script>

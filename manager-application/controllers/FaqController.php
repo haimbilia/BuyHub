@@ -444,8 +444,10 @@ class FaqController extends ListingBaseController
             $cond->attachCondition('faq_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
 
+        $excludeRecords = FatApp::getPostedData('excludeRecords', FatUtility::VAR_INT, []);
         $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
-        $alreadyAdded = Collections::getRecords($collectionId);
+
+        $alreadyAdded = !empty($excludeRecords) ? array_flip($excludeRecords) : Collections::getRecords($collectionId);
         if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
             $srch->addCondition('faq_id', 'NOT IN', array_keys($alreadyAdded));
         }
@@ -457,6 +459,7 @@ class FaqController extends ListingBaseController
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
         $posts = FatApp::getDb()->fetchAll($rs, 'faq_id');
+        
         $json = array(
             'pageCount' => $srch->pages(),
             'results' => []

@@ -70,19 +70,24 @@
 }
 
 .shop-layout-2 {
-    display: grid;
-    grid-gap: 4rem;
-    grid-template-columns: repeat(3, 1fr);
+    @include media-breakpoint-up(lg) {
+        display: grid;
+        grid-gap: 4rem;
+        grid-template-columns: repeat(3, 1fr);
+    }
     .shop {
         display: flex;
         flex-direction: column;
         text-align: center;
         max-width: 488px;
         &:nth-child(odd) {
-            flex-direction: column-reverse;
+            @include media-breakpoint-up(lg) {
+                flex-direction: column-reverse;
+            }
         }
         &-body {
             flex: 1;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
         }
         &-foot {
             display: flex;

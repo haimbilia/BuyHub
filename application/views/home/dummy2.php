@@ -13,220 +13,87 @@
                         </ul>
                     </div>
                     <div class="detail-first-fold">
-                        <div id="img-static" class="product-detail-gallery">
-                            <div class="product-gallery">
-                                <div class="slider-for main-thumb slick-initialized slick-slider" dir="ltr" id="slider-for">
-                                    <div aria-live="polite" class="slick-list draggable">
-                                        <div class="slick-track" role="listbox"><img alt="" class="xzoom active slick-slide slick-active" id="xzoom-default" src="/yokart/image/product/76/MEDIUM/0/2406?t=1608690809" data-xoriginal="/yokart/image/product/76/ORIGINAL/0/2406?t=1608690809" data-slick-index="0" aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide00" style="width: 100%; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;"></div>
+                        <div id="detail">
+
+                            <div class="main_img">
+                                <div class="product-images demo-gallery">
+                                    <div class="main-img-slider">
+                                        <a data-fancybox="gallery" href="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg">
+                                            <img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" class="img-fluid" />
+                                        </a>
+                                        <a data-fancybox="gallery" href="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg">
+                                            <img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" class="img-fluid" />
+                                        </a>
+                                        <a data-fancybox="gallery" href="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg">
+                                            <img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" class="img-fluid" />
+                                        </a>
+                                        <!-- <a data-fancybox="gallery" href="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg">
+                                            <img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" class="img-fluid" />
+                                        </a>
+                                        <a data-fancybox="gallery" href="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg">
+                                            <img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" class="img-fluid" />
+                                        </a>
+                                        <a data-fancybox="gallery" href="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg">
+                                            <img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" class="img-fluid" />
+                                        </a> -->
                                     </div>
-                                </div>
-                                <div class="slider-nav xzoom-thumbs slick-initialized slick-slider slick-vertical" dir="ltr" id="slider-nav"><button type="button" data-role="none" class="slick-prev slick-arrow" aria-label="Previous" role="button">Previous</button>
-                                    <div aria-live="polite" class="slick-list draggable">
-                                        <div class="slick-track" role="listbox">
-                                            <div class="slick-slide slick-cloned" data-slick-index="-4" aria-hidden="true" tabindex="-1" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2422?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2422?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2422?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2422?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide slick-cloned" data-slick-index="-3" aria-hidden="true" tabindex="-1" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2423?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2423?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2423?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2423?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide slick-cloned" data-slick-index="-2" aria-hidden="true" tabindex="-1" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2424?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2424?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2424?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2424?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide slick-cloned" data-slick-index="-1" aria-hidden="true" tabindex="-1" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2425?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2425?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2425?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2425?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide" data-slick-index="0" aria-hidden="true" tabindex="-1" role="option" aria-describedby="slick-slide10" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2406?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2406?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2406?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery xactive" width="80" src="/yokart/image/product/76/MEDIUM/0/2406?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide" data-slick-index="1" aria-hidden="true" tabindex="-1" role="option" aria-describedby="slick-slide11" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2407?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2407?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2407?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2407?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide" data-slick-index="2" aria-hidden="true" tabindex="-1" role="option" aria-describedby="slick-slide12" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2408?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2408?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2408?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2408?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide" data-slick-index="3" aria-hidden="true" tabindex="-1" role="option" aria-describedby="slick-slide13" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2409?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2409?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2409?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2409?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide" data-slick-index="4" aria-hidden="true" tabindex="-1" role="option" aria-describedby="slick-slide14" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2410?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2410?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2410?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2410?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide" data-slick-index="5" aria-hidden="true" tabindex="-1" role="option" aria-describedby="slick-slide15" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2421?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2421?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2421?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2421?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide" data-slick-index="6" aria-hidden="true" tabindex="-1" role="option" aria-describedby="slick-slide16" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2422?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2422?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2422?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2422?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide slick-current slick-active" data-slick-index="7" aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide17" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2423?t=1608690809" tabindex="0">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2423?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2423?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2423?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide slick-active" data-slick-index="8" aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide18" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2424?t=1608690809" tabindex="0">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2424?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2424?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2424?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide slick-active" data-slick-index="9" aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide19" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2425?t=1608690809" tabindex="0">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2425?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2425?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2425?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide slick-cloned slick-active" data-slick-index="10" aria-hidden="false" tabindex="-1" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2406?t=1608690809" tabindex="0">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2406?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2406?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery xactive" width="80" src="/yokart/image/product/76/MEDIUM/0/2406?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide slick-cloned" data-slick-index="11" aria-hidden="true" tabindex="-1" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2407?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2407?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2407?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2407?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide slick-cloned" data-slick-index="12" aria-hidden="true" tabindex="-1" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2408?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2408?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2408?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2408?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="slick-slide slick-cloned" data-slick-index="13" aria-hidden="true" tabindex="-1" style="width: 100px;">
-                                                <div class="thumb">
-                                                    <a href="/yokart/image/product/76/ORIGINAL/0/2409?t=1608690809" tabindex="-1">
-                                                        <picture>
-                                                            <source type="image/webp" srcset="/yokart/image/product/76/WEBPMEDIUM/0/2409?t=1608690809">
-                                                            <source type="image/jpeg" srcset="/yokart/image/product/76/MEDIUM/0/2409?t=1608690809">
-                                                            <img alt="" class="xzoom-gallery" width="80" src="/yokart/image/product/76/MEDIUM/0/2409?t=1608690809">
-                                                        </picture>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button type="button" data-role="none" class="slick-next slick-arrow" aria-label="Next" role="button">Next</button>
+
+                                    <ul class="thumb-nav">
+                                        <li><img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" /></li>
+                                        <li><img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" /></li>
+                                        <li><img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" /></li>
+                                        <!-- <li><img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" /></li>
+                                        <li><img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" /></li>
+                                        <li><img src="https://images.pexels.com/photos/821651/pexels-photo-821651.jpeg" /></li> -->
+
+                                    </ul>
                                 </div>
                             </div>
                         </div>
+
+                        <script src="https://techmytip.com/demos/image-gallery-slider/js/popper.min.js"></script>
+                        <script src="https://techmytip.com/demos/image-gallery-slider/js/slick.min.js"></script>
+                        <script src="https://techmytip.com/demos/image-gallery-slider/js/jquery.fancybox.min.js"></script>
+                        <script id="rendered-js">
+                            $("#detail .main-img-slider").slick({
+                                slidesToShow: 1,
+                                slidesToScroll: 1,
+                                infinite: true,
+                                arrows: true,
+                                fade: true,
+                                autoplay: true,
+                                autoplaySpeed: 4000,
+                                speed: 300,
+                                lazyLoad: "ondemand",
+                                asNavFor: ".thumb-nav",
+                                prevArrow: '<div class="slick-prev"><i class="i-prev"></i><span class="sr-only sr-only-focusable"><</span></div>',
+                                nextArrow: '<div class="slick-next"><i class="i-next"></i><span class="sr-only sr-only-focusable">></span></div>',
+                            });
+
+                            // Thumbnail/alternates slider for product page
+                            $(".thumb-nav").slick({
+                                slidesToShow: 4,
+                                slidesToScroll: 1,
+                                infinite: true,
+                                centerPadding: "0px",
+                                asNavFor: ".main-img-slider",
+                                dots: false,
+                                centerMode: false,
+                                draggable: true,
+                                speed: 200,
+                                focusOnSelect: true,
+                                prevArrow: '<div class="slick-prev"><i class="i-prev"></i><span class="sr-only sr-only-focusable"><</span></div>',
+                                nextArrow: '<div class="slick-next"><i class="i-next"></i><span class="sr-only sr-only-focusable">></span></div>',
+                            });
+
+                            //keeps thumbnails active when changing main image, via mouse/touch drag/swipe
+                            $(".main-img-slider").on("afterChange", function(event, slick, currentSlide, nextSlide) {
+                                //remove all active class
+                                $(".thumb-nav .slick-slide").removeClass("slick-current");
+                                //set active class for current slide
+                                $(".thumb-nav .slick-slide:not(.slick-cloned)").eq(currentSlide).addClass("slick-current");
+                            });
+                        </script>
                         <div class="product-description">
                             <a class="brand-title" href="/yokart/apple">HRX by Hrithik Roshan</a>
                             <div class="products-title">
