@@ -254,8 +254,11 @@ class OrderReturnRequestsController extends ListingBaseController
         $msgsSrchForm->fill(array('orrequest_id' => $requestRow['orrequest_id']));
         $this->set('msgsSrchForm', $msgsSrchForm);
 
-        $str = Labels::getLabel('LBL_REFERENCE_NO_#{REFERENCE-NO}', $this->siteLangId);
-        $this->set('pageTitle', CommonHelper::replaceStringData($str, ['{REFERENCE-NO}' => $requestRow['orrequest_reference']]));
+        $pageData = PageLanguageData::getAttributesByKey('ORDER_RETURN_REQUEST_VIEW', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageTitle', $pageTitle);
+        $this->set('pageData', $pageData);
         $this->set('orrequestId', $recordId);
 
         $this->set('messagesList', $messagesList);
