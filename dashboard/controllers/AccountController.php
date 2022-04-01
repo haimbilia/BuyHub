@@ -398,7 +398,7 @@ class AccountController extends LoggedUserController
         $this->set('userWalletBalance', User::getUserBalance($this->userId));
         $this->set('codMinWalletBalance', $codMinWalletBalance);
         $this->set('frmSearch', $frm);
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TRANSACTION_ID_OR_ORDER_ID_OR_COMMENT', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TRANSACTION_ID,_ORDER_ID_OR_COMMENT', $this->siteLangId));
         $this->set('accountSummary', $accountSummary);
         $this->set('frmRechargeWallet', $this->getRechargeWalletForm($this->siteLangId));
         $this->set('canAddMoneyToWallet', $canAddMoneyToWallet);
