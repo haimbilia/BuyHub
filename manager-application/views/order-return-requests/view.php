@@ -21,6 +21,10 @@ echo $msgsSrchForm->getFormHtml(); ?>
                                 echo CommonHelper::replaceStringData($str, ['{REFERENCE-NO}' => $order['orrequest_reference']])
                                 ?>
                             </h3>
+                            
+                        </div>
+                        <div class="card-head-toolbar">
+                            <small><?php echo FatDate::format($order['orrequest_date'], true); ?></small>
                         </div>
                     </div>
                     <div class="card-table itemSummaryJs">
@@ -37,7 +41,8 @@ echo $msgsSrchForm->getFormHtml(); ?>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><?php $this->includeTemplate('_partial/product/order-product-info-card.php', ['order' => $order, 'siteLangId' => $siteLangId, 'horizontalAlignOptions' => true], false); ?></td>
+                                        <td><?php $this->includeTemplate('_partial/product/order-product-info-card.php', ['order' => $order, 'siteLangId' => $siteLangId, 'horizontalAlignOptions' => true], false); ?>                                            
+                                        </td>
                                         <td><?php echo $order["orrequest_qty"]; ?></td>
                                         <td><?php echo OrderReturnRequest::getStatusHtml($siteLangId, $order['orrequest_status']); ?></td>
                                         <td>
@@ -108,11 +113,12 @@ echo $msgsSrchForm->getFormHtml(); ?>
                     <div class="card-body pt-0">
                         <div class="table-responsive table-scrollable js-scrollable" id="messagesList">
                             <?php require_once 'messages-list.php'; ?>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
+                <?php /* ?>
                 <!-- Order Summary -->
                 <div class="card">
                     <div class="card-head">
@@ -150,7 +156,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                         </div>
                     </div>
                 </div>
-
+                <?php  */ ?>
                 <!-- Buyer Information -->
                 <?php if (!empty($order['user_name']) || !empty($order['credential_username']) || !empty($order['credential_email']) || !empty($order['buyer_phone'])) { ?>
                     <div class="card">

@@ -1,7 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (isset($collection['categories']) && count($collection['categories'])) {
-
-?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+if (isset($collection['categories']) && count($collection['categories'])) { ?>
     <section class="section">
         <div class="container">
             <div class="section-head section-head-center">
@@ -15,7 +13,6 @@
 
             <div class="category-layout-2">
                 <?php foreach ($collection['categories'] as $category) {  ?>
-
                     <div class="category">
                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $category['prodcat_id']);
                         $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
@@ -23,10 +20,10 @@
                         <div class="category-head">
                             <?php
                             $pictureAttr = [
-                                'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'WEBPMEDIUM', applicationConstants::SCREEN_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
-                                'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'MEDIUM', applicationConstants::SCREEN_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'WEBPMEDIUM', 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
+                                'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'MEDIUM', 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                 'ratio' => '4:1',
-                                'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'MEDIUM', applicationConstants::SCREEN_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'MEDIUM', 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                 'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $category['prodcat_name'],
                                 'siteLangId' => $siteLangId,
                             ];
@@ -53,15 +50,18 @@
                                         break;
                                     }
                                 } ?>
-                                <?php /* if($i > 5) { ?>
-                                                <li class="last-link"> <a href="<?php echo UrlHelper::generateUrl('Category'); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More',$siteLangId); ?></a> </li>
-                                                <?php } */ ?>
                             </ul>
                         </div>
                     </div>
                 <?php } ?>
             </div>
+            <?php if (count($collection['categories']) > 4) { ?>
+                <div class="section-foot">
+                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline">
+                        <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
+                    </a>
+                </div>
+            <?php } ?>
         </div>
     </section>
-
-<?php } ?>
+<?php }

@@ -1,5 +1,4 @@
 <?php
-
 class HomeController extends MyAppController
 {
     public function index()
@@ -123,7 +122,6 @@ class HomeController extends MyAppController
                         $tpl = new FatTemplate('', '');
                         $tpl->set('siteLangId', $this->siteLangId);
                         $tpl->set('bannerLayout1', $collection['banners']);
-
                         $bannerFirstLayout = $tpl->render(false, false, '_partial/banners/home-banner-first-layout.php', true, true);
                         $collectionTemplates[$collection['collection_id']]['html'] = $bannerFirstLayout;
                     }
@@ -311,6 +309,7 @@ class HomeController extends MyAppController
                     break;
             }
         }
+
         $this->set('collectionTemplates', $collectionTemplates);
 
         $this->_template->render();
@@ -368,7 +367,7 @@ class HomeController extends MyAppController
         }
 
         $pathname = FatApp::getPostedData('pathname', FatUtility::VAR_STRING, '');
-        $pathname = str_replace(ltrim(CONF_WEBROOT_FRONTEND,'/'), '', $pathname);
+        $pathname = str_replace(ltrim(CONF_WEBROOT_FRONTEND, '/'), '', $pathname);
 
         $redirectUrl = '';
         if (empty($pathname)) {
@@ -421,11 +420,11 @@ class HomeController extends MyAppController
                 if (false == $isDefaultLangId) {
                     $redirectUrl .=  strtolower($langCodeArr[$langId]) . '/';
                 }
-                $redirectUrl .=  ltrim($pathname, '/');;   
+                $redirectUrl .=  ltrim($pathname, '/');;
             }
         } else {
             if (empty($redirectUrl)) {
-                $redirectUrl = UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_FRONTEND, null, false, false, false) . ltrim($pathname, '/');   
+                $redirectUrl = UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_FRONTEND, null, false, false, false) . ltrim($pathname, '/');
             }
         }
 
@@ -590,15 +589,12 @@ class HomeController extends MyAppController
 
 
         $collectionCache = CacheHelper::get('collectionCache_' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-
-        /* if ($collectionCache) {
-            return  unserialize($collectionCache);
-        } */
-
         $db = FatApp::getDb();
 
         $collectionsArr = CacheHelper::get('collectionsArr' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-        if (!$collectionsArr) {
+        if (!empty($collectionsArr)) {
+            $collectionsArr = unserialize($collectionCache);
+        } else {
             $srch = new CollectionSearch($langId);
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -611,8 +607,6 @@ class HomeController extends MyAppController
             $rs = $srch->getResultSet();
             $collectionsArr = $db->fetchAll($rs, 'collection_id');
             CacheHelper::create('collectionsArr' . $cacheKey, serialize($collectionsArr), CacheHelper::TYPE_COLLECTIONS);
-        } else {
-            $collectionsArr = unserialize($collectionCache);
         }
 
         if (empty($collectionsArr)) {
@@ -631,7 +625,6 @@ class HomeController extends MyAppController
         $collectionObj->addCondition('ctr_record_id', '!=', 'NULL');
 
         $i = 0;
-
         foreach ($collectionsArr as $collection_id => $collection) {
             if ($collectionCache && !in_array($collection['collection_type'], [Collections::COLLECTION_TYPE_SPONSORED_SHOPS, Collections::COLLECTION_TYPE_SPONSORED_PRODUCTS, Collections::COLLECTION_TYPE_BANNER])) {
                 continue;
@@ -660,7 +653,6 @@ class HomeController extends MyAppController
 
                     break;
                 case Collections::COLLECTION_TYPE_BANNER:
-                    /* $banners = $this->getBanners($collection_id); */
                     $banners = BannerLocation::getPromotionalBanners($collection_id, $langId);
                     $collections[$ind] = $collection;
 
@@ -778,7 +770,7 @@ class HomeController extends MyAppController
                     /* fetch Categories data[ */
                     $productCatSrchTempObj = clone $productCatSrchObj;
                     $productCatSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
-                    //$productCatSrchTempObj->addCondition('prodcat_id', 'IN', array_keys($categoryIds));
+
                     $productCatSrchTempObj->addCondition('prodcat_deleted', '=', applicationConstants::NO);
                     $productCatSrchTempObj->addOrder('ctr.ctr_display_order', 'ASC');
                     $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
@@ -792,17 +784,6 @@ class HomeController extends MyAppController
                     $counter = 0;
                     if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT2 || $collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT3) {
                         while ($catData = $db->fetch($rs)) {
-                            /* fetch Sub-Categories[ */
-                            $subCategorySrch = clone $productCatSrchObj;
-                            $subCategorySrch->doNotCalculateRecords();
-                            //$subCategorySrch->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
-                            //$subCategorySrch->addCondition('prodcat_id', '=', $catData['prodcat_id']);
-                            $subCategorySrch->addCondition('prodcat_parent', '=', $catData['prodcat_id']);
-                            $subCategorySrch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
-                            //$subCategorySrch->addOrder('ctr.ctr_record_id', 'ASC');
-                            $subCategorySrch->setPageSize(5);
-                            $Catrs = $subCategorySrch->getResultSet();
-
                             if (true === MOBILE_APP_API_CALL) {
                                 $imgUpdatedOn = ProductCategory::getAttributesById($catData['prodcat_id'], 'prodcat_updated_on');
                                 $uploadedTime = AttachedFile::setTimeParam($imgUpdatedOn);
@@ -813,8 +794,32 @@ class HomeController extends MyAppController
 
                                 $collections[$ind]['categories'][$counter] = $catData;
                             } else {
+                                /* fetch Sub-Categories[ */
+                                $subCategorySrch = clone $productCatSrchObj;
+                                $subCategorySrch->doNotCalculateRecords();
+                                //$subCategorySrch->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
+                                //$subCategorySrch->addCondition('prodcat_id', '=', $catData['prodcat_id']);
+                                $subCategorySrch->addCondition('prodcat_parent', '=', $catData['prodcat_id']);
+                                $subCategorySrch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+                                //$subCategorySrch->addOrder('ctr.ctr_record_id', 'ASC');
+                                $subCategorySrch->setPageSize(5);
+                                $subCatRs = $subCategorySrch->getResultSet();
+                                $subCategories = $db->fetchAll($subCatRs, 'prodcat_id');
+
                                 $collections[$ind]['categories'][$catData['prodcat_id']] = $catData;
-                                $collections[$ind]['categories'][$catData['prodcat_id']]['subCategories'] = $db->fetchAll($Catrs);
+                                $collections[$ind]['categories'][$catData['prodcat_id']]['subCategories'] = $subCategories;
+
+                                $product = [];
+                                if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT3) {
+                                    $allCats = [$catData['prodcat_id']] + array_keys($subCategories);
+                                    $prodObj = clone $productSrchObj;
+                                    $prodObj->addCondition('prodcat_id', 'IN', $allCats);
+                                    $prodObj->addGroupBy('selprod_product_id');
+                                    $prodObj->setPageSize(1);
+                                    $prodRs = $prodObj->getResultSet();
+                                    $product = $db->fetch($prodRs);
+                                }
+                                $collections[$ind]['categories'][$catData['prodcat_id']]['product'] = $product;
                             }
                             /* ] */
                             $counter++;

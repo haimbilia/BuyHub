@@ -3,28 +3,26 @@
     <section class="section">
         <div class="container">
             <div class="section-head section-head-center">
-                <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
-
-                <?php if ($collection['totCategories'] > Collections::LIMIT_CATEGORY_LAYOUT3) { ?>
-                    <div class="section-action"> <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a>
-                    </div>
-                <?php }  ?>
+                <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>                
             </div>
             <div class="category-layout-1">
-                <?php foreach ($collection['categories'] as $category) {
-                ?>
+                <?php foreach ($collection['categories'] as $category) { ?>
                     <div class="category">
                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $category['prodcat_id']);
                         $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
                         ?>
                         <div class="category-head">
                             <?php
+                            $productId = $category['product']['product_id'] ?? 0;
+                            $selProdId = $category['product']['selprod_id'] ?? 0;
+                            $prodcatName = $category['product']['prodcat_name'] ?? '';
+                            $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId);
                             $pictureAttr = [
-                                'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'image', array($category['prodcat_id'], $siteLangId, 'MEDIUM', applicationConstants::SCREEN_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
-                                'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'image', array($category['prodcat_id'], $siteLangId, 'MEDIUM', applicationConstants::SCREEN_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : "WEBP" . ImageDimension::VIEW_CLAYOUT3, $selProdId, 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
+                                'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : ImageDimension::VIEW_CLAYOUT3, $selProdId, 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                 'ratio' => '1:1',
-                                'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'image', array($category['prodcat_id'], $siteLangId, 'MEDIUM', applicationConstants::SCREEN_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
-                                'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $category['prodcat_name'],
+                                'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : ImageDimension::VIEW_CLAYOUT3, $selProdId, 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $prodcatName,
                                 'siteLangId' => $siteLangId,
                             ];
 
@@ -55,6 +53,13 @@
                     </div>
                 <?php } ?>
             </div>
+            <?php if (count($collection['categories']) > Collections::LIMIT_CATEGORY_LAYOUT3) { ?>
+                <div class="section-foot">
+                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline">
+                        <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
+                    </a>
+                </div>
+            <?php } ?>
         </div>
     </section>
 <?php } ?>

@@ -46,7 +46,7 @@
                     $li = $ul->appendElement("li");
                     $li->appendElement(
                         'a',
-                        array('href' => UrlHelper::generateUrl('Seller', 'taxRules', array($row['taxcat_id'])), 'class' => '', 'title' => Labels::getLabel('LBL_Tax_Rates', $siteLangId)),
+                        array('href' => UrlHelper::generateUrl('Seller', 'taxRules', array($row['taxcat_id'])), 'class' => '', 'title' => Labels::getLabel('LBL_View_Tax_Rates', $siteLangId)),
                         '<i class="icn">
                         <svg class="svg" width="18" height="18">
                             <use

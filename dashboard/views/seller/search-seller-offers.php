@@ -3,9 +3,20 @@ if (!empty($offers)) {
     foreach ($offers as $row) {
         $discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value']);
         $title = ($row['coupon_title'] == '') ? $row['coupon_identifier'] : $row['coupon_title'];
+
         $uploadedTime = AttachedFile::setTimeParam($row['coupon_updated_on']);
-        $imgUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'coupon', array($row['coupon_id'], $siteLangId, ImageDimension::VIEW_NORMAL), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $row['coupon_id'], 0, $siteLangId, true, 0, 1);
+
+        $imgUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'coupon', array($row['coupon_id'], 0, ImageDimension::VIEW_NORMAL, 0, 0), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
         $imageCouponDimensions = ImageDimension::getData(ImageDimension::TYPE_COUPON, ImageDimension::VIEW_NORMAL);
+        foreach ($images as $image) {
+            if ($image['afile_lang_id'] == $siteLangId) {
+                $imgUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'coupon', array($row['coupon_id'], $siteLangId, ImageDimension::VIEW_NORMAL, 0, $image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                break;
+            }
+        }
+
 
 ?>
         <div class="col-lg-6 mb-4">

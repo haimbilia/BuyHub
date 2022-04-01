@@ -11,11 +11,13 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                         foreach ($collection['categories'] as $key => $category) {
                             $x++; ?>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link <?php echo 1 == $x ? 'active' : ''; ?>" data-bs-toggle="tab" data-bs-target="#tb-<?php echo $key . "-" . $collection['collection_id'];; ?>" type="button">
+                                <button class="nav-link <?php echo 1 == $x ? 'active' : ''; ?>" data-bs-toggle="tab" data-bs-target="#tb-<?php echo $key . "-" . $collection['collection_id']; ?>" type="button">
                                     <?php echo $category['catData']['prodcat_name']; ?>
                                 </button>
                             </li>
-                        <?php
+                        <?php if (4 == $x) {
+                                break;
+                            }
                         } ?>
                     </ul>
                 </div>
@@ -23,7 +25,8 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
             <div class="tab-content">
                 <?php $j = 0;
                 foreach ($collection['categories'] as $key => $category) {
-                    $j++; ?>
+                    $j++;
+                ?>
                     <div class="tab-pane fade category-product-layout-1  <?php echo 1 == $j ? 'show active' : ''; ?>" id="tb-<?php echo $key . "-" . $collection['collection_id']; ?>">
                         <div class="product-listing" data-view="3">
                             <?php
@@ -84,19 +87,17 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                             <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
                                         </div>
                                     </div>
-
-
                                 </div>
                             <?php $i++;
                             } ?>
                         </div>
                     </div>
-                <?php }
-                ?>
+                <?php if (4 == $j) {break;}
+                } ?>
             </div>
-            <?php if ($collection['totCategories'] > Collections::LIMIT_CATEGORY_LAYOUT1) { ?>
-                <div class="section-action">
-                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a>
+            <?php if (count($collection['categories']) > 4) { ?>
+                <div class="section-foot">
+                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline"><?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
                 </div>
             <?php }  ?>
 

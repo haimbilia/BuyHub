@@ -72,7 +72,7 @@ class AbusiveWordsController extends ListingBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $srch = Abusive::getSearchObject(); 
+        $srch = Abusive::getSearchObject();
         $srch->joinTable('tbl_languages', 'inner join', 'abusive_lang_id = language_id and language_active = ' . applicationConstants::ACTIVE, 'tl');
 
         if (isset($post['keyword']) && '' != $post['keyword']) {
@@ -85,11 +85,11 @@ class AbusiveWordsController extends ListingBaseController
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(['aw.*', 'tl.*']);
-        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);  
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
-        $this->set('postedData', $post); 
+        $srch->setPageSize($pageSize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
+        $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -222,7 +222,7 @@ class AbusiveWordsController extends ListingBaseController
         if (1 < count($languages)) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
         }
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -256,7 +256,7 @@ class AbusiveWordsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'abusive_keyword' => Labels::getLabel('LBL_Keyword', $this->siteLangId),
             'language_name' => Labels::getLabel('LBL_Language', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),

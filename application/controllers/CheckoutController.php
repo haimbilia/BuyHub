@@ -614,8 +614,7 @@ class CheckoutController extends MyAppController
         }
 
         if (empty($cartProducts)) {
-            $message = Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
-            LibHelper::exitWithError($message, true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId), true);
         }
 
         $productToShippingMethods = array();
@@ -664,12 +663,7 @@ class CheckoutController extends MyAppController
             $this->cartObj->setProductShippingMethod($productToShippingMethods);
             if (!$this->cartObj->isProductShippingMethodSet()) {
                 $this->errMessage = Labels::getLabel('ERR_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART', $this->siteLangId);
-                if (true === MOBILE_APP_API_CALL) {
-                    FatUtility::dieJsonError($this->errMessage);
-                }
-                //MSG_Error_in_Shipping_Method_Selection
-                Message::addErrorMessage($this->errMessage);
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($this->errMessage, true);
             }
 
             $this->set('msg', Labels::getLabel('SUC_SHIPPING_METHOD_SELECTED_SUCCESSFULLY.', $this->siteLangId));
@@ -688,11 +682,7 @@ class CheckoutController extends MyAppController
             $this->_template->render(false, false, 'json-success.php');
         } else {
             $this->errMessage = Labels::getLabel('ERR_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($this->errMessage);
-            }
-            Message::addErrorMessage($this->errMessage);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->errMessage, true);
         }
     }
 

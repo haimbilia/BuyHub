@@ -6,14 +6,6 @@ $bCount = 1;
 if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?>
     <section class="poster-layout-1">
         <?php foreach ($bannerLayout1['banners'] as $val) {
-            /* if($bCount%2==0)
-        {
-            $bannerClass="banners_right";
-        }
-        else
-        {
-            $bannerClass="banners_left";
-        } */
             $desktopUrl = $desktopWebpUrl = '';
             $tabletUrl = $tabletWebpUrl = '';
             $mobileUrl = $mobileWebpUrl = '';
@@ -50,12 +42,10 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
 
             if ($val['banner_record_id'] > 0 && $val['banner_type'] == Banner::TYPE_PPC) {
                 Promotion::updateImpressionData($val['banner_record_id']);
-            }/* else{
-            Banner::updateImpressionData($val['banner_id']);
-        } */ ?>
+            } ?>
 
 
-            <div class="poster <?php /* echo $bannerClass; */ ?>">
+            <div class="poster">
                 <a target="<?php echo $val['banner_target']; ?>" href="<?php echo UrlHelper::generateUrl('Banner', 'url', array($val['banner_id'])); ?>" title="<?php echo $val['banner_title']; ?>">
                     <?php
                     $bannerDimension = ImageDimension::getBannerData('', Collections::TYPE_BANNER_LAYOUT1);

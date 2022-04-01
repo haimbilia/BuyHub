@@ -603,6 +603,13 @@ Updates/Fixes :
     => 063451 - Buyer UI: The alignment of the "No Record Found" is not correct under the Wishlist section and Page Not Found is showing while clicking on the Shop under the Shop's Wishlist section.
     => 063463 - Buyer UI: "Save Changes" and "Save" button is showing for the same functionality (Request My Data) and the confirmation message design is not correct while requesting to Remove My Data.
     => 063459 - Buyer UI: Spacing issue between the country code and phone number field while adding/editing the addresses and deleting address functionality is not working under the profile section at the buyer's end.
+    => 063448 - Buyer UI: A validation message is showing after sending the email on the "Share And Earn" page and transaction IDs are showing in the 2-lines under the My Credits section.
+    => 063439 - Buyer UI: Proper information is not showing for the "search" field under the Order's section.
+    => 063433 - Seller UI: "Copy Link" functionality is not working in the case of Digital products and delete button is also not aligned.
+    => 063461 - Seller UI: Getting multiple issues on Tax category page.
+    => 063440 - Buyer UI: Different icon is used for the "feedback" functionality on the dashboard and on the order's page AND the wrong order ID is showing under the Rewards Points section Assigned.
+    => 063408 - Buyer UI: "Delivery and Billing Address" format is not correct on the order's details page at the buyer's end.
+    => 063398 - Seller UI: The subscription coupon's image is not showing under the subscription offer section and recently purchased plan information is not showing under the "My Subscription" section at the seller's end.
     
     
 UAT points:

@@ -67,12 +67,6 @@ function getNotifications(type, obj) {
 
 copyText = function (obj, applyToolTipInfo = true) {
     var title = $(obj).data("title");
-    /*
-      document.addEventListener('copy', function(e) {
-          e.clipboardData.setData('text/plain', copyText);
-          e.preventDefault();
-      }, true);
-      */
 
     if (!navigator.clipboard) {
         console.warn('clipboard API only works on localhost and https');
@@ -80,7 +74,7 @@ copyText = function (obj, applyToolTipInfo = true) {
         return;
     }
     try {
-        navigator.clipboard.writeText(copyText);
+        navigator.clipboard.writeText(title);
         if (applyToolTipInfo) {
             tooltipCopyHelper(obj, title);
         }
