@@ -214,9 +214,9 @@ class Cronjob extends FatModel
             $languages = Language::getAllNames();
             foreach ($languages as $langId => $langName) {
                 $langData = array(
-                'coupon_title' => Labels::getLabel('LBL_DISCOUNT_ON_FIRST_PURCHASE', $langId),
-                'couponlang_coupon_id' => $couponId,
-                'couponlang_lang_id' => $langId
+                    'coupon_title' => Labels::getLabel('LBL_DISCOUNT_ON_FIRST_PURCHASE', $langId),
+                    'couponlang_coupon_id' => $couponId,
+                    'couponlang_lang_id' => $langId
                 );
 
                 $obj = new DiscountCoupons($couponId);
@@ -361,7 +361,7 @@ class Cronjob extends FatModel
             return false;
         }
 
-        $urpComments = CommonHelper::replaceStringData(Labels::getLabel("MSG_EARNED_REWARD_POINTS_ON_PURCHASE_OF_ORDER_ID_{ORDER-ID}", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)), ['{ORDER-ID}' => $orderId]);
+        $urpComments = CommonHelper::replaceStringData(Labels::getLabel("MSG_EARNED_REWARD_POINTS_ON_PURCHASE_OF_ORDER_ID_{ORDER-ID}", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)), ['{ORDER-ID}' => $row['order_number']]);
         $expiryDate = date('Y-m-d', strtotime(date('Y-m-d') . ' +' . FatApp::getConfig('CONF_REWARDS_VALIDITY_ON_PURCHASE') . 'days'));
 
         $rewardsRecord = new UserRewards();
@@ -812,7 +812,7 @@ class Cronjob extends FatModel
             }
 
 
-            if (!FatApp::getDb()->updateFromArray('tbl_user_cart', array( 'usercart_sent_reminder' => 'mysql_func_usercart_sent_reminder + 1', 'usercart_reminder_date' => date('Y-m-d H:i:s') ), array('smt' => 'usercart_user_id = ?', 'vals' => array($val['usercart_user_id']) ), true)) {
+            if (!FatApp::getDb()->updateFromArray('tbl_user_cart', array('usercart_sent_reminder' => 'mysql_func_usercart_sent_reminder + 1', 'usercart_reminder_date' => date('Y-m-d H:i:s')), array('smt' => 'usercart_user_id = ?', 'vals' => array($val['usercart_user_id'])), true)) {
                 return Labels::getLabel("MSG_CAN_NOT_BE_UPDATED", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
             }
         }
