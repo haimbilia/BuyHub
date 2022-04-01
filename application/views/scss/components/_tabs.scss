@@ -1,9 +1,9 @@
 .nav-tabs {
     border-bottom: solid 2px #000;
-    display: grid;
+    display: inline-grid;
     grid-auto-flow: column;
-    overflow: hidden;
-    overflow-x: scroll;
+    // overflow: hidden;
+    //overflow-x: scroll;
     grid-gap: 1rem;
     white-space: nowrap;
     @include media-breakpoint-up(lg) {

@@ -2,10 +2,7 @@
 <?php if (!empty($product['brand_name'])) { ?>
     <a class="brand-title" href="<?php echo UrlHelper::generateUrl('Brands', 'view', [$product['brand_id']]); ?>"><?php echo $product['brand_name']; ?></a>
 <?php } ?>
-<div class="products-title">
-    <h1 class="h1"> <?php echo $product['selprod_title']; ?> </h1>
-</div>
-
+<h1 class="product-title"> <?php echo $product['selprod_title']; ?> </h1>
 <div class="products-price">
     <span class="products-price-new"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></span>
 

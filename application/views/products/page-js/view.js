@@ -90,8 +90,8 @@ $(function () {
         speed: 300,
         lazyLoad: "ondemand",
         asNavFor: ".thumb-nav",
-        prevArrow: '<div class="slick-prev"><i class="i-prev"></i><span class="sr-only sr-only-focusable"><</span></div>',
-        nextArrow: '<div class="slick-next"><i class="i-next"></i><span class="sr-only sr-only-focusable">></span></div>',
+        prevArrow: '<button class="btn btn-prev"><span></span> </button>',
+        nextArrow: '<button class="btn btn-next"><span></span> </button>',
     });
 
     /* Thumbnail/alternates slider for product page */
@@ -106,8 +106,8 @@ $(function () {
         draggable: true,
         speed: 200,
         focusOnSelect: true,
-        prevArrow: '<div class="slick-prev"><i class="i-prev"></i><span class="sr-only sr-only-focusable"><</span></div>',
-        nextArrow: '<div class="slick-next"><i class="i-next"></i><span class="sr-only sr-only-focusable">></span></div>',
+        prevArrow: '<button class="btn btn-prev"><span></span> </button>',
+        nextArrow: '<button class="btn btn-next"><span></span> </button>',
     });
 
     /* keeps thumbnails active when changing main image, via mouse/touch drag/swipe */
