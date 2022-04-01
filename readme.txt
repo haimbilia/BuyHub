@@ -606,6 +606,7 @@ Updates/Fixes :
     => 063448 - Buyer UI: A validation message is showing after sending the email on the "Share And Earn" page and transaction IDs are showing in the 2-lines under the My Credits section.
     => 063439 - Buyer UI: Proper information is not showing for the "search" field under the Order's section.
     => 063433 - Seller UI: "Copy Link" functionality is not working in the case of Digital products and delete button is also not aligned.
+    => 063461 - Seller UI: Getting multiple issues on Tax category page.
     
     
 UAT points:

@@ -1800,3 +1800,7 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('FRM_SEARCH_BY_ORDER_ID,_PRODUCT_NAME_OR_SHOP_NAME', 1, 'Search by order id, product name or shop name', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_View_Tax_Rates', 1, 'View Tax Rates', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
