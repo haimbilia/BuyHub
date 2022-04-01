@@ -7,14 +7,6 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
     <section class="poster-layout-2">
 
         <?php foreach ($bannerLayout1['banners'] as $val) {
-            /* if($bCount%2==0)
-    {
-        $bannerClass="banners_right";
-    }
-    else
-    {
-        $bannerClass="banners_left";
-    } */
             $desktopUrl = $desktopWebpUrl = '';
             $tabletUrl = $tabletWebpUrl = '';
             $mobileUrl = $mobileWebpUrl = '';

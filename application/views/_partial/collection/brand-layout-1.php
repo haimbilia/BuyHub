@@ -3,17 +3,12 @@
         <div class="container">
             <div class="section-head section-head-center">
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
-
             </div>
             <div class="brand-layout-1">
                 <?php $i = 0;
                 foreach ($collection['brands'] as $brand) { ?>
                     <div class="brand">
                         <a class="brand-logo" href="<?php echo UrlHelper::generateUrl('brands', 'View', array($brand['brand_id'])); ?>">
-                            <?php /* ?><div class="brands-img">
-                    <img loading='lazy' src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'brandImage', array($brand['brand_id'], $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>" data-ratio="1:1 (600x600)" alt="<?php echo $brand['brand_name']; ?>" title="<?php echo $brand['brand_name']; ?>">
-                </div> <?php  */ ?>
-
                             <?php
                             $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brand['brand_id'], 0, 0, false);
                             $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
@@ -28,16 +23,13 @@
                     </div>
                 <?php $i++;
                 } ?>
-
             </div>
 
             <?php if ($collection['totBrands'] > Collections::LIMIT_BRAND_LAYOUT1) { ?>
                 <div class="section-foot">
-                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a>
+                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline"><?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
                 </div>
             <?php } ?>
         </div>
     </section>
-
-
 <?php } ?>
