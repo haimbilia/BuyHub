@@ -65,7 +65,7 @@ class BannerLocation extends MyAppModel
         $srch->setPageSize(1);
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
-        return $bannerDimensions = FatApp::getDb()->fetch($rs);
+        return (array) FatApp::getDb()->fetch($rs);
     }
 
     public static function getPromotionalBanners($collectionId, $langId, $pageSize = 0)

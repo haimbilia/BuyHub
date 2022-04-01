@@ -13,7 +13,7 @@ if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonH
                 $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                 $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 ?>
-                <a class="logo-checkout-main" href="<?php echo UrlHelper::generateUrl(); ?>"><img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>"></a>                
+                <a class="logo-checkout-main" href="<?php echo UrlHelper::generateUrl(); ?>"><img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>"></a>
                 <?php if ($controllerName == 'checkout' || $controllerName == 'subscriptioncheckout') {
                     $cartObj = new Cart();
                     $fulfillmentType = $cartObj->getCartCheckoutType();
@@ -22,6 +22,11 @@ if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonH
                         <?php if ($controllerName == 'checkout') {  ?>
                             <?php /* <li id="step1" class="checkout-progress-step checkoutNav-js billing-js"><?php echo Labels::getLabel('LBL_Billing', $siteLangId); ?>
                             </li> */ ?>
+                            <li id="step1" class="checkout-progress-step checkoutNav-js">
+                                <a href="<?php echo UrlHelper::generateUrl('Cart'); ?>">
+                                    <?php echo Labels::getLabel('LBL_CART', $siteLangId); ?>
+                                </a>
+                            </li>
                             <li id="step2" class="checkout-progress-step checkoutNav-js shipping-js" onclick="loadShippingSummaryDiv(1);">
                                 <?php
                                 if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $cartObj->hasPhysicalProduct()) {

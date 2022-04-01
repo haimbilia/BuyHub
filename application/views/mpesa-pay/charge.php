@@ -18,7 +18,7 @@
             <div class="payable-form__body">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="field-set">
+                        <div class="form-group">
                             <div class="caption-wraper">
                                 <label class="form-label"><?php echo Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId); ?></label>
                             </div>

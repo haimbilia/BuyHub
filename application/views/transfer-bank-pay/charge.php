@@ -113,7 +113,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 <div class="payable-form__body">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="field-set">
+                            <div class="form-group">
                                 <div class="caption-wraper">
                                     <label class="form-label"><?php echo $frm->getField('opayment_method')->getCaption(); ?></label>
                                 </div>
@@ -127,7 +127,7 @@ $frm->developerTags['fld_default_col'] = 12;
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="field-set">
+                            <div class="form-group">
                                 <div class="caption-wraper">
                                     <label class="form-label"><?php echo $frm->getField('opayment_gateway_txn_id')->getCaption(); ?></label>
                                 </div>
@@ -141,7 +141,7 @@ $frm->developerTags['fld_default_col'] = 12;
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="field-set">
+                            <div class="form-group">
                                 <div class="caption-wraper">
                                     <label class="form-label"><?php echo $frm->getField('opayment_amount')->getCaption(); ?></label>
                                 </div>
@@ -155,7 +155,7 @@ $frm->developerTags['fld_default_col'] = 12;
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="field-set">
+                            <div class="form-group">
                                 <div class="caption-wraper">
                                     <label class="form-label"><?php echo $frm->getField('opayment_comments')->getCaption(); ?></label>
                                 </div>

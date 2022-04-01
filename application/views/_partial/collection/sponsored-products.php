@@ -6,9 +6,6 @@
                 <div class="section-heading">
                     <h2><?php echo ($collection['collection_name'] != '') ? $collection['collection_name'] : ''; ?></h2>
                 </div>
-                <?php /* if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
-                <div class="section-action"><a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id']));?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a> </div>
-                <?php } */ ?>
             </div>
             <div class="product-listing" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
@@ -35,5 +32,12 @@
                 <?php } ?>
             </div>
         </div>
+        <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
+            <div class="section-foot">
+                <a href="<?php echo UrlHelper::generateUrl('Collections', 'view', array($collection['collection_id'])); ?>" class="link-underline">
+                    <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
+                </a>
+            </div>
+        <?php } ?>
     </section>
 <?php }

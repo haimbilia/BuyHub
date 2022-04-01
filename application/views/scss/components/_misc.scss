@@ -500,7 +500,9 @@ a:hover {
     flex-wrap: nowrap;
     .btn {
         background-color: #fff;
-        border: $border-black;
+        @include media-breakpoint-up(lg) {
+            border: $border-black;
+        }
         padding: 0;
         width: 42px;
         height: 42px;
