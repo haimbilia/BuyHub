@@ -132,6 +132,7 @@ var fcom = {
 		this.ajax(url, data, function (ans) {
 			fcom.closeProcessing(processingClass);
 			if (ans.status != 1) {
+				fcom.removeLoader();
 				if (typeof ans.displayLoginForm != 'undefined' && ans.displayLoginForm == 1) {
 					loginPopUpBox(true);
 					return;

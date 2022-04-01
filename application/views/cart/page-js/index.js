@@ -62,6 +62,7 @@ $(function () {
 	applyPromoCode = function (frm) {
 		if (!$(frm).validate()) return;
 		var data = fcom.frmData(frm);
+		$("#js-cartFinancialSummary").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Cart', 'applyPromoCode'), data, function (res) {
 			$.ykmodal.close();
 			listCartProducts();
@@ -81,6 +82,7 @@ $(function () {
 	};
 
 	removePromoCode = function () {
+		$("#js-cartFinancialSummary").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Cart', 'removePromoCode'), '', function (res) {
 			listCartProducts();
 		});
@@ -170,6 +172,7 @@ $(function () {
 	}
 
 	getCartFinancialSummary = function (type) {
+		$("#js-cartFinancialSummary").prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Cart', 'getCartFinancialSummary', [type]), '', function (res) {
 			$("#js-cartFinancialSummary").hide().html(res).fadeIn();
 			fcom.removeLoader();

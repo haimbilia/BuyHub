@@ -171,20 +171,17 @@ class CategoryController extends MyAppController
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
-
-
-      
     }
 
     public function icon($catId, $langId = 0, $sizeType = '')
-    { 
+    {
         $default_image = 'logo_default.svg';
         $catId = FatUtility::int($catId);
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $catId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $aspectRatioType = $file_row['afile_aspect_ratio'];
-        $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;            
+        $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType, $aspectRatioType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON, $sizeType);
 
@@ -193,8 +190,6 @@ class CategoryController extends MyAppController
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
-
-       
     }
 
 
@@ -213,7 +208,6 @@ class CategoryController extends MyAppController
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
-       
     }
 
 
@@ -234,7 +228,7 @@ class CategoryController extends MyAppController
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
-        }      
+        }
     }
 
     public function banner($prodCatId, $langId = 0, $sizeType = '', $afileId = 0, $screen = 0, $displayUniversalImage = true)
@@ -260,11 +254,10 @@ class CategoryController extends MyAppController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_BANNER, $sizeType);
 
         if ($sizeType) {
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'],$default_image);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
-       
     }
 
     public function getBreadcrumbNodes($action)

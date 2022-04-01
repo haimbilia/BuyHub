@@ -1,12 +1,8 @@
 <?php if (isset($collection['brands']) && count($collection['brands']) > 0) { ?>
-
-
     <section class="section">
         <div class="container">
             <div class="section-head section-head-center">
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
-
-
             </div>
             <div class="brand-layout-2">
                 <?php $i = 0;
@@ -20,8 +16,6 @@
                     if (isset($fileData['afile_aspect_ratio']) && $fileData['afile_aspect_ratio'] > 0 && isset($aspectRatioArr[$fileData['afile_aspect_ratio']])) {
                         $ratio = $aspectRatioArr[$fileData['afile_aspect_ratio']];
                     } ?>
-
-
                     <a href="<?php echo UrlHelper::generateUrl('brands', 'View', array($brand['brand_id'])); ?>" class="brand">
                         <div class="brand-thumb">
                             <img loading='lazy' data-ratio="<?php echo $ratio; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brandImage', array($brand['brand_id'], $siteLangId, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>" title="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>">
@@ -35,7 +29,7 @@
             </div>
             <?php if ($collection['totBrands'] > Collections::LIMIT_BRAND_LAYOUT1) { ?>
                 <div class="section-foot">
-                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a>
+                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline"><?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
                 </div>
             <?php } ?>
         </div>
