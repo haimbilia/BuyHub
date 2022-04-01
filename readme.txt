@@ -609,6 +609,7 @@ Updates/Fixes :
     => 063461 - Seller UI: Getting multiple issues on Tax category page.
     => 063440 - Buyer UI: Different icon is used for the "feedback" functionality on the dashboard and on the order's page AND the wrong order ID is showing under the Rewards Points section Assigned.
     => 063408 - Buyer UI: "Delivery and Billing Address" format is not correct on the order's details page at the buyer's end.
+    => 063398 - Seller UI: The subscription coupon's image is not showing under the subscription offer section and recently purchased plan information is not showing under the "My Subscription" section at the seller's end.
     
     
 UAT points:
