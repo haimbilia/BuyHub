@@ -607,7 +607,8 @@ Updates/Fixes :
     => 063439 - Buyer UI: Proper information is not showing for the "search" field under the Order's section.
     => 063433 - Seller UI: "Copy Link" functionality is not working in the case of Digital products and delete button is also not aligned.
     => 063461 - Seller UI: Getting multiple issues on Tax category page.
-    => 063440 - Buyer UI: Different icon is used for the "feedback" functionality on the dashboard and on the order's page AND the wrong order ID is showing under the Rewards Points section Assigned
+    => 063440 - Buyer UI: Different icon is used for the "feedback" functionality on the dashboard and on the order's page AND the wrong order ID is showing under the Rewards Points section Assigned.
+    => 063408 - Buyer UI: "Delivery and Billing Address" format is not correct on the order's details page at the buyer's end.
     
     
 UAT points:
