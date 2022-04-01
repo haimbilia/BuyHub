@@ -595,7 +595,7 @@ class BuyerController extends BuyerBaseController
     {
         $frmSearch = $this->getOrderSearchForm($this->siteLangId);
         $this->set('frmSearch', $frmSearch);
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ORDER_ID_OR_PRODUCT_NAME_OR_SHOP_NAME', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ORDER_ID,_PRODUCT_NAME_OR_SHOP_NAME', $this->siteLangId));
         $this->_template->render(true, true);
     }
 
