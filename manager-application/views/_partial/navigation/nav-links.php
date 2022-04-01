@@ -211,7 +211,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_REQUESTS', $siteLangId); ?><?php if (!$quickSearch && $supReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($supReqCount);?>)<?php } ?></span>
+                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_REQUESTS', $siteLangId); ?><?php if (!$quickSearch && $supReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($supReqCount); ?>)<?php } ?></span>
                             </a>
                         </li>
                     <?php } ?>
