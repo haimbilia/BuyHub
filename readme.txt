@@ -612,6 +612,7 @@ Updates/Fixes :
     => 063398 - Seller UI: The subscription coupon's image is not showing under the subscription offer section and recently purchased plan information is not showing under the "My Subscription" section at the seller's end.
     => 063508 - Seller UI: Getting multiple issues on Shipping services page.
     => 063491 - Seller UI: On hovering on the screen unnecessary tooltip 'Click here for edit' is coming.
+    => 063490 - Seller UI: 'Related Products' label is showing instead of 'Buy together products'.
     
     
 UAT points:
