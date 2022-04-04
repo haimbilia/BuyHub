@@ -150,7 +150,7 @@ class UserPrivilege
             array(
                 static::SECTION_SHOP => Labels::getLabel('LBL_Shop', $langId),
                 static::SECTION_PRODUCTS => Labels::getLabel('LBL_Products', $langId),
-               /* static::SECTION_PRODUCT_TAGS => Labels::getLabel('LBL_Product_Tags', $langId),*/
+                /* static::SECTION_PRODUCT_TAGS => Labels::getLabel('LBL_Product_Tags', $langId),*/
                 static::SECTION_PRODUCT_OPTIONS => Labels::getLabel('LBL_Product_Options', $langId),
                 static::SECTION_TAX_CATEGORY => Labels::getLabel('LBL_Tax_Categories', $langId),
                 static::SECTION_SELLER_REQUESTS => Labels::getLabel('LBL_Seller_Requests', $langId),
@@ -804,7 +804,7 @@ class UserPrivilege
 
     public function canEditSubscription($sellerId = 0, $returnResult = false)
     {
-        return false;
+        return true;
         // return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_WRITE, $returnResult);
     }
 

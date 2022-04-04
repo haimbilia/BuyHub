@@ -7,11 +7,13 @@ class SubscriptionCheckoutController extends LoggedUserController
     {
         parent::__construct($action);
         if (!FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
+            die('hi');
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
         $user_id = 0;
         if (!UserAuthentication::isUserLogged() || !User::canViewSupplierTab()) {
+            die('hi12');
             $errMsg = Labels::getLabel('MSG_Please_login_with_seller_account', $this->siteLangId);
             Message::addErrorMessage($errMsg);
             if (FatUtility::isAjaxCall()) {
@@ -695,10 +697,10 @@ class SubscriptionCheckoutController extends LoggedUserController
     {
 
         $loggedUserId = $this->userParentId;
-        
+
         $orderId = isset($_SESSION['subscription_shopping_cart']["order_id"]) ? $_SESSION['subscription_shopping_cart']["order_id"] : '';
-        $couponsList = DiscountCoupons::getValidSubscriptionCoupons($loggedUserId, $this->siteLangId, '' , $orderId);
-      
+        $couponsList = DiscountCoupons::getValidSubscriptionCoupons($loggedUserId, $this->siteLangId, '', $orderId);
+
         $this->set('couponsList', $couponsList);
 
         $PromoCouponsFrm = $this->getPromoCouponsForm($this->siteLangId);
@@ -734,8 +736,8 @@ class SubscriptionCheckoutController extends LoggedUserController
         $couponCode = $post['coupon_code'];
 
         $orderId = isset($_SESSION['subscription_shopping_cart']["order_id"]) ? $_SESSION['subscription_shopping_cart']["order_id"] : '';
-        $couponInfo = DiscountCoupons::getValidSubscriptionCoupons(UserAuthentication::getLoggedUserId(), $this->siteLangId, $couponCode , $orderId);
-      
+        $couponInfo = DiscountCoupons::getValidSubscriptionCoupons(UserAuthentication::getLoggedUserId(), $this->siteLangId, $couponCode, $orderId);
+
         if ($couponInfo == false) {
             FatUtility::dieWithError(Labels::getLabel('LBL_Invalid_Coupon_Code', $this->siteLangId));
         }

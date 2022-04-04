@@ -346,7 +346,7 @@ class HtmlHelper
                     <div class="alert-text">' . $message . '</div>
                 </div>';
     }
-    
+
     public static function getErrorMessageHtml(string $message): string
     {
         return '<div class="alert alert-danger" role="alert">
