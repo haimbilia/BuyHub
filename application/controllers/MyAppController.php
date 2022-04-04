@@ -143,6 +143,8 @@ class MyAppController extends FatController
                     'quantityAdjusted' => Labels::getLabel('MSG_MAX_QUANTITY_THAT_CAN_BE_PURCHASED_IS_{QTY}._SO,_YOUR_REQUESTED_QUANTITY_IS_ADJUSTED_TO_{QTY}.', $this->siteLangId),
                     'withUsernameOrEmail' => Labels::getLabel('LBL_USE_EMAIL_INSTEAD_?', $this->siteLangId),
                     'withPhoneNumber' => Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD_?', $this->siteLangId),
+                    'byPhone' => Labels::getLabel('LBL_PHONE_?', $this->siteLangId),
+                    'byEmail' => Labels::getLabel('LBL_EMAIL_?', $this->siteLangId),
                     'otpInterval' => User::OTP_INTERVAL,
                     'captchaSiteKey' => FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, ''),
                     'allowedFileSize' => LibHelper::getMaximumFileUploadSize(),
@@ -395,7 +397,7 @@ class MyAppController extends FatController
         return $frm;
     }
 
-    protected function getLoginForm()
+    protected function getLoginForm(bool $signInWithPhone = false)
     {
         $siteLangId = CommonHelper::getLangId();
         $frm = new Form('frmLogin');
@@ -405,11 +407,16 @@ class MyAppController extends FatController
             $userName = 'login@dummyid.com';
             $pass = 'kanwar@123';
         }
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_USERNAME_OR_EMAIL', $siteLangId), 'username', $userName, array('placeholder' => Labels::getLabel('LBL_USERNAME_OR_EMAIL', $siteLangId), 'data-alt-placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId)));
-        $pwd = $frm->addPasswordField(Labels::getLabel('LBL_Password', $siteLangId), 'password', $pass, array('placeholder' => Labels::getLabel('LBL_Password', $siteLangId)));
-        $pwd->requirements()->setRequired();
 
-        if (SmsArchive::canSendSms(SmsTemplate::LOGIN)) {
+        if (false === $signInWithPhone) {
+            $frm->addRequiredField(Labels::getLabel('LBL_USERNAME_OR_EMAIL', $siteLangId), 'username', $userName);
+            $pwd = $frm->addPasswordField(Labels::getLabel('LBL_Password', $siteLangId), 'password', $pass, array('placeholder' => Labels::getLabel('LBL_Password', $siteLangId)));
+            $pwd->requirements()->setRequired();
+
+            $frm->addCheckbox(Labels::getLabel('LBL_Remember_Me', $siteLangId), 'remember_me', 1, array(), '', 0);
+            $frm->addHtml('', 'forgot', '');
+        } else {
+            $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId), 'username', $userName);
             $attr = ['maxlength' => 1, 'size' => 1, 'placeholder' => '*'];
             for ($i = 0; $i < User::OTP_LENGTH; $i++) {
                 $frm->addTextBox('', 'upv_otp[' . $i . ']', '', $attr);
@@ -417,8 +424,6 @@ class MyAppController extends FatController
             $frm->addHiddenField('', 'loginWithOtp', 0);
         }
 
-        $frm->addCheckbox(Labels::getLabel('LBL_Remember_Me', $siteLangId), 'remember_me', 1, array(), '', 0);
-        $frm->addHtml('', 'forgot', '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_LOGIN', $siteLangId));
         return $frm;
     }
@@ -521,7 +526,7 @@ class MyAppController extends FatController
         }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $siteLangId));
         $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $siteLangId));
-        
+
         return $frm;
     }
 

@@ -1,11 +1,13 @@
 <?php
-$canEdit = isset($canEdit) ? $canEdit : true;
-$action = isset($action) ? $action : '';
-
+$canEdit = $canEdit ?? true;
+$action = $action ?? '';
+$canViewProducts = $canViewProducts ?? true;
+$canEditProducts = $canEditProducts ?? true;
 if ($canEdit) { ?>
     <div class="content-header-toolbar">
         <ul>
-            <?php if (User::canAddCustomProduct() && $action == 'products') { ?>
+            <?php if (User::canAddCustomProduct() && $action == 'products') {
+                if ($canEditProducts) { ?>
                 <li>
                     <a href="<?php echo UrlHelper::generateUrl('products', 'form'); ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
@@ -14,15 +16,18 @@ if ($canEdit) { ?>
                         </svg><?php echo Labels::getLabel('LBL_NEW_PRODUCT', $siteLangId); ?>
                     </a>
                 </li>
-                <li>
-                    <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog'); ?>" class="btn btn-outline-gray btn-icon">
-                        <svg class="svg btn-icon-start" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#inventories">
-                            </use>
-                        </svg><?php echo Labels::getLabel('LBL_MY_PRODUCTS', $siteLangId); ?>
-                    </a>
-                </li>
-            <?php } ?>
+                <?php }
+                if ($canViewProducts) { ?>
+                    <li>
+                        <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog'); ?>" class="btn btn-outline-gray btn-icon">
+                            <svg class="svg btn-icon-start" width="18" height="18">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#inventories">
+                                </use>
+                            </svg><?php echo Labels::getLabel('LBL_MY_PRODUCTS', $siteLangId); ?>
+                        </a>
+                    </li>
+            <?php }
+            } ?>
             <?php if (isset($adminCatalogs) && $adminCatalogs > 0) { ?>
                 <li>
                     <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog', [0]); ?>" class="btn btn-outline-gray btn-icon">

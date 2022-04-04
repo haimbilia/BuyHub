@@ -1,4 +1,4 @@
-$("document").ready(function () {
+$(function () {
 	$(".buySubscription--js").on('click', function (event) {
 		event.preventDefault();
 		var selectedPackage = $(this).closest('.packagesBoxJs');
@@ -12,20 +12,11 @@ $("document").ready(function () {
 			return false;
 		}
 
-		/* $packageId = $(this).attr('data-id'); */
-
 		$spplan_id = selectedPackage.find('input[name=packages]:checked').val();
 
 		subscription.add($spplan_id, true);
 		return false;
 	});
-	/* $(".buyFreeSubscription").on('click', function(event){
-		event.preventDefault();
-		$packageId = $(this).attr('data-id');
-
-		subscription.add( $packageId, true , true);
-		return false;
-	}); */
 });
 
 function htmlDecode(input) {
