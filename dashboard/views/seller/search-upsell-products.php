@@ -23,8 +23,7 @@
         foreach ($arr_flds as $key => $val) {
             $tr->setAttribute('id', 'row-' . $selProdId);
             if ($key == 'product_name') {
-                $title = ($canEdit) ? Labels::getLabel('LBL_Click_Here_For_Edit', $siteLangId) : '';
-                $td = $tr->appendElement('td', array('class' => (($canEdit) ? 'js-product-edit cursor-pointer' : ''), 'row-id' => $selProdId, 'title' => $title));
+                $td = $tr->appendElement('td', array('class' => (($canEdit) ? 'js-product-edit cursor-pointer' : ''), 'row-id' => $selProdId));
             } else {
                 $td = $tr->appendElement('td');
             }

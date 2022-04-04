@@ -37,7 +37,7 @@ $(function (){
 		if (catId < 0) {
 			catId = 0;
 		}
-		$(dv).html(fcom.getLoader());
+		$(dv).prepend(fcom.getLoader());
 		if (0 < catId) {
 			$('.is--active').removeClass('is--active');
 			$('#'+catId).addClass('is--active');
@@ -47,6 +47,7 @@ $(function (){
 			$(dv).find('.loader-yk').remove();
 			$(dv).html(ans.html);
 			window.recordCount = ans.recordCount;
+			fcom.removeLoader();
 		});
 	};
 
@@ -59,6 +60,7 @@ $(function (){
 				$(".questions-section").show();
 			}
 			window.recordCount = ans.recordCount;
+			fcom.removeLoader();
 		});
 	}
 

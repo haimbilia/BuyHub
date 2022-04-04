@@ -1,11 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/dashboardNavigation.php'); 
+$this->includeTemplate('_partial/dashboardNavigation.php');
 $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
 ?>
 <div class="content-wrapper content-space">
     <?php
     $data = [
-        'headingLabel' => Labels::getLabel('LBL_Related_Products', $siteLangId),
+        'headingLabel' => Labels::getLabel('LBL_Buy_Together_Products', $siteLangId),
         'siteLangId' => $siteLangId,
     ];
     if ($canEdit) {

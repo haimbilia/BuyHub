@@ -19,19 +19,7 @@
         padding: 20px 0;
         //max-width: 600px;
     }
-    & .thumb-nav.slick-slider .slick-prev,
-    & .thumb-nav.slick-slider .slick-next {
-        font-size: 1.2em;
-        height: 20px;
-        width: 26px;
-        margin-top: -10px;
-    }
-    & .thumb-nav.slick-slider .slick-prev {
-        margin-left: -30px;
-    }
-    & .thumb-nav.slick-slider .slick-next {
-        margin-right: -30px;
-    }
+
     & .thumb-nav li {
         display: block;
         margin: 0 auto;
@@ -56,30 +44,57 @@
     }
 }
 
-.slick-slider .slick-prev,
-.slick-slider .slick-next {
-    z-index: 100;
-    font-size: 2.5em;
-    height: 40px;
-    width: 40px;
-    margin-top: -20px;
-    color: #b7b7b7;
-    position: absolute;
-    top: 50%;
-    text-align: center;
-    color: #000;
-    opacity: 0.3;
-    transition: opacity 0.25s;
-    cursor: pointer;
-    background: #ffffff;
-}
-.slick-slider .slick-prev:hover,
-.slick-slider .slick-next:hover {
-    opacity: 0.65;
-}
-.slick-slider .slick-prev {
-    left: 0;
-}
-.slick-slider .slick-next {
-    right: 0;
+.slick-slider {
+    .btn {
+        @include media-breakpoint-up(lg) {
+            //border: $border;
+        }
+        padding: 0;
+        width: 42px;
+        height: 42px;
+        // display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0;
+        z-index: 100;
+        font-size: 2.5em;
+        margin-top: -20px;
+        position: absolute;
+        top: 50%;
+        text-align: center;
+        color: #000;
+        opacity: 0.6;
+        transition: opacity 0.25s;
+        cursor: pointer;
+        background: #ffffff;
+        &-prev {
+            left: 0;
+            span {
+                display: inline-block;
+                border-right: 1px solid black;
+                border-bottom: 1px solid black;
+                width: 10px;
+                height: 10px;
+                transform: rotate(-225deg);
+                margin-#{$end-direction}: -7px;
+            }
+        }
+
+        &-next {
+            right: 0;
+            span {
+                display: inline-block;
+                border-right: 1px solid black;
+                border-bottom: 1px solid black;
+                width: 10px;
+                height: 10px;
+                transform: rotate(-45deg);
+                margin-#{$start-direction}: -7px;
+            }
+        }
+        &:hover {
+            opacity: 1;
+        }
+    }
 }

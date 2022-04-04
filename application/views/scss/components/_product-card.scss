@@ -131,7 +131,7 @@
     &-title {
         color: inherit;
         margin: 0 auto;
-        padding: 0 10px;
+        padding: 0;
         margin-bottom: 1rem;
         font-size: 0.9em;
         font-weight: 400;
@@ -263,6 +263,7 @@
 .product-listing {
     display: grid;
     grid-gap: 3rem;
+
     //grid-gap: 0;
     &[data-view="2"] {
         grid-template-columns: repeat(2, 1fr);

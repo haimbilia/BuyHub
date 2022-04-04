@@ -36,6 +36,21 @@ class WithdrawalRequestsController extends ListingBaseController
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['newRecordBtn'] = false;
+        $actionItemsData['otherButtons'] = [
+            [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'class' => 'btn btn-icon btn-link',
+                    'onclick' => 'exportRecords()',
+                    'title' => Labels::getLabel('LBL_Export', $this->siteLangId)
+                ],
+                'label' => '<svg class="svg btn-icon-start " width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#export">
+                                </use>
+                            </svg><span>' . Labels::getLabel('LBL_Export', $this->siteLangId) . '</span>',
+            ]
+        ];
 
         $this->set('actionItemsData', $actionItemsData);
         $this->set('pageData', $pageData);
@@ -43,7 +58,7 @@ class WithdrawalRequestsController extends ListingBaseController
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_USER_NAME_OR_EMAIL', $this->siteLangId));
-        $this->getListingData();
+        $this->getListingData(false);
 
         $data = FatApp::getPostedData();
         if ($data) {
@@ -89,9 +104,9 @@ class WithdrawalRequestsController extends ListingBaseController
         return $frm;
     }
 
-    public function search()
+    public function search($reportType = false)
     {
-        $this->getListingData();
+        $this->getListingData($reportType);
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'withdrawal-requests/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
@@ -99,7 +114,7 @@ class WithdrawalRequestsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    public function getListingData()
+    public function getListingData($reportType)
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
@@ -183,6 +198,52 @@ class WithdrawalRequestsController extends ListingBaseController
             )
         );
         $srch->addOrder($sortBy, $sortOrder);
+
+        $paymentMethods = User::getAffiliatePaymentMethodArr($this->siteLangId);
+        $payoutPlugins = Plugin::getNamesByType(Plugin::TYPE_PAYOUTS, $this->siteLangId);
+
+        if ($reportType == 'export') {
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+            $rs = $srch->getResultSet();
+            $sheetData = array();
+            $exportField = ['user_email' => Labels::getLabel('LBL_USER_EMAIL', $this->siteLangId)];
+            $exportField = $exportField + $fields;
+            unset($exportField['action']);
+            array_push($sheetData, array_values($exportField));
+
+            while ($row = FatApp::getDb()->fetch($rs)) {
+                $arr = [];
+                foreach ($exportField as $key => $val) {
+                    switch ($key) {
+                        case 'user_balance':
+                        case 'withdrawal_amount':
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                            break;
+                        case 'withdrawal_payment_method':
+                            $methodType = $paymentMethods + $payoutPlugins;
+                            $methodName = (isset($row[$key]) && isset($methodType[$row[$key]]) ? $methodType[$row[$key]] : Labels::getLabel('LBL_N/A', $siteLangId));
+                            $arr[] = $methodName;
+                            break;
+                        case 'withdrawal_request_date':
+                            $arr[] = FatDate::format($row[$key], true);
+                            break;
+                        case 'withdrawal_status':
+                            $statusArr = Transactions::getWithdrawlStatusArr($this->siteLangId);
+                            $arr[] = $statusArr[$row[$key]] ?? Labels::getLabel('LBL_N/A', $this->siteLangId);
+                            break;
+                        default:
+                            $arr[] = $row[$key];
+                            break;
+                    }
+                }
+                array_push($sheetData, $arr);
+            }
+
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_WITHDRAWAL_REQUESTS', $this->siteLangId) . date("d-M-Y") . '.csv', ',');
+            exit;
+        }
+
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -195,9 +256,7 @@ class WithdrawalRequestsController extends ListingBaseController
         $this->set('statusArr', Transactions::getWithdrawlStatusArr($this->siteLangId));
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
-        $this->checkEditPrivilege(true);
-        $paymentMethods = User::getAffiliatePaymentMethodArr($this->siteLangId);
-        $payoutPlugins = Plugin::getNamesByType(Plugin::TYPE_PAYOUTS, $this->siteLangId);
+        $this->checkEditPrivilege(true);      
         $this->set('paymentMethods', $paymentMethods);
         $this->set('payoutPlugins', $payoutPlugins);
     }

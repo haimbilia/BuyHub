@@ -10,7 +10,7 @@ class GuestAdvertiserController extends MyAppController
     public function account()
     {
         if (UserAuthentication::isUserLogged() && (User::isAdvertiser() || User::isSigningUpAdvertiser())) {
-            FatApp::redirectUser(UrlHelper::generateUrl('advertiser'));
+            FatApp::redirectUser(UrlHelper::generateUrl('advertiser', '', [], CONF_WEBROOT_DASHBOARD));
         }
         if (UserAuthentication::isUserLogged()) {
             Message::addErrorMessage(Labels::getLabel('ERR_YOU_ARE_ALREADY_LOGGED_IN._PLEASE_LOGOUT_AND_REGISTER_FOR_ADVERTISER.', $this->siteLangId));
@@ -19,7 +19,8 @@ class GuestAdvertiserController extends MyAppController
 
         $obj = new Extrapage();
         $slogan = $obj->getContentByPageType(Extrapage::ADVERTISER_BANNER_SLOGAN, $this->siteLangId);
-
+        $slogan['epage_extra_info'] = !empty($slogan['epage_extra_info']) ? json_decode($slogan['epage_extra_info'], true) : [];
+        
         $this->set('slogan', $slogan);
         $this->set('siteLangId', $this->siteLangId);
 
