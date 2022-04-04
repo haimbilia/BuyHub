@@ -7,6 +7,11 @@
             border: none;
             font-size: 1em;
             margin-#{$end-direction}: 20px;
+            [dir="rtl"] &{
+                margin-#{$end-direction}:auto;
+                margin-#{$start-direction}:20px;
+
+            }
         }
         .select2-selection__placeholder {
             color: $txt-gray;
@@ -34,6 +39,7 @@
             [dir="rtl"] & {
                 padding-#{$start-direction}: 35px;
                 background-position: calc(0% - -12px) center;
+                padding-#{$end-direction}: 0.75rem ;
             }
         }
     }

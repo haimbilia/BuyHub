@@ -11,3 +11,54 @@ if (!empty($list) && is_array($list)) {
 <?php
     }
 }
+
+?>
+
+<script type="text/javascript">
+
+$(document).off("keyup").on("keyup", '.faq-input', function() {
+	// Get user input from search box
+	var filter_text = $(this).val();
+	
+		$('#listing .faqHeading').each(function() {
+			if ('' !== filter_text) {                        
+				let headingText = $(this).text(); 
+				var startAt = headingText.toLowerCase().indexOf(filter_text
+					.toLowerCase());
+			   
+				if (startAt >= 0) {
+					var endAt = filter_text.length;                              
+					filter_text = headingText.substr(startAt, endAt);
+					var replaceWith = "<span class='js--highlightText'>" + filter_text +
+						"</span>";                                                             
+					$(this).html(headingText.replace(filter_text, replaceWith));
+				}else{
+					$(this).text(headingText); 
+				}
+
+				let faqTextEle = $(this).siblings('.faqText');
+				let faqTextContent = faqTextEle.text();
+				var startAt = faqTextContent.toLowerCase().indexOf(filter_text
+					.toLowerCase());                           
+
+				if (startAt >= 0) {
+					var endAt = filter_text.length;                                
+					filter_text = faqTextContent.substr(startAt, endAt);
+					var replaceWith = "<span class='js--highlightText'>" + filter_text +
+						"</span>";                              
+					faqTextEle.collapse('show');
+					faqTextEle.html(faqTextContent.replace(filter_text, replaceWith));
+				} else {
+					faqTextEle.text(faqTextContent);
+					faqTextEle.collapse('hide');
+				}
+			}else {
+				$(this).text($(this).text());                           
+				$(this).siblings('.faqText').text($(this).siblings('.faqText').text());
+				$('#listing .faqText').collapse('hide');
+			} 
+		});                 
+});
+
+
+</script>

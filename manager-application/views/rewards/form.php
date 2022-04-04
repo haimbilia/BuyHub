@@ -17,7 +17,9 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
 <script>
-    $(document).ready(function () {
-        bindUserSelect2('userIdJs');
+    $(document).ready(function() {
+        bindUserSelect2('userIdJs', {
+            'parents_only': 1
+        });
     });
 </script>

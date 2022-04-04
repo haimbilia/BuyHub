@@ -193,7 +193,7 @@ $plugin = new Plugin();
                 </span>
                 <span class="dashboard-menu-head">
                     <?php echo Labels::getLabel('LBL_Promotions', $siteLangId); ?>
-                </span>              
+                </span>
                 <i class="dashboard-menu-arrow dropdown-toggle-custom-arrow">
                 </i>
             </button>
@@ -553,39 +553,38 @@ $plugin = new Plugin();
             </li>
         </ul>
     </li>
-    <li class="dashboard-menu-item">
-        <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-plugins" aria-expanded="true" aria-controls="collapseOne" title="">
-            <span class="dashboard-menu-icon">
-                <svg class="svg" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#plugin-data-migration">
-                    </use>
-                </svg>
-            </span>
-            <span class="dashboard-menu-head">
-                <?php echo Labels::getLabel("LBL_PLUGINS", $siteLangId); ?>
-            </span>
-            <i class="dashboard-menu-arrow dropdown-toggle-custom-arrow">
-            </i>
-        </button>
-        <ul class="menu-sub menu-sub-accordion collapse" id="nav-plugins" aria-labelledby="" data-parent="#dashboard-menu">
-            <?php if ($userPrivilege->canViewSellerPlugins(UserAuthentication::getLoggedUserId(), true)) {
-                foreach (SellerPlugin::getAllowedTypeArr($siteLangId) as $type => $name) {
-                    $canUseShippingApi = Shipping::canUseShippingApi(UserAuthentication::getLoggedUserId(0));
-                    if (false === $canUseShippingApi && Plugin::TYPE_SHIPPING_SERVICES == $type) {
-                        continue;
-                    }
-            ?>
-                    <li class="menu-sub-item">
-                        <a class="menu-sub-link navLinkJs <?php echo ($controller == 'sellerplugins' && $action == 'index' && is_array($params) && current($params) == $type) ? 'active' : ''; ?>" title="<?php echo $name; ?>" href="<?php echo UrlHelper::generateUrl('sellerPlugins', 'index', [$type]); ?>">
-                            <span class="menu-sub-title"><?php echo $name; ?></span>
-                        </a>
+    <?php if ($userPrivilege->canViewSellerPlugins(UserAuthentication::getLoggedUserId(), true)) { ?>
+        <li class="dashboard-menu-item">
+            <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-plugins" aria-expanded="true" aria-controls="collapseOne" title="">
+                <span class="dashboard-menu-icon">
+                    <svg class="svg" width="18" height="18">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#plugin-data-migration">
+                        </use>
+                    </svg>
+                </span>
+                <span class="dashboard-menu-head">
+                    <?php echo Labels::getLabel("LBL_PLUGINS", $siteLangId); ?>
+                </span>
+                <i class="dashboard-menu-arrow dropdown-toggle-custom-arrow">
+                </i>
+            </button>
+            <ul class="menu-sub menu-sub-accordion collapse" id="nav-plugins" aria-labelledby="" data-parent="#dashboard-menu">
+                <?php foreach (SellerPlugin::getAllowedTypeArr($siteLangId) as $type => $name) {
+                        $canUseShippingApi = Shipping::canUseShippingApi(UserAuthentication::getLoggedUserId(0));
+                        if (false === $canUseShippingApi && Plugin::TYPE_SHIPPING_SERVICES == $type) {
+                            continue;
+                        }
+                ?>
+                        <li class="menu-sub-item">
+                            <a class="menu-sub-link navLinkJs <?php echo ($controller == 'sellerplugins' && $action == 'index' && is_array($params) && current($params) == $type) ? 'active' : ''; ?>" title="<?php echo $name; ?>" href="<?php echo UrlHelper::generateUrl('sellerPlugins', 'index', [$type]); ?>">
+                                <span class="menu-sub-title"><?php echo $name; ?></span>
+                            </a>
 
-                    </li>
-            <?php }
-            } ?>
-        </ul>
-    </li>
-
+                        </li>
+                <?php } ?>
+            </ul>
+        </li>
+    <?php } ?>
     <?php if ($userPrivilege->canViewImportExport(UserAuthentication::getLoggedUserId(), true)) { ?>
         <li class="dashboard-menu-item">
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-import-export" aria-expanded="true" aria-controls="collapseOne" title="">

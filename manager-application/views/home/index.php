@@ -99,23 +99,23 @@
                         <ul class="list-stats list-stats-double">
                             <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_ADDED_TO_CART', $siteLangId); ?></span>
-                                <span class="value">                                    
+                                <span class="value">
                                     <?php echo $dashboardInfo['conversionStats']['added_to_cart']['%age']; ?>%</span>
                             </li>
                             <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_REACHED_CHECKOUT', $siteLangId); ?></span>
-                                <span class="value">                                   
+                                <span class="value">
                                     <?php echo $dashboardInfo['conversionStats']['reached_checkout']['%age']; ?>% </span>
                             </li>
                             <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_PURCHASED', $siteLangId); ?></span>
-                                <span class="value">                                    
+                                <span class="value">
                                     <?php echo $dashboardInfo['conversionStats']['purchased']['%age']; ?>%</span>
 
                             </li>
                             <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_CANCELLED', $siteLangId); ?></span>
-                                <span class="value">                                    
+                                <span class="value">
                                     <?php echo $dashboardInfo['conversionStats']['cancelled']['%age']; ?>%</span>
 
                             </li>
@@ -137,22 +137,22 @@
                             <ul class="list-stats list-stats-double">
                                 <li class="list-stats-item">
                                     <span class="label"><?php echo Labels::getLabel('LBL_Today', $siteLangId); ?></span>
-                                    <span class="value">                                        
+                                    <span class="value">
                                         <?php echo $dashboardInfo['visitsCount']['today'] ?></span>
                                 </li>
                                 <li class="list-stats-item">
                                     <span class="label"><?php echo Labels::getLabel('LBL_Weekly', $siteLangId); ?></span>
-                                    <span class="value">                                        
+                                    <span class="value">
                                         <?php echo $dashboardInfo['visitsCount']['weekly'] ?></span>
                                 </li>
                                 <li class="list-stats-item">
                                     <span class="label"><?php echo Labels::getLabel('LBL_last_Month', $siteLangId); ?></span>
-                                    <span class="value">                                        
+                                    <span class="value">
                                         <?php echo $dashboardInfo['visitsCount']['lastMonth'] ?></span>
                                 </li>
                                 <li class="list-stats-item">
                                     <span class="label"><?php echo Labels::getLabel('LBL_Last_3_Months', $siteLangId); ?></span>
-                                    <span class="value">                                        
+                                    <span class="value">
                                         <?php echo $dashboardInfo['visitsCount']['last3Month'] ?></span>
                                 </li>
 

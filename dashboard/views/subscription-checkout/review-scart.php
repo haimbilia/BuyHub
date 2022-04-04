@@ -5,7 +5,7 @@ $cartAdjustableAmount = isset($scartSummary['cartAdjustableAmount']) ? $scartSum
 $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['cartDiscounts']['coupon_discount_total']) ? $scartSummary['cartDiscounts']['coupon_discount_total'] : 0;
 ?>
 <div class="checkout-page">
-    <main class="main">
+    <main class="checkout-page_main">
         <div class="step">
             <div class="step_section">
                 <div class="step_head">
@@ -75,13 +75,14 @@ $discountTotal = isset($scartSummary['cartDiscounts']) && isset($scartSummary['c
                 </div>
             </div>
         </div>
+    </main>
+    <aside class="checkout-page_aside">
+        <div class="sticky-summary">
+            <div id="order-summary" class="cart-total order-summary summary-listing-js">
 
-
-        <aside class="sidebar" data-close-on-click-outside=" ">
-            <div class="sidebar-body">
-                <div id="order-summary" class="order-summary summary-listing-js"></div>
-                <?php //echo FatUtility::decodeHtmlEntities($pageData['epage_content']); 
-                ?>
             </div>
-        </aside>
+            <?php //echo FatUtility::decodeHtmlEntities($pageData['epage_content']); 
+            ?>
+        </div>
+    </aside>
 </div>

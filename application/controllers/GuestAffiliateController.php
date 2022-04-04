@@ -10,7 +10,7 @@ class GuestAffiliateController extends MyAppController
     public function index()
     {
         if ((UserAuthentication::isUserLogged() && (User::isAffiliate() || User::isSigningUpAffiliate())) || (UserAuthentication::isUserLogged() && !User::isSigningUpAffiliate())) {
-            FatApp::redirectUser(UrlHelper::generateUrl('affiliate'));
+            FatApp::redirectUser(UrlHelper::generateUrl('affiliate', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
         $extraPageObj = new Extrapage();

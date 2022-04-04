@@ -91,9 +91,9 @@ $(function (){
 })();
 
  /******** for faq accordians  ****************/ 
-
+/*
  $(document).on('click', '.accordians__trigger-js', function(){
-/* $(document).delegate('.accordians__trigger-js','click',function(){ */
+
   if($(this).hasClass('is-active')){
       $(this).removeClass('is-active');
       $(this).siblings('.accordians__target-js').slideUp();
@@ -104,9 +104,9 @@ $(function (){
  $('.accordians__target-js').slideUp();
  $(this).siblings('.accordians__target-js').slideDown();
 });
-
+*/
+/*
 $(document).on('click', '.nav--vertical-js li', function(){
-/* $(document).delegate('.nav--vertical-js li','click',function(){ */
 
 	if(!window.recordCount)
 	{
@@ -121,6 +121,7 @@ $(document).on('click', '.nav--vertical-js li', function(){
 		$(this).addClass('is-active');
 	}
 });
+*/
 
 /* for click scroll function */
 $(document).on('click',".scroll",function(event){

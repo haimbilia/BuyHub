@@ -10,7 +10,7 @@ class GuestAdvertiserController extends MyAppController
     public function account()
     {
         if (UserAuthentication::isUserLogged() && (User::isAdvertiser() || User::isSigningUpAdvertiser())) {
-            FatApp::redirectUser(UrlHelper::generateUrl('advertiser'));
+            FatApp::redirectUser(UrlHelper::generateUrl('advertiser', '', [], CONF_WEBROOT_DASHBOARD));
         }
         if (UserAuthentication::isUserLogged()) {
             Message::addErrorMessage(Labels::getLabel('ERR_YOU_ARE_ALREADY_LOGGED_IN._PLEASE_LOGOUT_AND_REGISTER_FOR_ADVERTISER.', $this->siteLangId));

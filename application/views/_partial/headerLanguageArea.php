@@ -8,7 +8,7 @@ $showDefalultLi =  (false === $hasMultipleLangs && false === $hasMultipleCurrenc
 if ($hasMultipleLangs || $hasMultipleCurrencies) { ?>
 
     <div class="dropdown">
-        <button type="button" class="btn btn-language dropdown-toggle dropdown-toggle-custom no-after" data-bs-toggle="dropdown">
+        <button type="button" class="btn btn-outline-gray btn-dropdown dropdown-toggle-custom btn-languagex" data-bs-toggle="dropdown">
             <?php if ($hasMultipleLangs) {
                 if ($languages[$siteLangId]['language_country_code']) { ?>
                     <img width="14" height="14" class="icon" alt="<?php echo Labels::getLabel('LBL_Language_Flag', $siteLangId); ?>" src="<?php echo CONF_WEBROOT_URL; ?>images/flags/<?php echo FatApp::getConfig('CONF_COUNTRY_FLAG_TYPE', FatUtility::VAR_STRING, 'round'); ?>/<?php echo $languages[$siteLangId]['language_country_code'] . '.svg'; ?>">

@@ -694,10 +694,9 @@ function defaultSetUpLogin(frm, v) {
     if ($(frm).hasClass("loginpopup--js")) {
         formClass = "form.loginpopup--js ";
     }
-    if (
-        0 < $(formClass + ".loginWithOtp--js").length &&
-        0 < $(formClass + ".loginWithOtp--js").val()
-    ) {
+
+    $(".loginFormJs").prepend(fcom.getLoader());
+    if (0 < $(formClass + ".loginWithOtp--js").length && 0 < $(formClass + ".loginWithOtp--js").val()) {
         $(formClass + "input.otpVal-js").each(function () {
             if ("undefined" == typeof $(this).val() || "" == $(this).val()) {
                 $(formClass + '.pwdField--js input[name="password"]').attr(
@@ -705,6 +704,7 @@ function defaultSetUpLogin(frm, v) {
                     '{"required":false}'
                 );
                 invalidOtpField();
+                fcom.removeLoader();
                 fcom.displayErrorMessage(langLbl.requiredFields);
                 return false;
             }
@@ -718,6 +718,7 @@ function defaultSetUpLogin(frm, v) {
         fcom.makeUrl("GuestUser", "login"),
         fcom.frmData(frm),
         function (t) {
+            fcom.removeLoader();
             var ans = JSON.parse(t);
             if (ans.status == 1) {
                 fcom.displaySuccessMessage(ans.msg);
@@ -1151,69 +1152,45 @@ $(function () {
     };
     signInWithPhone = function (obj, flag) {
         var form = $(obj).data("form");
-        var formElement =
-            "undefined" != typeof form ? 'form[name="' + form + '"]' : "form";
+        var formElement = "undefined" != typeof form ? 'form[name="' + form + '"]' : "form";
         var inputElement = $(formElement + " input[name='username']");
         var altPlaceHolder = inputElement.attr("data-alt-placeholder");
         var placeHolder = inputElement.attr("placeholder");
-        inputElement.val("").attr({
+        /* inputElement.val("").attr({
             placeholder: altPlaceHolder,
             "data-alt-placeholder": placeHolder,
             "data-field-caption": altPlaceHolder,
-        });
-        var objLbl =
-            0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
-        $(obj)
-            .attr("onclick", "signInWithPhone(this, " + !flag + ")")
-            .text(objLbl);
+        }); */
+        var title = 0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
+        var objLbl = 0 < flag ? langLbl.byEmail : langLbl.byPhone;
+        $(obj).attr("onclick", "signInWithPhone(this, " + !flag + ")").text(objLbl).attr('title', title);
         var formClass = "";
         if ($(obj).closest("form").hasClass("loginpopup--js")) {
             formClass = "form.loginpopup--js ";
         }
-        $(formClass + ".alreadyHave-js").show();
-        $(
-            formClass + " .withPwdLbl--js, " + formClass + " .getOtpBtnBlock--js"
-        ).removeClass("d-none");
-        $(
-            formClass +
-            ".forgetPwd--js, " +
-            formClass +
-            " .pwdField--js, " +
-            formClass +
-            " .submitBtn--js, " +
-            formClass +
-            " .remember--js"
-        ).hide();
-        $(formClass + ".withOtp--js").removeClass("d-none");
-        if (false === flag) {
-            inputElement.removeClass("hasFlag-js");
-            $(formClass + ".withOtp--js").addClass("d-none");
-            $(formClass + '.pwdField--js input[name="password"]').attr(
-                "data-fatreq",
-                '{"required":true}'
-            );
-            $(formClass + ".loginWithOtp--js").val(0);
-            $(
-                formClass +
-                ".forgetPwd--js, " +
-                formClass +
-                " .pwdField--js, " +
-                formClass +
-                " .submitBtn--js, " +
-                formClass +
-                " .remember--js"
-            ).show();
-            $(
-                formClass +
-                " .withPwdLbl--js, " +
-                formClass +
-                ".otpFieldBlock--js, " +
-                formClass +
-                " .getOtpBtnBlock--js"
-            ).addClass("d-none");
-        }
-        stylePhoneNumberFld(formElement + " input[name='username']", !flag);
+        $(".loginFormJs").prepend(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), 'signInWithPhone=' + parseInt(flag), function (t) {
+            $(".loginFormJs").replaceWith(t.html);
+            fcom.removeLoader();
+            stylePhoneNumberFld(formElement + " input[name='username']", !flag);
+        });
+        /*  $(formClass + ".alreadyHave-js").show();
+         $(formClass + " .withPwdLbl--js, " + formClass + " .getOtpBtnBlock--js").removeClass("d-none");
+         $(formClass + ".forgetPwd--js, " + formClass + " .pwdField--js, " + formClass + " .submitBtn--js, " + formClass + " .remember--js").hide();
+         $(formClass + ".withOtp--js").removeClass("d-none");
+         if (false === flag) {
+             inputElement.removeClass("hasFlag-js");
+             $(formClass + ".withOtp--js").addClass("d-none");
+             $(formClass + '.pwdField--js input[name="password"]').attr(
+                 "data-fatreq",
+                 '{"required":true}'
+             );
+             $(formClass + ".loginWithOtp--js").val(0);
+             $(formClass + ".forgetPwd--js, " + formClass + " .pwdField--js, " + formClass + " .submitBtn--js, " + formClass + " .remember--js").show();
+             $(formClass + " .withPwdLbl--js, " + formClass + ".otpFieldBlock--js, " + formClass + " .getOtpBtnBlock--js" ).addClass("d-none");
+         } */
     };
+
     getLoginOtp = function (obj) {
         var formClass = "";
         if ($(obj).closest("form").hasClass("loginpopup--js")) {
@@ -1221,43 +1198,30 @@ $(function () {
         }
         var phone = $(formClass + 'input[name="username"]').val();
         var dialCode = $(formClass + 'input[name="username_dcode"]').val();
-        if (
-            "undefined" == typeof phone ||
-            "" == phone ||
-            "undefined" == typeof dialCode ||
-            "" == dialCode
-        ) {
+        if ("undefined" == typeof phone || "" == phone || "undefined" == typeof dialCode || "" == dialCode) {
             $(obj).closest("form").submit();
             fcom.displayErrorMessage(langLbl.requiredFields);
             return false;
         }
+
+        $(".loginFormJs").prepend(fcom.getLoader());
         fcom.displayProcessing();
-        var data =
-            "username=" +
-            $(formClass + 'input[name="username"]').val() +
-            "&username_dcode=" +
-            $(formClass + 'input[name="username_dcode"]').val();
+        var data = "username=" + $(formClass + 'input[name="username"]').val() + "&username_dcode=" + $(formClass + 'input[name="username_dcode"]').val();
         fcom.ajax(fcom.makeUrl("GuestUser", "getLoginOtp", []), data, function (t) {
+            fcom.removeLoader();
             t = $.parseJSON(t);
             if (1 > t.status) {
                 fcom.displayErrorMessage(t.msg);
                 return false;
             }
-            $.ykmsg.close();
-            $(obj).closest(".getOtpBtnBlock--js").addClass("d-none");
-            $(formClass + " .resendOtp-js").addClass("disabled");
+            fcom.closeProcessing();
+            $(obj).closest(".getOtpBtnBlock--js").hide();
             $(formClass + " .submitBtn--js").show();
-            $(formClass + '.pwdField--js input[name="password"]').attr(
-                "data-fatreq",
-                '{"required":false}'
-            );
+            $(formClass + " .resendOtp-js").addClass("disabled");
+            $(formClass + '.pwdField--js input[name="password"]').attr("data-fatreq", '{"required":false}');
             $(formClass + ".loginWithOtp--js").val(1);
-            $(formClass + " .countdownFld--js, " + formClass + " .resendOtp-js")
-                .parent()
-                .removeClass("d-none");
-            $(
-                formClass + ".otpFieldBlock--js," + formClass + " .countdownFld--js"
-            ).removeClass("d-none");
+            $(formClass + " .countdownFld--js, " + formClass + " .resendOtp-js").parent().show();
+            $(formClass + ".otpFieldBlock--js," + formClass + " .countdownFld--js").show();
             startOtpInterval(formClass);
         });
         return false;
@@ -1322,8 +1286,8 @@ $(function () {
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
                 } else {
-                    $(".cookie-alert").hide("slow");
-                    $(".cookie-alert").remove();
+                    $("#cookieInfoBox").hide("slow");
+                    $("#cookieInfoBox").remove();
                     $.facebox.close();
                 }
             }

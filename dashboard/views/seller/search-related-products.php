@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap table-responsive">
     <?php
-    $arr_flds = array(     
+    $arr_flds = array(
         'product_name' => Labels::getLabel('LBL_Product_Name', $siteLangId),
         'related_products' => Labels::getLabel('LBL_Related_Products', $siteLangId)
     );
@@ -23,8 +23,7 @@
         foreach ($arr_flds as $key => $val) {
             $tr->setAttribute('id', 'row-' . $selProdId);
             if ($key == 'product_name') {
-                $title = ($canEdit) ? Labels::getLabel('LBL_Click_Here_For_Edit', $siteLangId) : '';
-                $td = $tr->appendElement('td', array('class' => (($canEdit) ? 'js-product-edit cursor-pointer' : ''), 'row-id' => $selProdId, 'title' => $title));
+                $td = $tr->appendElement('td', array('class' => (($canEdit) ? 'js-product-edit cursor-pointer' : ''), 'row-id' => $selProdId));
             } else {
                 $td = $tr->appendElement('td');
             }

@@ -92,11 +92,32 @@ $(function () {
         asNavFor: ".thumb-nav",
         prevArrow: '<button class="btn btn-prev"><span></span> </button>',
         nextArrow: '<button class="btn btn-next"><span></span> </button>',
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    dots: true,
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    dots: true,
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    dots: true,
+                }
+            }
+
+        ]
     });
 
     /* Thumbnail/alternates slider for product page */
     $(".thumb-nav").slick({
-        slidesToShow: 5,
+        slidesToShow: 4,
         slidesToScroll: 1,
         infinite: true,
         centerPadding: "0px",
@@ -106,8 +127,31 @@ $(function () {
         draggable: true,
         speed: 200,
         focusOnSelect: true,
+        vertical: true,
+        verticalSwiping: true,
         prevArrow: '<button class="btn btn-prev"><span></span> </button>',
         nextArrow: '<button class="btn btn-next"><span></span> </button>',
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    settings: 'unslick'
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    settings: 'unslick'
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    settings: 'unslick'
+                }
+            }
+
+        ]
     });
 
     /* keeps thumbnails active when changing main image, via mouse/touch drag/swipe */
