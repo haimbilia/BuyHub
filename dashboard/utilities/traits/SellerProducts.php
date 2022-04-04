@@ -2876,18 +2876,12 @@ trait SellerProducts
         $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . SellerProduct::DB_TBL_PREFIX . 'product_id');
         $srch->joinTable(Product::DB_TBL . '_lang', 'LEFT JOIN', 'lang.productlang_product_id = ' . SellerProduct::DB_TBL_LANG_PREFIX . 'selprod_id AND productlang_lang_id = ' . $this->siteLangId, 'lang');
 
-
-        //$prodSrch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', SellerProduct::DB_TBL_PREFIX . 'id = ' . SellerProduct::DB_TBL_RELATED_PRODUCTS_PREFIX . 'recommend_sellerproduct_id');
-
         if (!empty($keyword)) {
             $condition = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
             $condition->attachCondition('selprod_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
         $srch->addCondition('selprod_user_id', '=', 'mysql_func_' . $this->userParentId, 'AND', true);
-
-
-
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = selprod_user_id', 'tuc');
         $srch->addGroupBy('related_sellerproduct_id');
 
@@ -3083,22 +3077,9 @@ trait SellerProducts
         $srch->joinTable(SellerProduct::DB_TBL . '_lang', 'LEFT JOIN', 'slang.' . SellerProduct::DB_TBL_LANG_PREFIX . 'selprod_id = ' . SellerProduct::DB_TBL_UPSELL_PRODUCTS_PREFIX . 'sellerproduct_id AND ' . SellerProduct::DB_TBL_LANG_PREFIX . 'lang_id = ' . $this->siteLangId, 'slang');
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
-        $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'ptc.ptc_product_id = product_id', 'ptc');
-        $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'c.prodcat_id = ptc.ptc_prodcat_id', 'c');
-        $srch->addCondition('c.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
-        $srch->addCondition('c.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-        if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
-            $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', 'product_brand_id = brand.brand_id and brand.brand_active = ' . applicationConstants::YES . ' and brand.brand_deleted = ' . applicationConstants::NO, 'brand');
-        } else {
-            $srch->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'product_brand_id = brand.brand_id', 'brand');
-            $srch->addDirectCondition("(CASE WHEN product_brand_id > 0 THEN (brand.brand_active = " . applicationConstants::YES . " AND brand.brand_deleted = " . applicationConstants::NO . ") ELSE 1=1 END)");
-        }
-        $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
-        $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
-        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-        $srch->addCondition('product_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
-        $srch->addCondition('product_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+
         $srch->addCondition('selprod_user_id', '=', 'mysql_func_' . $this->userParentId, 'AND', true);
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = selprod_user_id', 'tuc');
 
         if ($keyword != '') {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $keyword . '%');
@@ -3107,6 +3088,7 @@ trait SellerProducts
         }
 
         $srch->addGroupBy('upsell_sellerproduct_id');
+
         $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
         $srch->doNotCalculateRecords();
         $srch->addOrder('selprod_id', 'DESC');
@@ -3142,6 +3124,7 @@ trait SellerProducts
         $this->set('postedData', $post);
         $this->_template->render(false, false);
     }
+
 
     public function setupUpsellProduct()
     {
