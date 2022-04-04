@@ -49,7 +49,7 @@
                         <form class="form">
                             <div class="row justify-content-center">
                                 <div class="col-md-12">
-                                    <input type="search" id="settingsSearch" class="form-control omni-search" name="search" value="" placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>">
+                                    <input type="search" id="settingsSearch" autocomplete="off" class="form-control omni-search" name="search" value="" placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>">
                                 </div>
                             </div>
                         </form>
