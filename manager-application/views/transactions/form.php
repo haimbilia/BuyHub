@@ -20,7 +20,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 <?php if ($userId == 0) { ?>
     <script>
         $(document).ready(function () {
-            bindUserSelect2('userIdJs');
+            bindUserSelect2('userIdJs', {'parents_only' : 1});
         });
     </script>
 <?php } ?>

@@ -610,6 +610,7 @@ Updates/Fixes :
     => 063440 - Buyer UI: Different icon is used for the "feedback" functionality on the dashboard and on the order's page AND the wrong order ID is showing under the Rewards Points section Assigned.
     => 063408 - Buyer UI: "Delivery and Billing Address" format is not correct on the order's details page at the buyer's end.
     => 063393 - Seller: JSON error is showing while adding sub-user trying to buy the subscription
+    => 063392 - Admin UI: Sub-Users are showing while adding the transaction at the admin's end
     
     
 UAT points:
