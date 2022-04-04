@@ -61,6 +61,7 @@ function setupReviewAbuse(frm) {
 
 			$("#loadMoreReviewsBtnDiv").html(ans.loadMoreBtnHtml);
 			$('a.yes').toggleClass("is-active");
+			fcom.removeLoader();
 		});
 	};
 

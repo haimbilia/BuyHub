@@ -97,6 +97,9 @@ class OrderCancellationRequestsController extends ListingBaseController
     public function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
+        $seller = FatApp::getPostedData('seller', FatUtility::VAR_INT, 0);
+
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
@@ -118,7 +121,9 @@ class OrderCancellationRequestsController extends ListingBaseController
         $srch->joinSellerProducts();
         $srch->joinOrders();
         $srch->joinOrderBuyerUser();
-        $srch->joinOrderSellerUser();
+        if(0 <  $seller){
+            $srch->joinOrderSellerUser();
+        }
         $srch->joinOrderProductStatus();
         $srch->joinOrderCancelReasons();
         $srch->addOrderProductCharges();
@@ -154,9 +159,8 @@ class OrderCancellationRequestsController extends ListingBaseController
             $srch->addCondition('buyer.user_id', '=', $buyer);
         }
 
-        $seller = FatApp::getPostedData('seller', FatUtility::VAR_INT, 0);
         if (0 < $seller) {
-            $srch->addCondition('seller.user_id', '=', $seller);
+            $srch->addCondition('seller.user_id', '=', $seller);            
         }
 
         $dateFrom = FatApp::getPostedData('date_from', null, '');
@@ -177,13 +181,14 @@ class OrderCancellationRequestsController extends ListingBaseController
         $srch->addMultipleFields(
             array(
                 'ocrequest_id', 'ocrequest_message', 'ocrequest_date', 'ocrequest_status',
-                'buyer.user_name as user_name', 'buyer_cred.credential_username as credential_username', 'buyer_cred.credential_email as credential_email', 'seller.user_name as seller_name', 'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'buyer.user_name as user_name', 'buyer_cred.credential_username as credential_username', 'buyer_cred.credential_email as credential_email', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
                 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'op_qty', 'op_unit_price',
                 'order_tax_charged', 'op_other_charges', 'op_rounding_off', 'op_id', 'buyer.user_id AS user_id',
                 'buyer.user_updated_on AS user_updated_on', 'op_shop_id', 'op_shop_name', 'op_selprod_id',
-                'op_product_name', 'op_selprod_title', 'op_brand_name', 'selprod_product_id', 'seller.user_updated_on AS seller_updated_on', 'seller.user_id AS seller_id', 'ocrequest_admin_comment'
+                'op_product_name', 'op_selprod_title', 'op_brand_name', 'selprod_product_id', 'ocrequest_admin_comment'
             )
         );
+       
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set('requestStatusArr', OrderCancelRequest::getRequestStatusArr($this->siteLangId));
         $this->set('statusClassArr', OrderCancelRequest::getStatusClassArr());
@@ -399,11 +404,15 @@ class OrderCancellationRequestsController extends ListingBaseController
         $ocrequestId = FatUtility::int($ocrequestId);
         $srch = new OrderCancelRequestSearch($this->siteLangId);
         $srch->joinOrderCancelReasons();
-        $srch->addMultipleFields(['ocreason_title', 'ocrequest_message']);
+        $srch->joinOrderProducts();
+        $srch->joinOrderSellerUser();
+        $srch->addMultipleFields(['ocreason_title', 'ocrequest_message','seller.user_name as seller_name', 'seller_cred.credential_username', 'seller_cred.credential_email','op_shop_id','op_shop_name']);
         $srch->addCondition('ocrequest_id', '=', $ocrequestId);
-        $row = FatApp::getDb()->fetch($srch->getResultSet());
-
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);       
+        $row = FatApp::getDb()->fetch($srch->getResultSet()); 
         $this->set('row', $row);
+        $this->set('canViewShops', $this->objPrivilege->canViewShops($this->admin_id, true));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -455,7 +464,7 @@ class OrderCancellationRequestsController extends ListingBaseController
             /* 'listSerial', */
             'reuqest_detail',
             'buyer_detail',
-            'vendor_detail',
+            /*'vendor_detail',*/
             'amount',
             'ocrequest_date',
             'ocrequest_status',

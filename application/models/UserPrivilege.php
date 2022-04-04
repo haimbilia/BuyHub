@@ -130,7 +130,7 @@ class UserPrivilege
             static::SECTION_INVENTORY_REPORT => Labels::getLabel('LBL_Inventory_Report', $langId),
             static::SECTION_UPLOAD_BULK_IMAGES => Labels::getLabel('LBL_Upload_Bulk_Images', $langId),
             static::SECTION_PROMOTIONS => Labels::getLabel('LBL_Promotions', $langId),
-            static::SECTION_SUBSCRIPTION => Labels::getLabel('LBL_Subscription', $langId),
+            // static::SECTION_SUBSCRIPTION => Labels::getLabel('LBL_Subscription', $langId),
             static::SECTION_SHIPPING_PROFILE => Labels::getLabel('LBL_Shipping_Profiles', $langId),
             static::SECTION_SHIPPING_PACKAGES => Labels::getLabel('LBL_Shipping_Packages', $langId),
             static::SECTION_ADVERTISEMENT_FEED => Labels::getLabel('LBL_Advertisement_Feed', $langId),
@@ -196,7 +196,7 @@ class UserPrivilege
             static::MODULE_ACCOUNT =>
             array(
                 static::SECTION_MESSAGES => Labels::getLabel('LBL_Messages', $langId),
-                static::SECTION_SUBSCRIPTION => Labels::getLabel('LBL_Seller_Subscription', $langId),
+                // static::SECTION_SUBSCRIPTION => Labels::getLabel('LBL_Seller_Subscription', $langId),
             ),
             static::MODULE_IMPORT_EXPORT =>
             array(
@@ -798,12 +798,14 @@ class UserPrivilege
 
     public function canViewSubscription($sellerId = 0, $returnResult = false)
     {
-        return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_READ, $returnResult);
+        return true;
+        // return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_READ, $returnResult);
     }
 
     public function canEditSubscription($sellerId = 0, $returnResult = false)
     {
-        return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_WRITE, $returnResult);
+        return false;
+        // return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_WRITE, $returnResult);
     }
 
     public function canViewCredits($sellerId = 0, $returnResult = false)

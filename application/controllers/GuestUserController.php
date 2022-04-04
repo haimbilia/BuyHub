@@ -2,38 +2,48 @@
 
 class GuestUserController extends MyAppController
 {
-
     private $authToken = '';
     private $username = '';
 
     public function loginForm()
     {
-        /* if(UserAuthentication::doCookieLogin()){
-          FatApp::redirectUser(UrlHelper::generateUrl('account'));
-          } */
         if (UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_ALREADY_LOGGED_IN', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('home'));
         }
 
         if (UserAuthentication::isUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_ALREADY_LOGGED_IN', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
         $socialLoginApis = Plugin::getDataByType(Plugin::TYPE_SOCIAL_LOGIN, $this->siteLangId);
+        $canSendSms = SmsArchive::canSendSms(SmsTemplate::LOGIN);
+        $signInWithPhone = FatApp::getPostedData('signInWithPhone', FatUtility::VAR_INT, 0);
+        if (0 < $signInWithPhone) {
+            $signInWithPhone = $canSendSms;
+        }
 
-        $loginFrm = $this->getLoginForm();
+        $loginFrm = $this->getLoginForm($signInWithPhone);
         $loginFrm->addSecurityToken();
         $loginData = array(
             'loginFrm' => $loginFrm,
             'socialLoginApis' => $socialLoginApis,
             'siteLangId' => $this->siteLangId,
+            'canSendSms' => $canSendSms,
         );
 
-        //  $this->registerFormDetail($isRegisterForm);
-        $this->set('smsPluginStatus', SmsArchive::canSendSms(SmsTemplate::LOGIN));
+        $this->set('signInWithPhone', $signInWithPhone);
         $this->set('loginData', $loginData);
         $this->set('exculdeMainHeaderDiv', true);
-        $this->_template->render(true, false);
+
+        $fOutMode = FatApp::getPostedData('fOutMode', FatUtility::VAR_STRING);
+        if ('json' == $fOutMode) {
+            $this->set('html', $this->_template->render(false, false, NULL, true, false));
+            $this->_template->render(false, false, 'json-success.php', true, false);
+        } else {
+            $this->_template->render(true, false);
+        }
     }
 
     public function registrationForm()
@@ -117,20 +127,18 @@ class GuestUserController extends MyAppController
             LibHelper::dieJsonResponse($resp);
         }
 
-        $frm = $this->getLoginForm();
+        $loginWithOtp = FatApp::getPostedData('loginWithOtp', FatUtility::VAR_INT, 0);
+        $frm = $this->getLoginForm($loginWithOtp);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
         if ($post == false) {
             $resp = LibHelper::formatResponse(applicationConstants::FAILURE, current($frm->getValidationErrors()));
             LibHelper::dieJsonResponse($resp);
         }
 
-        $frm->expireSecurityToken(FatApp::getPostedData());
-
         $password = FatApp::getPostedData('password');
         $userName = FatApp::getPostedData('username');
         $dialCode = FatApp::getPostedData('username_dcode', FatUtility::VAR_STRING, '');
 
-        $loginWithOtp = FatApp::getPostedData('loginWithOtp', FatUtility::VAR_INT, 0);
         if (0 < $loginWithOtp) {
             $post = FatApp::getPostedData();
             $authentication->setLoginWithOtp($dialCode, $userName);
@@ -153,7 +161,7 @@ class GuestUserController extends MyAppController
         if (!empty($dialCode) && false === strpos($userName, $dialCode)) {
             $userName = trim($dialCode) . trim($userName);
         }
-        
+
         if (!$authentication->login($userName, $password, $_SERVER['REMOTE_ADDR'], true, false, $this->app_user['temp_user_id'], $userType, $withPhone)) {
             $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $authentication->getError());
             LibHelper::dieJsonResponse($resp);
@@ -194,6 +202,8 @@ class GuestUserController extends MyAppController
                 Message::addErrorMessage(Labels::getLabel('ERR_COOKIES_NOT_ADDED', $this->siteLangId));
             }
         }
+        
+        $frm->expireSecurityToken(FatApp::getPostedData());
 
         setcookie('uc_id', $userId, time() + 3600 * 24 * 30, CONF_WEBROOT_URL);
 

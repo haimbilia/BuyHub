@@ -24,7 +24,6 @@ class SellerController extends SellerBaseController
 
     public function index()
     {
-        // $this->userPrivilege->canViewSellerDashboard(UserAuthentication::getLoggedUserId());
         $userId = $this->userParentId;
         $user = new User($userId);
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'S';
@@ -73,12 +72,7 @@ class SellerController extends SellerBaseController
         $orderSrch = new OrderProductSearch($this->siteLangId, true, true);
         $orderSrch->doNotCalculateRecords();
         $orderSrch->doNotLimitRecords();
-        /* $orderSrch->addSellerOrdersCounts( date('Y-m-d',strtotime("-1 days") ), date('Y-m-d'), 'yesterdayOrder');
-          $orderSrch->addSellerCompletedOrdersStats( date('Y-m-d', strtotime("-1 days")),date('Y-m-d'), 'yesterdaySold' ); */
-
-        /* $orderSrch->addSellerOrdersCounts( date('Y-m-d',strtotime("-1 days") ), date('Y-m-d',strtotime("-1 days") ), 'todayOrder'); */
         $orderSrch->addSellerOrdersCounts(date('Y-m-d'), date('Y-m-d'), 'todayOrder');
-        /* $orderSrch->addSellerCompletedOrdersStats( date('Y-m-d', strtotime("-1 days")),date('Y-m-d',strtotime("-1 days") ), 'yesterdaySold' ); */
         $orderSrch->addSellerCompletedOrdersStats(date('Y-m-d'), date('Y-m-d'), 'todaySold');
 
         $orderSrch->addSellerCompletedOrdersStats(false, false, 'totalSold');
@@ -92,11 +86,6 @@ class SellerController extends SellerBaseController
         $ordersStats = FatApp::getDb()->fetch($rs);
         /* ] */
 
-        /* $threadObj = new Thread();
-          $todayUnreadMessageCount = $threadObj->getMessageCount($userId, Thread::MESSAGE_IS_UNREAD, date('Y-m-d'));
-          $unreadMessageCount = $threadObj->getMessageCount($userId, Thread::MESSAGE_IS_UNREAD);
-          $totalMessageCount = $threadObj->getMessageCount($userId); */
-        /* ] */
         $orderObj = new Orders();
         $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
 
@@ -3984,6 +3973,7 @@ class SellerController extends SellerBaseController
         $this->set('includeFreeSubscription', $includeFreeSubscription);
         $this->set('currentActivePlanId', $currentActivePlanId);
         $this->set('packagesArr', $packagesArr);
+        $this->set('parentUserId', $this->userParentId);
         $this->_template->render(true, true);
     }
 

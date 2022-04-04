@@ -9,8 +9,23 @@ class BrandRequestsController extends ListingBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->objPrivilege->canEditBrandRequests();
+        $this->objPrivilege->canViewBrandRequests();
         $this->rewriteUrl = Brand::REWRITE_URL_PREFIX;
+    }
+
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditBrandRequests($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditBrandRequests();
+        }
     }
 
     public function index()
@@ -94,7 +109,7 @@ class BrandRequestsController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $searchForm = $this->getSearchForm($fields);
 
@@ -102,7 +117,7 @@ class BrandRequestsController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
 
         $prodBrandObj = new Brand();
-        $srch = $prodBrandObj->getSearchObject();
+        $srch = $prodBrandObj->getSearchObject(0, true, false, false);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = brand_seller_id', 'u');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
@@ -131,8 +146,8 @@ class BrandRequestsController extends ListingBaseController
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
+        $srch->setPageSize($pageSize);      
+        $srch->addOrder($sortBy, $sortOrder);        
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $records);
         $this->set('postedData', $post);
@@ -464,6 +479,7 @@ class BrandRequestsController extends ListingBaseController
             'brand_logo' => Labels::getLabel('LBL_Logo', $this->siteLangId),
             'brand_name' => Labels::getLabel('LBL_Brand_Name', $this->siteLangId),
             'brand_requested_on' => Labels::getLabel('LBL_Requested_On', $this->siteLangId),
+            'brand_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('brandRequestTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -477,6 +493,7 @@ class BrandRequestsController extends ListingBaseController
             'brand_logo',
             'brand_name',
             'brand_requested_on',
+            'brand_active',
             'action',
         ];
     }

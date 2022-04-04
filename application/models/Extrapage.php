@@ -51,6 +51,11 @@ class Extrapage extends MyAppModel
 
     public const REWRITE_URL_PREFIX = 'custom/view/';
 
+    /* [ EXTRA INFO Column types*/
+    public const TYPE_BKGROUND_IMAGE_REPEAT = 1;
+
+    /* EXTRA INFO Column types ]*/
+
     public function __construct($epageId = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $epageId);

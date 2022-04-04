@@ -129,19 +129,18 @@ $(document).on("change", ".state", function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupShop'), data, function (t) {
             runningAjaxReq = false;
-            $(ctabId).data('shop_id', t.shopId);
+            $(mtabId).attr('data-shop_id', t.shopId);
             if (t.langId > 0) {
                 shopLangForm(t.shopId, t.langId);
                 return;
             }
-
             shopForm();
             return;
         });
     };
 
     shopLangForm = function (shopId, langId, autoFillLangData = 0) {
-        shopId = shopId || $(ctabId).data('shop-id');
+        shopId = shopId || $(mtabId).data('shop_id');
         if (shopId < 0 || typeof (shopId) == "undefined") {
             return;
         }

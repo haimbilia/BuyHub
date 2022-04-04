@@ -3,8 +3,8 @@ $(document).ready(function () {
 });
 
 (function () {
-    bindUserSelect2 = function (element) {
-        select2(element, fcom.makeUrl('Users', 'autoComplete')); 
+    bindUserSelect2 = function (element, data = {}) {
+        select2(element, fcom.makeUrl('Users', 'autoComplete'), data); 
     }
 
     editAddress = function (recordId, addrRecordId) {

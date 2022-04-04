@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-<div id="body" class="body enter-page">
+<div id="body" class="body enter-page loginFormJs">
     <div class="form-sign">
         <?php
         $logoUrl = UrlHelper::generateUrl();
@@ -14,10 +14,9 @@
         </a>
         <div class="form-sign-body">
             <?php
-            $loginData['smsPluginStatus'] = $smsPluginStatus;
+            $loginData['signInWithPhone'] = $signInWithPhone;
             $this->includeTemplate('guest-user/loginPageTemplate.php', $loginData, false);
             ?>
         </div>
     </div>
-
 </div>

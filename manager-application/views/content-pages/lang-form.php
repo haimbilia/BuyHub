@@ -27,8 +27,7 @@ if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
     $imgArr = [];
     if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-        $imageContPageDimensions = ImageDimension::getData(ImageDimension::TYPE_CPAGE_BG, ImageDimension::VIEW_DEFAULT);
-       
+        $imageContPageDimensions = ImageDimension::getData(ImageDimension::TYPE_CPAGE_BG, ImageDimension::VIEW_DEFAULT);       
         $imgArr = [
             'url' => UrlHelper::getCachedUrl(
                 UrlHelper::generateFileUrl(
@@ -46,10 +45,9 @@ if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
             'afile_id' => $image['afile_id'],
             'data-aspect-ratio' => $imageContPageDimensions[ImageDimension::VIEW_DEFAULT]['aspectRatio'],
         ]; 
-    } 
-    
+    }     
    
-    $fld->value =  HtmlHelper::getfileInputHtml(
+    $fld->value =  '<label class="label">' . Labels::getLabel('FRM_BACKGROUND_IMAGE', $lang_id) . '</label>' .HtmlHelper::getfileInputHtml(
         [
             'onChange' => 'loadImageCropper(this)', 
             'accept' => 'image/*', 

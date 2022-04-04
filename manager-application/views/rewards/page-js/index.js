@@ -3,10 +3,8 @@ $(document).ready(function () {
 });
 
 (function () {
-    bindUserSelect2 = function (element) {
-        select2(element, fcom.makeUrl('Users', 'autoComplete'), {}, '', function () {
-            clearSearch();
-        });
+    bindUserSelect2 = function (element, data = {}) {
+        select2(element, fcom.makeUrl('Users', 'autoComplete'), data);
     }
 
     addNewRecord = function (userId) {

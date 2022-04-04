@@ -11,7 +11,7 @@ $displayProfileImage = $displayProfileImage ?? true;
 
 $verifiedBadge = '';
 if (true === $addVerifiedBadge) {
-    $isverfied = (applicationConstants::NO == $user['credential_verified']);
+    $isverfied = (applicationConstants::YES == $user['credential_verified']);
     $class = $isverfied ? 'is-verified' : '';
     $verifiedTitle = $isverfied ? Labels::getLabel('LBL_VERIFIED', $siteLangId) : Labels::getLabel('LBL_NOT_VERIFIED', $siteLangId);
     $verifiedBadge = '<div class="verified ' . $class . '" data-bs-toggle="tooltip" data-bs-palcement="top" title="' . $verifiedTitle . '">

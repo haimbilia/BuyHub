@@ -503,4 +503,18 @@ class applicationConstants
     {
         return [static::JOIN_LEFT => 'LEFT', static::JOIN_RIGHT => 'RIGHT', static::JOIN_INNER => 'INNER'];
     }
+
+    public static function getBkImageRepeatTypes($langId): array
+    {
+        return array(
+            'repeat' => Labels::getLabel('LBL_REPEAT', $langId),
+            'repeat-x' => Labels::getLabel('LBL_REPEAT_X', $langId),
+            'repeat-y' => Labels::getLabel('LBL_REPEAT_Y', $langId),
+            'no-repeat' => Labels::getLabel('LBL_NO_REPEAT', $langId),
+            'initial' => Labels::getLabel('LBL_INITIAL', $langId),
+            'inherit' => Labels::getLabel('LBL_INHERIT', $langId),
+            'space' => Labels::getLabel('LBL_SPACE', $langId),
+            'round' => Labels::getLabel('LBL_ROUND', $langId),
+        );
+    }
 }

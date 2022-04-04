@@ -576,6 +576,12 @@ class UsersController extends ListingBaseController
         if (0 < $deletedOnly) {
             $srch->addCondition('user_deleted', '=', applicationConstants::YES);
         }
+        
+        $parentsOnly = FatApp::getPostedData('parents_only', FatUtility::VAR_INT, 0);
+        if (0 < $parentsOnly) {
+            $srch->addCondition('user_parent', '=', 0);
+        }
+
         $srch->addOrder('credential_email', 'ASC');
 
         $keyword = FatApp::getPostedData('keyword', null, '');
