@@ -54,7 +54,7 @@ if (null != $btn) {
         <?php echo $frm->getFieldHtml('token'); ?>
         <div class="row">
             <div class="col-md-12">
-                <div class="field-set">
+                <div class="form-group">
                     <div class="caption-wraper">
                         <label class="form-label"><?php echo Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $siteLangId); ?></label>
                     </div>
@@ -71,7 +71,7 @@ if (null != $btn) {
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                        <div class="field-set">
+                        <div class="form-group">
                             <div class="field-wraper">
                                 <div class="field_cover">
                                     <?php
@@ -83,7 +83,7 @@ if (null != $btn) {
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                        <div class="field-set">
+                        <div class="form-group">
                             <div class="field-wraper">
                                 <div class="field_cover">
                                     <?php
@@ -97,7 +97,7 @@ if (null != $btn) {
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="field-set">
+                <div class="form-group">
                     <div class="caption-wraper">
                         <label class="form-label"><?php echo Labels::getLabel('LBL_CVV_SECURITY_CODE', $siteLangId); ?></label>
                     </div>
@@ -112,7 +112,7 @@ if (null != $btn) {
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="field-set">
+                <div class="form-group">
                     <div class="caption-wraper">
                         <label class="form-label"></label>
                     </div>

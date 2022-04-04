@@ -154,13 +154,15 @@ class ContentBlockController extends ListingBaseController
         } 
 
         $fieldsArray = [
-            'epage_id', 'epage_identifier', 'epage_active', 'IFNULL(epage_label,epage_identifier) as epage_label', 'epage_content','epage_default_content'
+            'epage_id', 'epage_identifier', 'epage_active', 'IFNULL(epage_label,epage_identifier) as epage_label', 'epage_content','epage_default_content','epage_extra_info'
         ];
         $epageData = Extrapage::getAttributesByLangId($this->siteLangId, $recordId, $fieldsArray, applicationConstants::JOIN_RIGHT);
         if ($epageData === false) {
             LibHelper::exitWithError($this->str_invalid_request, true);
-        }
+        }       
 
+        $epageData['epage_extra_info'] = !empty($epageData['epage_extra_info']) ? json_decode($epageData['epage_extra_info'], true) : [];
+    
         /* url data[ */
         $urlRow = UrlRewrite::getDataByOriginalUrl(Extrapage::REWRITE_URL_PREFIX . $recordId);
         if (!empty($urlRow)) {
@@ -210,6 +212,8 @@ class ContentBlockController extends ListingBaseController
         
         $getImageDimensions = ImageDimension::getData(ImageDimension::TYPE_CBLOCK_BG, ImageDimension::VIEW_DEFAULT);
         if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($this->siteLangId))) {
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_BK_IMAGE_REPEAT_TYPE', $this->siteLangId), 'epage_extra_info['.Extrapage::TYPE_BKGROUND_IMAGE_REPEAT.']', applicationConstants::getBkImageRepeatTypes($this->siteLangId), 'repeat', array(), '');
+            $fld->requirements()->setRequired();
             if ($recordId == Extrapage::SELLER_BANNER_SLOGAN) {
                 $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
             } elseif ($recordId == Extrapage::ADVERTISER_BANNER_SLOGAN) {
@@ -219,7 +223,6 @@ class ContentBlockController extends ListingBaseController
             } else {
                 $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
             }
-
             $frm->addHTML('', 'cblock_bg_image', '');
             $frm->addHiddenField('', 'file_type', $fileType);
             $frm->addHiddenField('', 'min_width', $getImageDimensions['width']);
@@ -246,7 +249,8 @@ class ContentBlockController extends ListingBaseController
         $frm->addHiddenField('', 'epage_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $langId), 'epage_label');
-        if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($langId))) {
+        if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($langId))) {           
+
             if ($recordId == Extrapage::SELLER_BANNER_SLOGAN) {
                 $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
             } elseif ($recordId == Extrapage::ADVERTISER_BANNER_SLOGAN) {
@@ -369,10 +373,13 @@ class ContentBlockController extends ListingBaseController
             'epagelang_lang_id' => $languageId,
             'epagelang_epage_id' => $recordId,
             'epage_label' => $post['epage_label'],
-            'epage_content' => $post['epage_content'],
+            'epage_content' => $post['epage_content'],            
         );
         // unset($post['lang_id'], $post['epage_content'], $post['epage_label'], $post['urlrewrite_custom'], $post['auto_update_other_langs_data']);
         unset($post['lang_id'], $post['epage_content'], $post['epage_label'], $post['auto_update_other_langs_data']);
+       
+        $epageExtraInfo = FatApp::getPostedData('epage_extra_info');    
+        $post['epage_extra_info'] = json_encode($epageExtraInfo);
 
         if (!$record->updatePageContent($post)) {
             LibHelper::exitWithError($record->getError(), true);

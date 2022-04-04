@@ -6,17 +6,17 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 
 <div id="body" class="body">
     <?php $haveBgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE, $slogan['epage_id'], 0, $siteLangId);
-    $bgImageUrl = ($haveBgImage) ? "background-image:url(" . UrlHelper::generateFileUrl('Image', 'cblockBackgroundImage', array($slogan['epage_id'], $siteLangId, 'DEFAULT', AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE)) . ")" : "background-image:url(" . CONF_WEBROOT_URL . "images/seller-bg.png);"; ?>
+    $bgImageUrl = ($haveBgImage) ? "background-image:url(" . UrlHelper::generateFileUrl('Image', 'cblockBackgroundImage', array($slogan['epage_id'], $siteLangId, 'DEFAULT', AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE)) . ");" : "background-image:url(" . CONF_WEBROOT_URL . "images/seller-bg.png);";
+    $imageRepeatType = array_key_exists(Extrapage::TYPE_BKGROUND_IMAGE_REPEAT, $slogan['epage_extra_info']) ? $slogan['epage_extra_info'][Extrapage::TYPE_BKGROUND_IMAGE_REPEAT] : 'repeat';
+    $bgImageUrl .= "background-repeat: $imageRepeatType;";
+    ?>
     <div class="hero-banner" style="<?php echo $bgImageUrl; ?>">
         <div class="container">
             <div class="hero-banner-inner">
-
                 <div class="seller-slogan">
                     <div class="seller-slogan-txt">
                         <?php echo FatUtility::decodeHtmlEntities($slogan['epage_content']); ?> </div>
                 </div>
-
-
                 <div class="seller-register-form">
                     <h2><?php echo Labels::getLabel('L_Register_Today', $siteLangId); ?></h2>
                     <?php $sellerFrm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
@@ -33,23 +33,23 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
         </div>
     </div>
     <?php if (!empty($block1)) { ?>
-        <div class="section">
+        <section>
             <div class="container"><?php echo FatUtility::decodeHtmlEntities($block1['epage_content']); ?></div>
-        </div>
+        </section>
     <?php }
     if (!empty($block2)) { ?>
-        <div class="section simple-step">
+        <section>
             <div class="container"> <?php echo FatUtility::decodeHtmlEntities($block2['epage_content']); ?> </div>
-        </div>
+        </section>
     <?php }
     if (!empty($block3)) { ?>
-        <div class="section simple-price">
+        <section>
             <div class="container"> <?php echo FatUtility::decodeHtmlEntities($block3['epage_content']); ?> </div>
-        </div>
+        </section>
     <?php } ?>
 
     <?php if ($faqCount > 0) { ?>
-        <div class="section bg-gray">
+        <section>
             <div class="container">
                 <div class="row align-items-center justify-content-center">
                     <div class="col-md-6">
@@ -66,8 +66,8 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="section">
+    </section>
+        <section>
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-8">
@@ -78,18 +78,18 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
         <div class="divider"></div>
     <?php } ?>
-
-
-    <div class="container">
-        <div class="align-center">
-            <div class="heading3"><?php echo Labels::getLabel('LBL_Still_need_help', $siteLangId) ?> ?</div>
-            <a href="<?php echo UrlHelper::generateUrl('custom', 'contact-us'); ?>" class="btn btn-secondary"><?php echo Labels::getLabel('LBL_Contact_Customer_Care', $siteLangId) ?> </a>
+    <section>
+        <div class="container">
+            <div class="align-center">
+                <div class="heading3"><?php echo Labels::getLabel('LBL_Still_need_help', $siteLangId) ?> ?</div>
+                <a href="<?php echo UrlHelper::generateUrl('custom', 'contact-us'); ?>" class="btn btn-secondary"><?php echo Labels::getLabel('LBL_Contact_Customer_Care', $siteLangId) ?> </a>
+            </div>
         </div>
+    </section>
 
-    </div>
 
 </div>
 <!-- End Document

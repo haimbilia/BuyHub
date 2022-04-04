@@ -12,6 +12,7 @@
     $approvalFrm->developerTags['fld_default_col'] = 12;
     
     $btn = $approvalFrm->getField('btn_submit');
+    $btn->developerTags['noCaptionTag'] = true;
     $btn->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
     echo $approvalFrm->getFormHtml();
 

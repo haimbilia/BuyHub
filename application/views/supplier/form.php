@@ -19,7 +19,7 @@ $frm->developerTags['fld_default_col'] = 12; */
 <?php echo $frm->getFormTag(); ?>
 <div class="row">
     <div class="col-md-6">
-        <div class="field-set">
+        <div class="form-group">
             <div class="caption-wraper">
                 <label class="form-label"><?php echo Labels::getLabel('LBL_NAME', $siteLangId); ?> <span class="mandatory">*</span></label>
             </div>
@@ -29,7 +29,7 @@ $frm->developerTags['fld_default_col'] = 12; */
         </div>
     </div>
     <div class="col-md-6">
-        <div class="field-set">
+        <div class="form-group">
             <div class="caption-wraper">
                 <label class="form-label"><?php echo Labels::getLabel('LBL_USERNAME', $siteLangId); ?> <span class="mandatory">*</span></label>
             </div>
@@ -39,7 +39,7 @@ $frm->developerTags['fld_default_col'] = 12; */
         </div>
     </div>
     <div class="col-md-12">
-        <div class="field-set">
+        <div class="form-group">
             <div class="caption-wraper">
                 <label class="form-label"><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?> <span class="mandatory">*</span></label>
             </div>
@@ -49,7 +49,7 @@ $frm->developerTags['fld_default_col'] = 12; */
         </div>
     </div>
     <div class="col-md-6">
-        <div class="field-set">
+        <div class="form-group">
             <div class="caption-wraper">
                 <label class="form-label"><?php echo Labels::getLabel('LBL_PASSWORD', $siteLangId); ?></label>
             </div>
@@ -60,7 +60,7 @@ $frm->developerTags['fld_default_col'] = 12; */
         </div>
     </div>
     <div class="col-md-6">
-        <div class="field-set">
+        <div class="form-group">
             <div class="caption-wraper">
                 <label class="form-label"><?php echo Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId); ?></label>
             </div>
@@ -74,7 +74,7 @@ $frm->developerTags['fld_default_col'] = 12; */
 
 <div class="row">
     <div class="col-md-12">
-        <div class="field-set">
+        <div class="form-group">
             <label class="checkbox">
                 <?php
                 $fld = $frm->getFieldHTML('agree');
@@ -104,15 +104,16 @@ $frm->developerTags['fld_default_col'] = 12; */
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="field-set">
+        <div class="form-group">
             <div class="caption-wraper">
-                <label class="form-label"></label>
+              
             </div>
             <div class="field-wraper">
                 <div class="field_cover">
                     <?php echo $frm->getFieldHTML('user_id'); ?>
                     <?php
                     $btn = $frm->getField('btn_submit');
+                    $btn->developerTags['noCaptionTag'] = true;
                     $btn->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
                     echo $frm->getFieldHTML('btn_submit');
                     ?>

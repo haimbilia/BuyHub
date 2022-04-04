@@ -9,8 +9,8 @@ if (is_array($ribbRow) && !empty($ribbRow)) {
         $text = "";
     }
     $class = '';
-    if (array_key_exists('blinkcond_position', $ribbRow)) {        
-        $class = ( Badge::RIBB_POS_TLEFT == $ribbRow['blinkcond_position'])  ? 'badges-left' : 'badges-right';
+    if (array_key_exists('blinkcond_position', $ribbRow)) {
+        $class = (Badge::RIBB_POS_TLEFT == $ribbRow['blinkcond_position'])  ? 'badges-left' : 'badges-right';
     }
 
     switch ($type) {

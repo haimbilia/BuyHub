@@ -74,7 +74,7 @@ foreach ($arrListing as $sn => $row) {
                         'attr' => [
                             'href' => 'javascript:void(0)',
                             'onclick' => 'viewComment(' . $row['ocrequest_id'] . ')',
-                            'title' => Labels::getLabel('MSG_CLICK_TO_VIEW_COMMENTS', $siteLangId),
+                            'title' => Labels::getLabel('MSG_CLICK_TO_VIEW_EXTRA_INFO', $siteLangId),
                         ],
                         'label' => '<i class="icn">
                                         <svg class="svg" width="18" height="18">

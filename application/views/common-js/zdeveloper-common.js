@@ -1286,8 +1286,8 @@ $(function () {
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
                 } else {
-                    $(".cookie-alert").hide("slow");
-                    $(".cookie-alert").remove();
+                    $("#cookieInfoBox").hide("slow");
+                    $("#cookieInfoBox").remove();
                     $.facebox.close();
                 }
             }
@@ -1665,7 +1665,7 @@ $(document).on("click", ".readMore", function () {
     } else {
         $lessText.hide();
         $moreText.fadeIn();
-        $moreText.removeClass('hidden');
+        $moreText.removeClass('hidden');       
         $this.text($linkLessText);
     }
     $this.toggleClass("expanded");
