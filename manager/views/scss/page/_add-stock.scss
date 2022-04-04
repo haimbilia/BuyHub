@@ -71,6 +71,10 @@
     }
     &-icn {
         margin-#{$end-direction}: 1rem;
+        [dir='rtl'] & {
+            margin-#{$start-direction}: 1rem;
+            margin-#{$end-direction}: auto;
+        }
     }
     &-title {
         font-size: 1rem;
@@ -142,16 +146,16 @@
         background: $bg-placeholder;
         height: 100%;
         position: relative;
-        &[data-ratio="1:1"] {
+        &[data-ratio='1:1'] {
             padding-bottom: calc(100% / (var(--aspect-ratio1)));
         }
-        &[data-ratio="4:3"] {
+        &[data-ratio='4:3'] {
             padding-bottom: calc(100% / (var(--aspect-ratio2)));
         }
-        &[data-ratio="3:4"] {
+        &[data-ratio='3:4'] {
             padding-bottom: calc(100% / (var(--aspect-ratio3)));
         }
-        &[data-ratio="16:9"] {
+        &[data-ratio='16:9'] {
             padding-bottom: calc(100% / (var(--aspect-ratio4)));
         }
         &:hover {

@@ -125,7 +125,7 @@ class RatingTypesController extends ListingBaseController
             $data = RatingType::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['IFNULL(ratingtype_name,ratingtype_identifier) as ratingtype_name', 'ratingtype_identifier', 'ratingtype_active'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
-            }           
+            }
             $frm->fill($data);
         }
         $this->set('recordId', $recordId);
@@ -143,6 +143,8 @@ class RatingTypesController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
+
+        $post['ratingtype_name'] = trim($post['ratingtype_name']);
 
         $recordId = FatApp::getPostedData('ratingtype_id', FatUtility::VAR_INT, 0);
         $restrictTypes = [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY];
@@ -189,7 +191,7 @@ class RatingTypesController extends ListingBaseController
         if (in_array($recordId, [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY])) {
             $label = Labels::getLabel('LBL_THIS_IS_DEFAULT_RATING_TYPE_CANNOT_BE_ASSIGNED.', $this->siteLangId);
         }
-        
+
         $htm = '<div class="alert alert-solid-brand " role="alert">
                     <div class="alert-icon"><i class="flaticon-warning"></i>
                     </div>

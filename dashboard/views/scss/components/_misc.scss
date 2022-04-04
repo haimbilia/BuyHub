@@ -423,6 +423,13 @@ mark,
             width: 100% !important;
         }
     }
+    .select2-selection{
+        &__arrow{
+            b{
+                margin-top: -4px!important;
+            }
+        }
+    } 
 }
 
 .cropper-body {

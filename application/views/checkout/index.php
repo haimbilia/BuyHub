@@ -8,7 +8,7 @@
             <main class="checkout-page_main checkout-content-js">
                 <?php include(CONF_THEME_PATH . 'checkout/_partial/shipping-summary-skeleton.php'); ?>
             </main>
-            <aside class="checkout-page_aside sidebar">
+            <aside class="checkout-page_aside">
                 <div class="sticky-summary">
                     <div class="cart-total summary-listing-js">
                         <?php include(CONF_THEME_PATH . 'checkout/_partial/price-summary-skeleton.php'); ?>

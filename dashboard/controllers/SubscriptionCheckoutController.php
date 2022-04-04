@@ -7,13 +7,11 @@ class SubscriptionCheckoutController extends LoggedUserController
     {
         parent::__construct($action);
         if (!FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
-            die('hi');
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
         $user_id = 0;
         if (!UserAuthentication::isUserLogged() || !User::canViewSupplierTab()) {
-            die('hi12');
             $errMsg = Labels::getLabel('MSG_Please_login_with_seller_account', $this->siteLangId);
             Message::addErrorMessage($errMsg);
             if (FatUtility::isAjaxCall()) {
