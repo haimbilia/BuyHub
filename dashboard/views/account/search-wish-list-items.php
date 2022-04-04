@@ -16,7 +16,7 @@
         <div class="card-body">
             <form method="post" name="wishlistForm" id="wishlistForm">
                 <input type="hidden" name="uwlist_id" value="<?php echo $uwlist_id; ?>" />
-                <?php require_once(CONF_THEME_PATH . 'products/products-list.php');  ?>
+                <?php require_once(CONF_THEME_PATH . 'products/wishlist-products-list.php');  ?>
             </form>
         </div>
     </div>

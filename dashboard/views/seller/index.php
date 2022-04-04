@@ -3,14 +3,21 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
+    $redirectToAccount = true;
+    $canViewProducts = $userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true);
+    $canEditProducts = $userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true);
     $data = [
-        'canEdit ' => $userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true),
+        'canEdit ' => $canEditProducts,
+        'userPrivilege' => $userPrivilege,
+        'canViewProducts' => $canViewProducts,
+        'canEditProducts' => $canEditProducts,
         'headingLabel' => Labels::getLabel('LBL_DASHBOARD', $siteLangId),
         'action' => 'products',
         'siteLangId' => $siteLangId
     ];
 
     if (!$isShopActive) {
+        $redirectToAccount = false;
         $data['otherButtons'][] = [
             'attr' => [
                 'href' => UrlHelper::generateUrl('Seller', 'shop'),
@@ -24,7 +31,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
         ];
     }
 
-    if ($userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) {
+    if ($canViewProducts) {
+        $redirectToAccount = false;
         $data['otherButtons'][] = [
             'attr' => [
                 'href' => UrlHelper::generateUrl('seller', 'products'),
@@ -38,6 +46,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             'label' =>  Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
         ];
     }
+    
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
         <div class="row">
@@ -46,7 +55,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     $userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true) ||
                     $userPrivilege->canViewCancellationRequests(UserAuthentication::getLoggedUserId(), true) ||
                     $userPrivilege->canViewReturnRequests(UserAuthentication::getLoggedUserId(), true)
-                ) { ?>
+                ) { $redirectToAccount = false; ?>
                     <div class="widget-scroll">
                         <?php if ($userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true)) { ?>
                             <div class="widget widget-stats">
@@ -509,10 +518,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 <?php } ?>
                 <?php if ($userPrivilege->canViewCancellationRequests(UserAuthentication::getLoggedUserId(), true)) { ?>
-                    <!-- <div class="card">
-                    <?php // $this->includeTemplate('_partial/userDashboardMessages.php');
-                    ?>
-                </div> -->
                     <div class="card">
                         <div class="card-head border-0">
                             <h5 class="card-title ">
@@ -614,11 +619,13 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 <?php } ?>
             </div>
-
         </div>
     </div>
 </div>
 
+<?php if ($redirectToAccount) {
+    FatApp::redirectUser(UrlHelper::generateUrl('Account', 'ProfileInfo'));
+} ?>
 
 <script>
     /******** for tooltip ****************/

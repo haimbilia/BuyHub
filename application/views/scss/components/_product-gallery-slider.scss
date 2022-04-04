@@ -1,7 +1,13 @@
 .product-images {
     width: 100%;
     margin: 0 auto;
-
+    display: flex;
+    flex-direction: column;
+    @include media-breakpoint-up(lg) {
+        flex-direction: row;
+    }
+    //grid-template-columns: 1fr 20%;
+    grid-gap: 2rem;
     & li,
     & figure,
     & a,
@@ -13,34 +19,62 @@
 
     .main-img-slider {
         border: $border;
+        min-width: 0;
+        @include media-breakpoint-up(lg) {
+            order: 2;
+        }
     }
     & .thumb-nav {
         margin: 0 auto;
-        padding: 20px 0;
+        padding: 0;
+        min-width: 0;
+        @include media-breakpoint-up(lg) {
+            max-width: 20%;
+            flex: 0 0 20%;
+        }
         //max-width: 600px;
+        li {
+            display: block;
+            margin: 0 auto;
+            cursor: pointer;
+
+            img {
+                padding: 0;
+                display: block;
+                width: 90%;
+                //max-width: 100px;
+                margin: 0 auto;
+                transition: border-color 0.25s;
+                border: solid 1px transparent;
+            }
+            &.slick-current img {
+                //border-color: $secondary-color;
+                //box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+            }
+
+            &:hover,
+            &:focus {
+                opacity: 0.8;
+            }
+        }
     }
 
-    & .thumb-nav li {
-        display: block;
-        margin: 0 auto;
-        cursor: pointer;
-    }
-    & .thumb-nav li img {
-        padding: 0;
-        display: block;
-        width: 90%;
-        //max-width: 100px;
-        margin: 0 auto;
-        transition: border-color 0.25s;
-        border: solid 1px transparent;
-    }
-    & .thumb-nav li:hover,
-    & .thumb-nav li:focus {
-        opacity: 0.8;
-    }
-    & .thumb-nav li.slick-current img {
-        //border-color: $secondary-color;
-        //box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    & .thumb-nav {
+        .btn-prev {
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            transform: rotate(90deg);
+        }
+        .btn-next {
+            bottom: 0;
+            left: 0;
+            right: 0;
+            top: auto;
+            margin: 0 auto;
+            transform: rotate(90deg);
+        }
     }
 }
 
