@@ -613,6 +613,7 @@ Updates/Fixes :
     => 063508 - Seller UI: Getting multiple issues on Shipping services page.
     => 063491 - Seller UI: On hovering on the screen unnecessary tooltip 'Click here for edit' is coming.
     => 063490 - Seller UI: 'Related Products' label is showing instead of 'Buy together products'.
+    => 063450 - Buyer UI: "Unexpected token" error is showing when clicking on the "View Items" button on the Wishlist page and the Wishlist's cards size is not the same.
     
     
 UAT points:
