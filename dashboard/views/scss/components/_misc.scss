@@ -58,6 +58,10 @@ a {
 a:hover {
     color: $brand-color;
     text-decoration: none;
+} 
+mark,
+.mark {
+    padding: 0;
 }
 
 .bg-gray {
