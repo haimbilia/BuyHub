@@ -54,9 +54,9 @@ class MyAppController extends FatController
         $urlController = implode('-', $arr);
         $controllerName = ucfirst(FatUtility::dashed2Camel($urlController));
 
+        $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
         if (!FatUtility::isAjaxCall() && !in_array($controllerName, ['Cart', 'Checkout'])) {
             /* to keep track of temporary hold the product stock, update time in each row of tbl_product_stock_hold against current user[ */
-            $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
             $cartObj->excludeTax();
             $cartProducts = $cartObj->getBasketProducts($this->siteLangId);
             if ($cartProducts) {
@@ -75,7 +75,7 @@ class MyAppController extends FatController
         $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
 
         $jsVariables = [];
-        if (!FatUtility::isAjaxCall()) {
+        if (!FatUtility::isAjaxCall() && false === MOBILE_APP_API_CALL) {
             $jsVariablesCache = CacheHelper::get('jsVariablesCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
             if (!$jsVariablesCache) {
                 $jsVariables = array(
