@@ -10,7 +10,7 @@ class SupplierController extends MyAppController
     public function index()
     {
         if (UserAuthentication::isUserLogged() && (User::isSeller() || User::isSigningUpForSeller())) {
-            FatApp::redirectUser(UrlHelper::generateUrl('seller'));
+            FatApp::redirectUser(UrlHelper::generateUrl('seller', '', [], CONF_WEBROOT_DASHBOARD));
         }
         if (isset($_SESSION['registered_supplier']['id'])) {
             FatApp::redirectUser(UrlHelper::generateUrl('supplier', 'account'));
