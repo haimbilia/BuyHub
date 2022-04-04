@@ -610,10 +610,22 @@ Updates/Fixes :
     => 063440 - Buyer UI: Different icon is used for the "feedback" functionality on the dashboard and on the order's page AND the wrong order ID is showing under the Rewards Points section Assigned.
     => 063408 - Buyer UI: "Delivery and Billing Address" format is not correct on the order's details page at the buyer's end.
     => 063398 - Seller UI: The subscription coupon's image is not showing under the subscription offer section and recently purchased plan information is not showing under the "My Subscription" section at the seller's end.
+    => 063508 - Seller UI: Getting multiple issues on Shipping services page.
+    => 063491 - Seller UI: On hovering on the screen unnecessary tooltip 'Click here for edit' is coming.
+    => 063490 - Seller UI: 'Related Products' label is showing instead of 'Buy together products'.
+    => 063450 - Buyer UI: "Unexpected token" error is showing when clicking on the "View Items" button on the Wishlist page and the Wishlist's cards size is not the same.
+    => 063393 - Seller: JSON error is showing while adding sub-user trying to buy the subscription
+    => 063392 - Admin UI: Sub-Users are showing while adding the transaction at the admin's end
+    => 063367 - Seller UI: Order ID is not showing on the Transaction report and search by comment is not working under the Financial report.
+    => 063471 - Admin UI: Same rating type options are showing while binding it with the category at the admin's end.
+    => 063489 - Seller UI: Buy together Products: New Added records are not showing in listing.
+    => 063284 - Affiliate UI: Home Page > Search: The background screen moves/dragged along when the user clicks on the dropdown icon on the popup screen
+    => 063272 - Affiliate UI: Home page: Search is not working.
+    => 063312 - Advertiser UI: Home page: Search is not working.
+    => 063313 - Advertiser UI: Home page: Search: The background screen moves/dragged along when the user clicks on the dropdown icon on the popup screen.
     => 063164 - Seller UI: "Shipping's Tracking URL" is not showing under the order's details page
     => 063355 - Seller UI: Alignment is not proper while binding the products with the badges at the seller's end
     => 063384 - Suggestion to change the functionality of the uploading profile images on the seller's, buyer's advertiser's, and affiliate's dashboard and make it similar to the admin's dashboard
-    
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

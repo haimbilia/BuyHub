@@ -16,24 +16,10 @@ $loginFrm->setFormTagAttribute('onsubmit', $onSubmitFunctionName . '(this, login
 $loginFrm->developerTags['fld_default_col'] = 12;
 $loginFrm->developerTags['colClassPrefix'] = 'col-md-';
 
-$remembermeField = $loginFrm->getField('remember_me');
-$remembermeField->setWrapperAttribute("class", "rememberme-text");
-$remembermeField->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$remembermeField->developerTags['col'] = 6;
-$remembermeField->developerTags['cbHtmlAfterCheckbox'] = '';
+$fldSubmit = $loginFrm->getField('btn_submit');
+$fldSubmit->addFieldTagAttribute('class', 'btn btn-secondary btn-block');
 
-$fldforgot = $loginFrm->getField('forgot');
-$fldforgot->value = '<a href="' . UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm') . '"
-    class="link-underline">' . Labels::getLabel('LBL_Forgot_Password?', $siteLangId) . '</a>';
-$fldforgot->developerTags['col'] = 6;
-
-$pwdFld = $loginFrm->getField('password');
-$pwdFld->addFieldTagAttribute('id', 'password');
-
-if (isset($smsPluginStatus) && true === $smsPluginStatus) {
-    $loginWithOtp = $loginFrm->getField('loginWithOtp');
-    $loginWithOtp->addFieldTagAttribute('class', 'loginWithOtp--js');
-}
+$signInWithPhone = $signInWithPhone ?? false;
 ?>
 <div id="<?php echo true === $popup ? 'sign-in' : ''; ?>" class="<?php echo true === $popup ? 'p-5' : ''; ?>">
     <div class="card-sign">
@@ -43,140 +29,55 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
             </h2>
         </div>
         <div class="card-sign_body">
-            <?php
-            $fldSubmit = $loginFrm->getField('btn_submit');
-            $fldSubmit->addFieldTagAttribute('class', 'btn btn-secondary btn-block');
-            echo $loginFrm->getFormTag(); ?>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <?php echo $loginFrm->getFieldHtml('username'); ?>
-                    </div>
-                </div>
-            </div>
-            <div class="row pwdField--js">
-                <div class="col-md-12">
-                    <div class="form-group form-group-relative">
-                        <?php echo $loginFrm->getFieldHtml('password'); ?>
-                        <span class="input-group-text field-password" id="showPass"></span>
-                    </div>
-                </div>
-            </div>
-            <?php if (isset($smsPluginStatus) && true === $smsPluginStatus) { ?>
-                <div class="otp-row otpFieldBlock--js d-none">
-                    <?php for ($i = 0; $i < User::OTP_LENGTH; $i++) { ?>
-                        <div class="otp-col otpCol-js">
-                            <?php
-                            $fld = $loginFrm->getField('upv_otp[' . $i . ']');
-                            $fld->setFieldTagAttribute('class', 'otpVal-js');
-                            echo $loginFrm->getFieldHtml('upv_otp[' . $i . ']'); ?>
-                            <?php if ($i < (User::OTP_LENGTH - 1)) { ?>
-                                <span class="dash">-</span>
-                            <?php } ?>
-                        </div>
-                    <?php } ?>
-                    <?php echo $loginFrm->getFieldHtml('loginWithOtp'); ?>
-                </div>
-            <?php } ?>
-            <div class="row">
-                <?php if ($loginFrm->getField('remember_me')) { ?>
-                    <div class="col remember--js">
-                        <div class="form-group">
-                            <?php
-                            $fld = $loginFrm->getFieldHTML('remember_me');
-                            $fld = str_replace("<label >", "", $fld);
-                            $fld = str_replace("</label>", "", $fld);
-                            echo $fld;
-                            ?>
-                        </div>
-                    </div>
-                <?php } ?>
-                <?php if (isset($smsPluginStatus) && true === $smsPluginStatus) { ?>
-                    <div class="col-auto">
-                        <div class="form-group">
-                            <button class="link-underline" data-form="frmLogin" onClick="signInWithPhone(this, true)">
-                                <?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD_?', $siteLangId); ?>
-                            </button>
-                        </div>
-                    </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 d-none getOtpBtnBlock--js">
-                    <div class="form-group">
-                        <button onclick="getLoginOtp(this);" class="btn btn-secondary btn-block">
-                            <?php echo Labels::getLabel('LBL_GET_OTP', $siteLangId); ?>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-between">
-                <div class="col d-none">
-                    <p class="otp-seconds countdownFld--js">
-                        <?php
-                        $msg = Labels::getLabel('LBL_PLEASE_WAIT_{SECONDS}_SECONDS_TO_RESEND', $siteLangId);
-                        $replace = [
-                            '{SECONDS}' => '<span class="intervaltime intervalTimer-js">' . User::OTP_INTERVAL . '</span>',
-                        ];
-                        echo CommonHelper::replaceStringData($msg, $replace);
-                        ?>
-                    </p>
-                </div>
-                <div class="col-auto d-none">
-                    <button class="link-underline resendOtp-js disabled" href="javascript:void(0);" onclick="getLoginOtp(this);"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></button>
-                </div>
-            </div>
-        <?php } else { ?>
-        </div> <!-- End Row 1st -->
-    <?php } ?>
-    <div class="row submitBtn--js">
-        <div class="col-md-12">
-            <div class="form-group"> <?php echo $loginFrm->getFieldHtml('btn_submit'); ?>
-                <?php echo $loginFrm->getFieldHtml('fatpostsectkn'); ?>
-            </div>
-        </div>
-    </div>
-    </form>
-    <?php
-    echo $loginFrm->getExternalJS();
+            <?php if (true === $signInWithPhone) {
+                include('login-with-phone.php');
+            } else {
+                include('login-with-email.php');
+            }
 
-    if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
-        <div class="or">
-            <span>
-                <?php echo Labels::getLabel('LBL_OR_CONTINUE_WITH', $siteLangId); ?>
-            </span>
-        </div>
-        <div class="buttons-list">
-            <ul>
-                <?php foreach ($socialLoginApis as $plugin) { ?>
-                    <li>
-                        <a href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>" class="btn btn-social btn-<?php echo $plugin['plugin_code']; ?>">
-                            <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+            echo $loginFrm->getExternalJS();
 
-                        </a>
-                    </li>
+            if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
+                <div class="or">
+                    <span>
+                        <?php echo Labels::getLabel('LBL_OR_CONTINUE_WITH', $siteLangId); ?>
+                    </span>
+                </div>
+                <div class="buttons-list">
+                    <ul>
+                        <?php foreach ($socialLoginApis as $plugin) { ?>
+                            <li>
+                                <a href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>" class="btn btn-social btn-<?php echo $plugin['plugin_code']; ?>">
+                                    <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+
+                                </a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </div>
+            <?php } ?>
+        </div>
+        <div class="card-sign_foot">
+            <h6><?php echo Labels::getLabel('DON’T_HAVE_AN_ACCOUNT?', $siteLangId); ?></h6>
+            <div class="more-links">
+                <?php
+                if (false === $signInWithPhone) {
+                    echo $loginFrm->getFieldHtml('forgot');
+                } ?>
+                <?php if (true === $popup) { ?>
+                    <a class="link-underline" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
+                        <?php echo sprintf(Labels::getLabel('LBL_REGISTER_NOW', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?>
+                    </a>
+                <?php } else { ?>
+                    <a class="link-underline loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
+                        <?php echo Labels::getLabel('LBL_REGISTER_NOW', $siteLangId); ?>
+                    </a>
                 <?php } ?>
-            </ul>
-        </div>
-    <?php } ?>
-    </div>
-    <div class="card-sign_foot">
-        <h6>Don’t have an account?</h6>
-        <div class="more-links">
-            <?php echo $loginFrm->getFieldHtml('forgot'); ?>
-            <?php if (true === $popup) { ?>
-                <a class="link-underline" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
-                    <?php echo sprintf(Labels::getLabel('LBL_REGISTER_NOW', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?>
-                </a>
-            <?php } else { ?>
-                <a class="link-underline loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
-                    <?php echo Labels::getLabel('LBL_REGISTER_NOW', $siteLangId); ?>
-                </a>
-            <?php } ?>
-            <?php if (isset($includeGuestLogin) && 'true' == $includeGuestLogin) { ?>
-                <a class="link-underline" href="javascript:void(0)" onclick="guestUserFrm()">
-                    <?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
-            <?php } ?>
+                <?php if (isset($includeGuestLogin) && 'true' == $includeGuestLogin) { ?>
+                    <a class="link-underline" href="javascript:void(0)" onclick="guestUserFrm()">
+                        <?php echo sprintf(Labels::getLabel('LBL_GUEST_CHECKOUT?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?></a>
+                <?php } ?>
+            </div>
         </div>
     </div>
-</div>
 </div>

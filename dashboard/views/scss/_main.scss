@@ -95,9 +95,8 @@
 @import "components/dropzone";
 @import "components/misc";
 
-//@import "../../../application/views/scss/components/product-profile";
-@import "../../../application/views/scss/components/list-cart";
 @import "../../../application/views/scss/components/cart-summary";
+//@import "../../../application/views/scss/components/product-profile";
 
 //vendors
 // @import 'vendors/animate';
@@ -120,5 +119,6 @@
 @import "pages/orders";
 @import "pages/maintenance";
 @import "pages/setting";
+@import "../../../application/views/scss/pages/cart";
 @import "../../../application/views/scss/pages/checkout";
 //

@@ -104,7 +104,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                 for (i = 0; i < ans.length; i++) {
                     list.push({
                         "id": ans[i].id,
-                        "value": ans[i].ratingtype_identifier,
+                        "value": $.trim(ans[i].ratingtype_identifier),
                     });
                 }
                 tagify.settings.whitelist = list;

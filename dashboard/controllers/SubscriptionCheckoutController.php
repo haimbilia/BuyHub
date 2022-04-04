@@ -695,10 +695,10 @@ class SubscriptionCheckoutController extends LoggedUserController
     {
 
         $loggedUserId = $this->userParentId;
-        
+
         $orderId = isset($_SESSION['subscription_shopping_cart']["order_id"]) ? $_SESSION['subscription_shopping_cart']["order_id"] : '';
-        $couponsList = DiscountCoupons::getValidSubscriptionCoupons($loggedUserId, $this->siteLangId, '' , $orderId);
-      
+        $couponsList = DiscountCoupons::getValidSubscriptionCoupons($loggedUserId, $this->siteLangId, '', $orderId);
+
         $this->set('couponsList', $couponsList);
 
         $PromoCouponsFrm = $this->getPromoCouponsForm($this->siteLangId);
@@ -724,32 +724,25 @@ class SubscriptionCheckoutController extends LoggedUserController
         $post = FatApp::getPostedData();
 
         if (false == $post) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
         }
 
         if (empty($post['coupon_code'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
         }
 
         $couponCode = $post['coupon_code'];
 
         $orderId = isset($_SESSION['subscription_shopping_cart']["order_id"]) ? $_SESSION['subscription_shopping_cart']["order_id"] : '';
-        $couponInfo = DiscountCoupons::getValidSubscriptionCoupons(UserAuthentication::getLoggedUserId(), $this->siteLangId, $couponCode , $orderId);
-        /*
-        $couponObj = new DiscountCoupons();
-        $couponInfo = $couponObj->getSubscriptionCoupon($couponCode, $this->siteLangId);
-        */
+        $couponInfo = DiscountCoupons::getValidSubscriptionCoupons(UserAuthentication::getLoggedUserId(), $this->siteLangId, $couponCode, $orderId);
+
         if ($couponInfo == false) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Coupon_Code', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieWithError(Labels::getLabel('LBL_Invalid_Coupon_Code', $this->siteLangId));
         }
 
         $cartObj = new SubscriptionCart();
         if (!$cartObj->updateCartDiscountCoupon($couponInfo['coupon_code'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Action_Trying_Perform_Not_Valid', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieWithError(Labels::getLabel('LBL_Action_Trying_Perform_Not_Valid', $this->siteLangId));
         }
 
         $holdCouponData = array(
@@ -759,8 +752,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         );
 
         if (!FatApp::getDb()->insertFromArray(DiscountCoupons::DB_TBL_COUPON_HOLD, $holdCouponData, true, array(), $holdCouponData)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Action_Trying_Perform_Not_Valid', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            FatUtility::dieWithError(Labels::getLabel('LBL_Action_Trying_Perform_Not_Valid', $this->siteLangId));
         }
 
         $this->_template->render(false, false, 'json-success.php');

@@ -1,5 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <div class="content-body">
@@ -10,6 +10,15 @@
                         <?php echo html_entity_decode($pageData['epage_content']); ?>
                     </div>
                 </div>
+                <?php
+                if (1 > $currentActivePlanId && $parentUserId != UserAuthentication::getLoggedUserId()) {
+                    $msg = '<svg class="svg" height="18" width="18">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#warning">
+                                </use>
+                            </svg> ' . Labels::getLabel('ERR_PARENT_MERCHANT_MUST_NEED_TO_BUY_A_VALID_SUBSCRIPTION.', $siteLangId);
+                    echo HtmlHelper::getErrorMessageHtml($msg);
+                }
+                ?>
                 <ul class="packages-box">
                     <?php
                     $packageArrClass = SellerPackages::getPackageClass();
@@ -52,51 +61,39 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <?php /* if($package[SellerPackages::DB_TBL_PREFIX.'free_trial_days']>0 && $includeFreeSubscription){
-                                    ?>
-                                <a class="btn btn-secondary ripplelink buyFreeSubscription"
-                                    data-id="<?php echo $package[SellerPackages::DB_TBL_PREFIX.'id'];?>"
-                                    href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Free_Trial',$siteLangId);?></a> <?php
-                                } */ ?>
                                     <h3><?php echo sprintf(Labels::getLabel('Lbl_Select_Your_%s_Price', $siteLangId), $package['spackage_name']); ?>
                                     </h3>
                                     <ul class="price-list">
                                         <?php foreach ($package['plans'] as $plan) {
+                                            $isActive = ($currentActivePlanId == $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']) ? 'checked=checked' : '';
+                                            $disabled = ($parentUserId != UserAuthentication::getLoggedUserId()) ? 'disabled=disabled' : '';
                                         ?>
                                             <li class="price-list-item">
                                                 <label class="radio">
-                                                    <input value="<?php echo $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']; ?>" name="packages" <?php if ($currentActivePlanId == $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']) {
-                                                                                                                                                        echo 'checked=checked ';
-                                                                                                                                                    } ?> type="radio">
-
-                                                    <?php echo SellerPackagePlans::getPlanPriceWithPeriod($plan, $plan[SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?></label>
+                                                    <input value="<?php echo $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']; ?>" name="packages" <?php echo $isActive; ?> <?php echo $disabled; ?> type="radio">
+                                                    <?php echo SellerPackagePlans::getPlanPriceWithPeriod($plan, $plan[SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?>
+                                                </label>
                                             </li>
                                         <?php
                                         } ?>
 
                                     </ul>
                                 </div>
-                                <div class="packages-box-foot">
-                                    <?php if ($currentActivePlanId) {
-                                        $buyPlanText = Labels::getLabel('LBL_Change_Plan', $siteLangId);
-                                    } else {
-                                        $buyPlanText = Labels::getLabel('LBL_Buy_Plan', $siteLangId);
-                                    } ?>
-                                    <button type="button" data-id="<?php echo $package[SellerPackages::DB_TBL_PREFIX . 'id']; ?>" class="btn btn-brand btn-wide buySubscription--js "><?php echo $buyPlanText; ?>
-                                    </button>
-
-                                </div>
-
-
-
-
-
+                                <?php if ($parentUserId == UserAuthentication::getLoggedUserId()) { ?>
+                                    <div class="packages-box-foot">
+                                        <?php if ($currentActivePlanId) {
+                                            $buyPlanText = Labels::getLabel('LBL_Change_Plan', $siteLangId);
+                                        } else {
+                                            $buyPlanText = Labels::getLabel('LBL_Buy_Plan', $siteLangId);
+                                        } ?>
+                                        <button type="button" data-id="<?php echo $package[SellerPackages::DB_TBL_PREFIX . 'id']; ?>" class="btn btn-brand btn-wide buySubscription--js "><?php echo $buyPlanText; ?>
+                                        </button>
+                                    </div>
+                                <?php } ?>
                             </li>
                     <?php
-
                             $inc++;
                         }
-                        //						}
                     }      ?>
                 </ul>
 

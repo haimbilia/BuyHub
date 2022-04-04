@@ -21,6 +21,7 @@ class SubscriptionCartController extends DashboardBaseController
         }
         $this->_template->render();
     }
+
     public function listing()
     {
         $templateName = 'subscription-cart/listing.php';
@@ -40,6 +41,7 @@ class SubscriptionCartController extends DashboardBaseController
         }
         $this->_template->render(false, false, $templateName);
     }
+
     public function add()
     {
         $post = FatApp::getPostedData();
@@ -83,21 +85,13 @@ class SubscriptionCartController extends DashboardBaseController
         $subsObj->add($spplan_id);
         $subsObj->adjustPreviousPlan($this->siteLangId);
 
-        Message::addMessage(Labels::getLabel('MSG_Success_Subscription_cart_add', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_SUCCESS_SUBSCRIPTION_CART_ADD', $this->siteLangId));
 
-        $this->set('msg', Labels::getLabel("MSG_Subscription_Package_Selected", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("MSG_SUBSCRIPTION_PACKAGE_SELECTED", $this->siteLangId));
 
         $this->set('success_msg', CommonHelper::renderHtml(Message::getHtml()));
 
         $this->_template->render(false, false, 'json-success.php', false, false);
-    }
-    private function getPromoCouponsForm($langId)
-    {
-        $langId = FatUtility::int($langId);
-        $frm = new Form('frmPromoCoupons');
-        $frm->addTextBox(Labels::getLabel('FRM_COUPON_CODE', $langId), 'coupon_code', '', array('placeholder' => Labels::getLabel('FRM_ENTER_YOUR_CODE', $langId)));
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_APPLY', $langId));
-        return $frm;
     }
 
     public function remove()

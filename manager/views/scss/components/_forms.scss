@@ -597,6 +597,9 @@ form.custom-form {
             text-decoration: underline;
         }
     }
+    &.disabled{
+        opacity: 0.5;
+    }
 }
 
 .checkbox input,
@@ -863,5 +866,11 @@ form.custom-form {
         + .btn {
             margin-#{$start-direction}: 0.5rem;
         }
+    }
+}
+
+select{
+    &:hover{
+        cursor: pointer;
     }
 }

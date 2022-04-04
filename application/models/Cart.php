@@ -141,7 +141,7 @@ class Cart extends FatModel
     }
 
     public function add($selprod_id, $qty = 1, $prodgroup_id = 0, $returnUserId = false)
-    {   
+    {
         $this->products = array();
         $this->basketProducts = [];
         $selprod_id = FatUtility::int($selprod_id);
@@ -187,7 +187,7 @@ class Cart extends FatModel
 
         if ($returnUserId) {
             return $this->cart_user_id;
-        }   
+        }
         return true;
     }
 
@@ -286,10 +286,10 @@ class Cart extends FatModel
             if (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) {
                 $loggedUserId = UserAuthentication::getLoggedUserId();
             }
-            
+
             $cartData = [];
             $cartProdsData = [];
-            
+
             foreach ($this->SYSTEM_ARR['cart'] as $key => $quantity) {
                 $keyDecoded = json_decode(base64_decode($key), true);
                 if (strpos($keyDecoded, static::CART_KEY_PREFIX_PRODUCT) !== false) {
@@ -320,7 +320,7 @@ class Cart extends FatModel
                     $this->removeCartKey($key, $selprod_id, $quantity);
                     continue;
                 }
-                
+
                 $quantity = $sellerProductRow['quantity'];
                 $fulfilmentType = $this->fulfilmentType;
                 if (isset($this->SYSTEM_ARR['shopping_cart']['checkout_type'])) {
@@ -435,7 +435,7 @@ class Cart extends FatModel
             if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0)) {
                 $cartDiscounts = $this->getCouponDiscounts();
             }
- 
+
             $cartData = [];
             $cartProdsData = [];
             foreach ($this->SYSTEM_ARR['cart'] as $key => $quantity) {
@@ -444,7 +444,7 @@ class Cart extends FatModel
                     $selProdId = FatUtility::int(str_replace(static::CART_KEY_PREFIX_PRODUCT, '', $keyDecoded));
                     $cartData[$selProdId] = $quantity;
                 }
-            }  
+            }
             if (!empty($cartData)) {
                 $cartProdsData = $this->getSellerProductsData($cartData, $siteLangId, $loggedUserId);
             }
@@ -467,7 +467,7 @@ class Cart extends FatModel
                     unset($this->SYSTEM_ARR['cart'][$key]);
                     continue;
                 }
-                
+
                 $this->products[$key]['shipping_cost'] = 0;
                 $this->products[$key]['opshipping_rate_id'] = 0;
                 $this->products[$key]['commission_percentage'] = '';
@@ -487,7 +487,7 @@ class Cart extends FatModel
                         $this->removeCartKey($key, $selprod_id, $quantity);
                         continue;
                     }
-                    
+
                     $quantity = $sellerProductRow['quantity'];
                     $fulfilmentType = $this->fulfilmentType;
                     if (isset($this->SYSTEM_ARR['shopping_cart']['checkout_type'])) {
@@ -736,7 +736,7 @@ class Cart extends FatModel
         foreach ($sellerProductRows as $key => $sellerProductRow) {
             $quantity = ($cartData[$key] > $sellerProductRow['selprod_stock']) ? $sellerProductRow['selprod_stock'] : $cartData[$key];
             $sellerProductRows[$key]['actualPrice'] = $sellerProductRow['theprice'];
-            
+
             $extraData = [];
             if ($this->includeTax == true) {
                 $shipFromStateId = $sellerProductRow['shop_state_id'];
@@ -748,7 +748,7 @@ class Cart extends FatModel
                 } else {
                     $shippingAddressId = $this->getCartShippingAddress();
                 }
-                
+
                 $shippingAddressDetail = [];
                 if (0 < $shippingAddressId) {
                     $address = new Address($shippingAddressId, $this->cart_lang_id);
@@ -1031,8 +1031,8 @@ class Cart extends FatModel
 
                         $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
                         $availableStock = $cartProducts[$cartKey]['selprod_stock'] - $tempHoldStock;
-                        $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);  
-                        
+                        $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
+
                         if ($quantity > $userTempHoldStock) {
                             if ($availableStock == 0 || ($availableStock < ($quantity - $userTempHoldStock))) {
                                 $this->warning = Labels::getLabel('MSG_REQUESTED_QUANTITY_MORE_THAN_STOCK_AVAILABLE', $this->cart_lang_id);
@@ -1235,7 +1235,6 @@ class Cart extends FatModel
                 if ($product['is_physical_product'] && !isset($this->SYSTEM_ARR['shopping_cart']['product_shipping_methods']['product'][$product['selprod_id']])) {
                     return false;
                 }
-
             }
         }
         return true;
@@ -1465,7 +1464,6 @@ class Cart extends FatModel
 
                 if (!empty($productIdsArr)) {
                     $couponInfo['grouped_coupon_products'] = array_merge($couponInfo['grouped_coupon_products'], $productIdsArr);
-                   
                 }
             }
             /* ] */
@@ -1774,19 +1772,19 @@ class Cart extends FatModel
     /* ] */
 
     public function clear($includeAbandonedCart = false)
-    {        
-        $cartProducts = $this->getProducts($this->cart_lang_id);    
+    {
+        $cartProducts = $this->getProducts($this->cart_lang_id);
         if (is_array($cartProducts)) {
             foreach ($cartProducts as $cartKey => $product) {
                 $this->updateTempStockHold($product['selprod_id'], 0, 0);
-                if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {                    
+                if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {
                     if ($includeAbandonedCart == true) {
                         AbandonedCart::saveAbandonedCart($this->cart_user_id, $product['selprod_id'], $product['quantity'], AbandonedCart::ACTION_DELETED);
                     }
                 }
             }
         }
-        
+
 
         $this->products = array();
         $this->basketProducts = [];
