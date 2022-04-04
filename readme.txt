@@ -626,7 +626,8 @@ Updates/Fixes :
     => 063164 - Seller UI: "Shipping's Tracking URL" is not showing under the order's details page
     => 063355 - Seller UI: Alignment is not proper while binding the products with the badges at the seller's end
     => 063384 - Suggestion to change the functionality of the uploading profile images on the seller's, buyer's advertiser's, and affiliate's dashboard and make it similar to the admin's dashboard
-    
+    => 063476 - Seller UI: Infinite loader is coming when user tries to upload the profile picture.
+
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 

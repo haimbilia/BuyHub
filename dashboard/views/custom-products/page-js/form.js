@@ -501,7 +501,7 @@ var advanceMedia = false; /* open via advance media*/
                     $.ykmodal.show();
                     productImages(ans.record_id, ans.file_type, ans.option_id, ans.lang_id);
                 }
-
+                fcom.removeLoader();
                 fcom.displaySuccessMessage(ans.msg);
                 if (ans.isDefaultLayout) {
                     productDefaultImages();
