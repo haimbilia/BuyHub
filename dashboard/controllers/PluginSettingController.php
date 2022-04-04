@@ -26,7 +26,7 @@ class PluginSettingController extends LoggedUserController
                 LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_KEY_NAME', $this->siteLangId));
             }
         }
-    }    
+    }
 
     public function index()
     {
@@ -36,10 +36,11 @@ class PluginSettingController extends LoggedUserController
         if (false === $settings) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_SETTINGS_NOT_AVALIABLE_FOR_THIS_PLUGIN', $this->siteLangId));
         }
-        $this->frmObj->fill($settings); 
+        $this->frmObj->fill($settings);
         $this->set('frm', $this->frmObj);
         $this->set('plugin_name', $settings['plugin_name']);
-    
+        $this->set('keyName', $settings['plugin_name']);
+
         $this->_template->render(false, false, 'seller-plugins/settings.php');
     }
 
@@ -54,9 +55,9 @@ class PluginSettingController extends LoggedUserController
         $pluginSetting = new PluginSetting($post["plugin_id"], NULL, UserAuthentication::getLoggedUserId());
         if (!$pluginSetting->save($post)) {
             FatUtility::dieWithError($pluginSetting->getError());
-        }       
-        
-        if (Plugin::getAttributesById($post["plugin_id"], 'plugin_type') == Plugin::TYPE_SHIPPING_SERVICES) {          
+        }
+
+        if (Plugin::getAttributesById($post["plugin_id"], 'plugin_type') == Plugin::TYPE_SHIPPING_SERVICES) {
             CacheHelper::clear(CacheHelper::TYPE_SHIPING_API);
         }
 
@@ -84,7 +85,7 @@ class PluginSettingController extends LoggedUserController
         } else {
             $frm = PluginSetting::getForm($requirements, $this->langId);
         }
-        
+
         /* if (null == $frm->getField('btn_submit')) {
             $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->langId));
         } */
@@ -99,7 +100,7 @@ class PluginSettingController extends LoggedUserController
      * @param  int $langId
      * @return object
      */
-    
+
     public static function form(int $langId)
     {
         $keyName = FatApp::getPostedData('keyName', FatUtility::VAR_STRING, '');
@@ -128,11 +129,11 @@ class PluginSettingController extends LoggedUserController
             if (is_array($colLabel)) {
                 $htmlAfterField = $colLabel['htmlAfterField'];
                 $colLabel = $colLabel['label'];
-                $fieldFn = isset($colLabel['fieldType']) ? $colLabel['label'] : '' ;
+                $fieldFn = isset($colLabel['fieldType']) ? $colLabel['label'] : '';
             }
 
             /* Sanbox Key Field */
-            $fieldFn = !empty($fieldFn) ? $fieldFn : (('password'== strtolower($colName)) ? 'addPasswordField' : 'addTextBox');
+            $fieldFn = !empty($fieldFn) ? $fieldFn : (('password' == strtolower($colName)) ? 'addPasswordField' : 'addTextBox');
             $fld = $frm->$fieldFn($colLabel, $colName);
             $fld->htmlAfterField = $htmlAfterField;
 
@@ -157,10 +158,10 @@ class PluginSettingController extends LoggedUserController
 
             $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_SANDBOX, 'eq', $colName, $fld);
             $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_PRODUCTION, 'eq', $colName, $reqFld);
-            /* Live Key Fields */            
+            /* Live Key Fields */
         }
 
-        if (is_array($nonEnvFields) && !empty(array_filter($nonEnvFields))){
+        if (is_array($nonEnvFields) && !empty(array_filter($nonEnvFields))) {
             foreach ($nonEnvFields as $colName => $colLabel) {
                 $htmlAfterField = "";
                 if (is_array($colLabel)) {
@@ -172,8 +173,7 @@ class PluginSettingController extends LoggedUserController
             }
         }
 
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
+        //$frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
         return $frm;
     }
-
 }
