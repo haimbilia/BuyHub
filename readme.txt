@@ -616,6 +616,8 @@ Updates/Fixes :
     => 063450 - Buyer UI: "Unexpected token" error is showing when clicking on the "View Items" button on the Wishlist page and the Wishlist's cards size is not the same.
     => 063393 - Seller: JSON error is showing while adding sub-user trying to buy the subscription
     => 063392 - Admin UI: Sub-Users are showing while adding the transaction at the admin's end
+    => 063367 - Seller UI: Order ID is not showing on the Transaction report and search by comment is not working under the Financial report.
+    => 063471 - Admin UI: Same rating type options are showing while binding it with the category at the admin's end.
     
     
 UAT points:
