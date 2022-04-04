@@ -611,6 +611,7 @@ Updates/Fixes :
     => 063408 - Buyer UI: "Delivery and Billing Address" format is not correct on the order's details page at the buyer's end.
     => 063398 - Seller UI: The subscription coupon's image is not showing under the subscription offer section and recently purchased plan information is not showing under the "My Subscription" section at the seller's end.
     => 063164 - Seller UI: "Shipping's Tracking URL" is not showing under the order's details page
+    => 063355 - Seller UI: Alignment is not proper while binding the products with the badges at the seller's end
     
     
 UAT points:

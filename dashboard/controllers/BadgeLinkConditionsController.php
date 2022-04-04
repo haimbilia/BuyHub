@@ -492,8 +492,8 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
 
         $recordType = FatApp::getPostedData('blinkcond_record_type', FatUtility::VAR_INT, 0);
-        $records = FatApp::getPostedData('record_ids', FatUtility::VAR_STRING, '');
-
+        //$records = FatApp::getPostedData('record_ids', FatUtility::VAR_STRING, '');
+        $records = FatApp::getPostedData('badgelink_record_ids', FatUtility::VAR_STRING, '');
         if (BadgeLinkCondition::RECORD_TYPE_SHOP == $recordType) {
             $shopId = Shop::getAttributesByUserId($sellerId, 'shop_id');
             if (false === $shopId || 1 > $shopId) {
@@ -505,8 +505,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         if (Badge::COND_MANUAL == $recordCondition && BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType) {
             if (empty($records) || '[]' == $records) {
                 FatUtility::dieJsonError(Labels::getLabel('MSG_LINK_TO_IS_MANDATORY', $this->siteLangId));
-            }
-            $records = json_decode($records, true);
+            }          
         }
 
         $fromDate = FatApp::getPostedData('blinkcond_from_date', FatUtility::VAR_STRING, '');
@@ -648,12 +647,12 @@ class BadgeLinkConditionsController extends SellerBaseController
             $recordTypesArr = BadgeLinkCondition::getRecordTypeArr($this->siteLangId);
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', $recordTypesArr);
             $fld->requirement->setRequired((Badge::COND_MANUAL == $recordCondition));
-        }
+        }     
 
-        $frm->addSelectBox(Labels::getLabel('FRM_LINK_TO', $this->siteLangId), 'badgelink_record_id', [], '', ['placeholder' => Labels::getLabel('FRM_SEARCH_RECORD', $this->siteLangId), 'class' => 'recordIds--js'], '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LINK_TO', $this->siteLangId), 'badgelink_record_ids[]', [], '', ['placeholder' => Labels::getLabel('FRM_SEARCH_RECORD', $this->siteLangId)], '');
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId));
+        //$frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId));
         return $frm;
     }
 
@@ -783,9 +782,9 @@ class BadgeLinkConditionsController extends SellerBaseController
             '{OBJECT-NAME}' => $this->badgeData['badge_name'],
         ]);
 
-        if ($action == 'list') {
+        if ($action == 'list') {          
             $this->nodes = [
-                ['title' => $this->objectTypeName, 'href' => UrlHelper::generateUrl($this->objectCtrlName)],
+                ['title' => $this->objectTypeName, 'href' => UrlHelper::generateUrl('badges','list',[$params[1]])],
                 ['title' => $pageTitle]
             ];
         } else {

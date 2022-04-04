@@ -117,14 +117,16 @@ if (Badge::TYPE_BADGE == $badgeType) {
                                         <div class="caption-wraper">
                                             <label class="field_label">
                                                 <?php
-                                                $fld = $frm->getField('badgelink_record_id');
+                                                $fld = $frm->getField('badgelink_record_ids[]');
+                                                $fld->addFieldTagAttribute('id', 'recordIds--js');
+                                                $fld->addFieldTagAttribute('multiple', true);
                                                 echo $fld->getCaption();
                                                 ?>
                                             </label>
                                         </div>
                                         <div class="field-wraper">
                                             <div class="field_cover">
-                                                <?php echo $frm->getFieldHtml('badgelink_record_id'); ?>
+                                                <?php echo $fld->getHtml(); ?>
                                             </div>
                                         </div>
                                     </div>
@@ -193,16 +195,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="field-set">
-                                    <div class="field-wraper">
-                                        <div class="field_cover">
-                                            <?php echo $frm->getFieldHtml('btn_clear'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>                            
                         </div>
                         </form>
                         <?php echo $frm->getExternalJS(); ?>

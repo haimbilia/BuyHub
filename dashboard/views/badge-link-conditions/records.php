@@ -5,11 +5,11 @@ if ($records) {
     $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table recordListing--js'));
     foreach ($records as $record) {
         $tr = $tbl->appendElement('tr', ['class' => 'recordRow--js', 'id' => 'record-' . $badgeLinkCondId . '-' . $record['badgelink_record_id']]);
-        $tr->appendElement('td')->appendElement('plaintext', [], $sr_no, true);
-        $tr->appendElement('td')->appendElement('plaintext', [], $record['record_name'], true);
+        $tr->appendElement('td',['width'=>'10%'])->appendElement('plaintext', [], $sr_no, true);
+        $tr->appendElement('td',['width'=>'60%'])->appendElement('plaintext', [], $record['record_name'], true);
 
         if (true === $canEditRecords && BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType) {
-            $tr->appendElement('td')
+            $tr->appendElement('td',['width'=>'20%'])
                 ->appendElement("ul", array("class" => "actions"))
                 ->appendElement("li")
                 ->appendElement('a', array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_REMOVE', $siteLangId), "onclick" => "removeBadgeLinkRecord(event, " . $badgeLinkCondId . "," . $record['badgelink_record_id'] . ")"), "<i class='fa fa-times'></i>", true);
