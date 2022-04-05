@@ -367,7 +367,6 @@ class AccountController extends LoggedUserController
         if (User::isAffiliate()) {
             $canAddMoneyToWallet = false;
         } else {
-
             $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr();
             $pmSrch = PaymentMethods::getSearchObject($this->siteLangId);
             $pmSrch->addCondition('plugin_code', 'NOT IN', $excludePaymentGatewaysArr[applicationConstants::CHECKOUT_ADD_MONEY_TO_WALLET]);
@@ -395,6 +394,9 @@ class AccountController extends LoggedUserController
         $payouts = [-1 => Labels::getLabel("LBL_BANK_PAYOUT", $this->siteLangId)] + $payoutPlugins;
         $this->set('payouts', $payouts);
         $this->set('userWalletBalance', User::getUserBalance($this->userId));
+        $this->set('userTotalWalletBalance', User::getUserBalance($this->userId, false, false));
+        $this->set('promotionWalletToBeCharged', Promotion::getPromotionWalleToBeCharged($this->userId));
+        $this->set('withdrawlRequestAmount', User::getUserWithdrawnRequestAmount($this->userId));
         $this->set('codMinWalletBalance', $codMinWalletBalance);
         $this->set('frmSearch', $frm);
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TRANSACTION_ID,_ORDER_ID_OR_COMMENT', $this->siteLangId));
@@ -419,18 +421,6 @@ class AccountController extends LoggedUserController
         }
 
         $this->_template->render();
-    }
-
-    public function creditsInfo()
-    {
-        $this->set('userWalletBalance', User::getUserBalance($this->userId));
-        $this->set('userTotalWalletBalance', User::getUserBalance($this->userId, false, false));
-        $this->set('promotionWalletToBeCharged', Promotion::getPromotionWalleToBeCharged($this->userId));
-        $this->set('withdrawlRequestAmount', User::getUserWithdrawnRequestAmount($this->userId));
-
-        if (false === MOBILE_APP_API_CALL) {
-            $this->_template->render(false, false);
-        }
     }
 
     public function setUpWalletRecharge()
@@ -616,6 +606,15 @@ class AccountController extends LoggedUserController
         }
         $this->_template->render(false, false);
     }
+    
+    private function creditsInfo()
+    {
+        $this->set('userWalletBalance', User::getUserBalance($this->userId));
+        $this->set('userTotalWalletBalance', User::getUserBalance($this->userId, false, false));
+        $this->set('promotionWalletToBeCharged', Promotion::getPromotionWalleToBeCharged($this->userId));
+        $this->set('withdrawlRequestAmount', User::getUserWithdrawnRequestAmount($this->userId));
+    }
+
 
     public function requestWithdrawal()
     {
