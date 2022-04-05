@@ -67,7 +67,7 @@ $(document).ready(function () {
         }
     });
 
-    $(".navLinkJs.active").closest('ul').addClass('show').siblings('.menuLinkJs').addClass('active').removeClass('collapsed');
+    $(".navLinkJs.active:not(.noCollapseJs)").closest('ul').addClass('show').siblings('.menuLinkJs').addClass('active').removeClass('collapsed');
     /* Active Sidebar Link. */
 });
 

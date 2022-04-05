@@ -188,12 +188,12 @@ $(function () {
             $(liObj).hide();
             $(".navLinkJs", liObj).each(function () {
                 var resultObj = $(this);
-                var textEle = resultObj.find('.nav_text');
+                var textEle = resultObj.find('.navTextJs');
                 var orignalText = textEle.text();
                 var text = orignalText.toLowerCase();
                 var textPos = text.indexOf(value.toLowerCase());
 
-                var parentTextEle = resultObj.closest('.dropdownJs').find('.menu-title');
+                var parentTextEle = resultObj.closest('.dropdownJs').find('.menuTitleJs');
                 var orignalParentText = parentTextEle.text();
                 var parentText = orignalParentText.toLowerCase();
                 var parentTextPos = parentText.indexOf(value.toLowerCase());

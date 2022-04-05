@@ -39,7 +39,9 @@
                              
                                     <?php foreach($trackingNumbers as $trackingNumber){
                                         $trackingNumber = trim($trackingNumber);
-                                        $trackingNumber = number_format($trackingNumber,0,null,''); 
+                                        if(is_numeric($trackingNumber)){
+                                            $trackingNumber = number_format($trackingNumber,0,null,''); 
+                                        }                                        
                                     ?>
                                         <div class="clipboard mb-4">
                                         <p class="clipboard_url trackingNumberJs">
@@ -57,7 +59,9 @@
                                         if (!empty($shippingApiObj) && true === $shippingApiObj->canFetchTrackingDetail()) {
                                             foreach($trackingNumbers as $trackingNumber){
                                                 $trackingNumber = trim($trackingNumber);
-                                                $trackingNumber = number_format($trackingNumber,0,null,'');
+                                                if(is_numeric($trackingNumber)){
+                                                    $trackingNumber = number_format($trackingNumber,0,null,'');
+                                                }
                                                 $str .=  '<div><a class="link" href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'" . $trackingNumber . "'" . ',' . "'" . $childOrderDetail['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . Labels::getLabel("MSG_TRACK", $siteLangId) . '</a></div>';
                                                 if (empty($childOrderDetail['opship_tracking_url']) && !empty($trackingNumber)) {
                                                     $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["opshipping_label"]) . "</em>";
@@ -75,7 +79,9 @@
                                     } else { 
                                         foreach($trackingNumbers as $trackingNumber){
                                             $trackingNumber = trim($trackingNumber);
-                                            $trackingNumber = number_format($trackingNumber,0,null,'');                                        
+                                            if(is_numeric($trackingNumber)){
+                                                $trackingNumber = number_format($trackingNumber,0,null,'');   
+                                            }                                     
                                         ?>                                    
                                         <a class="link" href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_TRACK', $siteLangId); ?>" onclick="trackOrder('<?php echo trim($trackingNumber); ?>', '<?php echo trim($carrier); ?>', '<?php echo $childOrderDetail['op_invoice_number']; ?>')">
                                             <?php echo $trackingNumber; ?>
@@ -87,6 +93,11 @@
                                         </em>
                                     <?php } ?>
                                 </p>
+                            <?php } ?>
+                            <?php if (!empty($row['oshistory_tracking_url'])) { ?>
+                                <a href="<?php echo $row['oshistory_tracking_url']; ?>" target="_blank" class="link-underline">
+                                        <?php echo Labels::getLabel('LBL_CLICK_HERE_TO_TRACK', $siteLangId); ?>
+                                    </a>
                             <?php } ?>
                             <p>
                                 <?php if (isset($row['oshistory_comments']) && !empty(trim(($row['oshistory_comments'])))) { ?>

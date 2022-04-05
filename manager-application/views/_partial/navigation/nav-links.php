@@ -13,7 +13,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_HOME', $siteLangId); ?></span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_HOME', $siteLangId); ?></span>
             </button>
         </li>
     <?php } ?>
@@ -36,7 +36,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_PRODUCT_MANAGEMENT', $siteLangId); ?></span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_PRODUCT_MANAGEMENT', $siteLangId); ?></span>
                 <?php if (!$quickSearch) { ?>
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
@@ -51,7 +51,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -63,7 +63,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_INVENTORY', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PRODUCT_INVENTORY', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -75,7 +75,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_CATEGORIES', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -88,7 +88,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text"><?php echo Labels::getLabel('NAV_BRANDS', $siteLangId); ?></span>
+                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BRANDS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -100,7 +100,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -113,7 +113,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_OPTIONS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_OPTIONS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -125,7 +125,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_TAGS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PRODUCT_TAGS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -158,7 +158,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?></span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?></span>
                 <?php if (!$quickSearch) { ?>
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
@@ -173,7 +173,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_BRAND_REQUEST', $siteLangId); ?><?php if (!$quickSearch && $brandReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($brandReqCount); ?>)<?php } ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BRAND_REQUEST', $siteLangId); ?><?php if (!$quickSearch && $brandReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($brandReqCount); ?>)<?php } ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -185,7 +185,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES_REQUESTS', $siteLangId); ?>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_CATEGORIES_REQUESTS', $siteLangId); ?>
                                     <?php if (!$quickSearch && $categoryReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($categoryReqCount); ?>)<?php } ?></span>
                             </a>
                         </li>
@@ -198,7 +198,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_MASTER_PRODUCT_REQUESTS', $siteLangId); ?>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_MASTER_PRODUCT_REQUESTS', $siteLangId); ?>
                                     <?php if (!$quickSearch && $custProdReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($custProdReqCount); ?>)<?php } ?></span>
                             </a>
                         </li>
@@ -211,7 +211,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_REQUESTS', $siteLangId); ?><?php if (!$quickSearch && $supReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($supReqCount); ?>)<?php } ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_REQUESTS', $siteLangId); ?><?php if (!$quickSearch && $supReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($supReqCount); ?>)<?php } ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -223,7 +223,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?><?php if (!$quickSearch && $threshSelProdCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($threshSelProdCount); ?>)<?php } ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?><?php if (!$quickSearch && $threshSelProdCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($threshSelProdCount); ?>)<?php } ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -237,7 +237,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_ORDER_RETURN_REQUESTS', $siteLangId); ?>
                                     <?php if (!$quickSearch && $orderRetReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($orderRetReqCount); ?>)<?php } ?>
                                 </span>
@@ -253,7 +253,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php
                                     $menuLabel = Labels::getLabel('NAV_WITHDRAWL_REQUESTS', $siteLangId);
                                     $menuLabel .= (!$quickSearch && $drReqCount ? ' (' . HtmlHelper::displayNumberWithPlus($drReqCount) . ')' : '');
@@ -272,7 +272,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php
                                     $menuLabel = Labels::getLabel('NAV_CANCELLATION_REQUESTS', $siteLangId);
                                     $menuLabel .= (!$quickSearch && $orderCancelReqCount ? ' (' . HtmlHelper::displayNumberWithPlus($orderCancelReqCount) . ')' : '');
@@ -291,7 +291,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php
                                     $menuLabel = Labels::getLabel('NAV_BADGE_REQUEST', $siteLangId);
                                     $menuLabel .= (!$quickSearch && $badgeRequestCount ? ' (' . HtmlHelper::displayNumberWithPlus($badgeRequestCount) . ')' : '');
@@ -310,7 +310,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php
                                     $menuLabel = Labels::getLabel('NAV_GDPR_REQUESTS', $siteLangId);
                                     $menuLabel .= (!$quickSearch && $gdprReqCount ? ' (' . HtmlHelper::displayNumberWithPlus($gdprReqCount) . ')' : '');
@@ -343,7 +343,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></span>
                 <?php if (!$quickSearch) { ?>
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
@@ -358,7 +358,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -370,7 +370,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_ORDERS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_ORDERS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -382,7 +382,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_ORDER_CANCEL_REASONS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_ORDER_CANCEL_REASONS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -395,7 +395,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_ORDER_RETURN_REASONS', $siteLangId); ?>
                                 </span>
                             </a>
@@ -409,7 +409,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_ORDER_STATUSES', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_ORDER_STATUSES', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -421,7 +421,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_REVIEWS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PRODUCT_REVIEWS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -433,7 +433,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_ABANDONED_CART', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_ABANDONED_CART', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -457,7 +457,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?></span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?></span>
                 <?php if (!$quickSearch) { ?>
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
@@ -473,7 +473,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text"><?php echo Labels::getLabel('NAV_ADMIN_USERS', $siteLangId); ?></span>
+                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_ADMIN_USERS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -486,7 +486,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text"> <?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?></span>
+                                <span class="nav_text navTextJs"> <?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?></span>
                             </a>
                         </li>
                         <li class="nav_item navItemJs">
@@ -497,7 +497,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text"><?php echo Labels::getLabel('NAV_REWARDS', $siteLangId); ?></span>
+                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_REWARDS', $siteLangId); ?></span>
                             </a>
                         </li>
                         <li class="nav_item navItemJs">
@@ -508,7 +508,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_TRANSACTIONS', $siteLangId); ?></span>
                             </a>
                         </li>
@@ -520,7 +520,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_DELETED_USERS', $siteLangId); ?></span>
                             </a>
                         </li>
@@ -532,7 +532,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text"><?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?></span>
+                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -545,7 +545,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text"><?php echo Labels::getLabel('NAV_MESSAGES', $siteLangId); ?></span>
+                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_MESSAGES', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -573,7 +573,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?></span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?></span>
                 <?php if (!$quickSearch) { ?>
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
@@ -589,7 +589,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text"><?php echo Labels::getLabel('NAV_SPECIAL_PRICE', $siteLangId); ?></span>
+                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SPECIAL_PRICE', $siteLangId); ?></span>
                             </a>
                         </li>
 
@@ -601,7 +601,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text"><?php echo Labels::getLabel('NAV_VOLUME_DISCOUNT', $siteLangId); ?></span>
+                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_VOLUME_DISCOUNT', $siteLangId); ?></span>
                             </a>
                         </li>
 
@@ -613,7 +613,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_RELATED_PRODUCTS', $siteLangId); ?></span>
                             </a>
                         </li>
@@ -625,7 +625,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_BUY_TOGETHER_PRODUCTS', $siteLangId); ?></span>
                             </a>
                         </li>
@@ -640,7 +640,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_PPC_PROMOTION_MANAGEMENT', $siteLangId); ?></span>
                             </a>
                         </li>
@@ -656,7 +656,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_REWARDS_ON_PURCHASE', $siteLangId); ?></span>
                             </a>
                         </li>
@@ -671,7 +671,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_MANAGE_WEIGHTAGES', $siteLangId); ?></span>
                             </a>
                         </li>
@@ -683,7 +683,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_RECOMMENDED_TAG_PRODUCTS_WEIGHTAGES', $siteLangId); ?>
                                 </span>
                             </a>
@@ -698,7 +698,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_DISCOUNT_COUPONS', $siteLangId); ?></span>
                             </a>
                         </li>
@@ -714,7 +714,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_PUSH_NOTIFICATIONS', $siteLangId); ?></span>
                             </a>
                         </li>
@@ -728,7 +728,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_BADGES', $siteLangId); ?></span>
                             </a>
                         </li>
@@ -740,7 +740,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_RIBBONS', $siteLangId); ?></span>
                             </a>
                         </li>
@@ -766,7 +766,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?></span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?></span>
                 <?php if (!$quickSearch) { ?>
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
@@ -781,7 +781,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_POST_CATEGORIES', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BLOG_POST_CATEGORIES', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -793,7 +793,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_POSTS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BLOG_POSTS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -805,7 +805,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_CONTRIBUTIONS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BLOG_CONTRIBUTIONS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -817,7 +817,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span><span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_COMMENTS', $siteLangId); ?></span>
+                                </span><span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BLOG_COMMENTS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -839,7 +839,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?></span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?></span>
                 <?php if (!$quickSearch) { ?>
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
@@ -854,7 +854,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_STRUCTURE', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TAX_STRUCTURE', $siteLangId); ?></span>
                             </a>
                         </li>
 
@@ -865,7 +865,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES', $siteLangId); ?></span>
                             </a>
                         </li>
                         <li class="nav_item navItemJs">
@@ -875,7 +875,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES_RULE', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES_RULE', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -905,7 +905,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?></span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?></span>
                 <?php if (!$quickSearch) { ?>
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
@@ -921,7 +921,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_HOME_PAGE_SLIDES', $siteLangId); ?>
                                 </span>
                             </a>
@@ -936,7 +936,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_BANNERS', $siteLangId); ?>
                                 </span>
                             </a>
@@ -951,7 +951,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_CONTENT_PAGES', $siteLangId); ?>
                                 </span>
                             </a>
@@ -965,7 +965,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CONTENT_BLOCK', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_CONTENT_BLOCK', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -977,7 +977,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_IMPORT_INSTRUCTIONS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_IMPORT_INSTRUCTIONS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -989,7 +989,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_FAQS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_FAQS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -1001,7 +1001,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_TESTIMONIALS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TESTIMONIALS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -1013,7 +1013,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_NAVIGATIONS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_NAVIGATIONS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -1025,7 +1025,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_COLLECTIONS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_COLLECTIONS', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -1060,7 +1060,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?></span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?></span>
                 <?php if (!$quickSearch) { ?>
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
@@ -1083,7 +1083,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SALES_REPORTS', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SALES_REPORTS', $siteLangId); ?></span>
                                 <?php if (!$quickSearch) { ?>
                                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                 <?php } ?>
@@ -1093,35 +1093,35 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
                                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["SalesReport"]' href="<?php echo UrlHelper::generateUrl('SalesReport'); ?>">
-                                                <span class="nav_text"><?php echo Labels::getLabel('NAV_SALES_OVER_TIME', $siteLangId); ?></span>
+                                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SALES_OVER_TIME', $siteLangId); ?></span>
                                             </a>
                                         </li>
                                     <?php } ?>
                                     <?php if ($objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
                                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["CatalogReport"]' href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>">
-                                                <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?></span>
+                                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?></span>
                                             </a>
                                         </li>
                                     <?php } ?>
                                     <?php if ($objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
                                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ProductsReport"]' href="<?php echo UrlHelper::generateUrl('ProductsReport'); ?>">
-                                                <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_VARIENTS', $siteLangId); ?></span>
+                                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PRODUCT_VARIENTS', $siteLangId); ?></span>
                                             </a>
                                         </li>
                                     <?php } ?>
                                     <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
                                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ShopsReport"]' href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>">
-                                                <span class="nav_text"><?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?></span>
+                                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?></span>
                                             </a>
                                         </li>
                                     <?php } ?>
                                     <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
                                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["BuyersReport"]' href="<?php echo UrlHelper::generateUrl('BuyersReport'); ?>">
-                                                <span class="nav_text"><?php echo Labels::getLabel('NAV_CUSTOMERS', $siteLangId); ?></span>
+                                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_CUSTOMERS', $siteLangId); ?></span>
                                             </a>
                                         </li>
                                     <?php } ?>
@@ -1145,7 +1145,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_USERS_REPORT', $siteLangId); ?>
                                 </span>
                                 <?php if (!$quickSearch) { ?>
@@ -1157,7 +1157,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
                                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UsersReport/index/<?php echo User::USER_TYPE_BUYER; ?>"]' href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>">
-                                                <span class="nav_text">
+                                                <span class="nav_text navTextJs">
                                                     <?php echo Labels::getLabel('NAV_BUYERS', $siteLangId); ?>
                                                 </span>
                                             </a>
@@ -1166,7 +1166,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <?php if ($objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
                                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["UsersReport/index/<?php echo User::USER_TYPE_SELLER; ?>"]' href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_SELLER]); ?>">
-                                                <span class="nav_text">
+                                                <span class="nav_text navTextJs">
                                                     <?php echo Labels::getLabel('NAV_SELLERS', $siteLangId); ?>
                                                 </span>
                                             </a>
@@ -1175,7 +1175,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <?php if ($objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
                                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["AffiliatesReport"]' href="<?php echo UrlHelper::generateUrl('AffiliatesReport'); ?>">
-                                                <span class="nav_text">
+                                                <span class="nav_text navTextJs">
                                                     <?php echo Labels::getLabel('NAV_AFFILIATES', $siteLangId); ?>
                                                 </span>
                                             </a>
@@ -1184,7 +1184,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <?php if ($objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
                                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["AdvertisersReport"]' href="<?php echo UrlHelper::generateUrl('AdvertisersReport'); ?>">
-                                                <span class="nav_text">
+                                                <span class="nav_text navTextJs">
                                                     <?php echo Labels::getLabel('NAV_ADVERTISERS', $siteLangId); ?>
                                                 </span>
                                             </a>
@@ -1203,7 +1203,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text"><?php echo Labels::getLabel('NAV_FINANCIAL_REPORT', $siteLangId); ?></span>
+                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_FINANCIAL_REPORT', $siteLangId); ?></span>
                                 <?php if (!$quickSearch) { ?>
                                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                 <?php } ?>
@@ -1212,27 +1212,27 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 <ul class="nav nav-level">
                                     <li class="nav_item navItemJs">
                                         <a href="<?php echo UrlHelper::generateUrl('EarningsReport'); ?>" class="nav_link navLinkJs ">
-                                            <span class="nav_text"><?php echo Labels::getLabel('NAV_EARNINGS', $siteLangId); ?></span>
+                                            <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_EARNINGS', $siteLangId); ?></span>
                                         </a>
                                     </li>
                                     <li class="nav_item navItemJs">
                                         <a href="<?php echo UrlHelper::generateUrl('ProductProfitReport'); ?>" class="nav_link navLinkJs ">
-                                            <span class="nav_text"><?php echo Labels::getLabel('NAV_PROFIT_BY_PRODUCTS', $siteLangId); ?></span>
+                                            <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PROFIT_BY_PRODUCTS', $siteLangId); ?></span>
                                         </a>
                                     </li>
                                     <li class="nav_item navItemJs">
                                         <a href="<?php echo UrlHelper::generateUrl('PreferredPaymentMethod'); ?>" class="nav_link navLinkJs ">
-                                            <span class="nav_text"><?php echo Labels::getLabel('NAV_PREFERRED_PAYMENT_METHOD', $siteLangId); ?></span>
+                                            <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PREFERRED_PAYMENT_METHOD', $siteLangId); ?></span>
                                         </a>
                                     </li>
                                     <li class="nav_item navItemJs">
                                         <a href="<?php echo UrlHelper::generateUrl('payoutReport'); ?>" class="nav_link navLinkJs ">
-                                            <span class="nav_text"><?php echo Labels::getLabel('NAV_PAYOUT', $siteLangId); ?></span>
+                                            <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PAYOUT', $siteLangId); ?></span>
                                         </a>
                                     </li>
                                     <li class="nav_item navItemJs">
                                         <a href="<?php echo UrlHelper::generateUrl('TransactionReport'); ?>" class="nav_link navLinkJs ">
-                                            <span class="nav_text"><?php echo Labels::getLabel('NAV_TRANSACTION_REPORT', $siteLangId); ?></span>
+                                            <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TRANSACTION_REPORT', $siteLangId); ?></span>
                                         </a>
                                     </li>
                                 </ul>
@@ -1247,7 +1247,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_REPORT', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_REPORT', $siteLangId); ?></span>
                                 <?php if (!$quickSearch) { ?>
                                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                 <?php } ?>
@@ -1256,12 +1256,12 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 <ul class="nav nav-level">
                                     <li class="nav_item navItemJs">
                                         <a href="<?php echo UrlHelper::generateUrl('SubscriptionPlanReport'); ?>" class="nav_link navLinkJs ">
-                                            <span class="nav_text"><?php echo Labels::getLabel('NAV_BY_PLAN', $siteLangId); ?></span>
+                                            <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BY_PLAN', $siteLangId); ?></span>
                                         </a>
                                     </li>
                                     <li class="nav_item navItemJs">
                                         <a href="<?php echo UrlHelper::generateUrl('SubscriptionSellerReport'); ?>" class="nav_link navLinkJs ">
-                                            <span class="nav_text"><?php echo Labels::getLabel('NAV_BY_SELLER', $siteLangId); ?></span>
+                                            <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_BY_SELLER', $siteLangId); ?></span>
                                         </a>
                                     </li>
                                 </ul>
@@ -1278,7 +1278,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_DISCOUNT_COUPONS', $siteLangId); ?>
                                 </span>
                             </a>
@@ -1301,7 +1301,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?></span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?></span>
                 <?php if (!$quickSearch) { ?>
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
@@ -1315,7 +1315,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                     </use>
                                 </svg>
-                            </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?></span>
+                            </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?></span>
                         </a>
                     </li>
 
@@ -1342,7 +1342,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     </use>
                 </svg>
             </span>
-            <span class="menu-title"><?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?></span>
+            <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?></span>
             <?php if (!$quickSearch) { ?>
                 <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
             <?php } ?>
@@ -1357,7 +1357,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                     </use>
                                 </svg>
-                            </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SHIPPING_COMPANY_USERS', $siteLangId); ?></span>
+                            </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPING_COMPANY_USERS', $siteLangId); ?></span>
                         </a>
                     </li>
                 <?php } ?>
@@ -1371,7 +1371,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     </use>
                                 </svg>
                             </span>
-                            <span class="nav_text"><?php echo Labels::getLabel('NAV_SHIPPING_PACKAGES', $siteLangId); ?></span>
+                            <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPING_PACKAGES', $siteLangId); ?></span>
                         </a>
                     </li>
                 <?php } ?>
@@ -1385,7 +1385,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     </use>
                                 </svg>
                             </span>
-                            <span class="nav_text"><?php echo Labels::getLabel('NAV_SHIPPING_PROFILE', $siteLangId); ?></span>
+                            <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPING_PROFILE', $siteLangId); ?></span>
                         </a>
                     </li>
                 <?php } ?>
@@ -1398,7 +1398,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                     </use>
                                 </svg>
-                            </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_PICKUP_ADDRESSES', $siteLangId); ?></span>
+                            </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PICKUP_ADDRESSES', $siteLangId); ?></span>
                         </a>
                     </li>
                 <?php } ?>
@@ -1410,7 +1410,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                     </use>
                                 </svg>
-                            </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SHIPPED_PRODUCTS', $siteLangId); ?></span>
+                            </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPED_PRODUCTS', $siteLangId); ?></span>
                         </a>
                     </li>
                 <?php } ?>
@@ -1422,7 +1422,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                     </use>
                                 </svg>
-                            </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_TRACKING_CODE_RELATION', $siteLangId); ?></span>
+                            </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TRACKING_CODE_RELATION', $siteLangId); ?></span>
                         </a>
                     </li>
                 <?php } ?>
@@ -1444,7 +1444,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </use>
                     </svg>
                 </span>
-                <span class="menu-title"><?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?></span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?></span>
                 <?php if (!$quickSearch) { ?>
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
@@ -1459,7 +1459,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_URL_REWRITING', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_URL_REWRITING', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -1473,7 +1473,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span>
-                                <span class="nav_text">
+                                <span class="nav_text navTextJs">
                                     <?php echo Labels::getLabel('NAV_IMAGE_ATTRIBUTES', $siteLangId); ?></span>
                             </a>
                         </li>
@@ -1487,7 +1487,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span><span class="nav_text"><?php echo Labels::getLabel('NAV_GENERATE_SITEMAP', $siteLangId); ?></span>
+                                </span><span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_GENERATE_SITEMAP', $siteLangId); ?></span>
                             </a>
                         </li>
                         <li class="nav_item navItemJs">
@@ -1497,7 +1497,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_VIEW_HTML', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_VIEW_HTML', $siteLangId); ?></span>
                             </a>
                         </li>
                         <li class="nav_item navItemJs">
@@ -1507,7 +1507,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_VIEW_XML', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_VIEW_XML', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>
@@ -1520,7 +1520,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_META_TAGS_MANAGEMENT', $siteLangId); ?></span>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_META_TAGS_MANAGEMENT', $siteLangId); ?></span>
                             </a>
                         </li>
                     <?php } ?>

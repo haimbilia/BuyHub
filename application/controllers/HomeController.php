@@ -55,24 +55,16 @@ class HomeController extends MyAppController
 
         if (0 < $sponShopLayoutCount) {
             foreach ($sponsoredShopsInCollection as $indexId => $collectionId) {
+                $recordId = (true === MOBILE_APP_API_CALL) ? $indexId : $collectionId;
                 $sponsoredShops = $this->getSponsoredShops($productSrchObj);
 
                 if (empty($sponsoredShops)) {
-                    if (true === MOBILE_APP_API_CALL) {
-                        unset($collections[$indexId]);
-                    } else {
-                        unset($collections[$collectionId]);
-                    }
+                    unset($collections[$recordId]);
                     continue;
                 }
 
-                if (true === MOBILE_APP_API_CALL) {
-                    $collections[$indexId]['shops'] = $sponsoredShops;
-                    $collections[$indexId]['totShops'] = count($sponsoredShops);
-                } else {
-                    $collections[$collectionId]['shops'] = $sponsoredShops;
-                    $collections[$collectionId]['totShops'] = count($sponsoredShops);
-                }
+                $collections[$recordId]['shops'] = $sponsoredShops;
+                $collections[$recordId]['totShops'] = count($sponsoredShops);
             }
         }
 
@@ -340,7 +332,7 @@ class HomeController extends MyAppController
             $productSrchObj->addFld('IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
         }
 
-        $productSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $productSrchObj->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $productSrchObj->addMultipleFields(array('product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on', 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'shop_id', 'selprod_min_order_qty'));
         return $productSrchObj;
     }

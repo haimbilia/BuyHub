@@ -184,10 +184,10 @@ $(document).on('change', '.icon-language-js', function () {
             },
             minimumInputLength: 0,
             templateResult: function (result) {
-                return result.name || result.value;
+                return result.text || result.value;
             },
             templateSelection: function (result) {
-                return result.name || result.value;
+                return result.text || result.value;
             }
         }).on('select2:selecting', function (e) {
             var position = 0;

@@ -54,7 +54,7 @@
             </ul>
         </div>
     <?php } ?>
-    <div class="header-icons-group">         
+    <div class="header-icons-group">
 
         <button class="c-header-icon btn quick-search" data-bs-toggle="modal" data-bs-target="#search-main">
             <svg class="svg" width="20" height="20">
@@ -64,6 +64,7 @@
         </button>
         <?php if ($userPrivilege->canViewMessages(0, true)) {
             if ($activeTab == 'B' || $activeTab == 'S') {
+                $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
         ?>
                 <a class="c-header-icon btn bell" data-org-url="<?php echo UrlHelper::generateUrl('Account', 'Messages', array(), '', null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>">
                     <svg class="svg bell-shake-delay" width="20" height="20">
