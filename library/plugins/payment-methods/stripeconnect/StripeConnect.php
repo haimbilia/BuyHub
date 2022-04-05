@@ -139,6 +139,16 @@ class StripeConnect extends PaymentMethodBase
         $this->payoutScheduleMonthly = isset($this->settings['payouts_schedule_monthly_anchor']) ? $this->settings['payouts_schedule_monthly_anchor'] : '';
         return true;
     }
+    
+    /**
+     * isMandatoryForSeller : Check if stripe connect configuration is mandatory for seller.
+     *
+     * @return int
+     */
+    public function isMandatoryForSeller(): int
+    {
+        return (int) $this->getKey('stripe_connect_mandatory');
+    }
 
     /**
      * getRedirectUri

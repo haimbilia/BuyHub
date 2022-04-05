@@ -10,7 +10,7 @@ class SellerBaseController extends LoggedUserController
             LibHelper::exitWithError($msg, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('account'));
         }
-      
+
         if (!User::canAccessSupplierDashboard() || !User::isSellerVerified($this->userParentId)) {
             $adminLoggedIn = isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) ? true : false;
             $userObj = new User(UserAuthentication::getLoggedUserId());
@@ -18,7 +18,7 @@ class SellerBaseController extends LoggedUserController
             if (empty($userEmail)) {
                 $msg = Labels::getLabel('ERR_CONFIGURE_YOUR_EMAIL_FIRST', $this->siteLangId);
                 LibHelper::exitWithError($msg, false, true);
-                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'configureEmail',[], CONF_WEBROOT_FRONTEND));
+                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'configureEmail', [], CONF_WEBROOT_FRONTEND));
             }
 
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), false, true);
@@ -29,36 +29,34 @@ class SellerBaseController extends LoggedUserController
         /* Validate Seller If stripe connect correctly configured. */
         $isStripeConnectLogin = (get_called_class() == 'StripeConnectController' && in_array($action, ['login', 'callback']));
         $stripeConnectObj = PluginHelper::callPlugin('StripeConnect', [$this->siteLangId]);
-        if (
-            false !== $stripeConnectObj && 
-            (
-                false === $stripeConnectObj->init($this->userParentId, true) || 
-                false === $stripeConnectObj->userAccountIsValid()
-            ) && 
-            !$isStripeConnectLogin &&
-            !FatUtility::isAjaxCall() && 
-            UserPrivilege::isUserHasValidSubsription($this->userParentId) && 
-            !empty($action) &&
-            !in_array(strtolower($action), ['shopform', 'shop', 'setuprequiredfields'])
-        ) {
-            if (true === MOBILE_APP_API_CALL) {
-                $msg = Labels::getLabel('MSG_PLEASE_CONFIGURE_STRIPE_ACCOUNT', $this->siteLangId);
-                FatUtility::dieJsonError($msg);
-            } else {
-                Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_CONFIGURE_STRIPE_ACCOUNT', $this->siteLangId));
+        if (false !== $stripeConnectObj) {
+            if (0 < $stripeConnectObj->isMandatoryForSeller() &&
+                (
+                    false === $stripeConnectObj->init($this->userParentId, true) ||
+                    false === $stripeConnectObj->userAccountIsValid()
+                ) &&
+                !$isStripeConnectLogin &&
+                !FatUtility::isAjaxCall() &&
+                UserPrivilege::isUserHasValidSubsription($this->userParentId) &&
+                !empty($action) &&
+                !in_array(strtolower($action), ['shopform', 'shop', 'setuprequiredfields'])
+            ) {
+                if (true === MOBILE_APP_API_CALL) {
+                    $msg = Labels::getLabel('MSG_PLEASE_CONFIGURE_STRIPE_ACCOUNT', $this->siteLangId);
+                    FatUtility::dieJsonError($msg);
+                } else {
+                    Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_CONFIGURE_STRIPE_ACCOUNT', $this->siteLangId));
+                }
+                FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop', ['StripeConnect']));
             }
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop', ['StripeConnect']));
         }
         /* ----------------- */
-
-        
     }
-    
+
     public function imgCropper()
     {
         $this->set('title', FatApp::getPostedData('title', FatUtility::VAR_STRING, Labels::getLabel('LBL_UPLOAD_IMAGE', $this->siteLangId)));
         $this->set('html', $this->_template->render(false, false, 'cropper/index.php', true));
         $this->_template->render(false, false, 'json-success.php', true, false);
-    }    
-    
+    }
 }
