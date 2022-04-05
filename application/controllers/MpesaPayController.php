@@ -100,7 +100,7 @@ class MpesaPayController extends PaymentController
                     $this->setErrorAndRedirect($response['ResponseDescription'], FatUtility::isAjaxCall());
                 }
 
-                $msg = Labels::getLabel('SUC_WAITING_FOR_CONFIRMATION', $this->siteLangId);
+                $msg = Labels::getLabel('MSG_WAITING_FOR_CONFIRMATION', $this->siteLangId);
                 $json['msg'] = $response['ResponseDescription'] . ' ' . $msg;
                 $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
             } else {
@@ -179,7 +179,7 @@ class MpesaPayController extends PaymentController
                             break;
                         }
                     }
-                    $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $txnId, $payment_amount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), $json);
+                    $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $txnId, $payment_amount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), $json);
                     return;
                 }
             } else { 
@@ -217,7 +217,7 @@ class MpesaPayController extends PaymentController
     private function getResultCodeName(int $code): string
     {
         $arr = [
-            '0' => Labels::getLabel('SUC_SUCCESS', $this->siteLangId),
+            '0' => Labels::getLabel('MSG_SUCCESS', $this->siteLangId),
             '1' => Labels::getLabel('ERR_INSUFFICIENT_FUNDS', $this->siteLangId),
             '2' => Labels::getLabel('ERR_LESS_THAN_MINIMUM_TRANSACTION_VALUE', $this->siteLangId),
             '3' => Labels::getLabel('ERR_MORE_THAN_MAXIMUM_TRANSACTION_VALUE', $this->siteLangId),

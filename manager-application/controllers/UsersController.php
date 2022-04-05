@@ -59,7 +59,7 @@ class UsersController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
@@ -576,7 +576,7 @@ class UsersController extends ListingBaseController
         if (0 < $deletedOnly) {
             $srch->addCondition('user_deleted', '=', applicationConstants::YES);
         }
-        
+
         $parentsOnly = FatApp::getPostedData('parents_only', FatUtility::VAR_INT, 0);
         if (0 < $parentsOnly) {
             $srch->addCondition('user_parent', '=', 0);
@@ -678,7 +678,7 @@ class UsersController extends ListingBaseController
         if (0 < $shopId) {
             Product::updateMinPrices(0, $shopId);
         }
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -699,7 +699,7 @@ class UsersController extends ListingBaseController
 
             $this->changeStatus($recordId, $status);
         }
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -767,7 +767,7 @@ class UsersController extends ListingBaseController
             LibHelper::exitWithError($email->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Your_Message_Sent_To', $this->siteLangId) . ' - ' . $user["credential_email"]);
+        $this->set('msg', Labels::getLabel('MSG_YOUR_MESSAGE_SENT_TO', $this->siteLangId) . ' - ' . $user["credential_email"]);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -825,7 +825,7 @@ class UsersController extends ListingBaseController
         if (!$userObj->sendAdminNewUserCreationEmail($userData, $this->admin_id)) {
             LibHelper::exitWithError(Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->admin_id), true);
         }
-        $this->set('msg', Labels::getLabel("MSG_Email_Sent_Successful", $this->admin_id));
+        $this->set('msg', Labels::getLabel("MSG_EMAIL_SENT_SUCCESSFUL", $this->admin_id));
         $this->_template->render(false, false, 'json-success.php');
     }
 

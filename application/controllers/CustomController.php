@@ -72,11 +72,11 @@ class CustomController extends MyAppController
                 }
                 Message::addErrorMessage($message);
             } else {
-                Message::addMessage(Labels::getLabel('SUC_YOUR_MESSAGE_SENT_SUCCESSFULLY', $this->siteLangId));
+                Message::addMessage(Labels::getLabel('MSG_YOUR_MESSAGE_SENT_SUCCESSFULLY', $this->siteLangId));
             }
 
             if (true === MOBILE_APP_API_CALL) {
-                $this->set('msg', Labels::getLabel('SUC_YOUR_MESSAGE_SENT_SUCCESSFULLY', $this->siteLangId));
+                $this->set('msg', Labels::getLabel('MSG_YOUR_MESSAGE_SENT_SUCCESSFULLY', $this->siteLangId));
                 $this->_template->render();
             }
 

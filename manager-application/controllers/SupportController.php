@@ -50,7 +50,7 @@ class SupportController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Mail_Sent_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_MAIL_SENT_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 }

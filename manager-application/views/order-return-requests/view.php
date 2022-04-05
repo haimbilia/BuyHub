@@ -21,7 +21,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                                 echo CommonHelper::replaceStringData($str, ['{REFERENCE-NO}' => $order['orrequest_reference']])
                                 ?>
                             </h3>
-                            
+
                         </div>
                         <div class="card-head-toolbar">
                             <small><?php echo FatDate::format($order['orrequest_date'], true); ?></small>
@@ -41,7 +41,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><?php $this->includeTemplate('_partial/product/order-product-info-card.php', ['order' => $order, 'siteLangId' => $siteLangId, 'horizontalAlignOptions' => true], false); ?>                                            
+                                        <td><?php $this->includeTemplate('_partial/product/order-product-info-card.php', ['order' => $order, 'siteLangId' => $siteLangId, 'horizontalAlignOptions' => true], false); ?>
                                         </td>
                                         <td><?php echo $order["orrequest_qty"]; ?></td>
                                         <td><?php echo OrderReturnRequest::getStatusHtml($siteLangId, $order['orrequest_status']); ?></td>
@@ -107,13 +107,26 @@ echo $msgsSrchForm->getFormHtml(); ?>
                                 </svg>
                                 <span><?php echo Labels::getLabel('LBL_NEW', $siteLangId); ?></span>
                             </a>
-                            <?php require_once 'load-more-btn.php'; ?>
                         </div>
                     </div>
                     <div class="card-body pt-0">
-                        <div class="table-responsive table-scrollable js-scrollable" id="messagesList">
-                            <?php require_once 'messages-list.php'; ?>
-                        </div>                        
+                        <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2">
+                            <ul class="timeline appendRowsJs" id="appendRowsJs">
+                                <?php require_once('get-rows.php'); ?>
+                            </ul>
+                            <?php
+                            $lastRecord = current(array_reverse($arrListing));
+                            $postedData['reference'] = $lastRecord['orrmsg_date'];
+                            $postedData['order_id'] = $lastRecord['orrmsg_id'];
+                            $data = [
+                                'siteLangId' => $siteLangId,
+                                'postedData' => $postedData,
+                                'page' => $page,
+                                'pageCount' => $pageCount,
+                            ];
+                            $this->includeTemplate('_partial/load-more-pagination.php', $data);
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>

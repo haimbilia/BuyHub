@@ -1508,7 +1508,7 @@ class ProductsController extends MyAppController
     private function getCartForm($formLangId)
     {
         $frm = new Form('frmBuyProduct', array('id' => 'frmBuyProduct'));
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Quantity', $formLangId), 'quantity', 1, array('maxlength' => '3'));
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_QUANTITY', $formLangId), 'quantity', 1, array('maxlength' => '3'));
         $fld->requirements()->setIntPositive();
         $frm->addHTML('', 'btnAddToCart', '<button name="btnAddToCart" type="submit" id="btnAddToCart" class="btn btn-brand btn-block quickView add-to-cart add-to-cart--js "> ' . Labels::getLabel('BTN_ADD_TO_CART', $formLangId) . '</button>');
         $frm->addHiddenField('', 'selprod_id');
@@ -1529,7 +1529,7 @@ class ProductsController extends MyAppController
     {
         $frm = new Form('frmReviewAbuse');
         $frm->addHiddenField('', 'spra_spreview_id', $reviewId);
-        $frm->addTextarea(Labels::getLabel('FRM_Comments', $this->siteLangId), 'spra_comments');
+        $frm->addTextarea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'spra_comments');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REPORT_ABUSE', $this->siteLangId));
         return $frm;
     }

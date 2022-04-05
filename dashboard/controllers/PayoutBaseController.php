@@ -86,7 +86,7 @@ class PayoutBaseController extends PluginBaseController
             }
         }
                 
-        $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 }

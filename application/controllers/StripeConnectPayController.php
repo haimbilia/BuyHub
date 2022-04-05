@@ -35,7 +35,7 @@ class StripeConnectPayController extends PaymentController
      */
     public function init()
     {
-        if ('distribute' != $this->action && (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged())) {
+        if ('distribute' != $this->_actionName && (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged())) {
             $this->userId = UserAuthentication::getLoggedUserId(true);
             if (1 > $this->userId) {
                 $msg = Labels::getLabel('ERR_INVALID_USER', $this->siteLangId);
@@ -416,7 +416,7 @@ class StripeConnectPayController extends PaymentController
             $this->paymentAmount = $this->paymentAmount / 100;
         }
 
-        if (false === $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $chargeId, $this->paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($chargeResponse), false, 0, Orders::ORDER_PAYMENT_PAID)) {
+        if (false === $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $chargeId, $this->paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($chargeResponse), false, 0, Orders::ORDER_PAYMENT_PAID)) {
             $orderPaymentObj->addOrderPaymentComments($message);
         }
 

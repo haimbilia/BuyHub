@@ -153,7 +153,7 @@ class BuyersReportController extends ListingBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Buyers_Sales_Report', $this->siteLangId) . '_' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_BUYERS_SALES_REPORT', $this->siteLangId) . '_' . date("d-M-Y") . '.csv', ',');
             exit;
         }
 
@@ -194,29 +194,29 @@ class BuyersReportController extends ListingBaseController
         $buyerReportsCacheVar = FatCache::get('buyerReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$buyerReportsCacheVar) {
             $arr = [
-                'buyerName' => Labels::getLabel('LBL_Name', $this->siteLangId),
-                'totOrders' => Labels::getLabel('LBL_No._of_Orders', $this->siteLangId),
-                'orderItems' => Labels::getLabel('LBL_Ordered_Items', $this->siteLangId),
-                'totQtys' => Labels::getLabel('LBL_Ordered_Qty', $this->siteLangId),
-                'totRefundedQtys' => Labels::getLabel('LBL_Refunded_Qty', $this->siteLangId),
-                'grossSales' => Labels::getLabel('LBL_Gross_Sale', $this->siteLangId),
-                // 'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->siteLangId),
-                'inventoryValue' => Labels::getLabel('LBL_Inventory_Value', $this->siteLangId),
+                'buyerName' => Labels::getLabel('LBL_NAME', $this->siteLangId),
+                'totOrders' => Labels::getLabel('LBL_NO._of_Orders', $this->siteLangId),
+                'orderItems' => Labels::getLabel('LBL_ORDERED_ITEMS', $this->siteLangId),
+                'totQtys' => Labels::getLabel('LBL_ORDERED_QTY', $this->siteLangId),
+                'totRefundedQtys' => Labels::getLabel('LBL_REFUNDED_QTY', $this->siteLangId),
+                'grossSales' => Labels::getLabel('LBL_GROSS_SALE', $this->siteLangId),
+                // 'transactionAmount' => Labels::getLabel('LBL_TRANSACTION_AMOUNT', $this->siteLangId),
+                'inventoryValue' => Labels::getLabel('LBL_INVENTORY_VALUE', $this->siteLangId),
 
-                'taxTotal' => Labels::getLabel('LBL_Tax_Charged', $this->siteLangId),
+                'taxTotal' => Labels::getLabel('LBL_TAX_CHARGED', $this->siteLangId),
 
-                'shippingTotal' => Labels::getLabel('LBL_Shipping_Charged', $this->siteLangId),
+                'shippingTotal' => Labels::getLabel('LBL_SHIPPING_CHARGED', $this->siteLangId),
 
-                'discountTotal' => Labels::getLabel('LBL_Total_Discount', $this->siteLangId),
-                'couponDiscount' => Labels::getLabel('LBL_Coupon_Discount', $this->siteLangId),
-                'volumeDiscount' => Labels::getLabel('LBL_Volume_Discount', $this->siteLangId),
-                'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->siteLangId),
+                'discountTotal' => Labels::getLabel('LBL_TOTAL_DISCOUNT', $this->siteLangId),
+                'couponDiscount' => Labels::getLabel('LBL_COUPON_DISCOUNT', $this->siteLangId),
+                'volumeDiscount' => Labels::getLabel('LBL_VOLUME_DISCOUNT', $this->siteLangId),
+                'rewardDiscount' => Labels::getLabel('LBL_REWARD_DISCOUNT', $this->siteLangId),
 
-                'refundedAmount' => Labels::getLabel('LBL_Refunded_Amount', $this->siteLangId),
-                'refundedShipping' => Labels::getLabel('LBL_Refunded_Shipping', $this->siteLangId),
-                'refundedTax' => Labels::getLabel('LBL_Refunded_Tax', $this->siteLangId),
+                'refundedAmount' => Labels::getLabel('LBL_REFUNDED_AMOUNT', $this->siteLangId),
+                'refundedShipping' => Labels::getLabel('LBL_REFUNDED_SHIPPING', $this->siteLangId),
+                'refundedTax' => Labels::getLabel('LBL_REFUNDED_TAX', $this->siteLangId),
 
-                'orderNetAmount' => Labels::getLabel('LBL_Net_Amount', $this->siteLangId),
+                'orderNetAmount' => Labels::getLabel('LBL_NET_AMOUNT', $this->siteLangId),
             ];
             FatCache::set('buyerReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {

@@ -638,7 +638,7 @@ class BadgeLinkConditionsController extends ListingBaseController
     private function removeLinkRecord(int $blinkcond_id, int $record_id = 0)
     {
         if (1 > $blinkcond_id) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
         $smt = 'badgelink_blinkcond_id = ?';
         $vals = [$blinkcond_id];

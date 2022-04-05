@@ -4,7 +4,7 @@ class ImageController extends FatController
 {
     public function default_action()
     {
-        exit(Labels::getLabel('LBL_Invalid_Request!!', CommonHelper::getLangId()));
+        exit(Labels::getLabel('ERR_INVALID_REQUEST!', CommonHelper::getLangId()));
     }
 
     public function product($recordId, $sizeType = '', $afile_id = 0)

@@ -21,14 +21,14 @@ trait RecordOperations
                 }
             }
         }
-       
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
-        }       
+        }
 
         if ($this->checkMediaExist == true && $this->newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
             $this->set('openMediaForm', true);
@@ -62,7 +62,7 @@ trait RecordOperations
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, current($allowedKeysForSorting));
-        } 
+        }
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         return $frm;
@@ -91,13 +91,12 @@ trait RecordOperations
             $langData = current($translatedData);
         } else {
             $langData = $this->modelObj::getAttributesByLangId($langId, $this->mainTableRecordId, NULL, applicationConstants::JOIN_RIGHT);
-            if(isset($langData[$this->modelObj::tblFld('name')])  && empty($langData[$this->modelObj::tblFld('name')])){
+            if (isset($langData[$this->modelObj::tblFld('name')])  && empty($langData[$this->modelObj::tblFld('name')])) {
                 $langData[$this->modelObj::tblFld('name')] =  $langData[$this->modelObj::tblFld('identifier')];
             }
-            if(isset($langData[$this->modelObj::tblFld('title')])  && empty($langData[$this->modelObj::tblFld('title')])){
+            if (isset($langData[$this->modelObj::tblFld('title')])  && empty($langData[$this->modelObj::tblFld('title')])) {
                 $langData[$this->modelObj::tblFld('title')] =  $langData[$this->modelObj::tblFld('identifier')];
             }
-        
         }
 
         if ($langData) {
@@ -172,7 +171,7 @@ trait RecordOperations
         }
 
         $this->changeStatus($recordId, $status);
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -207,7 +206,7 @@ trait RecordOperations
             $this->changeStatus($recordId, $status);
         }
         Product::updateMinPrices();
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -277,7 +276,7 @@ trait RecordOperations
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page', 1);
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'user_name');
+            $this->addSortingElements($frm, 'user_id', applicationConstants::SORT_DESC);
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_NAME_OR_EMAIL', $this->siteLangId), 'user_id', []);
@@ -295,7 +294,7 @@ trait RecordOperations
 
         $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_regdate_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_regdate_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;

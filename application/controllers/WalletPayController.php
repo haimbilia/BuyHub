@@ -84,13 +84,13 @@ class WalletPayController extends MyAppController
         }
 
         if (true === MOBILE_APP_API_CALL) {
-            $this->set('msg', Labels::getLabel("SUC_PAYMENT_FROM_WALLET_MADE_SUCCESSFULLY", $this->siteLangId));
+            $this->set('msg', Labels::getLabel("MSG_PAYMENT_FROM_WALLET_MADE_SUCCESSFULLY", $this->siteLangId));
             $this->_template->render();
         }
 
         if ($isAjaxCall) {
             $this->set('redirectUrl', UrlHelper::generateUrl('Custom', 'paymentSuccess', array($orderId)));
-            $this->set('msg', Labels::getLabel("SUC_PAYMENT_FROM_WALLET_MADE_SUCCESSFULLY", $this->siteLangId));
+            $this->set('msg', Labels::getLabel("MSG_PAYMENT_FROM_WALLET_MADE_SUCCESSFULLY", $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
         FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'paymentSuccess', array($orderId)));
@@ -274,7 +274,7 @@ class WalletPayController extends MyAppController
             if( Message::getErrorCount() > 0 ){
             $errMsg = Message::getHtml();
             } else {
-            Message::addErrorMessage(Labels::getLabel('MSG_Something_went_wrong,_please_try_after_some_time.', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId));
             $errMsg = Message::getHtml();
             }
             FatUtility::dieWithError( $errMsg );

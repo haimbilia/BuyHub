@@ -113,7 +113,7 @@ class FilterGroupsController extends ListingBaseController
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Filter_Group_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_FILTER_GROUP_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('filterGroupId', $filterGroupId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -163,7 +163,7 @@ class FilterGroupsController extends ListingBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Filter_Group_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_FILTER_GROUP_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('filterGroupId', $filtergroup_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');

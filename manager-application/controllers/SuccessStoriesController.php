@@ -139,7 +139,7 @@ class SuccessStoriesController extends ListingBaseController
             $newTabLangId = $this->siteLangId;
         }
         
-        $this->set('msg', Labels::getLabel('LBL_Category_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_CATEGORY_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('sstoryId', $sstory_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');

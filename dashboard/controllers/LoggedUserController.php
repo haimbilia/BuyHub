@@ -13,7 +13,7 @@ class LoggedUserController extends DashboardBaseController
 
         $this->userId = UserAuthentication::getLoggedUserId(true);
         if ($this->userId < 1) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()), false, true, ['displayLoginForm' => 1]);
+            LibHelper::exitWithError(Labels::getLabel('ERR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()), false, true, ['displayLoginForm' => 1]);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
@@ -34,7 +34,7 @@ class LoggedUserController extends DashboardBaseController
         
         $isLoginByAdmin = (isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && !empty($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]));
         if (true === $invalidAccess && false === $isLoginByAdmin) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_UNAUTHORIZED_ACCESS', CommonHelper::getLangId()), false, true, ['displayLoginForm' => 1]);
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS', CommonHelper::getLangId()), false, true, ['displayLoginForm' => 1]);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
         }
 
@@ -42,7 +42,7 @@ class LoggedUserController extends DashboardBaseController
             $user = new User($this->userInfo['user_parent']);
             $parentUserInfo = $user->getUserInfo(array(), true, true);
             if (false == $parentUserInfo || $parentUserInfo['credential_active'] != applicationConstants::ACTIVE) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_PARENT_MERCHANT_NOT_AUTHORIZED_TO_ACCESS', CommonHelper::getLangId()), false, true, ['displayLoginForm' => 1]);
+                LibHelper::exitWithError(Labels::getLabel('ERR_PARENT_MERCHANT_NOT_AUTHORIZED_TO_ACCESS', CommonHelper::getLangId()), false, true, ['displayLoginForm' => 1]);
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
             }
         }

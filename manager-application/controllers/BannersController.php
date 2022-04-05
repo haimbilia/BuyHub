@@ -408,7 +408,7 @@ class BannersController extends ListingBaseController
 
         $bannerDetail = Banner::getAttributesById($recordId);
         if (!false == $bannerDetail && ($bannerDetail['banner_active'] != applicationConstants::ACTIVE)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_INACTIVE_RECORD', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_INACTIVE_RECORD', $this->siteLangId), true);
         }
 
         $imageFrm = $this->getMediaForm($bannerLocationId, $recordId);
@@ -458,7 +458,7 @@ class BannersController extends ListingBaseController
 
         $bannerDetail = Banner::getAttributesById($recordId);
         if (!false == $bannerDetail && ($bannerDetail['banner_active'] != applicationConstants::ACTIVE)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_INACTIVE_RECORD', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_INACTIVE_RECORD', $this->siteLangId), true);
         }
 
         if (!false == $bannerDetail) {
@@ -491,7 +491,7 @@ class BannersController extends ListingBaseController
 
         $file = $_FILES['cropped_image'];
         if (!is_uploaded_file($file['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();

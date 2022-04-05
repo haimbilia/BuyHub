@@ -7,7 +7,7 @@ trait PluginBaseCommon
     protected function updateUserInfo($detail = [], $redirect = false)
     {
         if (!is_array($detail)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $obj = new User(UserAuthentication::getLoggedUserId());
         foreach ($detail as $key => $value) {
@@ -25,7 +25,7 @@ trait PluginBaseCommon
     public function getFormObj($fields)
     {
         if (!is_array($fields)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_FORM_FIELDS', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_FORM_FIELDS', $this->siteLangId));
         }
         $frm = PluginSetting::getForm($fields, $this->siteLangId);
         $keyName = (get_called_class())::KEY_NAME;
@@ -40,7 +40,7 @@ trait PluginBaseCommon
         $frm->fill(['plugin_id' => $settings['plugin_id'], 'keyName' => $keyName]);
         
         if (null == $frm->getField('btn_submit')) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->langId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->langId));
         }
         return $frm;
     }

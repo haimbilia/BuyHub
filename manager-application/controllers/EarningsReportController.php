@@ -205,11 +205,11 @@ class EarningsReportController extends ListingBaseController
         $earningsReportsCacheVar = FatCache::get('earningsReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$earningsReportsCacheVar) {
             $arr = [
-                'date' => Labels::getLabel('LBL_Date', $this->siteLangId),
-                'subscriptionCharges' => Labels::getLabel('LBL_Subscription_Charges', $this->siteLangId),
-                'promotionCharged' => Labels::getLabel('LBL_Advertisement_Charges', $this->siteLangId),
-                'adminSalesEarnings' => Labels::getLabel('LBL_Sales_Earnings', $this->siteLangId),
-                'totalEarning' => Labels::getLabel('LBL_Total_Earnings', $this->siteLangId),
+                'date' => Labels::getLabel('LBL_DATE', $this->siteLangId),
+                'subscriptionCharges' => Labels::getLabel('LBL_SUBSCRIPTION_CHARGES', $this->siteLangId),
+                'promotionCharged' => Labels::getLabel('LBL_ADVERTISEMENT_CHARGES', $this->siteLangId),
+                'adminSalesEarnings' => Labels::getLabel('LBL_SALES_EARNINGS', $this->siteLangId),
+                'totalEarning' => Labels::getLabel('LBL_TOTAL_EARNINGS', $this->siteLangId),
             ];
             FatCache::set('earningsReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {

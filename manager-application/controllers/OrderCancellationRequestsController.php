@@ -308,7 +308,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $row = FatApp::getDb()->fetch($rs);
 
         if (!$row) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_STATUS_IS_ALREADY_APPROVED_OR_DECLINED', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_STATUS_IS_ALREADY_APPROVED_OR_DECLINED', $this->siteLangId));
         }
 
         if ($postStatus == $row['ocrequest_status']) {
@@ -392,7 +392,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         }
         $emailObj = new EmailHandler();
         if (!$emailObj->sendOrderCancellationRequestUpdateNotification($row['ocrequest_id'], $this->siteLangId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_EMAIL_SENDING_ERROR', $this->siteLangId) . " " . $emailObj->getError());
+            Message::addErrorMessage(Labels::getLabel('ERR_EMAIL_SENDING_ERROR', $this->siteLangId) . " " . $emailObj->getError());
             CommonHelper::redirectUserReferer();
         }
         $db->commitTransaction();

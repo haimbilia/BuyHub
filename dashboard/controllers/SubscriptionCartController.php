@@ -6,7 +6,7 @@ class SubscriptionCartController extends DashboardBaseController
     {
         parent::__construct($action);
         if (!FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
     }
@@ -16,7 +16,7 @@ class SubscriptionCartController extends DashboardBaseController
         $sCartObj = new SubscriptionCart();
         $subscriptionArr = $sCartObj->getSubscription($this->siteLangId);
         if (count($subscriptionArr) == 0) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('seller', 'packages'));
         }
         $this->_template->render();
@@ -46,13 +46,13 @@ class SubscriptionCartController extends DashboardBaseController
     {
         $post = FatApp::getPostedData();
         if (false == $post) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
         $spplan_id = FatApp::getPostedData('spplan_id', FatUtility::VAR_INT, 0);
 
         if ($spplan_id <= 0) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Plan_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_PLAN_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -70,7 +70,7 @@ class SubscriptionCartController extends DashboardBaseController
         $db = FatApp::getDb();
         $sellerPlanRow = $db->fetch($rs);
         if (!$sellerPlanRow || $sellerPlanRow['spplan_id'] != $spplan_id) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $spplan_id = FatUtility::int($sellerPlanRow['spplan_id']);
@@ -98,12 +98,12 @@ class SubscriptionCartController extends DashboardBaseController
     {
         $post = FatApp::getPostedData();
         if (false == $post) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
 
         if (!isset($post['key'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 

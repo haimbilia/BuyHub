@@ -17,7 +17,7 @@ trait SellerUsers
     public function users()
     {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
-            $msg = Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId);
+            $msg = Labels::getLabel('LBL_UNAUTHORIZED_ACCESS!', $this->siteLangId);
             if (FatUtility::isAjaxCall()) {
                 FatUtility::dieWithError($msg);
             }
@@ -131,7 +131,7 @@ trait SellerUsers
     public function setupSubUser()
     {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS!', $this->siteLangId));
         }
         $post = FatApp::getPostedData();
 
@@ -152,7 +152,7 @@ trait SellerUsers
             $rs = $srch->getResultSet();
             $userData = FatApp::getDb()->fetch($rs);
             if (empty($userData) || $userData['user_parent'] != UserAuthentication::getLoggedUserId()) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             }
             $post['user_username'] = $userData['credential_username'];
         }
@@ -194,20 +194,20 @@ trait SellerUsers
 
         $db->commitTransaction();
 
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
     public function changeUserStatus()
     {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS!', $this->siteLangId));
         }
         $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
         $userData = User::getAttributesById($userId);
         if (empty($userData) || $userData['user_parent'] != UserAuthentication::getLoggedUserId()) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $this->updateUserStatus($userId, $status);
@@ -219,12 +219,12 @@ trait SellerUsers
     public function toggleSellerUserStatus()
     {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS!', $this->siteLangId));
         }
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $userIdsArr = FatUtility::int(FatApp::getPostedData('user_ids'));
         if (empty($userIdsArr) || -1 == $status) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         foreach ($userIdsArr as $userId) {
@@ -241,12 +241,12 @@ trait SellerUsers
     private function updateUserStatus($userId, $status)
     {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS!', $this->siteLangId));
         }
         $status = FatUtility::int($status);
         $userId = FatUtility::int($userId);
         if (1 > $userId || -1 == $status) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $userObj = new User($userId);
@@ -286,7 +286,7 @@ trait SellerUsers
     public function updateUserPassword()
     {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS!', $this->siteLangId));
         }
         $post = FatApp::getPostedData();
         $userId = $post['user_id'];
@@ -299,7 +299,7 @@ trait SellerUsers
 
         $userData = User::getAttributesById($userId);
         if (empty($userData) || $userData['user_parent'] != UserAuthentication::getLoggedUserId()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -314,7 +314,7 @@ trait SellerUsers
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Password_Updated_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PASSWORD_UPDATED_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -340,7 +340,7 @@ trait SellerUsers
         $userId = FatUtility::int($userId);
         $userData = User::getAttributesById($userId);
         if (empty($userData) || $userId == UserAuthentication::getLoggedUserId() || $userData['user_parent'] != UserAuthentication::getLoggedUserId()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('seller', 'users'));
         }
         $frm = $this->searchPermissionForm();
@@ -376,7 +376,7 @@ trait SellerUsers
     public function updatePermission($moduleId, $permission)
     {
         if ($this->userParentId != UserAuthentication::getLoggedUserId()) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS!', $this->siteLangId));
         }
         $moduleId = FatUtility::int($moduleId);
         $permission = FatUtility::int($permission);
@@ -387,7 +387,7 @@ trait SellerUsers
         $userId = FatUtility::int($post['user_id']);
         $userData = User::getAttributesById($userId);
         if (empty($userData) || $userId == UserAuthentication::getLoggedUserId() || $userData['user_parent'] != UserAuthentication::getLoggedUserId()) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $data = array(
             'userperm_user_id' => $userId,
@@ -403,7 +403,7 @@ trait SellerUsers
             $permissionModules = UserPrivilege::getSellerPermissionModulesArr($this->siteLangId);
             $permissionArr = UserPrivilege::getPermissionArr($this->siteLangId);
             if (!array_key_exists($moduleId, $permissionModules) || !array_key_exists($permission, $permissionArr)) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             }
             if (!$userPermission->updatePermissions($this->siteLangId, $data)) {
                 FatUtility::dieJsonError($userPermission->getError());

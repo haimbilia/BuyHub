@@ -116,12 +116,12 @@ class ImportExportController extends ListingBaseController
     public function importData($actionType)
     {
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Please_Select_A_CSV_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_CSV_FILE', $this->siteLangId), true);
         }
 
         $obj = new Importexport();
         if (!$obj->isUploadedFileValidMimes($_FILES['import_file'])) {
-            LibHelper::exitWithError(Labels::getLabel("ERR_Not_a_Valid_CSV_File", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_NOT_A_VALID_CSV_FILE", $this->siteLangId), true);
         }
 
         $sheetType = FatApp::getPostedData('sheet_type', FatUtility::VAR_INT, 0);
@@ -235,12 +235,12 @@ class ImportExportController extends ListingBaseController
         $post = FatApp::getPostedData();
 
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Please_Select_A_CSV_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_CSV_FILE', $this->siteLangId), true);
         }
 
         $obj = new Importexport();
         if (!$obj->isUploadedFileValidMimes($_FILES['import_file'])) {
-            LibHelper::exitWithError(Labels::getLabel("ERR_Not_a_Valid_CSV_File", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_NOT_A_VALID_CSV_FILE", $this->siteLangId), true);
         }
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
@@ -696,7 +696,7 @@ class ImportExportController extends ListingBaseController
             $rangeTypeFld->requirements()->addOnChangerequirementUpdate(Importexport::BY_BATCHES, 'eq', 'batch_number', $batchNumberReqObj);
         }
 
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SUBMIT', $langId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $langId));
         return $frm;
     }
 
@@ -968,7 +968,7 @@ class ImportExportController extends ListingBaseController
     public function downloadPathsFile($path)
     {
         if (empty($path)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $filesPathArr = UploadBulkImages::getAllFilesPath(base64_decode($path));
         if (!empty($filesPathArr) && 0 < count($filesPathArr)) {
@@ -977,7 +977,7 @@ class ImportExportController extends ListingBaseController
             CommonHelper::convertToCsv($filesPathArr, time() . '.csv');
             exit;
         }
-        Message::addErrorMessage(Labels::getLabel('MSG_No_File_Found', $this->siteLangId));
+        Message::addErrorMessage(Labels::getLabel('ERR_NO_FILE_FOUND', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
 

@@ -2,8 +2,7 @@
 
 /**
  *
- * ERR - ERROR Messages
- * SUC- Success Messages
+ * ERR - ERROR Messages 
  * LBL - LABLES (General labels)
  * FRM - Form fields (Labels, Place holders)
  * MSG - Messages

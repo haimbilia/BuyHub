@@ -236,7 +236,7 @@ class SellerOrdersController extends ListingBaseController
                 $rs = $srch->getResultSet();
                 $data = FatApp::getDb()->fetch($rs);
                 if (null === $data) {
-                    Message::addErrorMessage(Labels::getLabel("MSG_PLEASE_MAP_YOUR_SHIPPING_CARRIER_CODE_WITH_TRACKING_CARRIER_CODE", $this->siteLangId));
+                    Message::addErrorMessage(Labels::getLabel("ERR_PLEASE_MAP_YOUR_SHIPPING_CARRIER_CODE_WITH_TRACKING_CARRIER_CODE", $this->siteLangId));
                     FatApp::redirectUser(UrlHelper::generateUrl("TrackingCodeRelation"));
                 }
             }
@@ -357,7 +357,7 @@ class SellerOrdersController extends ListingBaseController
         $this->objPrivilege->canViewSellerOrders();
         $op_id = FatUtility::int($op_id);
         if (1 > $op_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -382,7 +382,7 @@ class SellerOrdersController extends ListingBaseController
         $orderDetail = FatApp::getDb()->fetch($rs);
 
         if (!$orderDetail) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -439,8 +439,8 @@ class SellerOrdersController extends ListingBaseController
         $pdf->SetMargins(10, 10, 10);
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
         $pdf->AddPage();
-        $pdf->SetTitle(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
-        $pdf->SetSubject(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
+        $pdf->SetTitle(Labels::getLabel('LBL_TAX_INVOICE', $this->siteLangId));
+        $pdf->SetSubject(Labels::getLabel('LBL_TAX_INVOICE', $this->siteLangId));
 
         // set LTR direction for english translation
         $pdf->setRTL(('rtl' == Language::getLayoutDirection($this->siteLangId)));
@@ -544,7 +544,7 @@ class SellerOrdersController extends ListingBaseController
         $rs = $srch->getResultSet();
         $shippingUserRow = FatApp::getDb()->fetch($rs);
         if ($shippingUserRow && $orderDetail['plugin_code'] == "CashOnDelivery") {
-            $comments = Labels::getLabel('Msg_Cash_will_collect_against_COD_order', $this->siteLangId) . ' ' . $orderDetail['op_invoice_number'];
+            $comments = Labels::getLabel('MSG_CASH_WILL_COLLECT_AGAINST_COD_ORDER', $this->siteLangId) . ' ' . $orderDetail['op_invoice_number'];
             $amt = CommonHelper::orderProductAmount($orderDetail);
             $txnObj = new Transactions();
             $txnDataArr = array(
@@ -588,7 +588,7 @@ class SellerOrdersController extends ListingBaseController
         $manualShipping = FatApp::getPostedData('manual_shipping', FatUtility::VAR_INT, 0);
         $trackingNumber = FatApp::getPostedData('tracking_number', FatUtility::VAR_STRING, '');
         if ($status ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && empty($shippingApiObj)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_SELF_SHIPPING', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_SELF_SHIPPING', $this->siteLangId), true);
         }
 
         $oCancelRequestSrch = new OrderCancelRequestSearch();
@@ -598,7 +598,7 @@ class SellerOrdersController extends ListingBaseController
         $oCancelRequestSrch->addCondition('ocrequest_status', '!=', OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED);
         $oCancelRequestRs = $oCancelRequestSrch->getResultSet();
         if (FatApp::getDb()->fetch($oCancelRequestRs)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Cancel_request_is_submitted_for_this_order', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_CANCEL_REQUEST_IS_SUBMITTED_FOR_THIS_ORDER', $this->siteLangId), true);
         }
 
         $orderObj = new Orders();
@@ -646,7 +646,7 @@ class SellerOrdersController extends ListingBaseController
         );
 
         if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']) && !$orderDetail['optsu_user_id'] && in_array($post["op_status_id"], $restrictOrderStatusChange) && $orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_assign_shipping_user', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ASSIGN_SHIPPING_USER', $this->siteLangId), true);
         }
 
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
@@ -706,7 +706,7 @@ class SellerOrdersController extends ListingBaseController
                     $updateArray = array('order_payment_status' => Orders::ORDER_PAYMENT_PAID);
                     $whr = array('smt' => 'order_id = ?', 'vals' => array($orderDetail['order_id']));
                     if (!FatApp::getDb()->updateFromArray(Orders::DB_TBL, $updateArray, $whr)) {
-                        LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId), true);
+                        LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), true);
                     }
                 }
             }
@@ -724,19 +724,19 @@ class SellerOrdersController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
 
         if (1 > $aFileId || 1 > $recordId) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('SellerOrders'));
         }
 
         $file_row = AttachedFile::getAttributesById($aFileId);
 
         if ($file_row == false || ($file_row['afile_record_id'] != $recordId)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('SellerOrders'));
         }
 
         if (!file_exists(CONF_UPLOADS_PATH . $file_row['afile_physical_path'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_File_not_found', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_FILE_NOT_FOUND', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('SellerOrders'));
         }
 
@@ -750,7 +750,7 @@ class SellerOrdersController extends ListingBaseController
         $op_id = FatUtility::int($op_id);
 
         if (false !== OrderCancelRequest::getCancelRequestById($op_id)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_User_have_already_sent_the_cancellation_request_for_this_order', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_USER_HAVE_ALREADY_SENT_THE_CANCELLATION_REQUEST_FOR_THIS_ORDER', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -815,11 +815,11 @@ class SellerOrdersController extends ListingBaseController
 
         $op_id = FatUtility::int($post['op_id']);
         if (1 > $op_id) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_access', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), true);
         }
 
         if (false !== OrderCancelRequest::getCancelRequestById($op_id)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_User_have_already_sent_the_cancellation_request_for_this_order', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_USER_HAVE_ALREADY_SENT_THE_CANCELLATION_REQUEST_FOR_THIS_ORDER', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -835,18 +835,18 @@ class SellerOrdersController extends ListingBaseController
         $orderDetail = (array) FatApp::getDb()->fetch($rs);
 
         if (empty($orderDetail)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), true);
         }
 
         $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
         $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
 
         if (in_array($orderDetail["op_status_id"], $notAllowedStatues)) {
-            LibHelper::exitWithError(sprintf(Labels::getLabel('LBL_this_order_already', $this->siteLangId), $orderStatuses[$orderDetail["op_status_id"]]), true);
+            LibHelper::exitWithError(sprintf(Labels::getLabel('LBL_THIS_ORDER_ALREADY', $this->siteLangId), $orderStatuses[$orderDetail["op_status_id"]]), true);
         }
 
         if (!$orderObj->addChildProductOrderHistory($op_id, $this->siteLangId, FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"), $post["comments"], true)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_ERROR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_ERROR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         /* Update To Shipping Service */
@@ -1010,7 +1010,7 @@ class SellerOrdersController extends ListingBaseController
     public function orderTrackingInfo($trackingNumber, $courier, $orderNumber)
     {
         if (empty($trackingNumber) || empty($courier)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $shipmentTracking = new ShipmentTracking();
@@ -1034,7 +1034,7 @@ class SellerOrdersController extends ListingBaseController
     {
         $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
         if (1 > $opId) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId), true);
         }
 
         $opSrch = OrderProduct::getSearchObject();
@@ -1051,18 +1051,18 @@ class SellerOrdersController extends ListingBaseController
         $row = FatApp::getDb()->fetch($rs);
 
         if (!is_array($row)) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId), true);
         }
 
         if (!DigitalOrderProduct::canAttachMoreFiles($row['op_status_id'])) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId), true);
         }
 
         if (
             !isset($_FILES['additional_attachment']['tmp_name'])
             || !is_uploaded_file($_FILES['additional_attachment']['tmp_name'])
         ) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();

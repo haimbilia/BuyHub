@@ -178,10 +178,10 @@ class DeletedUsersController extends ListingBaseController
         }
 
         $arr = [
-            'user_id' => Labels::getLabel('LBL_User_Id', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
+            'user_id' => Labels::getLabel('LBL_USER_ID', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_USER_NAME', $this->siteLangId),
             'user_type' => Labels::getLabel('LBL_USER_TYPE', $this->siteLangId),
-            'user_regdate' => Labels::getLabel('LBL_Reg._Date', $this->siteLangId),
+            'user_regdate' => Labels::getLabel('LBL_REG._DATE', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
 

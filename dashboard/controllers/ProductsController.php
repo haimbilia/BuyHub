@@ -489,7 +489,7 @@ class ProductsController extends SellerBaseController
 
         Tag::updateProductTagString($recordId);
 
-        $this->set('msg', Labels::getLabel('SUC_TAG_REMOVED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_TAG_REMOVED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

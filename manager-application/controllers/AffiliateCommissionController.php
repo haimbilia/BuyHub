@@ -191,7 +191,7 @@ class AffiliateCommissionController extends ListingBaseController
             $rs = $srch->getResultSet();
             $records = FatApp::getDb()->fetchAll($rs);
             if ($records) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_Record_already_exists', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_RECORD_ALREADY_EXISTS', $this->siteLangId), true);
             }
         }
         unset($post['afcommsetting_id']);
@@ -331,11 +331,11 @@ class AffiliateCommissionController extends ListingBaseController
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
-            'afcommsetting_prodcat_id' => Labels::getLabel('LBL_Category', $this->siteLangId),
-            'afcommsetting_user_id' => Labels::getLabel('LBL_Affiliate_User', $this->siteLangId),
-            'afcommsetting_fees' => Labels::getLabel('LBL_Fees_[%]', $this->siteLangId),
+            'afcommsetting_prodcat_id' => Labels::getLabel('LBL_CATEGORY', $this->siteLangId),
+            'afcommsetting_user_id' => Labels::getLabel('LBL_AFFILIATE_USER', $this->siteLangId),
+            'afcommsetting_fees' => Labels::getLabel('LBL_FEES_[%]', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('affCommissionTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);

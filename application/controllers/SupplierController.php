@@ -256,9 +256,9 @@ class SupplierController extends MyAppController
 
         $db->commitTransaction();
         if ($verify) {
-            $this->set('msg', Labels::getLabel("SUC_SUCCESS_USER_SIGNUP_VERIFIED", $this->siteLangId));
+            $this->set('msg', Labels::getLabel("MSG_SUCCESS_USER_SIGNUP_VERIFIED", $this->siteLangId));
         } else {
-            $this->set('msg', Labels::getLabel("SUC_SUCCESS_USER_SIGNUP", $this->siteLangId));
+            $this->set('msg', Labels::getLabel("MSG_SUCCESS_USER_SIGNUP", $this->siteLangId));
         }
 
         $_SESSION['registered_supplier']['id'] = $userObj->getMainTableRecordId();
@@ -380,10 +380,10 @@ class SupplierController extends MyAppController
 
         if (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1)) {
             $approval_request = 1;
-            $msg = Labels::getLabel('SUC_YOUR_SELLER_APPROVAL_FORM_REQUEST_SENT', $this->siteLangId);
+            $msg = Labels::getLabel('MSG_YOUR_SELLER_APPROVAL_FORM_REQUEST_SENT', $this->siteLangId);
         } else {
             $approval_request = 0;
-            $msg = Labels::getLabel('SUC_YOUR_APPLICATION_IS_APPROVED', $this->siteLangId);
+            $msg = Labels::getLabel('MSG_YOUR_APPLICATION_IS_APPROVED', $this->siteLangId);
         }
 
         if (!$userObj->notifyAdminSupplierApproval($userObj, $data, $approval_request, $this->siteLangId)) {
@@ -430,9 +430,9 @@ class SupplierController extends MyAppController
         }
 
         if (/* $userdata['credential_active'] == 1 &&  */$userdata['credential_verified'] == applicationConstants::YES) {
-            $success_message = Labels::getLabel('SUC_SELLER_SIGNUP_VERIFIED_SUCCESSFULLY', $this->siteLangId);
+            $success_message = Labels::getLabel('MSG_SELLER_SIGNUP_VERIFIED_SUCCESSFULLY', $this->siteLangId);
         } else {
-            $success_message = Labels::getLabel('SUC_SELLER_SIGNUP_SUCCESSFULLY', $this->siteLangId);
+            $success_message = Labels::getLabel('MSG_SELLER_SIGNUP_SUCCESSFULLY', $this->siteLangId);
         }
 
         unset($_SESSION['registered_supplier']['id']);
@@ -449,24 +449,20 @@ class SupplierController extends MyAppController
             FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
 
-        if (UserAuthentication::isUserLogged()) {
-            /* Message::addErrorMessage(Labels::getLabel('MSG_User_Already_Logged_in', $this->siteLangId)); */
+        if (UserAuthentication::isUserLogged()) {           
             FatUtility::dieJsonError(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
         }
 
         $post = FatApp::getPostedData();
-        if (empty($post)) {
-            /* Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId)); */
+        if (empty($post)) {            
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId));
         }
-        if (!isset($post['field_id']) || FatUtility::int($post['field_id']) == 0) {
-            /* Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId)); */
+        if (!isset($post['field_id']) || FatUtility::int($post['field_id']) == 0) {            
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId));
         }
         $field_id = $post['field_id'];
 
-        if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
-            /* Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId)); */
+        if (!is_uploaded_file($_FILES['file']['tmp_name'])) {            
             FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));
         }
 
@@ -479,7 +475,7 @@ class SupplierController extends MyAppController
         }
 
         $this->set('file', $_FILES['file']['name']);
-        $this->set('msg', /* $_FILES['file']['name'].' '. */ Labels::getLabel('SUC_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', /* $_FILES['file']['name'].' '. */ Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

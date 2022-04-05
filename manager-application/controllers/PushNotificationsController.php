@@ -39,7 +39,7 @@ class PushNotificationsController extends ListingBaseController
     {
         $active = (new Plugin())->getDefaultPluginData(Plugin::TYPE_PUSH_NOTIFICATION, 'plugin_active');
         if (false == $active || empty($active)) {
-            LibHelper::exitWithError(Labels::getlabel("MSG_NO_DEFAULT_PUSH_NOTIFICATION_PLUGIN__FOUND", $this->siteLangId), false, true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_NO_DEFAULT_PUSH_NOTIFICATION_PLUGIN__FOUND", $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
     }
@@ -397,7 +397,7 @@ class PushNotificationsController extends ListingBaseController
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();

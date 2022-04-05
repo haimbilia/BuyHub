@@ -510,7 +510,7 @@ class HomeController extends MyAppController
         if (!$_SESSION['geo_location']) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_Current_Location', $this->siteLangId));
         }
-        $this->set('msg', Labels::getLabel('SUC_Settings_with_your_current_location_setup_successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_Settings_with_your_current_location_setup_successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

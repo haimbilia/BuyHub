@@ -190,7 +190,7 @@ class EbsPayController extends PaymentController
             $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
             $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
             if ($response['ResponseCode'] == '0') {
-                $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response['TransactionID'], $paymentAmount, Labels::getLabel("SUC_Received_Payment", $this->siteLangId), json_encode($response));
+                $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response['TransactionID'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($response));
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
             } else {              
                 SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
