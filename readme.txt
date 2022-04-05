@@ -623,6 +623,9 @@ Updates/Fixes :
     => 063272 - Affiliate UI: Home page: Search is not working.
     => 063312 - Advertiser UI: Home page: Search is not working.
     => 063313 - Advertiser UI: Home page: Search: The background screen moves/dragged along when the user clicks on the dropdown icon on the popup screen.
+    => 063164 - Seller UI: "Shipping's Tracking URL" is not showing under the order's details page
+    => 063355 - Seller UI: Alignment is not proper while binding the products with the badges at the seller's end
+    => 063384 - Suggestion to change the functionality of the uploading profile images on the seller's, buyer's advertiser's, and affiliate's dashboard and make it similar to the admin's dashboard
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

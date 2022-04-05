@@ -354,14 +354,6 @@ class OrderPayment extends Orders
         $formattedOrderValue = "#" . $orderInfo["order_id"];
         $transObj = new Transactions();
 
-        /* $txnArray["utxn_user_id"] = $orderInfo["order_user_id"];
-        $txnArray["utxn_debit"] = $amountToBeCharge;
-        $txnArray["utxn_status"] = Transactions::STATUS_COMPLETED;
-        $txnArray["utxn_order_id"] = $orderInfo["order_id"];
-        $txnArray["utxn_date"] = date('Y-m-d H:i:s');
-        $txnArray["utxn_comments"] = sprintf(Labels::getLabel('LBL_ORDER_PLACED_NUMBER',$defaultSiteLangId),$formattedOrderValue);
-        $transObj->assignValues($txnArray);
-        if (!$transObj->save()) { $this->error = $transObj->getError(); return false; } */
         $transaction_comment = Orders::getOrderCommentById($orderInfo["order_id"], $defaultSiteLangId);
         $txnDataArr = array(
             'utxn_user_id' => $orderInfo["order_user_id"],
@@ -369,17 +361,12 @@ class OrderPayment extends Orders
             'utxn_status' => Transactions::STATUS_COMPLETED,
             'utxn_order_id' => $orderInfo["order_id"],
             'utxn_comments' => $transaction_comment,
-            /* 'utxn_comments'=>sprintf( Labels::getLabel( 'LBL_ORDER_PLACED_NUMBER', $defaultSiteLangId ), $formattedOrderValue ), */
             'utxn_type' => Transactions::TYPE_ORDER_PAYMENT
         );
         if (!$txnId = $transObj->addTransaction($txnDataArr)) {
             $this->error = $transObj->getError();
             return false;
         }
-        /* Send email to User[ */
-        // $emailNotificationObj = new EmailHandler();
-        // $emailNotificationObj->sendTxnNotification( $txnId, $defaultSiteLangId );
-        /* ] */
 
         // Update Order table user wallet charge amount
         $orderWalletAmountCharge = $orderInfo['order_wallet_amount_charge'] - $amountToBeCharge;
@@ -404,15 +391,7 @@ class OrderPayment extends Orders
 
         $transObj = new Transactions();
         $formattedOrderValue = "#" . $orderInfo["order_number"];
-        /*
-        $txnArray["utxn_user_id"]= $orderInfo["order_user_id"];
-        $txnArray["utxn_debit"]= $amountToBeCharge;
-        $txnArray["utxn_status"]= Transactions::STATUS_COMPLETED;
-        $txnArray["utxn_order_id"]= $orderInfo["order_id"];
-        $txnArray["utxn_date"]= date('Y-m-d H:i:s');
-        $txnArray["utxn_comments"]= sprintf(Labels::getLabel('LBL_ORDER_PLACED_NUMBER',$defaultSiteLangId),$formattedOrderValue);
-        $transObj->assignValues($txnArray);
-        if (!$transObj->save()) { $this->error = $transObj->getError(); return false;} */
+
         if ($orderInfo['order_type'] == Orders::ORDER_PRODUCT) {
             $txnComment = sprintf(Labels::getLabel('MSG_PRODUCT_PURCHASED_%s', $defaultSiteLangId), $formattedOrderValue);
         } else {

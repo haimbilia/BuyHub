@@ -37,7 +37,9 @@ foreach ($arrListing as $sn => $row) {
                                 $trackingNumbers = explode(",",$row['oshistory_tracking_number']); 
                                 foreach($trackingNumbers as $trackingNumber){
                                     $trackingNumber = trim($trackingNumber);
-                                    $trackingNumber = number_format($trackingNumber,0,null,'');  
+                                    if(is_numeric($trackingNumber)){
+                                        $trackingNumber = number_format($trackingNumber,0,null,'');  
+                                    }
                                     $str .=  '<span class="timeline-v4__item-text"><a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'". $trackingNumber ."'" . ',' . "'" . $row['op_id'] . "'" . ')" title="' . Labels::getLabel("LBL_TRACK", $siteLangId) . '">' . $trackingNumber . '</a></span>';
                                 }                                
                             }else{
