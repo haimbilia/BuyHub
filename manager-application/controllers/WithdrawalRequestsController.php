@@ -222,7 +222,7 @@ class WithdrawalRequestsController extends ListingBaseController
                             break;
                         case 'withdrawal_payment_method':
                             $methodType = $paymentMethods + $payoutPlugins;
-                            $methodName = (isset($row[$key]) && isset($methodType[$row[$key]]) ? $methodType[$row[$key]] : Labels::getLabel('LBL_N/A', $siteLangId));
+                            $methodName = (isset($row[$key]) && isset($methodType[$row[$key]]) ? $methodType[$row[$key]] : Labels::getLabel('LBL_N/A', $this->siteLangId));
                             $arr[] = $methodName;
                             break;
                         case 'withdrawal_request_date':
@@ -256,7 +256,7 @@ class WithdrawalRequestsController extends ListingBaseController
         $this->set('statusArr', Transactions::getWithdrawlStatusArr($this->siteLangId));
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
-        $this->checkEditPrivilege(true);      
+        $this->checkEditPrivilege(true);
         $this->set('paymentMethods', $paymentMethods);
         $this->set('payoutPlugins', $payoutPlugins);
     }
@@ -400,8 +400,8 @@ class WithdrawalRequestsController extends ListingBaseController
         $arr = [
             /* 'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId), */
             'user_name' => Labels::getLabel('LBL_USER_DETAILS', $this->siteLangId),
-            'user_balance' => Labels::getLabel('LBL_BALANCE', $this->siteLangId),
-            'withdrawal_amount' => Labels::getLabel('LBL_AMOUNT', $this->siteLangId),
+            'user_balance' => Labels::getLabel('LBL_WALLET_BALANCE', $this->siteLangId),
+            'withdrawal_amount' => Labels::getLabel('LBL_REQUESTED_AMOUNT', $this->siteLangId),
             'withdrawal_payment_method' => Labels::getLabel('LBL_WITHDRAWAL_MODE', $this->siteLangId),
             'withdrawal_request_date' => Labels::getLabel('LBL_DATE', $this->siteLangId),
             'withdrawal_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),

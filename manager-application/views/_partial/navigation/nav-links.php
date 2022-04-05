@@ -25,6 +25,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
         $objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewOptions(AdminAuthentication::getLoggedAdminId(), true) ||
+        $objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewTags(AdminAuthentication::getLoggedAdminId(), true)
     ) {
     ?>
@@ -129,6 +130,18 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             </a>
                         </li>
                     <?php } ?>
+                    <?php if ($objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ThresholdProducts"]' href="<?php echo UrlHelper::generateUrl('thresholdProducts'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?><?php if (!$quickSearch && $threshSelProdCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($threshSelProdCount); ?>)<?php } ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
 
                 </ul>
             </div>
@@ -139,7 +152,6 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     if (
         $objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-        $objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewWithdrawRequests(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewOrderCancellationRequests(AdminAuthentication::getLoggedAdminId(), true) ||
@@ -215,18 +227,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             </a>
                         </li>
                     <?php } ?>
-                    <?php if ($objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item navItemJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ThresholdProducts"]' href="<?php echo UrlHelper::generateUrl('thresholdProducts'); ?>">
-                                <span class="nav_icon">
-                                    <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                        </use>
-                                    </svg>
-                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?><?php if (!$quickSearch && $threshSelProdCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($threshSelProdCount); ?>)<?php } ?></span>
-                            </a>
-                        </li>
-                    <?php } ?>
+
 
                     <?php if ($objPrivilege->canViewOrderReturnRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
