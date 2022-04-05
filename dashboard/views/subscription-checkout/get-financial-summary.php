@@ -4,8 +4,12 @@ $cartAdjustableAmount = isset($cartSummary['cartAdjustableAmount']) ? $cartSumma
 $discountTotal = isset($cartSummary['cartDiscounts']) && isset($cartSummary['cartDiscounts']['coupon_discount_total']) ? $cartSummary['cartDiscounts']['coupon_discount_total'] : 0;
 $amount = CommonHelper::displayMoneyFormat($cartTotal - $cartAdjustableAmount - $discountTotal, true, false, true, false, true);
 ?>
-<h5 class="mb-2"><?php echo Labels::getLabel('LBL_Order_Summary', $siteLangId); ?></h5>
-<div class="box box--white box--radius order-summary">
+
+<div class="cart-total-head">
+    <h3 class="cart-total-title">
+        <?php echo Labels::getLabel('LBL_Order_Summary', $siteLangId); ?> </h3>
+</div>
+<div class="cart-total-body">
     <?php if ($spackage_type != SellerPackages::FREE_TYPE) { ?>
         <?php if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
             <div class="coupons-applied">
@@ -32,37 +36,28 @@ $amount = CommonHelper::displayMoneyFormat($cartTotal - $cartAdjustableAmount - 
             </div>
         <?php } ?>
     <?php } ?>
-
-
-
-    <div class="cart-summary">
-        <ul class="">
-            <li>
-                <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span>
-                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartTotal, true, false, true, false, true); ?></span>
+    <ul class="cart-summary">
+        <li class="cart-summary-item">
+            <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span>
+            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartTotal, true, false, true, false, true); ?></span>
+        </li>
+        <?php if ($cartAdjustableAmount > 0) { ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_Adjusted_Amount', $siteLangId); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartAdjustableAmount, true, false, true, false, true); ?></span>
             </li>
-            <?php if ($cartAdjustableAmount > 0) { ?>
-                <li>
-                    <span class="label"><?php echo Labels::getLabel('LBL_Adjusted_Amount', $siteLangId); ?></span>
-                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartAdjustableAmount, true, false, true, false, true); ?></span>
-                </li>
-            <?php } ?>
-            <?php if ($discountTotal > 0) { ?>
-                <li>
-                    <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
-                    <span class="value">
-                        <?php echo CommonHelper::displayMoneyFormat($discountTotal, true, false, true, false, true); ?></span>
-                </li>
-            <?php } ?>
-            <li class="hightlighted">
-                <span class="label"><?php echo Labels::getLabel('LBL_You_Pay', $siteLangId); ?></span>
+        <?php } ?>
+        <?php if ($discountTotal > 0) { ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
                 <span class="value">
-                    <?php echo $amount; ?></span>
+                    <?php echo CommonHelper::displayMoneyFormat($discountTotal, true, false, true, false, true); ?></span>
             </li>
-        </ul>
-
-    </div>
-
-
-
+        <?php } ?>
+        <li class="cart-summary-item highlighted">
+            <span class="label"><?php echo Labels::getLabel('LBL_You_Pay', $siteLangId); ?></span>
+            <span class="value">
+                <?php echo $amount; ?></span>
+        </li>
+    </ul>
 </div>
