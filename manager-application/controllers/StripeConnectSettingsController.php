@@ -15,6 +15,16 @@ class StripeConnectSettingsController extends PaymentMethodSettingsController
             LibHelper::exitWithError($error);
         }
 
+        $fld = $frm->addCheckBox(
+            Labels::getLabel("FRM_MANDATORY_CHECK_FOR_SELLER_TO_ACCESS_DASHBOARD", $langId),
+            'stripe_connect_mandatory',
+            1,
+            array(),
+            false,
+            0
+        );
+        HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_SELLER_WON'T_BE_ABLE_TO_MOVE_ON_OTHER_PAGES_UNTIL_STRIPE_CONNECT__IS_NOT_CONFIGURED.", $langId));
+
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_PAYOUT_INTERVAL', $langId), 'payouts_schedule_interval', $obj->getPayoutInterval(), '', ['class' => $keyName . 'PayoutInterval--js'], '');
         $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_STRIPE_CONNECT_PAYOUT_INTERVAL_DESC', $langId) . '</small>';
 
