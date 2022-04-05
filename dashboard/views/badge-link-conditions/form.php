@@ -8,6 +8,16 @@ if (null != $fld) {
     $fld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 
+$fld = $frm->getField('blinkcond_from_date');
+if (null != $fld) {
+    $fld->addFieldTagAttribute('class', 'field--calender');
+}
+
+$fld = $frm->getField('blinkcond_to_date');
+if (null != $fld) {
+    $fld->addFieldTagAttribute('class', 'field--calender');
+}
+
 $fld = $frm->getField('record_condition');
 if (null != $fld) {
     $fld->addFieldTagAttribute('class', 'recCond--js');
@@ -195,7 +205,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
                                         </div>
                                     </div>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                         </form>
                         <?php echo $frm->getExternalJS(); ?>
