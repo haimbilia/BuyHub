@@ -5,7 +5,7 @@ if (!isset($tbody)) {
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
 foreach ($arrListing as $sn => $row) {
-    
+
     $cls = (($row["withdrawal_id"] % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $row["withdrawal_id"]]);
     if ($row['withdrawal_payment_method'] == 0) {
@@ -20,7 +20,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'user_name':
                 $href = "javascript:void(0)";
-                $onclick = ($canViewUsers ? 'redirectUser('. $row['user_id'] . ')' : '');
+                $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
                 $str = $this->includeTemplate('_partial/user/user-info-card.php', [
                     'user' => $row,
                     'siteLangId' => $siteLangId,
@@ -34,7 +34,12 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
             case 'withdrawal_amount':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
+                if ($row['withdrawal_status'] != Transactions::STATUS_PENDING) {
+                    $amt =  '<del>' . CommonHelper::displayMoneyFormat($row[$key], true, true) . '</del>';
+                } else {
+                    $amt = CommonHelper::displayMoneyFormat($row[$key], true, true);
+                }
+                $td->appendElement('plaintext', $tdAttr, $amt, true);
                 break;
             case 'withdrawal_payment_method':
                 $methodType = $paymentMethods + $payoutPlugins;
@@ -49,20 +54,20 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $statusHtml, true);
                 break;
             case 'action':
-                $data = [   
+                $data = [
                     'siteLangId' => $siteLangId,
                     'recordId' => $row['withdrawal_id']
                 ];
 
                 if ($canEdit && $row['withdrawal_status'] == Transactions::STATUS_PENDING) {
-                    $data['editButton'] = ['onclick'=>'editRecord(' . $row['withdrawal_id'] . ', false)'];
+                    $data['editButton'] = ['onclick' => 'editRecord(' . $row['withdrawal_id'] . ', false)'];
                 }
 
                 $data['otherButtons'] = [
                     [
                         'attr' => [
                             'href' =>  'javascript:void(0);',
-                            'onclick' => 'viewDetails('.$row['withdrawal_id'].','.$siteLangId.')' ,
+                            'onclick' => 'viewDetails(' . $row['withdrawal_id'] . ',' . $siteLangId . ')',
                             'title' => Labels::getLabel('LBL_VIEW_DETAILS', $siteLangId),
                         ],
                         'label' => '<i class="icn">
@@ -72,7 +77,7 @@ foreach ($arrListing as $sn => $row) {
                         </svg>
                     </i>'
                     ]
-                ];	                    
+                ];
 
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
@@ -84,7 +89,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

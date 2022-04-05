@@ -639,7 +639,11 @@ UAT points:
     => S.no can be removed from the listing page. Total page record count should be displayed as the footer
     => Displayed record count with plus sign (10+) in the left navigation section under requests.
     => Listing pages>> Search Filter --- Add Submit button prior to Clear Button.
-    => Make the Search Button on the Listing Pages fixed when the dropdown gets clicked. It should not fluctuate
+    => Make the Search Button on the Listing Pages fixed when the dropdown gets clicked. It should not fluctuate.
+    => Threshold Products under Product Management or In Reports depending upon the team discussion 
+    => Order cancellation Page – details related to the cancellation (May be under drawer or) , Order Status niche lelo → taaki Order ka status directly ptaa chll jaaye
+    => Amount to be replaced with (Strike out option for the Withdrawn amount) under the Withdrawal Request section, Addition of one more column like Before Withdrawal and After Withdrawal, Balance section renaming, In queue refund request ki info v aani chahiye, Real time balance to be shown…. (Aliegnment of the )
+    => Manage Funds withdrawal requests - label Subtitle , Consideration over the Export option to be introduced under the Withdrawal Request Section (CSV download option) which is currently not placed into the system
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
