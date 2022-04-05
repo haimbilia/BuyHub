@@ -96,20 +96,6 @@ bindMaxLengthValidator = function () {
 }
 
 bindMaxLengthValidator();
-/* unlinkSlick = function () {
-    $(".js-widget-scroll").slick("unslick");
-};
-slickWidgetScroll = function () {
-    var slides = $(".widget-stats").length > 2 ? 3 : 2;
-    $(".js-widget-scroll").slick(
-        getSlickSliderSettings(slides, 1, langLbl.layoutDirection, false, {
-            1199: 3,
-            1023: 2,
-            767: 1,
-            480: 1,
-        })
-    );
-}; */
 invalidOtpField = function () {
     $("input.otpVal-js")
         .val("")
@@ -756,27 +742,21 @@ $(document).ready(function () {
             window[callbackFunction]();
         }
     };
+    
     openSignInForm = function (includeGuestLogin) {
         if (typeof includeGuestLogin == "undefined") {
             includeGuestLogin = false;
         }
         data = "includeGuestLogin=" + includeGuestLogin;
-        fcom.ajax(fcom.makeUrl("GuestUser", "LogInFormPopUp"), data, function (t) {
-            try {
-                var ans = JSON.parse(t);
-                if (ans.status == 1) {
-                    fcom.displaySuccessMessage(ans.msg);
-                    if ("undefined" != typeof ans.redirectUrl) {
-                        location.href = ans.redirectUrl;
-                    }
-                    return;
-                }
-                fcom.displayErrorMessage(ans.msg);
-            } catch (err) {
-                $.ykmodal(t);
-            }
+        fcom.displayProcessing();
+        $.ykmodal(fcom.getLoader(), true);
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function (t) {
+            $.ykmodal(t.html, true);
+            fcom.removeLoader();
+            stylePhoneNumberFld('.' + $.ykmodal.element + " input[name='username']", !flag);
         });
     };
+
     autofillLangData = function (autoFillBtn, frm) {
         var actionUrl = autoFillBtn.data("action");
         var defaultLangField = $("input.defaultLang", frm);
@@ -820,9 +800,7 @@ $(document).ready(function () {
             .appendTo($(document.body))
             .submit();
     };
-    $(document).on("click", ".sign-in-popup-js", function () {
-        openSignInForm();
-    });
+    
     $(".cc-cookie-accept-js").click(function () {
         var data = {
             statistical_cookies: 1,
@@ -1295,6 +1273,89 @@ function DataURIToBlob(dataURI) {
         type: mimeString,
     });
 }
+
+resetQuickSearchResults = function () {
+    var ul = '.quickMenujs';
+    var li = ul + ' li.navItemJs';
+    var searchResult = li + ' .navLinkJs';
+
+    $(ul + " mark").contents().unwrap();
+    $(li + ', ' + searchResult).show();
+    $(ul + ' li.dropdownJs').show();
+    $(ul + ' li.hasNestedChildJs').show();
+    $('.noResultsFoundJs').hide();
+};
+
+quickMenuItemSearch = function (ele, event) {
+    event.stopPropagation();
+    var ul = '.quickMenujs';
+    $(ul + " mark").contents().unwrap();
+    var value = ele.val().toLowerCase();
+    if (value.length < 1) {
+        return;
+    }
+    var noResults = '.noResultsFoundJs';
+    var li = ul + ' li.navItemJs';
+    var searchResult = li + ' .navLinkJs';
+    $(noResults + ', ' + searchResult).hide();
+    $(li).each(function () {
+        var liObj = this;
+        $(liObj).hide();
+        $(".navLinkJs", liObj).each(function () {
+            var resultObj = $(this);
+            var textEle = resultObj.find('.navTextJs');
+            var orignalText = textEle.text();
+            var text = orignalText.toLowerCase();
+            var textPos = text.indexOf(value.toLowerCase());
+
+            var parentTextEle = resultObj.closest('.dropdownJs').find('.menuTitleJs');
+            var orignalParentText = parentTextEle.text();
+            var parentText = orignalParentText.toLowerCase();
+            var parentTextPos = parentText.indexOf(value.toLowerCase());
+
+            var search = text.search(value);
+            var parentSearch = parentText.search(value);
+            if (-1 < search || -1 < parentSearch) {
+                resultObj.show();
+                $(liObj).show();
+
+                var endAt = value.length;
+                if (textPos >= 0) {
+                    var filter_text = orignalText.substr(textPos, endAt);
+                    var replaceWith = "<mark>" + filter_text + "</mark>";
+                    textEle.html(orignalText.replace(filter_text, replaceWith));
+                }
+
+                if (parentTextPos >= 0) {
+                    var filter_text = orignalParentText.substr(parentTextPos, endAt);
+                    var replaceWith = "<mark>" + filter_text + "</mark>";
+                    parentTextEle.html(orignalParentText.replace(filter_text, replaceWith));
+                }
+            }
+        });
+    });
+
+    $(ul + ' li.dropdownJs').each(function () {
+        var liObj = this;
+        $(liObj).show();
+        if (1 > $('.navItemJs:visible', liObj).length) {
+            $(liObj).hide();
+        }
+    });
+
+    $(ul + ' li.hasNestedChildJs').each(function () {
+        var liObj = this;
+        $(liObj).show();
+        if (1 > $('.navItemJs:visible', liObj).length) {
+            $(liObj).hide();
+        }
+    });
+
+    if (1 > $(li + ":visible").length) {
+        $(noResults).show();
+    }
+};
+
 $(document).on("change", ".multipleImgs--js", function () {
     if ($(this)[0].files.length > 8) {
         fcom.displayErrorMessage(langLbl.uploadImageLimit);
@@ -1308,8 +1369,30 @@ $(document).on("change", ".multipleImgs--js", function () {
     $(galleryElement).html("");
     imagesPreview(this, galleryElement);
 });
+
 $(document).on("click", ".fileRemove--js", function () {
     $(this).closest("li").remove();
+});
+
+$(document).on("search", "#quickSearchJs", function () {
+    if ("" == $(this).val()) {
+        resetQuickSearchResults();
+    }
+});
+
+$(document).on("keyup", "#quickSearchJs", function (e) {
+    if ("" == $(this).val()) {
+        resetQuickSearchResults();
+        return;
+    }
+
+    quickMenuItemSearch($(this), e);
+});
+
+$(document).on("shown.bs.modal", "#search-main", function () {
+    if (0 < $("#quickSearchJs").length) {
+        $("#quickSearchJs").focus();
+    }
 });
 
 $(window).keydown(function (e) {

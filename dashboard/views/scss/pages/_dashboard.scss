@@ -1780,6 +1780,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
                     //letter-spacing: 1px;
                     font-weight: 500;
                     background: $bg-white;
+                    white-space: nowrap;
                 }
             }
             tr {
@@ -1899,6 +1900,16 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
         flex: 1;
         max-width: 256px;
         overflow: hidden;
+        &.disabled {
+            opacity: 0.75;
+            pointer-events: none;
+            input {
+                &:checked {
+                    background-color: $border-color;
+                    border-color: $border-color;
+                }
+            }
+        }
     }
     .icn {
         cursor: grab;

@@ -2646,8 +2646,7 @@ class Orders extends MyAppModel
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
 
-        $formattedOrderValue = " #" . $orderInfo['order_number'];
-        /* CommonHelper::printArray($orderInfo); die; */
+        $formattedOrderValue = "#" . $orderInfo['order_number'];
         if ($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             if ($orderInfo['order_renew']) {
                 return sprintf(Labels::getLabel('LBL_YOUR_SUBSCRIPTION_IS_RENEWED_%s', $langId), $formattedOrderValue);
@@ -2964,5 +2963,9 @@ class Orders extends MyAppModel
         }
 
         return (in_array($opRow['op_status_id'], $processingStatuses) && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED);
+    }
+
+    public static function displayStatus()
+    {
     }
 }

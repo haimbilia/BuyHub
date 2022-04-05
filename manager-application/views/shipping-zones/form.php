@@ -108,7 +108,7 @@ if (!empty($excludeLocations)) {
                                                     } ?>
                                                     <li class="list-states-item filter-country--js">
                                                         <div class="list-zones-head">
-                                                            <label class="checkbox country--js " data-countryid="<?php echo $countryId; ?>" data-statecount="<?php echo $statesCount; ?>">
+                                                            <label class="checkbox country--js <?php echo $disabled; ?>" data-countryid="<?php echo $countryId; ?>" data-statecount="<?php echo $statesCount; ?>">
                                                                 <input type="checkbox" name="c_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>" class="checkbox_country_<?php echo $countryId; ?>" <?php echo $checked; ?>  <?php echo $disabled; ?> title="<?php echo $alreadyAddedMsg; ?>">
                                                                 <?php echo $country['country_name']; ?>
                                                             </label>

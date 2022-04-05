@@ -89,21 +89,21 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
                 <img src="<?php echo $profileImg; ?>" alt="<?php echo Labels::getLabel('LBL_Profile_Image', $siteLangId); ?>">
                 <?php echo $imgFrm->getFormTag(); ?>
                 <?php if ($mode == 'Edit') { ?>
-                    <button class="btn btn-edit" type="button" onclick="popupImage()">
-                        <svg class="svg" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                    <label class="btn btn-delete" title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage()">                       
+                        <svg class="svg" width="14" height="14">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                             </use>
                         </svg>
-                    </button>
-                <?php } else { ?>
-                    <label class="btn btn-edit" title="Upload image file">
+                    </label>  
+                    <?php } ?>
+                    <label class="btn btn-edit" title="<?php echo Labels::getLabel('LBL_UPLOAD_IMAGE_FILE', $siteLangId); ?>">
                         <input type="file" class="sr-only" id="profileInputImage" name="file" accept="image/*" onChange="popupImage(this)">
-                        <svg class="svg" width="18" height="18">
+                        <svg class="svg" width="14" height="14">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                             </use>
                         </svg>
                     </label>
-                <?php } ?>
+                
                 </form>
                 <?php echo $imgFrm->getExternalJS(); ?>
                 <div id="dispMessage"></div>

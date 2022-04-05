@@ -58,6 +58,10 @@ a {
 a:hover {
     color: $brand-color;
     text-decoration: none;
+} 
+mark,
+.mark {
+    padding: 0;
 }
 
 .bg-gray {
@@ -419,6 +423,13 @@ a:hover {
             width: 100% !important;
         }
     }
+    .select2-selection{
+        &__arrow{
+            b{
+                margin-top: -4px!important;
+            }
+        }
+    } 
 }
 
 .cropper-body {

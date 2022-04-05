@@ -15,7 +15,7 @@ class TransactionReportController extends SellerBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('fields', $fields);
-        $this->set('keywordPlaceholder', Labels::getLabel('MSG_SEARCH_BY_ORDER_ID,_COMMENTS,_USER_NAME_OR_USER_EMAIL', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_TRANSACTION_ID_OR_COMMENTS', $this->siteLangId));
         $this->_template->addJs('js/report.js');
         $this->_template->render();
     }
@@ -54,8 +54,6 @@ class TransactionReportController extends SellerBaseController
             $cond->attachCondition('utxn.utxn_op_id', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('utxn.utxn_comments', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('concat("TN-" ,lpad( utxn.`utxn_id`,7,0))', 'like', '%' . $keyword . '%', 'OR', true);
-            $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%', 'OR');
-            $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
         }
 
         if (!empty($fromDate)) {
@@ -171,7 +169,6 @@ class TransactionReportController extends SellerBaseController
                 'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
                 'utxn_id' => Labels::getLabel('LBL_Transaction_ID', $this->siteLangId),
                 'utxn_status' => Labels::getLabel('LBL_Payment_Status', $this->siteLangId),
-                'utxn_order_id' => Labels::getLabel('LBL_Order_Id', $this->siteLangId),
                 'utxn_credit' => Labels::getLabel('LBL_Credit', $this->siteLangId),
                 'utxn_debit' => Labels::getLabel('LBL_Debit', $this->siteLangId),
                 'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->siteLangId),
@@ -187,6 +184,6 @@ class TransactionReportController extends SellerBaseController
 
     protected function getDefaultColumns(): array
     {
-        return ['utxn_date', 'utxn_id', 'utxn_status', 'utxn_order_id', 'transactionAmount'];
+        return ['utxn_date', 'utxn_id', 'utxn_status', 'transactionAmount', 'utxn_comments'];
     }
 }

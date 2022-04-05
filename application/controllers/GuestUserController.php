@@ -31,6 +31,7 @@ class GuestUserController extends MyAppController
             'socialLoginApis' => $socialLoginApis,
             'siteLangId' => $this->siteLangId,
             'canSendSms' => $canSendSms,
+            'includeGuestLogin' => FatApp::getPostedData('includeGuestLogin', FatUtility::VAR_STRING, false),
         );
 
         $this->set('signInWithPhone', $signInWithPhone);
@@ -340,20 +341,6 @@ class GuestUserController extends MyAppController
     private function generateLoginToken()
     {
         return substr(md5(rand(1, 99999) . microtime()), 0, UserAuthentication::TOKEN_LENGTH);
-    }
-
-    public function LogInFormPopUp()
-    {
-        $includeGuestLogin = FatApp::getPostedData('includeGuestLogin', FatUtility::VAR_STRING, false);
-        $frm = $this->getLoginForm($includeGuestLogin);
-        $frm->addSecurityToken();
-        $socialLoginApis = Plugin::getDataByType(Plugin::TYPE_SOCIAL_LOGIN, $this->siteLangId);
-        $this->set('loginFrm', $frm);
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('socialLoginApis', $socialLoginApis);
-        $this->set('includeGuestLogin', $includeGuestLogin);
-        $this->set('smsPluginStatus', SmsArchive::canSendSms(SmsTemplate::LOGIN));
-        $this->_template->render(false, false);
     }
 
     public function form()

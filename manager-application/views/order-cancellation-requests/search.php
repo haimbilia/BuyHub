@@ -5,7 +5,7 @@ if (!isset($tbody)) {
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
 foreach ($arrListing as $sn => $row) {
-    
+
     $cls = (($row["ocrequest_id"] % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $row["ocrequest_id"]]);
     foreach ($fields as $key => $val) {
@@ -13,12 +13,12 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'listSerial':
-                $listSerial = '#C'. str_pad( $row["ocrequest_id"], 5, '0', STR_PAD_LEFT );
+                $listSerial = '#C' . str_pad($row["ocrequest_id"], 5, '0', STR_PAD_LEFT);
                 $td->appendElement('plaintext', $tdAttr,  $listSerial);
                 break;
             case 'buyer_detail':
                 $href = "javascript:void(0)";
-                $onclick = ($canViewUsers ? 'redirectUser('. $row['user_id'] . ')' : '');
+                $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
                 $str = $this->includeTemplate('_partial/user/user-info-card.php', [
                     'user' => $row,
                     'siteLangId' => $siteLangId,
@@ -36,7 +36,7 @@ foreach ($arrListing as $sn => $row) {
                     'user_name' => $row['seller_name'],
                     'credential_username' => $row['seller_username'],
                     'credential_email' => $row['seller_email'],
-                    
+
                 ];
                 $title = '';
                 if (!empty($row['op_shop_name'])) {
@@ -44,8 +44,8 @@ foreach ($arrListing as $sn => $row) {
                     $data['extra_text'] = CommonHelper::replaceStringData($str, ['{SHOP}' => $row['op_shop_name']]);
                     $title = Labels::getLabel('LBL_CLICK_HERE_TO_VISIT_SHOP_LIST', $siteLangId);
                 }
-                
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $data, 'siteLangId' => $siteLangId, 'onclick' => $onclick, 'title' => $title,'extraClass' => 'user-profile-sm','displayProfileImage'=>false], false, true);
+
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $data, 'siteLangId' => $siteLangId, 'onclick' => $onclick, 'title' => $title, 'extraClass' => 'user-profile-sm', 'displayProfileImage' => false], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'reuqest_detail':
@@ -53,18 +53,34 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $html, true);
                 break;
             case 'amount':
-                $amt = CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($row,'netamount'), true, true);
+                $amt = CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($row, 'netamount'), true, true);
                 $td->appendElement('plaintext', $tdAttr, $amt, true);
                 break;
             case 'ocrequest_date':
                 $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key], true), true);
                 break;
+            case 'orderstatus_name':
+                $orderStatus = ucwords($row['orderstatus_name']);
+                if (Orders::ORDER_PAYMENT_CANCELLED == $row["order_payment_status"]) {
+                    $orderStatus = Labels::getLabel('LBL_CANCELLED', $siteLangId);
+                } else {
+                    $paymentMethodCode = Plugin::getAttributesById($row['order_pmethod_id'], 'plugin_code');
+                    if (in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
+                        if ($orderStatus != $row['plugin_name']) {
+                            $orderStatus .= " - " . $row['plugin_name'];
+                        }
+                    }
+                }
+
+                $orderStatus = OrderProduct::getStatusHtml((int)$row["orderstatus_color_class"], $orderStatus);
+                $td->appendElement('plaintext', $tdAttr, $orderStatus, true);
+                break;
             case 'ocrequest_status':
-                $statusHtml = OrderCancelRequest::getStatusHtml($siteLangId, $row[$key]);
-                $td->appendElement('plaintext', $tdAttr, $statusHtml, true);
+                $reqStatus = OrderCancelRequest::getStatusHtml($siteLangId, $row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $reqStatus, true);
                 break;
             case 'action':
-                $data = [   
+                $data = [
                     'siteLangId' => $siteLangId,
                     'recordId' => $row['ocrequest_id']
                 ];
@@ -85,7 +101,7 @@ foreach ($arrListing as $sn => $row) {
                     ],
                 ];
 
-                if ($canEdit && $row['ocrequest_status'] == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING ) {
+                if ($canEdit && $row['ocrequest_status'] == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING) {
                     $arr = [
                         'attr' => [
                             'href' => 'javascript:void(0)',
@@ -115,7 +131,7 @@ foreach ($arrListing as $sn => $row) {
                                     </i>',
                     ];
                 }
-                
+
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
@@ -126,7 +142,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

@@ -80,7 +80,7 @@ $(document).ready(function () {
         $(dv).prepend(fcom.getLoader());
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'setup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
         });
     }
