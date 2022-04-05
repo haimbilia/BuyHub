@@ -629,6 +629,8 @@ Updates/Fixes :
     => 063533 - Buyer: After registration, the confirmation message is not aligned at the front-end.
     => 063476 - Seller UI: Infinite loader is coming when user tries to upload the profile picture.
     => 063465 - Seller UI: Reset button is not working on Tax categories.
+    => 063348 - Seller UI: Some icon is not showing while hovering on it and the calendar icon is also missing for the date field while adding the "bind condition" for the manual badges under the Badges section at the seller's end.
+    => 063401 - Seller UI: Not able to upload the file under the "Upload Bulk Media" section under the Import/Export section at the seller's end.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
