@@ -123,7 +123,7 @@ class ShippingProfileController extends ListingBaseController
             }
 
             if ($data['shipprofile_user_id'] != 0) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
             }
 
@@ -173,7 +173,7 @@ class ShippingProfileController extends ListingBaseController
             }
 
             if ($data['shipprofile_user_id'] != 0) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
             }
 

@@ -624,7 +624,7 @@ class BrandsController extends ListingBaseController
 
         $this->changeStatus($recordId, $status);
         Product::updateMinPrices(0, 0, $recordId);        
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -646,7 +646,7 @@ class BrandsController extends ListingBaseController
             $this->changeStatus($brandId, $status);
         }
         Product::updateMinPrices();
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -691,7 +691,7 @@ class BrandsController extends ListingBaseController
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'brand_logo' => Labels::getLabel('LBL_LOGO', $this->siteLangId),
             'brand_identifier' => Labels::getLabel('LBL_BRAND', $this->siteLangId),
-            'seo_url' => Labels::getLabel('LBL_Seo_Friendly_URL', $this->siteLangId),
+            'seo_url' => Labels::getLabel('LBL_SEO_FRIENDLY_URL', $this->siteLangId),
             'brand_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];

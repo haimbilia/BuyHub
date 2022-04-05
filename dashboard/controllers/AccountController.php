@@ -48,7 +48,7 @@ class AccountController extends LoggedUserController
         $requestId = FatUtility::int($requestId);
 
         if ($this->userId < 1 || $requestId < 1) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'SupplierApprovalForm', [], CONF_WEBROOT_DASHBOARD));
             //FatUtility::dieJsonError( Message::getHtml() );
         }
@@ -59,14 +59,14 @@ class AccountController extends LoggedUserController
 
         $rs = $srch->getResultSet();
         /* if(!$rs){
-        Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST',$this->siteLangId));
+        Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST',$this->siteLangId));
         FatUtility::dieJsonError( Message::getHtml() );
         } */
 
         $supplierRequest = FatApp::getDb()->fetch($rs);
 
         if (!$supplierRequest || $supplierRequest['usuprequest_id'] != $requestId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'SupplierApprovalForm', [], CONF_WEBROOT_DASHBOARD));
         }
         $maxAttempts = FatApp::getConfig('CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', FatUtility::VAR_INT, 3);
@@ -82,7 +82,7 @@ class AccountController extends LoggedUserController
     public function supplierApprovalForm($p = '')
     {
         if (!User::canViewSupplierTab()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_FOR_SUPPLIER_DASHBOARD', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST_FOR_SUPPLIER_DASHBOARD', $this->siteLangId));
             if (User::isBuyer()) {
                 FatApp::redirectUser(UrlHelper::generateUrl('buyer', '', [], CONF_WEBROOT_DASHBOARD));
             } elseif (User::isAdvertiser()) {
@@ -100,14 +100,14 @@ class AccountController extends LoggedUserController
 
         $rs = $srch->getResultSet();
         if (!$rs) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         $supplierRequest = FatApp::getDb()->fetch($rs);
         $maxAttempts = FatApp::getConfig('CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', FatUtility::VAR_INT, 3);
         if ($supplierRequest && $supplierRequest['usuprequest_attempts'] >= $maxAttempts) {
-            Message::addErrorMessage(Labels::getLabel('MSG_You_have_already_consumed_max_attempts', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOU_HAVE_ALREADY_CONSUMED_MAX_ATTEMPTS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('account', 'viewSupplierRequest', array($supplierRequest["usuprequest_id"]), CONF_WEBROOT_DASHBOARD));
         }
 
@@ -1044,7 +1044,7 @@ class AccountController extends LoggedUserController
         $post = FatApp::getPostedData();
 
         if (1 > count($post) && true === MOBILE_APP_API_CALL) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
         }
 
         $dob = FatApp::getPostedData('user_dob', FatUtility::VAR_STRING, '');
@@ -1191,7 +1191,7 @@ class AccountController extends LoggedUserController
     {
         $post = FatApp::getPostedData();
         if (1 > count($post) && true === MOBILE_APP_API_CALL) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
         }
 
         $frm = $this->getBankInfoForm();
@@ -1592,7 +1592,7 @@ class AccountController extends LoggedUserController
                 FatUtility::dieWithError(Message::getHtml());
             }
             $action = 'A'; //Added to wishlist
-            $this->set('msg', Labels::getLabel('LBL_Product_Added_in_list_successfully', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_PRODUCT_ADDED_IN_LIST_SUCCESSFULLY', $this->siteLangId));
         } else {
             $uwlistIds = array();
             if (true === MOBILE_APP_API_CALL) {
@@ -1623,7 +1623,7 @@ class AccountController extends LoggedUserController
             }
 
             $action = 'R'; //Removed from wishlist
-            $this->set('msg', Labels::getLabel('LBL_Product_Removed_from_list_successfully', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_PRODUCT_REMOVED_FROM_LIST_SUCCESSFULLY', $this->siteLangId));
         }
         return $action;
     }
@@ -1941,7 +1941,7 @@ class AccountController extends LoggedUserController
 
         $obj = new UserWishList();
         $obj->deleteWishList($row['uwlist_id']);
-        $this->set('msg', Labels::getLabel('LBL_Record_deleted_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_DELETED_SUCCESSFULLY', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -1967,11 +1967,11 @@ class AccountController extends LoggedUserController
         $whr = array('smt' => 'pssearch_id = ?', 'vals' => array($pssearch_id));
 
         if (!FatApp::getDb()->updateFromArray(SavedSearchProduct::DB_TBL, $updateArray, $whr)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Record_deleted_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2022,7 +2022,7 @@ class AccountController extends LoggedUserController
                 FatUtility::dieWithError(Message::getHtml());
             }
             $action = 'A'; //Added to favorite
-            $this->set('msg', Labels::getLabel('LBL_Shop_is_marked_as_favoutite', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_SHOP_IS_MARKED_AS_FAVOUTITE', $this->siteLangId));
         } else {
             if (!$db->deleteRecords(Shop::DB_TBL_SHOP_FAVORITE, array('smt' => 'ufs_user_id = ? AND ufs_shop_id = ?', 'vals' => array($this->userId, $shop_id)))) {
                 $message = Labels::getLabel('LBL_Some_problem_occurred,_Please_contact_webmaster', $this->siteLangId);
@@ -2033,7 +2033,7 @@ class AccountController extends LoggedUserController
                 FatUtility::dieWithError(Message::getHtml());
             }
             $action = 'R'; //Removed from favorite
-            $this->set('msg', Labels::getLabel('LBL_Shop_has_been_removed_from_your_favourite_list', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_SHOP_HAS_BEEN_REMOVED_FROM_YOUR_FAVOURITE_LIST', $this->siteLangId));
         }
 
         $this->set('action', $action);
@@ -2157,7 +2157,7 @@ class AccountController extends LoggedUserController
             return true;
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Product_has_been_marked_as_favourite_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_Product_has_been_marked_as_favourite_successfully', $this->siteLangId));
 
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
@@ -2185,7 +2185,7 @@ class AccountController extends LoggedUserController
             return true;
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Product_has_been_removed_from_favourite_list', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PRODUCT_HAS_BEEN_REMOVED_FROM_FAVOURITE_LIST', $this->siteLangId));
 
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
@@ -2210,7 +2210,7 @@ class AccountController extends LoggedUserController
             $this->removeFromFavorite($selprodId, false);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Product_has_been_removed_from_favourite_list', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PRODUCT_HAS_BEEN_REMOVED_FROM_FAVOURITE_LIST', $this->siteLangId));
 
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
@@ -2860,12 +2860,12 @@ class AccountController extends LoggedUserController
                 0,
                 false
             )) {
-                Message::addMessage(Labels::getLabel('MSG_Profile_Picture_Updated', $this->siteLangId));
+                Message::addMessage(Labels::getLabel('SUC_PROFILE_PICTURE_UPDATED', $this->siteLangId));
             } else {
                 Message::addErrorMessage($attachment->getError());
             }
         } else {
-            Message::addErrorMessage(Labels::getLabel('MSG_No_File_Uploaded', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_NO_FILE_UPLOADED', $this->siteLangId));
         }
         FatApp::redirectUser(UrlHelper::generateUrl('member', 'account'), [], CONF_WEBROOT_DASHBOARD);
     }
@@ -2874,7 +2874,7 @@ class AccountController extends LoggedUserController
     {
         $orrequest_id = FatUtility::int($orrequest_id);
         if (!$orrequest_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
         $srch = new OrderReturnRequestSearch();
@@ -2893,14 +2893,14 @@ class AccountController extends LoggedUserController
         $request = FatApp::getDb()->fetch($rs);
 
         if (!$request || $request['orrequest_id'] != $orrequest_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
         /* buyer cannot escalate request[ */
         // if( $this->userId == $request['orrequest_user_id'] ){
         if (!User::isSeller()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
         /* ] */
@@ -2919,7 +2919,7 @@ class AccountController extends LoggedUserController
             CommonHelper::redirectUserReferer();
         }
         /* ] */
-        Message::addMessage(Labels::getLabel('MSG_Your_request_sent', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('SUC_YOUR_REQUEST_SENT', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
 
@@ -3032,7 +3032,7 @@ class AccountController extends LoggedUserController
 
         $userInfo = User::getAttributesById($this->userId, array('user_fb_access_token'));
         if ($userInfo['user_fb_access_token'] == '') {
-            Message::addErrorMessage(Labels::getLabel('MSG_Authenticate_Your_Account', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_AUTHENTICATE_YOUR_ACCOUNT', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -3383,7 +3383,7 @@ class AccountController extends LoggedUserController
         if (!$db->updateFromArray(Notifications::DB_TBL, array(Notifications::DB_TBL_PREFIX . 'is_read' => 1), $smt)) {
             FatUtility::dieJsonError($db->getError());
         }
-        $this->set('msg', Labels::getLabel('Msg_Successfully_Updated', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_UPDATED', $this->siteLangId));
         $this->_template->render();
     }
 
@@ -3391,7 +3391,7 @@ class AccountController extends LoggedUserController
     {
         $notificationId = FatUtility::int($notificationId);
         if (1 > $notificationId) {
-            FatUtility::dieJSONError(Labels::getLabel('Msg_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJSONError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $srch = Notifications::getSearchObject();
@@ -3401,13 +3401,13 @@ class AccountController extends LoggedUserController
         $rs = $srch->getResultSet();
         $notification = FatApp::getDb()->fetch($rs);
         if (!($notification)) {
-            FatUtility::dieJSONError(Labels::getLabel('Msg_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJSONError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $nObj = new Notifications();
         if (!$nObj->readUserNotification($notificationId, $this->userId)) {
             FatUtility::dieJsonError($nObj->getError());
         }
-        $this->set('msg', Labels::getLabel('Msg_Successfully_Updated', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_UPDATED', $this->siteLangId));
         $this->_template->render();
     }
 
@@ -3466,7 +3466,7 @@ class AccountController extends LoggedUserController
         }
 
         if (1 > $updatePhnFrm && false === UserAuthentication::validateUserPhone($this->userId, $phoneNumber)) {
-            LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_PHONE_NUMBER', $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_PHONE_NUMBER', $this->siteLangId));
         }
 
         if (0 < $updatePhnFrm) {
@@ -3477,7 +3477,7 @@ class AccountController extends LoggedUserController
             $rs = $srch->getResultSet();
             $row = $db->fetch($rs);
             if (!empty($row)) {
-                LibHelper::dieJsonError(Labels::getLabel('MSG_THIS_PHONE_NUMBER_IS_ALREADY_EXISTS.', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_THIS_PHONE_NUMBER_IS_ALREADY_EXISTS.', $this->siteLangId));
             }
         }
 
@@ -3606,7 +3606,7 @@ class AccountController extends LoggedUserController
     {
         $post = FatApp::getPostedData();
         if (1 > count($post) && true === MOBILE_APP_API_CALL) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
         }
 
         $frm = $this->getCookiesPreferencesForm();

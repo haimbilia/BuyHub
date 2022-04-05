@@ -125,7 +125,7 @@ class ShippingPackagesController extends ListingBaseController
             LibHelper::exitWithError($spObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('SUC_SETUP_SUCCESSFUL', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

@@ -690,7 +690,7 @@ class ImportExportController extends SellerBaseController
     {
         $this->userPrivilege->canViewImportExport();
         if (empty($path)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $filesPathArr = UploadBulkImages::getAllFilesPath(base64_decode($path));
         if (!empty($filesPathArr) && 0 < count($filesPathArr)) {
@@ -699,7 +699,7 @@ class ImportExportController extends SellerBaseController
             CommonHelper::convertToCsv($filesPathArr, time() . '.csv');
             exit;
         }
-        Message::addErrorMessage(Labels::getLabel('MSG_No_File_Found', $this->siteLangId));
+        Message::addErrorMessage(Labels::getLabel('ERR_NO_FILE_FOUND', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
 

@@ -371,12 +371,12 @@ class CommissionController extends ListingBaseController
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
           /*   'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
-            'commsetting_prodcat_id' => Labels::getLabel('LBL_Category', $this->siteLangId),
+            'commsetting_prodcat_id' => Labels::getLabel('LBL_CATEGORY', $this->siteLangId),
             'commsetting_user_id' => Labels::getLabel('LBL_SHOP/_SELLER_NAME', $this->siteLangId),
-            'commsetting_product_id' => Labels::getLabel('LBL_Product', $this->siteLangId),
-            'commsetting_fees' => Labels::getLabel('LBL_Fees_[%]', $this->siteLangId),
+            'commsetting_product_id' => Labels::getLabel('LBL_PRODUCT', $this->siteLangId),
+            'commsetting_fees' => Labels::getLabel('LBL_FEES_[%]', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('commissionTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);

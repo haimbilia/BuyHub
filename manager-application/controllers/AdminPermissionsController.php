@@ -10,7 +10,7 @@ class AdminPermissionsController extends ListingBaseController
 
     public function index()
     {
-        Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_ADMIN_USER_FIRST', $this->siteLangId));
+        Message::addErrorMessage(Labels::getLabel('ERR_PLEASE_ADMIN_USER_FIRST', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('AdminUsers'));
     }
 
@@ -271,8 +271,8 @@ class AdminPermissionsController extends ListingBaseController
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
            /*  'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId), */
-            'module' => Labels::getLabel('LBL_Module', $this->siteLangId),
-            'permission' => Labels::getLabel('LBL_Permissions', $this->siteLangId),
+            'module' => Labels::getLabel('LBL_MODULE', $this->siteLangId),
+            'permission' => Labels::getLabel('LBL_PERMISSIONS', $this->siteLangId),
         ];
 
         CacheHelper::create('adminUsersTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);

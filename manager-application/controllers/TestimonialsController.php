@@ -446,7 +446,7 @@ class TestimonialsController extends ListingBaseController
         if (!$fileHandlerObj->deleteFile($fileType, $recordId, $aFileId, 0, -1)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

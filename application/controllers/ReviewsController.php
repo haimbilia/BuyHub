@@ -475,7 +475,7 @@ class ReviewsController extends MyAppController
             FatUtility::dieJsonError($obj->getError());
         }
         $this->set('reviewId', $reviewId);
-        $this->set('msg', Labels::getLabel('SUC_SETUP_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

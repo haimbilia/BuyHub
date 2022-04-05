@@ -378,7 +378,7 @@ class MyAppController extends FatController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Successfully_subscribed', $siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_SUBSCRIBED', $siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -821,12 +821,12 @@ class MyAppController extends FatController
         }
         if (true === MOBILE_APP_API_CALL) {
             if (User::OTP_LENGTH != strlen($post['upv_otp'])) {
-                LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_OTP', $this->siteLangId));
             }
             $otp = $post['upv_otp'];
         } else {
             if (!is_array($post['upv_otp']) || User::OTP_LENGTH != count($post['upv_otp'])) {
-                LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_OTP', $this->siteLangId));
             }
             $otp = implode("", $post['upv_otp']);
         }
@@ -862,7 +862,7 @@ class MyAppController extends FatController
             if (!UserAuthentication::isUserLogged()) {
                 $uObj = new User($userId);
                 if (!$token = $uObj->setMobileAppToken()) {
-                    LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                    LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 }
 
                 $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email'), true, true, true);

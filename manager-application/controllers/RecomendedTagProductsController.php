@@ -136,11 +136,11 @@ class RecomendedTagProductsController extends ListingBaseController
 
         $arr = [
             /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
-            'tag_name' => Labels::getLabel('LBL_Tag', $this->siteLangId),
-            'product_name' => Labels::getLabel('LBL_Product', $this->siteLangId),
-            'tpr_weightage' => Labels::getLabel('LBL_System_Weightage', $this->siteLangId),
-            'tpr_custom_weightage' => Labels::getLabel('LBL_Custom_Weightage', $this->siteLangId),
-            'tpr_custom_weightage_valid_till' => Labels::getLabel('LBL_Valid_Till_<br/>(Custom_Weightage)', $this->siteLangId),
+            'tag_name' => Labels::getLabel('LBL_TAG', $this->siteLangId),
+            'product_name' => Labels::getLabel('LBL_PRODUCT', $this->siteLangId),
+            'tpr_weightage' => Labels::getLabel('LBL_SYSTEM_WEIGHTAGE', $this->siteLangId),
+            'tpr_custom_weightage' => Labels::getLabel('LBL_CUSTOM_WEIGHTAGE', $this->siteLangId),
+            'tpr_custom_weightage_valid_till' => Labels::getLabel('LBL_VALID_TILL_<BR/>(CUSTOM_WEIGHTAGE)', $this->siteLangId),
         ];
 
         if (count(Language::getAllNames()) < 2) {

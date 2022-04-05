@@ -272,7 +272,7 @@ class GuestUserController extends MyAppController
                 FatUtility::dieJsonError(Labels::getLabel('ERR_UNABLE_TO_UPDATE', $this->siteLangId));
             }
         }
-        $this->set('msg', Labels::getLabel('SUC_SUCCESSFULLY_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_UPDATED', $this->siteLangId));
         $this->_template->render();
     }
 
@@ -501,7 +501,7 @@ class GuestUserController extends MyAppController
                         $redirectUrl = UrlHelper::generateUrl('Checkout');
                     }
                     if (FatUtility::isAjaxCall()) {
-                        $this->set('msg', Labels::getLabel('SUC_REGISTERATION_SUCCESSFULL', $this->siteLangId));
+                        $this->set('msg', Labels::getLabel('MSG_REGISTERATION_SUCCESSFULL', $this->siteLangId));
                         $this->set('redirectUrl', $redirectUrl);
                         $this->_template->render(false, false, 'json-success.php');
                         exit;
@@ -514,9 +514,9 @@ class GuestUserController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             if (0 < $signUpWithPhone) {
                 $this->set('data', ['user_id' => $userId]);
-                $this->set('msg', Labels::getLabel('SUC_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
+                $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
             } else {
-                $this->set('msg', Labels::getLabel('SUC_REGISTERATION_SUCCESSFULL', $this->siteLangId));
+                $this->set('msg', Labels::getLabel('MSG_REGISTERATION_SUCCESSFULL', $this->siteLangId));
             }
             $this->_template->render();
         }
@@ -528,7 +528,7 @@ class GuestUserController extends MyAppController
 
         $redirectUrl = UrlHelper::generateUrl('GuestUser', $actionUrl, [], CONF_WEBROOT_FRONTEND);
         if (FatUtility::isAjaxCall()) {
-            $this->set('msg', Labels::getLabel('SUC_REGISTERATION_SUCCESSFULL', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_REGISTERATION_SUCCESSFULL', $this->siteLangId));
             $this->set('redirectUrl', $redirectUrl);
             $this->_template->render(false, false, 'json-success.php');
             exit;
@@ -1090,10 +1090,10 @@ class GuestUserController extends MyAppController
         $row['link'] = UrlHelper::generateFullUrl('GuestUser', 'loginForm');
         $email->sendResetPasswordConfirmationEmail($this->siteLangId, $row);
 
-        /* Message::addMessage(Labels::getLabel('MSG_PASSWORD_CHANGED_SUCCESSFULLY',$this->siteLangId));
+        /* Message::addMessage(Labels::getLabel(SUC_PASSWORD_CHANGED_SUCCESSFULLY',$this->siteLangId));
           FatUtility::dieJsonError( Message::getHtml() ); */
 
-        $this->set('msg', Labels::getLabel('SUC_PASSWORD_CHANGED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PASSWORD_CHANGED_SUCCESSFULLY', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -1112,7 +1112,7 @@ class GuestUserController extends MyAppController
         $getOtpOnly = (true === MOBILE_APP_API_CALL) ? applicationConstants::YES : $getOtpOnly;
         if (0 < $getOtpOnly) {
             $this->set('data', ['user_id' => $userId]);
-            $this->set('msg', Labels::getLabel('SUC_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
             if (true === MOBILE_APP_API_CALL) {
                 $this->_template->render();
             }
@@ -1273,7 +1273,7 @@ class GuestUserController extends MyAppController
             LibHelper::dieJsonError($message);
         }
 
-        $this->set('msg', Labels::getLabel('SUC_UPDATE_EMAIL_REQUEST_SENT_SUCCESSFULLY._YOU_NEED_TO_VERIFY_YOUR_NEW_EMAIL_ADDRESS_BEFORE_ACCESSING_OTHER_MODULES', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATE_EMAIL_REQUEST_SENT_SUCCESSFULLY._YOU_NEED_TO_VERIFY_YOUR_NEW_EMAIL_ADDRESS_BEFORE_ACCESSING_OTHER_MODULES', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -1536,7 +1536,7 @@ class GuestUserController extends MyAppController
 
             if (0 < $userId) {
                 $this->set('data', ['user_id' => $userId]);
-                $this->set('msg', Labels::getLabel('SUC_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
+                $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
                 if (true === MOBILE_APP_API_CALL) {
                     $this->_template->render();
                 }

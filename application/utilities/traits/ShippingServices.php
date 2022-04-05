@@ -19,7 +19,7 @@ trait ShippingServices
     {
         $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id', 'opshipping_plugin_id']);
         if (empty($orderData) || 1 > $orderData['opshipping_plugin_id']) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_ORDER", $this->langId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_ORDER", $this->langId));
         }
 
         $this->validateShippingService($orderData);
@@ -542,7 +542,7 @@ trait ShippingServices
     {
         $data = $this->getOrderProductDetail($opId);
         if (empty($data) || empty($data['opsp_scheduled']) || 1 > $data['opsp_scheduled']) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->langId));
         }
         $this->validateShippingService($data);
 
@@ -745,13 +745,13 @@ trait ShippingServices
         $opId = $post['op_id'];
         $orderData = $this->getOrderProductDetail($opId);
         if (empty($orderData)) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->langId));
         }
 
         $rates = $this->getShippingRatesFromApi($orderData);
 
         if (1 > count($rates) || !isset($rates[$post['shipping_rates']])) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->langId));
         }
 
         $dataToUpdate = array(

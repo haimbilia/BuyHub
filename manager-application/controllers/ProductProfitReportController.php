@@ -132,7 +132,7 @@ class ProductProfitReportController extends ListingBaseController
                 array_push($sheetData, $arr);
                 $count++;
             }
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Product_Profit_Report', $this->siteLangId) . '_' . date("d-M-Y") . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_PRODUCT_PROFIT_REPORT', $this->siteLangId) . '_' . date("d-M-Y") . '.csv', ',');
             exit;
         }
 
@@ -178,12 +178,12 @@ class ProductProfitReportController extends ListingBaseController
         $productProfitReportsCacheVar = FatCache::get('productProfitReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$productProfitReportsCacheVar) {
             $arr = [
-                'product_name'    =>    Labels::getLabel('LBL_Product_name', $this->siteLangId),
-                'category_name' => Labels::getLabel('LBL_Category', $this->siteLangId),
-                'netSoldQty' => Labels::getLabel('LBL_Sold_Qty', $this->siteLangId),
-                /*  'inventoryCost' => Labels::getLabel('LBL_Inventory_Cost', $this->siteLangId),     */
-                'transactionAmount' => Labels::getLabel('LBL_Transaction_Amount', $this->siteLangId),
-                'adminSalesEarnings' => Labels::getLabel('LBL_Admin_Earnings', $this->siteLangId)
+                'product_name'    =>    Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
+                'category_name' => Labels::getLabel('LBL_CATEGORY', $this->siteLangId),
+                'netSoldQty' => Labels::getLabel('LBL_SOLD_QTY', $this->siteLangId),
+                /*  'inventoryCost' => Labels::getLabel('LBL_INVENTORY_COST', $this->siteLangId),     */
+                'transactionAmount' => Labels::getLabel('LBL_TRANSACTION_AMOUNT', $this->siteLangId),
+                'adminSalesEarnings' => Labels::getLabel('LBL_ADMIN_EARNINGS', $this->siteLangId)
             ];
             FatCache::set('productProfitReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {

@@ -39,7 +39,7 @@ class OptionValuesController extends ListingBaseController
 
     public function index()
     {
-        Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_SELECT_OPTION_FIRST', $this->siteLangId));
+        Message::addErrorMessage(Labels::getLabel('ERR_PLEASE_SELECT_OPTION_FIRST', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('Options'));
     }
 
@@ -418,7 +418,7 @@ class OptionValuesController extends ListingBaseController
                 LibHelper::exitWithError($obj->getError(), true);
             }
 
-            $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
     }

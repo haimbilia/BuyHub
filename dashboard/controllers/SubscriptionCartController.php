@@ -6,7 +6,7 @@ class SubscriptionCartController extends DashboardBaseController
     {
         parent::__construct($action);
         if (!FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
     }
@@ -85,7 +85,7 @@ class SubscriptionCartController extends DashboardBaseController
         $subsObj->add($spplan_id);
         $subsObj->adjustPreviousPlan($this->siteLangId);
 
-        Message::addMessage(Labels::getLabel('MSG_SUCCESS_SUBSCRIPTION_CART_ADD', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('SUC_SUCCESS_SUBSCRIPTION_CART_ADD', $this->siteLangId));
 
         $this->set('msg', Labels::getLabel("MSG_SUBSCRIPTION_PACKAGE_SELECTED", $this->siteLangId));
 

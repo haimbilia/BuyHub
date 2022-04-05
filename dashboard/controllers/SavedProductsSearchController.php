@@ -94,13 +94,13 @@ class SavedProductsSearchController extends LoggedUserController
     {
         $post = FatApp::getPostedData();
         if ($post == false) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         $pssearch_id = FatUtility::int($post['pssearch_id']);
         if (1 > $pssearch_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -109,7 +109,7 @@ class SavedProductsSearchController extends LoggedUserController
         $rs = $srch->getResultSet();
         $data = FatApp::getDb()->fetchAll($rs, 'pssearch_id');
         if ($data === false) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 

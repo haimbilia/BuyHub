@@ -80,7 +80,7 @@ class TransferBankPayController extends PaymentController
             }
 
             if (true === MOBILE_APP_API_CALL) {
-                $this->set('msg', Labels::getLabel('SUC_ORDER_PLACED_SUCCESSFULLY', $this->siteLangId));
+                $this->set('msg', Labels::getLabel('MSG_ORDER_PLACED_SUCCESSFULLY', $this->siteLangId));
                 $this->_template->render();
             }
 

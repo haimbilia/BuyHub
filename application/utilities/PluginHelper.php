@@ -37,7 +37,7 @@ trait PluginHelper
     {
         $this->frmObj = $this->getForm();
         if (false === $this->frmObj) {
-            LibHelper::dieJsonError(Labels::getLabel('LBL_REQUIREMENT_SETTINGS_ARE_NOT_DEFINED', $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_REQUIREMENT_SETTINGS_ARE_NOT_DEFINED', $this->siteLangId));
         }
     }
 
