@@ -3523,7 +3523,7 @@ class SellerController extends SellerBaseController
 
         $frm->addHiddenField('', 'requestId', $requestId);
         $frm->addTextArea(Labels::getLabel('FRM_MESSAGE', $this->siteLangId), 'message');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SEND', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEND', $this->siteLangId));
         return $frm;
     }
 
@@ -4389,7 +4389,7 @@ class SellerController extends SellerBaseController
         $fld2 = $frm->addHtml('', '', '<div id="tab_shipping"></div>');
         $fld1->attachField($fld2);
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
 
         return $frm;
     }

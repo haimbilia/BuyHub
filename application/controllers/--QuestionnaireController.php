@@ -180,7 +180,7 @@ class QuestionnaireController extends MyAppController
                 /* } */
             }
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_Send', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEND', $this->siteLangId));
         return $frm;
     }
 }

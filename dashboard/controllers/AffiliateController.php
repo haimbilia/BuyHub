@@ -424,7 +424,7 @@ class AffiliateController extends AffiliateBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_PAYPAL_EMAIL_ACCOUNT', $siteLangId), 'uextra_paypal_email_id');
         $fld->requirements()->setEmail();
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_REGISTER', $siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REGISTER', $siteLangId));
         $frm->setFormTagAttribute('onsubmit', 'setupAffiliateRegister(this); return(false);');
         return $frm;
     }

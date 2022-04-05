@@ -205,27 +205,27 @@ class TaxStructure extends MyAppModel
 
         $frm = new Form('frmTaxStructure');
         $frm->addHiddenField('', 'taxstr_id', $taxStrId);
-        $frm->addCheckBox(Labels::getLabel('LBL_Combined_Tax', $langId), 'taxstr_is_combined', 1);
+        $frm->addCheckBox(Labels::getLabel('FRM_COMBINED_TAX', $langId), 'taxstr_is_combined', 1);
 
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $languages = Language::getAllNames();
         foreach ($languages as $languageId => $lang) {
             if ($languageId == $siteDefaultLangId) {
-                $frm->addRequiredField(Labels::getLabel('LBL_Tax_name', $languageId), 'taxstr_name[' . $languageId . ']');
+                $frm->addRequiredField(Labels::getLabel('FRM_TAX_NAME', $languageId), 'taxstr_name[' . $languageId . ']');
             } else {
-                $frm->addTextBox(Labels::getLabel('LBL_Tax_name', $languageId), 'taxstr_name[' . $languageId . ']');
+                $frm->addTextBox(Labels::getLabel('FRM_TAX_NAME', $languageId), 'taxstr_name[' . $languageId . ']');
             }
-            $frm->addTextBox(Labels::getLabel('LBL_Tax_Component_Name', $languageId), 'taxstr_component_name[0][' . $languageId . ']');
+            $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $languageId), 'taxstr_component_name[0][' . $languageId . ']');
             /* if (0 < $taxStrId) {
               $combinedTaxes = $taxStructure->getCombinedTaxes($taxStrId);
               foreach($combinedTaxes as $combTaxCount => $combinedTax){
-              $frm->addTextBox(Labels::getLabel('LBL_Tax_Component_Name', $languageId), 'taxstr_component_name['.$combTaxCount.'][' . $languageId . ']');
+              $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $languageId), 'taxstr_component_name['.$combTaxCount.'][' . $languageId . ']');
               }
               } else {
               if ($languageId == $siteDefaultLangId) {
-              $frm->addRequiredField(Labels::getLabel('LBL_Tax_Component_Name', $languageId), 'taxstr_component_name[0][' . $languageId . ']');
+              $frm->addRequiredField(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $languageId), 'taxstr_component_name[0][' . $languageId . ']');
               } else {
-              $frm->addTextBox(Labels::getLabel('LBL_Tax_Component_Name', $languageId), 'taxstr_component_name[0][' . $languageId . ']');
+              $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $languageId), 'taxstr_component_name[0][' . $languageId . ']');
               }
               } */
         }
@@ -233,10 +233,10 @@ class TaxStructure extends MyAppModel
         /* $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
           unset($languages[$siteDefaultLangId]);
           if (!empty($translatorSubscriptionKey) && count($languages) > 0) {
-          $frm->addCheckBox(Labels::getLabel('LBL_Translate_To_Other_Languages', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
+          $frm->addCheckBox(Labels::getLabel('FRM_TRANSLATE_TO_OTHER_LANGUAGES', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
           } */
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
         return $frm;
     }
 

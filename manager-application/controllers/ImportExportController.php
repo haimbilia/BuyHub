@@ -696,7 +696,7 @@ class ImportExportController extends ListingBaseController
             $rangeTypeFld->requirements()->addOnChangerequirementUpdate(Importexport::BY_BATCHES, 'eq', 'batch_number', $batchNumberReqObj);
         }
 
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SUBMIT', $langId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $langId));
         return $frm;
     }
 

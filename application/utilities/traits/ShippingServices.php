@@ -486,7 +486,7 @@ trait ShippingServices
         $this->validateShippingService($data);
         $frm = $this->getPickupForm();
         if(null == $frm->getField('btn_submit')){
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->langId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->langId));
         }
         $frm->fill(['op_id' => $opId]);
         $this->set('frm', $frm);
@@ -590,7 +590,7 @@ trait ShippingServices
         $rateOptions = $this->formatShippingRates($rates, $this->langId);
 
         $frm = new Form('frmRates');
-        $frm->addSelectBox(Labels::getLabel('LBL_RATES', $this->langId), 'shipping_rates', $rateOptions)->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_RATES', $this->langId), 'shipping_rates', $rateOptions)->requirements()->setRequired();
         $frm->addHiddenField('', 'op_id', $opId)->requirements()->setIntPositive();      
         return $frm;
     }

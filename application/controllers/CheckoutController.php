@@ -2086,7 +2086,7 @@ class CheckoutController extends MyAppController
         $frm = new Form('frmPromoCoupons');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Coupon_code', $langId), 'coupon_code', '', array('placeholder' => Labels::getLabel('FRM_Enter_Your_code', $langId)));
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_Apply', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_APPLY', $langId));
         return $frm;
     }
 

@@ -312,7 +312,7 @@ class ShippingProfileController extends ListingBaseController
         }
         $frm->addRequiredField(Labels::getLabel('FRM_PROFILE_NAME', $this->siteLangId), 'shipprofile_name');
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
     }
 
