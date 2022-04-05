@@ -61,23 +61,21 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             </li>
                                         </ul>
                                     </div>
-                                    <h3><?php echo sprintf(Labels::getLabel('Lbl_Select_Your_%s_Price', $siteLangId), $package['spackage_name']); ?>
-                                    </h3>
-                                    <ul class="price-list">
-                                        <?php foreach ($package['plans'] as $plan) {
-                                            $isActive = ($currentActivePlanId == $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']) ? 'checked=checked' : '';
-                                            $disabled = ($parentUserId != UserAuthentication::getLoggedUserId()) ? 'disabled=disabled' : '';
-                                        ?>
-                                            <li class="price-list-item">
-                                                <label class="radio">
-                                                    <input value="<?php echo $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']; ?>" name="packages" <?php echo $isActive; ?> <?php echo $disabled; ?> type="radio">
-                                                    <?php echo SellerPackagePlans::getPlanPriceWithPeriod($plan, $plan[SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?>
-                                                </label>
-                                            </li>
+                                    <h3>
                                         <?php
-                                        } ?>
-
-                                    </ul>
+                                        echo CommonHelper::replaceStringData(Labels::getLabel('LBL_SELECT_YOUR_{PACKAGE-NAME}_PRICE', $siteLangId), ['{PACKAGE-NAME}' => $package['spackage_name']]);
+                                        ?>
+                                    </h3>
+                                    <?php $disabled = ($parentUserId != UserAuthentication::getLoggedUserId()) ? 'disabled=disabled' : ''; ?>
+                                    <select name="packages" class="form-control packagesJS" <?php echo $disabled; ?>>
+                                        <?php foreach ($package['plans'] as $plan) { 
+                                            $isActive = ($currentActivePlanId == $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']) ? 'selected=selected' : '';
+                                            ?>
+                                            <option value="<?php echo $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']; ?>" <?php echo $isActive; ?>>
+                                                <?php echo SellerPackagePlans::getPlanPriceWithPeriod($plan, $plan[SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
                                 <?php if ($parentUserId == UserAuthentication::getLoggedUserId()) { ?>
                                     <div class="packages-box-foot">

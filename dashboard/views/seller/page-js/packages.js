@@ -2,19 +2,19 @@ $(function () {
 	$(".buySubscription--js").on('click', function (event) {
 		event.preventDefault();
 		var selectedPackage = $(this).closest('.packagesBoxJs');
-		if (selectedPackage.find('input[name=packages]:checked').val() == '' || selectedPackage.find('input[name=packages]:checked').val() == 0 || selectedPackage.find('input[name=packages]:checked').val() == undefined) {
+		if (selectedPackage.find('.packagesJS').val() == '' || selectedPackage.find('.packagesJS').val() == 0 || selectedPackage.find('.packagesJS').val() == undefined) {
 			fcom.displayErrorMessage(langLbl.selectPlan);
 			return false;
 		}
 
-		if (currentActivePlanId != undefined && currentActivePlanId == selectedPackage.find('input[name=packages]:checked').val()) {
+		if (currentActivePlanId != undefined && currentActivePlanId == selectedPackage.find('.packagesJS').val()) {
 			fcom.displayErrorMessage(langLbl.alreadyHaveThisPlan);
 			return false;
 		}
 
-		$spplan_id = selectedPackage.find('input[name=packages]:checked').val();
-
-		subscription.add($spplan_id, true);
+		var spplan_id = selectedPackage.find('.packagesJS').val();
+		alert(spplan_id);return;
+		subscription.add(spplan_id, true);
 		return false;
 	});
 });
