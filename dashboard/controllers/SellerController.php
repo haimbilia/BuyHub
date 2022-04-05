@@ -1945,6 +1945,7 @@ class SellerController extends SellerBaseController
 
         $this->set('frm', $frm);
         $this->set('combinedTaxData', $combinedTaxData);
+        $this->set('taxRuleId', $taxRuleId);
         $this->_template->render(false, false);
     }
 

@@ -628,6 +628,7 @@ Updates/Fixes :
     => 063384 - Suggestion to change the functionality of the uploading profile images on the seller's, buyer's advertiser's, and affiliate's dashboard and make it similar to the admin's dashboard
     => 063533 - Buyer: After registration, the confirmation message is not aligned at the front-end.
     => 063476 - Seller UI: Infinite loader is coming when user tries to upload the profile picture.
+    => 063465 - Seller UI: Reset button is not working on Tax categories.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
