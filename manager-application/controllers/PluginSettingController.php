@@ -63,7 +63,7 @@ class PluginSettingController extends ListingBaseController
             LibHelper::exitWithError($pluginSetting->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_CONFIGURATION_KEYS_SAVED_SUCCESSFULLY.!!', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_CONFIGURATION_KEYS_SAVED_SUCCESSFULLY.!!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

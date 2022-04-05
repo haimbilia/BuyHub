@@ -3319,7 +3319,7 @@ class SellerController extends SellerBaseController
 
         $this->setLangData($recordObj, [$recordObj::tblFld('title') => $data[$recordObj::tblFld('title')]]);
 
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('splatformId', $splatform_id);
         $this->_template->render(false, false, 'json-success.php');
     }

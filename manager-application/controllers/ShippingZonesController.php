@@ -195,7 +195,7 @@ class ShippingZonesController extends ListingBaseController {
             LibHelper::exitWithError($sObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Zone_Deleted_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ZONE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

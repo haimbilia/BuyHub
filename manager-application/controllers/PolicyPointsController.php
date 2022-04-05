@@ -241,7 +241,7 @@ class PolicyPointsController extends ListingBaseController
 
             $this->updatePolicyPointStatus($ppointId, $status);
         }
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

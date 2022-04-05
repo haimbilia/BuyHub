@@ -2410,7 +2410,7 @@ trait SellerProducts
             if (!$sellerProdObj->save()) {
                 FatUtility::dieJsonError($sellerProdObj->getError());
             }
-            $this->set('msg', Labels::getLabel('Product_was_deleted._Reactivate_the_same', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_PRODUCT_WAS_DELETED._REACTIVATE_THE_SAME', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         } else {
             $data_to_be_save['selprod_user_id'] = $this->userParentId;

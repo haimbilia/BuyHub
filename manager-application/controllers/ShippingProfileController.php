@@ -234,7 +234,7 @@ class ShippingProfileController extends ListingBaseController
             ShippingProfile::setDefaultRates($shipProZoneId, $spObj->getMainTableRecordId());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->set('profileId', $spObj->getMainTableRecordId());
         $this->_template->render(false, false, 'json-success.php');
     }

@@ -716,7 +716,7 @@ class ProductCategoriesController extends ListingBaseController
             LibHelper::exitWithError($prodCat->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -734,7 +734,7 @@ class ProductCategoriesController extends ListingBaseController
             LibHelper::exitWithError($prodCat->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_REMOVED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_REMOVED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

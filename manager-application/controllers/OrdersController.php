@@ -1028,7 +1028,7 @@ class OrdersController extends ListingBaseController
             LibHelper::exitWithError($orderPaymentObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_PAYMENT_DETAILS_ADDED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PAYMENT_DETAILS_ADDED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

@@ -692,7 +692,7 @@ class SellerProductsController extends ListingBaseController
             Product::updateMinPrices($productId);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Special_Price_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SPECIAL_PRICE_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -788,7 +788,7 @@ class SellerProductsController extends ListingBaseController
         }
         $this->deleteSpecialPrice($splPriceId, $specialPriceRow['selprod_id']);
         $this->set('selprod_id', $specialPriceRow['selprod_id']);
-        $this->set('msg', Labels::getLabel('LBL_SPECIAL_PRICE_RECORD_DELETED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SPECIAL_PRICE_RECORD_DELETED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -802,7 +802,7 @@ class SellerProductsController extends ListingBaseController
             $this->deleteSpecialPrice($splPriceId, $specialPriceRow['selprod_id']);
         }
         $this->set('selprod_id', $specialPriceRow['selprod_id']);
-        $this->set('msg', Labels::getLabel('LBL_Special_Price_Record_Deleted', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SPECIAL_PRICE_RECORD_DELETED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -892,7 +892,7 @@ class SellerProductsController extends ListingBaseController
 
         $resp = $this->updateSelProdVolDiscount($selprod_id, $voldiscount_id, $post['voldiscount_min_qty'], $post['voldiscount_percentage']);
 
-        $this->set('msg', Labels::getLabel('LBL_Volume_Discount_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_VOLUME_DISCOUNT_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -969,7 +969,7 @@ class SellerProductsController extends ListingBaseController
         $this->deleteVolumeDiscount($voldiscount_id, $volumeDiscountRow['voldiscount_selprod_id']);
 
         $this->set('selprod_id', $volumeDiscountRow['voldiscount_selprod_id']);
-        $this->set('msg', Labels::getLabel('LBL_Volume_Discount_Record_Deleted', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_VOLUME_DISCOUNT_RECORD_DELETED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -986,7 +986,7 @@ class SellerProductsController extends ListingBaseController
 
             $this->deleteVolumeDiscount($voldiscount_id, $volumeDiscountRow['voldiscount_selprod_id']);
         }
-        $this->set('msg', Labels::getLabel('LBL_Volume_Discount_Record_Deleted', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_VOLUME_DISCOUNT_RECORD_DELETED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1546,7 +1546,7 @@ class SellerProductsController extends ListingBaseController
         }
 
         $this->set('scatrequest_id', $row['scatrequest_id']);
-        $this->set('msg', Labels::getLabel('LBL_Record_deleted_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1750,7 +1750,7 @@ class SellerProductsController extends ListingBaseController
         if (!$emailNotificationObj->sendProductStockAlert($selprod_id, $this->siteLangId)) {
             LibHelper::exitWithError($emailNotificationObj->getError(), true);
         }
-        $this->set('msg', Labels::getLabel('LBL_Your_message_sent_to', $this->siteLangId) . ' - ' . $user["credential_email"]);
+        $this->set('msg', Labels::getLabel('MSG_YOUR_MESSAGE_SENT_TO', $this->siteLangId) . ' - ' . $user["credential_email"]);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1846,7 +1846,7 @@ class SellerProductsController extends ListingBaseController
         $productId = SellerProduct::getAttributesById($selprodId, 'selprod_product_id', false);
         Product::updateMinPrices($productId);
 
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1865,7 +1865,7 @@ class SellerProductsController extends ListingBaseController
             }
             $this->updateSellerProductStatus($selprodId, $status);
         }
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2394,7 +2394,7 @@ class SellerProductsController extends ListingBaseController
             LibHelper::exitWithError($sellerProdObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Related_Product_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RELATED_PRODUCT_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2414,7 +2414,7 @@ class SellerProductsController extends ListingBaseController
         }
 
         $this->set('selprod_id', $selprod_id);
-        $this->set('msg', Labels::getLabel('LBL_Record_Deleted', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_DELETED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2580,7 +2580,7 @@ class SellerProductsController extends ListingBaseController
         }
         /* ] */
 
-        $this->set('msg', Labels::getLabel('LBL_Buy_Together_Product_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_BUY_TOGETHER_PRODUCT_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2600,7 +2600,7 @@ class SellerProductsController extends ListingBaseController
         }
 
         $this->set('selprod_id', $selprod_id);
-        $this->set('msg', Labels::getLabel('LBL_Record_Deleted', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_DELETED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
