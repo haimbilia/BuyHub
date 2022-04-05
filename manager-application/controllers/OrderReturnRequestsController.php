@@ -496,14 +496,14 @@ class OrderReturnRequestsController extends ListingBaseController
                 */
                 /* Update To Shipping Service */
 
-                $successMsg = Labels::getLabel('SUC_RETURN_REQUEST_HAS_BEEN_REFUNDED_SUCCESSFULLY.', $this->siteLangId);
+                $successMsg = Labels::getLabel('MSG_RETURN_REQUEST_HAS_BEEN_REFUNDED_SUCCESSFULLY.', $this->siteLangId);
                 break;
 
             case OrderReturnRequest::RETURN_REQUEST_STATUS_WITHDRAWN:
                 if (!$orrObj->withdrawRequest($row['orrequest_id'], $user_id, $this->siteLangId, $row['op_id'], $row['order_language_id'])) {
                     LibHelper::exitWithError($orrObj->getError(), true);
                 }
-                $successMsg = Labels::getLabel('SUC_RETURN_REQUEST_HAS_BEEN_WITHDRAWN_SUCCESSFULLY.', $this->siteLangId);
+                $successMsg = Labels::getLabel('MSG_RETURN_REQUEST_HAS_BEEN_WITHDRAWN_SUCCESSFULLY.', $this->siteLangId);
                 break;
         }
         $emailNotificationObj = new EmailHandler();

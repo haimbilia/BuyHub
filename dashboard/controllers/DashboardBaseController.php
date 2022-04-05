@@ -396,7 +396,7 @@ class DashboardBaseController extends FatController
         $api_key = FatApp::getConfig("CONF_MAILCHIMP_KEY");
         $list_id = FatApp::getConfig("CONF_MAILCHIMP_LIST_ID");
         if ($api_key == '' || $list_id == '') {
-            Message::addErrorMessage(Labels::getLabel("MSG_NEWSLETTER_IS_NOT_CONFIGURED_YET,_PLEASE_CONTACT_ADMIN", $siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_NEWSLETTER_IS_NOT_CONFIGURED_YET,_PLEASE_CONTACT_ADMIN", $siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 

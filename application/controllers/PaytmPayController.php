@@ -81,7 +81,7 @@ class PaytmPayController extends PaymentController
 
         $orderPaymentObj = new OrderPayment($orderId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
-        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['TXNID'], $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
+        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['TXNID'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
             $msg = $orderPaymentObj->getError();
             $this->logFailure($orderId, $msg);
         }

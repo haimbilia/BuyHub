@@ -415,7 +415,7 @@ class HomeController extends ListingBaseController
     {
         CommonHelper::recursiveDelete(CONF_UPLOADS_PATH . "caching");
         FatCache::clearAll();
-        // Message::addMessage(Labels::getLabel('SUC_CACHE_HAS_BEEN_CLEARED', $this->siteLangId));
+        // Message::addMessage(Labels::getLabel('MSG_CACHE_HAS_BEEN_CLEARED', $this->siteLangId));
         if (Labels::isAPCUcacheAvailable()) {
             apcu_clear_cache();
         }
@@ -428,7 +428,7 @@ class HomeController extends ListingBaseController
             }
         }
         Product::updateMinPrices();
-        FatUtility::dieJsonSuccess(Labels::getLabel('SUC_CACHE_HAS_BEEN_CLEARED', $this->siteLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_CACHE_HAS_BEEN_CLEARED', $this->siteLangId));
         //FatApp::redirectUser(UrlHelper::generateUrl("home"));
     }
     public function setLanguage($langId = 0)

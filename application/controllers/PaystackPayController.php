@@ -137,7 +137,7 @@ class PaystackPayController extends PaymentController
 
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
 
-        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $referenceId, $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), $response)) {
+        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $referenceId, $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), $response)) {
             $msg = $orderPaymentObj->getError();
             $this->logFailure($orderId, $msg);
         }

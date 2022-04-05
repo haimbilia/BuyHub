@@ -162,7 +162,7 @@ class ConfigurationsController extends ListingBaseController
             ];
 
             if (EmailHandler::sendSmtpTestEmail($this->siteLangId, $smtp_arr)) {
-                Message::addMessage(Labels::getLabel('SUC_WE_HAVE_SENT_A_TEST_EMAIL_TO_ADMINISTRATOR_ACCOUNT' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL"), $this->siteLangId));
+                Message::addMessage(Labels::getLabel('MSG_WE_HAVE_SENT_A_TEST_EMAIL_TO_ADMINISTRATOR_ACCOUNT' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL"), $this->siteLangId));
             } else {
                 unset($post["CONF_SEND_SMTP_EMAIL"]);
                 foreach ($smtp_arr as $skey => $sval) {
@@ -328,7 +328,7 @@ class ConfigurationsController extends ListingBaseController
                 if (!$record->update($arr)) {
                     Message::addErrorMessage($record->getError());
                 } else {
-                    Message::addMessage(Labels::getLabel('SUC_SETTING_UPDATED_SUCCESSFULLY', $this->siteLangId));
+                    Message::addMessage(Labels::getLabel('MSG_SETTING_UPDATED_SUCCESSFULLY', $this->siteLangId));
                 }
             } else {
                 Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS_TOKEN', $this->siteLangId));

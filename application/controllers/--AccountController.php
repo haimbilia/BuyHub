@@ -183,10 +183,10 @@ class AccountController extends LoggedUserController
 
         if (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1)) {
             $approval_request = 1;
-            $msg = Labels::getLabel('SUC_YOUR_SELLER_APPROVAL_FORM_REQUEST_SENT', $this->siteLangId);
+            $msg = Labels::getLabel('MSG_YOUR_SELLER_APPROVAL_FORM_REQUEST_SENT', $this->siteLangId);
         } else {
             $approval_request = 0;
-            $msg = Labels::getLabel('SUC_YOUR_APPLICATION_IS_APPROVED', $this->siteLangId);
+            $msg = Labels::getLabel('MSG_YOUR_APPLICATION_IS_APPROVED', $this->siteLangId);
         }
 
         if (!$userObj->notifyAdminSupplierApproval($userObj, $data, $approval_request, $this->siteLangId)) {
@@ -246,7 +246,7 @@ class AccountController extends LoggedUserController
         }
 
         $this->set('file', $_FILES['file']['name']);
-        $this->set('msg', /* $_FILES['file']['name'].' '. */ Labels::getLabel('SUC_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', /* $_FILES['file']['name'].' '. */ Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1391,7 +1391,7 @@ class AccountController extends LoggedUserController
         $uwlp_uwlist_id = $wListObj->getMainTableRecordId();
         /* ] */
 
-        $successMsg = Labels::getLabel('SUC_WISHLIST_CREATED_SUCCESSFULLY', $this->siteLangId);
+        $successMsg = Labels::getLabel('MSG_WISHLIST_CREATED_SUCCESSFULLY', $this->siteLangId);
         /* Assign current product to newly created list[ */
         if ($uwlp_uwlist_id && $selprod_id) {
             if (!$wListObj->addUpdateListProducts($uwlp_uwlist_id, $selprod_id)) {
@@ -2964,7 +2964,7 @@ class AccountController extends LoggedUserController
                 0,
                 false
             )) {
-                Message::addMessage(Labels::getLabel('SUC_PROFILE_PICTURE_UPDATED', $this->siteLangId));
+                Message::addMessage(Labels::getLabel('MSG_PROFILE_PICTURE_UPDATED', $this->siteLangId));
             } else {
                 Message::addErrorMessage($attachment->getError());
             }
@@ -3024,7 +3024,7 @@ class AccountController extends LoggedUserController
             CommonHelper::redirectUserReferer();
         }
         /* ] */
-        Message::addMessage(Labels::getLabel('SUC_YOUR_REQUEST_SENT', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_YOUR_REQUEST_SENT', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
 
@@ -3369,7 +3369,7 @@ class AccountController extends LoggedUserController
         if (!$userReqObj->save()) {
             FatUtility::dieJsonError($userReqObj->getError());
         }
-        Message::addMessage(Labels::getLabel('SUC_REQUEST_SENT_SUCCESSFULLY', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_REQUEST_SENT_SUCCESSFULLY', $this->siteLangId));
         FatUtility::dieJsonSuccess(Message::getHtml());
     }
 

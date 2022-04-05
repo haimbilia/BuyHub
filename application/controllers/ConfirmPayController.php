@@ -94,7 +94,7 @@ class ConfirmPayController extends MyAppController
 
         if ($isAjaxCall) {
             $this->set('redirectUrl', UrlHelper::generateUrl('Custom', 'paymentSuccess', array($orderId)));
-            $this->set('msg', Labels::getLabel("SUC_PAYMENT_FROM_WALLET_MADE_SUCCESSFULLY", $this->siteLangId));
+            $this->set('msg', Labels::getLabel("MSG_PAYMENT_FROM_WALLET_MADE_SUCCESSFULLY", $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
         FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'paymentSuccess', array($orderId)));

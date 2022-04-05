@@ -182,10 +182,10 @@ class AccountController extends LoggedUserController
 
         if (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1)) {
             $approval_request = 1;
-            $msg = Labels::getLabel('SUC_YOUR_SELLER_APPROVAL_FORM_REQUEST_SENT', $this->siteLangId);
+            $msg = Labels::getLabel('MSG_YOUR_SELLER_APPROVAL_FORM_REQUEST_SENT', $this->siteLangId);
         } else {
             $approval_request = 0;
-            $msg = Labels::getLabel('SUC_YOUR_APPLICATION_IS_APPROVED', $this->siteLangId);
+            $msg = Labels::getLabel('MSG_YOUR_APPLICATION_IS_APPROVED', $this->siteLangId);
         }
 
         if (!$userObj->notifyAdminSupplierApproval($userObj, $data, $approval_request, $this->siteLangId)) {
@@ -217,9 +217,8 @@ class AccountController extends LoggedUserController
     {
         $post = FatApp::getPostedData();
 
-        if (empty($post)) {
-            /* Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId)); */
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
+        if (empty($post)) {            
+            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId));
         }
         $field_id = $post['field_id'];
 
@@ -1959,7 +1958,7 @@ class AccountController extends LoggedUserController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!$row) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -2860,7 +2859,7 @@ class AccountController extends LoggedUserController
                 0,
                 false
             )) {
-                Message::addMessage(Labels::getLabel('SUC_PROFILE_PICTURE_UPDATED', $this->siteLangId));
+                Message::addMessage(Labels::getLabel('MSG_PROFILE_PICTURE_UPDATED', $this->siteLangId));
             } else {
                 Message::addErrorMessage($attachment->getError());
             }
@@ -2919,7 +2918,7 @@ class AccountController extends LoggedUserController
             CommonHelper::redirectUserReferer();
         }
         /* ] */
-        Message::addMessage(Labels::getLabel('SUC_YOUR_REQUEST_SENT', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_YOUR_REQUEST_SENT', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
 

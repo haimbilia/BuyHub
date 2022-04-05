@@ -620,7 +620,7 @@ class CustomProductsController extends SellerBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
         }
         /* ] */
-        Message::addMessage(Labels::getLabel('SUC_YOUR_CATALOG_REQUEST_SUBMITTED_FOR_APPROVAL', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_YOUR_CATALOG_REQUEST_SUBMITTED_FOR_APPROVAL', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
     }
 

@@ -92,7 +92,7 @@ class CheckoutController extends MyAppController
                 case 'hasStock':
                     /* if( !$this->cartObj->hasStock() ){
                     $key = false;
-                    Message::addErrorMessage(Labels::getLabel('MSG_Products_are_out_of_stock', $this->siteLangId));
+                    Message::addErrorMessage(Labels::getLabel('ERR_PRODUCTS_ARE_OUT_OF_STOCK', $this->siteLangId));
                     return false;
                     } */
 

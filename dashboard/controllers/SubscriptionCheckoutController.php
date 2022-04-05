@@ -487,12 +487,12 @@ class SubscriptionCheckoutController extends LoggedUserController
         $post = FatApp::getPostedData();
 
         if (false == $post) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         if (empty($post['redeem_rewards'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -516,7 +516,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         }
 
         if (!$scartObj->updateCartUseRewardPoints($rewardPoints)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Action_Trying_Perform_Not_Valid', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_ACTION_TRYING_PERFORM_NOT_VALID', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -529,7 +529,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId());
         $scartObj = new SubscriptionCart();
         if (!$scartObj->removeUsedRewardPoints()) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Action_Trying_Perform_Not_Valid', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_ACTION_TRYING_PERFORM_NOT_VALID', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -752,7 +752,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         );
 
         if (!FatApp::getDb()->insertFromArray(DiscountCoupons::DB_TBL_COUPON_HOLD, $holdCouponData, true, array(), $holdCouponData)) {
-            FatUtility::dieWithError(Labels::getLabel('LBL_Action_Trying_Perform_Not_Valid', $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel('LBL_ACTION_TRYING_PERFORM_NOT_VALID', $this->siteLangId));
         }
 
         $this->_template->render(false, false, 'json-success.php');
@@ -763,7 +763,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId());
         $scartObj = new SubscriptionCart();
         if (!$scartObj->removeCartDiscountCoupon()) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Action_Trying_Perform_Not_Valid', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_ACTION_TRYING_PERFORM_NOT_VALID', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -778,7 +778,7 @@ class SubscriptionCheckoutController extends LoggedUserController
     public function renewSubscriptionOrder($ossubs_id = 0)
     {
         if (!$this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId(), true)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_UNAUTHORIZED_ACCESS!', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'subscriptions'));
         }
         $statusArr = Orders::getActiveSubscriptionStatusArr();
@@ -804,7 +804,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $activeSub = FatApp::getDb()->fetch($rs, 'ossubs_id');
 
         if (empty($activeSub) && count($activeSub) == 0) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Subscription_is_not_active", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_Subscription_is_not_active", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'subscriptions'));
         }
 

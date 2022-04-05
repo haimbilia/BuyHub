@@ -84,7 +84,7 @@ class AdminGuestController extends FatController
         $this->set('redirectUrl', $redirectUrl);
         /* ] */
 
-        $msg = Labels::getLabel('SUC_LOGIN_SUCCESSFUL', $this->siteLangId);
+        $msg = Labels::getLabel('MSG_LOGIN_SUCCESSFUL', $this->siteLangId);
         Message::addMessage($msg);
         $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');

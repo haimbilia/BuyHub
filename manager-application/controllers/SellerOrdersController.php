@@ -357,7 +357,7 @@ class SellerOrdersController extends ListingBaseController
         $this->objPrivilege->canViewSellerOrders();
         $op_id = FatUtility::int($op_id);
         if (1 > $op_id) {
-            Message::addErrorMessage(Labels::getLabel('ERR_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -750,7 +750,7 @@ class SellerOrdersController extends ListingBaseController
         $op_id = FatUtility::int($op_id);
 
         if (false !== OrderCancelRequest::getCancelRequestById($op_id)) {
-            Message::addErrorMessage(Labels::getLabel('ERR_User_have_already_sent_the_cancellation_request_for_this_order', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_USER_HAVE_ALREADY_SENT_THE_CANCELLATION_REQUEST_FOR_THIS_ORDER', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -815,11 +815,11 @@ class SellerOrdersController extends ListingBaseController
 
         $op_id = FatUtility::int($post['op_id']);
         if (1 > $op_id) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_access', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId), true);
         }
 
         if (false !== OrderCancelRequest::getCancelRequestById($op_id)) {
-            Message::addErrorMessage(Labels::getLabel('ERR_User_have_already_sent_the_cancellation_request_for_this_order', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_USER_HAVE_ALREADY_SENT_THE_CANCELLATION_REQUEST_FOR_THIS_ORDER', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 

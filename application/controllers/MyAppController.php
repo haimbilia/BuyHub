@@ -370,7 +370,7 @@ class MyAppController extends FatController
         try {
             $subscriber = $Mailchimp_ListsObj->subscribe($list_id, array('email' => htmlentities($post['email'])));
             if (empty($subscriber['leid'])) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Newsletter_subscription_valid_email', $siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_NEWSLETTER_SUBSCRIPTION_VALID_EMAIL', $siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
         } catch (Mailchimp_Error $e) {
@@ -576,7 +576,7 @@ class MyAppController extends FatController
         $siteLangId = CommonHelper::getLangId();
         $pollId = FatApp::getPostedData('pollfeedback_polling_id', FatUtility::VAR_INT, 0);
         if ($pollId <= 0) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Invalid_Request', $siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $frm = Common::getPollForm($pollId, $siteLangId);
@@ -586,7 +586,7 @@ class MyAppController extends FatController
         }
         $pollFeedback = new PollFeedback();
         if ($pollFeedback->isPollAnsweredFromIP($pollId, $_SERVER['REMOTE_ADDR'])) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Poll_already_posted_from_this_IP', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_POLL_ALREADY_POSTED_FROM_THIS_IP', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $post['pollfeedback_response_ip'] = $_SERVER['REMOTE_ADDR'];

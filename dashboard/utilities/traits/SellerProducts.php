@@ -129,12 +129,12 @@ trait SellerProducts
         }
 
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_Please_buy_subscription", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
         }
 
         if (0 == $selprod_id && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && SellerProduct::getActiveCount($this->userParentId) >= SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed')) {
-            Message::addErrorMessage(Labels::getLabel("MSG_You_have_crossed_your_package_limit.", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_You_have_crossed_your_package_limit.", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
         }
 
@@ -178,7 +178,7 @@ trait SellerProducts
         }
 
         if (!UserPrivilege::canSellerAddProductInCatalog($product_id, $userId)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Invalid_Request", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_Invalid_Request", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Products'));
         }
 
@@ -458,7 +458,7 @@ trait SellerProducts
         $selprod_product_id = FatUtility::int($post['selprod_product_id']);
 
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_Please_buy_subscription", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1661,7 +1661,7 @@ trait SellerProducts
 
 
         if ($lang_id == 0) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
             FatApp::redirectUser($_SESSION['referer_page_url']);
         }
         $metaId = FatUtility::int($post['meta_id']);
@@ -1766,7 +1766,7 @@ trait SellerProducts
         $metaType = MetaTag::META_GROUP_PRODUCT_DETAIL;
 
         if ($metaType == '' || !isset($tabsArr[$metaType])) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $url = $tabsArr[$metaType]['controller'] . '/' . $tabsArr[$metaType]['action'] . '/' . $selprodId;
@@ -1857,7 +1857,7 @@ trait SellerProducts
         $metaType = MetaTag::META_GROUP_PRODUCT_DETAIL;
 
         if ($metaType == '' || !isset($tabsArr[$metaType])) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $url = $tabsArr[$metaType]['controller'] . '/' . $tabsArr[$metaType]['action'] . '/' . $selprodId;
@@ -2243,11 +2243,11 @@ trait SellerProducts
     public function sellerProductCloneForm($product_id, $selprod_id)
     {
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_Please_buy_subscription", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && SellerProduct::getActiveCount($this->userParentId) >= SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed')) {
-            Message::addErrorMessage(Labels::getLabel("MSG_You_have_crossed_your_package_limit", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_You_have_crossed_your_package_limit", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $selprod_id = FatUtility::int($selprod_id);

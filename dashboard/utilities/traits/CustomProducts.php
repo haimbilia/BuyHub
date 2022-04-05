@@ -119,7 +119,7 @@ trait CustomProducts
         $optionId = FatUtility::int($post['option_id']);
 
         if (!$productId || !$optionId) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 

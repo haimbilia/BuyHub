@@ -1330,7 +1330,7 @@ class SellerController extends SellerBaseController
         $frm = $this->getCatalogRequestMessageForm($requestId);
 
         if (0 >= $requestId) {
-            FatUtility::dieWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
         }
         $userObj = new User();
         $srch = $userObj->getUserSupplierRequestsObj($requestId);
@@ -1339,7 +1339,7 @@ class SellerController extends SellerBaseController
         $rs = $srch->getResultSet();
 
         if (!$rs || FatApp::getDb()->fetch($rs) === false) {
-            FatUtility::dieWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
         }
 
         $this->set('requestId', $requestId);
@@ -2563,7 +2563,7 @@ class SellerController extends SellerBaseController
 
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST_Or_File_not_supported', $this->siteLangId));
         }
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
         $languages = Language::getAllNames();
@@ -2786,7 +2786,7 @@ class SellerController extends SellerBaseController
       $this->set('prodCatId', $prodCatId);
       $this->set('shop_id', $shop_id);
 
-      Message::addMessage(Labels::getLabel('SUC_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+      Message::addMessage(Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
       FatUtility::dieJsonSuccess(Message::getHtml());
       }
 
@@ -3006,18 +3006,18 @@ class SellerController extends SellerBaseController
         $recordId = FatUtility::int($recordId);
 
         if (1 > $recordId) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'ViewOrderReturnRequest', array($recordId)));
         }
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BUYER_RETURN_PRODUCT, $recordId, $recordSubid);
 
         if (false == $file_row) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'ViewOrderReturnRequest', array($recordId)));
         }
         if (!file_exists(CONF_UPLOADS_PATH . $file_row['afile_physical_path'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_File_not_found', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_FILE_NOT_FOUND', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'ViewOrderReturnRequest', array($recordId)));
         }
 
@@ -3134,7 +3134,7 @@ class SellerController extends SellerBaseController
         $requestRow = FatApp::getDb()->fetch($rs);
 
         if (!$requestRow) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Invalid_Access", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_Invalid_Access", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrderReturnRequest', array($requestRow['orrequest_id'])));
         }
 
@@ -3166,7 +3166,7 @@ class SellerController extends SellerBaseController
         }
         /* ] */
 
-        Message::addMessage(Labels::getLabel('SUC_Request_Approved_Refund', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_Request_Approved_Refund', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrderReturnRequest', array($requestRow['orrequest_id'])));
     }
 
@@ -5303,7 +5303,7 @@ class SellerController extends SellerBaseController
         $productId = FatUtility::int($productId);
         $userId = $this->userParentId;
         if (0 == $productId) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
         }
         $available = Product::availableForAddToStore($productId, $userId);
         if (!$available) {
@@ -5627,7 +5627,7 @@ class SellerController extends SellerBaseController
     {
         $productId = FatUtility::int($productId);
         if (0 == $productId) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
         }
         $available = SellerProduct::getCatelogFromProductId($productId);
         if (count($available) > 0) {

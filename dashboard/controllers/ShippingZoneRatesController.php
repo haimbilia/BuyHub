@@ -117,7 +117,7 @@ class ShippingZoneRatesController extends SellerBaseController
         $langId = $post['lang_id'];
 
         if ($rateId == 0 || $langId == 0) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 

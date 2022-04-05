@@ -474,26 +474,26 @@ class BuyerController extends BuyerBaseController
         $userId = UserAuthentication::getLoggedUserId();
 
         if (1 > $aFileId || 1 > $recordId) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
 
         $digitalDownloads = Orders::getOrderProductDigitalDownloads($recordId, $aFileId);
 
         if ($digitalDownloads == false || empty($digitalDownloads) || $digitalDownloads[0]['order_user_id'] != $userId) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
 
         $res = array_shift($digitalDownloads);
 
         if ($res == false || !$res['downloadable']) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Not_available_to_download", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_Not_available_to_download", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
 
         if (!file_exists(CONF_UPLOADS_PATH . $res['afile_physical_path'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_File_not_found', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_FILE_NOT_FOUND', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
 
@@ -1548,7 +1548,7 @@ class BuyerController extends BuyerBaseController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        Message::addMessage(Labels::getLabel('SUC_REQUEST_WITHDRAWN', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_REQUEST_WITHDRAWN', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'viewOrderReturnRequest', array($orrequest_id)));
     }
 
@@ -2860,7 +2860,7 @@ class BuyerController extends BuyerBaseController
             $userData = array('user_fb_access_token' => $fbAccessToken);
             $userObj->assignValues($userData);
             if (!$userObj->save()) {
-                Message::addErrorMessage(Labels::getLabel("MSG_Token_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
+                Message::addErrorMessage(Labels::getLabel("ERR_Token_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
             }
         }
         FatApp::redirectUser($redirectUrl);

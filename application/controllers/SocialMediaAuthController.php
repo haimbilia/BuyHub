@@ -35,7 +35,7 @@ class SocialMediaAuthController extends PluginBaseController
             }
         }
         if (false === $referredRedirection) {
-            $message = Labels::getLabel('SUC_LOGGEDIN_SUCCESSFULLY', $this->siteLangId);
+            $message = Labels::getLabel('MSG_LOGGEDIN_SUCCESSFULLY', $this->siteLangId);
             $this->set('url', $referredUrl);
             $this->set('msg', $message);
             $this->_template->render(false, false, 'json-success.php');
