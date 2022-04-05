@@ -3373,7 +3373,7 @@ class SellerController extends SellerBaseController
         }
 
         if (1 > $splatform_id || 1 > $lang_id) {
-            Message::addErrorMessage('Invalid Request');
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $lang_id));
             FatUtility::dieWithError(Message::getHtml());
         }
 
