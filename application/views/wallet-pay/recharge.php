@@ -11,7 +11,7 @@ foreach ($paymentMethods as $key => $val) {
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="section-head  section--head--center">
+                <div class="section-head  section-head-center">
                     <div class="section-heading">
                         <h2><?php echo Labels::getLabel('LBL_ADD_MONEY_TO_WALLET', $siteLangId); ?></h2>
                     </div>

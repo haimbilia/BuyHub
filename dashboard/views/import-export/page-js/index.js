@@ -168,6 +168,8 @@ $(document).ready(function () {
     };
 
     uploadZip = function () {
+        var dv = $('#listing');
+        $(dv).prepend(fcom.getLoader());
         var data = new FormData();
         $.each($('#bulk_images')[0].files, function (i, file) {
             fcom.displayProcessing();
