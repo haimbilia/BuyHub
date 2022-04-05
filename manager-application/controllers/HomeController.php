@@ -39,12 +39,12 @@ class HomeController extends ListingBaseController
 
                 $accountId = $analytics->setAccountId(FatApp::getConfig("CONF_ANALYTICS_ID"));
                 if (!$accountId) {
-                    Message::addErrorMessage(Labels::getLabel('LBL_ANALYTIC_ID_DOES_NOT_EXIST_WITH_CONFIGURED_ACCOUNT', $this->siteLangId));
+                    Message::addErrorMessage(Labels::getLabel('ERR_ANALYTIC_ID_DOES_NOT_EXIST_WITH_CONFIGURED_ACCOUNT', $this->siteLangId));
                 } else {
                     $this->set('configuredAnalytics', true);
                 }
             } catch (exception $e) {
-                /* Message::addErrorMessage(Labels::getLabel('LBL_Analytic_Id_does_not_exist_with_Configured_Account',$this->siteLangId)); */
+                /* Message::addErrorMessage(Labels::getLabel('ERR_ANALYTIC_ID_DOES_NOT_EXIST_WITH_CONFIGURED_ACCOUNT',$this->siteLangId)); */
                 //Message::addErrorMessage($e->getMessage());
             }
 
@@ -415,7 +415,7 @@ class HomeController extends ListingBaseController
     {
         CommonHelper::recursiveDelete(CONF_UPLOADS_PATH . "caching");
         FatCache::clearAll();
-        // Message::addMessage(Labels::getLabel('LBL_Cache_has_been_cleared', $this->siteLangId));
+        // Message::addMessage(Labels::getLabel('MSG_CACHE_HAS_BEEN_CLEARED', $this->siteLangId));
         if (Labels::isAPCUcacheAvailable()) {
             apcu_clear_cache();
         }
@@ -428,20 +428,20 @@ class HomeController extends ListingBaseController
             }
         }
         Product::updateMinPrices();
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Cache_has_been_cleared', $this->siteLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_CACHE_HAS_BEEN_CLEARED', $this->siteLangId));
         //FatApp::redirectUser(UrlHelper::generateUrl("home"));
     }
     public function setLanguage($langId = 0)
     {
         $langId = FatUtility::int($langId);
         if (1 > $langId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_select_any_language', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_ANY_LANGUAGE', $this->siteLangId), true);
         }
         $languages = Language::getAllNames();
         if (array_key_exists($langId, $languages)) {
             setcookie('defaultAdminSiteLang', $langId, time() + 3600 * 24 * 10, CONF_WEBROOT_FRONT_URL);
         }
-        $this->set('msg', Labels::getLabel('Msg_Please_Wait_We_are_redirecting_you...', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PLEASE_WAIT_WE_ARE_REDIRECTING_YOU...', $this->siteLangId));
         $this->set('langId', $langId);
         $this->_template->render(false, false, 'json-success.php');
     }

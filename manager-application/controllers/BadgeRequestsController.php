@@ -321,12 +321,12 @@ class BadgeRequestsController extends ListingBaseController {
     public function downloadFile(int $badgeReqId) {
         $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
         if ($res == false || 1 > $res['afile_id']) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_NOT_AVAILABLE_TO_DOWNLOAD', $this->siteLangId), false, true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_NOT_AVAILABLE_TO_DOWNLOAD', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('BadgeRequests'));
         }
 
         if (!file_exists(CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'])) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_FILE_NOT_FOUND', $this->siteLangId), false, true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_FILE_NOT_FOUND', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('BadgeRequests'));
         }
 

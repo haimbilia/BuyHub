@@ -63,7 +63,7 @@ class PatchUpdateController extends ListingBaseController
                 $states = [];
                 $taxRuleObj = new TaxRule($ruleId);
                 $rule['taxrule_taxcat_id'] = $taxCatId;
-                $rule['taxrule_name'] = Labels::getLabel('LBL_Zero_Tax', CommonHelper::getLangId());
+                $rule['taxrule_name'] = Labels::getLabel('LBL_ZERO_TAX', CommonHelper::getLangId());
                 $rule['taxrule_taxstr_id'] = $structureId;        
                 $taxRuleObj->assignValues($rule);
                 if (!$taxRuleObj->save()) {
@@ -181,7 +181,7 @@ class PatchUpdateController extends ListingBaseController
             $taxObj->updateLangData($this->siteLangId, $data);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Record_Added_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_ADDED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

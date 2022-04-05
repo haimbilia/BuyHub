@@ -631,6 +631,8 @@ Updates/Fixes :
     => 063465 - Seller UI: Reset button is not working on Tax categories.
     => 063348 - Seller UI: Some icon is not showing while hovering on it and the calendar icon is also missing for the date field while adding the "bind condition" for the manual badges under the Badges section at the seller's end.
     => 063401 - Seller UI: Not able to upload the file under the "Upload Bulk Media" section under the Import/Export section at the seller's end.
+    => 063534 - Admin: Multiple delete functionality is not working while deleting the "Home Page Slides" under the CMS section at the admin's end.
+    => 063531 - Admin: Suggestion to show a default sorting of the user's table according to the "Reg. Date" at the admin's end.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

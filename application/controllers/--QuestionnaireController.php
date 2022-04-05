@@ -83,7 +83,7 @@ class QuestionnaireController extends MyAppController
                 $feedback->addAnswerToQuestion(array('qta_qfeedback_id' => $feedbackId, 'qta_question_id' => $question['question_id'], 'qta_answers' => $post[$fieldName]));
             }
         }
-        Message::addMessage(Labels::getLabel('SUC_FEEDBACK_SENT_SUCCESSFULY', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_FEEDBACK_SENT_SUCCESSFULY', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl(''));
     }
 

@@ -7,7 +7,7 @@ class BuyerBaseController extends LoggedUserController
         parent::__construct($action);
 
         if (!User::isBuyer() || UserAuthentication::isGuestUserLogged()) {
-            Message::addErrorMessage(Labels::getLabel("MSG_UNAUTHORISED_ACCESS", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_UNAUTHORISED_ACCESS", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('account'));
         }
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'B';

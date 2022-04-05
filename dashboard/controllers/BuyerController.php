@@ -474,26 +474,26 @@ class BuyerController extends BuyerBaseController
         $userId = UserAuthentication::getLoggedUserId();
 
         if (1 > $aFileId || 1 > $recordId) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
 
         $digitalDownloads = Orders::getOrderProductDigitalDownloads($recordId, $aFileId);
 
         if ($digitalDownloads == false || empty($digitalDownloads) || $digitalDownloads[0]['order_user_id'] != $userId) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
 
         $res = array_shift($digitalDownloads);
 
         if ($res == false || !$res['downloadable']) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Not_available_to_download", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_Not_available_to_download", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
 
         if (!file_exists(CONF_UPLOADS_PATH . $res['afile_physical_path'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_File_not_found', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_FILE_NOT_FOUND', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'MyDownloads'));
         }
 
@@ -993,7 +993,7 @@ class BuyerController extends BuyerBaseController
         $rs = $srch->getResultSet();
         $opDetail = FatApp::getDb()->fetch($rs);
         if (!$opDetail || CommonHelper::isMultidimArray($opDetail)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_ERROR_INVALID_ACCESS', $this->siteLangId));
             // CommonHelper::redirectUserReferer();
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderCancellationRequests'));
         }
@@ -1006,27 +1006,27 @@ class BuyerController extends BuyerBaseController
         $oReturnRequestRs = $oReturnRequestSrch->getResultSet();
 
         if (FatApp::getDb()->fetch($oReturnRequestRs)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Already_submitted_return_request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_ALREADY_SUBMITTED_RETURN_REQUEST', $this->siteLangId));
             // CommonHelper::redirectUserReferer();
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderCancellationRequests'));
         }
 
         if ($opDetail["op_product_type"] == Product::PRODUCT_TYPE_DIGITAL) {
             if (!in_array($opDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses(true))) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Order_Cancellation_cannot_placed', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_ORDER_CANCELLATION_CANNOT_PLACED', $this->siteLangId));
                 // CommonHelper::redirectUserReferer();
                 FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderCancellationRequests'));
             }
         } else {
             if (!in_array($opDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses())) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Order_Cancellation_cannot_placed', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_ORDER_CANCELLATION_CANNOT_PLACED', $this->siteLangId));
                 // CommonHelper::redirectUserReferer();
                 FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderCancellationRequests'));
             }
         }
 
         if (false !== OrderCancelRequest::getCancelRequestById($opDetail['op_id'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_You_have_already_sent_the_cancellation_request_for_this_order', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOU_HAVE_ALREADY_SENT_THE_CANCELLATION_REQUEST_FOR_THIS_ORDER', $this->siteLangId));
             // CommonHelper::redirectUserReferer();
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderCancellationRequests'));
         }
@@ -1470,7 +1470,7 @@ class BuyerController extends BuyerBaseController
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BUYER_RETURN_PRODUCT, $recordId, $recordSubid);
         if (false == $file_row || 1 > $file_row['afile_id']) {
-            Message::addErrorMessage(Labels::getLabel('MSG_FILE_NOT_FOUND', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_FILE_NOT_FOUND', $this->siteLangId));
             if (!FatUtility::isAjaxCall()) {
                 CommonHelper::redirectUserReferer();
             }
@@ -1548,7 +1548,7 @@ class BuyerController extends BuyerBaseController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        Message::addMessage(Labels::getLabel('MSG_Request_Withdrawn', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_REQUEST_WITHDRAWN', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'viewOrderReturnRequest', array($orrequest_id)));
     }
 
@@ -2084,7 +2084,7 @@ class BuyerController extends BuyerBaseController
         $oCancelRequestRs = $oCancelRequestSrch->getResultSet();
 
         if (FatApp::getDb()->fetch($oCancelRequestRs)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Already_submitted_cancel_request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_ALREADY_SUBMITTED_CANCEL_REQUEST', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -2099,7 +2099,7 @@ class BuyerController extends BuyerBaseController
         $opDetail = FatApp::getDb()->fetch($rs);
 
         if (!$opDetail || CommonHelper::isMultidimArray($opDetail)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_ERROR_INVALID_ACCESS', $this->siteLangId));
             // CommonHelper::redirectUserReferer();
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderReturnRequests'));
         }
@@ -2129,7 +2129,7 @@ class BuyerController extends BuyerBaseController
         $oReturnRequestSrch->addCondition('orrequest_op_id', '=', $opDetail['op_id']);
         $oReturnRequestRs = $oReturnRequestSrch->getResultSet();
         if (FatApp::getDb()->fetch($oReturnRequestRs)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Already_submitted_return_request_order', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_ALREADY_SUBMITTED_RETURN_REQUEST_ORDER', $this->siteLangId));
             // CommonHelper::redirectUserReferer();
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderReturnRequests'));
         }
@@ -2466,7 +2466,7 @@ class BuyerController extends BuyerBaseController
 
         $db->commitTransaction();
 
-        $this->set('msg', Labels::getLabel('LBL_Successfully_generated_coupon_from_Rewar_points', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_GENERATED_COUPON_FROM_REWAR_POINTS', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2616,11 +2616,11 @@ class BuyerController extends BuyerBaseController
     public function shareEarn()
     {
         if (!FatApp::getConfig("CONF_ENABLE_REFERRER_MODULE", FatUtility::VAR_INT, 1)) {
-            Message::addErrorMessage(Labels::getLabel('Msg_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
         if (empty(UserAuthentication::getLoggedUserAttribute('user_referral_code'))) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Referral_Code_is_empty', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_REFERRAL_CODE_IS_EMPTY', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -2835,7 +2835,7 @@ class BuyerController extends BuyerBaseController
                 Message::addErrorMessage($helper->getErrorDescription());
                 //Message::addErrorMessage($helper->getErrorReason());
             } else {
-                Message::addErrorMessage(Labels::getLabel('Msg_Bad_Request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_BAD_REQUEST', $this->siteLangId));
             }
         } else {
             // The OAuth 2.0 client handler helps us manage access tokens
@@ -2860,7 +2860,7 @@ class BuyerController extends BuyerBaseController
             $userData = array('user_fb_access_token' => $fbAccessToken);
             $userObj->assignValues($userData);
             if (!$userObj->save()) {
-                Message::addErrorMessage(Labels::getLabel("MSG_Token_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
+                Message::addErrorMessage(Labels::getLabel("ERR_Token_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
             }
         }
         FatApp::redirectUser($redirectUrl);
@@ -3078,7 +3078,7 @@ class BuyerController extends BuyerBaseController
                 break;
 
             default:
-                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_CHARGE_TYPE', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_CHARGE_TYPE', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
                 break;
         }

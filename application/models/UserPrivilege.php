@@ -315,7 +315,7 @@ class UserPrivilege
         if ($returnResult) {
             return (false);
         }
-        Message::addErrorMessage(Labels::getLabel('LBL_Unauthorized_Access!', CommonHelper::getLangId()));
+        Message::addErrorMessage(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS!', CommonHelper::getLangId()));
         if ($msg == '') {
             $msg = Message::getHtml();
         }

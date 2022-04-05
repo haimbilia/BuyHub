@@ -185,9 +185,9 @@ class EmailTemplatesController extends ListingBaseController
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        $frm->addRequiredField(Labels::getLabel('FRM_Name', $this->siteLangId), 'etpl_name');
-        $frm->addRequiredField(Labels::getLabel('FRM_Subject', $this->siteLangId), 'etpl_subject');
-        $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_Body', $this->siteLangId), 'etpl_body');
+        $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'etpl_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_SUBJECT', $this->siteLangId), 'etpl_subject');
+        $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_BODY', $this->siteLangId), 'etpl_body');
         $fld->requirements()->setRequired(true);
         $frm->addHtml(Labels::getLabel('FRM_REPLACEMENT_VARS', $this->siteLangId), 'etpl_replacements', '');
 
@@ -267,7 +267,7 @@ class EmailTemplatesController extends ListingBaseController
 
         $this->updateEmailTplStatus($etplCode, $status);
 
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -287,7 +287,7 @@ class EmailTemplatesController extends ListingBaseController
 
             $this->updateEmailTplStatus($etplCode, $status);
         }
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -383,15 +383,15 @@ class EmailTemplatesController extends ListingBaseController
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        $frm->addTextBox(Labels::getLabel('FRM_Header_Background_color', $this->siteLangId), 'CONF_EMAIL_TEMPLATE_COLOR_CODE' . $lang_id, FatApp::getConfig('CONF_EMAIL_TEMPLATE_COLOR_CODE' . $lang_id, FatUtility::VAR_STRING, ''));
+        $frm->addTextBox(Labels::getLabel('FRM_HEADER_BACKGROUND_COLOR', $this->siteLangId), 'CONF_EMAIL_TEMPLATE_COLOR_CODE' . $lang_id, FatApp::getConfig('CONF_EMAIL_TEMPLATE_COLOR_CODE' . $lang_id, FatUtility::VAR_STRING, ''));
 
         $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
-        $frm->addRadioButtons(Labels::getLabel('FRM_Logo_Ratio', $this->siteLangId), 'CONF_EMAIL_TEMPLATE_LOGO_RATIO', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
+        $frm->addRadioButtons(Labels::getLabel('FRM_LOGO_RATIO', $this->siteLangId), 'CONF_EMAIL_TEMPLATE_LOGO_RATIO', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
         $frm->addHiddenField('', 'min_width');
         $frm->addHiddenField('', 'min_height');
 
         $frm->addHtml('', 'email_logo', '');
-        $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_Footer_Content', $this->siteLangId), 'CONF_EMAIL_TEMPLATE_FOOTER_HTML' . $lang_id, FatApp::getConfig('CONF_EMAIL_TEMPLATE_FOOTER_HTML' . $lang_id, FatUtility::VAR_STRING, ''));
+        $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_FOOTER_CONTENT', $this->siteLangId), 'CONF_EMAIL_TEMPLATE_FOOTER_HTML' . $lang_id, FatApp::getConfig('CONF_EMAIL_TEMPLATE_FOOTER_HTML' . $lang_id, FatUtility::VAR_STRING, ''));
         $fld->requirements()->setRequired(true);
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -409,7 +409,7 @@ class EmailTemplatesController extends ListingBaseController
         $aspectRatio = FatApp::getPostedData('ratio_type', FatUtility::VAR_INT, 0);
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Please_Select_A_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -430,7 +430,7 @@ class EmailTemplatesController extends ListingBaseController
         if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_EMAIL_LOGO, 0, 0, 0, $lang_id)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
-        $this->set('msg', Labels::getLabel('SUC_DELETED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

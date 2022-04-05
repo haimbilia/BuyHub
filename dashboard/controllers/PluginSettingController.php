@@ -11,7 +11,7 @@ class PluginSettingController extends LoggedUserController
     {
         parent::__construct($action);
         if (get_called_class() == __CLASS__) {
-            LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         $this->keyName = FatApp::getPostedData('keyName', FatUtility::VAR_STRING, '');

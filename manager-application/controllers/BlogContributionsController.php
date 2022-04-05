@@ -274,13 +274,13 @@ class BlogContributionsController extends ListingBaseController
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
-            'author_name' => Labels::getLabel('LBL_Author_Name', $this->siteLangId),
-            'bcontributions_author_email' => Labels::getLabel('LBL_Author_Email', $this->siteLangId),
-            'bcontributions_author_phone' => Labels::getLabel('LBL_Author_Phone', $this->siteLangId),
-            'bcontributions_status' => Labels::getLabel('LBL_Status', $this->siteLangId),
-            'bcontributions_added_on' => Labels::getLabel('LBL_Posted_On', $this->siteLangId),
+            'author_name' => Labels::getLabel('LBL_AUTHOR_NAME', $this->siteLangId),
+            'bcontributions_author_email' => Labels::getLabel('LBL_AUTHOR_EMAIL', $this->siteLangId),
+            'bcontributions_author_phone' => Labels::getLabel('LBL_AUTHOR_PHONE', $this->siteLangId),
+            'bcontributions_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'bcontributions_added_on' => Labels::getLabel('LBL_POSTED_ON', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('blogContributionTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);

@@ -43,19 +43,19 @@ class CollectionsController extends ListingBaseController
             $this->modelObj::tblFld('link_caption'),
         ];
 
-        if(0 < $this->modelObj->getMainTableRecordId()){          
-            if($collection_type = $this->modelObj::getAttributesById($this->modelObj->getMainTableRecordId(),'collection_type')){                  
+        if (0 < $this->modelObj->getMainTableRecordId()) {
+            if ($collection_type = $this->modelObj::getAttributesById($this->modelObj->getMainTableRecordId(), 'collection_type')) {
                 if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_RECORDS)) {
                     $this->set('recordForm', 1);
-                }elseif($collection_type == Collections::COLLECTION_TYPE_BANNER){
+                } elseif ($collection_type == Collections::COLLECTION_TYPE_BANNER) {
                     $this->set('banners', 1);
                 }
-            } 
+            }
         }
     }
 
     public function index()
-    {      
+    {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
@@ -210,7 +210,7 @@ class CollectionsController extends ListingBaseController
         $frm = $this->getForm($type, $layoutType, $recordId);
 
         if (0 < $recordId) {
-            $data = Collections::getAttributesByLangId($this->siteLangId, $recordId, ['*','IFNULL(collection_name,collection_identifier) as collection_name'], applicationConstants::JOIN_RIGHT);
+            $data = Collections::getAttributesByLangId($this->siteLangId, $recordId, ['*', 'IFNULL(collection_name,collection_identifier) as collection_name'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -260,7 +260,7 @@ class CollectionsController extends ListingBaseController
                 break;
             case Collections::TYPE_SHOP_LAYOUT2:
                 return Collections::LIMIT_SHOP_LAYOUT2;
-                break;    
+                break;
             case Collections::TYPE_BRAND_LAYOUT1:
                 return Collections::LIMIT_BRAND_LAYOUT1;
                 break;
@@ -291,7 +291,7 @@ class CollectionsController extends ListingBaseController
 
         $collectionForApp = $post['collection_for_app'] ?? 0;
         $post['collection_for_app'] = in_array($data['collection_layout_type'], Collections::APP_COLLECTIONS_ONLY) ? 1 : $collectionForApp;
-        if(1 > $recordId){
+        if (1 > $recordId) {
             $maxDisplayOrder = Collections::getMaxDisplayOrder();
             $post['collection_display_order'] = $maxDisplayOrder + 1;
         }
@@ -440,7 +440,7 @@ class CollectionsController extends ListingBaseController
 
             $this->updateCollectionStatus($recordId, $status);
         }
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -563,7 +563,7 @@ class CollectionsController extends ListingBaseController
 
         $this->set('collection_id', $collection_id);
         $this->set('collection_type', $collectionDetails['collection_type']);
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -669,7 +669,7 @@ class CollectionsController extends ListingBaseController
     {
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
         }
         $collection_id = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
@@ -681,7 +681,7 @@ class CollectionsController extends ListingBaseController
 
         $collectionType = (0 < $collection_id) ? Collections::getAttributesById($collection_id, 'collection_type') : Collections::COLLECTION_TYPE_PRODUCT;
         if (in_array($collectionType, Collections::COLLECTION_WITHOUT_MEDIA)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Not_Allowed_To_Update_Media_For_This_Collection', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_NOT_ALLOWED_TO_UPDATE_MEDIA_FOR_THIS_COLLECTION', $this->siteLangId), true);
         }
 
         $allowedFileTypeArr = array(AttachedFile::FILETYPE_COLLECTION_IMAGE, AttachedFile::FILETYPE_COLLECTION_BG_IMAGE);
@@ -691,7 +691,7 @@ class CollectionsController extends ListingBaseController
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -713,7 +713,7 @@ class CollectionsController extends ListingBaseController
 
         $this->set('file', $_FILES['cropped_image']['name']);
         $this->set('collection_id', $collection_id);
-        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_Uploaded_Successfully', $this->siteLangId));
+        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -752,7 +752,7 @@ class CollectionsController extends ListingBaseController
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -764,12 +764,12 @@ class CollectionsController extends ListingBaseController
         }
         $collectionType = (0 < $recordId) ? Collections::getAttributesById($recordId, 'collection_type') : Collections::COLLECTION_TYPE_PRODUCT;
         if (in_array($collectionType, Collections::COLLECTION_WITHOUT_MEDIA)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Not_Allowed_To_Update_Media_For_This_Collection', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_NOT_ALLOWED_TO_UPDATE_MEDIA_FOR_THIS_COLLECTION', $this->siteLangId), true);
         }
 
         $collectionObj = new Collections($recordId);
         $collectionObj->addUpdateData(array('collection_display_media_only' => $value));
-        $this->set('msg', Labels::getLabel('MSG_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -950,9 +950,9 @@ class CollectionsController extends ListingBaseController
         }
 
         $bannerId = $record->getMainTableRecordId();
-        
+
         $bannerObj = new Banner($bannerId);
-        if (!$bannerObj->updateLangData(CommonHelper::getDefaultFormLangId(), ['banner_title'=> $post['banner_title']])) {
+        if (!$bannerObj->updateLangData(CommonHelper::getDefaultFormLangId(), ['banner_title' => $post['banner_title']])) {
             LibHelper::exitWithError($bannerObj->getError(), true);
         }
 
@@ -972,7 +972,7 @@ class CollectionsController extends ListingBaseController
         $newTabLangId = 0;
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
-            foreach ($languages as $languageId => $langName) {              
+            foreach ($languages as $languageId => $langName) {
                 if (!Banner::getAttributesByLangId($languageId, $bannerId)) {
                     $newTabLangId = $languageId;
                     break;
@@ -1088,7 +1088,7 @@ class CollectionsController extends ListingBaseController
         $type = $this->collectionDetails['collection_type'];
         $layoutType = $this->collectionDetails['collection_layout_type'];
         $this->setFormTitle($type, $layoutType, 'collectionForm(' . $type . ', ' . $layoutType . ', ' . $collectionId . ');');
-        $bannerDimensiomns = ImageDimension::getBannerData('',$layoutType);
+        $bannerDimensiomns = ImageDimension::getBannerData('', $layoutType);
         $frm = $this->getBannerMediaForm($recordId);
         $frm->fill(['collection_id' => $collectionId]);
         $this->set('bannerDimensiomns', $bannerDimensiomns);
@@ -1139,7 +1139,7 @@ class CollectionsController extends ListingBaseController
         $afileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $file_type = AttachedFile::FILETYPE_BANNER;
@@ -1166,7 +1166,7 @@ class CollectionsController extends ListingBaseController
         $this->set('banner_id', $banner_id);
         $this->set('lang_id', $lang_id);
         $this->set('slide_screen', $slide_screen);
-        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('MSG_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1189,10 +1189,10 @@ class CollectionsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        
+
 
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $recordId, 0, $lang_id, (1 == count($languages)), $screen, 1);
-        $this->set('collection_layout_type',$collectionDetails['collection_layout_type']);
+        $this->set('collection_layout_type', $collectionDetails['collection_layout_type']);
         $this->set('images', $images);
         $this->set('languages', Language::getAllNames());
         $this->set('screenTypeArr', $this->getDisplayScreenName());
@@ -1280,7 +1280,7 @@ class CollectionsController extends ListingBaseController
             if (!$collectionObj->updateOrder($post['collectionList'])) {
                 LibHelper::exitWithError($collectionObj->getError(), true);
             }
-            FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Order_Updated_Successfully', $this->siteLangId));
+            FatUtility::dieJsonSuccess(Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId));
         }
     }
 
@@ -1321,6 +1321,6 @@ class CollectionsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop','collection_layout_type'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop', 'collection_layout_type'], Common::excludeKeysForSort());
     }
 }

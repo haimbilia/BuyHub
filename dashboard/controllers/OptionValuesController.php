@@ -136,7 +136,7 @@ class OptionValuesController extends LoggedUserController
 
         $option = new Option();
         if (!$row = $option->getOption($option_id)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $optionName = (isset($row['option_name'])) ? $row['option_name'][$this->siteLangId] : $row['option_identifier'];
@@ -321,7 +321,7 @@ class OptionValuesController extends LoggedUserController
             if (!$obj->updateOrder($post['optionvalues'])) {
                 FatUtility::dieJsonError($obj->getError());
             }
-            $this->set('msg', Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
     }

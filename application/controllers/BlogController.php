@@ -359,7 +359,7 @@ class BlogController extends MyAppController
             FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
-        FatUtility::dieJsonSuccess(Labels::getLabel('SUC_BLOG_COMMENT_SAVED_AND_AWAITING_ADMIN_APPROVAL.', $this->siteLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_BLOG_COMMENT_SAVED_AND_AWAITING_ADMIN_APPROVAL.', $this->siteLangId));
     }
 
     public function searchComments()
@@ -496,7 +496,7 @@ class BlogController extends MyAppController
             $this->setErrorAndRedirect($fileHandlerObj->getError());
         }
 
-        Message::addMessage(Labels::getLabel('SUC_Contributed_Successfully', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_Contributed_Successfully', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('Blog', 'contributionForm'));
     }
 

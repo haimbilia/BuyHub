@@ -1038,7 +1038,7 @@ class CustomProductsController extends ListingBaseController
 
         $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_PHOTO(s):', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
         $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename"></span>';
-        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('FRM_BROWSE_FILE', $this->siteLangId) . '</label></div><br/><small>' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_' . $getImageDimensions['width'] . '_x_' . $getImageDimensions['height'] . '', $this->siteLangId) . '</small>';
+        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('FRM_BROWSE_FILE', $this->siteLangId) . '</label></div><br/><small>' . Labels::getLabel('LBL_PLEASE_KEEP_IMAGE_DIMENSIONS_GREATER_THAN_' . $getImageDimensions['width'] . '_x_' . $getImageDimensions['height'] . '', $this->siteLangId) . '</small>';
 
         $frm->addHiddenField('', 'min_width', $getImageDimensions['width']);
         $frm->addHiddenField('', 'min_height', $getImageDimensions['height']);
@@ -1048,7 +1048,7 @@ class CustomProductsController extends ListingBaseController
 
     private function getSeparateImageOptions($preq_id, $lang_id)
     {
-        $imgTypesArr = array(0 => Labels::getLabel('LBL_For_All_Options', $this->siteLangId));
+        $imgTypesArr = array(0 => Labels::getLabel('LBL_FOR_ALL_OPTIONS', $this->siteLangId));
 
         if ($preq_id) {
             $reqData = ProductRequest::getAttributesById($preq_id, array('preq_content'));

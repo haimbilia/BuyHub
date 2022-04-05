@@ -191,10 +191,10 @@ class RewardsController extends ListingBaseController
 
         $arr = [
             /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
-            'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
-            'urp_date_added' => Labels::getLabel('LBL_Valid_from', $this->siteLangId),
-            'urp_date_expiry' => Labels::getLabel('LBL_Valid_till', $this->siteLangId),
-            'urp_points' => Labels::getLabel('LBL_Points', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_USER_NAME', $this->siteLangId),
+            'urp_date_added' => Labels::getLabel('LBL_VALID_FROM', $this->siteLangId),
+            'urp_date_expiry' => Labels::getLabel('LBL_VALID_TILL', $this->siteLangId),
+            'urp_points' => Labels::getLabel('LBL_POINTS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
 

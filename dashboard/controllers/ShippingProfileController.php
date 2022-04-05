@@ -80,11 +80,11 @@ class ShippingProfileController extends SellerBaseController
         if (0 < $profileId) {
             $data = ShippingProfile::getAttributesById($profileId);            
             if ($data === false) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
             }
             if ($data['shipprofile_user_id'] != $userId) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
             }           
   
@@ -152,7 +152,7 @@ class ShippingProfileController extends SellerBaseController
 
         $profileId = $spObj->getMainTableRecordId();
 
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->set('profileId', $profileId);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -178,7 +178,7 @@ class ShippingProfileController extends SellerBaseController
 
         $shippingProfData = ShippingProfileZone::getAttributesByProfileId($shipprofileId);
         if (false == $shippingProfData) {
-            $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
 
@@ -211,7 +211,7 @@ class ShippingProfileController extends SellerBaseController
             FatApp::getDb()->updateFromArray(ShippingProfileProduct::DB_TBL, $data, $whr);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

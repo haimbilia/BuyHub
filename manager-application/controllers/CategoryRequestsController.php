@@ -102,7 +102,7 @@ class CategoryRequestsController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_REQUEST_IDENTIFIER', $this->siteLangId), 'scategoryreq_identifier');
         $statusArr = CategoryRequest::getCategoryReqStatusArr($this->siteLangId);
         unset($statusArr[CategoryRequest::CATEGORY_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', $statusArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
         $frm->addTextArea('', 'comments', '');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
@@ -131,7 +131,7 @@ class CategoryRequestsController extends ListingBaseController
 
         $statusArr = array(CategoryRequest::CATEGORY_REQUEST_APPROVED, CategoryRequest::CATEGORY_REQUEST_CANCELLED);
         if (!in_array($post['status'], $statusArr)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_STATUS_REQUEST', $this->siteLangId), true);
         }
 
         $db = FatApp::getDb();
@@ -145,7 +145,7 @@ class CategoryRequestsController extends ListingBaseController
         }
 
         $db->commitTransaction();
-        $this->set('msg', Labels::getLabel('LBL_Status_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

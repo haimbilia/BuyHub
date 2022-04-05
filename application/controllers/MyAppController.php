@@ -370,7 +370,7 @@ class MyAppController extends FatController
         try {
             $subscriber = $Mailchimp_ListsObj->subscribe($list_id, array('email' => htmlentities($post['email'])));
             if (empty($subscriber['leid'])) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Newsletter_subscription_valid_email', $siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_NEWSLETTER_SUBSCRIPTION_VALID_EMAIL', $siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
         } catch (Mailchimp_Error $e) {
@@ -378,7 +378,7 @@ class MyAppController extends FatController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Successfully_subscribed', $siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_SUBSCRIBED', $siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -576,7 +576,7 @@ class MyAppController extends FatController
         $siteLangId = CommonHelper::getLangId();
         $pollId = FatApp::getPostedData('pollfeedback_polling_id', FatUtility::VAR_INT, 0);
         if ($pollId <= 0) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Invalid_Request', $siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $frm = Common::getPollForm($pollId, $siteLangId);
@@ -586,7 +586,7 @@ class MyAppController extends FatController
         }
         $pollFeedback = new PollFeedback();
         if ($pollFeedback->isPollAnsweredFromIP($pollId, $_SERVER['REMOTE_ADDR'])) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Poll_already_posted_from_this_IP', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_POLL_ALREADY_POSTED_FROM_THIS_IP', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $post['pollfeedback_response_ip'] = $_SERVER['REMOTE_ADDR'];
@@ -821,12 +821,12 @@ class MyAppController extends FatController
         }
         if (true === MOBILE_APP_API_CALL) {
             if (User::OTP_LENGTH != strlen($post['upv_otp'])) {
-                LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_OTP', $this->siteLangId));
             }
             $otp = $post['upv_otp'];
         } else {
             if (!is_array($post['upv_otp']) || User::OTP_LENGTH != count($post['upv_otp'])) {
-                LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_OTP', $this->siteLangId));
             }
             $otp = implode("", $post['upv_otp']);
         }
@@ -862,7 +862,7 @@ class MyAppController extends FatController
             if (!UserAuthentication::isUserLogged()) {
                 $uObj = new User($userId);
                 if (!$token = $uObj->setMobileAppToken()) {
-                    LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                    LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 }
 
                 $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email'), true, true, true);

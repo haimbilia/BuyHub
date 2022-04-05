@@ -130,7 +130,7 @@ class UserGdprRequestsController extends ListingBaseController
         if (!$userRequest->updateRequestStatus($status)) {
             LibHelper::exitWithError($userRequest->getError(), true);
         }
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -185,7 +185,7 @@ class UserGdprRequestsController extends ListingBaseController
         /* ] */
 
         $this->set('userReqId', $userReqId);
-        $this->set('msg', Labels::getLabel('LBL_Successfully_Deleted_User_data', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_DELETED_USER_DATA', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

@@ -60,7 +60,7 @@ trait CustomProducts
 
         /* Validate product belongs to current logged seller[ */
         if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         /* ] */
@@ -108,7 +108,7 @@ trait CustomProducts
             FatUtility::dieJsonError($prodObj->getError());
         }
         Product::updateMinPrices($product_id);
-        $this->set('msg', Labels::getLabel('LBL_Option_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_OPTION_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -119,7 +119,7 @@ trait CustomProducts
         $optionId = FatUtility::int($post['option_id']);
 
         if (!$productId || !$optionId) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -400,7 +400,7 @@ trait CustomProducts
     public function productSpecifications($productId)
     {
         if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -421,12 +421,12 @@ trait CustomProducts
 
         $prodspec_id = FatUtility::int($post['prodSpecId']);
         if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         if ($prodspec_id > 0) {
             if (!UserPrivilege::canEditSellerProductSpecification($prodspec_id, $productId)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
         }
@@ -436,7 +436,7 @@ trait CustomProducts
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Specification_deleted_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SPECIFICATION_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -594,7 +594,7 @@ trait CustomProducts
     public function customProductLinks($productId = 0)
     {
         if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
        
@@ -644,7 +644,7 @@ trait CustomProducts
         $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
         if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $post['product_id'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $product_tags = (isset($post['product_tag'])) ? $post['product_tag'] : array();
@@ -658,7 +658,7 @@ trait CustomProducts
         unset($post['product_id']);
 
         if ($product_id <= 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -759,7 +759,7 @@ trait CustomProducts
         Tag::updateTagStrings($tag_id);
         /* ] */
 
-        $this->set('msg', Labels::getLabel('LBL_Tag_Updated_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_TAG_UPDATED_SUCCESSFUL', $this->siteLangId));
         $this->set('tagId', $tag_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -814,7 +814,7 @@ trait CustomProducts
         Tag::updateTagStrings($tag_id);
         /* ] */
 
-        $this->set('msg', Labels::getLabel('LBL_Tag_Updated_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_TAG_UPDATED_SUCCESSFUL', $this->siteLangId));
         $this->set('tagId', $tag_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
@@ -978,7 +978,7 @@ trait CustomProducts
     private function getLinksForm($product_id = 0)
     {
         if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $product_id)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 

@@ -457,7 +457,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $adsBatchObj->addCondition('abprod_adsbatch_id', '=', $post['abprod_adsbatch_id']);
         $record = (array) FatApp::getDb()->fetch($adsBatchObj->getResultSet());
         if (!empty($record) && 1 > $isEdit) {
-            LibHelper::dieJsonError(Labels::getLabel('MSG_ALREADY_BOUND', $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_ALREADY_BOUND', $this->siteLangId));
         }
 
         $productId = SellerProduct::getAttributesById($post['abprod_selprod_id'], 'selprod_product_id');
@@ -708,7 +708,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $rs = $srch->getResultSet();
         $productData = $db->fetchAll($rs);
         if (empty($productData)) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_PLEASE_ADD_ATLEAST_ONE_PRODUCT_TO_THE_BATCH", $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_PLEASE_ADD_ATLEAST_ONE_PRODUCT_TO_THE_BATCH", $this->siteLangId));
         }
 
         foreach ($productData as &$prodDetail) {
@@ -758,7 +758,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
             'adsbatch_synced_on' => date('Y-m-d H:i:s')
         ];
         if (false === AdsBatch::updateDetail($this->adsBatchId, $dataToUpdate)) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_UNABLE_TO_UPDATE", $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_UNABLE_TO_UPDATE", $this->siteLangId));
         }
 
         FatUtility::dieJsonSuccess($response['msg']);

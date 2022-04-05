@@ -390,7 +390,7 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canViewSales(UserAuthentication::getLoggedUserId());
         $op_id = FatUtility::int($op_id);
         if (1 > $op_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -424,7 +424,7 @@ class SellerController extends SellerBaseController
         $orderDetail = FatApp::getDb()->fetch($rs);
 
         if (!$orderDetail) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -603,7 +603,7 @@ class SellerController extends SellerBaseController
         $this->userPrivilege->canViewSales(UserAuthentication::getLoggedUserId());
         $op_id = FatUtility::int($op_id);
         if (1 > $op_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -628,7 +628,7 @@ class SellerController extends SellerBaseController
         $orderDetail = FatApp::getDb()->fetch($rs);
 
         if (!$orderDetail) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -709,7 +709,7 @@ class SellerController extends SellerBaseController
     {
         $op_id = FatUtility::int($ossubs_id);
         if (1 > $ossubs_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -729,7 +729,7 @@ class SellerController extends SellerBaseController
         $orderDetail = FatApp::getDb()->fetch($rs);
 
         if (!$orderDetail) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -966,7 +966,7 @@ class SellerController extends SellerBaseController
 
         $op_id = FatUtility::int($op_id);
         if (1 > $op_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -984,7 +984,7 @@ class SellerController extends SellerBaseController
         $orderDetail = FatApp::getDb()->fetch($rs);
 
         if (empty($orderDetail)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -1138,7 +1138,7 @@ class SellerController extends SellerBaseController
         }
 
         if (!User::canAddCustomProduct()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
         }
 
@@ -1160,7 +1160,7 @@ class SellerController extends SellerBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
         if (!User::canRequestProduct()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
         }
         $this->_template->render(true, true);
@@ -1169,7 +1169,7 @@ class SellerController extends SellerBaseController
     public function searchRequestedCatalog()
     {
         if (!User::canRequestProduct()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $post = FatApp::getPostedData();
@@ -1210,7 +1210,7 @@ class SellerController extends SellerBaseController
     public function addCatalogRequest()
     {
         if (!User::canRequestProduct()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $frm = $this->addNewCatalogRequestForm();
@@ -1221,7 +1221,7 @@ class SellerController extends SellerBaseController
     public function setUpCatalogRequest()
     {
         if (!User::canRequestProduct()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $userId = $this->userParentId;
@@ -1254,7 +1254,7 @@ class SellerController extends SellerBaseController
 
         $scatrequest_id = FatApp::getDb()->getInsertId();
         if (!$scatrequest_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Something_went_wrong,_please_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_please_contact_admin', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1330,7 +1330,7 @@ class SellerController extends SellerBaseController
         $frm = $this->getCatalogRequestMessageForm($requestId);
 
         if (0 >= $requestId) {
-            FatUtility::dieWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
         }
         $userObj = new User();
         $srch = $userObj->getUserSupplierRequestsObj($requestId);
@@ -1339,7 +1339,7 @@ class SellerController extends SellerBaseController
         $rs = $srch->getResultSet();
 
         if (!$rs || FatApp::getDb()->fetch($rs) === false) {
-            FatUtility::dieWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
         }
 
         $this->set('requestId', $requestId);
@@ -1427,7 +1427,7 @@ class SellerController extends SellerBaseController
         $rs = $srch->getResultSet();
         $requestRow = FatApp::getDb()->fetch($rs);
         if (!$requestRow) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1447,7 +1447,7 @@ class SellerController extends SellerBaseController
         }
         $scatrequestmsg_id = $catRequestMsgObj->getMainTableRecordId();
         if (!$scatrequestmsg_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Something_went_wrong,_please_contact_Technical_team', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_please_contact_Technical_team', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         /* ] */
@@ -1509,7 +1509,7 @@ class SellerController extends SellerBaseController
         }
 
         $this->set('scatrequest_id', $row['scatrequest_id']);
-        $this->set('msg', Labels::getLabel('LBL_Record_deleted_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1691,7 +1691,7 @@ class SellerController extends SellerBaseController
 
         $post = FatApp::getPostedData();
         if (false === $post) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1700,7 +1700,7 @@ class SellerController extends SellerBaseController
         $userId = $this->userParentId;
 
         if (1 > $product_id && 1 > $userId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1734,18 +1734,18 @@ class SellerController extends SellerBaseController
                 FatUtility::dieWithError(Message::getHtml());
             }
         } else {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
     public function taxCategories()
     {
         if (!FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'products'));
         }
         $this->userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId());
@@ -1995,7 +1995,7 @@ class SellerController extends SellerBaseController
         if (!$this->addUpdateCombinedData($combinedTaxDetails, $taxRuleId, $userId)) {
             FatUtility::dieJsonError($taxRuleObj->getError());
         }
-        $this->set('msg', Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2050,7 +2050,7 @@ class SellerController extends SellerBaseController
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -2115,12 +2115,12 @@ class SellerController extends SellerBaseController
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
 
         if (false == $shopDetails) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -2158,7 +2158,7 @@ class SellerController extends SellerBaseController
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -2203,7 +2203,7 @@ class SellerController extends SellerBaseController
         $lang_id = FatUtility::int($langId);
 
         if ($shop_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request_Id', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -2212,7 +2212,7 @@ class SellerController extends SellerBaseController
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $shopLayoutTemplateId = $shopDetails['shop_ltemplate_id'];
@@ -2222,7 +2222,7 @@ class SellerController extends SellerBaseController
         $this->set('shopLayoutTemplateId', $shopLayoutTemplateId);
 
         if (!$this->isShopActive($userId, $shop_id)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -2256,12 +2256,12 @@ class SellerController extends SellerBaseController
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
 
         if (false == $shopDetails) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -2296,12 +2296,12 @@ class SellerController extends SellerBaseController
 
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
         if (false == $shopDetails) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -2563,7 +2563,7 @@ class SellerController extends SellerBaseController
 
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST_Or_File_not_supported', $this->siteLangId));
         }
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
         $languages = Language::getAllNames();
@@ -2650,7 +2650,7 @@ class SellerController extends SellerBaseController
       $prodCatId = FatUtility::int($prodCatId);
 
       if (1 > $prodCatId) {
-      Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+      Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
       FatUtility::dieWithError(Message::getHtml());
       }
 
@@ -2672,7 +2672,7 @@ class SellerController extends SellerBaseController
       $arrListing = $db->fetchAll($rs, 'prodcat_id');
 
       if (empty($arrListing) || (!empty($arrListing) && !array_key_exists($prodCatId, $arrListing))) {
-      Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+      Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
       FatUtility::dieWithError(Message::getHtml());
       }
 
@@ -2694,18 +2694,18 @@ class SellerController extends SellerBaseController
       $langId = FatUtility::int($langId);
 
       if( !$prodCatId || !$langId ){
-      Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access',$this->siteLangId));
+      Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS',$this->siteLangId));
       FatUtility::dieWithError( Message::getHtml() );
       }
 
       if( !$shopDetails = $this->isShopActive($userId,0,true) ){
-      Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin',$this->siteLangId));
+      Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN',$this->siteLangId));
       FatUtility::dieJsonError( Message::getHtml() );
       }
 
       $shop_id = $shopDetails['shop_id'];
       if( !$shop_id ){
-      Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID',$this->siteLangId));
+      Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST_ID',$this->siteLangId));
       FatUtility::dieJsonError( Message::getHtml() );
       }
 
@@ -2717,7 +2717,7 @@ class SellerController extends SellerBaseController
       $catData = $db->fetchAll( $rs, 'prodcat_id' );
 
       if( empty( $catData ) || ( !empty( $catData ) && !array_key_exists( $prodCatId, $catData )) ){
-      Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access',$this->siteLangId));
+      Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS',$this->siteLangId));
       FatUtility::dieWithError( Message::getHtml() );
       }
 
@@ -2764,7 +2764,7 @@ class SellerController extends SellerBaseController
       $arrListing = $db->fetchAll($rs, 'prodcat_id');
 
       if (empty($arrListing) || (!empty($arrListing) && !array_key_exists($prodCatId, $arrListing))) {
-      Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+      Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
       FatUtility::dieWithError(Message::getHtml());
       }
 
@@ -2786,7 +2786,7 @@ class SellerController extends SellerBaseController
       $this->set('prodCatId', $prodCatId);
       $this->set('shop_id', $shop_id);
 
-      Message::addMessage(Labels::getLabel('MSG_File_uploaded_successfully', $this->siteLangId));
+      Message::addMessage(Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
       FatUtility::dieJsonSuccess(Message::getHtml());
       }
 
@@ -3006,18 +3006,18 @@ class SellerController extends SellerBaseController
         $recordId = FatUtility::int($recordId);
 
         if (1 > $recordId) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'ViewOrderReturnRequest', array($recordId)));
         }
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BUYER_RETURN_PRODUCT, $recordId, $recordSubid);
 
         if (false == $file_row) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'ViewOrderReturnRequest', array($recordId)));
         }
         if (!file_exists(CONF_UPLOADS_PATH . $file_row['afile_physical_path'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_File_not_found', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('LBL_FILE_NOT_FOUND', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'ViewOrderReturnRequest', array($recordId)));
         }
 
@@ -3063,7 +3063,7 @@ class SellerController extends SellerBaseController
         $request = FatApp::getDb()->fetch($rs);
 
         if (!$request) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'orderReturnRequests'));
         }
 
@@ -3134,7 +3134,7 @@ class SellerController extends SellerBaseController
         $requestRow = FatApp::getDb()->fetch($rs);
 
         if (!$requestRow) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Invalid_Access", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_Invalid_Access", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrderReturnRequest', array($requestRow['orrequest_id'])));
         }
 
@@ -3196,12 +3196,12 @@ class SellerController extends SellerBaseController
         $rs = $srch->getResultSet();
         $requestRow = FatApp::getDb()->fetch($rs);
         if (!$requestRow) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         if ($requestRow['orrequest_status'] == OrderReturnRequest::RETURN_REQUEST_STATUS_REFUNDED || $requestRow['orrequest_status'] == OrderReturnRequest::RETURN_REQUEST_STATUS_WITHDRAWN) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Message_cannot_be_posted_now,_as_order_is_refunded_or_withdrawn.', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_MESSAGE_CANNOT_BE_POSTED_NOW,_as_order_is_refunded_or_withdrawn.', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -3220,7 +3220,7 @@ class SellerController extends SellerBaseController
         }
         $orrmsg_id = $oReturnRequestMsgObj->getMainTableRecordId();
         if (!$orrmsg_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Something_went_wrong,_please_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_please_contact_admin', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         /* ] */
@@ -3244,12 +3244,12 @@ class SellerController extends SellerBaseController
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
         if (false == $shopDetails) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         if (!false == $shopDetails) {
@@ -3279,7 +3279,7 @@ class SellerController extends SellerBaseController
         if (0 < $splatform_id) {
             $data = SocialPlatform::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $splatform_id, array('*', 'IFNULL(splatform_title,splatform_identifier) as splatform_title'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
-                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
             $frm->fill($data);
@@ -3954,7 +3954,7 @@ class SellerController extends SellerBaseController
     {
         $this->userPrivilege->canViewSubscription(UserAuthentication::getLoggedUserId());
         if (!FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
         $includeFreeSubscription = OrderSubscription::canUserBuyFreeSubscription($this->siteLangId, $this->userParentId);
@@ -4146,7 +4146,7 @@ class SellerController extends SellerBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Shipping_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SHIPPING_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('product_id', $product_id);
 
         $this->_template->render(false, false, 'json-success.php');
@@ -4168,7 +4168,7 @@ class SellerController extends SellerBaseController
         if (!$record->save()) {
             FatUtility::dieJsonError(Labels::getLabel('M_Unable_to_Process_the_request,Please_try_later', $this->siteLangId));
         }
-        $this->set('msg', Labels::getLabel('M_Settings_updated_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETTINGS_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->set('autoRenew', $status);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -4210,7 +4210,7 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel($prodObj->getError(), FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1)));
             FatUtility::dieWithError(Message::getHtml());
         }
-        $this->set('msg', Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -4676,7 +4676,7 @@ class SellerController extends SellerBaseController
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -4702,7 +4702,7 @@ class SellerController extends SellerBaseController
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -4808,7 +4808,7 @@ class SellerController extends SellerBaseController
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -4843,7 +4843,7 @@ class SellerController extends SellerBaseController
         $userId = $this->userParentId;
 
         if ($userId == 0 || $lang_id == 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -4987,7 +4987,7 @@ class SellerController extends SellerBaseController
         if (0 < $selProd_id || 0 > $selProd_id) {
             $selProd_id = SellerProduct::getAttributesByID($selProd_id, 'selprod_id', false);
             if (empty($selProd_id)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('SellerProducts', 'specialPrice'));
             }
         }
@@ -5269,7 +5269,7 @@ class SellerController extends SellerBaseController
         }
         $this->deleteSpecialPrice($splPriceId, $specialPriceRow['selprod_id']);
         $this->set('selprod_id', $specialPriceRow['selprod_id']);
-        $this->set('msg', Labels::getLabel('LBL_Special_Price_Record_Deleted', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SPECIAL_PRICE_RECORD_DELETED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -5283,7 +5283,7 @@ class SellerController extends SellerBaseController
             $this->deleteSpecialPrice($splPriceId, $specialPriceRow['selprod_id']);
         }
         $this->set('selprod_id', $specialPriceRow['selprod_id']);
-        $this->set('msg', Labels::getLabel('LBL_Special_Price_Record_Deleted', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SPECIAL_PRICE_RECORD_DELETED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -5303,7 +5303,7 @@ class SellerController extends SellerBaseController
         $productId = FatUtility::int($productId);
         $userId = $this->userParentId;
         if (0 == $productId) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
         }
         $available = Product::availableForAddToStore($productId, $userId);
         if (!$available) {
@@ -5516,7 +5516,7 @@ class SellerController extends SellerBaseController
         }
         $this->set('productName', $translatedData[$toLangId]['product_name']);
         $this->set('productDesc', $translatedData[$toLangId]['product_description']);
-        $this->set('msg', Labels::getLabel('LBL_Product_Data_Translated_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PRODUCT_DATA_TRANSLATED_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -5540,12 +5540,12 @@ class SellerController extends SellerBaseController
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
         if (!$shopDetails) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         if (!false == $shopDetails) {
@@ -5576,7 +5576,7 @@ class SellerController extends SellerBaseController
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $shopId = 0;
@@ -5627,7 +5627,7 @@ class SellerController extends SellerBaseController
     {
         $productId = FatUtility::int($productId);
         if (0 == $productId) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
         }
         $available = SellerProduct::getCatelogFromProductId($productId);
         if (count($available) > 0) {
@@ -5639,7 +5639,7 @@ class SellerController extends SellerBaseController
     public function orderTrackingInfo($trackingNumber, $courier, $orderNumber)
     {
         if (empty($trackingNumber) || empty($courier)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -5837,7 +5837,7 @@ class SellerController extends SellerBaseController
         if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
             echo "here";
             die;
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         if ($productId < 1 || $tagId < 1) {
@@ -5852,7 +5852,7 @@ class SellerController extends SellerBaseController
 
         Tag::updateProductTagString($productId);
 
-        $this->set('msg', Labels::getLabel('LBL_Tag_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_TAG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -5879,7 +5879,7 @@ class SellerController extends SellerBaseController
         Tag::updateTagStrings($tag_id);
         /* ] */
 
-        $this->set('msg', Labels::getLabel('LBL_Tag_Updated_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_TAG_UPDATED_SUCCESSFUL', $this->siteLangId));
         $this->set('tagId', $tag_id);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -5892,7 +5892,7 @@ class SellerController extends SellerBaseController
         $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
         $tagId = FatApp::getPostedData('tag_id', FatUtility::VAR_INT, 0);
         if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         if ($productId < 1 || $tagId < 1) {
@@ -5908,7 +5908,7 @@ class SellerController extends SellerBaseController
 
         Tag::updateProductTagString($productId);
 
-        $this->set('msg', Labels::getLabel('LBL_Tag_Removed_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_TAG_REMOVED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

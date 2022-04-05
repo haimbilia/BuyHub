@@ -208,7 +208,7 @@ class AffiliateController extends AffiliateBaseController
                 Message::addErrorMessage($helper->getErrorDescription());
                 //Message::addErrorMessage($helper->getErrorReason());
             } else {
-                Message::addErrorMessage(Labels::getLabel('Msg_Bad_Request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_BAD_REQUEST', $this->siteLangId));
             }
         } else {
             // The OAuth 2.0 client handler helps us manage access tokens
@@ -232,7 +232,7 @@ class AffiliateController extends AffiliateBaseController
             $userData = array('user_fb_access_token' => $fbAccessToken);
             $userObj->assignValues($userData);
             if (!$userObj->save()) {
-                Message::addErrorMessage(Labels::getLabel("MSG_Token_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
+                Message::addErrorMessage(Labels::getLabel("ERR_Token_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
             }
         }
         FatApp::redirectUser($redirectUrl);

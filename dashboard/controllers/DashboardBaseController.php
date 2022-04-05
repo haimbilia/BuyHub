@@ -396,7 +396,7 @@ class DashboardBaseController extends FatController
         $api_key = FatApp::getConfig("CONF_MAILCHIMP_KEY");
         $list_id = FatApp::getConfig("CONF_MAILCHIMP_LIST_ID");
         if ($api_key == '' || $list_id == '') {
-            Message::addErrorMessage(Labels::getLabel("MSG_NEWSLETTER_IS_NOT_CONFIGURED_YET,_PLEASE_CONTACT_ADMIN", $siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_NEWSLETTER_IS_NOT_CONFIGURED_YET,_PLEASE_CONTACT_ADMIN", $siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -406,7 +406,7 @@ class DashboardBaseController extends FatController
         try {
             $subscriber = $Mailchimp_ListsObj->subscribe($list_id, array('email' => htmlentities($post['email'])));
             if (empty($subscriber['leid'])) {
-                Message::addErrorMessage(Labels::getLabel('MSG_NEWSLETTER_SUBSCRIPTION_VALID_EMAIL', $siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_NEWSLETTER_SUBSCRIPTION_VALID_EMAIL', $siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
         } catch (Mailchimp_Error $e) {
@@ -771,12 +771,12 @@ class DashboardBaseController extends FatController
         }
         if (true === MOBILE_APP_API_CALL) {
             if (User::OTP_LENGTH != strlen($post['upv_otp'])) {
-                LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_OTP', $this->siteLangId));
             }
             $otp = $post['upv_otp'];
         } else {
             if (!is_array($post['upv_otp']) || User::OTP_LENGTH != count($post['upv_otp'])) {
-                LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_OTP', $this->siteLangId));
             }
             $otp = implode("", $post['upv_otp']);
         }
@@ -813,7 +813,7 @@ class DashboardBaseController extends FatController
             if (!UserAuthentication::isUserLogged()) {
                 $uObj = new User($userId);
                 if (!$token = $uObj->setMobileAppToken()) {
-                    LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                    LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 }
 
                 $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email'), true, true, true);

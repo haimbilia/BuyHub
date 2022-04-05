@@ -423,7 +423,7 @@ class ContentPagesController extends ListingBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $lang_id));
+        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $lang_id));
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->set('cpage_layout', $cpage_layout);
@@ -597,8 +597,8 @@ class ContentPagesController extends ListingBaseController
     private function getAvailableLayouts()
     {
         $collectionLayouts = array(
-            ContentPage::CONTENT_PAGE_LAYOUT1_TYPE => Labels::getLabel('LBL_Content_Page_Layout1', $this->siteLangId),
-            ContentPage::CONTENT_PAGE_LAYOUT2_TYPE => Labels::getLabel('LBL_Content_Page_Layout2', $this->siteLangId),
+            ContentPage::CONTENT_PAGE_LAYOUT1_TYPE => Labels::getLabel('LBL_CONTENT_PAGE_LAYOUT1', $this->siteLangId),
+            ContentPage::CONTENT_PAGE_LAYOUT2_TYPE => Labels::getLabel('LBL_CONTENT_PAGE_LAYOUT2', $this->siteLangId),
         );
         return $collectionLayouts;
     }
@@ -625,7 +625,7 @@ class ContentPagesController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'cpage_id' => Labels::getLabel('LBL_ID', $this->siteLangId),
-            'cpage_title' => Labels::getLabel('LBL_Title', $this->siteLangId),
+            'cpage_title' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('ContentPageTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);

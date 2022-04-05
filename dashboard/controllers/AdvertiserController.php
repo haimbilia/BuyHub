@@ -360,13 +360,13 @@ class AdvertiserController extends AdvertiserBaseController
         $langId = $post['lang_id'];
 
         if ($promotionId == 0 || $langId == 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
         $promotionData = Promotion::getAttributesById($promotionId, array('promotion_user_id'));
         if (!$promotionData || ($promotionData && $promotionData['promotion_user_id'] != $userId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1069,7 +1069,7 @@ class AdvertiserController extends AdvertiserBaseController
         $promotionDetails = FatApp::getDb()->fetch($rs);
 
         if (empty($promotionDetails)) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -1089,12 +1089,12 @@ class AdvertiserController extends AdvertiserBaseController
         $promotionId = FatUtility::int($data['promotion_id']);
 
         if ($promotionId < 1) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('advertiser', '', [], CONF_WEBROOT_DASHBOARD));
         }
         $promotionDetails = Promotion::getAttributesById($promotionId);
         if ($promotionDetails['promotion_user_id'] != $userId) {
-            Message::addErrorMessage(Labels::getLabel('Msg_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1553,7 +1553,7 @@ class AdvertiserController extends AdvertiserBaseController
 
         $promotionData = Promotion::getAttributesById($promotionId, array('promotion_user_id', 'promotion_active'));
         if (!$promotionData || ($promotionData && $promotionData['promotion_user_id'] != $userId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 

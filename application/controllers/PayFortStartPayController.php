@@ -133,7 +133,7 @@ class PayFortStartPayController extends PaymentController
                     $request .= "\n\n PP_STANDARD :: TOTAL PAID MISMATCH! " . strtolower($response['captured_amount']) . "\n\n";
                 }
                 if ($order_payment_status == 1 && $total_paid_match) {
-                    $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response['id'], $payment_gateway_charge, Labels::getLabel("SUC_Received_Payment", $this->siteLangId), json_encode($response));
+                    $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response['id'], $payment_gateway_charge, Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($response));
                     FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
                 } else {             
                     SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);

@@ -175,7 +175,7 @@ class LanguagesController extends ListingBaseController
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($siteLangId, true, 'country_code');
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $siteLangId), 'language_country_code', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $siteLangId), 'language_country_code', $countriesArr, '', array(), Labels::getLabel('FRM_SELECT', $siteLangId));
         $fld->requirement->setRequired(true);
         
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'language_active', applicationConstants::ACTIVE, array(), false, applicationConstants::INACTIVE);

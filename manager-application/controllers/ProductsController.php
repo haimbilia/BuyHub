@@ -617,7 +617,7 @@ class ProductsController extends ListingBaseController
 
         Tag::updateProductTagString($recordId);
 
-        $this->set('msg', Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -637,7 +637,7 @@ class ProductsController extends ListingBaseController
 
         Tag::updateProductTagString($recordId);
 
-        $this->set('msg', Labels::getLabel('LBL_Tag_Removed_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_TAG_REMOVED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

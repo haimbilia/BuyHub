@@ -194,7 +194,7 @@ trait SellerUsers
 
         $db->commitTransaction();
 
-        $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -299,7 +299,7 @@ trait SellerUsers
 
         $userData = User::getAttributesById($userId);
         if (empty($userData) || $userData['user_parent'] != UserAuthentication::getLoggedUserId()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -314,7 +314,7 @@ trait SellerUsers
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Password_Updated_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PASSWORD_UPDATED_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -340,7 +340,7 @@ trait SellerUsers
         $userId = FatUtility::int($userId);
         $userData = User::getAttributesById($userId);
         if (empty($userData) || $userId == UserAuthentication::getLoggedUserId() || $userData['user_parent'] != UserAuthentication::getLoggedUserId()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('seller', 'users'));
         }
         $frm = $this->searchPermissionForm();

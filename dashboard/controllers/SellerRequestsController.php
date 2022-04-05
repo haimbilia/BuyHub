@@ -619,7 +619,7 @@ class SellerRequestsController extends SellerBaseController
         }
 
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brandReqId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -653,7 +653,7 @@ class SellerRequestsController extends SellerBaseController
     {
         $brand_id = FatUtility::int($brand_id);
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brand_id)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -858,13 +858,13 @@ class SellerRequestsController extends SellerBaseController
     {
         $reqUserId = BadgeRequest::getAttributesById($badgeReqId, 'breq_user_id');
         if ($reqUserId != UserAuthentication::getLoggedUserId(0)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_FILE", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_FILE", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
         }
 
         $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
         if ($res == false || 1 > $res['afile_id']) {
-            Message::addErrorMessage(Labels::getLabel("MSG_NOT_AVAILABLE_TO_DOWNLOAD", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_NOT_AVAILABLE_TO_DOWNLOAD", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
         }
 

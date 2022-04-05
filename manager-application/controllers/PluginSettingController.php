@@ -14,7 +14,7 @@ class PluginSettingController extends ListingBaseController
         $this->objPrivilege->canEditPlugins($this->admin_id);
 
         if (get_called_class() == __CLASS__) {
-            LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         $this->keyName = FatApp::getPostedData('keyName', FatUtility::VAR_STRING, '');
@@ -26,7 +26,7 @@ class PluginSettingController extends ListingBaseController
                 LibHelper::dieJsonError($message);
             }
             if (empty($this->keyName)) {
-                LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_KEY_NAME', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_KEY_NAME', $this->siteLangId));
             }
         }
     }
@@ -37,7 +37,7 @@ class PluginSettingController extends ListingBaseController
         $pluginSetting = new PluginSetting(0, $this->keyName);
         $settings = $pluginSetting->get();
         if (false === $settings) {
-            $msg = empty($pluginSetting->getError()) ? Labels::getLabel('LBL_SETTINGS_NOT_AVALIABLE_FOR_THIS_PLUGIN', $this->siteLangId) : $pluginSetting->getError();
+            $msg = empty($pluginSetting->getError()) ? Labels::getLabel('ERR_SETTINGS_NOT_AVALIABLE_FOR_THIS_PLUGIN', $this->siteLangId) : $pluginSetting->getError();
             LibHelper::exitWithError($msg, true);
         }
         $this->frmObj->fill($settings);
