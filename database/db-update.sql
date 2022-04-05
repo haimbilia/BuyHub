@@ -1806,6 +1806,6 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 UPDATE `tbl_content_pages_block_lang` SET `cpblocklang_text` = '\r\n<div class=\"align--center\">\r\n	<div class=\"section-head section-head-center\">\r\n		<div class=\"section__heading\">              \r\n			<h2>Or Start your business with YoKart Multivendor Platform </h2>            <a href=\"#\" class=\"btn btn-brand\">                Start Selling Now\r\n            </a> \r\n         </div>    </div></div>\r\n' WHERE `tbl_content_pages_block_lang`.`cpblocklang_id` = 5;
-UPDATE `tbl_content_pages_block_lang` SET `cpblocklang_text` = '\r\n<div class=\"align--center\">\r\n <div class=\"section-head section-head-center\">\r\n <div class=\"section__heading\"> \r\n <h2>Or Start your business with YoKart Multivendor Platform </h2> <a href=\"#\" class=\"btn btn-brand\"> Start Selling Now\r\n </a> \r\n </div> </div></div>\r\n' WHERE `tbl_content_pages_block_lang`.`cpblocklang_id` = 6
+UPDATE `tbl_content_pages_block_lang` SET `cpblocklang_text` = '\r\n<div class=\"align--center\">\r\n <div class=\"section-head section-head-center\">\r\n <div class=\"section__heading\"> \r\n <h2>Or Start your business with YoKart Multivendor Platform </h2> <a href=\"#\" class=\"btn btn-brand\"> Start Selling Now\r\n </a> \r\n </div> </div></div>\r\n' WHERE `tbl_content_pages_block_lang`.`cpblocklang_id` = 6;
 
 ALTER TABLE `tbl_extra_pages` ADD `epage_extra_info` JSON NOT NULL AFTER `epage_default_content`;
