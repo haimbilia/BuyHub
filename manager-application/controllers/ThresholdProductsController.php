@@ -122,7 +122,7 @@ class ThresholdProductsController extends ListingBaseController
             LibHelper::exitWithError($emailNotificationObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('SUC_YOUR_MESSAGE_SENT_TO', $this->siteLangId) . ' - ' . $user["credential_email"]);
+        $this->set('msg', Labels::getLabel('MSG_YOUR_MESSAGE_SENT_TO', $this->siteLangId) . ' - ' . $user["credential_email"]);
         $this->_template->render(false, false, 'json-success.php');
     }
 

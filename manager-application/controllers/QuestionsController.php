@@ -25,8 +25,8 @@ class QuestionsController extends ListingBaseController
         $parameters = FatApp::getParameters();
         switch ($action) {
         case 'index':
-            $nodes[] = array('title' => Labels::getLabel('LBL_Question_Banks', $this->siteLangId), 'href' => UrlHelper::generateUrl('QuestionBanks'));
-            $nodes[] = array('title' => Labels::getLabel('LBL_Question', $this->siteLangId));
+            $nodes[] = array('title' => Labels::getLabel('LBL_QUESTION_BANKS', $this->siteLangId), 'href' => UrlHelper::generateUrl('QuestionBanks'));
+            $nodes[] = array('title' => Labels::getLabel('LBL_QUESTION', $this->siteLangId));
             break;
         }
         return $nodes;

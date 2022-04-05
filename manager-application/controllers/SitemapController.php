@@ -40,7 +40,7 @@ class SitemapController extends AdminBaseController
 
         $this->writePrimarySitemapIndex();
 
-        Message::addMessage(Labels::getLabel('MSG_SITEMAP_HAS_BEEN_UPDATED_SUCCESSFULLY', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('SUC_SITEMAP_HAS_BEEN_UPDATED_SUCCESSFULLY', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
 

@@ -302,7 +302,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
 
-        $this->set('msg', Labels::getLabel('SUC_PASSWORD_CHANGED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PASSWORD_CHANGED_SUCCESSFULLY', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -354,7 +354,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($userObj->getError());
         }
 
-        $this->set('msg', Labels::getLabel('SUC_SETUP_SUCCESSFUL', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -517,7 +517,7 @@ class AccountController extends LoggedUserController
             $this->_template->render();
         }
         $this->set('redirectUrl', UrlHelper::generateUrl('WalletPay', 'Recharge', array($order_id)));
-        $this->set('msg', Labels::getLabel('SUC_REDIRECTING', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_REDIRECTING', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -760,7 +760,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
 
-        $this->set('msg', Labels::getLabel('SUC_WITHDRAW_REQUEST_PLACED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_WITHDRAW_REQUEST_PLACED_SUCCESSFULLY', $this->siteLangId));
 
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
@@ -788,7 +788,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
 
-        $this->set('msg', Labels::getLabel('SUC_PROFILE_IMAGE_REMOVED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PROFILE_IMAGE_REMOVED_SUCCESSFULLY', $this->siteLangId));
         if (true ===  MOBILE_APP_API_CALL) {
             $userImgUpdatedOn = User::getAttributesById($userId, 'user_updated_on');
             $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
@@ -1036,7 +1036,7 @@ class AccountController extends LoggedUserController
         $this->set('file', $profileImg);
 
         User::setImageUpdatedOn($userId, $updatedAt);
-        $this->set('msg', Labels::getLabel('SUC_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -1125,7 +1125,7 @@ class AccountController extends LoggedUserController
             $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_name'] = $postUserName;
         }
 
-        $this->set('msg', Labels::getLabel('SUC_UPDATED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -1207,7 +1207,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
 
-        $this->set('msg', Labels::getLabel('SUC_UPDATED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -1231,7 +1231,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError(Labels::getLabel($userObj->getError(), $this->siteLangId));
         }
 
-        $this->set('msg', Labels::getLabel('SUC_SETUP_SUCCESSFUL', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1299,7 +1299,7 @@ class AccountController extends LoggedUserController
         }
 
 
-        $this->set('msg', Labels::getLabel('SUC_CHANGE_EMAIL_REQUEST_SENT_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_CHANGE_EMAIL_REQUEST_SENT_SUCCESSFULLY', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -1595,7 +1595,7 @@ class AccountController extends LoggedUserController
                 FatUtility::dieWithError(Message::getHtml());
             }
             $action = 'A'; //Added to wishlist
-            $this->set('msg', Labels::getLabel('SUC_PRODUCT_ADDED_IN_LIST_SUCCESSFULLY', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_PRODUCT_ADDED_IN_LIST_SUCCESSFULLY', $this->siteLangId));
         } else {
             $uwlistIds = array();
             if (true === MOBILE_APP_API_CALL) {
@@ -1626,7 +1626,7 @@ class AccountController extends LoggedUserController
             }
 
             $action = 'R'; //Removed from wishlist
-            $this->set('msg', Labels::getLabel('SUC_PRODUCT_REMOVED_FROM_LIST_SUCCESSFULLY', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_PRODUCT_REMOVED_FROM_LIST_SUCCESSFULLY', $this->siteLangId));
         }
         return $action;
     }
@@ -1992,7 +1992,7 @@ class AccountController extends LoggedUserController
 
         $obj = new UserWishList();
         $obj->deleteWishList($row['uwlist_id']);
-        $this->set('msg', Labels::getLabel('SUC_RECORD_DELETED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_DELETED_SUCCESSFULLY', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -2045,7 +2045,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $this->set('msg', Labels::getLabel('SUC_RECORD_DELETED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2097,7 +2097,7 @@ class AccountController extends LoggedUserController
                 FatUtility::dieWithError(Message::getHtml());
             }
             $action = 'A'; //Added to favorite
-            $this->set('msg', Labels::getLabel('SUC_SHOP_IS_MARKED_AS_FAVOUTITE', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_SHOP_IS_MARKED_AS_FAVOUTITE', $this->siteLangId));
         } else {
             if (!$db->deleteRecords(Shop::DB_TBL_SHOP_FAVORITE, array('smt' => 'ufs_user_id = ? AND ufs_shop_id = ?', 'vals' => array($loggedUserId, $shop_id)))) {
                 $message = Labels::getLabel('ERR_SOME_PROBLEM_OCCURRED,_PLEASE_CONTACT_WEBMASTER', $this->siteLangId);
@@ -2108,7 +2108,7 @@ class AccountController extends LoggedUserController
                 FatUtility::dieWithError(Message::getHtml());
             }
             $action = 'R'; //Removed from favorite
-            $this->set('msg', Labels::getLabel('SUC_SHOP_HAS_BEEN_REMOVED_FROM_YOUR_FAVOURITE_LIST', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_SHOP_HAS_BEEN_REMOVED_FROM_YOUR_FAVOURITE_LIST', $this->siteLangId));
         }
 
         $this->set('action', $action);
@@ -2200,11 +2200,11 @@ class AccountController extends LoggedUserController
         switch ($status) {
             case applicationConstants::ACTIVE:
                 $this->markAsFavorite($selprodId, false);
-                $this->set('msg', Labels::getLabel('SUC_PRODUCT_HAS_BEEN_MARKED_AS_FAVOURITE_SUCCESSFULLY', $this->siteLangId));
+                $this->set('msg', Labels::getLabel('MSG_PRODUCT_HAS_BEEN_MARKED_AS_FAVOURITE_SUCCESSFULLY', $this->siteLangId));
                 break;
             case applicationConstants::INACTIVE:
                 $this->removeFromFavorite($selprodId, false);
-                $this->set('msg', Labels::getLabel('SUC_PRODUCT_HAS_BEEN_REMOVED_FROM_FAVOURITE_LIST', $this->siteLangId));
+                $this->set('msg', Labels::getLabel('MSG_PRODUCT_HAS_BEEN_REMOVED_FROM_FAVOURITE_LIST', $this->siteLangId));
                 break;
             default:
                 FatUtility::dieJsonError(Labels::getLabel('ERR_UNKNOWN_ACTION', $this->siteLangId));
@@ -2234,7 +2234,7 @@ class AccountController extends LoggedUserController
             return true;
         }
 
-        $this->set('msg', Labels::getLabel('SUC_PRODUCT_HAS_BEEN_MARKED_AS_FAVOURITE_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PRODUCT_HAS_BEEN_MARKED_AS_FAVOURITE_SUCCESSFULLY', $this->siteLangId));
 
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
@@ -2263,7 +2263,7 @@ class AccountController extends LoggedUserController
             return true;
         }
 
-        $this->set('msg', Labels::getLabel('SUC_PRODUCT_HAS_BEEN_REMOVED_FROM_FAVOURITE_LIST', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PRODUCT_HAS_BEEN_REMOVED_FROM_FAVOURITE_LIST', $this->siteLangId));
 
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
@@ -2288,7 +2288,7 @@ class AccountController extends LoggedUserController
             $this->removeFromFavorite($selprodId, false);
         }
 
-        $this->set('msg', Labels::getLabel('SUC_PRODUCT_HAS_BEEN_REMOVED_FROM_FAVOURITE_LIST', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PRODUCT_HAS_BEEN_REMOVED_FROM_FAVOURITE_LIST', $this->siteLangId));
 
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
@@ -2635,7 +2635,7 @@ class AccountController extends LoggedUserController
 
         $this->set('threadId', $threadId);
         $this->set('messageId', $insertId);
-        $this->set('msg', Labels::getLabel('SUC_MESSAGE_SUBMITTED_SUCCESSFULLY!', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_MESSAGE_SUBMITTED_SUCCESSFULLY!', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->set('messageDetail', $data);
             $this->_template->render();
@@ -3174,7 +3174,7 @@ class AccountController extends LoggedUserController
 
         $graphNode = $response->getGraphNode();
 
-        $this->set('msg', Labels::getLabel('SUC_SHARED_SUCCESSFULLY!', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SHARED_SUCCESSFULLY!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -3455,7 +3455,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId));
         }
 
-        $this->set('msg', Labels::getLabel('SUC_REQUEST_SENT_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_REQUEST_SENT_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -3506,7 +3506,7 @@ class AccountController extends LoggedUserController
         if (!$db->updateFromArray(Notifications::DB_TBL, array(Notifications::DB_TBL_PREFIX . 'is_read' => 1), $smt)) {
             FatUtility::dieJsonError($db->getError());
         }
-        $this->set('msg', Labels::getLabel('SUC_SUCCESSFULLY_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_UPDATED', $this->siteLangId));
         $this->_template->render();
     }
 
@@ -3531,7 +3531,7 @@ class AccountController extends LoggedUserController
         if (!$nObj->readUserNotification($notificationId, $userId)) {
             FatUtility::dieJsonError($nObj->getError());
         }
-        $this->set('msg', Labels::getLabel('SUC_SUCCESSFULLY_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_UPDATED', $this->siteLangId));
         $this->_template->render();
     }
 
@@ -3609,7 +3609,7 @@ class AccountController extends LoggedUserController
 
         $this->sendOtp($userId, $dialCode,  $phoneNumber);
 
-        $this->set('msg', Labels::getLabel('SUC_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -3649,7 +3649,7 @@ class AccountController extends LoggedUserController
             }
         }
 
-        $this->set('msg', Labels::getLabel('SUC_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }

@@ -72,7 +72,7 @@ class Settings
         $download_dir = CONF_DB_BACKUP_DIRECTORY_FULL_PATH;
         $path = $download_dir . $file;
         if (!file_exists($path)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_The_file_is_not_available_for_download.', CommonHelper::getLangId()));
+            Message::addErrorMessage(Labels::getLabel('ERR_THE_FILE_IS_NOT_AVAILABLE_FOR_DOWNLOAD.', CommonHelper::getLangId()));
             return false;
         }
         $filename = $download_dir . "/" . $file;

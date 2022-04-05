@@ -14,7 +14,7 @@ trait SellerCollections
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
         if (false == $shopDetails) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $records = ShopCollection::getCollectionGeneralDetail($shopDetails['shop_id']);
@@ -29,7 +29,7 @@ trait SellerCollections
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         if (!false == $shopDetails) {
@@ -400,7 +400,7 @@ trait SellerCollections
         $product_ids = (isset($post['scp_selprod_id'])) ? $post['scp_selprod_id'] : array();
 
         if ($scollection_id <= 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -416,7 +416,7 @@ trait SellerCollections
             $this->set('openMediaForm', true);
         } 
         $this->set('scollection_id', $scollection_id);
-        $this->set('msg', Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

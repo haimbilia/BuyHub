@@ -207,7 +207,7 @@ class ShippingZonesController extends SellerBaseController
             FatUtility::dieJsonError($sObj->getError());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Zone_Deleted_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ZONE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

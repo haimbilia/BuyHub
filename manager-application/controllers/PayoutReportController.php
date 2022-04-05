@@ -114,7 +114,7 @@ class PayoutReportController extends ListingBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel("LBL_Transaction_Report", $this->siteLangId) . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel("LBL_TRANSACTION_REPORT", $this->siteLangId) . '.csv', ',');
             exit;
         }
 
@@ -160,11 +160,11 @@ class PayoutReportController extends ListingBaseController
         $payoutReportsCacheVar = FatCache::get('payoutReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$payoutReportsCacheVar) {
             $arr = [
-                'orderDate' => Labels::getLabel('LBL_Date', $this->siteLangId),
-                'rewardDiscount' => Labels::getLabel('LBL_Reward_Discount', $this->siteLangId),
-                'affiliateCommissionCharged' => Labels::getLabel('LBL_Affiliate_Commision', $this->siteLangId),
-                'discountTotal' => Labels::getLabel('LBL_Coupon_Discount', $this->siteLangId),
-                'totalAmount' => Labels::getLabel('LBL_Total_Amount', $this->siteLangId),
+                'orderDate' => Labels::getLabel('LBL_DATE', $this->siteLangId),
+                'rewardDiscount' => Labels::getLabel('LBL_REWARD_DISCOUNT', $this->siteLangId),
+                'affiliateCommissionCharged' => Labels::getLabel('LBL_AFFILIATE_COMMISION', $this->siteLangId),
+                'discountTotal' => Labels::getLabel('LBL_COUPON_DISCOUNT', $this->siteLangId),
+                'totalAmount' => Labels::getLabel('LBL_TOTAL_AMOUNT', $this->siteLangId),
             ];
             FatCache::set('payoutReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {

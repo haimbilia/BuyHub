@@ -77,7 +77,7 @@ class ShippingZoneRatesController extends SellerBaseController
         $shipProfileId = ShippingProfileZone::getAttributesById($post['shiprate_shipprozone_id'], 'shipprozone_shipprofile_id');
         ShippingProfile::setDefaultRates($post['shiprate_shipprozone_id'], $shipProfileId);
 
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->set('zoneId', $post['shiprate_shipprozone_id']);
         $this->set('rateId', $rateId);
         $this->set('langId', $newTabLangId);
@@ -150,7 +150,7 @@ class ShippingZoneRatesController extends SellerBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->set('zoneId', $zoneId);
         $this->set('rateId', $rateId);
         $this->set('langId', $newTabLangId);
@@ -206,7 +206,7 @@ class ShippingZoneRatesController extends SellerBaseController
             FatUtility::dieJsonError($sObj->getError());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Rate_Deleted_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RATE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

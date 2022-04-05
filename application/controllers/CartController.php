@@ -331,7 +331,7 @@ class CartController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $cartObj = new Cart();
             $this->set('cartItemsCount', $cartObj->countProducts());
-            $this->set('msg', Labels::getLabel('SUC_ADDED_SUCCESSFULLY', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_ADDED_SUCCESSFULLY', $this->siteLangId));
             $this->_template->render();
         }
 
@@ -549,7 +549,7 @@ class CartController extends MyAppController
             if ($logMessage) {
                 Message::addMessage(sprintf(Labels::getLabel('MSG_SUCCESS_CART_ADD', $this->siteLangId), $strProduct, $strCart));
             }
-            $this->set('msg', Labels::getLabel("MSG_ADDED_TO_CART", $this->siteLangId));
+            $this->set('msg', Labels::getLabel("SUC_ADDED_TO_CART", $this->siteLangId));
         }
         $this->set('total', $cartObj->countProducts());
     }
@@ -600,7 +600,7 @@ class CartController extends MyAppController
 
         LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
         
-        $this->set('msg', Labels::getLabel("MSG_ITEM_REMOVED_FROM_CART", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("SUC_ITEM_REMOVED_FROM_CART", $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $fulfilmentType = FatApp::getPostedData('fulfilmentType', FatUtility::VAR_INT, Shipping::FULFILMENT_SHIP);
             $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id'], Cart::PAGE_TYPE_CART);

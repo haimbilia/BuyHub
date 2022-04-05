@@ -286,7 +286,7 @@ class OptionsController extends ListingBaseController
         }
 
         if ($optionObj->isLinkedWithProduct($recordId)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_This_option_is_linked_with_product', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_THIS_OPTION_IS_LINKED_WITH_PRODUCT', $this->siteLangId), true);
         }
 
         $optionObj->assignValues(array(Option::tblFld('deleted') => 1));

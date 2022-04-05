@@ -1890,7 +1890,7 @@ class SellerProductsController extends ListingBaseController
         if (0 < $selProd_id || 0 > $selProd_id) {
             $selProd_id = SellerProduct::getAttributesByID($selProd_id, 'selprod_id', false);
             if (empty($selProd_id)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('SellerProducts', 'specialPrice'));
             }
         }
@@ -1941,7 +1941,7 @@ class SellerProductsController extends ListingBaseController
         if (0 < $selProd_id || 0 > $selProd_id) {
             $selProd_id = SellerProduct::getAttributesByID($selProd_id, 'selprod_id', false);
             if (empty($selProd_id)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('SellerProducts', 'volumeDiscount'));
             }
         }
@@ -2273,7 +2273,7 @@ class SellerProductsController extends ListingBaseController
         if (0 < $selProd_id || 0 > $selProd_id) {
             $selProd_id = SellerProduct::getAttributesByID($selProd_id, 'selprod_id', false);
             if (empty($selProd_id)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'volumeDiscount'));
             }
         }
@@ -2403,13 +2403,13 @@ class SellerProductsController extends ListingBaseController
         $selprod_id = FatUtility::int($selprod_id);
         $relprod_id = FatUtility::int($relprod_id);
         if (!$selprod_id || !$relprod_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser($_SESSION['referer_page_url']);
         }
 
         $db = FatApp::getDb();
         if (!$db->deleteRecords(SellerProduct::DB_TBL_RELATED_PRODUCTS, array('smt' => 'related_sellerproduct_id = ? AND related_recommend_sellerproduct_id = ?', 'vals' => array($selprod_id, $relprod_id)))) {
-            Message::addErrorMessage(Labels::getLabel("LBL_" . $db->getError(), $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_" . $db->getError(), $this->siteLangId));
             FatApp::redirectUser($_SESSION['referer_page_url']);
         }
 
@@ -2456,7 +2456,7 @@ class SellerProductsController extends ListingBaseController
         if (0 < $selProd_id || 0 > $selProd_id) {
             $selProd_id = SellerProduct::getAttributesByID($selProd_id, 'selprod_id', false);
             if (empty($selProd_id)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'volumeDiscount'));
             }
         }
@@ -2589,13 +2589,13 @@ class SellerProductsController extends ListingBaseController
         $selprod_id = FatUtility::int($selprod_id);
         $relprod_id = FatUtility::int($relprod_id);
         if (!$selprod_id || !$relprod_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId));
             FatApp::redirectUser($_SESSION['referer_page_url']);
         }
 
         $db = FatApp::getDb();
         if (!$db->deleteRecords(SellerProduct::DB_TBL_UPSELL_PRODUCTS, array('smt' => 'upsell_sellerproduct_id = ? AND upsell_recommend_sellerproduct_id = ?', 'vals' => array($selprod_id, $relprod_id)))) {
-            Message::addErrorMessage(Labels::getLabel("LBL_" . $db->getError(), $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_" . $db->getError(), $this->siteLangId));
             FatApp::redirectUser($_SESSION['referer_page_url']);
         }
 

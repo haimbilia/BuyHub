@@ -619,7 +619,7 @@ class SellerRequestsController extends SellerBaseController
         }
 
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brandReqId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -653,7 +653,7 @@ class SellerRequestsController extends SellerBaseController
     {
         $brand_id = FatUtility::int($brand_id);
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brand_id)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 

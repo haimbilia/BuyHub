@@ -129,7 +129,7 @@ class PreferredPaymentMethodController extends ListingBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, Labels::getLabel("LBL_Preferred_Payment_Method", $this->siteLangId) . '.csv', ',');
+            CommonHelper::convertToCsv($sheetData, Labels::getLabel("LBL_PREFERRED_PAYMENT_METHOD", $this->siteLangId) . '.csv', ',');
             exit;
         }
 
@@ -177,13 +177,13 @@ class PreferredPaymentMethodController extends ListingBaseController
         $prefPayMethodReportsCacheVar = FatCache::get('prefPayMethodReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$prefPayMethodReportsCacheVar) {
             $arr = [
-                'orderDate' => Labels::getLabel('LBL_Date', $this->siteLangId),
-                'pluginName' => Labels::getLabel('LBL_Payment_Method', $this->siteLangId),
-                'billingAddress' => Labels::getLabel('LBL_Billing_Address', $this->siteLangId),
-                /* 'oua_country' => Labels::getLabel('LBL_Country', $this->siteLangId),
-                'oua_state' => Labels::getLabel('LBL_State', $this->siteLangId),
-                'oua_city' => Labels::getLabel('LBL_City', $this->siteLangId), */
-                'transactionAmount' => Labels::getLabel('LBL_Transaction', $this->siteLangId)
+                'orderDate' => Labels::getLabel('LBL_DATE', $this->siteLangId),
+                'pluginName' => Labels::getLabel('LBL_PAYMENT_METHOD', $this->siteLangId),
+                'billingAddress' => Labels::getLabel('LBL_BILLING_ADDRESS', $this->siteLangId),
+                /* 'oua_country' => Labels::getLabel('LBL_COUNTRY', $this->siteLangId),
+                'oua_state' => Labels::getLabel('LBL_STATE', $this->siteLangId),
+                'oua_city' => Labels::getLabel('LBL_CITY', $this->siteLangId), */
+                'transactionAmount' => Labels::getLabel('LBL_TRANSACTION', $this->siteLangId)
             ];
             FatCache::set('prefPayMethodReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {

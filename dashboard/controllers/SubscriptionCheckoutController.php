@@ -7,7 +7,7 @@ class SubscriptionCheckoutController extends LoggedUserController
     {
         parent::__construct($action);
         if (!FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
         $user_id = 0;
@@ -34,14 +34,14 @@ class SubscriptionCheckoutController extends LoggedUserController
                 case 'isUserLogged':
                     if (!UserAuthentication::isUserLogged()) {
                         $key = false;
-                        Message::addErrorMessage(Labels::getLabel('MSG_Your_Session_seems_to_be_expired.', $this->siteLangId));
+                        Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId));
                         return false;
                     }
                     break;
                 case 'hasSubscription':
                     if (!$this->scartObj->hasSusbscription()) {
                         $key = false;
-                        Message::addErrorMessage(Labels::getLabel('MSG_Your_cart_seems_to_be_empty,_Please_try_after_reloading_the_page.', $this->siteLangId));
+                        Message::addErrorMessage(Labels::getLabel('ERR_YOUR_CART_SEEMS_TO_BE_EMPTY,_Please_try_after_reloading_the_page.', $this->siteLangId));
                         return false;
                     }
                     break;
@@ -53,7 +53,7 @@ class SubscriptionCheckoutController extends LoggedUserController
     public function index()
     {
         if (!$this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId(), true)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_YOU_DO_NOT_HAVE_A_SUFFICIENT_PERMISSION_TO_CHANGE_PLAN', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOU_DO_NOT_HAVE_A_SUFFICIENT_PERMISSION_TO_CHANGE_PLAN', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('seller', 'packages'));
         }
 
@@ -125,7 +125,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             if (Message::getErrorCount()) {
                 $errMsg = Message::getHtml();
             } else {
-                Message::addErrorMessage(Labels::getLabel('MSG_Something_went_wrong,_please_try_after_some_time.', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_please_try_after_some_time.', $this->siteLangId));
                 $errMsg = Message::getHtml();
             }
             FatUtility::dieWithError($errMsg);
@@ -174,7 +174,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             if (Message::getErrorCount()) {
                 $errMsg = Message::getHtml();
             } else {
-                Message::addErrorMessage(Labels::getLabel('MSG_Something_went_wrong,_please_try_after_some_time.', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_please_try_after_some_time.', $this->siteLangId));
                 $errMsg = Message::getHtml();
             }
             FatUtility::dieWithError($errMsg);
@@ -500,7 +500,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $totalBalance = UserRewardBreakup::rewardPointBalance($this->userParentId);
         /* var_dump($totalBalance);exit; */
         if ($totalBalance == 0 || $totalBalance < $rewardPoints) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_Insufficient_reward_point_balance', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INSUFFICIENT_REWARD_POINT_BALANCE', $this->siteLangId));
         }
 
         $scartObj = new SubscriptionCart();
@@ -547,7 +547,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             if (Message::getErrorCount() > 0) {
                 $errMsg = Message::getHtml();
             } else {
-                Message::addErrorMessage(Labels::getLabel('MSG_Something_went_wrong,_please_try_after_some_time.', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_please_try_after_some_time.', $this->siteLangId));
                 $errMsg = Message::getHtml();
             }
             FatUtility::dieWithError($errMsg);
@@ -569,7 +569,7 @@ class SubscriptionCheckoutController extends LoggedUserController
 
         $post = $frm->getFormDataFromArray($post);
         if (!isset($post['order_id']) || $post['order_id'] == '') {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $orderObj = new Orders();
@@ -585,13 +585,13 @@ class SubscriptionCheckoutController extends LoggedUserController
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         if (!$orderInfo) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
 
         if ($cartSummary['orderPaymentGatewayCharges'] == 0 && $plugin_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Amount_for_payment_gateway_must_be_greater_than_zero.', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_AMOUNT_FOR_PAYMENT_GATEWAY_MUST_BE_GREATER_THAN_ZERO.', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -613,7 +613,7 @@ class SubscriptionCheckoutController extends LoggedUserController
 
 
         if ($cartSummary['cartWalletSelected'] && $cartSummary['orderPaymentGatewayCharges'] == 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Try_to_pay_using_wallet_balance_as_amount_for_payment_gateway_is_not_enough.', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_TRY_TO_PAY_USING_WALLET_BALANCE_AS_AMOUNT_FOR_PAYMENT_GATEWAY_IS_NOT_ENOUGH.', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -681,7 +681,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             if (Message::getErrorCount()) {
                 $errMsg = Message::getHtml();
             } else {
-                Message::addErrorMessage(Labels::getLabel('MSG_Something_went_wrong,_please_try_after_some_time.', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_please_try_after_some_time.', $this->siteLangId));
                 $errMsg = Message::getHtml();
             }
             FatUtility::dieWithError($errMsg);

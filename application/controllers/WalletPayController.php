@@ -274,7 +274,7 @@ class WalletPayController extends MyAppController
             if( Message::getErrorCount() > 0 ){
             $errMsg = Message::getHtml();
             } else {
-            Message::addErrorMessage(Labels::getLabel('MSG_Something_went_wrong,_please_try_after_some_time.', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId));
             $errMsg = Message::getHtml();
             }
             FatUtility::dieWithError( $errMsg );

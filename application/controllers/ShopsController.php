@@ -742,7 +742,7 @@ class ShopsController extends MyAppController
                 LibHelper::dieJsonError($emailObj->getError());
             }
         }
-        $this->set('msg', Labels::getLabel('SUC_MESSAGE_SUBMITTED_SUCCESSFULLY!', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_MESSAGE_SUBMITTED_SUCCESSFULLY!', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }

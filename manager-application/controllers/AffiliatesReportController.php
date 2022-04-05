@@ -136,7 +136,8 @@ class AffiliatesReportController extends ListingBaseController
                 $count++;
             }
 
-            CommonHelper::convertToCsv($sheetData, str_replace("{reportgenerationdate}", date("d-M-Y"), Labels::getLabel("LBL_Affiliates_Report_{reportgenerationdate}", $this->siteLangId)) . '.csv', ',');
+            $name = CommonHelper::replaceStringData(Labels::getLabel("LBL_AFFILIATES_REPORT_{REPORTGENERATIONDATE}", $this->siteLangId), ['{reportgenerationdate}' => date("d-M-Y")]);
+            CommonHelper::convertToCsv($sheetData, $name . '.csv', ',');
             exit;
         }
 
@@ -183,14 +184,14 @@ class AffiliatesReportController extends ListingBaseController
         $affiliatesUserReportsCacheVar = FatCache::get('affiliatesUserReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$affiliatesUserReportsCacheVar) {
             $arr = [
-                'name' => Labels::getLabel('LBL_Name', $this->siteLangId),
-                'user_regdate' => Labels::getLabel('LBL_Registration_Date', $this->siteLangId),
-                'totAffiliatedUsers' => Labels::getLabel('LBL_Affiliate_Registered', $this->siteLangId),
-                'availableBalance' => Labels::getLabel('LBL_Available_Balance', $this->siteLangId),
-                'totAffilateRevenue' => Labels::getLabel('LBL_Total_Revenue', $this->siteLangId),
-                'totAffilateSignupRevenue' => Labels::getLabel('LBL_SignUps_Revenue', $this->siteLangId),
-                'totAffilateOrdersRevenue' => Labels::getLabel('LBL_Orders_Revenue', $this->siteLangId),
-                'affiliateLink' => Labels::getLabel('LBL_Affiliate_link', $this->siteLangId),
+                'name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
+                'user_regdate' => Labels::getLabel('LBL_REGISTRATION_DATE', $this->siteLangId),
+                'totAffiliatedUsers' => Labels::getLabel('LBL_AFFILIATE_REGISTERED', $this->siteLangId),
+                'availableBalance' => Labels::getLabel('LBL_AVAILABLE_BALANCE', $this->siteLangId),
+                'totAffilateRevenue' => Labels::getLabel('LBL_TOTAL_REVENUE', $this->siteLangId),
+                'totAffilateSignupRevenue' => Labels::getLabel('LBL_SIGNUPS_REVENUE', $this->siteLangId),
+                'totAffilateOrdersRevenue' => Labels::getLabel('LBL_ORDERS_REVENUE', $this->siteLangId),
+                'affiliateLink' => Labels::getLabel('LBL_AFFILIATE_LINK', $this->siteLangId),
             ];
             FatCache::set('affiliatesUserReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {

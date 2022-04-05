@@ -45,7 +45,7 @@ class SellerBaseController extends LoggedUserController
                 $msg = Labels::getLabel('MSG_PLEASE_CONFIGURE_STRIPE_ACCOUNT', $this->siteLangId);
                 FatUtility::dieJsonError($msg);
             } else {
-                Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_CONFIGURE_STRIPE_ACCOUNT', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_PLEASE_CONFIGURE_STRIPE_ACCOUNT', $this->siteLangId));
             }
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop', ['StripeConnect']));
         }

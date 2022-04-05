@@ -447,7 +447,7 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        $this->set('msg', Labels::getLabel('SUC_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -666,7 +666,7 @@ class CheckoutController extends MyAppController
                 LibHelper::exitWithError($this->errMessage, true);
             }
 
-            $this->set('msg', Labels::getLabel('SUC_SHIPPING_METHOD_SELECTED_SUCCESSFULLY.', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_SHIPPING_METHOD_SELECTED_SUCCESSFULLY.', $this->siteLangId));
             if (true === MOBILE_APP_API_CALL) {
                 $fulfilmentType = FatApp::getPostedData('fulfilmentType', FatUtility::VAR_INT, Shipping::FULFILMENT_SHIP);
                 $cartObj = new Cart();
@@ -2166,7 +2166,7 @@ class CheckoutController extends MyAppController
         }
 
         $this->cartObj->setProductPickUpAddresses($pickupAddressArr);
-        $this->set('msg', Labels::getLabel('SUC_PICKUP_METHOD_SELECTED_SUCCESSFULLY.', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PICKUP_METHOD_SELECTED_SUCCESSFULLY.', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -2228,7 +2228,7 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        $this->set('msg', Labels::getLabel('SUC_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2280,7 +2280,7 @@ class CheckoutController extends MyAppController
             FatUtility::dieWithError($userObj->getError());
         }
 
-        $this->set('msg', Labels::getLabel('SUC_OTP_SENT!', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_OTP_SENT!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

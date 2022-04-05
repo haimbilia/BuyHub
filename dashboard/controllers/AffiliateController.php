@@ -208,7 +208,7 @@ class AffiliateController extends AffiliateBaseController
                 Message::addErrorMessage($helper->getErrorDescription());
                 //Message::addErrorMessage($helper->getErrorReason());
             } else {
-                Message::addErrorMessage(Labels::getLabel('Msg_Bad_Request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_BAD_REQUEST', $this->siteLangId));
             }
         } else {
             // The OAuth 2.0 client handler helps us manage access tokens
