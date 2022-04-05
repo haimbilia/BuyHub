@@ -1072,29 +1072,21 @@ $(function () {
             fcom.updateFaceboxContent(t);
         });
     };
+
     openSignInForm = function (includeGuestLogin) {
         if (typeof includeGuestLogin == "undefined") {
             includeGuestLogin = false;
         }
         data = "includeGuestLogin=" + includeGuestLogin;
         fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl("GuestUser", "LogInFormPopUp"), data, function (t) {
-            fcom.closeProcessing();
-            try {
-                var ans = JSON.parse(t);
-                if (ans.status == 1) {
-                    fcom.displaySuccessMessage(ans.msg);
-                    if ("undefined" != typeof ans.redirectUrl) {
-                        location.href = ans.redirectUrl;
-                    }
-                    return;
-                }
-                fcom.displayErrorMessage(ans.msg);
-            } catch (err) {
-                fcom.updateFaceboxContent(t);
-            }
+        $.ykmodal(fcom.getLoader(), true);
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function (t) {
+            $.ykmodal(t.html, true);
+            fcom.removeLoader();
+            stylePhoneNumberFld('.' + $.ykmodal.element + " input[name='username']", !flag);
         });
     };
+
     guestUserLogin = function (frm, v) {
         v.validate();
         if (!v.isValid()) return;
@@ -1150,45 +1142,19 @@ $(function () {
             });
         }
     };
+
     signInWithPhone = function (obj, flag) {
         var form = $(obj).data("form");
         var formElement = "undefined" != typeof form ? 'form[name="' + form + '"]' : "form";
-        var inputElement = $(formElement + " input[name='username']");
-        var altPlaceHolder = inputElement.attr("data-alt-placeholder");
-        var placeHolder = inputElement.attr("placeholder");
-        /* inputElement.val("").attr({
-            placeholder: altPlaceHolder,
-            "data-alt-placeholder": placeHolder,
-            "data-field-caption": altPlaceHolder,
-        }); */
         var title = 0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
         var objLbl = 0 < flag ? langLbl.byEmail : langLbl.byPhone;
         $(obj).attr("onclick", "signInWithPhone(this, " + !flag + ")").text(objLbl).attr('title', title);
-        var formClass = "";
-        if ($(obj).closest("form").hasClass("loginpopup--js")) {
-            formClass = "form.loginpopup--js ";
-        }
         $(".loginFormJs").prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), 'signInWithPhone=' + parseInt(flag), function (t) {
             $(".loginFormJs").replaceWith(t.html);
             fcom.removeLoader();
             stylePhoneNumberFld(formElement + " input[name='username']", !flag);
         });
-        /*  $(formClass + ".alreadyHave-js").show();
-         $(formClass + " .withPwdLbl--js, " + formClass + " .getOtpBtnBlock--js").removeClass("d-none");
-         $(formClass + ".forgetPwd--js, " + formClass + " .pwdField--js, " + formClass + " .submitBtn--js, " + formClass + " .remember--js").hide();
-         $(formClass + ".withOtp--js").removeClass("d-none");
-         if (false === flag) {
-             inputElement.removeClass("hasFlag-js");
-             $(formClass + ".withOtp--js").addClass("d-none");
-             $(formClass + '.pwdField--js input[name="password"]').attr(
-                 "data-fatreq",
-                 '{"required":true}'
-             );
-             $(formClass + ".loginWithOtp--js").val(0);
-             $(formClass + ".forgetPwd--js, " + formClass + " .pwdField--js, " + formClass + " .submitBtn--js, " + formClass + " .remember--js").show();
-             $(formClass + " .withPwdLbl--js, " + formClass + ".otpFieldBlock--js, " + formClass + " .getOtpBtnBlock--js" ).addClass("d-none");
-         } */
     };
 
     getLoginOtp = function (obj) {
@@ -1244,6 +1210,7 @@ $(function () {
     $(document).on("click", ".sign-in-popup-js", function () {
         openSignInForm();
     });
+
     $(".cc-cookie-accept-js").on('click', function () {
         var data = {
             statistical_cookies: 1,
@@ -1665,7 +1632,7 @@ $(document).on("click", ".readMore", function () {
     } else {
         $lessText.hide();
         $moreText.fadeIn();
-        $moreText.removeClass('hidden');       
+        $moreText.removeClass('hidden');
         $this.text($linkLessText);
     }
     $this.toggleClass("expanded");
