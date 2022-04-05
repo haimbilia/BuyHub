@@ -14,10 +14,10 @@ class OrderProduct extends MyAppModel
     public const DB_TBL_SETTINGS_PREFIX = 'opsetting_';
 
     public const DB_TBL_RESPONSE = 'tbl_order_product_responses';
-    public const DB_TBL_RESPONSE_PREFIX = 'opr_';    
+    public const DB_TBL_RESPONSE_PREFIX = 'opr_';
 
     public const DB_TBL_SHIPMENT_PICKUP = 'tbl_order_product_shipment_pickup';
-    public const DB_TBL_SHIPMENT_PICKUP_PREFIX = 'opsp_';    
+    public const DB_TBL_SHIPMENT_PICKUP_PREFIX = 'opsp_';
 
     public const DB_TBL_PLUGIN_SPECIFICS = 'tbl_order_product_plugin_specifics';
     public const DB_TBL_PLUGIN_SPECIFICS_PREFIX = 'opps_';
@@ -33,7 +33,7 @@ class OrderProduct extends MyAppModel
     public const RESPONSE_TYPE_SHIPMENT = 1;
     public const RESPONSE_TYPE_RETURN = 2;
     public const RESPONSE_TYPE_REFUND = 3;
-    
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -131,7 +131,7 @@ class OrderProduct extends MyAppModel
         $rows = FatApp::getDb()->fetchAll($srch->getResultSet());
         return $rows;
     }
-    
+
     /**
      * getResponseTypes
      *
@@ -146,7 +146,7 @@ class OrderProduct extends MyAppModel
             self::RESPONSE_TYPE_REFUND => Labels::getLabel('LBL_REFUND', $langId),
         ];
     }
-    
+
     /**
      * isValidResponseType
      *
@@ -157,7 +157,7 @@ class OrderProduct extends MyAppModel
     {
         return array_key_exists($type, self::getResponseTypes(0));
     }
-    
+
     /**
      * bindResponse
      *
@@ -186,7 +186,7 @@ class OrderProduct extends MyAppModel
             'opr_response' => $response,
             'opr_added_on' => date('Y-m-d H:i:s')
         ];
-        
+
         $dataToInsert = array_merge($dataToInsert, $updateOnDuplicate);
 
         $db = FatApp::getDb();
@@ -196,7 +196,7 @@ class OrderProduct extends MyAppModel
         }
         return true;
     }
-    
+
     /**
      * getResponse : Belongs to third party response
      *
@@ -257,7 +257,8 @@ class OrderProduct extends MyAppModel
         $srch = new OrderProductSearch(0, true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addMultipleFields(['op_selprod_return_age', 'op_selprod_cancellation_age', 'op_product_warranty', 'op_prodcat_id']
+        $srch->addMultipleFields(
+            ['op_selprod_return_age', 'op_selprod_cancellation_age', 'op_product_warranty', 'op_prodcat_id']
         );
         $srch->joinOrderProductSpecifics();
         $srch->addCondition('op.op_id', '=', $this->mainTableRecordId);
@@ -273,7 +274,7 @@ class OrderProduct extends MyAppModel
         $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_FILE', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
         return $frm;
     }
-        
+
     /**
      * getOrderActionRate
      *
@@ -342,7 +343,7 @@ class OrderProduct extends MyAppModel
 
         return self::getOrderActionRate($sellerId, $status);
     }
-    
+
     /**
      * getCompltedOrderCount
      *
@@ -367,8 +368,8 @@ class OrderProduct extends MyAppModel
             return 0;
         }
         return (int) $compltedOrderRate['completedOrdersCount'];
-    }    
-    
+    }
+
     public static function getPickUpShedule($op_id)
     {
         $srch = new SearchBase(static::DB_TBL_SHIPMENT_PICKUP);
@@ -377,15 +378,15 @@ class OrderProduct extends MyAppModel
         $srch->setPageSize(1);
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
-    
-    public static function getShippingResponse(int $op_id , int $type, bool $joinShipment = false)
+
+    public static function getShippingResponse(int $op_id, int $type, bool $joinShipment = false)
     {
         $srch = new SearchBase(static::DB_TBL_RESPONSE, 'opr');
         if (true === $joinShipment) {
             $srch->joinTable(OrderProductShipment::DB_TBL, 'LEFT JOIN', 'ops.opship_op_id = opr.opr_op_id', 'ops');
         }
         $srch->addCondition('opr_op_id', '=', $op_id);
-        $srch->addCondition('opr_type', '=', $type); 
+        $srch->addCondition('opr_type', '=', $type);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         return FatApp::getDb()->fetch($srch->getResultSet());
