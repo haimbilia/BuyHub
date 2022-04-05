@@ -2,7 +2,7 @@
 if (isset($collection['shops']) && count($collection['shops'])) { ?>
     <section class="section">
         <div class="container">
-            <div class="section-head">
+            <div class="section-head section-head-center">
                 <div class="section-heading">
                     <h2><?php echo ($collection['collection_name'] != '') ? $collection['collection_name'] : ''; ?></h2>
                 </div>
