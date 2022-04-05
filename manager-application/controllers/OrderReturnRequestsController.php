@@ -243,10 +243,11 @@ class OrderReturnRequestsController extends ListingBaseController
 
         $this->set('order', $requestRow);
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $pageSize = 10;
         $srch = $this->getMessageListObj();
-        $srch->addCondition('orrmsg_orrequest_id', '=', $recordId);
+        $srch->addCondition('orrmsg_orrequest_id', '=', $recordId);       
         $srch->setPageNumber(1);
-        $srch->setPageSize($pageSize);
+        $srch->setPageSize($pageSize);      
         $rs = $srch->getResultSet();
         $messagesList = FatApp::getDb()->fetchAll($rs, 'orrmsg_id');
 
@@ -261,7 +262,7 @@ class OrderReturnRequestsController extends ListingBaseController
         $this->set('pageData', $pageData);
         $this->set('orrequestId', $recordId);
 
-        $this->set('messagesList', $messagesList);
+        $this->set('arrListing', $messagesList);
         $this->set('page', 1);
         $this->set('pageSize', $pageSize);
         $this->set('pageCount', $srch->pages());
@@ -341,42 +342,34 @@ class OrderReturnRequestsController extends ListingBaseController
         return $srch;
     }
 
-    public function messageSearch()
+    public function getRows()
     {
         $frm = $this->getMessageSearchForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
-        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+       
+        $pageSize = 10;
         $recordId = isset($post['orrequest_id']) ? FatUtility::int($post['orrequest_id']) : 0;
 
         $srch = $this->getMessageListObj();
         $srch->addCondition('orrmsg_orrequest_id', '=', $recordId);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $messagesList = FatApp::getDb()->fetchAll($rs, 'orrmsg_id');
 
-        $this->set('messagesList', $messagesList);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+        $this->set("arrListing", $records);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('pageCount', $srch->pages());
-        $this->set('postedData', $post);
-        $this->set('rowsOnly', FatApp::getPostedData('rows_only', FatUtility::VAR_INT, 0));
-        $this->set('canEdit', $this->objPrivilege->canEditOrderReturnRequests($this->admin_id, true));
+        $this->set('recordId', $recordId);
+        $this->set('postedData', FatApp::getPostedData());
 
-        $startRecord = ($page - 1) * $pageSize + 1;
-        $endRecord = $page * $pageSize;
-        $totalRecords = $srch->recordCount();
-        if ($totalRecords < $endRecord) {
-            $endRecord = $totalRecords;
-        }
-        $json['totalRecords'] = $totalRecords;
-        $json['startRecord'] = $startRecord;
-        $json['endRecord'] = $endRecord;
-
-        $json['html'] = $this->_template->render(false, false, 'order-return-requests/messages-list.php', true);
-        FatUtility::dieJsonSuccess($json);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupMessage()
@@ -531,6 +524,7 @@ class OrderReturnRequestsController extends ListingBaseController
         $frm = new Form('frmMsgsSrch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'orrequest_id');
+        $frm->addHiddenField('', 'reference');
         return $frm;
     }
 
