@@ -59,7 +59,7 @@ class UsersController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
@@ -576,7 +576,7 @@ class UsersController extends ListingBaseController
         if (0 < $deletedOnly) {
             $srch->addCondition('user_deleted', '=', applicationConstants::YES);
         }
-        
+
         $parentsOnly = FatApp::getPostedData('parents_only', FatUtility::VAR_INT, 0);
         if (0 < $parentsOnly) {
             $srch->addCondition('user_parent', '=', 0);
