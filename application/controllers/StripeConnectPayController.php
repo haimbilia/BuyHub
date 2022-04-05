@@ -35,7 +35,7 @@ class StripeConnectPayController extends PaymentController
      */
     public function init()
     {
-        if ('distribute' != $this->action && (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged())) {
+        if ('distribute' != $this->_actionName && (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged())) {
             $this->userId = UserAuthentication::getLoggedUserId(true);
             if (1 > $this->userId) {
                 $msg = Labels::getLabel('ERR_INVALID_USER', $this->siteLangId);
