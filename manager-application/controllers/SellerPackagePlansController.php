@@ -27,7 +27,7 @@ class SellerPackagePlansController extends ListingBaseController
 
     public function index()
     {
-        Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_SELECT_SELLER_PACKAGE_FIRST', $this->siteLangId));
+        Message::addErrorMessage(Labels::getLabel('ERR_PLEASE_SELECT_SELLER_PACKAGE_FIRST', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('SellerPackages'));
     }
 

@@ -220,7 +220,7 @@ class TwocheckoutPayController extends PaymentController
                         $message .= 'Response Message: ' . $responseMsg . "\n";
                         if ($responseCode == 'APPROVED') {
                             /* Recording Payment in DB */
-                            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $transactionId, $orderPaymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), $message);
+                            $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $transactionId, $orderPaymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), $message);
                             $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
                             /* End Recording Payment in DB */
                         }

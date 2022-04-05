@@ -189,7 +189,7 @@ class OrderPayment extends Orders
             $orderBalance = (($orderDetails['order_net_amount'] - 1) - $totalPaymentPaid);
 
             if ($orderBalance <= 0) {
-                $this->addOrderPaymentHistory($paymentOrderId, $orderPaymentStatus, Labels::getLabel('SUC_RECEIVED_PAYMENT', $defaultSiteLangId), 1);
+                $this->addOrderPaymentHistory($paymentOrderId, $orderPaymentStatus, Labels::getLabel('MSG_RECEIVED_PAYMENT', $defaultSiteLangId), 1);
 
                 $notificationData = array(
                     'notification_record_type' => Notification::TYPE_ORDER,

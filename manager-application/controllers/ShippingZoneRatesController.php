@@ -213,7 +213,7 @@ class ShippingZoneRatesController extends ListingBaseController {
         if (!$sObj->deleteRecord(true)) {
              LibHelper::exitWithError($sObj->getError(), true);   
         }
-        $this->set('msg', Labels::getLabel('LBL_Rate_Deleted_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RATE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

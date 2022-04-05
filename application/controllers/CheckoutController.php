@@ -92,7 +92,7 @@ class CheckoutController extends MyAppController
                 case 'hasStock':
                     /* if( !$this->cartObj->hasStock() ){
                     $key = false;
-                    Message::addErrorMessage(Labels::getLabel('MSG_Products_are_out_of_stock', $this->siteLangId));
+                    Message::addErrorMessage(Labels::getLabel('ERR_PRODUCTS_ARE_OUT_OF_STOCK', $this->siteLangId));
                     return false;
                     } */
 
@@ -447,7 +447,7 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        $this->set('msg', Labels::getLabel('SUC_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -666,7 +666,7 @@ class CheckoutController extends MyAppController
                 LibHelper::exitWithError($this->errMessage, true);
             }
 
-            $this->set('msg', Labels::getLabel('SUC_SHIPPING_METHOD_SELECTED_SUCCESSFULLY.', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_SHIPPING_METHOD_SELECTED_SUCCESSFULLY.', $this->siteLangId));
             if (true === MOBILE_APP_API_CALL) {
                 $fulfilmentType = FatApp::getPostedData('fulfilmentType', FatUtility::VAR_INT, Shipping::FULFILMENT_SHIP);
                 $cartObj = new Cart();
@@ -2086,7 +2086,7 @@ class CheckoutController extends MyAppController
         $frm = new Form('frmPromoCoupons');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Coupon_code', $langId), 'coupon_code', '', array('placeholder' => Labels::getLabel('FRM_Enter_Your_code', $langId)));
         $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_Apply', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_APPLY', $langId));
         return $frm;
     }
 
@@ -2166,7 +2166,7 @@ class CheckoutController extends MyAppController
         }
 
         $this->cartObj->setProductPickUpAddresses($pickupAddressArr);
-        $this->set('msg', Labels::getLabel('SUC_PICKUP_METHOD_SELECTED_SUCCESSFULLY.', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PICKUP_METHOD_SELECTED_SUCCESSFULLY.', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -2228,7 +2228,7 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        $this->set('msg', Labels::getLabel('SUC_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2280,7 +2280,7 @@ class CheckoutController extends MyAppController
             FatUtility::dieWithError($userObj->getError());
         }
 
-        $this->set('msg', Labels::getLabel('SUC_OTP_SENT!', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_OTP_SENT!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

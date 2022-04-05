@@ -136,7 +136,7 @@ class PaynowPayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
 
         /* Recording Payment in DB */
-        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $paymentId, $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($_REQUEST))) {
+        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $paymentId, $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($_REQUEST))) {
             $msg = $orderPaymentObj->getError();
             $this->logFailure($orderId, $msg);
         }
@@ -184,7 +184,7 @@ class PaynowPayController extends PaymentController
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
         if (false === $processRequest) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         }
         return $frm;
     }

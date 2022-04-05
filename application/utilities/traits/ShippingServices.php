@@ -19,7 +19,7 @@ trait ShippingServices
     {
         $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id', 'opshipping_plugin_id']);
         if (empty($orderData) || 1 > $orderData['opshipping_plugin_id']) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_ORDER", $this->langId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_ORDER", $this->langId));
         }
 
         $this->validateShippingService($orderData);
@@ -486,7 +486,7 @@ trait ShippingServices
         $this->validateShippingService($data);
         $frm = $this->getPickupForm();
         if(null == $frm->getField('btn_submit')){
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->langId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->langId));
         }
         $frm->fill(['op_id' => $opId]);
         $this->set('frm', $frm);
@@ -542,7 +542,7 @@ trait ShippingServices
     {
         $data = $this->getOrderProductDetail($opId);
         if (empty($data) || empty($data['opsp_scheduled']) || 1 > $data['opsp_scheduled']) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->langId));
         }
         $this->validateShippingService($data);
 
@@ -579,7 +579,7 @@ trait ShippingServices
     {
         $orderData = $this->getOrderProductDetail($opId);
         if (empty($orderData)) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_ORDER", $this->langId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_ORDER", $this->langId), true);
         }
         
         $rates = $this->getShippingRatesFromApi($orderData);
@@ -590,7 +590,7 @@ trait ShippingServices
         $rateOptions = $this->formatShippingRates($rates, $this->langId);
 
         $frm = new Form('frmRates');
-        $frm->addSelectBox(Labels::getLabel('LBL_RATES', $this->langId), 'shipping_rates', $rateOptions)->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_RATES', $this->langId), 'shipping_rates', $rateOptions)->requirements()->setRequired();
         $frm->addHiddenField('', 'op_id', $opId)->requirements()->setIntPositive();      
         return $frm;
     }
@@ -745,13 +745,13 @@ trait ShippingServices
         $opId = $post['op_id'];
         $orderData = $this->getOrderProductDetail($opId);
         if (empty($orderData)) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->langId));
         }
 
         $rates = $this->getShippingRatesFromApi($orderData);
 
         if (1 > count($rates) || !isset($rates[$post['shipping_rates']])) {
-            LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->langId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->langId));
         }
 
         $dataToUpdate = array(

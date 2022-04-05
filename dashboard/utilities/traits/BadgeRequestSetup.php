@@ -113,31 +113,31 @@ trait BadgeRequestSetup
 
         $badgeLinkCondId = FatApp::getPostedData('breq_blinkcond_id', FatUtility::VAR_INT, 0);
         if (1 > $badgeLinkCondId && 1 > $badgeId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_BADGE', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_BADGE', $this->siteLangId));
         }
 
         $recordIds = isset($post['record_ids']) ? json_decode($post['record_ids'], true) : [];
         if (null === $recordIds || false === $recordIds || empty($recordIds)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_PLEASE_SELECT_ATLEAST_ONE_RECORD', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_ATLEAST_ONE_RECORD', $this->siteLangId));
         }
 
         /* Badge Condition Setup if not added. */
         if (1 > $badgeLinkCondId) {
             $recordType = FatApp::getPostedData('breq_record_type', FatUtility::VAR_INT, 0);
             if (1 > $recordType) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RECORD_TYPE', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_RECORD_TYPE', $this->siteLangId));
             }
 
             $fromDate = FatApp::getPostedData('blinkcond_from_date', FatUtility::VAR_STRING, '');
             $toDate = FatApp::getPostedData('blinkcond_to_date', FatUtility::VAR_STRING, '');
 
             if (!empty($fromDate) && !empty($toDate) && $fromDate > $toDate) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', $this->siteLangId));
             }
 
             $userId = UserAuthentication::getLoggedUserId();
             if (false === BadgeLinkCondition::isUnique($badgeId, $userId, $recordType)) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_REQUEST_FOR_THIS_BADGE_ALREADY_APPROVED/_PENDING', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_REQUEST_FOR_THIS_BADGE_ALREADY_APPROVED/_PENDING', $this->siteLangId));
             }
 
             $data = [
@@ -333,7 +333,7 @@ trait BadgeRequestSetup
     public function unlinkRecord(int $badgeReqId, int $record_id = 0)
     {
         if (1 > $badgeReqId || 1 > $record_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $smt = 'badgelink_breq_id = ?';
         $vals = [$badgeReqId];

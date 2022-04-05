@@ -970,7 +970,7 @@ class Importexport extends ImportexportCommon
             FatUtility::dieJsonError($success);
         }
         CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES); 
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
 
         FatUtility::dieJsonSuccess($success);
     }
@@ -1114,7 +1114,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -1474,7 +1474,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -2229,7 +2229,7 @@ class Importexport extends ImportexportCommon
             FatUtility::dieJsonError($success);
         }
 
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -2391,7 +2391,7 @@ class Importexport extends ImportexportCommon
             FatUtility::dieJsonError($success);
         }
 
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -2553,7 +2553,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -2758,7 +2758,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -3018,7 +3018,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -3302,7 +3302,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -3757,7 +3757,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -3968,7 +3968,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -4118,7 +4118,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -4277,7 +4277,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -4396,7 +4396,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -4544,7 +4544,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -4667,7 +4667,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -4817,7 +4817,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -4978,7 +4978,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -5146,7 +5146,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -5301,7 +5301,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -5478,7 +5478,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -5599,7 +5599,7 @@ class Importexport extends ImportexportCommon
             FatUtility::dieJsonError($success);
         }
         CacheHelper::clear(CacheHelper::TYPE_ZONE);
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 
@@ -5768,7 +5768,7 @@ class Importexport extends ImportexportCommon
         }
         
         CacheHelper::clear(CacheHelper::TYPE_ZONE);        
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
 
         FatUtility::dieJsonSuccess($success);
     }
@@ -5925,7 +5925,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        $success['msg'] = Labels::getLabel('SUC_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
+        $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
 

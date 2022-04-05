@@ -293,7 +293,7 @@ class UrlRewritingController extends ListingBaseController
         }
         $fld =  $frm->addHTML('', '', '');
         $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_EXAMPLE:_CUSTOM_URL_EXAMPLE', $this->siteLangId) . '</small>';
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $this->siteLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 

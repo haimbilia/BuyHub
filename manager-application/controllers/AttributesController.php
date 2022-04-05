@@ -100,7 +100,7 @@ class AttributesController extends ListingBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Attribute_Group_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ATTRIBUTE_GROUP_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -109,12 +109,12 @@ class AttributesController extends ListingBaseController
         $this->objPrivilege->canViewAttributes();
         $attrgrp_id = FatUtility::int($attrgrp_id);
         if (!$attrgrp_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Attributes'));
         }
         $attrgrp_row = AttributeGroup::getAttributesById($attrgrp_id);
         if (!$attrgrp_row) {
-            Message::addErrorMessage(Labels::getLabel('MSG_No_Record_Exist', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_NO_RECORD_EXIST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Attributes'));
         }
 
@@ -179,7 +179,7 @@ class AttributesController extends ListingBaseController
         $attrgrp_id = FatUtility::int($post['attrgrp_id']);
         $attrgrp_row = AttributeGroup::getAttributesById($attrgrp_id);
         if (!$attrgrp_row) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Attribute_Group_Not_Selected', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_ATTRIBUTE_GROUP_NOT_SELECTED', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Attributes'));
         }
         $attrgrp_id = $attrgrp_row['attrgrp_id'];
@@ -193,7 +193,7 @@ class AttributesController extends ListingBaseController
                 continue;
             }
             if (empty($post['attr_identifier_num_' . $i]) || empty($post['attr_type_num_' . $i])) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Could_Not_Save_Data', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_COULD_NOT_SAVE_DATA', $this->siteLangId));
                 $this->attributes($attrgrp_id);
                 return;
             }
@@ -222,7 +222,7 @@ class AttributesController extends ListingBaseController
                 continue;
             }
             if (empty($post['attr_identifier_text_' . $i]) || empty($post['attr_type_text_' . $i])) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Could_Not_Save_Data', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_COULD_NOT_SAVE_DATA', $this->siteLangId));
                 $this->attributes($attrgrp_id);
                 return;
             }
@@ -248,7 +248,7 @@ class AttributesController extends ListingBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('Attributes'));
         }
 
-        Message::addMessage(Labels::getLabel('LBL_Record_Added_Successfully', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_RECORD_ADDED_SUCCESSFULLY', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('Attributes'));
     }
 
@@ -260,7 +260,7 @@ class AttributesController extends ListingBaseController
         $attrgrp_id = FatUtility::int($post['attrgrp_id']);
         $attrgrp_row = AttributeGroup::getAttributesById($attrgrp_id);
         if (!$attrgrp_row) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Attribute_Group_not_selected', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_ATTRIBUTE_GROUP_NOT_SELECTED', $this->siteLangId), true);
         }
 
         $attrgrp_id = $attrgrp_row['attrgrp_id'];
@@ -291,7 +291,7 @@ class AttributesController extends ListingBaseController
         $attrgrp_id = FatUtility::int($attrgrp_id);
         $attrgrp_row = AttributeGroup::getAttributesById($attrgrp_id);
         if (!$attrgrp_row) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Attribute_Group_not_selected', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_ATTRIBUTE_GROUP_NOT_SELECTED', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Attributes'));
         }
 
@@ -312,7 +312,7 @@ class AttributesController extends ListingBaseController
             if (!$attrGrpAttrObj->updateOrder($post['attributes'])) {
                 LibHelper::exitWithError($attrGrpAttrObj->getError(), true);
             }
-            FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Order_Updated_Successfully', $this->siteLangId));
+            FatUtility::dieJsonSuccess(Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId));
         }
     }
 
@@ -323,7 +323,7 @@ class AttributesController extends ListingBaseController
         $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         $lang_id = (!$lang_id) ? $this->siteLangId : $lang_id;
         if ($recordId == 0 || $lang_id == 0) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
         $attrLangFrm = $this->getAttributeLangForm($recordId, $lang_id);
 
@@ -349,7 +349,7 @@ class AttributesController extends ListingBaseController
         $lang_id = $post['lang_id'];
 
         if ($attr_id == 0 || $lang_id == 0) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
         $frm = $this->getAttributeLangForm($attr_id, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());

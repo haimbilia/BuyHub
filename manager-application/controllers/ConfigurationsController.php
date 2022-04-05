@@ -162,7 +162,7 @@ class ConfigurationsController extends ListingBaseController
             ];
 
             if (EmailHandler::sendSmtpTestEmail($this->siteLangId, $smtp_arr)) {
-                Message::addMessage(Labels::getLabel('LBL_WE_HAVE_SENT_A_TEST_EMAIL_TO_ADMINISTRATOR_ACCOUNT' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL"), $this->siteLangId));
+                Message::addMessage(Labels::getLabel('MSG_WE_HAVE_SENT_A_TEST_EMAIL_TO_ADMINISTRATOR_ACCOUNT' . FatApp::getConfig("CONF_SITE_OWNER_EMAIL"), $this->siteLangId));
             } else {
                 unset($post["CONF_SEND_SMTP_EMAIL"]);
                 foreach ($smtp_arr as $skey => $sval) {
@@ -200,7 +200,7 @@ class ConfigurationsController extends ListingBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', $this->str_setup_successful);
+        $this->set('msg', Labels::getLabel('MSG_SETTINGS_SAVED!!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -331,10 +331,10 @@ class ConfigurationsController extends ListingBaseController
                     Message::addMessage(Labels::getLabel('MSG_SETTING_UPDATED_SUCCESSFULLY', $this->siteLangId));
                 }
             } else {
-                Message::addErrorMessage(Labels::getLabel('MSG_INVALID_ACCESS_TOKEN', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS_TOKEN', $this->siteLangId));
             }
         } else {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
         FatApp::redirectUser(UrlHelper::generateUrl('configurations', 'index'));
     }
@@ -1954,7 +1954,7 @@ class ConfigurationsController extends ListingBaseController
             unlink($path_filename);
         }
         move_uploaded_file($temp_name, $path_filename);
-        $this->set('msg', Labels::getLabel('LBL_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1972,7 +1972,7 @@ class ConfigurationsController extends ListingBaseController
         if (file_exists($path_filename)) {
             unlink($path_filename);
         }
-        $this->set('msg', Labels::getLabel('LBL_FILE_DELETED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_FILE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

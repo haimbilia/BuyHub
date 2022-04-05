@@ -10,7 +10,7 @@ class AdvertisementFeedBaseController extends SellerPluginBaseController
 
         $class = get_called_class();
         if (!defined($class . '::KEY_NAME')) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_PLUGIN', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_PLUGIN', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller','', [], CONF_WEBROOT_DASHBOARD));
         }
         $this->keyName = $class::KEY_NAME;
@@ -25,7 +25,7 @@ class AdvertisementFeedBaseController extends SellerPluginBaseController
     protected function updateMerchantInfo($detail = [], $redirect = true)
     {
         if (!is_array($detail)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $obj = new User(UserAuthentication::getLoggedUserId());
         foreach ($detail as $key => $value) {

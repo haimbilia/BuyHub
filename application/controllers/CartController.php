@@ -331,7 +331,7 @@ class CartController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $cartObj = new Cart();
             $this->set('cartItemsCount', $cartObj->countProducts());
-            $this->set('msg', Labels::getLabel('SUC_ADDED_SUCCESSFULLY', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_ADDED_SUCCESSFULLY', $this->siteLangId));
             $this->_template->render();
         }
 
@@ -636,7 +636,7 @@ class CartController extends MyAppController
             Message::addMessage($cartObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-        $this->set('msg', Labels::getLabel("SUC_PRODUCT_COMBO_REMOVED_SUCCESSFULLY", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("MSG_PRODUCT_COMBO_REMOVED_SUCCESSFULLY", $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -683,7 +683,7 @@ class CartController extends MyAppController
             FatUtility::dieWithError(Message::getHtml());
             /* $this->set( 'msg', $cartObj->getWarning() ); */
         } else {
-            $this->set('msg', Labels::getLabel("SUC_CART_UPDATED_SUCCESSFULLY", $this->siteLangId));
+            $this->set('msg', Labels::getLabel("MSG_CART_UPDATED_SUCCESSFULLY", $this->siteLangId));
         }
         if (true === MOBILE_APP_API_CALL) {
             $fulfilmentType = FatApp::getPostedData('fulfilmentType', FatUtility::VAR_INT, Shipping::FULFILMENT_SHIP);
@@ -722,7 +722,7 @@ class CartController extends MyAppController
 
             $this->set('msg', $cartObj->getWarning());
         } else {
-            $this->set('msg', Labels::getLabel("SUC_CART_UPDATED_SUCCESSFULLY", $this->siteLangId));
+            $this->set('msg', Labels::getLabel("MSG_CART_UPDATED_SUCCESSFULLY", $this->siteLangId));
         }
 
         $this->_template->render(false, false, 'json-success.php');
@@ -780,7 +780,7 @@ class CartController extends MyAppController
             $this->set('cartSummary', $cartSummary);
             $this->_template->render();
         }
-        $this->set('msg', Labels::getLabel("SUC_CART_DISCOUNT_COUPON_APPLIED", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("MSG_CART_DISCOUNT_COUPON_APPLIED", $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -808,7 +808,7 @@ class CartController extends MyAppController
             $this->set('cartSummary', $cartSummary);
             $this->_template->render();
         }
-        $this->set('msg', Labels::getLabel("SUC_CART_DISCOUNT_COUPON_REMOVED", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("MSG_CART_DISCOUNT_COUPON_REMOVED", $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -926,6 +926,6 @@ class CartController extends MyAppController
         $cartObj->clear(true);
         $cartObj->updateUserCart();
         //FatApp::getDb()->deleteRecords('tbl_user_cart', array('smt' => '`usercart_user_id`=? and usercart_type=?', 'vals' => array($loggedUserId, $type)));
-        FatUtility::dieJsonSuccess(Labels::getLabel('SUC_SUCCESS', $this->siteLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
     }
 }

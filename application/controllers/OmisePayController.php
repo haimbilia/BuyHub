@@ -163,7 +163,7 @@ class OmisePayController extends PaymentController
                     throw new Exception(Labels::getLabel('ERR_INVALID_TRANSACTION_AMOUNT', $this->siteLangId));
                 }
                 /* Recording Payment in DB */
-                if (!$orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response->offsetGet('transaction'), $orderPaymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode((array) $response))) {
+                if (!$orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response->offsetGet('transaction'), $orderPaymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode((array) $response))) {
                     $error = Labels::getLabel('ERR_INVALID_ACTION', $this->siteLangId);
                 } else {
                     $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
@@ -203,7 +203,7 @@ class OmisePayController extends PaymentController
             }
 
             /* Recording Payment in DB */
-            if (!$orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $charge->offsetGet('transaction'), $orderPaymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode((array) $charge))) {
+            if (!$orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $charge->offsetGet('transaction'), $orderPaymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode((array) $charge))) {
                 $error = Labels::getLabel('ERR_INVALID_ACTION', $this->siteLangId);
             } else {
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));

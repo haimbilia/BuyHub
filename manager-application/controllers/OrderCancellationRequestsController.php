@@ -121,10 +121,10 @@ class OrderCancellationRequestsController extends ListingBaseController
         $srch->joinSellerProducts();
         $srch->joinOrders();
         $srch->joinOrderBuyerUser();
-        if(0 <  $seller){
+        if (0 <  $seller) {
             $srch->joinOrderSellerUser();
         }
-        $srch->joinOrderProductStatus();
+        $srch->joinOrderProductStatus($this->siteLangId);
         $srch->joinOrderCancelReasons();
         $srch->addOrderProductCharges();
 
@@ -160,7 +160,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         }
 
         if (0 < $seller) {
-            $srch->addCondition('seller.user_id', '=', $seller);            
+            $srch->addCondition('seller.user_id', '=', $seller);
         }
 
         $dateFrom = FatApp::getPostedData('date_from', null, '');
@@ -185,13 +185,13 @@ class OrderCancellationRequestsController extends ListingBaseController
                 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'op_qty', 'op_unit_price',
                 'order_tax_charged', 'op_other_charges', 'op_rounding_off', 'op_id', 'buyer.user_id AS user_id',
                 'buyer.user_updated_on AS user_updated_on', 'op_shop_id', 'op_shop_name', 'op_selprod_id',
-                'op_product_name', 'op_selprod_title', 'op_brand_name', 'selprod_product_id', 'ocrequest_admin_comment'
+                'op_product_name', 'op_selprod_title', 'op_brand_name', 'selprod_product_id', 'ocrequest_admin_comment', 'order_payment_status', 'order_pmethod_id', 'orderstatus_color_class'
             )
         );
-       
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set('requestStatusArr', OrderCancelRequest::getRequestStatusArr($this->siteLangId));
         $this->set('statusClassArr', OrderCancelRequest::getStatusClassArr());
+        $this->set('orderStatusArr', Orders::getOrderStatusArr($this->siteLangId));
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -308,7 +308,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $row = FatApp::getDb()->fetch($rs);
 
         if (!$row) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_STATUS_IS_ALREADY_APPROVED_OR_DECLINED', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_STATUS_IS_ALREADY_APPROVED_OR_DECLINED', $this->siteLangId));
         }
 
         if ($postStatus == $row['ocrequest_status']) {
@@ -392,7 +392,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         }
         $emailObj = new EmailHandler();
         if (!$emailObj->sendOrderCancellationRequestUpdateNotification($row['ocrequest_id'], $this->siteLangId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_EMAIL_SENDING_ERROR', $this->siteLangId) . " " . $emailObj->getError());
+            Message::addErrorMessage(Labels::getLabel('ERR_EMAIL_SENDING_ERROR', $this->siteLangId) . " " . $emailObj->getError());
             CommonHelper::redirectUserReferer();
         }
         $db->commitTransaction();
@@ -406,11 +406,11 @@ class OrderCancellationRequestsController extends ListingBaseController
         $srch->joinOrderCancelReasons();
         $srch->joinOrderProducts();
         $srch->joinOrderSellerUser();
-        $srch->addMultipleFields(['ocreason_title', 'ocrequest_message','seller.user_name as seller_name', 'seller_cred.credential_username', 'seller_cred.credential_email','op_shop_id','op_shop_name']);
+        $srch->addMultipleFields(['ocreason_title', 'ocrequest_message', 'seller.user_name as seller_name', 'seller_cred.credential_username', 'seller_cred.credential_email', 'op_shop_id', 'op_shop_name']);
         $srch->addCondition('ocrequest_id', '=', $ocrequestId);
         $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);       
-        $row = FatApp::getDb()->fetch($srch->getResultSet()); 
+        $srch->setPageSize(1);
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
         $this->set('row', $row);
         $this->set('canViewShops', $this->objPrivilege->canViewShops($this->admin_id, true));
         $this->set('html', $this->_template->render(false, false, NULL, true));
@@ -446,7 +446,8 @@ class OrderCancellationRequestsController extends ListingBaseController
             'vendor_detail' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             'amount' => Labels::getLabel('LBL_AMOUNT', $this->siteLangId),
             'ocrequest_date' => Labels::getLabel('LBL_DATE', $this->siteLangId),
-            'ocrequest_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'orderstatus_name' => Labels::getLabel('LBL_ORDER_STATUS', $this->siteLangId),
+            'ocrequest_status' => Labels::getLabel('LBL_REQUEST_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId)
         ];
         CacheHelper::create('orderCancellationRequestsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -466,6 +467,7 @@ class OrderCancellationRequestsController extends ListingBaseController
             'buyer_detail',
             /*'vendor_detail',*/
             'amount',
+            'orderstatus_name',
             'ocrequest_date',
             'ocrequest_status',
             'action'

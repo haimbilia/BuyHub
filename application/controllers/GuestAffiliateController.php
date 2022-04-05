@@ -289,9 +289,9 @@ class GuestAffiliateController extends MyAppController
                 break;
 
             case UserAuthentication::AFFILIATE_REG_STEP4:
-                $successMsg = Labels::getLabel('SUC_YOU_HAVE_BEEN_REGISTERED_SUCCESSFULLY.', $this->siteLangId);
+                $successMsg = Labels::getLabel('MSG_YOU_HAVE_BEEN_REGISTERED_SUCCESSFULLY.', $this->siteLangId);
                 if (FatApp::getConfig('CONF_EMAIL_VERIFICATION_AFFILIATE_REGISTRATION', FatUtility::VAR_INT, 1)) {
-                    $successMsg .= Labels::getLabel('SUC_A_VERIFICATION_LINK_HAS_BEEN_SENT_TO_YOUR_EMAIL_ADDRESS._PLEASE_VERIFY_YOUR_EMAIL_AND_ACCESS_MY_ACCOUNT_AREA.', $this->siteLangId);
+                    $successMsg .= Labels::getLabel('MSG_A_VERIFICATION_LINK_HAS_BEEN_SENT_TO_YOUR_EMAIL_ADDRESS._PLEASE_VERIFY_YOUR_EMAIL_AND_ACCESS_MY_ACCOUNT_AREA.', $this->siteLangId);
                 }
                 $this->clearAffiliateSession();
                 $this->set('successMsg', $successMsg);

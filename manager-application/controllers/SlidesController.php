@@ -192,7 +192,7 @@ class SlidesController extends ListingBaseController
         $recordId = $post['slide_id'];
         $slideId = Slides::getAttributesByIdentifier($post['slide_title'], 'slide_id');
         if (!empty($slideId) && $slideId != $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_SLIDE_TITLE_MUST_BE_UNIQUE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_SLIDE_TITLE_MUST_BE_UNIQUE', $this->siteLangId), true);
         }
 
         $post['slide_identifier'] = $post['slide_title'];
@@ -240,7 +240,7 @@ class SlidesController extends ListingBaseController
                 }
             }
         }
-        
+
         if ($newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
             $this->set('openMediaForm', true);
         }
@@ -377,8 +377,6 @@ class SlidesController extends ListingBaseController
         if (!$obj->deleteRecord(true)) {
             LibHelper::exitWithError($obj->getError(), true);
         }
-        $this->set('msg', $this->str_delete_record);
-        $this->_template->render(false, false, 'json-success.php');
     }
 
 
@@ -395,7 +393,7 @@ class SlidesController extends ListingBaseController
 
         $file = $_FILES['cropped_image'];
         if (!is_uploaded_file($file['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -504,11 +502,11 @@ class SlidesController extends ListingBaseController
         }
 
         $slideImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0, $langId, false);
-        $slideDimensions = ImageDimension::getSlideData();    
+        $slideDimensions = ImageDimension::getSlideData();
 
         $this->set('image', $slideImage);
         $this->set('recordId', $recordId);
-        $this->set('slideDimensions',$slideDimensions);
+        $this->set('slideDimensions', $slideDimensions);
         $this->set('imageFrm', $imageFrm);
         $this->set('languageCount', count($languages));
         $this->set('langId', $langId);
@@ -552,7 +550,7 @@ class SlidesController extends ListingBaseController
         $arr = [
             'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'slide_media' => Labels::getLabel('LBL_MEDIA', $this->siteLangId),
             'slide_title' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'slide_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -561,7 +559,7 @@ class SlidesController extends ListingBaseController
         CacheHelper::create('slideTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
-    
+
     /**
      * getDefaultColumns
      *
@@ -572,14 +570,14 @@ class SlidesController extends ListingBaseController
         return [
             //'dragdrop',
             'select_all',
-           /*  'listSerial', */
+            /*  'listSerial', */
             'slide_media',
             'slide_title',
             'slide_active',
             'action',
         ];
     }
-    
+
     /**
      * setCustomColumnWidth
      *
@@ -612,7 +610,7 @@ class SlidesController extends ListingBaseController
         ];
         $this->set('tableHeadAttrArr', $arr);
     }
-    
+
     /**
      * excludeKeysForSort
      *

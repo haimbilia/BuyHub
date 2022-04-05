@@ -11,7 +11,7 @@ class ShippingPackagesController extends SellerBaseController {
         }
 
         if (!FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 

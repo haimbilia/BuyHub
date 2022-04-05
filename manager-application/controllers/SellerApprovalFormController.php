@@ -229,7 +229,7 @@ class SellerApprovalFormController extends ListingBaseController
                 LibHelper::exitWithError($obj->getError(), true);
             }
 
-            $this->set('msg', Labels::getLabel('LBL_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
     }

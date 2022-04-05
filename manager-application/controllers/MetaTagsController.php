@@ -676,13 +676,13 @@ class MetaTagsController extends ListingBaseController
             $frm->addHtml('', 'or', '<div class="or"> <span>' . Labels::getLabel('FRM_OR', $this->siteLangId) . '</span></div>');
 
             $fld = $frm->addRequiredField(Labels::getLabel('FRM_CONTROLLER', $this->siteLangId), 'meta_controller');
-            $fld->htmlAfterField = "<small>" . Labels::getLabel("TXT_Ex:_If_URL_is", $this->siteLangId) . " http://domain-name.com/shops/report-spam/1/10 " . Labels::getLabel("LBL_then_controller_will_be_", $this->siteLangId) . " shops</small>";
+            $fld->htmlAfterField = "<small>" . Labels::getLabel("TXT_EX:_IF_URL_IS", $this->siteLangId) . " http://domain-name.com/shops/report-spam/1/10 " . Labels::getLabel("LBL_then_controller_will_be_", $this->siteLangId) . " shops</small>";
             $fld = $frm->addRequiredField(Labels::getLabel('FRM_ACTION', $this->siteLangId), 'meta_action');
-            $fld->htmlAfterField = "<small>" . Labels::getLabel("TXT_Ex:_If_URL_is", $this->siteLangId) . " http://domain-name.com/shops/report-spam/1/10 " . Labels::getLabel("LBL_then_action_will_be_", $this->siteLangId) . " reportSpam</small>";
+            $fld->htmlAfterField = "<small>" . Labels::getLabel("TXT_EX:_IF_URL_IS", $this->siteLangId) . " http://domain-name.com/shops/report-spam/1/10 " . Labels::getLabel("LBL_THEN_ACTION_WILL_BE_", $this->siteLangId) . " reportSpam</small>";
             $fld = $frm->addTextBox(Labels::getLabel('FRM_RECORD_ID', $this->siteLangId), 'meta_record_id');
-            $fld->htmlAfterField = "<small>" . Labels::getLabel("TXT_Ex:_If_URL_is", $this->siteLangId) . " http://domain-name.com/shops/report-spam/1/10 " . Labels::getLabel("LBL_then_record_id_will_be_", $this->siteLangId) . " 1</small>";
+            $fld->htmlAfterField = "<small>" . Labels::getLabel("TXT_EX:_IF_URL_IS", $this->siteLangId) . " http://domain-name.com/shops/report-spam/1/10 " . Labels::getLabel("LBL_then_record_id_will_be_", $this->siteLangId) . " 1</small>";
             $fld = $frm->addTextBox(Labels::getLabel('FRM_SUB_RECORD_ID', $this->siteLangId), 'meta_subrecord_id');
-            $fld->htmlAfterField = "<small>" . Labels::getLabel("TXT_Ex:_If_URL_is", $this->siteLangId) . " http://domain-name.com/shops/report-spam/1/10 " . Labels::getLabel("LBL_then_sub_record_id_will_be_", $this->siteLangId) . " 10</small>";
+            $fld->htmlAfterField = "<small>" . Labels::getLabel("TXT_EX:_IF_URL_IS", $this->siteLangId) . " http://domain-name.com/shops/report-spam/1/10 " . Labels::getLabel("LBL_then_sub_record_id_will_be_", $this->siteLangId) . " 10</small>";
         }
         return $frm;
     }

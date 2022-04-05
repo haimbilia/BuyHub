@@ -95,7 +95,7 @@ class GuestAdvertiserController extends MyAppController
         if (!ValidateElement::password($post['user_password'])) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('SUC_Data_verified', $this->siteLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Data_verified', $this->siteLangId));
     }
 
     public function setupCompanyDetailsForm()
@@ -171,9 +171,9 @@ class GuestAdvertiserController extends MyAppController
 
         $db->commitTransaction();
         if ($verify) {
-            $this->set('msg', Labels::getLabel("SUC_SUCCESS_USER_SIGNUP_VERIFIED", $this->siteLangId));
+            $this->set('msg', Labels::getLabel("MSG_SUCCESS_USER_SIGNUP_VERIFIED", $this->siteLangId));
         } else {
-            $this->set('msg', Labels::getLabel("SUC_SUCCESS_USER_SIGNUP", $this->siteLangId));
+            $this->set('msg', Labels::getLabel("MSG_SUCCESS_USER_SIGNUP", $this->siteLangId));
         }
 
         $_SESSION['registered_supplier']['id'] = $userObj->getMainTableRecordId();
@@ -204,9 +204,9 @@ class GuestAdvertiserController extends MyAppController
         }
 
         if (/* $userdata['credential_active'] == applicationConstants::ACTIVE &&  */$userdata['credential_verified'] == applicationConstants::YES) {
-            $success_message = Labels::getLabel('SUC_SUCCESS_USER_SIGNUP_VERIFIED', $this->siteLangId);
+            $success_message = Labels::getLabel('MSG_SUCCESS_USER_SIGNUP_VERIFIED', $this->siteLangId);
         } else {
-            $success_message = Labels::getLabel('SUC_SUCCESS_USER_SIGNUP', $this->siteLangId);
+            $success_message = Labels::getLabel('MSG_SUCCESS_USER_SIGNUP', $this->siteLangId);
         }
 
         unset($_SESSION['registered_supplier']['id']);

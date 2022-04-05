@@ -227,7 +227,7 @@ class ShippingMethodsController extends ListingBaseController
 
         $this->updateShippingMethodsStatus($shippingapiId, $status);
 
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -250,7 +250,7 @@ class ShippingMethodsController extends ListingBaseController
 
             $this->updateShippingMethodsStatus($shippingapiId, $status);
         }
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -300,7 +300,7 @@ class ShippingMethodsController extends ListingBaseController
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 }

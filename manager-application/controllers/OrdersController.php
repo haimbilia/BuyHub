@@ -459,7 +459,7 @@ class OrdersController extends ListingBaseController
         $rs = $srch->getResultSet();
         $shippingUserRow = FatApp::getDb()->fetch($rs);
         if ($shippingUserRow && $orderDetail['plugin_code'] == "CashOnDelivery") {
-            $comments = Labels::getLabel('Msg_Cash_will_collect_against_COD_order', $this->siteLangId) . ' ' . $orderDetail['op_invoice_number'];
+            $comments = Labels::getLabel('MSG_CASH_WILL_COLLECT_AGAINST_COD_ORDER', $this->siteLangId) . ' ' . $orderDetail['op_invoice_number'];
             $amt = CommonHelper::orderProductAmount($orderDetail);
             $txnObj = new Transactions();
             $txnDataArr = array(
@@ -486,7 +486,7 @@ class OrdersController extends ListingBaseController
         $this->objPrivilege->canViewSellerOrders();
         $opId = FatUtility::int($opId);
         if (1 > $opId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -511,7 +511,7 @@ class OrdersController extends ListingBaseController
         $orderDetail = FatApp::getDb()->fetch($rs);
 
         if (!$orderDetail) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -562,8 +562,8 @@ class OrdersController extends ListingBaseController
         $pdf->SetMargins(10, 10, 10);
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
         $pdf->AddPage();
-        $pdf->SetTitle(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
-        $pdf->SetSubject(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
+        $pdf->SetTitle(Labels::getLabel('LBL_TAX_INVOICE', $this->siteLangId));
+        $pdf->SetSubject(Labels::getLabel('LBL_TAX_INVOICE', $this->siteLangId));
 
         // set LTR direction for english translation
         $pdf->setRTL(('rtl' == Language::getLayoutDirection($this->siteLangId)));
@@ -586,7 +586,7 @@ class OrdersController extends ListingBaseController
     {
         $this->objPrivilege->canViewSellerOrders();
         if (!$orderId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -608,7 +608,7 @@ class OrdersController extends ListingBaseController
         $childOrderDetail = FatApp::getDb()->fetchAll($srch->getResultSet(), 'op_id');
 
         if (1 > count($childOrderDetail)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Order', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ORDER', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
 
@@ -1028,7 +1028,7 @@ class OrdersController extends ListingBaseController
             LibHelper::exitWithError($orderPaymentObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_PAYMENT_DETAILS_ADDED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PAYMENT_DETAILS_ADDED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

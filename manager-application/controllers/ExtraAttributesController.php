@@ -167,7 +167,7 @@ class ExtraAttributesController extends ListingBaseController
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Attribute_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ATTRIBUTE_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('eattrgroup_id', $eattrgroup_id);
         $this->set('eattribute_id', $eattribute_id);
         $this->set('lang_id', $newTabLangId);
@@ -272,7 +272,7 @@ class ExtraAttributesController extends ListingBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Attribute_Setup_Successful', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ATTRIBUTE_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('eattribute_id', $eattribute_id);
         $this->set('lang_id', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');

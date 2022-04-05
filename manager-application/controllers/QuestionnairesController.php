@@ -458,7 +458,7 @@ class QuestionnairesController extends ListingBaseController
         if (!$questionnaireObj->addQuestionToQuestionnaire($dataToSave)) {
             LibHelper::exitWithError($questionnaireObj->getError(), true);
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Question_Added_Successfully', $this->siteLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_QUESTION_ADDED_SUCCESSFULLY', $this->siteLangId));
     }
 
     public function removeQuestion()
@@ -474,7 +474,7 @@ class QuestionnairesController extends ListingBaseController
         if (!$db->deleteRecords(Questionnaires::DB_TBL_QUESTIONNAIRE_TO_QUESTION, $whereCond)) {
             LibHelper::exitWithError($db->getError(), true);
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Question_Removed_Successfully', $this->siteLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('SCU_QUESTION_REMOVED_SUCCESSFULLY', $this->siteLangId));
     }
 
     public function updateQuestionsOrder()
@@ -502,7 +502,7 @@ class QuestionnairesController extends ListingBaseController
                     )
                 );
             }
-            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
+            FatUtility::dieJsonSuccess(Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId));
         }
     }
 

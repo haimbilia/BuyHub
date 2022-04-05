@@ -438,7 +438,7 @@ class ProductCategoriesController extends ListingBaseController
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('LBL_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         ProductCategory::deleteImagesWithOutCategoryId($file_type);
@@ -639,13 +639,13 @@ class ProductCategoriesController extends ListingBaseController
     public function getRequestSearchForm($request = false)
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $f1 = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $f1 = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         if ($request) {
             $frm->addTextBox(Labels::getLabel('FRM_Seller_Name_Or_Email', $this->siteLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
             $frm->addHiddenField('', 'user_id');
         }
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('FRM_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $frm->addHiddenField('', 'prodcat_id');
         $fld_submit->attachField($fld_cancel);
         return $frm;
@@ -716,7 +716,7 @@ class ProductCategoriesController extends ListingBaseController
             LibHelper::exitWithError($prodCat->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -734,7 +734,7 @@ class ProductCategoriesController extends ListingBaseController
             LibHelper::exitWithError($prodCat->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_REMOVED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_REMOVED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

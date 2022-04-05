@@ -137,7 +137,7 @@ class ProfileController extends ListingBaseController
 
         $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_updated_on'] = time();
 
-        $this->set('msg', Labels::getLabel('SUC_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -154,7 +154,7 @@ class ProfileController extends ListingBaseController
 
         $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_updated_on'] = time();
 
-        $this->set('msg', Labels::getLabel('SUC_FILE_DELETED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_FILE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -216,7 +216,7 @@ class ProfileController extends ListingBaseController
             LibHelper::exitWithError($this->_adminProfileObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Password_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PASSWORD_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -224,7 +224,7 @@ class ProfileController extends ListingBaseController
     {
         AdminAuthentication::clearLoggedAdminLoginCookie();
         session_destroy();
-        Message::addMessage(Labels::getLabel('LBL_You_Are_Logged_Out_Successfully', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_YOU_ARE_LOGGED_OUT_SUCCESSFULLY', $this->siteLangId));
         FatApplication::redirectUser(UrlHelper::generateUrl('adminGuest', 'loginForm'));
     }
 
@@ -274,7 +274,7 @@ class ProfileController extends ListingBaseController
         $conNewPwdReq->setCompareWith('new_password', 'eq');
         $conNewPwdReq->setCustomErrorMessage(Labels::getLabel('FRM_Confirm_Password_Not_Matched!', $this->siteLangId));
 
-        $frm->addSubmitButton(Labels::getLabel('FRM_CHANGE', $this->siteLangId), 'btn_submit', Labels::getLabel('FRM_CHANGE', $this->siteLangId), array('id' => 'btn_submit'));
+        $frm->addSubmitButton(Labels::getLabel('FRM_CHANGE', $this->siteLangId), 'btn_submit', Labels::getLabel('BTN_CHANGE', $this->siteLangId), array('id' => 'btn_submit'));
         return $frm;
     }
 }

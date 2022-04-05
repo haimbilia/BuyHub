@@ -19,7 +19,7 @@ class DashboardBaseController extends FatController
 
         if ('updateUserCookies' != $action && FatApp::getConfig("CONF_MAINTENANCE", FatUtility::VAR_INT, 0) && (get_class($this) != "MaintenanceController") && (get_class($this) != ' Home' && $action != 'setLanguage')) {
             if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
             }
             FatApp::redirectUser(UrlHelper::generateUrl('maintenance', '', [], CONF_WEBROOT_FRONTEND));
         }
@@ -396,7 +396,7 @@ class DashboardBaseController extends FatController
         $api_key = FatApp::getConfig("CONF_MAILCHIMP_KEY");
         $list_id = FatApp::getConfig("CONF_MAILCHIMP_LIST_ID");
         if ($api_key == '' || $list_id == '') {
-            Message::addErrorMessage(Labels::getLabel("MSG_NEWSLETTER_IS_NOT_CONFIGURED_YET,_PLEASE_CONTACT_ADMIN", $siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_NEWSLETTER_IS_NOT_CONFIGURED_YET,_PLEASE_CONTACT_ADMIN", $siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -406,7 +406,7 @@ class DashboardBaseController extends FatController
         try {
             $subscriber = $Mailchimp_ListsObj->subscribe($list_id, array('email' => htmlentities($post['email'])));
             if (empty($subscriber['leid'])) {
-                Message::addErrorMessage(Labels::getLabel('MSG_NEWSLETTER_SUBSCRIPTION_VALID_EMAIL', $siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_NEWSLETTER_SUBSCRIPTION_VALID_EMAIL', $siteLangId));
                 FatUtility::dieWithError(Message::getHtml());
             }
         } catch (Mailchimp_Error $e) {
@@ -712,7 +712,7 @@ class DashboardBaseController extends FatController
         $ttk = ($get['ttk'] != '') ? $get['ttk'] : '';
 
         if (strlen($ttk) != UserAuthentication::TOKEN_LENGTH) {
-            FatUtility::dieJSONError(Labels::getLabel('MSG_INVALID_TEMP_TOKEN', CommonHelper::getLangId()));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_TEMP_TOKEN', CommonHelper::getLangId()));
         }
 
         $userId = 0;
@@ -722,11 +722,11 @@ class DashboardBaseController extends FatController
 
         $uObj = new User($userId);
         if (!$user_temp_token_data = $uObj->validateAPITempToken($ttk)) {
-            FatUtility::dieJSONError(Labels::getLabel('MSG_INVALID_TOKEN_DATA', CommonHelper::getLangId()));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_TOKEN_DATA', CommonHelper::getLangId()));
         }
 
         if (!$user = $uObj->getUserInfo(array('credential_username', 'credential_password', 'user_id'), true, true)) {
-            FatUtility::dieJSONError(Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId()));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
         }
 
         $authentication = new UserAuthentication();
@@ -745,7 +745,7 @@ class DashboardBaseController extends FatController
             }
             return $translatedText;
         }
-        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
     }
 
     protected function getPhoneNumberForm()
@@ -771,12 +771,12 @@ class DashboardBaseController extends FatController
         }
         if (true === MOBILE_APP_API_CALL) {
             if (User::OTP_LENGTH != strlen($post['upv_otp'])) {
-                LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_OTP', $this->siteLangId));
             }
             $otp = $post['upv_otp'];
         } else {
             if (!is_array($post['upv_otp']) || User::OTP_LENGTH != count($post['upv_otp'])) {
-                LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_OTP', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_OTP', $this->siteLangId));
             }
             $otp = implode("", $post['upv_otp']);
         }
@@ -813,7 +813,7 @@ class DashboardBaseController extends FatController
             if (!UserAuthentication::isUserLogged()) {
                 $uObj = new User($userId);
                 if (!$token = $uObj->setMobileAppToken()) {
-                    LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                    LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 }
 
                 $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email'), true, true, true);

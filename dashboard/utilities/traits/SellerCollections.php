@@ -14,7 +14,7 @@ trait SellerCollections
         $userId = $this->userParentId;
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
         if (false == $shopDetails) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $records = ShopCollection::getCollectionGeneralDetail($shopDetails['shop_id']);
@@ -29,7 +29,7 @@ trait SellerCollections
         $shopDetails = Shop::getAttributesByUserId($userId, null, false);
 
         if (!false == $shopDetails && $shopDetails['shop_active'] != applicationConstants::ACTIVE) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Your_shop_deactivated_contact_admin', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SHOP_DEACTIVATED_CONTACT_ADMIN', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         if (!false == $shopDetails) {
@@ -46,7 +46,7 @@ trait SellerCollections
     {
         $userId = $this->userParentId;
         if (!UserPrivilege::canEditSellerCollection($userId)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
 
         $this->commonShopCollection();
@@ -136,7 +136,7 @@ trait SellerCollections
     {
         $shopcolDetails = ShopCollection::getCollectionGeneralDetail($shop_id, $scollection_id);
         if (empty($shopcolDetails)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $collection = new ShopCollection();
         if (!$collection->deleteCollection($scollection_id)) {
@@ -171,7 +171,7 @@ trait SellerCollections
         $shop_id = FatUtility::int($post['scollection_shop_id']);
         $scollection_id = FatUtility::int($post['scollection_id']);
         if (!UserPrivilege::canEditSellerCollection($shop_id)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }        
         $frm = $this->getCollectionGeneralForm($scollection_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -184,7 +184,7 @@ trait SellerCollections
 
         $record->assignValues($post);
         if (!$collection_id = $record->save()) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_This_identifier_is_not_available._Please_try_with_another_one.", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_THIS_IDENTIFIER_IS_NOT_AVAILABLE._PLEASE_TRY_WITH_ANOTHER_ONE.", $this->siteLangId));
         }
 
         $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);
@@ -262,7 +262,7 @@ trait SellerCollections
     {
         $scollection_id = Fatutility::int($scollection_id);
         if (!$scollection_id) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
 
         $shopColLangFrm = $this->getCollectionLangForm($scollection_id, $langId);
@@ -311,7 +311,7 @@ trait SellerCollections
         $post = FatApp::getPostedData();
         $scollection_id = FatUtility::int($post['scollection_id']);
         if (!UserPrivilege::canEditSellerCollection($scollection_id)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }        
         $frm = $this->getCollectionLangForm($scollection_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -346,7 +346,7 @@ trait SellerCollections
         $scollection_id = FatUtility::int($scollection_id);
         $shop_id = $this->commonShopCollection();
         if (!UserPrivilege::canEditSellerCollection($scollection_id)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
         $sellProdObj = new ShopCollection();
         $products = $sellProdObj->getShopCollectionProducts($scollection_id, $this->siteLangId);
@@ -395,12 +395,12 @@ trait SellerCollections
         $post = FatApp::getPostedData();
         $scollection_id = FatUtility::int($post['scp_scollection_id']);
         if (!UserPrivilege::canEditSellerCollection($scollection_id)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
         $product_ids = (isset($post['scp_selprod_id'])) ? $post['scp_selprod_id'] : array();
 
         if ($scollection_id <= 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -416,7 +416,7 @@ trait SellerCollections
             $this->set('openMediaForm', true);
         } 
         $this->set('scollection_id', $scollection_id);
-        $this->set('msg', Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -471,11 +471,11 @@ trait SellerCollections
     public function uploadCollectionImage()
     {
         if (!$this->userPrivilege->canEditShop(UserAuthentication::getLoggedUserId(), true)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Unauthorized_Access!', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS!', $this->siteLangId));
         }
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId));
         }
 
         $languages = Language::getAllNames();
@@ -492,7 +492,7 @@ trait SellerCollections
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));
         }
 
         $fileHandlerObj = new AttachedFile();

@@ -2964,4 +2964,8 @@ class Orders extends MyAppModel
 
         return (in_array($opRow['op_status_id'], $processingStatuses) && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED);
     }
+
+    public static function displayStatus()
+    {
+    }
 }

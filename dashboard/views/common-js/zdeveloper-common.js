@@ -742,27 +742,21 @@ $(document).ready(function () {
             window[callbackFunction]();
         }
     };
+    
     openSignInForm = function (includeGuestLogin) {
         if (typeof includeGuestLogin == "undefined") {
             includeGuestLogin = false;
         }
         data = "includeGuestLogin=" + includeGuestLogin;
-        fcom.ajax(fcom.makeUrl("GuestUser", "LogInFormPopUp"), data, function (t) {
-            try {
-                var ans = JSON.parse(t);
-                if (ans.status == 1) {
-                    fcom.displaySuccessMessage(ans.msg);
-                    if ("undefined" != typeof ans.redirectUrl) {
-                        location.href = ans.redirectUrl;
-                    }
-                    return;
-                }
-                fcom.displayErrorMessage(ans.msg);
-            } catch (err) {
-                $.ykmodal(t);
-            }
+        fcom.displayProcessing();
+        $.ykmodal(fcom.getLoader(), true);
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function (t) {
+            $.ykmodal(t.html, true);
+            fcom.removeLoader();
+            stylePhoneNumberFld('.' + $.ykmodal.element + " input[name='username']", !flag);
         });
     };
+
     autofillLangData = function (autoFillBtn, frm) {
         var actionUrl = autoFillBtn.data("action");
         var defaultLangField = $("input.defaultLang", frm);
@@ -806,9 +800,7 @@ $(document).ready(function () {
             .appendTo($(document.body))
             .submit();
     };
-    $(document).on("click", ".sign-in-popup-js", function () {
-        openSignInForm();
-    });
+    
     $(".cc-cookie-accept-js").click(function () {
         var data = {
             statistical_cookies: 1,
