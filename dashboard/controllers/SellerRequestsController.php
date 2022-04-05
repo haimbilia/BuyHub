@@ -236,7 +236,7 @@ class SellerRequestsController extends SellerBaseController
 
         $categoryReqId = $post['prodcat_id'];
         if ($categoryReqId > 0 && !UserPrivilege::canSellerUpdateCategoryRequest(UserAuthentication::getLoggedUserId(), $categoryReqId)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         $approvalRequired = FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0);
@@ -275,13 +275,13 @@ class SellerRequestsController extends SellerBaseController
         );
 
         if (!Notification::saveNotifications($notificationData)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         $categoryData = ProductCategory::getAttributesById($categoryReqId);
         $email = new EmailHandler();
         if (!$email->sendCategoryRequestAdminNotification($this->siteLangId, $categoryData)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         if ($approvalRequired) {
@@ -344,11 +344,11 @@ class SellerRequestsController extends SellerBaseController
         $categoryReqId = $post['prodcat_id'];
 
         if (1 > $categoryReqId || 1 > $lang_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         if (!UserPrivilege::canSellerUpdateCategoryRequest(UserAuthentication::getLoggedUserId(), $categoryReqId)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         $frm = $this->getCategoryReqLangForm($categoryReqId, $lang_id);
@@ -424,15 +424,15 @@ class SellerRequestsController extends SellerBaseController
         }
 
         if (!$recordId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         if (!UserPrivilege::canSellerUpdateCategoryRequest(UserAuthentication::getLoggedUserId(), $recordId)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -460,11 +460,11 @@ class SellerRequestsController extends SellerBaseController
         $recordId = FatUtility::int($recordId);
         $lang_id = FatUtility::int($lang_id);
         if (!$recordId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         if (!UserPrivilege::canSellerUpdateCategoryRequest(UserAuthentication::getLoggedUserId(), $recordId)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -514,7 +514,7 @@ class SellerRequestsController extends SellerBaseController
         $brandReqId = $post['brand_id'];
 
         if ($brandReqId > 0 && !UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brandReqId)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         unset($post['brandReqId']);
@@ -553,7 +553,7 @@ class SellerRequestsController extends SellerBaseController
         );
 
         if (!Notification::saveNotifications($notificationData)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         if ($brandReqId == 0) {
@@ -586,11 +586,11 @@ class SellerRequestsController extends SellerBaseController
         }
 
         if ($brandReqId == 0 || $lang_id == 0) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brandReqId)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         $frm = $this->getBrandReqLangForm($brandReqId, $lang_id);
@@ -681,15 +681,15 @@ class SellerRequestsController extends SellerBaseController
         }
 
         if (!$brand_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brand_id)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));
         }
 
         $aspectRatio = FatApp::getPostedData('ratio_type', FatUtility::VAR_INT, 0);
@@ -741,11 +741,11 @@ class SellerRequestsController extends SellerBaseController
         $brand_id = FatUtility::int($brand_id);
         $lang_id = FatUtility::int($lang_id);
         if (!$brand_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brand_id)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -881,7 +881,7 @@ class SellerRequestsController extends SellerBaseController
     {
         $reqUserId = BadgeRequest::getAttributesById($badgeReqId, 'breq_user_id');
         if ($reqUserId != UserAuthentication::getLoggedUserId(0)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_FILE", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_FILE", $this->siteLangId));
         }
 
         $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
@@ -901,7 +901,7 @@ class SellerRequestsController extends SellerBaseController
     {
         $badgeReqData = BadgeRequest::getAttributesById($badgeReqId, ['breq_user_id', 'breq_status']);
         if (empty($badgeReqData) || $badgeReqData['breq_user_id'] !== UserAuthentication::getLoggedUserId()) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         /* if ($badgeReqData['breq_status'] !== BadgeRequest::REQUEST_PENDING) {

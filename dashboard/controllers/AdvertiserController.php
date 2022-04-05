@@ -141,7 +141,7 @@ class AdvertiserController extends AdvertiserBaseController
                 $rs = $srch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
                 if (empty($row)) {
-                    FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                    FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 }
                 $promotion_record_id = $row['shop_id'];
                 $promotionApproved = applicationConstants::YES;
@@ -166,7 +166,7 @@ class AdvertiserController extends AdvertiserBaseController
                 $row = FatApp::getDb()->fetch($rs);
 
                 if (empty($row)) {
-                    FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                    FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 }
                 $promotion_record_id = $row['selprod_id'];
                 $promotionApproved = applicationConstants::YES;
@@ -208,13 +208,13 @@ class AdvertiserController extends AdvertiserBaseController
                 break;
 
             default:
-                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 break;
         }
 
         $promotionBudget = Fatutility::float($post['promotion_budget']);
         if ($minBudget > $promotionBudget) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_BUDGET_SHOULD_BE_GREATER_THAN_CPC", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_BUDGET_SHOULD_BE_GREATER_THAN_CPC", $this->siteLangId));
         }
         $recordId = $post['promotion_id'];
         if (Promotion::TYPE_PRODUCT == $post['promotion_type'] || $post['promotion_type'] == Promotion::TYPE_SHOP) {
@@ -232,7 +232,7 @@ class AdvertiserController extends AdvertiserBaseController
             /* echo $srch->getQuery();die;  */
             $row = FatApp::getDb()->fetch($rs);
             if (!empty($row)) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_PROMOTION_RECORD_WITH_SAME_PERIOD_ALREADY_EXISTS', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_PROMOTION_RECORD_WITH_SAME_PERIOD_ALREADY_EXISTS', $this->siteLangId));
             }
         }
 
@@ -338,7 +338,7 @@ class AdvertiserController extends AdvertiserBaseController
         );
 
         if (!Notification::saveNotifications($notificationData)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         if ($post['promotion_type'] == Promotion::TYPE_SHOP || $post['promotion_type'] == Promotion::TYPE_PRODUCT) {
@@ -403,11 +403,11 @@ class AdvertiserController extends AdvertiserBaseController
         );
 
         if (1 > $promotionId || !in_array($promotionType, $allowedTypeArr)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_PLEASE_SELECT_A_FILE', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));
         }
 
         $recordId = 0;
@@ -435,7 +435,7 @@ class AdvertiserController extends AdvertiserBaseController
         }
 
         if (1 > $recordId || 1 > $attachedFileType) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
         $db = FatApp::getDb();
         $db->startTransaction();
@@ -469,7 +469,7 @@ class AdvertiserController extends AdvertiserBaseController
         );
 
         if (!Notification::saveNotifications($notificationData)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
         /* } */
         $db->commitTransaction();
@@ -577,7 +577,7 @@ class AdvertiserController extends AdvertiserBaseController
         $userId = $this->userParentId;
 
         if (1 > $promotionType) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $label = '';
@@ -592,7 +592,7 @@ class AdvertiserController extends AdvertiserBaseController
                 $rs = $srch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
                 if (empty($row)) {
-                    FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                    FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 }
                 $label = $row['shop_name'];
                 $value = $row['shop_id'];
@@ -965,7 +965,7 @@ class AdvertiserController extends AdvertiserBaseController
             'promotion_user_id'
         ));
         if (!$data || $data['promotion_user_id'] != $this->userParentId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId));
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -981,7 +981,7 @@ class AdvertiserController extends AdvertiserBaseController
         }
 
         if (1 > $attachedFileType) {
-            FatUtility::dieJsonError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         if (!$fileHandlerObj->deleteFile($attachedFileType, $bannerId, 0, 0, $langId, $screen)) {
@@ -1471,7 +1471,7 @@ class AdvertiserController extends AdvertiserBaseController
             'placeholder' => Labels::getLabel('FRM_DATE_TO', $langId)
         ));
 
-        /* $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SEARCH', $langId));
+        /* $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $langId));
         $fldClear = $frm->addButton("", "btn_clear", Labels::getLabel("FRM_CLEAR", $langId), array(
             'onclick' => 'clearPromotionSearch();'
         )); */
@@ -1524,7 +1524,7 @@ class AdvertiserController extends AdvertiserBaseController
         }
 
         if ($minBudget > $promotionBudget) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_Budget_should_be_greater_than_CPC", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_BUDGET_SHOULD_BE_GREATER_THAN_CPC", $this->siteLangId));
         }
         FatUtility::dieJsonSuccess(Message::getHtml());
     }

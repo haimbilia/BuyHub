@@ -497,14 +497,14 @@ class BadgeLinkConditionsController extends SellerBaseController
         if (BadgeLinkCondition::RECORD_TYPE_SHOP == $recordType) {
             $shopId = Shop::getAttributesByUserId($sellerId, 'shop_id');
             if (false === $shopId || 1 > $shopId) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_SHOP', $this->adminLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_SHOP', $this->adminLangId));
             }
             $records = [$shopId];
         }
 
         if (Badge::COND_MANUAL == $recordCondition && BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType) {
             if (empty($records) || '[]' == $records) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_LINK_TO_IS_MANDATORY', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_LINK_TO_IS_MANDATORY', $this->siteLangId));
             }          
         }
 
@@ -512,7 +512,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         $toDate = FatApp::getPostedData('blinkcond_to_date', FatUtility::VAR_STRING, '');
 
         if (!empty($fromDate) && !empty($toDate) && $fromDate > $toDate) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', $this->siteLangId));
         }
 
         $userId = UserAuthentication::getLoggedUserId();
@@ -540,20 +540,20 @@ class BadgeLinkConditionsController extends SellerBaseController
                         $toCond = FatApp::getPostedData('blinkcond_condition_to', $type, 0);
                         $rateCondition = (BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS != $conditionType && 100 < $toCond);
                         if (1 > $fromCond || 1 > $toCond || $fromCond > $toCond || $rateCondition) {
-                            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_CONDITION_FROM_OR_TO_VALUE', $this->siteLangId));
+                            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_CONDITION_FROM_OR_TO_VALUE', $this->siteLangId));
                         }
                         break;
                     case BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE:
                     case BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED:
                         $rate = FatApp::getPostedData('blinkcond_condition_from', FatUtility::VAR_FLOAT, 0);
                         if (0 > $rate || 100 < $rate) {
-                            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RATE_VALUE', $this->siteLangId));
+                            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_RATE_VALUE', $this->siteLangId));
                         }
                         $post['blinkcond_condition_from'] = $rate;
                         break;
 
                     default:
-                        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_CONDITION_TYPE', $this->siteLangId));
+                        FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_CONDITION_TYPE', $this->siteLangId));
                         break;
                 }
             } else {
@@ -682,7 +682,7 @@ class BadgeLinkConditionsController extends SellerBaseController
     public function unlinkRecord(int $blinkcond_id, int $record_id)
     {
         if (1 > $record_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RECORD', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_RECORD', $this->siteLangId));
         }
         $this->removeLinkRecord($blinkcond_id, $record_id);
     }
@@ -690,7 +690,7 @@ class BadgeLinkConditionsController extends SellerBaseController
     private function removeLinkRecord(int $blinkcond_id, int $record_id = 0)
     {
         if (1 > $blinkcond_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $smt = 'badgelink_blinkcond_id = ?';
         $vals = [$blinkcond_id];
@@ -715,7 +715,7 @@ class BadgeLinkConditionsController extends SellerBaseController
     public function linkRecord(int $badgeType, int $blinkcond_id, int $record_id, int $position = 0)
     {
         if (1 > $blinkcond_id || 1 > $record_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RECORD', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_RECORD', $this->siteLangId));
         }
 
         $recordType = BadgeLinkCondition::getAttributesById($blinkcond_id, 'blinkcond_record_type');
@@ -744,11 +744,11 @@ class BadgeLinkConditionsController extends SellerBaseController
         $blinkcond_id = FatApp::getPostedData('blinkcond_id', FatUtility::VAR_INT, 0);
 
         if (1 > $blinkcond_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RECORD', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_RECORD', $this->siteLangId));
         }
 
         if (!BadgeLinkCondition::getAttributesById($blinkcond_id, ['blinkcond_id'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_RECORD_ID', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_RECORD_ID', $this->siteLangId));
         }
 
         $this->unlink($blinkcond_id);

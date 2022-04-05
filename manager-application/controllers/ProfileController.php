@@ -274,7 +274,7 @@ class ProfileController extends ListingBaseController
         $conNewPwdReq->setCompareWith('new_password', 'eq');
         $conNewPwdReq->setCustomErrorMessage(Labels::getLabel('FRM_Confirm_Password_Not_Matched!', $this->siteLangId));
 
-        $frm->addSubmitButton(Labels::getLabel('FRM_CHANGE', $this->siteLangId), 'btn_submit', Labels::getLabel('FRM_CHANGE', $this->siteLangId), array('id' => 'btn_submit'));
+        $frm->addSubmitButton(Labels::getLabel('FRM_CHANGE', $this->siteLangId), 'btn_submit', Labels::getLabel('BTN_CHANGE', $this->siteLangId), array('id' => 'btn_submit'));
         return $frm;
     }
 }

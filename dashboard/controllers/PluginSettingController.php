@@ -23,7 +23,7 @@ class PluginSettingController extends LoggedUserController
                 LibHelper::dieJsonError($message);
             }
             if (empty($this->keyName)) {
-                LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_KEY_NAME', $this->siteLangId));
+                LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_KEY_NAME', $this->siteLangId));
             }
         }
     }
@@ -34,7 +34,7 @@ class PluginSettingController extends LoggedUserController
         $pluginSetting = new PluginSetting(0, $this->keyName, UserAuthentication::getLoggedUserId());
         $settings = $pluginSetting->get($this->siteLangId);
         if (false === $settings) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_SETTINGS_NOT_AVALIABLE_FOR_THIS_PLUGIN', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_SETTINGS_NOT_AVALIABLE_FOR_THIS_PLUGIN', $this->siteLangId));
         }
         $this->frmObj->fill($settings);
         $this->set('frm', $this->frmObj);
@@ -87,7 +87,7 @@ class PluginSettingController extends LoggedUserController
         }
 
         /* if (null == $frm->getField('btn_submit')) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->langId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->langId));
         } */
 
         $frm->fill(['keyName' => $this->keyName]);
@@ -105,11 +105,11 @@ class PluginSettingController extends LoggedUserController
     {
         $keyName = FatApp::getPostedData('keyName', FatUtility::VAR_STRING, '');
         if (empty($keyName)) {
-            LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_KEY_NAME', $langId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_KEY_NAME', $langId));
         }
         $plugin = PluginHelper::callPlugin($keyName, [$langId], $error, $langId, false);
         if (false == method_exists($plugin, 'getFormFieldsArr')) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_UNABLE_TO_LOAD_SETTINGS_FORM', $langId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_UNABLE_TO_LOAD_SETTINGS_FORM', $langId));
         }
         $labelsArr = $plugin->getFormFieldsArr();
 

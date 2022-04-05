@@ -122,18 +122,18 @@ class ShippingZonesController extends SellerBaseController
         $this->userPrivilege->canEditShippingProfiles(UserAuthentication::getLoggedUserId());
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         if (isset($post['shipzone_name']) && empty(trim($post['shipzone_name']))) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $shipZoneId = (isset($post['shipzone_id'])) ? $post['shipzone_id'] : 0;
         $msg = 0 < $shipZoneId ? Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->siteLangId) : Labels::getLabel('LBL_ADDED_SUCCESSFULLY', $this->siteLangId);
 
         if (!$this->checkForLocations($post['shipzone_profile_id'], $shipZoneId, $post)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Locations_already_added_in_other_zone_of_same_profile', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_LOCATIONS_ALREADY_ADDED_IN_OTHER_ZONE_OF_SAME_PROFILE', $this->siteLangId));
         }
 
         unset($post['shipzone_id']);
@@ -163,10 +163,10 @@ class ShippingZonesController extends SellerBaseController
         if ($shipZoneId > 0) {
             if (!$this->eligibleForUpdateLocations($shipZoneId, $post)) {
                 $db->rollbackTransaction();
-                FatUtility::dieJsonError(Labels::getLabel('LBL_This_zone_is_Also_used_with_another_profile._Please_change_the_zone_name_to_update_it.', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_THIS_ZONE_IS_ALSO_USED_WITH_ANOTHER_PROFILE._Please_change_the_zone_name_to_update_it.', $this->siteLangId));
             }
             if (!$this->setupLocations($post, $shipZoneId)) {
-                FatUtility::dieJsonError(Labels::getLabel('LBL_Unable_to_update_locations', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_UNABLE_TO_UPDATE_LOCATIONS', $this->siteLangId));
             }
         }
         $db->commitTransaction();
@@ -182,7 +182,7 @@ class ShippingZonesController extends SellerBaseController
         $shippingProfData = ShippingProfileZone::getAttributesById($shipprozoneId);
 
         if (false == $shippingProfData) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $shippingProfileId = $shippingProfData['shipprozone_shipprofile_id'];

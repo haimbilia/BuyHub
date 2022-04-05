@@ -41,12 +41,12 @@ class ShippingProfileProductsController extends SellerBaseController {
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $prodType = Product::getAttributesById($post['shippro_product_id'], 'product_type');
         if (Product::PRODUCT_TYPE_DIGITAL == $prodType) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->siteLangId));
         }
 
         $data = array(

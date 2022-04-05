@@ -192,7 +192,7 @@ class SlidesController extends ListingBaseController
         $recordId = $post['slide_id'];
         $slideId = Slides::getAttributesByIdentifier($post['slide_title'], 'slide_id');
         if (!empty($slideId) && $slideId != $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_SLIDE_TITLE_MUST_BE_UNIQUE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_SLIDE_TITLE_MUST_BE_UNIQUE', $this->siteLangId), true);
         }
 
         $post['slide_identifier'] = $post['slide_title'];
@@ -393,7 +393,7 @@ class SlidesController extends ListingBaseController
 
         $file = $_FILES['cropped_image'];
         if (!is_uploaded_file($file['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();

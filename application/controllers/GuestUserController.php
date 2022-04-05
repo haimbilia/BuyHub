@@ -1063,7 +1063,7 @@ class GuestUserController extends MyAppController
         }
 
         /* if (! ValidateElement::password($post['new_pwd'])) {
-          FatUtility::dieJsonError(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
+          FatUtility::dieJsonError(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
           } */
 
         $userAuthObj = new UserAuthentication();

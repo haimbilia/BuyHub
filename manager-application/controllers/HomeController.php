@@ -435,7 +435,7 @@ class HomeController extends ListingBaseController
     {
         $langId = FatUtility::int($langId);
         if (1 > $langId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_ANY_LANGUAGE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_ANY_LANGUAGE', $this->siteLangId), true);
         }
         $languages = Language::getAllNames();
         if (array_key_exists($langId, $languages)) {

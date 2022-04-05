@@ -19,7 +19,7 @@ class DashboardBaseController extends FatController
 
         if ('updateUserCookies' != $action && FatApp::getConfig("CONF_MAINTENANCE", FatUtility::VAR_INT, 0) && (get_class($this) != "MaintenanceController") && (get_class($this) != ' Home' && $action != 'setLanguage')) {
             if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
             }
             FatApp::redirectUser(UrlHelper::generateUrl('maintenance', '', [], CONF_WEBROOT_FRONTEND));
         }
@@ -712,7 +712,7 @@ class DashboardBaseController extends FatController
         $ttk = ($get['ttk'] != '') ? $get['ttk'] : '';
 
         if (strlen($ttk) != UserAuthentication::TOKEN_LENGTH) {
-            FatUtility::dieJSONError(Labels::getLabel('MSG_INVALID_TEMP_TOKEN', CommonHelper::getLangId()));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_TEMP_TOKEN', CommonHelper::getLangId()));
         }
 
         $userId = 0;
@@ -722,11 +722,11 @@ class DashboardBaseController extends FatController
 
         $uObj = new User($userId);
         if (!$user_temp_token_data = $uObj->validateAPITempToken($ttk)) {
-            FatUtility::dieJSONError(Labels::getLabel('MSG_INVALID_TOKEN_DATA', CommonHelper::getLangId()));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_TOKEN_DATA', CommonHelper::getLangId()));
         }
 
         if (!$user = $uObj->getUserInfo(array('credential_username', 'credential_password', 'user_id'), true, true)) {
-            FatUtility::dieJSONError(Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId()));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
         }
 
         $authentication = new UserAuthentication();
@@ -745,7 +745,7 @@ class DashboardBaseController extends FatController
             }
             return $translatedText;
         }
-        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
     }
 
     protected function getPhoneNumberForm()

@@ -403,14 +403,14 @@ class TestimonialsController extends ListingBaseController
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
         if (empty($post)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request_Or_File_not_supported', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
         }
         if (!$recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();

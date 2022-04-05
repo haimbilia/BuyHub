@@ -308,7 +308,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $row = FatApp::getDb()->fetch($rs);
 
         if (!$row) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_STATUS_IS_ALREADY_APPROVED_OR_DECLINED', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_STATUS_IS_ALREADY_APPROVED_OR_DECLINED', $this->siteLangId));
         }
 
         if ($postStatus == $row['ocrequest_status']) {

@@ -200,7 +200,7 @@ class ConfigurationsController extends ListingBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_SETTINGS_SAVED!!', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_SETTINGS_SAVED!!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

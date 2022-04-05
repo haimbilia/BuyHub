@@ -105,7 +105,7 @@ class OptionValuesController extends LoggedUserController
             $optionValueObj = new OptionValue();
             $data = $optionValueObj->getAttributesByIdAndOptionId($option_id, $optionvalue_id, array('optionvalue_id'));
             if ($data === false) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId));
             }
         }
 
@@ -216,7 +216,7 @@ class OptionValuesController extends LoggedUserController
             $option_id = $langData['optionvalue_option_id'];
             $option = new Option();
             if (!$row = $option->getOption($option_id)) {
-                LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId), true);
             }
             $optionName = (isset($row['option_name'])) ? $row['option_name'][$this->siteLangId] : $row['option_identifier'];
         }
@@ -301,7 +301,7 @@ class OptionValuesController extends LoggedUserController
         }
 
         if ($optionValueObj->isLinkedWithInventory($optionvalue_id)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_This_option_value_is_linked_with_inventory', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_THIS_OPTION_VALUE_IS_LINKED_WITH_INVENTORY', $this->siteLangId));
         }
 
         if (!$optionValueObj->deleteRecord()) {

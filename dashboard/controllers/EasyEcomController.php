@@ -89,7 +89,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
         $userData = $this->getLoggedUserInfo();
         $uObj = new User($this->getUserId());
         if (!$authToken = $uObj->setMobileAppToken(UserAuthentication::TOKEN_AGE_IN_DAYS)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $shopAddress = [
@@ -244,7 +244,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
 
         $apiSecurityToken = (string) User::getUserMeta($this->userId, 'easyEcomSellerApiToken');
         if (empty($apiSecurityToken)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_SECURITY_TOKEN', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_SECURITY_TOKEN', $this->siteLangId), true);
         }
 
         $url = self::API_URL . 'Maintenance/switchSyncStatus?api_token=' . $apiSecurityToken;

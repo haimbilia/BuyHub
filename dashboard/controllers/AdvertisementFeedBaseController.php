@@ -25,7 +25,7 @@ class AdvertisementFeedBaseController extends SellerPluginBaseController
     protected function updateMerchantInfo($detail = [], $redirect = true)
     {
         if (!is_array($detail)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $obj = new User(UserAuthentication::getLoggedUserId());
         foreach ($detail as $key => $value) {

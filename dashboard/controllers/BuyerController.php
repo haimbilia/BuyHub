@@ -381,7 +381,7 @@ class BuyerController extends BuyerBaseController
     public function downloadDigitalFiles(int $type, int $opId)
     {
         if (1 > $type || 1 > $opId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST.', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST.', $this->siteLangId));
         }
 
         switch ($type) {
@@ -393,7 +393,7 @@ class BuyerController extends BuyerBaseController
                 break;
 
             default:
-                FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST_TYPE.', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_TYPE.', $this->siteLangId));
                 break;
         }
     }
@@ -1053,7 +1053,7 @@ class BuyerController extends BuyerBaseController
     public function orderReturnRequestsReasons($op_id)
     {
         if (1 > FatUtility::int($op_id)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $user_id = UserAuthentication::getLoggedUserId();
         $orderReturnReasonsArr = OrderReturnReason::getOrderReturnReasonArr($this->siteLangId);
@@ -1072,7 +1072,7 @@ class BuyerController extends BuyerBaseController
         $rs = $srch->getResultSet();
         $opDetail = FatApp::getDb()->fetch($rs);
         if (!$opDetail || CommonHelper::isMultidimArray($opDetail)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $this->set('data', array('reasons' => $returnReasonsArr));
@@ -2004,7 +2004,7 @@ class BuyerController extends BuyerBaseController
         if (!empty($_FILES) && array_key_exists('spreview_image', $_FILES) && is_array($_FILES['spreview_image']['tmp_name'])) {
             foreach ($_FILES['spreview_image']['tmp_name'] as $index => $tmpName) {
                 if (!is_uploaded_file($tmpName)) {
-                    FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->adminLangId));
+                    FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->adminLangId));
                 }
 
                 $fileHandlerObj = new AttachedFile();
@@ -2175,7 +2175,7 @@ class BuyerController extends BuyerBaseController
             $volumeDiscountPerItem = abs($opDetail['opcharge_amount']) / $opDetail['op_qty'];
             $amtChargeBackToBuyer = ($opDetail['op_qty'] - $orrequestQty) * $volumeDiscountPerItem;
             if ($amtChargeBackToBuyer > ($opDetail['op_unit_price'] - $volumeDiscountPerItem) * abs($orrequestQty)) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_Order_not_eligible_for_partial_qty_refund', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_ORDER_NOT_ELIGIBLE_FOR_PARTIAL_QTY_REFUND', $this->siteLangId));
             }
         }
 
@@ -2651,7 +2651,7 @@ class BuyerController extends BuyerBaseController
         $post = FatApp::getPostedData();
         $email = $post["email"];
         if (empty($email)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $email = array_unique(array_column(json_decode($email, true), 'value'));
         if (count($email) && !empty($email)) {
@@ -2939,12 +2939,12 @@ class BuyerController extends BuyerBaseController
     {
         $userId = UserAuthentication::getLoggedUserId();
         if (!FatApp::getConfig("CONF_ENABLE_REFERRER_MODULE")) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_This_module_is_not_enabled', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_THIS_MODULE_IS_NOT_ENABLED', $this->siteLangId));
         }
         $userObj = new User($userId);
         $userInfo = $userObj->getUserInfo(array('user_referral_code'), true, true);
         if (empty($userInfo['user_referral_code'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_User', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_USER', $this->siteLangId));
         }
 
         $referralTrackingUrl = CommonHelper::referralTrackingUrl($userInfo['user_referral_code']);

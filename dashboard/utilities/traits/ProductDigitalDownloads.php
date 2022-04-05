@@ -245,7 +245,7 @@ trait ProductDigitalDownloads
     {
         $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
         if (1 > $opId) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId) . __LINE__);
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId) . __LINE__);
         }
 
         $opSrch = OrderProduct::getSearchObject();
@@ -261,22 +261,22 @@ trait ProductDigitalDownloads
         $rs = $opSrch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!is_array($row)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
         }
 
         if ($this->userParentId != $row['op_selprod_user_id']) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
         }
 
         if (!DigitalOrderProduct::canAttachMoreFiles($row['op_status_id'])) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
         }
 
         if (
             !isset($_FILES['additional_attachment']['tmp_name'])
             || !is_uploaded_file($_FILES['additional_attachment']['tmp_name'])
         ) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));
         }
 
         $fileHandlerObj = new AttachedFile();

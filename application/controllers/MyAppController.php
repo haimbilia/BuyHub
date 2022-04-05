@@ -386,12 +386,12 @@ class MyAppController extends FatController
     {
         $siteLangId = FatUtility::int($langId);
         $frm = new Form('frmGuestLogin');
-        $frm->addRequiredField(Labels::getLabel('LBL_Name', $siteLangId), 'user_name', '', array('placeholder' => Labels::getLabel('LBL_Name', $siteLangId)));
-        $fld = $frm->addEmailField(Labels::getLabel('LBL_EMAIL', $siteLangId), 'user_email', '', array('placeholder' => Labels::getLabel('LBL_EMAIL_ADDRESS', $siteLangId)));
+        $frm->addRequiredField(Labels::getLabel('FRM_NAME', $siteLangId), 'user_name', '', array('placeholder' => Labels::getLabel('LBL_Name', $siteLangId)));
+        $fld = $frm->addEmailField(Labels::getLabel('FRM_EMAIL', $siteLangId), 'user_email', '', array('placeholder' => Labels::getLabel('LBL_EMAIL_ADDRESS', $siteLangId)));
         $fld->requirement->setRequired(true);
 
         $frm->addHtml('', 'space', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Guest_Sign_in', $siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_GUEST_SIGN_IN', $siteLangId));
         return $frm;
     }
 
@@ -407,14 +407,14 @@ class MyAppController extends FatController
         }
 
         if (false === $signInWithPhone) {
-            $frm->addRequiredField(Labels::getLabel('LBL_USERNAME_OR_EMAIL', $siteLangId), 'username', $userName);
-            $pwd = $frm->addPasswordField(Labels::getLabel('LBL_Password', $siteLangId), 'password', $pass, array('placeholder' => Labels::getLabel('LBL_Password', $siteLangId)));
+            $frm->addRequiredField(Labels::getLabel('FRM_USERNAME_OR_EMAIL', $siteLangId), 'username', $userName);
+            $pwd = $frm->addPasswordField(Labels::getLabel('FRM_PASSWORD', $siteLangId), 'password', $pass, array('placeholder' => Labels::getLabel('FRM_PASSWORD', $siteLangId)));
             $pwd->requirements()->setRequired();
 
-            $frm->addCheckbox(Labels::getLabel('LBL_Remember_Me', $siteLangId), 'remember_me', 1, array(), '', 0);
+            $frm->addCheckbox(Labels::getLabel('FRM_REMEMBER_ME', $siteLangId), 'remember_me', 1, array(), '', 0);
             $frm->addHtml('', 'forgot', '');
         } else {
-            $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId), 'username', $userName);
+            $frm->addRequiredField(Labels::getLabel('FRM_PHONE_NUMBER', $siteLangId), 'username', $userName);
             $attr = ['maxlength' => 1, 'size' => 1, 'placeholder' => '*'];
             for ($i = 0; $i < User::OTP_LENGTH; $i++) {
                 $frm->addTextBox('', 'upv_otp[' . $i . ']', '', $attr);
@@ -422,7 +422,7 @@ class MyAppController extends FatController
             $frm->addHiddenField('', 'loginWithOtp', 0);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_LOGIN', $siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_LOGIN', $siteLangId));
         return $frm;
     }
 
@@ -432,8 +432,8 @@ class MyAppController extends FatController
 
         $frm = new Form('frmRegister');
         $frm->addHiddenField('', 'user_id', 0, array('id' => 'user_id'));
-        $frm->addRequiredField(Labels::getLabel('LBL_NAME', $siteLangId), 'user_name', '', array('placeholder' => Labels::getLabel('LBL_NAME', $siteLangId)));
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_USERNAME', $siteLangId), 'user_username', '', array('placeholder' => Labels::getLabel('LBL_USERNAME', $siteLangId)));
+        $frm->addRequiredField(Labels::getLabel('FRM_NAME', $siteLangId), 'user_name', '', array('placeholder' => Labels::getLabel('FRM_NAME', $siteLangId)));
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $siteLangId), 'user_username', '', array('placeholder' => Labels::getLabel('FRM_USERNAME', $siteLangId)));
         if (false === MOBILE_APP_API_CALL) {
             $fld->setUnique('tbl_user_credentials', 'credential_username', 'credential_user_id', 'user_id', 'user_id');
         }
@@ -443,31 +443,31 @@ class MyAppController extends FatController
         if (0 < $signUpWithPhone) {
             $frm->addHiddenField('', 'signUpWithPhone', 1);
             $frm->addHiddenField('', 'user_phone_dcode');
-            $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId), 'class' => 'phone-js'));
+            $frm->addRequiredField(Labels::getLabel('FRM_PHONE_NUMBER', $siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('FRM_PHONE_NUMBER', $siteLangId), 'class' => 'phone-js'));
         } else {
-            $fld = $frm->addEmailField(Labels::getLabel('LBL_EMAIL', $siteLangId), 'user_email', '', array('placeholder' => Labels::getLabel('LBL_EMAIL', $siteLangId)));
+            $fld = $frm->addEmailField(Labels::getLabel('FRM_EMAIL', $siteLangId), 'user_email', '', array('placeholder' => Labels::getLabel('FRM_EMAIL', $siteLangId)));
             if (false === MOBILE_APP_API_CALL) {
                 $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
             }
-            $fld = $frm->addPasswordField(Labels::getLabel('LBL_PASSWORD', $siteLangId), 'user_password', '', array('placeholder' => Labels::getLabel('LBL_PASSWORD', $siteLangId)));
+            $fld = $frm->addPasswordField(Labels::getLabel('FRM_PASSWORD', $siteLangId), 'user_password', '', array('placeholder' => Labels::getLabel('FRM_PASSWORD', $siteLangId)));
             $fld->requirements()->setRequired();
             $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
             $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $siteLangId));
 
-            $fld1 = $frm->addPasswordField(Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId), 'password1', '', array('placeholder' => Labels::getLabel('LBL_CONFIRM_PASSWORD', $siteLangId)));
+            $fld1 = $frm->addPasswordField(Labels::getLabel('FRM_CONFIRM_PASSWORD', $siteLangId), 'password1', '', array('placeholder' => Labels::getLabel('FRM_CONFIRM_PASSWORD', $siteLangId)));
             $fld1->requirements()->setRequired();
-            $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('LBL_PASSWORD', $siteLangId));
+            $fld1->requirements()->setCompareWith('user_password', 'eq', Labels::getLabel('FRM_PASSWORD', $siteLangId));
         }
 
         $fld = $frm->addCheckBox('', 'agree', 1);
         $fld->requirements()->setRequired();
-        $fld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Terms_Condition_is_mandatory.', $siteLangId));
+        $fld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_TERMS_CONDITION_IS_MANDATORY.', $siteLangId));
 
         if (1 > $signUpWithPhone && $showNewsLetterCheckBox && FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION')) {
             $api_key = FatApp::getConfig("CONF_MAILCHIMP_KEY");
             $list_id = FatApp::getConfig("CONF_MAILCHIMP_LIST_ID");
             if ($api_key != '' || $list_id != '') {
-                $frm->addCheckBox(Labels::getLabel('LBL_Newsletter_Signup', $siteLangId), 'user_newsletter_signup', 1);
+                $frm->addCheckBox(Labels::getLabel('FRM_NEWSLETTER_SIGNUP', $siteLangId), 'user_newsletter_signup', 1);
             }
         }
 
@@ -482,9 +482,9 @@ class MyAppController extends FatController
             $frm->addHiddenField('', 'isCheckOutPage', 1);
         }
 
-        //$frm->addDateField(Labels::getLabel('LBL_DOB',CommonHelper::getLangId()), 'user_dob', '',array('readonly' =>'readonly'));
+        //$frm->addDateField(Labels::getLabel('FRM_DOB',CommonHelper::getLangId()), 'user_dob', '',array('readonly' =>'readonly'));
         //$frm->addTextBox(Labels::getLabel('LBL_PHONE',CommonHelper::getLangId()), 'user_phone');
-        $frm->addSubmitButton(Labels::getLabel('LBL_Register', $siteLangId), 'btn_submit', Labels::getLabel('LBL_Register', $siteLangId));
+        $frm->addSubmitButton(Labels::getLabel('BTN_REGISTER', $siteLangId), 'btn_submit', Labels::getLabel('BTN_REGISTER', $siteLangId));
         return $frm;
     }
 
@@ -519,11 +519,11 @@ class MyAppController extends FatController
         $frm->addHiddenField('', 'addr_id');
         if ($btnOrderFlip) {
             $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $siteLangId));
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $siteLangId));
             return $frm;
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $siteLangId));
-        $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $siteLangId));
+        $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_CANCEL', $siteLangId));
 
         return $frm;
     }
@@ -622,7 +622,7 @@ class MyAppController extends FatController
             $curPwd->requirements()->setRequired();
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
     }
 
@@ -638,7 +638,7 @@ class MyAppController extends FatController
                 $frm->addTextBox('', 'upv_otp[' . $i . ']', '', $attr);
             }
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_VERIFY', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_VERIFY', $this->siteLangId));
         return $frm;
     }
 
@@ -795,7 +795,7 @@ class MyAppController extends FatController
             }
             return $translatedText;
         }
-        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
     }
 
     protected function getPhoneNumberForm()
@@ -804,7 +804,7 @@ class MyAppController extends FatController
         $frm->addHiddenField('', 'user_phone_dcode');
         $frm->addRequiredField(Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId)));
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_GET_OTP', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_GET_OTP', $this->siteLangId));
         return $frm;
     }
 
@@ -899,7 +899,7 @@ class MyAppController extends FatController
         $frm->addTextBox(Labels::getLabel('LBL_TXN_ID', $langId), 'opayment_gateway_txn_id');
         $frm->addTextBox(Labels::getLabel('LBL_AMOUNT', $langId), 'opayment_amount')->requirements()->setFloatPositive(true);
         $frm->addTextArea(Labels::getLabel('LBL_COMMENTS', $langId), 'opayment_comments', '');
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_CONFIRM_ORDER', $langId));
+        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('BTN_CONFIRM_ORDER', $langId));
         return $frm;
     }
 
@@ -923,7 +923,7 @@ class MyAppController extends FatController
             return true;
         }
 
-        LibHelper::exitWithError(Labels::getLabel('MSG_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
+        LibHelper::exitWithError(Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
         FatApp::redirectUser(UrlHelper::generateUrl('maintenance'));
     }
 }
