@@ -2589,7 +2589,7 @@ class SellerProductsController extends ListingBaseController
         $selprod_id = FatUtility::int($selprod_id);
         $relprod_id = FatUtility::int($relprod_id);
         if (!$selprod_id || !$relprod_id) {
-            Message::addErrorMessage(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser($_SESSION['referer_page_url']);
         }
 

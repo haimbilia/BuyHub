@@ -93,7 +93,7 @@ class PayuIndiaPayController extends PaymentController
                     break;
             }
             if ($order_payment_status == 1) {
-                $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $post["mihpayid"], $paymentGatewayCharge, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post));
+                $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $post["mihpayid"], $paymentGatewayCharge, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post));
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
             } else {        
                 SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);

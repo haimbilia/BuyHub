@@ -156,7 +156,7 @@ class PaygatePayController extends PaymentController
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
 
         /* Recording Payment in DB */
-        $orderPaymentObj->addOrderPayment(self::KEY_NAME, $this->queryResponse['TRANSACTION_ID'], $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($this->queryResponse));
+        $orderPaymentObj->addOrderPayment(self::KEY_NAME, $this->queryResponse['TRANSACTION_ID'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($this->queryResponse));
         /* End Recording Payment in DB */
         FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
     }

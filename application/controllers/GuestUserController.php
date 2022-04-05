@@ -248,7 +248,7 @@ class GuestUserController extends MyAppController
             $redirectUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
         }
         $this->set('redirectUrl', $redirectUrl);
-        $this->set('msg', Labels::getLabel("SUC_LOGIN_SUCCESSFULL", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("MSG_LOGIN_SUCCESSFULL", $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -306,7 +306,7 @@ class GuestUserController extends MyAppController
         }
 
         $this->set('redirectUrl', $redirectUrl);
-        $this->set('msg', Labels::getLabel("SUC_GUEST_LOGIN_SUCCESSFULL", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("MSG_GUEST_LOGIN_SUCCESSFULL", $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -414,7 +414,7 @@ class GuestUserController extends MyAppController
 
         $resp = LibHelper::formatResponse(
             applicationConstants::SUCCESS,
-            Labels::getLabel('SUC_RESULT_FOUND', $this->siteLangId),
+            Labels::getLabel('MSG_RESULT_FOUND', $this->siteLangId),
             [
                 'found' => 1,
                 'verified' => $data['credential_verified'],
@@ -557,7 +557,7 @@ class GuestUserController extends MyAppController
     {
         $code = FatUtility::convertToType($code, FatUtility::VAR_STRING);
         if (strlen($code) < 1) {
-            Message::addMessage(Labels::getLabel("SUC_PLEASE_CHECK_YOUR_EMAIL_IN_ORDER_TO_VERIFY", $this->siteLangId));
+            Message::addMessage(Labels::getLabel("MSG_PLEASE_CHECK_YOUR_EMAIL_IN_ORDER_TO_VERIFY", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
 
@@ -635,7 +635,7 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
-        Message::addMessage(Labels::getLabel("SUC_EMAIL_VERIFIED", $this->siteLangId));
+        Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));
 
         FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
     }
@@ -711,18 +711,18 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
-        Message::addMessage(Labels::getLabel("SUC_EMAIL_VERIFIED", $this->siteLangId));
+        Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
     }
 
     public function registrationSuccess()
     {
         if (FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
-            $this->set('registrationMsg', Labels::getLabel("SUC_SUCCESS_USER_SIGNUP_EMAIL_VERIFICATION_PENDING", $this->siteLangId));
+            $this->set('registrationMsg', Labels::getLabel("MSG_SUCCESS_USER_SIGNUP_EMAIL_VERIFICATION_PENDING", $this->siteLangId));
         } elseif (FatApp::getConfig('CONF_ADMIN_APPROVAL_REGISTRATION', FatUtility::VAR_INT, 1)) {
-            $this->set('registrationMsg', Labels::getLabel("SUC_SUCCESS_USER_SIGNUP_ADMIN_APPROVAL_PENDING", $this->siteLangId));
+            $this->set('registrationMsg', Labels::getLabel("MSG_SUCCESS_USER_SIGNUP_ADMIN_APPROVAL_PENDING", $this->siteLangId));
         } else {
-            $this->set('registrationMsg', Labels::getLabel("SUC_REGISTERED_SUCCESSFULLY", $this->siteLangId));
+            $this->set('registrationMsg', Labels::getLabel("MSG_REGISTERED_SUCCESSFULLY", $this->siteLangId));
         }
 
         $this->_template->render();
@@ -782,7 +782,7 @@ class GuestUserController extends MyAppController
             $message = Labels::getLabel("ERR_PASSWORD_RESET_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId);
             $error = true;
         }
-        $message = Labels::getLabel("SUC_YOUR_PASSWORD_RESET_INSTRUCTIONS_TO_YOUR_EMAIL", $this->siteLangId);
+        $message = Labels::getLabel("MSG_YOUR_PASSWORD_RESET_INSTRUCTIONS_TO_YOUR_EMAIL", $this->siteLangId);
 
         if (true === MOBILE_APP_API_CALL) {
             $this->set('msg', $message);
@@ -944,9 +944,9 @@ class GuestUserController extends MyAppController
 
         $db->commitTransaction();
         if (1 > $withPhone) {
-            $message = Labels::getLabel("SUC_YOUR_PASSWORD_RESET_INSTRUCTIONS_TO_YOUR_EMAIL", $this->siteLangId);
+            $message = Labels::getLabel("MSG_YOUR_PASSWORD_RESET_INSTRUCTIONS_TO_YOUR_EMAIL", $this->siteLangId);
         } else {
-            $message = Labels::getLabel("SUC_AN_OTP_SENT_ON_YOUR_PHONE", $this->siteLangId);
+            $message = Labels::getLabel("MSG_AN_OTP_SENT_ON_YOUR_PHONE", $this->siteLangId);
         }
 
         if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
@@ -1256,7 +1256,7 @@ class GuestUserController extends MyAppController
         }
 
         /* if ($data['credential_password'] != UserAuthentication::encryptPassword($post['current_password'])) {
-          Message::addErrorMessage(Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED',$this->siteLangId));
+          Message::addErrorMessage(Labels::getLabel('ERR_YOUR_CURRENT_PASSWORD_MIS_MATCHED',$this->siteLangId));
           FatUtility::dieJsonError( Message::getHtml() );
           } */
         $dialCode = array_key_exists('user_phone_dcode', $data) ? ValidateElement::formatDialCode($data['user_phone_dcode']) : '';
@@ -1427,7 +1427,7 @@ class GuestUserController extends MyAppController
             FatUtility::dieJsonError($resp);
         }
 
-        $msg = Labels::getLabel("SUC_SUCCESS", $this->siteLangId);
+        $msg = Labels::getLabel("MSG_SUCCESS", $this->siteLangId);
         $resp = LibHelper::formatResponse(Plugin::RETURN_TRUE, $msg, ['authToken' => $newAuthToken]);
         CommonHelper::jsonEncodeUnicode($resp, true);
     }
@@ -1462,7 +1462,7 @@ class GuestUserController extends MyAppController
         }
 
         $authToken = User::getUserMeta($row['uttr_user_id'], 'seller_auth_token');
-        $msg = Labels::getLabel("SUC_SUCCESS", $this->siteLangId);
+        $msg = Labels::getLabel("MSG_SUCCESS", $this->siteLangId);
         $resp = LibHelper::formatResponse(Plugin::RETURN_TRUE, $msg, ['authToken' => $authToken]);
         CommonHelper::jsonEncodeUnicode($resp, true);
     }

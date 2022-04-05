@@ -170,7 +170,7 @@ class UploadBulkImagesController extends ListingBaseController
             CommonHelper::convertToCsv($filesPathArr, time() . '.csv');
             exit;
         }
-        Message::addErrorMessage(Labels::getLabel('ERR_No_File_Found', $this->siteLangId));
+        Message::addErrorMessage(Labels::getLabel('ERR_NO_FILE_FOUND', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
 }

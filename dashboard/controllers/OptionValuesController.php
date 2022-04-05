@@ -136,7 +136,7 @@ class OptionValuesController extends LoggedUserController
 
         $option = new Option();
         if (!$row = $option->getOption($option_id)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         $optionName = (isset($row['option_name'])) ? $row['option_name'][$this->siteLangId] : $row['option_identifier'];

@@ -825,7 +825,7 @@ class UsersController extends ListingBaseController
         if (!$userObj->sendAdminNewUserCreationEmail($userData, $this->admin_id)) {
             LibHelper::exitWithError(Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->admin_id), true);
         }
-        $this->set('msg', Labels::getLabel("SUC_EMAIL_SENT_SUCCESSFUL", $this->admin_id));
+        $this->set('msg', Labels::getLabel("MSG_EMAIL_SENT_SUCCESSFUL", $this->admin_id));
         $this->_template->render(false, false, 'json-success.php');
     }
 

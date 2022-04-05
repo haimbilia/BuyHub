@@ -19,7 +19,7 @@ class DatabaseBackupRestoreController extends ListingBaseController
             $this->objPrivilege->canEditDatabaseBackupView();
             $settingsObj = new Settings();
             $settingsObj->backupDatabase(trim($post["name"]));
-            Message::addMessage(Labels::getLabel('SUC_DATABASE_BACKUP_ON_SERVER_CREATED_SUCCESSFULLY', $this->siteLangId));
+            Message::addMessage(Labels::getLabel('MSG_DATABASE_BACKUP_ON_SERVER_CREATED_SUCCESSFULLY', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('DatabaseBackupRestore'));
         }
 
@@ -34,7 +34,7 @@ class DatabaseBackupRestoreController extends ListingBaseController
                 Message::addErrorMessage(Labels::getLabel('ERR_FILE_COULD_NOT_BE_SAVED', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('DatabaseBackupRestore'));
             }
-            Message::addMessage(Labels::getLabel('SUC_DATABASE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+            Message::addMessage(Labels::getLabel('MSG_DATABASE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('DatabaseBackupRestore'));
         }
 
@@ -74,7 +74,7 @@ class DatabaseBackupRestoreController extends ListingBaseController
         if (isset($file) and trim($file) != "") {
             $settingsObj = new Settings();
             $settingsObj->restoreDatabase($file);
-            Message::addMessage(Labels::getLabel('SUC_DATABASE_RESTORED_SUCCESSFULLY', $this->siteLangId));
+            Message::addMessage(Labels::getLabel('MSG_DATABASE_RESTORED_SUCCESSFULLY', $this->siteLangId));
         }
         $this->set('msg', Labels::getLabel('MSG_DATABASE_RESTORED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');

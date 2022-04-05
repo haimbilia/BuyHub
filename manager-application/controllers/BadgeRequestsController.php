@@ -229,7 +229,7 @@ class BadgeRequestsController extends ListingBaseController {
             FatApp::getDb()->insertFromArray(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $linkData, false, [], $linkData);
         }
 
-        $this->set('msg', Labels::getLabel("SUC_REQUEST_UPDATED_SUCCESSFULLY", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("MSG_REQUEST_UPDATED_SUCCESSFULLY", $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

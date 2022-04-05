@@ -173,7 +173,7 @@ class ShopsController extends ListingBaseController
             $shop->rewriteUrlpolicy($post['urlrewrite_custom']);
         }
         Product::updateMinPrices(0, $shop_id);
-        $this->set('msg', Labels::getLabel("SUC_SETUP_SUCCESSFUL", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("MSG_SETUP_SUCCESSFUL", $this->siteLangId));
         $this->set('shopId', $shop_id);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -341,7 +341,7 @@ class ShopsController extends ListingBaseController
 
         $this->set('recordId', $shop_id);
         $this->set('file', $_FILES['cropped_image']['name']);
-        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('SUC_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

@@ -40,6 +40,6 @@ class CurrencyConverterBaseController extends PluginSettingController
             LibHelper::dieJsonError($currObj->getError());
         }
 
-        FatUtility::dieJsonSuccess(Labels::getLabel('SUC_UPDATED_SUCCESSFULLY', $this->siteLangId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
     }
 }

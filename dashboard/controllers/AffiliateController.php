@@ -232,7 +232,7 @@ class AffiliateController extends AffiliateBaseController
             $userData = array('user_fb_access_token' => $fbAccessToken);
             $userObj->assignValues($userData);
             if (!$userObj->save()) {
-                Message::addErrorMessage(Labels::getLabel("MSG_Token_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
+                Message::addErrorMessage(Labels::getLabel("ERR_Token_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
             }
         }
         FatApp::redirectUser($redirectUrl);

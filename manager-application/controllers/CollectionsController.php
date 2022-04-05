@@ -713,7 +713,7 @@ class CollectionsController extends ListingBaseController
 
         $this->set('file', $_FILES['cropped_image']['name']);
         $this->set('collection_id', $collection_id);
-        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('SUC_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1166,7 +1166,7 @@ class CollectionsController extends ListingBaseController
         $this->set('banner_id', $banner_id);
         $this->set('lang_id', $lang_id);
         $this->set('slide_screen', $slide_screen);
-        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('SUC_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('MSG_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1280,7 +1280,7 @@ class CollectionsController extends ListingBaseController
             if (!$collectionObj->updateOrder($post['collectionList'])) {
                 LibHelper::exitWithError($collectionObj->getError(), true);
             }
-            FatUtility::dieJsonSuccess(Labels::getLabel('SUC_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId));
+            FatUtility::dieJsonSuccess(Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId));
         }
     }
 

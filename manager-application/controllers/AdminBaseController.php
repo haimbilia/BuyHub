@@ -50,12 +50,12 @@ class AdminBaseController extends FatController
         $curdLangLabelCache = CacheHelper::get('curdLangLabelCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$curdLangLabelCache) {
             $arr = [
-                'str_update_record' => Labels::getLabel('SUC_RECORD_UPDATED_SUCCESSFULLY', $this->siteLangId),
+                'str_update_record' => Labels::getLabel('MSG_RECORD_UPDATED_SUCCESSFULLY', $this->siteLangId),
                 'str_invalid_request_id' => Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId),
                 'str_invalid_request' => Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId),
-                'str_delete_record' => Labels::getLabel('SUC_RECORD_DELETED_SUCCESSFULLY', $this->siteLangId),
+                'str_delete_record' => Labels::getLabel('MSG_RECORD_DELETED_SUCCESSFULLY', $this->siteLangId),
                 'str_invalid_Action' => Labels::getLabel('ERR_INVALID_ACTION', $this->siteLangId),
-                'str_setup_successful' => Labels::getLabel('SUC_SETUP_SUCCESSFUL', $this->siteLangId)
+                'str_setup_successful' => Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId)
             ];
             CacheHelper::create('curdLangLabelCache' . $this->siteLangId, serialize($arr), CacheHelper::TYPE_LABELS);
         } else {

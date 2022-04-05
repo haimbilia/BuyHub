@@ -150,7 +150,7 @@ class DpoPayController extends PaymentController
         }
 
         /* Recording Payment in DB */
-        $this->orderPaymentObj->addOrderPayment(self::KEY_NAME, $response['TransID'], $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($logResponse));
+        $this->orderPaymentObj->addOrderPayment(self::KEY_NAME, $response['TransID'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($logResponse));
         /* End Recording Payment in DB */
         FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
     }

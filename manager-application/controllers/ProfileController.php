@@ -224,7 +224,7 @@ class ProfileController extends ListingBaseController
     {
         AdminAuthentication::clearLoggedAdminLoginCookie();
         session_destroy();
-        Message::addMessage(Labels::getLabel('SUC_YOU_ARE_LOGGED_OUT_SUCCESSFULLY', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_YOU_ARE_LOGGED_OUT_SUCCESSFULLY', $this->siteLangId));
         FatApplication::redirectUser(UrlHelper::generateUrl('adminGuest', 'loginForm'));
     }
 

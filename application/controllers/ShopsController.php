@@ -851,7 +851,7 @@ class ShopsController extends MyAppController
         }
         /* ] */
 
-        $sucessMsg = Labels::getLabel('SUC_REPORTED_SUCCESSFULLY!', $this->siteLangId);
+        $sucessMsg = Labels::getLabel('MSG_REPORTED_SUCCESSFULLY!', $this->siteLangId);
         Message::addMessage($sucessMsg);
         $this->set('msg', $sucessMsg);
         if (true === MOBILE_APP_API_CALL) {

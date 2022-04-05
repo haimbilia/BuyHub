@@ -193,7 +193,7 @@ class ShippingCompanyUsersController extends ListingBaseController
             }
         }
         FatApp::getDB()->commitTransaction();
-        $this->set('msg', Labels::getLabel("SUC_SETUP_SUCCESSFUL", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("MSG_SETUP_SUCCESSFUL", $this->siteLangId));
         $this->set('userId', $user_id);
         $this->_template->render(false, false, 'json-success.php');
     }

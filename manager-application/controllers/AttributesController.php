@@ -248,7 +248,7 @@ class AttributesController extends ListingBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('Attributes'));
         }
 
-        Message::addMessage(Labels::getLabel('SUC_RECORD_ADDED_SUCCESSFULLY', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_RECORD_ADDED_SUCCESSFULLY', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('Attributes'));
     }
 
@@ -312,7 +312,7 @@ class AttributesController extends ListingBaseController
             if (!$attrGrpAttrObj->updateOrder($post['attributes'])) {
                 LibHelper::exitWithError($attrGrpAttrObj->getError(), true);
             }
-            FatUtility::dieJsonSuccess(Labels::getLabel('SUC_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId));
+            FatUtility::dieJsonSuccess(Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId));
         }
     }
 
