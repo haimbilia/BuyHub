@@ -374,14 +374,14 @@ class SubscriptionCheckoutController extends LoggedUserController
             $WalletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($order_id), CONF_WEBROOT_FRONTEND));
             $WalletPaymentForm->fill(array('order_id' => $order_id));
             $WalletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
-            $WalletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Pay_Now', $this->siteLangId));
+            $WalletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
         }
 
         if ($cartSummary['orderNetAmount'] == 0 || $cartSummary['orderNetAmount'] == 0) {
             $confirmPaymentFrm->addFormTagAttribute('action', UrlHelper::generateUrl('ConfirmPay', 'Charge', array($order_id), CONF_WEBROOT_FRONTEND));
             $confirmPaymentFrm->fill(array('order_id' => $order_id));
             $confirmPaymentFrm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
-            $confirmPaymentFrm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Confirm', $this->siteLangId));
+            $confirmPaymentFrm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         }
         $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr();
 
@@ -646,7 +646,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             CommonHelper::addCaptchaField($frm);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_CONFIRM_PAYMENT', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM_PAYMENT', $langId));
         $frm->addHiddenField('', 'order_id');
         $frm->addHiddenField('', 'plugin_id');
         return $frm;

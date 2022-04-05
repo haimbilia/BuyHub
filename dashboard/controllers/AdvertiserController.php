@@ -1471,7 +1471,7 @@ class AdvertiserController extends AdvertiserBaseController
             'placeholder' => Labels::getLabel('FRM_DATE_TO', $langId)
         ));
 
-        /* $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SEARCH', $langId));
+        /* $fldSubmit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $langId));
         $fldClear = $frm->addButton("", "btn_clear", Labels::getLabel("FRM_CLEAR", $langId), array(
             'onclick' => 'clearPromotionSearch();'
         )); */

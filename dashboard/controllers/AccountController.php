@@ -2656,7 +2656,7 @@ class AccountController extends LoggedUserController
             $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $langId), 'ub_bank_address');
         }
         $frm->addTextArea(Labels::getLabel('FRM_OTHER_INFO_INSTRUCTIONS', $langId), 'withdrawal_instructions');
-        /* $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_REQUEST', $langId));
+        /* $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REQUEST', $langId));
         $frm->addButton("", "btn_cancel", Labels::getLabel("LBL_Cancel", $langId)); */
         return $frm;
     }
@@ -2667,7 +2667,7 @@ class AccountController extends LoggedUserController
         $frm->setRequiredStarWith('NONE');
         $frm->addRequiredField('', 'uwlist_title');
         $frm->addHiddenField('', 'selprod_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_ADD', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_ADD', $this->siteLangId));
         $frm->setJsErrorDisplay('afterfield');
         return $frm;
     }

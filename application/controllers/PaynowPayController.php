@@ -184,7 +184,7 @@ class PaynowPayController extends PaymentController
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
         if (false === $processRequest) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_CONFIRM', $this->siteLangId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         }
         return $frm;
     }

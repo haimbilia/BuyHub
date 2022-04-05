@@ -495,7 +495,7 @@ class ReviewsController extends MyAppController
     {
         $frm = new Form('frmReviewAbuse');
         $frm->addHiddenField('', 'spra_spreview_id', $reviewId);
-        $frm->addTextarea(Labels::getLabel('FRM_Comments', $this->siteLangId), 'spra_comments');
+        $frm->addTextarea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'spra_comments');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REPORT_ABUSE', $this->siteLangId));
         return $frm;
     }

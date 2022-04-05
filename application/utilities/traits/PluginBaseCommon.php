@@ -40,7 +40,7 @@ trait PluginBaseCommon
         $frm->fill(['plugin_id' => $settings['plugin_id'], 'keyName' => $keyName]);
         
         if (null == $frm->getField('btn_submit')) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE_CHANGES', $this->langId));
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->langId));
         }
         return $frm;
     }
