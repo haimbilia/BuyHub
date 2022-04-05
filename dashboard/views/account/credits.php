@@ -7,7 +7,10 @@ $dateFromFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_FROM_DAT
 $dateToFld = $frmSearch->getField('date_to');
 $dateToFld->setFieldTagAttribute('class', 'field--calender');
 $dateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_TO_DATE', $siteLangId));
-?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
+
+$showTotalBalanceAvailableDiv = ($userTotalWalletBalance != $userWalletBalance || ($promotionWalletToBeCharged) || ($withdrawlRequestAmount));
+
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
@@ -25,8 +28,50 @@ $dateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_TO_DATE', 
                     </p>
                 <?php } ?>
                 <div class="row">
-                    <div class="col-lg-4 order-lg-2">
-                        <div id="credits-info"></div>
+                    <?php 
+                    if ($showTotalBalanceAvailableDiv) {
+                        if ($promotionWalletToBeCharged) { ?>
+                            <div class="col-md-auto">
+                                <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
+                                    <div class="card-head border-0">
+                                        <h6> <?php echo Labels::getLabel('LBL_Pending_Promotions_Charges', $siteLangId); ?>: </h6>
+                                        <i class="icn"> </i>
+                                    </div>
+
+                                    <div class="card-body ">
+                                        <h3 class="h3">
+                                            <?php echo CommonHelper::displayMoneyFormat($promotionWalletToBeCharged); ?> </h3>
+                                        <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
+                                            <small>
+                                                <?php echo Labels::getLabel('LBL_Approx.', $siteLangId);
+                                                echo CommonHelper::displayMoneyFormat($promotionWalletToBeCharged, true, true); ?>
+                                            </small>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php }
+
+                        if ($withdrawlRequestAmount) { ?>
+                            <div class="col-md-auto">
+                                <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
+                                    <div class="card-head border-0">
+                                        <h6> <?php echo Labels::getLabel('LBL_Pending_Withdrawl_Requests', $siteLangId); ?>: </h6>
+                                        <i class="icn"> </i>
+                                    </div>
+                                    <div class="card-body">
+                                        <h3 class="h3">
+                                            <?php echo CommonHelper::displayMoneyFormat($withdrawlRequestAmount); ?> </h3>
+
+                                        <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
+                                            <small><?php echo Labels::getLabel('LBL_Approx.', $siteLangId); ?> <?php echo CommonHelper::displayMoneyFormat($withdrawlRequestAmount, true, true); ?></small>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                    <?php }
+                    } ?>
+                    <div class="col-md-auto">
                         <div class="card card-commerce form">
                             <div class="card-head border-0">
                                 <h6>
@@ -60,13 +105,9 @@ $dateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_TO_DATE', 
                                 </div>
                             </div>
                         </div>
-
-                        <div class="card withdrawForm">
-                            <div id="withdrawalReqForm"></div>
-                        </div>
-
-                        <?php $srchFormDivWidth = $canAddMoneyToWallet ? '8' : '12'; ?>
-                        <?php if ($canAddMoneyToWallet) { ?>
+                    </div>
+                    <?php if ($canAddMoneyToWallet) { ?>
+                        <div class="col-md-auto">
                             <div class="card card-commerce">
                                 <div class="card-head border-0">
                                     <h6>
@@ -98,10 +139,12 @@ $dateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_TO_DATE', 
                                     </div>
                                 </div>
                             </div>
-                        <?php } ?>
-                    </div>
+                        </div>
+                    <?php } ?>
+                </div>
 
-                    <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-md-12">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -113,7 +156,6 @@ $dateToFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_TO_DATE', 
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
