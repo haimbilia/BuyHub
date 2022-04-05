@@ -44,11 +44,17 @@
         success: function (message, timeOut = "", toastClass = "") {
             autoCloseTimeOut = ("" == timeOut ? getTimeout() : timeOut);
             toastExtraClass = "successMsgJs " + toastClass;
+            if ($($.parseHTML(message)).hasClass("div_msg")) {
+                message = $(message).removeClass('div_msg').get(0);
+            }
             setOptions('success', message);
         },
         info: function (message, timeOut = "", toastClass = "") {
             autoCloseTimeOut = ("" == timeOut ? getTimeout() : timeOut);
             toastExtraClass = "infoMsgJs " + toastClass;
+            if ($($.parseHTML(message)).hasClass("div_info")) {
+                message = $(message).removeClass('div_info').get(0);
+            }
             setOptions('info', message);
         },
         warning: function (message, timeOut = "", toastClass = "") {
@@ -59,6 +65,10 @@
         error: function (message, timeOut = "", toastClass = "") {
             autoCloseTimeOut = ("" == timeOut ? getTimeout() : timeOut);
             toastExtraClass = "errorMsgJs " + toastClass;
+
+            if ($($.parseHTML(message)).hasClass("div_error")) {
+                message = $(message).removeClass('div_error').get(0);
+            }
             setOptions('error', message);
         },
         close: function () {
