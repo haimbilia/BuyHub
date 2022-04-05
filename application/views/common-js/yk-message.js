@@ -44,7 +44,7 @@
         success: function (message, timeOut = "", toastClass = "") {
             autoCloseTimeOut = ("" == timeOut ? getTimeout() : timeOut);
             toastExtraClass = "successMsgJs " + toastClass;
-            if ($(message).hasClass("div_msg")) {
+            if ($($.parseHTML(message)).hasClass("div_msg")) {
                 message = $(message).removeClass('div_msg').get(0);
             }
             setOptions('success', message);
@@ -52,7 +52,7 @@
         info: function (message, timeOut = "", toastClass = "") {
             autoCloseTimeOut = ("" == timeOut ? getTimeout() : timeOut);
             toastExtraClass = "infoMsgJs " + toastClass;
-            if ($(message).hasClass("div_info")) {
+            if ($($.parseHTML(message)).hasClass("div_info")) {
                 message = $(message).removeClass('div_info').get(0);
             }
             setOptions('info', message);
@@ -66,7 +66,7 @@
             autoCloseTimeOut = ("" == timeOut ? getTimeout() : timeOut);
             toastExtraClass = "errorMsgJs " + toastClass;
 
-            if ($(message).hasClass("div_error")) {
+            if ($($.parseHTML(message)).hasClass("div_error")) {
                 message = $(message).removeClass('div_error').get(0);
             }
             setOptions('error', message);
