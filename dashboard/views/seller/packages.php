@@ -67,10 +67,13 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         ?>
                                     </h3>
                                     <?php $disabled = ($parentUserId != UserAuthentication::getLoggedUserId()) ? 'disabled=disabled' : ''; ?>
-                                    <select name="packages" class="form-control packagesJS" <?php echo $disabled; ?>>
-                                        <?php foreach ($package['plans'] as $plan) { 
+                                    <select name="packages" class="custom-select packagesJS" <?php echo $disabled; ?>>
+                                        <option value="" disabled="disabled" <?php echo (empty($selectedClass) ? 'selected=selected' : ''); ?>>
+                                            <?php echo Labels::getLabel('LBL_SELECT_PRICE', $siteLangId); ?>
+                                        </option>
+                                        <?php foreach ($package['plans'] as $plan) {
                                             $isActive = ($currentActivePlanId == $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']) ? 'selected=selected' : '';
-                                            ?>
+                                        ?>
                                             <option value="<?php echo $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']; ?>" <?php echo $isActive; ?>>
                                                 <?php echo SellerPackagePlans::getPlanPriceWithPeriod($plan, $plan[SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?>
                                             </option>
