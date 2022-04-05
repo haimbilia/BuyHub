@@ -795,7 +795,7 @@ class MyAppController extends FatController
             }
             return $translatedText;
         }
-        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
     }
 
     protected function getPhoneNumberForm()
@@ -923,7 +923,7 @@ class MyAppController extends FatController
             return true;
         }
 
-        LibHelper::exitWithError(Labels::getLabel('MSG_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
+        LibHelper::exitWithError(Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
         FatApp::redirectUser(UrlHelper::generateUrl('maintenance'));
     }
 }

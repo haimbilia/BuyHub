@@ -101,11 +101,11 @@ class PluginSettingController extends ListingBaseController
     {
         $keyName = FatApp::getPostedData('keyName', FatUtility::VAR_STRING, '');
         if (empty($keyName)) {
-            LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_KEY_NAME', $langId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_KEY_NAME', $langId));
         }
         $plugin = PluginHelper::callPlugin($keyName, [$langId], $error, $langId, false);
         if (false == method_exists($plugin, 'getFormFieldsArr')) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_UNABLE_TO_LOAD_SETTINGS_FORM', $langId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_LOAD_SETTINGS_FORM', $langId));
         }
         $labelsArr = $plugin->getFormFieldsArr();
 

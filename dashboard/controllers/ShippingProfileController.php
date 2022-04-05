@@ -116,7 +116,7 @@ class ShippingProfileController extends SellerBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (empty($post)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -163,12 +163,12 @@ class ShippingProfileController extends SellerBaseController
 
         $shipprofileId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($shipprofileId < 1) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request_id', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId));
         }
 
         $shippingProfile = ShippingProfile::getAttributesById($shipprofileId);
         if (false == $shippingProfile) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $whr = array('smt' => 'shipprofile_id = ? and shipprofile_default != ? and shipprofile_user_id = ?', 'vals' => array($shipprofileId, applicationConstants::YES, $this->userParentId));

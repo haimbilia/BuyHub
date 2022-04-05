@@ -191,7 +191,7 @@ class AffiliateCommissionController extends ListingBaseController
             $rs = $srch->getResultSet();
             $records = FatApp::getDb()->fetchAll($rs);
             if ($records) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_Record_already_exists', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_RECORD_ALREADY_EXISTS', $this->siteLangId), true);
             }
         }
         unset($post['afcommsetting_id']);

@@ -73,7 +73,7 @@ class SavedProductsSearchController extends LoggedUserController
         $savedSearchProduct->assignValues($post);
 
         if (!$savedSearchProduct->save()) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Can_not_be_saved', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_CAN_NOT_BE_SAVED', $this->siteLangId));
         }
 
         $this->set('msg', Labels::getLabel('MSG_Saved_successfully', $this->siteLangId));

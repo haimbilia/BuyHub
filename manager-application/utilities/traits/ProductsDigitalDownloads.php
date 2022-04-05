@@ -11,7 +11,7 @@ trait ProductsDigitalDownloads
         $sellerProductRow = SellerProduct::getAttributesById($selProdId, ['selprod_user_id', 'selprod_product_id']);
 
         if (false == $sellerProductRow) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $productId = $sellerProductRow['selprod_product_id'];
@@ -19,7 +19,7 @@ trait ProductsDigitalDownloads
         $product = Product::getAttributesById($productId, ['product_attachements_with_inventory']);
 
         if (false == $product) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
@@ -131,7 +131,7 @@ trait ProductsDigitalDownloads
         $selProdData = $ddpObj->getSellerProduct($recordId);
 
         if (1 > count($selProdData)) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
 
         $ddpObj->getProduct($selProdData['selprod_product_id']);
@@ -153,7 +153,7 @@ trait ProductsDigitalDownloads
         }
 
         if ($file['pddr_record_id'] != $recordId) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
 
         if (!file_exists(CONF_UPLOADS_PATH . $file['afile_physical_path'])) {

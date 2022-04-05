@@ -568,7 +568,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     {
         $this->adsBatchId = $adsBatchId;
         if (1 > $this->adsBatchId) {
-            LibHelper::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -653,7 +653,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $adsBatchId = FatUtility::int($adsBatchId);
         $sellerProducts = FatApp::getPostedData('selprod_ids');
         if (1 > $adsBatchId || !is_array($sellerProducts) || 1 > count($sellerProducts)) {
-            LibHelper::dieJsonError(Labels::getLabel("LBL_INVALID_REQUEST", $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
         }
 
         foreach ($sellerProducts as $selProdId) {

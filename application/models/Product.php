@@ -1293,7 +1293,7 @@ class Product extends MyAppModel
         $productId = FatUtility::int($productId);
         $userId = FatUtility::int($userId);
         if (!$productId || !$userId) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST', CommonHelper::getLangId()));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
         }
         $srch = SellerProduct::getSearchObject();
         $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');

@@ -579,7 +579,7 @@ trait ShippingServices
     {
         $orderData = $this->getOrderProductDetail($opId);
         if (empty($orderData)) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_ORDER", $this->langId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_ORDER", $this->langId), true);
         }
         
         $rates = $this->getShippingRatesFromApi($orderData);

@@ -127,7 +127,7 @@ class AdminGuestController extends FatController
             ->setVariables($replacements)
             ->send();
         if (!$sendEmail) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Unable_to_send_email', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_SEND_EMAIL', $this->siteLangId), true);
         }
 
         $emaiHandObj = new EmailHandler();

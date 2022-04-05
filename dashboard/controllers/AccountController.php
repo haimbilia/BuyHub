@@ -204,7 +204,7 @@ class AccountController extends LoggedUserController
 
         if (!Notification::saveNotifications($notificationData)) {
             $db->rollbackTransaction();
-            FatUtility::dieJsonError(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
         $db->commitTransaction();
@@ -218,7 +218,7 @@ class AccountController extends LoggedUserController
         $post = FatApp::getPostedData();
 
         if (empty($post)) {            
-            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId));
         }
         $field_id = $post['field_id'];
 
@@ -274,7 +274,7 @@ class AccountController extends LoggedUserController
 
         /* Restrict to change password for demo user on demo URL. */
         if (CommonHelper::demoUrl() && 4 == $this->userId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId));
         }
 
         $userObj = new User($this->userId);
@@ -321,33 +321,33 @@ class AccountController extends LoggedUserController
         switch ($dasboardType) {
             case User::USER_BUYER_DASHBOARD:
                 if (!User::canViewBuyerTab()) {
-                    FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+                    FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
                 }
                 break;
             case User::USER_SELLER_DASHBOARD:
                 if (!User::canViewSupplierTab()) {
-                    FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+                    FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
                 }
                 break;
             case User::USER_ADVERTISER_DASHBOARD:
                 if (!User::canViewAdvertiserTab()) {
-                    FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+                    FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
                 }
                 break;
             case User::USER_AFFILIATE_DASHBOARD:
                 if (!User::canViewAffiliateTab()) {
-                    FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+                    FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
                 }
                 break;
             default:
-                FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
                 break;
         }
 
         $arr = array('user_preferred_dashboard' => $dasboardType);
 
         if (1 > $this->userId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
 
         $userObj = new User($this->userId);
@@ -452,7 +452,7 @@ class AccountController extends LoggedUserController
         $paymentMethod = FatApp::getDb()->fetch($pmRs);
 
         if (false == $paymentMethod) {
-            LibHelper::dieJsonError(Labels::getLabel("LBL_Payment_method_is_not_available._Please_contact_your_administrator.", $this->siteLangId));
+            LibHelper::dieJsonError(Labels::getLabel("ERR_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.", $this->siteLangId));
         }
 
 
@@ -882,7 +882,7 @@ class AccountController extends LoggedUserController
 
         $data = User::getAttributesById($this->userId, array('user_preferred_dashboard', 'user_registered_initially_for', 'user_parent'));
         if ($data === false) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
         }
 
         $showSellerActivateButton = false;
@@ -1323,7 +1323,7 @@ class AccountController extends LoggedUserController
         $wishList = new UserWishList();
         $wishListId = $wishList->getWishListId($this->userId, UserWishList::TYPE_SAVE_FOR_LATER);
         if (!$wishList->addUpdateListProducts($wishListId, $selProdId)) {
-            FatUtility::dieJsonError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
         }
 
         $cartObj = new Cart($this->userId, $this->siteLangId, $this->app_user['temp_user_id']);
@@ -2130,7 +2130,7 @@ class AccountController extends LoggedUserController
                 $this->set('msg', Labels::getLabel('MSG_Product_has_been_removed_from_favourite_list', $this->siteLangId));
                 break;
             default:
-                FatUtility::dieJsonError(Labels::getLabel('MSG_UNKNOWN_ACTION', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_UNKNOWN_ACTION', $this->siteLangId));
                 break;
         }
 
@@ -2461,7 +2461,7 @@ class AccountController extends LoggedUserController
         $threadId = FatUtility::int($post['message_thread_id']);
 
         if (1 > $threadId) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $message = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($message);
             }
@@ -2485,7 +2485,7 @@ class AccountController extends LoggedUserController
 
         $threadDetails = FatApp::getDb()->fetch($rs);
         if (empty($threadDetails)) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $message = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError($message);
             }
@@ -3210,7 +3210,7 @@ class AccountController extends LoggedUserController
             $address = new Address($addr_id, $langId);
             $data = $address->getData(Address::TYPE_USER, $this->userId);
             if (empty($data)) {
-                FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_request', $langId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $langId));
             }
             $stateId = $data['addr_state_id'];
             $addressFrm->fill($data);
@@ -3238,7 +3238,7 @@ class AccountController extends LoggedUserController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_You_have_alrady_submitted_the_request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_YOU_HAVE_ALRADY_SUBMITTED_THE_REQUEST', $this->siteLangId));
         }
 
         $assignValues = array(
@@ -3273,13 +3273,13 @@ class AccountController extends LoggedUserController
         $rs = $srch->getResultSet();
 
         if (!$rs) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
         $data = FatApp::getDb()->fetch($rs, 'user_id');
 
         if ($data === false) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', 'mysql_func_' . FatApp::getConfig('CONF_GDPR_POLICY_PAGE', FatUtility::VAR_INT, 0), 'AND', true);
@@ -3313,7 +3313,7 @@ class AccountController extends LoggedUserController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_You_have_alrady_submitted_the_data_request', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_YOU_HAVE_ALRADY_SUBMITTED_THE_DATA_REQUEST', $this->siteLangId));
         }
 
         $assignValues = array(
@@ -3636,7 +3636,7 @@ class AccountController extends LoggedUserController
     public function viewBuyerOrderInvoice($orderId, $opId = 0)
     {
         if (!$orderId) {
-            $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+            $message = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);
             }

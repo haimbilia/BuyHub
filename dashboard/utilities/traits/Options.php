@@ -91,7 +91,7 @@ trait Options
         $post[$optionObj::tblFld('identifier')] = $post[$optionObj::tblFld('name')];
         $optionObj->assignValues($post);
         if (!$optionObj->save()) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Option_Identifier_already_exists', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_OPTION_IDENTIFIER_ALREADY_EXISTS', $this->siteLangId));
         }
 
         $option_id = ($option_id > 0) ? $option_id : $optionObj->getMainTableRecordId();
@@ -313,7 +313,7 @@ trait Options
         }
 
         if ($optionObj->isLinkedWithProduct($option_id)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_This_option_is_linked_with_product', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_THIS_OPTION_IS_LINKED_WITH_PRODUCT', $this->siteLangId));
         }
 
         $optionObj->assignValues(array(Option::tblFld('deleted') => 1));
