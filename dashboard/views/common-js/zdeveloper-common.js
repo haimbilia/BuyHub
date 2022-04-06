@@ -535,10 +535,9 @@ function defaultSetUpLogin(frm, v) {
     if ($(frm).hasClass("loginpopup--js")) {
         formClass = "form.loginpopup--js ";
     }
-    if (
-        0 < $(formClass + ".loginWithOtp--js").length &&
-        0 < $(formClass + ".loginWithOtp--js").val()
-    ) {
+
+    $(".loginFormJs").prepend(fcom.getLoader());
+    if (0 < $(formClass + ".loginWithOtp--js").length && 0 < $(formClass + ".loginWithOtp--js").val()) {
         $(formClass + "input.otpVal-js").each(function () {
             if ("undefined" == typeof $(this).val() || "" == $(this).val()) {
                 $(formClass + '.pwdField--js input[name="password"]').attr(
@@ -546,6 +545,7 @@ function defaultSetUpLogin(frm, v) {
                     '{"required":false}'
                 );
                 invalidOtpField();
+                fcom.removeLoader();
                 fcom.displayErrorMessage(langLbl.requiredFields);
                 return false;
             }
@@ -556,9 +556,10 @@ function defaultSetUpLogin(frm, v) {
         return false;
     }
     fcom.ajax(
-        fcom.makeUrl("GuestUser", "login"),
+        fcom.makeUrl("GuestUser", "login", [], siteConstants.webrootfront),
         fcom.frmData(frm),
         function (t) {
+            fcom.removeLoader();
             var ans = JSON.parse(t);
             if (ans.status == 1) {
                 fcom.displaySuccessMessage(ans.msg);
@@ -570,6 +571,7 @@ function defaultSetUpLogin(frm, v) {
     );
     return false;
 }
+
 (function ($) {
     var screenHeight = $(window).height() - 100;
     window.onresize = function (event) {
@@ -749,7 +751,6 @@ $(document).ready(function () {
         fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm', [], siteConstants.webrootfront), '', function (t) {
             $.ykmodal(t.html, true);
             fcom.removeLoader();
-            stylePhoneNumberFld('.' + $.ykmodal.element + " input[name='username']");
         });
     };
 

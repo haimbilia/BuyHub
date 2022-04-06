@@ -35,6 +35,7 @@ class GuestUserController extends MyAppController
         );
 
         $this->set('signInWithPhone', $signInWithPhone);
+        $this->set('signinpopup', FatApp::getPostedData('signinpopup', FatUtility::VAR_INT, 0));
         $this->set('loginData', $loginData);
         $this->set('exculdeMainHeaderDiv', true);
 
@@ -203,7 +204,7 @@ class GuestUserController extends MyAppController
                 Message::addErrorMessage(Labels::getLabel('ERR_COOKIES_NOT_ADDED', $this->siteLangId));
             }
         }
-        
+
         $frm->expireSecurityToken(FatApp::getPostedData());
 
         setcookie('uc_id', $userId, time() + 3600 * 24 * 30, CONF_WEBROOT_URL);
@@ -220,7 +221,6 @@ class GuestUserController extends MyAppController
         if (isset($_SESSION['referer_page_url'])) {
             $redirectUrl = $_SESSION['referer_page_url'];
             unset($_SESSION['referer_page_url']);
-
 
             $userPreferedDashboardType = ($data['user_preferred_dashboard']) ? $data['user_preferred_dashboard'] : $data['user_registered_initially_for'];
 
@@ -495,7 +495,7 @@ class GuestUserController extends MyAppController
                 }
 
                 if (false === MOBILE_APP_API_CALL) {
-                    $redirectUrl = UrlHelper::generateUrl('Account');
+                    $redirectUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD);
                     if ($isCheckOutPage) {
                         $this->set('needLogin', 1);
                         $redirectUrl = UrlHelper::generateUrl('Checkout');

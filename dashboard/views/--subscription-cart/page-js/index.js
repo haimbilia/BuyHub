@@ -11,7 +11,6 @@ $(document).ready(function(){
 	
 	applyPromoCode  = function(frm){
 		if( isUserLogged() == 0 ){
-			loginPopUpBox();
 			return false;
 		}
 		if (!$(frm).validate()) return;	
