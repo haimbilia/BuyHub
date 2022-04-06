@@ -299,6 +299,9 @@ $("document").ready(function () {
                 loadPaymentSummary();
                 loadFinancialSummary(1);
                 setCheckoutFlow("PAYMENT");
+                setTimeout(() => {
+                    fcom.removeLoader();
+                }, 2000);
             }
         );
     };
@@ -459,61 +462,13 @@ $("document").ready(function () {
                 fcom.removeLoader();
                 loadFinancialSummary(1);
                 loadPaymentSummary();
+                setTimeout(() => {
+                    fcom.removeLoader();
+                }, 2000);
             }
         );
     };
-
-    getPromoCode = function () {
-        fcom.displayProcessing();
-        checkLogin();
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl("Checkout", "getCouponForm"), "", function (t) {
-                $.ykmsg.close();
-                $.facebox(t);
-                $("input[name='coupon_code']").focus();
-            });
-        });
-    };
-
-    /* applyPromoCode = function (frm) {
-        checkLogin();
-        if (!$(frm).validate()) return;
-        var data = fcom.frmData(frm);
-
-        fcom.updateWithAjax(
-            fcom.makeUrl("Cart", "applyPromoCode"),
-            data,
-            function (res) {
-                $.facebox.close();
-                $.ykmsg.close();
-                loadFinancialSummary();
-                if ($(paymentDiv).hasClass("is-current")) {
-                    loadPaymentSummary();
-                }
-            }
-        );
-    }; */
-
-    /* triggerApplyCoupon = function (coupon_code) {
-        document.frmPromoCoupons.coupon_code.value = coupon_code;
-        applyPromoCode(document.frmPromoCoupons);
-        return false;
-    }; */
-
-    /* removePromoCode = function () {
-        $(financialSummary).prepend(fcom.getLoader());
-        fcom.updateWithAjax(
-            fcom.makeUrl("Cart", "removePromoCode"),
-            "",
-            function (res) {
-                loadFinancialSummary();
-                if ($(paymentDiv).hasClass("is-current")) {
-                    loadPaymentSummary();
-                }
-            }
-        );
-    }; */
-
+    
     useRewardPoints = function (frm) {
         if (!$(frm).validate()) return;
         $(financialSummary).prepend(fcom.getLoader());

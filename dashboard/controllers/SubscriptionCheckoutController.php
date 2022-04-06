@@ -540,14 +540,13 @@ class SubscriptionCheckoutController extends LoggedUserController
         return $frm;
     }
 
-    public function getCouponForm()
+    public function getCoupons()
     {
         $orderId = $_SESSION['subscription_shopping_cart']["order_id"] ?? '';
         $this->set('couponsList', DiscountCoupons::getValidSubscriptionCoupons($this->userParentId, $this->siteLangId, '', $orderId));
-
-        $PromoCouponsFrm = $this->getPromoCouponsForm($this->siteLangId);
-        $this->set('PromoCouponsFrm', $PromoCouponsFrm);
-        $this->_template->render(false, false);
+        
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getPromoCouponsForm($langId)

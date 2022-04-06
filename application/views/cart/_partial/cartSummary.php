@@ -1,12 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 require('coupons-section.php');?>
-
-<div class="cart-total-head">
-    <h3 class="cart-total-title">
-        <?php echo Labels::getLabel('LBL_Price', $siteLangId); ?>
-    </h3>
-</div>
 <div class="cart-total-body">
     <ul class="cart-summary">
         <li class="cart-summary-item">

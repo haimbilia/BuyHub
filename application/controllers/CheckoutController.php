@@ -2050,7 +2050,7 @@ class CheckoutController extends MyAppController
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
 
-    public function getCouponForm()
+    public function getCoupons()
     {
         $loggedUserId = UserAuthentication::getLoggedUserId();
         $orderId = isset($_SESSION['order_id']) ? $_SESSION['order_id'] : '';
@@ -2060,22 +2060,8 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-
-        $PromoCouponsFrm = $this->getPromoCouponsForm($this->siteLangId);
-        $this->set('PromoCouponsFrm', $PromoCouponsFrm);
-
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
-    }
-
-    private function getPromoCouponsForm($langId)
-    {
-        $langId = FatUtility::int($langId);
-        $frm = new Form('frmPromoCoupons');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Coupon_code', $langId), 'coupon_code', '', array('placeholder' => Labels::getLabel('FRM_Enter_Your_code', $langId)));
-        $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_APPLY', $langId));
-        return $frm;
     }
 
     public function setUpPickUp()

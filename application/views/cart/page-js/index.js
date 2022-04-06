@@ -48,14 +48,16 @@ $(function () {
 	};
 
 	getPromoCode = function () {
-		fcom.updateWithAjax(fcom.makeUrl('Checkout', "getCouponForm"), '', function (res) {
-            $.ykmodal(res.html);
+		$.ykmodal(fcom.getLoader(), true);
+		fcom.updateWithAjax(fcom.makeUrl('Checkout', "getCoupons"), '', function (res) {
+			fcom.removeLoader();
+            $.ykmodal(res.html, true);
         });
 	};
 
 	triggerApplyCoupon = function (coupon_code) {
 		$(".couponCodeJs").val(coupon_code);
-		applyPromoCode($("#checkoutCouponForm").get(0));
+		applyPromoCode(document.frmPromoCoupons);
 		return false;
 	};
 
