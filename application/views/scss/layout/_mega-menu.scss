@@ -5,6 +5,7 @@
     padding: 0;
     align-items: center;
     justify-content: space-between;
+    color: $txt-body;
     &.less {
         justify-content: flex-start;
     }
@@ -88,7 +89,7 @@
     }
 
     &-link {
-        color: inherit;
+        color: $txt-body;
         display: block;
         overflow: hidden;
         padding: 1.625rem 0;

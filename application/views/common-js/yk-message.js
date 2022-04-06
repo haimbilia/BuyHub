@@ -65,7 +65,6 @@
         error: function (message, timeOut = "", toastClass = "") {
             autoCloseTimeOut = ("" == timeOut ? getTimeout() : timeOut);
             toastExtraClass = "errorMsgJs " + toastClass;
-
             if ($($.parseHTML(message)).hasClass("div_error")) {
                 message = $(message).removeClass('div_error').get(0);
             }

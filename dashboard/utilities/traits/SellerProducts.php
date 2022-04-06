@@ -731,11 +731,12 @@ trait SellerProducts
         $data_to_be_save = $post;
         $this->deleteSelProdWithoutOptions($productId, $this->userParentId);
         $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-        $error = false;
+        $errorMsg ='' ;
         $prodAllowedLimit = -1;
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             $prodAllowedLimit = SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed');
         }
+        $minSellingPrice = Product::getAttributesById($productId, 'product_min_selling_price');
         $productCount = SellerProduct::getActiveCount($this->userParentId);
 
         if (SellerProduct::INVENTORY_RESTRICT_LIMIT >= $availableOptionsCount) {
@@ -758,18 +759,26 @@ trait SellerProducts
                     continue;
                 }
 
+                $sellingPrice = $post['selprod_price' . $optionKey];
+                if ($minSellingPrice > $sellingPrice) {                   
+                    $errorMsg = Labels::getLabel('MSG_FOR_{VARIANT}_VARIANT_YOU_CANNOT_ADD_LESS_THEN_MINIMUM_SELLING_PRICE_{MINIMUM-SELLING-PRICE}', $this->siteLangId);
+                    $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{VARIANT}' => $optionValue, '{MINIMUM-SELLING-PRICE}' => $minSellingPrice]);                   
+                    continue;
+                }
+
                 if (-1 != $prodAllowedLimit && $prodAllowedLimit < $productCount) {
                     $data_to_be_save['selprod_active'] = applicationConstants::INACTIVE;
                 }
                 $data_to_be_save['selprod_code'] = $selProdCode;
                 $data_to_be_save['selprod_cost'] = $post['selprod_cost' . $optionKey];
-                $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionKey];
+                $data_to_be_save['selprod_price'] = $sellingPrice;
                 $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
                 $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey] ?? '';
                 $this->addOption($selprod_id, $data_to_be_save, $optionKey);
                 $productCount++;
             }
         } else {
+            
             $optionValue = FatApp::getPostedData('inv_option_id', FatUtility::VAR_STRING, '');
             if (!empty($optionValue) && false === Product::validateProductOptionValue($post['selprod_product_id'], $optionValue)) {
                 FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
@@ -805,8 +814,8 @@ trait SellerProducts
             return;
         }
 
-        if ($error) {
-            FatUtility::dieWithError(Message::getHtml());
+        if (!empty($errorMsg)) {
+            FatUtility::dieJsonError($errorMsg);
         }
         $this->set('product_id', $productId);
         $this->set('msg', Labels::getLabel('MSG_PRODUCT_SETUP_SUCCESSFUL', $this->siteLangId));

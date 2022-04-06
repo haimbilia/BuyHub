@@ -90,12 +90,6 @@ class CheckoutController extends MyAppController
                     }
                     break;
                 case 'hasStock':
-                    /* if( !$this->cartObj->hasStock() ){
-                    $key = false;
-                    Message::addErrorMessage(Labels::getLabel('ERR_PRODUCTS_ARE_OUT_OF_STOCK', $this->siteLangId));
-                    return false;
-                    } */
-
                     /* to check that product is temporary hold[ */
                     $cart_user_id = Cart::getCartUserId();
                     $intervalInMinutes = FatApp::getConfig('cart_stock_hold_minutes', FatUtility::VAR_INT, 15);
@@ -769,7 +763,7 @@ class CheckoutController extends MyAppController
         $this->set('cartOrderData', $cartOrderData);
         $this->set('shippingRates', $shippingRates);
         $this->set('headerData', $headerData);
-
+        $this->_template->addJs('js/scroll-hint.js');
         $this->_template->render();
     }
 
@@ -1477,17 +1471,11 @@ class CheckoutController extends MyAppController
         $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
-        // CommonHelper::printArray($orderInfo);
-        /* $orderObj = new Orders();
-        $orderInfo = $orderObj->getOrderById( $order_id, $this->siteLangId, array('payment_status' => 0) ); */
         if (!$orderInfo) {
-            /* Message::addErrorMessage( Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId) );
-            $this->set('error', Message::getHtml() ); */
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
 
         $methodCode = Plugin::getAttributesById($plugin_id, 'plugin_code');
-        // $paymentMethod = Plugin::getAttributesByCode($methodCode, Plugin::ATTRS, $this->siteLangId);
         $this->plugin = PluginHelper::callPlugin($methodCode, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $this->plugin) {
             LibHelper::exitWithError($error);

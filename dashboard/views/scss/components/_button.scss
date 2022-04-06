@@ -39,6 +39,8 @@
 }
 
 .btn {
+    display: inline-flex;
+    align-items: center;
     padding: $input-padding;
     height: $input-height;
     font-size: 0.85rem;
@@ -130,11 +132,19 @@
         height: auto;
     }
     &-arrow {
+        gap: 6px;
         .svg {
             width: 12px;
             height: 12px;
             margin-top: -4px;
-            margin-#{$end-direction}: 5px;
+        }
+    }
+    &-icon {
+        gap: 6px;
+        .svg {
+            // width: 12px;
+            // height: 12px;
+            //margin-#{$end-direction}: 6px;
         }
     }
     &-link {
@@ -156,32 +166,6 @@
             }
         }
     }
-    .link-underline {
-        padding: 0;
-        color: $brand-color;
-        position: relative;
-        font-size: 0.875rem;
-        font-weight: 500;
-        white-space: nowrap;
-        text-rendering: optimizeLegibility;
-        transition: color 0.3s ease-in-out;
-        background-image: linear-gradient(currentColor, currentColor);
-        background-position: 50% 100%;
-        background-repeat: no-repeat;
-        background-size: 0% 2px;
-        background-color: transparent;
-        transition: background-size 0.3s;
-        text-decoration: none;
-        background-size: 100% 2px;
-        border: none;
-        &:hover {
-            text-decoration: none;
-            background-size: 95% 2px;
-        }
-        &-black {
-            color: $black;
-        }
-    }
 
     &.disabled {
         filter: grayscale(1);
@@ -199,7 +183,32 @@
         }
     }
 }
-
+.link-underline {
+    padding: 0;
+    color: $brand-color;
+    position: relative;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    text-rendering: optimizeLegibility;
+    transition: color 0.3s ease-in-out;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 50% 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 2px;
+    background-color: transparent;
+    transition: background-size 0.3s;
+    text-decoration: none;
+    background-size: 100% 2px;
+    border: none;
+    &:hover {
+        text-decoration: none;
+        background-size: 95% 2px;
+    }
+    &-black {
+        color: $black;
+    }
+}
 a.link {
     color: $brand-color;
     position: relative;

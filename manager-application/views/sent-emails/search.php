@@ -18,6 +18,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo, true);
                 break;
             case 'earch_sent_on':
+            case 'earch_added_on':
                 $date = !empty($row[$key]) ? HtmlHelper::formatDateTime((string)$row[$key], true, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())) : Labels::getLabel('LBL_N/A', $siteLangId);
                 $td->appendElement('plaintext', $tdAttr, $date, true);
                 break;

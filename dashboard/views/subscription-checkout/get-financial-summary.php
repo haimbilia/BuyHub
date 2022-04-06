@@ -3,39 +3,46 @@ $cartTotal = isset($cartSummary['cartTotal']) ? $cartSummary['cartTotal'] : 0;
 $cartAdjustableAmount = isset($cartSummary['cartAdjustableAmount']) ? $cartSummary['cartAdjustableAmount'] : 0;
 $discountTotal = isset($cartSummary['cartDiscounts']) && isset($cartSummary['cartDiscounts']['coupon_discount_total']) ? $cartSummary['cartDiscounts']['coupon_discount_total'] : 0;
 $amount = CommonHelper::displayMoneyFormat($cartTotal - $cartAdjustableAmount - $discountTotal, true, false, true, false, true);
+
+$cartSubscription = current($subscriptions);
+$spackage_type = $cartSubscription['spackage_type'];
 ?>
 
 <div class="cart-total-head">
     <h3 class="cart-total-title">
-        <?php echo Labels::getLabel('LBL_Order_Summary', $siteLangId); ?> </h3>
+        <?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?>
+    </h3>
 </div>
 <div class="cart-total-body">
-    <?php if ($spackage_type != SellerPackages::FREE_TYPE) { ?>
-        <?php if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
-            <div class="coupons-applied">
-                <div class="">
-                    <h6><?php echo $cartSummary['cartDiscounts']['coupon_code']; ?></h6>
-                    <p>
-                        <?php $arr =  ['{AMOUNT}' => CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total'])];
-                        echo CommonHelper::replaceStringData(Labels::getLabel("LBL_YOU_SAVED_ADDITIONAL_{AMOUNT}", $siteLangId), $arr); ?>
-                    </p>
+    <ul class="list-cart list-cart-page list-shippings">
+        <?php foreach ($subscriptions as $subscription) { ?>
+            <li>
+                <div class="row">
+                    <div class="col">
+                        <?php
+                        $spackageName = isset($subscription['spackage_name']) ? $subscription['spackage_name'] : '';
+                        $spackagePrice = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price'] : '';
+                        $interval = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval'] : 0;
+                        echo  $spackageName . ' / ' . SellerPackagePlans::getPlanPeriod($subscription, $spackagePrice); ?>
+                    </div>
+                    <div class="col-auto">
+                        <a href="javascript::void(0)" onclick="subscription.remove('<?php echo md5($subscription['key']); ?>')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                            <svg class="svg" width="16" height="16">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
+                                </use>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
-                <button class="close-layer" onclick="removePromoCode()"> </button>
-            </div>
-        <?php } else { ?>
-            <div class="coupons">
-                <button class="btn btn-outline-gray btn-block btn-coupons" onclick="getPromoCode()">
-                    <i class="icn">
-                        <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#coupon">
-                            </use>
-                        </svg>
-                    </i>
-                    <span><?php echo Labels::getLabel('LBL_I_have_a_coupon', $siteLangId); ?></span></button>
-
-            </div>
+            </li>
         <?php } ?>
-    <?php } ?>
+    </ul>
+    <div class="divider"></div>
+    <?php
+    if ($spackage_type != SellerPackages::FREE_TYPE) {
+        require(CONF_INSTALLATION_PATH . 'application/views/cart/_partial/coupons-section.php');
+    } ?>
+
     <ul class="cart-summary">
         <li class="cart-summary-item">
             <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span>
@@ -60,4 +67,50 @@ $amount = CommonHelper::displayMoneyFormat($cartTotal - $cartAdjustableAmount - 
                 <?php echo $amount; ?></span>
         </li>
     </ul>
+
+    <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
+        <div class="divider"></div>
+        <div class="cart-total-foot">
+            <div class="cart-action">
+                <?php if ($spackage_type == SellerPackages::PAID_TYPE) { ?>
+                    <p class="note">
+                        <?php echo Labels::getLabel('LBL_NOTE_PLEASE_MAINTAIN_WALLET_BALANCE_FOR_FURTHER_AUTO_RENEWAL_PAYMENTS', $siteLangId); ?>
+                    </p>
+                <?php } ?>
+                <label class="checkbox wallet-credits">
+                    <input onchange="walletSelection(this)" type="checkbox" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> name="pay_from_wallet" id="pay_from_wallet" value="1">
+                    <?php echo Labels::getLabel('LBL_WALLET_CREDITS:', $siteLangId); ?>
+                    <strong><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true); ?></strong>
+                </label>
+
+                <?php if ($cartSummary["cartWalletSelected"] && $userWalletBalance >= $cartSummary['orderNetAmount']) {
+                    $btnSubmitFld = $walletPaymentForm->getField('btn_submit');
+                    $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand btn-block');
+                    $btnSubmitFld->value = Labels::getLabel('LBL_PAY', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, false);
+                    $walletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
+                    $walletPaymentForm->developerTags['fld_default_col'] = 12;
+                    echo $walletPaymentForm->getFormTag();
+                    echo $walletPaymentForm->getFieldHTML('order_id');
+                    echo $walletPaymentForm->getFieldHTML('btn_submit');
+                    echo $walletPaymentForm->getExternalJS();
+                ?>
+                    </form>
+
+                    <script type="text/javascript">
+                        function confirmOrder(frm) {
+                            var data = fcom.frmData(frm);
+                            var action = $(frm).attr('action');
+                            fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'confirmOrder'), data, function(ans) {
+                                $(location).attr("href", action);
+                            });
+                        }
+                    </script>
+                <?php } else { ?>
+                    <p class="txt-sm">
+                        <?php echo Labels::getLabel('LBL_USE_MY_WALLET_BALANCE_TO_PAY_FOR_MY_ORDER', $siteLangId); ?>
+                    </p>
+                <?php } ?>
+            </div>
+        </div>
+    <?php } ?>
 </div>

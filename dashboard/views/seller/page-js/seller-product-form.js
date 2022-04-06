@@ -128,7 +128,12 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		}
 		var data = orignalData;
 		var varients = data.varients;
-		varients = varients.filter(function () { return true; });
+		if(data.varients === undefined){
+			fcom.displayErrorMessage(LBL_MANDATORY_OPTION_FIELDS);
+			return false;
+		}
+		varients = varients.filter(function () { return true; });	
+		
 
 		if (i < varients.length) {
 			var chunk = varients[i];
@@ -155,13 +160,18 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 					$this.parent().removeClass('invalid');
 				}
 			});
-			if ($("#optionsTable-js > tbody > tr.invalid").length == $("#optionsTable-js > tbody > tr").length) {
+			if ($("#optionsTable-js > tbody > tr.invalid").length == $("#optionsTable-js > tbody > tr").length) {				
 				fcom.displayErrorMessage(LBL_MANDATORY_OPTION_FIELDS);
 				return false;
 			}
 
-			fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpMultipleSellerProducts'), data, function (t) {
+			fcom.ajax(fcom.makeUrl('Seller', 'setUpMultipleSellerProducts'), data, function (t) {			
 				i++;
+				if (0 == t.status) {
+					fcom.displayErrorMessage(t.msg);				
+					// setTimeout(function () { location.reload(); }, 3000);
+					return;
+				}
 				if (i < varients.length) {
 					setUpMultipleSellerProducts(frm, i, orignalData);
 				}
@@ -170,16 +180,14 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 						sellerProductDownloadFrm(t.product_id, 0);
 						return;
 					}
-					setTimeout(function () { window.location.href = fcom.makeUrl('Seller', 'products'); }, 1000);
+					// setTimeout(function () { location.reload(); }, 1000);
 				}
-			});
+			}, { fOutMode: 'json' });
+
 			var counterString = langLbl.processing_counter.replace("{counter}", (i + 1));
 			counterString = counterString.replace("{count}", varients.length);
-			counterString = langLbl.processing + " " + counterString;
+			counterString = langLbl.processing + " " + counterString;			
 			$.ykmsg.info(counterString);
-		}
-		if (i == (varients.length - 1)) {
-			/* setTimeout(function() { window.location.href = fcom.makeUrl('Seller', 'products'); }, 1000); */
 		}
 	};
 

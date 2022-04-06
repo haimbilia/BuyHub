@@ -1083,7 +1083,7 @@ $(function () {
         fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function (t) {
             $.ykmodal(t.html, true);
             fcom.removeLoader();
-            stylePhoneNumberFld('.' + $.ykmodal.element + " input[name='username']", !flag);
+            stylePhoneNumberFld('.' + $.ykmodal.element + " input[name='username']");
         });
     };
 
@@ -1692,29 +1692,9 @@ $(function () {
         $("div.demo-header").hide();
     }
 });
-$(function () {
-    new ScrollHint(".js-scrollable", {
-        i18n: {
-            scrollable: langLbl.scrollable,
-        },
-    });
-});
+
 $(document).ajaxComplete(function () {
-    stylePhoneNumberFld(".phone-js");
-    new ScrollHint(".js-scrollable:not(.scroll-hint)", {
-        i18n: {
-            scrollable: langLbl.scrollable,
-        },
-    });
-    if (
-        0 < $("div.block--empty").length &&
-        0 < $("div.scroll-hint-icon-wrap").length
-    ) {
-        $("div.block--empty")
-            .siblings(".js-scrollable.scroll-hint")
-            .children("div.scroll-hint-icon-wrap")
-            .remove();
-    }
+    stylePhoneNumberFld(".phone-js");    
     if (0 < $("#facebox").length) {
         if ($("#facebox").is(":visible")) {
             $("html").addClass("pop-on");

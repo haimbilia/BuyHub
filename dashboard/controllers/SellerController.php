@@ -4539,23 +4539,12 @@ class SellerController extends SellerBaseController
                             continue;
                         }
                         /* ] */
-                        // $frm->addRequiredField(Labels::getLabel('FRM_URL_KEYWORD', $this->siteLangId), 'selprod_url_keyword'.$optionKey);
-                        $costPrice = $frm->addTextBox(Labels::getLabel('FRM_COST_PRICE', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'varients[' . $j . '][selprod_cost' . $optionKey . ']');
-                        // $costPrice->requirements()->setPositive();
-
-                        $fld = $frm->addTextBox(Labels::getLabel('FRM_PRICE', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'varients[' . $j . '][selprod_price' . $optionKey . ']');
-                        /* $fld->requirements()->setPositive();
-                          if (isset($productData['product_min_selling_price'])) {
-                          $fld->requirements()->setRange($productData['product_min_selling_price'], 9999999999);
-                          } */
-
-                        $fld = $frm->addTextBox(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'varients[' . $j . '][selprod_stock' . $optionKey . ']');
-                        // $fld->requirements()->setPositive();
-
-                        $fld_sku = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'varients[' . $j . '][selprod_sku' . $optionKey . ']');
-                        if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
-                            // $fld_sku->requirements()->setRequired();
-                        }
+                       
+                        $frm->addTextBox(Labels::getLabel('FRM_COST_PRICE', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'varients[' . $j . '][selprod_cost' . $optionKey . ']');
+                        $frm->addTextBox(Labels::getLabel('FRM_PRICE', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'varients[' . $j . '][selprod_price' . $optionKey . ']');
+                        $frm->addTextBox(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'varients[' . $j . '][selprod_stock' . $optionKey . ']');
+                        $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'varients[' . $j . '][selprod_sku' . $optionKey . ']');
+                       
                         $i++;
                     }
                 }
@@ -4567,9 +4556,6 @@ class SellerController extends SellerBaseController
                 $fld->requirements()->setPositive();
                 if (isset($productData['product_min_selling_price'])) {
                     $fld->requirements()->setRange($productData['product_min_selling_price'], 9999999999);
-                    // $fld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE_FOR_THIS_PRODUCT_IS', $this->siteLangId).' '.CommonHelper::displayMoneyFormat($productData['product_min_selling_price'], true, true));
-
-                    /* $fld->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_THIS_PRICE_IS_EXCLUDING_THE_TAX_RATES.', $this->siteLangId) . '</span> <span class="note">' . Labels::getLabel('FRM_MIN_SELLING_PRICE', $this->siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productData['product_min_selling_price'], true, true) . '</small>'; */
                 }
 
                 $fld = $frm->addIntegerField(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'selprod_stock');
@@ -4577,8 +4563,7 @@ class SellerController extends SellerBaseController
                 $fld_sku = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'selprod_sku');
                 if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
                     $fld_sku->requirements()->setRequired();
-                }
-                /* $fld_sku->htmlAfterField = '<br/><span class="note">' . Labels::getLabel('FRM_STOCK_KEEPING_UNIT', $this->siteLangId) . '</span>'; */
+                }                
             }
         }
         $frm->addTextArea(Labels::getLabel('FRM_ANY_EXTRA_COMMENT_FOR_BUYER', $this->siteLangId), 'selprod_comments' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
