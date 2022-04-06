@@ -58,7 +58,7 @@
     &-link {
         color: $txt-gray;
         display: flex;
-        padding: 20px 25px;
+        padding: 20px 20px;
         font-size: 0.8rem;
         gap: 1rem;
         @media (max-width: 1280px) {
@@ -147,16 +147,16 @@
         background: $bg-placeholder;
         height: 100%;
         position: relative;
-        &[data-ratio='1:1'] {
+        &[data-ratio="1:1"] {
             padding-bottom: calc(100% / (var(--aspect-ratio1)));
         }
-        &[data-ratio='4:3'] {
+        &[data-ratio="4:3"] {
             padding-bottom: calc(100% / (var(--aspect-ratio2)));
         }
-        &[data-ratio='3:4'] {
+        &[data-ratio="3:4"] {
             padding-bottom: calc(100% / (var(--aspect-ratio3)));
         }
-        &[data-ratio='16:9'] {
+        &[data-ratio="16:9"] {
             padding-bottom: calc(100% / (var(--aspect-ratio4)));
         }
         &:hover {
