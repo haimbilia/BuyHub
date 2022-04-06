@@ -16,7 +16,6 @@ $location->addFieldTagAttribute("placeholder", Labels::getLabel('LBL_TYPE_YOUR_A
         <br>
         <small><?php echo Labels::getLabel('MSG_ALLOW_LOCATION_ACCESS_DESCRIPTION', $siteLangId); ?></small>
     </h5>
-
 </div>
 <div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">

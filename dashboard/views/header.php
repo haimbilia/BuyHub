@@ -32,6 +32,7 @@ if (isset($includeEditor) && $includeEditor == true) {
 if ($controllerName != 'GuestUser' && $controllerName != 'Error') {
     $_SESSION['referer_page_url'] = UrlHelper::getCurrUrl();
 }
+
 $htmlClass = '';
 $actionName = FatApp::getAction();
 if ($controllerName == 'Products' && $actionName == 'view') {

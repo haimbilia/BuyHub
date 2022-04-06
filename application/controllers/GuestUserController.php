@@ -35,6 +35,7 @@ class GuestUserController extends MyAppController
         );
 
         $this->set('signInWithPhone', $signInWithPhone);
+        $this->set('signinpopup', FatApp::getPostedData('signinpopup', FatUtility::VAR_INT, 0));
         $this->set('loginData', $loginData);
         $this->set('exculdeMainHeaderDiv', true);
 
@@ -220,8 +221,7 @@ class GuestUserController extends MyAppController
         if (isset($_SESSION['referer_page_url'])) {
             $redirectUrl = $_SESSION['referer_page_url'];
             unset($_SESSION['referer_page_url']);
-
-
+            
             $userPreferedDashboardType = ($data['user_preferred_dashboard']) ? $data['user_preferred_dashboard'] : $data['user_registered_initially_for'];
 
             switch ($userPreferedDashboardType) {
@@ -246,7 +246,7 @@ class GuestUserController extends MyAppController
 
         if ($redirectUrl == '') {
             $redirectUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
-        }
+        }        
         $this->set('redirectUrl', $redirectUrl);
         $this->set('msg', Labels::getLabel("MSG_LOGIN_SUCCESSFULL", $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
