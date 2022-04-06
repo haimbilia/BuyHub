@@ -54,7 +54,7 @@ class SentEmailsController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING) , applicationConstants::SORT_DESC );
 
         $srchFrm = $this->getSearchForm($fields);
 
@@ -104,6 +104,7 @@ class SentEmailsController extends ListingBaseController
 
         $arr = [
             /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            'earch_added' => Labels::getLabel('LBL_Created_On', $this->siteLangId),
             'earch_sent_on' => Labels::getLabel('LBL_Sent_On', $this->siteLangId),
             'earch_subject' => Labels::getLabel('LBL_Subject', $this->siteLangId),
             'earch_to_email' => Labels::getLabel('LBL_Sent_To', $this->siteLangId),
@@ -119,6 +120,7 @@ class SentEmailsController extends ListingBaseController
     {
         $arr = [
             /* 'listSerial', */
+            'earch_added',
             'earch_sent_on',
             'earch_subject',
             'earch_to_email',
