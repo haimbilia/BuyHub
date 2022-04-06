@@ -11,7 +11,7 @@ if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFor
                     </a>';
 }
 ?>
-<div class="row" dir="<?php echo Language::getLayoutDirection($langId); ?>">
+<div class="row" <?php echo CommonHelper::getLayoutDirection() != Language::getLayoutDirection($langId) ? 'dir="'.Language::getLayoutDirection($langId).'"' : ''; ?>>
     <div class="col-md-9">
         <div class="form-group">
             <div class="d-flex">

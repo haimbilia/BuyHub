@@ -6,7 +6,7 @@ if (0 < $recordId) {
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
 ?>
-<div class="content-wrapper content-space mainJs" dir="<?php echo $formLayout; ?>">
+<div class="content-wrapper content-space mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="'.$formLayout.'"' : ''; ?>>
     <?php
     $frm->setFormTagAttribute('class', 'form');
     $frm->setFormTagAttribute('id', 'addProductfrm');
