@@ -86,10 +86,10 @@ $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageD
                                     <div class="message">
                                         <?php echo nl2br($row['message_text']); ?>
                                     </div>
-                                    <?php if ($row['thread_started_by'] != $row['message_from_user_id']) { ?>
-                                        <span class="time"><?php echo $toUserName; ?></span>
+                                    <span class="time"> <?php if ($row['thread_started_by'] != $row['message_from_user_id']) { ?>
+                                        <?php echo $toUserName; ?> - 
                                     <?php } ?>
-                                    <span class="time"><?php echo date('H:i', $msgTimeStamp); ?></span>
+                                    <?php echo date('H:i', $msgTimeStamp); ?></span>
                                 </div>
                             </div>
                     <?php }
@@ -99,7 +99,7 @@ $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageD
         </div>
     </div>
 
-    <div class="communication-sidebar userJs">
+    <!-- <div class="communication-sidebar userJs">
         <div class="card mb-0 h-100">
             <div class="card-body">
                 <div class="message__user">
@@ -139,5 +139,5 @@ $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageD
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 <?php } ?>

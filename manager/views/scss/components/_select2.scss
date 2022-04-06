@@ -7,9 +7,8 @@
             border: none;
             font-size: 1em;
             margin-#{$end-direction}: 20px;
-            .main[dir="rtl"] &{
+            .main[dir='rtl'] & {
                 float: #{$start-direction};
-
             }
         }
         .select2-selection__placeholder {
@@ -28,25 +27,24 @@
             font-size: 0.85rem;
             line-height: 1.5;
             padding-#{$end-direction}: 35px;
-            background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzA2cHgiIGhlaWdodD0iMzA2cHgiIHZpZXdCb3g9IjAgMCAzMDYgMzA2IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMDYgMzA2OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQoJPGc+DQoJCTxnIGlkPSJleHBhbmQtbW9yZSI+DQoJCQk8cG9seWdvbiBwb2ludHM9IjI3MC4zLDU4LjY1IDE1MywxNzUuOTUgMzUuNyw1OC42NSAwLDk0LjM1IDE1MywyNDcuMzUgMzA2LDk0LjM1IiAvPg0KCQk8L2c+DQoJPC9nPg0KDQo8L3N2Zz4NCg==");
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzA2cHgiIGhlaWdodD0iMzA2cHgiIHZpZXdCb3g9IjAgMCAzMDYgMzA2IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMDYgMzA2OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQoJPGc+DQoJCTxnIGlkPSJleHBhbmQtbW9yZSI+DQoJCQk8cG9seWdvbiBwb2ludHM9IjI3MC4zLDU4LjY1IDE1MywxNzUuOTUgMzUuNyw1OC42NSAwLDk0LjM1IDE1MywyNDcuMzUgMzA2LDk0LjM1IiAvPg0KCQk8L2c+DQoJPC9nPg0KDQo8L3N2Zz4NCg==');
             background-size: 10px;
             background-repeat: no-repeat;
             background-position: calc(100% - 12px) center;
             &:hover {
                 cursor: pointer;
             }
-            .main[dir="rtl"] & {
+            .main[dir='rtl'] & {
                 padding-#{$start-direction}: 35px;
-                padding-#{$end-direction}: 0.75rem ;
+                padding-#{$end-direction}: 0.75rem;
                 text-align: #{$end-direction};
             }
-            .main[dir="ltr"] & {
+            .main[dir='ltr'] & {
                 padding-#{$start-direction}: 35px;
-                padding-#{$end-direction}: 0.75rem ;
+                padding-#{$end-direction}: 0.75rem;
                 background-position: calc(100% - 12px) center;
-
             }
-            [dir="rtl"] &{
+            [dir='rtl'] & {
                 background-position: calc(0% - -12px) center;
             }
         }
@@ -95,7 +93,7 @@
         .select2-search__field {
             width: 100% !important;
             font-size: 0.85rem;
-            font-family: "Poppins";
+            font-family: 'Poppins';
             &:hover,
             &:focus {
                 background: transparent;
@@ -119,6 +117,10 @@
         .select2-results__option {
             font-size: 0.875rem;
         }
+    }
+    &:focus-visible,
+    & *:focus-visible {
+        outline: $focus-outline !important;
     }
 }
 

@@ -264,48 +264,65 @@ if (0 < $recordId) {
 
                 <?php if ($displayDigitalDownloadList) { ?>
                     <div class="card card-toggle" id="digital-files">
-                        <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
+                        <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-file-block" aria-expanded="false" aria-controls="stock-block2">
                             <div class="card-head-label">
                                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
                                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
-                            </div>
-                            <?php if ($displayDigitalDownloadAddBtn) { ?>
-                                <div class="card-toolbar">
-                                    <div class="me-5">
-                                        <a href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);" class="btn btn-outline-secondary btn-sm">Digital Files</a>
-                                    </div>
-                                    <i class="dropdown-toggle-custom-arrow"></i>
-                                </div>
-                            <?php } ?>
+                            </div>                         
+                            <i class="dropdown-toggle-custom-arrow"></i>
                         </div>
-                        <div class="collapse" id="digital-files-block">
+                        <div class="collapse" id="digital-file-block">
                             <div class="card-body">
                                 <div id="digitalFilesDefaultListJs">
                                 </div>
                             </div>
                         </div>
+                        <?php if ($displayDigitalDownloadAddBtn) { ?>
+                            <div class="card-foot">
+                                <div class="row justify-content-end">
+                                    <div class="col-auto">
+                                        <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);">
+                                            <svg class="svg btn-icon-start" width="18" height="18">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                </use>
+                                            </svg>
+                                            <span><?php echo Labels::getLabel('BTN_DIGITAL_FILES', $langId); ?></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
                     </div>
                     <div class="card card-toggle" id="digital-links">
-                        <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
+                        <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-link-block" aria-expanded="false" aria-controls="stock-block2">
                             <div class="card-head-label">
                                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
                                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?></span>
-                            </div>
-                            <?php if ($displayDigitalDownloadAddBtn) { ?>
-                                <div class="card-toolbar">
-                                    <div class="me-5">
-                                        <a href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);" class="btn btn-outline-secondary btn-sm">Digital Links</a>
-                                    </div>
-                                    <i class="dropdown-toggle-custom-arrow"></i>
-                                </div>
-                            <?php } ?>
+                            </div>                          
+                            <i class="dropdown-toggle-custom-arrow"></i>
                         </div>
-                        <div class="collapse" id="digital-links-block">
+                        <div class="collapse" id="digital-link-block">
                             <div class="card-body">
                                 <div id="digitalLinksDefaultListJs">
                                 </div>
                             </div>
                         </div>
+                        <?php if ($displayDigitalDownloadAddBtn) { ?>
+                                <div class="card-foot">
+                                    <div class="row justify-content-end">
+                                        <div class="col-auto">
+                                            <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
+                                                <svg class="svg btn-icon-start" width="18" height="18">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                    </use>
+                                                </svg>
+                                                <span><?php echo Labels::getLabel('BTN_DIGITAL_LINKS', $langId); ?></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                        <?php } ?>
+
                     </div>
                 <?php } ?>
             </div>

@@ -568,17 +568,37 @@
     };
     getDigitalDownloads = function (downloadType, recordId, langId = 0, optionCombi = 0) {
         let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
-        if (downloadType == 1) {
+        if (downloadType == 1) {         
             fcom.ajax(fcom.makeUrl('CustomProducts', 'getDigitalDownloadLinks'), data, function (res) {
                 if (langId == 0 && optionCombi == 0) {
                     $("#digitalLinksDefaultListJs").html(res.html);
+                    if(res.html == ''){                      
+                        $('#digital-link-block').collapse('hide');
+                        $('#digital-links').find('.dropdown-toggle-custom').attr('data-bs-toggle','');
+                        $('#digital-links').find('.dropdown-toggle-custom-arrow').addClass('hide');                        
+                    }else{
+                        $('#digital-links').find('.dropdown-toggle-custom').attr('data-bs-toggle','collapse');
+                        $('#digital-links').find('.dropdown-toggle-custom-arrow').removeClass('hide');
+                        $('#digital-link-block').collapse('show');
+                    }
                 }
+                
                 $("#digitalFrmListJs").html(res.html);
             }, { fOutMode: 'json' });
         } else {
             fcom.ajax(fcom.makeUrl('CustomProducts', 'getDigitalDownloadAttachments'), data, function (res) {
                 if (langId == 0 && optionCombi == 0) {
                     $("#digitalFilesDefaultListJs").html(res.html);
+                    if(res.html == ''){                  
+                        $('#digital-file-block').collapse('hide');
+                        $('#digital-files').find('.dropdown-toggle-custom').attr('data-bs-toggle','');
+                        $('#digital-files').find('.dropdown-toggle-custom-arrow').addClass('hide');                  
+                    }else{
+                        $('#digital-files').find('.dropdown-toggle-custom').attr('data-bs-toggle','collapse');
+                        $('#digital-files').find('.dropdown-toggle-custom-arrow').removeClass('hide');
+                        $('#digital-file-block').collapse('show');                     
+                    }
+                  
                 }
                 $("#digitalFrmListJs").html(res.html);
             }, { fOutMode: 'json' });

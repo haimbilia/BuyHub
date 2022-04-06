@@ -636,6 +636,8 @@ Updates/Fixes :
     => 063348 - Seller UI: Some icon is not showing while hovering on it and the calendar icon is also missing for the date field while adding the "bind condition" for the manual badges under the Badges section at the seller's end.
     => 063579 - Issue coming on shop contact form.
     -----------------TV-9.4.0.20220406--------------------------------
+    => 063504 - Seller UI: Getting multiple issues on sub users page. 
+    => 063427 - Seller UI: Dropdown is closing and opening while clicking on the "Digital files and Digital Links" option, the CSV file is not uploading, double delete options are showing, and the table width is not fixed in the case of digital file while adding the Digi
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
