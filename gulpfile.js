@@ -28,7 +28,7 @@ const config = {
 function css() {
     return src("./application/views/scss/*.scss")
         .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(sass({ outputStyle: "compressed" }))
+        .pipe(sass({ outputStyle: "compressed", errLogToConsole: true, sourceComments: 'map' }))
         .pipe(autoprefixer())
         .pipe(sourcemaps.write("."))
         .pipe(dest("./application/views/css"));

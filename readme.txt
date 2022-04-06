@@ -626,7 +626,16 @@ Updates/Fixes :
     => 063164 - Seller UI: "Shipping's Tracking URL" is not showing under the order's details page
     => 063355 - Seller UI: Alignment is not proper while binding the products with the badges at the seller's end
     => 063384 - Suggestion to change the functionality of the uploading profile images on the seller's, buyer's advertiser's, and affiliate's dashboard and make it similar to the admin's dashboard
+    => 063533 - Buyer: After registration, the confirmation message is not aligned at the front-end.
     => 063476 - Seller UI: Infinite loader is coming when user tries to upload the profile picture.
+    => 063465 - Seller UI: Reset button is not working on Tax categories.
+    => 063348 - Seller UI: Some icon is not showing while hovering on it and the calendar icon is also missing for the date field while adding the "bind condition" for the manual badges under the Badges section at the seller's end.
+    => 063401 - Seller UI: Not able to upload the file under the "Upload Bulk Media" section under the Import/Export section at the seller's end.
+    => 063534 - Admin: Multiple delete functionality is not working while deleting the "Home Page Slides" under the CMS section at the admin's end.
+    => 063531 - Admin: Suggestion to show a default sorting of the user's table according to the "Reg. Date" at the admin's end.
+    => 063348 - Seller UI: Some icon is not showing while hovering on it and the calendar icon is also missing for the date field while adding the "bind condition" for the manual badges under the Badges section at the seller's end.
+    => 063579 - Issue coming on shop contact form.
+    -----------------TV-9.4.0.20220406--------------------------------
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
@@ -645,7 +654,8 @@ UAT points:
     => Order cancellation Page – details related to the cancellation (May be under drawer or) , Order Status niche lelo → taaki Order ka status directly ptaa chll jaaye
     => Amount to be replaced with (Strike out option for the Withdrawn amount) under the Withdrawal Request section, Addition of one more column like Before Withdrawal and After Withdrawal, Balance section renaming, In queue refund request ki info v aani chahiye, Real time balance to be shown…. (Aliegnment of the )
     => Manage Funds withdrawal requests - label Subtitle , Consideration over the Export option to be introduced under the Withdrawal Request Section (CSV download option) which is currently not placed into the system
-
+    ----------------------------TV-9.4.0.20220406-----------------------
+    
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

@@ -116,8 +116,8 @@ class TaxReportController extends ListingBaseController
         $frm->addTextBox(Labels::getLabel('FRM_SHOP_OWNER', $this->siteLangId), 'user_name');
         $frm->addHiddenField('', 'op_selprod_user_id', 0);
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SEARCH', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('FRM_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

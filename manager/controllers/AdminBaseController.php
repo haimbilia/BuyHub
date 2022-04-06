@@ -335,8 +335,8 @@ class AdminBaseController extends FatController
 
         $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'user_id', ''); 
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->adminLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -371,7 +371,7 @@ class AdminBaseController extends FatController
                 break;
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->adminLangId));
         return $frm;
     }
 
@@ -397,8 +397,8 @@ class AdminBaseController extends FatController
         $frm->addHiddenField('', 'user_id');
         $frm->addHiddenField('', 'order_id');
         $frm->addHiddenField('', 'shipping_company_user_id', 0);
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
+        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->adminLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }
@@ -606,7 +606,7 @@ class AdminBaseController extends FatController
         }
         $frm->addHiddenField('', 'product_attrgrp_id', $attrgrp_id);
         $frm->addHiddenField('', 'product_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->adminLangId));
         return $frm;
     }
 
@@ -776,7 +776,7 @@ class AdminBaseController extends FatController
         }
         $frm->addHiddenField('', 'selprod_product_id', $product_id);
         $frm->addHiddenField('', 'selprod_id');
-        $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->adminLangId));
+        $fld1 = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->adminLangId));
         return $frm;
     }
 
@@ -808,7 +808,7 @@ class AdminBaseController extends FatController
             }
             return $translatedText;
         }
-        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId));
+        FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->adminLangId));
     }
 
     public function imgCropper()

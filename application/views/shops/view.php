@@ -11,14 +11,17 @@ $bgUrl = UrlHelper::generateFullUrl('Image', 'shopBackgroundImage', array($shop[
     if (!empty($collectionData)) { ?>
         <section class="section pt-0">
             <div class="container container-fluid">
-                <div class="js-shop-slider shop-slider">
+                <div class="js-carousel js-shop-slider shop-slider" data-slides="3,3,2,2">
                     <?php foreach ($collectionData as $collection) { ?>
-                        <div>
-                            <figure class="item"><img class="" src="<?php echo UrlHelper::generateFileUrl('Image', 'shopCollectionImage', array($collection['scollection_id'], $siteLangId, ImageDimension::VIEW_SHOP)); ?>" alt="" data-ratio="2:1"></figure>
+                        <div class="item">
+
+                            <img class="" src="<?php echo UrlHelper::generateFileUrl('Image', 'shopCollectionImage', array($collection['scollection_id'], $siteLangId, ImageDimension::VIEW_SHOP)); ?>" alt="" data-ratio="2:1">
+
                             <div class="overlay-content">
                                 <h4><?php echo $collection['scollection_name']; ?></h4>
                                 <!--<p>From the runway to your wardrobe</p>-->
-                                <a href="<?php echo UrlHelper::generateUrl('Shops', 'collection', array($shop['shop_id'], $collection['scollection_id'])) ?>" class="link"><?php echo Labels::getLabel('MSG_Explore', $siteLangId) ?></a>
+                                <a class="link-underline" href="<?php echo UrlHelper::generateUrl('Shops', 'collection', array($shop['shop_id'], $collection['scollection_id'])) ?>">
+                                    <?php echo Labels::getLabel('MSG_Explore', $siteLangId) ?></a>
                             </div>
                         </div>
                     <?php } ?>

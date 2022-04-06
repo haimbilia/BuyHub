@@ -56,13 +56,13 @@ trait CatalogProduct
         $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $langId), 'product_description');
         $frm->addTextBox(Labels::getLabel('FRM_YOUTUBE_VIDEO_URL', $langId), 'product_youtube_video');
         $frm->addCheckBox(Labels::getLabel('FRM_MARK_AS_FEATURED', $langId), 'product_featured', 1, array(), false, 0);
-        $frm->addCheckBox(Labels::getLabel("LBL_ACTIVE", $langId), 'product_active', applicationConstants::YES, array(), true, 0);
+        $frm->addCheckBox(Labels::getLabel("FRM_ACTIVE", $langId), 'product_active', applicationConstants::YES, array(), true, 0);
 
         $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_TAGS', $langId), 'product_tags');
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_TAX_CATEGORY', $langId), 'ptt_taxcat_id', []);
         $fld->requirements()->setRequired();
         if (0 == $isRequested) {
-            $frm->addSelectBox(Labels::getLabel('LBL_COUNTRY_OF_ORIGIN', $langId), 'ps_from_country_id', []);
+            $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY_OF_ORIGIN', $langId), 'ps_from_country_id', []);
         }
         if ($productType == Product::PRODUCT_TYPE_DIGITAL) {
             $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', $this->siteLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($langId), applicationConstants::NO);
@@ -116,7 +116,7 @@ trait CatalogProduct
         }
 
         $frm->addHiddenField('', 'record_id', 0);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_AND_NEXT', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_AND_NEXT', $langId));
         return $frm;
     }
     

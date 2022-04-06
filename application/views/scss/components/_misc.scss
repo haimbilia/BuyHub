@@ -19,9 +19,6 @@ html {
     }
 }
 
-body {
-}
-
 :focus {
     box-shadow: none !important;
     outline: 0 !important;
@@ -653,4 +650,11 @@ a:hover {
     to {
         left: 100%;
     }
+}
+
+.grid-layout {
+    display: grid;
+    grid-gap: 5rem;
+
+    grid-template-columns: minmax(auto, 24%) 1fr;
 }

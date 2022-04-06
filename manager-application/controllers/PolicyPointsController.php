@@ -241,7 +241,7 @@ class PolicyPointsController extends ListingBaseController
 
             $this->updatePolicyPointStatus($ppointId, $status);
         }
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -250,7 +250,7 @@ class PolicyPointsController extends ListingBaseController
         $status = FatUtility::int($status);
         $ppointId = FatUtility::int($ppointId);
         if (1 > $ppointId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $obj = new PolicyPoint($ppointId);
@@ -278,7 +278,7 @@ class PolicyPointsController extends ListingBaseController
         $ppointIdsArr = FatUtility::int(FatApp::getPostedData('ppoint_ids'));
 
         if (empty($ppointIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($ppointIdsArr as $ppoint_id) {
@@ -295,7 +295,7 @@ class PolicyPointsController extends ListingBaseController
     {
         $ppoint_id = FatUtility::int($ppoint_id);
         if (1 > $ppoint_id) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
         $ppointObj = new PolicyPoint($ppoint_id);
         if (!$ppointObj->canRecordMarkDelete($ppoint_id)) {

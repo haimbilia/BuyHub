@@ -1,10 +1,10 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'form form_horizontal');
+$frm->setFormTagAttribute('class', 'form form_horizontal modalFormJs');
 $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
 $frm->setFormTagAttribute('onsubmit', 'updateTaxRule(this); return(false);');
-
+$frm->setFormTagAttribute('data-onclear', "editRule(" . $taxRuleId . ")");
 ?>
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Edit_tax_rule', $siteLangId); ?></h5>
@@ -46,7 +46,7 @@ $frm->setFormTagAttribute('onsubmit', 'updateTaxRule(this); return(false);');
                         </div>
                     </div>
                 </div>
-            <?php } ?>            
+            <?php } ?>
         </div>
         </form>
         <?php echo $frm->getExternalJs(); ?>

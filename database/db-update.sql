@@ -1815,3 +1815,9 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 DELETE FROM tbl_language_labels WHERE label_key = "MSG_SEARCH_BY_ORDER_ID,_COMMENTS,_USER_NAME_OR_USER_EMAIL";
+
+-- -----------Stripe Connect Mandatory Check. ---------- --
+INSERT IGNORE INTO `tbl_plugin_settings` (`pluginsetting_plugin_id`, `pluginsetting_record_id`, `pluginsetting_key`, `pluginsetting_value`) VALUES 
+((SELECT plugin_id FROM `tbl_plugins` WHERE `plugin_code` LIKE 'StripeConnect'), '0', 'stripe_connect_mandatory', '1')
+ON DUPLICATE KEY UPDATE pluginsetting_value = 1;
+-- -----------Stripe Connect Mandatory Check. ---------- --

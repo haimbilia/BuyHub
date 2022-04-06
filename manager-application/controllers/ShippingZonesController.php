@@ -177,7 +177,7 @@ class ShippingZonesController extends ListingBaseController {
         $shippingProfileId = $shippingProfData['shipprozone_shipprofile_id'];
         $allZones = ShippingProfileZone::getAttributesByProfileId($shippingProfileId, null, true);
         if (is_array($allZones) && 1 == count($allZones)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEASE_ONE_SHIPPING_ZONE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_MAINTAIN_ATLEASE_ONE_SHIPPING_ZONE', $this->siteLangId), true);
         }
 
         $sObj = new ShippingProfileZone($shipprozoneId);
@@ -195,7 +195,7 @@ class ShippingZonesController extends ListingBaseController {
             LibHelper::exitWithError($sObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Zone_Deleted_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ZONE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

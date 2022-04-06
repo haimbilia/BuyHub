@@ -9,7 +9,7 @@
  </div>
  <div class="message message--success align-center cms">
      <i class="fa fa-check-circle"></i>
-     <div class="section-head  section--head--center">
+     <div class="section-head  section-head-center">
          <div class="section-heading">
              <h2><?php echo Labels::getLabel('MSG_Congratulations', $siteLangId); ?>!</h2>
          </div>

@@ -22,7 +22,7 @@ if (!empty($arrListing) && is_array($arrListing)) {
                         <p><span class="lessText"><?php echo CommonHelper::truncateCharacters($row['coupon_description'], 85, '', '', true); ?></span>
                             <?php if (strlen($row['coupon_description']) > 85) { ?>
                                 <span class="moreText" hidden><?php echo nl2br($row['coupon_description']); ?></span>
-                                <a class="readMore link btn-link" href="javascript:void(0);"> <?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?> </a>
+                                <a class="readMore link-underline" href="javascript:void(0);"> <?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?> </a>
                         </p>
                     <?php } ?>
                     <div class="offer__footer">

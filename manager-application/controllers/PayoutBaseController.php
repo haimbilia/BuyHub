@@ -14,7 +14,7 @@ class PayoutBaseController extends PluginSettingController
     {
         $recordId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
-            $message = Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId);
+            $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
 
@@ -31,7 +31,7 @@ class PayoutBaseController extends PluginSettingController
         }
 
         if (true !== $response['status']) {
-            $message = Labels::getLabel('LBL_UNABLE_TO_PROCEED!_PLEASE_TRY_AGAIN', $this->siteLangId);
+            $message = Labels::getLabel('ERR_UNABLE_TO_PROCEED!_PLEASE_TRY_AGAIN', $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
 
@@ -47,7 +47,7 @@ class PayoutBaseController extends PluginSettingController
                 array('smt' => 'utxn_withdrawal_id=?', 'vals' => array($recordId))
         );
 
-        $this->set('msg', Labels::getLabel('LBL_PAYOUT_REQUEST_SENT_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('ERR_PAYOUT_REQUEST_SENT_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 }

@@ -123,7 +123,7 @@ class ShippingProfileController extends ListingBaseController
             }
 
             if ($data['shipprofile_user_id'] != 0) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
             }
 
@@ -173,7 +173,7 @@ class ShippingProfileController extends ListingBaseController
             }
 
             if ($data['shipprofile_user_id'] != 0) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+                Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
             }
 
@@ -234,7 +234,7 @@ class ShippingProfileController extends ListingBaseController
             ShippingProfile::setDefaultRates($shipProZoneId, $spObj->getMainTableRecordId());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->set('profileId', $spObj->getMainTableRecordId());
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -312,7 +312,7 @@ class ShippingProfileController extends ListingBaseController
         }
         $frm->addRequiredField(Labels::getLabel('FRM_PROFILE_NAME', $this->siteLangId), 'shipprofile_name');
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
     }
 

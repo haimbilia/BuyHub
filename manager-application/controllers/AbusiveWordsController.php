@@ -215,12 +215,12 @@ class AbusiveWordsController extends ListingBaseController
             $this->addSortingElements($frm, 'abusive_keyword');
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $languages = Language::getAllNames();
         if (1 < count($languages)) {
-            $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
         }
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
@@ -255,10 +255,10 @@ class AbusiveWordsController extends ListingBaseController
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
-            'abusive_keyword' => Labels::getLabel('LBL_Keyword', $this->siteLangId),
-            'language_name' => Labels::getLabel('LBL_Language', $this->siteLangId),
+            'abusive_keyword' => Labels::getLabel('LBL_KEYWORD', $this->siteLangId),
+            'language_name' => Labels::getLabel('LBL_LANGUAGE', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
 

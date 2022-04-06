@@ -58,12 +58,9 @@
 .page-sort {
     display: flex;
     align-items: center;
-    display: grid;
     grid-gap: 1rem;
-    grid-template-columns: auto auto;
     margin-#{$start-direction}: auto;
     @include media-breakpoint-up(lg) {
-        grid-template-columns: auto auto auto auto;
     }
     .btn {
         border-radius: 0;
@@ -542,13 +539,17 @@
 }
 
 .shop-slider {
+    display: flex;
+
     .item {
+        flex: 0 0 auto;
         position: relative;
         max-width: 610px;
-        margin: 0 15px;
+        margin: 0 1.5rem;
         background: $bg-placeholder;
         @include placeholder;
-        @include responsive-ratio(2, 1);
+        aspect-ratio: 2/1;
+        min-height: 250px;
         position: relative;
         img {
             @include img-absolute;
@@ -556,9 +557,7 @@
             //opacity: 0.2;
         }
     }
-    figure {
-        margin: 0;
-    }
+
     .overlay-content {
         background: rgba(255, 255, 255, 0.8);
         border-radius: $radius2;

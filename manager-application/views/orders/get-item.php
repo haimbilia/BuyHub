@@ -130,7 +130,7 @@ foreach ($op['taxOptions'] as $key => $val) {
                             <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
                         </span>
                         <span class="value">
-                            <span class="currency-value" dir="ltr">
+                            <span class="currency-value">
                                 <?php echo CommonHelper::displayMoneyFormat($totalTax, true, false, true, false, true); ?>
                             </span>
                         </span>
@@ -147,7 +147,7 @@ foreach ($op['taxOptions'] as $key => $val) {
                             <?php echo $val['title']; ?>
                         </span>
                         <span class="value">
-                            <span class="currency-value" dir="ltr">
+                            <span class="currency-value">
                                 <?php echo CommonHelper::displayMoneyFormat($val['value'], true, false, true, false, true); ?>
                             </span>
                         </span>

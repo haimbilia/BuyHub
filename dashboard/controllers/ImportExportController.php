@@ -77,13 +77,13 @@ class ImportExportController extends SellerBaseController
     {
         $this->userPrivilege->canEditImportExport();
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_CSV_FILE', $this->siteLangId));
         }
         
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $obj = new Importexport();
         if (!$obj->isUploadedFileValidMimes($_FILES['import_file'])) {
-            FatUtility::dieJsonError(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_NOT_A_VALID_CSV_FILE", $this->siteLangId));
         }
 
         $sheetType = FatApp::getPostedData('sheet_type', FatUtility::VAR_INT, 0);
@@ -148,12 +148,12 @@ class ImportExportController extends SellerBaseController
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_CSV_FILE', $this->siteLangId));
         }
 
         $obj = new Importexport();
         if (!$obj->isUploadedFileValidMimes($_FILES['import_file'])) {
-            FatUtility::dieJsonError(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel("ERR_NOT_A_VALID_CSV_FILE", $this->siteLangId));
         }
 
         $obj->importMedia($actionType, $post, $langId, $userId);
@@ -690,7 +690,7 @@ class ImportExportController extends SellerBaseController
     {
         $this->userPrivilege->canViewImportExport();
         if (empty($path)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $filesPathArr = UploadBulkImages::getAllFilesPath(base64_decode($path));
         if (!empty($filesPathArr) && 0 < count($filesPathArr)) {
@@ -699,7 +699,7 @@ class ImportExportController extends SellerBaseController
             CommonHelper::convertToCsv($filesPathArr, time() . '.csv');
             exit;
         }
-        Message::addErrorMessage(Labels::getLabel('MSG_No_File_Found', $this->siteLangId));
+        Message::addErrorMessage(Labels::getLabel('ERR_NO_FILE_FOUND', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
 
@@ -736,30 +736,30 @@ class ImportExportController extends SellerBaseController
         $loggedUserId = $this->userParentId;
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         if (!isset($_FILES['file'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_File_Upload', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_FILE_UPLOAD', $this->siteLangId));
         }
 
         if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));
         }
 
         $uploadedFile = $_FILES['file']['tmp_name'];
         $fileHandle = fopen($uploadedFile, 'r');
         if ($fileHandle == false) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_File_Upload', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_FILE_UPLOAD', $this->siteLangId));
         }
 
         /* validate file extension[ */
         $mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv', 'text/tsv', 'application/octet-stream');
         if (!in_array($_FILES['file']['type'], $mimes)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_File_Upload', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_FILE_UPLOAD', $this->siteLangId));
         }
         /* ] */
 
         $firstLine = fgetcsv($fileHandle);
         $defaultColArr = $this->getInventorySheetColoum($this->siteLangId);
         if ($firstLine != $defaultColArr) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Coloum_CSV_File', $this->siteLangId));
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_COLOUM_CSV_FILE', $this->siteLangId));
         }
 
         $db = FatApp::getDb();

@@ -59,23 +59,18 @@
             opacity: 0;
             transition: all 0.5s;
             @include media-breakpoint-down(sm) {
-                & {
-                    opacity: 1;
-                    transform: none;
-                    border-top: $border;
-                }
+                opacity: 1;
+                transform: none;
+                border-top: $border;
             }
             &.is-opened {
                 opacity: 1;
-
                 transform: translateX(50% * $transform-direction);
                 transition: all 0.5s;
                 #{$end-direction}: 50%;
                 @include media-breakpoint-down(sm) {
-                    & {
-                        transform: none;
-                        left: auto;
-                    }
+                    transform: none;
+                    left: auto;
                 }
             }
         }
@@ -85,10 +80,8 @@
         opacity: 0;
         transition: all 0.5s;
         @include media-breakpoint-down(sm) {
-            & {
-                opacity: 1;
-                #{$start-direction}: auto;
-            }
+            opacity: 1;
+            #{$start-direction}: auto;
         }
     }
 }

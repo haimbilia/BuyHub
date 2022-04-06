@@ -100,7 +100,7 @@ class SubscriptionOrdersController extends ListingBaseController
             LibHelper::exitWithError($orderPaymentObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_PAYMENT_DETAILS_ADDED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_PAYMENT_DETAILS_ADDED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -125,7 +125,7 @@ class SubscriptionOrdersController extends ListingBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('LBL_ORDER_CANCELLED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ORDER_CANCELLED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 }

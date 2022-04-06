@@ -113,7 +113,7 @@ class QnbPayController extends PaymentController
             $this->logFailure($orderId, $post['ErrMsg']);
         }
 
-        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['RequestGuid'], $paymentAmount, Labels::getLabel("SUC_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
+        if (false === $orderPaymentObj->addOrderPayment(self::KEY_NAME, $post['RequestGuid'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post))) {
             $msg = $orderPaymentObj->getError();
             $this->logFailure($orderId, $msg);
         }

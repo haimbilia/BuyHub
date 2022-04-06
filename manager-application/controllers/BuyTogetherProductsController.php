@@ -178,7 +178,7 @@ class BuyTogetherProductsController extends ListingBaseController
     {
         $recordId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel("ERR_Please_Select_A_Valid_Product", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_PLEASE_SELECT_A_VALID_PRODUCT", $this->siteLangId), true);
         }
         $relatedProdId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
 
@@ -290,7 +290,7 @@ class BuyTogetherProductsController extends ListingBaseController
         }
 
         $this->set('selprod_id', $selprod_id);
-        $this->set('msg', Labels::getLabel('LBL_Record_Deleted', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RECORD_DELETED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

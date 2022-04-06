@@ -264,7 +264,7 @@ class StatesController extends ListingBaseController
             $this->changeStatus($recordId, $status);
         }
         Product::updateMinPrices();
-        $this->set('msg', Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
