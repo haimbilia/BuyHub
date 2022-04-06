@@ -636,6 +636,7 @@ Updates/Fixes :
     => 063348 - Seller UI: Some icon is not showing while hovering on it and the calendar icon is also missing for the date field while adding the "bind condition" for the manual badges under the Badges section at the seller's end.
     => 063579 - Issue coming on shop contact form.
     -----------------TV-9.4.0.20220406--------------------------------
+    => 063504 - Seller UI: Getting multiple issues on sub users page. 
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
