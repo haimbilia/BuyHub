@@ -345,6 +345,23 @@ form.custom-form {
         margin: 0;
     }
 }
+.form-apply {
+    margin-bottom: 1rem;
+    position: relative;
+    .btn-apply {
+        position: absolute;
+        #{$end-direction}: 2px;
+        top: 1px;
+        bottom: 1px;
+        border: 1px;
+        background-color: #fff;
+        color: $brand-color;
+        font-weight: 600;
+        width: auto;
+        padding: 0 1rem;
+    }
+}
+
 
 .form-otp {
     .otp-row {

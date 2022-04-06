@@ -1,28 +1,28 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <div class="modal-header">
-    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Apply_Promo_Coupons', $siteLangId); ?></h5>
+    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_APPLY_PROMO_COUPONS', $siteLangId); ?></h5>
 </div>
 <div class="modal-body">
     <?php
     if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
         <div class="alert alert--success">
-            <a href="javascript:void(0)" class="btn-close" onClick="removePromoCode()"></a>
-            <p><?php echo Labels::getLabel('LBL_Promo_Code', $siteLangId); ?>
+            <a href="javascript:void(0)" class="btn-close" onclick="removePromoCode()"></a>
+            <p>
+                <?php echo Labels::getLabel('LBL_PROMO_CODE', $siteLangId); ?>
                 <strong><?php echo $cartSummary['cartDiscounts']['coupon_code']; ?></strong>
-                <?php echo Labels::getLabel('LBL_Successfully_Applied', $siteLangId); ?>
+                <?php echo Labels::getLabel('LBL_SUCCESSFULLY_APPLIED', $siteLangId); ?>
             </p>
         </div>
     <?php }
-    
-    $PromoCouponsFrm->setFormTagAttribute('class', 'form custom-form mb-5');
+
+    $PromoCouponsFrm->setFormTagAttribute('class', 'form form-apply');
+    $PromoCouponsFrm->setFormTagAttribute('id', 'checkoutCouponForm');
     $PromoCouponsFrm->setFormTagAttribute('onsubmit', 'applyPromoCode(this); return false;');
     $fld = $PromoCouponsFrm->getField('coupon_code');
     $fld->addFieldTagAttribute('class', 'couponCodeJs');
-
-    $fld = $PromoCouponsFrm->getField('btn_submit');
-    $fld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
     $PromoCouponsFrm->setJsErrorDisplay('afterfield');
+
     echo $PromoCouponsFrm->getFormTag();
     echo $PromoCouponsFrm->getFieldHtml('coupon_code');
     echo $PromoCouponsFrm->getFieldHtml('btn_submit');
@@ -33,7 +33,7 @@
         <?php if ($couponsList) { ?>
             <div class="col-md-12">
                 <h6 class="h6">
-                    <?php echo Labels::getLabel("LBL_Available_Coupons", $siteLangId); ?>
+                    <?php echo Labels::getLabel("LBL_AVAILABLE_COUPONS", $siteLangId); ?>
                 </h6>
             </div>
             <div class="col-md-12">
@@ -41,7 +41,7 @@
                     <?php $counter = 1;
                     foreach ($couponsList as $coupon_id => $coupon) {    ?>
                         <li>
-                            <div class="coupon-code" onClick="triggerApplyCoupon('<?php echo $coupon['coupon_code']; ?>');" title="<?php echo Labels::getLabel("LBL_Click_to_apply_coupon", $siteLangId); ?>">
+                            <div class="coupon-code" onclick="triggerApplyCoupon('<?php echo $coupon['coupon_code']; ?>');" title="<?php echo Labels::getLabel("LBL_Click_to_apply_coupon", $siteLangId); ?>">
                                 <?php echo $coupon['coupon_code']; ?></div>
                             <?php if ($coupon['coupon_description'] != '') { ?>
                                 <p><?php echo $coupon['coupon_description']; ?> </p>
@@ -51,10 +51,10 @@
                     } ?>
                 </ul>
             </div>
+        <?php } else { ?>
             <div class="col-md-12">
-            <?php } else {
-            echo Labels::getLabel("LBL_No_Copons_offer_is_available_now.", $siteLangId);
-        } ?>
+                <?php echo Labels::getLabel("LBL_NO_COPONS_OFFER_IS_AVAILABLE_NOW.", $siteLangId); ?>
             </div>
+        <?php } ?>
     </div>
 </div>

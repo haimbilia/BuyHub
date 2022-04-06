@@ -475,7 +475,7 @@ $("document").ready(function () {
         });
     };
 
-    applyPromoCode = function (frm) {
+    /* applyPromoCode = function (frm) {
         checkLogin();
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
@@ -492,15 +492,15 @@ $("document").ready(function () {
                 }
             }
         );
-    };
+    }; */
 
-    triggerApplyCoupon = function (coupon_code) {
+    /* triggerApplyCoupon = function (coupon_code) {
         document.frmPromoCoupons.coupon_code.value = coupon_code;
         applyPromoCode(document.frmPromoCoupons);
         return false;
-    };
+    }; */
 
-    removePromoCode = function () {
+    /* removePromoCode = function () {
         $(financialSummary).prepend(fcom.getLoader());
         fcom.updateWithAjax(
             fcom.makeUrl("Cart", "removePromoCode"),
@@ -512,7 +512,7 @@ $("document").ready(function () {
                 }
             }
         );
-    };
+    }; */
 
     useRewardPoints = function (frm) {
         if (!$(frm).validate()) return;

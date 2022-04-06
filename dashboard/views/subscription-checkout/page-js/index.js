@@ -3,9 +3,9 @@ var sCartReviewDiv = '.checkout-content-js';
 var paymentDiv = '.checkout-content-js';
 var financialSummary = '.summary-listing-js';
 
-$("document").ready(function () {
+$(function () {
     //$('.step').removeClass("is-current");
-    if (!isUserLogged()) {
+    /* if (!isUserLogged()) {
         $(loginDiv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'login'), '', function (ans) {
             fcom.removeLoader();
@@ -13,9 +13,9 @@ $("document").ready(function () {
             $(loginDiv).addClass("is-current");
         });
     } else {
-        loadSubscriptionCartReviewDiv();
-        setTimeout(function () { loadFinancialSummary(); }, 300);
-    }
+    } */
+    loadPaymentSummary();
+    loadFinancialSummary();
 });
 
 (function () {
@@ -29,24 +29,6 @@ $("document").ready(function () {
         });
     };
 
-    loadSubscriptionCartReviewDiv = function () {
-        $(loginDiv).prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'loginDetails'), '', function (ans) {
-            fcom.removeLoader();
-            $(loginDiv).html(ans);
-            //$(loginDiv).show();
-
-        });
-        $(sCartReviewDiv).prepend(fcom.getLoader());
-
-        fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'reviewScart'), '', function (ans) {
-            fcom.removeLoader();
-            $(sCartReviewDiv).html(ans);
-            //$('.step').removeClass("is-current");
-            $(sCartReviewDiv).addClass("is-current");
-            setCheckoutFlow('BILLING');
-        });
-    };
     getReviewSCart = function () {
         $(sCartReviewDiv).find('.section-head').attr('onclick', 'loadCartReviewDiv()');
         $(sCartReviewDiv).prepend(fcom.getLoader());
@@ -58,6 +40,7 @@ $("document").ready(function () {
 
         });
     };
+
     $(document).on('click', ".confirmReview", function () {
         if (isUserLogged() == 0) {
             loginPopUpBox();
@@ -67,10 +50,11 @@ $("document").ready(function () {
         loadPaymentSummary();
         loadFinancialSummary();
     });
+
     $(document).on('click', ".reviewOrder", function () {
-        loadSubscriptionCartReviewDiv();
         loadPaymentBlankDiv();
     });
+
     loadPaymentBlankDiv = function () {
         $(paymentDiv).prepend(fcom.getLoader());
 
@@ -89,6 +73,7 @@ $("document").ready(function () {
             setCheckoutFlow('PAYMENT');
         });
     };
+
     loadFinancialSummary = function () {
         $(financialSummary).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'getFinancialSummary'), '', function (ans) {
@@ -138,35 +123,21 @@ $("document").ready(function () {
         });
     };
 
-    applyPromoCode = function (frm) {
-        if (isUserLogged() == 0) {
-            loginPopUpBox();
-            return false;
-        }
-        if (!$(frm).validate()) return;
-        var data = fcom.frmData(frm);
-
-        fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'applyPromoCode'), data, function (res) {
-            $.ykmodal.close();
-            if ($('.payment-area').length > 0) {
-                loadPaymentSummary();
-            }
-            loadFinancialSummary();
-            /*  if ($('.payment-area').length == 0) {
-                 console.log($('.payment-area').length);                   
-                 loadPaymentSummary();
-             } else {
-                 loadPaymentBlankDiv();
-                 loadSubscriptionCartReviewDiv();
-             } */
-        });
-    };
-
     triggerApplyCoupon = function (coupon_code) {
-        document.frmPromoCoupons.coupon_code.value = coupon_code;
-        applyPromoCode(document.frmPromoCoupons);
-        return false;
-    }
+		$(".couponCodeJs").val(coupon_code);
+		applyPromoCode($("#checkoutCouponForm").get(0));
+		return false;
+	};
+
+    applyPromoCode = function (frm) {
+		if (!$(frm).validate()) {return;}
+        if ('undefined' == typeof frm.coupon_code.value || '' == frm.coupon_code.value) {return;}
+		var data = fcom.frmData(frm);
+		fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'applyPromoCode'), data, function (res) {
+			$.ykmodal.close();
+            loadFinancialSummary();
+		});
+	};
 
     removePromoCode = function () {
         fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'removePromoCode'), '', function (res) {
@@ -175,13 +146,6 @@ $("document").ready(function () {
                 loadPaymentSummary();
             }
             loadFinancialSummary();
-            /* if ($('.payment-area').length == 0) {
-                console.log($('.payment-area').length);   
-                loadPaymentSummary();
-            } else {
-                loadPaymentBlankDiv();
-                loadSubscriptionCartReviewDiv();
-            } */
         });
     };
 

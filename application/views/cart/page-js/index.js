@@ -55,12 +55,13 @@ $(function () {
 
 	triggerApplyCoupon = function (coupon_code) {
 		$(".couponCodeJs").val(coupon_code);
-		applyPromoCode(document.frmPromoCoupons);
+		applyPromoCode($("#checkoutCouponForm").get(0));
 		return false;
 	};
 
 	applyPromoCode = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) {return};
+        if ('undefined' == typeof frm.coupon_code.value || '' == frm.coupon_code.value) {return;}		
 		var data = fcom.frmData(frm);
 		$("#js-cartFinancialSummary").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Cart', 'applyPromoCode'), data, function (res) {

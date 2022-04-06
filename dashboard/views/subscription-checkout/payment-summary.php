@@ -9,96 +9,7 @@
                     </h5>
                 </div>
                 <div class="step_body">
-
-                    <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
-                        <div class="wallet-balance">
-                            <label class="checkbox wallet">
-                                <input onChange="walletSelection(this)" type="checkbox" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> name="pay_from_wallet" id="pay_from_wallet" />
-
-                                <span class="wallet__txt">
-                                    <svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#wallet" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#wallet">
-                                        </use>
-                                    </svg>
-                                    <div class="">
-                                        <p><?php echo Labels::getLabel('LBL_AVAILABLE_BALANCE', $siteLangId); ?></p>
-                                        <span class="currency-value" dir="ltr"><span class="currency-value" dir="ltr"><span class="currency-symbol"><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true) ?></span>
-                                    </div>
-                                </span>
-                            </label>
-                            <div class="wallet-balance_info">
-                                <?php if ($cartSummary["cartWalletSelected"]) {
-                                    $remainingWalletBalance = ($userWalletBalance - $cartSummary['orderNetAmount']);
-                                    $remainingWalletBalance = ($remainingWalletBalance < 0) ? 0 : $remainingWalletBalance;
-                                    echo Labels::getLabel('LBL_Remaining_wallet_balance', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($remainingWalletBalance, true, false, true, false, true);
-                                } else {
-                                    echo Labels::getLabel('LBL_USE_MY_WALLET_BALANCE_TO_PAY_FOR_MY_ORDER', $siteLangId);
-                                } ?>
-                            </div>
-                        </div>
-                    <?php } ?>
-                    <?php if ($subscriptionType == SellerPackages::PAID_TYPE && $canUseWalletForPayment) { ?>
-                        <p class="note">
-                            <?php echo Labels::getLabel('LBL_Note_Please_Maintain_Wallet_Balance_for_further_auto_renewal_payments', $siteLangId); ?>
-                        </p>
-                    <?php } ?>
-
-
                     <section id="payment" class="section-checkout">
-                        <div class="align-items-center mb-4">
-                            <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
-                                <?php if ($userWalletBalance >= $cartSummary['orderNetAmount'] && $cartSummary["cartWalletSelected"]) { ?>
-
-                                    <?php $btnSubmitFld = $WalletPaymentForm->getField('btn_submit');
-                                    $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-outline-gray');
-
-                                    $WalletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
-                                    $WalletPaymentForm->developerTags['fld_default_col'] = 12;
-                                    echo $WalletPaymentForm->getFormHtml(); ?>
-
-                                    <script type="text/javascript">
-                                        function confirmOrder(frm) {
-                                            var data = fcom.frmData(frm);
-                                            var action = $(frm).attr('action')
-                                            fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout',
-                                                    'confirmOrder'), data,
-                                                function(ans) {
-                                                    $(location).attr("href", action);
-                                                });
-                                        }
-                                    </script>
-                                <?php } ?>
-                            <?php }
-
-
-                            if ($cartSummary['orderNetAmount'] <= 0) { ?>
-
-                                <div>
-                                    <h6>
-                                        <strong> <?php echo Labels::getLabel('LBL_Payment_to_be_made', $siteLangId); ?>
-                                        </strong>
-                                        <?php
-                                        $btnSubmitFld = $confirmPaymentFrm->getField('btn_submit');
-                                        $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand');
-
-                                        $confirmPaymentFrm->developerTags['colClassPrefix'] = 'col-md-';
-                                        $confirmPaymentFrm->developerTags['fld_default_col'] = 12;
-                                        echo $confirmPaymentFrm->getFormHtml(); ?>
-
-                                        <script type="text/javascript">
-                                            function confirmOrder(frm) {
-                                                var data = fcom.frmData(frm);
-                                                var action = $(frm).attr('action')
-                                                fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'confirmOrder'),
-                                                    data,
-                                                    function(ans) {
-                                                        $(location).attr("href", action);
-                                                    });
-                                            }
-                                        </script>
-                                </div>
-                            <?php } ?>
-                        </div>
                         <?php
                         $gatewayCount = 0;
                         foreach ($paymentMethods as $key => $val) {
@@ -121,10 +32,6 @@
                                                 $pmethodCode = $val['plugin_code'];
                                                 $pmethodId = $val['plugin_id'];
                                                 $pmethodName = (isset($val['plugin_name']) && !empty($val['plugin_name'])) ? $val['plugin_name'] : $val['plugin_identifier'];
-                                                /* if(strtolower($val['plugin_code']) == 'cashondelivery' && $fulfillmentType == Shipping::FULFILMENT_PICKUP){
-                                    $pmethodName = Labels::getLabel('LBL_Pay_on_pickup', $siteLangId);
-                                } */
-
                                                 if (in_array($pmethodCode, $excludePaymentGatewaysArr[applicationConstants::CHECKOUT_PRODUCT])) {
                                                     continue;
                                                 } ?>
@@ -150,7 +57,6 @@
                             </div>
                         <?php } ?>
                     </section>
-
                 </div>
             </div>
         </div>
@@ -159,42 +65,8 @@
     <aside class="checkout-page_aside">
         <div class="sticky-summary">
             <div id="order-summary" class="cart-total order-summary summary-listing-js">
-                <div class="cart-total-head">
-                    <h3 class="cart-total-title">
-                        <?php echo Labels::getLabel('LBL_Order_Summary', $siteLangId); ?> </h3>
-                </div>
-                <div class="cart-total-body">
-                    <ul class="cart-summary">
-                        <li class="cart-summary-item">
-                            <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span>
-                            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal'], true, false, true, false, true); ?></span>
-                        </li>
-                        <?php if ($cartSummary['cartAdjustableAmount'] > 0) { ?>
-                            <li class="cart-summary-item">
-                                <span class="label"><?php echo Labels::getLabel('LBL_Adjusted_Amount', $siteLangId); ?></span>
-                                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartAdjustableAmount'], true, false, true, false, true); ?></span>
-                            </li>
-                        <?php } ?>
-                        <?php
-                        $cartDiscounts = isset($cartSummary['cartDiscounts']["coupon_discount_total"]) ? $cartSummary['cartDiscounts']["coupon_discount_total"] : 0;
-                        if ($cartDiscounts > 0) { ?>
-                            <li class="cart-summary-item">
-                                <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
-                                <span class="value">
-                                    <?php echo CommonHelper::displayMoneyFormat($cartDiscounts, true, false, true, false, true); ?></span>
-                            </li>
-                        <?php } ?>
-                        <li class="cart-summary-item highlighted">
-                            <span class="label"><?php echo Labels::getLabel('LBL_You_Pay', $siteLangId); ?></span>
-                            <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, true); ?>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
+                <?php include(CONF_INSTALLATION_PATH . 'application/views/cart/_partial/summary-skeleton.php'); ?>
             </div>
-            <?php //echo FatUtility::decodeHtmlEntities($pageData['epage_content']);
-            ?>
-
         </div>
     </aside>
 </div>
