@@ -70,7 +70,7 @@
                 <div class="payment-area" <?php echo ($cartSummary['orderPaymentGatewayCharges'] <= 0) ? 'is--disabled' : ''; ?>>
                     <?php if (0 < count($paymentMethods)) { ?>
                         <ul class="payments-nav" id="payment_methods_tab">
-                            <?php 
+                            <?php
                             $showFirstElement = '';
                             foreach ($paymentMethods as $key => $val) {
                                 $pmethodCode = $val['plugin_code'];
@@ -82,14 +82,16 @@
 
                                 if (in_array($pmethodCode, $excludePaymentGatewaysArr[applicationConstants::CHECKOUT_PRODUCT])) {
                                     continue;
-                                } 
-                                $showFirstElement = empty($showFirstElement) ? 'show' : '';
-                                ?>
+                                }
+                                $showFirstElement = empty($showFirstElement) && 0 < $cartSummary['orderPaymentGatewayCharges'] ? 'show' : ''; ?>
                                 <li class="payments-nav-item">
                                     <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderId, $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>" data-bs-toggle="collapse" data-bs-target="#<?php echo $pmethodCode; ?>-section" aria-expanded="true" aria-controls="<?php echo $pmethodCode; ?>-section">
                                         <?php echo $pmethodName; ?>
                                     </a>
-                                    <div class="accordion-collapse <?php echo $showFirstElement; ?> collapse payment-block paymentBlockJs <?php echo $pmethodCode . '-js'; ?>" id="<?php echo $pmethodCode; ?>-section" aria-labelledby="headingOne" data-bs-parent="#payment_methods_tab"></div>
+
+                                    <?php if (0 < $cartSummary['orderPaymentGatewayCharges']) { ?>
+                                        <div class="accordion-collapse <?php echo $showFirstElement; ?> collapse payment-block paymentBlockJs <?php echo $pmethodCode . '-js'; ?>" id="<?php echo $pmethodCode; ?>-section" aria-labelledby="headingOne" data-bs-parent="#payment_methods_tab"></div>
+                                    <?php } ?>
                                 </li>
                             <?php
                             } ?>
@@ -158,7 +160,7 @@ if (!empty($siteKey) && !empty($secretKey) && true === $paymentMethods->cashOnDe
                     if (0 < paymentMethodSection.find('.paymentFormSection-js').length && paymentMethodSection.find('.paymentFormSection-js').hasClass('d-none')) {
                         paymentMethodSection.replaceWith(res.html);
                     } else {
-                        paymentMethodSection.append(res.html);
+                        paymentMethodSection.html(res.html);
                     }
                     var form = '.' + paymentMethod + '-js .paymentFormSection-js form';
                     if (0 < $(form).length) {

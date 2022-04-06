@@ -21,32 +21,6 @@ class SubscriptionCheckoutController extends LoggedUserController
         $this->set('exculdeMainHeaderDiv', true);
     }
 
-    /* private function isEligibleForNextStep(&$criteria = array())
-    {
-        if (empty($criteria)) {
-            return true;
-        }
-        foreach ($criteria as $key => $val) {
-            switch ($key) {
-                case 'isUserLogged':
-                    if (!UserAuthentication::isUserLogged()) {
-                        $key = false;
-                        Message::addErrorMessage(Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId));
-                        return false;
-                    }
-                    break;
-                case 'hasSubscription':
-                    if (!$this->scartObj->hasSusbscription()) {
-                        $key = false;
-                        Message::addErrorMessage(Labels::getLabel('ERR_YOUR_CART_SEEMS_TO_BE_EMPTY,_Please_try_after_reloading_the_page.', $this->siteLangId));
-                        return false;
-                    }
-                    break;
-            }
-        }
-        return true;
-    } */
-
     public function index()
     {
         if (!$this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId(), true)) {
@@ -60,14 +34,6 @@ class SubscriptionCheckoutController extends LoggedUserController
         $this->_template->render(true, false);
     }
 
-    /* public function reviewScart()
-    {
-        $this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId());
-        $this->set('subscriptions', $this->scartObj->getSubscription($this->siteLangId));
-        $this->set('scartSummary', $this->scartObj->getSubscriptionCartFinancialSummary($this->siteLangId));
-        $this->_template->render(false, false);
-    } */
-
     public function getFinancialSummary()
     {
         $cartSummary = $this->scartObj->getSubscriptionCartFinancialSummary($this->siteLangId);
@@ -75,8 +41,8 @@ class SubscriptionCheckoutController extends LoggedUserController
         $walletPaymentForm = $this->getWalletPaymentForm($this->siteLangId);
         $userWalletBalance = User::getUserBalance($this->userParentId, true);
         if ((FatUtility::convertToType($userWalletBalance, FatUtility::VAR_FLOAT) > 0) && $cartSummary['cartWalletSelected'] && $cartSummary['orderNetAmount'] > 0) {
-            $orderId = $_SESSION['order_id'] ?? '';
-            $walletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($orderId)));
+            $orderId = $_SESSION['subscription_shopping_cart']["order_id"] ?? '';
+            $walletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($orderId), CONF_WEBROOT_FRONTEND));
             $walletPaymentForm->fill(array('order_id' => $orderId));
             $walletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
             $walletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
@@ -346,11 +312,11 @@ class SubscriptionCheckoutController extends LoggedUserController
         $this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId());
         $plugin_id = FatUtility::int($plugin_id);
         if (!$plugin_id) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_Invalid_Request!", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST!", $this->siteLangId));
         }
 
         if (!UserAuthentication::isUserLogged()) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Your_Session_seems_to_be_expired.', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId));
         }
 
 
@@ -362,7 +328,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         if (!$orderInfo) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
 
         $pmSrch = PaymentMethods::getSearchObject($this->siteLangId);
@@ -373,7 +339,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $pmRs = $pmSrch->getResultSet();
         $paymentMethod = FatApp::getDb()->fetch($pmRs);
         if (!$paymentMethod) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_Selected_Payment_method_not_found!", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_SELECTED_PAYMENT_METHOD_NOT_FOUND!", $this->siteLangId));
         }
 
         $frm = $this->getPaymentTabForm($this->siteLangId, $paymentMethod['plugin_code']);
@@ -394,7 +360,8 @@ class SubscriptionCheckoutController extends LoggedUserController
         $this->set('paymentMethod', $paymentMethod);
         $this->set('frm', $frm);
 
-        $this->_template->render(false, false, '', false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function walletSelection()
@@ -573,13 +540,6 @@ class SubscriptionCheckoutController extends LoggedUserController
         return $frm;
     }
 
-    public function getReviewScart()
-    {
-        $this->set('subscriptions', $this->scartObj->getSubscription($this->siteLangId));
-        $this->set('scartSummary', $this->scartObj->getSubscriptionCartFinancialSummary($this->siteLangId));
-        $this->_template->render(false, false);
-    }
-
     public function getCouponForm()
     {
         $orderId = $_SESSION['subscription_shopping_cart']["order_id"] ?? '';
@@ -595,7 +555,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $langId = FatUtility::int($langId);
         $frm = new Form('frmPromoCoupons');
         $frm->addTextBox(Labels::getLabel('FRM_COUPON_CODE', $langId), 'coupon_code', '', array('placeholder' => Labels::getLabel('FRM_ENTER_YOUR_CODE', $langId)));
-        
+
         $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('BTN_APPLY', $langId), 'submit', 'btn_submit', 'btn-apply'));
         return $frm;
     }
