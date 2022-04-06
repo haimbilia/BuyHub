@@ -286,7 +286,7 @@ class ShopsController extends MyAppController
                 ];
             }
         }
-        /* Shop and SelProd Badge */   
+        /* Shop and SelProd Badge */
         $data['pageTitle'] = Labels::getLabel('LBL_SHOP_PRODUCTS', $this->siteLangId);
         $this->set('data', $data);
 
@@ -351,7 +351,7 @@ class ShopsController extends MyAppController
             array(
                 'shop_id', 'tu.user_name', 'tu.user_regdate', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
                 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city',
-                'IFNULL(ufs.ufs_id, 0) as is_favorite','u_cred.credential_username as shop_owner_username','u.user_name as shop_owner_name',
+                'IFNULL(ufs.ufs_id, 0) as is_favorite', 'u_cred.credential_username as shop_owner_username', 'u.user_name as shop_owner_name',
             )
         );
         $srch->addCondition('shop_id', '=', $shop_id);
@@ -420,7 +420,7 @@ class ShopsController extends MyAppController
         $showBgImage = $this->showBackgroundImage($shop_id, $this->siteLangId, SHOP::TEMPLATE_ONE);
         $this->set('showBgImage', $showBgImage);
         if (UserAuthentication::isUserLogged()) {
-            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(),'user_parent');
+            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(), 'user_parent');
             $userParentId = (0 < $userParent) ? $userParent : UserAuthentication::getLoggedUserId();
             $this->set('userParentId', $userParentId);
         }
@@ -495,7 +495,7 @@ class ShopsController extends MyAppController
             'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId)
         );
 
-        $data = array_merge($data, $arr);       
+        $data = array_merge($data, $arr);
 
         if (FatUtility::isAjaxCall()) {
             $this->set('data', $data);
@@ -532,12 +532,12 @@ class ShopsController extends MyAppController
         $frm->fill($frmData);
         $searchFrm->fill($frmData);
         $this->set('frmProductSearch', $frm);
-        $this->set('searchFrm', $searchFrm);      
+        $this->set('searchFrm', $searchFrm);
         $this->_template->addJs('js/slick.js');
         $this->_template->addJs('js/shop-nav.js');
         $this->_template->addJs('js/jquery.colourbrightness.min.js');
         if (UserAuthentication::isUserLogged()) {
-            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(),'user_parent');
+            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(), 'user_parent');
             $userParentId = (0 < $userParent) ? $userParent : UserAuthentication::getLoggedUserId();
             $this->set('userParentId', $userParentId);
         }
@@ -594,7 +594,7 @@ class ShopsController extends MyAppController
             'productSearchPageType' => SavedSearchProduct::PAGE_SHOP,
             'recordId' => $shop_id,
             'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
-            'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId) 
+            'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId)
         );
 
         if (false === MOBILE_APP_API_CALL) {
@@ -642,7 +642,7 @@ class ShopsController extends MyAppController
 
         $frm = $this->getSendMessageForm($this->siteLangId);
         $userObj = new User($loggedUserId);
-        $loggedUserData = $userObj->getUserInfo(array('user_id', 'user_name', 'credential_username'));
+        $loggedUserData = $userObj->getUserInfo(array('user_id', 'user_name', 'credential_username'), false, false, true);
         $frmData = array('shop_id' => $shop_id);
 
         if ($selprod_id > 0) {
@@ -766,12 +766,12 @@ class ShopsController extends MyAppController
             Message::addErrorMessage(Labels::getLabel('ERR_YOU_ALREADY_REPORTED_FOR_THIS_SHOP', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Shops', 'View', array($shop_id)));
         }
-        
+
         $this->shopDetail($shop_id, true);
 
         $frm = $this->getReportSpamForm($this->siteLangId);
         $frm->fill(array('shop_id' => $shop_id));
-        $this->set('frm', $frm);       
+        $this->set('frm', $frm);
         $this->set('template_id', SHOP::TEMPLATE_ONE);
         $this->_template->render();
     }
@@ -911,7 +911,6 @@ class ShopsController extends MyAppController
 
         if ($prodCatId > 0) {
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER_SELLER, $shopId, $prodCatId, $lang_id);
-          
         }
 
         if (false == $file_row) {
@@ -921,14 +920,13 @@ class ShopsController extends MyAppController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
-        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_BANNER, $sizeType);        
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_BANNER, $sizeType);
         $default_image = 'banner-default-image.png';
         if ($sizeType) {
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
-        
     }
 
     private function getShopInfo($shop_id)

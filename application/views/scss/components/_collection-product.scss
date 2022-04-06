@@ -167,7 +167,8 @@
 .product-layout-1 {
     display: grid;
     grid-gap: 1px;
-    grid-template-columns: repeat(auto-fill, minmax(146px, 1fr));
+
+    grid-template-columns: repeat(2, 1fr);
 
     @include media-breakpoint-up(lg) {
         grid-template-columns: repeat(auto-fill, minmax(335px, 1fr));
@@ -234,6 +235,7 @@
             align-items: center;
             flex-direction: column;
             padding: 0;
+            min-height: 50%;
             @include media-breakpoint-up(lg) {
                 min-height: 234px;
             }
