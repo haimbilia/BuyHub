@@ -6,7 +6,7 @@
     pointer-events: none;
     position: fixed;
     top: 0;
-    transform: translateX(-100%) translateZ(0px);
+    transform: translateX(-100% * $transform-direction) translateZ(0px);
     z-index: $zindex-offcanvas;
 }
 
@@ -19,9 +19,9 @@
     background-color: rgba(0, 0, 0, 0.42);
     bottom: 0;
     display: none;
-    left: 0;
+    #{$start-direction}: 0;
     position: fixed;
-    right: 0;
+    #{$end-direction}: 0;
     top: 0;
     z-index: 1049;
 }
@@ -32,7 +32,7 @@
 
 .zeynep.opened {
     pointer-events: auto;
-    transform: translateX(0px) translateZ(0px);
+    transform: translateX(0px * $transform-direction) translateZ(0px);
 }
 
 .zeynep.submenu-opened {
@@ -52,7 +52,7 @@
 }
 
 .zeynep .submenu.opened {
-    left: 0;
+    #{$start-direction}: 0;
     pointer-events: auto;
 }
 
@@ -78,7 +78,7 @@
 .zeynep ul {
     list-style-type: none;
     padding: 0;
-    padding-left: 0;
+    padding-#{$start-direction}: 0;
     -webkit-overflow-scrolling: touch;
 }
 .zeynep ul > li {
@@ -117,7 +117,7 @@
 /* zeynepjs submenu styles */
 .zeynep .submenu {
     background-color: #ffffff;
-    left: 295px;
+    #{$start-direction}: 295px;
 }
 
 .zeynep .submenu-header {
@@ -136,7 +136,7 @@
     font-size: 14px;
     font-weight: bold;
     padding: 18px 20px;
-    padding-left: 40px;
+    padding-#{$start-direction}: 40px;
     text-decoration: none;
 }
 
@@ -147,7 +147,7 @@
     background-size: 8px 14px;
     content: "";
     height: 100%;
-    left: 26px;
+    #{$start-direction}: 26px;
     position: absolute;
     top: 0;
     transform: rotate(-180deg);
@@ -162,13 +162,13 @@
     margin-bottom: 8px;
     margin-top: 19px;
     //opacity: 0.5;
-    padding-left: 20px;
+    padding-#{$start-direction}: 20px;
     width: 100%;
 }
 
 /* left side menu specific styles */
 body {
-    left: 0;
+    #{$start-direction}: 0;
 }
 
 .zeynep-opened body {
@@ -176,6 +176,6 @@ body {
 }
 
 .zeynep {
-    right: auto;
-    left: 0;
+    #{$end-direction}: auto;
+    #{$start-direction}: 0;
 }

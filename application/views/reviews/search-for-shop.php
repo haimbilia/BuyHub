@@ -1,18 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-
-if(1 < $reviewId){
-    $shop_city = $shop['shop_city'];
-    $shop_state = (strlen($shop['shop_city']) > 0) ? ', ' . $shop['shop_state_name'] : $shop['shop_state_name'];
-    $shop_country = (strlen($shop_state) > 0) ? ', ' . $shop['shop_country_name'] : $shop['shop_country_name'];
-    $shopLocation = $shop_city . $shop_state . $shop_country;    
-    ?>
-    <div class="shop-detail"> 
-        <h1 class="shop-title"> <a href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop['shop_id'])); ?>" ><?php echo $shop['shop_name']; ?></a></h1>  
-        <p class="shop-location"><?php echo $shopLocation; ?></p>        
-    </div>
-    <div class="divider"></div>
-<?php } ?>
-<?php if ($reviewsList) { ?>
+if ($reviewsList) { ?>
     <div class="user-reviews">
         <?php foreach ($reviewsList as $review) {
             $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $review['spreview_id']);
@@ -73,7 +60,7 @@ if(1 < $reviewId){
                             <p class='moreText hidden'>
                                 <?php echo nl2br($review['spreview_description']); ?>
                             </p>
-                            <a class="readMore link btn-link" href="javascript:void(0);">
+                            <a class="readMore link-underline" href="javascript:void(0);">
                                 <?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?> </a>
                         <?php } ?>
                     </div>
@@ -97,12 +84,12 @@ if(1 < $reviewId){
                                 <span class="counts">(<?php echo $review['notHelpful']; ?>)</span>
                             </button>
                         </li>
-                        <?php if(1 > $reviewId){ ?>
-                        <li class="yes-no-item">
-                            <a class="btn btn-light" href="<?php echo UrlHelper::generateUrl('Reviews', 'shopPermalink', array($review['spreview_seller_user_id'], $review['spreview_id'])) ?>">
-                                <?php echo Labels::getLabel('LBL_PERMALINK', $siteLangId); ?>
-                            </a>
-                        </li>
+                        <?php if (1 > $reviewId) { ?>
+                            <li class="yes-no-item">
+                                <a class="btn btn-light" href="<?php echo UrlHelper::generateUrl('Reviews', 'shopPermalink', array($review['spreview_seller_user_id'], $review['spreview_id'])) ?>">
+                                    <?php echo Labels::getLabel('LBL_PERMALINK', $siteLangId); ?>
+                                </a>
+                            </li>
                         <?php  } ?>
                     </ul>
                 </div>
