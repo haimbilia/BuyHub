@@ -102,7 +102,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
             </td>
 
             <td>
-                <span class="currency-value" dir="ltr">
+                <span class="currency-value">
                     <?php echo CommonHelper::displayMoneyFormat($total, true, true, true, false, true); ?>
                 </span>
             </td>

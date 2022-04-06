@@ -5,7 +5,7 @@ $actionItemsData = $actionItemsData + [
 ];
 ?>
 <main class="main mainJs">
-    <div class="container" dir="<?php echo $formLayout; ?>">
+    <div class="container" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="'.$formLayout.'"' : ''; ?>>
         <?php
         $this->includeTemplate('_partial/header/header-breadcrumb.php', $actionItemsData, false); ?>
         <div class="row">

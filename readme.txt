@@ -634,6 +634,7 @@ Updates/Fixes :
     => 063534 - Admin: Multiple delete functionality is not working while deleting the "Home Page Slides" under the CMS section at the admin's end.
     => 063531 - Admin: Suggestion to show a default sorting of the user's table according to the "Reg. Date" at the admin's end.
     => 063348 - Seller UI: Some icon is not showing while hovering on it and the calendar icon is also missing for the date field while adding the "bind condition" for the manual badges under the Badges section at the seller's end.
+    => 063579 - Issue coming on shop contact form.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
