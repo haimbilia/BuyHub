@@ -1072,18 +1072,66 @@ $(function () {
             fcom.updateFaceboxContent(t);
         });
     };
+    signInWithPhone = function (obj, flag) {
+        var form = $(obj).data("form");
+        var formElement = "undefined" != typeof form ? 'form[name="' + form + '"]' : "form";
+        var title = 0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
+        var objLbl = 0 < flag ? langLbl.byEmail : langLbl.byPhone;
+        $(obj).attr("onclick", "signInWithPhone(this, " + !flag + ")").text(objLbl).attr('title', title);
+        $(".loginFormJs").prepend(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), 'signInWithPhone=' + parseInt(flag), function (t) {
+            $(".loginFormJs").replaceWith(t.html);
+            fcom.removeLoader();
+            stylePhoneNumberFld(formElement + " input[name='username']", !flag);
+        });
+    };
+
+    getLoginOtp = function (obj) {
+        var formClass = "";
+        if ($(obj).closest("form").hasClass("loginpopup--js")) {
+            formClass = "form.loginpopup--js ";
+        }
+        var phone = $(formClass + 'input[name="username"]').val();
+        var dialCode = $(formClass + 'input[name="username_dcode"]').val();
+        if ("undefined" == typeof phone || "" == phone || "undefined" == typeof dialCode || "" == dialCode) {
+            $(obj).closest("form").submit();
+            fcom.displayErrorMessage(langLbl.requiredFields);
+            return false;
+        }
+
+        $(".loginFormJs").prepend(fcom.getLoader());
+        fcom.displayProcessing();
+        var data = "username=" + $(formClass + 'input[name="username"]').val() + "&username_dcode=" + $(formClass + 'input[name="username_dcode"]').val();
+        fcom.ajax(fcom.makeUrl("GuestUser", "getLoginOtp", []), data, function (t) {
+            fcom.removeLoader();
+            t = $.parseJSON(t);
+            if (1 > t.status) {
+                fcom.displayErrorMessage(t.msg);
+                return false;
+            }
+            fcom.closeProcessing();
+            $(obj).closest(".getOtpBtnBlock--js").hide();
+            $(formClass + " .submitBtn--js").show();
+            $(formClass + " .resendOtp-js").addClass("disabled");
+            $(formClass + '.pwdField--js input[name="password"]').attr("data-fatreq", '{"required":false}');
+            $(formClass + ".loginWithOtp--js").val(1);
+            $(formClass + " .countdownFld--js, " + formClass + " .resendOtp-js").parent().show();
+            $(formClass + ".otpFieldBlock--js," + formClass + " .countdownFld--js").show();
+            startOtpInterval(formClass);
+        });
+        return false;
+    };
 
     openSignInForm = function (includeGuestLogin) {
         if (typeof includeGuestLogin == "undefined") {
             includeGuestLogin = false;
         }
-        data = "includeGuestLogin=" + includeGuestLogin;
+        data = "includeGuestLogin=" + includeGuestLogin + "&signinpopup=1";
         fcom.displayProcessing();
         $.ykmodal(fcom.getLoader(), true);
         fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function (t) {
             $.ykmodal(t.html, true);
             fcom.removeLoader();
-            stylePhoneNumberFld('.' + $.ykmodal.element + " input[name='username']");
         });
     };
 
@@ -1142,56 +1190,7 @@ $(function () {
             });
         }
     };
-
-    signInWithPhone = function (obj, flag) {
-        var form = $(obj).data("form");
-        var formElement = "undefined" != typeof form ? 'form[name="' + form + '"]' : "form";
-        var title = 0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
-        var objLbl = 0 < flag ? langLbl.byEmail : langLbl.byPhone;
-        $(obj).attr("onclick", "signInWithPhone(this, " + !flag + ")").text(objLbl).attr('title', title);
-        $(".loginFormJs").prepend(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), 'signInWithPhone=' + parseInt(flag), function (t) {
-            $(".loginFormJs").replaceWith(t.html);
-            fcom.removeLoader();
-            stylePhoneNumberFld(formElement + " input[name='username']", !flag);
-        });
-    };
-
-    getLoginOtp = function (obj) {
-        var formClass = "";
-        if ($(obj).closest("form").hasClass("loginpopup--js")) {
-            formClass = "form.loginpopup--js ";
-        }
-        var phone = $(formClass + 'input[name="username"]').val();
-        var dialCode = $(formClass + 'input[name="username_dcode"]').val();
-        if ("undefined" == typeof phone || "" == phone || "undefined" == typeof dialCode || "" == dialCode) {
-            $(obj).closest("form").submit();
-            fcom.displayErrorMessage(langLbl.requiredFields);
-            return false;
-        }
-
-        $(".loginFormJs").prepend(fcom.getLoader());
-        fcom.displayProcessing();
-        var data = "username=" + $(formClass + 'input[name="username"]').val() + "&username_dcode=" + $(formClass + 'input[name="username_dcode"]').val();
-        fcom.ajax(fcom.makeUrl("GuestUser", "getLoginOtp", []), data, function (t) {
-            fcom.removeLoader();
-            t = $.parseJSON(t);
-            if (1 > t.status) {
-                fcom.displayErrorMessage(t.msg);
-                return false;
-            }
-            fcom.closeProcessing();
-            $(obj).closest(".getOtpBtnBlock--js").hide();
-            $(formClass + " .submitBtn--js").show();
-            $(formClass + " .resendOtp-js").addClass("disabled");
-            $(formClass + '.pwdField--js input[name="password"]').attr("data-fatreq", '{"required":false}');
-            $(formClass + ".loginWithOtp--js").val(1);
-            $(formClass + " .countdownFld--js, " + formClass + " .resendOtp-js").parent().show();
-            $(formClass + ".otpFieldBlock--js," + formClass + " .countdownFld--js").show();
-            startOtpInterval(formClass);
-        });
-        return false;
-    };
+    
     redirectfunc = function (url, orderStatus) {
         var input =
             '<input type="hidden" name="status" value="' + orderStatus + '">';

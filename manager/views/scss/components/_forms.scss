@@ -69,14 +69,16 @@ $input-color: #474747;
         padding-#{$start-direction}: 30px;
         padding-#{$end-direction}: 1rem;
     }
-    [dir='rtl'] & {
-        background-position: calc(0% - -12px) center;
-    }
-    .main[dir='ltr'] & {
+    .main[dir='ltr'] & ,
+    .form[dir='ltr'] & {
         background-position: calc(100% - 12px) center;
         padding-#{$start-direction}: 30px;
         padding-#{$end-direction}: 1rem;
     }
+    [dir='rtl'] & {
+        background-position: calc(0% - -12px) center;
+    }
+   
 }
 
 @mixin submit {
@@ -139,10 +141,13 @@ $input-color: #474747;
             -webkit-appearance: search-cancel-button;
             .form[dir='rtl'] & {
                 padding-#{$end-direction}: 40px;
-                background-position: calc(100% - 13px) center;
                 text-align: #{$end-direction};
                 direction: rtl;
                 padding-#{$start-direction}: 1rem !important;
+            }
+            [dir='rtl'] &{
+                background-position: calc(100% - 13px) center;
+
             }
             .form[dir='ltr'],
             .main[dir='ltr'] & {
@@ -204,6 +209,8 @@ $input-color: #474747;
     }
     select {
         @include select;
+        
+        
     }
     textarea {
         @include input;

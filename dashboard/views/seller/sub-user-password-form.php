@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('onsubmit', 'updateUserPassword(this); return(false);');
-$frm->setFormTagAttribute('class', 'form form--horizontal');
+$frm->setFormTagAttribute('data-onclear', "userPasswordForm(" . $userId . ")");
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->developerTags['fld_default_col'] = 12;
 $newPwd = $frm->getField('new_password');
 $newPwd->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Example_password', $siteLangId), 'User@123') . '</span>';

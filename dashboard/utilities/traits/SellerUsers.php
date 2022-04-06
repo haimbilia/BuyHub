@@ -262,6 +262,7 @@ trait SellerUsers
         $frm = $this->getChangePasswordForm($userId);
 
         $this->set('frm', $frm);
+        $this->set('userId', $userId);
         $this->_template->render(false, false);
     }
 
