@@ -1,13 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-
-if (!empty($product) && !$productView) { ?>
-    <div class="product-description">
-        <?php include(CONF_THEME_PATH . 'products/product-info.php'); ?>
-    </div>
-    <div class="divider"></div>
-<?php } ?>
-
-<?php if ($reviewsList) { ?>
+if ($reviewsList) { ?>
     <div class="user-reviews">
         <?php foreach ($reviewsList as $review) {
             $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $review['spreview_id']);
@@ -68,7 +60,7 @@ if (!empty($product) && !$productView) { ?>
                             <p class='moreText hidden'>
                                 <?php echo nl2br($review['spreview_description']); ?>
                             </p>
-                            <a class="readMore link btn-link" href="javascript:void(0);">
+                            <a class="readMore link-underline" href="javascript:void(0);">
                                 <?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?> </a>
                         <?php } ?>
                     </div>
@@ -92,12 +84,12 @@ if (!empty($product) && !$productView) { ?>
                                 <span class="counts">(<?php echo $review['notHelpful']; ?>)</span>
                             </button>
                         </li>
-                        <?php if(1 > $reviewId){ ?>
-                        <li class="yes-no-item">
-                            <a class="btn btn-light" href="<?php echo UrlHelper::generateUrl('Reviews', 'productPermalink', array($review['spreview_selprod_id'], $review['spreview_id'])) ?>">
-                            <?php echo Labels::getLabel('LBL_PERMALINK', $siteLangId); ?>
-                            </a>
-                        </li>
+                        <?php if (1 > $reviewId) { ?>
+                            <li class="yes-no-item">
+                                <a class="btn btn-light" href="<?php echo UrlHelper::generateUrl('Reviews', 'productPermalink', array($review['spreview_selprod_id'], $review['spreview_id'])) ?>">
+                                    <?php echo Labels::getLabel('LBL_PERMALINK', $siteLangId); ?>
+                                </a>
+                            </li>
                         <?php } ?>
                     </ul>
                 </div>

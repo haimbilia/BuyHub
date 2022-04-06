@@ -50,21 +50,41 @@ $productView = $productView ?? false;
                         <div class="rating-layout">
                             <!-- Rating Section -->
                             <div class="rating-layout-start">
-                                <div class="sticky-lg-top">
-                                    <?php if (false === $productView && !empty($product)) { ?>
-                                        <img alt="<?php echo $product['product_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
-                                    <?php } ?>
-                                    <div class="rating-block">
-                                        <div class="average-rating">
-                                            <span class="rate"><?php echo round($avgRating, 1); ?>
-                                                <svg class="svg" width="16" height="16">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                                    </use>
-                                                </svg>
-                                            </span>
-                                            <span class="totals"><?php echo $totReviews . ' ' . Labels::getLabel("LBL_REVIEWS", $siteLangId); ?></span>
+                                <div class="sticky-top">
+                                    <div class="product-card">
+                                        <div class="product-card-start">
+                                            <div class="product-card-img">
+                                                <?php if (false === $productView && !empty($product)) { ?>
+                                                    <img alt="<?php echo $product['product_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                        <div class="product-card-end">
+
+                                            <?php
+                                            if (!empty($product) && !$productView) { ?>
+                                                <div class="product-description">
+                                                    <?php include(CONF_THEME_PATH . 'products/product-info.php'); ?>
+                                                </div>
+
+                                            <?php } ?>
+
+
+                                            <div class="rating-block">
+                                                <div class="average-rating">
+                                                    <span class="rate"><?php echo round($avgRating, 1); ?>
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                            </use>
+                                                        </svg>
+                                                    </span>
+                                                    <span class="totals"><?php echo $totReviews . ' ' . Labels::getLabel("LBL_REVIEWS", $siteLangId); ?></span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
+
                                     <div class="divider"></div>
                                     <?php
                                     $this->includeTemplate('_partial/product-overall-ratings.php', [

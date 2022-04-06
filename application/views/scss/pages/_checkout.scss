@@ -931,14 +931,14 @@
     font-size: 1rem;
     margin-bottom: 1rem;
     display: flex;
-    border: solid 2px $secondary-color;
-    border-radius: 3px;
+    border: $border-black;
+    border-radius: 0;
     margin: auto;
     align-items: center;
     padding: 2rem;
     width: 100%;
     background-color: transparent;
-    color: $secondary-color;
+    color: $txt-black;
     &:hover {
     }
     strong {

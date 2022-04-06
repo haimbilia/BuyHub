@@ -90,12 +90,6 @@ class CheckoutController extends MyAppController
                     }
                     break;
                 case 'hasStock':
-                    /* if( !$this->cartObj->hasStock() ){
-                    $key = false;
-                    Message::addErrorMessage(Labels::getLabel('ERR_PRODUCTS_ARE_OUT_OF_STOCK', $this->siteLangId));
-                    return false;
-                    } */
-
                     /* to check that product is temporary hold[ */
                     $cart_user_id = Cart::getCartUserId();
                     $intervalInMinutes = FatApp::getConfig('cart_stock_hold_minutes', FatUtility::VAR_INT, 15);
@@ -769,7 +763,7 @@ class CheckoutController extends MyAppController
         $this->set('cartOrderData', $cartOrderData);
         $this->set('shippingRates', $shippingRates);
         $this->set('headerData', $headerData);
-
+        $this->_template->addJs('js/scroll-hint.js');
         $this->_template->render();
     }
 

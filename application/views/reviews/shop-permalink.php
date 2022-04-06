@@ -1,12 +1,12 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div id="body" class="body">
-    <?php   
+    <?php
     echo $frmReviewSearch->getFormHtml();
     $this->includeTemplate('_partial/shop-reviews.php', [
         'reviews' => $reviews,
         'ratingAspects' => $ratingAspects,
-        'siteLangId' => $siteLangId,       
+        'siteLangId' => $siteLangId,
         'shop' => $shop,
         'shopView' => false,
     ], false);

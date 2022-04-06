@@ -655,6 +655,6 @@ a:hover {
 .grid-layout {
     display: grid;
     grid-gap: 5rem;
-    //grid-template-columns: 30% 1fr;
-    grid-template: auto / 300px auto;
+
+    grid-template-columns: minmax(auto, 24%) 1fr;
 }

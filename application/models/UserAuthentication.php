@@ -938,6 +938,24 @@ class UserAuthentication extends FatModel
 
         return false;
     }
+    
+    public static function subscriptionCheckLogin($redirect = true, $redirectUrl = '')
+    {
+        if (static::isUserLogged() && User::canViewSupplierTab()) {
+            return true;
+        }
+
+        $message = Labels::getLabel('MSG_SESSION_SEEMS_TO_BE_EXPIRED._PLEASE_LOGIN_WITH_SELLER_ACCOUNT', CommonHelper::getLangId());
+        LibHelper::exitWithError($message, false, $redirect, ['displayLoginForm' => 1]);
+
+        $_SESSION['referer_page_url'] = UrlHelper::getCurrUrl();
+        if ($redirect == true) {
+            $redirectUrl = (empty($redirectUrl) ? UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND) : $redirectUrl);
+            FatApp::redirectUser($redirectUrl);
+        }
+
+        return false;
+    }
 
 
     public static function setSessionAffiliateRegistering($data = array())

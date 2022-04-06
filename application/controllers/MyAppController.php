@@ -690,7 +690,8 @@ class MyAppController extends FatController
     {
         $this->_template->addJs('js/masonry.pkgd.js');
         $this->_template->addJs('js/product-search.js');
-        $this->_template->addJs('js/ion.rangeSlider.js');
+        $this->_template->addJs('js/nouislider.js');
+        // $this->_template->addJs('js/ion.rangeSlider.js');
         $this->_template->addJs('js/listing-functions.js');
     }
 

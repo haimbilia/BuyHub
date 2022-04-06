@@ -3,10 +3,10 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <div class="content-body">
-        <div class="card">
-            <div class="card-body">
+        <div class="">
+            <div class="">
                 <div class="section-head section-head-center my-4">
-                    <div class="section__heading">
+                    <div class="section-heading">
                         <?php echo html_entity_decode($pageData['epage_content']); ?>
                     </div>
                 </div>
@@ -33,7 +33,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             } ?>
                             <li class="packages-box-item packagesBoxJs box <?php echo $packageArrClass[$inc] . " " . $selectedClass ?>">
                                 <div class="packages-box-head">
-                                    <div class="name"><?php echo $package['spackage_name']; ?>
+                                    <div class="name">
+                                        <?php echo $package['spackage_name']; ?>
                                         <span><?php echo $package['spackage_text']; ?></span>
                                     </div>
                                     <div class="valid">
@@ -67,7 +68,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         ?>
                                     </h3>
                                     <?php $disabled = ($parentUserId != UserAuthentication::getLoggedUserId()) ? 'disabled=disabled' : ''; ?>
-                                    <select name="packages" class="custom-select packagesJS" <?php echo $disabled; ?>>
+                                    <select name="packages" class="form-select packagesJS" <?php echo $disabled; ?>>
                                         <option value="" disabled="disabled" <?php echo (empty($selectedClass) ? 'selected=selected' : ''); ?>>
                                             <?php echo Labels::getLabel('LBL_SELECT_PRICE', $siteLangId); ?>
                                         </option>

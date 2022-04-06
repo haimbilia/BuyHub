@@ -327,7 +327,7 @@ class CartController extends MyAppController
         }
 
         LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
-        
+
         if (true === MOBILE_APP_API_CALL) {
             $cartObj = new Cart();
             $this->set('cartItemsCount', $cartObj->countProducts());
@@ -401,7 +401,7 @@ class CartController extends MyAppController
             }
 
             LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
-            
+
             if (true === MOBILE_APP_API_CALL) {
                 $this->_template->render();
             }
@@ -599,7 +599,7 @@ class CartController extends MyAppController
         $total = $cartObj->countProducts();
 
         LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
-        
+
         $this->set('msg', Labels::getLabel("MSG_ITEM_REMOVED_FROM_CART", $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $fulfilmentType = FatApp::getPostedData('fulfilmentType', FatUtility::VAR_INT, Shipping::FULFILMENT_SHIP);
@@ -736,13 +736,8 @@ class CartController extends MyAppController
 
         $post = FatApp::getPostedData();
         $loggedUserId = UserAuthentication::getLoggedUserId();
-
-        if (empty($post)) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
-        }
-
         if (empty($post['coupon_code'])) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieWithError(Labels::getLabel('ERR_PLEASE_ENTER_VALID_COUPON_CODE', $this->siteLangId));
         }
 
         $couponCode = $post['coupon_code'];
@@ -908,15 +903,16 @@ class CartController extends MyAppController
             $cart->excludeTax();
         }
 
-        $PromoCouponsFrm = $this->getPromoCouponsForm($this->siteLangId);
-        $this->set('PromoCouponsFrm', $PromoCouponsFrm);
+        $this->set('PromoCouponsFrm', $this->getPromoCouponsForm($this->siteLangId));
 
         $cartSummary = $cart->getCartFinancialSummary($this->siteLangId);
         $this->set('cartSummary', $cartSummary);
+
+        $this->set('couponsList', DiscountCoupons::getValidCoupons(UserAuthentication::getLoggedUserId(true), $this->siteLangId));
         $this->_template->render(false, false, 'cart/_partial/cartSummary.php');
     }
 
-    public function clear(int $type = Cart::TYPE_PRODUCT)
+    public function clear()
     {
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
         if (1 > $loggedUserId) {
@@ -925,7 +921,6 @@ class CartController extends MyAppController
         $cartObj = new Cart($loggedUserId, $this->siteLangId, $this->app_user['temp_user_id']);
         $cartObj->clear(true);
         $cartObj->updateUserCart();
-        //FatApp::getDb()->deleteRecords('tbl_user_cart', array('smt' => '`usercart_user_id`=? and usercart_type=?', 'vals' => array($loggedUserId, $type)));
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
     }
 }

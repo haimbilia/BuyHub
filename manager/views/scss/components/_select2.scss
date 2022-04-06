@@ -7,9 +7,8 @@
             border: none;
             font-size: 1em;
             margin-#{$end-direction}: 20px;
-            [dir="rtl"] &{
-                margin-#{$end-direction}:auto;
-                margin-#{$start-direction}:20px;
+            .main[dir="rtl"] &{
+                float: #{$start-direction};
 
             }
         }
@@ -36,10 +35,19 @@
             &:hover {
                 cursor: pointer;
             }
-            [dir="rtl"] & {
+            .main[dir="rtl"] & {
                 padding-#{$start-direction}: 35px;
-                background-position: calc(0% - -12px) center;
                 padding-#{$end-direction}: 0.75rem ;
+                text-align: #{$end-direction};
+            }
+            .main[dir="ltr"] & {
+                padding-#{$start-direction}: 35px;
+                padding-#{$end-direction}: 0.75rem ;
+                background-position: calc(100% - 12px) center;
+
+            }
+            [dir="rtl"] &{
+                background-position: calc(0% - -12px) center;
             }
         }
     }
