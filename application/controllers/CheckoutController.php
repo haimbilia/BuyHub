@@ -763,7 +763,7 @@ class CheckoutController extends MyAppController
         $this->set('cartOrderData', $cartOrderData);
         $this->set('shippingRates', $shippingRates);
         $this->set('headerData', $headerData);
-
+        $this->_template->addJs('js/scroll-hint.js');
         $this->_template->render();
     }
 

@@ -10,7 +10,7 @@
                     <?php if ($supplierRequest["usuprequest_status"] == User::SUPPLIER_REQUEST_PENDING) { ?>
                         <i class="fa fa-hourglass-1"></i>
                         <div class="section-head section-head-center">
-                            <div class="section__heading">
+                            <div class="section-heading">
                                 <h2> <?php //echo /* Labels::getLabel('LBL_Oops',$siteLangId); */
                                         ?> </h2>
                             </div>
@@ -26,7 +26,7 @@
                     <?php } elseif ($supplierRequest["usuprequest_status"] == User::SUPPLIER_REQUEST_APPROVED) { ?>
                         <i class="fa fa-check-circle"></i>
                         <div class="section-head section-head-center">
-                            <div class="section__heading">
+                            <div class="section-heading">
                                 <h2><?php echo /* Labels::getLabel('LBL_Approved',$siteLangId) */ Labels::getLabel('LBL_Congratulations', $siteLangId); ?></h2>
                             </div>
                         </div>

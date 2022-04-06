@@ -1,7 +1,7 @@
 $(function () {
-    $('.navchild').hover(function () {
+    /* $('.navchild').hover(function () {
         reinitSlick();
-    });
+    }); */
 
 
     $('.js-hero-slider').slick({
