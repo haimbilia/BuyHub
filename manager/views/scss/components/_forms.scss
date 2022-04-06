@@ -69,13 +69,14 @@ $input-color: #474747;
         padding-#{$start-direction}: 30px;
         padding-#{$end-direction}: 1rem;
     }
-    [dir='rtl'] & {
-        background-position: calc(0% - -12px) center;
-    }
-    .main[dir='ltr'] & {
+    .main[dir='ltr'] & ,
+    .form[dir='ltr'] & {
         background-position: calc(100% - 12px) center;
         padding-#{$start-direction}: 30px;
         padding-#{$end-direction}: 1rem;
+    }
+    [dir='rtl'] & {
+        background-position: calc(0% - -12px) center;
     }
    
 }
@@ -208,9 +209,7 @@ $input-color: #474747;
     }
     select {
         @include select;
-        .form[dir='ltr'] &{
-            display: none;
-           }
+        
         
     }
     textarea {

@@ -1847,6 +1847,9 @@ mark,
         font-size: 0.875rem;
         margin: 0;
         color: $txt-body;
+        &:hover{
+            color: $brand-color;
+        }
     }
     &-sm {
         .user-profile_photo {
@@ -3119,6 +3122,11 @@ $header-height: 65px;
         border-radius: $input-border-radius;
         margin-#{$end-direction}: 10px !important;
         position: absolute;
+        .form[dir="rtl"] &{
+            margin-#{$start-direction}: 10px !important;
+            margin-#{$end-direction}: auto !important;
+
+        }
     }
     &__country-list {
         position: relative;
