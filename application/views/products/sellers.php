@@ -9,7 +9,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
         <div class="container">
             <div class="grid-layout">
                 <div class="grid-layout-start">
-                    <div class="sticky-lg-top">
+                    <div class="sticky-top">
                         <div class="product-card">
                             <div class="product-card-start">
                                 <div class="product-card-img">
@@ -47,7 +47,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                             <div class="seller-card">
                                 <div class="seller-card-head">
                                     <a title="<?php echo $moresellers['shop_name']; ?>" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($moresellers['shop_id'])); ?>">
-                                        <img data-ratio="1:1 (150x150)" src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($moresellers['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $moresellers['shop_name']; ?>">
+                                        <img class="seller-logo" data-ratio="" src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($moresellers['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $moresellers['shop_name']; ?>">
                                     </a>
                                 </div>
                                 <div class="seller-card-body">
@@ -81,12 +81,12 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                     </a>
                                     <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
                                         <span class="text-danger"><?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?></span>
-                                    <?php } else {
+                                        <?php } else {
                                         if (date('Y-m-d', strtotime($moresellers['selprod_available_from'])) <= FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d')) { ?>
                                             <button class="btn btn-outline-black btn-sm btnAddToCart--js" type="button" data-id="<?php echo $moresellers['selprod_id']; ?>" data-min-qty="<?php echo $moresellers['selprod_min_order_qty']; ?>">
                                                 <?php echo Labels::getLabel('LBL_Add_To_Cart', $siteLangId); ?>
                                             </button>
-                                        <?php } else {
+                                    <?php } else {
                                             echo CommonHelper::replaceStringData(Labels::getLabel('LBL_THIS_ITEM_WILL_BE_AVAILABLE_FROM_{AVAILABLE-DATE}', $siteLangId), ['{AVAILABLE-DATE}' => FatDate::Format($moresellers['selprod_available_from'])]);
                                         }
                                     } ?>
