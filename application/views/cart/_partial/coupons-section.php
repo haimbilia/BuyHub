@@ -16,10 +16,10 @@ if (!empty($couponsList)) {
             <div class="promotional-code">
                 <div class="promotional-code-head">
                     <h5 class="promotional-code-title">
-                        <?php echo Labels::getLabel('LBL_PROMOTIONAL_CODE', $siteLangId); ?>
+                        <?php echo Labels::getLabel('LBL_PROMOTIONAL_COUPONS', $siteLangId); ?>
                     </h5>
                     <button class="link-underline" onclick="getPromoCode()">
-                        <?php echo Labels::getLabel('LBL_VIEW_PROMOTIONS', $siteLangId); ?>
+                        <?php echo Labels::getLabel('LBL_VIEW', $siteLangId); ?>
                     </button>
                 </div>
 
@@ -27,6 +27,8 @@ if (!empty($couponsList)) {
                 $PromoCouponsFrm->setFormTagAttribute('class', 'form form-apply');
                 $PromoCouponsFrm->setFormTagAttribute('onsubmit', 'applyPromoCode(this); return false;');
                 $PromoCouponsFrm->setJsErrorDisplay('afterfield');
+                $fld = $PromoCouponsFrm->getField('coupon_code');
+                $fld->addFieldTagAttribute('class', 'couponCodeJs');
 
                 echo $PromoCouponsFrm->getFormTag(); ?>
                     <?php echo $PromoCouponsFrm->getFieldHtml('coupon_code'); ?>
