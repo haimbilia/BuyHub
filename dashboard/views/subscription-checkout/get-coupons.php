@@ -1,0 +1,1 @@
+<?php require(CONF_INSTALLATION_PATH . 'application/views/checkout/get-coupons.php'); ?>

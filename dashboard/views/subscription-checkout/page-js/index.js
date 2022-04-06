@@ -36,23 +36,18 @@ $(function () {
     };
     
     getPromoCode = function () {
-        fcom.displayProcessing();
-        if (isUserLogged() == 0) {
-            loginPopUpBox();
-            return false;
-        }
-        fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'getCouponForm'), '', function (t) {
-            $.ykmsg.close();
-            $.ykmodal(t);
-            $("input[name='coupon_code']").focus();
+		$.ykmodal(fcom.getLoader(), true);
+		fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', "getCoupons"), '', function (res) {
+            fcom.removeLoader();
+            $.ykmodal(res.html, true);
         });
-    };
+	};
 
     triggerApplyCoupon = function (coupon_code) {
-        $(".couponCodeJs").val(coupon_code);
-        applyPromoCode($("#checkoutCouponForm").get(0));
-        return false;
-    };
+		$(".couponCodeJs").val(coupon_code);
+		applyPromoCode(document.frmPromoCoupons);
+		return false;
+	};
 
     applyPromoCode = function (frm) {
         if (!$(frm).validate()) { return; }
