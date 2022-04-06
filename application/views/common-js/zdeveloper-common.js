@@ -1083,7 +1083,7 @@ $(function () {
         fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function (t) {
             $.ykmodal(t.html, true);
             fcom.removeLoader();
-            stylePhoneNumberFld('.' + $.ykmodal.element + " input[name='username']", !flag);
+            stylePhoneNumberFld('.' + $.ykmodal.element + " input[name='username']");
         });
     };
 

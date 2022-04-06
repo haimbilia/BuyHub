@@ -88,11 +88,11 @@
         padding-#{$end-direction}: 2rem;
     }
     &-arrow {
+        gap: 6px;
         .svg {
             width: 12px;
             height: 12px;
             margin-top: -4px;
-            margin-#{$end-direction}: 5px;
         }
     }
     &-icon {
@@ -102,7 +102,6 @@
             // height: 12px;
             //margin-#{$end-direction}: 6px;
         }
-        
     }
     //size
     &-sm {

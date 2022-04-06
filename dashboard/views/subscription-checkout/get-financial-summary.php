@@ -90,6 +90,7 @@ $spackage_type = $cartSubscription['spackage_type'];
                     $walletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
                     $walletPaymentForm->developerTags['fld_default_col'] = 12;
                     echo $walletPaymentForm->getFormTag();
+                    echo $walletPaymentForm->getFieldHTML('order_id');
                     echo $walletPaymentForm->getFieldHTML('btn_submit');
                     echo $walletPaymentForm->getExternalJS();
                 ?>

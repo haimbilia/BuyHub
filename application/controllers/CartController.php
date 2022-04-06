@@ -728,8 +728,6 @@ class CartController extends MyAppController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-
-
     public function applyPromoCode()
     {
         UserAuthentication::checkLogin();

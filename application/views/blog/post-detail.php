@@ -41,7 +41,7 @@
                             } ?>
                         </span>
                         <div class="dropdown share-blog">
-                            <button class="btn btn-outline-brand btn-wide dropdown-toggle no-after" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-outline-brand btn-wide btn-icon dropdown-toggle no-after" type="button" data-bs-toggle="dropdown">
                                 Share
                                 <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#share">

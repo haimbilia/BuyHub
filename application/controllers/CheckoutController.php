@@ -1471,17 +1471,11 @@ class CheckoutController extends MyAppController
         $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
-        // CommonHelper::printArray($orderInfo);
-        /* $orderObj = new Orders();
-        $orderInfo = $orderObj->getOrderById( $order_id, $this->siteLangId, array('payment_status' => 0) ); */
         if (!$orderInfo) {
-            /* Message::addErrorMessage( Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId) );
-            $this->set('error', Message::getHtml() ); */
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
 
         $methodCode = Plugin::getAttributesById($plugin_id, 'plugin_code');
-        // $paymentMethod = Plugin::getAttributesByCode($methodCode, Plugin::ATTRS, $this->siteLangId);
         $this->plugin = PluginHelper::callPlugin($methodCode, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $this->plugin) {
             LibHelper::exitWithError($error);
@@ -2056,7 +2050,7 @@ class CheckoutController extends MyAppController
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
 
-    public function getCouponForm()
+    public function getCoupons()
     {
         $loggedUserId = UserAuthentication::getLoggedUserId();
         $orderId = isset($_SESSION['order_id']) ? $_SESSION['order_id'] : '';
@@ -2066,22 +2060,8 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-
-        $PromoCouponsFrm = $this->getPromoCouponsForm($this->siteLangId);
-        $this->set('PromoCouponsFrm', $PromoCouponsFrm);
-
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
-    }
-
-    private function getPromoCouponsForm($langId)
-    {
-        $langId = FatUtility::int($langId);
-        $frm = new Form('frmPromoCoupons');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Coupon_code', $langId), 'coupon_code', '', array('placeholder' => Labels::getLabel('FRM_Enter_Your_code', $langId)));
-        $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_APPLY', $langId));
-        return $frm;
     }
 
     public function setUpPickUp()

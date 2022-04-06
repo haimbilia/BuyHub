@@ -2,8 +2,8 @@
     display: grid;
     grid-gap: 1rem;
     border-radius: 1rem;
-    grid-template-columns: 300px auto 300px;
-    grid-template-areas: "nav content sidebar";
+    grid-template-columns: 300px auto;
+    grid-template-areas: "nav content";
 
     &-nav {
         background-color: $bg-white;
@@ -31,6 +31,7 @@
 }
 
 .message__list {
+    min-height: calc(100vh - 280px);
     max-height: calc(100vh - 280px);
     overflow-y: auto;
     &-item {

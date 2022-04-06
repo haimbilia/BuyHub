@@ -39,6 +39,8 @@
 }
 
 .btn {
+    display: inline-flex;
+    align-items: center;
     padding: $input-padding;
     height: $input-height;
     font-size: 0.85rem;
@@ -130,11 +132,19 @@
         height: auto;
     }
     &-arrow {
+        gap: 6px;
         .svg {
             width: 12px;
             height: 12px;
             margin-top: -4px;
-            margin-#{$end-direction}: 5px;
+        }
+    }
+    &-icon {
+        gap: 6px;
+        .svg {
+            // width: 12px;
+            // height: 12px;
+            //margin-#{$end-direction}: 6px;
         }
     }
     &-link {
@@ -156,7 +166,6 @@
             }
         }
     }
-   
 
     &.disabled {
         filter: grayscale(1);

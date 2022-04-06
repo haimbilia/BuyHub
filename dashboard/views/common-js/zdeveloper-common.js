@@ -742,18 +742,14 @@ $(document).ready(function () {
             window[callbackFunction]();
         }
     };
-    
-    openSignInForm = function (includeGuestLogin) {
-        if (typeof includeGuestLogin == "undefined") {
-            includeGuestLogin = false;
-        }
-        data = "includeGuestLogin=" + includeGuestLogin;
+
+    openSignInForm = function () {
         fcom.displayProcessing();
         $.ykmodal(fcom.getLoader(), true);
-        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm', [], siteConstants.webrootfront), '', function (t) {
             $.ykmodal(t.html, true);
             fcom.removeLoader();
-            stylePhoneNumberFld('.' + $.ykmodal.element + " input[name='username']", !flag);
+            stylePhoneNumberFld('.' + $.ykmodal.element + " input[name='username']");
         });
     };
 
@@ -800,7 +796,7 @@ $(document).ready(function () {
             .appendTo($(document.body))
             .submit();
     };
-    
+
     $(".cc-cookie-accept-js").click(function () {
         var data = {
             statistical_cookies: 1,
@@ -959,16 +955,9 @@ function quickDetail(selprod_id) {
     );
 }
 
-function stylePhoneNumberFld(
-    element = "input[name='user_phone']",
-    destroy = false
-) {
+function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = false) {
     var inputList = document.querySelectorAll(element);
-    var country =
-        "" == langLbl.defaultCountryCode ||
-            "undefined" == typeof langLbl.defaultCountryCode
-            ? "in"
-            : langLbl.defaultCountryCode;
+    var country = "" == langLbl.defaultCountryCode || "undefined" == typeof langLbl.defaultCountryCode ? "in" : langLbl.defaultCountryCode;
     inputList.forEach(function (input) {
         var form = input.closest("form");
         if (true == destroy) {
@@ -986,30 +975,19 @@ function stylePhoneNumberFld(
             var dialCodeElement = $('input[name="' + elementName + '"]', form);
 
             if (false === hasOnlyFlag) {
-                if (
-                    0 < dialCodeElement.length &&
-                    "" != dialCodeElement.val() &&
-                    "undefined" != typeof dialCodeElement.val()
-                ) {
+                if (0 < dialCodeElement.length && "" != dialCodeElement.val() && "undefined" != typeof dialCodeElement.val()) {
                     var elementVal = dialCodeElement.val();
                     var countryCodePos = elementVal.indexOf("-");
                     if (0 < countryCodePos) {
-                        country = elementVal.substring(
-                            countryCodePos + 1,
-                            elementVal.length
-                        );
+                        country = elementVal.substring(countryCodePos + 1, elementVal.length);
                     } else {
                         country = getCountryIso2CodeFromDialCode(parseInt(elementVal));
                     }
                 }
             }
-            var iti = window.intlTelInput(input, {
-                separateDialCode: !hasOnlyFlag,
-                initialCountry: country,
-            });
+            var iti = window.intlTelInput(input, {separateDialCode: !hasOnlyFlag, initialCountry: country,});
             var dialCode = "+" + iti.getSelectedCountryData().dialCode;
-            var dialCodeWithPhone =
-                dialCode + "-" + iti.getSelectedCountryData().iso2;
+            var dialCodeWithPhone = dialCode + "-" + iti.getSelectedCountryData().iso2;
             $(input, form).attr("data-before", dialCode);
             if (1 == dialCodeElement.length && false === hasOnlyFlag) {
                 dialCodeElement.insertAfter(input);
@@ -1017,13 +995,11 @@ function stylePhoneNumberFld(
                     dialCodeElement.val(dialCodeWithPhone);
                 }
             } else if (1 > dialCodeElement.length && false === hasOnlyFlag) {
-                $("<input>")
-                    .attr({
+                $("<input>").attr({
                         type: "hidden",
                         name: elementName,
                         value: dialCodeWithPhone,
-                    })
-                    .insertAfter(input, form);
+                    }).insertAfter(input, form);
             } else if (true === hasOnlyFlag) {
                 var phoneNumber = $(input, form).val();
                 if ("undefined" == typeof phoneNumber || "" == phoneNumber) {
