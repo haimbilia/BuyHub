@@ -2903,19 +2903,19 @@ $header-height: 65px;
             transition: all 0.25s ease-in-out;
         }
         &:before {
-            transform: translate(3px * $transform-direction, 0) rotate(45deg);
+            transform: translate(3px, 0) rotate(45deg);
         }
         &:after {
-            transform: translate(-3px * $transform-direction, 0) rotate(-45deg);
+            transform: translate(-3px, 0) rotate(-45deg);
         }
     }
     &:not(.collapsed) {
         .dropdown-toggle-custom-arrow {
             &:before {
-                transform: translate(-3px * $transform-direction, 0) rotate(45deg);
+                transform: translate(-3px, 0) rotate(45deg);
             }
             &:after {
-                transform: translate(3px * $transform-direction, 0) rotate(-45deg);
+                transform: translate(3px, 0) rotate(-45deg);
             }
         }
     }
@@ -2923,12 +2923,13 @@ $header-height: 65px;
 
 .card-toggle {
     .dropdown-toggle-custom-arrow {
-        #{$end-direction}: 25px;
-        [dir='rtl'] & {
-            #{$end-direction}: auto;
-            #{$start-direction}: 25px;
-            transform: translate(6px, 0);
-        }
+        position: relative;
+        width:32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: none;
     }
 }
 
@@ -3074,7 +3075,7 @@ $header-height: 65px;
             border: none !important;
         }
 
-        [dir='rtl'] & {
+        .main[dir='rtl'] & {
             padding-#{$end-direction}: 40px !important;
             background-position: calc(100% - 13px) center !important;
         }

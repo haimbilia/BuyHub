@@ -10,7 +10,7 @@ if (0 < $recordId) {
 }
 
 ?>
-<main class="main mainJs" dir="<?php echo $formLayout; ?>">
+<main class="main mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="'.$formLayout.'"' : ''; ?> >
     <div class="container">
         <?php
         $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false);
