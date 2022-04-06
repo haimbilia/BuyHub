@@ -10,32 +10,37 @@ $frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
 $submitFld = $frm->getField('btn_submit');
 $submitFld->setFieldTagAttribute('class', "btn btn-brand");
 ?>
-<div class="text-center paymentForm-js d-none">
+<div class="text-center paymentFormSection-js d-none">
     <?php if (!isset($error)) {
         echo $frm->getFormHtml();
     }
     ?>
 </div>
 <script type="text/javascript">
-    $("document").ready(function() {
-        <?php if (isset($error)) { ?>
-            fcom.displayErrorMessage(<?php echo $error; ?>);
-        <?php } ?>
-    });
-
-
+    var paymentMethodBlockJs = '<?php echo $pmethodCode; ?>-js';
     function confirmOrder(frm) {
-
         var data = fcom.frmData(frm);
         var action = $(frm).attr('action')
         var getExternalLibraryUrl = $(frm).data('external');
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'confirmOrder'), data, function(res) {
+            fcom.removeLoader();
+            try {
+                var ans = $.parseJSON(res);
+                if (1 > ans.status) {
+                    fcom.displayErrorMessage(ans.msg);
+                    return false;
+                }
+
+            } catch (e) {
+                // console.log(e);
+            }
+
             if ('undefined' != typeof getExternalLibraryUrl) {
                 fcom.ajax(getExternalLibraryUrl, '', function(t) {
                     var json = $.parseJSON(t);
                     if (1 > json.status) {
-                        $("#tabs-container form input[type='submit']").val(langLbl.confirmPayment);
+                        $("." + paymentMethodBlockJs + " form input[type='submit']").val(langLbl.confirmPayment);
                         fcom.displayErrorMessage(json.msg);
                         return;
                     }
@@ -57,17 +62,19 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
     function loadChargeForm(action) {
         fcom.ajax(action, '', function(t) {
             $.ykmsg.close();
+            fcom.removeLoader();
             try {
                 var ans = $.parseJSON(t);
                 if (1 > ans.status) {
                     fcom.displayErrorMessage(ans.msg);
+                    $('.' + paymentMethodBlockJs).html(ans.msg);
                     return false;
                 } else if ('undefined' != typeof ans.redirect) {
                     location.href = ans.redirect;
                 } else {
-                    $('#tabs-container').html(ans.html);
+                    $('.' + paymentMethodBlockJs).html(ans.html);
                     <?php if ('stripeconnect' == strtolower($pmethodCode)) { ?>
-                        $('#tabs-container').addClass('p-0');
+                        $('.' + paymentMethodBlockJs).addClass('p-0');
                     <?php } ?>
                 }
             } catch (e) {
@@ -76,20 +83,7 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
         });
     }
 
-    /*
-        function confirmOrder(frm) {
-            var data = fcom.frmData(frm);
-            var action = $(frm).attr('action')
-            fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'confirmOrder'), data, function(ans) {
-                $(location).attr("href", action);
-            });
-        }
-     * 
-         */
+    <?php if (isset($error)) { ?>
+        fcom.displayErrorMessage(<?php echo $error; ?>);
+    <?php } ?>
 </script>
-<?php
-$siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
-$secretKey = FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '');
-if (!empty($siteKey) && !empty($secretKey) && in_array(strtolower($paymentMethod['plugin_code']), ['cashondelivery', 'payatstore'])) { ?>
-    <script src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
-<?php } ?>
