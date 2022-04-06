@@ -6,7 +6,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
         <div class="">
             <div class="">
                 <div class="section-head section-head-center my-4">
-                    <div class="section__heading">
+                    <div class="section-heading">
                         <?php echo html_entity_decode($pageData['epage_content']); ?>
                     </div>
                 </div>
