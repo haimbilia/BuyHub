@@ -158,6 +158,7 @@ class AdminPermissionsController extends ListingBaseController
         $this->set("hidePaginationHtml", true);
         $this->set('page', 1);
         $this->set('pageSize', $pageSize);
+        $this->set('doNotLimitRecords', true);        
 
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);

@@ -638,7 +638,8 @@ Updates/Fixes :
     -----------------TV-9.4.0.20220406--------------------------------
     => 063504 - Seller UI: Getting multiple issues on sub users page. 
     => 063427 - Seller UI: Dropdown is closing and opening while clicking on the "Digital files and Digital Links" option, the CSV file is not uploading, double delete options are showing, and the table width is not fixed in the case of digital file while adding the Digi
-
+    => 063621 - Admin: "Undefined variable" error is showing at the footer(Pagination) on the admin user's permission page
+    
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
