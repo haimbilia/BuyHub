@@ -6,6 +6,8 @@ $btn-font-size: 0.85rem;
 $btn-font-weight: 500;
 $btn-line-height: $btn-height;
 .btn {
+    display: inline-flex;
+    align-items: center;
     border: $btn-border;
     padding: $btn-padding;
     height: $btn-height;
@@ -102,11 +104,19 @@ $btn-line-height: $btn-height;
         //border-radius: 0.2rem;
     }
     &-arrow {
+        gap: 6px;
         .svg {
             width: 12px;
             height: 12px;
             margin-top: -4px;
-            margin-#{$end-direction}: 5px;
+        }
+    }
+    &-icon {
+        gap: 6px;
+        .svg {
+            // width: 12px;
+            // height: 12px;
+            //margin-#{$end-direction}: 6px;
         }
     }
     &-link {
