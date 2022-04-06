@@ -58,7 +58,7 @@ a {
 a:hover {
     color: $brand-color;
     text-decoration: none;
-} 
+}
 mark,
 .mark {
     padding: 0;
@@ -266,7 +266,7 @@ mark,
     border-radius: 0.25rem;
     font-size: 0.875rem;
     font-weight: 500;
-    svg {
+    .svg {
         width: 20px;
         height: 20px;
         margin-#{$end-direction}: 0.5rem;
@@ -423,13 +423,13 @@ mark,
             width: 100% !important;
         }
     }
-    .select2-selection{
-        &__arrow{
-            b{
-                margin-top: -4px!important;
+    .select2-selection {
+        &__arrow {
+            b {
+                margin-top: -4px !important;
             }
         }
-    } 
+    }
 }
 
 .cropper-body {

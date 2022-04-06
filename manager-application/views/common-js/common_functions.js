@@ -211,7 +211,7 @@ select2 = function (
         dropdownParent: obj,
         closeOnSelect: ele.data("closeOnSelect") || true,
         data: data,
-        dir: layoutDirection,
+        /*dir: layoutDirection,*/
         allowClear: ele.data("allowClear") || true,
         placeholder: ele.attr("placeholder") || "",
         ajax: {
