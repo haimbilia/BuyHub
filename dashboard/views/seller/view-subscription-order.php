@@ -14,29 +14,44 @@
     ?>
     <div class="content-body">
         <div class="card">
-            <div class="card-body ">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="info--order">
-                            <p><strong><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?>: </strong><?php echo $orderDetail['user_name']; ?></p>
-                            <p><strong><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?>: </strong><?php if ($orderDetail['ossubs_status_id'] == FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') && $orderDetail['ossubs_till_date'] < date("Y-m-d")) {
-                                                                                                                echo Labels::getLabel('LBL_Expired', $siteLangId);
-                                                                                                            } else {
-                                                                                                                echo $orderStatuses[$orderDetail['ossubs_status_id']];
-                                                                                                            } ?></p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="info--order">
-                            <p><strong><?php echo Labels::getLabel('LBL_Invoice', $siteLangId); ?> #: </strong><?php echo $orderDetail['order_number']; ?></p>
-                            <p><strong><?php echo Labels::getLabel('LBL_Date', $siteLangId); ?>: </strong><?php echo FatDate::format($orderDetail['order_date_added']); ?></p>
-
-                        </div>
-                    </div>
-                </div>
+            <div class="card-body">
 
 
-                <div class="js-scrollable table-wrap mt-4">
+                <ul class="list-stats list-stats-double">
+                    <li class="list-stats-item">
+                        <span class="label"><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?>: </span>
+                        <span class="value"><?php echo $orderDetail['user_name']; ?></span>
+                    </li>
+                    <li class="list-stats-item">
+                        <span class="label">
+                            <?php echo Labels::getLabel('LBL_Invoice', $siteLangId); ?> #:</span>
+                        <span class="value"><?php echo $orderDetail['order_number']; ?></span>
+                    </li>
+
+                    <li class="list-stats-item">
+                        <span class="label"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?>:</span>
+                        <span class="value"><?php if ($orderDetail['ossubs_status_id'] == FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') && $orderDetail['ossubs_till_date'] < date("Y-m-d")) {
+                                                echo Labels::getLabel('LBL_Expired', $siteLangId);
+                                            } else {
+                                                echo $orderStatuses[$orderDetail['ossubs_status_id']];
+                                            } ?></span>
+                    </li>
+
+                    <li class="list-stats-item">
+                        <span class="label"><?php echo Labels::getLabel('LBL_Date', $siteLangId); ?>: </span>
+                        <span class="value"><?php echo FatDate::format($orderDetail['order_date_added']); ?></span>
+                    </li>
+
+
+
+
+                </ul>
+
+
+            </div>
+            <div class="card-table">
+
+                <div class="js-scrollable table-wrap">
                     <table class="table">
                         <thead>
                             <tr class="">
@@ -69,6 +84,7 @@
                     </table>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
