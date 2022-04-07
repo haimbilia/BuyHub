@@ -1120,7 +1120,7 @@ mark,
         min-width: 100px;
         text-align: center;
         top: -14px;
-        left: 50%;
+        #{$start-direction}: 50%;
         transform: translateX(-50% * $transform-direction);
     }
     &__detail {
