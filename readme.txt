@@ -642,6 +642,7 @@ Updates/Fixes :
     => 063621 - Admin: "Undefined variable" error is showing at the footer(Pagination) on the admin user's permission page
     => 063622 - Buyer: "Forgot Password" functionality is not showing while login at the front-end
     => 063619 - Seller: "Page not found." is showing while the admin clicks on the attached file under the seller approval request section
+    => 063620 - Seller: Proper error message is not showing at the seller's end if their form is rejected by admin and the rejection limit is greater than the "Max seller request attempts
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
