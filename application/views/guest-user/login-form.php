@@ -3,7 +3,7 @@ $signinpopup = $signinpopup ?? 0;
 if (0 < $signinpopup) { ?>
     <div class="modal-header border-0"></div>
     <div class="modal-body">
-        <div class="login-popup">
+        <div class="login-popup loaderContainerJs">
             <?php
             $loginData['signInWithPhone'] = $signInWithPhone;
             $loginData['signinpopup'] = $signinpopup;

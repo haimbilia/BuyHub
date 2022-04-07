@@ -745,6 +745,68 @@ $(document).ready(function () {
         }
     };
 
+    signInWithPhone = function (obj, flag) {
+        var form = $(obj).data("form");
+        var formElement = "undefined" != typeof form ? 'form[name="' + form + '"]' : "form";
+        var title = 0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
+        var objLbl = 0 < flag ? langLbl.byEmail : langLbl.byPhone;
+        $(obj).attr("onclick", "signInWithPhone(this, " + !flag + ")").text(objLbl).attr('title', title);
+
+        var data = 'signInWithPhone=' + parseInt(flag);
+        var popup = $(formElement).closest('.' + $.ykmodal.element);
+        if (0 < popup.length) {
+            $.ykmodal(fcom.getLoader(), true);
+            data +=  "&signinpopup=1";
+        } else {
+            $(".loginFormJs").prepend(fcom.getLoader());
+        }
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm', [], siteConstants.webrootfront), data, function (t) {
+            if (0 < popup.length) {
+                $.ykmodal(t.html, true);
+            } else {
+                $(".loginFormJs").replaceWith(t.html);
+            }
+            fcom.removeLoader();
+            stylePhoneNumberFld(formElement + " input[name='username']", !flag);
+        });
+    };
+
+    getLoginOtp = function (obj) {
+        var formClass = "";
+        if ($(obj).closest("form").hasClass("loginpopup--js")) {
+            formClass = "form.loginpopup--js ";
+        }
+        var phone = $(formClass + 'input[name="username"]').val();
+        var dialCode = $(formClass + 'input[name="username_dcode"]').val();
+        if ("undefined" == typeof phone || "" == phone || "undefined" == typeof dialCode || "" == dialCode) {
+            $(obj).closest("form").submit();
+            fcom.displayErrorMessage(langLbl.requiredFields);
+            return false;
+        }
+
+        $(".loginFormJs").prepend(fcom.getLoader());
+        fcom.displayProcessing();
+        var data = "username=" + $(formClass + 'input[name="username"]').val() + "&username_dcode=" + $(formClass + 'input[name="username_dcode"]').val();
+        fcom.ajax(fcom.makeUrl("GuestUser", "getLoginOtp", [], siteConstants.webrootfront), data, function (t) {
+            fcom.removeLoader();
+            t = $.parseJSON(t);
+            if (1 > t.status) {
+                fcom.displayErrorMessage(t.msg);
+                return false;
+            }
+            fcom.closeProcessing();
+            $(obj).closest(".getOtpBtnBlock--js").hide();
+            $(formClass + " .submitBtn--js").show();
+            $(formClass + " .resendOtp-js").addClass("disabled");
+            $(formClass + '.pwdField--js input[name="password"]').attr("data-fatreq", '{"required":false}');
+            $(formClass + ".loginWithOtp--js").val(1);
+            $(formClass + " .countdownFld--js, " + formClass + " .resendOtp-js").parent().show();
+            $(formClass + ".otpFieldBlock--js," + formClass + " .countdownFld--js").show();
+            startOtpInterval(formClass);
+        });
+        return false;
+    };
+
     openSignInForm = function () {
         fcom.displayProcessing();
         $.ykmodal(fcom.getLoader(), true);

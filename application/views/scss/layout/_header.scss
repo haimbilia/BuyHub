@@ -10,7 +10,7 @@ $header-height: 122px;
     background: $bg-white;
     border-bottom: $border;
     @include media-breakpoint-up(lg) {
-        //min-height: $header-height;
+        min-height: $header-height;
     }
     .container {
         max-width: none;
@@ -144,7 +144,6 @@ $header-height: 122px;
     align-items: center;
     justify-content: flex-end;
     grid-gap: 1rem;
-
     @include media-breakpoint-up(lg) {
         grid-gap: 3rem;
     }
@@ -175,13 +174,13 @@ $header-height: 122px;
         line-height: 1;
         display: flex;
         align-items: center;
+        gap: 0.5rem;
         &:hover {
             color: $secondary-color;
         }
     }
     .svg {
         color: $secondary-color;
-        margin-#{$end-direction}: 8px;
     }
 
     .txt {

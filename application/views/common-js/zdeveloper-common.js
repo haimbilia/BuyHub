@@ -1078,9 +1078,21 @@ $(function () {
         var title = 0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
         var objLbl = 0 < flag ? langLbl.byEmail : langLbl.byPhone;
         $(obj).attr("onclick", "signInWithPhone(this, " + !flag + ")").text(objLbl).attr('title', title);
-        $(".loginFormJs").prepend(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), 'signInWithPhone=' + parseInt(flag), function (t) {
-            $(".loginFormJs").replaceWith(t.html);
+
+        var data = 'signInWithPhone=' + parseInt(flag);
+        var popup = $(formElement).closest('.' + $.ykmodal.element);
+        if (0 < popup.length) {
+            $.ykmodal(fcom.getLoader(), true);
+            data +=  "&signinpopup=1";
+        } else {
+            $(".loginFormJs").prepend(fcom.getLoader());
+        }
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function (t) {
+            if (0 < popup.length) {
+                $.ykmodal(t.html, true);
+            } else {
+                $(".loginFormJs").replaceWith(t.html);
+            }
             fcom.removeLoader();
             stylePhoneNumberFld(formElement + " input[name='username']", !flag);
         });
@@ -1190,7 +1202,7 @@ $(function () {
             });
         }
     };
-    
+
     redirectfunc = function (url, orderStatus) {
         var input =
             '<input type="hidden" name="status" value="' + orderStatus + '">';
@@ -1693,7 +1705,7 @@ $(function () {
 });
 
 $(document).ajaxComplete(function () {
-    stylePhoneNumberFld(".phone-js");    
+    stylePhoneNumberFld(".phone-js");
     if (0 < $("#facebox").length) {
         if ($("#facebox").is(":visible")) {
             $("html").addClass("pop-on");
