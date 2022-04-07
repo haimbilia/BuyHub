@@ -67,6 +67,13 @@ class BadgesController extends SellerBaseController
             $srch->addCondition('badge_required_approval', '=', $approval);
         }
 
+        $conditionType = FatApp::getPostedData('badge_trigger_type');
+        if ('' != $conditionType) {
+            $srch->addCondition('badge_trigger_type', '=', $conditionType);
+        } else if (Badge::APPROVAL_OPEN == $approval) {
+            $srch->addCondition('badge_trigger_type', '=', Badge::COND_MANUAL);
+        }
+
         $attr = array_merge(Badge::ATTR, Badge::LANG_ATTR, [
             '(CASE
                 WHEN ' . Badge::DB_TBL_PREFIX . 'type = ' . Badge::TYPE_RIBBON . ' OR ' . Badge::DB_TBL_PREFIX . 'required_approval = ' . Badge::APPROVAL_OPEN . '
@@ -115,8 +122,11 @@ class BadgesController extends SellerBaseController
         $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
 
         if (Badge::TYPE_BADGE == $badgeType) {
+            $conditionTypeArr = Badge::getTriggerCondTypeArr($this->siteLangId);
+            $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_trigger_type', $conditionTypeArr, '', ['class' => 'badgeTriggerTypeJs']);
+
             $approvalArr = Badge::getApprovalStatusArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr, '', [], Labels::getLabel('LBL_SELECT_APPROVAL', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr, '', ['class' => 'badgeApprovalJs'], Labels::getLabel('LBL_SELECT_APPROVAL', $this->siteLangId));
         }
 
         HtmlHelper::addSearchButton($frm);

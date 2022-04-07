@@ -41,8 +41,7 @@ class PickupAddressesController extends ListingBaseController
     }
 
     private function getListingData()
-    {
-        $this->objPrivilege->canViewBrandRequests();
+    {        
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
@@ -101,7 +100,7 @@ class PickupAddressesController extends ListingBaseController
         $slotData = [];
         $langId = FatUtility::int($langId);
         if ($langId == 0) {
-            $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
+            $langId = CommonHelper::getDefaultFormLangId();
         }
         $addressId = FatUtility::int($addressId);
         $frm = $this->getForm($addressId, $langId);

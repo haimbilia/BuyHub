@@ -3,8 +3,11 @@
 HtmlHelper::formatFormFields($frm, 6);
 
 $frm->setFormTagAttribute('id', 'returnAddressLangFrm');
-$frm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
-$frm->setFormTagAttribute('dir', $formLayout);
+$frm->setFormTagAttribute('class', 'form modalFormJs');
+if (CommonHelper::getLayoutDirection() != $formLayout) {
+    $frm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $frm->setFormTagAttribute('dir', $formLayout);
+}
 $frm->setFormTagAttribute('onsubmit', 'setReturnAddressLang(this); return(false);');
 
 $address1 = $frm->getField('ura_address_line_1');
