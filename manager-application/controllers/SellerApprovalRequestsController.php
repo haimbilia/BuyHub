@@ -230,6 +230,28 @@ class SellerApprovalRequestsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
+    public function downloadAttachment($recordId, $recordSubid)
+    {
+        
+        $recordId = FatUtility::int($recordId);
+        $recordSubid = FatUtility::int($recordSubid);
+
+        if (1 > $recordId || 1 > $recordSubid) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SELLER_APPROVAL_FILE, $recordId, $recordSubid);
+
+        if (false == $file_row) {
+            Message::addErrorMessage($this->str_invalid_request);
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+        AttachedFile::downloadAttachment($image_name, $file_row['afile_name']);
+    }
+
     private function getForm()
     {
         $frm = new Form('frmapproval', array('id' => 'frmapproval'));

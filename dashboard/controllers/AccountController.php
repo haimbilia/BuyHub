@@ -74,7 +74,7 @@ class AccountController extends LoggedUserController
             $this->set('maxAttemptsReached', true);
         }
 
-
+        $this->set('maxAttempts', FatApp::getConfig('CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', FatUtility::VAR_INT, 3));
         $this->set('supplierRequest', $supplierRequest);
         $this->_template->render();
     }
