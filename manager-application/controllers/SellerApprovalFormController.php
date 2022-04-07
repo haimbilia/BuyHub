@@ -12,6 +12,21 @@ class SellerApprovalFormController extends ListingBaseController
     }
 
     /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditSellerApprovalForm($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditSellerApprovalForm();
+        }
+    }
+
+    /**
      * setLangTemplateData - This function is use to automate load langform and save it. 
      *
      * @param  array $constructorArgs
@@ -36,7 +51,7 @@ class SellerApprovalFormController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);          
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -231,6 +246,18 @@ class SellerApprovalFormController extends ListingBaseController
 
             $this->set('msg', Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
+        }
+    }
+
+    protected function markAsDeleted($recordId)
+    {
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $this->setModel([$recordId]);
+        if (!$this->modelObj->deleteRecord(false)) {
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
 
