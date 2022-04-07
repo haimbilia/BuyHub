@@ -75,7 +75,6 @@ foreach ($arrListing as $sn => $row) {
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => 'changeUserPassword(' . $row['user_id'] . ')',
-                                'title' => Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId),
                             ],
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
@@ -90,7 +89,6 @@ foreach ($arrListing as $sn => $row) {
                                 'href' => UrlHelper::generateUrl('Users', 'login', array($row['user_id'])),
                                 'target' => '_blank',
                                 'id' => 'redirectJs',
-                                'title' => Labels::getLabel('LBL_LOGIN_TO_USER_PROFILE', $siteLangId),
                             ],
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
@@ -108,7 +106,6 @@ foreach ($arrListing as $sn => $row) {
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => 'sendMailToUser(' . $row['user_id'] . ')',
-                                'title' => Labels::getLabel('LBL_EMAIL_USER', $siteLangId),
                             ],
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
@@ -125,7 +122,6 @@ foreach ($arrListing as $sn => $row) {
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => 'sendSetPasswordEmail(' . $row['user_id'] . ')',
-                                'title' => Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $siteLangId),
                             ],
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
@@ -142,7 +138,6 @@ foreach ($arrListing as $sn => $row) {
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => 'markSellerAsBuyer(' . $row['user_id'] . ')',
-                                'title' => Labels::getLabel('LBL_MARK_AS_BUYER', $siteLangId),
                             ],
                             'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">

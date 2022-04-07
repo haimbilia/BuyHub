@@ -1,6 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $promotionLangFrm->setFormTagAttribute('onsubmit', 'setupPromotionLang(this); return(false);');
-$promotionLangFrm->setFormTagAttribute('class', 'form form--horizontal layout--' . $formLayout);
+$promotionLangFrm->setFormTagAttribute('class', 'form form--horizontal');
+
+if (CommonHelper::getLayoutDirection() != $formLayout) {
+    $promotionLangFrm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $promotionLangFrm->setFormTagAttribute('dir', $formLayout);
+}
+
 $promotionLangFrm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $promotionLangFrm->developerTags['fld_default_col'] = 12;
 

@@ -1,5 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$tagLangFrm->setFormTagAttribute('class', 'form form--horizontal layout--' . $formLayout);
+$tagLangFrm->setFormTagAttribute('class', 'form form--horizontal');
+if (CommonHelper::getLayoutDirection() != $formLayout) {
+    $tagLangFrm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $tagLangFrm->setFormTagAttribute('dir', $formLayout);
+}
 $tagLangFrm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $tagLangFrm->developerTags['fld_default_col'] = 12;
 $tagLangFrm->setFormTagAttribute('onsubmit', 'setupTagLang(this); return(false);');
