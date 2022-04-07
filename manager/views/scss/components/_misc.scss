@@ -1901,7 +1901,6 @@ mark,
 .help-data {
     padding: 1.5rem 1rem;
 }
-
 .form-edit {
     display: flex;
     flex-direction: column;
@@ -1924,7 +1923,7 @@ mark,
         border-top: $border;
         position: sticky;
         bottom: 0;
-        z-index: 3;
+        z-index: 1025;
         background-color: $bg-white;
         padding: 1.5rem 2rem;
     }

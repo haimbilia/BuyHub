@@ -151,10 +151,19 @@ class AccountController extends LoggedUserController
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
+
+        foreach ($post as $key => $val) {
+            if (false !== strpos($key, '_dcode')) {
+                $phoneKey = str_replace('_dcode', '', $key);
+                if (!empty($phoneKey)) {
+                    $post[$phoneKey] = $val . $post[$phoneKey];
+                }
+            }
+        }
+
         $frm->expireSecurityToken(FatApp::getPostedData());
 
         $supplier_form_fields = $userObj->getSupplierFormFields($this->siteLangId);
-
         foreach ($supplier_form_fields as $field) {
             $fieldIdsArr[] = $field['sformfield_id'];
             //$fieldCaptionsArr[] = $field['sformfield_caption'];
@@ -217,7 +226,7 @@ class AccountController extends LoggedUserController
     {
         $post = FatApp::getPostedData();
 
-        if (empty($post)) {            
+        if (empty($post)) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId));
         }
         $field_id = $post['field_id'];
@@ -606,7 +615,7 @@ class AccountController extends LoggedUserController
         }
         $this->_template->render(false, false);
     }
-    
+
     private function creditsInfo()
     {
         $this->set('userWalletBalance', User::getUserBalance($this->userId));
@@ -2814,11 +2823,11 @@ class AccountController extends LoggedUserController
                     break;
 
                 case User::USER_FIELD_TYPE_DATE:
-                    $fld = $frm->addDateField($field['sformfield_caption'], $fieldName, '', array('readonly' => 'readonly'));
+                    $fld = $frm->addDateField($field['sformfield_caption'], $fieldName, '', array('readonly' => 'readonly', 'class' => 'field--calender'));
                     break;
 
                 case User::USER_FIELD_TYPE_DATETIME:
-                    $fld = $frm->addDateTimeField($field['sformfield_caption'], $fieldName, '', array('readonly' => 'readonly'));
+                    $fld = $frm->addDateTimeField($field['sformfield_caption'], $fieldName, '', array('readonly' => 'readonly', 'class' => 'field--calender'));
                     break;
 
                 case User::USER_FIELD_TYPE_TIME:
@@ -2829,6 +2838,7 @@ class AccountController extends LoggedUserController
                     break;
 
                 case User::USER_FIELD_TYPE_PHONE:
+                    $frm->addHiddenField('', $fieldName . '_dcode');
                     $fld = $frm->addTextBox($field['sformfield_caption'], $fieldName, '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
                     $fld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
                     break;
