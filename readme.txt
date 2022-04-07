@@ -647,6 +647,7 @@ Updates/Fixes :
     => 063629 - Buyer: "Page not found" is showing while the buyer verifying the "change email" and email address is also not updating.
     => 063493 - Badges listing is not shown as per search filters.
     => 062957 - Seller UI: The product's listing is not showing while linking the product under the collection section
+    => 063616 - Buyer: "Calendar" icon is not showing for the date field in the seller approval form at the front end and an error is not showing while uploading the wrong file in the same form.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
