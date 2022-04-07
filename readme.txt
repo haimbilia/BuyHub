@@ -641,7 +641,8 @@ Updates/Fixes :
     => 063605 - Buyer: "404 PAGE NOT FOUND" error is showing after a new user's registration if the auto-login is enabled at the front-end.
     => 063621 - Admin: "Undefined variable" error is showing at the footer(Pagination) on the admin user's permission page
     => 063622 - Buyer: "Forgot Password" functionality is not showing while login at the front-end
-
+    => 063619 - Seller: "Page not found." is showing while the admin clicks on the attached file under the seller approval request section
+    
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
