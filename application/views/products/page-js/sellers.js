@@ -23,7 +23,7 @@ $("document").ready(function(){
                     return false;
                 }
                 $('span.cartQuantity').html(ans.total);
-                $('#cartSummaryJs').load(fcom.makeUrl('cart', 'getCartSummary'));
+                cart.loadCartSummary();
 			});
 			return false;
 		}); 

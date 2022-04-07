@@ -906,7 +906,8 @@ class CartController extends MyAppController
         $cartSummary = $cart->getCartFinancialSummary($this->siteLangId);
         $this->set('cartSummary', $cartSummary);
 
-        $this->set('couponsList', DiscountCoupons::getValidCoupons(UserAuthentication::getLoggedUserId(true), $this->siteLangId));
+        $couponsList = UserAuthentication::isUserLogged() ? DiscountCoupons::getValidCoupons(UserAuthentication::getLoggedUserId(true), $this->siteLangId) : [];
+        $this->set('couponsList', $couponsList);
         $this->_template->render(false, false, 'cart/_partial/cartSummary.php');
     }
 
