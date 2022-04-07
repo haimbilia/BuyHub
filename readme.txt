@@ -645,6 +645,7 @@ Updates/Fixes :
     => 063619 - Seller: "Page not found." is showing while the admin clicks on the attached file under the seller approval request section
     => 063620 - Seller: Proper error message is not showing at the seller's end if their form is rejected by admin and the rejection limit is greater than the "Max seller request attempts
     => 063629 - Buyer: "Page not found" is showing while the buyer verifying the "change email" and email address is also not updating.
+    => 063493 - Badges listing is not shown as per search filters.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

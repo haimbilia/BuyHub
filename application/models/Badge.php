@@ -441,9 +441,4 @@ class Badge extends MyAppModel
         $status = $notAllowed ? HtmlHelper::WARNING : $status;
         return HtmlHelper::getStatusHtml($status, $msg);
     }
-
-    public static function getRibbbonShapeDesign(int $recordId)
-    {
-        # code...
-    }
 }
