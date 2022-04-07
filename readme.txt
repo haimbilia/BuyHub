@@ -648,6 +648,7 @@ Updates/Fixes :
     => 063493 - Badges listing is not shown as per search filters.
     => 062957 - Seller UI: The product's listing is not showing while linking the product under the collection section
     => 063560 - Admin: The tooltip is not showing correctly after clicking on the Action button under the user's section
+    => 063537 - Admin: The whole page is not getting blurred while the loader is showing on the page at the admin's end
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
