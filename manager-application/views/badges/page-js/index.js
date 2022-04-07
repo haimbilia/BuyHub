@@ -1,3 +1,11 @@
+$(document).on('change', '.badgeTriggerTypeJs', function () {
+    if (2 == $(this).val()) {
+        $('.badgeApprovalJs').val('').attr('disabled', 'disabled');
+    } else {
+        $('.badgeApprovalJs').val('').removeAttr('disabled');
+    }
+});
+
 (function () {
     mediaForm = function (recordId, langId = 0, slide_screen = 1) {
         fcom.updateWithAjax(
@@ -55,4 +63,18 @@
 
         approvalFld.attr('data-fatreq', '{"required":true}').removeAttr('disabled');
     }
+
+    clearSearch = function (loadRowsOnly = false) {
+        document.frmRecordSearch.reset();
+        $('input', document.frmRecordSearch).not(':hidden').val('');
+        $("input:checkbox[name=listingFld]:checked").each(function () {
+            if ($(this).attr("disabled") != "disabled") {
+                $(this).prop("checked", false);
+            }
+        });
+        $('.select2-hidden-accessible').val('').trigger('change');
+        $('.badgeApprovalJs').val('').removeAttr('disabled');
+        searchRecords(document.frmRecordSearch, loadRowsOnly);
+
+    };
 })()
