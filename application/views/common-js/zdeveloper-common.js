@@ -445,7 +445,7 @@ removeFromCart = function (key) {
                 $(".emtyCartBtn-js").hide();
             }
             listCartProducts();
-            $('#cartSummaryJs').load(fcom.makeUrl('cart', 'getCartSummary'));
+            cart.loadCartSummary();
         }
         $.ykmsg.close();
         fcom.displaySuccessMessage(langLbl.MovedSuccessfully);
@@ -1662,6 +1662,7 @@ $(document).on("click", ".add-to-cart--js", function (event) {
     var data = fcom.frmData(document.frmBuyProduct);
     var yourArray = [];
     var selprodId = $(this).siblings('input[name="selprod_id"]').val();
+    var quantity = document.frmBuyProduct.quantity.value;
     if (typeof mainSelprodId != "undefined" && mainSelprodId == selprodId) {
         $(".list-addons--js")
             .find("input")
@@ -1674,27 +1675,7 @@ $(document).on("click", ".add-to-cart--js", function (event) {
                 }
             });
     }
-    fcom.updateWithAjax(fcom.makeUrl("cart", "add"), data, function (ans) {
-        if (ans["redirect"]) {
-            location = ans["redirect"];
-            return false;
-        }
-        if ($btn.hasClass("btnBuyNow") == true) {
-            setTimeout(function () {
-                window.location = fcom.makeUrl("Checkout");
-            }, 300);
-            return false;
-        }
-        if ($btn.hasClass("quickView") == true) {
-            $.facebox.close();
-            $("body").addClass("side-cart--on");
-        }
-        if (9 < ans.total) {
-            ans.total = "9+";
-        }
-        $("span.cartQuantity").html(ans.total);
-        $('#cartSummaryJs').load(fcom.makeUrl("cart", "getCartSummary"));
-    });
+    cart.add(selprodId, quantity);
     return false;
 });
 $(function () {

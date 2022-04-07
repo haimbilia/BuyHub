@@ -20,7 +20,7 @@ var cart = {
             } else {
                 $('span.cartQuantity').html(ans.total);
                 $('html, body').animate({ scrollTop: 0 }, 'slow');
-                $('#cartSummaryJs').load(fcom.makeUrl('cart', 'getCartSummary'));
+                cart.loadCartSummary(false);
             }
 
         });
@@ -42,14 +42,14 @@ var cart = {
                 else if (page == 'cart') {
                     if (ans.status) {
                         listCartProducts();
-                        $('#cartSummaryJs').load(fcom.makeUrl('cart', 'getCartSummary'));
+                        cart.loadCartSummary();
                     }
                     if (ans.total == 0) {
                         $('.emtyCartBtn-js').hide();
                     }
                 }
                 else {
-                    $('#cartSummaryJs').load(fcom.makeUrl('cart', 'getCartSummary'));
+                    cart.loadCartSummary();
                 }
                 $.ykmsg.close();
             });
@@ -128,13 +128,26 @@ var cart = {
                         listCartProducts();
                     }
                     $('span.cartQuantity').html(ans.total);
-                    $('#cartSummaryJs').load(fcom.makeUrl('cart', 'getCartSummary'));
+                    cart.loadCartSummary();
                     $('body').removeClass('side-cart--on');
                 }
                 $.ykmsg.close();
             });
         }
     },
+
+    loadCartSummary: function (show = true) {
+        var isOffcanvas = (0 < $("#side-cart.offcanvas").length);
+        if (true === show && isOffcanvas) {
+            $("#side-cart").prepend(fcom.getLoader());
+        }
+        $('#cartSummaryJs').load(fcom.makeUrl('cart', 'getCartSummary'), function () {
+            if (true === show && isOffcanvas) {
+                fcom.removeLoader();
+                $("#side-cart").offcanvas('show');
+            }            
+        });
+    }
 };
 
 var ykevents = {
