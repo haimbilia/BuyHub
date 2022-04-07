@@ -122,6 +122,8 @@ class BadgesController extends ListingBaseController
         $conditionType = FatApp::getPostedData('badge_trigger_type');
         if ('' != $conditionType) {
             $srch->addCondition('badge_trigger_type', '=', $conditionType);
+        } else if (Badge::APPROVAL_OPEN == $approval) {
+            $srch->addCondition('badge_trigger_type', '=', Badge::COND_MANUAL);
         }
 
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
@@ -227,11 +229,12 @@ class BadgesController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
         $fld->overrideFldType('search');
 
-        $approvalArr = Badge::getApprovalStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr);
-
         $conditionTypeArr = Badge::getTriggerCondTypeArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_trigger_type', $conditionTypeArr);
+        $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_trigger_type', $conditionTypeArr, '', ['class' => 'badgeTriggerTypeJs']);
+
+        $approvalArr = Badge::getApprovalStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr, '', ['class' => 'badgeApprovalJs']);
+
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);/*clearBtn*/
@@ -531,7 +534,7 @@ class BadgesController extends ListingBaseController
     {
         return [
             'select_all',
-           /*  'listSerial', */
+            /*  'listSerial', */
             Badge::DB_TBL_PREFIX . 'shape_type',
             Badge::DB_TBL_PREFIX . 'name',
             Badge::DB_TBL_PREFIX . 'trigger_type',

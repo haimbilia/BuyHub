@@ -190,6 +190,10 @@ trait SellerCollections
         $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);
         /* url data[ */
 
+        $langs = Language::getAllNames();
+        if (1 == count($langs) && !$this->isCollectionLinkFormFilled($scollection_id)) {             
+            $this->set('openCollectionLinkForm', true);
+        }
 
         $shopOriginalUrl = Shop::SHOP_COLLECTION_ORGINAL_URL . $shop_id . '/' . $collection_id;
         if ($post['urlrewrite_custom'] == '') {

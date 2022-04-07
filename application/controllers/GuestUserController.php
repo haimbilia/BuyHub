@@ -708,6 +708,7 @@ class GuestUserController extends MyAppController
                 Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
             }
+            Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 

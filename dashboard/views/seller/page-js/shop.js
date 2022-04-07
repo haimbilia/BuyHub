@@ -269,8 +269,12 @@ $(document).on("change", ".state", function () {
             if (t.langId > 0) {
                 editShopCollectionLangForm(t.collection_id, t.langId);
                 return;
+            } else if (t.openCollectionLinkForm) {
+                sellerCollectionProducts(t.collection_id);
+                return;
+            } else {
+                getShopCollectionGeneralForm(t.collection_id);
             }
-
         });
     };
 

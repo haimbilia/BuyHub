@@ -7,6 +7,8 @@ $fld = $frm->getField('collection_image');
 $fld->value= '<label class="label">'.Labels::getLabel('LBL_UPLOAD_BANNER', $siteLangId).'</label><span id="collectionImageHtml"></span>';
 
 $fld->htmlAfterField ='<span class="form-text text-muted">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '610 x 343').'</span>';
+
+unset($languages[CommonHelper::getDefaultFormLangId()]);
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
