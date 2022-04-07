@@ -648,7 +648,8 @@ Updates/Fixes :
     => 063493 - Badges listing is not shown as per search filters.
     => 062957 - Seller UI: The product's listing is not showing while linking the product under the collection section
     => 063599 - Buyer: Error is showing while verifying the email while registering as a new user at the front-end 
-
+    => 063638 - Advertiser: Auto-login is not working after registering as an Advertiser and the advertiser's company information is not showing at the admin's end
+  
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 

@@ -11,6 +11,7 @@ $(function (){
 		fcom.ajax(fcom.makeUrl('GuestAdvertiser', 'form'), '', function(t) {
 			$(dv).html(t);
             stylePhoneNumberFld();
+			fcom.removeLoader();
 		});		
 	};
 

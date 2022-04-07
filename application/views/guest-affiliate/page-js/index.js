@@ -14,6 +14,7 @@
         fcom.ajax(fcom.makeUrl('GuestAffiliate', 'affiliateRegistrationStep', [registeration_step_number]), '', function (t) {
             $("#register-form-div").html(t);
             stylePhoneNumberFld();
+            fcom.removeLoader();
         });
     };
 })();
