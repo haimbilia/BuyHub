@@ -647,6 +647,7 @@ Updates/Fixes :
     => 063629 - Buyer: "Page not found" is showing while the buyer verifying the "change email" and email address is also not updating.
     => 063493 - Badges listing is not shown as per search filters.
     => 062957 - Seller UI: The product's listing is not showing while linking the product under the collection section
+    => 063599 - Buyer: Error is showing while verifying the email while registering as a new user at the front-end 
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
