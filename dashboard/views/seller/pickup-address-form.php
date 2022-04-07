@@ -1,8 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($frm);
 
-$frm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
-$frm->setFormTagAttribute('dir', $formLayout);
+$frm->setFormTagAttribute('class', 'form modalFormJs');
+if (CommonHelper::getLayoutDirection() != $formLayout) {
+    $frm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $frm->setFormTagAttribute('dir', $formLayout);
+}
 $frm->setFormTagAttribute('data-onclear', "pickupAddressForm(" . $addrId . ", " . $langId . ");");
 $frm->setFormTagAttribute('id', 'pickupAddressFrm');
 $frm->setFormTagAttribute('onsubmit', 'setPickupAddress(this); return(false);');

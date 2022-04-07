@@ -1,6 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('id', 'returnAddressLangFrm');
-$frm->setFormTagAttribute('class', 'form layout--' . $formLayout);
+$frm->setFormTagAttribute('class', 'form');
+if (CommonHelper::getLayoutDirection() != $formLayout) {
+    $frm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $frm->setFormTagAttribute('dir', $formLayout);
+}
 $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
 $frm->setFormTagAttribute('onsubmit', 'setReturnAddressLang(this); return(false);');
