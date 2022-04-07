@@ -517,4 +517,16 @@ class applicationConstants
             'round' => Labels::getLabel('LBL_ROUND', $langId),
         );
     }
+
+    public static function getBkImageSizeTypes($langId): array
+    {        
+        return array(
+            'auto' => Labels::getLabel('LBL_AUTO', $langId),
+            'length' => Labels::getLabel('LBL_LENGTH', $langId),
+            'cover' => Labels::getLabel('LBL_COVER', $langId),
+            'contain' => Labels::getLabel('LBL_CONTAIN', $langId),
+            'initial' => Labels::getLabel('LBL_INITIAL', $langId),
+            'inherit' => Labels::getLabel('LBL_INHERIT', $langId),            
+        );
+    }
 }
