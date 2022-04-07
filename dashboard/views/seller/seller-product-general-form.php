@@ -6,7 +6,12 @@ if ($selprod_id > 0 || empty($productOptions)) {
     $frmSellerProduct->setFormTagAttribute('onsubmit', 'setUpMultipleSellerProducts(this); return(false);');
 }
 $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-$frmSellerProduct->setFormTagAttribute('class', 'form form--horizontal inventoryForm-js layout--' . Language::getLayoutDirection($siteDefaultLangId));
+$frmSellerProduct->setFormTagAttribute('class', 'form form--horizontal inventoryForm-js');
+if (CommonHelper::getLayoutDirection() != Language::getLayoutDirection($siteDefaultLangId)) {
+    $frmSellerProduct->addFormTagAttribute('class', "layout--" . Language::getLayoutDirection($siteDefaultLangId));
+    $frmSellerProduct->setFormTagAttribute('dir', Language::getLayoutDirection($siteDefaultLangId));
+}
+
 $autoUpdateFld = $frmSellerProduct->getField('auto_update_other_langs_data');
 if (null != $autoUpdateFld) {
     $autoUpdateFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');

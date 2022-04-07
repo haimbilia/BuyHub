@@ -1,7 +1,11 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 $shopLangFrm->setFormTagAttribute('onsubmit', 'setupShopLang(this); return(false);');
-$shopLangFrm->setFormTagAttribute('class', 'form form--horizontal shopLangForm-js layout--' . $formLayout);
+$shopLangFrm->setFormTagAttribute('class', 'form form--horizontal shopLangForm-js');
+if (CommonHelper::getLayoutDirection() != $formLayout) {
+    $shopColLangFrm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $shopColLangFrm->setFormTagAttribute('dir', $formLayout);
+}
 
 $shopLangFrm->developerTags['colClassPrefix'] = 'col-lg-4 col-md-';
 $shopLangFrm->developerTags['fld_default_col'] = 4;
