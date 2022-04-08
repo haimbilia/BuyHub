@@ -28,32 +28,32 @@ if (!empty($list) && is_array($list)) {
                 if (startAt >= 0) {
                     var endAt = filter_text.length;
                     filter_text = headingText.substr(startAt, endAt);
-                    var replaceWith = "<span class='js--highlightText'>" + filter_text +
-                        "</span>";
+                    var replaceWith = "<mark>" + filter_text +
+                        "</mark>";
                     $(this).html(headingText.replace(filter_text, replaceWith));
                 } else {
                     $(this).text(headingText);
                 }
 
                 let faqTextEle = $(this).siblings('.faqText');
-                let faqTextContent = faqTextEle.text();
+                let faqTextContent = faqTextEle.find('p').text();
                 var startAt = faqTextContent.toLowerCase().indexOf(filter_text
                     .toLowerCase());
 
                 if (startAt >= 0) {
                     var endAt = filter_text.length;
                     filter_text = faqTextContent.substr(startAt, endAt);
-                    var replaceWith = "<span class='js--highlightText'>" + filter_text +
-                        "</span>";
-                    faqTextEle.collapse('show');
-                    faqTextEle.html(faqTextContent.replace(filter_text, replaceWith));
+                    var replaceWith = "<mark>" + filter_text +
+                        "</mark>";
+                    faqTextEle.closest('.collapse').collapse('show');
+                    faqTextEle.find('p').html(faqTextContent.replace(filter_text, replaceWith));
                 } else {
-                    faqTextEle.text(faqTextContent);
-                    faqTextEle.collapse('hide');
+                    faqTextEle.find('p').text(faqTextContent);
+                    faqTextEle.closest('.collapse').collapse('hide');
                 }
             } else {
                 $(this).text($(this).text());
-                $(this).siblings('.faqText').text($(this).siblings('.faqText').text());
+                $(this).siblings('.faqText').text($(this).siblings('.faqText').find('p').text());
                 $('#listing .faqText').collapse('hide');
             }
         });
