@@ -1,5 +1,6 @@
 $blog-header-height: 58px;
 .header-blog {
+    min-height: $blog-header-height;
     &-inner {
         display: flex;
         align-items: center;

@@ -71,9 +71,10 @@
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#notification">
                         </use>
                     </svg>
-
-                    <span class="h-badge">
-                        <?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span></a>
+                    <span class="h-badge msg-count">
+                        <?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?>
+                    </span>
+                </a>
         <?php }
         } ?>
         <?php $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>

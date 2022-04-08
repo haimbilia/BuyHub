@@ -1,6 +1,6 @@
 (function () {
 	setupFeedback = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		let formData = new FormData(frm);
 		formData.delete("spreview_image[]");
 		$('.imgToUpload--js').each(function () {

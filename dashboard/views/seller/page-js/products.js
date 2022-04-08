@@ -96,7 +96,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 	};
 
 	setUpSellerProductClone = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		runningAjaxReq = true;
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpSellerProductClone'), data, function (t) {

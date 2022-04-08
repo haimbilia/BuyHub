@@ -1,10 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="js-scrollable table-wrap table-responsive">
     <?php $arr_flds = array(
-        'urp_points'    =>    Labels::getLabel('LBL_Points', $siteLangId),
-        'urp_comments'    =>    Labels::getLabel('LBL_Description', $siteLangId),
-        'urp_date_added' =>    Labels::getLabel('LBL_Added_Date', $siteLangId),
-        'urp_date_expiry'    =>    Labels::getLabel('LBL_Expiry_Date', $siteLangId),
+        'urp_points' => Labels::getLabel('LBL_Points', $siteLangId),
+        'urp_comments' => Labels::getLabel('LBL_Description', $siteLangId),
+        'urp_date_added' => Labels::getLabel('LBL_Added_Date', $siteLangId),
+        'urp_date_expiry' => Labels::getLabel('LBL_Expiry_Date', $siteLangId),
     );
 
     if ($convertReward == 'coupon') {
@@ -28,14 +28,6 @@
                 case 'select_option':
                     $td->appendElement('plaintext', array(), '<input class="rewardOptions-Js" type="checkbox" name="rewardOptions[]" value="' . $row['urp_id'] . '">', true);
                     break;
-                    /* case 'urp_used':
-                $yesNoArr = applicationConstants::getYesNoArr($siteLangId);
-                if($row[$key] != applicationConstants::YES && $row['urp_date_expiry'] !='0000-00-00' && $row['urp_date_expiry'] < date('Y-m-d')){
-                    $td->appendElement('plaintext', array(), Labels::getLabel('LBL_Expired',$siteLangId) , true);
-                }else{
-                    $td->appendElement('plaintext', array(), $yesNoArr[$row[$key]] , true);
-                }
-                break; */
                 case 'urp_date_added':
                     $td->appendElement('plaintext', array(), FatDate::format($row[$key]), true);
                     break;

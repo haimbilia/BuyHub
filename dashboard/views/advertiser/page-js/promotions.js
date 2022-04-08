@@ -67,9 +67,6 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 		fcom.ajax(fcom.makeUrl('Advertiser', 'searchPromotions'), data, function (t) {
 			fcom.removeLoader();
 			$(dv).html(t);
-			if (!$(dv).hasClass('card-body')) {
-				$(dv).addClass('card-body')
-			}
 		});
 	};
 
@@ -106,7 +103,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 	};	
 
 	setupPromotion = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);		
 		fcom.updateWithAjax(fcom.makeUrl('Advertiser', 'setupPromotion'), data, function (t) {
 			reloadList();
@@ -120,7 +117,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 	};
 
 	setupPromotionLang = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Advertiser', 'setupPromotionLang'), data, function (t) {
 			if (t.langId) {

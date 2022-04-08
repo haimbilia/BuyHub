@@ -44,7 +44,7 @@ $(document).ready(function(){
 	};	
 	
 	sendMessage = function(frm){
-		if (!$(frm).validate()) return;	
+		if (!$(frm).validate()) { return; }	
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'sendMessage'), data, function(t) {					
 			document.frmMessageSrch.reset();

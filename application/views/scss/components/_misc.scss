@@ -67,6 +67,10 @@ a:hover {
 .svg {
     fill: currentColor;
 }
+mark,
+.mark {
+    padding: 0;
+}
 
 .mleft-auto {
     margin-#{$start-direction}: auto !important;

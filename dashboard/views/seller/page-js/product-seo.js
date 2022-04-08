@@ -52,7 +52,7 @@ $(document).ready(function () {
 	};
 
 	setupProductLangMetaTag = function (frm, exit) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('seller', 'setupProdMetaLang'), data, function (t) {
 			if (!exit && t.langId > 0) {

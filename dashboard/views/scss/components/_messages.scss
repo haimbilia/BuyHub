@@ -258,5 +258,8 @@
         height: 50px;
         border-color: transparent !important;
         resize: none;
+        &:focus {
+            border-color: transparent !important;
+        }
     }
 }

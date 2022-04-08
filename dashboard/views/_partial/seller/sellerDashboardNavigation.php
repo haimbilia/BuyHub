@@ -543,9 +543,9 @@ $plugin = new Plugin();
                 <li class="menu-sub-item navItemJs">
                     <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'account' && ($action == 'messages' || strtolower($action) == 'viewmessages')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>">
                         <span class="menu-sub-title navTextJs"><?php echo Labels::getLabel("LBL_Messages", $siteLangId); ?>
-                            <?php if ($todayUnreadMessageCount > 0) { ?>
-                                <span class="msg-count"><?php echo ($todayUnreadMessageCount < 9) ? $todayUnreadMessageCount : '9+'; ?></span>
-                            <?php } ?></span></a>
+                            <span class="msg-count"><?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span>
+                        </span>
+                    </a>
                 </li>
             <?php } ?>
             <?php if ($userParentId == UserAuthentication::getLoggedUserId()) { ?>

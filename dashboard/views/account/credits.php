@@ -16,9 +16,23 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     <?php
     $data = [
         'headingLabel' => Labels::getLabel('LBL_MY_CREDITS', $siteLangId),
-        'siteLangId' => $siteLangId
+        'siteLangId' => $siteLangId,
     ];
-    $this->includeTemplate('_partial/header/content-header.php', $data); ?>
+
+    if ($canAddMoneyToWallet) {
+        $data['newRecordBtn'] = true;
+        $data['newRecordBtnAttrs'] = [
+            'attr' => [
+                'onclick' => 'addCredits()',
+                'title' => Labels::getLabel('BTN_RECHARGE_YOUR_WALLET', $siteLangId),
+            ],
+            'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                            </use>
+                        </svg>' . Labels::getLabel('BTN_ADD_CREDITS', $siteLangId)
+        ];
+    }
+    $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
         <div class="row mb-4">
             <div class="col-lg-12">
@@ -28,13 +42,15 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </p>
                 <?php } ?>
                 <div class="row">
-                    <?php 
+                    <?php
+                    $col = 6;
                     if ($showTotalBalanceAvailableDiv) {
-                        if ($promotionWalletToBeCharged) { ?>
-                            <div class="col-md-auto">
+                        if ($promotionWalletToBeCharged) { 
+                            $col = ($withdrawlRequestAmount) ? 4 : 6; ?>
+                            <div class="col-md-<?php echo $col; ?>">
                                 <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
                                     <div class="card-head border-0">
-                                        <h6> <?php echo Labels::getLabel('LBL_Pending_Promotions_Charges', $siteLangId); ?>: </h6>
+                                        <h6> <?php echo Labels::getLabel('LBL_PENDING_PROMOTIONS_CHARGES', $siteLangId); ?>: </h6>
                                         <i class="icn"> </i>
                                     </div>
 
@@ -43,7 +59,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             <?php echo CommonHelper::displayMoneyFormat($promotionWalletToBeCharged); ?> </h3>
                                         <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
                                             <small>
-                                                <?php echo Labels::getLabel('LBL_Approx.', $siteLangId);
+                                                <?php echo Labels::getLabel('LBL_APPROX.', $siteLangId);
                                                 echo CommonHelper::displayMoneyFormat($promotionWalletToBeCharged, true, true); ?>
                                             </small>
                                         <?php } ?>
@@ -53,10 +69,10 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         <?php }
 
                         if ($withdrawlRequestAmount) { ?>
-                            <div class="col-md-auto">
+                            <div class="col-md-<?php echo $col; ?>">
                                 <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
                                     <div class="card-head border-0">
-                                        <h6> <?php echo Labels::getLabel('LBL_Pending_Withdrawl_Requests', $siteLangId); ?>: </h6>
+                                        <h6> <?php echo Labels::getLabel('LBL_PENDING_WITHDRAWL_REQUESTS', $siteLangId); ?>: </h6>
                                         <i class="icn"> </i>
                                     </div>
                                     <div class="card-body">
@@ -71,8 +87,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             </div>
                     <?php }
                     } ?>
-                    <div class="col-md-auto">
-                        <div class="card card-commerce form">
+                    <div class="col-md-<?php echo $col; ?>">
+                        <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
                             <div class="card-head border-0">
                                 <h6>
                                     <p><?php echo Labels::getLabel('LBL_AVAILABLE_BALANCE', $siteLangId); ?>: </p>
@@ -80,67 +96,18 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             </div>
                             <div class="card-body">
                                 <h3><?php echo CommonHelper::displayMoneyFormat($userWalletBalance); ?></h3>
+                                <button class="btn link-arrow" onclick="withdrawalOptionsForm();">
+                                    <?php echo Labels::getLabel('LBL_WITHDRAW', $siteLangId); ?>
+                                </button>
                                 <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
                                     <small class="d-block">
                                         <?php echo Labels::getLabel('LBL_Approx.', $siteLangId); ?>
                                         <?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, true); ?>
                                     </small>
                                 <?php } ?>
-                                <div class="row">
-                                    <div class="col-lg-7">
-                                        <select name='payout_type' class='custom-select payout_type'>
-                                            <?php
-                                            foreach ($payouts as $type => $name) { ?>
-                                                <option value='<?php echo $type; ?>'><?php echo $name; ?></option>
-                                            <?php }
-                                            ?>
-                                        </select>
-
-                                    </div>
-                                    <div class="col-lg-5">
-                                        <a href="javascript:void(0)" onclick="withdrawalReqForm()" class="btn btn-brand btn-block">
-                                            <?php echo Labels::getLabel('LBL_Withdraw', $siteLangId); ?>
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
-                    <?php if ($canAddMoneyToWallet) { ?>
-                        <div class="col-md-auto">
-                            <div class="card card-commerce">
-                                <div class="card-head border-0">
-                                    <h6>
-                                        <?php
-                                        $str = Labels::getLabel('LBL_Add_Wallet_Credits_[{CURRENCY-SYMBOL}]', $siteLangId);
-                                        echo CommonHelper::replaceStringData($str, ['{CURRENCY-SYMBOL}' => CommonHelper::getDefaultCurrencySymbol()]); ?>
-                                    </h6>
-
-                                </div>
-                                <div class="card-body">
-                                    <div id="rechargeWalletDiv" class="">
-                                        <?php
-                                        $frmRechargeWallet->setFormTagAttribute('onSubmit', 'setUpWalletRecharge(this); return false;');
-                                        $frmRechargeWallet->setFormTagAttribute('class', 'form');
-                                        $frmRechargeWallet->developerTags['colClassPrefix'] = 'col-md-';
-                                        $frmRechargeWallet->developerTags['fld_default_col'] = 12;
-                                        $frmRechargeWallet->setRequiredStarPosition(Form::FORM_REQUIRED_STAR_WITH_NONE);
-
-                                        $amountFld = $frmRechargeWallet->getField('amount');
-                                        $amountFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Enter_Amount', $siteLangId));
-                                        $amountFld->developerTags['noCaptionTag'] = true;
-                                        $amountFld->developerTags['col'] = 7;
-                                        $buttonFld = $frmRechargeWallet->getField('btn_submit');
-                                        $buttonFld->setFieldTagAttribute('class', 'btn-block block-on-mobile');
-                                        $buttonFld->developerTags['noCaptionTag'] = true;
-                                        $buttonFld->developerTags['col'] = 5;
-                                        $buttonFld->setFieldTagAttribute('class', "btn btn-brand btn-block");
-                                        echo $frmRechargeWallet->getFormHtml(); ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php } ?>
                 </div>
 
                 <div class="row">
@@ -149,7 +116,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             <div class="col-lg-12">
                                 <div class="card">
                                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
-                                    <div class="card-body">
+                                    <div class="card-table">
                                         <div id="creditListing"><?php echo Labels::getLabel('LBL_LOADING..', $siteLangId); ?></div>
                                     </div>
                                 </div>

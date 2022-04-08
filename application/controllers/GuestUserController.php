@@ -21,7 +21,7 @@ class GuestUserController extends MyAppController
         $canSendSms = SmsArchive::canSendSms(SmsTemplate::LOGIN);
         $signInWithPhone = FatApp::getPostedData('signInWithPhone', FatUtility::VAR_INT, 0);
         if (0 < $signInWithPhone) {
-            $signInWithPhone = $canSendSms;
+            $signInWithPhone = (int) $canSendSms;
         }
 
         $loginFrm = $this->getLoginForm($signInWithPhone);
@@ -742,7 +742,8 @@ class GuestUserController extends MyAppController
         $this->set('siteLangId', $this->siteLangId);
 
         if (1 > $withPhone && 0 < $includeHeaderAndFooter) {
-            $this->_template->render();
+            $this->set('exculdeMainHeaderDiv', true);
+            $this->_template->render(true, false);
             return;
         }
         $this->_template->render(false, false);

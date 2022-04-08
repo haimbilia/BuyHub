@@ -98,7 +98,7 @@ $(document).on('change', '.language-js', function () {
 	}
 
 	setupSellerShipping = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		if (runningAjaxReq == true) {
 			console.log(runningAjaxMsg);
 			return;

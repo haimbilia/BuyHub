@@ -1,9 +1,11 @@
-$(document).ready(function () {
+$(function () {
     searchRecords(document.frmRecordSearch);
+    $(document).on('click', '.withdrawJs', function () {
+
+    });
 });
 (function () {
     var dv = '#creditListing';
-
     searchRecords = function (frm) {
         /*[ this block should be written before overriding html of 'form's parent div/element, otherwise it will through exception in ie due to form being removed from div */
         var data = fcom.frmData(frm);
@@ -29,46 +31,58 @@ $(document).ready(function () {
         searchRecords(document.frmRecordSearch);
     };
 
-    withdrawalReqForm = function () {
-        $payoutType = $(".payout_type").val();
-        if ('-1' == $payoutType) {
-            fcom.ajax(fcom.makeUrl('Account', 'requestWithdrawal'), '', function (res) {
-                $.ykmodal(res);
-            });
-        } else {
-            fcom.ajax(fcom.makeUrl($payoutType, 'getRequestForm'), '', function (res) {
-                $.ykmodal(res);
-            });
-        }
-        fcom.removeLoader();
-    };
-
     setupWithdrawalReq = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Account', 'setupRequestWithdrawal'), data, function (t) {
             fcom.removeLoader();
             searchRecords(document.frmRecordSearch);
+            $.ykmodal.close();
+        });
+    };
+
+    setupPluginForm = function (frm) {
+        if (!$(frm).validate()) { return; }
+        var data = fcom.frmData(frm);
+        $.ykmodal(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl(frm.keyName.value, 'setup'), data, function (t) {
+            fcom.removeLoader();
+            searchRecords(document.frmRecordSearch);
+            $.ykmodal.close();
         });
     };
 
     setUpWalletRecharge = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
+        if ('' == frm.amount.value) { return; }
         var data = fcom.frmData(frm);
+        $.ykmodal(fcom.getLoader(), true);
         fcom.updateWithAjax(fcom.makeUrl('Account', 'setUpWalletRecharge'), data, function (t) {
             if (t.redirectUrl) {
                 window.location = t.redirectUrl;
             }
         });
     }
-    setupPluginForm = function (frm) {
-        if (!$(frm).validate()) return;
-        var data = fcom.frmData(frm);
+    
+    withdrawalOptionsForm = function (payoutType = -1) {
         $.ykmodal(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl(frm.keyName.value, 'setup'), data, function (t) {
+        var url = fcom.makeUrl('Account', 'requestWithdrawal');
+        if (-1 != payoutType) {
+            url = fcom.makeUrl(payoutType, 'getRequestForm');
+        }
+
+        fcom.updateWithAjax(url, '', function (t) {
             fcom.removeLoader();
-            searchRecords(document.frmRecordSearch);
+            $.ykmodal(t.html);
+        });
+    };
+
+    addCredits = function () {
+        $.ykmodal(fcom.getLoader(), true);
+        fcom.updateWithAjax(fcom.makeUrl('Account', 'walletRechargeForm'), '', function (t) {
+            fcom.removeLoader();
+            $.ykmodal(t.html, true);
         });
     };
 })();
