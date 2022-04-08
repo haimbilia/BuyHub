@@ -39,7 +39,7 @@ $(document).ready(function () {
 	};
 
 	setup = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'setup'), data, function (t) {
 			$.ykmsg.close();
@@ -71,7 +71,7 @@ $(document).ready(function () {
 	};
 
 	langSetup = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'langSetup'), data, function (t) {
 			$.ykmsg.close();

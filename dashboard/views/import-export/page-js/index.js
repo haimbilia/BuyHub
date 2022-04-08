@@ -52,7 +52,7 @@ $(document).ready(function () {
     };
 
     exportData = function (frm, actionType) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         document.frmImportExport.action = fcom.makeUrl('ImportExport', 'exportData', [actionType]);
         document.frmImportExport.submit();
     };
@@ -66,7 +66,7 @@ $(document).ready(function () {
     };
 
     exportMedia = function (frm, actionType) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         document.frmImportExport.action = fcom.makeUrl('ImportExport', 'exportMedia', [actionType]);
         document.frmImportExport.submit();
     };

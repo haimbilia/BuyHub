@@ -50,7 +50,7 @@ $(document).ready(function () {
 	};
 
 	sendMessage = function (frm) {	
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		if(frm.message_text.value == ''){
 			return;
 		}

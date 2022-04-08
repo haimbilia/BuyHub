@@ -665,8 +665,7 @@ class DiscountCouponsController extends ListingBaseController
         if (false == $couponData) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        $getImageDimensions = ImageDimension::getData(ImageDimension::TYPE_COUPON, ImageDimension::VIEW_DEFAULT);
-        
+        $getImageDimensions = ImageDimension::getData(ImageDimension::TYPE_COUPON, ImageDimension::VIEW_NORMAL);
         $frm = $this->getMediaForm($recordId);
         $this->set('getImageDimensions', $getImageDimensions);
         $this->set('recordId', $recordId);

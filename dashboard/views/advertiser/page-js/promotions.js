@@ -103,7 +103,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 	};	
 
 	setupPromotion = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);		
 		fcom.updateWithAjax(fcom.makeUrl('Advertiser', 'setupPromotion'), data, function (t) {
 			reloadList();
@@ -117,7 +117,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 	};
 
 	setupPromotionLang = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Advertiser', 'setupPromotionLang'), data, function (t) {
 			if (t.langId) {

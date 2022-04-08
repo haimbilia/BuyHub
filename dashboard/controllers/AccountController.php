@@ -369,9 +369,8 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function credits()
+    private function canAddMoneyWallet(): bool
     {
-        $frm = $this->getCreditsSearchForm($this->siteLangId);
         $canAddMoneyToWallet = true;
         if (User::isAffiliate()) {
             $canAddMoneyToWallet = false;
@@ -383,10 +382,26 @@ class AccountController extends LoggedUserController
             $pmSrch->doNotLimitRecords();
             $pmRs = $pmSrch->getResultSet();
             $paymentMethod = FatApp::getDb()->fetch($pmRs);
-            if (false == $paymentMethod) {
+            if (false == $paymentMethod || empty($paymentMethod)) {
                 $canAddMoneyToWallet = false;
             }
         }
+        return $canAddMoneyToWallet;
+    }
+
+    public function walletRechargeForm()
+    {
+        if (false === $this->canAddMoneyWallet()) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOU_ARE_NOT_ALLOWED_RECHARGE_YOUR_WALLET'), true);
+        }
+        $this->set('frmRechargeWallet', $this->getRechargeWalletForm($this->siteLangId));
+        $this->set('html', $this->_template->render(false, false, NULL, true, false));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    public function credits()
+    {
+        $frm = $this->getCreditsSearchForm($this->siteLangId);
         $codMinWalletBalance = -1;
         if (User::isSeller() && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S') {
             $shop_cod_min_wallet_balance = Shop::getAttributesByUserId($this->userId, 'shop_cod_min_wallet_balance');
@@ -398,10 +413,7 @@ class AccountController extends LoggedUserController
         }
         $txnObj = new Transactions();
 
-        $payoutPlugins = Plugin::getNamesWithCode(Plugin::TYPE_PAYOUTS, $this->siteLangId);
         $accountSummary = $txnObj->getTransactionSummary($this->userId);
-        $payouts = [-1 => Labels::getLabel("LBL_BANK_PAYOUT", $this->siteLangId)] + $payoutPlugins;
-        $this->set('payouts', $payouts);
         $this->set('userWalletBalance', User::getUserBalance($this->userId));
         $this->set('userTotalWalletBalance', User::getUserBalance($this->userId, false, false));
         $this->set('promotionWalletToBeCharged', Promotion::getPromotionWalleToBeCharged($this->userId));
@@ -410,8 +422,7 @@ class AccountController extends LoggedUserController
         $this->set('frmSearch', $frm);
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TRANSACTION_ID,_ORDER_ID_OR_COMMENT', $this->siteLangId));
         $this->set('accountSummary', $accountSummary);
-        $this->set('frmRechargeWallet', $this->getRechargeWalletForm($this->siteLangId));
-        $this->set('canAddMoneyToWallet', $canAddMoneyToWallet);
+        $this->set('canAddMoneyToWallet', $this->canAddMoneyWallet());
         $this->_template->render();
     }
 
@@ -624,7 +635,6 @@ class AccountController extends LoggedUserController
         $this->set('withdrawlRequestAmount', User::getUserWithdrawnRequestAmount($this->userId));
     }
 
-
     public function requestWithdrawal()
     {
         $frm = $this->getWithdrawalForm($this->siteLangId);
@@ -663,7 +673,8 @@ class AccountController extends LoggedUserController
         $frm->fill($data);
 
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, null, true, false));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupRequestWithdrawal()
@@ -2557,10 +2568,17 @@ class AccountController extends LoggedUserController
     private function getWithdrawalForm($langId)
     {
         $frm = new Form('frmWithdrawal');
+
+        $payoutPlugins = Plugin::getNamesWithCode(Plugin::TYPE_PAYOUTS, $this->siteLangId);
+        if (0 < count($payoutPlugins)) {
+            $payouts = [-1 => Labels::getLabel("LBL_BANK_PAYOUT", $this->siteLangId)] + $payoutPlugins;
+            $frm->addSelectBox(Labels::getLabel('FRM_SELECT_PAYOUT', $this->siteLangId), 'payout', $payouts, -1, array(), '');
+        }
+
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_AMOUNT_TO_BE_WITHDRAWN', $langId) . ' [' . commonHelper::getDefaultCurrencySymbol() . ']', 'withdrawal_amount');
         $fld->requirement->setFloat(true);
         $walletBalance = User::getUserBalance($this->userId);
-        $fld->htmlAfterField = Labels::getLabel("FRM_CURRENT_WALLET_BALANCE", $langId) . ' ' . CommonHelper::displayMoneyFormat($walletBalance, true, true);
+        $fld->htmlAfterField = '<span class="form-text">'. Labels::getLabel("FRM_CURRENT_WALLET_BALANCE", $langId) . ' ' . CommonHelper::displayMoneyFormat($walletBalance, true, true) . '</span>';
 
         if (User::isAffiliate()) {
             $PayMethodFld = $frm->addRadioButtons(Labels::getLabel('FRM_PAYMENT_METHOD', $langId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($langId));
@@ -2665,8 +2683,6 @@ class AccountController extends LoggedUserController
             $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $langId), 'ub_bank_address');
         }
         $frm->addTextArea(Labels::getLabel('FRM_OTHER_INFO_INSTRUCTIONS', $langId), 'withdrawal_instructions');
-        /* $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REQUEST', $langId));
-        $frm->addButton("", "btn_cancel", Labels::getLabel("LBL_Cancel", $langId)); */
         return $frm;
     }
 
@@ -3158,14 +3174,6 @@ class AccountController extends LoggedUserController
         return $frm;
     }
 
-    private function getMsgSearchForm($langId)
-    {
-        $frm = new Form('frmMessageSrch');
-        $frm->addHiddenField('', 'page');
-        $frm->addHiddenField('', 'thread_id');
-        return $frm;
-    }
-
     private function getSettingsForm()
     {
         $frm = new Form('frmBankInfo');
@@ -3178,9 +3186,8 @@ class AccountController extends LoggedUserController
     private function getRechargeWalletForm($langId)
     {
         $frm = new Form('frmRechargeWallet');
-        $fld = $frm->addFloatField('', 'amount');
-        //$fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_ADD_CREDITS', $langId));
+        $frm->addFloatField('', 'amount');
+        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('BTN_ADD_CREDITS', $langId), 'submit', 'btn_submit', 'btn-apply'));
         return $frm;
     }
 

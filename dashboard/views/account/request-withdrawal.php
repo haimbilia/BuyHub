@@ -4,9 +4,15 @@ if (User::isAffiliate()) {
     $col = 12;
 }
 HtmlHelper::formatFormFields($frm, $col);
+$frm->setFormTagAttribute('data-onclear', 'withdrawalOptionsForm();');
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('onsubmit', 'setupWithdrawalReq(this); return(false);');
-$frm->setFormTagAttribute('data-onclear', 'withdrawalReqForm()');
+
+$fld = $frm->getField('payout');
+if (null != $fld) {
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+    $fld->addFieldTagAttribute('onchange', 'withdrawalOptionsForm(this.value)');
+}
 
 $fld = $frm->getField('withdrawal_amount');
 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -41,21 +47,10 @@ if (User::isAffiliate()) {
     $PayPalEmailIdFld->setWrapperAttribute('class', 'paypal_payment_method_fld');
 }
 
-/* $submitBtnFld = $frm->getField('btn_submit');
-$submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
-$submitBtnFld->setWrapperAttribute('class', 'col-6 col-lg-2');
-$submitBtnFld->developerTags['col'] = 3;
-
-$cancelBtnFld = $frm->getField('btn_cancel');
-$cancelBtnFld->setFieldTagAttribute('onclick', 'closeForm()');
-$cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
-$cancelBtnFld->setWrapperAttribute('class', 'col-6 col-lg-2');
-$cancelBtnFld->developerTags['col'] = 3; */
-
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_Request_Withdrawal', $siteLangId); ?>
+        <?php echo Labels::getLabel('LBL_REQUEST_WITHDRAWAL', $siteLangId); ?>
     </h5>
 </div>
 <div class="modal-body form-edit">

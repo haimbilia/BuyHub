@@ -28,7 +28,7 @@ $signInWithPhone = $signInWithPhone ?? 0;
         </h2>
     </div>
     <div class="card-sign_body">
-        <?php if (1 < $signInWithPhone) {
+        <?php if (0 < $signInWithPhone) {
             include('login-with-phone.php');
         } else {
             include('login-with-email.php');

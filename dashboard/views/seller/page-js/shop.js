@@ -124,7 +124,7 @@ $(document).on("change", ".state", function () {
     };
 
     setupShop = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         checkRunningAjax();
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupShop'), data, function (t) {
@@ -155,7 +155,7 @@ $(document).on("change", ".state", function () {
     };
 
     setupShopLang = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         checkRunningAjax();
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupShopLang'), data, function (t) {
@@ -261,7 +261,7 @@ $(document).on("change", ".state", function () {
     };
 
     setupShopCollection = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollection'), data, function (t) {
             fcom.removeLoader();          
@@ -279,7 +279,7 @@ $(document).on("change", ".state", function () {
     };
 
     setupShopCollectionlangForm = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('seller', 'setupShopCollectionLang'), data, function (t) {
             fcom.removeLoader();
@@ -318,7 +318,7 @@ $(document).on("change", ".state", function () {
     };
 
     setUpSellerCollectionProductLinks = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpSellerCollectionProductLinks'), data, function (t) {
             fcom.removeLoader();
@@ -350,7 +350,7 @@ $(document).on("change", ".state", function () {
         });
     };
     setup = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function (t) {          
             fcom.removeLoader();
@@ -373,7 +373,7 @@ $(document).on("change", ".state", function () {
     };
 
     setupLang = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformLangSetup'), data, function (t) {
             fcom.removeLoader();
@@ -443,7 +443,7 @@ $(document).on("change", ".state", function () {
     };
 
     setReturnAddress = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setReturnAddress'), data, function (t) {
             getReturnAddress();
@@ -462,7 +462,7 @@ $(document).on("change", ".state", function () {
     };
 
     setReturnAddressLang = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setReturnAddressLang'), data, function (t) {
             getReturnAddress();
@@ -503,7 +503,7 @@ $(document).on("change", ".state", function () {
     };
 
     setPickupAddress = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         if (1 == $(".availabilityType-js:checked").val()) {
             if (1 > $(".slotDays-js:checked").length) {
                 $.ykmsg.error(langLbl.selectTimeslotDay);
@@ -836,7 +836,7 @@ $(document).on("change", ".state", function () {
     };
 
     setupRequiredFields = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         var attr = $(frm).attr('enctype');
         if (typeof attr !== typeof undefined && attr !== false) {
@@ -865,7 +865,7 @@ $(document).on("change", ".state", function () {
     }
 
     initialSetup = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(keyName, 'initialSetup'), data, function (t) {
             $('.' + keyName).click();

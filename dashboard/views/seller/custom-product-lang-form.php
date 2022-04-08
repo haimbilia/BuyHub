@@ -67,7 +67,7 @@ if (null != $fld) {
         if (validator.validate() == false) {
             return;
         }
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupCustomProductLang'), data, function(t) {
             runningAjaxReq = false;

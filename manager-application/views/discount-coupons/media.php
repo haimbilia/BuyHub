@@ -10,7 +10,7 @@ $fld->value = HtmlHelper::getfileInputHtml(
         'onChange' => 'loadImageCropper(this)',
         'accept' => 'image/*',
         'data-name' => Labels::getLabel("FRM_DISCOUNT_COUPON_IMAGE", $siteLangId),
-        'data-frm'=> $frm->getFormTagAttribute('name')
+        'data-frm' => $frm->getFormTagAttribute('name')
     ],
     $siteLangId,
     '',
@@ -19,7 +19,7 @@ $fld->value = HtmlHelper::getfileInputHtml(
     'dropzone-custom dropzoneContainerJs'
 );
 
-$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), ' '.$getImageDimensions['width'].'*'.$getImageDimensions['height'].'') . '</span>';
+$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), ' ' . $getImageDimensions['width'] . '*' . $getImageDimensions['height'] . '') . '</span>';
 $htmlAfterField .= '<div id="imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
 
@@ -40,18 +40,19 @@ $otherButtons = [
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
 <script type="text/javascript">
+    $(function() {
+        var getAspectRatio = '<?php echo $getImageDimensions[ImageDimension::VIEW_NORMAL]['aspectRatio']; ?>';
 
-var getAspectRatio = '<?php echo $getImageDimensions[ImageDimension::VIEW_DEFAULT]['aspectRatio']; ?>';
-
-getAspectRatio = getAspectRatio.split(":");
-            if (getAspectRatio) {
-                var getAspectRatio = getAspectRatio[0] / getAspectRatio[1];
-            } else {
-                var getAspectRatio = 60 / 60;
-            }
+        getAspectRatio = getAspectRatio.split(":");
+        if (getAspectRatio) {
+            var getAspectRatio = getAspectRatio[0] / getAspectRatio[1];
+        } else {
+            var getAspectRatio = 60 / 60;
+        }
 
 
-    $('input[name=min_width]').val('<?php echo $getImageDimensions['width']; ?>');
-    $('input[name=min_height]').val('<?php echo $getImageDimensions['height']; ?>');
-    var aspectRatio = getAspectRatio;
+        $('input[name=min_width]').val('<?php echo $getImageDimensions['width']; ?>');
+        $('input[name=min_height]').val('<?php echo $getImageDimensions['height']; ?>');
+        var aspectRatio = getAspectRatio;
+    });
 </script>
