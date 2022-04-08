@@ -7,7 +7,7 @@ foreach ($paymentMethods as $key => $val) {
     }
     $gatewayCount++;
 } ?>
-<section class="section bg-gray-dark">
+<section class="section">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -18,36 +18,36 @@ foreach ($paymentMethods as $key => $val) {
                 </div>
                 <?php if ($orderInfo['order_net_amount']) { ?>
                     <?php if ($gatewayCount > 0) { ?>
-                        <div class="col-md-8">
-                            <div class="you-pay">
-                                <?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?> : <?php echo CommonHelper::displayMoneyFormat($orderInfo['order_net_amount'], true, false, true, false, true); ?>
-                                <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
-                                    <p><?php echo CommonHelper::currencyDisclaimer($siteLangId, $orderInfo['order_net_amount']);  ?></p>
-                                <?php } ?>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div id="payment">
-                                <div class="payment-area">
-                                    <ul class="payments-nav <?php echo 1 == count($paymentMethods) ? 'd-none' : ''; ?>" id="payment_methods_tab">
-                                        <?php foreach ($paymentMethods as $key => $val) {
-                                            $pmethodCode = $val['plugin_code'];
-                                            $pmethodId = $val['plugin_id'];
-                                            $pmethodName = $val['plugin_name']; ?>
-                                            <li class="payments-nav-item">
-                                                <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderInfo['order_id'], $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>">
-                                                    <?php echo $pmethodName; ?>
 
-                                                </a>
-                                            </li>
-                                        <?php
-                                        } ?>
-                                    </ul>
-                                    <div class="payment-block" id="tabs-container"></div>
-                                </div>
+                        <h5 class="h5">
+                            <?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?> : <?php echo CommonHelper::displayMoneyFormat($orderInfo['order_net_amount'], true, false, true, false, true); ?>
+                            <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
+                                <p><?php echo CommonHelper::currencyDisclaimer($siteLangId, $orderInfo['order_net_amount']);  ?></p>
+                            <?php } ?>
+                        </h5>
 
+
+                        <div id="payment">
+                            <div class="payment-area">
+                                <ul class="payments-nav <?php echo 1 == count($paymentMethods) ? 'd-none' : ''; ?>" id="payment_methods_tab">
+                                    <?php foreach ($paymentMethods as $key => $val) {
+                                        $pmethodCode = $val['plugin_code'];
+                                        $pmethodId = $val['plugin_id'];
+                                        $pmethodName = $val['plugin_name']; ?>
+                                        <li class="payments-nav-item">
+                                            <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderInfo['order_id'], $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>">
+                                                <?php echo $pmethodName; ?>
+
+                                            </a>
+                                        </li>
+                                    <?php
+                                    } ?>
+                                </ul>
+                                <div class="payment-block" id="tabs-container"></div>
                             </div>
+
                         </div>
+
                     <?php } else {
                         echo Labels::getLabel("LBL_Payment_method_is_not_available._Please_contact_your_administrator.", $siteLangId);
                     } ?>
