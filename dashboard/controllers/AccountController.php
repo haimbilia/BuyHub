@@ -2383,11 +2383,19 @@ class AccountController extends LoggedUserController
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("threadListing", $records);
 
+        /*Mark messages as read [*/
+        $threadObj = new Thread();
+        $threadObj->markMessageReadFromUserArr($threadId, [$this->userId]);
+        $todayUnreadMessageCount = $threadObj->getMessageCount($this->userId, Thread::MESSAGE_IS_UNREAD, date('Y-m-d'));
+        /*]*/
+
         $frm = $this->sendMessageForm($this->siteLangId);
         $frm->fill(array('message_thread_id' => $threadId));
         $this->set('frm', $frm);
         $this->set('activeTab', $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']);
         $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->set('todayUnreadMessageCount', CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
