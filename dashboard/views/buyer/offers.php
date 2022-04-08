@@ -8,9 +8,6 @@
         $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
             <div class="card">
-                <!-- <div class="card-head">
-                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_My_Offers', $siteLangId); ?></h5>
-                </div> -->
                 <div class="card-body">
                     <div id="listing"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
                 </div>

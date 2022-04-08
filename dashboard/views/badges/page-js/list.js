@@ -109,7 +109,7 @@ $(document).on('change', '.badgeTriggerTypeJs', function () {
 
 
     setupBadgeReq = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
 
         let formData = new FormData(frm);
         $.ajax({

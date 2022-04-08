@@ -1,5 +1,6 @@
 .header-supplier {
     color: $txt-body;
+    min-height: auto;
 
     .logo-bar {
         display: grid;
@@ -167,6 +168,7 @@
     color: $txt-body;
     width: 100%;
     border-radius: $radius4;
+    position: relative;
     h2 {
         margin-bottom: 2rem;
     }

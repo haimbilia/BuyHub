@@ -210,22 +210,32 @@ if (false == $canDo) {
                     </div>
                 </div>
             <?php } else { ?>
-                <div class="col-md-12 attach-files-js alert-danger">
-                    <div class="dd-not-allowed note">
-                        <i class="fa fa-info-circle"></i>
-                        <p class=""><?php echo Labels::getLabel('LBL_You_can_not_attach_files_with_inventory', $siteLangId); ?></p>
-                    </div>
-                </div>
-                <div class="col-md-12 attach-links-js alert-danger">
-                    <div class="dd-not-allowed note">
-                        <i class="fa fa-info-circle"></i>
-                        <p class="note-text"><?php echo Labels::getLabel('LBL_You_Can_not_add_links_with_Inventory', $siteLangId); ?></p>
-                    </div>
+                <?php
+                $msg = '<svg class="svg" height="18" width="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#warning">
+                            </use>
+                        </svg> ' . Labels::getLabel('LBL_YOU_CAN_NOT_ATTACH_FILES_WITH_INVENTORY.', $siteLangId);
+                echo HtmlHelper::getErrorMessageHtml($msg);
+                ?>
+                <div class="attach-links-js p-0">
+                    <?php
+                    $msg = '<svg class="svg" height="18" width="18">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#warning">
+                                </use>
+                            </svg> ' . Labels::getLabel('LBL_YOU_CAN_NOT_ADD_LINKS_WITH_INVENTORY.', $siteLangId);
+                    echo HtmlHelper::getErrorMessageHtml($msg);
+                    ?>
                 </div>
             <?php } ?>
         </div>
-        <?php echo $downloadFrm->getFieldHtml('product_id');
-        echo $downloadFrm->getFieldHtml('selprod_id');
+        <?php
+        if (null != $downloadFrm->getField('product_id')) {
+            echo $downloadFrm->getFieldHtml('product_id');
+        }
+
+        if (null != $downloadFrm->getField('selprod_id')) {
+            echo $downloadFrm->getFieldHtml('selprod_id');
+        }
         echo $downloadFrm->getFieldHtml('dd_link_id');
         echo $downloadFrm->getFieldHtml('dd_link_ref_id');
         echo $downloadFrm->getFieldHtml('is_preview');

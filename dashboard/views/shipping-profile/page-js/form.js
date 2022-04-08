@@ -6,7 +6,7 @@ $(document).ready(function () {
 
 (function () {
     setupProfile = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         var profileId = $('input[name="shipprofile_id"]').val();
         fcom.updateWithAjax(fcom.makeUrl('shippingProfile', 'setup'), data, function (t) {
@@ -59,7 +59,7 @@ $(document).ready(function () {
     };
 
     setupProfileProduct = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         if ($('input[name="shipprofile_id"]').val() <= 0) {
             fcom.displayErrorMessage(langLbl.saveProfileFirst);
             return;
@@ -148,7 +148,7 @@ $(document).ready(function () {
             return;
         }
 
-        /* if (!$(frm).validate()) return; */
+        /* if (!$(frm).validate()) { return; } */
         $('.country--js input[type="checkbox"]:checked').each(function () {
             var countryId = $(this).closest('.country--js').data('countryid');
             if ($('.country_' + countryId + ' .state--js').length == $('.country_' + countryId + ' .state--js:not(:disabled)').length) {
@@ -158,7 +158,7 @@ $(document).ready(function () {
             }
         });
 
-        /* if (!$(frm).validate()) return; */
+        /* if (!$(frm).validate()) { return; } */
         /*var data = fcom.frmData(frm);*/
         var data = $(frm).serialize();
         fcom.updateWithAjax(fcom.makeUrl('shippingZones', 'setup'), data, function (t) {
@@ -205,7 +205,7 @@ $(document).ready(function () {
     };
 
     setupRate = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var submitBtn = $("input[name='btn_submit']");
         submitBtn.attr('disabled', 'disabled');
         var data = fcom.frmData(frm);
@@ -236,7 +236,7 @@ $(document).ready(function () {
     };
 
     setupLangRate = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         $("input[name='btn_submit']").attr('disabled', 'disabled');
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'langSetup'), data, function (t) {

@@ -75,7 +75,7 @@ $(document).ready(function () {
 	};
 
 	setUpOptionValues = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('OptionValues', 'setup'), data, function (t) {
 			$.ykmsg.close();
@@ -130,7 +130,7 @@ $(document).ready(function () {
 	};
 
 	submitOptionForm = function (frm, fn) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupOptions'), data, function (t) {
 			$('.navTabsJs').data('optionId', t.optionId);			

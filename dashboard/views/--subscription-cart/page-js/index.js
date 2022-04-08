@@ -13,7 +13,7 @@ $(document).ready(function(){
 		if( isUserLogged() == 0 ){
 			return false;
 		}
-		if (!$(frm).validate()) return;	
+		if (!$(frm).validate()) { return; }	
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('subscriptionCart','applyPromoCode'),data,function(res){
 			listSubscriptionCartProducts();

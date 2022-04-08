@@ -45,15 +45,15 @@ $(document).ready(function () {
 			fcom.removeLoader();
 			$('.userJs').remove();
 			$('.threadJs').replaceWith(t.html);
+			$('.msg-count').html(t.todayUnreadMessageCount);
 			$('.messages').scrollTop($('.messages')[0].scrollHeight);
+
 		}, { fOutMode: 'json' });
 	};
 
-	sendMessage = function (frm) {	
-		if (!$(frm).validate()) return;
-		if(frm.message_text.value == ''){
-			return;
-		}
+	sendMessage = function (frm) {
+		if (!$(frm).validate()) { return; }
+		if (frm.message_text.value == '') { return; }
 		var data = fcom.frmData(frm);
 		$('.threadJs').prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account', 'sendMessage'), data, function (t) {

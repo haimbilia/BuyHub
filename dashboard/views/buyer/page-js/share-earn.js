@@ -58,7 +58,7 @@ $(document).ready(function () {
 
 (function () {
     sendMailShareEarn = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Buyer', 'sendMailShareEarn'), data, function (t) {
             frm.reset();

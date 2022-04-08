@@ -75,7 +75,7 @@ $(document).ready(function () {
 	};
 
 	setUpCatalogRequestMessage = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpCatalogRequestMessage'), data, function (t) {
 			searchCatalogRequestMessages(document.frmCatalogRequestMsgsSrch);

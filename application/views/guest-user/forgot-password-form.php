@@ -4,27 +4,22 @@ if (0 < $withPhone) {
     $frm->setFormTagAttribute('onsubmit', 'getOtpForm(this); return(false);');
 }
 ?>
-<div id="body" class="body forgotPwForm">
-
-    <div class="full-page-from">
-        <div class="full-page-from-block">
-            <div class="full-page-from-block_head">
-                <?php
-                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
-                $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-                $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                ?>
-                <a class="form-item_logo" href="<?php echo UrlHelper::generateFullFileUrl(); ?>">
-                    <img src="<?php echo $siteLogo; ?>"
-                        alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>"
-                        title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
-                </a>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h1><?php echo Labels::getLabel('LBL_Forgot_Password?', $siteLangId); ?></h1>
+<div id="body" class="body enter-page forgotPwForm">
+    <div class="form-sign">
+        <?php
+        $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+        $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+        $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        ?>
+        <a class="form-sign-logo" href="<?php echo UrlHelper::generateFullFileUrl(); ?>">
+            <img src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
+        </a>
+        <div class="form-sign-body">
+            <div class="card-sign">
+                <div class="card-sign_head">
+                    <h1 class="title">
+                        <?php echo Labels::getLabel('LBL_Forgot_Password?', $siteLangId); ?></h1>
                     <p>
                         <?php if (1 > $withPhone) {
                             echo Labels::getLabel('LBL_Forgot_Password_Msg', $siteLangId);
@@ -33,58 +28,55 @@ if (0 < $withPhone) {
                         } ?>
                         <?php if (isset($smsPluginStatus) && true === $smsPluginStatus) {
                             if (isset($withPhone) && 1 > $withPhone) { ?>
-                        <a href="javaScript:void(0)" onClick="forgotPwdForm(<?php echo applicationConstants::YES; ?>)">
-                            <?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD', $siteLangId); ?>
-                        </a>
-                        <?php } else { ?>
-                        <a href="javaScript:void(0)" onClick="forgotPwdForm(<?php echo applicationConstants::NO; ?>)">
-                            <?php echo Labels::getLabel('LBL_USE_EMAIL_INSTEAD', $siteLangId); ?>
-                        </a>
-                        <?php } ?>
+                                <a class="link-underline" href="javaScript:void(0)" onClick="forgotPwdForm(<?php echo applicationConstants::YES; ?>)">
+                                    <?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD', $siteLangId); ?>
+                                </a>
+                            <?php } else { ?>
+                                <a class="link-underline" href="javaScript:void(0)" onClick="forgotPwdForm(<?php echo applicationConstants::NO; ?>)">
+                                    <?php echo Labels::getLabel('LBL_USE_EMAIL_INSTEAD', $siteLangId); ?>
+                                </a>
+                            <?php } ?>
                         <?php } ?>
                     </p>
                 </div>
-                <div class="card-body">
-                    <?php
-                    $frm->setFormTagAttribute('class', 'form form--normal');
-                    $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
-                    $frm->developerTags['fld_default_col'] = 12;
+            </div>
+            <div class="card-sign_body">
+                <?php
+                $frm->setFormTagAttribute('class', 'form form--normal');
+                $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
+                $frm->developerTags['fld_default_col'] = 12;
+                $frm->setFormTagAttribute('id', 'frmPwdForgot');
+                $frm->setFormTagAttribute('autocomplete', 'off');
+                $frm->setValidatorJsObjectName('forgotValObj');
+                $frm->setFormTagAttribute('action', UrlHelper::generateUrl('GuestUser', 'forgotPassword'));
+                $btnFld = $frm->getField('btn_submit');
+                $btnFld->setFieldTagAttribute('class', 'btn btn-secondary btn-block');
+                if (1 > $withPhone) {
+                    $frmFld = $frm->getField('user_email_username');
+                    $frmFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Username_or_email', $siteLangId));
+                } else {
+                    $frmFld = $frm->getField('user_phone');
+                }
+                $frmFld->developerTags['noCaptionTag'] = true;
 
-                    $frm->setFormTagAttribute('id', 'frmPwdForgot');
-                    $frm->setFormTagAttribute('autocomplete', 'off');
-                    $frm->setValidatorJsObjectName('forgotValObj');
-                    $frm->setFormTagAttribute('action', UrlHelper::generateUrl('GuestUser', 'forgotPassword'));
-                    $btnFld = $frm->getField('btn_submit');
-                    $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
-                    if (1 > $withPhone) {
-                        $frmFld = $frm->getField('user_email_username');
-                        $frmFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Username_or_email', $siteLangId));
-                    } else {
-                        $frmFld = $frm->getField('user_phone');
-                    }
-                    $frmFld->developerTags['noCaptionTag'] = true;
-
-                    $frmFld = $frm->getField('btn_submit');
-                    $frmFld->developerTags['noCaptionTag'] = true;
-                    echo $frm->getFormHtml(); ?>
-                </div>
-                <div class="card-footer">
-                    <p><?php echo Labels::getLabel('LBL_Back_to_login', $siteLangId); ?>
-                        <a href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm'); ?>" class="link">
-                            <?php echo Labels::getLabel('LBL_Click_Here', $siteLangId); ?>
-                        </a>
-                    </p>
+                $frmFld = $frm->getField('btn_submit');
+                $frmFld->developerTags['noCaptionTag'] = true;
+                echo $frm->getFormHtml(); ?>
+            </div>
+            <div class="card-sign_foot">
+                <h6> <?php echo Labels::getLabel('LBL_Back_to_login', $siteLangId); ?></h6>
+                <div class="more-links">
+                    <a href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm'); ?>" class="link-underline">
+                        <?php echo Labels::getLabel('LBL_Click_Here', $siteLangId); ?>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
-
-
 <?php
 $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
 $secretKey = FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '');
 if (!empty($siteKey) && !empty($secretKey)) { ?>
-<script src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
+    <script src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
 <?php } ?>
