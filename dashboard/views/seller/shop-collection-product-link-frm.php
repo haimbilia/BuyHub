@@ -9,6 +9,8 @@ $collectionLinkFrm->setFormTagAttribute('data-onclear', "sellerCollectionProduct
 $fld = $collectionLinkFrm->getField('scp_selprod_id[]');
 $fld->setfieldTagAttribute('multiple','true');
 $fld->setfieldTagAttribute('placeholder',Labels::getLabel('FRM_SEARCH_RECORDS', $siteLangId));
+
+unset($languages[CommonHelper::getDefaultFormLangId()]);
 ?>
 <div class="modal-header">
     <h5 class="modal-title">

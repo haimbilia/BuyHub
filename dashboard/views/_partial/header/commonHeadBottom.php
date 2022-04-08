@@ -19,30 +19,18 @@ if (CommonHelper::demoUrl()) {
 ?>
 
 <body class="<?php echo $bodyClass; ?> ">
-    <?php
-    $alertClass = '';
-    if (Message::getInfoCount() > 0) {
-        $alertClass = 'alert--info';
-    } elseif (Message::getErrorCount() > 0) {
-        $alertClass = 'alert--danger';
-    } elseif (Message::getMessageCount() > 0) {
-        $alertClass = 'alert--success';
-    }
-    ?>
+    <script>
+        <?php
+        if (Message::getInfoCount() > 0 || Message::getDialogCount() > 0) { ?>
+            $.ykmsg.info('<?php echo html_entity_decode(Message::getHtml()); ?>');
+        <?php } else if (Message::getErrorCount() > 0) { ?>
+            $.ykmsg.error('<?php echo html_entity_decode(Message::getHtml()); ?>');
+        <?php } else if (Message::getMessageCount() > 0) { ?>
+            $.ykmsg.success('<?php echo html_entity_decode(Message::getHtml()); ?>');
+        <?php } ?>
+    </script>
     <?php
     if (FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT", FatUtility::VAR_STRING, '') && User::checkStatisticalCookiesEnabled() == true) {
         echo FatApp::getConfig("CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT", FatUtility::VAR_STRING, '');
     }
     ?>
-    <div class="system_message alert alert--positioned-top-full <?php echo $alertClass; ?>" style="display:none">
-        <div class="btn-close"></div>
-        <div class="content">
-            <?php
-            $haveMsg = false;
-            if (Message::getMessageCount() || Message::getErrorCount() || Message::getDialogCount() || Message::getInfoCount()) {
-                $haveMsg = true;
-                echo html_entity_decode(Message::getHtml());
-            } ?>
-        </div>
-    </div>
-    <?php /*?> <div id="quick-view-section" class="quick-view"></div>    <?php */ ?>

@@ -19,7 +19,7 @@ $loginFrm->developerTags['colClassPrefix'] = 'col-md-';
 $fldSubmit = $loginFrm->getField('btn_submit');
 $fldSubmit->addFieldTagAttribute('class', 'btn btn-secondary btn-block');
 
-$signInWithPhone = $signInWithPhone ?? false;
+$signInWithPhone = $signInWithPhone ?? 0;
 ?>
 <div class="card-sign">
     <div class="card-sign_head">
@@ -28,7 +28,7 @@ $signInWithPhone = $signInWithPhone ?? false;
         </h2>
     </div>
     <div class="card-sign_body">
-        <?php if (true === $signInWithPhone) {
+        <?php if (1 < $signInWithPhone) {
             include('login-with-phone.php');
         } else {
             include('login-with-email.php');
@@ -60,7 +60,7 @@ $signInWithPhone = $signInWithPhone ?? false;
         <h6><?php echo Labels::getLabel('DON’T_HAVE_AN_ACCOUNT?', $siteLangId); ?></h6>
         <div class="more-links">
             <?php
-            if (false === $signInWithPhone) {
+            if (1 > $signInWithPhone) {
                 echo $loginFrm->getFieldHtml('forgot');
             } ?>
             <?php if (0 < $signinpopup) { ?>

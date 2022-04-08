@@ -74,7 +74,7 @@
 
                             <?php
                             if ($val['afile_physical_path'] != '') {
-                                echo "<span class='value'><a href='" . UrlHelper::generateUrl('Users', 'downloadAttachment', array($supplierRequest['user_id'], $val['sfreqvalue_formfield_id'])) . "'>" . $val['sfreqvalue_text'] . "</a></span>";
+                                echo "<span class='value'><a href='" . UrlHelper::generateUrl('sellerApprovalRequests', 'downloadAttachment', array($supplierRequest['user_id'], $val['sfreqvalue_formfield_id'])) . "'>" . $val['sfreqvalue_text'] . "</a></span>";
                             } else {
                                 if ($val['sformfield_type']  == User::USER_FIELD_TYPE_PHONE) {
                                     echo '<span class="value">' . filter_var($val['sfreqvalue_text'], FILTER_SANITIZE_NUMBER_INT) . '</span>';

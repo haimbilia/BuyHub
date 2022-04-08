@@ -2054,7 +2054,7 @@ class CheckoutController extends MyAppController
     {
         $loggedUserId = UserAuthentication::getLoggedUserId();
         $orderId = isset($_SESSION['order_id']) ? $_SESSION['order_id'] : '';
-        $couponsList = DiscountCoupons::getValidCoupons($loggedUserId, $this->siteLangId, '', $orderId);
+        $couponsList = 0 < $loggedUserId ? DiscountCoupons::getValidCoupons($loggedUserId, $this->siteLangId, '', $orderId) : [];
         $this->set('couponsList', $couponsList);
 
         if (true === MOBILE_APP_API_CALL) {

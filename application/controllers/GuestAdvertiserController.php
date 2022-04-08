@@ -197,7 +197,7 @@ class GuestAdvertiserController extends MyAppController
         }
 
         $userObj = new User($userId);
-        $userdata = $userObj->getUserInfo(array('credential_active', 'credential_verified'), false, false);
+        $userdata = $userObj->getUserInfo(array('credential_active', 'credential_verified','credential_email','credential_password'), false, false);
 
         if (false == $userdata) {
             FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
@@ -207,6 +207,15 @@ class GuestAdvertiserController extends MyAppController
             $success_message = Labels::getLabel('MSG_SUCCESS_USER_SIGNUP_VERIFIED', $this->siteLangId);
         } else {
             $success_message = Labels::getLabel('MSG_SUCCESS_USER_SIGNUP', $this->siteLangId);
+        }
+
+
+        if (FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1)  && $userdata['credential_active'] == applicationConstants::YES) {
+            $authentication = new UserAuthentication();
+            if (!$authentication->login($userdata['credential_email'], $userdata['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {              
+                FatUtility::dieJsonError($authentication->getError());
+            }
+            $this->set('redirectUrl', UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));            
         }
 
         unset($_SESSION['registered_supplier']['id']);

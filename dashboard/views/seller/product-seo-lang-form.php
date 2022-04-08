@@ -1,7 +1,11 @@
 <?php
 HtmlHelper::formatFormFields($productSeoLangForm);
-$productSeoLangForm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
-$productSeoLangForm->setFormTagAttribute('dir', $formLayout);
+$productSeoLangForm->setFormTagAttribute('class', 'form modalFormJs');
+
+if (CommonHelper::getLayoutDirection() != $formLayout) {
+    $productSeoLangForm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $productSeoLangForm->setFormTagAttribute('dir', $formLayout);
+}
 $productSeoLangForm->setFormTagAttribute('onsubmit', 'setupProductLangMetaTag(this, 0); return(false);');
 $productSeoLangForm->developerTags['colClassPrefix'] = 'col-md-';
 $productSeoLangForm->developerTags['fld_default_col'] = 12;

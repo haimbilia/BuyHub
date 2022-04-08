@@ -40,8 +40,8 @@ class SupplierController extends MyAppController
         $srch->addCondition('faqlang_lang_id', '=', $this->siteLangId);
         $srch->addCondition('faqcat_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('faqcat_type', '=', FaqCategory::SELLER_PAGE);
-        $srch->getResultSet();    
-       
+        $srch->getResultSet();
+
         $seller_navigation_left = Navigation::getNavigation(Navigations::NAVTYPE_SELLER_LEFT);
         $this->set('seller_navigation_left', $seller_navigation_left);
         $this->set('formText', $formText);
@@ -148,7 +148,7 @@ class SupplierController extends MyAppController
             if (FatUtility::isAjaxCall()) {
                 FatUtility::dieWithError($msg);
             }
-            
+
             Message::addErrorMessage($msg);
             FatApp::redirectUser(UrlHelper::generateUrl('Supplier', 'Account'));
             return;
@@ -333,18 +333,16 @@ class SupplierController extends MyAppController
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
 
-        $phoneKey = $dialCode = '';
         foreach ($post as $key => $val) {
             if (false !== strpos($key, '_dcode')) {
                 $phoneKey = str_replace('_dcode', '', $key);
-                $dialCode = $val;
-                break;
+                if (!empty($phoneKey)) {
+                    $post[$phoneKey] = $val . $post[$phoneKey];
+                }
             }
         }
 
-        if (!empty($phoneKey)) {
-            $post[$phoneKey] = $dialCode . $post[$phoneKey];
-        }
+
 
         $userObj = new User($userId);
         $supplier_form_fields = $userObj->getSupplierFormFields($this->siteLangId);
@@ -449,20 +447,20 @@ class SupplierController extends MyAppController
             FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
 
-        if (UserAuthentication::isUserLogged()) {           
+        if (UserAuthentication::isUserLogged()) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
         }
 
         $post = FatApp::getPostedData();
-        if (empty($post)) {            
+        if (empty($post)) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId));
         }
-        if (!isset($post['field_id']) || FatUtility::int($post['field_id']) == 0) {            
+        if (!isset($post['field_id']) || FatUtility::int($post['field_id']) == 0) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId));
         }
         $field_id = $post['field_id'];
 
-        if (!is_uploaded_file($_FILES['file']['tmp_name'])) {            
+        if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));
         }
 
@@ -691,11 +689,11 @@ class SupplierController extends MyAppController
                     break;
 
                 case User::USER_FIELD_TYPE_DATE:
-                    $fld = $frm->addDateField($field['sformfield_caption'], $fieldName, '', array('readonly' => 'readonly'));
+                    $fld = $frm->addDateField($field['sformfield_caption'], $fieldName, '', array('readonly' => 'readonly', 'class' => 'field--calender'));
                     break;
 
                 case User::USER_FIELD_TYPE_DATETIME:
-                    $fld = $frm->addDateTimeField($field['sformfield_caption'], $fieldName, '', array('readonly' => 'readonly'));
+                    $fld = $frm->addDateTimeField($field['sformfield_caption'], $fieldName, '', array('readonly' => 'readonly', 'class' => 'field--calender'));
                     break;
 
                 case User::USER_FIELD_TYPE_TIME:

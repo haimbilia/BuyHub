@@ -445,7 +445,7 @@ removeFromCart = function (key) {
                 $(".emtyCartBtn-js").hide();
             }
             listCartProducts();
-            $('#cartSummaryJs').load(fcom.makeUrl('cart', 'getCartSummary'));
+            cart.loadCartSummary();
         }
         $.ykmsg.close();
         fcom.displaySuccessMessage(langLbl.MovedSuccessfully);
@@ -1078,9 +1078,21 @@ $(function () {
         var title = 0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
         var objLbl = 0 < flag ? langLbl.byEmail : langLbl.byPhone;
         $(obj).attr("onclick", "signInWithPhone(this, " + !flag + ")").text(objLbl).attr('title', title);
-        $(".loginFormJs").prepend(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), 'signInWithPhone=' + parseInt(flag), function (t) {
-            $(".loginFormJs").replaceWith(t.html);
+
+        var data = 'signInWithPhone=' + parseInt(flag);
+        var popup = $(formElement).closest('.' + $.ykmodal.element);
+        if (0 < popup.length) {
+            $.ykmodal(fcom.getLoader(), true);
+            data +=  "&signinpopup=1";
+        } else {
+            $(".loginFormJs").prepend(fcom.getLoader());
+        }
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function (t) {
+            if (0 < popup.length) {
+                $.ykmodal(t.html, true);
+            } else {
+                $(".loginFormJs").replaceWith(t.html);
+            }
             fcom.removeLoader();
             stylePhoneNumberFld(formElement + " input[name='username']", !flag);
         });
@@ -1190,7 +1202,7 @@ $(function () {
             });
         }
     };
-    
+
     redirectfunc = function (url, orderStatus) {
         var input =
             '<input type="hidden" name="status" value="' + orderStatus + '">';
@@ -1650,6 +1662,7 @@ $(document).on("click", ".add-to-cart--js", function (event) {
     var data = fcom.frmData(document.frmBuyProduct);
     var yourArray = [];
     var selprodId = $(this).siblings('input[name="selprod_id"]').val();
+    var quantity = document.frmBuyProduct.quantity.value;
     if (typeof mainSelprodId != "undefined" && mainSelprodId == selprodId) {
         $(".list-addons--js")
             .find("input")
@@ -1662,27 +1675,7 @@ $(document).on("click", ".add-to-cart--js", function (event) {
                 }
             });
     }
-    fcom.updateWithAjax(fcom.makeUrl("cart", "add"), data, function (ans) {
-        if (ans["redirect"]) {
-            location = ans["redirect"];
-            return false;
-        }
-        if ($btn.hasClass("btnBuyNow") == true) {
-            setTimeout(function () {
-                window.location = fcom.makeUrl("Checkout");
-            }, 300);
-            return false;
-        }
-        if ($btn.hasClass("quickView") == true) {
-            $.facebox.close();
-            $("body").addClass("side-cart--on");
-        }
-        if (9 < ans.total) {
-            ans.total = "9+";
-        }
-        $("span.cartQuantity").html(ans.total);
-        $('#cartSummaryJs').load(fcom.makeUrl("cart", "getCartSummary"));
-    });
+    cart.add(selprodId, quantity);
     return false;
 });
 $(function () {
@@ -1693,7 +1686,7 @@ $(function () {
 });
 
 $(document).ajaxComplete(function () {
-    stylePhoneNumberFld(".phone-js");    
+    stylePhoneNumberFld(".phone-js");
     if (0 < $("#facebox").length) {
         if ($("#facebox").is(":visible")) {
             $("html").addClass("pop-on");

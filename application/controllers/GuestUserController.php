@@ -625,9 +625,8 @@ class GuestUserController extends MyAppController
 
         $db->commitTransaction();
 
-        if (FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
+        if (FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1)  && $userdata['credential_active'] == applicationConstants::YES) {
             $authentication = new UserAuthentication();
-
             if (!$authentication->login($userdata['credential_email'], $userdata['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {
                 Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
@@ -708,6 +707,7 @@ class GuestUserController extends MyAppController
                 Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
             }
+            Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 

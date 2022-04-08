@@ -640,6 +640,18 @@ Updates/Fixes :
     => 063427 - Seller UI: Dropdown is closing and opening while clicking on the "Digital files and Digital Links" option, the CSV file is not uploading, double delete options are showing, and the table width is not fixed in the case of digital file while adding the Digi
     => 063605 - Buyer: "404 PAGE NOT FOUND" error is showing after a new user's registration if the auto-login is enabled at the front-end.
     => 063621 - Admin: "Undefined variable" error is showing at the footer(Pagination) on the admin user's permission page
+    => 063576 - Buyer: On the header, options are showing highlighted continuously after clicking on it, and the search icon is not aligned when "No record Found" at the front-end.
+    => 063622 - Buyer: "Forgot Password" functionality is not showing while login at the front-end
+    => 063619 - Seller: "Page not found." is showing while the admin clicks on the attached file under the seller approval request section
+    => 063620 - Seller: Proper error message is not showing at the seller's end if their form is rejected by admin and the rejection limit is greater than the "Max seller request attempts
+    => 063629 - Buyer: "Page not found" is showing while the buyer verifying the "change email" and email address is also not updating.
+    => 063493 - Badges listing is not shown as per search filters.
+    => 062957 - Seller UI: The product's listing is not showing while linking the product under the collection section
+    => 063616 - Buyer: "Calendar" icon is not showing for the date field in the seller approval form at the front end and an error is not showing while uploading the wrong file in the same form.
+    => 063560 - Admin: The tooltip is not showing correctly after clicking on the Action button under the user's section
+    => 063537 - Admin: The whole page is not getting blurred while the loader is showing on the page at the admin's end
+    => 063599 - Buyer: Error is showing while verifying the email while registering as a new user at the front-end 
+    => 063638 - Advertiser: Auto-login is not working after registering as an Advertiser and the advertiser's company information is not showing at the admin's end
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

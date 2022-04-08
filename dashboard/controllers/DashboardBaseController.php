@@ -607,7 +607,7 @@ class DashboardBaseController extends FatController
             $verificationCode = $userObj->prepareUserVerificationCode($data['user_email']);
         }
 
-        $link = UrlHelper::generateFullUrl('GuestUser', 'changeEmailVerification', array('verify' => $verificationCode));
+        $link = UrlHelper::generateFullUrl('GuestUser', 'changeEmailVerification', array('verify' => $verificationCode), CONF_WEBROOT_FRONTEND);
 
         $email = new EmailHandler();
         $dataArr = array(
@@ -825,7 +825,7 @@ class DashboardBaseController extends FatController
         }
     }
 
-   /*  public function accessLocation()
+    /*  public function accessLocation()
     {
         if (true === CommonHelper::isAppUser()) {          
             FatUtility::dieJsonSuccess(Labels::getLabel('MSG_APP_ACCESS', $this->siteLangId));

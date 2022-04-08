@@ -1,7 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($addressFrm, 6);
-$addressFrm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
-$addressFrm->setFormTagAttribute('dir', $formLayout);
+$addressFrm->setFormTagAttribute('class', 'form modalFormJs');
+
+if (CommonHelper::getLayoutDirection() != $formLayout) {
+    $addressFrm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $addressFrm->setFormTagAttribute('dir', $formLayout);
+}
 $addressFrm->setFormTagAttribute('id', 'addressFrm');
 $addressFrm->setFormTagAttribute('onsubmit', 'setupAddress(this); return(false);');
 $addressFrm->setFormTagAttribute('data-onclear', "addAddressForm(" . $addr_id . ");");

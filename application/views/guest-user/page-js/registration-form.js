@@ -1,12 +1,16 @@
 (function () {
     signUpWithPhone = function () {
+        $('#sign-up').prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('GuestUser', 'signUpWithPhone'), '', function (t) {
+            fcom.removeLoader();
             $('#sign-up').html(t);
         });
     };
 
     signUpWithEmail = function () {
+        $('#sign-up').prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('GuestUser', 'signUpWithEmail'), '', function (t) {
+            fcom.removeLoader();
             $('#sign-up').html(t);
         });
     };
@@ -14,9 +18,11 @@
     registerWithPhone = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
+        $('#sign-up').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'register'), data, function (t) {
             if (1 == t.status) {
                 fcom.ajax(fcom.makeUrl('GuestUser', 'otpForm'), '', function (t) {
+                    fcom.removeLoader();
                     t = $.parseJSON(t);
                     if (1 > t.status) {
                         fcom.displayErrorMessage(t.msg);
@@ -34,7 +40,9 @@
     validateOtp = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
+        $('#sign-up').prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('GuestUser', 'validateOtp'), data, function (t) {
+            fcom.removeLoader();
             t = $.parseJSON(t);
             if (1 == t.status) {
                 window.location.href = t.redirectUrl;
@@ -48,7 +56,9 @@
 
     resendOtp = function (userId, getOtpOnly = 0) {
         fcom.displayProcessing();
+        $('#sign-up').prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('GuestUser', 'resendOtp', [userId, getOtpOnly]), '', function (t) {
+            fcom.removeLoader();
             t = $.parseJSON(t);
             if (typeof t.status != 'undefined' && 1 > t.status) {
                 fcom.displayErrorMessage(t.msg);

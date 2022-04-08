@@ -6,7 +6,12 @@ if ($selprod_id > 0 || empty($productOptions)) {
     $frmSellerProduct->setFormTagAttribute('onsubmit', 'setUpMultipleSellerProducts(this); return(false);');
 }
 $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-$frmSellerProduct->setFormTagAttribute('class', 'form form--horizontal inventoryForm-js layout--' . Language::getLayoutDirection($siteDefaultLangId));
+$frmSellerProduct->setFormTagAttribute('class', 'form form--horizontal inventoryForm-js');
+if (CommonHelper::getLayoutDirection() != Language::getLayoutDirection($siteDefaultLangId)) {
+    $frmSellerProduct->addFormTagAttribute('class', "layout--" . Language::getLayoutDirection($siteDefaultLangId));
+    $frmSellerProduct->setFormTagAttribute('dir', Language::getLayoutDirection($siteDefaultLangId));
+}
+
 $autoUpdateFld = $frmSellerProduct->getField('auto_update_other_langs_data');
 if (null != $autoUpdateFld) {
     $autoUpdateFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
@@ -60,7 +65,12 @@ $inventoryForm->developerTags['labelWidthValuesDefault'] = ['label', 'label', 'l
 $inventoryForm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
 
 $inventoryForm->setFormTagAttribute('onsubmit', 'addInvOption(); return(false);');
-$inventoryForm->setFormTagAttribute('class', 'form optionForm-js optionFld-js form--horizontal layout--' . Language::getLayoutDirection($siteDefaultLangId));
+$inventoryForm->setFormTagAttribute('class', 'form optionForm-js optionFld-js form--horizontal');
+if (CommonHelper::getLayoutDirection() != Language::getLayoutDirection($siteDefaultLangId)) {
+    $inventoryForm->addFormTagAttribute('class', "layout--" . Language::getLayoutDirection($siteDefaultLangId));
+    $inventoryForm->setFormTagAttribute('dir', $formLayout);
+}
+
 
 $fld = $inventoryForm->getField('btn_submit');
 $fld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
