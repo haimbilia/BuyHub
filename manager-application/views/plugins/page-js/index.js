@@ -38,6 +38,10 @@ $(document).ajaxComplete(function () {
         }
         data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
+            if (0 == res.status) {
+                fcom.displayErrorMessage(res.msg);
+                return;
+            }
             fcom.removeLoader();
             setTabActive(type);
             window.history.pushState('', '', fcom.makeUrl('plugins', 'index', [type]));

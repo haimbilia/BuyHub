@@ -7,7 +7,7 @@ foreach ($paymentMethods as $key => $val) {
     }
     $gatewayCount++;
 } ?>
-<section class="section bg-gray-dark">
+<section class="section">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -29,27 +29,29 @@ foreach ($paymentMethods as $key => $val) {
                         <div class="col-md-12">
                             <div id="payment">
                                 <div class="payment-area">
-                                    <ul class="payments-nav <?php echo 1 == count($paymentMethods) ? 'd-none' : ''; ?>" id="payment_methods_tab">
-                                        <?php foreach ($paymentMethods as $key => $val) {
+                                    <ul class="payments-nav" id="payment_methods_tab">
+                                        <?php
+                                        $showFirstElement = '';
+                                        foreach ($paymentMethods as $key => $val) {
                                             $pmethodCode = $val['plugin_code'];
                                             $pmethodId = $val['plugin_id'];
-                                            $pmethodName = $val['plugin_name']; ?>
+                                            $pmethodName = $val['plugin_name'];
+                                            $showFirstElement = empty($showFirstElement) ? 'show' : ''; ?>
                                             <li class="payments-nav-item">
-                                                <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderInfo['order_id'], $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>">
+                                                <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderInfo['order_id'], $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>" data-bs-toggle="collapse" data-bs-target="#<?php echo $pmethodCode; ?>-section" aria-expanded="true" aria-controls="<?php echo $pmethodCode; ?>-section">
                                                     <?php echo $pmethodName; ?>
-
                                                 </a>
+
+                                                <div class="accordion-collapse <?php echo $showFirstElement; ?> collapse payment-block paymentBlockJs <?php echo $pmethodCode . '-js'; ?>" id="<?php echo $pmethodCode; ?>-section" aria-labelledby="headingOne" data-bs-parent="#payment_methods_tab"></div>
                                             </li>
                                         <?php
                                         } ?>
                                     </ul>
-                                    <div class="payment-block" id="tabs-container"></div>
                                 </div>
-
                             </div>
                         </div>
                     <?php } else {
-                        echo Labels::getLabel("LBL_Payment_method_is_not_available._Please_contact_your_administrator.", $siteLangId);
+                        echo Labels::getLabel("LBL_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.", $siteLangId);
                     } ?>
                 <?php } ?>
             </div>
@@ -76,20 +78,25 @@ foreach ($paymentMethods as $key => $val) {
         });
 
         function loadTab(tabObj) {
-            if (isUserLogged() == 0) {
-                loginPopUpBox();
-                return false;
-            }
             if (!tabObj || !tabObj.length) {
                 return;
             }
-
+            var paymentMethod = tabObj.data('paymentmethod');
+            var paymentMethodSection = $('.' + paymentMethod + '-js');
+            paymentMethodSection.prepend(fcom.getLoader());
             fcom.updateWithAjax(tabObj.attr('href'), '', function(res) {
-                $('#tabs-container').html(res.html);
-                var paymentMethod = tabObj.data('paymentmethod');
-                var form = '#tabs-container form';
+                if ('paypal' != paymentMethod.toLowerCase() && 0 < $("#paypal-buttons").length) {
+                    $("#paypal-buttons").html("");
+                }
+
+                if (0 < paymentMethodSection.find('.paymentFormSection-js').length && paymentMethodSection.find('.paymentFormSection-js').hasClass('d-none')) {
+                    paymentMethodSection.replaceWith(res.html);
+                } else {
+                    paymentMethodSection.html(res.html);
+                }
+                var form = '.' + paymentMethod + '-js .paymentFormSection-js form';
                 if (0 < $(form).length) {
-                    $('#tabs-container').append(fcom.getLoader());
+                    paymentMethodSection.prepend(fcom.getLoader());
                     if (0 < $(form + " input[type='submit']").length) {
                         $(form + " input[type='submit']").val(langLbl.requestProcessing);
                     }
@@ -109,6 +116,7 @@ foreach ($paymentMethods as $key => $val) {
                     var json = $.parseJSON(t);
                     if (typeof json.status != 'undefined' && 1 > json.status) {
                         fcom.displayErrorMessage(json.msg);
+                        fcom.removeLoader();
                         return false;
                     }
                     if (typeof json.html != 'undefined') {
