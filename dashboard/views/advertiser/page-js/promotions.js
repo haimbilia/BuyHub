@@ -67,9 +67,6 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 		fcom.ajax(fcom.makeUrl('Advertiser', 'searchPromotions'), data, function (t) {
 			fcom.removeLoader();
 			$(dv).html(t);
-			if (!$(dv).hasClass('card-body')) {
-				$(dv).addClass('card-body')
-			}
 		});
 	};
 
