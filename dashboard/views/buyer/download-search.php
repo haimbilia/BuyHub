@@ -32,21 +32,19 @@ if (null != $fld) {
 }
 ?>
 
-<div class="row">
-    <div class="col-lg-12">
-        <?php echo $frmSrch->getFormHtml(); ?>
-        <?php echo $frmSrch->getExternalJS(); ?>
-    </div>
+<div class="card-body">
+    <?php echo $frmSrch->getFormHtml(); ?>
+    <?php echo $frmSrch->getExternalJS(); ?>
 </div>
-<div class="js-scrollable table-wrap table-responsive">
+<div class="js-scrollable table-wrap table-responsive card-table">
     <?php $arr_flds = array(
-        'op_invoice_number'    =>    Labels::getLabel('LBL_Invoice', $siteLangId),
-        'filesCount'    =>    Labels::getLabel('LBL_FILES_INSIDE', $siteLangId),
-        'afile_name'    =>    Labels::getLabel('LBL_FILE_NAME', $siteLangId),
-        'downloadable_count'        =>    Labels::getLabel('LBL_Download_times', $siteLangId),
-        'afile_downloaded_times'        =>    Labels::getLabel('LBL_Downloaded_Count', $siteLangId),
-        'expiry_date'    =>    Labels::getLabel('LBL_Expired_on', $siteLangId),
-        'action'    =>    '',
+        'op_invoice_number' => Labels::getLabel('LBL_Invoice', $siteLangId),
+        'filesCount' => Labels::getLabel('LBL_FILES_INSIDE', $siteLangId),
+        'afile_name' => Labels::getLabel('LBL_FILE_NAME', $siteLangId),
+        'downloadable_count' => Labels::getLabel('LBL_Download_times', $siteLangId),
+        'afile_downloaded_times' => Labels::getLabel('LBL_Downloaded_Count', $siteLangId),
+        'expiry_date' => Labels::getLabel('LBL_Expired_on', $siteLangId),
+        'action' => '',
     );
 
     if (0 < $opId) {

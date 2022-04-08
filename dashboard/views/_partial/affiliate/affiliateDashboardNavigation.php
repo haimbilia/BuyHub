@@ -51,7 +51,9 @@ $action = strtolower($action);
             <?php if (!User::canViewAffiliateTab()) { ?>
                 <li class="menu-sub-item navItemJs">
                     <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'account' && $action == 'messages') ? 'is-active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Messages", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>">
-                        <span class="menu-item__title navTextJs"><?php echo Labels::getLabel("LBL_Messages", $siteLangId); ?></span></a>
+                        <span class="menu-sub-title navTextJs"><?php echo Labels::getLabel("LBL_Messages", $siteLangId); ?>
+                            <span class="msg-count"><?php echo CommonHelper::displayBadgeCount($todayUnreadMessageCount, 9); ?></span>
+                        </span>
                 </li>
             <?php } ?>
             <li class="menu-sub-item navItemJs">
