@@ -172,12 +172,6 @@
             }
             .message {
                 border-radius: 1.125rem 1.125rem 0 1.125rem;
-                // // background-color: $brand-color;
-                // color:  lighten($brand-color, 55%);
-                @include bg-brand();
-                // color:  lighten($brand-color, 55%);
-                @include bg-brand();
-                color: white;
                 margin-#{$start-direction}: auto;
             }
             .time {
