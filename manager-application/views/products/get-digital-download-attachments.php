@@ -2,14 +2,9 @@
 if (1 > count($attachments)) {
     return;
 }
-$arr_flds = array(
-    /*'listSerial' => Labels::getLabel('LBL_#', $siteLangId),*/
+$arr_flds = array(   
     'mainfile' => Labels::getLabel('LBL_DD_FILE', $siteLangId),
-    'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),
-    /*
-    'pddr_options_code' => Labels::getLabel('LBL_DD_OPTION', $siteLangId),
-    'afile_lang_id' => Labels::getLabel('LBL_DD_LANGUAGE', $siteLangId),
-    */
+    'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),  
 );
 
 if (0 == $product['product_seller_id']) {
@@ -19,7 +14,7 @@ if (0 == $product['product_seller_id']) {
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
-    $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+    $tdAttr = ('action' == $key) ? ['class' => 'align-right','width'=>'20%'] : ['width'=> '40%'];
     $e = $th->appendElement('th', $tdAttr, $val);
 }
 
@@ -30,10 +25,7 @@ foreach ($attachments as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
-        switch ($key) {
-            case 'listSerial':
-                $td->appendElement('plaintext', array(), $serialNo, true);
-                break;
+        switch ($key) {          
             case 'mainfile':
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
                 $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
@@ -131,22 +123,7 @@ foreach ($attachments as $sn => $row) {
                     );
                 }
                 $dvElem->appendElement('plaintext', $tdAttr, $ul->getHtml(), true);
-                break;
-            case 'pddr_options_code':
-                if (array_key_exists($row['pddr_options_code'], $options)) {
-                    $val = $options[$row['pddr_options_code']];
-                } else {
-                    $val = 'Invalid option link - ' . $row['pddr_options_code'];
-                }
-                $td->appendElement('plaintext', array(), $val, true);
-                break;
-            case 'afile_lang_id':
-                $lang_name = Labels::getLabel('LBL_ALL', $siteLangId);
-                if ($row['afile_lang_id'] > 0) {
-                    $lang_name = $languages[$row['afile_lang_id']];
-                }
-                $td->appendElement('plaintext', array(), $lang_name, true);
-                break;
+                break; 
             case 'action':
                 if ((1 < $row['afile_id'] || 1 < $row['prev_afile_id']) && 0 == $product['product_seller_id']) {
                     $fileId = $row['afile_id'];
