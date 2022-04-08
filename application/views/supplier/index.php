@@ -33,23 +33,23 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
         </div>
     </div>
     <?php if (!empty($block1)) { ?>
-        <section>
+        <section class="section">
             <div class="container"><?php echo FatUtility::decodeHtmlEntities($block1['epage_content']); ?></div>
         </section>
     <?php }
     if (!empty($block2)) { ?>
-        <section>
+        <section class="section bg-gray">
             <div class="container"> <?php echo FatUtility::decodeHtmlEntities($block2['epage_content']); ?> </div>
         </section>
     <?php }
     if (!empty($block3)) { ?>
-        <section>
+        <section class="section">
             <div class="container"> <?php echo FatUtility::decodeHtmlEntities($block3['epage_content']); ?> </div>
         </section>
     <?php } ?>
 
-    <?php if ($faqCount > 0) { ?>
-        <section>
+    <?php if ($faqCount > 0) { ?><div class="divider"></div>
+        <section class="section">
             <div class="container">
                 <div class="row align-items-center justify-content-center">
                     <div class="col-md-6">
@@ -66,8 +66,9 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
                     </div>
                 </div>
             </div>
-    </section>
-        <section>
+        </section>
+
+        <section class="section">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-8">
@@ -81,13 +82,18 @@ $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
         </section>
         <div class="divider"></div>
     <?php } ?>
-    <section>
+    <section class="section">
         <div class="container">
             <div class="align-center">
-                <div class="heading3"><?php echo Labels::getLabel('LBL_Still_need_help', $siteLangId) ?> ?</div>
-                <a href="<?php echo UrlHelper::generateUrl('custom', 'contact-us'); ?>" class="btn btn-secondary"><?php echo Labels::getLabel('LBL_Contact_Customer_Care', $siteLangId) ?> </a>
+                <div class="section-head section-head-center">
+                    <div class="section-heading">
+                        <h2><?php echo Labels::getLabel('LBL_Still_need_help?', $siteLangId) ?> </h2>
+                    </div>
+
+                </div> <a href="<?php echo UrlHelper::generateUrl('custom', 'contact-us'); ?>" class="btn btn-secondary"><?php echo Labels::getLabel('LBL_Contact_Customer_Care', $siteLangId) ?> </a>
             </div>
         </div>
+
     </section>
 
 
