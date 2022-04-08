@@ -40,7 +40,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             <div class="col-lg-12">
                 <div class="card">
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
-                    <div class="card-body" id="listing">
+                    <div class="card-table" id="listing">
                         <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                     </div>
                 </div>

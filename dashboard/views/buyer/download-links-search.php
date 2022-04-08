@@ -31,14 +31,12 @@ if (null != $fld) {
 }
 ?>
 
-<div class="row">
-    <div class="col-lg-12">
-        <?php echo $frmSrch->getFormHtml(); ?>
-        <?php echo $frmSrch->getExternalJS(); ?>
-    </div>
+<div class="card-body">
+    <?php echo $frmSrch->getFormHtml(); ?>
+    <?php echo $frmSrch->getExternalJS(); ?>
 </div>
 
-<div class="js-scrollable table-wrap table-responsive">
+<div class="js-scrollable table-wrap table-responsive card-table">
     <?php $arr_flds = array(
         'op_invoice_number'    =>    Labels::getLabel('LBL_Invoice', $siteLangId),
         'linksCount'    =>    Labels::getLabel('LBL_LINKS_INSIDE', $siteLangId),
