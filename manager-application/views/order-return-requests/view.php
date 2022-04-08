@@ -4,7 +4,8 @@ echo $msgsSrchForm->getFormHtml(); ?>
 
 <main class="main">
     <div class="container">
-        <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?> <div class="row">
+        <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
+        <div class="row">
             <div class="col-md-9">
                 <div class="card">
                     <div class="card-head">
@@ -109,24 +110,24 @@ echo $msgsSrchForm->getFormHtml(); ?>
                             </a>
                         </div>
                     </div>
-                    <div class="card-body pt-0">
-                        <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2">
-                            <ul class="timeline appendRowsJs" id="appendRowsJs">
-                                <?php require_once('get-rows.php'); ?>
-                            </ul>
-                            <?php
-                            $lastRecord = current(array_reverse($arrListing));
-                            $postedData['reference'] = $lastRecord['orrmsg_date'];
-                            $postedData['order_id'] = $lastRecord['orrmsg_id'];
-                            $data = [
-                                'siteLangId' => $siteLangId,
-                                'postedData' => $postedData,
-                                'page' => $page,
-                                'pageCount' => $pageCount,
-                            ];
-                            $this->includeTemplate('_partial/load-more-pagination.php', $data);
-                            ?>
-                        </div>
+                    <div class="card-body">
+
+                        <ul class="timeline appendRowsJs" id="appendRowsJs">
+                            <?php require_once('get-rows.php'); ?>
+                        </ul>
+                        <?php
+                        $lastRecord = current(array_reverse($arrListing));
+                        $postedData['reference'] = $lastRecord['orrmsg_date'];
+                        $postedData['order_id'] = $lastRecord['orrmsg_id'];
+                        $data = [
+                            'siteLangId' => $siteLangId,
+                            'postedData' => $postedData,
+                            'page' => $page,
+                            'pageCount' => $pageCount,
+                        ];
+                        $this->includeTemplate('_partial/load-more-pagination.php', $data);
+                        ?>
+
                     </div>
                 </div>
             </div>

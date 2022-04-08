@@ -912,33 +912,30 @@
     }
 }
 
-//Timeline codepen
+//Timeline Code pen
 
 $brand-color-hover: scale-color($brand-color, $lightness: 32%);
 
 .timeline {
-    line-height: 1.4em;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    font-size: 1rem;
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        line-height: inherit;
-        font-size: 1.1rem;
+    .text-muted {
+        font-size: 0.8rem;
+    }
+    .time {
+        color: $txt-gray;
+        font-weight: 400;
+    }
+    &-title {
+        font-size: 1.2rem;
+        font-weight: 600;
     }
 }
 
 .timeline-item {
+    list-style: none;
     padding-left: 40px;
     position: relative;
     &:last-child {
-        padding-bottom: 0;
+        //padding-bottom: 0;
     }
 }
 
@@ -981,12 +978,19 @@ $brand-color-hover: scale-color($brand-color, $lightness: 32%);
         left: 6px;
     }
     .timeline-item:last-child &:after {
-        content: none;
+        //content: none;
     }
 }
 .timeline-item:not(.period):hover .timeline-marker:before {
     background: transparent;
     border: 3px solid $brand-color;
+}
+
+.timeline-desc {
+    background-color: $bg-gray;
+    padding: 1.5rem;
+    border-radius: 2px;
+    font-size: 0.85rem;
 }
 
 /*----- TIMELINE CONTENT -----*/

@@ -251,48 +251,7 @@
 }
 
 //forgot password
-.full-page-from {
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    align-items: flex-start;
-    background: $bg-white;
-    .full-page-from-block {
-        margin: 0 auto;
-        margin-top: 100px;
-        max-width: 500px;
-        width: 100%;
-        text-align: center;
-        &_head {
-            margin-bottom: 2rem;
-        }
-    }
-    .card {
-        border: none;
-        box-shadow: $shadow1;
-        border-radius: $radius4;
-        &-header {
-            flex-direction: column;
-            padding: 2rem 1.5rem;
-            h1 {
-                color: $txt-body;
-                font-size: 1.6rem;
-                margin-bottom: 1rem;
-            }
-            p {
-                color: $txt-gray;
-                font-size: 0.8rem;
-                line-height: 1.5;
-            }
-        }
-        &-body {
-            padding: 2rem;
-        }
-        &-footer {
-            border: none;
-        }
-    }
-}
+
 .more-links {
     display: flex;
     align-items: center;

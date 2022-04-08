@@ -742,7 +742,8 @@ class GuestUserController extends MyAppController
         $this->set('siteLangId', $this->siteLangId);
 
         if (1 > $withPhone && 0 < $includeHeaderAndFooter) {
-            $this->_template->render();
+            $this->set('exculdeMainHeaderDiv', true);
+            $this->_template->render(true, false);
             return;
         }
         $this->_template->render(false, false);

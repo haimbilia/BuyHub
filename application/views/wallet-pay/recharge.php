@@ -19,12 +19,12 @@ foreach ($paymentMethods as $key => $val) {
                 <?php if ($orderInfo['order_net_amount']) { ?>
                     <?php if ($gatewayCount > 0) { ?>
                         <div class="col-md-8">
-                            <div class="you-pay">
+                            <h5 class="h5">
                                 <?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?> : <?php echo CommonHelper::displayMoneyFormat($orderInfo['order_net_amount'], true, false, true, false, true); ?>
                                 <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
                                     <p><?php echo CommonHelper::currencyDisclaimer($siteLangId, $orderInfo['order_net_amount']);  ?></p>
                                 <?php } ?>
-                            </div>
+                            </h5>
                         </div>
                         <div class="col-md-12">
                             <div id="payment">
@@ -49,7 +49,9 @@ foreach ($paymentMethods as $key => $val) {
                                     </ul>
                                 </div>
                             </div>
+
                         </div>
+
                     <?php } else {
                         echo Labels::getLabel("LBL_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.", $siteLangId);
                     } ?>

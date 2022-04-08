@@ -8,24 +8,26 @@ $showDefalultLi =  (false === $hasMultipleLangs && false === $hasMultipleCurrenc
 if ($hasMultipleLangs || $hasMultipleCurrencies) { ?>
 
     <div class="dropdown">
-        <button type="button" class="btn btn-outline-gray btn-dropdown dropdown-toggle-custom btn-languagex" data-bs-toggle="dropdown">
+        <button type="button" class="btn btn-outline-gray btn-dropdown dropdown-toggle-custom btn-icon" data-bs-toggle="dropdown">
             <?php if ($hasMultipleLangs) {
                 if ($languages[$siteLangId]['language_country_code']) { ?>
                     <img width="14" height="14" class="icon" alt="<?php echo Labels::getLabel('LBL_Language_Flag', $siteLangId); ?>" src="<?php echo CONF_WEBROOT_URL; ?>images/flags/<?php echo FatApp::getConfig('CONF_COUNTRY_FLAG_TYPE', FatUtility::VAR_STRING, 'round'); ?>/<?php echo $languages[$siteLangId]['language_country_code'] . '.svg'; ?>">
                 <?php } ?>
-                <span class="language-name">
-                    <?php echo $languages[$siteLangId]['language_name']; ?></span>
-            <?php }
+                <span>
+                    <span class="language-name">
+                        <?php echo $languages[$siteLangId]['language_name']; ?></span>
+                <?php }
 
             echo ($hasMultipleLangs && $hasMultipleCurrencies) ? '/' : '';
 
             if ($hasMultipleCurrencies) {
                 echo (CommonHelper::getCurrencySymbolRight()) ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft(); ?>
-                <span class="currency-name">
-                    <?php echo $currencies[$siteCurrencyId]; ?></span>
-            <?php } ?>
-
-            <i class="dropdown-toggle-custom-arrow"></i>
+                    <span class="currency-name">
+                        <?php echo $currencies[$siteCurrencyId]; ?>
+                    </span>
+                <?php } ?>
+                </span>
+                <i class="dropdown-toggle-custom-arrow"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim">
             <div class="select-lang-currency">
