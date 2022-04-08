@@ -85,7 +85,6 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             }
                         }
                     }
-
                     echo OrderProduct::getStatusHtml((int)$op["orderstatus_color_class"], $orderStatus); ?>
             </td>
 
