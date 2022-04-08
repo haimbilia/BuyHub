@@ -75,7 +75,7 @@ $(document).on('mouseout', "ul.list-tags li span i", function () {
     };
 
     setUpSellerProductLinks = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupRelatedProduct'), data, function (t) {
             document.frmRelatedSellerProduct.reset();

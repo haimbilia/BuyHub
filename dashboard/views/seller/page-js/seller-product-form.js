@@ -61,7 +61,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 	}
 
 	setUpSellerProduct = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		ykevents.customizeProduct();
 		runningAjaxReq = true;
 		var data = fcom.frmData(frm);
@@ -121,7 +121,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 	};
 
 	setUpMultipleSellerProducts = function (frm, i = 0, orignalData = []) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 
 		if (1 > orignalData.length) {
 			orignalData = optionsAssocArr($(frm).serializeArray());

@@ -21,7 +21,7 @@ class GuestUserController extends MyAppController
         $canSendSms = SmsArchive::canSendSms(SmsTemplate::LOGIN);
         $signInWithPhone = FatApp::getPostedData('signInWithPhone', FatUtility::VAR_INT, 0);
         if (0 < $signInWithPhone) {
-            $signInWithPhone = $canSendSms;
+            $signInWithPhone = (int) $canSendSms;
         }
 
         $loginFrm = $this->getLoginForm($signInWithPhone);

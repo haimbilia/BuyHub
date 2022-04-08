@@ -4,7 +4,17 @@ class PayPalPayoutController extends PayoutBaseController
     public const KEY_NAME = 'PayPalPayout';
     public static function reqFields()
     {
+        $payoutPlugins = Plugin::getNamesWithCode(Plugin::TYPE_PAYOUTS, CommonHelper::getLangId());
+        $payouts = [-1 => Labels::getLabel("LBL_BANK_PAYOUT")] + $payoutPlugins;
         $reqFields = [
+            'payout' => [
+                'type' => PluginSetting::TYPE_SELECT,
+                'required' => false,
+                'label' => "Select Payout",
+                'options' => $payouts,
+                'selectedValue' => self::KEY_NAME,
+                'selectCaption' => '',
+            ],
             'amount' => [
                 'type' => PluginSetting::TYPE_FLOAT,
                 'required' => true,
@@ -26,7 +36,9 @@ class PayPalPayoutController extends PayoutBaseController
             $frm->fill($data);
         }
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('walletBalance', User::getUserBalance(UserAuthentication::getLoggedUserId(true)));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public static function formFields()

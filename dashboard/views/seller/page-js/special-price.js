@@ -108,7 +108,7 @@ $(document).on('change', ".inputDateJs", function () {
     };
 
     updateSpecialPriceRow = function (frm, selProd_id) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(
             fcom.makeUrl("Seller", "updateSpecialPriceRow"),

@@ -125,7 +125,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
     }
 
     setup = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controller, 'setup'), data, function (t) {
             backToListing();

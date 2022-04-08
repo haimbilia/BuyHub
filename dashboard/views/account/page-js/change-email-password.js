@@ -35,7 +35,7 @@ $(document).ready(function () {
     };
 
     updatePassword = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Account', 'updatePassword'), data, function (t) {
             changePasswordForm();
@@ -43,7 +43,7 @@ $(document).ready(function () {
     };
 
     updateEmail = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Account', 'updateEmail'), data, function (t) {
             changeEmailForm();
@@ -61,7 +61,7 @@ $(document).ready(function () {
     };
 
     getOtp = function (frm, updateToDbFrm = 0) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         $(frm.btn_submit).attr('disabled', 'disabled');
         fcom.displayProcessing();
@@ -120,7 +120,7 @@ $(document).ready(function () {
     };
 
     validateOtp = function (frm, updateToDbFrm = 1) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         $(frm.btn_submit).attr('disabled', 'disabled');
         fcom.displayProcessing();

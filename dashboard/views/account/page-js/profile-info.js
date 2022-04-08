@@ -29,7 +29,7 @@ $(document).ready(function () {
 
 	updateProfileInfo = function (frm) {
 
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateProfileInfo'), data, function (t) { });
 	};
@@ -47,14 +47,14 @@ $(document).ready(function () {
 		});
 	};
 	setSettingsInfo = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateSettingsInfo'), data, function (t) {
 			settingsForm();
 		});
 	};
 	setBankInfo = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateBankInfo'), data, function (t) {
 			bankInfoForm();
@@ -79,7 +79,7 @@ $(document).ready(function () {
 	};
 
 	setUpAffiliatePaymentInfo = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Affiliate', 'setUpPaymentInfo'), data, function (t) {
 			//returnAddressForm();
@@ -181,7 +181,7 @@ $(document).ready(function () {
 	};
 
 	setupRequestData = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'setupRequestData'), data, function (t) {
 			$.ykmodal.close();
@@ -189,7 +189,7 @@ $(document).ready(function () {
 	};
 
 	setCookiesPreferences = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateCookiesPreferences'), data, function (t) { });
 	};

@@ -30,7 +30,7 @@ $(document).ready(function () {
 	};
 
 	setup = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformSetup'), data, function (t) {
 			$.ykmsg.close();
@@ -52,7 +52,7 @@ $(document).ready(function () {
 	};
 
 	setupLang = function (frm) {
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Seller', 'socialPlatformLangSetup'), data, function (t) {
 			$.ykmsg.close();

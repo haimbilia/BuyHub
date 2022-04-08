@@ -33,7 +33,7 @@ $(document).ready(function(){
 	};
 	
 	setUpReturnOrderRequestMessage = function(frm){
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl( 'Buyer', 'setUpReturnOrderRequestMessage'), data, function(t) {
 			searchOrderReturnRequestMessages( document.frmOrderReturnRequestMsgsSrch );

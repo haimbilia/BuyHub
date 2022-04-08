@@ -52,10 +52,8 @@ $(document).ready(function () {
 	};
 
 	sendMessage = function (frm) {
-		if (!$(frm).validate()) return;
-		if (frm.message_text.value == '') {
-			return;
-		}
+		if (!$(frm).validate()) { return; }
+		if (frm.message_text.value == '') { return; }
 		var data = fcom.frmData(frm);
 		$('.threadJs').prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account', 'sendMessage'), data, function (t) {
