@@ -287,7 +287,7 @@ class applicationConstants
 
     public static function allowedFileExtensions()
     {
-        $extensions = array('zip', 'txt', 'png', 'jpeg', 'jpg', 'gif', 'bmp', 'ico', 'tiff', 'tif', 'svg', 'svgz', 'rar', 'msi', 'cab', 'mp3', 'pdf', 'psd', 'ai', 'eps', 'ps', 'doc', 'docx');
+        $extensions = array('zip', 'txt', 'png', 'jpeg', 'jpg', 'gif', 'bmp', 'ico', 'tiff', 'tif', 'svg', 'svgz', 'rar', 'msi', 'cab', 'mp3', 'pdf', 'psd', 'ai', 'eps', 'ps', 'doc', 'docx','csv');
 
         return array_merge($extensions, static::allowedVideoFileExtensions());
     }

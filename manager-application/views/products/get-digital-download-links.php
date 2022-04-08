@@ -8,10 +8,7 @@ if (0 == $product['product_seller_id']) {
     $arr_flds['pdl_download_link'] = Labels::getLabel('LBL_DOWNLOAD_LINK', $siteLangId);
 }
 $arr_flds['pdl_preview_link'] = Labels::getLabel('LBL_PREVIEW_LINK', $siteLangId);
-/*
-$arr_flds['pddr_options_code'] = Labels::getLabel('LBL_LINK_OPTION', $siteLangId);
-$arr_flds['pdl_lang_id'] = Labels::getLabel('LBL_LINK_LANGUAGE', $siteLangId);
-*/
+
 
 if (0 == $product['product_seller_id']) {
     $arr_flds['action'] = Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId);
@@ -20,7 +17,7 @@ if (0 == $product['product_seller_id']) {
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
-    $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+    $tdAttr = ('action' == $key) ? ['class' => 'align-right','width'=>'20%'] : ['width'=> '40%'];
     $e = $th->appendElement('th', array(), $val);
 }
 

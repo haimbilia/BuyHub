@@ -12,7 +12,7 @@ $arr_flds = array(
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
-    $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+    $tdAttr = ('action' == $key) ? ['class' => 'align-right','width'=>'20%'] : ['width'=> '40%'];
     $e = $th->appendElement('th', $tdAttr, $val);
 }
 
