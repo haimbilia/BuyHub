@@ -673,6 +673,7 @@ UAT points:
     ----------------------------TV-9.4.0.20220406-----------------------
     => 063377 - Seller UI: Messages' count is still showing after reading all the messages at the seller's end and buyer's end.
     => 063631 - Seller UI: Spacing issue on seller registration page.
+    => 063632 - Advertiser: Double background images are showing while registering as an advertiser at the front-end and getting a UI issue while editing the content block of the advertiser at the admin's end.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
