@@ -345,8 +345,8 @@ class UsersController extends ListingBaseController
 
         if (1 > $recordId) {
             $userTypesArr = User::getUserTypesArr($this->siteLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER_TYPE', $this->siteLangId), 'user_type', $userTypesArr, '', [], Labels::getLabel('FRM_Select', $this->siteLangId));
-            $fld->requirement->setRequired(true);
+            $userTypefld = $frm->addSelectBox(Labels::getLabel('FRM_USER_TYPE', $this->siteLangId), 'user_type', $userTypesArr, '', ['class' => 'fieldsVisibilityJs'], Labels::getLabel('FRM_Select', $this->siteLangId));
+            $userTypefld->requirement->setRequired(true);
         }
 
         $fld = $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'credential_username', '');
@@ -364,7 +364,23 @@ class UsersController extends ListingBaseController
 
         $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('placeholder' => Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
 
-        $frm->addHiddenField('', 'user_phone_dcode');
+        $frm->addHiddenField('', 'user_phone_dcode');        
+        $companyFld = $frm->addTextBox(Labels::getLabel('FRM_COMPANY', $this->siteLangId), 'user_company');
+
+        if (1 > $recordId) {
+            $companyUnReqObj = new FormFieldRequirement('user_company', Labels::getLabel('FRM_COMPANY', $this->siteLangId));
+            $companyUnReqObj->setRequired(false);
+
+            $companyReqObj = new FormFieldRequirement('user_company', Labels::getLabel('FRM_COMPANY', $this->siteLangId));
+            $companyReqObj->setRequired(true);
+            $userTypefld->requirements()->addOnChangerequirementUpdate(User::USER_TYPE_ADVERTISER, 'eq', 'user_company', $companyReqObj);
+            $userTypefld->requirements()->addOnChangerequirementUpdate(User::USER_TYPE_ADVERTISER, 'ne', 'user_company', $companyUnReqObj);
+        }
+
+        if(1 < $recordId && !User::getAttributesById($recordId, 'user_is_advertiser')){
+            $frm->removeField($companyFld);
+        }
+
         $phnFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER.', $this->siteLangId));
