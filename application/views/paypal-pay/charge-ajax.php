@@ -45,7 +45,6 @@
                 }).then(function(res) {
                     return res.json();
                 }).then(function(data) {
-                    console.log(data);
                     //=== Redirect to thank you/success page after saving transaction
                     $.ajax({
                         type: "POST",
