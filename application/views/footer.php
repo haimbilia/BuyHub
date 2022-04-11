@@ -119,7 +119,7 @@ if (CommonHelper::demoUrl()) { ?>
         <?php }  ?>
     </div><?php } ?>
 <?php if (!isset($_SESSION['geo_location']) && FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '') != '') { ?>
-    <script src='https://maps.google.com/maps/api/js?key=<?php echo FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''); ?>&libraries=places'>
+    <script defer src='https://maps.google.com/maps/api/js?key=<?php echo FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''); ?>&libraries=places'>
     </script>
 
 <?php } ?>
@@ -133,7 +133,7 @@ if (CommonHelper::demoUrl()) { ?>
 <div class="no-print">
     <?php if (CommonHelper::demoUrl()) { ?>
         <!--Start of Tawk.to Script-->
-        <script>
+        <script defer>
             var Tawk_API = Tawk_API || {},
                 Tawk_LoadStart = new Date();
             (function() {
@@ -160,7 +160,7 @@ if (CommonHelper::demoUrl()) { ?>
         }
     } ?>
     <?php if (FatApp::getConfig('CONF_PWA_SERVICE_WORKER', FatUtility::VAR_INT, 1)) { ?>
-        <script>
+        <script defer>
             $(function() {
                 if ('serviceWorker' in navigator) {
                     window.addEventListener('load', function() {

@@ -229,44 +229,46 @@ if (!empty($postList)) { ?>
 <script>
     var layoutDirection = '<?php echo CommonHelper::getLayoutDirection(); ?>';
     var rtl = (layoutDirection == 'rtl') ? true : false;
-    $('.js-popular-stories').slick({
-        dots: false,
-        arrows: false,
-        infinite: false,
-        speed: 300,
-        slidesToShow: 3,
-        slidesToScroll: 3,
-        rtl: rtl,
-        responsive: [{
-                breakpoint: 1199,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
+    $(function() {
+        $('.js-popular-stories').slick({
+            dots: false,
+            arrows: false,
+            infinite: false,
+            speed: 300,
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            rtl: rtl,
+            responsive: [{
+                    breakpoint: 1199,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 1,
+                    }
+                },
+                {
+                    breakpoint: 1023,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 2
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1
+                    }
                 }
-            },
-            {
-                breakpoint: 1023,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 2
-                }
-            },
-            {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
-        ]
+            ]
+        });
+
+        $('.arrows--left').on('click', function() {
+            $('.js-popular-stories').slick('slickPrev');
+        })
+
+        $('.arrows--right').on('click', function() {
+            $('.js-popular-stories').slick('slickNext');
+        });
     });
-
-    $('.arrows--left').on('click', function() {
-        $('.js-popular-stories').slick('slickPrev');
-    })
-
-    $('.arrows--right').on('click', function() {
-        $('.js-popular-stories').slick('slickNext');
-    })
 </script>
 <?php echo $this->includeTemplate('_partial/shareThisScript.php');

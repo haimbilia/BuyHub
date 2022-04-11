@@ -1,1 +1,1 @@
-<?php include(CONF_THEME_PATH.'_partial/cart-summary.php'); ?>
+<?php include(CONF_THEME_PATH.'_partial/cart-summary.php');

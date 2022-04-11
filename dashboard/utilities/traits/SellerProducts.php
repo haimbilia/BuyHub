@@ -571,7 +571,9 @@ trait SellerProducts
         }
         /* ] */
 
-        /* Update seller product language data[ */
+
+
+        /* Update seller product language data[ */        
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
             if (!empty($post['selprod_title' . $langId])) {
@@ -586,6 +588,14 @@ trait SellerProducts
                     Message::addErrorMessage(Labels::getLabel($sellerProdObj->getError(), $this->siteLangId));
                     FatUtility::dieWithError(Message::getHtml());
                 }
+            }
+        }
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(SellerProduct::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($selprod_id)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
         /* ] */
@@ -731,7 +741,7 @@ trait SellerProducts
         $data_to_be_save = $post;
         $this->deleteSelProdWithoutOptions($productId, $this->userParentId);
         $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-        $errorMsg ='' ;
+        $errorMsg = '';
         $prodAllowedLimit = -1;
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             $prodAllowedLimit = SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed');
@@ -760,9 +770,9 @@ trait SellerProducts
                 }
 
                 $sellingPrice = $post['selprod_price' . $optionKey];
-                if ($minSellingPrice > $sellingPrice) {                   
+                if ($minSellingPrice > $sellingPrice) {
                     $errorMsg = Labels::getLabel('MSG_FOR_{VARIANT}_VARIANT_YOU_CANNOT_ADD_LESS_THEN_MINIMUM_SELLING_PRICE_{MINIMUM-SELLING-PRICE}', $this->siteLangId);
-                    $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{VARIANT}' => $optionValue, '{MINIMUM-SELLING-PRICE}' => $minSellingPrice]);                   
+                    $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{VARIANT}' => $optionValue, '{MINIMUM-SELLING-PRICE}' => $minSellingPrice]);
                     continue;
                 }
 
@@ -778,7 +788,7 @@ trait SellerProducts
                 $productCount++;
             }
         } else {
-            
+
             $optionValue = FatApp::getPostedData('inv_option_id', FatUtility::VAR_STRING, '');
             if (!empty($optionValue) && false === Product::validateProductOptionValue($post['selprod_product_id'], $optionValue)) {
                 FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));

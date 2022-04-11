@@ -8,6 +8,7 @@ $btn-line-height: $btn-height;
 .btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     border: $btn-border;
     padding: $btn-padding;
     height: $btn-height;
@@ -15,6 +16,7 @@ $btn-line-height: $btn-height;
     font-size: $btn-font-size;
     font-weight: $btn-font-weight;
     line-height: $btn-line-height;
+
     &-brand {
         @include bg-brand;
         &:hover {

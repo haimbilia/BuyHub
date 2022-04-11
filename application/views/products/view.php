@@ -99,7 +99,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
 <!-- Product Schema Code -->
 <?php
 $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']); ?>
-<script type="application/ld+json">
+<script defer type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "Product",
@@ -130,7 +130,7 @@ $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $prod
 <?php echo $this->includeTemplate('_partial/shareThisScript.php'); ?>
 
 <!-- JWPlayer -->
-<script type="text/JavaScript">
-    jwplayer.key='<?php echo FatApp::getConfig("CONF_JW_PLAYER_KEY", null, ''); ?>';
+<script defer>
+    jwplayer.key = '<?php echo FatApp::getConfig("CONF_JW_PLAYER_KEY", null, ''); ?>';
 </script>
 <!-- JWPlayer -->

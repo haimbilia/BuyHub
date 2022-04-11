@@ -26,6 +26,7 @@ if (isset($prodcat_code)) {
     </form>-->
         <?php
         $searchFrm->addFormTagAttribute('class', 'form');
+        $searchFrm->setFormTagAttribute('id', 'filterSearchForm');
         echo $searchFrm->getFormTag();
         $fld = $searchFrm->getField('keyword');
         $fld->overrideFldType('search');
@@ -331,7 +332,7 @@ if (isset($prodcat_code)) {
 
                     </div>
 
-                    <script language="javascript">
+                    <script>
                         var catCodeArr = <?php echo json_encode($catCodeArr); ?>;
                         $.each(catCodeArr, function(key, value) {
                             if ($("ul li a[data-id='" + value + "']").parent().find('span')) {

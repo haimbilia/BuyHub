@@ -14,13 +14,15 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     <div class="content-body">
         <div class="row">
             <div class="col-md-6 mb-3 mb-md-0">
-                <div class="card">
+                <div class="card card-stretch">
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
-                    <span id="listing"><div class="container m-2"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div></span>
+                    <span id="listing">
+                        <div class="container m-2"><?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
+                    </span>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card h-100">
+                <div class="card card-stretch">
                     <div id="dvForm"></div>
                     <div class="alert-aligned" id="dvAlert">
                         <div class="card-body">

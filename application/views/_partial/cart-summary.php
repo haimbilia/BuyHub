@@ -58,6 +58,11 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) { ?>
                                         <div class="block-cart-detail-top">
                                             <div class="product-profile">
                                                 <div class="product-profile-data">
+                                                    <div class="item__category">
+                                                        <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
+                                                            <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                                        </a>
+                                                    </div>
                                                     <a class="title" title="<?php echo $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
                                                     <div class="products-price">
                                                         <span class="products-price-new">
@@ -78,11 +83,11 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) { ?>
                                                                 <?php echo $option['optionvalue_name']; ?>
                                                         <?php $count++;
                                                             }
-                                                        } ?>
-                                                        | <?php echo Labels::getLabel('LBL_Quantity:', $siteLangId) ?>
-                                                        <?php echo $product['quantity']; ?> </div>
-
-
+                                                            echo ' | ';
+                                                        }
+                                                        echo Labels::getLabel('LBL_Quantity:', $siteLangId) ?>
+                                                        <?php echo $product['quantity']; ?>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

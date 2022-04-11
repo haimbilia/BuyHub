@@ -326,7 +326,7 @@ function resetListingFilter() {
     }); */
     var shop_id = parseInt($("input[name=shop_id]").val());
     if (shop_id > 0) {
-        document.frmSearch.reset();
+        $("#filterSearchForm").get(0).reset()
         $("input[id=keyword]").val('');
     }
     document.frmProductSearch.reset();
