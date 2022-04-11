@@ -22,7 +22,6 @@ echo $msgsSrchForm->getFormHtml(); ?>
                                 echo CommonHelper::replaceStringData($str, ['{REFERENCE-NO}' => $order['orrequest_reference']])
                                 ?>
                             </h3>
-
                         </div>
                         <div class="card-head-toolbar">
                             <small><?php echo FatDate::format($order['orrequest_date'], true); ?></small>
@@ -92,7 +91,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                     </div>
                 </div>
 
-                <!-- Messages -->
+             
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
@@ -111,7 +110,6 @@ echo $msgsSrchForm->getFormHtml(); ?>
                         </div>
                     </div>
                     <div class="card-body">
-
                         <ul class="timeline appendRowsJs" id="appendRowsJs">
                             <?php require_once('get-rows.php'); ?>
                         </ul>
@@ -131,46 +129,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <?php /* ?>
-                <!-- Order Summary -->
-                <div class="card">
-                    <div class="card-head">
-                        <div class="card-head-label">
-                            <h3 class="card-head-title">
-                                <i class="fas fa-file"></i> <?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?>
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="cart-summary">
-                            <ul>
-                                <li>
-                                    <span class="label"><?php echo Labels::getLabel('LBL_ORDER_INVOICE', $siteLangId); ?></span>
-                                    <span class="value">
-                                        <span class="badge badge-success">
-                                            <?php echo $order["op_invoice_number"]; ?>
-                                        </span>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="label"><?php echo Labels::getLabel('LBL_REQUESTED_ON', $siteLangId); ?></span>
-                                    <span class="value"><?php echo FatDate::format($order['orrequest_date'], true); ?></span>
-                                </li>
-                                <li class="highlighted">
-                                    <span class="label"><?php echo Labels::getLabel('LBL_REFUND_AMOUNT', $siteLangId) ?></span>
-                                    <span class="value">
-                                        <?php
-                                        $returnDataArr = CommonHelper::getOrderProductRefundAmtArr($order);
-                                        echo CommonHelper::displayMoneyFormat($returnDataArr['op_refund_amount'], true, false, true, false, true);
-                                        ?>
-                                    </span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <?php  */ ?>
+            <div class="col-md-3">             
                 <!-- Buyer Information -->
                 <?php if (!empty($order['user_name']) || !empty($order['credential_username']) || !empty($order['credential_email']) || !empty($order['buyer_phone'])) { ?>
                     <div class="card">

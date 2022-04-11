@@ -9,8 +9,9 @@ $(function (){
 		$(dv).html( fcom.getLoader() );
 		var frm = document.frmSellerAccount;
 		var data = fcom.frmData(frm);
-		fcom.ajax(fcom.makeUrl('Supplier', 'form'), data, function(t) {
+		fcom.ajax(fcom.makeUrl('Supplier', 'form'), data, function(t) {			
 			$(dv).html(t);
+			fcom.removeLoader();
 		});
 	};
 
@@ -30,6 +31,7 @@ $(function (){
 		$(dv).html( fcom.getLoader() );
 		fcom.ajax(fcom.makeUrl('Supplier', 'profileActivationForm'), '', function(t) {
 			$(dv).html(t);
+			fcom.removeLoader();
 		});
 	}
 
@@ -52,6 +54,7 @@ $(function (){
 			$(dv).html(t);
 			//fcom.scrollToTop(dv);
 			window.scrollTo(0,0);
+			fcom.removeLoader();
 		});
 	};
 })();
