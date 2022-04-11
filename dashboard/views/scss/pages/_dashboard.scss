@@ -1122,7 +1122,11 @@
         margin: auto;
     }
 }
-
+.account-fav-listing{
+    display: grid;
+    grid-gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+}
 .wishlists {
     width: 100%;
     border-radius: $radius4;
@@ -1137,12 +1141,19 @@
         text-align: center;
         display: flex;
         justify-content: space-between;
-        border-bottom: $border;
+       // border-bottom: $border;
         padding: 10px 1rem;
+        .heading{
+            font-size: 1rem;
+            font-weight: 500;
+            margin: 0;
+
+        }
     }
     &__body {
         flex: 1;
         padding: 1rem;
+        min-height: 320px;
         .media-wishlist {
             align-items: center;
             flex-wrap: wrap;
@@ -1152,11 +1163,21 @@
             li {
                 border: $border;
                 border-radius: $radius4;
-                padding: 0.5rem;
+               // padding: 0.5rem;
                 img {
                     margin: auto;
                     display: block;
                 }
+            }
+        }
+        .block-empty{
+            img{
+                margin: 15px auto!important;
+                max-width: 140px;
+            }
+            h5{
+                color: $txt-gray;
+                font-size: 0.875rem;
             }
         }
     }

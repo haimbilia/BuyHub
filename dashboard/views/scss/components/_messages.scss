@@ -54,8 +54,8 @@
             text-decoration: none;
         }
         &.is-active {
-            color: $brand-color-inverse;
-            @include bg-brand();
+            
+            background-color: $bg-gray;
             .message-to {
                 background: #00000054;
             }
@@ -122,7 +122,7 @@
 .messages {
     padding: 1rem;
     height: 100%;
-    max-height: calc(100vh - 280px);
+    height: calc(100vh - 480px);
     flex-shrink: 2;
     overflow-y: auto;
     //border-top: $border;
@@ -176,12 +176,6 @@
             }
             .message {
                 border-radius: 1.125rem 1.125rem 0 1.125rem;
-                // // background-color: $brand-color;
-                // color:  lighten($brand-color, 55%);
-                @include bg-brand();
-                // color:  lighten($brand-color, 55%);
-                @include bg-brand();
-                color: white;
                 margin-#{$start-direction}: auto;
             }
             .time {

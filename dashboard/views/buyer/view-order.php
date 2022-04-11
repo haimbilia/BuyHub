@@ -21,7 +21,6 @@ if (true == $primaryOrder) {
     $canSubmitFeedback = Orders::canSubmitFeedback($childOrderDetail['order_user_id'], $childOrderDetail['order_id'], $childOrderDetail['op_selprod_id']);
     $selProdTotalSpecialPrice += $childOrderDetail['op_special_price'] * $childOrderDetail["op_qty"];
 
-
     $cartTotal = CommonHelper::orderProductAmount($childOrderDetail, 'CART_TOTAL');
     $disc = CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT');
     $volumeDiscount = CommonHelper::orderProductAmount($childOrderDetail, 'VOLUME_DISCOUNT');
@@ -43,9 +42,9 @@ if (true == $primaryOrder) {
     $timeSlotTo = isset($childOrderDetail['opshipping_time_slot_to']) ? date('H:i', strtotime($childOrderDetail['opshipping_time_slot_to'])) : '';
 }
 
-if (!$print) { ?>
-    <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<?php } ?>
+if (!$print) {
+    $this->includeTemplate('_partial/dashboardNavigation.php');
+} ?>
 
 <div class="content-wrapper content-space">
     <?php if (!$print) {
@@ -117,15 +116,12 @@ if (!$print) { ?>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <?php
-                    $this->includeTemplate('_partial/order/right-side-block.php', $this->variables, false);
-
+                    <?php $this->includeTemplate('_partial/order/right-side-block.php', $this->variables, false);
                     $data = $this->variables + [
                         'canViewShippingCharges' => true,
                         'canViewTaxCharges' => true,
                     ];
-                    $this->includeTemplate('_partial/order/left-side-block.php', $data, false);
-                    ?>
+                    $this->includeTemplate('_partial/order/left-side-block.php', $data, false); ?>
                 </div>
 
                 <div class="row">
@@ -137,7 +133,7 @@ if (!$print) { ?>
                             <div class="js-scrollable table-wrap table-responsive">
                                 <table class="table">
                                     <thead>
-                                        <tr class="">
+                                        <tr>
                                             <th>
                                                 <?php echo Labels::getLabel('LBL_#', $siteLangId); ?>
                                             </th>
@@ -160,7 +156,6 @@ if (!$print) { ?>
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                         <?php $sr_no = 1;
                                         foreach ($digitalDownloads as $key => $row) {
                                             $lang_name = Labels::getLabel('LBL_All', $siteLangId);
@@ -174,14 +169,14 @@ if (!$print) { ?>
                                                 $fileName = $row['afile_name'];
                                             }
                                             $downloads = '<li>
-                                                                <a href="' . UrlHelper::generateUrl('Buyer', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'])) . '">
+                                                            <a href="' . UrlHelper::generateUrl('Buyer', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'])) . '">
                                                                 <svg class="svg" width="18" height="18">
-                            <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
-                            </use>
-                        </svg>
-                                                                </a>
-                                                            </li>';
+                                                                    <use
+                                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                                                                    </use>
+                                                                </svg>
+                                                            </a>
+                                                        </li>';
 
                                             $expiry = Labels::getLabel('LBL_N/A', $siteLangId);
                                             if ($row['expiry_date'] != '') {
@@ -212,13 +207,11 @@ if (!$print) { ?>
                                                     <?php echo $expiry; ?>
                                                 </td>
                                                 <td>
-                                                    <?php if ($row['downloadable']) {
-                                                    ?>
+                                                    <?php if ($row['downloadable']) { ?>
                                                         <ul class="actions">
                                                             <?php echo $downloads; ?>
                                                         </ul>
-                                                    <?php
-                                                    } ?>
+                                                    <?php } ?>
                                                 </td>
                                             </tr>
                                         <?php $sr_no++;
@@ -229,7 +222,6 @@ if (!$print) { ?>
                         </div>
                     <?php } ?>
 
-
                     <?php if (!empty($digitalDownloadLinks)) { ?>
                         <div class="col-md-12 section--repeated mb-3">
                             <h6>
@@ -238,7 +230,7 @@ if (!$print) { ?>
                             <div class="js-scrollable table-wrap table-responsive">
                                 <table class="table">
                                     <thead>
-                                        <tr class="">
+                                        <tr>
                                             <th>
                                                 <?php echo Labels::getLabel('LBL_#', $siteLangId); ?>
                                             </th>
@@ -257,8 +249,6 @@ if (!$print) { ?>
                                         </tr>
                                     </thead>
                                     <tbody>
-
-
                                         <?php $sr_no = 1;
                                         foreach ($digitalDownloadLinks as $key => $row) {
                                             $expiry = Labels::getLabel('LBL_N/A', $siteLangId);
@@ -301,51 +291,46 @@ if (!$print) { ?>
                                     </tbody>
                                 </table>
                             </div>
-                            >>>>>>> e42a45b9ad02de5db78ed55d89402b60a2dda071
                         </div>
+                    <?php } ?>
+
+                    <?php
+                    if (!$orderDetail['order_deleted'] && !$primaryOrder && !$orderDetail["order_payment_status"] && 'TransferBank' == $orderDetail['plugin_code']) { ?>
+                        <div class="col-md-12 section--repeated mb-3">
+                            <h6>
+                                <?php echo Labels::getLabel('LBL_ORDER_PAYMENTS', $siteLangId); ?>
+                            </h6>
+                            <div class="info--order">
+                                <?php
+                                $frm->setFormTagAttribute('onsubmit', 'updatePayment(this); return(false);');
+                                $frm->setFormTagAttribute('class', 'form');
+                                $frm->developerTags['colClassPrefix'] = 'col-md-';
+                                $frm->developerTags['fld_default_col'] = 12;
+
+
+                                $paymentFld = $frm->getField('opayment_method');
+                                $paymentFld->developerTags['col'] = 4;
+
+                                $gatewayFld = $frm->getField('opayment_gateway_txn_id');
+                                $gatewayFld->developerTags['col'] = 4;
+
+                                $amountFld = $frm->getField('opayment_amount');
+                                $amountFld->developerTags['col'] = 4;
+
+                                $submitFld = $frm->getField('btn_submit');
+                                $submitFld->developerTags['col'] = 4;
+                                $submitFld->addFieldTagAttribute('class', 'btn btn-brand');
+                                $submitFld->value = Labels::getLabel("LBL_SUBMIT_REQUEST", $siteLangId);
+                                echo $frm->getFormHtml(); ?>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
-            <?php } ?>
-
-            <?php
-            if (!$orderDetail['order_deleted'] && !$primaryOrder && !$orderDetail["order_payment_status"] && 'TransferBank' == $orderDetail['plugin_code']) { ?>
-                <div class="col-md-12 section--repeated mb-3">
-                    <h6>
-                        <?php echo Labels::getLabel('LBL_ORDER_PAYMENTS', $siteLangId); ?>
-                    </h6>
-                    <div class="info--order">
-                        <?php
-                        $frm->setFormTagAttribute('onsubmit', 'updatePayment(this); return(false);');
-                        $frm->setFormTagAttribute('class', 'form');
-                        $frm->developerTags['colClassPrefix'] = 'col-md-';
-                        $frm->developerTags['fld_default_col'] = 12;
-
-
-                        $paymentFld = $frm->getField('opayment_method');
-                        $paymentFld->developerTags['col'] = 4;
-
-                        $gatewayFld = $frm->getField('opayment_gateway_txn_id');
-                        $gatewayFld->developerTags['col'] = 4;
-
-                        $amountFld = $frm->getField('opayment_amount');
-                        $amountFld->developerTags['col'] = 4;
-
-                        $submitFld = $frm->getField('btn_submit');
-                        $submitFld->developerTags['col'] = 4;
-                        $submitFld->addFieldTagAttribute('class', 'btn btn-brand');
-                        $submitFld->value = Labels::getLabel("LBL_SUBMIT_REQUEST", $siteLangId);
-                        echo $frm->getFormHtml(); ?>
-                    </div>
-                </div>
-            <?php } ?>
             </div>
         </div>
     </div>
 </div>
-</div>
 
-<?php if ($print) { ?>
-
-<?php } ?>
 <script>
     $(document).ready(function() {
         setTimeout(function() {

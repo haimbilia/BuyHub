@@ -2151,6 +2151,7 @@ mark,
     .actions {
         border-radius: $radius-common;
         border: $border;
+        gap: 6px;
         li {
             .actions-link {
                 text-align: center;
@@ -2749,7 +2750,7 @@ $header-height: 65px;
         flex-wrap: wrap;
         li {
             padding: 0;
-            padding-bottom: 2rem;
+            padding-bottom: 1rem;
             flex: 0 0 50%;
             max-width: 50%;
         }

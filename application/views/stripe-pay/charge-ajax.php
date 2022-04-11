@@ -21,7 +21,6 @@ if (isset($client_secret)) { ?>
         stripe.confirmCardPayment(clientSecret, {
             payment_method: '<?php echo $payment_method_id; ?>'
         }).then(function(result) {
-            // console.log(result);
             if (result.error) {
                 // PaymentIntent client secret was invalid
                 location.href = '<?php echo $cancelBtnUrl; ?>';
@@ -84,11 +83,12 @@ if (isset($client_secret)) { ?>
                         $submit = true;
                         $(document).on("submit", "#stripeCharge", function(event) {
                             event.preventDefault();
-                            if (!$(this).validate()) return;
+                            if (!$(this).validate()) { return };
                             var stripeToken = $("input[name='stripeToken']").val();
                             if ('' != stripeToken && 'undefined' != typeof stripeToken) {
                                 return;
                             }
+                            $(".<?php echo $pmethodCode ?>-js").prepend(fcom.getLoader());
                             fcom.displayProcessing();
                             // prop('disabled', true);
                             $('.alert--danger').remove();

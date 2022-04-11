@@ -2,7 +2,7 @@
 if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
     $this->includeTemplate('restore-system/top-header.php');
     $this->includeTemplate('restore-system/page-content.php');
-} 
+}
 
 $cartObj = new Cart();
 $fulfillmentType = $cartObj->getCartCheckoutType();
@@ -21,25 +21,32 @@ $fulfillmentType = $cartObj->getCartCheckoutType();
                     <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>">
                 </a>
                 <ul class="checkout-progress">
-                    <li id="step1" class="checkout-progress-step checkoutNav-js">
-                        <a href="<?php echo UrlHelper::generateUrl('Cart'); ?>">
-                            <?php echo Labels::getLabel('LBL_CART', $siteLangId); ?>
-                        </a>
-                    </li>
-                    <li id="step2" class="checkout-progress-step checkoutNav-js shipping-js" onclick="loadShippingSummaryDiv(1);">
-                        <?php
-                        if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $cartObj->hasPhysicalProduct()) {
-                            echo Labels::getLabel('LBL_Shipping', $siteLangId);
-                        } else if ($cartObj->hasPhysicalProduct()) {
-                            echo Labels::getLabel('LBL_PICKUP', $siteLangId);
-                        } else {
-                            /* Not In Use. Need Discussion */
-                            echo Labels::getLabel('LBL_REVIEW', $siteLangId);
-                        } ?>
-                    </li>
-                    <li id="step3" class="checkout-progress-step checkoutNav-js payment-js">
-                        <?php echo Labels::getLabel('LBL_Payment', $siteLangId); ?>
-                    </li>
+                    <?php 
+                    if ('walletpay' == strtolower($controllerName) && 'recharge' == $action) { ?>
+                        <li id="step1" class="checkout-progress-step checkoutNav-js payment-js">
+                            <?php echo Labels::getLabel('LBL_PAYMENT', $siteLangId); ?>
+                        </li>
+                    <?php } else { ?>
+                        <li id="step1" class="checkout-progress-step checkoutNav-js">
+                            <a href="<?php echo UrlHelper::generateUrl('Cart'); ?>">
+                                <?php echo Labels::getLabel('LBL_CART', $siteLangId); ?>
+                            </a>
+                        </li>
+                        <li id="step2" class="checkout-progress-step checkoutNav-js shipping-js" onclick="loadShippingSummaryDiv(1);">
+                            <?php
+                            if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $cartObj->hasPhysicalProduct()) {
+                                echo Labels::getLabel('LBL_Shipping', $siteLangId);
+                            } else if ($cartObj->hasPhysicalProduct()) {
+                                echo Labels::getLabel('LBL_PICKUP', $siteLangId);
+                            } else {
+                                /* Not In Use. Need Discussion */
+                                echo Labels::getLabel('LBL_REVIEW', $siteLangId);
+                            } ?>
+                        </li>
+                        <li id="step3" class="checkout-progress-step checkoutNav-js payment-js">
+                            <?php echo Labels::getLabel('LBL_PAYMENT', $siteLangId); ?>
+                        </li>
+                    <?php } ?>
                 </ul>
             </div>
         </div>
