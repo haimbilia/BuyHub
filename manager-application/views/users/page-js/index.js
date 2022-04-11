@@ -59,9 +59,10 @@ $(document).ready(function () {
     sendMail = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        $.ykmodal(fcom.getLoader());
+        $.ykmodal(fcom.getLoader(), true);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'sendMail'), data, function (t) {
             fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
             $.ykmodal.close();
         });
