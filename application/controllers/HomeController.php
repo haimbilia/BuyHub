@@ -981,6 +981,13 @@ class HomeController extends MyAppController
 
                             $collections[$ind]['shops'][$counter]['rating'] = $rating;
                         } else {
+                            if ($collection['collection_layout_type'] == Collections::TYPE_SHOP_LAYOUT2) {
+                                $prodObj = clone $productSrchObj;
+                                $prodObj->addCondition('shop_id', '=', $shopsData['shop_id']);
+                                $prodObj->addGroupBy('shop_id');
+                                $prodObj->setPageSize(1);
+                                $shopsData['product'] = (array) $db->fetch($prodObj->getResultSet());
+                            }
                             $collections[$ind]['shops'][$shopsData['shop_id']]['shopData'] = $shopsData;
 
                             $collections[$ind]['rating'][$shopsData['shop_id']] = $rating;
@@ -1015,6 +1022,16 @@ class HomeController extends MyAppController
                     if (true === MOBILE_APP_API_CALL) {
                         foreach ($brands as &$brand) {
                             $brand['brand_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'brand', array($brand['brand_id'], $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                        }
+                    } else {
+                        if ($collection['collection_layout_type'] == Collections::TYPE_BRAND_LAYOUT2) {
+                            foreach ($brands as &$brand) {
+                                $prodObj = clone $productSrchObj;
+                                $prodObj->addCondition('brand_id', '=', $brand['brand_id']);
+                                $prodObj->addGroupBy('brand_id');
+                                $prodObj->setPageSize(1);
+                                $brand['product'] = (array) $db->fetch($prodObj->getResultSet());
+                            }
                         }
                     }
 
@@ -1070,7 +1087,6 @@ class HomeController extends MyAppController
                     unset($tempObj);
                     break;
                 case Collections::COLLECTION_TYPE_FAQ:
-
                     $tempObj = clone $collectionObj;
                     $tempObj->addCondition('collection_id', '=', $collection_id);
                     $tempObj->doNotCalculateRecords();
@@ -1110,7 +1126,6 @@ class HomeController extends MyAppController
                     unset($tempObj);
                     break;
                 case Collections::COLLECTION_TYPE_FAQ_CATEGORY:
-
                     $tempObj = clone $collectionObj;
                     $tempObj->addCondition('collection_id', '=', $collection_id);
                     $tempObj->doNotCalculateRecords();

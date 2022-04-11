@@ -6,19 +6,30 @@
             </div>
             <div class="brand-layout-2">
                 <?php $i = 0;
-                foreach ($collection['brands'] as $brand) { ?>
-
-                    <?php
+                foreach ($collection['brands'] as $brand) {
                     $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brand['brand_id'], 0, 0, false);
                     $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                     $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
                     $ratio = "";
                     if (isset($fileData['afile_aspect_ratio']) && $fileData['afile_aspect_ratio'] > 0 && isset($aspectRatioArr[$fileData['afile_aspect_ratio']])) {
                         $ratio = $aspectRatioArr[$fileData['afile_aspect_ratio']];
-                    } ?>
+                    }
+                    $productId = $brand['product']['product_id'] ?? 0;
+                    $selProdId = $brand['product']['selprod_id'] ?? 0;
+                    $prodcatName = $brand['product']['prodcat_name'] ?? '';
+                    $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId);
+                    $pictureAttr = [
+                        'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : "WEBP" . ImageDimension::VIEW_CLAYOUT3, $selProdId, 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
+                        'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : ImageDimension::VIEW_CLAYOUT3, $selProdId, 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                        'ratio' => '1:1',
+                        'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : ImageDimension::VIEW_CLAYOUT3, $selProdId, 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                        'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $prodcatName,
+                        'siteLangId' => $siteLangId,
+                    ];
+                ?>
                     <a href="<?php echo UrlHelper::generateUrl('brands', 'View', array($brand['brand_id'])); ?>" class="brand">
                         <div class="brand-thumb">
-                            <img loading='lazy' data-ratio="<?php echo $ratio; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brandImage', array($brand['brand_id'], $siteLangId, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>" title="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>">
+                            <?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?>
                         </div>
                         <div class="brand-logo">
                             <img loading='lazy' data-ratio="<?php echo $ratio; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($brand['brand_id'], $siteLangId, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>" title="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>">
