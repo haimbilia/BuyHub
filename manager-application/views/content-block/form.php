@@ -3,6 +3,7 @@ $frm->setFormTagAttribute('id', 'frmAddBlock');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord($("#frmAddBlock")); return(false);');
 
 $fld = $frm->getField('epage_label');
+$fld->setFieldtagAttribute('autocomplete', 'off');
 
 $fld = $frm->getField('epage_active');
 if ($fld != null) {
@@ -11,7 +12,7 @@ if ($fld != null) {
 }
 
 $fld = $frm->getField('epage_content');
-$htmlFld = $frm->addHTML('','epage_content_html', '<div class="col-md-12"><div class="form-group"><label class="label lbl-link">'.$fld->getCaption().'<a class="link" href="javascript:void(0)" onclick="resetToDefaultContent();">'.Labels::getLabel('LBL_RESET_TO_DEFAULT_CONTENT', $siteLangId).'</a></label>'.$fld->getHtml().'</div></div>');
+$htmlFld = $frm->addHTML('', 'epage_content_html', '<div class="col-md-12"><div class="form-group"><label class="label lbl-link">' . $fld->getCaption() . '<a class="link" href="javascript:void(0)" onclick="resetToDefaultContent();">' . Labels::getLabel('LBL_RESET_TO_DEFAULT_CONTENT', $siteLangId) . '</a></label>' . $fld->getHtml() . '</div></div>');
 $frm->changeFieldPosition($htmlFld->getFormIndex(), $fld->getFormIndex());
 $frm->removeField($fld);
 
@@ -67,12 +68,12 @@ if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId)
                     ' . $dropZone . '
                 </div>
             </div>';
-    
+
     $fld->value = $htm;
 }
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>
 
 <div id="editor_default_content" style="display:none;">
-    <?php echo (!empty($defaultContent)) ? html_entity_decode($defaultContent) : '';?>
+    <?php echo (!empty($defaultContent)) ? html_entity_decode($defaultContent) : ''; ?>
 </div>
