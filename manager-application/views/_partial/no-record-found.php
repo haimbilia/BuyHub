@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="col-md-12 noRecordFoundJs">
-    <div class="card mb-0 h-100">
+    <div class="card card-stretch mb-0">
         <div class="card-body">
             <div class="not-found">
                 <img width="100" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
