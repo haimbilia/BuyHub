@@ -23,7 +23,7 @@ $shopPolicyArr = array(
         'ratingAspects' => $ratingAspects,
         'siteLangId' => $siteLangId,   
         'shopView' => true,  
-    ], false);
+    ] + $variables, false);
     ?>       
     <div class="gap"></div>
 </div>

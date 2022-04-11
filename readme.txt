@@ -656,6 +656,7 @@ Updates/Fixes :
     => 063679 - Buyer: Seller's name is not showing with the product while adding the product into the cart and while proceeding with the payment at the front-end
     => 063678 - Buyer: Shop > Shop top products: Clear button is not working
     => 063674 - Seller: "Invalid Request" error is showing while adding the media for the product at the seller's end
+    => 063672 - Buyer: Getting an error on shop reviews page.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
