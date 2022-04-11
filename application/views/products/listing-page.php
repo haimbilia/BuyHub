@@ -98,7 +98,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
 <?php
 
 $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearch' => $frmProductSearch, 'siteLangId' => $siteLangId, 'recordCount' => $recordCount, 'pageTitle' => (isset($pageTitle)) ? $pageTitle : 'Products'), false);  ?>
-<section class="section">
+<section class="section productsAndFiltersJs">
     <div class="container">
         <div class="collection-search">
             <div class="collection-search-head">
