@@ -2705,6 +2705,7 @@ $header-height: 65px;
         .value {
             font-weight: 500;
             color: $txt-body;
+            //white-space: break-spaces;
             //font-size: 1rem;
         }
         &:first-child {

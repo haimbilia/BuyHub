@@ -213,7 +213,7 @@
 }
 
 .product-layout-2 {
-    max-width: 1000px;
+    // max-width: 1000px;
     margin: auto;
     @include media-breakpoint-up(lg) {
         display: grid;

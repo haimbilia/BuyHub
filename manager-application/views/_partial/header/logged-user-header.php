@@ -19,7 +19,7 @@
                             } ?>
                         </h1>
                         <?php if (isset($pageData['plang_summary'])) { ?>
-                            <span class="page-title-sub"> <?php echo $pageData['plang_summary']; ?> <a href="javascript:void(0)" class="openAlertJs" data-pageid="<?php echo $pageData['plang_id']; ?>" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>">
+                            <span class="page-title-sub"> <?php echo $pageData['plang_summary']; ?> <a href="javascript:void(0)" class="openAlertJs" data-pageid="<?php echo $pageData['plang_id']; ?>" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>" title="<?php echo Labels::getLabel('LBL_ALERT', $siteLangId)?>">
                                     <?php if (!empty($pageData['plang_warring_msg']) /* && CommonHelper::isSetCookie('alert_' . $pageData['plang_id']) */) { ?>
                                         <i class="fas fa-exclamation-triangle"></i></a></span>
                         <?php } ?>

@@ -264,9 +264,9 @@ class AdminPermissionsController extends ListingBaseController
 
     protected function getFormColumns(): array
     {
-        $adminUsersTblHeadingCols = CacheHelper::get('adminUsersTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($adminUsersTblHeadingCols) {
-            return json_decode($adminUsersTblHeadingCols, true);
+        $tblHeadingCols = CacheHelper::get('adminUsersPermissionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [
@@ -276,7 +276,7 @@ class AdminPermissionsController extends ListingBaseController
             'permission' => Labels::getLabel('LBL_PERMISSIONS', $this->siteLangId),
         ];
 
-        CacheHelper::create('adminUsersTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('adminUsersPermissionTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 

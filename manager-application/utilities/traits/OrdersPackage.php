@@ -180,6 +180,7 @@ trait OrdersPackage
         $pageData = PageLanguageData::getAttributesByKey($this->viewPageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? CommonHelper::replaceStringData($str, ['{ORDER-NUMBER}' =>  $this->order['order_number']]);
         $this->set('pageTitle', $pageTitle);
+        $this->set('pageData', $pageData);
 
         $frm = $this->getPaymentForm($this->order['order_id']);
         $this->set('frm', $frm);

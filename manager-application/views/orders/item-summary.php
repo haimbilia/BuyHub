@@ -149,8 +149,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                         [
                             'attr' => [
                                 'href' => Fatutility::generateUrl('Orders', 'viewInvoice', [$op['op_id']]),
-                                'target' => '_blank',
-                                'title' => Labels::getLabel('MSG_PRINT_INVOICE', $siteLangId),
+                                'target' => '_blank',                               
                             ],
                             'label' => '<i class="icn">
                                                         <svg class="svg" width="18" height="18">
@@ -163,8 +162,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                         [
                             'attr' => [
                                 'href' => Fatutility::generateUrl('Orders', 'viewBuyerOrderInvoice', [$op['order_id'], $op['op_id']]),
-                                'target' => '_blank',
-                                'title' => Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId),
+                                'target' => '_blank',                               
                             ],
                             'label' => '<i class="icn">
                                                         <svg class="svg" width="18" height="18">
@@ -177,8 +175,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'onclick' => 'getItemStatusHistory(' . $op['order_id'] . ',' . $op['op_id'] . ')',
-                                'title' => Labels::getLabel('MSG_STATUS_HISTORY', $siteLangId),
+                                'onclick' => 'getItemStatusHistory(' . $op['order_id'] . ',' . $op['op_id'] . ')',                               
                             ],
                             'label' => '<i class="icn">
                                                         <svg class="svg" width="18" height="18">
@@ -212,8 +209,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             $data['dropdownButtons']['otherButtons'][] = [
                                 'attr' => [
                                     'href' => 'javascript:void(0)',
-                                    'onclick' => 'shippingRatesForm(' . $op['op_id'] . ')',
-                                    'title' => Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId)
+                                    'onclick' => 'shippingRatesForm(' . $op['op_id'] . ')',                                   
                                 ],
                                 'label' => '<i class="icn">
                                                             <svg class="svg" width="18" height="18">
@@ -229,8 +225,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                     $data['dropdownButtons']['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
-                                            'onclick' => 'generateLabel(' . $op['op_id'] . ')',
-                                            'title' => Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId)
+                                            'onclick' => 'generateLabel(' . $op['op_id'] . ')',                                           
                                         ],
                                         'label' => '<i class="icn">
                                                                     <svg class="svg" width="18" height="18">
@@ -246,8 +241,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                     $data['dropdownButtons']['otherButtons'][] = [
                                         'attr' => [
                                             'href' => UrlHelper::generateUrl("ShippingServices", $method, [$op['op_id']]),
-                                            'target' => "_blank",
-                                            'title' => Labels::getLabel($title, $siteLangId)
+                                            'target' => "_blank",                                            
                                         ],
                                         'label' => '<i class="icn">
                                                                     <svg class="svg" width="18" height="18">
@@ -267,8 +261,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                     $data['dropdownButtons']['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
-                                            'onclick' => 'proceedToShipment(' . $op['op_id'] . ')',
-                                            'title' => $label
+                                            'onclick' => 'proceedToShipment(' . $op['op_id'] . ')',                                            
                                         ],
                                         'label' => '<i class="icn">
                                                                     <svg class="svg" width="18" height="18">
@@ -285,8 +278,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                         $data['dropdownButtons']['otherButtons'][] = [
                                             'attr' => [
                                                 'href' => 'javascript:void(0)',
-                                                'onclick' => 'getPickupForm(' . $op['op_id'] . ')',
-                                                'title' => Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId)
+                                                'onclick' => 'getPickupForm(' . $op['op_id'] . ')',                                                
                                             ],
                                             'label' => '<i class="icn">
                                                                         <svg class="svg" width="18" height="18">
@@ -300,8 +292,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                         $data['dropdownButtons']['otherButtons'][] = [
                                             'attr' => [
                                                 'href' => 'javascript:void(0)',
-                                                'onclick' => 'cancelPickup(' . $op['op_id'] . ')',
-                                                'title' => Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId)
+                                                'onclick' => 'cancelPickup(' . $op['op_id'] . ')',                                                
                                             ],
                                             'label' => '<i class="icn">
                                                                         <svg class="svg" width="18" height="18">

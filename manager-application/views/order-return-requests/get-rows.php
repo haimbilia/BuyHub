@@ -15,8 +15,7 @@ foreach ($arrListing as $sn => $row) {
         }
     }
 
-    if ($count != 1 && 0 < $month && $month != date("m", strtotime($row['orrmsg_date']))) {
-?>
+    if ($count != 1 && 0 < $month && $month != date("m", strtotime($row['orrmsg_date']))) { ?>
         <li class="timeline-item period">
             <div class="timeline-info"></div>
             <div class="timeline-marker"></div>
@@ -64,12 +63,10 @@ foreach ($arrListing as $sn => $row) {
                     <?php echo nl2br($row['orrmsg_msg']); ?>
                 </p>
             </div>
-
-
         </div>
     <?php
-    if (count($arrListing) == $count) {
-        echo '</div>';
+    if (count($arrListing)  == $count) {
+        echo '</li>';
     }
     $month = date("m", strtotime($row['orrmsg_date']));
     $count++;
