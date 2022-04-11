@@ -165,7 +165,12 @@
 
             <?php if (isset($pageData['plang_warring_msg']) && !empty($pageData['plang_warring_msg']) && ('true' != CommonHelper::getCookie('alert_' . $pageData['plang_id']))) { ?>
                 <div class="alert alert-solid-warning fade alertWarningJs show " role="alert">
-                    <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                    <div class="alert-icon">
+                        <svg class="svg" width="20" height="20">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#warning">
+                            </use>
+                        </svg>
+                    </div>
                     <div class="alert-text"><?php echo nl2br($pageData['plang_warring_msg']); ?></div>
                     <div class="alert-close">
                         <button type="button" class="btn-close closeAlertJs <?php echo 'alert_' . $pageData['plang_id']; ?>" data-bs-dismiss="alert" aria-label="Close" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>">
@@ -177,7 +182,10 @@
 
             <?php if (isset($pageData['plang_recommendations']) && !empty($pageData['plang_recommendations'])) { ?>
                 <div class="alert alert-solid-info fade show" role="alert">
-                    <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                    <div class="alert-icon"><svg class="svg" width="20" height="20">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#info">
+                            </use>
+                        </svg></div>
                     <div class="alert-text"><?php echo nl2br($pageData['plang_recommendations']); ?></div>
                 </div>
             <?php } ?>

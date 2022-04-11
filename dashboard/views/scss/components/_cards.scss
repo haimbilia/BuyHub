@@ -18,6 +18,9 @@ $card-bg: #fff;
     @include media-breakpoint-down(md) {
         word-break: normal;
     }
+    &-stretch {
+        height: 100%;
+    }
     &-tabs {
         .card-head {
             align-items: center;
@@ -121,7 +124,7 @@ $card-bg: #fff;
             color: currentColor;
         }
     }
-    &-full-height{
+    &-full-height {
         height: 100%;
         margin-bottom: 1rem;
     }

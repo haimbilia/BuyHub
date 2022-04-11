@@ -5,7 +5,7 @@ $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageD
 ?>
 <?php if (empty($messageDetail)) { ?>
     <div class="col-md-9">
-        <div class="card mb-0 h-100">
+        <div class="card card-stretch mb-0">
             <div class="card-body">
                 <div class="not-found">
                     <img width="100" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
@@ -32,17 +32,17 @@ $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageD
     }
 
     $uploadedTime = AttachedFile::setTimeParam($fromUserUpdatedOn);
-    
+
     $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, ImageDimension::VIEW_THUMB, true], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 ?>
 
     <div class="communication-content threadJs" data-thread-id="<?php echo $messageDetail['thread_id'] ?>">
-        <div class="card mb-0 h-100">
+        <div class="card card-stretch mb-0">
             <div class="card-head">
                 <div class="card-head-label">
                     <div class="card-head-title d-flex align-items-center">
                         <div class="user user-md user-circle">
-                            <img data-aspect-ratio = "<?php echo $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $userImageUrl; ?>" alt="<?php echo $fromUserName; ?>">
+                            <img data-aspect-ratio="<?php echo $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $userImageUrl; ?>" alt="<?php echo $fromUserName; ?>">
                         </div>
                         <div class="message-user__detail">
                             <h3><?php echo $fromUserName; ?></h3>
@@ -79,7 +79,7 @@ $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageD
 
                                         $rowUserImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$row['message_from_user_id'], ImageDimension::VIEW_THUMB, true], CONF_WEBROOT_FRONT_URL) . $rowUploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                         ?>
-                                        <img data-aspect-ratio = "<?php echo $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $rowUserImageUrl; ?>" alt="<?php echo $row['message_from_name']; ?>">
+                                        <img data-aspect-ratio="<?php echo $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $rowUserImageUrl; ?>" alt="<?php echo $row['message_from_name']; ?>">
                                     </div>
                                 </div>
                                 <div class="message-detail">
@@ -87,9 +87,9 @@ $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageD
                                         <?php echo nl2br($row['message_text']); ?>
                                     </div>
                                     <span class="time"> <?php if ($row['thread_started_by'] != $row['message_from_user_id']) { ?>
-                                        <?php echo $toUserName; ?> - 
-                                    <?php } ?>
-                                    <?php echo date('H:i', $msgTimeStamp); ?></span>
+                                            <?php echo $toUserName; ?> -
+                                        <?php } ?>
+                                        <?php echo date('H:i', $msgTimeStamp); ?></span>
                                 </div>
                             </div>
                     <?php }
@@ -100,7 +100,7 @@ $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageD
     </div>
 
     <!-- <div class="communication-sidebar userJs">
-        <div class="card mb-0 h-100">
+        <div class="card card-stretch mb-0">
             <div class="card-body">
                 <div class="message__user">
                     <div class="user user-circle">

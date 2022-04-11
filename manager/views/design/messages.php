@@ -68,7 +68,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="card mb-0 h-100">
+                            <div class="card card-stretch mb-0">
                                 <div class="card-head flex-column">
                                     <div class="card-head-label">
                                         <h3 class="card-head-title">Messages</h3>
@@ -223,7 +223,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="card mb-0 h-100">
+                            <div class="card card-stretch mb-0">
                                 <div class="card-head">
                                     <div class="card-head-label">
                                         <div class="card-head-title d-flex align-items-center">
@@ -317,7 +317,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="card mb-0 h-100">
+                            <div class="card card-stretch mb-0">
                                 <div class="card-body">
                                     <div class="message__user">
                                         <div class="user user-circle">

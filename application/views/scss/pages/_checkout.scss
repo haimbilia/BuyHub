@@ -54,7 +54,7 @@
     display: grid;
     grid-gap: 5rem;
     grid-template-columns: 2fr 1fr;
-    @include media-breakpoint-down(md) {
+    @include media-breakpoint-down(lg) {
         display: block;
     }
     &_main {
@@ -388,7 +388,7 @@
         }
     }
     .payment-block {
-        padding: 2rem;
+        padding: 0 2rem;
     }
 }
 

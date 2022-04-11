@@ -662,3 +662,16 @@ mark,
 
     grid-template-columns: minmax(auto, 24%) 1fr;
 }
+
+.badges-list {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    &-img {
+        border-radius: 6px;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        max-width: 22px;
+    }
+}

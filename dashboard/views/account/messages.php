@@ -17,7 +17,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
     <?php if (empty($arrListing)) { ?>
         <div class="row">
             <div class="col-md-12">
-                <div class="card mb-0 h-100">
+                <div class="card card-stretch mb-0">
                     <div class="card-body">
                         <div class="not-found">
                             <img width="100" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
@@ -31,7 +31,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
     <?php } else { ?>
         <div class="communication">
             <div class="communication-nav">
-                <div class="card mb-0 h-100">
+                <div class="card card-stretch mb-0">
                     <div class="communication-search">
                         <?php
                         $frmSearch->setFormTagAttribute('class', 'form');

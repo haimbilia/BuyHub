@@ -26,6 +26,7 @@ if (isset($prodcat_code)) {
     </form>-->
         <?php
         $searchFrm->addFormTagAttribute('class', 'form');
+        $searchFrm->setFormTagAttribute('id', 'filterSearchForm');
         echo $searchFrm->getFormTag();
         $fld = $searchFrm->getField('keyword');
         $fld->overrideFldType('search');
