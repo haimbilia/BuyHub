@@ -136,6 +136,11 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                     <div class="block-cart-detail-top">
                         <div class="product-profile">
                             <div class="product-profile-data">
+                                <div class="item__category">
+                                    <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
+                                        <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                    </a>
+                                </div>
                                 <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
                                 <div class="products-price"> <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
                                 <div class="options">
@@ -255,6 +260,11 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         <div class="block-cart-detail-top">
                             <div class="product-profile">
                                 <div class="product-profile-data">
+                                    <div class="item__category">
+                                        <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
+                                            <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                        </a>
+                                    </div>
                                     <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
                                     <div class="products-price">
                                         <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
