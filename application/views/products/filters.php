@@ -331,7 +331,7 @@ if (isset($prodcat_code)) {
 
                     </div>
 
-                    <script language="javascript">
+                    <script>
                         var catCodeArr = <?php echo json_encode($catCodeArr); ?>;
                         $.each(catCodeArr, function(key, value) {
                             if ($("ul li a[data-id='" + value + "']").parent().find('span')) {

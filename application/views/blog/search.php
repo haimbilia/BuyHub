@@ -10,6 +10,6 @@
         </div>
     </div>
 </section>
-<script type="text/javascript">
+<script>
     var keyword = '<?php echo (isset($keyword)) ? $keyword : ''; ?>';
 </script>
