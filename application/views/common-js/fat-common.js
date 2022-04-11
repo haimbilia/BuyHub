@@ -1,5 +1,6 @@
 siteConstants.userWebRoot = (siteConstants.rewritingEnabled) ? siteConstants.webroot : siteConstants.webroot_traditional;
 var pageReloading = false;
+var isAjaxRunning = false;
 var fcom = {
 	ajaxRequestLog: [],
 	logAjaxRequest: function (url, data, res, ajaxLoopHandler) {
@@ -59,13 +60,14 @@ var fcom = {
 		var dbmsg = o.dbmsg || '<img src="' + fcom.makeUrl() + 'img/loading.gif" alt="Processing..">';
 		var dvdebug = $('<div />').append(dbmsg);
 		dvdebug.appendTo($('#dv-bg-processes'));
-
+		isAjaxRunning = true;
 		$.ajax({
 			method: "POST",
 			url: url,
 			data: data,
 			dataType: o.fOutMode,
 			success: function (t) {
+				isAjaxRunning = false;
 				dvdebug.remove();
 				var repeatCount = fcom.logAjaxRequest(url, data, t, o.ajaxLoopHandler);
 				if (o.fOutMode == 'json') {
@@ -129,7 +131,9 @@ var fcom = {
 		fcom.displayProcessing();
 		let processingClass = fcom.processingCounter;
 		var o = $.extend(true, { fOutMode: 'json' }, options);
+		isAjaxRunning = true;
 		this.ajax(url, data, function (ans) {
+			isAjaxRunning = false;
 			fcom.closeProcessing(processingClass);
 			if (ans.status != 1) {
 				fcom.removeLoader();

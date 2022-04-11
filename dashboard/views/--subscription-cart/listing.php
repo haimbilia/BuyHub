@@ -12,9 +12,7 @@
         <tbody>
             <?php
             if (count($subscriptionArr)) {
-                foreach ($subscriptionArr as $subscription) {
-
-            ?>
+                foreach ($subscriptionArr as $subscription) { ?>
                     <tr>
                         <td>
                             <div class="item__head">
@@ -34,9 +32,7 @@
                             <div class="product_price"><?php echo CommonHelper::displayMoneyFormat($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price'], true, false, true, false, true); ?></div>
                         </td>
                     </tr>
-            <?php
-
-                }
+            <?php }
             }
             ?>
         </tbody>

@@ -44,7 +44,7 @@
                             <div class="block-cart-detail-top">
                                 <div class="product-profile">
                                     <div class="product-profile-data">
-                                        <a class="title" title="<?php echo $product['selprod_title']; ?>" href="/yokart/apple-iphone-12-187">
+                                        <a class="title" title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>">
                                             <?php echo $product['selprod_title']; ?>
                                         </a>
                                         <div class="products-price">

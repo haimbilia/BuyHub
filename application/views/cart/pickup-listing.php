@@ -72,6 +72,11 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                             <div class="block-cart-detail-top">
                                 <div class="product-profile">
                                     <div class="product-profile-data">
+                                        <div class="item__category">
+                                            <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
+                                                <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                            </a>
+                                        </div>
                                         <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
                                         <div class="options">
                                             <?php
@@ -145,21 +150,28 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                     <div class="block-cart-detail-top">
                         <div class="product-profile">
                             <div class="product-profile-data">
+                                <div class="item__category">
+                                    <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
+                                        <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                    </a>
+                                </div>
                                 <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
                                     <div class="products-price">
                                         <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?>
                                     </div>
                                 </div>
                                 <div class="options">
-                                    <p class=""> <?php
-                                                    if (isset($product['options']) && count($product['options'])) {
-                                                        foreach ($product['options'] as $key => $option) {
-                                                            if (0 < $key) {
-                                                                echo ' | ';
-                                                            }
-                                                            echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
+                                    <p>
+                                        <?php
+                                        if (isset($product['options']) && count($product['options'])) {
+                                            foreach ($product['options'] as $key => $option) {
+                                                if (0 < $key) {
+                                                    echo ' | ';
+                                                }
+                                                echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
                                         <?php }
-                                                    } ?></p>
+                                        } ?>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -269,7 +281,13 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         <div class="block-cart-detail-top">
                             <div class="product-profile">
                                 <div class="product-profile-data">
-                                    <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?>
+                                    <div class="item__category">
+                                        <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
+                                            <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                        </a>
+                                    </div>
+                                    <a class="title" href="<?php echo $productUrl; ?>">
+                                        <?php echo $productTitle; ?>
                                     </a>
                                     <div class="products-price">
                                         <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>

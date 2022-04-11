@@ -1,18 +1,12 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
-die();
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $colMdVal = isset($colMdVal) ? $colMdVal : 4;
 $displayProductNotAvailableLable = false;
 if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
     $displayProductNotAvailableLable = true;
 }
-?>
-
-<?php
 $productsByShop = [];
 $productsBySelProdCode = [];
-if ($products) {
-?>
+if ($products) { ?>
     <div class="interactive-stores-list">
         <div class="stores">
             <div class="stores-body">
@@ -60,9 +54,7 @@ if ($products) {
             </div>
         </div>
     </div>
-
-
-    <?php
+<?php
     $searchFunction = 'goToProductListingSearchPage';
     if (isset($pagingFunc)) {
         $searchFunction = $pagingFunc;
@@ -72,18 +64,12 @@ if ($products) {
     echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
     $pagingArr = array('pageCount' => $pageCount, 'page' => $postedData['page'], 'recordCount' => $recordCount, 'callBackJsFunc' => $searchFunction);
     $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
-    ?>
-<?php
 } else {
     $arr['recordDisplayCount'] = $recordCount;
     echo FatUtility::createHiddenFormFromData($arr, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
     $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
 }
-?>
-
-<?php
-
 foreach ($moreSellersProductsArr as $product) {
     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
     $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']));
@@ -94,37 +80,37 @@ foreach ($moreSellersProductsArr as $product) {
         'shop_id' => $product['shop_id'],
         'selprod_id' => $product['selprod_id'],
         'content' => '<ul class="gmap-list">
-                <li>
-                    <div class="product-profile">
-                        <div class="product-profile-thumbnail"><img class="product-img" src="' . $img . '" alt=""></div>
-                        <div class="product-profile-data"><div class="title"><a href="' . $productUrl . '"><strong>' . ((mb_strlen($product['selprod_title']) > 30) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']) . '</strong></a></div></div>
-                    </div>
-                </li>
-            </ul>',
+                        <li>
+                            <div class="product-profile">
+                                <div class="product-profile-thumbnail"><img class="product-img" src="' . $img . '" alt=""></div>
+                                <div class="product-profile-data"><div class="title"><a href="' . $productUrl . '"><strong>' . ((mb_strlen($product['selprod_title']) > 30) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']) . '</strong></a></div></div>
+                            </div>
+                        </li>
+                    </ul>',
         'amount' =>  CommonHelper::displayMoneyFormat($product['theprice']),
     ];
 }
 
 foreach ($productsByShop as &$marker) {
     $contentString = '<div class="seller-card">
-                <div class="seller_logo">
-                    <img src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$product['shop_id'], $siteLangId, ImageDimension::VIEW_SMALL]) . '">
-                </div>
-                <div class="seller_detail">
-                <div class="seller_title">' . $marker['shop_name'] . '</div>                
-                </div> 
-            </div>
+                        <div class="seller_logo">
+                            <img src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$product['shop_id'], $siteLangId, ImageDimension::VIEW_SMALL]) . '">
+                        </div>
+                        <div class="seller_detail">
+                        <div class="seller_title">' . $marker['shop_name'] . '</div>                
+                        </div> 
+                    </div>
             <ul class="gmap-list">';
     foreach ($marker['products'] as $product) {
         $amount = CommonHelper::displayMoneyFormat($product['theprice']);
         $contentString .= '<li>
-            <figure class="product-profile">
-            <div class="product-profile-thumbnail"><img class="product-img" src="' . $product['img'] . '" alt="' . $product['name'] . '"></div>
-            <div class="product-profile-data"><div class="title"><a href="' . $product['url'] . '">' . $product['name'] . '</a></div>
-                <div class="price">' . $amount . '</div>
-            </div>
-            </figure>
-            </li>';
+                                <figure class="product-profile">
+                                    <div class="product-profile-thumbnail"><img class="product-img" src="' . $product['img'] . '" alt="' . $product['name'] . '"></div>
+                                    <div class="product-profile-data"><div class="title"><a href="' . $product['url'] . '">' . $product['name'] . '</a></div>
+                                        <div class="price">' . $amount . '</div>
+                                    </div>
+                                </figure>
+                            </li>';
     }
     $contentString .= '</ul>';
     unset($marker['products']);
