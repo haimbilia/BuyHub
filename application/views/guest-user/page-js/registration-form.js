@@ -19,21 +19,27 @@
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         $('#sign-up').prepend(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'register'), data, function (t) {
+        fcom.ajax(fcom.makeUrl('GuestUser', 'register'), data, function (t) {
+            if (1 > t.status) {
+                
+                fcom.displayErrorMessage(t.msg);
+                fcom.removeLoader();
+            }
             if (1 == t.status) {
                 fcom.ajax(fcom.makeUrl('GuestUser', 'otpForm'), '', function (t) {
                     fcom.removeLoader();
                     t = $.parseJSON(t);
-                    if (1 > t.status) {
+                    if (1 > t.status) {                       
                         fcom.displayErrorMessage(t.msg);
                         return false;
                     }
                     $('#sign-up').html(t.html);
                     $('.countdownFld--js, .resendOtp-js').parent().removeClass('d-none');
                     startOtpInterval('.otpForm-js');
+                    fcom
                 });
             }
-        });
+        },{ fOutMode: 'json' });
         return false;
     };
 
