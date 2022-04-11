@@ -652,6 +652,10 @@ Updates/Fixes :
     => 063537 - Admin: The whole page is not getting blurred while the loader is showing on the page at the admin's end
     => 063599 - Buyer: Error is showing while verifying the email while registering as a new user at the front-end 
     => 063638 - Advertiser: Auto-login is not working after registering as an Advertiser and the advertiser's company information is not showing at the admin's end
+    => 063647 - Buyer: "Invalid Form submitted" error is showing while trying to register with a Phone number
+    => 063679 - Buyer: Seller's name is not showing with the product while adding the product into the cart and while proceeding with the payment at the front-end
+    => 063678 - Buyer: Shop > Shop top products: Clear button is not working
+    => 063674 - Seller: "Invalid Request" error is showing while adding the media for the product at the seller's end
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
@@ -672,6 +676,8 @@ UAT points:
     => Manage Funds withdrawal requests - label Subtitle , Consideration over the Export option to be introduced under the Withdrawal Request Section (CSV download option) which is currently not placed into the system
     ----------------------------TV-9.4.0.20220406-----------------------
     => 063377 - Seller UI: Messages' count is still showing after reading all the messages at the seller's end and buyer's end.
+    => 063631 - Seller UI: Spacing issue on seller registration page.
+    => 063632 - Advertiser: Double background images are showing while registering as an advertiser at the front-end and getting a UI issue while editing the content block of the advertiser at the admin's end.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
