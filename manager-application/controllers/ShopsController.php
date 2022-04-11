@@ -47,6 +47,7 @@ class ShopsController extends ListingBaseController
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'shops/page-js/index.js']);
         $this->includeFeatherLightJsCss();
         $this->set('includeEditor', true);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_SHOP_NAME_OR_SELLER_NAME', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -104,6 +105,7 @@ class ShopsController extends ListingBaseController
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
+            $shopSpecificsData = ShopSpecifics::getAttributesById($shop_id);
             $data['urlrewrite_custom'] = AdminShopSearch::getUrlRewrite('shops/view/' . $shop_id);
             $data['shop_country_code'] = Countries::getCountryById($data['shop_country_id'], $this->siteLangId, 'country_code');
             $stateObj = new States();
@@ -111,6 +113,7 @@ class ShopsController extends ListingBaseController
             $frm->getField('shop_state')->options = $statesArr;
             $stateCode = States::getAttributesById($data['shop_state_id'], 'state_code');
             $data['shop_state'] = $stateCode;
+            $data = array_merge($data, $shopSpecificsData);
             $frm->fill($data);
         }
         $this->set('languages', $lang);

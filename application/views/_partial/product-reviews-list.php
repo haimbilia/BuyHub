@@ -86,10 +86,12 @@ $this->includeTemplate('_partial/product-reviews.php', [
     </div>
 </div>
 <script>
-    var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
-    var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';
+    $(function() {
+        var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
+        var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';
 
-    $('#itemRatings div.progress__fill').css({
-        'clip': 'rect(0px, <?php echo $pixelToFillRight; ?>px, 160px, 0px)'
+        $('#itemRatings div.progress__fill').css({
+            'clip': 'rect(0px, <?php echo $pixelToFillRight; ?>px, 160px, 0px)'
+        });
     });
 </script>

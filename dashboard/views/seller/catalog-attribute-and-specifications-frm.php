@@ -113,12 +113,9 @@ $warrantyFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_I
             foreach ($otherLanguages as $langId => $data) {
         ?>
                 <div class="accordion my-4" id="specification-accordion-<?php echo $langId; ?>">
-
-                    <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapse-<?php echo $langId; ?>">
-                        <span onclick="displayOtherLangProdSpec(this,<?php echo $langId; ?>)">
-                            <?php echo $data . " ";
-                            echo Labels::getLabel('LBL_Language_Specification', $siteLangId); ?>
-                        </span>
+                    <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapse-<?php echo $langId; ?>" onclick="displayOtherLangProdSpec(this,<?php echo $langId; ?>)">
+                        <?php echo $data . " ";
+                        echo Labels::getLabel('LBL_Language_Specification', $siteLangId); ?>
                     </h6>
                     <div id="collapse-<?php echo $langId; ?>" class="collapse collapse-js-<?php echo $langId; ?>" aria-labelledby="headingOne" data-parent="#specification-accordion-<?php echo $langId; ?>">
                         <div class="specifications-form-<?php echo $langId; ?>"></div>

@@ -17,9 +17,9 @@ if (isset($amazon) && strlen($orderId) > 0 && $orderInfo["order_payment_status"]
     if (strlen($amazon['merchant_id']) > 0 && strlen($amazon['access_key']) > 0 && strlen($amazon['secret_key']) > 0 && strlen($amazon['client_id']) > 0 && strlen(FatApp::getConfig('CONF_TRANSACTION_MODE', FatUtility::VAR_STRING, '0'))) {
 
     if (!FatUtility::isAjaxCall()) { ?>
-        <script type='text/javascript' src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js'></script>
+        <script src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js'></script>
     <?php } ?>
-    <script type="text/javascript">
+    <script>
         var loginReady = false;
         window.onAmazonLoginReady = function() {
             if (true === loginReady) {
@@ -33,7 +33,7 @@ if (isset($amazon) && strlen($orderId) > 0 && $orderInfo["order_payment_status"]
             window.onAmazonLoginReady();
         }
     </script>
-    <script type="text/javascript">
+    <script>
         var authRequest;
         OffAmazonPayments.Button("AmazonPayButton", '<?php echo $amazon['merchant_id']; ?>', {
             type: "PwA",

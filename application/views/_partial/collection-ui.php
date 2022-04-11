@@ -153,5 +153,7 @@ if ($showAddToFavorite) {
 ?>
 
 <script>
-    $('#shareIcon').insertAfter("#body");
+    $(function() {
+        $('#shareIcon').insertAfter("#body");
+    });
 </script>

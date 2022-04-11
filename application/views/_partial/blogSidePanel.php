@@ -130,21 +130,23 @@
 <?php }*/ ?>
 
 <script>
-    /* for blog links */
-    $('.link--toggle-js').on('click', function() {
-        if ($(this).hasClass('is-active')) {
-            $(this).removeClass('is-active');
-            $(this).next('.nav--toggled-js > ul > li ul').find('.link--toggle-js').removeClass('is-active');
-            $(this).next('.nav--toggled-js > ul > li ul').slideUp();
-            $(this).next('.nav--toggled-js > ul > li ul').find('.nav--toggled-js > ul > li ul').slideUp();
-            return false;
-        }
-        $('.link--toggle-js').removeClass('is-active');
-        $(this).addClass("is-active");
-        $(this).parents('ul').each(function() {
-            $(this).siblings('span').addClass('is-active');
+    $(function() {
+        /* for blog links */
+        $('.link--toggle-js').on('click', function() {
+            if ($(this).hasClass('is-active')) {
+                $(this).removeClass('is-active');
+                $(this).next('.nav--toggled-js > ul > li ul').find('.link--toggle-js').removeClass('is-active');
+                $(this).next('.nav--toggled-js > ul > li ul').slideUp();
+                $(this).next('.nav--toggled-js > ul > li ul').find('.nav--toggled-js > ul > li ul').slideUp();
+                return false;
+            }
+            $('.link--toggle-js').removeClass('is-active');
+            $(this).addClass("is-active");
+            $(this).parents('ul').each(function() {
+                $(this).siblings('span').addClass('is-active');
+            });
+            $(this).closest('ul').find('li .nav--toggled-js > ul > li ul').slideUp();
+            $(this).next('.nav--toggled-js > ul > li ul').slideDown();
         });
-        $(this).closest('ul').find('li .nav--toggled-js > ul > li ul').slideUp();
-        $(this).next('.nav--toggled-js > ul > li ul').slideDown();
     });
 </script>

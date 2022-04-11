@@ -34,7 +34,7 @@ $addressFrm->removeField($fld);
     </div>
     <?php require_once(CONF_THEME_PATH . '_partial/sidebar/form-edit-foot.php'); ?>
 </div>
-<script language="javascript">
+<script>
     $(document).ready(function() {
         getCountryStates($("#addr_country_id").val(), <?php echo $stateId; ?>, '#addr_state_id');
     });

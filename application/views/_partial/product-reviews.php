@@ -153,13 +153,11 @@ $productView = $productView ?? false;
             }
         };
 
-        $(function() {
-            // create new variable for each menu
-            var dd1 = new DropDown($('.js-wrap-drop-reviews'));
-            $(document).on('click', function() {
-                // close menu on document click
-                $('.wrap-drop').removeClass('active');
-            });
+        // create new variable for each menu
+        var dd1 = new DropDown($('.js-wrap-drop-reviews'));
+        $(document).on('click', function() {
+            // close menu on document click
+            $('.wrap-drop').removeClass('active');
         });
     });
 </script>
