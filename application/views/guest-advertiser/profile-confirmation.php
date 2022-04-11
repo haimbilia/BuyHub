@@ -11,9 +11,14 @@
     <div class="section-head  section-head-center">
         <div class="section-heading">
             <h2><?php echo Labels::getLabel('MSG_Congratulations', $siteLangId); ?>!</h2>
+            <p><?php echo $success_message; ?></p>
+            <a href="<?php echo UrlHelper::generateUrl('guest-user', 'login-form'); ?>" class="btn btn-brand"><?php echo Labels::getLabel('Lbl_Login', $siteLangId); ?></a>
         </div>
     </div>
-
-    <p><?php echo $success_message; ?></p>
-    <a href="<?php echo UrlHelper::generateUrl('guest-user', 'login-form'); ?>" class="btn btn-brand"><?php echo Labels::getLabel('Lbl_Login', $siteLangId); ?></a>
 </div>
+
+<?php if (isset($redirectUrl) && !empty($redirectUrl)) { ?>
+    <script>
+        setTimeout(window.location.href = '<?php echo $redirectUrl; ?>', 3000);
+    </script>
+<?php } ?>

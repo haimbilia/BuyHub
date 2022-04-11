@@ -44,7 +44,7 @@
     };
 
     setupPluginsSettings = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         var keyName = frm.keyName.value;
         fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings', 'setup'), data, function (t) {

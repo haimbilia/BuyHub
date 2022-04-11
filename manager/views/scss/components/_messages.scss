@@ -33,11 +33,7 @@
             text-decoration: none;
         }
         &.is-active {
-            // // background-color: $brand-color;
-            // color:  lighten($brand-color, 55%);
-            @include bg-brand();
-            // color:  lighten($brand-color, 55%);
-            @include bg-brand();
+            background-color: $bg-gray;
             .message-to {
                 background: #00000054;
             }
@@ -159,12 +155,6 @@
             }
             .message {
                 border-radius: 1.125rem 1.125rem 0 1.125rem;
-                // // background-color: $brand-color;
-                // color:  lighten($brand-color, 55%);
-                @include bg-brand();
-                // color:  lighten($brand-color, 55%);
-                @include bg-brand();
-                color: white;
                 margin-#{$start-direction}: auto;
             }
             .time {

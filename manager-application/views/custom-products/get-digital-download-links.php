@@ -5,19 +5,15 @@ if(1 > count($links)){
 }
 $arr_flds = [
     'pdl_download_link' => Labels::getLabel('LBL_DOWNLOAD_LINK', $siteLangId),
-    'pdl_preview_link' => Labels::getLabel('LBL_PREVIEW_LINK', $siteLangId),
-    /*
-    'pddr_options_code' => Labels::getLabel('LBL_LINK_OPTION', $siteLangId),
-    'pdl_lang_id' => Labels::getLabel('LBL_LINK_LANGUAGE', $siteLangId),
-    */
+    'pdl_preview_link' => Labels::getLabel('LBL_PREVIEW_LINK', $siteLangId),   
     'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId),    
 ];
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
-$th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table listingTableJs'));
+$th = $tbl->appendElement('thead',['class'=> 'tableHeadJs'])->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
-    $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
-    $e = $th->appendElement('th', array(), $val);
+    $tdAttr = ('action' == $key) ? ['class' => 'align-right','width'=>'20%'] : ['width'=>'40%'];
+    $e = $th->appendElement('th', $tdAttr, $val);
 }
 
 $serialNo = 0;

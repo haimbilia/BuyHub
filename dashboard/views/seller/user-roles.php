@@ -3,7 +3,7 @@
     <div class="row">
         <?php foreach ($arrListing as $key => $arrList) { ?>
             <div class="col-md-6">
-                <div class="card">
+                <div class="card card-full-height">
                     <div class="card-head">
                         <h5 class="card-title"><?php echo $modulesArr[$key]; ?></h5>
                     </div>

@@ -5,7 +5,7 @@ $(document).ready(function () {
 });
 (function () {
     updatePayment = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Buyer', 'updatePayment'), data, function (t) {
             setTimeout(function () { location.reload(true); }, 2000);

@@ -15,6 +15,7 @@ class PluginSetting
     public const TYPE_INT = 2;
     public const TYPE_FLOAT = 3;
     public const TYPE_BOOL = 4;
+    public const TYPE_SELECT = 5;
 
     public function __construct($id, $pluginKey = '', $recordId = 0)
     {
@@ -166,6 +167,12 @@ class PluginSetting
                 case static::TYPE_BOOL:
                     $yesNo = array_reverse(applicationConstants::getYesNoArr($langId));
                     $fld = $frm->addSelectBox($label, $fieldName, $yesNo, '', array(), '');
+                    break;
+                case static::TYPE_SELECT:
+                    $options = $attributes['options'] ?? [];
+                    $selectedValue = $attributes['selectedValue'] ?? '';
+                    $selectCaption = $attributes['selectCaption'] ?? Labels::getLabel('LBL_SELECT', $langId);
+                    $fld = $frm->addSelectBox($label, $fieldName, $options, $selectedValue, array(), $selectCaption);
                     break;
                 default:
                     $fld = $frm->addTextBox($label, $fieldName);

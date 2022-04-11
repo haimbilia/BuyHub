@@ -11,7 +11,7 @@ $(document).ready(function () {
 
 (function () {
     updateStatus = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
         var op_id = $(frm.op_id).val();
         var manualShipping = 0;
         var orderStatusId = $(frm.op_status_id).val(); 

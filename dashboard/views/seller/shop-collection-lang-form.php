@@ -1,8 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($shopColLangFrm);
-$shopColLangFrm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
-$shopColLangFrm->setFormTagAttribute('dir', $formLayout);
+$shopColLangFrm->setFormTagAttribute('class', 'form modalFormJs');
+if (CommonHelper::getLayoutDirection() != $formLayout) {
+    $shopColLangFrm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $shopColLangFrm->setFormTagAttribute('dir', $formLayout);
+}
 $shopColLangFrm->setFormTagAttribute('data-onclear', "editShopCollectionLangForm(" . $scollection_id . ", " . $langId . ");");
 $shopColLangFrm->setFormTagAttribute('onsubmit', 'setupShopCollectionlangForm(this); return(false);');
 

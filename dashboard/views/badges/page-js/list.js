@@ -8,6 +8,14 @@ $(document).on('change', '.icon-language-js', function () {
     badgeImages(badge_id, 'icon', 0, $(this).val());
 });
 
+$(document).on('change', '.badgeTriggerTypeJs', function () {
+    if (2 == $(this).val()) {
+        $('.badgeApprovalJs').val('').attr('disabled', 'disabled');
+    } else {
+        $('.badgeApprovalJs').val('').removeAttr('disabled');
+    }
+});
+
 (function () {
     var dv = '#listing';
     var controller = 'Badges';
@@ -46,6 +54,7 @@ $(document).on('change', '.icon-language-js', function () {
 
     clearSearch = function () {
         document.frmRecordSearch.reset();
+        $('.badgeApprovalJs').val('').removeAttr('disabled');
         searchRecords(document.frmRecordSearch);
         $('.searchHead--js').click();
     };
@@ -100,7 +109,7 @@ $(document).on('change', '.icon-language-js', function () {
 
 
     setupBadgeReq = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate()) { return; }
 
         let formData = new FormData(frm);
         $.ajax({

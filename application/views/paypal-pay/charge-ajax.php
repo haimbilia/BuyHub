@@ -25,8 +25,9 @@
                 }).then(function(res) {
                     return res.json();
                 }).then(function(data) {
-                    $.ykmsg.info(langLbl.waitingForResponse);
+                    $.ykmsg.info(langLbl.waitingForResponse, -1);
                     if (!data.success && (data.message || data.msg)) {
+                        fcom.removeLoader();
                         var msg = typeof data.msg != 'undefined' ? data.msg : data.message;
                         fcom.displayErrorMessage(msg);
                         return;
@@ -37,13 +38,13 @@
             },
             //=== Call your server to save the transaction
             onApprove: function(data, actions) {
-                $.ykmsg.info(langLbl.waitingForResponse);
+                $(".Paypal-js").prepend(fcom.getLoader());
+                $.ykmsg.info(langLbl.waitingForResponse, -1);
                 return fetch(fcom.makeUrl('PaypalPay', 'captureOrder', [data.orderID]), {
                     method: "POST",
                 }).then(function(res) {
                     return res.json();
                 }).then(function(data) {
-                    console.log(data);
                     //=== Redirect to thank you/success page after saving transaction
                     $.ajax({
                         type: "POST",
@@ -51,10 +52,12 @@
                         data: data,
                         dataType: 'json',
                         beforeSend: function() {
-                            $.ykmsg.info(langLbl.updatingRecord);
+                            $.ykmsg.close();
+                            $.ykmsg.info(langLbl.updatingRecord, -1);
                         },
                         success: function(resp) {
                             if (1 > resp.status) {
+                                fcom.removeLoader();
                                 fcom.displayErrorMessage(resp.msg);
                             } else {
                                 fcom.displaySuccessMessage(resp.msg);
@@ -69,7 +72,7 @@
         }).render("#paypal-buttons");
     }
 
-    $(function () {
+    $(function() {
         loadPayPalButtons();
         setTimeout(function() {
             if ('' != $("#paypal-buttons").html()) {

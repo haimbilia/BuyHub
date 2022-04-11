@@ -481,7 +481,7 @@ mark,
     position: relative;
     &-arrow {
         position: absolute;
-        transform: translate(-6px * $transform-direction, 0);
+        transform: translate(-10px * $transform-direction, 0);
         top: calc(50% - 4px);
         //#{$end-direction}: 25px;
         #{$end-direction}: 0;
@@ -495,19 +495,19 @@ mark,
             transition: all 0.25s ease-in-out;
         }
         &:before {
-            transform: translate(0px * $transform-direction, 0) rotate(45deg);
+            transform: translate(0px, 0) rotate(45deg);
         }
         &:after {
-            transform: translate(-6px * $transform-direction, 0px) rotate(-45deg);
+            transform: translate(-6px, 0px) rotate(-45deg);
         }
     }
     &:not(.collapsed) {
         .dropdown-toggle-custom-arrow {
             &:before {
-                transform: translate(-6px * $transform-direction, 0px) rotate(45deg);
+                transform: translate(-6px, 0px) rotate(45deg);
             }
             &:after {
-                transform: translate(0px * $transform-direction, 0) rotate(-45deg);
+                transform: translate(0px, 0) rotate(-45deg);
             }
         }
     }
@@ -869,7 +869,7 @@ mark,
         flex-wrap: wrap;
         li {
             padding: 0;
-            padding-bottom: 2rem;
+            padding-bottom: 1rem;
             flex: 0 0 50%;
             max-width: 50%;
         }
@@ -1047,6 +1047,7 @@ mark,
 
 //Coupon
 .list-coupons {
+    margin: 2.5rem;
     font-size: 0.8rem;
     display: grid;
     grid-gap: 3.5rem 2rem;
@@ -1120,7 +1121,7 @@ mark,
         min-width: 100px;
         text-align: center;
         top: -14px;
-        left: 50%;
+        #{$start-direction}: 50%;
         transform: translateX(-50% * $transform-direction);
     }
     &__detail {

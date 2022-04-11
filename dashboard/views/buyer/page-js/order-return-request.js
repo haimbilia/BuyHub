@@ -1,7 +1,7 @@
 (function () {
 	setupOrderReturnRequest = function (frm) {
 		fcom.addTrailingSlash();
-		if (!$(frm).validate()) return;
+		if (!$(frm).validate()) { return; }
 		fcom.displayProcessing();
 		$.ajax({
 			url: fcom.makeUrl('Buyer', 'setupOrderReturnRequest'),

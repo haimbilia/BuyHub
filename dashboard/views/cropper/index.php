@@ -52,10 +52,10 @@ $footer = '
                 </a>
             </li>
         </ul>
-        <div class="d-flex">
-            <button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary btn-wide dark:border-dark-5 dark:text-gray-300 me-1">Cancel</button>
-            <button type="button" class="btn btn-brand btn-wide " data-method="getCroppedCanvas">' . Labels::getLabel('LBL_APPLY', $siteLangId) . '</button>
-        </div>
+        <ul class="actions">
+            <li><button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary btn-wide dark:border-dark-5 dark:text-gray-300">Cancel</button></li>
+            <li><button type="button" class="btn btn-brand btn-wide " data-method="getCroppedCanvas">' . Labels::getLabel('LBL_APPLY', $siteLangId) . '</button></li>
+        </ul>
    
 </div>';
 

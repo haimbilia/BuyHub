@@ -1,8 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('dir', $formLayout);
-$frm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
+
+$frm->setFormTagAttribute('class', 'form modalFormJs');
+if (CommonHelper::getLayoutDirection() != $formLayout) {
+    $frm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $frm->setFormTagAttribute('dir', $formLayout);
+}
 $frm->setFormTagAttribute('onsubmit', 'setupCategoryReqLang(this); return(false);');
 $frm->setFormTagAttribute('data-onclear', "addCategoryReqLangForm(" . $categoryReqId . ", " . $langId . ");");
 

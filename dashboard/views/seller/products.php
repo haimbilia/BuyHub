@@ -3,7 +3,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
-    $title = Labels::getLabel('LBL_My_Inventory', $siteLangId);
+    $title = Labels::getLabel('LBL_MY_INVENTORY', $siteLangId);
     $data = [
         'headingLabel' => $title . '<i class="fa fa-question-circle" onclick="productInstructions(' .  Extrapage::SELLER_INVENTORY_INSTRUCTIONS . ')"></i>',
         'siteLangId' => $siteLangId,

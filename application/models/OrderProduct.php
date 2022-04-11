@@ -394,23 +394,8 @@ class OrderProduct extends MyAppModel
 
     public static function getStatusHtml(int $status, string $msg): string
     {
-        switch ($status) {
-            case applicationConstants::CLASS_INFO:
-                $status = HtmlHelper::INFO;
-                break;
-            case applicationConstants::CLASS_SUCCESS:
-                $status = HtmlHelper::SUCCESS;
-                break;
-            case applicationConstants::CLASS_DANGER:
-                $status = HtmlHelper::DANGER;
-                break;
-            case applicationConstants::CLASS_WARNING:
-                $status = HtmlHelper::WARNING;
-                break;
-            default:
-                $status = HtmlHelper::INFO;
-                break;
-        }
-        return HtmlHelper::getStatusHtml($status, rtrim($msg));
+        $statusArr = applicationConstants::getClassArr();
+        $class = $statusArr[$status] ?? 'badge-info';
+        return '<span class="badge ' . $class . '">' . $msg . '</span>';
     }
 }

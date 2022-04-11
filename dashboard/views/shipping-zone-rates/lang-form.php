@@ -1,7 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($langFrm);
-$langFrm->setFormTagAttribute('dir', $formLayout);
-$langFrm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
+
+$langFrm->setFormTagAttribute('class', 'form modalFormJs');
+if (CommonHelper::getLayoutDirection() != $formLayout) {
+    $langFrm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $langFrm->setFormTagAttribute('dir', $formLayout);
+}
 $langFrm->setFormTagAttribute('data-onclear', "editRateLangForm(" . $zoneId . ", " . $rateId . ", " . $langId . ");");
 $langFrm->setFormTagAttribute('onsubmit', 'setupLangRate(this); return(false);');
 

@@ -3,20 +3,16 @@ if (1 > count($attachments)) {
     return;
 }
 $arr_flds = array(
-    /*'listSerial' => Labels::getLabel('LBL_#', $siteLangId),*/
+   
     'mainfile' => Labels::getLabel('LBL_DD_FILE', $siteLangId),
     'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),
-    /*
-    'pddr_options_code' => Labels::getLabel('LBL_DD_OPTION', $siteLangId),
-    'afile_lang_id' => Labels::getLabel('LBL_DD_LANGUAGE', $siteLangId),
-    */
     'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId),
 );
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
-    $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+    $tdAttr = ('action' == $key) ? ['class' => 'align-right','width'=>'20%'] : ['width'=> '40%'];
     $e = $th->appendElement('th', $tdAttr, $val);
 }
 

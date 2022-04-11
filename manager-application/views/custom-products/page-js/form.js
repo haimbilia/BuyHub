@@ -546,11 +546,11 @@
             url: fcom.makeUrl('CustomProducts', 'setupDigitalDownload'),
             type: "POST",
             data: data,
+            dataType:"json",
             processData: false,
             contentType: false,
             success: function (t) {
-                fcom.removeLoader();
-                t = $.parseJSON(t);
+                fcom.removeLoader();               
                 if (t.status == 0) {
                     fcom.displayErrorMessage(t.msg);
                     return;
@@ -559,7 +559,11 @@
                 frm.find('input[type=file],input[type=text]').each(function (i, v) {
                     $(v).val('');
                 });
-                getDigitalDownloads(t.downloadType, t.recordId, t.langId, t.optionComb);
+                digitalDownloadsForm(t.downloadType, function () {
+                    $(".option-comb-id-js").val(t.optionComb);
+                    $(".file-language-js").val(t.langId);
+                    getDigitalDownloads(t.downloadType, t.recordId, t.langId, t.optionComb);        
+                });
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Error Occurred.");
@@ -633,8 +637,10 @@
 
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteDigitalFile'), data, function (res) {
             fcom.closeProcessing();
-            let recordId = getCurrentFrmRecordId();
-            getDigitalDownloads(typeDigitalFile, recordId);
+            let recordId = getCurrentFrmRecordId();      
+            let langId = $('#digitalFrmLangId').val() || 0;     
+            let optionComb = $('#digitalFrmOptionId').val() || 0; 
+            getDigitalDownloads(typeDigitalFile, recordId, langId, optionComb);
         });
     };
 

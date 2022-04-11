@@ -53,6 +53,7 @@ class Extrapage extends MyAppModel
 
     /* [ EXTRA INFO Column types*/
     public const TYPE_BKGROUND_IMAGE_REPEAT = 1;
+    public const TYPE_BKGROUND_IMAGE_SIZE = 2;
 
     /* EXTRA INFO Column types ]*/
 

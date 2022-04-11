@@ -89,4 +89,10 @@ class PayoutBaseController extends PluginBaseController
         $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
+
+    public function getRequestForm()
+    {
+        $this->set('html', $this->_template->render(false, false, '_partial/no-record-found.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
 }

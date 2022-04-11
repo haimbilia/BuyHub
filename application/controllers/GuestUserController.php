@@ -21,7 +21,7 @@ class GuestUserController extends MyAppController
         $canSendSms = SmsArchive::canSendSms(SmsTemplate::LOGIN);
         $signInWithPhone = FatApp::getPostedData('signInWithPhone', FatUtility::VAR_INT, 0);
         if (0 < $signInWithPhone) {
-            $signInWithPhone = $canSendSms;
+            $signInWithPhone = (int) $canSendSms;
         }
 
         $loginFrm = $this->getLoginForm($signInWithPhone);
@@ -443,7 +443,6 @@ class GuestUserController extends MyAppController
             LibHelper::exitWithError($message, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
         }
-        $frm->expireSecurityToken(FatApp::getPostedData());
 
         $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
         $phoneNumber = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, '');
@@ -482,6 +481,8 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'registrationForm', CONF_WEBROOT_FRONTEND));
         }
 
+        $frm->expireSecurityToken(FatApp::getPostedData());
+        
         if (1 > $signUpWithPhone && !FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
             $cartObj = new Cart();
             $isCheckOutPage = (isset($post['isCheckOutPage']) && $cartObj->hasProducts()) ? FatUtility::int($post['isCheckOutPage']) : 0;
@@ -625,9 +626,8 @@ class GuestUserController extends MyAppController
 
         $db->commitTransaction();
 
-        if (FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
+        if (FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1)  && $userdata['credential_active'] == applicationConstants::YES) {
             $authentication = new UserAuthentication();
-
             if (!$authentication->login($userdata['credential_email'], $userdata['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {
                 Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
@@ -708,6 +708,7 @@ class GuestUserController extends MyAppController
                 Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
             }
+            Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
@@ -742,7 +743,8 @@ class GuestUserController extends MyAppController
         $this->set('siteLangId', $this->siteLangId);
 
         if (1 > $withPhone && 0 < $includeHeaderAndFooter) {
-            $this->_template->render();
+            $this->set('exculdeMainHeaderDiv', true);
+            $this->_template->render(true, false);
             return;
         }
         $this->_template->render(false, false);

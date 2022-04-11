@@ -86,6 +86,23 @@
                     $available = Product::availableForAddToStore($row['product_id'], $userParentId);
                     $ul = $td->appendElement("ul", array('class' => 'actions'), '', true);
                     if ($canEdit) {
+                        $hasInventory = Product::hasInventory($row['product_id'], UserAuthentication::getLoggedUserId());
+                        if ($hasInventory) {
+                            $li = $ul->appendElement("li");
+                            $li->appendElement(
+                                'a',
+                                array('href' => 'javascript:void(0)', 'onclick' => 'sellerProducts(' . $row['product_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_View_Inventories', $siteLangId), true),
+                                '<i class="icn">
+                                <svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#inventories">
+                                    </use>
+                                </svg>
+                            </i>',
+                                true
+                            );
+                        }
+                        
                         if ($available) {
                             $li = $ul->appendElement("li");
                             $li->appendElement(
@@ -122,24 +139,7 @@
                                 </use>
                             </svg>
                         </i>', true);
-                        }
-
-                        $hasInventory = Product::hasInventory($row['product_id'], UserAuthentication::getLoggedUserId());
-                        if ($hasInventory) {
-                            $li = $ul->appendElement("li");
-                            $li->appendElement(
-                                'a',
-                                array('href' => 'javascript:void(0)', 'onclick' => 'sellerProducts(' . $row['product_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_View_Inventories', $siteLangId), true),
-                                '<i class="icn">
-                                <svg class="svg" width="18" height="18">
-                                    <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#inventories">
-                                    </use>
-                                </svg>
-                            </i>',
-                                true
-                            );
-                        }
+                        }                        
                     }
 
                     $li = $ul->appendElement("li");

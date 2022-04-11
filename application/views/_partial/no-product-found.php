@@ -4,12 +4,10 @@ $pSrchFrm->setFormTagAttribute('name', 'frmSiteSearchCustom');
 $pSrchFrm->setFormTagAttribute('id', 'frm_fat_id_frmSiteSearch_custom');
 $keywordFld = $pSrchFrm->getField('keyword');
 
-/* $submitFld = $pSrchFrm->getField('btnSiteSrchSubmit');
-$submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide'); */
-
 $keywordFld->setFieldTagAttribute('class', 'search--keyword--js omni-search');
 $keywordFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search_for_Product...', $siteLangId));
-/* $keywordFld->setFieldTagAttribute('autofocus','autofocus'); */
+$keywordFld->overrideFldType('search');
+
 $keywordFld->setFieldTagAttribute('id', 'header_search_keyword');
 $keywordFld->setFieldTagAttribute('onkeyup', 'animation(this)'); ?>
 <div class="container align-center">
@@ -24,7 +22,6 @@ $keywordFld->setFieldTagAttribute('onkeyup', 'animation(this)'); ?>
                     <div class="query-form">
                         <?php echo $pSrchFrm->getFormTag(); ?>
                         <?php echo $pSrchFrm->getFieldHTML('keyword'); ?>
-                        <?php /* echo $pSrchFrm->getFieldHTML('btnSiteSrchSubmit'); */ ?>
                         </form>
                         <?php echo $pSrchFrm->getExternalJS(); ?>
                     </div>
@@ -33,15 +30,6 @@ $keywordFld->setFieldTagAttribute('onkeyup', 'animation(this)'); ?>
             <?php
             $top_searched_keywords = SearchItem::getTopSearchedKeywords();
             if (count($top_searched_keywords) > 0) : ?>
-                <!-- <div class="row justify-content-center">
-                <div class="col-md-5">
-                    <div class="or">
-                        <span>
-                            <?php echo Labels::getLabel('LBL_OR', $siteLangId) ?>
-                        </span>
-                    </div>
-                </div>
-            </div> -->
                 <div class="popular-searches my-5">
                     <h3 class=""><?php echo Labels::getLabel('L_Popular_Searches', $siteLangId) ?> </h3>
                     <ul class="browse-more">

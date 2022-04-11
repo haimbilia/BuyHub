@@ -98,15 +98,15 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         line-height: 1;
-        font-size: 1rem;
-        font-weight: 500;
+        font-size: 0.9rem;
+        font-weight: 600;
         background-image: linear-gradient(currentColor, currentColor);
         background-position: 50% 100%;
         background-repeat: no-repeat;
         background-size: 0% 2px;
         transition: background-size 0.3s;
         &:hover,
-        &:visited,
+        &.active,
         &:focus {
             color: $brand-color;
             text-decoration: none;
@@ -116,6 +116,7 @@
                 color: $brand-color;
             }
         }
+    
     }
 
     .more {

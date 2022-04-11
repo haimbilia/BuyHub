@@ -17,7 +17,7 @@
             position: absolute;
             #{$end-direction}: 10px;
             top: calc(50% - 3px);
-            content: "";
+            content: '';
             height: 7px;
             width: 7px;
             border: solid 1px darken($border-color, 50%);
@@ -26,6 +26,7 @@
             [dir="rtl"] & {
                 #{$start-direction}: auto;
                 transform: rotate(-136deg);
+                content: '';
             }
         }
         &:last-child {
@@ -42,6 +43,8 @@
         }
     }
     &-item + &-item {
+        padding-#{$end-direction}: 25px;
+
         &:before {
             content: "";
             padding-#{$end-direction}: 0;
