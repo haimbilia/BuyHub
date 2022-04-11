@@ -654,6 +654,7 @@ Updates/Fixes :
     => 063638 - Advertiser: Auto-login is not working after registering as an Advertiser and the advertiser's company information is not showing at the admin's end
     => 063647 - Buyer: "Invalid Form submitted" error is showing while trying to register with a Phone number
     => 063679 - Buyer: Seller's name is not showing with the product while adding the product into the cart and while proceeding with the payment at the front-end
+    => 063678 - Buyer: Shop > Shop top products: Clear button is not working
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
