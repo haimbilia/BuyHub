@@ -4,7 +4,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
 ?>
 <?php if (empty($messageDetail)) { ?>
     <div class="col-md-9">
-        <div class="card mb-0 h-100">
+        <div class="card card-stretch mb-0">
             <div class="card-body">
                 <div class="not-found">
                     <img width="100" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
@@ -35,7 +35,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
 ?>
 
     <div class="communication-content threadJs" data-thread-id="<?php echo $messageDetail['thread_id'] ?>">
-        <div class="card mb-0 h-100">
+        <div class="card card-stretch mb-0">
             <div class="card-head">
                 <div class="card-head-label">
                     <div class="card-head-title d-flex align-items-center">
@@ -115,10 +115,10 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                     <?php echo $frm->getFormTag(); ?>
                     <?php echo $frm->getFieldHtml('message_thread_id'); ?>
 
-                    <?php 
+                    <?php
                     $fld =  $frm->getField('message_text');
                     $fld->requirements()->setRequired(false);
-                    
+
                     echo $frm->getFieldHtml('message_text'); ?>
                     <button class="btn btn-icon btn-send" type="submit">
                         <svg class="svg" width="20" height="20">
@@ -133,7 +133,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
         </div>
     </div>
     <!-- <div class="communication-sidebar userJs">
-        <div class="card mb-0 h-100">
+        <div class="card card-stretch mb-0">
             <div class="card-body">
                 <div class="message__user">
                     <div class="user user-circle">

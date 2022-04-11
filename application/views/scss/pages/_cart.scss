@@ -113,9 +113,17 @@
     }
     &_main {
         padding: 0;
+        margin-bottom: 2rem;
+        @include media-breakpoint-up(lg) {
+            margin-bottom: 0;
+        }
     }
     &_aside {
         flex: 1;
+        margin-bottom: 2rem;
+        @include media-breakpoint-up(lg) {
+            margin-bottom: 0;
+        }
         &:after {
             // content: "";
             background: $bg-gray;
@@ -256,7 +264,7 @@
 
 .sticky-summary {
     position: sticky;
-    top: 175px;
+    top: 100px;
 }
 
 .buttons-group {
@@ -444,8 +452,8 @@
         margin: 0 auto;
         text-align: center;
         position: relative;
-        flex: 0 0 clamp(80px, 50%, 150px);
-        max-width: clamp(80px, 50%, 150px);
+        flex: 0 0 clamp(80px, 130px, 150px);
+        max-width: clamp(80px, 130px, 150px);
         @include media-breakpoint-up(lg) {
         }
         .products-img {
