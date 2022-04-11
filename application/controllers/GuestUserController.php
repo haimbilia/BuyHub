@@ -443,7 +443,6 @@ class GuestUserController extends MyAppController
             LibHelper::exitWithError($message, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
         }
-        $frm->expireSecurityToken(FatApp::getPostedData());
 
         $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
         $phoneNumber = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, '');
@@ -482,6 +481,8 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'registrationForm', CONF_WEBROOT_FRONTEND));
         }
 
+        $frm->expireSecurityToken(FatApp::getPostedData());
+        
         if (1 > $signUpWithPhone && !FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
             $cartObj = new Cart();
             $isCheckOutPage = (isset($post['isCheckOutPage']) && $cartObj->hasProducts()) ? FatUtility::int($post['isCheckOutPage']) : 0;

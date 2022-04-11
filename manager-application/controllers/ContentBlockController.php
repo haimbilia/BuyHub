@@ -212,9 +212,9 @@ class ContentBlockController extends ListingBaseController
         
         $getImageDimensions = ImageDimension::getData(ImageDimension::TYPE_CBLOCK_BG, ImageDimension::VIEW_DEFAULT);
         if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($this->siteLangId))) {
-            $fld = $frm->addSelectBox(Labels::getLabel('FRM_BK_IMAGE_REPEAT_TYPE', $this->siteLangId), 'epage_extra_info['.Extrapage::TYPE_BKGROUND_IMAGE_REPEAT.']', applicationConstants::getBkImageRepeatTypes($this->siteLangId), 'repeat', array(), '');
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_BACKGROUND_IMAGE_REPEAT_TYPE', $this->siteLangId), 'epage_extra_info['.Extrapage::TYPE_BKGROUND_IMAGE_REPEAT.']', applicationConstants::getBkImageRepeatTypes($this->siteLangId), 'repeat', array(), '');
             $fld->requirements()->setRequired();
-            $fld = $frm->addSelectBox(Labels::getLabel('FRM_BK_IMAGE_SIZE_TYPE', $this->siteLangId), 'epage_extra_info['.Extrapage::TYPE_BKGROUND_IMAGE_SIZE.']', applicationConstants::getBkImageSizeTypes($this->siteLangId), 'repeat', array(), '');
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_BACKGROUND_IMAGE_SIZE_TYPE', $this->siteLangId), 'epage_extra_info['.Extrapage::TYPE_BKGROUND_IMAGE_SIZE.']', applicationConstants::getBkImageSizeTypes($this->siteLangId), 'repeat', array(), '');
             $fld->requirements()->setRequired();
             if ($recordId == Extrapage::SELLER_BANNER_SLOGAN) {
                 $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
