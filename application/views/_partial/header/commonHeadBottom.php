@@ -14,7 +14,7 @@ if (CommonHelper::demoUrl()) {
 ?>
 
 <body class="<?php echo $bodyClass; ?> ">
-    <script>
+    <script defer>
         <?php
         if (Message::getInfoCount() > 0 || Message::getDialogCount() > 0) { ?>
             $.ykmsg.info('<?php echo html_entity_decode(Message::getHtml()); ?>');

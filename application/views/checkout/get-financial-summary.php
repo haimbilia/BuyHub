@@ -171,7 +171,7 @@
                 ?>
                     </form>
 
-                    <script type="text/javascript">
+                    <script>
                         function confirmOrder(frm) {
                             var data = fcom.frmData(frm);
                             var action = $(frm).attr('action');

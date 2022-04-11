@@ -14,48 +14,50 @@ if (!empty($list) && is_array($list)) {
 
 ?>
 
-<script type="text/javascript">
-    $(document).off("keyup").on("keyup", '.faq-input', function() {
-        // Get user input from search box
-        var filter_text = $(this).val();
+<script>
+    $(function() {
+        $(document).off("keyup").on("keyup", '.faq-input', function() {
+            // Get user input from search box
+            var filter_text = $(this).val();
 
-        $('#listing .faqHeading').each(function() {
-            if ('' !== filter_text) {
-                let headingText = $(this).text();
-                var startAt = headingText.toLowerCase().indexOf(filter_text
-                    .toLowerCase());
+            $('#listing .faqHeading').each(function() {
+                if ('' !== filter_text) {
+                    let headingText = $(this).text();
+                    var startAt = headingText.toLowerCase().indexOf(filter_text
+                        .toLowerCase());
 
-                if (startAt >= 0) {
-                    var endAt = filter_text.length;
-                    filter_text = headingText.substr(startAt, endAt);
-                    var replaceWith = "<mark>" + filter_text +
-                        "</mark>";
-                    $(this).html(headingText.replace(filter_text, replaceWith));
+                    if (startAt >= 0) {
+                        var endAt = filter_text.length;
+                        filter_text = headingText.substr(startAt, endAt);
+                        var replaceWith = "<mark>" + filter_text +
+                            "</mark>";
+                        $(this).html(headingText.replace(filter_text, replaceWith));
+                    } else {
+                        $(this).text(headingText);
+                    }
+
+                    let faqTextEle = $(this).siblings('.faqText');
+                    let faqTextContent = faqTextEle.find('p').text();
+                    var startAt = faqTextContent.toLowerCase().indexOf(filter_text
+                        .toLowerCase());
+
+                    if (startAt >= 0) {
+                        var endAt = filter_text.length;
+                        filter_text = faqTextContent.substr(startAt, endAt);
+                        var replaceWith = "<mark>" + filter_text +
+                            "</mark>";
+                        faqTextEle.closest('.collapse').collapse('show');
+                        faqTextEle.find('p').html(faqTextContent.replace(filter_text, replaceWith));
+                    } else {
+                        faqTextEle.find('p').text(faqTextContent);
+                        faqTextEle.closest('.collapse').collapse('hide');
+                    }
                 } else {
-                    $(this).text(headingText);
+                    $(this).text($(this).text());
+                    $(this).siblings('.faqText').text($(this).siblings('.faqText').find('p').text());
+                    $('#listing .faqText').collapse('hide');
                 }
-
-                let faqTextEle = $(this).siblings('.faqText');
-                let faqTextContent = faqTextEle.find('p').text();
-                var startAt = faqTextContent.toLowerCase().indexOf(filter_text
-                    .toLowerCase());
-
-                if (startAt >= 0) {
-                    var endAt = filter_text.length;
-                    filter_text = faqTextContent.substr(startAt, endAt);
-                    var replaceWith = "<mark>" + filter_text +
-                        "</mark>";
-                    faqTextEle.closest('.collapse').collapse('show');
-                    faqTextEle.find('p').html(faqTextContent.replace(filter_text, replaceWith));
-                } else {
-                    faqTextEle.find('p').text(faqTextContent);
-                    faqTextEle.closest('.collapse').collapse('hide');
-                }
-            } else {
-                $(this).text($(this).text());
-                $(this).siblings('.faqText').text($(this).siblings('.faqText').find('p').text());
-                $('#listing .faqText').collapse('hide');
-            }
+            });
         });
     });
 </script>

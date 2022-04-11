@@ -51,7 +51,7 @@ switch ($affiliate_register_step_number) {
         $registerForm->developerTags['fld_default_col'] = 6;
         $stateId = isset($stateId) ? $stateId : 0;
 ?>
-        <script language="javascript">
+        <script>
             $(function() {
                 getCountryStates($("#user_country_id").val(), '<?php echo $stateId; ?>', '#user_state_id');
             });
@@ -88,7 +88,7 @@ switch ($affiliate_register_step_number) {
         $PayPalEmailIdFld->setWrapperAttribute('class', 'paypal_payment_method_fld');
 
     ?>
-        <script type="text/javascript">
+        <script>
             $("document").ready(function() {
                 var AFFILIATE_PAYMENT_METHOD_CHEQUE = '<?php echo User::AFFILIATE_PAYMENT_METHOD_CHEQUE; ?>';
                 var AFFILIATE_PAYMENT_METHOD_BANK = '<?php echo User::AFFILIATE_PAYMENT_METHOD_BANK; ?>';

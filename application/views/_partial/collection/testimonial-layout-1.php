@@ -46,30 +46,32 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
     </section>
     <?php if (1 < count($collection['testimonials'])) { ?>
         <script>
-            $(".js-slider-testimonials").slick({
-                slidesToShow: 1,
-                dots: false,
-                arrows: true,
-                swipe: true,
-                //  infinite: true,
-                swipeToSlide: true,
-                //adaptiveHeight: true,
+            $(function() {
+                $(".js-slider-testimonials").slick({
+                    slidesToShow: 1,
+                    dots: false,
+                    arrows: true,
+                    swipe: true,
+                    //  infinite: true,
+                    swipeToSlide: true,
+                    //adaptiveHeight: true,
 
-                responsive: [{
-                        breakpoint: 768,
-                        settings: {
-                            arrows: false,
-                            dots: true,
+                    responsive: [{
+                            breakpoint: 768,
+                            settings: {
+                                arrows: false,
+                                dots: true,
+                            }
+                        },
+                        {
+                            breakpoint: 480,
+                            settings: {
+                                arrows: false,
+                                dots: true,
+                            }
                         }
-                    },
-                    {
-                        breakpoint: 480,
-                        settings: {
-                            arrows: false,
-                            dots: true,
-                        }
-                    }
-                ]
+                    ]
+                });
             });
         </script>
     <?php } ?>
