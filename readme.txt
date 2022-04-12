@@ -664,6 +664,7 @@ Updates/Fixes :
     => 063749 - Admin: While adding a product, drop down and auto suggestions both are showing for the country field.
     => 063742 - Buyer: When the user clicks on the view button of the discount coupon 'Please configure your location' is coming
     => 063733 - Buyer: Geo Location: Suggestion to add a clear all button
+    => 063695 - Buyer: Product is still showing under 'Save for later' section even though the buyer has added it to the cart.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
