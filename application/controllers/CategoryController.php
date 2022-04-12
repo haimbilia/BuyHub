@@ -87,6 +87,7 @@ class CategoryController extends MyAppController
         }
 
         $products = FatApp::getDb()->fetchAll($srch->getResultSet());
+        /*
         $moreSellersArr = [];
         if ($get['vtype'] == 'map') {
             if (0 < count($products)) {
@@ -94,6 +95,7 @@ class CategoryController extends MyAppController
                 $moreSellersArr = Product::getMoreSeller($selprodCodes, $this->siteLangId);
             }
         }
+        */
 
         $selProdIdsArr = array_column($products, 'selprod_id');
         $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
@@ -105,7 +107,7 @@ class CategoryController extends MyAppController
             'products' => $products,
             'tLeftRibbons' => $tLeftRibbons,
             'tRightRibbons' => $tRightRibbons,
-            'moreSellersProductsArr' => $moreSellersArr,
+           /* 'moreSellersProductsArr' => $moreSellersArr,*/
             'page' => $page,
             'pageSize' => $pageSize,
             'categoryId' => $categoryId,
@@ -125,7 +127,7 @@ class CategoryController extends MyAppController
         if (FatUtility::isAjaxCall()) {
             $this->set('products', $products);
             $this->set('page', $page);
-            $this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);
+            /*$this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);*/
             $this->set('pageCount', $srch->pages());
             $this->set('postedData', $get);
             $this->set('recordCount', $srch->recordCount());

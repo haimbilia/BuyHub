@@ -15,6 +15,9 @@ class ProfileController extends ListingBaseController
     public function index($tab = '')
     {
         $adminDetails = AdminUsers::getAttributesById($this->_adminId);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_PROFILE', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        $this->set('pageTitle', $pageTitle);
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs('js/cropper.js');
         $this->_template->addJs('js/cropper-main.js');

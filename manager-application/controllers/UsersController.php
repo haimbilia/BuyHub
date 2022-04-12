@@ -971,6 +971,6 @@ class UsersController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['user_type'], Common::excludeKeysForSort());
+        return array_diff($fields, ['user_type', 'user_registered_initially_for'], Common::excludeKeysForSort());
     }
 }

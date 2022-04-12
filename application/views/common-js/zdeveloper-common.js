@@ -1105,12 +1105,14 @@ $(function () {
         }
         var phone = $(formClass + 'input[name="username"]').val();
         var dialCode = $(formClass + 'input[name="username_dcode"]').val();
+        
         if ("undefined" == typeof phone || "" == phone || "undefined" == typeof dialCode || "" == dialCode) {
             $(obj).closest("form").submit();
+            fcom.removeLoader();
             fcom.displayErrorMessage(langLbl.requiredFields);
             return false;
         }
-
+        
         $(".loginFormJs").prepend(fcom.getLoader());
         fcom.displayProcessing();
         var data = "username=" + $(formClass + 'input[name="username"]').val() + "&username_dcode=" + $(formClass + 'input[name="username_dcode"]').val();

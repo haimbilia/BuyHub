@@ -16,6 +16,15 @@ class TransactionsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
+        $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT);
+        if (0 < $userId) {
+            $fld = $frmSearch->getField('utxn_user_id');
+            $userObj = new User($userId);
+            $userDetail = $userObj->getUserInfo(['user_name', 'credential_username'], false, false, true);
+            $fld->options = [$userId => $userDetail['user_name'] . ' (' . $userDetail['credential_username'] . ')'];
+            $frmSearch->fill(['utxn_user_id' => $userId]);
+        }
+
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
@@ -39,6 +48,7 @@ class TransactionsController extends ListingBaseController
     {
         $this->getListingData();
         $jsonData = [
+            'headSection' => $this->_template->render(false, false, '_partial/listing/head-section.php', true),
             'listingHtml' => $this->_template->render(false, false, 'transactions/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
@@ -66,11 +76,8 @@ class TransactionsController extends ListingBaseController
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
-        if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
-        }
+        
+        $sortBy = 'utxn_date'; /* Sorting not required*/
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
         $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
@@ -80,26 +87,30 @@ class TransactionsController extends ListingBaseController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-        $balSrch = Transactions::getSearchObject();
-        $balSrch->doNotCalculateRecords();
-        $balSrch->doNotLimitRecords();
-        $balSrch->addMultipleFields(['utxn.utxn_id', "utxn_credit - utxn_debit as bal"]);
-        if (0 < $userId) {
-            $balSrch->addCondition('utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
-        }
-        $balSrch->addCondition('utxn_status', '=', 'mysql_func_1', 'AND', true);
+        
         $srch = Transactions::getSearchObject();
         $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'uc.credential_user_id = u.user_id', 'uc');
-        if (0 < $userId) {
+        if (0 < $userId) {              
+            $balSrch = Transactions::getSearchObject();
+            $balSrch->doNotCalculateRecords();
+            $balSrch->doNotLimitRecords();
+            $balSrch->addMultipleFields(['utxn.utxn_id', "utxn_credit - utxn_debit as bal"]);         
+            $balSrch->addCondition('utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);            
+            $balSrch->addCondition('utxn_status', '=', 'mysql_func_1', 'AND', true);
+
+            $srch->joinTable('(' . $balSrch->getQuery() . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
+
             $srch->addCondition('utxn.utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
+            $srch->addFld('SUM(tqupb.bal) balance');            
+        }else{
+            unset($fields['balance']);
         }
         $srch->addGroupBy('utxn.utxn_id');
         $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
         $srch->doNotCalculateRecords();
-
-        $srch->joinTable('(' . $balSrch->getQuery() . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
-        $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
+       
+        $srch->addMultipleFields(array('utxn.*', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
         if ($customSortBy != false && $customOrder != false) {
             $srch->addOrder($customSortBy, $customOrder);
         } else {
@@ -123,7 +134,7 @@ class TransactionsController extends ListingBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'utxn_id', applicationConstants::SORT_DESC);
+            $this->addSortingElements($frm, 'utxn_date', applicationConstants::SORT_DESC);
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
@@ -254,7 +265,7 @@ class TransactionsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['utxn_comments'], Common::excludeKeysForSort());
+        return array_diff($fields, $this->getDefaultColumns(), Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)

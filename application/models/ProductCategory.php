@@ -1055,11 +1055,11 @@ class ProductCategory extends MyAppModel
         return $return;
     }
 
-    public function haveProducts()
+    public function haveProducts(bool $isActive = true)
     {
-        $prodSrchObj = new ProductSearch();
+        $prodSrchObj = new ProductSearch(0, null, null, $isActive);
         $prodSrchObj->setDefinedCriteria();
-        $prodSrchObj->joinProductToCategory();
+        $prodSrchObj->joinProductToCategory(0, $isActive);
         $prodSrchObj->doNotCalculateRecords();
         $prodSrchObj->setPageSize(1);
 
