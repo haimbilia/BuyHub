@@ -662,6 +662,12 @@ Updates/Fixes :
     => 063444 - Advertiser UI: Some of the labels are not showing in Arabic
     => 063630 - Admin: UI is not correct after sending the email to the user from the admin's end
     => 063749 - Admin: While adding a product, drop down and auto suggestions both are showing for the country field.
+    => 063742 - Buyer: When the user clicks on the view button of the discount coupon 'Please configure your location' is coming
+    => 063733 - Buyer: Geo Location: Suggestion to add a clear all button
+    => 063695 - Buyer: Product is still showing under 'Save for later' section even though the buyer has added it to the cart.
+    => 063694 - Admin: Suggestion to don't show the sorting according to the Brand's name by default and recently added brands should show on the top of the table
+    => 063690 - Admin: Loader is not showing while uploading the media under the category section
+    => 063686 - Admin: The admin is able to delete the categories if their associated products are deactivated
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
