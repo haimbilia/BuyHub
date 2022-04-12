@@ -1,5 +1,54 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (0 < $isShippingSelected && $rewardPoints > 0) { ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+if (0 < $isShippingSelected && 1 > count($paymentMethods)) {
+    if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $shippingAddressId == $billingAddressId) { ?>
+        <div class="step_section">
+            <div class="step_head">
+                <label class="checkbox">
+                    <input onclick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1">
+                    <?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?>
+                </label>
+            </div>
+        </div>
+    <?php } else { ?>
+        <ul class="review-block">
+            <li class="review-block-item">
+                <div class="review-block-head">
+                    <h5 class="h5">
+                        <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?>
+                    </h5>
+
+                    <div class="review-block-action" role="cell">
+                        <button class="link-underline" onClick="loadAddressDiv(1)">
+                            <span>
+                                <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="review-block-body" role="cell">
+                    <div class="delivery-address">
+                        <p><?php echo $billingAddressArr['addr_name'] . ', ' . $billingAddressArr['addr_address1']; ?>
+                            <?php if (strlen($billingAddressArr['addr_address2']) > 0) {
+                                echo ", " . $billingAddressArr['addr_address2']; ?>
+                            <?php } ?>
+                        </p>
+                        <p><?php echo $billingAddressArr['addr_city'] . ", " . $billingAddressArr['state_name'] . ", " . $billingAddressArr['country_name'] . ", " . $billingAddressArr['addr_zip']; ?>
+                        </p>
+
+                        <?php if (strlen($billingAddressArr['addr_phone']) > 0) {
+                            $addrPhone = ValidateElement::formatDialCode($billingAddressArr['addr_phone_dcode']) . $billingAddressArr['addr_phone'];
+                        ?>
+                            <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    <?php }
+}
+
+if (0 < $isShippingSelected && $rewardPoints > 0) { ?>
     <div class="cart-total-head">
         <h3 class="cart-total-title">
             <?php echo Labels::getLabel('LBL_REWARD_POINTS', $siteLangId); ?>
@@ -140,14 +189,14 @@
                     <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
                 </button>
             <?php } else { ?>
-                <button class="btn btn-brand btn-block" type="button" onclick="loadPaymentSummary();">
+                <button class="btn btn-brand btn-block" type="button" onclick="loadFinancialSummary(1);loadPaymentSummary();">
                     <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
                 </button>
             <?php } ?>
         </div>
     </div>
-<?php } else { ?>
-    <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
+    <?php } else {
+    if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
         <div class="divider"></div>
         <div class="cart-total-foot">
             <div class="cart-action">
@@ -163,7 +212,7 @@
                     $btnSubmitFld->value = Labels::getLabel('LBL_PAY', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, false);
                     $walletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
                     $walletPaymentForm->developerTags['fld_default_col'] = 12;
-                    
+
                     echo $walletPaymentForm->getFormTag();
                     echo $walletPaymentForm->getFieldHTML('order_id');
                     echo $walletPaymentForm->getFieldHTML('btn_submit');
@@ -187,5 +236,13 @@
                 <?php } ?>
             </div>
         </div>
-    <?php } ?>
-<?php } ?>
+    <?php }
+
+    if (1 > count($paymentMethods) && 1 > $userWalletBalance) { ?>
+        <div class="cart-total-foot">
+            <div class="mt-4">
+                <?php echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.', $siteLangId)); ?>
+            </div>
+        </div>
+<?php }
+} ?>

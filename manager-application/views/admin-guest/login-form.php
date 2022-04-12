@@ -10,11 +10,11 @@ $frm->setValidatorJsObjectName('loginValidator');
 
 $userNameFld = $frm->getField('username');
 $userNameFld->addFieldTagAttribute('title', $userNameFld->getCaption());
-$userNameFld->addFieldTagAttribute('autocomplete', 'off');
+$userNameFld->addFieldTagAttribute('autocomplete', 'no');
 
 $passwordFld = $frm->getField('password');
 $passwordFld->addFieldTagAttribute('title', $passwordFld->getCaption());
-$passwordFld->addFieldTagAttribute('autocomplete', 'off');
+$passwordFld->addFieldTagAttribute('autocomplete', 'no');
 $passwordFld->addFieldTagAttribute('id', 'password');
 
 $fld = $frm->getField('rememberme');

@@ -347,10 +347,14 @@ class HtmlHelper
                 </div>';
     }
 
-    public static function getErrorMessageHtml(string $message): string
+    public static function getErrorMessageHtml(string $message, string $icon = ''): string
     {
+        $icon = empty($icon) ? '<svg class="svg" height="18" width="18">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#warning">
+                                    </use>
+                                </svg>' :  $icon;
         return '<div class="alert alert-danger" role="alert">
-                    <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
+                    <div class="alert-icon">' . $icon . '</div>
                     <div class="alert-text">' . $message . '</div>
                 </div>';
     }

@@ -110,11 +110,6 @@ $("document").ready(function () {
             function (ans) {
                 $(financialSummary).hide().html(ans.html).fadeIn();
                 $("#netAmountSummary").hide().html(ans.netAmount).fadeIn();
-                setTimeout(() => {
-                    if (0 < $(financialSummary + ' .loaderJs').length) {
-                        fcom.removeLoader();
-                    }
-                }, 1000);
             }
         );
     };
@@ -441,13 +436,23 @@ $("document").ready(function () {
             fcom.makeUrl("Checkout", "PaymentSummary"),
             '',
             function (res) {
-                $(pageContent).hide().html(res.html).fadeIn();
-                $(paymentDiv).addClass("is-current");
-                setTimeout(() => {
-                    if (0 < $(pageContent + ' .loaderJs').length) {
-                        fcom.removeLoader();
-                    }
-                }, 1000);
+                if ('' == res.html) {
+                    $('.checkoutPageJs').hide();
+                    fcom.removeLoader();
+                    setTimeout(() => {
+                        $(pageContent).remove();
+                        $('.checkoutPageJs').addClass('checkout-page-single').fadeIn();
+                    }, 200);
+                } else {
+                    $(pageContent).hide().html(res.html).fadeIn();
+                    $(paymentDiv).addClass("is-current");
+                    setTimeout(() => {
+                        if (0 < $(pageContent + ' .loaderJs').length) {
+                            fcom.removeLoader();
+                        }
+                    }, 1000);
+                }
+
             }
         );
     };
@@ -468,7 +473,7 @@ $("document").ready(function () {
             }
         );
     };
-    
+
     useRewardPoints = function (frm) {
         if (!$(frm).validate()) return;
         $(financialSummary).prepend(fcom.getLoader());
