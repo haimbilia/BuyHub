@@ -134,7 +134,7 @@ class TransactionsController extends ListingBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'utxn_id', applicationConstants::SORT_DESC);
+            $this->addSortingElements($frm, 'utxn_date', applicationConstants::SORT_DESC);
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
