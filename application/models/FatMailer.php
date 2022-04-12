@@ -127,12 +127,12 @@ class FatMailer extends FatModel
             $this->error = Labels::getLabel('ERR_EMAIL_TEMPLATE_NOT_FOUND!', $this->langId);
             return false;
         }
-        
+
         if (empty($this->fromEmail)) {
             $this->fromEmail = FatApp::getConfig("CONF_FROM_EMAIL");
             $this->fromName = FatApp::getConfig('CONF_FROM_NAME_' . $this->langId, FatUtility::VAR_STRING, '');
         }
-        
+
         $etpl = new FatTemplate('', '');
         $etpl->set('langId', $row['etpl_lang_id']);
         $header = $etpl->render(false, false, '_partial/emails/email-header.php', true);
@@ -417,6 +417,7 @@ class FatMailer extends FatModel
         return array(
             '{website_name}' => FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId),
             '{website_url}' => UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL),
+            '{admin_login_url}' => UrlHelper::generateUrl('adminGuest', 'loginForm'),
             '{Company_Logo}' => '<img style="max-width:100%" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'emailLogo', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" />',
             '{current_date}' => date('M d, Y'),
             '{social_media_icons}' => $social_media_icons,
@@ -425,5 +426,4 @@ class FatMailer extends FatModel
             '{SITE-PHONE}' => ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode', FatUtility::VAR_STRING, '')) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_STRING, ''),
         );
     }
-
 }
