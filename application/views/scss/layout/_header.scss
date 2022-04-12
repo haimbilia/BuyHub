@@ -151,7 +151,6 @@ $header-height: 122px;
         display: block;
         padding: 0;
         position: relative;
-
         &.item-desktop {
             display: none;
             @include media-breakpoint-up(lg) {
@@ -176,7 +175,7 @@ $header-height: 122px;
         align-items: center;
         gap: 0.5rem;
         &:hover {
-            color: $brand-color;
+            color: $secondary-color;
         }
     }
     .svg {
