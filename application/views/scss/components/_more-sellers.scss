@@ -24,6 +24,7 @@
     .sold-by {
         font-size: 0.8rem;
         display: flex;
+        margin-bottom: 0.6rem;
 
         &-txt {
             padding-right: 10px;
@@ -32,6 +33,9 @@
         &-name {
             text-decoration: underline;
         }
+    }
+    .shop-wrap {
+        margin-bottom: 0.6rem;
     }
 
     .product-ratings {

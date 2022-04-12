@@ -56,7 +56,9 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
     <?php include('banners.php'); ?>
     <!-- Banners -->
 
-    <div id="recentlyViewedProductsDiv"></div>
+
+    <section class="section bg-gray" id="recentlyViewedProductsDiv"></section>
+
 </div>
 
 <script>

@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $count = 1;
 foreach ($sellers as $key => $sellerDetail) {
+    $isActive = array_key_exists('isActive', $sellerDetail) && true === $sellerDetail['isActive'];
     if ($count > Product::VIEW_MORE_SELLER_COUNT) { ?>
         <li class="more-sellers-item more-link">
             <a href="<?php echo UrlHelper::generateUrl('products', 'sellers', array($sellerDetail['selprod_id'])); ?>" class="link-underline">
@@ -14,7 +15,7 @@ foreach ($sellers as $key => $sellerDetail) {
         echo '<li class="more-sellers-head">' . Labels::getLabel('LBL_MORE_SELLERS', $siteLangId) . '</li>';
     }
     ?>
-    <li class="more-sellers-item <?php echo (array_key_exists('isActive', $sellerDetail) && true === $sellerDetail['isActive'] ? 'is-active' : ''); ?>">
+    <li class="more-sellers-item <?php echo ($isActive ? 'is-active' : ''); ?>">
         <div class="sold-price"><?php echo CommonHelper::displayMoneyFormat($sellerDetail['theprice']); ?></div>
         <div class="sold-by">
             <span class="sold-by-txt"><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?></span>
@@ -44,6 +45,10 @@ foreach ($sellers as $key => $sellerDetail) {
             ?>
             <!-- Shop Badge  -->
         </div>
+        <?php if (false === $isActive) { ?>
+            <button class="btn btn-outline-black btn-sm btnAddToCart--js" data-id='<?php echo $sellerDetail['selprod_id']; ?>' data-min-qty="<?php echo $sellerDetail['selprod_min_order_qty']; ?>" type="button"><?php echo Labels::getLabel('BTN_ADD_TO_CART', $siteLangId); ?></button>
+        <?php } ?>
+
     </li>
 <?php $count++;
 }
