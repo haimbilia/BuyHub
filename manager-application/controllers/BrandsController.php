@@ -34,7 +34,7 @@ class BrandsController extends ListingBaseController
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'brands/page-js/index.js']);
         $this->includeFeatherLightJsCss();
-        
+
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -61,12 +61,12 @@ class BrandsController extends ListingBaseController
 
         $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'brand_id');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'brand_id';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
 
         $searchForm = $this->getSearchForm($fields);
 
@@ -113,10 +113,10 @@ class BrandsController extends ListingBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active','brand_identifier','IFNULL(brand_name,brand_identifier) as brand_name'), applicationConstants::JOIN_RIGHT);
+            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active', 'brand_identifier', 'IFNULL(brand_name,brand_identifier) as brand_name'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
-            }            
+            }
 
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
@@ -139,6 +139,22 @@ class BrandsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    protected function getSearchForm(array $fields = [])
+    {
+        $fields = $this->getFormColumns();
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'brand_id', applicationConstants::SORT_DESC);
+        }
+        $frm->addHiddenField('', 'total_record_count');
+        HtmlHelper::addSearchButton($frm);
+        return $frm;
     }
 
     public function setup()
@@ -227,7 +243,7 @@ class BrandsController extends ListingBaseController
     {
         $this->objPrivilege->canEditBrands();
         $recordId = FatUtility::int($recordId);
-        
+
         $frm = new Form('frmProdBrand', array('id' => 'frmProdBrand'));
         $frm->addHiddenField('', 'brand_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('FRM_BRAND_NAME', $this->siteLangId), 'brand_name');
@@ -282,10 +298,10 @@ class BrandsController extends ListingBaseController
         $imageFrm->fill($data);
 
         $getBrandRequestDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_BRAND_IMAGE);
-        $getBrandRequestLogoSquare = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_SQUARE);
-        $getBrandRequestLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_RECTANGULAR);
-        $this->set('getBrandRequestLogoSquare',$getBrandRequestLogoSquare);
-        $this->set('getBrandRequestLogoRactangle',$getBrandRequestLogoRactangle);
+        $getBrandRequestLogoSquare = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE);
+        $getBrandRequestLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_RECTANGULAR);
+        $this->set('getBrandRequestLogoSquare', $getBrandRequestLogoSquare);
+        $this->set('getBrandRequestLogoRactangle', $getBrandRequestLogoRactangle);
         $this->set('getBrandRequestDimensions', $getBrandRequestDimensions);
 
         $this->set('recordId', $recordId);
@@ -311,17 +327,15 @@ class BrandsController extends ListingBaseController
             $this->set('image', $brandLogo);
             $this->set('imageFunction', 'brandReal');
             $aspectRatioType = $brandLogo['afile_aspect_ratio'];
-            $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+            $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
             $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_THUMB, $aspectRatioType);
             $this->set('imageBrandDimensions', $imageBrandDimensions);
-
         } else {
             $brandImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_IMAGE, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $brandImage);
             $this->set('imageFunction', 'brandImage');
             $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_IMAGE, ImageDimension::VIEW_THUMB);
             $this->set('imageBrandDimensions', $imageBrandDimensions);
-
         }
 
         $this->set('file_type', $file_type);
@@ -623,7 +637,7 @@ class BrandsController extends ListingBaseController
         }
 
         $this->changeStatus($recordId, $status);
-        Product::updateMinPrices(0, 0, $recordId);        
+        Product::updateMinPrices(0, 0, $recordId);
         $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -688,7 +702,7 @@ class BrandsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'brand_id' => Labels::getLabel('LBL_BRAND_ID', $this->siteLangId),
             'brand_logo' => Labels::getLabel('LBL_LOGO', $this->siteLangId),
             'brand_identifier' => Labels::getLabel('LBL_BRAND', $this->siteLangId),
             'seo_url' => Labels::getLabel('LBL_SEO_FRIENDLY_URL', $this->siteLangId),
@@ -703,7 +717,7 @@ class BrandsController extends ListingBaseController
     {
         return [
             'select_all',
-            /* 'listSerial', */
+            'brand_id',
             'brand_logo',
             'brand_identifier',
             'seo_url',
@@ -714,6 +728,6 @@ class BrandsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['brand_logo', 'brand_active', 'seo_url'], Common::excludeKeysForSort());
+        return array_diff($fields, ['brand_logo', 'seo_url'], Common::excludeKeysForSort());
     }
 }

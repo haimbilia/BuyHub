@@ -665,6 +665,7 @@ Updates/Fixes :
     => 063742 - Buyer: When the user clicks on the view button of the discount coupon 'Please configure your location' is coming
     => 063733 - Buyer: Geo Location: Suggestion to add a clear all button
     => 063695 - Buyer: Product is still showing under 'Save for later' section even though the buyer has added it to the cart.
+    => 063694 - Admin: Suggestion to don't show the sorting according to the Brand's name by default and recently added brands should show on the top of the table
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
