@@ -249,9 +249,11 @@
         .media {
             position: relative;
             z-index: 0;
-            margin-#{$start-direction}: -10px;
-            border: 2px solid #fff;
+            margin-#{$start-direction}: -5px;
+            border: 2px solid #ddd;
             transition: all 0.3s ease;
+            overflow: hidden;
+            background-color: #fff;
             &:first-child {
                 margin-#{$start-direction}: 0;
             }
