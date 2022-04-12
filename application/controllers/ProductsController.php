@@ -149,7 +149,7 @@ class ProductsController extends MyAppController
             $this->set('products', $data['products']);
             $this->set('tLeftRibbons', $tLeftRibbons);
             $this->set('tRightRibbons', $tRightRibbons);
-            $this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);
+            /*$this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);*/
             $this->set('page', $data['page']);
             $this->set('pageCount', $data['pageCount']);
             $this->set('postedData', $get);
@@ -1857,6 +1857,7 @@ class ProductsController extends MyAppController
                 $category['banner'] = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $categoryId);
             }
         }
+        /*
         $moreSellersArr = [];
         if ($get['vtype'] == 'map') {
             if (0 < count($products)) {
@@ -1864,12 +1865,13 @@ class ProductsController extends MyAppController
                 $moreSellersArr = Product::getMoreSeller($selprodCodes, $this->siteLangId);
             }
         }
+        */
 
         /* ] */
 
         $data = array(
             'products' => $products,
-            'moreSellersProductsArr' => $moreSellersArr, /* seller products which is related to same options*/
+           /* 'moreSellersProductsArr' => $moreSellersArr, *//* seller products which is related to same options*/
             'category' => $category,
             'categoryId' => $categoryId,
             'postedData' => $get,

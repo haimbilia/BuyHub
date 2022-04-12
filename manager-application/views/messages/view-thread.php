@@ -73,14 +73,14 @@ $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageD
                             <?php $class = ($row['thread_started_by'] == $row['message_from_user_id']) ? 'from' : 'to'; ?>
                             <div class="message-wrap message-wrap--<?php echo $class; ?>">
                                 <div class="message-avtar">
-                                    <div class="user user-circle">
+                                    <a class="user user-circle" href="javascript:void(0)" onclick="redirectUser(<?php echo $row['message_from_user_id'];?>)">
                                         <?php
                                         $rowUploadedTime = AttachedFile::setTimeParam($row['message_from_user_updated_on']);
 
                                         $rowUserImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$row['message_from_user_id'], ImageDimension::VIEW_THUMB, true], CONF_WEBROOT_FRONT_URL) . $rowUploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                         ?>
                                         <img data-aspect-ratio="<?php echo $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $rowUserImageUrl; ?>" alt="<?php echo $row['message_from_name']; ?>">
-                                    </div>
+                                    </a>
                                 </div>
                                 <div class="message-detail">
                                     <div class="message">

@@ -12,7 +12,7 @@
     #{$end-direction}: 0;
     transition: all 0.3s ease 0s;
     width: 100%;
-    z-index: 999;
+    z-index: 1050;
     .box-cookies {
         font-size: 13px;
         font-weight: 400;
@@ -23,6 +23,10 @@
         align-items: center;
         justify-content: center;
         grid-gap: 10px;
+        flex-direction: column;
+        @include media-breakpoint-up(lg) {
+            flex-direction: row;
+        }
         a {
             text-decoration: underline;
         }

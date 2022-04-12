@@ -39,6 +39,7 @@ foreach ($products as $product) {
     ];
 }
 
+/*
 foreach ($moreSellersProductsArr as $product) {
     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
     $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']));
@@ -59,6 +60,7 @@ foreach ($moreSellersProductsArr as $product) {
         'amount' =>  CommonHelper::displayMoneyFormat($product['theprice']),
     ];
 }
+/*
 
 foreach ($productsByShop as &$marker) {
     $contentString = '<div class="seller-card">

@@ -10,40 +10,41 @@ $(function (){
 		searchShops(document.frmSearchShops);
 	};
 	
-	searchShops = function(frm, append){
-		if(typeof append == undefined || append == null){
+	searchShops = function (frm, append) {
+		if (typeof append == undefined || append == null) {
 			append = 0;
 		}
-		
+
 		var data = fcom.frmData(frm);
-		if( append == 1 ){
+		if (append == 1) {
 			$(dv).prepend(fcom.getLoader());
 		} else {
 			$(dv).html(fcom.getLoader());
 		}
-		
-		fcom.updateWithAjax(fcom.makeUrl('Shops','search'), data, function(ans){
+
+		fcom.updateWithAjax(fcom.makeUrl('Shops', 'search'), data, function (ans) {
+			fcom.removeLoader();
 			$.ykmsg.close();
-			if( append == 1 ){
+			if (append == 1) {
 				$(document.frmSearchShopsPaging).remove();
 				$(dv).find('.loader-yk').remove();
 				$(dv).append(ans.html);
 			} else {
 				$(dv).html(ans.html);
 			}
-                        if(CONF_ENABLE_GEO_LOCATION){
-                            if (typeof map == 'undefined') {
-                                initMutipleMapMarker(markers, 'shopMap--js', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'), dragCallback);
-                            } else {
-                                clearMarkers();
-                                createMarkers(markers);
-                            }
-                        }else{
-                           $("#loadMoreBtnDiv").html( ans.loadMoreBtnHtml ); 
-                           $("#favShopCount").html( ans.totalRecords );
-                        }
-                        
-		}); 
+			if (CONF_ENABLE_GEO_LOCATION) {
+				if (typeof map == 'undefined') {
+					initMutipleMapMarker(markers, 'shopMap--js', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'), dragCallback);
+				} else {
+					clearMarkers();
+					createMarkers(markers);
+				}
+			} else {
+				$("#loadMoreBtnDiv").html(ans.loadMoreBtnHtml);
+				$("#favShopCount").html(ans.totalRecords);
+			}
+
+		});
 	};
 	
 	goToLoadMore = function(page){
