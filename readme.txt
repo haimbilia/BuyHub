@@ -670,8 +670,7 @@ Updates/Fixes :
     => 063686 - Admin: The admin is able to delete the categories if their associated products are deactivated
     => 063666 - Admin: Navigate to the wrong link while clicking on the "Click to Login" option in the Password reset successfully email at the admin's end
     => 063675 - Buyer: Products are not showing on the Map and the "Undefined variable" & "Warning" message is showing on the Map view Page
-    => 063659 - Admin: "Reset Password" page design is not correct at the admin's end and after resetting the password there is no confirmation message
-    => 063767 - Buyer: The wallet option is not showing while placing an order for the digital product
+    => 063766 - Buyer: Print functionality is not working after placing an order at the front-end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
