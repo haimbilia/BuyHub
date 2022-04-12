@@ -668,6 +668,7 @@ Updates/Fixes :
     => 063694 - Admin: Suggestion to don't show the sorting according to the Brand's name by default and recently added brands should show on the top of the table
     => 063690 - Admin: Loader is not showing while uploading the media under the category section
     => 063686 - Admin: The admin is able to delete the categories if their associated products are deactivated
+    => 063666 - Admin: Navigate to the wrong link while clicking on the "Click to Login" option in the Password reset successfully email at the admin's end
     => 063675 - Buyer: Products are not showing on the Map and the "Undefined variable" & "Warning" message is showing on the Map view Page
     
 UAT points:
