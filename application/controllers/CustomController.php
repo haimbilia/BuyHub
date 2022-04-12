@@ -506,7 +506,7 @@ class CustomController extends MyAppController
         FatApp::redirectUser(UrlHelper::generateFullUrl('Checkout'));
     }
 
-    public function paymentSuccess($orderId, $print = '')
+    public function paymentSuccess($orderId)
     {
         if (!$orderId) {
             FatUtility::exitWithErrorCode(404);
@@ -620,10 +620,7 @@ class CustomController extends MyAppController
         $orderInfo['orderProducts'] = $orderObj->getChildOrders(['order_id' => $orderInfo['order_id']], $orderInfo['order_type'], $orderInfo['order_language_id'], true);
 
         $this->set('textMessage', $textMessage);
-        $this->set('orderInfo', $orderInfo);
-
-        $print = ('print' == $print);
-        $this->set('print', $print);
+        $this->set('orderInfo', $orderInfo);     
 
         $this->set('orderFulFillmentTypeArr', $orderFulFillmentTypeArr);
         if (CommonHelper::isAppUser() && false ===  MOBILE_APP_API_CALL) {
