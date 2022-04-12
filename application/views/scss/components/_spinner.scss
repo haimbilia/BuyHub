@@ -1,7 +1,7 @@
 .spinner {
     position: relative;
     &:before {
-        content: '';
+        content: "";
         box-sizing: border-box;
         position: absolute;
         top: 50%;
@@ -10,7 +10,7 @@
         width: 20px;
         height: 20px;
         margin-top: -10px;
-        animation: spinner .5s linear infinite;
+        animation: spinner 0.5s linear infinite;
     }
     &.spinner--sm {
         &:before {
@@ -144,7 +144,7 @@
     }
     &.spinner--v2 {
         &:before {
-            animation: spinner .5s linear infinite;
+            animation: spinner 0.5s linear infinite;
         }
         &.spinner--brand {
             &:before {
@@ -230,7 +230,7 @@
     }
     &.loader--brand {
         // background-color: $brand-color;
-        // color:  lighten($brand-color, 55%); 
+        // color:  lighten($brand-color, 55%);
         @include bg-brand();
     }
     &.loader--light {
@@ -355,35 +355,35 @@
 @-webkit-keyframes pulse {
     0% {
         -webkit-transform: scale(0.1, 0.1);
-        opacity: 0.0;
+        opacity: 0;
     }
     60% {
         -webkit-transform: scale(0.1, 0.1);
-        opacity: 0.0;
+        opacity: 0;
     }
     65% {
         opacity: 1;
     }
     100% {
         -webkit-transform: scale(1.2, 1.2);
-        opacity: 0.0;
+        opacity: 0;
     }
 }
 
 @keyframes pulse {
     0% {
         -webkit-transform: scale(0.1, 0.1);
-        opacity: 0.0;
+        opacity: 0;
     }
     60% {
         -webkit-transform: scale(0.1, 0.1);
-        opacity: 0.0;
+        opacity: 0;
     }
     65% {
         opacity: 1;
     }
     100% {
         -webkit-transform: scale(1.2, 1.2);
-        opacity: 0.0;
+        opacity: 0;
     }
 }
