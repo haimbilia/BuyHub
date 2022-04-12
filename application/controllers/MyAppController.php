@@ -414,7 +414,8 @@ class MyAppController extends FatController
             $frm->addCheckbox(Labels::getLabel('FRM_REMEMBER_ME', $siteLangId), 'remember_me', 1, array(), '', 0);
             $frm->addHtml('', 'forgot', '');
         } else {
-            $frm->addRequiredField(Labels::getLabel('FRM_PHONE_NUMBER', $siteLangId), 'username', $userName);
+            $phnFld = $frm->addRequiredField(Labels::getLabel('FRM_PHONE_NUMBER', $siteLangId), 'username', $userName);
+            $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
             $attr = ['maxlength' => 1, 'size' => 1, 'placeholder' => '*'];
             for ($i = 0; $i < User::OTP_LENGTH; $i++) {
                 $frm->addTextBox('', 'upv_otp[' . $i . ']', '', $attr);
