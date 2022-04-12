@@ -1964,7 +1964,7 @@ class CheckoutController extends MyAppController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Reward_Points', $langId), 'redeem_rewards', '', array());
         $fld->requirements()->setRequired();
 
-        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('BTN_APPLY', $langId), 'button', 'btn_submit', 'btn-apply'));
+        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('BTN_APPLY', $langId), 'submit', 'btn_submit', 'btn-apply'));
         return $frm;
     }
 

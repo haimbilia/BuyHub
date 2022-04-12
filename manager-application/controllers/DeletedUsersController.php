@@ -58,7 +58,7 @@ class DeletedUsersController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $userId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
@@ -157,7 +157,7 @@ class DeletedUsersController extends ListingBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'user_id');
+            $this->addSortingElements($frm, 'user_id', applicationConstants::SORT_DESC);
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER_NAME', $this->siteLangId), 'user_id', []);
