@@ -130,6 +130,7 @@ class SellerController extends SellerBaseController
          * Transactions Listing
          */
         $transSrch = Transactions::getUserTransactionsObj($userId);
+        $transSrch->doNotCalculateRecords();
         $transSrch->setPageSize(applicationConstants::DASHBOARD_PAGE_SIZE);
         $rs = $transSrch->getResultSet();
         $transactions = FatApp::getDb()->fetchAll($rs, 'utxn_id');
