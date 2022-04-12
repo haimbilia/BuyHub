@@ -28,8 +28,10 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'urp_date_added':
-            case 'urp_date_expiry':
                 $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
+            break;         
+            case 'urp_date_expiry':
+                $td->appendElement('plaintext', $tdAttr, ($row[$key] != '0000-00-00'  ? HtmlHelper::formatDateTime($row[$key]) : Labels::getLabel("LBL_NA", $siteLangId)), true);
                 break;
             case 'action':
                 $data = [
