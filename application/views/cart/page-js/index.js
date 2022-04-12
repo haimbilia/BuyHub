@@ -49,7 +49,6 @@ $(function () {
 	};
 
 	getPromoCode = function () {
-		$.ykmodal(fcom.getLoader(), true);
 		fcom.updateWithAjax(fcom.makeUrl('Checkout', "getCoupons"), '', function (res) {
 			fcom.removeLoader();
             $.ykmodal(res.html, true);
