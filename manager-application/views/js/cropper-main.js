@@ -99,10 +99,11 @@ var cropper;
                         break;
 
                     case 'getCroppedCanvas':
+                        $('.imgContainerJs').prepend(fcom.getLoader());
                         try {
                             data.option = JSON.parse(data.option);
                         } catch (e) {
-                            /*console.log(e.message);*/
+                            
                         }
 
                         if (uploadedImageType === 'image/jpeg') {
