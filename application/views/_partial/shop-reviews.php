@@ -48,14 +48,13 @@ if (!empty($reviews)) {
                             <div class="rating-layout-start">
                                 <div class="sticky-top">
                                     <div class="product-card">
+                                    <?php if (false === $shopView && !empty($shop)) { ?>
                                         <div class="product-card-start">
-                                            <div class="product-card-img">
-                                                <?php if (false === $shopView && !empty($shop)) {
-                                                ?>
+                                            <div class="product-card-img">  
                                                     <img alt="<?php echo $shop['shop_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
-                                                <?php } ?>
                                             </div>
                                         </div>
+                                        <?php } ?>
                                         <div class="product-card-end">
                                             <div class="product-card-data">
                                                 <?php
