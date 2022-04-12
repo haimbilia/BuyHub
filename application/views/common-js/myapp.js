@@ -20,7 +20,7 @@ var cart = {
             } else {
                 $('span.cartQuantity').html(ans.total);
                 $('html, body').animate({ scrollTop: 0 }, 'slow');
-                cart.loadCartSummary(false);
+                cart.loadCartSummary();
             }
 
         });
