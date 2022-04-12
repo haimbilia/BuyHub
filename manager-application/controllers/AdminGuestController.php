@@ -207,35 +207,7 @@ class AdminGuestController extends FatController
 
         $frm = $this->getResetPwdForm($adminId, trim($token));
 
-        $frm->setFormTagAttribute('id', 'frmResetPassword');
-        $frm->setFormTagAttribute('class', 'web_form');
-        $frm->setRequiredStarPosition('none');
-        $frm->setValidatorJsObjectName('resetValidator');
-
-        $frm->setFormTagAttribute("action", '');
-        $frm->setFormTagAttribute('onsubmit', 'reset_password(this, resetValidator); return false;');
-
-        $btn_fld = $frm->getField('btn_reset');
-        $btn_fld->addFieldTagAttribute('id', 'btn_reset');
-
-        $fld_np = $frm->getField('new_pwd');
-        $fld_np->addFieldTagAttribute('title', 'New Password');
-        $fld_np->addFieldTagAttribute('placeholder', ' Enter New Password');
-
-        $fld_np->addFieldTagAttribute('autocomplete', 'off');
-        $fld_np->addFieldTagAttribute('id', 'new_pwd');
-        $fld_np->requirements()->setLength(4, 20);
-        $fld_np->setRequiredStarWith('none');
-
-        $fld_ncp = $frm->getField('confirm_pwd');
-        $fld_ncp->addFieldTagAttribute('title', 'Confirm Password');
-        $fld_ncp->addFieldTagAttribute('placeholder', ' Enter Confirm Password');
-
-        $fld_ncp->addFieldTagAttribute('autocomplete', 'off');
-        $fld_ncp->addFieldTagAttribute('id', 'confirm_pwd');
-        $fld_ncp->setRequiredStarWith('none');
-
-        $this->set('frmResetPassword', $frm);
+        $this->set('frm', $frm);
         $this->_template->render();
     }
 
@@ -400,8 +372,8 @@ class AdminGuestController extends FatController
     private function getResetPwdForm($aId, $token)
     {
         $frm = new Form('frmResetPassword');
-        $fld_np = $frm->addPasswordField('', 'new_pwd')->requirements()->setRequired();
-        $fld_cp = $frm->addPasswordField('', 'confirm_pwd');
+        $frm->addPasswordField(Labels::getLabel('FRM_NEW_PASSWORD', $this->siteLangId), 'new_pwd')->requirements()->setRequired();
+        $fld_cp = $frm->addPasswordField(Labels::getLabel('FRM_CONFIRM_NEW_PASSWORD', $this->siteLangId), 'confirm_pwd');
         $fld_cp->requirements()->setCompareWith('new_pwd', 'eq', '');
         $frm->addHiddenField('', 'apr_id', $aId, array('id' => 'apr_id'));
         $frm->addHiddenField('', 'token', $token, array('id' => 'token'));

@@ -669,6 +669,7 @@ Updates/Fixes :
     => 063690 - Admin: Loader is not showing while uploading the media under the category section
     => 063686 - Admin: The admin is able to delete the categories if their associated products are deactivated
     => 063666 - Admin: Navigate to the wrong link while clicking on the "Click to Login" option in the Password reset successfully email at the admin's end
+    => 063659 - Admin: "Reset Password" page design is not correct at the admin's end and after resetting the password there is no confirmation message
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
