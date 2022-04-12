@@ -4,7 +4,7 @@
 </script>
 <section class="section" data-content="">
     <div class="container">
-        <div class="checkout-page">
+        <div class="checkout-page checkoutPageJs">
             <main class="checkout-page_main checkout-content-js">
                 <?php include(CONF_THEME_PATH . 'checkout/_partial/shipping-summary-skeleton.php'); ?>
             </main>

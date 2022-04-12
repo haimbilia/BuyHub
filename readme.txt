@@ -671,6 +671,7 @@ Updates/Fixes :
     => 063666 - Admin: Navigate to the wrong link while clicking on the "Click to Login" option in the Password reset successfully email at the admin's end
     => 063675 - Buyer: Products are not showing on the Map and the "Undefined variable" & "Warning" message is showing on the Map view Page
     => 063659 - Admin: "Reset Password" page design is not correct at the admin's end and after resetting the password there is no confirmation message
+    => 063767 - Buyer: The wallet option is not showing while placing an order for the digital product
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

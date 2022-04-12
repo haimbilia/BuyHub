@@ -1100,7 +1100,9 @@ class CheckoutController extends MyAppController
                 $codEnabled = $cartProduct['isProductShippedBySeller'] ? $cartProduct['selprod_cod_enabled'] : $cartProduct['product_cod_enabled'];
                 if (applicationConstants::NO == $codEnabled) {
                     $key = array_search('CashOnDelivery', array_column($paymentMethods, 'plugin_code'));
-                    if (false !== $key) unset($paymentMethods[$key]);
+                    if (false !== $key) {
+                        unset($paymentMethods[$key]);
+                    }
                 }
 
                 $productShippingData = array();
@@ -2033,13 +2035,45 @@ class CheckoutController extends MyAppController
             $walletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
             $walletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
         }
+        $fulfillmentType = $this->cartObj->getCartCheckoutType();
+        /* Payment Methods[ */
+        $splitPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);
+        $regularPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_REGULAR_PAYMENT_METHOD, $this->siteLangId);
+
+        if ($fulfillmentType == Shipping::FULFILMENT_PICKUP) {
+            $codPlugInId = Plugin::getAttributesByCode('CashOnDelivery', 'plugin_id');
+            if (array_key_exists($codPlugInId, $regularPaymentMethodsPlugins)) {
+                unset($regularPaymentMethodsPlugins[$codPlugInId]);
+            }
+        } else if ($fulfillmentType == Shipping::FULFILMENT_SHIP) {
+            $codPlugInId = Plugin::getAttributesByCode('PayAtStore', 'plugin_id');
+            if (array_key_exists($codPlugInId, $regularPaymentMethodsPlugins)) {
+                unset($regularPaymentMethodsPlugins[$codPlugInId]);
+            }
+        }
+
+        $paymentMethods = array_merge($splitPaymentMethodsPlugins, $regularPaymentMethodsPlugins);
+        $this->set('paymentMethods', $paymentMethods);
+        if (0 < $isShippingSelected && 1 > count($paymentMethods)) {
+            $this->set('shippingAddressId', $this->cartObj->getCartShippingAddress());
+
+            $billingAddressId = $this->cartObj->getCartBillingAddress();
+            $billingAddressArr = [];
+            if ($billingAddressId) {
+                $address = new Address($billingAddressId, $this->siteLangId);
+                $billingAddressArr = $address->getData(Address::TYPE_USER, $userId);
+            }
+            $this->set('billingAddressId', $billingAddressId);
+            $this->set('billingAddressArr', $billingAddressArr);
+        }
+        /* ] */
 
         $this->set('shippingAddress', $shippingAddress);
         $this->set('isShippingSelected', $isShippingSelected);
         $this->set('products', $products);
         $this->set('cartSummary', $cartSummary);
         $this->set('cartHasPhysicalProduct', $this->cartObj->hasPhysicalProduct());
-        $this->set('fulfillmentType', $this->cartObj->getCartCheckoutType());
+        $this->set('fulfillmentType', $fulfillmentType);
         $this->set('netAmount', CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount']));
         $this->set('redeemRewardFrm', $this->getRewardsForm($this->siteLangId));
         $this->set('rewardPoints', UserRewardBreakup::rewardPointBalance($userId));
