@@ -153,14 +153,10 @@ class AdminGuestController extends FatController
         $admin = $adminAuthObj->checkAdminEmail($adminEmail);
 
         if (!$admin) {
-            Message::addErrorMessage($adminAuthObj->getError());
-            $this->set('msg', Message::getHtml());
-            $this->_template->render(false, false, 'json-error.php', true, false);
+            LibHelper::exitWithError($adminAuthObj->getError(), true);
         }
         if ($adminAuthObj->checkAdminPwdResetRequest($admin['admin_id'])) {
-            Message::addErrorMessage($adminAuthObj->getError());
-            $this->set('msg', Message::getHtml());
-            $this->_template->render(false, false, 'json-error.php', true, false);
+            LibHelper::exitWithError($adminAuthObj->getError(), true);
         }
 
         $token = FatUtility::getRandomString(30);
@@ -169,9 +165,7 @@ class AdminGuestController extends FatController
         $reset_url = UrlHelper::generateFullUrl('adminGuest', 'resetPwd', array($admin['admin_id'], $token));
         $adminAuthObj->deleteOldPasswordResetRequest();
         if (!$adminAuthObj->addPasswordResetRequest($data)) {
-            Message::addErrorMessage($adminAuthObj->getError());
-            $this->set('msg', Message::getHtml());
-            $this->_template->render(false, false, 'json-error.php', true, false);
+            LibHelper::exitWithError($adminAuthObj->getError(), true);
         }
         $replacements = array(
             '{reset_url}' => $reset_url,
@@ -185,9 +179,7 @@ class AdminGuestController extends FatController
             ->send();
 
         if (false === $sendEmail) {
-            Message::addErrorMessage(Labels::getLabel('ERR_UNABLE_TO_SEND_EMAIL', $this->siteLangId));
-            $this->set('msg', Message::getHtml());
-            $this->_template->render(false, false, 'json-error.php', true, false);
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_SEND_EMAIL', $this->siteLangId), true);
         }
         $emaiHandObj = new EmailHandler();
         $emaiHandObj->sendSms('admin_forgot_password', FatApp::getConfig('CONF_SITE_PHONE'), $replacements, $this->siteLangId);

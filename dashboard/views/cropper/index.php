@@ -40,10 +40,8 @@ $footer = '
             </li>
             <li>            
             <label class="actions-link btn-upload" for="inputImage" title="' . Labels::getLabel('LBL_UPLOAD_IMAGE_FILE', $siteLangId) . '">
-                <input type="file" class="sr-only" id="inputImage" name="file" accept="image/*">
-                
-                    <span class="fa fa-upload"></span>  
-                
+                <input type="file" class="sr-only" id="inputImage" name="file" accept="image/*">                
+                    <span class="fa fa-upload"></span>                  
             </label>
             </li>              
             <li>
@@ -53,8 +51,8 @@ $footer = '
             </li>
         </ul>
         <ul class="actions">
-            <li><button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary btn-wide dark:border-dark-5 dark:text-gray-300">Cancel</button></li>
-            <li><button type="button" class="btn btn-brand btn-wide " data-method="getCroppedCanvas">' . Labels::getLabel('LBL_APPLY', $siteLangId) . '</button></li>
+            <li><button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary btn-wide dark:border-dark-5 dark:text-gray-300">' . Labels::getLabel('BTN_CANCEL', $siteLangId) . '</button></li>
+            <li><button type="button" class="btn btn-brand btn-wide " data-method="getCroppedCanvas">' . Labels::getLabel('BTN_APPLY', $siteLangId) . '</button></li>
         </ul>
    
 </div>';

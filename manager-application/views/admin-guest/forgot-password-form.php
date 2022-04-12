@@ -56,12 +56,13 @@ if (null != $captchaFld) {
 
         </div>
     </div>
-    <?php
-    if (null != $captchaFld) {
-        $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
-    ?>
-        <script>
-            langLbl.captchaSiteKey = "<?php echo FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, ''); ?>";
-        </script>
-        <script src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
-    <?php } ?>
+</div>
+<?php
+if (null != $captchaFld) {
+    $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
+?>
+    <script>
+        langLbl.captchaSiteKey = "<?php echo FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, ''); ?>";
+    </script>
+    <script src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
+<?php } ?>

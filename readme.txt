@@ -659,6 +659,9 @@ Updates/Fixes :
     => 063672 - Buyer: Getting an error on shop reviews page.
     => 063671 - Seller: "Translate to other languages" functionality is not working while adding the Inventory at the seller's end
     => 063669 - Admin: "Order cancellation age (Days) and Return age" information is not showing under the shop details section andat the admin's end
+    => 063444 - Advertiser UI: Some of the labels are not showing in Arabic
+    => 063630 - Admin: UI is not correct after sending the email to the user from the admin's end
+    => 063749 - Admin: While adding a product, drop down and auto suggestions both are showing for the country field.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

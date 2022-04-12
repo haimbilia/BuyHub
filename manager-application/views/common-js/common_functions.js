@@ -264,15 +264,15 @@ select2 = function (
 
     var select2Selector = ele.data("select2");
     var elementName = ele.attr('name').replace('[]', '');
-
+    console.log(select2Selector);
     select2Selector.$container.addClass("custom-select2");
 
     if ('undefined' != typeof (select2Selector.dropdown)) {
-        $(select2Selector.dropdown.$search).attr('name', elementName + '-select2');
+        $(select2Selector.dropdown.$search).attr({ 'name': elementName + '-select2', 'autocomplete': 'no' });
     }
 
     if ('undefined' != typeof (select2Selector.selection)) {
-        $(select2Selector.selection.$search).attr('name', elementName + '-select2');
+        $(select2Selector.selection.$search).attr({ 'name': elementName + '-select2', 'autocomplete': 'no' });
     }
 
     if (0 < ele.closest(".advancedSearchJs").length || 0 < ele.closest(".form-group").length) {
@@ -289,7 +289,9 @@ select2 = function (
 };
 
 $(document).on('select2:open', () => {
-    setTimeout(function () { document.querySelector('.select2-search__field').focus(); }, 10);
+    setTimeout(function () {
+        document.querySelector('.select2-search__field').focus();
+    }, 10);
 });
 /**
  * hiddenfields object = { fieldname : fieldValue}

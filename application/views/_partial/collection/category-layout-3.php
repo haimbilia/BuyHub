@@ -3,7 +3,7 @@
     <section class="section">
         <div class="container">
             <div class="section-head section-head-center">
-                <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>                
+                <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
             </div>
             <div class="category-layout-1">
                 <?php foreach ($collection['categories'] as $category) { ?>
@@ -24,10 +24,12 @@
                                 'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : ImageDimension::VIEW_CLAYOUT3, $selProdId, 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                 'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $prodcatName,
                                 'siteLangId' => $siteLangId,
-                            ];
-
-                            $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                            ]; 
+                            $prodUrl = 0 < $selProdId ? UrlHelper::generateUrl('Products', 'View', array($selProdId)) : 'javascript:void(0);';
                             ?>
+                            <a title="<?php echo $prodcatName; ?>" href="<?php echo $prodUrl; ?>">
+                                <?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?>
+                            </a>
                         </div>
                         <div class="category-body">
                             <ul class="category-list">
