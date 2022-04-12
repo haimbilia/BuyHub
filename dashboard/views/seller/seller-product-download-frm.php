@@ -210,21 +210,9 @@ if (false == $canDo) {
                     </div>
                 </div>
             <?php } else { ?>
-                <?php
-                $msg = '<svg class="svg" height="18" width="18">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#warning">
-                            </use>
-                        </svg> ' . Labels::getLabel('LBL_YOU_CAN_NOT_ATTACH_FILES_WITH_INVENTORY.', $siteLangId);
-                echo HtmlHelper::getErrorMessageHtml($msg);
-                ?>
+                <?php echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_YOU_CAN_NOT_ATTACH_FILES_WITH_INVENTORY.', $siteLangId)); ?>
                 <div class="attach-links-js p-0">
-                    <?php
-                    $msg = '<svg class="svg" height="18" width="18">
-                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#warning">
-                                </use>
-                            </svg> ' . Labels::getLabel('LBL_YOU_CAN_NOT_ADD_LINKS_WITH_INVENTORY.', $siteLangId);
-                    echo HtmlHelper::getErrorMessageHtml($msg);
-                    ?>
+                    <?php HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_YOU_CAN_NOT_ADD_LINKS_WITH_INVENTORY.', $siteLangId)); ?>
                 </div>
             <?php } ?>
         </div>

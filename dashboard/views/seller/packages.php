@@ -12,11 +12,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                 </div>
                 <?php
                 if (1 > $currentActivePlanId && $parentUserId != UserAuthentication::getLoggedUserId()) {
-                    $msg = '<svg class="svg" height="18" width="18">
-                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#warning">
-                                </use>
-                            </svg> ' . Labels::getLabel('ERR_PARENT_MERCHANT_MUST_NEED_TO_BUY_A_VALID_SUBSCRIPTION.', $siteLangId);
-                    echo HtmlHelper::getErrorMessageHtml($msg);
+                    echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_PARENT_MERCHANT_MUST_NEED_TO_BUY_A_VALID_SUBSCRIPTION.', $siteLangId));
                 }
                 ?>
                 <ul class="packages-box">

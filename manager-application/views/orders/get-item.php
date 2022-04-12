@@ -112,7 +112,7 @@ foreach ($op['taxOptions'] as $key => $val) {
                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($op["op_unit_price"], true, true); ?></span>
             </li>
             <li class="list-stats-item">
-                <span class="lable"><?php echo Labels::getLabel('LBL_QUANTITY', $siteLangId); ?>:</span>
+                <span class="lable"><?php echo Labels::getLabel('LBL_ORDERED_QUANTITY', $siteLangId); ?>:</span>
                 <span class="value"><?php echo $op['op_qty']; ?></span>
             </li>
 

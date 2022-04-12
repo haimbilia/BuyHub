@@ -81,7 +81,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                     &nbsp;&nbsp;&nbsp;
                                     <span class="no-print">
 
-                                        <a class="btn btn-link" href="<?php echo UrlHelper::generateUrl('Custom', 'PaymentSuccess', [$orderInfo['order_id'], 'print']); ?>"> <svg class="svg" width="22px" height="22px">
+                                        <a class="btn btn-link" onclick="window.print();" href="javascript:void(0)"> <svg class="svg" width="22px" height="22px">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#print" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#print">
                                                 </use>
                                             </svg> <?php echo Labels::getLabel("LBL_PRINT", $siteLangId); ?></a>
@@ -345,15 +345,4 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
     </section>
 
 </div>
-<?php if (true === $print) { ?>
-    <script>
-        $(function() {
-            setTimeout(() => {
-                window.print();
-            }, 1000);
-            window.onafterprint = function() {
-                location.href = history.back();
-            }
-        });
-    </script>
-<?php }
+

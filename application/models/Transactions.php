@@ -230,7 +230,7 @@ class Transactions extends MyAppModel
         $balSrch = static::getSearchObject();
         $balSrch->doNotCalculateRecords();
         $balSrch->doNotLimitRecords();
-        $balSrch->addMultipleFields(array('utxn.*', "utxn_credit - utxn_debit as bal"));
+        $balSrch->addMultipleFields(array('utxn_user_id', 'utxn_id','utxn_credit - utxn_debit as bal'));
         $balSrch->addCondition('utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $balSrch->addCondition('utxn_status', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $qryUserPointsBalance = $balSrch->getQuery();
@@ -241,7 +241,7 @@ class Transactions extends MyAppModel
         $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", "IF(utxn.utxn_credit > 0, " . static::CREDIT_TYPE . ", " . static::DEBIT_TYPE . ") as txnPaymentType"));
         $srch->addCondition('utxn.utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->addGroupBy('utxn.utxn_id');
-        $srch->addOrder('utxn_id', 'DESC');
+        $srch->addOrder('utxn.utxn_id', 'DESC');
         return $srch;
     }
 
