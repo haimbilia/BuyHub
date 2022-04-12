@@ -145,6 +145,23 @@ foreach ($arrListing as $sn => $row) {
                                         </i>' . Labels::getLabel('LBL_MARK_AS_BUYER', $siteLangId),
                         ];
                     }
+
+
+                    $data['dropdownButtons']['otherButtons'][] = [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'redirectfunc(fcom.makeUrl("transactions"),{utxn_user_id:'.$row['user_id'].'})',
+                        ],
+                        'label' => '<i class="icn">
+                                        <svg class="svg" width="18" height="18">
+                                            <use
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-users">
+                                            </use>
+                                        </svg>
+                                    </i>' . Labels::getLabel('LBL_TRANSACTIONS', $siteLangId),
+                    ];
+
+
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
