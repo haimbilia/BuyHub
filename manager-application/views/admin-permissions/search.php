@@ -37,7 +37,7 @@ foreach ($arrListing as $moduleId => $moduleName) {
                         }
                         $options .= "<option value=" . $key . " " . $selected . ">" . $list . "</option>";
                     }
-                    $td->appendElement('plaintext', $tdAttr, "<select class='form-control' onChange='updatePermission(" . $moduleId . ",this.value)'>" . $options . "</select>", true);
+                    $td->appendElement('plaintext', $tdAttr, "<select class='form-select focused' onChange='updatePermission(" . $moduleId . ",this.value)'>" . $options . "</select>", true);
                 }
                 break;
         }
