@@ -35,35 +35,26 @@ $profileImg  = UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAu
             <div class="col-lg-3 text-center">
                 <!--begin::Image input-->
                 <div class="avatar avatar-outline avatar-circle" id="user_avatar_3">
-                    <div data-aspect-ratio = "<?php echo $imageProfileDimensions[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" class="avatar__holder" style="background-image: url('<?php echo $profileImg . "t=?" . time(); ?>')">
+                    <div data-aspect-ratio="<?php echo $imageProfileDimensions[ImageDimension::VIEW_CROPED]['aspectRatio']; ?>" class="avatar__holder" style="background-image: url('<?php echo $profileImg . "t=?" . time(); ?>')">
                     </div>
-
-                    
-                        <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>">
-                            <svg class="svg" width="12" height="12">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                </use>
-                            </svg>
-                            <?php echo $imageFld->getHTML(); ?>
-                        </label>
-                 
+                    <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>">
+                        <svg class="svg" width="12" height="12">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                            </use>
+                        </svg>
+                        <?php echo $imageFld->getHTML(); ?>
+                    </label>
 
                     <?php if (!$isNewImage) { ?>
-                    <label class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage();">
+                        <label class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage();">
                             <svg class="svg" width="12" height="12">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#times">
                                 </use>
                             </svg>
                         </label>
-                    <?php } ?>     
+                    <?php } ?>
 
                 </div>
-                <!--end::Image input-->
-                <!--begin::Hint-->
-                <!-- <div class="form-text">Allowed file types: png,
-                    jpg,
-                    jpeg.</div> -->
-                <!--end::Hint-->
             </div>
             <!--end::Col-->
         </div>
