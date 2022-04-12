@@ -54,10 +54,13 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
 
                                         <div class=" products-body">
                                             <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
-                                                <div class="not-available"><svg class="svg">
+                                                <div class="not-available">
+                                                    <svg class="svg">
                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                                                         </use>
-                                                    </svg> <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?></div>
+                                                    </svg>
+                                                    <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?>
+                                                </div>
                                             <?php } ?>
 
                                             <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
@@ -92,7 +95,9 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                             } ?>
                         </div>
                     </div>
-                <?php if (4 == $j) {break;}
+                <?php if (4 == $j) {
+                        break;
+                    }
                 } ?>
             </div>
             <?php if (count($collection['categories']) > 4) { ?>
