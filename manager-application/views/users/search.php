@@ -155,7 +155,7 @@ foreach ($arrListing as $sn => $row) {
                         'label' => '<i class="icn">
                                         <svg class="svg" width="18" height="18">
                                             <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-users">
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#sync-currency">
                                             </use>
                                         </svg>
                                     </i>' . Labels::getLabel('LBL_TRANSACTIONS', $siteLangId),

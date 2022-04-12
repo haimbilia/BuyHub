@@ -76,11 +76,8 @@ class TransactionsController extends ListingBaseController
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
-        if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
-        }
+        
+        $sortBy = 'utxn_date'; /* Sorting not required*/
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
         $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
@@ -137,7 +134,7 @@ class TransactionsController extends ListingBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'utxn_id', applicationConstants::SORT_DESC);
+            $this->addSortingElements($frm, 'utxn_date', applicationConstants::SORT_DESC);
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
@@ -268,7 +265,7 @@ class TransactionsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['utxn_comments'], ['utxn_id','user_name','utxn_credit','utxn_debit','balance','utxn_status'] + Common::excludeKeysForSort());
+        return array_diff($fields, $this->getDefaultColumns(), Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)
