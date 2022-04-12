@@ -94,11 +94,9 @@
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim geo-location_dropdown-menu" aria-labelledby="location-dropdown">
                                             <div class="geo-location_body">
-                                                <input autocomplete="no" id="ga-autoComplete-header" class="geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
+                                                <?php $value = ($geoAddress == Labels::getLabel("LBL_LOCATION", $siteLangId)) ? "" : $geoAddress; ?>
+                                                <input autocomplete="no" id="ga-autoComplete-header" class="geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="search" name="location" value="<?php echo $value; ?>">
 
-                                                <!-- <div class="or">
-                                                    <span>Or</span>
-                                                </div> -->
                                                 <button onclick="loadGeoLocation()" class="btn btn-outline-gray btn-block btn-detect">
                                                     <svg class="svg" width="18" height="18">
                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#gps">

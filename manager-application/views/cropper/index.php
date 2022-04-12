@@ -2,7 +2,7 @@
 
     $imageUrl = isset($image) ? ($image . "t=" . time()) : '';
     $body = '
-        <div class="img-container">
+        <div class="img-container imgContainerJs">
             <img src="' . $imageUrl . '" alt="Picture" id="new-img" class="img_responsive cropper-hidden">
             <div class="loader-positon" id="loader-js">
                 <div class="table-processing loaderJs">

@@ -49,7 +49,6 @@ $(function () {
 	};
 
 	getPromoCode = function () {
-		$.ykmodal(fcom.getLoader(), true);
 		fcom.updateWithAjax(fcom.makeUrl('Checkout', "getCoupons"), '', function (res) {
 			fcom.removeLoader();
             $.ykmodal(res.html, true);
@@ -100,11 +99,6 @@ $(function () {
 	};
 
 	addToFavourite = function (key, selProdId) {
-		if (isUserLogged() == 0) {
-			loginPopUpBox();
-			return false;
-		}
-		$.ykmsg.close();
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'markAsFavorite', [selProdId], siteConstants.webroot_dashboard), '', function (ans) {
 			if (ans.status) {
 				removeFromCart(key);
@@ -113,11 +107,7 @@ $(function () {
 	};
 
 	moveToSaveForLater = function (key, selProdId, fulfilmentType) {
-		if (isUserLogged() == 0) {
-			loginPopUpBox();
-			return false;
-		}
-		$.ykmsg.close();
+		$('#cartList').prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'moveToSaveForLater', [selProdId], siteConstants.webroot_dashboard), '', function (ans) {
 			if (ans.status) {
 				listCartProducts(fulfilmentType);
@@ -133,16 +123,17 @@ $(function () {
 	};
 
 	moveToCart = function (selprod_id, wish_list_id, event, fulfilmentType) {
+		$('#cartList').prepend(fcom.getLoader());
 		var data = 'selprod_id[0]=' + selprod_id;
 		fcom.updateWithAjax(fcom.makeUrl('cart', 'addSelectedToCart'), data, function (ans) {
 			addRemoveWishListProduct(selprod_id, wish_list_id, event);
-			listCartProducts(fulfilmentType);
 			cart.loadCartSummary();
 			setTimeout(function () {
+				listCartProducts(fulfilmentType);
 				if (1 > $("#cartList").length) {
 					location.reload();
 				}
-			}, 500);
+			}, 1000);
 		});
 	};
 
