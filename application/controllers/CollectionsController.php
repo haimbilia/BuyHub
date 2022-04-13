@@ -123,7 +123,9 @@ class CollectionsController extends MyAppController
         $productCatSrchObj->doNotLimitRecords();
         $productCatSrchObj->addMultipleFields(array('prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_content_block'));
 
+        $collectionLayoutType = '';
         if (!empty($collection)) {
+            $collectionLayoutType = $collection['collection_layout_type'];
             switch ($collection['collection_type']) {
                 case Collections::COLLECTION_TYPE_PRODUCT:
                     $tempObj = clone $collectionObj;
@@ -365,6 +367,7 @@ class CollectionsController extends MyAppController
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_COLLECTION', $this->siteLangId));
         }
 
+        $this->set('collectionLayoutType', $collectionLayoutType);
         $this->set('collection', $collection);
         $this->set('siteLangId', CommonHelper::getLangId());
 
