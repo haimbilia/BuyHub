@@ -224,7 +224,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SELLER_PRODUCT_REQUESTS', $siteLangId); ?>
-                                    <?php if (!$quickSearch && $custProdReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($custProdReqCount); ?>)<?php } ?></span>
+                                    <?php if (!$quickSearch && $selProdReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($selProdReqCount); ?>)<?php } ?></span>
                             </a>
                         </li>
                     <?php } ?>
