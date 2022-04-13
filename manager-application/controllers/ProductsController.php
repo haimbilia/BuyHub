@@ -32,20 +32,23 @@ class ProductsController extends ListingBaseController
     public function index()
     {
         $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
-
-        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        $frmSearch = $this->getSearchForm($fields);        
 
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['newRecordBtnAttrs'] = ['attr' => ['href' => UrlHelper::generateUrl('products', 'form')]];
+
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        
 
         $defaultSrchParm = [];
         if(FatApp::getAction() == 'approvalPending'){
             $actionItemsData['newRecordBtn'] = false;
             $defaultSrchParm['product_approved'] = Product::UNAPPROVED;
             $defaultSrchParm['is_custom_or_catalog'] = applicationConstants::CUSTOM_CATALOG;
+            $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('FRM_SELLER_PRODUCT_REQUESTS', $this->siteLangId);
+        }else{
+            $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         }
 
         $actionItemsData['deleteButton'] = true;
