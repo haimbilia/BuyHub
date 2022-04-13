@@ -15,24 +15,24 @@
                     $uploadedTime = AttachedFile::setTimeParam($slideScreen['afile_updated_at']);
                     switch ($slideScreen['afile_screen']) {
                         case applicationConstants::SCREEN_MOBILE:
-                            $mobileUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_MOBILE, $siteLangId, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . ',';
-                            $mobileWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_MOBILE, $siteLangId, "WEBP".ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp') . ',';
+                            $mobileUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_MOBILE, $siteLangId, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            $mobileWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_MOBILE, $siteLangId, "WEBP" . ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
                             break;
                         case applicationConstants::SCREEN_IPAD:
                             $tabletUrl = UrlHelper::getCachedUrl(
                                 UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_IPAD, $siteLangId, ImageDimension::VIEW_TABLET)) . $uploadedTime,
                                 CONF_IMG_CACHE_TIME,
                                 '.jpg'
-                            ) . ',';
+                            );
                             $tabletWebpUrl = UrlHelper::getCachedUrl(
-                                UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_IPAD, $siteLangId, "WEBP".ImageDimension::VIEW_TABLET)) . $uploadedTime,
+                                UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_IPAD, $siteLangId, "WEBP" . ImageDimension::VIEW_TABLET)) . $uploadedTime,
                                 CONF_IMG_CACHE_TIME,
                                 '.webp'
-                            ) . ',';
+                            );
                             break;
                         case applicationConstants::SCREEN_DESKTOP:
                             $desktopUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, ImageDimension::VIEW_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                            $desktopWebpUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, "WEBP".ImageDimension::VIEW_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
+                            $desktopWebpUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, "WEBP" . ImageDimension::VIEW_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
                             break;
                     }
                 }
@@ -58,8 +58,14 @@
             }
             $out .= '<div class="hero-slider-media">
 				<picture>
-					<source type="image/webp" srcset="' . $mobileWebpUrl . $tabletWebpUrl  . $desktopWebpUrl . '" media="(max-width: 767px),(max-width: 1024px)">
-					<source type="image/jpeg" srcset="' . $mobileUrl . $tabletUrl  . $desktopUrl . '" media="(max-width: 767px),(max-width: 1024px)">
+					<source type="image/webp" srcset="' . $mobileWebpUrl . '" media="(max-width: 576px)">
+                    <source type="image/webp" srcset="' . $tabletWebpUrl . '" media="(max-width: 1199px)">
+                    <source type="image/webp" srcset="' . $desktopWebpUrl . '" media="(min-width: 1200px)">
+
+					<source type="image/jpeg" srcset="' . $mobileUrl . '" media="(max-width: 576px)">
+                    <source type="image/jpeg" srcset="' . $tabletUrl  . '" media="(max-width: 1199px))">
+                    <source type="image/jpeg" srcset="' .  $desktopUrl . '" media="(min-width: 1200px)">
+
 					<img data-aspect-ratio="' . $imageDimension['DESKTOP']['aspectRatio'] . '" src="' . $desktopUrl . '" alt="">
 				</picture>
 			</div>';
