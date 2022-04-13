@@ -2,9 +2,10 @@
 if (!empty($couponsList)) {
     if (!empty($cartSummary['cartDiscounts']['coupon_code'])) { ?>
         <div class="coupons-applied">
+            <button class="btn-close" onClick="removePromoCode()"></button>
             <h6 class="coupons-applied-title">
-                <?php echo Labels::getLabel('LBL_Code:', $siteLangId); ?><?php echo $cartSummary['cartDiscounts']['coupon_code']; ?>
-                <button class="btn-close" onClick="removePromoCode()"></button>
+                <?php echo Labels::getLabel('LBL_Code:', $siteLangId); ?>
+                <?php echo $cartSummary['cartDiscounts']['coupon_code']; ?>
             </h6>
             <p class="coupons-applied-desc">
                 <?php $arr =  ['{AMOUNT}' => CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total'])];
@@ -31,8 +32,8 @@ if (!empty($couponsList)) {
                 $fld->addFieldTagAttribute('class', 'couponCodeJs');
 
                 echo $PromoCouponsFrm->getFormTag(); ?>
-                    <?php echo $PromoCouponsFrm->getFieldHtml('coupon_code'); ?>
-                    <?php echo $PromoCouponsFrm->getFieldHtml('btn_submit'); ?>
+                <?php echo $PromoCouponsFrm->getFieldHtml('coupon_code'); ?>
+                <?php echo $PromoCouponsFrm->getFieldHtml('btn_submit'); ?>
                 </form>
                 <?php echo $PromoCouponsFrm->getExternalJs(); ?>
             </div>

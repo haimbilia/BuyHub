@@ -32,12 +32,5 @@
                 <?php } ?>
             </div>
         </div>
-        <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
-            <div class="section-foot">
-                <a href="<?php echo UrlHelper::generateUrl('Collections', 'view', array($collection['collection_id'])); ?>" class="link-underline">
-                    <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
-                </a>
-            </div>
-        <?php } ?>
     </section>
 <?php }
