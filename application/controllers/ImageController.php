@@ -810,7 +810,7 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getSlideData($sizeType);
 
         if ($sizeType) {
-            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false, true, true);
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false, true, false);
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
