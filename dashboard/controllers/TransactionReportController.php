@@ -68,7 +68,8 @@ class TransactionReportController extends SellerBaseController
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
-        $this->setRecordCount(clone $srch, $pagesize, $page, $post);
+        $recordCountSrch = clone $srch; 
+     
         $srch->doNotCalculateRecords();
         switch ($sortBy) {
             default:
@@ -127,6 +128,7 @@ class TransactionReportController extends SellerBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
+        $this->setRecordCount($recordCountSrch, $pagesize, $page, $post);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
