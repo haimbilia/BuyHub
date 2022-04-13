@@ -1266,7 +1266,7 @@ class Product extends MyAppModel
         $srch->addFld('count(DISTINCT selprod_code) as count');
         $rs = $srch->getResultSet();
         $alreadyAdded = FatApp::getDb()->fetch($rs);
-        if ($alreadyAdded == false) {
+        if ($alreadyAdded == false || 1 > $alreadyAdded['count']) {
             return true;
         }
         $alreadyAddedOptions = $alreadyAdded['count'];
