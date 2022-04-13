@@ -7,7 +7,7 @@
 
     $keywordFld = $headerSrchFrm->getField('keyword');
     $keywordFld->overrideFldType('search');
-    $keywordFld->setFieldTagAttribute('class', 'mega-search-input search--keyword search--keyword--js no--focus');
+    $keywordFld->setFieldTagAttribute('class', 'mega-search-input search--keyword search--keyword--js');
     $keywordFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_I_am_looking_for...', $siteLangId));
 
     $keywordFld->setFieldTagAttribute('id', 'header_search_keyword');
