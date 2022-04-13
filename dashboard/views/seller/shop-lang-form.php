@@ -3,8 +3,8 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 $shopLangFrm->setFormTagAttribute('onsubmit', 'setupShopLang(this); return(false);');
 $shopLangFrm->setFormTagAttribute('class', 'form form--horizontal shopLangForm-js');
 if (CommonHelper::getLayoutDirection() != $formLayout) {
-    $shopColLangFrm->addFormTagAttribute('class', "layout--" . $formLayout);
-    $shopColLangFrm->setFormTagAttribute('dir', $formLayout);
+    $shopLangFrm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $shopLangFrm->setFormTagAttribute('dir', $formLayout);
 }
 
 $shopLangFrm->developerTags['colClassPrefix'] = 'col-lg-4 col-md-';

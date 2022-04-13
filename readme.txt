@@ -671,7 +671,8 @@ Updates/Fixes :
     => 063666 - Admin: Navigate to the wrong link while clicking on the "Click to Login" option in the Password reset successfully email at the admin's end
     => 063675 - Buyer: Products are not showing on the Map and the "Undefined variable" & "Warning" message is showing on the Map view Page
     => 063766 - Buyer: Print functionality is not working after placing an order at the front-end
-    
+    => 063794 - Seller: Getting fatal error on language data page
+
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
