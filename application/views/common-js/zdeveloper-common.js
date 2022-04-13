@@ -1708,7 +1708,11 @@ $(document).ajaxComplete(function () {
 
     /* Binding Feather Light gallery */
     bindFeatherLight();
-    /* Binding Feather Light gallery */
+    /* -------------------------- */
+
+    /* Binding Slick slider element if loaded after ajax complete. */
+    initCarousel();
+    /* -------------------------- */
 });
 $(function () {
     $("body")
