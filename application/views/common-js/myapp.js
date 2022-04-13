@@ -139,13 +139,13 @@ var cart = {
     loadCartSummary: function (show = true) {
         var isOffcanvas = (0 < $("#side-cart.offcanvas").length);
         if (true === show && isOffcanvas) {
-            $("#side-cart").prepend(fcom.getLoader());
+            $("#side-cart").prepend(fcom.getLoader()).offcanvas('hide');
         }
         $('#cartSummaryJs').load(fcom.makeUrl('cart', 'getCartSummary'), function () {
             if (true === show && isOffcanvas) {
                 fcom.removeLoader();
                 $("#side-cart").offcanvas('show');
-            }            
+            }
         });
     }
 };
