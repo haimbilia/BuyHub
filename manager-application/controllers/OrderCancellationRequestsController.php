@@ -267,7 +267,8 @@ class OrderCancellationRequestsController extends ListingBaseController
         $reqFld1 = new FormFieldRequirement('ocrequest_refund_in_wallet', Labels::getLabel('FRM_TRANSFER_REFUND', $langId));
         $reqFld1->setRequired(true);
 
-        $frm->addTextarea(Labels::getLabel('FRM_COMMENT', $this->siteLangId), 'ocrequest_admin_comment');
+        $fld = $frm->addTextarea(Labels::getLabel('FRM_COMMENT', $this->siteLangId), 'ocrequest_admin_comment');
+        $fld->requirement->setRequired(true);
         $fld2 = new FormFieldRequirement('ocrequest_admin_comment', Labels::getLabel('FRM_COMMENT', $langId));
         $fld2->setRequired(false);
         $reqFld2 = new FormFieldRequirement('ocrequest_admin_comment', Labels::getLabel('FRM_COMMENT', $langId));

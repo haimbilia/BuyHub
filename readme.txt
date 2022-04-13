@@ -672,6 +672,7 @@ Updates/Fixes :
     => 063675 - Buyer: Products are not showing on the Map and the "Undefined variable" & "Warning" message is showing on the Map view Page
     => 063766 - Buyer: Print functionality is not working after placing an order at the front-end
     => 063794 - Seller: Getting fatal error on language data page
+    => 063776 - Admin: Asterisk sign is missing for the comments section.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

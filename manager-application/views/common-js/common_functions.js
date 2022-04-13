@@ -264,7 +264,6 @@ select2 = function (
 
     var select2Selector = ele.data("select2");
     var elementName = ele.attr('name').replace('[]', '');
-    console.log(select2Selector);
     select2Selector.$container.addClass("custom-select2");
 
     if ('undefined' != typeof (select2Selector.dropdown)) {
