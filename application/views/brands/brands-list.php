@@ -1,6 +1,6 @@
 <div class="cg-main">
     <?php if (!empty($brandsArr)) {
-        foreach ($brandsArr[Collections::TYPE_BRAND_LAYOUT1] as $allBrands) {
+        foreach ($brandsArr[$collectionLayoutType] as $allBrands) {
             if (!empty($allBrands['brands'])) {
                 $firstCharacter = '';
                 foreach ($allBrands['brands'] as $brands) {

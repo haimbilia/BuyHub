@@ -5,9 +5,6 @@
             <?php echo Labels::getLabel('LBL_SHOP_STORE_HOME', $siteLangId); ?>
         </a>
     </li>
-    <?php /* if (!empty($collectionData)) { ?>
-    <li class="<?php echo $action == 'collection' ? 'active' : '' ?>"><a href="<?php echo UrlHelper::generateUrl('shops', 'collections', array($shop_id));?>" ><?php echo $collectionData['collectionName']; ?></a></li>
-    <?php } */ ?>
     <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
         <li class="shop-nav-item">
             <a class="shop-nav-link <?php echo $action == 'topProducts' ? 'active' : '' ?>" href="<?php echo UrlHelper::generateUrl('shops', 'topProducts', array($shop_id)); ?>">

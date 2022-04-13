@@ -90,7 +90,7 @@ class ProductCategoriesController extends ListingBaseController
             LibHelper::exitWithError($prodCat->getError(), true);
         }
 
-        ProductCategory::updateCatOrderCode();
+        LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('ProductCategories', 'updateCatOrderCode'), ['sessionId' => LibHelper::getSessionId()]);
 
         $changeStatus = ProductCategory::getAttributesById($recordId, 'prodcat_active');
         if (applicationConstants::INACTIVE == $changeStatus) {
@@ -101,6 +101,20 @@ class ProductCategoriesController extends ListingBaseController
 
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function updateCatOrderCode()
+    {
+        $sessionId = FatApp::getPostedData('sessionId', FatUtility::VAR_STRING, '');
+        if (empty($sessionId)) {
+            return;
+        }
+        session_destroy();
+        session_id($sessionId);
+        session_start();
+
+        ProductCategory::updateCatOrderCode();
+        return;
     }
 
     public function form($productReq = 0)
