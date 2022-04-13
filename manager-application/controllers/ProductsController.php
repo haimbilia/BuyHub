@@ -6,6 +6,7 @@ class ProductsController extends ListingBaseController
     use CatalogProduct;
 
     protected string $modelClass = 'Product';
+    protected $pageKey = 'MANAGE_PRODUCTS';
 
     public function __construct($action)
     {
@@ -33,12 +34,19 @@ class ProductsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_PRODUCTS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
-        $actionItemsData['newRecordBtnAttrs'] = ['attr' => ['href' => UrlHelper::generateUrl('products', 'form'), 'onclick' => '']];
+        $actionItemsData['newRecordBtnAttrs'] = ['attr' => ['href' => UrlHelper::generateUrl('products', 'form')]];
+
+        $defaultSrchParm = [];
+        if(FatApp::getAction() == 'approvalPending'){
+            $actionItemsData['newRecordBtn'] = false;
+            $defaultSrchParm['product_approved'] = Product::UNAPPROVED;
+            $defaultSrchParm['is_custom_or_catalog'] = applicationConstants::CUSTOM_CATALOG;
+        }
 
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['searchFrmTemplate'] = 'products/search-form.php';
@@ -51,12 +59,18 @@ class ProductsController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME_AND_MODEL', $this->siteLangId));
 
         $this->checkEditPrivilege(true);
-        $this->getListingData();
+        $this->getListingData($defaultSrchParm);
 
         $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->addJs(array('products/page-js/index.js', 'js/select2.js'));
         $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');
+    }
+
+    public function approvalPending()
+    {
+        $this->pageKey = 'MANAGE_SELLER_PRODUCTS_REQUEST';
+        $this->index();
     }
 
     public function search()
@@ -69,7 +83,7 @@ class ProductsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    private function getListingData($defaultSrchParm = [])
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
@@ -106,15 +120,14 @@ class ProductsController extends ListingBaseController
             $srch->addCondition('product_active', '=', $active);
         }
 
-        $product_approved = FatApp::getPostedData('product_approved');
-        if ('' != $product_approved && $product_approved > -1) {
+        $product_approved = FatApp::getPostedData('product_approved', FatUtility::VAR_INT, ($defaultSrchParm['product_approved'] ?? -1));  
+        if ($product_approved > -1) {
             $srch->addCondition('product_approved', '=', $product_approved);
-        }
-
+        }       
+   
         $product_seller_id = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
-
-        if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
-            $is_custom_or_catalog = FatApp::getPostedData('is_custom_or_catalog', FatUtility::VAR_INT, -1); 
+        $is_custom_or_catalog = FatApp::getPostedData('is_custom_or_catalog', FatUtility::VAR_INT, $defaultSrchParm['is_custom_or_catalog'] ?? -1 );
+        if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {             
             $post['is_custom_or_catalog'] = $is_custom_or_catalog; 
             if ($is_custom_or_catalog == applicationConstants::SYSTEM_CATALOG) {             
                 $srch->addCondition('product_seller_id', '=', 0);
@@ -132,6 +145,8 @@ class ProductsController extends ListingBaseController
         } else {
             if (0 < $product_seller_id) {
                 $srch->addCondition('product_seller_id', '=', $product_seller_id);
+            } elseif ($is_custom_or_catalog == applicationConstants::CUSTOM_CATALOG) {
+                $srch->addCondition('product_seller_id', '>', 0);
             }
         }
 
@@ -679,9 +694,13 @@ class ProductsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
         
-        if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
-            $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'is_custom_or_catalog', array(-1 => Labels::getLabel('FRM_ALL', $this->siteLangId)) + applicationConstants::getCatalogTypeArr($this->siteLangId), -1, array(), '');
-        }
+        if(FatApp::getAction() == 'approvalPending'){
+            $frm->addHiddenField('', 'is_custom_or_catalog', applicationConstants::CUSTOM_CATALOG);
+        }else{
+            if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
+                $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'is_custom_or_catalog', array(-1 => Labels::getLabel('FRM_ALL', $this->siteLangId)) + applicationConstants::getCatalogTypeArr($this->siteLangId), -1, array(), '');
+            }
+        }        
 
         $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME', $this->siteLangId), 'product_seller_id', []);
         $prodCatObj = new ProductCategory();
@@ -691,10 +710,14 @@ class ProductsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'prodcat_id', $categories);
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'active', array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $activeInactiveArr, '', array(), '');
-
-        $approveUnApproveArr = Product::getApproveUnApproveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL_STATUS', $this->siteLangId), 'product_approved', array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $approveUnApproveArr, '', array(), '');
-
+        
+        if(FatApp::getAction() == 'approvalPending'){
+            $frm->addHiddenField('', 'product_approved', Product::UNAPPROVED);
+        }else{
+            $approveUnApproveArr = Product::getApproveUnApproveArr($this->siteLangId);
+            $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL_STATUS', $this->siteLangId), 'product_approved', array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $approveUnApproveArr, '', array(), '');     
+        }
+        
         $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_TYPE', $this->siteLangId), 'product_type', Product::getProductTypes($this->siteLangId), array(), [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
 
         $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
@@ -1442,6 +1465,11 @@ class ProductsController extends ListingBaseController
                     ['title' => Labels::getLabel('LBL_FORM', $this->siteLangId)]
                 ];
                 break;
+            case 'approvalPending':         
+                $this->nodes = [       
+                    ['title' => Labels::getLabel('LBL_SELLER_PRODUCT_REQUEST', $this->siteLangId)]
+                ];
+                break;    
             default:
                 parent::getBreadcrumbNodes($action);
                 break;
