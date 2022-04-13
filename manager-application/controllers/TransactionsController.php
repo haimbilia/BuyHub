@@ -88,28 +88,18 @@ class TransactionsController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         
-        $srch = Transactions::getSearchObject();
-        $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
-        $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'uc.credential_user_id = u.user_id', 'uc');
-        if (0 < $userId) {              
-            $balSrch = Transactions::getSearchObject();
-            $balSrch->doNotCalculateRecords();
-            $balSrch->doNotLimitRecords();
-            $balSrch->addMultipleFields(['utxn.utxn_id', "utxn_credit - utxn_debit as bal"]);         
-            $balSrch->addCondition('utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);            
-            $balSrch->addCondition('utxn_status', '=', 'mysql_func_1', 'AND', true);
-
-            $srch->joinTable('(' . $balSrch->getQuery() . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
-
-            $srch->addCondition('utxn.utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
-            $srch->addFld('SUM(tqupb.bal) balance');            
+       
+        if (0 < $userId) {  
+            $srch = Transactions::getUserTransactionsObj($userId);        
         }else{
             unset($fields['balance']);
-        }
-        $srch->addGroupBy('utxn.utxn_id');
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
-        $srch->doNotCalculateRecords();
-       
+            $srch = Transactions::getSearchObject();            
+        }      
+        
+        $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'uc.credential_user_id = u.user_id', 'uc');
+        
+        $srch->doNotCalculateRecords();       
         $srch->addMultipleFields(array('utxn.*', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
         if ($customSortBy != false && $customOrder != false) {
             $srch->addOrder($customSortBy, $customOrder);
@@ -117,9 +107,14 @@ class TransactionsController extends ListingBaseController
             $srch->addOrder($sortBy, $sortOrder);
         }
 
+        $recordCountSrch = clone $srch;
+
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
+
+        $this->setRecordCount($recordCountSrch, $pageSize, $page, $post, true);
+
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
         $this->set('sortBy', $sortBy);

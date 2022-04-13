@@ -609,12 +609,13 @@ class AccountController extends LoggedUserController
                     break;
             }
         }
-        $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
+        $recordCountSrch = clone $srch;      
         $srch->doNotCalculateRecords();
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $srch->addOrder('utxn.utxn_date', $dateOrder);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'utxn_id');
+        $srch->addOrder('utxn.utxn_date', $dateOrder);       
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $this->setRecordCount($recordCountSrch, $pagesize, $page, $post, true);        
         $this->set('arrListing', $records);
         $this->set('postedData', $post);
         $this->set('siteLangId', $this->siteLangId);

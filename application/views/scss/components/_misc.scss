@@ -126,6 +126,16 @@ mark,
 .txt-white {
     color: #fff;
 }
+.txt-brand {
+    color: $brand-color;
+}
+.txt-secondary {
+    color: $secondary-color;
+}
+
+.txt-success {
+    color: $success-color;
+}
 
 .dragHandle {
     cursor: move;
