@@ -45,7 +45,7 @@ foreach ($arrListing as $sn => $row) {
                     CONF_IMG_CACHE_TIME,
                     '.jpg'
                 );
-                $slideImage = '<a href="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Slide', array($row['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, ImageDimension::VIEW_ORIGINAL, false), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" data-featherlight="image"><img data-aspect-ratio = "' . $imageSlideDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'] . '" class="banner-thumb" width="100" height="50" title="' . $row['slide_title'] . '" alt="' . $row['slide_title'] . '" src="' . $url . '"></a>';
+                $slideImage = '<a href="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Slide', array($row['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, ImageDimension::VIEW_ORIGINAL, false), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" data-featherlight="image"><img data-aspect-ratio = "' . $imageSlideDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'] . '" class="banner-thumb"  title="' . $row['slide_title'] . '" alt="' . $row['slide_title'] . '" src="' . $url . '"></a>';
                 $td->appendElement('plaintext', $tdAttr, $slideImage, true);
                 break;
             case 'slide_title':
