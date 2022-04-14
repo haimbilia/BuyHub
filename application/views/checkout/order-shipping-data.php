@@ -21,8 +21,8 @@ if (!empty($orderShippingData)) {
                                         <span class="circle" data-bs-toggle="tooltip" data-placement="top" title="<?php echo $data['op_selprod_title']; ?>" data-original-title="<?php echo $data['op_selprod_title']; ?>">
                                             <?php
                                             $pictureAttr = [
-                                                'webpImageUrl' => $imageWebpUrl,
-                                                'jpgImageUrl' => $imageUrl,
+                                                'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageWebpUrl],
+                                                'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageUrl],
                                                 'imageUrl' => $imageUrl,
                                                 'alt' => $data['op_selprod_title'],
                                                 'siteLangId' => $siteLangId,

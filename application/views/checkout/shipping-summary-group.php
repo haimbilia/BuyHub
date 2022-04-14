@@ -49,8 +49,8 @@
                     <a href="<?php echo $productUrl; ?>">
                         <?php
                         $pictureAttr = [
-                            'webpImageUrl' => $imageWebpUrl,
-                            'jpgImageUrl' => $imageUrl,
+                            'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageWebpUrl],
+                            'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageUrl],
                             'imageUrl' => $imageUrl,
                             'ratio' => '3:4',
                             'alt' => $product['product_name'],

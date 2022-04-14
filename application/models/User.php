@@ -1595,7 +1595,7 @@ class User extends MyAppModel
             return false;
         }
         if ($row = $this->getOtpDetail()) {
-            $applicableUpto =  (strtotime($row[static::DB_TBL_UPV_PREFIX . 'expired_on']) + self::OTP_INTERVAL);
+            $applicableUpto = strtotime($row[static::DB_TBL_UPV_PREFIX . 'expired_on'] . "+" . self::OTP_INTERVAL . " seconds");
             $now = strtotime("+" . self::OTP_AGE . " minutes", time());
             if ($applicableUpto >= $now) {
                 $msg = Labels::getLabel('LBL_PLEASE_WAIT_{SECONDS}_SECONDS_TO_RESEND.', $this->commonLangId);

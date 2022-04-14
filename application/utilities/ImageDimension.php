@@ -872,4 +872,23 @@ class ImageDimension extends FatUtility
 
         return $arr[$defaultMode];
     }
+
+    public static function getPictureTagMedia($key = '')
+    {
+        $arr = [
+            self::VIEW_MOBILE => ['key' => 'max-width', 'value' => 576],
+            self::VIEW_TABLET => ['key' => 'max-width', 'value' => 1199],
+            self::VIEW_DESKTOP => ['key' => 'min-width', 'value' => 1200]
+        ];
+
+        if (empty($key)) {
+            return $arr;
+        }
+
+        if (!array_key_exists($key, $arr)) {
+            return $arr[self::VIEW_DESKTOP];
+        }
+
+        return $arr[$key];
+    }
 }

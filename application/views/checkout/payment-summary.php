@@ -154,6 +154,7 @@ if (0 < count($paymentMethods)) { ?>
                         $("#paypal-buttons").html("");
                     }
                     if ('cashondelivery' == paymentMethod.toLowerCase() || 'payatstore' == paymentMethod.toLowerCase()) {
+                        fcom.removeLoader();
                         paymentMethodSection.html(res.html);
                         if (true == enableGcaptcha) {
                             googleCaptcha();
