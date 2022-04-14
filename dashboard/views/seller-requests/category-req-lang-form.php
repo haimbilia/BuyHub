@@ -7,7 +7,7 @@ if (CommonHelper::getLayoutDirection() != $formLayout) {
     $frm->addFormTagAttribute('class', "layout--" . $formLayout);
     $frm->setFormTagAttribute('dir', $formLayout);
 }
-$frm->setFormTagAttribute('onsubmit', 'setupCategoryReqLang(this); return(false);');
+$frm->setFormTagAttribute('onsubmit', 'setupCategoryReqLang($("#' . $frm->getFormTagAttribute('id') . '")[0]); return(false);');
 $frm->setFormTagAttribute('data-onclear', "addCategoryReqLangForm(" . $categoryReqId . ", " . $langId . ");");
 
 
