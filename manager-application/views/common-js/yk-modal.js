@@ -124,7 +124,7 @@
     $(document).on("hidden.bs.modal", "." + $.ykmodal.element, function () {
         $.ykmodal.close()
     });
-
+    let submitInterval;
     $(document).on("click", ".submitBtnJs", function () {
 
         if(submitInterval != undefined){ 

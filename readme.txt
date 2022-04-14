@@ -680,6 +680,7 @@ Updates/Fixes :
     => 063801 - Admin: The order status timeline is not showing correctly according to the date on the order details page at the admin's end and the timeline design is also not matched with the seller's side
     => 063423 - Seller UI: Scrolling is not working properly when the seller awaiting the admin's approval and charts values are also not showing properly on the Dashboard
     => 063812 - Seller : When the Seller adds a pickup address it is showing twice.
+    => 063825 - Buyer: 404 error page is showing while the buyer clicking on the "Write A Review" option on the product details page
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
