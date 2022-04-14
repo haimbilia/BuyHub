@@ -215,6 +215,19 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             </a>
                         </li>
                     <?php } ?>
+                    <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('products','approvalPending'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SELLER_PRODUCT_REQUESTS', $siteLangId); ?>
+                                    <?php if (!$quickSearch && $selProdReqCount) { ?> (<?php echo HtmlHelper::displayNumberWithPlus($selProdReqCount); ?>)<?php } ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <?php if ($objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["SellerApprovalRequests"]' href="<?php echo UrlHelper::generateUrl('sellerApprovalRequests'); ?>">

@@ -519,10 +519,11 @@ function getCookie(cname) {
 }
 
 /*Google reCaptcha V3  */
-function googleCaptcha() {
+function googleCaptcha(updateToken = false) {
+    updateToken = ('undefined' == typeof updateToken ? false : updateToken);
     $("body").addClass("captcha");
     var inputObj = $("form input[name='g-recaptcha-response']");
-    if ('' != inputObj.val()) { return; }
+    if ('' != inputObj.val() && false === updateToken) { return; }
 
     var submitBtn = inputObj.parent("form").find('input[type="submit"]');
     fcom.displayProcessing();

@@ -60,7 +60,7 @@ foreach ($moreSellersProductsArr as $product) {
         'amount' =>  CommonHelper::displayMoneyFormat($product['theprice']),
     ];
 }
-/*
+*/
 
 foreach ($productsByShop as &$marker) {
     $contentString = '<div class="seller-card">

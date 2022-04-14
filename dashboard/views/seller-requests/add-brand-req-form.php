@@ -6,7 +6,7 @@ $frmBrandReq->setFormTagAttribute('data-onclear', "addBrandReqForm(" . $brandReq
 
 $frmBrandReq->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $frmBrandReq->developerTags['fld_default_col'] = 12;
-$frmBrandReq->setFormTagAttribute('onsubmit', 'setupBrandReq(this); return(false);');
+$frmBrandReq->setFormTagAttribute('onsubmit', 'setupBrandReq($("#' . $frmBrandReq->getFormTagAttribute('id') . '")[0]); return(false);');
 $identifierFld = $frmBrandReq->getField(Brand::DB_TBL_PREFIX . 'id');
 $identifierFld->setFieldTagAttribute('id', Brand::DB_TBL_PREFIX . 'id');
 

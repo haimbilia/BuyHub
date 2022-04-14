@@ -287,6 +287,10 @@ class SellerRequestsController extends SellerBaseController
         if ($approvalRequired) {
             $msg = Labels::getLabel("MSG_CATEGORY_REQUEST_SUBMITTED_SUCCESSFULLY", $this->siteLangId);
         }
+
+        if ($this->get('langId') == 0 && !$this->isCategoryMediaUploaded($categoryReqId)) {
+            $this->set('openMediaForm', true);
+        }
         $this->set('msg', $msg);
         $this->set('categoryReqId', $categoryReqId);
         $this->_template->render(false, false, 'json-success.php');
@@ -359,6 +363,10 @@ class SellerRequestsController extends SellerBaseController
 
         $recordObj = new ProductCategory($categoryReqId);
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);
+
+        if ($this->get('langId') == 0 && !$this->isCategoryMediaUploaded($categoryReqId)) {
+            $this->set('openMediaForm', true);
+        }
 
         $this->set('categoryReqId', $categoryReqId);
         $this->_template->render(false, false, 'json-success.php');
@@ -563,7 +571,7 @@ class SellerRequestsController extends SellerBaseController
             $email->sendBrandRequestAdminNotification($this->siteLangId, $brandData);
         }
 
-        if ($this->get('langId') == 0 && !$this->isMediaUploaded($brandReqId)) {
+        if ($this->get('langId') == 0 && !$this->isBrandMediaUploaded($brandReqId)) {
             $this->set('openMediaForm', true);
         }
 
@@ -602,7 +610,7 @@ class SellerRequestsController extends SellerBaseController
         $recordObj = new Brand($brandReqId);
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]], $lang_id);
 
-        if ($this->get('langId') == 0 && !$this->isMediaUploaded($brandReqId)) {
+        if ($this->get('langId') == 0 && !$this->isBrandMediaUploaded($brandReqId)) {
             $this->set('openMediaForm', true);
         }
         $this->set('brandReqId', $brandReqId);
@@ -785,9 +793,15 @@ class SellerRequestsController extends SellerBaseController
     }
 
 
-    private function isMediaUploaded($brandId)
+    private function isBrandMediaUploaded($brandId)
     {
         $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brandId, 0);
+        return (!empty($attachment) && 0 < $attachment['afile_id']);
+    }
+
+    private function isCategoryMediaUploaded($recordId)
+    {
+        $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $recordId, 0);
         return (!empty($attachment) && 0 < $attachment['afile_id']);
     }
 

@@ -40,6 +40,9 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
             </p>
         </div>
         <div class="otp-block__body">
+            <p class="text-muted text-center">
+                <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_OTP_WILL_EXPIRES_AFTER_{AGE}_MINUTES', $siteLangId), ['{AGE}' => User::OTP_AGE]); ?>
+            </p>
             <div class="otp-enter">
                 <div class="otp-inputs">
                     <?php
@@ -52,7 +55,6 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
                         $fld->developerTags['noCaptionTag'] = true;
                         $fld->setWrapperAttribute('class', 'otpCol-js');
                     }
-                    
                     $submitFld->developerTags['noCaptionTag'] = true;
                     $submitFld->developerTags['col'] = 12;
                     echo $frm->getFormHtml();
@@ -64,7 +66,7 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
             <span>
                 <p>
                     <?php
-                    $msg = Labels::getLabel('LBL_OTP_EXPIRES_IN_{TIMER}_SECONDS', $siteLangId);
+                    $msg = Labels::getLabel('LBL_RESEND_OTP_AFTER_{TIMER}_SECONDS', $siteLangId);
                     $htm = '<span class="txt-success font-weight-bold intervalTimer-js">
                                 ' . User::OTP_INTERVAL . '
                             </span>';
