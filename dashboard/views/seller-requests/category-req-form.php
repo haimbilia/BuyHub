@@ -4,6 +4,7 @@ HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('data-onclear', "addCategoryReqForm(" . $categoryReqId . ")");
 $frm->setFormTagAttribute('onsubmit', 'setupCategoryReq(this); return(false);');
+$frm->setFormTagAttribute('onsubmit', 'setupCategoryReq($("#' . $frm->getFormTagAttribute('id') . '")[0]); return(false);');
 
 $fld = $frm->getField('prodcat_name');
 $fld->setFieldTagAttribute('onkeyup', "getIdentifier(this)");

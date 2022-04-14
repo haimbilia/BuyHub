@@ -654,6 +654,7 @@ $("document").ready(function () {
         var method = $(frm).data("method");
         var orderId = $(frm).find('input[name="order_id"]').val();
         fcom.ajax(fcom.makeUrl("Checkout", "validateOtp"), data, function (t) {
+            fcom.closeProcessing();
             t = $.parseJSON(t);
             if (1 == t.status) {
                 if ("undefined" != typeof method) {
@@ -676,6 +677,7 @@ $("document").ready(function () {
 
     resendOtp = function (frm = "") {
         fcom.displayProcessing();
+        $('input[name="btn_submit"]', frm).val(langLbl.processing);
         fcom.ajax(fcom.makeUrl("Checkout", "resendOtp"), "", function (t) {
             t = $.parseJSON(t);
             if (typeof t.status != "undefined" && 1 > t.status) {

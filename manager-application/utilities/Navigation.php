@@ -16,16 +16,7 @@ class Navigation
         // $supReqSrchObj->doNotLimitRecords();
         $supReqSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $supReqResult = $db->fetch($supReqSrchObj->getResultset());
-        $supReqCount = FatUtility::int($supReqResult['countOfRec']);
-
-        /* product catalog requests */
-        $catReqSrchObj = $userObj->getUserCatalogRequestsObj();
-        $catReqSrchObj->addCondition('scatrequest_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
-        $catReqSrchObj->addMultipleFields(array('count(scatrequest_id) as countOfRec'));
-        $catReqSrchObj->doNotCalculateRecords();
-        $catReqSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
-        $catReqResult = $db->fetch($catReqSrchObj->getResultset());
-        $catReqCount = FatUtility::int($catReqResult['countOfRec']);
+        $supReqCount = FatUtility::int($supReqResult['countOfRec']);     
 
         /* Custom catalog requests */
         $custReqSrchObj = ProductRequest::getSearchObject(0, false, true);
@@ -154,14 +145,24 @@ class Navigation
         $orderRetReqResult = $db->fetch($orderRetReqSrchObj->getResultset());
         $orderRetReqCount = FatUtility::int($orderRetReqResult['countOfRec']);
 
+        /* Seller product requests */
+        $srch = Product::getSearchObject();
+        $srch->addCondition('product_approved', '=', Product::UNAPPROVED);
+        $srch->addCondition('product_seller_id', '>', 0);
+        $srch->addMultipleFields(array('count(*) as countOfRec'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
+        $selProdReqResult = $db->fetch($srch->getResultset());
+        $selProdReqCount = FatUtility::int($selProdReqResult['countOfRec']);
+
 
         /* set counter variables [ */
         $template->set('brandReqCount', $brandReqCount);
         $template->set('categoryReqCount', $categoryReqCount);
         $template->set('custProdReqCount', $custProdReqCount);
         $template->set('badgeRequestCount', $badgeRequestCount);
-        $template->set('supReqCount', $supReqCount);
-        $template->set('catReqCount', $catReqCount);
+        $template->set('supReqCount', $supReqCount);  
+        $template->set('selProdReqCount', $selProdReqCount); 
         $template->set('drReqCount', $drReqCount);
         $template->set('orderCancelReqCount', $orderCancelReqCount);
         $template->set('orderRetReqCount', $orderRetReqCount);

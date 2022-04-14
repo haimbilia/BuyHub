@@ -44,8 +44,8 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) { ?>
                                                 <?php
                                                 $pictureAttr = [
                                                     'siteLangId' => $siteLangId,
-                                                    'webpImageUrl' => $imageWebpUrl,
-                                                    'jpgImageUrl' => $imageUrl,
+                                                    'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageWebpUrl],
+                                                    'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageUrl],
                                                     'imageUrl' => $imageUrl,
                                                     'alt' => $product['product_name'],
                                                 ];

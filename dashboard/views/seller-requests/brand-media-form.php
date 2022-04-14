@@ -50,6 +50,7 @@ unset($languages[CommonHelper::getDefaultFormLangId()]);
 
 <script>
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
+    var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
     $(document).on('change', '.prefRatio-js', function() {
         if ($(this).val() == ratioTypeSquare) {
             $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '500 x 500'));

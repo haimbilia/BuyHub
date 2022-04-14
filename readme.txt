@@ -673,6 +673,9 @@ Updates/Fixes :
     => 063766 - Buyer: Print functionality is not working after placing an order at the front-end
     => 063794 - Seller: Getting fatal error on language data page
     => 063776 - Admin: Asterisk sign is missing for the comments section.
+    => 063819 - Seller: User is unable to place request for new Category and Brand.
+    => 063843 - Buyer: Expired OTP code is working while placing an order using COD at the front-end
+    => 063821 - Seller: The User is not able to add products.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
@@ -695,6 +698,7 @@ UAT points:
     => 063377 - Seller UI: Messages' count is still showing after reading all the messages at the seller's end and buyer's end.
     => 063631 - Seller UI: Spacing issue on seller registration page.
     => 063632 - Advertiser: Double background images are showing while registering as an advertiser at the front-end and getting a UI issue while editing the content block of the advertiser at the admin's end.
+    => 063813 - Seller: Shop Inventory >> Add product: UI is distorted.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
