@@ -6,7 +6,7 @@ if (CommonHelper::getLayoutDirection() != $formLayout) {
     $brandReqLangFrm->addFormTagAttribute('class', "layout--" . $formLayout);
     $brandReqLangFrm->setFormTagAttribute('dir', $formLayout);
 }
-$brandReqLangFrm->setFormTagAttribute('onsubmit', 'setupBrandReqLang(this); return(false);');
+$brandReqLangFrm->setFormTagAttribute('onsubmit', 'setupBrandReqLang($("#' . $brandReqLangFrm->getFormTagAttribute('id') . '")[0]); return(false);');
 $brandReqLangFrm->setFormTagAttribute('data-onclear', "addBrandReqLangForm(" . $brandReqId . ", " . $brandReqLangId . ");");
 
 $langFld = $brandReqLangFrm->getField('lang_id');

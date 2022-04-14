@@ -369,6 +369,10 @@ $(document).on('change', '#catLanguageJs', function () {
                 addCategoryReqLangForm(t.categoryReqId, t.langId);
                 return;
             }
+            if (t.openMediaForm) {
+                categoryReqMediaForm(t.categoryReqId);
+                return;
+            }
         });
     };
 

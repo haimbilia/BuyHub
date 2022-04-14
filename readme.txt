@@ -673,6 +673,7 @@ Updates/Fixes :
     => 063766 - Buyer: Print functionality is not working after placing an order at the front-end
     => 063794 - Seller: Getting fatal error on language data page
     => 063776 - Admin: Asterisk sign is missing for the comments section.
+    => 063819 - Seller: User is unable to place request for new Category and Brand.
     => 063843 - Buyer: Expired OTP code is working while placing an order using COD at the front-end
 
 UAT points:
