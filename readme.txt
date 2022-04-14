@@ -679,6 +679,7 @@ Updates/Fixes :
     => 063821 - Seller: The User is not able to add products.
     => 063801 - Admin: The order status timeline is not showing correctly according to the date on the order details page at the admin's end and the timeline design is also not matched with the seller's side
     => 063423 - Seller UI: Scrolling is not working properly when the seller awaiting the admin's approval and charts values are also not showing properly on the Dashboard
+    => 063812 - Seller : When the Seller adds a pickup address it is showing twice.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
