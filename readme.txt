@@ -676,6 +676,8 @@ Updates/Fixes :
     => 063819 - Seller: User is unable to place request for new Category and Brand.
     => 063843 - Buyer: Expired OTP code is working while placing an order using COD at the front-end
     => 063842 - Seller: Getting an error when the user tries to bind the conditions with the ribbons.
+    => 063821 - Seller: The User is not able to add products.
+    => 063801 - Admin: The order status timeline is not showing correctly according to the date on the order details page at the admin's end and the timeline design is also not matched with the seller's side
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
@@ -698,6 +700,7 @@ UAT points:
     => 063377 - Seller UI: Messages' count is still showing after reading all the messages at the seller's end and buyer's end.
     => 063631 - Seller UI: Spacing issue on seller registration page.
     => 063632 - Advertiser: Double background images are showing while registering as an advertiser at the front-end and getting a UI issue while editing the content block of the advertiser at the admin's end.
+    => 063813 - Seller: Shop Inventory >> Add product: UI is distorted.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

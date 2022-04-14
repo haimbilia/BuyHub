@@ -222,11 +222,16 @@ trait CatalogProduct
                             }
                         }
                     }
-                }
+                }            
 
                 foreach ($post['options'] as $index => $optionId) {
                     if (!isset($post['optionValues'][$index])) {
                         LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_OPTION_VALUES_ID', $langId), true);
+                    }                    
+                    if (empty($post['optionValues'][$index])) {
+                        $optionData = Option::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $optionId, ['IFNULL(option_name,option_identifier) as option_name'], applicationConstants::JOIN_RIGHT);
+                        $optionName = $optionData['option_name'];
+                        LibHelper::exitWithError(CommonHelper::replaceStringData(Labels::getLabel('ERR_OPTION_VALUES_IS_REQUIRED_FOR_{OPTION-NAME}', $langId), ['{OPTION-NAME}' => $optionName]), true);
                     }
                     $opValuesArr = array_column(json_decode($post['optionValues'][$index]), 'id');
                     $srch = OptionValue::getSearchObject(0, false);

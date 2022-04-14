@@ -36,7 +36,7 @@ class ProductsController extends ListingBaseController
 
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
-        $actionItemsData['newRecordBtnAttrs'] = ['attr' => ['href' => UrlHelper::generateUrl('products', 'form')]];
+        $actionItemsData['newRecordBtnAttrs'] = ['attr' => ['href' => UrlHelper::generateUrl('products', 'form'),'onclick'=> '']];
 
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         
