@@ -6,7 +6,7 @@
             $img = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $row['splatform_id']);
             $title = ($row['splatform_title'] != '') ? $row['splatform_title'] : $row['splatform_identifier']; ?>
             <li class="footer-social-item">
-                <a class="footer-social-link" title="<?php echo $title; ?>" <?php if ($row['splatform_url'] != '') { ?>target="_blank" <?php } ?> href="<?php echo ($row['splatform_url'] != '') ? $row['splatform_url'] : 'javascript:void(0)'; ?>">
+                <a class="footer-social-link" title="<?php echo $title; ?>" <?php if ($row['splatform_url'] != '') { ?>target="_blank" rel="noopener" <?php } ?> href="<?php echo ($row['splatform_url'] != '') ? $row['splatform_url'] : 'javascript:void(0)'; ?>">
                     <?php if (isset($img['afile_id']) && 0 < $img['afile_id']) {
                         echo '<img  width="20" height="20" class="footer-social-icon" alt="' . $title . '" src = "' . UrlHelper::generateFileUrl('Image', 'SocialPlatform', array($row['splatform_id'])) . '"/>';
                     } elseif ($row['splatform_icon_class'] != '') { ?>
