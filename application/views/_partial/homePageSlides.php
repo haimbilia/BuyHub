@@ -57,7 +57,7 @@
                 $out .= '<a target="' . $slide['slide_target'] . '" href="' . $slideUrl . '">';
             }
             $out .= '<div class="hero-slider-media">
-				<picture>
+            <picture>
 					<source type="image/webp" srcset="' . $mobileWebpUrl . '" media="(max-width: 576px)">
                     <source type="image/webp" srcset="' . $tabletWebpUrl . '" media="(max-width: 1199px)">
                     <source type="image/webp" srcset="' . $desktopWebpUrl . '" media="(min-width: 1200px)">
