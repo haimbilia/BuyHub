@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $appScreenType = CommonHelper::getAppScreenType();
-$resType = $appScreenType == applicationConstants::SCREEN_IPAD ? 'TABLET' : 'MOBILE';
+$resType = $appScreenType == applicationConstants::SCREEN_IPAD ? ImageDimension::VIEW_TABLET : ImageDimension::VIEW_MOBILE;
 
 foreach ($slides as &$slideDetail) {
     $uploadedTime = AttachedFile::setTimeParam($slideDetail['slide_img_updated_on']);
