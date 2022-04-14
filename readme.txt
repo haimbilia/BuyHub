@@ -675,6 +675,7 @@ Updates/Fixes :
     => 063776 - Admin: Asterisk sign is missing for the comments section.
     => 063819 - Seller: User is unable to place request for new Category and Brand.
     => 063843 - Buyer: Expired OTP code is working while placing an order using COD at the front-end
+    => 063821 - Seller: The User is not able to add products.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
