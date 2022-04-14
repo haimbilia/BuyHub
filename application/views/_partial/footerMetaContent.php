@@ -2,7 +2,6 @@
 
 <?php if ($footerData) { ?>
     <section class="">
-        <?php echo FatUtility::decodeHtmlEntities($footerData['epage_content']); ?>
-        </div>
+        <?php echo FatUtility::decodeHtmlEntities($footerData['epage_content']); ?>       
     </section>
 <?php } ?>

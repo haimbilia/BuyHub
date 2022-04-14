@@ -86,7 +86,7 @@ class HtmlHelper
     {
         $currDate = strtotime(date("Y-m-d H:i:s"));
         $theDate = strtotime($date);
-        $diff = floor(($currDate - $theDate) / (60 * 60 * 24));
+        $diff = round(($currDate - $theDate) / (60 * 60 * 24));      
         switch ($diff) {
             case 0:
                 return Labels::getLabel('LBL_TODAY', $langId);

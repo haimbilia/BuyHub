@@ -14,7 +14,7 @@ $headingBackButton = [
 if (Badge::COND_MANUAL == $conditionType && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_OPEN) {
     $otherButtons[] = [
         'attr' => [
-            'href' => UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$badgeType, $badgeId]),
+            'href' => UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$badgeId, $badgeType]),
             'title' => Labels::getLabel('LBL_BIND_CONDITION', $siteLangId)
         ],
         'icon' => '<svg class="svg btn-icon-start" width="18" height="18">

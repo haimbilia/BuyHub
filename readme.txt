@@ -675,7 +675,12 @@ Updates/Fixes :
     => 063776 - Admin: Asterisk sign is missing for the comments section.
     => 063819 - Seller: User is unable to place request for new Category and Brand.
     => 063843 - Buyer: Expired OTP code is working while placing an order using COD at the front-end
+    => 063842 - Seller: Getting an error when the user tries to bind the conditions with the ribbons.
     => 063821 - Seller: The User is not able to add products.
+    => 063801 - Admin: The order status timeline is not showing correctly according to the date on the order details page at the admin's end and the timeline design is also not matched with the seller's side
+    => 063423 - Seller UI: Scrolling is not working properly when the seller awaiting the admin's approval and charts values are also not showing properly on the Dashboard
+    => 063840 - Admin >> Orders >> View detail: UI is not correct.
+    => 063810 - Seller: Cross button is not showing on Cancel order request
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

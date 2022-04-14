@@ -50,11 +50,11 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
     $googleFontFamily =  '"' . str_replace("+", " ", explode('-', $googleFontFamily)[0]) . '" !important';
 ?>
-    <link href="<?php echo $googleFontFamilyUrl; ?>" rel="stylesheet">
+    <link rel="preload" href="<?php echo $googleFontFamilyUrl; ?>" as="font">
 <?php
 } else { ?>
      
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,300,regular,500,600&subset=cyrillic,cyrillic-ext,latin,latin-ext,vietnamese" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Montserrat:700,300,regular,500,600&subset=cyrillic,cyrillic-ext,latin,latin-ext,vietnamese" as="font">
 <?php } ?>
 
 <style>

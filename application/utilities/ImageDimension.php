@@ -59,6 +59,7 @@ class ImageDimension extends FatUtility
     public const VIEW_MEDIUM = 'MEDIUM';
     public const VIEW_CLAYOUT3 = 'CLAYOUT3';
     public const VIEW_CLAYOUT2 = 'CLAYOUT2';
+    public const VIEW_CLAYOUT1 = 'CLAYOUT1';
     public const VIEW_ORIGINAL = 'ORIGINAL';
     public const VIEW_FB_RECOMMEND = 'FB_RECOMMEND';
     public const VIEW_DEFAULT = 'DEFAULT';
@@ -234,7 +235,7 @@ class ImageDimension extends FatUtility
             self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 666],
             self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
             self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
-            self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 100],
+            self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 66],
         ];
 
         return self::returnData($arr, self::VIEW_DESKTOP, $sizeType);
@@ -244,14 +245,15 @@ class ImageDimension extends FatUtility
     public static function getProductImageData(string $sizeType = ''): array
     {
         $arr =  [
+            self::VIEW_CLAYOUT2 => [self::WIDTH => 398, self::HEIGHT => 398],
+            self::VIEW_CLAYOUT3 => [self::WIDTH => 160, self::HEIGHT => 160],
+            self::VIEW_CLAYOUT1 => [self::WIDTH => 286, self::HEIGHT => 286],
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_MINI => [self::WIDTH => 50, self::HEIGHT => 50],
             self::VIEW_EXTRA_SMALL => [self::WIDTH => 60, self::HEIGHT => 60],
             self::VIEW_SMALL => [self::WIDTH => 230, self::HEIGHT => 230],
             self::VIEW_MEDIUM => [self::WIDTH => 500, self::HEIGHT => 500],
             self::VIEW_LARGE => [self::WIDTH => 800, self::HEIGHT => 800],
-            self::VIEW_CLAYOUT2 => [self::WIDTH => 398, self::HEIGHT => 398],
-            self::VIEW_CLAYOUT3 => [self::WIDTH => 230, self::HEIGHT => 230],
             self::VIEW_ORIGINAL => [self::WIDTH => 1500, self::HEIGHT => 1500],
             self::VIEW_FB_RECOMMEND => [self::WIDTH => 1200, self::HEIGHT => 630],
             self::VIEW_DEFAULT => [self::WIDTH => 400, self::HEIGHT => 400],
@@ -342,7 +344,8 @@ class ImageDimension extends FatUtility
             self::VIEW_MINI_THUMB => [self::WIDTH => 62, self::HEIGHT => 35],
             self::VIEW_THUMB => [self::WIDTH => 62, self::HEIGHT => 35],
             self::VIEW_LISTING_PAGE => [self::WIDTH => 500, self::HEIGHT => 280],
-            self::VIEW_DEFAULT => [self::WIDTH => 500, self::HEIGHT => 280],
+            self::VIEW_DEFAULT => [self::WIDTH => 480, self::HEIGHT => 270],
+            self::VIEW_COLLECTION_PAGE => [self::WIDTH => 160, self::HEIGHT => 90],
         ];
 
         $arr[AttachedFile::RATIO_TYPE_SQUARE] =  [
@@ -351,6 +354,7 @@ class ImageDimension extends FatUtility
             self::VIEW_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
             self::VIEW_LISTING_PAGE => [self::WIDTH => 530, self::HEIGHT => 530],
             self::VIEW_DEFAULT => [self::WIDTH => 500, self::HEIGHT => 500],
+            self::VIEW_COLLECTION_PAGE => [self::WIDTH => 100, self::HEIGHT => 100],
         ];
 
         if (!empty($sizeType)) {
@@ -582,7 +586,7 @@ class ImageDimension extends FatUtility
     public static function getTestimonialImageData(string $sizeType = ''): array
     {
         $arr =  [
-            self::VIEW_MEDIUM => [self::WIDTH => 280, self::HEIGHT => 280],
+            self::VIEW_MEDIUM => [self::WIDTH => 300, self::HEIGHT => 300],
             self::VIEW_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
             self::VIEW_MINI_THUMB => [self::WIDTH => 42, self::HEIGHT => 52],
             self::VIEW_DEFAULT => [self::WIDTH => 118, self::HEIGHT => 276]

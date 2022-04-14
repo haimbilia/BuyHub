@@ -41,8 +41,8 @@ foreach ($arrListing as $sn => $row) {
                     'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)
                 ], $row[$key], true);
                 break;
-            case 'tpr_custom_weightage_valid_till':
-                $date = date('Y-m-d', strtotime($row[$key]));
+            case 'tpr_custom_weightage_valid_till':      
+                $date = 0 < strtotime($row[$key]) ? date('Y-m-d', strtotime($row[$key])) : '0000-00-00';
                 $fldAttr = array(
                     'placeholder' => $val,
                     'readonly' => 'readonly',

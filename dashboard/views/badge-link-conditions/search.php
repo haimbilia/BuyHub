@@ -79,7 +79,7 @@ foreach ($arrListing as $sn => $row) {
                 if ($canEdit) {
                     $ul = $td->appendElement("ul", array("class" => "actions"));
                     if (Badge::COND_MANUAL == $badgeConditionType) {
-                        $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
+                        $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
 
                         $icon = "<i class='far fa-edit icon'></i>";
                         $title = Labels::getLabel('LBL_EDIT', $siteLangId);
@@ -106,7 +106,7 @@ foreach ($arrListing as $sn => $row) {
                         $li = $ul->appendElement("li");
                         $li->appendElement('plaintext', [], $htm, true);
                     } else {
-                        $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
+                        $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
                         $icon = "<i class='far fa-eye icon'></i>";
                         $title = Labels::getLabel('LBL_VIEW', $siteLangId);
                         $li = $ul->appendElement("li");
