@@ -1711,7 +1711,9 @@ $(document).ajaxComplete(function () {
     /* -------------------------- */
 
     /* Binding Slick slider element if loaded after ajax complete. */
-    initCarousel();
+    if ('undefined' != typeof initCarousel) {
+        initCarousel();
+    }
     /* -------------------------- */
 });
 $(function () {
