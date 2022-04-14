@@ -420,7 +420,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         return (array) FatApp::getDb()->fetch($badgeSearch->getResultSet());
     }
 
-    public function conditionForm(int $badgeType, int $badgeId, int $badgeLinkCondId = 0)
+    public function conditionForm(int $badgeId, int $badgeType, int $badgeLinkCondId = 0)
     {
         if (Badge::TYPE_BADGE == $badgeType && 1 > Badge::canAccess($badgeId, UserAuthentication::getLoggedUserId()) && in_array($badgeLinkCondId, BadgeLinkCondition::SHOP_BADGES_COND_TYPES)) {
             Message::addErrorMessage(Labels::getLabel('ERR_ACCESS_RESTRICTED', $this->siteLangId));
