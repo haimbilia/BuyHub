@@ -80,7 +80,7 @@ class CustomProductsController extends ListingBaseController
             $sortBy = 'preq_requested_on';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
 
         $searchForm = $this->getSearchForm($fields);
 

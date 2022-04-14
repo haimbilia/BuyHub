@@ -893,4 +893,33 @@ class Collections extends MyAppModel
         $row = (array) FatApp::getDb()->fetch($srch->getResultSet());
         return (int) current($row);
     }
+
+    public static function layoutIconClass(int $layoutId): string
+    {
+        $classArr = [
+            self::TYPE_PRODUCT_LAYOUT1 => 'product-layout-1',
+            self::TYPE_PRODUCT_LAYOUT2 => 'product-layout-2',
+            self::TYPE_PRODUCT_LAYOUT3 => 'product-layout-3',
+            self::TYPE_PRODUCT_LAYOUT4 => 'product-layout-4',
+            self::TYPE_CATEGORY_LAYOUT1 => 'category-layout-1',
+            self::TYPE_CATEGORY_LAYOUT2 => 'category-layout-2',
+            self::TYPE_CATEGORY_LAYOUT3 => 'category-layout-3',
+            self::TYPE_SHOP_LAYOUT1 => 'shop-layout-1',
+            self::TYPE_SHOP_LAYOUT2 => 'shop-layout-2',
+            self::TYPE_BRAND_LAYOUT1 => 'brand-layout-1',
+            self::TYPE_BRAND_LAYOUT2 => 'brand-layout-2',
+            self::TYPE_BLOG_LAYOUT1 => 'blog-layout-1',
+            self::TYPE_SPONSORED_PRODUCT_LAYOUT => 'sponsored-product-layout',
+            self::TYPE_SPONSORED_SHOP_LAYOUT => 'sponsored-shop-layout',
+            self::TYPE_BANNER_LAYOUT1 => 'banner-layout-1',
+            self::TYPE_BANNER_LAYOUT2 => 'banner-layout-2',
+            self::TYPE_BANNER_LAYOUT3 => 'banner-layout-3',
+            self::TYPE_FAQ_LAYOUT1 => 'faq-layout-1',
+            self::TYPE_TESTIMONIAL_LAYOUT1 => 'testimonial-layout-1',
+            self::TYPE_CONTENT_BLOCK_LAYOUT1 => 'content-block-layout-1',
+            self::TYPE_PENDING_REVIEWS1 => 'pending-reviews-1',
+            self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'faq-category-layout-1',
+        ];
+        return $classArr[$layoutId] ?? '';
+    }
 }

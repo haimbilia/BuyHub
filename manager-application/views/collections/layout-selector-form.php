@@ -14,13 +14,13 @@
                         <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
                     <div class="layout-data collapse" id="collectionType<?php echo $type; ?>">
-                        <?php foreach ($layouts as $layoutType => $layout) { ?>
-                            <div class="layout-block" data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo $layout; ?>" onclick="collectionForm(<?php echo $type; ?>, <?php echo $layoutType; ?>)">
-                                <i class="icn">
-                                    <svg class="svg" width="32" height="32">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg#collection-layout-<?php echo $layoutType; ?>"></use>
-                                    </svg>
-                                </i>
+                        <?php foreach ($layouts as $layoutId => $layout) { ?>
+                            <div class="layout-block" data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo $layout; ?>" onclick="collectionForm(<?php echo $type; ?>, <?php echo $layoutId; ?>)">
+
+                                <svg class="svg" width="164" height="94">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg#<?php echo Collections::layoutIconClass($layoutId); ?>"></use>
+                                </svg>
+
                             </div>
                         <?php } ?>
                     </div>

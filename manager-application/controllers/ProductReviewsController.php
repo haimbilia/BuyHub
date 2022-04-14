@@ -119,7 +119,7 @@ class ProductReviewsController extends ListingBaseController
                 break;
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $searchForm = $this->getSearchForm($fields);
         $post = $searchForm->getFormDataFromArray($data, ['reviewed_for_id']);
