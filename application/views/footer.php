@@ -27,15 +27,6 @@ if (CommonHelper::demoUrl()) { ?>
 <footer class="footer section no-print" id="footer">
     <section class="footer-top">
         <div class="container">
-            <div class="back-to-top">
-                <a href="#top">
-                    <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#up-arrow"></use>
-                    </svg>
-                    <span>Top</span>
-                </a>
-            </div>
-
             <div class="footer-layout">
                 <div class="footer-layout-col">
                     <div class="footer-logo">
@@ -102,8 +93,12 @@ if (CommonHelper::demoUrl()) { ?>
 
 
         </div>
-    </section>   
-    <?php $this->includeTemplate('_partial/footerMetaContent.php'); ?>    
+    </section>
+
+    <?php $this->includeTemplate('_partial/footerMetaContent.php'); ?>
+
+
+
 </footer>
 
 <?php if (FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1) && !CommonHelper::getUserCookiesEnabled()) { ?>
@@ -176,7 +171,12 @@ if (CommonHelper::demoUrl()) { ?>
 </div>
 </script>
 <?php include(CONF_THEME_PATH . '_partial/footer-part/offcanvas-elements.php'); ?>
-
+<a class="back-to-top" href="#top">
+    <svg class="svg">
+        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#up-arrow"></use>
+    </svg>
+    <span>Top</span>
+</a>
 </body>
 
 </html>
