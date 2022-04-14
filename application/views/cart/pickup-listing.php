@@ -53,8 +53,8 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                     <a href="<?php echo $productUrl; ?>">
                                         <?php
                                         $pictureAttr = [
-                                            'webpImageUrl' => $imageWebpUrl,
-                                            'jpgImageUrl' => $imageUrl,
+                                            'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageWebpUrl],
+                                            'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageUrl],
                                             'ratio' => '1:1',
                                             'alt' => $productTitle,
                                             'imageUrl' => $imageUrl,
@@ -132,8 +132,8 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         <a href="<?php echo $productUrl; ?>">
                             <?php
                             $pictureAttr = [
-                                'webpImageUrl' => $imageWebpUrl,
-                                'jpgImageUrl' => $imageUrl,
+                                'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageWebpUrl],
+                                'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageUrl],
                                 'imageUrl' => $imageUrl,
                                 'ratio' => '1:1',
                                 'alt' => $productTitle,
@@ -263,8 +263,8 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                             <a href="<?php echo $productUrl; ?>">
                                 <?php
                                 $pictureAttr = [
-                                    'webpImageUrl' => $imageWebpUrl,
-                                    'jpgImageUrl' => $imageUrl,
+                                    'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageWebpUrl],
+                                    'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageUrl],
                                     'imageUrl' => $imageUrl,
                                     'ratio' => '1:1',
                                     'alt' => $productTitle,

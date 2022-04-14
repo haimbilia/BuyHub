@@ -450,7 +450,6 @@ class ImageController extends FatController
 
         $recordId = FatUtility::int($recordId);
         $filePath = LayoutTemplate::LAYOUTTYPE_SHOP_IMAGE_PATH;
-        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 200;
@@ -706,7 +705,7 @@ class ImageController extends FatController
         }
     }
 
-    public function BrandCollectionBgImage($langId = 0, $sizeType = '')
+    /* public function BrandCollectionBgImage($langId = 0, $sizeType = '')
     {
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_COLLECTION_BG_IMAGE, $recordId, 0, $langId);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
@@ -722,7 +721,7 @@ class ImageController extends FatController
                 AttachedFile::displayOriginalImage($image_name, $default_image);
                 break;
         }
-    }
+    } */
 
     public function coupon($coupon_id, $lang_id = 0, $sizeType = '')
     {

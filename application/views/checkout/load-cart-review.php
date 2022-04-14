@@ -27,8 +27,8 @@
                                 <a href="<?php echo $productUrl; ?>">
                                     <?php
                                     $pictureAttr = [
-                                        'webpImageUrl' => $imageWebpUrl,
-                                        'jpgImageUrl' => $imageUrl,
+                                        'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageWebpUrl],
+                                        'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => $imageUrl],
                                         'imageUrl' => $imageUrl,
                                         'ratio' => '3:4',
                                         'alt' => $product['product_name'],
@@ -77,7 +77,8 @@
     </div>
     <!-- <div class="selected-panel-action">
         <a href="javascript:void(0);" onclick="viewOrder()" ; class="btn btn-brand btn-sm ripplelink">
-            <?php // echo Labels::getLabel('LBL_View_Order', $siteLangId); ?>
+            <?php // echo Labels::getLabel('LBL_View_Order', $siteLangId); 
+            ?>
         </a>
     </div> -->
 </div>
