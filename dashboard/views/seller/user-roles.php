@@ -2,12 +2,12 @@
 <form class="form">
     <div class="row">
         <?php foreach ($arrListing as $key => $arrList) { ?>
-            <div class="col-md-6">
+            <div class="col-md-6 mb-4">
                 <div class="card card-full-height">
                     <div class="card-head">
                         <h5 class="card-title"><?php echo $modulesArr[$key]; ?></h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-table">
                         <div class="js-scrollable table-wrap table-responsive">
                             <?php
                             $arr_flds = array(
