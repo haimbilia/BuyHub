@@ -44,7 +44,7 @@ $(document).ready(function () {
 	editProductMetaTagLangForm = function (selprod_id, langId, autoFillLangData = 0) {
 		$("#dvForm").prepend(fcom.getLoader())
 		fcom.ajax(fcom.makeUrl('seller', 'productSeoLangForm', [selprod_id, langId, autoFillLangData]), '', function (t) {
-			$("#dvForm").html(t).show();
+			$("#dvForm").replaceWith(t).show();
 			fcom.removeLoader();
 			$("#dvAlert").hide();
 		});
