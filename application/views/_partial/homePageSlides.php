@@ -56,19 +56,17 @@
             if ($haveUrl) {
                 $out .= '<a target="' . $slide['slide_target'] . '" href="' . $slideUrl . '">';
             }
-            $out .= '<div class="hero-slider-media">
-            <picture>
-					<source type="image/webp" srcset="' . $mobileWebpUrl . '" media="(max-width: 576px)">
-                    <source type="image/webp" srcset="' . $tabletWebpUrl . '" media="(max-width: 1199px)">
-                    <source type="image/webp" srcset="' . $desktopWebpUrl . '" media="(min-width: 1200px)">
-
-					<source type="image/jpeg" srcset="' . $mobileUrl . '" media="(max-width: 576px)">
-                    <source type="image/jpeg" srcset="' . $tabletUrl  . '" media="(max-width: 1199px))">
-                    <source type="image/jpeg" srcset="' .  $desktopUrl . '" media="(min-width: 1200px)">
-
-					<img data-aspect-ratio="' . $imageDimension['DESKTOP']['aspectRatio'] . '" src="' . $desktopUrl . '" alt="">
-				</picture>
-			</div>';
+            $out .= '<div class="hero-slider-media">';
+            $pictureAttr = [
+                'siteLangId' => $siteLangId,
+                'webpImageUrl' => [ImageDimension::VIEW_MOBILE => $mobileWebpUrl, ImageDimension::VIEW_TABLET => $tabletWebpUrl, ImageDimension::VIEW_DESKTOP => $desktopWebpUrl],
+                'jpgImageUrl' => [ImageDimension::VIEW_MOBILE => $mobileUrl, ImageDimension::VIEW_TABLET => $tabletUrl, ImageDimension::VIEW_DESKTOP => $desktopUrl],
+                'imageUrl' => $desktopUrl,
+                'ratio' => $imageDimension['DESKTOP']['aspectRatio'],
+                'alt' => '',
+            ];
+            $out .= $this->includeTemplate('_partial/picture-tag.php', $pictureAttr, true, true);
+            $out .= '</div>';
             if ($haveUrl) {
                 $out .= '</a>';
             }
