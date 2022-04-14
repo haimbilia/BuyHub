@@ -58,6 +58,7 @@
 .page-sort {
     display: flex;
     align-items: center;
+    flex-flow: row wrap;
     grid-gap: 1rem;
     margin-#{$start-direction}: auto;
     @include media-breakpoint-up(lg) {

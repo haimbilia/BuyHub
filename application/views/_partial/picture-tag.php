@@ -12,12 +12,18 @@ $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
 ?>
 <picture>
     <?php foreach ($webpImageUrl as $key => $url) {
+        if (empty($url)) {
+            continue;
+        }
         $key = strtoupper($key);
         $mediaArr = ImageDimension::getPictureTagMedia($key);
     ?>
         <source srcset="<?php echo $url; ?>" type="image/webp" media="(<?php echo $mediaArr['key']; ?>: <?php echo $mediaArr['value']; ?>px)">
     <?php } ?>
     <?php foreach ($jpgImageUrl as $key => $url) {
+        if (empty($url)) {
+            continue;
+        }
         $key = strtoupper($key);
         $mediaArr = ImageDimension::getPictureTagMedia($key); ?>
 
