@@ -2288,10 +2288,11 @@ mark,
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: $radius-common;
-        height: 86px;
-        width: 86px;
+        border-radius: 5px;
+        width: 164px;
+        height: 94px;
         background: $bg-gray;
+        box-shadow: $shadow4;
         &:hover,
         &.selected {
             color: $brand-color;
@@ -2303,14 +2304,17 @@ mark,
         // }
     }
     &-type {
-        background: #f7f7f7;
+        background: #fff;
         padding: 2px;
-        border-radius: $radius-common;
+
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 60px;
-        height: 60px;
+        width: 164px;
+        height: 94px;
+        border-radius: 5px;
+        // box-shadow: 0 10px 15px -3px rgba(36, 69, 101, 0.19), 0 4px 6px -2px #d0dce8;
+        box-shadow: $shadow4;
     }
 }
 
