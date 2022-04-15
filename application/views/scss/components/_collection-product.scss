@@ -167,9 +167,7 @@
 .product-layout-1 {
     display: grid;
     grid-gap: 1px;
-
     grid-template-columns: repeat(2, 1fr);
-
     @include media-breakpoint-up(lg) {
         grid-template-columns: repeat(auto-fill, minmax(335px, 1fr));
         grid-gap: 3rem;
@@ -202,7 +200,7 @@
             .products-title {
                 @include media-breakpoint-up(lg) {
                     padding-#{$start-direction}: 0;
-                    margin: 0;
+                    //margin: 0;
                 }
             }
             .products-price {

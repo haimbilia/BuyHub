@@ -1122,10 +1122,12 @@
         margin: auto;
     }
 }
-.account-fav-listing{
+.account-fav-listing {
     display: grid;
     grid-gap: 1.5rem;
-    grid-template-columns: repeat(3, 1fr);
+    @include media-breakpoint-up(lg) {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 .wishlists {
     width: 100%;
@@ -1141,13 +1143,12 @@
         text-align: center;
         display: flex;
         justify-content: space-between;
-       // border-bottom: $border;
+        // border-bottom: $border;
         padding: 10px 1rem;
-        .heading{
+        .heading {
             font-size: 1rem;
             font-weight: 500;
             margin: 0;
-
         }
     }
     &__body {
@@ -1163,19 +1164,19 @@
             li {
                 border: $border;
                 border-radius: $radius4;
-               // padding: 0.5rem;
+                // padding: 0.5rem;
                 img {
                     margin: auto;
                     display: block;
                 }
             }
         }
-        .block-empty{
-            img{
-                margin: 15px auto!important;
+        .block-empty {
+            img {
+                margin: 15px auto !important;
                 max-width: 140px;
             }
-            h5{
+            h5 {
                 color: $txt-gray;
                 font-size: 0.875rem;
             }
@@ -1818,23 +1819,23 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
         }
     }
 }
+.order-feedback-section {
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+}
 
 .feedback-block {
+    padding: 2rem 0;
     .card-title {
         margin-bottom: 1rem;
     }
     &_content {
-        background: lighten($bg-gray, $amount: 3);
-        border-radius: $radius4;
-        border: solid 1px lighten($border-color, $amount: 3);
+        //background: lighten($bg-gray, $amount: 3);
+        //border-radius: $radius4;
+        //border: solid 1px lighten($border-color, $amount: 3);
         //box-shadow: $shadow1;
-        padding: 1.5rem;
-        .item {
-            .item__pic {
-                max-width: 100px;
-                flex: 0 0 100px;
-            }
-        }
+        //padding: 1.5rem;
     }
     .rating-listing {
         //border: $border;
@@ -1870,6 +1871,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 .shop-card {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
     &__img {
         border: $border;
         border-radius: $radius4;

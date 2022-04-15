@@ -91,7 +91,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                     </div>
                 </div>
 
-             
+
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
@@ -129,13 +129,13 @@ echo $msgsSrchForm->getFormHtml(); ?>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">             
+            <div class="col-md-3">
                 <!-- Buyer Information -->
                 <?php if (!empty($order['user_name']) || !empty($order['credential_username']) || !empty($order['credential_email']) || !empty($order['buyer_phone'])) { ?>
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"><i class="fas fa-address-card"></i>
+                                <h3 class="card-head-title">
                                     <?php echo Labels::getLabel('LBL_CUSTOMER_INFORMATION', $siteLangId); ?>
                                 </h3>
                             </div>
@@ -179,7 +179,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                     <div class="card card-toggle">
                         <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block1" aria-expanded="false" aria-controls="order-block1">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"><i class="fas fa-address-card"></i>
+                                <h3 class="card-head-title">
                                     <?php echo Labels::getLabel('LBL_SELLER_INFORMATION', $siteLangId); ?>
                                 </h3>
                             </div>

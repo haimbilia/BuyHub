@@ -482,13 +482,14 @@
     width: max-content;
     display: flex;
     align-items: flex-start;
+    gap: 1.5rem;
     &__pic {
         flex: 0 0 50px;
         max-width: 50px;
         border: $border;
         border-radius: $radius4;
         margin: 0;
-        margin-#{$end-direction}: 10px;
+        //margin-#{$end-direction}: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
