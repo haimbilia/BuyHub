@@ -681,6 +681,7 @@ Updates/Fixes :
     => 063423 - Seller UI: Scrolling is not working properly when the seller awaiting the admin's approval and charts values are also not showing properly on the Dashboard
     => 063840 - Admin >> Orders >> View detail: UI is not correct.
     => 063810 - Seller: Cross button is not showing on Cancel order request
+    => 063818 - Admin: Sorting is changed after performing an action on the product review's request at the admin's end
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
