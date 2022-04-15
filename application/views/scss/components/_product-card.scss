@@ -77,6 +77,7 @@
         width: 100%;
         overflow: hidden;
         background-color: $bg-gray;
+
         &:before {
             color: #dadada;
             //content: "";
@@ -117,6 +118,7 @@
             }
         }
         img {
+            border: solid 1px lighten($border-color, 8);
             mix-blend-mode: multiply;
             object-fit: cover;
             max-width: 100%;

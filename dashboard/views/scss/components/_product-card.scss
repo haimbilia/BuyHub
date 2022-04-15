@@ -500,6 +500,10 @@
             padding: 16px;
         }
     }
+    &-free-size {
+        flex: auto;
+        max-width: none;
+    }
 
     &__description {
         font-size: 0.8rem;

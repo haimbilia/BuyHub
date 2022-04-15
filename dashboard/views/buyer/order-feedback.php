@@ -24,14 +24,12 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     <div class="card-body">
                         <?php echo $frm->getFormTag(); ?>
                         <div class="order-feedback-section">
-
                             <div class="feedback-block">
                                 <h5 class="card-title ">
                                     <?php echo Labels::getLabel('LBL_PRODUCT_FEEDBACK', $siteLangId); ?></h5>
                                 <div class="feedback-block_content">
-
                                     <div class="product-profile mb-3">
-                                        <div class="product-profile__pic">
+                                        <div class="product-profile__pic product-profile-free-size">
                                             <?php
                                             $prodTitle =  (!empty($opDetail['op_selprod_title']) ? $opDetail['op_selprod_title'] : $opDetail['op_product_name']);
 
@@ -41,7 +39,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             } else {
                                                 $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selProdCodeArr[0], ImageDimension::VIEW_MEDIUM, $opDetail['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                             } ?>
-                                            <a href="<?php echo UrlHelper::generateUrl('products', 'view', array($opDetail['op_selprod_id']), CONF_WEBROOT_FRONTEND) ?>"><img src="<?php echo $prodImg; ?>" alt="<?php echo $prodTitle; ?>" title="<?php echo $prodTitle; ?>"></a>
+                                            <a href="<?php echo UrlHelper::generateUrl('products', 'view', array($opDetail['op_selprod_id']), CONF_WEBROOT_FRONTEND) ?>">
+                                                <img width="120" height="120" src="<?php echo $prodImg; ?>" alt="<?php echo $prodTitle; ?>" title="<?php echo $prodTitle; ?>">
+                                            </a>
                                         </div>
                                         <div class="product-profile__description">
                                             <div class="item__category"><a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($opDetail['op_shop_id'])); ?>"><?php echo $opDetail['op_shop_name']; ?></a></div>
@@ -50,7 +50,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             <div class="product-profile__specification"> <?php echo $opDetail['op_selprod_options']; ?> </div>
                                         </div>
                                     </div>
-                                    <div class="rating-listing rating-listing-column mb-4">
+                                    <div class="rating-listing rating-listing-column">
                                         <?php foreach ($selProdRating as $ratingTypeId => $ratingTypeLabel) { ?>
                                             <div class="rating rating-f">
                                                 <span class="rating__text"><?php echo $ratingTypeLabel; ?>*</span>
@@ -63,58 +63,43 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="field-set">
-                                                <div class="caption-wraper">
-                                                    <label class="field_label">
-                                                        <?php echo $frm->getField('spreview_title')->getCaption(); ?>
-                                                    </label>
-                                                </div>
-                                                <div class="field-wraper">
-                                                    <div class="field_cover">
-                                                        <?php echo $frm->getFieldHtml('spreview_title'); ?>
-                                                    </div>
-                                                </div>
+                                            <div class="form-group">
+                                                <label class="form-label">
+                                                    <?php echo $frm->getField('spreview_title')->getCaption(); ?>
+                                                </label>
+                                                <?php echo $frm->getFieldHtml('spreview_title'); ?>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="field-set">
-                                                <div class="caption-wraper">
-                                                    <label class="field_label">
-                                                        <?php echo $frm->getField('spreview_description')->getCaption(); ?>
-                                                    </label>
-                                                </div>
-                                                <div class="field-wraper">
-                                                    <div class="field_cover">
-                                                        <?php echo $frm->getFieldHtml('spreview_description'); ?>
-                                                    </div>
-                                                </div>
+                                            <div class="form-group">
+                                                <label class="form-label">
+                                                    <?php echo $frm->getField('spreview_description')->getCaption(); ?>
+                                                </label>
+                                                <?php echo $frm->getFieldHtml('spreview_description'); ?>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="field-set">
-                                                <div class="field-wraper">
-                                                    <div class="field_cover">
-                                                        <div class="file__upload">
-                                                            <?php
-                                                            $fld = $frm->getField('spreview_image[]');
-                                                            $fld->setFieldTagAttribute('multiple', 'multiple');
-                                                            $fld->setFieldTagAttribute('class', 'multipleImgs--js');
-                                                            echo $frm->getFieldHtml('spreview_image[]'); ?>
-                                                            <span class="upload-icon">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                                                    <path d="M3 4V1h2v3h3v2H5v3H3V6H0V4zm3 6V7h3V4h7l1.83 2H21a2.006 2.006 0 0 1 2 2v12a2.006 2.006 0 0 1-2 2H5a2.006 2.006 0 0 1-2-2V10zm7 9a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm-3.2-5a3.2 3.2 0 1 0 3.2-3.2A3.2 3.2 0 0 0 9.8 14z" data-name="Path 2486"></path>
-                                                                </svg>
-                                                            </span>
-                                                            <span><?php echo Labels::getLabel('LBL_UPLOAD_IMAGES', $siteLangId); ?></span>
-                                                        </div>
-                                                        <div class='uploaded-media multipleImgsGallery--js'>
-                                                        </div>
-                                                    </div>
+                                            <div class="form-group">
+                                                <div class="file__upload">
+                                                    <?php
+                                                    $fld = $frm->getField('spreview_image[]');
+                                                    $fld->setFieldTagAttribute('multiple', 'multiple');
+                                                    $fld->setFieldTagAttribute('class', 'multipleImgs--js');
+                                                    echo $frm->getFieldHtml('spreview_image[]'); ?>
+                                                    <span class="upload-icon">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                            <path d="M3 4V1h2v3h3v2H5v3H3V6H0V4zm3 6V7h3V4h7l1.83 2H21a2.006 2.006 0 0 1 2 2v12a2.006 2.006 0 0 1-2 2H5a2.006 2.006 0 0 1-2-2V10zm7 9a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm-3.2-5a3.2 3.2 0 1 0 3.2-3.2A3.2 3.2 0 0 0 9.8 14z" data-name="Path 2486"></path>
+                                                        </svg>
+                                                    </span>
+                                                    <span><?php echo Labels::getLabel('LBL_UPLOAD_IMAGES', $siteLangId); ?></span>
                                                 </div>
+                                                <div class='uploaded-media multipleImgsGallery--js'>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -131,7 +116,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             <div class="shop-rating-wrap">
                                                 <div class="shop-card">
                                                     <div class="shop-card__img">
-                                                        <img src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND); ?>" />
+                                                        <img width="120" height="120" src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND); ?>" />
                                                     </div>
                                                     <div class="shop-card__detail">
                                                         <h6><?php echo $opDetail['op_shop_name']; ?> </h6>
@@ -141,7 +126,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                             echo $date->format('M d, Y'); ?> </span>
                                                     </div>
                                                 </div>
-                                                <div class="rating-listing">
+                                                <div class="rating-listing rating-listing-column">
                                                     <?php foreach ($shopRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
                                                         <div class="rating rating-f">
                                                             <?php
