@@ -7,7 +7,7 @@ if (0 < $recordId) {
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
 ?>
-<div class="content-wrapper content-space mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="'.$formLayout.'"' : ''; ?>>
+<div class="content-wrapper content-space mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="' . $formLayout . '"' : ''; ?>>
     <?php
     $frm->setFormTagAttribute('class', 'form');
     $frm->setFormTagAttribute('id', 'addProductfrm');
@@ -16,7 +16,7 @@ if (0 < $recordId) {
     <div class="content-header">
         <div class="content-header-title">
             <h2>
-                <a class="back" href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>">
+                <a class="btn btn-back back" href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                         </use>
@@ -274,14 +274,14 @@ if (0 < $recordId) {
                             <div class="card-head-label">
                                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
                                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
-                            </div>                         
+                            </div>
                             <i class="dropdown-toggle-custom-arrow"></i>
                         </div>
                         <div class="collapse" id="digital-file-block">
                             <div class="card-body">
                                 <div id="digitalFilesDefaultListJs">
                                 </div>
-                            </div>                           
+                            </div>
                         </div>
                         <?php if ($displayDigitalDownloadAddBtn) { ?>
                             <div class="card-foot">
@@ -298,36 +298,36 @@ if (0 < $recordId) {
                                 </div>
                             </div>
                         <?php } ?>
-                        
+
                     </div>
                     <div class="card card-toggle" id="digital-links">
                         <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-link-block" aria-expanded="false" aria-controls="stock-block2">
                             <div class="card-head-label">
                                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
                                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?></span>
-                            </div>                           
+                            </div>
                             <i class="dropdown-toggle-custom-arrow"></i>
                         </div>
                         <div class="collapse" id="digital-link-block">
                             <div class="card-body">
                                 <div id="digitalLinksDefaultListJs">
-                                </div>                               
+                                </div>
                             </div>
                         </div>
                         <?php if ($displayDigitalDownloadAddBtn) { ?>
-                                <div class="card-foot">
-                                    <div class="row justify-content-end">
-                                        <div class="col-auto">
-                                            <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
-                                                <svg class="svg btn-icon-start" width="18" height="18">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
-                                                    </use>
-                                                </svg>
-                                                <span><?php echo Labels::getLabel('BTN_DIGITAL_LINKS', $langId); ?></span>
-                                            </a>
-                                        </div>
+                            <div class="card-foot">
+                                <div class="row justify-content-end">
+                                    <div class="col-auto">
+                                        <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
+                                            <svg class="svg btn-icon-start" width="18" height="18">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                </use>
+                                            </svg>
+                                            <span><?php echo Labels::getLabel('BTN_DIGITAL_LINKS', $langId); ?></span>
+                                        </a>
                                     </div>
                                 </div>
+                            </div>
                         <?php } ?>
                     </div>
                 <?php } ?>

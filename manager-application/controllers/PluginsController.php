@@ -248,7 +248,7 @@ class PluginsController extends ListingBaseController
             $record::tblFld('name') => $post[$record::tblFld('name')]
         ];
 
-        if (isset($post[$record::tblFld('description')])){
+        if (isset($post[$record::tblFld('description')])) {
             $langData[$record::tblFld('description')] = $post[$record::tblFld('description')];
         }
         $this->setLangData($record, $langData);
@@ -419,12 +419,9 @@ class PluginsController extends ListingBaseController
         if (in_array($pluginType, Plugin::HAVING_DESCRIPTION)) {
             $frm->addHtmlEditor(Labels::getLabel('FRM_EXTRA_INFO', $this->siteLangId), 'plugin_description');
         }
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'plugin_active', $activeInactiveArr, '', array(), '');
-
-        if (in_array($pluginType, Plugin::getKingpinTypeArr())) {
-            $frm->addCheckBox(Labels::getLabel('FRM_MARK_AS_DEFAULT', $this->siteLangId), 'CONF_DEFAULT_PLUGIN_' . $pluginType, $recordId, array(), false, 0);
-        }
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'plugin_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+        $fld->developerTags['noCaptionTag'] = true;
 
         if (in_array($pluginType, Plugin::getSeparateIconTypeArr())) {
             $frm->addHTML('', 'plugin_logo', '');

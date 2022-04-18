@@ -756,7 +756,7 @@ $(document).ready(function () {
         var popup = $(formElement).closest('.' + $.ykmodal.element);
         if (0 < popup.length) {
             $.ykmodal(fcom.getLoader(), true);
-            data +=  "&signinpopup=1";
+            data += "&signinpopup=1";
         } else {
             $(".loginFormJs").prepend(fcom.getLoader());
         }
@@ -1048,7 +1048,7 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
                     }
                 }
             }
-            var iti = window.intlTelInput(input, {separateDialCode: !hasOnlyFlag, initialCountry: country,});
+            var iti = window.intlTelInput(input, { separateDialCode: !hasOnlyFlag, initialCountry: country, });
             var dialCode = "+" + iti.getSelectedCountryData().dialCode;
             var dialCodeWithPhone = dialCode + "-" + iti.getSelectedCountryData().iso2;
             $(input, form).attr("data-before", dialCode);
@@ -1059,10 +1059,10 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
                 }
             } else if (1 > dialCodeElement.length && false === hasOnlyFlag) {
                 $("<input>").attr({
-                        type: "hidden",
-                        name: elementName,
-                        value: dialCodeWithPhone,
-                    }).insertAfter(input, form);
+                    type: "hidden",
+                    name: elementName,
+                    value: dialCodeWithPhone,
+                }).insertAfter(input, form);
             } else if (true === hasOnlyFlag) {
                 var phoneNumber = $(input, form).val();
                 if ("undefined" == typeof phoneNumber || "" == phoneNumber) {
@@ -1279,9 +1279,7 @@ var imagesPreview = function (input, placeToInsertImagePreview) {
             var reader = new FileReader();
             reader.onload = function (event) {
                 var htm =
-                    '<li><div class="uploaded-file"><span class="uploaded-file__thumb"></span><a href="javascript:void(0);" class="file-remove fileRemove--js" data-filefld="' +
-                    fileFldName +
-                    '"></a></div></li>';
+                    '<li><div class="uploaded-file"><span class="uploaded-file__thumb"></span><button class="file-remove fileRemove--js" data-filefld="' + fileFldName + '"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></button></div></li>';
                 $(placeToInsertImagePreview + " ul").append(htm);
                 $(
                     $.parseHTML(

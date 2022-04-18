@@ -138,3 +138,19 @@
         }
     }
 }
+
+.custom-tagify {
+    background-color: #fff;
+    border: 1px solid $border-color;
+    height: auto;
+    padding: 0;
+    width: 100%;
+    font-family: inherit;
+    font-size: 0.9em;
+    font-weight: normal;
+    border-radius: $radius4;
+    .tagify__input {
+        border: none;
+        padding-top: 6px;
+    }
+}
