@@ -36,31 +36,97 @@ if (null != $btn) {
             </div>
             <div class="card-body ">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-                        <div class="info--order">
-                            <h6><?php echo Labels::getLabel('LBL_Vendor_Return_Address', $siteLangId); ?></h6>
-                            <?php echo ($vendorReturnAddress['ura_name'] != null) ? '<strong>' . $vendorReturnAddress['ura_name'] . '</strong>' : ''; ?>
-                            <p>
-                                <?php echo (strlen($vendorReturnAddress['ura_address_line_1']) > 0) ? $vendorReturnAddress['ura_address_line_1'] . '<br/>' : ''; ?>
-                                <?php echo (strlen($vendorReturnAddress['ura_address_line_2']) > 0) ? $vendorReturnAddress['ura_address_line_2'] . '<br>' : ''; ?>
-                                <?php echo (strlen($vendorReturnAddress['ura_city']) > 0) ? $vendorReturnAddress['ura_city'] . ',' : ''; ?>
-                                <?php echo (strlen($vendorReturnAddress['state_name']) > 0) ? $vendorReturnAddress['state_name'] . '<br>' : ''; ?>
-                                <?php echo (strlen($vendorReturnAddress['country_name']) > 0) ? $vendorReturnAddress['country_name'] . '<br>' : ''; ?>
-                                <?php echo (strlen($vendorReturnAddress['ura_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $vendorReturnAddress['ura_zip'] . '<br>' : ''; ?>
-                                <?php echo (strlen($vendorReturnAddress['ura_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . ValidateElement::formatDialCode($vendorReturnAddress['ura_phone_dcode']) . $vendorReturnAddress['ura_phone'] . '<br>' : ''; ?>
-                            </p>
+                    <div class="col-md-6">
+                        <h5><?php echo Labels::getLabel('LBL_VENDOR_RETURN_ADDRESS', $siteLangId); ?></h5>
+                        <div class="row">
+                            <div class="col-lg-12 my-4">
+                                <ul class="list-stats list-stats-double">
+                                    <?php if ($request['op_shop_owner_name'] != '') { ?>
+                                        <li class="list-stats-item">
+                                            <span class="label"><?php echo Labels::getLabel('LBL_VENDOR_NAME', $siteLangId); ?></span>
+                                            <span class="value"><?php echo $request['op_shop_owner_name']; ?></span>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if ($request['op_shop_name'] != '') { ?>
+                                        <li class="list-stats-item">
+                                            <span class="label"><?php echo Labels::getLabel('LBL_SHOP_NAME', $siteLangId); ?></span>
+                                            <span class="value"><?php echo $request['op_shop_name']; ?></span>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if (strlen($vendorReturnAddress['ura_name']) > 0) { ?>
+                                        <li class="list-stats-item">
+                                            <span class="label"><?php echo Labels::getLabel('LBL_ADDRESS_NAME', $siteLangId); ?></span>
+                                            <span class="value"><?php echo $vendorReturnAddress['ura_name']; ?></span>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if (strlen($vendorReturnAddress['ura_address_line_1']) > 0) { ?>
+                                        <li class="list-stats-item">
+                                            <span class="label"><?php echo Labels::getLabel('LBL_ADDRESS_LINE_1', $siteLangId); ?></span>
+                                            <span class="value"><?php echo $vendorReturnAddress['ura_address_line_1']; ?></span>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if (strlen($vendorReturnAddress['ura_address_line_2']) > 0) { ?>
+                                        <li class="list-stats-item">
+                                            <span class="label"><?php echo Labels::getLabel('LBL_ADDRESS_LINE_2', $siteLangId); ?></span>
+                                            <span class="value"><?php echo $vendorReturnAddress['ura_address_line_2']; ?></span>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if (strlen($vendorReturnAddress['ura_city']) > 0) { ?>
+                                        <li class="list-stats-item">
+                                            <span class="label"><?php echo Labels::getLabel('LBL_CITY', $siteLangId); ?></span>
+                                            <span class="value"><?php echo $vendorReturnAddress['ura_city']; ?></span>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if (strlen($vendorReturnAddress['state_name']) > 0) { ?>
+                                        <li class="list-stats-item">
+                                            <span class="label"><?php echo Labels::getLabel('LBL_STATE_NAME', $siteLangId); ?></span>
+                                            <span class="value"><?php echo $vendorReturnAddress['state_name']; ?></span>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if (strlen($vendorReturnAddress['country_name']) > 0) { ?>
+                                        <li class="list-stats-item">
+                                            <span class="label"><?php echo Labels::getLabel('LBL_COUNTRY_NAME', $siteLangId); ?></span>
+                                            <span class="value"><?php echo $vendorReturnAddress['country_name']; ?></span>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if (strlen($vendorReturnAddress['ura_zip']) > 0) { ?>
+                                        <li class="list-stats-item">
+                                            <span class="label"><?php echo Labels::getLabel('LBL_Zip', $siteLangId); ?></span>
+                                            <span class="value"><?php echo $vendorReturnAddress['ura_zip']; ?></span>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if (strlen($vendorReturnAddress['ura_phone']) > 0) { ?>
+                                        <li class="list-stats-item">
+                                            <span class="label"><?php echo Labels::getLabel('LBL_Phone', $siteLangId); ?></span>
+                                            <span class="value"><?php echo ValidateElement::formatDialCode($vendorReturnAddress['ura_phone_dcode']) . $vendorReturnAddress['ura_phone']; ?></span>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
-                        <div class="info--order">
-                            <h6><?php echo Labels::getLabel('LBL_Customer_Detail', $siteLangId); ?></h6>
-                            <p><?php echo ($request['buyer_name'] != '') ? '<strong>' . Labels::getLabel('LBL_Customer_Name:', $siteLangId) . '</strong> ' . $request['buyer_name'] : ''; ?></p>
-                            <?php if (isset($attachedFile) && !empty($attachedFile)) { ?>
-                                <p><strong><?php echo Labels::getLabel('Lbl_Download_attached_file', $siteLangId); ?> </strong> <a href="<?php echo UrlHelper::generateUrl('Seller', 'downloadAttachedFileForReturn', array($request['orrequest_id'], 0)); ?>"><svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#download">
-                                            </use>
-                                        </svg></a></p>
-                            <?php } ?>
+                    <div class="col-md-6">
+                        <h5><?php echo Labels::getLabel('LBL_CUSTOMER_DETAIL', $siteLangId); ?></h5>
+                        <div class="row">
+                            <div class="col-lg-12 my-4">
+                                <ul class="list-stats list-stats-double">
+                                    <li class="list-stats-item">
+                                        <span class="label"><?php echo Labels::getLabel('LBL_CUSTOMER_NAME', $siteLangId); ?></span>
+                                        <span class="value"><?php echo $request['buyer_name']; ?></span>
+                                    </li>
+                                    <li class="list-stats-item">
+                                        <span class="label"><?php echo Labels::getLabel('Lbl_Download_attached_file', $siteLangId); ?></span>
+                                        <span class="value">
+                                            <a href="<?php echo UrlHelper::generateUrl('Seller', 'downloadAttachedFileForReturn', array($request['orrequest_id'], 0)); ?>">
+                                                <svg class="svg" width="18" height="18">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#download">
+                                                    </use>
+                                                </svg>
+                                            </a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -125,7 +191,8 @@ if (null != $btn) {
                                         if ($request['op_qty'] == $request['orrequest_qty'] && 0 != $request['op_rounding_off']) {
                                             echo ' (' . $request['op_rounding_off'] . ')';
                                         }
-                                        ?></td>
+                                        ?>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -134,7 +201,7 @@ if (null != $btn) {
 
                 <?php echo ($canEdit) ? $returnRequestMsgsForm->getFormHtml() : ''; ?>
 
-                <div class="messageListBlock--js">
+                <div class="mt-5 messageListBlock--js">
                     <h5><?php echo Labels::getLabel('LBL_Return_Request_Messages', $siteLangId); ?> </h5>
                     <div id="loadMoreBtnDiv"></div>
                     <ul class="messages-list" id="messagesList"></ul>
