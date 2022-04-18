@@ -20,6 +20,7 @@ $fld->htmlAfterField = "<span class='form-text text-muted'>" . HtmlHelper::seoFr
 $fld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value)");
 
 $fld = $frm->getField('rating_type');
+$fld->setFieldTagAttribute('class', 'custom-tagify');
 $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_TYPE_TO_SEARCH', $siteLangId));
 $url = UrlHelper::generateFullUrl('RatingTypes');
 $fld->htmlAfterField = '<span class="form-text text-muted"><a href="' . $url . '" target="_blank">' . $url . '</a></span>';
