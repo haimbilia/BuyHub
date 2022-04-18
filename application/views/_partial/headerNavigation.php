@@ -49,7 +49,7 @@
                                 $navchild = '';
                                 $target = $link['nlink_target'];
                                 if (0 < count($link['children'])) {
-                                    $href = 'javascript:void(0)';
+                                    /* $href = 'javascript:void(0)'; */
                                     $navchild = 'navchild';
                                     $target = '_self';
                                 }
