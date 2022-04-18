@@ -40,7 +40,7 @@ $nonPercElements =  [
     BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS
 ];
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
@@ -81,18 +81,30 @@ foreach ($arrListing as $sn => $row) {
                     if (Badge::COND_MANUAL == $badgeConditionType) {
                         $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
 
-                        $icon = "<i class='far fa-edit icon'></i>";
+                        $icon = '<svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                    </use>
+                                </svg>';
                         $title = Labels::getLabel('LBL_EDIT', $siteLangId);
 
                         if ($row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED) {
-                            $icon = "<i class='far fa-eye icon'></i>";
+                            $icon = '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                        </use>
+                                    </svg>';
                             $title = Labels::getLabel('LBL_VIEW', $siteLangId);
                         }
                         $li = $ul->appendElement("li");
                         $li->appendElement('a', array('href' => $href, 'title' => $title), $icon, true);
                         if ($row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_OPEN) {
                             $li = $ul->appendElement("li");
-                            $li->appendElement('a', array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), "<i class='fas fa-trash icon'></i>", true);
+                            $li->appendElement('a', array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => "unlink(event, " . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ")"), '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                            </use>
+                        </svg>', true);
                         }
                     } else if (in_array($row['blinkcond_condition_type'], BadgeLinkCondition::SHOP_BADGES_COND_TYPES)) {
                         $lbl = Labels::getLabel('LBL_N/A', $siteLangId);
@@ -107,7 +119,11 @@ foreach ($arrListing as $sn => $row) {
                         $li->appendElement('plaintext', [], $htm, true);
                     } else {
                         $href = UrlHelper::generateUrl('BadgeLinkConditions', 'conditionForm', [$row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], $row[Badge::DB_TBL_PREFIX . 'type'], $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id']]);
-                        $icon = "<i class='far fa-eye icon'></i>";
+                        $icon = '<svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                    </use>
+                                </svg>';
                         $title = Labels::getLabel('LBL_VIEW', $siteLangId);
                         $li = $ul->appendElement("li");
                         $li->appendElement('a', array('href' => $href, 'title' => $title), $icon, true);
