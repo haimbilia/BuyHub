@@ -36,11 +36,11 @@
 <!-- offcanvas-order-summary -->
 <div class="offcanvas offcanvas-start  offcanvas-order-summary" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel"><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <h3>Order summery data goes here</h3>
+        <h3><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h3>
 
     </div>
 </div>

@@ -38,7 +38,7 @@ if ($hasMultipleLangs || $hasMultipleCurrencies) { ?>
                     <ul class="list-options">
                         <?php foreach ($languages as $langId => $language) { ?>
                             <li class="list-options-item <?php echo ($siteLangId == $langId) ? ' is-active' : ''; ?>">
-                                <a class="list-options-link" class="" href="javascript:void(0);" onClick="setSiteDefaultLang(<?php echo $langId; ?>)"><?php if ($language['language_country_code']) { ?>
+                                <a class="list-options-link" href="javascript:void(0);" onClick="setSiteDefaultLang(<?php echo $langId; ?>)"><?php if ($language['language_country_code']) { ?>
                                         <img width="14" height="14" class="icon" alt="<?php echo Labels::getLabel('LBL_Language_Flag', $siteLangId); ?>" src="<?php echo CONF_WEBROOT_URL; ?>images/flags/<?php echo FatApp::getConfig('CONF_COUNTRY_FLAG_TYPE', FatUtility::VAR_STRING, 'round'); ?>/<?php echo $language['language_country_code'] . '.svg'; ?>">
                                     <?php } ?> <?php echo ' ' . $language['language_name']; ?></a>
                             </li>
