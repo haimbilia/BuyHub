@@ -70,7 +70,7 @@ class BadgesController extends SellerBaseController
         $conditionType = FatApp::getPostedData('badge_trigger_type');
         if ('' != $conditionType) {
             $srch->addCondition('badge_trigger_type', '=', $conditionType);
-        } else if (Badge::APPROVAL_OPEN == $approval) {
+        } else if (Badge::APPROVAL_OPEN === $approval) {
             $srch->addCondition('badge_trigger_type', '=', Badge::COND_MANUAL);
         }
 
