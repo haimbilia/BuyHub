@@ -23,7 +23,6 @@
     $orderObj = new Orders();
     $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses();
     $processingStatuses = array_diff($processingStatuses, [FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")]);
-
     foreach ($orders as $sn => $order) {
         $sr_no++;
         $tr = $tbl->appendElement('tr', array('class' => ''));
@@ -33,7 +32,7 @@
             $td = $tr->appendElement('td');
             switch ($key) {
                 case 'order_id':
-                    $txt = '<a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . $orderDetailUrl . '">';
+                    $txt = '<a title="' . Labels::getLabel('LBL_VIEW_ORDER_DETAIL', $siteLangId) . '" href="' . $orderDetailUrl . '">';
                     $txt .= $order['op_invoice_number'];
                     $txt .= '</a><br/>' . FatDate::format($order['order_date_added']);
                     $td->appendElement('plaintext', array(), $txt, true);
@@ -43,14 +42,16 @@
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'total':
-                    $txt = '';
-                    // $txt .= CommonHelper::displayMoneyFormat($order['order_net_amount']);
-                    $txt .= CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order, 'netamount', false, User::USER_TYPE_SELLER));
+                    $txt = CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($order, 'netamount', false, User::USER_TYPE_SELLER));
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'opshipping_by_seller_user_id':
                     $label = (0 == $order[$key] ? Labels::getLabel('LBL_ADMIN', $siteLangId) : Labels::getLabel('LBL_ME', $siteLangId));
                     $class = (0 == $order[$key] ? 'badge-warning' : 'badge-success');
+                    if ($order['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                        $label = Labels::getLabel('LBL_N/A', $siteLangId);
+                        $class = 'badge-danger';
+                    }
                     $htm = '<span class="badge ' . $class . '">' . $label . '</span>';
 
                     $td->appendElement('plaintext', array(), $htm, true);
