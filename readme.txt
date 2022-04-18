@@ -689,6 +689,7 @@ Updates/Fixes :
     => 063922 - Seller/Buyer/Affiliate/Advertiser: Sign In page design is not aligned/correct while clicking on the "Withdraw" option under the My credit section if the session is expired
     => 063920 - Seller: "Fulfilled By: Admin" is showing for the digital products on the order listing page at the seller's end
     => 063688 - Admin: Placeholder text is not proper for the Rating types field.
+    => 063907 - Buyer: The user is not able to send the invitation for Share and Earn
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
