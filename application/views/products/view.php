@@ -132,7 +132,7 @@ $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $prod
 <?php echo $this->includeTemplate('_partial/shareThisScript.php'); ?>
 
 <!-- JWPlayer -->
-<script defer>
+<script>
     jwplayer.key = '<?php echo FatApp::getConfig("CONF_JW_PLAYER_KEY", null, ''); ?>';
 </script>
 <!-- JWPlayer -->
