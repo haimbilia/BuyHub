@@ -122,4 +122,6 @@ php_errors.log
 /application/views/css/main-rtl.css.map
 /dashboard/views/css/main-ltr.css.map
 /dashboard/views/css/main-rtl.css.map
+/manager-application/views/css/main-ltr.css.map
+/manager-application/views/css/main-rtl.css.map
 /.php-cs-fixer.cache
