@@ -66,7 +66,6 @@ $(function () {
     }
     
     withdrawalOptionsForm = function (payoutType = -1) {
-        $.ykmodal(fcom.getLoader());
         var url = fcom.makeUrl('Account', 'requestWithdrawal');
         if (-1 != payoutType) {
             url = fcom.makeUrl(payoutType, 'getRequestForm');

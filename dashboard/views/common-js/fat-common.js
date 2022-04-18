@@ -59,7 +59,7 @@ var fcom = {
         var dbmsg = o.dbmsg || '<img src="' + fcom.makeUrl() + 'img/loading.gif" alt="Processing..">';
         var dvdebug = $('<div />').append(dbmsg);
         dvdebug.appendTo($('#dv-bg-processes'));
-        
+
         $.ajax({
             method: "POST",
             url: url,
@@ -126,24 +126,26 @@ var fcom = {
     },
 
     updateWithAjax: function (url, data, fn, options, autoClose = true) {
-		fcom.displayProcessing();
-		let processingClass = fcom.processingCounter;
-		var o = $.extend(true, { fOutMode: 'json' }, options);
-		this.ajax(url, data, function (ans) {
-			fcom.closeProcessing(processingClass);
-			if (ans.status != 1) {
-				fcom.removeLoader();
-				if (typeof ans.displayLoginForm != 'undefined' && ans.displayLoginForm == 1) {
-					loginPopUpBox();
-					return;
-				}
-				fcom.displayErrorMessage(ans.msg);
-				return;
-			}
-			fcom.displaySuccessMessage(ans.msg);
-			fn(ans);
-		}, o);
-	},
+        fcom.displayProcessing();
+        let processingClass = fcom.processingCounter;
+        var o = $.extend(true, { fOutMode: 'json' }, options);
+        this.ajax(url, data, function (ans) {
+            fcom.closeProcessing(processingClass);
+            if (ans.status != 1) {
+                fcom.removeLoader();
+                fcom.displayErrorMessage(ans.msg);
+                if (typeof ans.displayLoginForm != 'undefined' && ans.displayLoginForm == 1) {
+                    setTimeout(() => {
+                        window.location = fcom.makeUrl('GuestUser', 'loginForm', [], siteConstants.webrootfront);
+                    }, 1000);
+                    return;
+                }
+                return;
+            }
+            fcom.displaySuccessMessage(ans.msg);
+            fn(ans);
+        }, o);
+    },
 
     camel2dashed: function (str) {
         return str.replace(/([a-zA-Z])(?=[A-Z])/g, '$1-').toLowerCase();
