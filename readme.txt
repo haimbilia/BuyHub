@@ -690,6 +690,7 @@ Updates/Fixes :
     => 063920 - Seller: "Fulfilled By: Admin" is showing for the digital products on the order listing page at the seller's end
     => 063688 - Admin: Placeholder text is not proper for the Rating types field.
     => 063907 - Buyer: The user is not able to send the invitation for Share and Earn
+    => 063668 - Buyer: Map view button is not working.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
