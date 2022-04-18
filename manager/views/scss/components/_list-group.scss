@@ -116,6 +116,7 @@
 .list-checkboxes {
     display: flex;
     flex-wrap: wrap;
+    gap: 1rem;
     li {
         flex: 0 0 30%;
         max-width: 30%;

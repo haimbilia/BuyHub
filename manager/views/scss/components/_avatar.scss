@@ -35,7 +35,12 @@ $avatar: "avatar";
     }
 
     .file-upload {
+        position: absolute;
         opacity: 0;
+    }
+    &__upload {
+        right: -11px;
+        top: 55px;
     }
     &__cancel {
         bottom: 0;
@@ -157,8 +162,8 @@ $avatar: "avatar";
             border-radius: 50%;
         }
         .#{$avatar}__upload {
-            right: 0px;
-            top: 5px;
+            // right: 0px;
+            // top: 5px;
         }
         .#{$avatar}__cancel {
             right: 3px;

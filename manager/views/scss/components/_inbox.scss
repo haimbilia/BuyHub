@@ -485,28 +485,28 @@
 
 .inbox {
     .inbox__list {
-        .inbox__items[data-type='inbox'] {
-            .inbox__item[data-type='inbox'] {
+        .inbox__items[data-type="inbox"] {
+            .inbox__item[data-type="inbox"] {
                 display: flex;
             }
         }
-        .inbox__items[data-type='marked'] {
-            .inbox__item[data-type='marked'] {
+        .inbox__items[data-type="marked"] {
+            .inbox__item[data-type="marked"] {
                 display: flex;
             }
         }
-        .inbox__items[data-type='draft'] {
-            .inbox__item[data-type='draft'] {
+        .inbox__items[data-type="draft"] {
+            .inbox__item[data-type="draft"] {
                 display: flex;
             }
         }
-        .inbox__items[data-type='sent'] {
-            .inbox__item[data-type='sent'] {
+        .inbox__items[data-type="sent"] {
+            .inbox__item[data-type="sent"] {
                 display: flex;
             }
         }
-        .inbox__items[data-type='trash'] {
-            .inbox__item[data-type='trash'] {
+        .inbox__items[data-type="trash"] {
+            .inbox__item[data-type="trash"] {
                 display: flex;
             }
         }
@@ -1113,7 +1113,7 @@
                     font-size: 1rem;
                     color: $txt-gray;
                     padding: 15px 25px;
-                    font-family: 'Poppins';
+                    font-family: "Poppins";
                 }
                 .ql-editor.ql-blank {
                     &:before {
@@ -1137,12 +1137,12 @@
                     font-weight: 400;
                     font-size: 1rem;
                     color: $txt-gray;
-                    font-family: 'Poppins';
+                    font-family: "Poppins";
                     &:before {
                         font-weight: 400;
                         font-size: 1rem;
                         color: $txt-gray;
-                        font-family: 'Poppins';
+                        font-family: "Poppins";
                     }
                 }
             }

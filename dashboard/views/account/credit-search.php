@@ -13,20 +13,21 @@
 
     $tbl = new HtmlElement('table', array('class' => 'table'));
     $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
-    foreach ($arr_flds as $val) {
-        $e = $th->appendElement('th', array(), $val);
+    foreach ($arr_flds as $key => $val) {
+        $class = 'utxn_id' == $key ? ['class' => 'text-nowrap'] : [];
+        $e = $th->appendElement('th', $class, $val);
     }
 
     $sr_no = 0;
     foreach ($arrListing as $sn => $row) {
         $sr_no++;
-        $tr = $tbl->appendElement('tr', array('class' => ''));
+        $tr = $tbl->appendElement('tr');
 
         foreach ($arr_flds as $key => $val) {
             $td = $tr->appendElement('td');
             switch ($key) {
                 case 'utxn_id':
-                    $td->appendElement('plaintext', array(), Transactions::formatTransactionNumber($row[$key]), true);
+                    $td->appendElement('plaintext', array(),  '<div class="text-nowrap">' . Transactions::formatTransactionNumber($row[$key]) . '</div>', true);
                     break;
                 case 'utxn_gateway_txn_id':
                     $pgTxnId = !empty($row[$key]) ? $row[$key] : Labels::getLabel('LBL_N/A', $siteLangId);

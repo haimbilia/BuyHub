@@ -20,15 +20,15 @@
                                 echo CommonHelper::replaceStringData($str, ['{ORDER-NUMBER}' => $order['order_number']])
                                 ?>
                             </h3>
-                        </div> 
-                        <div class="card-toolbar <?php echo (1 >= count($sellers) ?'hide': ''  ) ?>">
+                        </div>
+                        <div class="card-toolbar <?php echo (1 >= count($sellers) ? 'hide' : '') ?>">
                             <select id='allSellerJs' class="form-select" onchange="getOrderParticulars(<?php echo $order['order_id'] ?>, this)">
                                 <option value=""><?php echo Labels::getLabel('LBL_ALL_SELLERS', $siteLangId); ?></option>
                                 <?php foreach ($sellers as $sellerId => $shopName) { ?>
                                     <option value="<?php echo $sellerId; ?>" <?php echo ($opSellerId == $sellerId ? 'selected="selected"' : ''); ?>><?php echo $shopName; ?></option>
                                 <?php } ?>
                             </select>
-                        </div>        
+                        </div>
                     </div>
                     <?php require_once(CONF_THEME_PATH . 'orders/item-summary.php'); ?>
                 </div>
@@ -60,7 +60,7 @@
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"><i class="fas fa-address-card"></i>
+                                <h3 class="card-head-title">
                                     <?php echo Labels::getLabel('LBL_CONTACT_INFORMATION', $siteLangId); ?>
                                 </h3>
                             </div>
@@ -98,7 +98,7 @@
                     <div class="card card-toggle">
                         <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block1" aria-expanded="false" aria-controls="order-block1">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"><i class="fas fa-address-card"></i>
+                                <h3 class="card-head-title">
                                     <?php echo Labels::getLabel('LBL_SHIPPING_ADDRESS', $siteLangId); ?>
                                 </h3>
                             </div>
@@ -112,7 +112,7 @@
                 <div class="card card-toggle">
                     <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block2" aria-expanded="false" aria-controls="order-block2">
                         <div class="card-head-label">
-                            <h3 class="card-head-title"><i class="fas fa-address-card"></i>
+                            <h3 class="card-head-title">
                                 <?php echo Labels::getLabel('LBL_BILLING_ADDRESS', $siteLangId); ?>
                             </h3>
                         </div>

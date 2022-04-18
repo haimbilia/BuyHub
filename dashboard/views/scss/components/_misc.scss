@@ -819,7 +819,7 @@ mark,
         .label {
             color: $txt-gray;
             padding: 0;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0;
         }
         .value {
             font-weight: 500;
@@ -869,7 +869,7 @@ mark,
         flex-wrap: wrap;
         li {
             padding: 0;
-            padding-bottom: 1rem;
+            padding-bottom: 1.5rem;
             flex: 0 0 50%;
             max-width: 50%;
         }
@@ -1506,7 +1506,7 @@ mark,
             width: 1rem;
             height: 1rem;
         }
-    }  
+    }
     p {
         font-size: 0.9rem;
     }

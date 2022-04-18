@@ -52,7 +52,7 @@
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"><i class="fas fa-address-card"></i>
+                                <h3 class="card-head-title">
                                     <?php echo Labels::getLabel('LBL_CONTACT_INFORMATION', $siteLangId); ?>
                                 </h3>
                             </div>

@@ -28,7 +28,7 @@ $input-color: #474747;
     &:focus,
     &:hover {
         box-shadow: none;
-        background-color: transparent;
+        background-color: $input-bg;
         transition: 0.3s all ease-in-out;
         border-color: darken($border-color, 10);
     }

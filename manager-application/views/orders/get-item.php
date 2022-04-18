@@ -196,6 +196,7 @@ foreach ($op['taxOptions'] as $key => $val) {
             ?>
 
                 <li class="list-stats-item list-stats-item-full">
+                    <span class="separator"></span>
                     <span class="value"><?php echo Labels::getLabel('LBL_PACKAGE_DETAIL', $siteLangId); ?>:</span>
                 </li>
                 <li class="list-stats-item">

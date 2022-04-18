@@ -349,8 +349,7 @@ class ImageController extends FatController
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, $sizeType, $aspectRatioType);
 
-        if ($sizeType && $sizeType != ImageDimension::VIEW_COLLECTION_PAGE) {
-
+        if ($sizeType) {
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);

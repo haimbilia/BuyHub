@@ -37,6 +37,7 @@ $dropzone-height: 160px;
         opacity: 0;
         width: 100%;
         height: 100%;
+        cursor: pointer;
     }
     &-msg-title {
         color: $txt-body;

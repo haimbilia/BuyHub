@@ -679,6 +679,10 @@ Updates/Fixes :
     => 063821 - Seller: The User is not able to add products.
     => 063801 - Admin: The order status timeline is not showing correctly according to the date on the order details page at the admin's end and the timeline design is also not matched with the seller's side
     => 063423 - Seller UI: Scrolling is not working properly when the seller awaiting the admin's approval and charts values are also not showing properly on the Dashboard
+    => 063840 - Admin >> Orders >> View detail: UI is not correct.
+    => 063810 - Seller: Cross button is not showing on Cancel order request
+    => 063818 - Admin: Sorting is changed after performing an action on the product review's request at the admin's end
+    => 063383 - Seller UI: Not properly defined " search by what?" on the search field under the My Credit section and "Transaction ID" is shown in the 2-lines in the My Credits table
     => 063812 - Seller : When the Seller adds a pickup address it is showing twice.
     => 063825 - Buyer: 404 error page is showing while the buyer clicking on the "Write A Review" option on the product details page
     => 063808 - Seller: Shipping charges are showing on the order details page at the seller's end if shipping is provided by the admin

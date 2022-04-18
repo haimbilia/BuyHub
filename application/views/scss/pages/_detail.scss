@@ -7,7 +7,7 @@
 .detail-first-fold {
     @include media-breakpoint-up(lg) {
         display: grid;
-        grid-gap: 6rem;
+        grid-gap: 5rem;
         grid-template-columns: 1fr 350px;
     }
 }
@@ -177,6 +177,7 @@
 }
 
 //product-sharing
+$sharing-height: 50px;
 .product-sharing {
     margin-top: 1rem;
     display: flex;
@@ -184,8 +185,9 @@
     align-items: center;
     .btn-favorite {
         min-width: 120px;
+        height: $sharing-height;
         border: $border;
-        border-radius: 2px;
+        border-radius: 0;
         background-color: transparent;
         color: $star-color;
     }
@@ -195,9 +197,9 @@
         justify-content: center;
         //grid-gap: 10px;
         border: $border;
-        border-radius: 2px;
+        border-radius: 0;
         background-color: transparent;
-        min-height: 48px;
+        height: $sharing-height;
         &-item {
             margin: auto;
         }

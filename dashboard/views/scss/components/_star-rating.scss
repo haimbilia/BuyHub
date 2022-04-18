@@ -26,7 +26,6 @@
     color: #646464;
 }
 
-
 /******* EXAMPLE B *******/
 
 .rating-b .br-widget {
@@ -59,7 +58,6 @@
     background-color: #cbcbcb;
 }
 
-
 /******* EXAMPLE C *******/
 
 .rating-c .br-widget {
@@ -86,7 +84,6 @@
     background-color: #59a6d6;
     color: white;
 }
-
 
 /******* EXAMPLE D *******/
 
@@ -123,7 +120,6 @@
     color: #646464;
 }
 
-
 /******* EXAMPLE E *******/
 
 .rating-e .br-widget a {
@@ -146,7 +142,6 @@
     color: white;
 }
 
-
 /******* EXAMPLE F *******/
 
 .rating-f .br-widget {
@@ -154,19 +149,23 @@
 }
 
 .rating-f .br-widget a {
-    background: url('../images/star.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-size: 80%;
+    background-image: url("../images/retina/star-gray.svg");
     width: 24px;
     height: 24px;
     display: block;
+    padding: 0;
     float: #{$start-direction};
 }
 
 .rating-f .br-widget a:hover,
 .rating-f .br-widget a.br-active,
 .rating-f .br-widget a.br-selected {
-    background-position: 0 24px;
+    background-image: url("../images/retina/star-yellow.svg");
 }
-
 
 /******* EXAMPLE G *******/
 
@@ -195,10 +194,7 @@
     color: #646464;
 }
 
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-only screen and (min-device-pixel-ratio: 1.5),
-(-webkit-min-device-pixel-ratio: 2),
-(min-resolution: 192dpi) {
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .rating-f .br-widget a {
         /* background: url('../images/star@2x.png');
         background-size: 24px 48px; */
@@ -208,11 +204,11 @@ only screen and (min-device-pixel-ratio: 1.5),
 // NEW RATING STYLE
 .rating {
     --rating-fg: #f5861f;
-    --size: .875rem;
+    --size: 0.875rem;
     --space: 0.15em;
     position: relative;
     display: flex;
-    margin-#{$start-direction}: - 0.15em;
+    margin-#{$start-direction}: -0.15em;
     &-action,
     &-view {
         display: inline-flex;
@@ -236,7 +232,7 @@ only screen and (min-device-pixel-ratio: 1.5),
         @for $i from 1 through 5 {
             &[data-rating="#{$i}"] {
                 .icon:nth-last-child(#{$i}),
-                .icon:nth-last-child(#{$i})~.icon {
+                .icon:nth-last-child(#{$i}) ~ .icon {
                     fill: var(--rating-fg);
                     stroke: var(--rating-fg);
                 }
@@ -246,7 +242,7 @@ only screen and (min-device-pixel-ratio: 1.5),
     &-action {
         .icon {
             &:hover,
-            &:hover~.icon {
+            &:hover ~ .icon {
                 fill: var(--rating-fg);
                 stroke: var(--rating-fg);
             }
@@ -257,7 +253,7 @@ only screen and (min-device-pixel-ratio: 1.5),
             .icon {
                 cursor: pointer;
                 &:hover,
-                &:hover~.icon {
+                &:hover ~ .icon {
                     fill: var(--rating-fg);
                     stroke: var(--rating-fg);
                 }
@@ -265,17 +261,17 @@ only screen and (min-device-pixel-ratio: 1.5),
         }
     }
     &__count {
-        font-size: .875rem;
+        font-size: 0.875rem;
         color: $txt-gray;
-        padding-#{$start-direction}: .5rem;
+        padding-#{$start-direction}: 0.5rem;
     }
     &__text {
-        font-size:12px;
+        font-size: 12px;
         color: $txt-gray;
         border: $border;
         border-radius: 50px;
         display: inline-block;
         padding: 0.15rem 1rem;
-        margin-bottom: .5rem;
+        margin-bottom: 0.5rem;
     }
 }
