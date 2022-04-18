@@ -4,10 +4,10 @@
     align-items: center;
     color: $txt-gray;
     border: $border;
-    padding: .45rem 1rem;
-    border-radius: .25rem;
+    padding: 0.45rem 1rem;
+    border-radius: 0.25rem;
     //margin: .875rem 0;
-    font-size: .8rem;
+    font-size: 0.8rem;
     &:hover {
         cursor: pointer;
         color: $primary-color;
@@ -20,7 +20,7 @@
         cursor: pointer;
     }
     span {
-        font-size: .875rem;
+        font-size: 0.875rem;
         color: currentColor;
         svg {
             fill: currentColor;
@@ -31,7 +31,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-#{$end-direction}: .25rem;
+            margin-#{$end-direction}: 0.25rem;
         }
     }
 }
@@ -39,7 +39,8 @@
 .uploaded-media {
     margin-top: 1rem;
     ul {
-        display: flex; flex-wrap: wrap;
+        display: flex;
+        flex-wrap: wrap;
         li {
             margin-#{$end-direction}: 1rem;
             margin-bottom: 1rem;
@@ -56,7 +57,7 @@
         padding: 10px;
         background: #fff;
     }
-    .close-layer {  
+    .close-layer {
         box-shadow: $shadow1;
         background: #fff;
         border-radius: 50%;
@@ -71,9 +72,9 @@
     .review-media-list {
         display: flex;
         flex-wrap: wrap;
-        margin: 0 -.35rem;
+        margin: 0 -0.35rem;
         li {
-            margin: 0 .35rem 1rem .35rem;
+            margin: 0 0.35rem 1rem 0.35rem;
             flex: 0 0 60px;
             max-width: 60px;
             position: relative;
