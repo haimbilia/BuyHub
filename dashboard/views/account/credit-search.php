@@ -26,7 +26,7 @@
             $td = $tr->appendElement('td');
             switch ($key) {
                 case 'utxn_id':
-                    $td->appendElement('plaintext', array(), Transactions::formatTransactionNumber($row[$key]), true);
+                    $td->appendElement('plaintext', array(),  '<div class="text-nowrap">' . Transactions::formatTransactionNumber($row[$key]) . '</div>', true);
                     break;
                 case 'utxn_gateway_txn_id':
                     $pgTxnId = !empty($row[$key]) ? $row[$key] : Labels::getLabel('LBL_N/A', $siteLangId);
