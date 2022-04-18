@@ -1,368 +1,184 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$canViewShippingCharges = isset($canViewShippingCharges) ? $canViewShippingCharges : false;
-$canViewTaxCharges = isset($canViewTaxCharges) ? $canViewTaxCharges : false;
+
 $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
-
-$transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderDetail['plugin_code']);
-$cartTotal = 0;
-$shippingCharges = 0;
-$totalTax = 0;
-
-foreach ($arr as $childOrder) {
-    $cartTotal = $cartTotal + CommonHelper::orderProductAmount($childOrder, 'cart_total');
-    $shippingCharges = $shippingCharges + CommonHelper::orderProductAmount($childOrder, 'shipping');
-    if (empty($childOrder['taxOptions'])) {
-        $totalTax = $totalTax + CommonHelper::orderProductAmount($childOrder, 'TAX');
-    } else {
-        foreach ($childOrder['taxOptions'] as $key => $val) {
-            $totalTax = $totalTax + $val['value'];
-        }
-    }
-}
 ?>
-<div class="col-md-4">
-    <div class="ml-md-4">
-        <div class="order-block">
-            <h4><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h4>
-            <div class="cart-summary">
-                <ul>
-                    <?php if (isset($orderDetail['user_name'])) { ?>
-                        <li>
-                            <span class="lable"><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?> </span>
-                            <span class="value"><?php echo $orderDetail['user_name']; ?></span>
-                        </li>
-                    <?php } ?>
-                    <li>
-                        <span class="lable"><?php echo Labels::getLabel('MSG_Order_Created', $siteLangId); ?> </span>
-                        <span class="value"><?php echo FatDate::format($orderDetail['order_date_added']); ?></span>
-                    </li>
-                    <?php if (0 < $shippingCharges && true == $canViewShippingCharges) { ?>
-                        <li>
-                            <span class="lable">
-                                <?php if (true === $primaryOrder) {
-                                    echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId);
-                                } else { ?>
-                                    <a class="dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $orderDetail['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>)">
-                                        <?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId); ?>
-                                    </a>
-                                <?php } ?>
-                            </span>
-                            <span class="value">
-                                <?php echo CommonHelper::displayMoneyFormat($shippingCharges, true, false, true, false, true); ?>
-                            </span>
-                        </li>
-                    <?php } ?>
-
-                    <?php if (true == $canViewTaxCharges && 0 < $totalTax) { ?>
-                        <li>
-                            <span class="lable">
-                                <?php if (true === $primaryOrder) {
-                                    echo Labels::getLabel('LBL_Tax_Charges', $siteLangId);
-                                } else { ?>
-                                    <a class="dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $orderDetail['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
-                                        <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
-                                    </a>
-                                <?php } ?>
-                            </span>
-                            <span class="value"><?php echo CommonHelper::displayMoneyFormat($totalTax, true, false, true, false, true); ?></span>
-                        </li>
-                    <?php } ?>
-                    <li>
-                        <span class="lable"><?php echo Labels::getLabel('Lbl_Cart_Total', $siteLangId) ?></span>
-                        <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartTotal, true, false, true, false, true); ?></span>
-                    </li>
-                    <?php
-                    $discount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT', true)) : $orderDetail['order_discount_total'];
-                    if (0 < $discount) { ?>
-                        <li class="discounted">
-                            <span class="lable"><?php echo Labels::getLabel('LBL_Discount', $siteLangId) ?></span>
-                            <span class="value">
-                                <?php echo '-' . CommonHelper::displayMoneyFormat($discount, true, false, true, false, true); ?>
-                            </span>
-                        </li>
-                    <?php } ?>
-                    <?php
-                    $volDiscount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'VOLUME_DISCOUNT', false)) : $orderDetail['order_volume_discount_total'];
-                    if (0 < $volDiscount) { ?>
-                        <li class="discounted">
-                            <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME/LOYALTY_DISCOUNT', $siteLangId);  ?></span>
-                            <span class="value">
-                                <?php echo '-' . CommonHelper::displayMoneyFormat($volDiscount, true, false, true, false, true); ?>
-                            </span>
-                        </li>
-                    <?php } ?>
-                    <?php
-                    if (!$isSellerDashboardView) {
-                    $rewards = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'REWARDPOINT', true)) : $orderDetail['order_reward_point_value'];
-                    if (0 < $rewards) { ?>
-                        <li class="discounted">
-                            <span class="lable"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId); ?>
-                            </span>
-                            <span class="value">
-                                <?php echo '-' . CommonHelper::displayMoneyFormat($rewards, true, false, true, false, true); ?>
-                            </span>
-                        </li>
-                    <?php }
-                    } ?>
-                    <?php if (array_key_exists('order_rounding_off', $orderDetail) && 0 != $orderDetail['order_rounding_off']) { ?>
-                        <li>
-                            <span class="lable">
-                                <?php echo (0 < $orderDetail['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?>
-                            </span>
-                            <span class="value">
-                                <?php echo CommonHelper::displayMoneyFormat($orderDetail['order_rounding_off'], true, false, true, false, true); ?>
-                            </span>
-                        </li>
-                    <?php } ?>
-                    <li class="highlighted">
-                        <span class="lable"><?php echo Labels::getLabel('LBL_NET_AMOUNT', $siteLangId) ?></span>
-                        <span class="value">
-                            <?php
-                            if (true === $primaryOrder) {
-                                echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrderDetail, 'NETAMOUNT',false, ($isSellerDashboardView ? User::USER_TYPE_SELLER :false) ), true, false, true, false, true);
-                            } else {
-                                echo CommonHelper::displayMoneyFormat($orderDetail['order_net_amount'], true, false, true, false, true);
-                            }
-                            ?>
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
-        </div>
-        <?php if (isset($totalSaving) && 0 < $totalSaving) { ?>
-            <div class="total-savings">
-                <img class="total-savings-img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/savings.svg" alt="">
-                <p><?php echo Labels::getLabel('MSG_YOUR_TOTAL_SAVINGS_AMOUNT_ON_THIS_ORDER', $siteLangId); ?></p>
-                <span class="amount"><?php echo CommonHelper::displayMoneyFormat($totalSaving, true, false, true, false, true); ?></span>
-
-            </div>
-        <?php } ?>
-
-        <?php if (isset($orderDetail['op_product_dimension_unit']) && isset($unitTypeArray[$orderDetail['op_product_dimension_unit']])) { ?>
-            <div class="order-block">
-                <h4><?php echo Labels::getLabel('LBL_PACKAGE_DETAIL', $siteLangId); ?></h4>
-                <div class="order-block-data">
-                    <?php
-                    $data = $this->variables + [
-                        'unitType' => $unitTypeArray[$orderDetail['op_product_dimension_unit']],
-                    ];
-                    $this->includeTemplate('_partial/order/package-detail.php', $data, false);
-                    ?>
-                </div>
-            </div>
-        <?php } ?>
-
-        <?php if (!empty($orderDetail['shippingAddress']) && $productType != Product::PRODUCT_TYPE_DIGITAL) { ?>
-            <div class="order-block">
-                <h4><?php echo Labels::getLabel('LBL_Shipping_ADDRESS', $siteLangId); ?></h4>
-                <div class="order-block-data">
-                    <?php
-                    $data = $this->variables + ['address' => $orderDetail['shippingAddress']];
-                    $this->includeTemplate('_partial/order/address.php', $data, false);
-                    ?>
-                </div>
-            </div>
-        <?php } ?>
-        <div class="order-block">
-            <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block2" aria-expanded="false" aria-controls="order-block2">
-                <?php echo Labels::getLabel('LBL_Billing_ADDRESS', $siteLangId); ?>: <i class="dropdown-toggle-custom-arrow"></i></h4>
-            <div class="collapse" id="order-block2">
-                <div class="order-block-data">
-                    <?php
-                    $data = $this->variables + [
-                        'address' => $orderDetail['billingAddress'],
-                    ];
-                    $this->includeTemplate('_partial/order/address.php', $data, false);
-                    ?>
-                </div>
-            </div>
-
-        </div>
-        <?php if ($primaryOrder && !empty($orderDetail['pickupAddress'])) { ?>
-            <div class="order-block">
-                <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block3" aria-expanded="false" aria-controls="order-block3">
-                    <?php echo Labels::getLabel('LBL_PICKUP_ADDRESS', $siteLangId); ?>:
-                    <i class="dropdown-toggle-custom-arrow"></i>
-                </h4>
-                <div class="collapse" id="order-block3">
-                    <div class="order-block-data">
+<div class="col-md-8">
+    <div class="card">
+        <div class="card-head">
+            <h5 class="card-title">
+                <div class="order-number">
+                    <small class="sm-txt"><?php echo Labels::getLabel('LBL_ORDER_#', $siteLangId); ?></small>
+                    <span class="numbers">
+                        <?php echo (true == $primaryOrder) ? $childOrderDetail['op_invoice_number'] : $orderDetail['order_number']; ?>
                         <?php
-                        $data = $this->variables + [
-                            'address' => $orderDetail['pickupAddress'],
-                        ];
-                        $this->includeTemplate('_partial/order/address.php', $data, false);
-                        ?>
-                    </div>
-                </div>
-            </div>
-        <?php } ?>
-
-        <?php if (!empty($pickUpDetails) && 0 < $pickUpDetails['opsp_scheduled']) {
-            $pickUpPostedDetails = json_decode($pickUpDetails['opsp_requested_data'], true);
-            $pickUpflds = $shippingApiObj->getPickupFormElementsArr();
-        ?>
-            <div class="order-block">
-                <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block7" aria-expanded="false" aria-controls="order-block3">
-                    <?php echo Labels::getLabel('LBL_PICKUP_TIMING', $siteLangId); ?>:
-                    <i class="dropdown-toggle-custom-arrow"></i>
-                </h4>
-                <div class="collapse" id="order-block7">
-                    <div class="order-block-data">
-                        <ul class="list-stats">
-                            <?php foreach ($pickUpflds as $fldName => $fldVal) {
-                                if (!isset($pickUpPostedDetails[$fldName])) {
-                                    continue;
-                                } ?>
-                                <li class="list-stats-item">
-                                    <span class="lable"><?php echo $fldVal['label']; ?></span>
-                                    <span class="value"><?php echo $pickUpPostedDetails[$fldName]; ?></span>
-                                </li>
-                            <?php } ?>
-                        </ul>
-
-                    </div>
-                </div>
-            </div>
-        <?php } ?>
-
-
-        <?php if (true === $primaryOrder) {
-            $selected_method = '';
-            if ($childOrderDetail['order_pmethod_id'] > 0) {
-                $selected_method .= empty($childOrderDetail["plugin_name"]) ? CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["plugin_code"]) : $childOrderDetail["plugin_name"];
-            }
-            if ($childOrderDetail['order_is_wallet_selected'] > 0) {
-                $selected_method .= ($selected_method != '') ? ' + ' . Labels::getLabel("LBL_Wallet", $siteLangId) : Labels::getLabel("LBL_Wallet", $siteLangId);
-            }
-            if ($childOrderDetail['order_reward_point_used'] > 0) {
-                $selected_method .= ($selected_method != '') ? ' + ' . Labels::getLabel("LBL_Rewards", $siteLangId) : Labels::getLabel("LBL_Rewards", $siteLangId);
-            }
-
-            if (in_array(strtolower($childOrderDetail['plugin_code']), ['cashondelivery', 'payatstore'])) {
-                $selected_method = (empty($childOrderDetail['plugin_name'])) ? $childOrderDetail['plugin_identifier'] : $childOrderDetail['plugin_name'];
-            } ?>
-            <div class="order-block">
-                <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block5" aria-expanded="false" aria-controls="order-block3">
-                    <?php echo Labels::getLabel('LBL_PAYMENT_METHOD', $siteLangId); ?>:
-                    <i class="dropdown-toggle-custom-arrow"></i>
-                </h4>
-                <div class="collapse" id="order-block5">
-                    <div class="order-block-data">
-                        <ul class="list-stats">
-                            <li class="list-stats-item">
-                                <span class="lable"><?php echo Labels::getLabel('LBL_Payment_Method', $siteLangId); ?></span>
-                                <span class="value"><?php echo $selected_method; ?></span>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
-            </div>
-        <?php } ?>
-
-        <?php
-        if (true == $transferBank) {
-            $pluginSettingsObj = new PluginSetting(0, 'TransferBank');
-            $settings = $pluginSettingsObj->get($siteLangId);
-        ?>
-            <div class="order-block">
-                <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block4" aria-expanded="false" aria-controls="order-block3">
-                    <?php echo Labels::getLabel('LBL_BANK_DETAIL', $siteLangId); ?>:
-                    <i class="dropdown-toggle-custom-arrow"></i>
-                </h4>
-                <div class="collapse" id="order-block4">
-                    <div class="order-block-data">
-
-                        <ul class="list-stats">
-                            <li class="list-stats-item">
-                                <span class="lable"><?php echo Labels::getLabel('LBL_BUSSINESS_NAME', $siteLangId); ?></span>
-                                <span class="value"><?php echo $settings['business_name']; ?></span>
-
-                            </li>
-                            <li class="list-stats-item">
-                                <span class="lable"><?php echo Labels::getLabel('LBL_BANK_NAME', $siteLangId); ?></span>
-                                <span class="value"><?php echo $settings['bank_name']; ?></span>
-
-                            </li>
-                            <li class="list-stats-item">
-                                <span class="lable"><?php echo Labels::getLabel('LBL_BANK_BRANCH', $siteLangId); ?></span>
-                                <span class="value"><?php echo $settings['bank_branch']; ?></span>
-
-                            </li>
-                            <li class="list-stats-item">
-                                <span class="lable"><?php echo Labels::getLabel('LBL_ACCOUNT_#', $siteLangId); ?></span>
-                                <span class="value"><?php echo $settings['account_number']; ?></span>
-
-                            </li>
-                            <li class="list-stats-item">
-                                <span class="lable"><?php echo Labels::getLabel('LBL_IFSC_/_MICR', $siteLangId); ?></span>
-                                <span class="value"><?php echo $settings['ifsc']; ?></span>
-
-                            </li>
-                            <?php if (!empty($settings['routing'])) { ?>
-                                <li class="list-stats-item">
-                                    <span class="lable"><?php echo Labels::getLabel('LBL_ROUTING_#', $siteLangId); ?></span>
-                                    <span class="value"><?php echo $settings['routing']; ?></span>
-
-                                </li>
-                            <?php } ?>
-                            <?php if (!empty($settings['bank_notes'])) { ?>
-                                <li class="list-stats-item">
-                                    <span class="lable"><?php echo Labels::getLabel('LBL_OTHER_NOTES', $siteLangId); ?></span>
-                                    <span class="value"><?php echo $settings['bank_notes']; ?></span>
-                                </li>
-                            <?php } ?>
-                        </ul>
-
-                    </div>
-                </div>
-            </div>
-        <?php } ?>
-        <?php if (!empty($orderDetail['payments'])) { ?>
-            <div class="order-block">
-                <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block6" aria-expanded="false" aria-controls="order-block3">
-                    <?php echo Labels::getLabel('LBL_Payment_History', $siteLangId); ?>:
-                    <i class="dropdown-toggle-custom-arrow"></i>
-                </h4>
-                <div class="collapse" id="order-block6">
-                    <div class="order-block-data">
-
-                        <?php foreach ($orderDetail['payments'] as $i => $row) { ?>
-                            <ul class="list-stats">
-                                <li class="list-stats-item">
-                                    <span class="lable"><?php echo Labels::getLabel('LBL_Date_Added', $siteLangId); ?></span>
-                                    <span class="value"><?php echo FatDate::format($row['opayment_date']); ?></span>
-                                </li>
-                                <li class="list-stats-item">
-                                    <span class="lable"><?php echo Labels::getLabel('LBL_Txn_Id', $siteLangId); ?></span>
-                                    <span class="value"><?php echo $row['opayment_gateway_txn_id']; ?></span>
-                                </li>
-                                <li class="list-stats-item">
-                                    <span class="lable"><?php echo Labels::getLabel('LBL_Payment_Method', $siteLangId); ?></span>
-                                    <span class="value"><?php echo $row['opayment_method']; ?></span>
-                                </li>
-                                <li class="list-stats-item">
-                                    <span class="lable"><?php echo Labels::getLabel('LBL_Amount', $siteLangId); ?></span>
-                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($row['opayment_amount'], true, false, true, false, true); ?></span>
-                                </li>
-                                <li class="list-stats-item">
-                                    <span class="lable"><?php echo Labels::getLabel('LBL_Comments', $siteLangId); ?></span>
-                                    <span class="value"><?php echo nl2br($row['opayment_comments']); ?></span>
-                                </li>
-                                <li class="list-stats-item">
-                                    <span class="lable"><?php echo Labels::getLabel('LBL_STATUS', $siteLangId); ?></span>
-                                    <span class="value"><?php echo $orderStatusArr[$row['opayment_txn_status']]; ?></span>
-                                </li>
-                            </ul>
-                            <?php if (isset($orderDetail['payments'][$i + 1])) { ?>
-                                <hr class="dotted">
-                            <?php } ?>
+                        if (true == $primaryOrder && FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
+                            $statusName = isset($childOrderDetail['orderstatus_name']) ? $childOrderDetail['orderstatus_name'] : $childOrderDetail['orderstatus_identifier']; ?>
+                            <span class="badge badge-danger ms-2">
+                                <?php echo $statusName; ?>
+                            </span>
                         <?php } ?>
+                    </span>
+                </div>
+            </h5>
+            <div class="">
+                <div class="dropdown">
+                    <button class="btn btn-icon btn-outline-gray" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <svg class="svg" width="20" height="20">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#three-dots">
+                            </use>
+                        </svg>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <?php if ($isSellerDashboardView) { ?>
+                            <li>
+                                <a class="dropdown-item no-print" target="_blank" href="<?php echo UrlHelper::generateUrl('Seller', 'viewInvoice', [$orderDetail['op_id']]); ?>" title="
+								<?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?>">
+                                    <span><?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item no-print" target="_blank" href="<?php echo UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $orderDetail['op_id']]); ?>" title="<?php echo Labels::getLabel('LBL_BUYER_INVOICE', $siteLangId); ?>">
+                                    <span><?php echo Labels::getLabel('LBL_BUYER_INVOICE', $siteLangId); ?></span>
+                                </a>
+                            </li>
+                            <?php
+                            if (!in_array($orderDetail['op_status_id'], unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"))) && $orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && $shippedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status']) && false === OrderCancelRequest::getCancelRequestById($orderDetail['op_id'])) {
 
-                    </div>
+                                $opId = $orderDetail['op_id'];
+                                if (1 < $orderDetail['opshipping_rate_id'] && (empty($orderDetail['opshipping_plugin_id']) || ($shippingApiObj->getKey('plugin_id') != $orderDetail['opshipping_plugin_id'] && empty($orderDetail['opr_response'])))) {
+                            ?>
+                                    <li>
+                                        <a class="dropdown-item no-print" href="javascript:void(0)" onclick="shippingRatesForm(<?php echo $opId; ?>)" title="<?php echo Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId); ?>">
+                                            <span><?php echo Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId); ?></span>
+                                        </a>
+                                    </li>
+
+                                    <?php
+                                } else {
+                                    if ($shippingApiObj->getKey('plugin_id') == $orderDetail['opshipping_plugin_id']) {
+                                        if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && true === $shippingApiObj->canGenerateLabelSeparately()) {
+                                            $orderId = $orderDetail['order_id'];
+                                    ?>
+                                            <li>
+                                                <a class="dropdown-item no-print" href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>">
+                                                    <span><?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?></span>
+                                                </a>
+                                            </li>
+                                            <?php
+                                        } elseif (!empty($orderDetail['opr_response'])) {
+                                            if (FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS") == $orderDetail["op_status_id"]) {
+                                            ?>
+                                                <li>
+                                                    <a class="dropdown-item no-print" target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$orderDetail['op_id']]); ?>" title="<?php echo Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId); ?>">
+                                                        <span><?php echo Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId); ?></span>
+                                                    </a>
+                                                </li>
+                                            <?php } else { ?>
+                                                <li>
+                                                    <a class="dropdown-item no-print" target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>">
+                                                        <span><?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?></span>
+                                                    </a>
+                                                </li>
+                                            <?php } ?>
+                                        <?php
+                                        }
+                                        if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || ($shippingApiObj->canGenerateLabelFromShipment() || !empty($orderDetail['opship_tracking_number']))) && empty($orderDetail['opship_order_number'])) {
+                                            if (true === $shippingApiObj->canGenerateLabelFromShipment()) {
+                                                $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
+                                            } else {
+                                                $label = Labels::getLabel('LBL_BUY_SHIPMENT', $siteLangId);
+                                            }
+                                        ?>
+                                            <li>
+                                                <a class="dropdown-item no-print" href="javascript:void(0)" onclick="proceedToShipment(<?php echo $opId; ?>)" title="<?php echo $label; ?>">
+                                                    <span><?php echo $label; ?></span>
+                                                </a>
+                                            </li>
+                                        <?php
+                                        }
+
+                                        if ($orderDetail['orderstatus_id'] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && true === $shippingApiObj->canCreatePickup()) {
+                                        ?>
+                                            <?php
+                                            $pickUpDetails =  OrderProduct::getPickUpShedule($opId);
+                                            if (!$pickUpDetails || 1 > $pickUpDetails['opsp_scheduled']) {
+                                            ?>
+                                                <li>
+                                                    <a class="dropdown-item no-print" href="javascript:void(0)" onclick="getPickupForm(<?php echo $opId; ?>)" title="<?php echo Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId); ?>">
+                                                        <span><?php echo Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId); ?></span>
+                                                    </a>
+                                                </li>
+                                            <?php } else { ?>
+                                                <li>
+                                                    <a class="dropdown-item no-print" href="javascript:void(0)" onclick="cancelPickup(<?php echo $opId; ?>)" title="<?php echo Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId); ?>">
+                                                        <span><?php echo Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId); ?></span>
+                                                    </a>
+                                                </li>
+                                            <?php } ?>
+                            <?php }
+                                    }
+                                }
+                            }
+                        } else {
+                            ?>
+                            <li>
+                                <a class="dropdown-item no-print" href="javascript:void(0)" onclick="return addItemsToCart('<?php echo $orderDetail['order_id']; ?>');"><?php echo Labels::getLabel('LBL_Buy_Again', $siteLangId); ?></a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item no-print" href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" title="<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?></a>
+                            </li>
+                        <?php } ?>
+                    </ul>
                 </div>
             </div>
-        <?php } ?>
+        </div>
+        <div class="card-table">
+            <div class="table-wrap">
+                <table class="table table-justified table-orders">
+                    <thead>
+                        <tr>
+                            <th><?php echo Labels::getLabel('LBL_ITEMS_SUMMARY', $siteLangId); ?></th>
+                            <th><?php echo Labels::getLabel('LBL_Price', $siteLangId); ?></th>
+                            <th><?php echo Labels::getLabel('LBL_ORDERED_QUANTITY', $siteLangId); ?></th>
+                            <th><?php echo Labels::getLabel('LBL_Total', $siteLangId); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($arr as $childOrder) { ?>
+                            <tr>
+                                <td>
+                                    <?php $this->includeTemplate('_partial/product/product-info-html.php', $this->variables + ['order' => $childOrder], false); ?>
+                                </td>
+                                <td><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?></td>
+                                <td><?php echo $childOrder['op_qty']; ?></td>
+                                <td><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder), true, false, true, false, true); ?></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+
+    <?php
+    if (true == $primaryOrder) { ?>
+        <div class="card">
+            <div class="card-head">
+                <h5 class="card-title"><?php echo Labels::getLabel('MSG_ORDER_TIMELINE', $siteLangId); ?></h5>
+            </div>
+            <div class="card-body">
+                <div class="timelines-wrap">
+                    <?php $this->includeTemplate('_partial/order/timeline.php', $this->variables, false); ?>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+    <?php 
+        if($isSellerDashboardView){
+            include CONF_THEME_PATH . 'seller/_partial/order-update-form.php';
+        }else{
+            include CONF_THEME_PATH . 'buyer/partial-view-order.php';
+        }
+    ?>    
 </div>
