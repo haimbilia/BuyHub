@@ -756,7 +756,7 @@ $(document).ready(function () {
         var popup = $(formElement).closest('.' + $.ykmodal.element);
         if (0 < popup.length) {
             $.ykmodal(fcom.getLoader(), true);
-            data +=  "&signinpopup=1";
+            data += "&signinpopup=1";
         } else {
             $(".loginFormJs").prepend(fcom.getLoader());
         }
@@ -1048,7 +1048,7 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
                     }
                 }
             }
-            var iti = window.intlTelInput(input, {separateDialCode: !hasOnlyFlag, initialCountry: country,});
+            var iti = window.intlTelInput(input, { separateDialCode: !hasOnlyFlag, initialCountry: country, });
             var dialCode = "+" + iti.getSelectedCountryData().dialCode;
             var dialCodeWithPhone = dialCode + "-" + iti.getSelectedCountryData().iso2;
             $(input, form).attr("data-before", dialCode);
@@ -1059,10 +1059,10 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
                 }
             } else if (1 > dialCodeElement.length && false === hasOnlyFlag) {
                 $("<input>").attr({
-                        type: "hidden",
-                        name: elementName,
-                        value: dialCodeWithPhone,
-                    }).insertAfter(input, form);
+                    type: "hidden",
+                    name: elementName,
+                    value: dialCodeWithPhone,
+                }).insertAfter(input, form);
             } else if (true === hasOnlyFlag) {
                 var phoneNumber = $(input, form).val();
                 if ("undefined" == typeof phoneNumber || "" == phoneNumber) {
