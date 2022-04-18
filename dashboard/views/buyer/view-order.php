@@ -119,7 +119,8 @@ if (!$print) {
                     <?php $this->includeTemplate('_partial/order/right-side-block.php', $this->variables, false);
                     $data = $this->variables + [
                         'canViewShippingCharges' => true,
-                        'canViewTaxCharges' => true,
+                        'canViewTaxCharges' => true,  
+                        'isSellerDashboardView' => false,                   
                     ];
                     $this->includeTemplate('_partial/order/left-side-block.php', $data, false); ?>
                 </div>

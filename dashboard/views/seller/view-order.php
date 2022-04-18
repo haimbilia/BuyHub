@@ -161,12 +161,12 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                 <div class="row">
                     <?php
                     $data = $this->variables + ['childOrderDetail' => $orderDetail];
-                    $this->includeTemplate('_partial/order/right-side-block.php', $data, false);
-
+                    $this->includeTemplate('_partial/order/right-side-block.php', $data, false);                          
                     $data = $this->variables + [
-                        'canViewShippingCharges' => true,
-                        'canViewTaxCharges' => true,
-                        'childOrderDetail' => $orderDetail
+                        'canViewShippingCharges' => $shippedBySeller,
+                        'canViewTaxCharges' => $orderDetail['op_tax_collected_by_seller'],
+                        'childOrderDetail' => $orderDetail, 
+                        'isSellerDashboardView' => true,                      
                     ];
                     $this->includeTemplate('_partial/order/left-side-block.php', $data, false);
                     ?>
