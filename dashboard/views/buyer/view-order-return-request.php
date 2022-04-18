@@ -20,7 +20,6 @@
                 <?php if (!$print) { ?>
                     <div class="">
                         <iframe src="<?php echo Fatutility::generateUrl('buyer', 'viewOrderReturnRequest', $urlParts) . '/print'; ?>" name="frame" style="display:none"></iframe>
-                        <?php /* <a href="javascript:void(0)" onclick="frames['frame'].print()" class="btn btn-brand btn-sm no-print"><?php echo Labels::getLabel('LBL_Print', $siteLangId); ?></a> */ ?>
                         <?php if ($canEscalateRequest) { ?>
                             <a class="btn btn-brand no-print" onclick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Account', 'escalateOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo str_replace("{websitename}", FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId), Labels::getLabel('LBL_ESCALATE_TO_{WEBSITENAME}', $siteLangId)); ?></a>
                         <?php } ?>
@@ -34,7 +33,7 @@
             <div class="card-body ">
                 <h5><?php echo Labels::getLabel('LBL_VENDOR_RETURN_ADDRESS', $siteLangId); ?></h5>
                 <div class="row">
-                    <div class="col-lg-12 mb-4">
+                    <div class="col-lg-12 my-4">
                         <ul class="list-stats list-stats-triple">
                             <?php if ($request['op_shop_owner_name'] != '') { ?>
                                 <li class="list-stats-item">
@@ -127,9 +126,9 @@
                         </table>
                     </div>
                     <div class="js-scrollable table-wrap table-responsive">
-                        <table class="table">
-                            <tbody>
-                                <tr class="">
+                        <table class="table table-justified">
+                            <thead>
+                                <tr>
                                     <th width="20%"><?php echo Labels::getLabel('LBL_Reason', $siteLangId); ?></th>
                                     <th width="20%"><?php echo Labels::getLabel('LBL_Date', $siteLangId); ?></th>
                                     <th width="20%"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?></th>
@@ -138,31 +137,18 @@
                                         <th width="20%"><?php echo Labels::getLabel('LBL_Download_Attached_Files', $siteLangId); ?></th>
                                     <?php } ?>
                                 </tr>
+                            </thead>
+                            <tbody>
                                 <tr>
                                     <td><?php echo $request['orreason_title']; ?></td>
                                     <td>
                                         <div class="product-profile__description">
-                                            <span class=""><?php echo FatDate::format($request['orrequest_date']); ?></span>
+                                            <span><?php echo FatDate::format($request['orrequest_date']); ?></span>
                                         </div>
                                     </td>
                                     <td><?php echo $requestRequestStatusArr[$request['orrequest_status']]; ?></td>
                                     <td><?php
                                         $returnDataArr = CommonHelper::getOrderProductRefundAmtArr($request);
-                                        /* $priceTotalPerItem = CommonHelper::orderProductAmount($request,'netamount',true);
-
-                            $price = 0;
-                            if($request['orrequest_status'] != OrderReturnRequest::RETURN_REQUEST_STATUS_REFUNDED){
-                                if(FatApp::getConfig('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER',FatUtility::VAR_INT,0)){
-                                    $shipCharges = isset($request['charges'][OrderProduct::CHARGE_TYPE_SHIPPING][OrderProduct::DB_TBL_CHARGES_PREFIX.'amount'])?$request['charges'][OrderProduct::CHARGE_TYPE_SHIPPING][OrderProduct::DB_TBL_CHARGES_PREFIX.'amount']:0;
-                                    $unitShipCharges = round(($shipCharges / $request['op_qty']),2);
-                                    $priceTotalPerItem = $priceTotalPerItem + $unitShipCharges;
-                                    $price = $priceTotalPerItem * $request['orrequest_qty'];
-                                }
-                            }
-                            if(!$price){
-                                $price = $priceTotalPerItem * $request['orrequest_qty'];
-                                $price = $price + $request['op_refund_shipping'];
-                            } */
                                         echo CommonHelper::displayMoneyFormat($returnDataArr['op_refund_amount'], true, false); ?></td>
                                     <?php if (isset($attachedFile) && !empty($attachedFile)) { ?>
                                         <td><a href="<?php echo UrlHelper::generateUrl('Buyer', 'downloadAttachedFileForReturn', array($request["orrequest_id"]));  ?>" class="button small green"> <?php echo Labels::getLabel('LBL_Download', $siteLangId); ?></a></td>
@@ -173,14 +159,12 @@
                     </div>
                 <?php }    ?>
                 <?php if (!$print) { ?>
-                    <div class="no-print">
+                    <div class="mt-5 no-print">
                         <?php echo $returnRequestMsgsSrchForm->getFormHtml(); ?>
 
                         <h5><?php echo Labels::getLabel('LBL_Return_Request_Messages', $siteLangId); ?> </h5>
                         <div id="loadMoreBtnDiv"></div>
                         <ul class="messages-list" id="messagesList"></ul>
-
-
                         <?php if ($request && ($request['orrequest_status'] != OrderReturnRequest::RETURN_REQUEST_STATUS_REFUNDED && $request['orrequest_status'] != OrderReturnRequest::RETURN_REQUEST_STATUS_WITHDRAWN)) {
                             $frmMsg->setFormTagAttribute('onSubmit', 'setUpReturnOrderRequestMessage(this); return false;');
                             $frmMsg->setFormTagAttribute('class', 'form');
@@ -206,8 +190,6 @@
                                     </li>
                                 </ul>
                             </div>
-
-
                         <?php
                         } ?>
                     </div>
@@ -216,7 +198,3 @@
         </div>
     </div>
 </div>
-
-<?php if ($print) { ?>
-
-<?php } ?>
