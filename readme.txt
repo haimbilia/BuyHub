@@ -692,6 +692,7 @@ Updates/Fixes :
     => 063907 - Buyer: The user is not able to send the invitation for Share and Earn
     => 063668 - Buyer: Map view button is not working.
     => 063348 - Seller UI: Some icon is not showing while hovering on it and the calendar icon is also missing for the date field while adding the "bind condition" for the manual badges under the Badges section at the seller's end
+    => 063942 - Admin: Commission amount is not showing while viewing the order details at the admin's end
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
