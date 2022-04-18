@@ -131,7 +131,7 @@
                                 </button>
                             </li>
                             <li class="quick-nav-item item-mobile">
-                                <button class="btn-mega-search toggle--search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-controls="offcanvas-mega-search">
+                                <button class="btn-mega-search toggle--search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-controls="offcanvas-mega-search" aria-label="mega-nav-search">
                                     <svg class="svg" width="20" height="20">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
                                         </use>

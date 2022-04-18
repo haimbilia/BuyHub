@@ -88,7 +88,15 @@ foreach ($arrListing as $sn => $row) {
                     if (0 < (int) $row['canAccess']) {
                         $condManualReq = (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'trigger_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED);
 
-                        $icon = $condManualReq ? "<i class='fas fa-eye icon'></i>" : "<i class='fas fa-link icon'></i>";
+                        $icon = $condManualReq ? '<svg class="svg" width="18" height="18">
+                                                    <use
+                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                                    </use>
+                                                </svg>' : '<svg class="svg" width="18" height="18">
+                                                                <use
+                                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#linking">
+                                                                </use>
+                                                            </svg>';
                         $title = $condManualReq ? Labels::getLabel('LBL_VIEW', $siteLangId) : Labels::getLabel('LBL_BIND_CONDITION', $siteLangId);
 
                         $li = $ul->appendElement("li");
@@ -111,18 +119,20 @@ foreach ($arrListing as $sn => $row) {
                         $htm = ' <span class="badge badge-danger rounded-pill">' . Labels::getLabel('LBL_N/A', $siteLangId) . '</span>';
                         $td->appendElement('plaintext', [], $htm, true);
                     } else {
-                        $icon = '<i class="icn shop">
-                                    <svg class="svg">
-                                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#requests" href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#requests"></use>
-                                    </svg>
-                                </i>';
+                        $icon = '<svg class="svg" width="18" height="18">
+                                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#requests"></use>
+                                    </svg>';
                         $function = "addBadgeReqForm(0, " . $row[Badge::DB_TBL_PREFIX . 'id'] . ")";
                         $li = $ul->appendElement("li");
                         $li->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $function, 'title' => Labels::getLabel('LBL_REQUEST', $siteLangId)), $icon, true);
                     }
                 } else {
                     $li = $ul->appendElement("li");
-                    $li->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'title' => Labels::getLabel('LBL_VIEW', $siteLangId)), "<i class='fas fa-eye icon'></i>", true);
+                    $li->appendElement('a', array('href' => UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$row[Badge::DB_TBL_PREFIX . 'id'], $row[Badge::DB_TBL_PREFIX . 'type']]), 'title' => Labels::getLabel('LBL_VIEW', $siteLangId)), '<svg class="svg" width="18" height="18">
+                                                                                <use
+                                                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                                                                </use>
+                                                                            </svg>', true);
                 }
                 break;
         }
