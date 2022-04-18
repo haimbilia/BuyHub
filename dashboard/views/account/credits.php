@@ -45,10 +45,10 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     <?php
                     $col = 6;
                     if ($showTotalBalanceAvailableDiv) {
-                        if ($promotionWalletToBeCharged) { 
+                        if ($promotionWalletToBeCharged) {
                             $col = ($withdrawlRequestAmount) ? 4 : 6; ?>
                             <div class="col-md-<?php echo $col; ?>">
-                                <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
+                                <div class="card card-commerce card-commerce-bg card-full-height" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-2.png);">
                                     <div class="card-head border-0">
                                         <h6> <?php echo Labels::getLabel('LBL_PENDING_PROMOTIONS_CHARGES', $siteLangId); ?>: </h6>
                                         <i class="icn"> </i>
@@ -70,7 +70,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
                         if ($withdrawlRequestAmount) { ?>
                             <div class="col-md-<?php echo $col; ?>">
-                                <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
+                                <div class="card card-commerce card-commerce-bg card-full-height" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
                                     <div class="card-head border-0">
                                         <h6> <?php echo Labels::getLabel('LBL_PENDING_WITHDRAWL_REQUESTS', $siteLangId); ?>: </h6>
                                         <i class="icn"> </i>
@@ -88,7 +88,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     <?php }
                     } ?>
                     <div class="col-md-<?php echo $col; ?>">
-                        <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
+                        <div class="card card-commerce card-commerce-bg card-full-height" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
                             <div class="card-head border-0">
                                 <h6>
                                     <p><?php echo Labels::getLabel('LBL_AVAILABLE_BALANCE', $siteLangId); ?>: </p>
@@ -96,7 +96,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             </div>
                             <div class="card-body">
                                 <h3><?php echo CommonHelper::displayMoneyFormat($userWalletBalance); ?></h3>
-                                <button class="btn link-arrow" onclick="withdrawalOptionsForm();">
+                                <button class="btn btn-outline-gray btn-sm" onclick="withdrawalOptionsForm();">
                                     <?php echo Labels::getLabel('LBL_WITHDRAW', $siteLangId); ?>
                                 </button>
                                 <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
@@ -110,7 +110,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row mt-4">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-lg-12">
