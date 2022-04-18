@@ -682,6 +682,7 @@ Updates/Fixes :
     => 063840 - Admin >> Orders >> View detail: UI is not correct.
     => 063810 - Seller: Cross button is not showing on Cancel order request
     => 063818 - Admin: Sorting is changed after performing an action on the product review's request at the admin's end
+    => 063383 - Seller UI: Not properly defined " search by what?" on the search field under the My Credit section and "Transaction ID" is shown in the 2-lines in the My Credits table
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

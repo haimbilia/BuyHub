@@ -13,14 +13,15 @@
 
     $tbl = new HtmlElement('table', array('class' => 'table'));
     $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
-    foreach ($arr_flds as $val) {
-        $e = $th->appendElement('th', array(), $val);
+    foreach ($arr_flds as $key => $val) {
+        $class = 'utxn_id' == $key ? ['class' => 'text-nowrap'] : [];
+        $e = $th->appendElement('th', $class, $val);
     }
 
     $sr_no = 0;
     foreach ($arrListing as $sn => $row) {
         $sr_no++;
-        $tr = $tbl->appendElement('tr', array('class' => ''));
+        $tr = $tbl->appendElement('tr');
 
         foreach ($arr_flds as $key => $val) {
             $td = $tr->appendElement('td');
