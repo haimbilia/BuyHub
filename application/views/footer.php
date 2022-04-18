@@ -128,7 +128,7 @@ if (CommonHelper::demoUrl()) { ?>
 <div class="no-print">
     <?php if (CommonHelper::demoUrl()) { ?>
         <!--Start of Tawk.to Script-->
-        <script defer>
+        <script>
             var Tawk_API = Tawk_API || {},
                 Tawk_LoadStart = new Date();
             (function() {
@@ -155,7 +155,7 @@ if (CommonHelper::demoUrl()) { ?>
         }
     } ?>
     <?php if (FatApp::getConfig('CONF_PWA_SERVICE_WORKER', FatUtility::VAR_INT, 1)) { ?>
-        <script defer>
+        <script>
             $(function() {
                 if ('serviceWorker' in navigator) {
                     window.addEventListener('load', function() {

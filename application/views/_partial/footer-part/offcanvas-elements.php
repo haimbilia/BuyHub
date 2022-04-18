@@ -81,9 +81,7 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
 </div>
 <!-- offcanvas-seller-nav -->
 <div class="offcanvas offcanvas-start offcanvas-seller-nav" tabindex="-1" id="offcanvas-seller-nav" aria-labelledby="offcanvas-seller-nav">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">
-        </h5>
+    <div class="offcanvas-header">        
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body p-0">
