@@ -50,9 +50,9 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                         <span class="value">
                             <span class="badge badge-success">
                                 <?php
-                                    $fulfillmentTypeArr = Shipping::getFulFillmentArr($siteLangId, $fulfillmentType);
-                                    echo $fulfillmentTypeArr[$fulfillmentType];
-                                ?>    
+                                $fulfillmentTypeArr = Shipping::getFulFillmentArr($siteLangId, $fulfillmentType);
+                                echo $fulfillmentTypeArr[$fulfillmentType];
+                                ?>
                             </span>
                         </span>
                     </li>
@@ -64,13 +64,13 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                 <?php if (0 < $shippingCharges) { ?>
                     <li>
                         <span class="label">
-                            <?php 
-                                if (1 == count($order['products'])) {
-                                    echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId);
-                                } else { ?>
-                                    <a class="dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>)">
-                                        <?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId); ?>
-                                    </a>
+                            <?php
+                            if (1 == count($order['products'])) {
+                                echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId);
+                            } else { ?>
+                                <a class="dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>)">
+                                    <?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId); ?>
+                                </a>
                             <?php } ?>
                         </span>
                         <span class="value">
@@ -84,13 +84,13 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                     if (0 < $totalTax) { ?>
                         <li>
                             <span class="label">
-                                <?php 
-                                    if (1 == count($order['products'])) {
-                                        echo Labels::getLabel('LBL_Tax_Charges', $siteLangId);
-                                    } else { ?>
-                                        <a class="dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
-                                            <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
-                                        </a>
+                                <?php
+                                if (1 == count($order['products'])) {
+                                    echo Labels::getLabel('LBL_Tax_Charges', $siteLangId);
+                                } else { ?>
+                                    <a class="dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
+                                        <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
+                                    </a>
                                 <?php } ?>
                             </span>
                             <span class="value">
@@ -104,7 +104,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                     foreach ($taxOptionsTotal as $key => $val) { ?>
                         <li>
                             <span class="label">
-                                <?php 
+                                <?php
                                 if (1 == count($order['products'])) {
                                     echo $val['title'];
                                 } else { ?>
@@ -129,6 +129,12 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                         </span>
                     </span>
                 </li>
+                <li>
+                    <span class="label"><?php echo Labels::getLabel('LBL_SITE_COMMISSION', $siteLangId) ?></span>
+                    <span class="value">
+                        <?php echo CommonHelper::displayMoneyFormat($order['order_site_commission'], true, true); ?>
+                    </span>
+                </li>
                 <?php
                 $discount = (0 < $opSellerId) ? abs($discount) : $order['order_discount_total'];
                 if (0 < $discount) { ?>
@@ -144,7 +150,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                 if (0 < $volDiscount) { ?>
                     <li class="discounted">
                         <span class="label">
-                            <?php 
+                            <?php
                             if (1 == count($order['products'])) {
                                 echo Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId);
                             } else { ?>
@@ -163,7 +169,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                 if (0 < $rewards) { ?>
                     <li class="discounted">
                         <span class="label">
-                            <?php 
+                            <?php
                             if (1 == count($order['products'])) {
                                 echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId);
                             } else { ?>

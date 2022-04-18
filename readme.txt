@@ -682,6 +682,17 @@ Updates/Fixes :
     => 063840 - Admin >> Orders >> View detail: UI is not correct.
     => 063810 - Seller: Cross button is not showing on Cancel order request
     => 063818 - Admin: Sorting is changed after performing an action on the product review's request at the admin's end
+    => 063383 - Seller UI: Not properly defined " search by what?" on the search field under the My Credit section and "Transaction ID" is shown in the 2-lines in the My Credits table
+    => 063812 - Seller : When the Seller adds a pickup address it is showing twice.
+    => 063825 - Buyer: 404 error page is showing while the buyer clicking on the "Write A Review" option on the product details page
+    => 063808 - Seller: Shipping charges are showing on the order details page at the seller's end if shipping is provided by the admin
+    => 063922 - Seller/Buyer/Affiliate/Advertiser: Sign In page design is not aligned/correct while clicking on the "Withdraw" option under the My credit section if the session is expired
+    => 063920 - Seller: "Fulfilled By: Admin" is showing for the digital products on the order listing page at the seller's end
+    => 063688 - Admin: Placeholder text is not proper for the Rating types field.
+    => 063907 - Buyer: The user is not able to send the invitation for Share and Earn
+    => 063668 - Buyer: Map view button is not working.
+    => 063348 - Seller UI: Some icon is not showing while hovering on it and the calendar icon is also missing for the date field while adding the "bind condition" for the manual badges under the Badges section at the seller's end
+    => 063942 - Admin: Commission amount is not showing while viewing the order details at the admin's end
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

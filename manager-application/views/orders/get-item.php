@@ -1,6 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $op = current($order['products']);
-
 $shippingCost = CommonHelper::orderProductAmount($op, 'SHIPPING');
 $volumeDiscount = CommonHelper::orderProductAmount($op, 'VOLUME_DISCOUNT');
 $discount = CommonHelper::orderProductAmount($op, 'DISCOUNT');
@@ -185,7 +184,12 @@ foreach ($op['taxOptions'] as $key => $val) {
                     </span>
                 </li>
             <?php } ?>
-
+            <li class="list-stats-item">
+                <span class="lable"><?php echo Labels::getLabel('LBL_COMMISSION_CHARGED', $siteLangId); ?>[<?php echo $op["op_commission_percentage"] ?>%]</span>
+                <span class="value">
+                    <?php echo CommonHelper::displayMoneyFormat($op['op_commission_charged'] - $op['op_refund_commission'], true, true); ?>
+                </span>
+            </li>
             <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_TOTAL', $siteLangId); ?>:</span>
                 <span class="value" <?php echo CommonHelper::displayMoneyFormat($total, true, true, true, false, true); ?></span>

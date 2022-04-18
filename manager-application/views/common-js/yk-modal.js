@@ -124,21 +124,27 @@
     $(document).on("hidden.bs.modal", "." + $.ykmodal.element, function () {
         $.ykmodal.close()
     });
-
+    let submitInterval;
     $(document).on("click", ".submitBtnJs", function () {
-        if ($('.' + $.ykmodal.element).hasClass("show")) {
-            var form = $('.' + $.ykmodal.element + ' form');
-            if (true === extendEditorJs) {
-                var onSubmit = form.attr('onsubmit');
-                if ('undefined' != typeof onSubmit) {
-                    onSubmit = onSubmit.replace("return(false);", "");
-                    eval(onSubmit);
-                }
-            } else {
-                form.submit();
+
+        if(submitInterval != undefined){ 
+            clearInterval(submitInterval); 
+            submitInterval = undefined;
+        }          
+        submitInterval = setTimeout(function(){
+            if ($('.' + $.ykmodal.element).hasClass("show")) {
+                var form = $('.' + $.ykmodal.element + ' form');
+                if (true === extendEditorJs) {
+                    var onSubmit = form.attr('onsubmit');
+                    if ('undefined' != typeof onSubmit) {
+                        onSubmit = onSubmit.replace("return(false);", "");
+                        eval(onSubmit);
+                    }
+                } else {
+                    form.submit();
+                }               
             }
-            // $(this).addClass('loading');
-        }
+        }, 800);         
     });
 
     /* $('.' + $.ykmodal.element).on("scroll", function () {

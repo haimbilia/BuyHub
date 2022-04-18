@@ -760,6 +760,9 @@ sendResetPasswordLink = function (user) {
             $(document.body).css({ cursor: "wait" });
             return '<div class="processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
+        getPageLoader: function () {
+            return '<div id="loader-wrapper"><div class="yokart-loader"><img src="/images/retina/yokart-loader.svg"></div><div class="loader-section section-left"></div><div class="loader-section section-right"></div>';
+        },
         scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {
                 $("html, body").animate(

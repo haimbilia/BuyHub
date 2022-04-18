@@ -232,7 +232,7 @@ $(document).on('mouseover mouseout', '.productsListItemsJs', function (e) {
 
 toogleMapView = function () {
     let vtype = 'map';
-    $(".productsAndFiltersJs").prepend(fcom.getLoader());
+    $(document.body).prepend(fcom.getPageLoader());
     fcom.displayProcessing();
     if ($("form[name=frmProductSearch] input[name=vtype]").val() != vtype) {
         $("form[name=frmProductSearch] input[name=vtype]").val(vtype);
