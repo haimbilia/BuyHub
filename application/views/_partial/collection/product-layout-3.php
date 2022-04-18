@@ -9,9 +9,9 @@ if (isset($collection['products']) && count($collection['products'])) { ?>
                 </div>
                 <div class="section-action">
                     <div class="slider-controls">
-                        <button class="btn btn-prev" type="button" data-href="#product-listing-3"> <span></span>
+                        <button class="btn btn-prev" type="button" data-href="#product-listing-3" aria-label="Previous"> <span></span>
                         </button>
-                        <button class="btn btn-next" type="button" data-href="#product-listing-3"> <span></span>
+                        <button class="btn btn-next" type="button" data-href="#product-listing-3" aria-label="Next"> <span></span>
                         </button>
                     </div>
                 </div>
