@@ -8,10 +8,8 @@
     font-size: 0.9em;
     font-weight: normal;
     border-radius: $radius4;
-    input {
-        &[type="text"] {
-            border: none;
-        }
+    .tagify__input {
+        border: none;
     }
 }
 

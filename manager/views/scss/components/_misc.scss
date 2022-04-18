@@ -3063,13 +3063,7 @@ $header-height: 65px;
 }
 
 //plugin
-.custom-tagify {
-    border: $border !important;
 
-    .tagify__input {
-        // @include input;
-    }
-}
 .custom-select2 {
     .select2-selection__clear {
         font-size: 1rem !important;
