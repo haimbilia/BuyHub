@@ -1,3 +1,6 @@
+.pawan {
+}
+
 .custom-tagify {
     background-color: #fff;
     border: 1px solid $border-color;
@@ -10,6 +13,7 @@
     border-radius: $radius4;
     .tagify__input {
         border: none;
+        padding-top: 6px;
     }
 }
 
