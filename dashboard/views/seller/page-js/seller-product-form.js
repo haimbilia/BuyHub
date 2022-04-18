@@ -205,16 +205,19 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		downloadsForm(product_id, selprod_id, true);
 	};
 
-	downloadsForm = function (product_id, selprod_id, getList) {
+	downloadsForm = function (product_id, selprod_id, callback) {
 		var getList = getList || false;
 		fcom.displayProcessing(langLbl.requestProcessing);
 		fcom.ajax(fcom.makeUrl('Seller', 'sellerProductDownloadFrm', [product_id, selprod_id]), '', function (res) {
 			fcom.removeLoader();
 			fcom.closeProcessing();
 			$("#digital_download_form").html(res);
-			if (true == getList) {
+			if (typeof callback == 'function') {
+                callback();
+            }else{
 				getDigitalDownloads();
 			}
+			
 		});
 	}
 
@@ -339,20 +342,20 @@ $(document).on('click', '.tabs_002', function () {
 
 (function () {
 	getDigitalDownloads = function () {
-		var productId = $('#frmDownload input[name=product_id]').val();
-		var selProdId = $('#frmDownload input[name=selprod_id]').val();
+		var recordId = $('#frmDownload input[name=record_id]').val();
 		var downloadType = $("#frmDownload select[name='download_type']").val();
 		var langId = $("#frmDownload select[name='lang_id']").val();
 		var optionCombi = "";
 		if (0 < $("#frmDownload select[name='option_comb_id']").length) {
 			optionCombi = $("#frmDownload select[name='option_comb_id']").val();
-			selProdId = $("#frmDownload select[name='option_comb_id']").val();
+			recordId = $("#frmDownload select[name='option_comb_id']").val();
 		}
 
 		if (optionCombi == '') {
 			optionCombi = '0';
 		}
-		var data = '&product_id=' + productId + '&selprod_id=' + selProdId + '&download_type=' + downloadType;
+		
+		var data = 'record_id=' + recordId + '&download_type=' + downloadType;
 		data = data + '&option_comb=' + optionCombi + '&langId=' + langId;
 
 		fcom.ajax(fcom.makeUrl('Seller', 'getInventoryDigitalDownloads'), data, function (res) {
@@ -363,25 +366,21 @@ $(document).on('click', '.tabs_002', function () {
 	saveDownloadLinks = function () {
 		if (!$('#frmDownload').validate()) return;
 
+			var data = fcom.frmData(document.frmDownload);
 		var optionCombi = "";
 		if (0 < $("#frmDownload select[name='option_comb_id']").length) {
 			optionCombi = $("#frmDownload select[name='option_comb_id']").val();
 		}
 
-		var data = fcom.frmData(document.frmDownload);
-
-		/* if (optionCombi == '') {
-			data = data + '&option_comb_id=0';
-		} */
-
-		/*   else {
-			data = data + '&option_comb_id=' + optionCombi;
-		} */
-
-		console.log(data);
+		if (optionCombi == '') {
+			data.append('option_comb_id', 0);
+			data +="&option_comb_id=0"; 		
+		} else {
+			data +="&record_id="+optionCombi;			
+		}	
 
 		fcom.displayProcessing();
-		fcom.ajax(fcom.makeUrl('Seller', 'setupDigitalDownloads'), data, function (t) {
+		fcom.ajax(fcom.makeUrl('Seller', 'setupDigitalDownload'), data, function (t) {
 			var ans = $.parseJSON(t);
 			if (ans.status == 0) {
 				fcom.displayErrorMessage(ans.msg);
@@ -415,31 +414,36 @@ $(document).on('click', '.tabs_002', function () {
 		if (optionCombi == '') {
 			data.append('option_comb_id', 0);
 		} else {
-			data.append('selprod_id', optionCombi);
+			data.append('record_id', optionCombi);
 		}
 
 		data.append('prod_ref_type', 1);
 
 		fcom.displayProcessing();
-
-		var productId = $("input[name='product_id']").val();
-		var selProdId = $("input[name='selprod_id']").val();
+		var recordId = $("input[name='record_id']").val();
+		// var productId = $("input[name='product_id']").val();
+		// var selProdId = $("input[name='selprod_id']").val();
 
 		$.ajax({
-			url: fcom.makeUrl('Seller', 'setupDigitalDownloads'),
+			url: fcom.makeUrl('Seller', 'setupDigitalDownload'),
 			type: "POST",
 			data: data,
 			processData: false,
 			contentType: false,
-			success: function (t) {
-				var ans = $.parseJSON(t);
+			dataType :"json",
+			success: function (ans) {				
 				$('.downloadable_file').val('');
 				if (ans.status != 1) {
 					fcom.displayErrorMessage(ans.msg);
 					return;
 				}
 				fcom.displaySuccessMessage(ans.msg);
-				downloadsForm(productId, selProdId, true);
+				downloadsForm(ans.productId, recordId, function(){				
+					$(".option-comb-id-js").val(ans.recordId);
+                    $(".file-language-js").val(ans.langId);
+					getDigitalDownloads();
+				});
+				
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				alert("Error Occurred.");
@@ -466,17 +470,29 @@ $(document).on('click', '.tabs_002', function () {
 		var data = new FormData();
 		$inputs = $('#frmDownload select,#frmDownload input[type=hidden]');
 		$inputs.each(function () { data.append(this.name, $(this).val()); });
-		var prodId = $("input[name='product_id']").val();
-		var selProdId = $("input[name='selprod_id']").val();
+		// var prodId = $("input[name='product_id']").val();
+		// var selProdId = $("input[name='selprod_id']").val();
 
 		$.each($('#preview_file')[0].files, function (i, file) {
 			data.append('preview_file', file);
 		});
 
+		var optionCombi = "";
+		if (0 < $("#frmDownload select[name='option_comb_id']").length) {
+			optionCombi = $("#frmDownload select[name='option_comb_id']").val();
+		}
+
+		if (optionCombi == '') {
+			data.append('option_comb_id', 0);
+		} else {
+			data.append('record_id', optionCombi);
+		}
+
+
 		fcom.displayProcessing();
 
 		$.ajax({
-			url: fcom.makeUrl('Seller', 'setupDigitalPreviewFile'),
+			url: fcom.makeUrl('Seller', 'setupDigitalDownload'),
 			type: "POST",
 			data: data,
 			processData: false,
@@ -488,7 +504,8 @@ $(document).on('click', '.tabs_002', function () {
 					return;
 				}
 				fcom.displaySuccessMessage(ans.msg);
-				downloadsForm(prodId, selProdId, true);
+				//downloadsForm(prodId, selProdId, true);
+				getDigitalDownloads();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				alert("Error Occurred.");
@@ -502,9 +519,7 @@ $(document).on('click', '.tabs_002', function () {
 			return false;
 		}
 
-		var data = '&link_id=' + linkId + '&ref_id=' + refId;
-
-		fcom.updateWithAjax(fcom.makeUrl('Seller', 'deleteDigitalLink'), data, function (res) {
+		fcom.updateWithAjax(fcom.makeUrl('Seller', 'deleteDigitalLink',[linkId,refId]), '', function (res) {
 			if (res.status == 1) {
 				getDigitalDownloads();
 			}
@@ -530,12 +545,6 @@ $(document).on('click', '.tabs_002', function () {
 				getDigitalDownloads();
 			}
 		}, {}, true);
-	};
-
-	resetForm = function () {
-		var productId = $("input[name='product_id']").val();
-		var selProdId = $("input[name='selprod_id']").val();
-		downloadsForm(productId, selProdId, true);
-	};
+	};	
 
 })();

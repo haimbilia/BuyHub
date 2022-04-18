@@ -93,38 +93,35 @@ trait ProductDigitalDownloads
         $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
 
         $data = [
-            'product_id' => $productId,
-            'selprod_id' =>  $selProdId,
+            'record_id' => $selProdId,            
         ];
         $frm->fill($data);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('canDo', $canDo);
         $this->set('savedOptions', $savedOptions);
-        $this->set('downloadFrm', $frm);
-        $this->set('product_id', $productId);
+        $this->set('downloadFrm', $frm);     
         $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
 
     public function getInventoryDigitalDownloads()
     {
-        $this->userPrivilege->canViewProducts();
-        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-        $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
+        
+        $this->userPrivilege->canViewProducts();        
+        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);      
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            $records = DigitalDownloadSearch::getInventoryLinks($selProdId, $langId);
+            $records = DigitalDownloadSearch::getInventoryLinks($recordId, $langId);
         } else {
-            $records = DigitalDownloadSearch::getInventoryAttachments($selProdId, $langId);
+            $records = DigitalDownloadSearch::getInventoryAttachments($recordId, $langId);
             $records = DigitalDownloadSearch::processAttachmentsWithPreview($records);
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
         $canDo = $ddpObj->canEdit(
-            $selProdId,
+            $recordId,
             Product::CATALOG_TYPE_INVENTORY,
             $this->userParentId,
             $this->siteLangId,
@@ -134,13 +131,12 @@ trait ProductDigitalDownloads
         $this->set('records', $records);
         $this->set('canDelete', $canDo);
         $this->set('canDoDigDownload', $canDo);
-        $this->set('recordId', $selProdId);
+        $this->set('recordId', $recordId);
         $this->set('downloadrefType', Product::CATALOG_TYPE_INVENTORY);
 
         $languages = Language::getAllNames();
         $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
         $this->set('languages', $languages);
-        $this->set('selProdId', $selProdId);
 
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
             echo $this->_template->render(false, false, 'seller/inventory-digital-download-links-list.php', true);
@@ -503,7 +499,14 @@ trait ProductDigitalDownloads
                 LibHelper::exitWithError($this->str_invalid_request_id);
             }
             $userId =  $productData['preq_user_id'];
-        } else {
+        }elseif(Product::CATALOG_TYPE_INVENTORY == $catalogType) {             
+            $selProdData = SellerProduct::getAttributesById($recordId, array('selprod_user_id', 'selprod_code','selprod_product_id'));
+            if (!is_array($selProdData) && 1 > count($selProdData)) {            
+                LibHelper::exitWithError($this->str_invalid_request_id);
+            }
+            $userId =  $selProdData['selprod_user_id'];
+            
+        }else {
             $productData = Product::getAttributesById($recordId, ['product_type', 'product_seller_id']);
             if ($productData == false) {
                 LibHelper::exitWithError($this->str_invalid_request_id, true);
@@ -518,23 +521,18 @@ trait ProductDigitalDownloads
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
+        if ($userId !== $this->userParentId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
         $optionValId = FatApp::getPostedData('option_comb_id', null, 0);
 
         $ddpObj = new DigitalDownloadPrivilages();
         if (Product::CATALOG_TYPE_INVENTORY == $catalogType) {
             $canDo = $ddpObj->canEdit($recordId, $catalogType, $userId, $this->siteLangId, true);
-
             if (false === $canDo) {
                 FatUtility::dieJsonError($ddpObj->getError());
-            }
-            $selProdData = SellerProduct::getAttributesById($recordId, array('selprod_user_id', 'selprod_code'));
-            if (!is_array($selProdData) && 1 > count($selProdData)) {
-                LibHelper::exitWithError($this->str_invalid_request, true);
-            }
-
-            if ($selProdData['selprod_user_id'] !== $userId) {
-                LibHelper::exitWithError($this->str_invalid_request, true);
-            }
+            }            
             $selProdOption = explode('_', $selProdData['selprod_code']);
             array_shift($selProdOption);
             if (0 < count($selProdOption)) {
@@ -542,6 +540,7 @@ trait ProductDigitalDownloads
             } else {
                 $optionValId = '0';
             }
+            $this->set('productId', $selProdData['selprod_product_id']);           
         } else {
             $canDo = $ddpObj->canEdit($recordId, $catalogType, $userId, $this->siteLangId, false);
             if (false === $canDo) {

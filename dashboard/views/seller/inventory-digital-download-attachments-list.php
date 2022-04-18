@@ -2,7 +2,7 @@
 $arr_flds['listserial'] = Labels::getLabel('LBL_#', $siteLangId);
 $arr_flds['mainfile'] = Labels::getLabel('LBL_DD_File', $siteLangId);
 $arr_flds['preview'] = Labels::getLabel('LBL_DD_Preview', $siteLangId);
-$arr_flds['afile_lang_id'] = Labels::getLabel('LBL_DD_Language', $siteLangId);
+//$arr_flds['afile_lang_id'] = Labels::getLabel('LBL_DD_Language', $siteLangId);
 
 if (true === $canDoDigDownload) {
     $arr_flds['action'] = Labels::getLabel('LBL_Action', $siteLangId);
@@ -35,7 +35,7 @@ foreach ($records as $sn => $row) {
                             array(
                                 'class' => 'btn',
                                 'title' => Labels::getLabel('LBL_download', $siteLangId),
-                                'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['afile_id'], $selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $row['mainfile'])),
+                                'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['afile_id'], $recordId, Product::CATALOG_TYPE_INVENTORY, 0, $row['mainfile'])),
                                 'target' => '_blank'
                             ),
                             '<svg class="svg" width="18" height="18">
@@ -62,15 +62,15 @@ foreach ($records as $sn => $row) {
                 }
                 break;
             case 'preview':
-                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
-                $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));                
                 if (0 < $row['prev_afile_id']) {
+                    $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
                     $dvElem->appendElement(
                         "a",
                         array(
                             'class' => 'btn',
                             'title' => Labels::getLabel('LBL_download', $siteLangId),
-                            'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['prev_afile_id'], $selProdId, Product::CATALOG_TYPE_INVENTORY, 1, $row['preview'])),
+                            'href' => UrlHelper::generateUrl('Seller', 'downloadAttachment', array($row['prev_afile_id'], $recordId, Product::CATALOG_TYPE_INVENTORY, 1, $row['preview'])),
                             'target' => '_blank'
                         ),
                         '<svg class="svg" width="18" height="18">
@@ -93,20 +93,23 @@ foreach ($records as $sn => $row) {
                             true
                         );
                     }
-                } else {
-                    $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
+                } else {                   
                     if (true === $canDoDigDownload) {
                         $dvElem->appendElement(
                             "a",
                             array(
-                                'class' => 'btn',
+                                'class' => 'btn btn-icon btn-outline-gray btn-sm',
                                 'title' => Labels::getLabel('LBL_Add', $siteLangId),
                                 'href' => 'javascript:void(0);',
                                 'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;',
                                 'href' => 'javascript:void(0);'
 
                             ),
-                            '<i class="fa fa-plus  icon"></i>',
+                            '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                            </use>
+                        </svg>'.Labels::getLabel('LBL_Add', $siteLangId),
                             true
                         );
                     }

@@ -7,7 +7,7 @@ if (true === $canDoDigDownload) {
 }
 
 $arr_flds['pdl_preview_link'] = Labels::getLabel('LBL_Preview_Link', $siteLangId);
-$arr_flds['pdl_lang_id'] = Labels::getLabel('LBL_Link_language', $siteLangId);
+//$arr_flds['pdl_lang_id'] = Labels::getLabel('LBL_Link_language', $siteLangId);
 
 if (true === $canDoDigDownload) {
     $arr_flds['action'] = Labels::getLabel('LBL_Action', $siteLangId);

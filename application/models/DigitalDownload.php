@@ -240,8 +240,7 @@ class DigitalDownload extends MyAppModel
         $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('FRM_UPLOAD', $langId));
         $frm->addButton('', 'reset', Labels::getLabel('FRM_RESET', $langId));
         
-        $frm->addHiddenField('', 'record_id',$recordId);
-        //$frm->addHiddenField('', 'selprod_id');
+        $frm->addHiddenField('', 'record_id', $recordId);      
         $frm->addHiddenField('', 'preq_id');
         $frm->addHiddenField('', 'dd_link_id');
         $frm->addHiddenField('', 'is_preview', 0);

@@ -686,6 +686,7 @@ Updates/Fixes :
     => 063812 - Seller : When the Seller adds a pickup address it is showing twice.
     => 063825 - Buyer: 404 error page is showing while the buyer clicking on the "Write A Review" option on the product details page
     => 063808 - Seller: Shipping charges are showing on the order details page at the seller's end if shipping is provided by the admin
+    => 063434 - Seller UI: "Field 'selprod_id' not found" error is showing while adding the inventory if "Digital files and Digital Links" is added while adding the digital product at the seller's end
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
