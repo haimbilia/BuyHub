@@ -55,51 +55,38 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
         $this->includeTemplate('_partial/header/content-header.php', $data, false);
     } ?>
     <div class="content-body">
-
-
-        <div class="card-head-label">
-            <h5 class="card-title">
-                <div class="order-number">
-                    <small class="sm-txt"><?php echo Labels::getLabel('LBL_ORDER_#', $siteLangId); ?></small>
-                    <span class="numbers">
-                        <?php echo $orderDetail['op_invoice_number'] ?>
-                        <?php
-                        if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
-                            $statusName = isset($orderDetail['orderstatus_name']) ? $orderDetail['orderstatus_name'] : $orderDetail['orderstatus_identifier']; ?>
-                            <span class="badge badge-danger ms-2">
-                                <?php echo $statusName; ?>
-                            </span>
-                        <?php } ?>
-                    </span>
-                </div>
-            </h5>
-        </div>
         <div class="card-toolbar">
             <?php if (!$print) { ?>
+                <iframe src="<?php echo Fatutility::generateUrl('seller', 'viewOrder', $urlParts) . '/print'; ?>" name="frame" class="printFrame-js" style="display:none" width="1" height="1"></iframe>
                 <ul>
-                    <iframe src="<?php echo Fatutility::generateUrl('seller', 'viewOrder', $urlParts) . '/print'; ?>" name="frame" class="printFrame-js" style="display:none" width="1" height="1"></iframe>
-                    <li> <a target="_blank" href="<?php echo UrlHelper::generateUrl('Seller', 'viewInvoice', [$orderDetail['op_id']]); ?>" class="btn btn-icon no-print" title="
+                    <li>
+                        <a target="_blank" href="<?php echo UrlHelper::generateUrl('Seller', 'viewInvoice', [$orderDetail['op_id']]); ?>" class="btn btn-icon no-print" title="
 								<?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?>">
                             <svg class="svg btn-icon-start" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#invoice">
                                 </use>
                             </svg>
                             <span><?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?></span>
-                        </a></li>
-                    <li> <a target="_blank" href="<?php echo UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $orderDetail['op_id']]); ?>" class="btn btn-icon no-print" title="<?php echo Labels::getLabel('LBL_BUYER_INVOICE', $siteLangId); ?>">
+                        </a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="<?php echo UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $orderDetail['op_id']]); ?>" class="btn btn-icon no-print" title="<?php echo Labels::getLabel('LBL_BUYER_INVOICE', $siteLangId); ?>">
                             <svg class="svg btn-icon-start" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#invoice">
                                 </use>
                             </svg>
                             <span><?php echo Labels::getLabel('LBL_BUYER_INVOICE', $siteLangId); ?></span>
-                        </a></li>
+                        </a>
+                    </li>
                     <?php
                     if (!in_array($orderDetail['op_status_id'], unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"))) && $orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && $shippedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status']) && false === OrderCancelRequest::getCancelRequestById($orderDetail['op_id'])) {
 
                         $opId = $orderDetail['op_id'];
                         if (1 < $orderDetail['opshipping_rate_id'] && (empty($orderDetail['opshipping_plugin_id']) || ($shippingApiObj->getKey('plugin_id') != $orderDetail['opshipping_plugin_id'] && empty($orderDetail['opr_response'])))) {
                     ?>
-                            <a href="javascript:void(0)" onclick="shippingRatesForm(<?php echo $opId; ?>)" class="btn btn-icon no-print" title="<?php echo Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId); ?>"><i class="fas fa-file-invoice"></i></a>
+                            <li>
+                                <a href="javascript:void(0)" onclick="shippingRatesForm(<?php echo $opId; ?>)" class="btn btn-icon no-print" title="<?php echo Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId); ?>"><i class="fas fa-file-invoice"></i></a>
+                            </li>
 
                             <?php
                         } else {
@@ -107,14 +94,20 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                 if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && true === $shippingApiObj->canGenerateLabelSeparately()) {
                                     $orderId = $orderDetail['order_id'];
                             ?>
-                                    <a href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' class="btn btn-icon no-print" title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>"><i class="fas fa-file-download"></i></a>
+                                    <li>
+                                        <a href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' class="btn btn-icon no-print" title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>"><i class="fas fa-file-download"></i></a>
+                                    </li>
                                     <?php
                                 } elseif (!empty($orderDetail['opr_response'])) {
                                     if (FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS") == $orderDetail["op_status_id"]) {
                                     ?>
-                                        <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$orderDetail['op_id']]); ?>" class="btn btn-icon  no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
+                                        <li>
+                                            <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$orderDetail['op_id']]); ?>" class="btn btn-icon  no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
+                                        </li>
                                     <?php } else { ?>
-                                        <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" class="btn btn-icon  no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
+                                        <li>
+                                            <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" class="btn btn-icon  no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
+                                        </li>
                                     <?php } ?>
                                 <?php
                                 }
@@ -129,7 +122,9 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                         $label = Labels::getLabel('LBL_BUY_SHIPMENT', $siteLangId);
                                     }
                                 ?>
-                                    <a href="javascript:void(0)" onclick="proceedToShipment(<?php echo $opId; ?>)" class="btn btn-icon no-print" title="<?php echo $label; ?>"><i class="fas fa-shipping-fast"></i></a>
+                                    <li>
+                                        <a href="javascript:void(0)" onclick="proceedToShipment(<?php echo $opId; ?>)" class="btn btn-icon no-print" title="<?php echo $label; ?>"><i class="fas fa-shipping-fast"></i></a>
+                                    </li>
                                 <?php
                                 }
 
@@ -139,13 +134,17 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                     $pickUpDetails =  OrderProduct::getPickUpShedule($opId);
                                     if (!$pickUpDetails || 1 > $pickUpDetails['opsp_scheduled']) {
                                     ?>
-                                        <a href="javascript:void(0)" onclick="getPickupForm(<?php echo $opId; ?>)" class="btn btn-icon  no-print" title="<?php echo Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId); ?>">
-                                            <i class="fas fa-truck-pickup"></i>
-                                        </a>
+                                        <li>
+                                            <a href="javascript:void(0)" onclick="getPickupForm(<?php echo $opId; ?>)" class="btn btn-icon  no-print" title="<?php echo Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId); ?>">
+                                                <i class="fas fa-truck-pickup"></i>
+                                            </a>
+                                        </li>
                                     <?php } else { ?>
-                                        <a href="javascript:void(0)" onclick="cancelPickup(<?php echo $opId; ?>)" class="btn btn-icon  no-print" title="<?php echo Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId); ?>">
-                                            <i class="far fa-times-circle"></i>
-                                        </a>
+                                        <li>
+                                            <a href="javascript:void(0)" onclick="cancelPickup(<?php echo $opId; ?>)" class="btn btn-icon  no-print" title="<?php echo Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId); ?>">
+                                                <i class="far fa-times-circle"></i>
+                                            </a>
+                                        </li>
                                     <?php } ?>
                     <?php }
                             }
@@ -161,11 +160,11 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                 <?php
                 $data = $this->variables + ['childOrderDetail' => $orderDetail];
                 $this->includeTemplate('_partial/order/right-side-block.php', $data, false);
-
                 $data = $this->variables + [
                     'canViewShippingCharges' => true,
                     'canViewTaxCharges' => true,
-                    'childOrderDetail' => $orderDetail
+                    'childOrderDetail' => $orderDetail,
+                    'isSellerDashboardView' => true
                 ];
                 $this->includeTemplate('_partial/order/left-side-block.php', $data, false);
                 ?>
