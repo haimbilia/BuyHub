@@ -441,7 +441,7 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        $this->set('msg', Labels::getLabel('MSG_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ADDRESS_SELECTION_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -2236,7 +2236,7 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        $this->set('msg', Labels::getLabel('MSG_ADDRESS_SELECTION_SUCCESSFULL', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_ADDRESS_SELECTION_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

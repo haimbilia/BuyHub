@@ -83,7 +83,7 @@ class CurrencyManagementController extends ListingBaseController
 
     private function getListingData()
     {
-        $data = FatApp::getPostedData();
+        $postedData = FatApp::getPostedData();
 
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
@@ -102,10 +102,9 @@ class CurrencyManagementController extends ListingBaseController
 
         $searchForm = $this->getSearchForm($fields);
 
-        $post = $searchForm->getFormDataFromArray($data);
+        $post = $searchForm->getFormDataFromArray($postedData);
 
         $srch = Currency::getSearchObject($this->siteLangId, false);
-        $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
 
         if (isset($post['keyword']) && '' != $post['keyword']) {
@@ -123,11 +122,16 @@ class CurrencyManagementController extends ListingBaseController
         $this->set("defaultCurrencyId", $defaultCurrencyId);
         $this->set("arrListing", $records);
 
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('doNotLimitRecords', true);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', 1);
+        $this->set('hidePaginationHtml', true);
         $this->set('canEdit', $this->objPrivilege->canEditCurrencyManagement($this->admin_id, true));
     }
 
@@ -343,7 +347,6 @@ class CurrencyManagementController extends ListingBaseController
     {
         return array_diff($fields, [
             'dragdrop',
-            'currency_active',
             'currency_symbol_left',
             'currency_symbol_right'
         ], Common::excludeKeysForSort());

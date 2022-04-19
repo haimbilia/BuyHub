@@ -248,7 +248,7 @@ class GuestUserController extends MyAppController
             $redirectUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
         }
         $this->set('redirectUrl', $redirectUrl);
-        $this->set('msg', Labels::getLabel("MSG_LOGIN_SUCCESSFULL", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("MSG_LOGIN_SUCCESSFULLY", $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -306,7 +306,7 @@ class GuestUserController extends MyAppController
         }
 
         $this->set('redirectUrl', $redirectUrl);
-        $this->set('msg', Labels::getLabel("MSG_GUEST_LOGIN_SUCCESSFULL", $this->siteLangId));
+        $this->set('msg', Labels::getLabel("MSG_GUEST_LOGIN_SUCCESSFULLY", $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -502,7 +502,7 @@ class GuestUserController extends MyAppController
                         $redirectUrl = UrlHelper::generateUrl('Checkout');
                     }
                     if (FatUtility::isAjaxCall()) {
-                        $this->set('msg', Labels::getLabel('MSG_REGISTERATION_SUCCESSFULL', $this->siteLangId));
+                        $this->set('msg', Labels::getLabel('MSG_REGISTERATION_SUCCESSFULLY', $this->siteLangId));
                         $this->set('redirectUrl', $redirectUrl);
                         $this->_template->render(false, false, 'json-success.php');
                         exit;
@@ -517,7 +517,7 @@ class GuestUserController extends MyAppController
                 $this->set('data', ['user_id' => $userId]);
                 $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
             } else {
-                $this->set('msg', Labels::getLabel('MSG_REGISTERATION_SUCCESSFULL', $this->siteLangId));
+                $this->set('msg', Labels::getLabel('MSG_REGISTERATION_SUCCESSFULLY', $this->siteLangId));
             }
             $this->_template->render();
         }
@@ -529,7 +529,7 @@ class GuestUserController extends MyAppController
 
         $redirectUrl = UrlHelper::generateUrl('GuestUser', $actionUrl, [], CONF_WEBROOT_FRONTEND);
         if (FatUtility::isAjaxCall()) {
-            $this->set('msg', Labels::getLabel('MSG_REGISTERATION_SUCCESSFULL', $this->siteLangId));
+            $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_REGISTERED', $this->siteLangId));
             $this->set('redirectUrl', $redirectUrl);
             $this->_template->render(false, false, 'json-success.php');
             exit;
