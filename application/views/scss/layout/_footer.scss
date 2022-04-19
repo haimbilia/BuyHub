@@ -151,6 +151,14 @@
             grid-gap: 4rem;
             grid-template-columns: 25% 1fr 12%;
         }
+        .footer-logo-wrap {
+            @include media-breakpoint-down(lg) {
+                display: flex;
+                flex-flow: row wrap;
+                gap: 2rem;
+                align-items: center;
+            }
+        }
     }
 
     .footer-group {
