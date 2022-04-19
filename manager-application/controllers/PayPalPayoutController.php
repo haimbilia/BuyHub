@@ -161,7 +161,7 @@ class PayPalPayoutController extends PayoutBaseController
             LibHelper::dieJsonError($message);
         }
         $response = json_decode($response, true);
-
+        
         if (!array_key_exists('batch_header', $response)) {
             if (array_key_exists('message', $response)) {
                 Message::addErrorMessage($response['name'] . ' : ' . $response['message']);

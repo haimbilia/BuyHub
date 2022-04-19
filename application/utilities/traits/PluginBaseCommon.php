@@ -56,7 +56,7 @@ trait PluginBaseCommon
         $this->set('identifier', $this->identifier);
         $this->_template->render(false, false, 'plugins/form.php');
     }
-
+    
     protected function redirectBack(string $controller = '', string $action = '')
     {
         if (empty($controller)) {

@@ -79,12 +79,13 @@ class WithdrawalRequestsController extends ListingBaseController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'order_date_added', applicationConstants::SORT_DESC);
+            $this->addSortingElements($frm, 'withdrawal_request_date', applicationConstants::SORT_DESC);
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
         $statusArr = Transactions::getWithdrawlStatusArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', array('-1' => 'Does not matter') + $statusArr, '-1', [], '');
+
         $arr_options2 = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + User::getUserTypesArr($this->siteLangId);
         $arr_options2 = $arr_options2 + array(User::USER_TYPE_BUYER_SELLER => Labels::getLabel('FRM_BUYER', $this->siteLangId) . '+' . Labels::getLabel('FRM_SELLER', $this->siteLangId));
         $arr_options2 = $arr_options2 + array(User::USER_TYPE_SUB_USER => Labels::getLabel('FRM_SUB_USER', $this->siteLangId));
@@ -123,12 +124,12 @@ class WithdrawalRequestsController extends ListingBaseController
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'withdrawal_request_date');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'withdrawal_request_date';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $searchForm = $this->getSearchForm($fields);
         $post = $searchForm->getFormDataFromArray($data);
@@ -158,7 +159,7 @@ class WithdrawalRequestsController extends ListingBaseController
             $srch->addCondition('tuwr.withdrawal_id', '=', $withdrawalId);
         }
 
-        if (isset($post['status']) && $post['status'] > 0) {
+        if (isset($post['status']) && '' != $post['status']) {
             $srch->addCondition('tuwr.withdrawal_status', '=', $post['status']);
         }
 
@@ -290,7 +291,7 @@ class WithdrawalRequestsController extends ListingBaseController
         $this->set('displayLangTab', false);
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_WITHDRAWAL_REQUEST_UPDATE', $this->siteLangId));
-        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 

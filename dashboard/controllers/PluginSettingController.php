@@ -172,8 +172,6 @@ class PluginSettingController extends LoggedUserController
                 $fld->htmlAfterField = $htmlAfterField;
             }
         }
-
-        //$frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
         return $frm;
     }
 }
