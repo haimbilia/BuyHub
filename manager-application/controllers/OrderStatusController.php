@@ -129,9 +129,11 @@ class OrderStatusController extends ListingBaseController
         } else {
             $srch->addCondition('ostatus.orderstatus_type', '=', Orders::ORDER_PRODUCT);
         }
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
 
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->addFld(array('ostatus.*', 'IFNULL(ostatus_l.orderstatus_name,ostatus.orderstatus_identifier) as orderstatus_name'));
@@ -146,7 +148,7 @@ class OrderStatusController extends ListingBaseController
 
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
-        $this->set('page', 1);
+        $this->set('page', $page);
         $this->set('pageSize', $pageSize);
         $this->set('canEdit', $this->objPrivilege->canEditOrderStatus($this->admin_id, true));
     }
