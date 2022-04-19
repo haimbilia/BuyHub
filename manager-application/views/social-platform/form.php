@@ -7,7 +7,7 @@ if ($fld != null) {
 }
 
 $fld = $frm->getField('splatform_icon_class');
-$fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_IF_YOU_HAVE_TO_ADD_A_PLATFORM_ICON_EXCEPT_THIS_SELECT_LIST', $siteLangId) . '</span>';
+$fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_IF_YOU_HAVEN`T_UPLOADED_ICON_MEDIA_THEN_DEFAULT_ICON_IS_DISPLAYED_AS_PER_SELECTED_PLATFORM.', $siteLangId) . '</span>';
 
 $otherButtons = [
     [

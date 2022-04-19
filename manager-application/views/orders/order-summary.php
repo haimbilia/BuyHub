@@ -129,12 +129,6 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                         </span>
                     </span>
                 </li>
-                <li>
-                    <span class="label"><?php echo Labels::getLabel('LBL_SITE_COMMISSION', $siteLangId) ?></span>
-                    <span class="value">
-                        <?php echo CommonHelper::displayMoneyFormat($order['order_site_commission'], true, true); ?>
-                    </span>
-                </li>
                 <?php
                 $discount = (0 < $opSellerId) ? abs($discount) : $order['order_discount_total'];
                 if (0 < $discount) { ?>
@@ -208,6 +202,12 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                     <span class="label"><?php echo Labels::getLabel('LBL_NET_AMOUNT', $siteLangId) ?></span>
                     <span class="value">
                         <?php echo CommonHelper::displayMoneyFormat($netAmount, true, false, true, false, true); ?>
+                    </span>
+                </li>
+                <li>
+                    <span class="label"><?php echo Labels::getLabel('LBL_SITE_COMMISSION', $siteLangId) ?></span>
+                    <span class="value">
+                        <?php echo CommonHelper::displayMoneyFormat($order['order_site_commission'], true, true); ?>
                     </span>
                 </li>
             </ul>

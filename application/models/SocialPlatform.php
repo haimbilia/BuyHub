@@ -15,6 +15,7 @@ class SocialPlatform extends MyAppModel
     public const ICON_CSS_GOOGLE_PLUS_CLASS = 'google';
     public const ICON_CSS_PINTEREST_CLASS = 'pinterest-p';
     public const ICON_CSS_LINKEDIN_CLASS = 'linkedin';
+    public const ICON_CSS_OTHER_CLASS = 'other-social-platform';
 
     public function __construct($id = 0)
     {
@@ -59,6 +60,25 @@ class SocialPlatform extends MyAppModel
             static::ICON_CSS_GOOGLE_PLUS_CLASS => Labels::getLabel('LBL_Google_Icon', $langId),
             static::ICON_CSS_PINTEREST_CLASS => Labels::getLabel('LBL_Pinterest_Icon', $langId),
             static::ICON_CSS_LINKEDIN_CLASS => Labels::getLabel('LBL_LINKEDIN_ICON', $langId),
+        ];
+    }
+    
+    public static function getPlatFormClass($langId)
+    {
+        $langId = FatUtility::int($langId);
+        if ($langId < 1) {
+            $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
+        }
+
+        return [
+            static::ICON_CSS_FB_CLASS => Labels::getLabel('LBL_FACEBOOK', $langId),
+            static::ICON_CSS_TWITTER_CLASS => Labels::getLabel('LBL_TWITTER', $langId),
+            static::ICON_CSS_YOUTUBE_CLASS => Labels::getLabel('LBL_YOUTUBE', $langId),
+            static::ICON_CSS_INSTAGRAM_CLASS => Labels::getLabel('LBL_INSTAGRAM', $langId),
+            static::ICON_CSS_GOOGLE_PLUS_CLASS => Labels::getLabel('LBL_GOOGLE', $langId),
+            static::ICON_CSS_PINTEREST_CLASS => Labels::getLabel('LBL_PINTEREST', $langId),
+            static::ICON_CSS_LINKEDIN_CLASS => Labels::getLabel('LBL_LINKEDIN', $langId),
+            static::ICON_CSS_OTHER_CLASS => Labels::getLabel('LBL_OTHER', $langId),
         ];
     }
 

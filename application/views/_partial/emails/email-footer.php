@@ -8,18 +8,18 @@
                                         <tr>
                                             <td style="text-align: center">
                                                 <p style="font-family: 'Poppins', sans-serif;font-size: 14px;letter-spacing: -0.2px;display: block;box-sizing: border-box;font-weight: 400;color: #212529;margin: 0 0 20px 0;">
-                                                        Contact {website_name} at<br />
+                                                        <?php echo Labels::getLabel('LBL_CONTACT');?> {website_name} <?php echo Labels::getLabel('LBL_AT');?> <br />
                                                     <a href="mailto:tribe@sv.com" style="color: #f13925; text-decoration: none">{CONTACT-EMAIL}</a>
-                                                    or call at
+                                                    <?php echo Labels::getLabel('LBL_OR_CALL_AT');?>
                                                     <a href="tel:+1235546464" style="color: #f13925; text-decoration: none">{SITE-PHONE}</a>
                                                 </p>
                                                 <h5 style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: -0.2px; line-height: 24px; display: block; margin: 0 0 15px 0; color: #212529">
-                                                    Get In Touch
+                                                    <?php echo Labels::getLabel('LBL_GET_IN_TOUCH');?>
                                                 </h5>
                                                 {social_media_icons}
                                                 <span style="display: block; width: 100%; font-size: 12px; padding: 10px 0; color: #212529"></span>
-                                                <a href="javascript:void(0);" style="display: inline-block; font-size: 14px; font-weight: 500; color: 212529; text-decoration: underline">Terms & Conditions</a>
-                                                <a href="javascript:void(0);" style="display: inline-block;font-size: 14px;font-weight: 500;color: 212529;text-decoration: underline;border-left: 1px solid #212529;line-height: 12px;padding: 0 15px;margin: 0 15px;">Privacy Policy</a>
+                                                <a href="javascript:void(0);" style="display: inline-block; font-size: 14px; font-weight: 500; color: 212529; text-decoration: underline"><?php echo Labels::getLabel('LBL_TERMS_&_CONDITIONS');?></a>
+                                                <a href="javascript:void(0);" style="display: inline-block;font-size: 14px;font-weight: 500;color: 212529;text-decoration: underline;border-left: 1px solid #212529;line-height: 12px;padding: 0 15px;margin: 0 15px;"><?php echo Labels::getLabel('LBL_PRIVACY_POLICY');?></a>
                                             </td>
                                         </tr>
                                     </table>
