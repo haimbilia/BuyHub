@@ -41,21 +41,36 @@
     ul {
         display: flex;
         flex-wrap: wrap;
+        gap: 1rem;
         li {
-            margin-#{$end-direction}: 1rem;
-            margin-bottom: 1rem;
             position: relative;
         }
     }
     .uploaded-file {
         display: flex;
         align-items: center;
-        width: 80px;
-        height: 80px;
+        //width: 100px;
+        //height: 80px;
         border: $border;
         border-radius: $radius4;
-        padding: 10px;
+        padding: 5px;
+        position: relative;
         background: #fff;
+    }
+    .uploaded-file__thumb {
+        aspect-ratio: 1/1;
+        img {
+            width: 50px;
+            height: 50px;
+            max-width: none;
+            object-fit: cover;
+        }
+    }
+
+    .file-remove {
+        position: absolute;
+        top: 0;
+        #{$end-direction}: 0;
     }
     .close-layer {
         box-shadow: $shadow1;

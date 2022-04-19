@@ -39,9 +39,11 @@ foreach ($arr as $childOrder) {
                     <?php if (0 < $shippingCharges && true == $canViewShippingCharges) { ?>
                         <li>
                             <span class="lable">
-                                <?php if (true === $primaryOrder) {
-                                    echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId);
-                                } else { ?>
+                                <?php if (true === $primaryOrder) { ?>
+                                    <a class="dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $orderDetail['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>,<?php echo $childOrderDetail['op_id']; ?>)">
+                                        <?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId); ?>
+                                    </a>
+                                <?php } else { ?>
                                     <a class="dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $orderDetail['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>)">
                                         <?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId); ?>
                                     </a>
@@ -56,9 +58,12 @@ foreach ($arr as $childOrder) {
                     <?php if (true == $canViewTaxCharges && 0 < $totalTax) { ?>
                         <li>
                             <span class="lable">
-                                <?php if (true === $primaryOrder) {
-                                    echo Labels::getLabel('LBL_Tax_Charges', $siteLangId);
-                                } else { ?>
+                                <?php if (true === $primaryOrder) { ?>
+                                    <a class="dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $orderDetail['order_id']; ?>',<?php echo OrderProduct::CHARGE_TYPE_TAX; ?>,<?php echo $childOrderDetail['op_id']; ?>)">
+                                        <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
+                                    </a>
+                                    
+                                <?php } else { ?>
                                     <a class="dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $orderDetail['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
                                         <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
                                     </a>

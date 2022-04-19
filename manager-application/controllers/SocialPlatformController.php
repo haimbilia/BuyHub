@@ -303,6 +303,8 @@ class SocialPlatformController extends ListingBaseController
     {
         $frm = new Form('frmSocialPlatform');
         $frm->addHiddenField('', 'splatform_id');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELECT_PLATFORM', $this->siteLangId), 'splatform_icon_class', SocialPlatform::getPlatFormClass($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
+        $fld->requirements()->setRequired();
         $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_identifier');
 
         $urlFld = $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'splatform_url');
@@ -310,7 +312,6 @@ class SocialPlatformController extends ListingBaseController
         $urlFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_THIS_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));
         $urlFld->requirements()->setRequired();
 
-        $frm->addSelectBox(Labels::getLabel('FRM_ICON_TYPE_FROM_CSS', $this->siteLangId), 'splatform_icon_class', SocialPlatform::getIconArr($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
 
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'splatform_active', applicationConstants::ACTIVE, array(), true, applicationConstants::INACTIVE);
 

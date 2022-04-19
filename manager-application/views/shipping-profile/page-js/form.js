@@ -240,8 +240,8 @@ $(document).ready(function () {
         });
     };
 
-    editRateLangForm = function (zoneId, rateId, langId) {
-        fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId]), '', function (t) {
+    editRateLangForm = function (zoneId, rateId, langId, autoFillLangData = 0) {
+        fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId, autoFillLangData]), '', function (t) {
             fcom.closeProcessing();
             $.ykmodal(t.html, false, '');
             fcom.removeLoader();

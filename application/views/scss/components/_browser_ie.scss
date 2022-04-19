@@ -2,7 +2,7 @@
     display: none;
 }
 
-@media all and (-ms-high-contrast:none) {
+@media all and (-ms-high-contrast: none) {
     /* IE10 */
     *::-ms-backdrop,
     .outdated {
@@ -22,11 +22,11 @@
     #{$end-direction}: 0;
     background: #00caff;
     z-index: 100000;
-    
+
     display: flex;
-    
+
     align-items: center;
-    
+
     justify-content: center;
 
     flex-direction: column;
@@ -52,9 +52,8 @@
 }
 
 .list-browser {
-    
     display: flex;
-    
+
     align-items: center;
     -ms-flex-pack: distribute;
     justify-content: space-around;
