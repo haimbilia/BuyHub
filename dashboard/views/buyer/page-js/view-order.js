@@ -28,24 +28,26 @@ $(document).ready(function () {
         });
     };
 
-    loadOpShippingCharges = function (orderId, chargeType) {
+    loadOpShippingCharges = function (orderId, chargeType, opId = 0) {
         if (0 < $(".opShippingChargesJs").length) {
             $.ykmodal.show();
         } else {
             $.ykmodal(fcom.getLoader());
-            fcom.ajax(fcom.makeUrl('Buyer', 'orderProductsCharges', [orderId, chargeType]), '', function (ans) {
+            fcom.ajax(fcom.makeUrl('Order', 'orderProductsCharges', [orderId, chargeType, opId]), '', function (ans) {
+                fcom.removeLoader();
                 $.ykmsg.close();
                 $.ykmodal(ans, false, 'modal-dialog-vertical-md opShippingChargesJs');
             });
         }
     };
 
-    loadOpTaxCharges = function (orderId, chargeType) {
+    loadOpTaxCharges = function (orderId, chargeType, opId = 0) {
         if (0 < $(".opTaxChargesJs").length) {
             $.ykmodal.show();
         } else {
             $.ykmodal(fcom.getLoader());
-            fcom.ajax(fcom.makeUrl('Buyer', 'orderProductsCharges', [orderId, chargeType]), '', function (ans) {
+            fcom.ajax(fcom.makeUrl('Order', 'orderProductsCharges', [orderId, chargeType, opId]), '', function (ans) {
+                fcom.removeLoader();
                 $.ykmsg.close();
                 $.ykmodal(ans, false, 'modal-dialog-vertical-md opTaxChargesJs');
             });

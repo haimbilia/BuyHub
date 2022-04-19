@@ -54,8 +54,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
         }
         $this->includeTemplate('_partial/header/content-header.php', $data, false);
     } ?>
-    <div class="content-body">      
-        <div class="card-body">
+    <div class="content-body">        
             <div class="row">
                 <?php
                 $data = $this->variables + ['childOrderDetail' => $orderDetail,'isSellerDashboardView' => true];
@@ -68,9 +67,7 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                 ];
                 $this->includeTemplate('_partial/order/right-side-block.php', $data, false);
                 ?>
-            </div>
-        </div>
-
+            </div>  
     </div>
 </div>
 
