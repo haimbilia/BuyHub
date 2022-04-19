@@ -1139,7 +1139,7 @@ trait SellerProducts
         }
 
         $this->set('selprod_id', $selprod_id);
-        $this->set('msg', Labels::getLabel('MSG_Reset_Successfull', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_Reset_successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

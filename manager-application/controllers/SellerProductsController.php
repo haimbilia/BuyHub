@@ -1120,7 +1120,7 @@ class SellerProductsController extends ListingBaseController
         }
 
         $this->set('selprod_id', $selprod_id);
-        $this->set('msg', Labels::getLabel('MSG_Reset_Successfull', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_RESET_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
