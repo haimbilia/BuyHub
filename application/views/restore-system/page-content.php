@@ -52,7 +52,7 @@
             clearInterval(x);
             $('#restoreCounter').html("Process...");
             showRestorePopup();
-            restoreSystem();
+            // restoreSystem();
         }
     }, 1000);
 
@@ -90,6 +90,6 @@
 <!-- Tracking subsequent page views -->
 <script>
     var _hsq = window._hsq = window._hsq || [];
-    _hsq.push(['setPath', '<?php echo $_SERVER['REQUEST_URI'];?>']);
+    _hsq.push(['setPath', '<?php echo $_SERVER['REQUEST_URI']; ?>']);
     _hsq.push(['trackPageView']);
 </script>

@@ -13,20 +13,20 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                             <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName; ?>
                         </span>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
-                        <ul class="nav nav-block">
-                            <li class="nav__item">
-                                <a class="dropdown-item nav__link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD, null, false, false, false); ?>">
-                                    <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName; ?>
-                                </a>
-                            </li>
-                            <li class="nav__item logout">
-                                <a class="dropdown-item nav__link" data-org-url="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl, false); ?>" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>">
-                                    <?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+
+                    <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
+                        <li class="dropdown-menu-item">
+                            <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD, null, false, false, false); ?>">
+                                <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName; ?>
+                            </a>
+                        </li>
+                        <li class="dropdown-menu-item logout">
+                            <a class="dropdown-menu-link" data-org-url="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl, false); ?>" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>">
+                                <?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
+                            </a>
+                        </li>
+                    </ul>
+
                 </div>
             </li>
         <?php
@@ -76,19 +76,22 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                     <span class="txt">
                         <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?></span>
                 </button>
-                <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
-                    <ul class="nav nav-block">
-                        <li class="nav__item">
-                            <a class="dropdown-item nav__link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD, null, false, false, false); ?>">
-                                <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName; ?>
-                            </a>
-                        </li>
-                        <li class="nav__item"><a class="dropdown-item nav__link" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>"><?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?></a>
-                        </li>
-                        <li class="nav__item logout"><a class="dropdown-item nav__link" data-org-url="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', array(), CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>"><?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
-                            </a></li>
-                    </ul>
-                </div>
+
+                <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
+                    <li class="dropdown-menu-item">
+                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD, null, false, false, false); ?>">
+                            <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName; ?>
+                        </a>
+                    </li>
+                    <li class="dropdown-menu-item">
+                        <a class="dropdown-menu-link" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>"><?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?></a>
+                    </li>
+                    <li class="dropdown-menu-item logout">
+                        <a class="dropdown-menu-link" data-org-url="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', array(), CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>"><?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
+                        </a>
+                    </li>
+                </ul>
+
             </div>
         </li>
     <?php }

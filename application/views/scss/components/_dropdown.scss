@@ -115,19 +115,34 @@
 
 .dropdown-menu {
     //border: 0 !important;
-    margin: 0;
-    border-radius: $radius-common;
-    min-width: 14rem;
     padding: 0;
     box-shadow: 0 0 50px 0 rgba(82, 63, 105, 0.15);
     #{$start-direction}: 0;
     text-align: #{$start-direction};
+    font-size: 0.85rem;
+    border: 0 !important;
+    margin: 0;
+    min-width: 14rem;
+    //box-shadow: $card-shadow;
+    padding: 1rem 0;
+    border-radius: $radius4;
+    #{$start-direction}: 0;
+    text-align: #{$start-direction};
+
     &-anim {
         animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
     }
     &-right {
         #{$end-direction}: 0;
         #{$start-direction}: auto;
+    }
+    &-item {
+        border: none;
+    }
+    &-link {
+        display: block;
+        padding: 10px 1rem;
+        color: inherit;
     }
 }
 

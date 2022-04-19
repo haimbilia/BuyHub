@@ -20,20 +20,19 @@
     bottom: 0;
     #{$start-direction}: 0;
     #{$end-direction}: 0;
-    background: #00caff;
+    background: $secondary-color;
+    color: $secondary-color-inverse;
     z-index: 100000;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     flex-direction: column;
-    color: #fff;
     text-align: center;
     * {
-        color: #fff;
+        color: currentColor;
+    }
+    a:hover {
+        color: currentColor;
     }
 }
 
