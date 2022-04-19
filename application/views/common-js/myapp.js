@@ -137,14 +137,17 @@ var cart = {
     },
 
     loadCartSummary: function (show = true) {
-        var isOffcanvas = (0 < $("#side-cart.offcanvas").length);
+        var isOffcanvas = (0 < $("#sideCartJs.offcanvas").length);
         if (true === show && isOffcanvas) {
-            $("#side-cart").prepend(fcom.getLoader()).offcanvas('hide');
+            $("#sideCartJs").prepend(fcom.getLoader()).offcanvas('hide');
         }
-        $('#cartSummaryJs').load(fcom.makeUrl('cart', 'getCartSummary'), function () {
+
+        fcom.updateWithAjax(fcom.makeUrl('Cart', 'getCartSummary'), '', function (ans) {
             if (true === show && isOffcanvas) {
                 fcom.removeLoader();
-                $("#side-cart").offcanvas('show');
+                $('#cartSummaryJs').html(ans.buttonHtml);
+                $('#sideCartJs').replaceWith(ans.offCanvasHtml);
+                $("#sideCartJs").offcanvas('show');
             }
         });
     }

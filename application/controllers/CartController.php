@@ -818,7 +818,15 @@ class CartController extends MyAppController
         $this->set('products', $productsArr);
         $this->set('cartSummary', $cartSummary);
         $this->set('totalCartItems', $cartObj->countProducts());
-        $this->_template->render(false, false);
+        $this->set('showHeaderButton', true);
+        $buttonHtml = $this->_template->render(false, false, '_partial/cart-summary.php', true);
+        $this->set('showHeaderButton', false);
+        $offCanvasHtml = $this->_template->render(false, false, '_partial/cart-summary.php', true);
+        $jsonData = [
+            'buttonHtml' => $buttonHtml,
+            'offCanvasHtml' => $offCanvasHtml
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function removePickupOnlyProducts()
