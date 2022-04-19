@@ -142,8 +142,7 @@ class FatMailer extends FatModel
         $footer = $ftpl->render(false, false, '_partial/emails/email-footer.php', true);
         $body = $header . $row['etpl_body'] . $footer;
         $this->variables += $this->commonVars($row['etpl_lang_id']);
-
-        $body = $this->replaceVariables($body);
+        $body = $this->replaceVariables($body);        
         $subject = $this->replaceVariables($row['etpl_subject']);
 
         if ($row['etpl_status'] != applicationConstants::ACTIVE) {
@@ -399,7 +398,7 @@ class FatMailer extends FatModel
             $target_blank = ($row['splatform_url'] != '') ? 'target="_blank"' : '';
             $url = $row['splatform_url'] != '' ? $row['splatform_url'] : 'javascript:void(0)';
 
-            if (!empty($img)) {
+            if (!empty($img) && 0 < $img['afile_id']) {
                 $uploadedTime = AttachedFile::setTimeParam($img['afile_updated_at']);
                 $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'SocialPlatform', array($row['splatform_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             } elseif ($row['splatform_icon_class'] != '') {
