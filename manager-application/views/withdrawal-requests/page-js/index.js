@@ -30,6 +30,7 @@
     requestOutside = function (pluginName, id, status, comment = '') {
         data = 'id=' + id + '&status=' + status + '&comment=' + comment;
         fcom.updateWithAjax(fcom.makeUrl(pluginName), data, function (t) {
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
             reloadList();
             $.ykmodal.close();
