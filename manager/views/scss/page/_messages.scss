@@ -19,9 +19,14 @@
     }
     &-search {
         border-bottom: $border;
-        padding: 20px 0;
+        padding: 10px 0;
         .omni-search {
             border: none !important;
+            &:focus,
+            &:focus-visible {
+                outline: none !important;
+                border: none !important;
+            }
         }
     }
     &-filter {
