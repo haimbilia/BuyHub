@@ -1,25 +1,90 @@
+.file__upload {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    color: $txt-gray;
+    border: $border;
+    padding: 0.45rem 1rem;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    //margin: .875rem 0;
+    font-size: 0.8rem;
+    &:hover {
+        cursor: pointer;
+        color: $primary-color;
+    }
+    input[type="file"] {
+        position: absolute;
+        border: none;
+        opacity: 0;
+        padding: 0;
+        cursor: pointer;
+    }
+    span {
+        font-size: 0.875rem;
+        color: currentColor;
+        svg {
+            fill: currentColor;
+        }
+        &.upload-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-#{$end-direction}: 0.25rem;
+        }
+    }
+}
+
 .uploaded-media {
     display: flex;
     flex-direction: column;
-    .uploaded {
+    margin-top: 1rem;
+    &-list {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-flow: row wrap;
+    }
+    &-item {
+    }
+
+    .uploaded-file {
+        box-shadow: $shadow1;
+        background: #fff;
         display: flex;
         align-items: center;
-        border: dashed 1px $border-color;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        border-radius: 4px;
-        &:last-child {
-            margin-bottom: 0;
+        border: $border;
+        border-radius: $radius4;
+        padding: 5px;
+        position: relative;
+    }
+    .uploaded-file__thumb {
+        aspect-ratio: 1/1;
+        img {
+            width: 80px;
+            height: 80px;
+            max-width: none;
+            object-fit: cover;
         }
     }
-    .uploaded-file {
-        max-width: 50px;
-        flex: 0 0 50px;
-        border: $border;
-        border-radius: 4px;
-        box-shadow: $shadow1;
-        background: $bg-placeholder;
-        margin-#{$end-direction}: 1rem;
+    .file-remove {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        border: none;
+        position: absolute;
+        top: 0;
+        #{$end-direction}: 0;
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
     }
     .file {
         position: relative;
@@ -32,11 +97,7 @@
             font-size: 0.85rem;
         }
     }
-    .trash {
-        #{$end-direction}: 0;
-        position: absolute;
-        top: auto;
-    }
+
     .progress {
         height: 6px;
         &-bar {
