@@ -1,12 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
+
 if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
-    if (true === $showHeaderButton) {
-?>
-        <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#side-cart" aria-controls="side-cart">
+    if (true === $showHeaderButton) {?>
+        <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#sideCartJs" aria-controls="side-cart">
             <svg class="svg" width="20" height="20">
                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
             </svg>
-
             <span class="cart-qty">
                 <?php
                 $cartObj = new Cart();
@@ -18,14 +17,13 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
         </button>
     <?php } else { ?>
         <!-- offcanvas-side-cart -->
-        <div class="offcanvas offcanvas-end offcanvas-side-cart" tabindex="-1" id="side-cart" aria-labelledby="side-cartLabel">
+        <div class="offcanvas offcanvas-end offcanvas-side-cart" tabindex="-1" id="sideCartJs" aria-labelledby="side-cartLabel">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title">
                     <?php echo Labels::getLabel('LBL_ITEMS', $siteLangId); ?> <span class="count-items"> (<?php echo $totalCartItems; ?>) </span>
                 </h5>
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-
             <?php if ($totalCartItems > 0) { ?>
                 <div class="offcanvas-body">
                     <div class="short-detail">

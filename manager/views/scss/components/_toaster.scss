@@ -8,11 +8,12 @@
 
 .toast-message a,
 .toast-message label {
-    color: #ffffff;
+    color: currentColor;
+    text-decoration: underline;
 }
 
 .toast-message a:hover {
-    color: #cccccc;
+    color: currentColor;
     text-decoration: none;
 }
 

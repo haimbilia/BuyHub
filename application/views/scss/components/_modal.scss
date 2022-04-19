@@ -32,7 +32,7 @@
     }
     &.fixed-right {
         padding-#{$end-direction}: 0 !important;
-        
+
         &.fade .modal-dialog-vertical {
             transform: translateX(100% * $transform-direction);
         }
