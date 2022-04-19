@@ -10,7 +10,7 @@
 </div>
 <div class="zeynep-overlay"></div>
 
-
+<?php $this->includeTemplate('_partial/cart-summary.php', ['showHeaderButton' => false]); ?>
 
 <!-- offcanvas-filters -->
 <div class="offcanvas offcanvas-end offcanvas-filters" tabindex="-1" id="filters-right" aria-labelledby="filters-right">
