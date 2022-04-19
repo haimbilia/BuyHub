@@ -22,7 +22,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
             </h5>
             <div class="">
                 <div class="dropdown">
-                    <button class="btn btn-icon btn-outline-gray" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-icon btn-outline-gray btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         <svg class="svg" width="20" height="20">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#three-dots">
                             </use>
@@ -30,14 +30,14 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <?php if ($isSellerDashboardView) { ?>
-                            <li>
-                                <a class="dropdown-item no-print" target="_blank" href="<?php echo UrlHelper::generateUrl('Seller', 'viewInvoice', [$orderDetail['op_id']]); ?>" title="
+                            <li class="dropdown-menu-item">
+                                <a class="dropdown-menu-link no-print" target="_blank" href="<?php echo UrlHelper::generateUrl('Seller', 'viewInvoice', [$orderDetail['op_id']]); ?>" title="
 								<?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?>">
                                     <span><?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?></span>
                                 </a>
                             </li>
-                            <li>
-                                <a class="dropdown-item no-print" target="_blank" href="<?php echo UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $orderDetail['op_id']]); ?>" title="<?php echo Labels::getLabel('LBL_BUYER_INVOICE', $siteLangId); ?>">
+                            <li class="dropdown-menu-item">
+                                <a class="dropdown-menu-link no-print" target="_blank" href="<?php echo UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $orderDetail['op_id']]); ?>" title="<?php echo Labels::getLabel('LBL_BUYER_INVOICE', $siteLangId); ?>">
                                     <span><?php echo Labels::getLabel('LBL_BUYER_INVOICE', $siteLangId); ?></span>
                                 </a>
                             </li>
@@ -47,8 +47,8 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                 $opId = $orderDetail['op_id'];
                                 if (1 < $orderDetail['opshipping_rate_id'] && (empty($orderDetail['opshipping_plugin_id']) || ($shippingApiObj->getKey('plugin_id') != $orderDetail['opshipping_plugin_id'] && empty($orderDetail['opr_response'])))) {
                             ?>
-                                    <li>
-                                        <a class="dropdown-item no-print" href="javascript:void(0)" onclick="shippingRatesForm(<?php echo $opId; ?>)" title="<?php echo Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId); ?>">
+                                    <li class="dropdown-menu-item">
+                                        <a class="dropdown-menu-link no-print" href="javascript:void(0)" onclick="shippingRatesForm(<?php echo $opId; ?>)" title="<?php echo Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId); ?>">
                                             <span><?php echo Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId); ?></span>
                                         </a>
                                     </li>
@@ -59,8 +59,8 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                         if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && true === $shippingApiObj->canGenerateLabelSeparately()) {
                                             $orderId = $orderDetail['order_id'];
                                     ?>
-                                            <li>
-                                                <a class="dropdown-item no-print" href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>">
+                                            <li class="dropdown-menu-item">
+                                                <a class="dropdown-menu-link no-print" href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>">
                                                     <span><?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?></span>
                                                 </a>
                                             </li>
@@ -68,14 +68,14 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                         } elseif (!empty($orderDetail['opr_response'])) {
                                             if (FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS") == $orderDetail["op_status_id"]) {
                                             ?>
-                                                <li>
-                                                    <a class="dropdown-item no-print" target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$orderDetail['op_id']]); ?>" title="<?php echo Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId); ?>">
+                                                <li class="dropdown-menu-item">
+                                                    <a class="dropdown-menu-link no-print" target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$orderDetail['op_id']]); ?>" title="<?php echo Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId); ?>">
                                                         <span><?php echo Labels::getLabel('LBL_PREVIEW_RETURN_LABEL', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } else { ?>
-                                                <li>
-                                                    <a class="dropdown-item no-print" target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>">
+                                                <li class="dropdown-menu-item">
+                                                    <a class="dropdown-menu-link no-print" target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>">
                                                         <span><?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
@@ -89,8 +89,8 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                                 $label = Labels::getLabel('LBL_BUY_SHIPMENT', $siteLangId);
                                             }
                                         ?>
-                                            <li>
-                                                <a class="dropdown-item no-print" href="javascript:void(0)" onclick="proceedToShipment(<?php echo $opId; ?>)" title="<?php echo $label; ?>">
+                                            <li class="dropdown-menu-item">
+                                                <a class="dropdown-menu-link no-print" href="javascript:void(0)" onclick="proceedToShipment(<?php echo $opId; ?>)" title="<?php echo $label; ?>">
                                                     <span><?php echo $label; ?></span>
                                                 </a>
                                             </li>
@@ -103,14 +103,14 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                             $pickUpDetails =  OrderProduct::getPickUpShedule($opId);
                                             if (!$pickUpDetails || 1 > $pickUpDetails['opsp_scheduled']) {
                                             ?>
-                                                <li>
-                                                    <a class="dropdown-item no-print" href="javascript:void(0)" onclick="getPickupForm(<?php echo $opId; ?>)" title="<?php echo Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId); ?>">
+                                                <li class="dropdown-menu-item">
+                                                    <a class="dropdown-menu-link no-print" href="javascript:void(0)" onclick="getPickupForm(<?php echo $opId; ?>)" title="<?php echo Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId); ?>">
                                                         <span><?php echo Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } else { ?>
                                                 <li>
-                                                    <a class="dropdown-item no-print" href="javascript:void(0)" onclick="cancelPickup(<?php echo $opId; ?>)" title="<?php echo Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId); ?>">
+                                                    <a class="dropdown-menu-link no-print" href="javascript:void(0)" onclick="cancelPickup(<?php echo $opId; ?>)" title="<?php echo Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId); ?>">
                                                         <span><?php echo Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
@@ -121,11 +121,11 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                             }
                         } else {
                             ?>
-                            <li>
-                                <a class="dropdown-item no-print" href="javascript:void(0)" onclick="return addItemsToCart('<?php echo $orderDetail['order_id']; ?>');"><?php echo Labels::getLabel('LBL_Buy_Again', $siteLangId); ?></a>
+                            <li class="dropdown-menu-item">
+                                <a class="dropdown-menu-link no-print" href="javascript:void(0)" onclick="return addItemsToCart('<?php echo $orderDetail['order_id']; ?>');"><?php echo Labels::getLabel('LBL_Buy_Again', $siteLangId); ?></a>
                             </li>
-                            <li>
-                                <a class="dropdown-item no-print" href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" title="<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?></a>
+                            <li class="dropdown-menu-item">
+                                <a class="dropdown-menu-link no-print" href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" title="<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?></a>
                             </li>
                         <?php } ?>
                     </ul>
@@ -174,11 +174,11 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
             </div>
         </div>
     <?php } ?>
-    <?php 
-        if($isSellerDashboardView){
-            include CONF_THEME_PATH . 'seller/_partial/order-update-form.php';
-        }else{
-            include CONF_THEME_PATH . 'buyer/partial-view-order.php';
-        }
-    ?>    
+    <?php
+    if ($isSellerDashboardView) {
+        include CONF_THEME_PATH . 'seller/_partial/order-update-form.php';
+    } else {
+        include CONF_THEME_PATH . 'buyer/partial-view-order.php';
+    }
+    ?>
 </div>

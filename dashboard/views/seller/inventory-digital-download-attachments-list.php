@@ -45,7 +45,7 @@ foreach ($records as $sn => $row) {
                         </svg>',
                             true
                         );
-                        
+
                         $dvElem->appendElement(
                             "a",
                             array(
@@ -62,7 +62,7 @@ foreach ($records as $sn => $row) {
                 }
                 break;
             case 'preview':
-                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));                
+                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
                 if (0 < $row['prev_afile_id']) {
                     $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
                     $dvElem->appendElement(
@@ -93,7 +93,7 @@ foreach ($records as $sn => $row) {
                             true
                         );
                     }
-                } else {                   
+                } else {
                     if (true === $canDoDigDownload) {
                         $dvElem->appendElement(
                             "a",
@@ -109,7 +109,7 @@ foreach ($records as $sn => $row) {
                             <use
                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
                             </use>
-                        </svg>'.Labels::getLabel('LBL_Add', $siteLangId),
+                        </svg>' . Labels::getLabel('LBL_Add', $siteLangId),
                             true
                         );
                     }

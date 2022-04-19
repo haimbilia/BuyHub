@@ -78,7 +78,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
 <?php
 
 } elseif ($layoutType == applicationConstants::SCREEN_MOBILE) { ?>
-    <div class="offcanvas offcanvas-account offcanvas-start" tabindex="-1" id="offcanvas-account">
+    <div class="offcanvas  offcanvas-start offcanvas-account" tabindex="-1" id="offcanvas-account">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title">Profile </h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
