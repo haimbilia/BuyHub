@@ -86,9 +86,9 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
                         $active = $isActive ? 'active' : '';
                         $othetBtnsDisabled = (isset($link['isDisabled']) && false === $link['isDisabled']) || true === $isActive ? '' : $disabled;
 
-                        $href = !empty($attr) ? $attr['href'] : 'javascript:void(0);';
-                        $onclick = !empty($attr) ? $attr['onclick'] : '';
-                        $title = !empty($attr) ? $attr['title'] : '';
+                        $href = $attr['href'] ?? 'javascript:void(0);';
+                        $onclick = $attr['onclick'] ?? '';
+                        $title = $attr['title'] ?? '';
                 ?>
                         <a class="nav-link <?php echo $active . $othetBtnsDisabled; ?>" href="<?php echo $href; ?>" <?php echo !empty($onclick) ? "onclick='" . $onclick . "'" : ""; ?> title="<?php echo $title; ?>">
                             <?php echo $label; ?>

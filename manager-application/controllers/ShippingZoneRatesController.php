@@ -1,11 +1,13 @@
 <?php
 
-class ShippingZoneRatesController extends ListingBaseController {
+class ShippingZoneRatesController extends ListingBaseController
+{
 
     protected $modelClass = 'ShippingRate';
     protected $pageKey = 'MANAGE_SHIPPING_RATES';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewShippingManagement();
     }
@@ -16,7 +18,8 @@ class ShippingZoneRatesController extends ListingBaseController {
      * @param  bool $setVariable
      * @return void
      */
-    protected function checkEditPrivilege(bool $setVariable = false): void {
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
         if (true === $setVariable) {
             $this->set("canEdit", $this->objPrivilege->canEditShippingManagement($this->admin_id, true));
         } else {
@@ -24,19 +27,20 @@ class ShippingZoneRatesController extends ListingBaseController {
         }
     }
 
-    public function form($zoneId, $rateId = 0) {
+    public function form($zoneId, $rateId = 0)
+    {
         $this->objPrivilege->canEditShippingManagement();
         $rateId = FatUtility::int($rateId);
         $data = array();
         $frm = $this->getForm($zoneId, $rateId);
         if (0 < $rateId) {
             $data = ShippingRate::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $rateId, [
-                        'COALESCE(shiprate_name, shiprate_identifier) shiprate_name',
-                        'shiprate_condition_type',
-                        'shiprate_cost',
-                        'shiprate_min_val',
-                        'shiprate_max_val',
-                            ], applicationConstants::JOIN_RIGHT);
+                'COALESCE(shiprate_name, shiprate_identifier) shiprate_name',
+                'shiprate_condition_type',
+                'shiprate_cost',
+                'shiprate_min_val',
+                'shiprate_max_val',
+            ], applicationConstants::JOIN_RIGHT);
             if (empty($data)) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -45,7 +49,7 @@ class ShippingZoneRatesController extends ListingBaseController {
                 $data['is_condition'] = 1;
             }
             $frm->fill($data);
-        }       
+        }
         $this->set('activeGentab', true);
         $this->set('languages', Language::getAllNames());
         $this->set('zoneId', $zoneId);
@@ -57,7 +61,8 @@ class ShippingZoneRatesController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->objPrivilege->canEditShippingManagement();
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -97,7 +102,8 @@ class ShippingZoneRatesController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($zoneId = 0, $rateId = 0, $langId = 0) {
+    public function langForm($zoneId = 0, $rateId = 0, $langId = 0, $autoFillLangData = 0)
+    {
         $this->objPrivilege->canEditShippingManagement();
         $zoneId = FatUtility::int($zoneId);
         $rateId = FatUtility::int($rateId);
@@ -108,7 +114,16 @@ class ShippingZoneRatesController extends ListingBaseController {
         }
 
         $langFrm = $this->getLangForm($zoneId, $rateId, $langId);
-        $langData = ShippingRate::getAttributesByLangId($langId, $rateId);
+        if (0 < $autoFillLangData) {
+            $updateLangDataobj = new TranslateLangData(ShippingRate::DB_TBL_LANG);
+            $translatedData = $updateLangDataobj->getTranslatedData($rateId, $langId, CommonHelper::getDefaultFormLangId());
+            if (false === $translatedData) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+            $langData = current($translatedData);
+        } else {
+            $langData = ShippingRate::getAttributesByLangId($langId, $rateId);
+        }
         if ($langData) {
             $langFrm->fill($langData);
         }
@@ -125,7 +140,8 @@ class ShippingZoneRatesController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function langSetup() {
+    public function langSetup()
+    {
         $this->objPrivilege->canEditShippingManagement();
         $post = FatApp::getPostedData();
         $zoneId = $post['zone_id'];
@@ -163,21 +179,22 @@ class ShippingZoneRatesController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteRate($rateId) {
+    public function deleteRate($rateId)
+    {
         $this->objPrivilege->canEditShippingManagement();
 
         $srch = ShippingRate::getSearchObject(0);
         $srch->joinTable(
-                ShippingProfileZone::DB_TBL,
-                'LEFT OUTER JOIN',
-                'tspz.' . ShippingProfileZone::DB_TBL_PREFIX . 'id = srate.' . ShippingRate::DB_TBL_PREFIX . 'shipprozone_id',
-                'tspz'
+            ShippingProfileZone::DB_TBL,
+            'LEFT OUTER JOIN',
+            'tspz.' . ShippingProfileZone::DB_TBL_PREFIX . 'id = srate.' . ShippingRate::DB_TBL_PREFIX . 'shipprozone_id',
+            'tspz'
         );
         $srch->joinTable(
-                ShippingRate::DB_TBL,
-                'LEFT OUTER JOIN',
-                'tsr.' . ShippingRate::DB_TBL_PREFIX . 'shipprozone_id = tspz.' . ShippingProfileZone::DB_TBL_PREFIX . 'id',
-                'tsr'
+            ShippingRate::DB_TBL,
+            'LEFT OUTER JOIN',
+            'tsr.' . ShippingRate::DB_TBL_PREFIX . 'shipprozone_id = tspz.' . ShippingProfileZone::DB_TBL_PREFIX . 'id',
+            'tsr'
         );
         $srch->addMultipleFields(['tsr.*']);
         $srch->addCondition('srate.shiprate_id', '=', $rateId);
@@ -205,19 +222,20 @@ class ShippingZoneRatesController extends ListingBaseController {
 
             if (false === $canDelete) {
                 $msg = Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEASE_ONE_SHIPPING_RATE_WITHOUT_CONDITION', $this->siteLangId);
-                LibHelper::exitWithError($msg, true);    
+                LibHelper::exitWithError($msg, true);
             }
         }
 
         $sObj = new ShippingRate($rateId);
         if (!$sObj->deleteRecord(true)) {
-             LibHelper::exitWithError($sObj->getError(), true);   
+            LibHelper::exitWithError($sObj->getError(), true);
         }
         $this->set('msg', Labels::getLabel('MSG_RATE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm($zoneId = 0, $rateId = 0) {
+    private function getForm($zoneId = 0, $rateId = 0)
+    {
         $conditionTypes = ShippingRate::getConditionTypes($this->siteLangId);
         $zoneId = FatUtility::int($zoneId);
         $rateId = FatUtility::int($rateId);
@@ -276,16 +294,14 @@ class ShippingZoneRatesController extends ListingBaseController {
         return $frm;
     }
 
-    protected function getLangForm($zoneId = 0, $rateId = 0, $langId = 0) {
+    protected function getLangForm($zoneId = 0, $rateId = 0, $langId = 0)
+    {
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmzoneLang', array('id' => 'frmzoneLang'));
         $frm->addHiddenField('', 'zone_id', $zoneId);
         $frm->addHiddenField('', 'rate_id', $rateId);
-        $frm->addHiddenField('', 'lang_id', $langId);
-        $langFld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $langFld->setfieldTagAttribute('onChange', "editRateLangForm($zoneId,$rateId,this.value);");
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_RATE_NAME', $langId), 'shiprate_name');
         return $frm;
     }
-
 }

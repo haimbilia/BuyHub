@@ -1,39 +1,3 @@
-<div class="outdated">
-    <div class="outdated-inner">
-        <div class="outdated-messages">
-            <div class="heading">The browser you are using is not supported. Some critical security features are not
-                available for your
-                browser version.</div>
-            <div class="para">We want you to have the best possible experience with
-                <?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, ''); ?>.
-                For this you'll need to use a supported browser and upgrade to the latest version. </div>
-            <ul class="list-browser">
-                <li><a href="https://www.google.com/chrome" target="_blank" rel="noopener noreferrer"><i class="icn chrome"></i>
-                        <p><strong>Chrome</strong><br>
-                            <span>Get the latest version</span>
-                        </p>
-                    </a></li>
-                <li><a href="https://getfirefox.com" target="_blank" rel="noopener noreferrer"><i class="icn firefox"></i>
-                        <p><strong>Firefox</strong><br>
-                            <span>Get the latest version</span>
-                        </p>
-                    </a></li>
-                <li><a href="http://support.apple.com/downloads/#safari" target="_blank" rel="noopener noreferrer"><i class="icn safari"></i>
-                        <p><strong>Safari</strong><br>
-                            <span>Get the latest version</span>
-                        </p>
-                    </a></li>
-                <li>
-                    <a href="http://getie.com" target="_blank" rel="noopener noreferrer"><i class="icn internetexplorer"></i>
-                        <p><strong>Internet Explorer</strong><br>
-                            <span>Get the latest version</span>
-                        </p>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
 <div class="wrapper">
     <?php if (FatApp::getConfig('CONF_LOADER', FatUtility::VAR_INT, 0)) { ?>
         <div id="loader-wrapper">
