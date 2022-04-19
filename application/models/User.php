@@ -332,15 +332,6 @@ class User extends MyAppModel
 
     public static function canAccessSupplierDashboard()
     {
-        /* if(!FatApp::getConfig('CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION')){
-        return true;
-        }
-
-        if(FatApp::getConfig('CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION')){
-        if(static::isSeller()){
-        return true;
-        }
-        } */
         if (static::isSeller()) {
             return true;
         }

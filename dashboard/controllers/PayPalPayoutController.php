@@ -21,24 +21,8 @@ class PayPalPayoutController extends PayoutBaseController
                 'label' => "Amount",
             ]
         ];
-        $formFields = static::formFields();
+        $formFields = self::formFields();
         return array_merge($reqFields, $formFields);
-    }
-
-    public function getRequestForm()
-    {
-        $userId = UserAuthentication::getLoggedUserId();
-        $frm = $this->getFormObj(static::reqFields());
-
-        $userObj = new User($userId);
-        $data = $userObj->getUserInfo('credential_email as email');
-        if (!empty($data)) {
-            $frm->fill($data);
-        }
-        $this->set('frm', $frm);
-        $this->set('walletBalance', User::getUserBalance(UserAuthentication::getLoggedUserId(true)));
-        $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public static function formFields()
@@ -57,12 +41,11 @@ class PayPalPayoutController extends PayoutBaseController
         ];
     }
 
-    public function form()
+    public function payoutInfoForm()
     {
-        $userId = UserAuthentication::getLoggedUserId();
         $frm = $this->getFormObj(static::formFields());
 
-        $data = User::getUserMeta($userId);
+        $data = User::getUserMeta(UserAuthentication::getLoggedUserId());
         if (!empty($data)) {
             $frm->fill($data);
         }
@@ -71,13 +54,18 @@ class PayPalPayoutController extends PayoutBaseController
         $this->_template->render(false, false);
     }
 
-    public function setupAccountForm()
+    public function getRequestForm()
     {
-        $frm = $this->getFormObj(self::formFields());
+        $frm = $this->getFormObj(self::reqFields());
 
-        $post = array_filter($frm->getFormDataFromArray(FatApp::getPostedData()));
-        unset($post['keyName'], $post['plugin_id']);
-        $this->updateUserInfo($post);
+        $data = User::getUserMeta(UserAuthentication::getLoggedUserId());
+        if (!empty($data)) {
+            $frm->fill($data);
+        }
+        $this->set('frm', $frm);
+        $this->set('walletBalance', User::getUserBalance(UserAuthentication::getLoggedUserId(true)));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function saveWithdrawalSpecifics($withdrawalId, $data, $elements)
@@ -105,6 +93,15 @@ class PayPalPayoutController extends PayoutBaseController
         return true;
     }
 
+    public function setupAccountForm()
+    {
+        $frm = $this->getFormObj(self::formFields());
+
+        $post = array_filter($frm->getFormDataFromArray(FatApp::getPostedData()));
+        unset($post['keyName'], $post['plugin_id']);
+        $this->updateUserInfo($post);
+    }
+
     public function setup()
     {
         $this->validateWithdrawalRequest();
@@ -127,8 +124,6 @@ class PayPalPayoutController extends PayoutBaseController
         if (1 > $withdrawal_payment_method) {
             $withdrawal_payment_method = Plugin::getAttributesByCode(self::KEY_NAME, 'plugin_id');
         }
-        // $withdrawal_payment_method = ($withdrawal_payment_method > 0 && array_key_exists($withdrawal_payment_method, User::getAffiliatePaymentMethodArr($this->siteLangId))) ? $withdrawal_payment_method  : User::AFFILIATE_PAYMENT_METHOD_BANK;
-
 
         $post['withdrawal_payment_method'] = $withdrawal_payment_method;
 
@@ -165,44 +160,5 @@ class PayPalPayoutController extends PayoutBaseController
             $this->_template->render();
         }
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function callback()
-    {
-        $post = file_get_contents('php://input');
-        if (empty($post)) {
-            $message = Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId);
-            LibHelper::dieJsonError($message);
-        }
-        $webhookData = json_decode($post, true);
-        $event_type = $webhookData['event_type'];
-        $requestData = $webhookData['resource'];
-        $senderBatchIdArr = explode('_', $requestData['sender_batch_id']);
-        $recordId = end($senderBatchIdArr);
-        $recordId = FatUtility::int($recordId);
-
-        $txnStatus = '';
-        switch ($event_type) {
-            case "PAYMENT.PAYOUTS-ITEM.SUCCEEDED":
-                $withdrawStatus = Transactions::WITHDRAWL_STATUS_COMPLETED;
-                $txnStatus = Transactions::STATUS_COMPLETED;
-                break;
-
-            case "PAYMENT.PAYOUTS-ITEM.CANCELED":
-            case "PAYMENT.PAYOUTS-ITEM.DENIED":
-                $withdrawStatus = Transactions::WITHDRAWL_STATUS_DECLINED;
-                $txnStatus = Transactions::STATUS_DECLINED;
-                break;
-
-            case "PAYMENT.PAYOUTS-ITEM.FAILED":
-                $withdrawStatus = Transactions::WITHDRAWL_STATUS_PAYOUT_FAILED;
-                $txnStatus = Transactions::STATUS_DECLINED;
-                break;
-            case "PAYMENT.PAYOUTS-ITEM.UNCLAIMED":
-                $withdrawStatus = Transactions::WITHDRAWL_STATUS_PAYOUT_UNCLAIMED;
-                $txnStatus = Transactions::STATUS_COMPLETED;
-                break;
-        }
-        $this->updateWithdrawalRequest($recordId, $post, $withdrawStatus, $txnStatus);
     }
 }
