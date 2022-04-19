@@ -18,21 +18,16 @@
             <tbody>
                 <?php
                 $k = 1;
-                $totalTax = 0;
+                $totalTax = 0;         
                 foreach ($opsShippingDetail as $op) {
                     $taxCost = CommonHelper::orderProductAmount($op, 'TAX');
                     $totalTax += $taxCost;
                     $opId = FatUtility::int($op['op_id']);
                     $prodOrBatchUrl = 'javascript:void(0)';
-                    if ($op['op_is_batch']) {
-                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'batch', array($op['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($op['op_selprod_id'], $siteLangId, ImageDimension::VIEW_SMALL), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-                    } else {
-                        if (Product::verifyProductIsValid($op['op_selprod_id']) == true) {
-                            $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($op['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-                        }
-                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($op['selprod_product_id'], ImageDimension::VIEW_SMALL, $op['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
+                    if (Product::verifyProductIsValid($op['op_selprod_id']) == true) {
+                        $prodOrBatchUrl = UrlHelper::generateUrl('Products', 'view', array($op['op_selprod_id']), CONF_WEBROOT_FRONTEND);
                     }
+                    $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($op['selprod_product_id'], ImageDimension::VIEW_SMALL, $op['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                 ?>
                     <tr>
                         <td><?php echo $k; ?></td>
@@ -69,6 +64,16 @@
                         </td>
                         <td>
                             <?php echo CommonHelper::displayMoneyFormat($taxCost, true, true); ?>
+                            <?php  
+                                echo "<br/>";
+                                $strCount = 1;                             
+                                foreach($op['taxOptions'] as $taxStr){ 
+                                    echo $taxStr['name'] ." - " .$taxStr['value'];
+                                    if($strCount != count($op['taxOptions'])){
+                                        echo "<br/>";
+                                    }
+                                    $strCount++;
+                                }?> 
                         </td>
                     </tr>
                 <?php $k++;
@@ -83,5 +88,4 @@
             </tfoot>
         </table>
     </div>
-    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
