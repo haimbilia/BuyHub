@@ -21,9 +21,7 @@ class ImageController extends FatController
             if (!false == $res && $res['afile_type'] == $fileType) {
                 $file_row = $res;
             }
-        } else {
-            //FILETYPE_USER_IMAGE
-            //FILETYPE_f_PROFILE_IMAGE
+        } else {      
             $file_row = AttachedFile::getAttachment($fileType, $recordId);
             if ($cropedImage && $file_row == false) {
                 $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_USER_PROFILE_IMAGE, $recordId);
@@ -70,10 +68,9 @@ class ImageController extends FatController
         }
         $image_name = (isset($file_row['afile_physical_path']) && !empty($file_row['afile_physical_path'])) ? AttachedFile::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CUSTOM_PRODUCTS, $sizeType);
-
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_PRODUCTS, $sizeType);
+        
         if ($sizeType) {
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'], $default_image);

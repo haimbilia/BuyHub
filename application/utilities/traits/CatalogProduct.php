@@ -162,8 +162,9 @@ trait CatalogProduct
         }
         $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'prod_image');
         $frm->addHtml('', 'images', '');
-        $frm->addHiddenField('', 'min_width', 500);
-        $frm->addHiddenField('', 'min_height', 500);
+        $imgDimension = ImageDimension::getProductImageData(ImageDimension::VIEW_ORIGINAL);
+        $frm->addHiddenField('', 'min_width', $imgDimension[ImageDimension::WIDTH]);
+        $frm->addHiddenField('', 'min_height', $imgDimension[ImageDimension::HEIGHT]);
         $frm->addHiddenField('', 'record_id');
         $frm->addHiddenField('', 'file_type');
 
