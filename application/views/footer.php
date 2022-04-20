@@ -210,7 +210,7 @@ if (CommonHelper::demoUrl()) { ?>
     <svg class="svg">
         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#up-arrow"></use>
     </svg>
-    <span>Top</span>
+    <span><?php echo Labels::getLabel('LBL_TOP', $siteLangId); ?></span>
 </a>
 </body>
 

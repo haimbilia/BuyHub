@@ -27,16 +27,15 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
 }
 ?>
 <!-- offcanvas-gps-location -->
-<div class="offcanvas offcanvas-bottom offcanvas-gps-location" tabindex="-1" id="offcanvas-gps-location">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title"><?php echo Labels::getLabel('LBL_CHANGE_LOCATION', $siteLangId); ?></h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <div class="geo-location-mobile">
-            <div class="geo-location_inner">
-                <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-
+<?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+    <div class="offcanvas offcanvas-bottom offcanvas-gps-location" tabindex="-1" id="offcanvas-gps-location">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title"><?php echo Labels::getLabel('LBL_CHANGE_LOCATION', $siteLangId); ?></h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="geo-location-mobile">
+                <div class="geo-location_inner">
                     <?php
                     $geoAddress = '';
                     if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
@@ -76,12 +75,11 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
                             </button>
                         </div>
                     </div>
-
-                <?php } ?>
+                </div>
             </div>
         </div>
     </div>
-</div>
+<?php } ?>
 <!-- offcanvas-seller-nav -->
 <div class="offcanvas offcanvas-start offcanvas-seller-nav" tabindex="-1" id="offcanvas-seller-nav" aria-labelledby="offcanvas-seller-nav">
     <div class="offcanvas-header">
