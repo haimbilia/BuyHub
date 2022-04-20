@@ -47,7 +47,7 @@
                 case 'product_identifier':
                     $uploadedTime = AttachedFile::setTimeParam($row['product_updated_on']);
                     $html = '<div class="product-profile">
-                            <figure class="product-profile__pic"><img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($row['product_id'], ImageDimension::VIEW_SMALL, 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '"></figure>
+                            <figure class="product-profile__pic"><img '.HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI).' src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($row['product_id'], ImageDimension::VIEW_MINI, 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '"></figure>
                                 <div class="product-profile__description">
                                     <div class="product-profile__title">' . $row['product_name'] . '</div>
                                     <div class="product-profile__sub_title"> (' . $row[$key] . ') </div>

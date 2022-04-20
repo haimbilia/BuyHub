@@ -6,7 +6,7 @@ foreach ($images as $image) {
 ?>
         <li class="abc" id="<?php echo $image['afile_id']; ?>">
             <div class="uploaded-stocks-item" data-ratio="1:1">
-                <img class="uploaded-stocks-img" data-bs-toggle="tooltip" data-placement="top" src="<?php echo $imgUrl; ?>" title="<?php echo $image['afile_name']; ?>" alt="<?php echo $image['afile_name']; ?>">
+                <img class="uploaded-stocks-img" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB); ?> data-bs-toggle="tooltip" data-placement="top" src="<?php echo $imgUrl; ?>" title="<?php echo $image['afile_name']; ?>" alt="<?php echo $image['afile_name']; ?>">
                 <div class="uploaded-stocks-actions">
                     <?php if ($canEdit) { ?>
                         <ul class="actions">
@@ -26,7 +26,7 @@ foreach ($images as $image) {
     <?php } else { ?>
         <li class="upload__list-item" id="<?php echo $image['afile_id']; ?>">
             <div class="media">
-                <img class="mr-2 product-profile-img" src="<?php echo $imgUrl; ?>" title="<?php echo $image['afile_name']; ?>" alt="<?php echo $image['afile_name']; ?>" width="50">
+                <img class="mr-2 product-profile-img" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB); ?> src="<?php echo $imgUrl; ?>" title="<?php echo $image['afile_name']; ?>" alt="<?php echo $image['afile_name']; ?>">
             </div>
             <div class="title"><?php echo $image['afile_name'] ?></div>
             <?php if ($canEdit) { ?>

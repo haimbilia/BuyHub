@@ -3,14 +3,14 @@
     <div class="container">
         <div class="blog-detail post-data">
             <div class="blog-detail-left">
-                <a class="btn btn-icon btn-link btn-back" href="">
+                <a class="btn btn-icon btn-link btn-back" href="<?php echo UrlHelper::generateUrl('Blog'); ?>">
                     <i class="icn">
                         <svg class="svg" width="20" height="20">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#arrow-back">
                             </use>
                         </svg>
                     </i>
-                    <?php Labels::getLabel('LBL_BACK_TO_HOME', $siteLangId); ?>
+                    <?php echo Labels::getLabel('LBL_BACK_TO_HOME', $siteLangId); ?>
                 </a>
 
                 <div class="blog-head">

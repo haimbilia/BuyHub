@@ -32,7 +32,7 @@ $fld->value = HtmlHelper::getfileInputHtml(
     'dropzone-custom dropzoneContainerJs'
 );
 
-$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_PREFERRED_DIMENSIONS', $siteLangId), '640*480') . '</span>';
+$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_PREFERRED_DIMENSIONS', $siteLangId), $imageDimension['width'].'*'.$imageDimension['height']) . '</span>';
 $htmlAfterField .= '<div id="imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
 
@@ -70,7 +70,6 @@ $includeTabs = ($collection_layout_type != Collections::TYPE_PENDING_REVIEWS1);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
 <script type="text/javascript">
-  /*   $('input[name=min_width]').val(640);
-    $('input[name=min_height]').val(480);
-    var aspectRatio = 4 / 3; */
+    $('input[name=min_width]').val(<?php echo $imageDimension['width'];?>);
+    $('input[name=min_height]').val(<?php echo $imageDimension['height'];?>); 
 </script>

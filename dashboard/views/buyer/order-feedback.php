@@ -40,7 +40,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selProdCodeArr[0], ImageDimension::VIEW_MEDIUM, $opDetail['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                             } ?>
                                             <a href="<?php echo UrlHelper::generateUrl('products', 'view', array($opDetail['op_selprod_id']), CONF_WEBROOT_FRONTEND) ?>">
-                                                <img width="120" height="120" src="<?php echo $prodImg; ?>" alt="<?php echo $prodTitle; ?>" title="<?php echo $prodTitle; ?>">
+                                                <img <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM);?> src="<?php echo $prodImg; ?>" alt="<?php echo $prodTitle; ?>" title="<?php echo $prodTitle; ?>">
                                             </a>
                                         </div>
                                         <div class="product-profile__description">

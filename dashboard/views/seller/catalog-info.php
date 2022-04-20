@@ -13,7 +13,7 @@
                             <?php if (isset($imageGallery) && $imageGallery) { ?>
                                 <a href="<?php echo $mainImgUrl; ?>" class="gallery" rel="gallery">
                                 <?php } ?>
-                                <img src="<?php echo $mainImgUrl; ?>">
+                                <img src="<?php echo $mainImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM);?>>
                                 <?php if (isset($imageGallery) && $imageGallery) { ?>
                                 </a>
                             <?php } ?>
@@ -21,7 +21,7 @@
                     </div>
                 <?php } else {
                     $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_MEDIUM, 0), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg'); ?>
-                    <div class="item__main"><img src="<?php echo $mainImgUrl; ?>"></div>
+                    <div class="item__main"><img src="<?php echo $mainImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM);?>></div>
                 <?php } ?>
             </div>
             <div class="col-lg-8">

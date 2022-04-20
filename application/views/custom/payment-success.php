@@ -217,7 +217,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                         <div class="block-cart-img">
                                                             <div class="products-img">
                                                                 <a href="<?php echo $productUrl; ?>">
-                                                                    <img src="<?php echo $imageUrl; ?>" alt="<?php echo $product['op_product_name']; ?>" title="<?php echo $product['op_product_name']; ?>">
+                                                                    <img src="<?php echo $imageUrl; ?>" alt="<?php echo $product['op_product_name']; ?>" title="<?php echo $product['op_product_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI);?>>
                                                                 </a>
 
                                                             </div>

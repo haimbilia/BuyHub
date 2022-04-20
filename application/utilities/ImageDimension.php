@@ -93,14 +93,12 @@ class ImageDimension extends FatUtility
 
                 break;
             case self::TYPE_PRODUCTS:
+            case self::TYPE_CUSTOM_PRODUCTS:
                 $imageDimensions = self::getProductImageData($sizeType);
                 break;
             case self::TYPE_USER:
                 $imageDimensions = self::getUserImageData($sizeType);
-                break;
-            case self::TYPE_CUSTOM_PRODUCTS:
-                $imageDimensions = self::getCustomProductImageData($sizeType);
-                break;
+                break;           
             case self::TYPE_SHOP_LOGO:
                 $imageDimensions = self::getShopLogoImageData($sizeType, $aspectRatioType);
                 break;
@@ -273,19 +271,7 @@ class ImageDimension extends FatUtility
         ];
 
         return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
-    }
-
-    public static function getCustomProductImageData(string $sizeType = ''): array
-    {
-        $arr =  [
-            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
-            self::VIEW_SMALL => [self::WIDTH => 150, self::HEIGHT => 150],
-            self::VIEW_MEDIUM => [self::WIDTH => 542, self::HEIGHT => 480],
-            self::VIEW_DEFAULT => [self::WIDTH => 500, self::HEIGHT => 500],
-        ];
-
-        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
-    }
+    }   
 
     public static function getShopLogoImageData(string $sizeType = '', int $aspectRatioType): array
     {
@@ -543,6 +529,7 @@ class ImageDimension extends FatUtility
     public static function getDisplayCollectionImageData(string $sizeType = ''): array
     {
         $arr =  [
+            self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 480],
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_HOME => [self::WIDTH => 76, self::HEIGHT => 92]
         ];

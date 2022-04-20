@@ -88,7 +88,7 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                                                                 <table width="100%" cellspacing="0" cellpadding="0" border="0">
                                                                                     <tr>
                                                                                         <td style="width: 70px; padding: 10px;">
-                                                                                            <a href=""' . $prodOrBatchUrl . '""><img src="' . $prodOrBatchImgUrl . '" alt="" title="" /></a>
+                                                                                            <a href=""' . $prodOrBatchUrl . '""><img src="' . $prodOrBatchImgUrl . '" alt="" title="" '. HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI).' /></a>
                                                                                         </td>
                                                                                         <td style="padding: 10px;">
                                                                                             <a href="' . $prodOrBatchUrl . '" style="color: #555555;font-size: 14px;font-weight: 600;text-decoration: none;">' . $val["op_product_name"] . '</a>

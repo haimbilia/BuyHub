@@ -6,11 +6,8 @@ if (!empty($productsData)) {
     foreach ($productsData as $product) {
         ?>
         <li class="upload__list-item">
-            <div class="media">
-                <?php
-                     $imageProductDimensions = ImageDimension::getData(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL);
-                ?>
-                <img data-aspect-ratio = "<?php echo $imageProductDimensions[ImageDimension::VIEW_SMALL]['aspectRatio']; ?>" class="mr-2 product-profile-img" src="<?php echo UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, 0, 0, 1)) ?>" alt="" width="50">
+            <div class="media">                
+                <img  class="mr-2 product-profile-img" src="<?php echo UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, 0, 0, 1)) ?>" alt="" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL);?>>
             </div>
             <div class="title"><?php echo $product['product_name'] ?></div>
             <?php if (isset($profileData['shipprofile_default']) && $profileData['shipprofile_default'] != 1) { ?>

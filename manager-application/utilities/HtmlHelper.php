@@ -456,14 +456,15 @@ class HtmlHelper
         $images = AttachedFile::getMultipleAttachments($imageType, $recordId, $recordSubid, 0,  true,  0, 4);
         $str = '<div class="media-group featherLightGalleryJs">';
         $count  = 0;
+        $dimensionType = ImageDimension::TYPE_PRODUCTS;
         foreach ($images as $key => $image) {
             switch ($imageType) {
                 case AttachedFile::FILETYPE_PRODUCT_IMAGE:
-                    $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, ImageDimension::VIEW_SMALL, 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, ImageDimension::VIEW_MINI, 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     $imgOrgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, ImageDimension::VIEW_ORIGINAL, 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     break;
                 case AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE:
-                    $imgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, ImageDimension::VIEW_SMALL, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    $imgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, ImageDimension::VIEW_MINI, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     $imgOrgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, ImageDimension::VIEW_ORIGINAL, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     break;
                 default:
@@ -489,7 +490,7 @@ class HtmlHelper
                     data-placement="top" title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '"
                     data-original-title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '">
                     <a href="' . $imgOrgSrc . '" data-featherlight="image">
-                    <img data-aspect-ratio="1:1"
+                    <img '.HtmlHelper::getImgDimParm($dimensionType, ImageDimension::VIEW_MINI).'
                         src="' . $imgSrc . '"
                         alt="' . ($image['afile_attribute_alt'] ?? $defaultImageName) . '"></a>
                 </span>';
@@ -503,7 +504,7 @@ class HtmlHelper
                 data-placement="top" 
                 data-original-title="' . $defaultImageName . '">
                 <a href="' . CONF_WEBROOT_FRONTEND . 'images/defaults/product_default_image.jpg" data-featherlight="image">
-                <img data-aspect-ratio="1:1"
+                <img '.HtmlHelper::getImgDimParm($dimensionType, ImageDimension::VIEW_MINI).'
                     src="' . CONF_WEBROOT_FRONTEND . 'images/defaults/product_default_image.jpg"
                     alt="' . $defaultImageName . '">
             </span>';
@@ -713,5 +714,11 @@ class HtmlHelper
     public static function displayNumberWithPlus(int $recordCount)
     {
         return ((self::RECORD_COUNT_LIMIT - 1) < $recordCount) ? $recordCount . '+' : $recordCount;
+    }
+
+    public static function getImgDimParm(int $dimensionType, string $sizeType)
+    {
+        $dimensions = ImageDimension::getData($dimensionType, $sizeType);
+        return ' data-aspect-ratio="' . $dimensions[$sizeType]['aspectRatio'] . '"  width="' . $dimensions[ImageDimension::WIDTH] . '" hieght="' . $dimensions[ImageDimension::HEIGHT] . '"';
     }
 }
