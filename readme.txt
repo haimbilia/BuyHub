@@ -695,6 +695,7 @@ Updates/Fixes :
     => 063942 - Admin: Commission amount is not showing while viewing the order details at the admin's end
     => 063434 - Seller UI: "Field 'selprod_id' not found" error is showing while adding the inventory if "Digital files and Digital Links" is added while adding the digital product at the seller's end
     => 063928 - Buyer: Sellers address is not showing aligned/correctly on the "Return Request" at the buyer's end and a different label is used for the same functionality i.e. Seller and Vendor
+    => 063751 - Seller: The product's images are not showing properly while viewing the "Marketplace Products" at the seller's end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

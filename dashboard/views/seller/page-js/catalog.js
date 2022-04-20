@@ -195,7 +195,7 @@ $(document).on('change', '.language-js', function () {
 
     catalogInfo = function (product_id) {
         fcom.ajax(fcom.makeUrl('Seller', 'catalogInfo', [product_id]), '', function (t) {
-            $.ykmodal(t, true);
+            $.ykmodal(t, true, 'modal-lg');
         });
     }
 
