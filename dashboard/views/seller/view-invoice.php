@@ -49,6 +49,114 @@
         padding: 10px;
     }
 </style>
+<?php
+
+$billingAddress = Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId);
+if (!empty($orderDetail['billingAddress'])) {
+    $billingAddress = $orderDetail['billingAddress']['oua_name'] . '<br/>';
+    if ($orderDetail['billingAddress']['oua_address1'] != '') {
+        $billingAddress .= $orderDetail['billingAddress']['oua_address1'] . '<br/>';
+    }
+
+    if ($orderDetail['billingAddress']['oua_address2'] != '') {
+        $billingAddress .= $orderDetail['billingAddress']['oua_address2'] . '<br/>';
+    }
+
+    if ($orderDetail['billingAddress']['oua_city'] != '') {
+        $billingAddress .= $orderDetail['billingAddress']['oua_city'] . ', ';
+    }
+
+    if ($orderDetail['billingAddress']['oua_state'] != '') {
+        $billingAddress .= $orderDetail['billingAddress']['oua_state'] . ', ';
+    }
+
+    if ($orderDetail['billingAddress']['oua_country'] != '') {
+        $billingAddress .= $orderDetail['billingAddress']['oua_country'];
+    }
+
+    if ($orderDetail['billingAddress']['oua_zip'] != '') {
+        $billingAddress  .= '-' . $orderDetail['billingAddress']['oua_zip'];
+    }
+
+    if ($orderDetail['billingAddress']['oua_phone'] != '') {
+        $billingAddress  .= '<br/>' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
+    }
+}
+
+if ($orderDetail['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && !empty($orderDetail['shippingAddress'])) {
+    $shippingAddress = $orderDetail['shippingAddress']['oua_name'] . '<br/>';
+    if ($orderDetail['shippingAddress']['oua_address1'] != '') {
+        $shippingAddress .= $orderDetail['shippingAddress']['oua_address1'] . '<br/>';
+    }
+    if ($orderDetail['shippingAddress']['oua_address2'] != '') {
+        $shippingAddress .= $orderDetail['shippingAddress']['oua_address2'] . '<br/>';
+    }
+    if ($orderDetail['shippingAddress']['oua_city'] != '') {
+        $shippingAddress .= $orderDetail['shippingAddress']['oua_city'] . ',';
+    }
+
+    if ($orderDetail['shippingAddress']['oua_state'] != '') {
+        $shippingAddress .= $orderDetail['shippingAddress']['oua_state'] . ', ';
+    }
+
+    if ($orderDetail['shippingAddress']['oua_country'] != '') {
+        $shippingAddress .= $orderDetail['shippingAddress']['oua_country'];
+    }
+
+    if ($orderDetail['shippingAddress']['oua_zip'] != '') {
+        $shippingAddress .= '-' . $orderDetail['shippingAddress']['oua_zip'];
+    }
+
+    if ($orderDetail['shippingAddress']['oua_phone'] != '') {
+        $shippingAddress .= '<br/>' . ValidateElement::formatDialCode($orderDetail['shippingAddress']['oua_phone_dcode']) . $orderDetail['shippingAddress']['oua_phone'];
+    }
+}
+
+if (isset($orderDetail['pickupAddress']) && !empty($orderDetail['pickupAddress'])) {
+    $pickUpAddress = $orderDetail['pickupAddress']['oua_name'] . '<br/>';
+    if ($orderDetail['pickupAddress']['oua_address1'] != '') {
+        $pickUpAddress .= $orderDetail['pickupAddress']['oua_address1'] . '<br/>';
+    }
+    if ($orderDetail['pickupAddress']['oua_address2'] != '') {
+        $pickUpAddress .= $orderDetail['pickupAddress']['oua_address2'] . '<br/>';
+    }
+    if ($orderDetail['pickupAddress']['oua_city'] != '') {
+        $pickUpAddress .= $orderDetail['pickupAddress']['oua_city'] . ',';
+    }
+    if ($orderDetail['pickupAddress']['oua_zip'] != '') {
+        $pickUpAddress .= $orderDetail['pickupAddress']['oua_state'];
+    }
+    if ($orderDetail['pickupAddress']['oua_zip'] != '') {
+        $pickUpAddress .= '-' . $orderDetail['pickupAddress']['oua_zip'];
+    }
+    if ($orderDetail['pickupAddress']['oua_phone'] != '') {
+        $pickUpAddress .= '<br/>' . ValidateElement::formatDialCode($orderDetail['pickupAddress']['oua_phone_dcode']) . $orderDetail['pickupAddress']['oua_phone'];
+    }
+}
+
+$paymentMethodName = empty($orderDetail['plugin_name']) ? $orderDetail['plugin_identifier'] : $orderDetail['plugin_name'];
+if (!empty($paymentMethodName) && $orderDetail['order_pmethod_id'] > 0 && $orderDetail['order_is_wallet_selected'] > 0) {
+    $paymentMethodName  .= ' + ';
+}
+if ($orderDetail['order_is_wallet_selected'] > 0) {
+    $paymentMethodName .= Labels::getLabel("LBL_Wallet", $siteLangId);
+}
+
+$item = ($orderDetail['op_selprod_title'] != '') ? $orderDetail['op_selprod_title'] : $orderDetail['op_product_name'];
+$item .= '<br>';
+$item .= Labels::getLabel('Lbl_Brand', $siteLangId) . ' : ';
+$item .= CommonHelper::displayNotApplicable($siteLangId, $orderDetail['op_brand_name']);
+$item .= '<br>';
+if ($orderDetail['op_selprod_options'] != '') {
+    $item .= $orderDetail['op_selprod_options'] . '<br>';
+}
+$item .= Labels::getLabel('LBL_Sold_By', $siteLangId) . ': ' . $orderDetail['op_shop_name'];
+if ($orderDetail['op_shipping_duration_name'] != '') {
+    $item .= '<br>';
+    $item .= Labels::getLabel('LBL_Shipping_Method', $siteLangId) . ' : ';
+    $item .= $orderDetail['op_shipping_durations'] . '-' . $orderDetail['op_shipping_duration_name'];
+}
+?>
 <table width="100%" border="0" cellpadding="10" cellspacing="0" class="tbl-border">
     <tbody>
         <tr>
@@ -86,98 +194,12 @@
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
-                            <td><strong><?php echo Labels::getLabel('LBL_Bill_to', $siteLangId); ?></strong> <br> <br><?php
-                                                                                                                        $billingAddress = Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId);
-                                                                                                                        if (!empty($orderDetail['billingAddress'])) {
-                                                                                                                            $billingAddress = $orderDetail['billingAddress']['oua_name'] . '<br/>';
-                                                                                                                            if ($orderDetail['billingAddress']['oua_address1'] != '') {
-                                                                                                                                $billingAddress .= $orderDetail['billingAddress']['oua_address1'] . '<br/>';
-                                                                                                                            }
-
-                                                                                                                            if ($orderDetail['billingAddress']['oua_address2'] != '') {
-                                                                                                                                $billingAddress .= $orderDetail['billingAddress']['oua_address2'] . '<br/>';
-                                                                                                                            }
-
-                                                                                                                            if ($orderDetail['billingAddress']['oua_city'] != '') {
-                                                                                                                                $billingAddress .= $orderDetail['billingAddress']['oua_city'] . ', ';
-                                                                                                                            }
-
-                                                                                                                            if ($orderDetail['billingAddress']['oua_state'] != '') {
-                                                                                                                                $billingAddress .= $orderDetail['billingAddress']['oua_state'] . ', ';
-                                                                                                                            }
-
-                                                                                                                            if ($orderDetail['billingAddress']['oua_country'] != '') {
-                                                                                                                                $billingAddress .= $orderDetail['billingAddress']['oua_country'];
-                                                                                                                            }
-
-                                                                                                                            if ($orderDetail['billingAddress']['oua_zip'] != '') {
-                                                                                                                                $billingAddress  .= '-' . $orderDetail['billingAddress']['oua_zip'];
-                                                                                                                            }
-
-                                                                                                                            if ($orderDetail['billingAddress']['oua_phone'] != '') {
-                                                                                                                                $billingAddress  .= '<br/>' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                        ?><?php echo $billingAddress; ?>
-
-
-
-                            </td>
+                            <td><strong><?php echo Labels::getLabel('LBL_Bill_to', $siteLangId); ?></strong> <br> <br><?php echo $billingAddress; ?></td>
                             <?php if ($orderDetail['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && !empty($orderDetail['shippingAddress'])) { ?>
-                                <td> <strong><?php echo Labels::getLabel('LBL_Ship_to', $siteLangId); ?></strong><br><br><?php $shippingAddress = $orderDetail['shippingAddress']['oua_name'] . '<br/>';
-                                                                                                                            if ($orderDetail['shippingAddress']['oua_address1'] != '') {
-                                                                                                                                $shippingAddress .= $orderDetail['shippingAddress']['oua_address1'] . '<br/>';
-                                                                                                                            }
-                                                                                                                            if ($orderDetail['shippingAddress']['oua_address2'] != '') {
-                                                                                                                                $shippingAddress .= $orderDetail['shippingAddress']['oua_address2'] . '<br/>';
-                                                                                                                            }
-                                                                                                                            if ($orderDetail['shippingAddress']['oua_city'] != '') {
-                                                                                                                                $shippingAddress .= $orderDetail['shippingAddress']['oua_city'] . ',';
-                                                                                                                            }
-
-                                                                                                                            if ($orderDetail['shippingAddress']['oua_state'] != '') {
-                                                                                                                                $shippingAddress .= $orderDetail['shippingAddress']['oua_state'] . ', ';
-                                                                                                                            }
-
-                                                                                                                            if ($orderDetail['shippingAddress']['oua_country'] != '') {
-                                                                                                                                $shippingAddress .= $orderDetail['shippingAddress']['oua_country'];
-                                                                                                                            }
-
-                                                                                                                            if ($orderDetail['shippingAddress']['oua_zip'] != '') {
-                                                                                                                                $shippingAddress .= '-' . $orderDetail['shippingAddress']['oua_zip'];
-                                                                                                                            }
-
-                                                                                                                            if ($orderDetail['shippingAddress']['oua_phone'] != '') {
-                                                                                                                                $shippingAddress .= '<br/>' . ValidateElement::formatDialCode($orderDetail['shippingAddress']['oua_phone_dcode']) . $orderDetail['shippingAddress']['oua_phone'];
-                                                                                                                            } ?>
-                                    <?php echo $shippingAddress; ?>
-
-                                </td>
+                                <td><strong><?php echo Labels::getLabel('LBL_Ship_to', $siteLangId); ?></strong><br><br><?php echo $shippingAddress; ?></td>
                             <?php } ?>
                             <?php if (!empty($orderDetail['pickupAddress'])) { ?>
-                                <td> <?php echo Labels::getLabel('LBL_Pickup_Details', $siteLangId); ?><br> <br>
-                                    <?php $pickUpAddress = $orderDetail['pickupAddress']['oua_name'] . '<br/>';
-                                    if ($orderDetail['pickupAddress']['oua_address1'] != '') {
-                                        $pickUpAddress .= $orderDetail['pickupAddress']['oua_address1'] . '<br/>';
-                                    }
-                                    if ($orderDetail['pickupAddress']['oua_address2'] != '') {
-                                        $pickUpAddress .= $orderDetail['pickupAddress']['oua_address2'] . '<br/>';
-                                    }
-                                    if ($orderDetail['pickupAddress']['oua_city'] != '') {
-                                        $pickUpAddress .= $orderDetail['pickupAddress']['oua_city'] . ',';
-                                    }
-                                    if ($orderDetail['pickupAddress']['oua_zip'] != '') {
-                                        $pickUpAddress .= $orderDetail['pickupAddress']['oua_state'];
-                                    }
-                                    if ($orderDetail['pickupAddress']['oua_zip'] != '') {
-                                        $pickUpAddress .= '-' . $orderDetail['pickupAddress']['oua_zip'];
-                                    }
-                                    if ($orderDetail['pickupAddress']['oua_phone'] != '') {
-                                        $pickUpAddress .= '<br/>' . ValidateElement::formatDialCode($orderDetail['pickupAddress']['oua_phone_dcode']) . $orderDetail['pickupAddress']['oua_phone'];
-                                    } ?>
-                                    <?php echo $pickUpAddress; ?>
-
-                                </td>
+                                <td><?php echo Labels::getLabel('LBL_Pickup_Details', $siteLangId); ?><br> <br><?php echo $pickUpAddress; ?></td>
                             <?php } ?>
                         </tr>
                     </tbody>
@@ -191,22 +213,9 @@
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
-                            <td><strong><?php echo Labels::getLabel('LBL_Order', $siteLangId); ?>:</strong> <?php echo $orderDetail['order_number']; ?><br><strong><?php echo Labels::getLabel('LBL_Invoice_Number', $siteLangId); ?>:</strong> <?php echo $orderDetail['op_invoice_number']; ?><br><strong><?php echo Labels::getLabel('LBL_Payment_Method', $siteLangId); ?>:</strong> <?php
-                                                                                                                                                                                                                                                                                                                                                                                            $paymentMethodName = empty($orderDetail['plugin_name']) ? $orderDetail['plugin_identifier'] : $orderDetail['plugin_name'];
-                                                                                                                                                                                                                                                                                                                                                                                            if (!empty($paymentMethodName) && $orderDetail['order_pmethod_id'] > 0 && $orderDetail['order_is_wallet_selected'] > 0) {
-                                                                                                                                                                                                                                                                                                                                                                                                $paymentMethodName  .= ' + ';
-                                                                                                                                                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                                                                                                                                                            if ($orderDetail['order_is_wallet_selected'] > 0) {
-                                                                                                                                                                                                                                                                                                                                                                                                $paymentMethodName .= Labels::getLabel("LBL_Wallet", $siteLangId);
-                                                                                                                                                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                                                                                                                                                            echo $paymentMethodName;
-                                                                                                                                                                                                                                                                                                                                                                                            ?>
+                            <td><strong><?php echo Labels::getLabel('LBL_Order', $siteLangId); ?>:</strong> <?php echo $orderDetail['order_number']; ?><br><strong><?php echo Labels::getLabel('LBL_Invoice_Number', $siteLangId); ?>:</strong> <?php echo $orderDetail['op_invoice_number']; ?><br><strong><?php echo Labels::getLabel('LBL_Payment_Method', $siteLangId); ?>:</strong> <?php echo $paymentMethodName; ?>
                             </td>
-                            <td>
-                                <strong><?php echo Labels::getLabel('LBL_Order_Date', $siteLangId); ?>:</strong><?php echo FatDate::format($orderDetail['order_date_added']); ?><br>
-                                <?php /* if (!empty($orderDetail['opshipping_date'])) { ?>
-                                                                    <p><strong><?php echo Labels::getLabel('LBL_Invoice_Date', $siteLangId); ?>:</strong> <?php echo FatDate::format($orderDetail['opshipping_date']); ?></p>
-                                                                <?php } */ ?>
+                            <td><strong><?php echo Labels::getLabel('LBL_Order_Date', $siteLangId); ?>:</strong><?php echo FatDate::format($orderDetail['order_date_added']); ?><br>
                                 <?php if (!empty($orderDetail['opship_tracking_number'])) { ?>
                                     <strong><?php echo Labels::getLabel('LBL_Tracking_ID', $siteLangId); ?>:</strong><?php echo $orderDetail['opship_tracking_number']; ?>
                                 <?php } ?>
@@ -214,8 +223,6 @@
                         </tr>
                     </tbody>
                 </table>
-
-
             </td>
         </tr>
         <tr>
@@ -235,30 +242,13 @@
                             <?php } ?>
                             <th style="padding:10px; font-size:12px;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Qty', $siteLangId); ?></th>
                             <th style="padding:10px; font-size:12px;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Price', $siteLangId); ?></th>
-                            <?php /* <th style="padding:10px; font-size:12px;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Savings', $siteLangId);?></th> */ ?>
                             <th style="padding:10px; font-size:12px;text-align: right; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Total_Amount', $siteLangId); ?></th>
                         </tr>
                     </thead>
                     <tbody>
-
                         <tr>
                             <?php $volumeDiscount = CommonHelper::orderProductAmount($orderDetail, 'VOLUME_DISCOUNT'); ?>
-                            <td style="padding:10px; font-size:12px;text-align: left;" colspan="<?php echo $orderDetail['op_tax_collected_by_seller'] ? 1 : 2;  ?>"><?php
-                                                                                                                                                                    echo ($orderDetail['op_selprod_title'] != '') ? $orderDetail['op_selprod_title'] : $orderDetail['op_product_name'];
-                                                                                                                                                                    echo '<br>';
-                                                                                                                                                                    echo Labels::getLabel('Lbl_Brand', $siteLangId) . ' : ';
-                                                                                                                                                                    echo CommonHelper::displayNotApplicable($siteLangId, $orderDetail['op_brand_name']);
-                                                                                                                                                                    echo '<br>';
-                                                                                                                                                                    if ($orderDetail['op_selprod_options'] != '') {
-                                                                                                                                                                        echo $orderDetail['op_selprod_options'] . '<br>';
-                                                                                                                                                                    }
-                                                                                                                                                                    echo Labels::getLabel('LBL_Sold_By', $siteLangId) . ': ' . $orderDetail['op_shop_name'];
-                                                                                                                                                                    if ($orderDetail['op_shipping_duration_name'] != '') {
-                                                                                                                                                                        echo '<br>';
-                                                                                                                                                                        echo Labels::getLabel('LBL_Shipping_Method', $siteLangId) . ' : ';
-                                                                                                                                                                        echo $orderDetail['op_shipping_durations'] . '-' . $orderDetail['op_shipping_duration_name'];
-                                                                                                                                                                    }
-                                                                                                                                                                    ?>
+                            <td style="padding:10px; font-size:12px;text-align: left;" colspan="<?php echo $orderDetail['op_tax_collected_by_seller'] ? 1 : 2;  ?>"><?php echo $item; ?>
                             </td>
                             <?php if ($orderDetail['op_tax_collected_by_seller']) { ?>
                                 <td style="padding:10px; font-size:12px;text-align: left;">
@@ -267,30 +257,15 @@
                             <?php } ?>
                             <td style="padding:10px; font-size:12px;text-align: left;"><?php echo $orderDetail['op_qty']; ?></td>
                             <td style="padding:10px; font-size:12px;text-align: left;"><?php echo CommonHelper::displayMoneyFormat($orderDetail['op_unit_price'], true, false, true, false, true); ?></td>
-                            <?php /* $couponDiscount = CommonHelper::orderProductAmount($orderDetail, 'DISCOUNT'); 
-                                                            $volumeDiscount = CommonHelper::orderProductAmount($orderDetail, 'VOLUME_DISCOUNT'); 
-                                                            $totalSavings = $couponDiscount + $volumeDiscount; ?>     
-                                                            <td style="padding:10px; font-size:12px;text-align: left;">
-                                                                <?php echo CommonHelper::displayMoneyFormat($totalSavings); ?>
-                                                            </td>  */ ?>
                             <td style="padding:10px; font-size:12px;text-align: right;"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'CART_TOTAL'), true, false, true, false, true); ?></td>
                         </tr>
                         <tr>
                             <td style="padding:10px; font-size:12px;text-align: left;font-weight:700;background-color: #ddd;" colspan="2"><?php echo Labels::getLabel('Lbl_Summary', $siteLangId) ?> </td>
                             <td style="padding:10px; font-size:12px;text-align: left;background-color: #ddd;"><strong><?php echo $orderDetail['op_qty']; ?></strong></td>
                             <td style="padding:10px; font-size:12px;text-align: left;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat($orderDetail['op_unit_price'], true, false, true, false, true); ?></strong></td>
-                            <?php /* <td style="padding:10px; font-size:12px;text-align: left;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat($totalSavings); ?></strong></td> */ ?>
                             <td style="padding:10px; font-size:12px;text-align: right;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'CART_TOTAL'), true, false, true, false, true); ?></strong></td>
                         </tr>
                         <tr>
-                            <?php /* <td style="padding:15px 15px;font-size:20px;text-align: left;font-weight:700; vertical-align: top;" colspan="3" rowspan="6">
-                                                            <?php
-                                                            if ($totalSavings != 0) {
-                                                                $str = Labels::getLabel("LBL_You_have_saved_{totalsaving}_on_this_order", $siteLangId);
-                                                                $str = str_replace("{totalsaving}", -$totalSavings, $str);
-                                                                echo $str;
-                                                            } ?> 
-                                                            </td> */ ?>
                             <td style="padding:15px 15px;font-size:20px;text-align: left;font-weight:700; vertical-align: top;" colspan="2" rowspan="5"></td>
                             <td style="padding:10px; font-size:12px;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('Lbl_Cart_Total', $siteLangId) ?></td>
                             <td style="padding:10px; font-size:12px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'cart_total'), true, false, true, false, true); ?></td>
@@ -314,35 +289,6 @@
                                 <td style="padding:10px; font-size:12px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></td>
                             </tr>
                         <?php } ?>
-                        <?php /* $rewardPointDiscount = CommonHelper::orderProductAmount($orderDetail, 'REWARDPOINT');
-										if ($rewardPointDiscount != 0) { ?>
-										<tr>                                                                              
-											<td style="padding:10px; font-size:12px;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Reward_Point_Discount', $siteLangId) ?></td>                    
-											<td style="padding:10px; font-size:12px;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($rewardPointDiscount, true, false, true, false, true); ?></td>                                           
-										</tr>
-										<?php } */ ?>
-                        <?php
-                        /* if (CommonHelper::orderProductAmount($orderDetail, 'TAX') > 0) { ?>
-										<tr>                                                                              
-											<td style="padding:10px; font-size:12px;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId) ?></td>                    
-											<td style="padding:10px; font-size:12px;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'TAX'), true, false, true, false, true); ?></td>      
-										</tr>
-										<?php } */ ?>
-                        <?php
-                        /* if ($totalSavings != 0) { ?>
-										<tr>                                                                              
-											<td style="padding:10px; font-size:12px;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Total_Savings', $siteLangId) ?></td>                    
-											<td style="padding:10px; font-size:12px;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($totalSavings, true, false, true, false, true); ?></td>      
-										</tr>
-										<?php } */ ?>
-                        <?php
-                        /* $rewardPointDiscount = CommonHelper::orderProductAmount($orderDetail, 'REWARDPOINT');
-										if ($rewardPointDiscount != 0) { ?>
-										<tr>                                                                              
-											<td style="padding:10px; font-size:12px;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId) ?></td>                    
-											<td style="padding:10px; font-size:12px;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($rewardPointDiscount, true, false, true, false, true); ?></td>      
-										</tr>
-                                        <?php } */ ?>
                         <?php if (array_key_exists('order_rounding_off', $orderDetail) && 0 != $orderDetail['order_rounding_off']) { ?>
                             <tr>
                                 <td style="padding:10px; font-size:12px;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo (0 < $orderDetail['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?></td>
@@ -363,9 +309,7 @@
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
-                            <td style="padding:15px;vertical-align: top;">
-                                <strong><?php echo $orderDetail['op_shop_name']; ?></strong><br>
-                                <span><?php echo Labels::getLabel('LBL_Authorized_Signatory', $siteLangId); ?> </span>
+                            <td style="padding:15px;vertical-align: top;"><strong><?php echo $orderDetail['op_shop_name']; ?></strong><br><span><?php echo Labels::getLabel('LBL_Authorized_Signatory', $siteLangId); ?> </span>
                             </td>
                             <?php if ($orderDetail['op_tax_collected_by_seller']) { ?>
                                 <td style="background-color: #ddd;">
