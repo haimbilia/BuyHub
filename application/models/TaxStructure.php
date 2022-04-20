@@ -269,18 +269,19 @@ class TaxStructure extends MyAppModel
 
         $autoUpdateOtherLangsData = isset($post['auto_update_other_langs_data']) ? FatUtility::int($post['auto_update_other_langs_data']) : 0;
         foreach ($post['taxstr_name'] as $langId => $taxStrName) {
-            if (empty($taxStrName) && $autoUpdateOtherLangsData > 0) {
-                $this->saveTranslatedLangData($langId);
-            } elseif (!empty($taxStrName)) {
-                $data = array(
-                    static::DB_TBL_LANG_PREFIX . 'taxstr_id' => $this->mainTableRecordId,
-                    static::DB_TBL_LANG_PREFIX . 'lang_id' => $langId,
-                    'taxstr_name' => $taxStrName,
-                );
-                if (!$this->updateLangData($langId, $data)) {
-                    $this->error = $this->getError();
-                    return false;
-                }
+            $data = array(
+                static::DB_TBL_LANG_PREFIX . 'taxstr_id' => $this->mainTableRecordId,
+                static::DB_TBL_LANG_PREFIX . 'lang_id' => $langId,
+                'taxstr_name' => $taxStrName,
+            );
+
+            if (!$this->updateLangData($langId, $data)) {
+                $this->error = $this->getError();
+                return false;
+            }
+
+            if ($autoUpdateOtherLangsData > 0) {
+                $this->saveTranslatedLangData();
             }
         }
 
@@ -322,6 +323,7 @@ class TaxStructure extends MyAppModel
         }
 
         foreach ($post['taxstr_component_name'] as $taxStrValues) {
+            $taxStrValues = array_filter($taxStrValues);
             if (empty($taxStrValues[$siteDefaultLangId])) {
                 continue;
             }
@@ -337,20 +339,20 @@ class TaxStructure extends MyAppModel
                 $this->error = $this->getError();
                 return false;
             }
+            $autoUpdateOtherLangsData = isset($post['auto_update_other_langs_data']) ? FatUtility::int($post['auto_update_other_langs_data']) : 0;
             foreach ($taxStrValues as $langId => $taxStrName) {
-                $autoUpdateOtherLangsData = isset($post['auto_update_other_langs_data']) ? FatUtility::int($post['auto_update_other_langs_data']) : 0;
-                if (empty($taxStrName) && $autoUpdateOtherLangsData > 0) {
-                    $this->saveTranslatedLangData($langId);
-                } elseif (!empty($taxStrName)) {
-                    $data = array(
-                        static::DB_TBL_LANG_PREFIX . 'taxstr_id' => $this->mainTableRecordId,
-                        static::DB_TBL_LANG_PREFIX . 'lang_id' => $langId,
-                        'taxstr_name' => $taxStrName,
-                    );
-                    if (!$this->updateLangData($langId, $data)) {
-                        $this->error = $this->getError();
-                        return false;
-                    }
+                $data = array(
+                    static::DB_TBL_LANG_PREFIX . 'taxstr_id' => $this->mainTableRecordId,
+                    static::DB_TBL_LANG_PREFIX . 'lang_id' => $langId,
+                    'taxstr_name' => $taxStrName,
+                );
+                if (!$this->updateLangData($langId, $data)) {
+                    $this->error = $this->getError();
+                    return false;
+                }
+
+                if ($autoUpdateOtherLangsData > 0) {
+                    $this->saveTranslatedLangData();
                 }
             }
         }
@@ -393,19 +395,17 @@ class TaxStructure extends MyAppModel
     /**
      * saveTranslatedLangData
      *
-     * @param  mixed $langId
      * @return bool
      */
-    public function saveTranslatedLangData($langId): bool
+    public function saveTranslatedLangData(): bool
     {
-        $langId = FatUtility::int($langId);
-        if ($this->mainTableRecordId < 1 || $langId < 1) {
+        if ($this->mainTableRecordId < 1) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
             return false;
         }
 
         $translateLangobj = new TranslateLangData(static::DB_TBL_LANG);
-        if (false === $translateLangobj->updateTranslatedData($this->mainTableRecordId, 0, $langId)) {
+        if (false === $translateLangobj->updateTranslatedData($this->mainTableRecordId)) {
             $this->error = $translateLangobj->getError();
             return false;
         }
