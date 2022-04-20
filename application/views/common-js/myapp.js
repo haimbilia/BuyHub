@@ -5,6 +5,7 @@ var cart = {
         var data = 'selprod_id=' + selprod_id + '&quantity=' + (typeof (quantity) != 'undefined' ? quantity : 1);
         ykevents.addToCart();
         fcom.updateWithAjax(fcom.makeUrl('Cart', 'add'), data, function (ans) {
+            fcom.removeLoader();
             if (ans['redirect']) {
                 location = ans['redirect'];
             }
@@ -30,6 +31,7 @@ var cart = {
         if (confirm(langLbl.confirmRemove)) {
             var data = 'key=' + key + '&saveForLater=' + saveForLater;
             fcom.updateWithAjax(fcom.makeUrl('Cart', 'remove'), data, function (ans) {
+                fcom.removeLoader();
                 if (page == 'checkout') {
                     if (ans.status) {
                         loadFinancialSummary();
@@ -64,6 +66,7 @@ var cart = {
 
         var data = 'key=' + key + '&quantity=' + $("input[name='qty_" + key + "']").val();
         fcom.updateWithAjax(fcom.makeUrl('Cart', 'update'), data, function (ans) {
+            fcom.removeLoader();
             isAjaxRunning = false;
             if (ans.status) {
                 if (loadDiv != undefined) {
@@ -85,6 +88,7 @@ var cart = {
         $.ykmsg.close();
         var data = 'prodgroup_id=' + prodgroup_id + '&quantity=' + $("input[name='qty_" + prodgroup_id + "']").val();;
         fcom.updateWithAjax(fcom.makeUrl('Cart', 'updateGroup'), data, function (ans) {
+            fcom.removeLoader();
             if (ans.status) {
                 listCartProducts();
             }
@@ -95,8 +99,9 @@ var cart = {
         isRedirectToCart = (typeof (isRedirectToCart) != 'undefined') ? true : false;
         var data = 'prodgroup_id=' + prodgroup_id;
         fcom.updateWithAjax(fcom.makeUrl('Cart', 'addGroup'), data, function (ans) {
+            fcom.removeLoader();
             setTimeout(function () {
-                $.ykmsg.close();
+                fcom.closeProcessing();
             }, 3000);
 
             $(".cart-item-counts-js").html(ans.total);
@@ -112,6 +117,7 @@ var cart = {
         if (confirm(langLbl.confirmRemove)) {
             var data = 'prodgroup_id=' + prodgroup_id;
             fcom.updateWithAjax(fcom.makeUrl('Cart', 'removeGroup'), data, function (ans) {
+                fcom.removeLoader();
                 if (ans.status) {
                     listCartProducts();
                 }
@@ -123,6 +129,7 @@ var cart = {
     clear: function () {
         if (confirm(langLbl.confirmRemove)) {
             fcom.updateWithAjax(fcom.makeUrl('Cart', 'clear'), '', function (ans) {
+                fcom.removeLoader();
                 if (ans.status) {
                     if (typeof listCartProducts === "function") {
                         listCartProducts();

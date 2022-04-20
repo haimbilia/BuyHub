@@ -1,33 +1,36 @@
-function reviewAbuse(reviewId){
-	if(reviewId){
-		$.facebox(function() {
-			fcom.ajax(fcom.makeUrl('Reviews', 'reviewAbuse', [reviewId]), '', function(t) {
+function reviewAbuse(reviewId) {
+	if (reviewId) {
+		$.facebox(function () {
+			fcom.ajax(fcom.makeUrl('Reviews', 'reviewAbuse', [reviewId]), '', function (t) {
 				$.facebox(t);
 			});
 		});
 	}
 }
 
-function setupReviewAbuse(frm){
+function setupReviewAbuse(frm) {
 	if (!$(frm).validate()) return;
 	var data = fcom.frmData(frm);
-	fcom.updateWithAjax(fcom.makeUrl('Reviews', 'setupReviewAbuse'), data, function(t) {
+	fcom.updateWithAjax(fcom.makeUrl('Reviews', 'setupReviewAbuse'), data, function (t) {
+		fcom.closeProcessing();
+		fcom.removeLoader();
 		$(document).trigger('close.facebox');
 	});
 	return false;
 }
 
-(function() {
+(function () {
 
-	markReviewHelpful = function(reviewId , isHelpful){
-		if( isUserLogged() == 0 ){
+	markReviewHelpful = function (reviewId, isHelpful) {
+		if (isUserLogged() == 0) {
 			loginPopUpBox();
 			return false;
 		}
 		isHelpful = (isHelpful) ? isHelpful : 0;
-		var data = 'reviewId='+reviewId+'&isHelpful=' + isHelpful;
-		fcom.updateWithAjax(fcom.makeUrl('Reviews','markHelpful'), data, function(ans){
-			 // $.ykmsg.close();
+		var data = 'reviewId=' + reviewId + '&isHelpful=' + isHelpful;
+		fcom.updateWithAjax(fcom.makeUrl('Reviews', 'markHelpful'), data, function (ans) {
+			fcom.closeProcessing();
+			fcom.removeLoader();
 		});
 	}
 

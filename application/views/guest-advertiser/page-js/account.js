@@ -42,7 +42,8 @@ $(function () {
 		}
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('GuestAdvertiser', 'setupCompanyDetailsForm'), data, function (t) {
-			//$.ykmsg.close();
+			fcom.closeProcessing();
+			fcom.removeLoader();
 			if (t.userId > 0) {
 				profileConfirmation(t.userId);
 			}
@@ -62,7 +63,8 @@ $(function () {
 		}
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('GuestAdvertiser', 'setupPasswordForm'), data, function (t) {
-			//$.ykmsg.close();
+			fcom.closeProcessing();
+			fcom.removeLoader();
 			if (t.userId > 0) {
 				profileConfirmation(t.userId);
 			}

@@ -3,8 +3,10 @@ if (!empty($footer_navigation)) { ?>
     <?php foreach ($footer_navigation as $nav) { ?>
         <div class="col-lg-4 mb-3 mb-md-0">
             <div class="footer-group">
-                <h5 class="footer-group-head"><?php echo $nav['parent']; ?></h5>
-                <ul class="footer-nav">
+                <h5 class="footer-group-head" data-bs-toggle="collapse" data-bs-target="#footer-nav" aria-expanded="false" aria-controls="footer-nav">
+                    <?php echo $nav['parent']; ?>
+                </h5>
+                <ul class="footer-nav collapse" id="footer-nav">
                     <?php if ($nav['pages']) {
                         $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
                         foreach ($nav['pages'] as $link) {

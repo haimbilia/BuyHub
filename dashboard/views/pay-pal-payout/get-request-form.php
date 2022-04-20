@@ -17,7 +17,7 @@ if (null != $fld) {
 }
 
 $amountFld = $frm->getField('amount');
-$amountFld->htmlAfterField = '<span class="form-text">'. Labels::getLabel("FRM_CURRENT_WALLET_BALANCE", $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($walletBalance, true, true) . '</span>';
+$amountFld->htmlAfterField = '<span class="form-text">' . Labels::getLabel("FRM_CURRENT_WALLET_BALANCE", $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($walletBalance, true, true) . '</span>';
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
@@ -32,5 +32,14 @@ $amountFld->htmlAfterField = '<span class="form-text">'. Labels::getLabel("FRM_C
             </div>
         </div>
     </div>
-    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+    <div class="form-edit-foot">
+        <div class="row">
+            <div class="col">
+                <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_RESET', $siteLangId), 'button', 'btn_reset_form', 'btn btn-outline-gray btn-wide  resetModalFormJs'); ?>
+            </div>
+            <div class="col-auto">
+                <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_SAVE', $siteLangId), 'button', 'btn_save', 'btn btn-brand btn-wide submitBtnJs'); ?>
+            </div>
+        </div>
+    </div>
 </div>

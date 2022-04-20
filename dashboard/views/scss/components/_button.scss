@@ -112,6 +112,10 @@
         padding-right: 2rem;
     }
     &-icon {
+    }
+    &-icon {
+        gap: 6px;
+        white-space: nowrap;
         .svg {
             // width: 12px;
             // height: 12px;
@@ -139,14 +143,7 @@
             margin-top: -4px;
         }
     }
-    &-icon {
-        gap: 6px;
-        .svg {
-            // width: 12px;
-            // height: 12px;
-            //margin-#{$end-direction}: 6px;
-        }
-    }
+
     &-link {
         text-decoration: none;
         color: $txt-body;

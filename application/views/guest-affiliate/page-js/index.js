@@ -3,6 +3,8 @@
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('GuestAffiliate', 'setupAffiliateRegister'), data, function (t) {
+            fcom.closeProcessing();
+			fcom.removeLoader();
             if (t.affiliate_register_step_number) {
                 callAffilitiateRegisterStep(t.affiliate_register_step_number);
             }

@@ -1,10 +1,9 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('class', 'form');
-/* $frm->setFormTagAttribute('onsubmit','setupContribution(this);return false;'); */
 $frm->setFormTagAttribute('action', UrlHelper::generateUrl('Blog', 'setupContribution'));
-$frm->developerTags['colClassPrefix'] = 'col-lg-6 ';
-$frm->developerTags['fld_default_col'] = 12;
+$frm->developerTags['colClassPrefix'] = 'col-lg-';
+$frm->developerTags['fld_default_col'] = 6;
 $fileFld = $frm->getField('file');
 $fileFld->htmlBeforeField = '<div class="filefield"><span class="filename"></span>';
 $preferredDimensionsStr = '</div><span class="form-text text-muted">' . Labels::getLabel('MSG_Allowed_Extensions', $siteLangId) . '</span>';
@@ -19,16 +18,16 @@ if ($isUserLogged) {
 }
 ?>
 <div id="body" class="body">
-
     <section class="section">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-7">
                     <div class="section-head section-head-center">
                         <div class="section-heading">
-                            <h1><?php echo Labels::getLabel('Lbl_Blog_Contribution', $siteLangId); ?>
+                            <h1>
+                                <?php echo Labels::getLabel('LBL_BLOG_CONTRIBUTION', $siteLangId); ?>
                             </h1>
-                            <p>Lorem ipsum dolor, sit amet consectetu sed quaerat recusandae </p>
+                            <p><?php echo Labels::getLabel('LBL_BLOG_CONTRIBUTION_FORM_DESCRIPTION', $siteLangId); ?></p>
                         </div>
                     </div>
                     <div class="bg-gray rounded p-5">

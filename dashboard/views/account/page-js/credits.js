@@ -68,7 +68,7 @@ $(function () {
     withdrawalOptionsForm = function (payoutType = -1) {
         var url = fcom.makeUrl('Account', 'requestWithdrawal');
         if (-1 != payoutType) {
-            url = fcom.makeUrl(payoutType, 'getRequestForm');
+            url = fcom.makeUrl(payoutType, 'getRequestForm', []);
         }
 
         fcom.updateWithAjax(url, '', function (t) {

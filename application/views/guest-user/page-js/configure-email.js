@@ -39,6 +39,8 @@ $(function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'updateEmail'), data, function (t) {
+            fcom.closeProcessing();
+			fcom.removeLoader();
             changeEmailForm();
         });
     };

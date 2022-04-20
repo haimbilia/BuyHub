@@ -5,8 +5,9 @@ class BlogComment extends MyAppModel
     public const DB_TBL = 'tbl_blog_post_comments';
     public const DB_TBL_PREFIX = 'bpcomment_';
 
-    public const COMMENT_STATUS_APPROVED = 1;
     public const COMMENT_STATUS_PENDING = 0;
+    public const COMMENT_STATUS_APPROVED = 1;
+    public const COMMENT_STATUS_REJECT = 2;
 
     public function __construct($id = 0)
     {
@@ -54,7 +55,8 @@ class BlogComment extends MyAppModel
 
         return array(
             self::COMMENT_STATUS_PENDING => Labels::getLabel('LBL_PENDING', $langId),
-            self::COMMENT_STATUS_APPROVED => Labels::getLabel('LBL_APPROVED', $langId)
+            self::COMMENT_STATUS_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
+            self::COMMENT_STATUS_REJECT => Labels::getLabel('LBL_REJECT', $langId)
         );
     }
 
@@ -68,6 +70,9 @@ class BlogComment extends MyAppModel
                 break;
             case self::COMMENT_STATUS_APPROVED:
                 $status = HtmlHelper::SUCCESS;
+                break;
+            case self::COMMENT_STATUS_REJECT:
+                $status = HtmlHelper::DANGER;
                 break;
 
             default:

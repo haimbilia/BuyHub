@@ -6,7 +6,6 @@
         grid-template-areas: "nav content";
     }
     //border-radius: 1rem;
-
     &-nav {
         background-color: $bg-white;
         grid-area: nav;
@@ -27,7 +26,7 @@
     }
     &-search {
         border-bottom: $border;
-        padding: 27px 0;
+        padding: 10px 0;
         .omni-search {
             border: none !important;
         }
@@ -54,7 +53,6 @@
             text-decoration: none;
         }
         &.is-active {
-            
             background-color: $bg-gray;
             .message-to {
                 background: #00000054;

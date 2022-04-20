@@ -3,12 +3,13 @@
 		v.validate();
 		if (!v.isValid()) return;		
 		fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'forgotPassword'), fcom.frmData(frm), function(t) {
+            fcom.closeProcessing();
+			fcom.removeLoader();
 			if( t.status == 1){
 				location.href = fcom.makeUrl('GuestUser', 'loginForm');
 			}else{
 				fcom.displayErrorMessage(t.msg);				
 			}
-			$.ykmsg.close();
 			return;
 		});
     };

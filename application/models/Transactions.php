@@ -8,6 +8,7 @@ class Transactions extends MyAppModel
     public const STATUS_PENDING = 0;
     public const STATUS_COMPLETED = 1;
     public const STATUS_DECLINED = 2;
+    public const STATUS_APPROVED = 3;
 
     public const WITHDRAWL_STATUS_PENDING = 0;
     public const WITHDRAWL_STATUS_COMPLETED = 1;

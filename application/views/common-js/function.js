@@ -526,7 +526,6 @@ function googleCaptcha(updateToken = false) {
     if ('' != inputObj.val() && false === updateToken) { return; }
 
     var submitBtn = inputObj.parent("form").find('input[type="submit"]');
-    fcom.displayProcessing();
     submitBtn.attr({ "disabled": "disabled", "type": "button" });
 
     var counter = 0;

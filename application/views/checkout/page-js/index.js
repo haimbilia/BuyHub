@@ -108,6 +108,7 @@ $("document").ready(function () {
 
         fcom.updateWithAjax(fcom.makeUrl("Checkout", "getFinancialSummary", [isShippingSelected]), "",
             function (ans) {
+                fcom.removeLoader();
                 $(financialSummary).hide().html(ans.html).fadeIn();
                 $("#netAmountSummary").hide().html(ans.netAmount).fadeIn();
             }

@@ -4,7 +4,7 @@
         $(dv).prepend(fcom.getLoader());
         $("ul.tabs-js li").removeClass("is-active");
         $("#tab-" + keyName).addClass("is-active");
-        fcom.ajax(fcom.makeUrl(keyName, 'form'), '', function (t) {
+        fcom.ajax(fcom.makeUrl(keyName, 'payoutInfoForm'), '', function (t) {
             fcom.removeLoader();
             $(dv).html(t);
         });

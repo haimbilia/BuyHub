@@ -225,6 +225,7 @@ if (0 < $isShippingSelected && $rewardPoints > 0) { ?>
                             var data = fcom.frmData(frm);
                             var action = $(frm).attr('action');
                             fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(ans) {
+                                fcom.removeLoader();
                                 $(location).attr("href", action);
                             });
                         }

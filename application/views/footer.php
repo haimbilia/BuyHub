@@ -28,7 +28,7 @@ if (CommonHelper::demoUrl()) { ?>
     <section class="footer-top">
         <div class="container">
             <div class="footer-layout">
-                <div class="footer-layout-col">
+                <div class="footer-layout-col footer-logo-wrap">
                     <div class="footer-logo">
                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/logos/logo-footer.png" alt="">
                     </div>
