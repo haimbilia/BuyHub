@@ -41,7 +41,7 @@
                             <div class="product-profile">
                                 <figure class="product-profile__pic">
                                     <a href="<?php echo $prodOrBatchUrl; ?>">
-                                        <img src="<?php echo $prodOrBatchImgUrl; ?>" title="<?php echo $op['op_product_name']; ?>" alt="<?php echo $op['op_product_name']; ?>">
+                                        <img <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL);?> src="<?php echo $prodOrBatchImgUrl; ?>" title="<?php echo $op['op_product_name']; ?>" alt="<?php echo $op['op_product_name']; ?>">
                                     </a>
                                 </figure>
                                 <div class="product-profile__description">

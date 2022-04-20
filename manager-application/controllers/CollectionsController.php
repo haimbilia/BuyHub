@@ -611,7 +611,8 @@ class CollectionsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('displayFooterButtons', false);
         $this->set('activeGentab', false);
-        $this->set('displayMediaOnly', $data['collection_display_media_only']);
+        $this->set('displayMediaOnly', $data['collection_display_media_only']);        
+        $this->set('imageDimension', ImageDimension::getDisplayCollectionImageData(ImageDimension::VIEW_MOBILE));        
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }

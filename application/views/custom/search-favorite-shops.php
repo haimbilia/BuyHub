@@ -17,7 +17,7 @@ if (!empty($userFavoriteShops)) {
 						<ul class="listing--items">
 							<?php if (!empty($val['products'])) {
 								foreach ($val['products'] as $product) { ?>
-									<li><a class="item__pic" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['product_id'])); ?>"><img alt="" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg'); ?>"></a></li>
+									<li><a class="item__pic" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['product_id'])); ?>"><img alt="" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg'); ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL);?>></a></li>
 							<?php }
 							} ?>
 							<?php if ($val['totalProducts'] <= $totalProdCountToDisplay) { ?>

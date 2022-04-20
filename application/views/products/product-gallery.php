@@ -8,7 +8,7 @@
                 <?php if (isset($imageGallery) && $imageGallery) { ?>
                     <a href="<?php echo $mainImgUrl; ?>" class="gallery" rel="gallery">
                     <?php } ?>
-                    <img src="<?php echo $mainImgUrl; ?>">
+                    <img src="<?php echo $mainImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM);?>>
                     <?php if (isset($imageGallery) && $imageGallery) { ?>
                     </a>
                 <?php } ?>
@@ -28,7 +28,7 @@
             $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg');
             $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>
 
-            <img class="thumb" main-src="<?php echo $mainImgUrl; ?>" src="<?php echo $thumbImgUrl; ?>">
+            <img class="thumb" main-src="<?php echo $mainImgUrl; ?>" src="<?php echo $thumbImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB);?>>
 
         <?php
         } ?>

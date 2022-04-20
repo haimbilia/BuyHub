@@ -21,8 +21,10 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'user_details':
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
+            case 'user_details':              
+                $href = "javascript:void(0)";
+                $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId, 'displayProfileImage'=> true, 'href' => $href, 'onclick' => $onclick,], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'usuprequest_status':

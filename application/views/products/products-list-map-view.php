@@ -76,7 +76,7 @@ foreach ($productsByShop as &$marker) {
         $amount = CommonHelper::displayMoneyFormat($product['theprice']);
         $contentString .= '<li>
             <figure class="product-profile">
-            <div class="product-profile-thumbnail"><img class="product-img" src="' . $product['img'] . '" alt="' . $product['name'] . '"></div>
+            <div class="product-profile-thumbnail"><img class="product-img" src="' . $product['img'] . '" alt="' . $product['name'] . '" '.HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB).'></div>
             <div class="product-profile-data"><div class="title"><a href="' . $product['url'] . '">' . $product['name'] . '</a></div>
                 <div class="price">' . $amount . '</div>
             </div>
