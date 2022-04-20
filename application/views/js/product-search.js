@@ -777,6 +777,8 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         data = data + "&pssearch_record_id=" + $recordId;
         data = data + "&curr_page=" + $currentPageUrl;
         fcom.updateWithAjax(fcom.makeUrl('SavedProductsSearch', 'setup', [], siteConstants.webroot_dashboard), data, function (ans) {
+            fcom.closeProcessing();
+			fcom.removeLoader();
             if (ans.status) {
                 $.facebox.close();
             }

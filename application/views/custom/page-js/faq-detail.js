@@ -1,103 +1,104 @@
 window.recordCount = 0;
-$(function (){
-   /* $(document).delegate('.acc_ctrl','click',function(e){ 
+$(function () {
+	/* $(document).delegate('.acc_ctrl','click',function(e){ 
+ 
+	  
+	 e.preventDefault();
+	 if ($(this).hasClass('active')) {
+	   $(this).removeClass('active');
+	   $(this).next()
+	   .stop()
+	   .slideUp(300);
+	 } else {
+	   $(this).addClass('active');
+	   $(this).next()
+	   .stop()
+	   .slideDown(300);
+	 }
+   }); */
 
-	 
-    e.preventDefault();
-    if ($(this).hasClass('active')) {
-      $(this).removeClass('active');
-      $(this).next()
-      .stop()
-      .slideUp(300);
-    } else {
-      $(this).addClass('active');
-      $(this).next()
-      .stop()
-      .slideDown(300);
-    }
-  }); */
-       
 
 	searchFaqs(document.frmSearchFaqs);
 	faqRightPanel();
-	
+
 });
 
-(function() {
+(function () {
 	var dv = '#listing';
 	var dvCategoryPanel = '#categoryPanel';
 	var currPage = 1;
-	var faqCatId=1;
-	reloadListing = function(){
+	var faqCatId = 1;
+	reloadListing = function () {
 		searchFaqs(document.frmSearchFaqs);
 	};
-	
-    $(document).on('click', 'a.selectedFaq', function(){
-	/* $(document).delegate('a.selectedFaq','click',function(){ */
-		var faqId=$(this).attr('data-id');
-		var faqCatId=$(this).attr('data-cat-id');
-		getFaq(faqCatId,faqId);
+
+	$(document).on('click', 'a.selectedFaq', function () {
+		/* $(document).delegate('a.selectedFaq','click',function(){ */
+		var faqId = $(this).attr('data-id');
+		var faqCatId = $(this).attr('data-cat-id');
+		getFaq(faqCatId, faqId);
 	});
-	
-	searchFaqs = function(){
+
+	searchFaqs = function () {
 		// alert(faqcatId);
-		
+
 		$(dv).prepend(fcom.getLoader());
-		
-		fcom.updateWithAjax(fcom.makeUrl('Custom','SearchFaqsDetail', [faqcatId,faqId]), '', function(ans){
-			$.ykmsg.close();			
-		
-				$(dv).find('.loader-yk').remove();
-				$(dv).html(ans.html);
-			
+
+		fcom.updateWithAjax(fcom.makeUrl('Custom', 'SearchFaqsDetail', [faqcatId, faqId]), '', function (ans) {
+			fcom.closeProcessing();
+
+			$(dv).find('.loader-yk').remove();
+			$(dv).html(ans.html);
+
 			window.recordCount = ans.recordCount;
 			fcom.removeLoader();
-			
-		}); 
+
+		});
 	};
-	getFaq = function(faqCatId,faqId){
-		fcom.updateWithAjax(fcom.makeUrl('Custom','SearchFaqsDetail', [faqCatId,faqId]), '', function(ans){
-			$.ykmsg.close();			
-		
-				$(dv).find('.loader-yk').remove();
-				$(dv).html(ans.html);
-			
+	getFaq = function (faqCatId, faqId) {
+		fcom.updateWithAjax(fcom.makeUrl('Custom', 'SearchFaqsDetail', [faqCatId, faqId]), '', function (ans) {
+			fcom.closeProcessing();
+			fcom.removeLoader();
+			$(dv).find('.loader-yk').remove();
+			$(dv).html(ans.html);
+
 			window.recordCount = ans.recordCount;
-			
-		}); 
+
+		});
 	}
-	faqRightPanel = function(){
-		fcom.updateWithAjax(fcom.makeUrl('Custom','faqQuestionsPanel', [faqcatId]), '', function(ans){
-			$.ykmsg.close();			
-			
-				$(dv).find('.loader-yk').remove();
-				$(dvCategoryPanel).html(ans.categoriesPanelHtml);
-			
+	faqRightPanel = function () {
+		fcom.updateWithAjax(fcom.makeUrl('Custom', 'faqQuestionsPanel', [faqcatId]), '', function (ans) {
+			fcom.closeProcessing();
+			fcom.removeLoader();
+
+			$(dv).find('.loader-yk').remove();
+			$(dvCategoryPanel).html(ans.categoriesPanelHtml);
+
 			window.recordCount = ans.recordCount;
-			
-		}); 
+
+		});
 	}
-	goToLoadMore = function(page){
-		if(typeof page == undefined || page == null){
+	goToLoadMore = function (page) {
+		if (typeof page == undefined || page == null) {
 			page = 1;
 		}
 		currPage = page;
-		
-		var frm = document.frmSearchFaqsPaging;		
+
+		var frm = document.frmSearchFaqsPaging;
 		$(frm.page).val(page);
-		searchFaqs(frm,1);
+		searchFaqs(frm, 1);
 	};
-	
+
 })();
 
- /******** for faq accordians  ****************/ 
+/******** for faq accordians  ****************/
 /*
  $(document).on('click', '.accordians__trigger-js', function(){
 
   if($(this).hasClass('is-active')){
-      $(this).removeClass('is-active');
-      $(this).siblings('.accordians__target-js').slideUp();
-      return false;
+	  $(this).removeClass('is-active');
+	  $(this).siblings('.accordians__target-js').slideUp();
+	  return false;
   }
  $('.accordians__trigger-js').removeClass('is-active');
  $(this).addClass("is-active");
@@ -124,14 +125,13 @@ $(document).on('click', '.nav--vertical-js li', function(){
 */
 
 /* for click scroll function */
-$(document).on('click',".scroll",function(event){
-/* $(document).delegate(".scroll",'click',function(event){ */
+$(document).on('click', ".scroll", function (event) {
+	/* $(document).delegate(".scroll",'click',function(event){ */
 
-	if(!window.recordCount)
-	{
+	if (!window.recordCount) {
 		document.frmSearchFaqs.reset();
 		$this = $(this);//.find('a');
-		searchFaqs(document.frmSearchFaqs , 0 ,function(){$this.trigger('click');});
+		searchFaqs(document.frmSearchFaqs, 0, function () { $this.trigger('click'); });
 		event.stopPropagation();
 		return false;
 	}
@@ -139,9 +139,9 @@ $(document).on('click',".scroll",function(event){
 	var full_url = this.href;
 	var parts = full_url.split("#");
 	var trgt = parts[1];
-	if($("#"+trgt).length){
-		var target_offset = $("#"+trgt).offset();
+	if ($("#" + trgt).length) {
+		var target_offset = $("#" + trgt).offset();
 		var target_top = target_offset.top;
-		$('html, body').animate({scrollTop:target_top}, 1000);
+		$('html, body').animate({ scrollTop: target_top }, 1000);
 	}
 });

@@ -43,7 +43,7 @@ $(function (){
 			$('#'+catId).addClass('is--active');
 		}
 		fcom.updateWithAjax(fcom.makeUrl('Custom','SearchFaqs', [page, catId]), '', function(ans){
-			$.ykmsg.close();
+			fcom.closeProcessing();
 			$(dv).find('.loader-yk').remove();
 			$(dv).html(ans.html);
 			window.recordCount = ans.recordCount;
@@ -53,7 +53,7 @@ $(function (){
 
 	faqRightPanel = function(){
 		fcom.updateWithAjax(fcom.makeUrl('supplier','faqCategoriesPanel'), '', function(ans){
-			$.ykmsg.close();
+			fcom.closeProcessing();
 			$(dv).find('.loader-yk').remove();
 			$(dvCategoryPanel).html(ans.categoriesPanelHtml);
 			if(ans.recordCount!=0){

@@ -16,6 +16,8 @@ $(function () {
 		data = "selprod_id=" + selprod_id + "&quantity=" + quantity;
 		ykevents.addToCart();
 		fcom.updateWithAjax(fcom.makeUrl('cart', 'add'), data, function (ans) {
+			fcom.closeProcessing();
+			fcom.removeLoader();
 			if (ans['redirect']) {
 				location = ans['redirect'];
 				return false;

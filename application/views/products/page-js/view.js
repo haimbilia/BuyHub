@@ -163,23 +163,25 @@ $(function () {
     });
     /* Product Gallery */
 
-	$(document).on('click', ".btnAddToCart--js", function (event) {
-		event.preventDefault();
-		var data = $("#frmBuyProduct").serialize();
-		var selprod_id = $(this).attr('data-id');
-		var quantity = $(this).attr('data-min-qty');
-		data = "selprod_id=" + selprod_id + "&quantity=" + quantity;
-		ykevents.addToCart();
-		fcom.updateWithAjax(fcom.makeUrl('cart', 'add'), data, function (ans) {
-			if (ans['redirect']) {
-				location = ans['redirect'];
-				return false;
-			}
-			$('span.cartQuantity').html(ans.total);
-			cart.loadCartSummary();
-		});
-		return false;
-	});
+    $(document).on('click', ".btnAddToCart--js", function (event) {
+        event.preventDefault();
+        var data = $("#frmBuyProduct").serialize();
+        var selprod_id = $(this).attr('data-id');
+        var quantity = $(this).attr('data-min-qty');
+        data = "selprod_id=" + selprod_id + "&quantity=" + quantity;
+        ykevents.addToCart();
+        fcom.updateWithAjax(fcom.makeUrl('cart', 'add'), data, function (ans) {
+            fcom.closeProcessing();
+            fcom.removeLoader();
+            if (ans['redirect']) {
+                location = ans['redirect'];
+                return false;
+            }
+            $('span.cartQuantity').html(ans.total);
+            cart.loadCartSummary();
+        });
+        return false;
+    });
 });
 
 function moreSellerRows(selprodCode, sellerId) {
@@ -217,6 +219,8 @@ function setupReviewAbuse(frm) {
     if (!$(frm).validate()) return;
     var data = fcom.frmData(frm);
     fcom.updateWithAjax(fcom.makeUrl('Reviews', 'setupReviewAbuse'), data, function (t) {
+        fcom.closeProcessing();
+        fcom.removeLoader();
         $(document).trigger('close.facebox');
     });
     return false;
@@ -259,7 +263,7 @@ function setupReviewAbuse(frm) {
         }
         data += '&productView=1';
         fcom.updateWithAjax(fcom.makeUrl('Reviews', 'searchForProduct'), data, function (ans) {
-            $.ykmsg.close();
+            fcom.closeProcessing();
             fcom.removeLoader();
             if (ans.totalRecords) {
                 $('#reviews-pagination-strip--js').show();
@@ -299,13 +303,9 @@ function setupReviewAbuse(frm) {
         isHelpful = (isHelpful) ? isHelpful : 0;
         var data = 'reviewId=' + reviewId + '&isHelpful=' + isHelpful;
         fcom.updateWithAjax(fcom.makeUrl('Reviews', 'markHelpful'), data, function (ans) {
-            $.ykmsg.close();
+            fcom.closeProcessing();
+			fcom.removeLoader();
             reviews(document.frmReviewSearch);
-            /* if(isHelpful == 1){
-
-            } else {
-
-            } */
         });
     }
 

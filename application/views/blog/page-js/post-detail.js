@@ -55,6 +55,7 @@ $(document).on('click', ".link--post-comment-form", function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Blog', 'setupPostComment'), data, function (res) {
+            fcom.removeLoader();
             frm.reset();
         });
     };
@@ -76,6 +77,7 @@ $(document).on('click', ".link--post-comment-form", function () {
         }
 
         fcom.updateWithAjax(fcom.makeUrl('Blog', 'searchComments'), data, function (ans) {
+            fcom.removeLoader();
             $.ykmsg.close();
             if (append == 1) {
                 $(dv).find('.loader-yk').remove();

@@ -73,6 +73,7 @@
             ykevents.newsLetterSubscription();
             var data = fcom.frmData(frm);
             fcom.updateWithAjax(fcom.makeUrl('MyApp', 'setUpNewsLetter'), data, function(t) {
+                fcom.removeLoader();
                 if (t.status) {
                     frm.reset();
                 }

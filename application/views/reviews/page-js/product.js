@@ -15,6 +15,8 @@ function setupReviewAbuse(frm) {
 	if (!$(frm).validate()) return;
 	var data = fcom.frmData(frm);
 	fcom.updateWithAjax(fcom.makeUrl('Reviews', 'setupReviewAbuse'), data, function (t) {
+		fcom.closeProcessing();
+		fcom.removeLoader();
 		$.facebox.close();
 	});
 	return false;
@@ -40,8 +42,9 @@ function setupReviewAbuse(frm) {
 
 		//
 		fcom.updateWithAjax(fcom.makeUrl('Reviews', 'searchForProduct'), data, function (ans) {
+			fcom.removeLoader();
 			if (ans.status == 1) {
-				$.ykmsg.close();
+				fcom.closeProcessing();
 			}
 			if (ans.totalRecords) {
 				$('#reviews-pagination-strip--js').show();
@@ -85,7 +88,8 @@ function setupReviewAbuse(frm) {
 		isHelpful = (isHelpful) ? isHelpful : 0;
 		var data = 'reviewId=' + reviewId + '&isHelpful=' + isHelpful;
 		fcom.updateWithAjax(fcom.makeUrl('Reviews', 'markHelpful'), data, function (ans) {
-
+			fcom.closeProcessing();
+			fcom.removeLoader();
 			setTimeout(function () {
 				reviews(document.frmReviewSearch);
 			}, 3000);

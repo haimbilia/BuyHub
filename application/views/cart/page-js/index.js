@@ -67,7 +67,8 @@ $(function () {
 		var data = fcom.frmData(frm);
 		$("#js-cartFinancialSummary").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Cart', 'applyPromoCode'), data, function (res) {
-			$.ykmodal.close();
+			fcom.removeLoader();
+			fcom.closeProcessing();
 			listCartProducts();
 		});
 	};
@@ -76,6 +77,7 @@ $(function () {
 		var type = $('input[name="fulfillment_type"]:checked').val();
 		var data = "type=" + type;
 		fcom.updateWithAjax(fcom.makeUrl('Cart', 'setCartCheckoutType'), data, function (ans) {
+			fcom.removeLoader();
 			if (isUserLogged() == 0) {
 				loginPopUpBox(true);
 				return false;
@@ -87,6 +89,7 @@ $(function () {
 	removePromoCode = function () {
 		$("#js-cartFinancialSummary").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Cart', 'removePromoCode'), '', function (res) {
+			fcom.removeLoader();
 			listCartProducts();
 		});
 	};
@@ -100,6 +103,7 @@ $(function () {
 
 	addToFavourite = function (key, selProdId) {
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'markAsFavorite', [selProdId], siteConstants.webroot_dashboard), '', function (ans) {
+			fcom.removeLoader();
 			if (ans.status) {
 				removeFromCart(key);
 			}
@@ -109,6 +113,7 @@ $(function () {
 	moveToSaveForLater = function (key, selProdId, fulfilmentType) {
 		$('#cartList').prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'moveToSaveForLater', [selProdId], siteConstants.webroot_dashboard), '', function (ans) {
+			fcom.removeLoader();
 			if (ans.status) {
 				listCartProducts(fulfilmentType);
 				fcom.displaySuccessMessage(langLbl.MovedSuccessfully);
@@ -126,6 +131,7 @@ $(function () {
 		$('#cartList').prepend(fcom.getLoader());
 		var data = 'selprod_id[0]=' + selprod_id;
 		fcom.updateWithAjax(fcom.makeUrl('cart', 'addSelectedToCart'), data, function (ans) {
+			fcom.removeLoader();
 			addRemoveWishListProduct(selprod_id, wish_list_id, event);
 			cart.loadCartSummary();
 			setTimeout(function () {
@@ -140,6 +146,7 @@ $(function () {
 	removePickupOnlyProducts = function () {
 		if (confirm(langLbl.confirmRemove)) {
 			fcom.updateWithAjax(fcom.makeUrl('Cart', 'removePickupOnlyProducts'), '', function (ans) {
+				fcom.removeLoader();
 				listCartProducts(2);
 				cart.loadCartSummary();
 			});
@@ -149,6 +156,7 @@ $(function () {
 	removeShippedOnlyProducts = function () {
 		if (confirm(langLbl.confirmRemove)) {
 			fcom.updateWithAjax(fcom.makeUrl('Cart', 'removeShippedOnlyProducts'), '', function (ans) {
+				fcom.removeLoader();
 				listCartProducts(1);
 				cart.loadCartSummary();
 			});
@@ -158,6 +166,7 @@ $(function () {
 	setCheckoutType = function (type) {
 		var data = "type=" + type;
 		fcom.updateWithAjax(fcom.makeUrl('Cart', 'setCartCheckoutType'), data, function (ans) {
+			fcom.removeLoader();
 			if (isUserLogged() == 0) {
 				loginPopUpBox(true);
 				return false;

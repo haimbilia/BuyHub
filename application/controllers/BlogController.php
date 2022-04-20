@@ -496,7 +496,7 @@ class BlogController extends MyAppController
             $this->setErrorAndRedirect($fileHandlerObj->getError());
         }
 
-        Message::addMessage(Labels::getLabel('MSG_Contributed_Successfully', $this->siteLangId));
+        Message::addMessage(Labels::getLabel('MSG_CONTRIBUTED_SUCCESSFULLY', $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('Blog', 'contributionForm'));
     }
 

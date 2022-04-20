@@ -19,7 +19,8 @@ $(function (){
 			$(dv).html(fcom.getLoader());
 		}
 		fcom.updateWithAjax(fcom.makeUrl('Offers','search'), data, function(ans){
-			$.ykmsg.close();
+			fcom.closeProcessing();
+			fcom.removeLoader();
 			if( append == 1 ){
 				$(dv).find('.loader-yk').remove();
 				$(dv).append(ans.html);

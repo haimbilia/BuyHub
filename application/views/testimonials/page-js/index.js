@@ -24,7 +24,7 @@ $(function () {
 
 
 		fcom.updateWithAjax(fcom.makeUrl('Testimonials', 'search'), data, function (ans) {
-			$.ykmsg.close();
+			fcom.closeProcessing();
 			fcom.removeLoader();
 			if (append == 1) {
 				$(dv).find('.loader-yk').remove();
