@@ -1,5 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (!empty($postList)) {
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+if (!empty($postList)) {
     foreach ($postList as $blogPost) { ?>
         <section class="section">
             <div class="container">
@@ -27,8 +27,12 @@
                                 <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo $blogPost['post_title'] ?>
                                 </a>
                             </h1>
-                            <p class="post-description"> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur cumque ullam laboriosam ipsa minus velit voluptates voluptatum tempora facilis, expedita, eligendi!</p>
-                            <a class="post-link" href="#">Read more</a>
+                            <p class="post-description">
+                                <?php
+                                echo mb_strimwidth(html_entity_decode($blogPost['post_description']), 0, 130, "...");
+                                ?>
+                            </p>
+                            <a class="post-link" href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo Labels::getLabel('LBL_READ_MORE', $siteLangId); ?></a>
                         </div>
                     </div>
                 </div>
@@ -70,7 +74,7 @@ if (!empty($postList)) { ?>
                             </h2>
                         </div>
                         <div class="post-foot">
-                            <a class="post-link" href="#">Read more</a>
+                            <a class="post-link" href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo Labels::getLabel('LBL_READ_MORE', $siteLangId); ?></a>
                         </div>
                     </div>
                 <?php $count++;
@@ -115,33 +119,14 @@ if (!empty($postList)) { ?>
                             </ul>
                             <h2 class="post-title"> <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo mb_substr($blogPost['post_title'], 0, 80); ?></a>
                             </h2>
-                            <a class="post-link" href="#">Read more</a>
+                            <a class="post-link" href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo Labels::getLabel('LBL_READ_MORE', $siteLangId); ?></a>
                         </div>
                     </div>
                 <?php } ?>
             </div>
         </div>
-
     </section>
 <?php } ?>
-<!-- 
-<?php if (FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 0)) { ?>
-    <section class="section bg-brand">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-6">
-                    <div class="blog-subscribers">
-                        <h4><?php echo Labels::getLabel('LBL_Get_Weekly_Insights', $siteLangId) ?>
-                        </h4>
-                        <p><?php echo Labels::getLabel('LBL_Subscribe_to_our_weekly_newsletter', $siteLangId) ?>
-                        </p>
-                        <?php $this->includeTemplate('_partial/footerNewsLetterForm.php', array('blogPage' => true, 'formId' => 'blogFrmNewsletter')); ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-<?php } ?> -->
 
 <?php $postList = array_slice($postList, 2);
 if (!empty($postList)) { ?>
@@ -171,12 +156,9 @@ if (!empty($postList)) { ?>
                                 <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo $blogPost['post_title'] ?>
                                 </a>
                             </h2>
-                            <a class="post-link" href="#">Read more</a>
+                            <a class="post-link" href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo Labels::getLabel('LBL_READ_MORE', $siteLangId); ?></a>
                         </div>
-
-
                     </div>
-
                 <?php } ?>
             </div>
         </div>
@@ -217,9 +199,8 @@ if (!empty($postList)) { ?>
                             <h2 class="post-title">
                                 <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo mb_substr($blogPost['post_title'], 0, 80); ?></a>
                             </h2>
-                            <a class="post-link" href="#">Read more</a>
+                            <a class="post-link" href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo Labels::getLabel('LBL_READ_MORE', $siteLangId); ?></a>
                         </div>
-
                     </div>
                 <?php } ?>
             </div>
