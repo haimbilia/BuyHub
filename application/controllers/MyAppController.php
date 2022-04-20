@@ -178,6 +178,7 @@ class MyAppController extends FatController
                     'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
                     'copiedText' => Labels::getLabel('LBL_COPIED_TEXT', $this->siteLangId),
                     'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
+                    'fieldNotFound' => Labels::getLabel('LBL_{field}_NOT_FOUND', $this->siteLangId),
                 );
 
                 $languages = Language::getAllNames(false);

@@ -1,16 +1,17 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <section class=" <?php echo (false === CommonHelper::isAppUser()) ? ' ' : ''; ?>">
     <div class="container">
-        <div class="blog-detail">
+        <div class="blog-detail post-data">
             <div class="blog-detail-left">
-                <a class="btn btn-icon btn-link btn-back" href="">
+                <a class="btn btn-icon btn-link btn-back" href="<?php echo UrlHelper::generateUrl('Blog'); ?>">
                     <i class="icn">
                         <svg class="svg" width="20" height="20">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#arrow-back">
                             </use>
                         </svg>
                     </i>
-                    Back To Home</a>
+                    <?php echo Labels::getLabel('LBL_BACK_TO_HOME', $siteLangId); ?>
+                </a>
 
                 <div class="blog-head">
                     <h1 class="title"> <?php echo $blogPostData['post_title']; ?></h1>

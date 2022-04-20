@@ -28,6 +28,10 @@
 <?php if (!UserAuthentication::isUserLogged()) { ?>
     <div class="comment commentBox-js">
         <span class="">
-            <a href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm'); ?>"><?php echo Labels::getLabel('Lbl_Login', $siteLangId); ?> </a> <?php echo Labels::getLabel('Lbl_Login_required_to_post_comment', $siteLangId); ?></span>
+            <a class="link" href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm'); ?>">
+                <?php echo Labels::getLabel('Lbl_Login', $siteLangId); ?>
+            </a>
+            <?php echo Labels::getLabel('Lbl_Login_required_to_post_comment', $siteLangId); ?>
+        </span>
     </div>
 <?php } ?>

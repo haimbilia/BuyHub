@@ -440,6 +440,7 @@ addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
 removeFromCart = function (key) {
     var data = "key=" + key;
     fcom.updateWithAjax(fcom.makeUrl("Cart", "remove"), data, function (ans) {
+        fcom.removeLoader();
         if (ans.status) {
             if (ans.total == 0) {
                 $(".emtyCartBtn-js").hide();
@@ -447,7 +448,7 @@ removeFromCart = function (key) {
             listCartProducts();
             cart.loadCartSummary();
         }
-        $.ykmsg.close();
+        fcom.closeProcessing();
         fcom.displaySuccessMessage(langLbl.MovedSuccessfully);
     });
 };

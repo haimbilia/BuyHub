@@ -142,7 +142,7 @@ class TaxStructureController extends ListingBaseController
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0, $isCombined = 0)
+    protected function getLangForm($recordId = 0, $lang_id = 0, $isCombined = 0, $autoFillLangData = 0)
     {
         $frm = new Form('frmLangJs', array('id' => 'frmLangJs'));
         $frm->addHiddenField('', 'taxstr_id', $recordId);
@@ -150,7 +150,14 @@ class TaxStructureController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_TAX_NAME', $lang_id), 'taxstr_name');
 
         if ($isCombined) {
-            $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, $lang_id);
+            if (0 < $autoFillLangData && CommonHelper::getDefaultFormLangId() != $lang_id) {
+                $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, CommonHelper::getDefaultFormLangId());
+                $updateLangDataobj = new TranslateLangData(TaxStructure::DB_TBL_LANG);
+                $translatedData = $updateLangDataobj->directTranslate($langcombinedTaxes, $lang_id, CommonHelper::getDefaultFormLangId());
+                $langcombinedTaxes = $translatedData[$lang_id] ?? [];
+            } else {
+                $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, $lang_id);
+            }
             $combinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, CommonHelper::getDefaultFormLangId());
             $count = 1;
             foreach ($combinedTaxes as $key => $value) {
@@ -257,15 +264,17 @@ class TaxStructureController extends ListingBaseController
                 }
                 $post['taxstr_component_name'] = $postComponent;
             }
+
             if ($recordId > 0) {
                 $post['lang_id'] = CommonHelper::getDefaultFormLangId();
+                /* Need to know more about below row whether it is required or not. */
                 $taxDetails = (new TaxStructure())->getCombinedTaxesWithLang($recordId, $post);
                 $post = array_merge($post, $taxDetails);
             }
         } else {
             $post['taxstr_component_name'] = [];
         }
-
+        
         if (!$record->addUpdateCombinedData($post, $record->getMainTableRecordId())) {
             LibHelper::exitWithError($record->getError(), true);
         }
@@ -283,7 +292,7 @@ class TaxStructureController extends ListingBaseController
         if (1 > $recordId || 1 > $langId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        $langFrm = $this->getLangForm($recordId, $langId);
+
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(TaxStructure::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId, CommonHelper::getDefaultFormLangId());
@@ -294,11 +303,12 @@ class TaxStructureController extends ListingBaseController
         } else {
             $langData = TaxStructure::getAttributesByLangId($langId, $recordId);
             $langData = (!empty($langData)) ? $langData : [];
-            $combinedData = TaxStructure::getAttributesById($recordId, ['taxstr_is_combined', 'taxstr_id']);
-            $langData = $langData + $combinedData;
         }
+
+        $combinedData = TaxStructure::getAttributesById($recordId, ['taxstr_is_combined', 'taxstr_id']);
+        $langData = $langData + $combinedData;
         $isCombined = $langData['taxstr_is_combined'] ?? 0;
-        $langFrm = $this->getLangForm($recordId, $langId, $isCombined);
+        $langFrm = $this->getLangForm($recordId, $langId, $isCombined, $autoFillLangData);
         if ($langData) {
             $langFrm->fill($langData);
         }

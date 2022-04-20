@@ -20,8 +20,8 @@ $fld->value = '<div class="yoco-form" id="card_frame"></div>';
 <script type="text/javascript">
     var sdk = new window.YocoSDK({
         publicKey: '<?php echo $publicKey; ?>'
-    });    
-    
+    });
+
     var inline = sdk.inline({
         layout: 'basic',
         amountInCents: <?php echo $paymentAmount; ?>,
@@ -32,26 +32,29 @@ $fld->value = '<div class="yoco-form" id="card_frame"></div>';
     function confirmOrder() {
         var btnEle = $("#paymentForm input[type='submit']");
         var btnText = btnEle.val();
-        btnEle.val(btnEle.data('processing-text')).attr('disabled', 'disabled');    
-        inline.createToken().then(function (result) {
-            if (result.error) {         
+        btnEle.val(btnEle.data('processing-text')).attr('disabled', 'disabled');
+        inline.createToken().then(function(result) {
+            if (result.error) {
                 btnEle.val(btnText).removeAttr('disabled');
                 const errorMessage = result.error.message;
                 errorMessage && fcom.displayErrorMessage(errorMessage);
             } else {
                 fcom.displayProcessing();
-                fcom.updateWithAjax(fcom.makeUrl('YocoPay', 'chargeCard', ['<?php echo $orderInfo["id"]; ?>']), {token: result.id}, function (t) {
+                fcom.updateWithAjax(fcom.makeUrl('YocoPay', 'chargeCard', ['<?php echo $orderInfo["id"]; ?>']), {
+                    token: result.id
+                }, function(t) {
+                    fcom.closeProcessing();
+                    fcom.removeLoader();
                     btnEle.val(btnText).removeAttr('disabled');
                     if (t.status == 1) {
                         window.location.href = t.redirectUrl;
                     }
                 });
             }
-        }).catch(function (error) {
+        }).catch(function(error) {
             fcom.displayErrorMessage(error);
             btnEle.val(btnText).removeAttr('disabled');
         });
 
     }
-
 </script>
