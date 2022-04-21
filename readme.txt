@@ -703,6 +703,7 @@ Updates/Fixes :
     => 063889 - Buyer: When the buyer adds the shop in Wishlist, the Wishlist icon does not get highlighted.
     => 063910 - iOS Web: Buyer: The user is not able to place an order
     => 063943 - iOS Web: Getting an error when the user clicks on Dashboard.
+    => 063946 - iOS web: Getting a multiple issues when the user adds a product
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
