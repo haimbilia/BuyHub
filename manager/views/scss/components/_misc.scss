@@ -1886,7 +1886,7 @@ mark,
 }
 
 .help-btn {
-    box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 0 2px rgba(211, 212, 213, 0.8);
     position: fixed;
     z-index: 9;
     #{$end-direction}: 0;
@@ -2407,8 +2407,11 @@ $header-height: 65px;
 
 .main {
     flex: 1;
-    padding: 2rem 1rem 0;
-    flex: 1;
+    padding: 2rem 0;
+    @include media-breakpoint-up(lg) {
+        padding: 2rem 1rem 0;
+    }
+
     &.isLoading {
         overflow: hidden;
         position: relative;
@@ -2513,6 +2516,7 @@ $header-height: 65px;
 
 .breadcrumb-wrap {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     margin-bottom: 1rem;
     min-height: 42px;

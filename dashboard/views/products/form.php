@@ -120,40 +120,42 @@ if (0 < $recordId) {
                     </div>
                     <div class="collapse" id="stock-block1">
                         <div class="card-body  p-0">
-                            <table class="table  listingTableJs" id="variantsJs">
-                                <thead class="tableHeadJs">
-                                    <tr>
-                                        <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                                        <th width="45%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                                        <th class="align-right" width="15%"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $optionCount = count($productOptions);
-                                    for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
-                                        echo getVariantUiTr($langId, $i, ($productOptions[$i] ?? []));
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                            <div class="separator separator-dashed my-4"></div>
-                            <div class="form-group row justify-content-between px-4">
-                                <div class="col">
-                                    <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
+                            <div class="js-scrollable table-wrap table-responsive">
+                                <table class="table  listingTableJs" id="variantsJs">
+                                    <thead class="tableHeadJs">
+                                        <tr>
+                                            <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
+                                            <th width="45%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                                            <th class="align-right" width="15%"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $optionCount = count($productOptions);
+                                        for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
+                                            echo getVariantUiTr($langId, $i, ($productOptions[$i] ?? []));
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                                <div class="separator separator-dashed my-4"></div>
+                                <div class="form-group row justify-content-between px-4">
+                                    <div class="col">
+                                        <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <?php
+                                        $fld = $frm->getField('upc_type');
+                                        HtmlHelper::configureSwitchForRadio($fld);
+                                        $fld->addOptionListTagAttribute('class', 'list-radio');
+                                        $fld->addFieldTagAttribute('onchange', 'upcType()');
+                                        $fld->addFieldTagAttribute('class', 'upc_type');
+                                        echo $fld->getHtml();
+                                        ?>
+                                    </div>
                                 </div>
-                                <div class="col-auto">
-                                    <?php
-                                    $fld = $frm->getField('upc_type');
-                                    HtmlHelper::configureSwitchForRadio($fld);
-                                    $fld->addOptionListTagAttribute('class', 'list-radio');
-                                    $fld->addFieldTagAttribute('onchange', 'upcType()');
-                                    $fld->addFieldTagAttribute('class', 'upc_type');
-                                    echo $fld->getHtml();
-                                    ?>
-                                </div>
+                                <div id="variantsListJs"></div>
                             </div>
-                            <div id="variantsListJs"></div>
                         </div>
                     </div>
                 </div>

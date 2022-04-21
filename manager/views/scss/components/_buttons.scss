@@ -257,3 +257,9 @@ a.link {
         }
     }
 }
+
+.cell-link {
+    &:hover {
+        color: $brand-color;
+    }
+}

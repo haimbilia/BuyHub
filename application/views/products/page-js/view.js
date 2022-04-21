@@ -1,28 +1,4 @@
 $(function () {
-    var tabsReferences = [];
-    if (0 < $('a.nav-scroll-js').length) {
-        $('a.nav-scroll-js').each(function () {
-            tabsReferences.push($(this).attr('href'));
-        });
-    }
-
-    /* Product Main image to be static on scroll par a particular window scroll range[ */
-    $(window).on("scroll", function () {
-        var scrollTop = $(window).scrollTop();
-
-        $.each(tabsReferences, function (index, value) {
-            var tabDist = ($('.nav-detail-js a[href="' + value + '"]').offset().top) - scrollTop;
-            var contentDist = (($(value).offset().top) - scrollTop) - tabDist;
-            var headerHeight = $("#header").height();
-            if ((headerHeight + 20) > tabDist && 130 > contentDist) {
-                $(".nav-scroll-js").removeClass('is-active');
-                $('a[href="' + value + '"]').addClass('is-active');
-            } else if ((headerHeight + 20) < tabDist) {
-                $(".nav-scroll-js").removeClass('is-active');
-            }
-        });
-    });
-
     $(".cancel").on('click', function () {
         $(this).closest('.addon--js').toggleClass('cancelled--js ');
         $(this).toggleClass('remove-add-on');
@@ -38,35 +14,12 @@ $(function () {
         $(".item__main").find('img').attr('src', mainSrc);
     });
 
-    // $('.js-collection-corner').slick(getSlickSliderSettings(5, 1, langLbl.layoutDirection));
-
-    /* for on scoll jump navigation fix */
-    /* var elementPosition = $('.nav--jumps').offset();
-    $(window).scroll(function(){
-        if( $(window).scrollTop() > elementPosition.top ){
-            $('.nav--jumps').addClass('nav--jumps-fixed');
-        } else {
-            $('.nav--jumps').removeClass('nav--jumps-fixed');
-        }
-    });
-     */
     $(".link_li").on('click', function (event) {
         event.preventDefault();
 
         var target_offset = $(".product--specifications").offset();
         var target_top = target_offset.top - 100;
         $('html, body').animate({ scrollTop: target_top }, 1000);
-    });
-    /* for click scroll function */
-    $(".scroll").on('click', function (event) {
-        /* event.preventDefault();
-        var full_url = this.href;
-        var parts = full_url.split("#");
-        var trgt = parts[1];
-        fcom.scrollToTop('#' + trgt);
-        var target_offset = $("#" + trgt).offset();
-        var target_top = target_offset.top - 60;
-        $('html, body').animate({ scrollTop: target_top }, 1000); */
     });
 
     $(".link--write").on('click', function () {
@@ -304,7 +257,7 @@ function setupReviewAbuse(frm) {
         var data = 'reviewId=' + reviewId + '&isHelpful=' + isHelpful;
         fcom.updateWithAjax(fcom.makeUrl('Reviews', 'markHelpful'), data, function (ans) {
             fcom.closeProcessing();
-			fcom.removeLoader();
+            fcom.removeLoader();
             reviews(document.frmReviewSearch);
         });
     }

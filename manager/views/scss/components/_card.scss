@@ -1,4 +1,4 @@
-$card-space: 25px;
+$card-space: 1.5625rem;
 $card-radius: 1px;
 $card-shadow: 0 0 20px 0 rgba(76, 87, 125, 0.02);
 $card-bg: #fff;
@@ -381,9 +381,11 @@ $card: "card";
     }
     &#{&}-tabs {
         #{$selfHead} {
-            align-items: center;
-            padding-top: 0;
-            padding-bottom: 0;
+            @include media-breakpoint-up(lg) {
+                align-items: center;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
             #{$selfHead}-toolbar {
                 display: flex;
                 align-items: stretch;

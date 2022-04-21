@@ -58,10 +58,8 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('taxruleloc_type');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
 
-$formTitle = Labels::getLabel('LBL_TAX_CATEGORIES_RULE_SETUP', $siteLangId);
-require_once(CONF_THEME_PATH . '_partial/listing/form.php');
-?>
-
+$formTitle = Labels::getLabel('LBL_TAX_CATEGORY_RULE_SETUP', $siteLangId);
+require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
 <script>
     $(function () {
