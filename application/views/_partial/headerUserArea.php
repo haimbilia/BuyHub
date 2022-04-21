@@ -140,7 +140,6 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
         </div>
         <div class="offcanvas-foot">
             <a class="btn btn-logout" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>">
-
                 <?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
             </a>
         </div>
