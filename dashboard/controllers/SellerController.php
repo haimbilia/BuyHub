@@ -3555,15 +3555,15 @@ class SellerController extends SellerBaseController
         }
         $frm = new Form('frmSocialPlatform');
         $frm->addHiddenField('', 'splatform_id', $splatform_id);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELECT_PLATFORM', $this->siteLangId), 'splatform_icon_class', $iconsArr, '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
+        if ($splatform_id > 0) {
+            $fld->setFieldTagAttribute('disabled', 'disabled');
+        }
         $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'splatform_title');
         $urlFld = $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'splatform_url');
         $urlFld->requirements()->setRegularExpressionToValidate(ValidateElement::URL_REGEX);
         $urlFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_THIS_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));
         $urlFld->requirements()->setRequired();
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_ICON_TYPE_FROM_CSS', $this->siteLangId), 'splatform_icon_class', $iconsArr, '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
-        if ($splatform_id > 0) {
-            $fld->setFieldTagAttribute('disabled', 'disabled');
-        }
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'splatform_active', applicationConstants::ACTIVE, array(), true, applicationConstants::INACTIVE);
 
         $languageArr = Language::getDropDownList();

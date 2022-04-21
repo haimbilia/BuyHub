@@ -37,57 +37,58 @@
                 ?>
             </div>
         </div>
-        <?php if ($socialPlatforms) { ?>
-            <div class="shop-information-end">
-                <ul class="contact-social">
+
+        <div class="shop-information-end">
+            <ul class="contact-social">
+                <li class="contact-social-item">
+                    <a class="contact-social-link" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#shareIcon">
+                        <svg class="svg" width="20" height="20">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share"></use>
+                        </svg>
+                    </a>
+                </li>
+                <?php $showAddToFavorite = true;
+                if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
+                    $showAddToFavorite = false;
+                }
+                ?>
+                <?php if ($showAddToFavorite) { ?>
                     <li class="contact-social-item">
-                        <a class="contact-social-link" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#shareIcon">
+                        <a class="contact-social-link" title="<?php echo ($shop['is_favorite']) ? Labels::getLabel('Lbl_Unfavorite_Shop', $siteLangId) : Labels::getLabel('Lbl_Favorite_Shop', $siteLangId); ?>" onclick="toggleShopFavorite(<?php echo $shop['shop_id']; ?>);" <?php echo ($shop['is_favorite']) ? 'is-active' : ''; ?> id="shop_<?php echo $shop['shop_id']; ?>">
                             <svg class="svg" width="20" height="20">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share"></use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart"></use>
                             </svg>
                         </a>
                     </li>
-                    <?php $showAddToFavorite = true;
-                    if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
-                        $showAddToFavorite = false;
-                    }
-                    ?>
-                    <?php if ($showAddToFavorite) { ?>
+                <?php } ?>
+                <?php $showMoreButtons = true;
+                if (isset($userParentId) && $userParentId == $shop['shop_user_id']) {
+                    $showMoreButtons = false;
+                } ?>
+                <?php if ($showMoreButtons) {
+                    $shopRepData = ShopReport::getReportDetail($shop['shop_id'], UserAuthentication::getLoggedUserId(true), 'sreport_id');
+                    if (false === UserAuthentication::isUserLogged() || empty($shopRepData)) { ?>
                         <li class="contact-social-item">
-                            <a class="contact-social-link" title="<?php echo ($shop['is_favorite']) ? Labels::getLabel('Lbl_Unfavorite_Shop', $siteLangId) : Labels::getLabel('Lbl_Favorite_Shop', $siteLangId); ?>" onclick="toggleShopFavorite(<?php echo $shop['shop_id']; ?>);" <?php echo ($shop['is_favorite']) ? 'is-active' : ''; ?> id="shop_<?php echo $shop['shop_id']; ?>">
+                            <a class="contact-social-link" href="<?php echo UrlHelper::generateUrl('Shops', 'ReportSpam', array($shop['shop_id'])); ?>" title="<?php echo Labels::getLabel('Lbl_Report_Spam', $siteLangId); ?>">
                                 <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart"></use>
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#report"></use>
                                 </svg>
+
                             </a>
                         </li>
                     <?php } ?>
-                    <?php $showMoreButtons = true;
-                    if (isset($userParentId) && $userParentId == $shop['shop_user_id']) {
-                        $showMoreButtons = false;
-                    } ?>
-                    <?php if ($showMoreButtons) {
-                        $shopRepData = ShopReport::getReportDetail($shop['shop_id'], UserAuthentication::getLoggedUserId(true), 'sreport_id');
-                        if (false === UserAuthentication::isUserLogged() || empty($shopRepData)) { ?>
-                            <li class="contact-social-item">
-                                <a class="contact-social-link" href="<?php echo UrlHelper::generateUrl('Shops', 'ReportSpam', array($shop['shop_id'])); ?>" title="<?php echo Labels::getLabel('Lbl_Report_Spam', $siteLangId); ?>">
-                                    <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#report"></use>
-                                    </svg>
-
-                                </a>
-                            </li>
-                        <?php } ?>
-                        <?php if (!UserAuthentication::isUserLogged() || (UserAuthentication::isUserLogged() && ((User::isBuyer()) || (User::isSeller())))) { ?>
-                            <li class="contact-social-item">
-                                <a class="contact-social-link" href="<?php echo UrlHelper::generateUrl('shops', 'sendMessage', array($shop['shop_id'])); ?>" title="<?php echo Labels::getLabel('Lbl_Send_Message', $siteLangId); ?>">
-                                    <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#send-msg"></use>
-                                    </svg> </a>
-                            </li>
-                        <?php } ?>
+                    <?php if (!UserAuthentication::isUserLogged() || (UserAuthentication::isUserLogged() && ((User::isBuyer()) || (User::isSeller())))) { ?>
+                        <li class="contact-social-item">
+                            <a class="contact-social-link" href="<?php echo UrlHelper::generateUrl('shops', 'sendMessage', array($shop['shop_id'])); ?>" title="<?php echo Labels::getLabel('Lbl_Send_Message', $siteLangId); ?>">
+                                <svg class="svg" width="20" height="20">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#send-msg"></use>
+                                </svg> </a>
+                        </li>
                     <?php } ?>
-
-                    <?php foreach ($socialPlatforms as $row) { ?>
+                <?php }
+                
+                if ($socialPlatforms) {
+                    foreach ($socialPlatforms as $row) { ?>
                         <li class="contact-social-item">
                             <a class="contact-social-link" <?php if ($row['splatform_url'] != '') { ?> target="_blank" <?php } ?> href="<?php echo ($row['splatform_url'] != '') ? $row['splatform_url'] : 'javascript:void(0)'; ?>">
 
@@ -97,10 +98,10 @@
 
                             </a>
                         </li>
-                    <?php } ?>
-                </ul>
-            </div>
-        <?php } ?>
+                    <?php }
+                } ?>
+            </ul>
+        </div>
     </div>
 <?php } ?>
 <div class="modal fade" id="shareIcon" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
