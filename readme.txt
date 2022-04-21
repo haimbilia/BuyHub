@@ -701,6 +701,7 @@ Updates/Fixes :
     => 063829 - Buyer: Getting multiple issues under the rating section at the front-end
     => 063890 - The "Payment Pending" status is showing for the COD Order at the admin's, seller's and buyer's end
     => 063889 - Buyer: When the buyer adds the shop in Wishlist, the Wishlist icon does not get highlighted.
+    => 063910 - iOS Web: Buyer: The user is not able to place an order
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
