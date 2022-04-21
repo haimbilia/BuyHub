@@ -700,6 +700,7 @@ Updates/Fixes :
     => 063888 - Buyer: Shop's options are not showing on detail page
     => 063829 - Buyer: Getting multiple issues under the rating section at the front-end
     => 063890 - The "Payment Pending" status is showing for the COD Order at the admin's, seller's and buyer's end
+    => 063889 - Buyer: When the buyer adds the shop in Wishlist, the Wishlist icon does not get highlighted.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
