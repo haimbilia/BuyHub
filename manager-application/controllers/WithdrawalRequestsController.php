@@ -159,7 +159,7 @@ class WithdrawalRequestsController extends ListingBaseController
             $srch->addCondition('tuwr.withdrawal_id', '=', $withdrawalId);
         }
 
-        if (isset($post['status']) && '' != $post['status']) {
+        if (isset($post['status']) && '' != $post['status'] &&  -1 < $post['status']) {
             $srch->addCondition('tuwr.withdrawal_status', '=', $post['status']);
         }
 
@@ -208,12 +208,15 @@ class WithdrawalRequestsController extends ListingBaseController
             $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
             $sheetData = array();
-            $exportField = ['user_email' => Labels::getLabel('LBL_USER_EMAIL', $this->siteLangId)];
-            $exportField = $exportField + $fields;
+            $exportField = [
+                'user_email' => Labels::getLabel('LBL_USER_EMAIL', $this->siteLangId),
+                'payout_address' => Labels::getLabel('LBL_PAYOUT_ADDRESS', $this->siteLangId),                
+            ];
+            $exportField =  $fields + $exportField;
             unset($exportField['action']);
             array_push($sheetData, array_values($exportField));
 
-            while ($row = FatApp::getDb()->fetch($rs)) {
+            while ($row = FatApp::getDb()->fetch($rs)) {             
                 $arr = [];
                 foreach ($exportField as $key => $val) {
                     switch ($key) {
@@ -233,14 +236,42 @@ class WithdrawalRequestsController extends ListingBaseController
                             $statusArr = Transactions::getWithdrawlStatusArr($this->siteLangId);
                             $arr[] = $statusArr[$row[$key]] ?? Labels::getLabel('LBL_N/A', $this->siteLangId);
                             break;
+                        case 'payout_address':
+                            $str = '';
+                            if($row['withdrawal_payment_method'] ==  User::AFFILIATE_PAYMENT_METHOD_BANK){
+                                $str .= Labels::getLabel('LBL_BANK_NAME', $this->siteLangId)." - ".$row['withdrawal_bank'] ."\n";
+                                $str .= Labels::getLabel('LBL_A/C_NAME', $this->siteLangId)." - ".$row['withdrawal_account_holder_name'] ."\n";
+                                $str .= Labels::getLabel('LBL_A/C_NUMBER', $this->siteLangId)." - ".$row['withdrawal_account_number'] ."\n";
+                                $str .= Labels::getLabel('LBL_IFSC_CODE/SWIFT_CODE', $this->siteLangId)." - ".$row['withdrawal_ifc_swift_code'] ."\n";
+                                $str .= Labels::getLabel('LBL_BANK_ADDRESS', $this->siteLangId)." - ".$row['withdrawal_bank_address']; 
+                            }elseif($row['withdrawal_payment_method'] ==  User::AFFILIATE_PAYMENT_METHOD_PAYPAL){
+
+                            }elseif (array_key_exists($row['withdrawal_payment_method'], $payoutPlugins)) {  
+                                if (!empty($row['payout_detail'])) {                                 
+                                    $extraInfoArr = explode(',', $row["payout_detail"]); 
+                                    foreach($extraInfoArr as $extrInfo){
+                                        $extrInfo = explode(":", $extrInfo);
+                                        if(!isset($extrInfo[0]) || !isset($extrInfo[1])){
+                                            continue;
+                                        }
+                                        if($extrInfo[0] == 'amount' || $extrInfo[0] == 'payout'){
+                                            continue;
+                                        }     
+                                        $str .= ucwords(str_replace('_', ' ', $extrInfo[0]))." - ".$extrInfo[1] ."\n";                                                                       
+                                    }
+                                }
+                            }
+                                                      
+                            $arr[] = $str;
+                            break;                       
                         default:
                             $arr[] = $row[$key];
                             break;
                     }
                 }
+               
                 array_push($sheetData, $arr);
-            }
-
+            } 
             CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_WITHDRAWAL_REQUESTS', $this->siteLangId) . date("d-M-Y") . '.csv', ',');
             exit;
         }

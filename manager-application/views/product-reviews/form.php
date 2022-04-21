@@ -83,7 +83,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                 if ($findKeywordStr == '') {
                     echo $data['spreview_title'];
                 } else {
-                    echo preg_replace('/' . $findKeywordStr . '/i', '<span class="highlight">$0</span>', $data['spreview_title']);
+                    echo preg_replace('/' . $findKeywordStr . '/i', '<mark>$0</mark>', $data['spreview_title']);
                 }
                 ?>
             </div>
@@ -97,7 +97,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                 if ($findKeywordStr == '') {
                     echo nl2br($data['spreview_description']);
                 } else {
-                    $spreviewDescription = preg_replace('/' . $findKeywordStr . '/i', '<span class="highlight">$0</span>', $data['spreview_description']);
+                    $spreviewDescription = preg_replace('/' . $findKeywordStr . '/i', '<mark>$0</mark>', $data['spreview_description']);
                     echo nl2br($spreviewDescription);
                 }
                 ?>

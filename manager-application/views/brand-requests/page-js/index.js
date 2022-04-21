@@ -50,6 +50,23 @@
             clearSearch();
         }); 
     }; 
+    updateApprovalStatus = function (e, obj, recordId, status) {
+        if (false === checkControllerName()) {
+            return false;
+        }      
+        e.stopPropagation();
+        var oldStatus = $(obj).attr("data-old-status");
+        $(listingTableJs).prepend(fcom.getLoader());
+        data = "recordId=" + recordId + "&status=" + status;
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "updateApprovalStatus"), data,
+            function (ans) {
+                fcom.removeLoader();
+                fcom.displaySuccessMessage(ans.msg);               
+                reloadList();               
+            }
+        );
+    };
+    
 })();
 
 $(document).ready(function () {
