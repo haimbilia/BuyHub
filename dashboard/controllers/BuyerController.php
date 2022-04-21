@@ -257,7 +257,7 @@ class BuyerController extends BuyerBaseController
         }
 
         $address = $orderObj->getOrderAddresses($orderDetail['order_id']);
-        $orderDetail['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE];
+        $orderDetail['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE] ?? [];
         $orderDetail['shippingAddress'] = (!empty($address[Orders::SHIPPING_ADDRESS_TYPE])) ? $address[Orders::SHIPPING_ADDRESS_TYPE] : array();
 
         $pickUpAddress = $orderObj->getOrderAddresses($orderDetail['order_id'], $opId);
@@ -349,6 +349,7 @@ class BuyerController extends BuyerBaseController
         $this->set('orderStatusArr', $orderStatusArr);
         $this->set('cancelledDate', $cancelledDate);
 
+        // CommonHelper::printArray($childOrderDetail);
         $this->set('orderDetail', $orderDetail);
         $this->set('childOrderDetail', $childOrderDetail);
         $this->set('primaryOrder', $primaryOrderDisplay);
