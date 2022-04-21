@@ -229,6 +229,14 @@ class BrandRequestsController extends ListingBaseController
         }
 
         $this->setLangData($brand, [$brand::tblFld('name') => $post[$brand::tblFld('name')]]);
+        
+        $brandData = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('IFNULL(brand_name,brand_identifier) as brand_name', 'brand_id', 'brand_identifier', 'brand_active', 'brand_featured', 'brand_status', 'brand_seller_id'), applicationConstants::JOIN_RIGHT);
+        $email = new EmailHandler();
+        if ($post['brand_status'] != Brand::BRAND_REQUEST_PENDING) {
+            if (!$email->sendBrandRequestStatusChangeNotification($this->siteLangId, $brandData)) {                
+                LibHelper::exitWithError(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
+            }
+        }
 
         /* url data[ */
         $brandOriginalUrl = $this->rewriteUrl . $recordId;
@@ -253,10 +261,9 @@ class BrandRequestsController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_BRAND_NAME', $this->siteLangId), 'brand_name');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_BRAND_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
-
-        $frm->addCheckBox(Labels::getLabel('FRM_BRAND_STATUS', $this->siteLangId), 'brand_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $frm->addCheckBox(Labels::getLabel('FRM_BRAND_APPROVAL', $this->siteLangId), 'brand_status', applicationConstants::YES, [], false, applicationConstants::NO);
-
+        $frm->addCheckBox(Labels::getLabel('FRM_BRAND_STATUS', $this->siteLangId), 'brand_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
+        
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -467,6 +474,37 @@ class BrandRequestsController extends ListingBaseController
         return $frm;
     }
 
+    public function updateApprovalStatus()
+    {
+        $this->checkEditPrivilege();
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 == $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        
+        $brandObj = new Brand($recordId); 
+        $brandObj->setFldValue($brandObj::tblFld('status'), $status);
+        if (!$brandObj->save()) {
+            LibHelper::exitWithError($brandObj->getError(), true);
+        }   
+        
+        $brandData = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('IFNULL(brand_name,brand_identifier) as brand_name', 'brand_id', 'brand_identifier', 'brand_active', 'brand_featured', 'brand_status', 'brand_seller_id'), applicationConstants::JOIN_RIGHT);
+        $email = new EmailHandler();
+        if ($status != Brand::BRAND_REQUEST_PENDING) {
+            if (!$email->sendBrandRequestStatusChangeNotification($this->siteLangId, $brandData)) {                
+                LibHelper::exitWithError(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
+            }
+        }
+     
+        $this->set('msg', Labels::getLabel('MSG_BRAND_APPROVED_SUCCESSFULLY', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
     private function getFormColumns(): array
     {
         $shopsTblHeadingCols = CacheHelper::get('brandRequestTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -480,6 +518,7 @@ class BrandRequestsController extends ListingBaseController
             'brand_name' => Labels::getLabel('LBL_Brand_Name', $this->siteLangId),
             'brand_requested_on' => Labels::getLabel('LBL_Requested_On', $this->siteLangId),
             'brand_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'brand_status' => Labels::getLabel('LBL_BRAND_APPROVAL', $this->siteLangId),            
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('brandRequestTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -494,6 +533,7 @@ class BrandRequestsController extends ListingBaseController
             'brand_name',
             'brand_requested_on',
             'brand_active',
+            'brand_status',
             'action',
         ];
     }
