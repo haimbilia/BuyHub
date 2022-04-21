@@ -36,7 +36,7 @@ foreach ($sellers as $key => $sellerDetail) {
                 <?php
                 }
                 ?>
-                <button href="#itemRatings" class="totals-review nav-scroll-js"><?php echo isset($sellerDetail['totReviews']) ? $sellerDetail['totReviews'] : 0; ?> <?php echo Labels::getLabel('LBL_REVIEWS', $siteLangId); ?> </button>
+                <a href="<?php echo UrlHelper::generateUrl('reviews', 'shop', array($sellerDetail['shop_id'])); ?>" class="totals-review"><?php echo isset($sellerDetail['totReviews']) ? $sellerDetail['totReviews'] : 0; ?> <?php echo Labels::getLabel('LBL_REVIEWS', $siteLangId); ?> </a>
             </div>
             <!-- Shop Badge  -->
             <?php

@@ -6,12 +6,15 @@
     $selectUpto = array_search($currentStatus, array_keys($orderProductStatusArr));
     $index = 0;
     foreach ($orderProductStatusArr as $statusId => $statusLabel) {
-        $current = $currentStatus == $statusId || $orderCancelled ? 'currently' : '';
-        $highlight = ($index <= $selectUpto || in_array($statusId, $highlightEnabled) || $orderCancelled ? 'enable' : 'disabled');
+        $current = $currentStatus == $statusId || $orderCancelled ? 'currently ' : '';
+        $highlight = ($index <= $selectUpto || in_array($statusId, $highlightEnabled) || $orderCancelled ? 'enable ' : 'disabled ');
         $orderTimeLineRecords = !empty($orderTimeLine) && isset($orderTimeLine[$statusId]) ? $orderTimeLine[$statusId] : [];
         $orderStatusClass = $orderCancelled && $index > $selectUpto ? 'shipped' : OrderStatus::getOpStatusClass($statusId);
+        if ('disabled' == trim($highlight)) {
+            $orderStatusClass = "";
+        }
     ?>
-        <li class="<?php echo $highlight . ' ' . $current . ' ' . $orderStatusClass; ?>">
+        <li class="<?php echo $highlight . $current . $orderStatusClass; ?>">
             <?php if (!empty($orderTimeLineRecords)) {
                 foreach (array_reverse($orderTimeLineRecords) as $i => $row) {
                     /* Same Status with no Comment.*/
@@ -72,7 +75,7 @@
                                             $trackingUrls = (array) explode(', ', $childOrderDetail['opship_tracking_url']);
                                             $str .= '<br>';
                                             foreach ($trackingUrls as $url) {
-                                                $str .=  " <a class='link' href='" . $url . "' target='_blank'>" . Labels::getLabel("MSG_TRACK", $siteLangId) . "</a>";
+                                                $str .=  " <a class='link-underline' href='" . $url . "' target='_blank'>" . Labels::getLabel("MSG_TRACK", $siteLangId) . "</a>";
                                             }
                                         }
                                         echo $str;

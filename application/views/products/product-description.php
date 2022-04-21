@@ -11,7 +11,7 @@
                 </use>
             </svg>
             <span class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
-            <button href="#itemRatings" class="totals-review nav-scroll-js"><?php echo $label; ?></button>
+            <a href="#itemRatings" class="totals-review"><?php echo $label; ?></a>
         </div>
     <?php } ?>
 
@@ -209,7 +209,7 @@
                     <li class="list-addons-item addon--js <?php echo $cancelClass; ?>">
                         <div class="product-profile">
                             <figure class="product-profile__pic">
-                                <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], ImageDimension::VIEW_MINI, $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>">
+                                <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], ImageDimension::VIEW_MINI, $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI);?>>
                                 </a>
                             </figure>
                             <div class="product-profile-data">

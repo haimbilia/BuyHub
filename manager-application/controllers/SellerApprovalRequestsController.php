@@ -122,6 +122,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('reqStatusArr', User::getSupplierReqStatusArr($this->siteLangId));
         $this->set('canEdit', $this->objPrivilege->canEditSellerApprovalRequests($this->admin_id, true));
+        $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));        
     }
 
     public function form()

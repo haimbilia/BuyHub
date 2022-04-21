@@ -63,7 +63,7 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                     <div class="product-profile-data">
                         <a class="title" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
                         <div class="products-price">
-                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                            <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?>
                             <?php if ($product['special_price_found']) { ?>
                                 <span class="products-price-off">
                                     <?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>

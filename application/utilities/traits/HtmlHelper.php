@@ -358,4 +358,10 @@ class HtmlHelper
                     <div class="alert-text">' . $message . '</div>
                 </div>';
     }
+
+    public static function getImgDimParm(int $dimensionType, string $sizeType)
+    {
+        $dimensions = ImageDimension::getData($dimensionType, $sizeType);
+        return ' data-aspect-ratio="' . $dimensions[$sizeType]['aspectRatio'] . '"  width="' . $dimensions[ImageDimension::WIDTH] . '" hieght="' . $dimensions[ImageDimension::HEIGHT] . '"';
+    }
 }
