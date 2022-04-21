@@ -1,5 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
-<?php
+<?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $catBannerArr = [];
 $showBanner = $showBanner ?? false;
 if (true == $showBanner) {
@@ -28,9 +27,8 @@ if (true == $showBanner) {
         }
     }
 }
-?>
 
-<?php if (!empty($catBannerArr)) { ?>
+if (!empty($catBannerArr)) { ?>
     <section class="shop-fold">
         <div class="shop-banner">
             <?php

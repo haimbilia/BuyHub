@@ -365,23 +365,6 @@ class ShopsController extends MyAppController
             FatApp::redirectUser(FatUtility::exitWithErrorCode('404'));
         }
 
-        $shopCategories = array();
-        /* Switch($shop['shop_ltemplate_id']){
-            case Shop::TEMPLATE_ONE:
-            case Shop::TEMPLATE_THREE:
-            case Shop::TEMPLATE_FOUR:
-            case Shop::TEMPLATE_FIVE:
-                $this->_template->addCss('shops/templates/page-css/'.$shop['shop_ltemplate_id'].'.css');
-                break;
-            case Shop::TEMPLATE_TWO:
-                $this->_template->addJs('js/slick.min.js');
-                $this->_template->addCss('shops/templates/page-css/'.$shop['shop_ltemplate_id'].'.css');
-                break;
-            default:
-                $this->_template->addCss('shops/templates/page-css/'.SHOP::TEMPLATE_ONE.'.css');
-            break;
-        } */
-        /* $this->_template->addCss('shops/templates/page-css/' . SHOP::TEMPLATE_ONE . '.css'); */
         $this->set('shop', $this->shopPoliciesData($shop));
         $this->set('shopRating', SelProdRating::getSellerRating($shop['shop_user_id']));
         $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id']));
@@ -404,11 +387,8 @@ class ShopsController extends MyAppController
             $srchSplat->doNotCalculateRecords();
             $srchSplat->doNotLimitRecords();
             $srchSplat->addCondition('splatform_user_id', '=', $shopUserId);
-            $db = FatApp::getDb();
-
             $rs = $srchSplat->getResultSet();
-
-            $socialPlatforms = $db->fetchAll($rs);
+            $socialPlatforms = FatApp::getDb()->fetchAll($rs);
             $this->set('socialPlatforms', $socialPlatforms);
         }
 

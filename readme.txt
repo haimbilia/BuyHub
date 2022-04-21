@@ -697,6 +697,7 @@ Updates/Fixes :
     => 063928 - Buyer: Sellers address is not showing aligned/correctly on the "Return Request" at the buyer's end and a different label is used for the same functionality i.e. Seller and Vendor
     => 063751 - Seller: The product's images are not showing properly while viewing the "Marketplace Products" at the seller's end
     => 063981 - Buyer: The product's price is also increasing with the quantity on the checkout page at the buyer's end
+    => 063888 - Buyer: Shop's options are not showing on detail page
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
