@@ -31,7 +31,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'user_balance':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
+                $td->appendElement('plaintext', $tdAttr, '<a href="javascript:void(0)" onclick="redirectfunc(fcom.makeUrl(\'transactions\'),{utxn_user_id:'.$row['user_id'].'})">'.CommonHelper::displayMoneyFormat($row[$key], true, true).'</a>', true);
                 break;
             case 'withdrawal_amount':
                 if ($row['withdrawal_status'] != Transactions::STATUS_PENDING) {

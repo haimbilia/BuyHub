@@ -20,7 +20,7 @@ foreach ($arrListing as $sn => $row) {
             <div class="timeline-info"></div>
             <div class="timeline-marker"></div>
             <div class="timeline-content">
-                <h2 class="timeline-title"><?php echo date("F m, Y", strtotime($row['orrmsg_date'])); ?></h2>
+                <h2 class="timeline-title"><?php echo date("F Y", strtotime($row['orrmsg_date'])); ?></h2>
             </div>
         </li>
     <?php

@@ -2,6 +2,19 @@
 class PayPalPayoutController extends PayoutBaseController
 {
     public const KEY_NAME = 'PayPalPayout';
+    private $plugin;
+
+    public function __construct($action)
+    {
+        parent::__construct($action);
+        $this->init();
+    }
+    
+    private function init(): void
+    {
+        $this->plugin = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
+    }
+
     public static function reqFields()
     {
         $payoutPlugins = Plugin::getNamesWithCode(Plugin::TYPE_PAYOUTS, CommonHelper::getLangId());
@@ -27,18 +40,7 @@ class PayPalPayoutController extends PayoutBaseController
 
     public static function formFields()
     {
-        return [
-            'email' => [
-                'type' => PluginSetting::TYPE_STRING,
-                'required' => false,
-                'label' => "Email Id",
-            ],
-            'paypal_id' => [
-                'type' => PluginSetting::TYPE_STRING,
-                'required' => false,
-                'label' => "PayPal Id",
-            ],
-        ];
+        return (self::KEY_NAME)::formFields();
     }
 
     public function payoutInfoForm()

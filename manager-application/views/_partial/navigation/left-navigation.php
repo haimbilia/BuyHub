@@ -4,7 +4,7 @@ $adminSidebar = (in_array(FatApp::getController(), ['ProductsController','Custom
 ?>
 <sidebar class="sidebar sidebar-hoverable" id="sidebar" data-close-on-click-outside="sidebar">
     <div class="sidebar-logo">
-        <button class="sidebar-toggle sidebarOpenerBtnJs <?php if (0 < $adminSidebar) { ?>active<?php } ?>" type="button">
+        <button class="sidebar-toggle sidebarOpenerBtnJs <?php if (0 < $adminSidebar) { ?>active<?php } ?>" type="button" title="<?php echo 0 < $adminSidebar ? Labels::getLabel('LBL_CLICK_TO_HIDE', $siteLangId) : Labels::getLabel('LBL_CLICK_TO_EXPAND', $siteLangId) ;?>">
             <span class="sidebar-toggle-icon"><span class="toggle-line"></span></span>
         </button>
         <a href="<?php echo UrlHelper::generateUrl(); ?>" class="logo">
