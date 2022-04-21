@@ -501,8 +501,6 @@ class ProductsController extends MyAppController
             FatUtility::exitWithErrorCode(404);
         }
 
-        $selProdReviewObj = $this->getSelProdReviewObj();
-
         if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) {
             $selProdOption = explode('_', $product['selprod_code']);
             array_shift($selProdOption);
@@ -544,12 +542,12 @@ class ProductsController extends MyAppController
         }
 
         /* over all catalog product reviews */
+        $selProdReviewObj = $this->getSelProdReviewObj();
         $selProdReviewObj->addCondition('spreview_product_id', '=', $product['product_id']);
-        $selProdReviewObj->addMultipleFields(array('count(spreview_postedby_user_id) totReviews', 'sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'SUM(sprating_rating) as totRatings'));
+        $selProdReviewObj->addMultipleFields(array('sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'SUM(sprating_rating) as totRatings'));
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
-        /* CommonHelper::printArray($reviews); die; */
         $this->set('reviews', $reviews);
         $subscription = false;
         $allowed_images = -1;
@@ -1521,25 +1519,7 @@ class ProductsController extends MyAppController
         $frm->addHiddenField('', 'selprod_id');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'pageSize', $pageSize);
-        $frm->addHiddenField('', 'orderBy', 'most_helpful');
-        return $frm;
-    }
-
-    private function getReviewAbuseForm($reviewId)
-    {
-        $frm = new Form('frmReviewAbuse');
-        $frm->addHiddenField('', 'spra_spreview_id', $reviewId);
-        $frm->addTextarea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'spra_comments');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_REPORT_ABUSE', $this->siteLangId));
-        return $frm;
-    }
-
-    private function getPollForm($pollId, $langId)
-    {
-        $frm = new Form('frmPoll');
-        $frm->addHiddenField('', 'polling_id', $pollId);
-        $frm->addRadioButtons('', 'polling_feedback', Polling::getPollingResponseTypeArr($langId), '', array('class' => 'listing--vertical listing--vertical-chcek'), array());
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_VOTE', $this->siteLangId), array('class' => 'btn btn-brand poll--link-js'));
+        $frm->addHiddenField('', 'orderBy', 'most_recent');
         return $frm;
     }
 

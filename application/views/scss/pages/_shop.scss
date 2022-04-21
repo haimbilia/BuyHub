@@ -132,6 +132,10 @@
             top: 50px;
         }
     }
+    .active {
+        background-color: $brand-color;
+        color: $brand-color-inverse;
+    }
 }
 .shop-info {
     padding: 0;

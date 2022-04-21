@@ -698,7 +698,11 @@ Updates/Fixes :
     => 063751 - Seller: The product's images are not showing properly while viewing the "Marketplace Products" at the seller's end
     => 063981 - Buyer: The product's price is also increasing with the quantity on the checkout page at the buyer's end
     => 063888 - Buyer: Shop's options are not showing on detail page
-    
+    => 063829 - Buyer: Getting multiple issues under the rating section at the front-end
+    => 063890 - The "Payment Pending" status is showing for the COD Order at the admin's, seller's and buyer's end
+    => 063889 - Buyer: When the buyer adds the shop in Wishlist, the Wishlist icon does not get highlighted.
+    => 063910 - iOS Web: Buyer: The user is not able to place an order
+
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
