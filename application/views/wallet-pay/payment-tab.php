@@ -6,7 +6,7 @@ $frm->developerTags['fld_default_col'] = 12;
 $frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
 ?>
 <div class="">
-    <p><strong><?php echo sprintf(Labels::getLabel('LBL_Pay_using_Payment_Method', $siteLangId), $paymentMethod["plugin_name"]) ?>:</strong></p><br />
+    <p><strong><?php echo sprintf(Labels::getLabel('LBL_PAY_USING_PAYMENT_METHOD', $siteLangId), $paymentMethod["plugin_name"]) ?>:</strong></p><br />
     <?php
     if (!isset($error)) {
         echo $frm->getFormHtml();
@@ -22,10 +22,11 @@ $frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
 
     function confirmOrder(frm) {
         var data = fcom.frmData(frm);
-        var action = $(frm).attr('action')
+        var action = $(frm).attr('action');
+        $('.checkout-content-js').prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('WalletPay', 'confirmOrder'), data, function(ans) {
-            fcom.closeProcessing();
             fcom.removeLoader();
+            fcom.closeProcessing();
             $(location).attr("href", action);
         });
     }
