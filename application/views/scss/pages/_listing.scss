@@ -541,19 +541,24 @@
 
 .shop-slider {
     display: flex;
+    flex-flow: row wrap;
+    gap: 1rem;
 
     .item {
-        flex: 0 0 auto;
+        //flex: 0 0 auto;
         position: relative;
-        max-width: 610px;
+        //max-width: 610px;
         margin: 0 1.5rem;
         background: $bg-placeholder;
         @include placeholder;
         aspect-ratio: 2/1;
-        min-height: 250px;
+        //min-height: 250px;
         position: relative;
         img {
-            @include img-absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            //@include img-absolute;
             border-radius: $radius4;
             //opacity: 0.2;
         }

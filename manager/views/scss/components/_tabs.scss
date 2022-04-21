@@ -2,6 +2,9 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    overflow: hidden;
+    overflow-x: auto;
+    flex-wrap: nowrap;
     .nav-item {
         + .nav-item {
             padding-#{$start-direction}: 2rem;
@@ -20,6 +23,7 @@
         padding: 1.5rem 0;
         margin: 0 1rem;
         top: 1px;
+        white-space: nowrap;
         &.active {
             color: $brand-color;
             background-image: linear-gradient(currentColor, currentColor);
