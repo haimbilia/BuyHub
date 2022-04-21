@@ -321,10 +321,7 @@ viewWishList = function (selprod_id, dv, event, excludeWishList = 0) {
     return false;
 };
 toggleShopFavorite = function (shop_id) {
-    if (isUserLogged() == 0) {
-        loginPopUpBox();
-        return false;
-    }
+    fcom.displayProcessing();
     var data = "shop_id=" + shop_id;
     fcom.updateWithAjax(
         fcom.makeUrl(
@@ -335,12 +332,14 @@ toggleShopFavorite = function (shop_id) {
         ),
         data,
         function (ans) {
+            fcom.removeLoader();
+            fcom.displaySuccessMessage(ans.msg);
             if (ans.status) {
                 if (ans.action == "A") {
-                    $("#shop_" + shop_id).addClass("is-active");
+                    $("#shop_" + shop_id).addClass("active");
                     $("#shop_" + shop_id).prop("title", "Unfavorite Shop");
                 } else if (ans.action == "R") {
-                    $("#shop_" + shop_id).removeClass("is-active");
+                    $("#shop_" + shop_id).removeClass("active");
                     $("#shop_" + shop_id).prop("title", "Favorite Shop");
                 }
             }
@@ -1087,7 +1086,7 @@ $(function () {
         var popup = $(formElement).closest('.' + $.ykmodal.element);
         if (0 < popup.length) {
             $.ykmodal(fcom.getLoader(), true);
-            data +=  "&signinpopup=1";
+            data += "&signinpopup=1";
         } else {
             $(".loginFormJs").prepend(fcom.getLoader());
         }
@@ -1109,14 +1108,14 @@ $(function () {
         }
         var phone = $(formClass + 'input[name="username"]').val();
         var dialCode = $(formClass + 'input[name="username_dcode"]').val();
-        
+
         if ("undefined" == typeof phone || "" == phone || "undefined" == typeof dialCode || "" == dialCode) {
             $(obj).closest("form").submit();
             fcom.removeLoader();
             fcom.displayErrorMessage(langLbl.requiredFields);
             return false;
         }
-        
+
         $(".loginFormJs").prepend(fcom.getLoader());
         fcom.displayProcessing();
         var data = "username=" + $(formClass + 'input[name="username"]').val() + "&username_dcode=" + $(formClass + 'input[name="username_dcode"]').val();

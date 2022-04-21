@@ -94,7 +94,6 @@ class ReviewsController extends MyAppController
                 $srch->addOrder('spr.spreview_posted_on', 'desc');
                 break;
         }
-
         $records = (array) FatApp::getDb()->fetchAll($srch->getResultSet(), 'spreview_id');
 
         $recordRatings = [];

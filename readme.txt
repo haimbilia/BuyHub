@@ -698,6 +698,7 @@ Updates/Fixes :
     => 063751 - Seller: The product's images are not showing properly while viewing the "Marketplace Products" at the seller's end
     => 063981 - Buyer: The product's price is also increasing with the quantity on the checkout page at the buyer's end
     => 063888 - Buyer: Shop's options are not showing on detail page
+    => 063829 - Buyer: Getting multiple issues under the rating section at the front-end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

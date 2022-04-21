@@ -11,7 +11,7 @@
                 </use>
             </svg>
             <span class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
-            <button href="#itemRatings" class="totals-review nav-scroll-js"><?php echo $label; ?></button>
+            <a href="#itemRatings" class="totals-review"><?php echo $label; ?></a>
         </div>
     <?php } ?>
 
