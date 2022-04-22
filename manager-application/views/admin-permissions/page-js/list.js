@@ -15,7 +15,7 @@
 
         data = fcom.frmData(document.frmRecordSearch);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updatePermission', [moduleId, permission]), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             if (t.moduleId == 0) {
                 reloadList();
             }

@@ -804,7 +804,7 @@ class OrdersController extends ListingBaseController
         $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
         $srch->joinOrderUser();
         $srch->addCondition('op_id', '=', $opId);
-        $srch->addMultipleFields(['op.*', 'pm.*', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code', 'opshipping_by_seller_user_id', 'op_selprod_user_id', 'opshipping_carrier_code', 'optsu_user_id', 'opship_tracking_number', 'orderstatus_id']);
+        $srch->addMultipleFields(['op.*', 'pm.*', 'order_id', 'order_language_id', 'order_payment_status', 'ops_plugin.plugin_code as opshipping_plugin_code', 'opshipping_by_seller_user_id', 'op_selprod_user_id', 'opshipping_carrier_code', 'optsu_user_id', 'opship_tracking_number', 'orderstatus_id']);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $orderDetail = FatApp::getDb()->fetch($srch->getResultSet());
@@ -841,15 +841,14 @@ class OrdersController extends ListingBaseController
         $restrictOrderStatusChange = array_merge(
             (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"),
             (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"),
-            (array) FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")
+            (array) unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"))
         );
 
-        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']) && !$orderDetail['optsu_user_id'] && in_array($post["op_status_id"], $restrictOrderStatusChange) && $orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Please_assign_shipping_user', $this->siteLangId), true);
+        if (!CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']) && !$orderDetail['optsu_user_id'] && in_array($post["op_status_id"], $restrictOrderStatusChange) && $orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ASSIGN_SHIPPING_USER', $this->siteLangId), true);
         }
 
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
-
             $trackingCourierCode = '';
             $opship_tracking_url = FatApp::getPostedData('opship_tracking_url', FatUtility::VAR_STRING, '');
             $activatedTrackPluginId = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING, 'plugin_id') ?? 0;

@@ -38,7 +38,7 @@
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderProductsCharges', [orderId, chargeType]), '', function (t) {
             fcom.closeProcessing();
             fcom.removeLoader();
-            $.ykmodal(t.html, true, "modal-dialog-vertical-md");
+            $.ykmodal(t.html, true, "modal-lg");
         });
     }
 
@@ -136,11 +136,12 @@
         }else if(0 < $("select.manualShippingJs").length){            
             manualShipping = $("select.manualShippingJs").val();            
         }
-
+        $.ykmodal(fcom.getLoader());
         if (0 < canShipByPlugin && 1 != manualShipping && orderShippedStatus == orderStatusId) {
             proceedToShipment(op_id);
         } else {
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) {
+                fcom.removeLoader();
                 $("#allSellerJs").trigger('change');
                 getOrderCommentForm( frm.order_id.value, frm.op_id.value);                
             });
@@ -150,7 +151,9 @@
     updateShippingUser = function (frm) {
         var data = fcom.frmData(frm);
         if (!$(frm).validate()) return;
+        $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updateShippingUser'), data, function (t) {
+            fcom.removeLoader();
             fcom.closeProcessing();
         });
     };
@@ -168,6 +171,7 @@
     proceedToShipment = function (opId) {
         fcom.displayProcessing();        
         fcom.ajax(fcom.makeUrl('ShippingServices', 'proceedToShipment', [opId]), '', function (t) {
+            fcom.removeLoader();
             fcom.closeProcessing();
             t = $.parseJSON(t);
             if (1 > t.status) {

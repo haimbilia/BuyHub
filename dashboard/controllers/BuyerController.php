@@ -1908,8 +1908,15 @@ class BuyerController extends BuyerBaseController
             if (!empty($enteredAbusiveWordsArr)) {
                 $errStr = Labels::getLabel("LBL_Word_{abusiveword}_is/are_not_allowed_to_post", $this->siteLangId);
                 $errStr = str_replace("{abusiveword}", '"' . implode(", ", $enteredAbusiveWordsArr) . '"', $errStr);
-                LibHelper::dieJsonError($errStr);
-                //FatUtility::dieWithError( Message::getHtml() );
+                LibHelper::dieJsonError($errStr);           
+            }
+        }
+
+        if (!Abusive::validateContent(FatApp::getPostedData('spreview_title', FatUtility::VAR_STRING, ''), $enteredAbusiveWordsArr)) {
+            if (!empty($enteredAbusiveWordsArr)) {
+                $errStr = Labels::getLabel("LBL_Word_{abusiveword}_is/are_not_allowed_to_post", $this->siteLangId);
+                $errStr = str_replace("{abusiveword}", '"' . implode(", ", $enteredAbusiveWordsArr) . '"', $errStr);
+                LibHelper::dieJsonError($errStr);              
             }
         }
         /* ] */
@@ -2026,16 +2033,16 @@ class BuyerController extends BuyerBaseController
         if ($post['spreview_status'] == SelProdReview::STATUS_APPROVED) {
             $emailNotificationObj->sendBuyerReviewStatusUpdatedNotification($spreviewId, $this->siteLangId);
         }
+        /*
         $reviewTitle = $post['spreview_title'];
         $reviewTitleArr = preg_split("/[\s,-]+/", $reviewTitle);
         $reviewDesc = $post['spreview_description'];
         $reviewDescArr = preg_split("/[\s,-]+/", $reviewDesc);
-
+       
         $abusiveWords = Abusive::getAbusiveWords();
         if (!empty(array_intersect($abusiveWords, $reviewTitleArr)) || !empty(array_intersect($abusiveWords, $reviewDescArr))) {
             $emailNotificationObj->sendAdminAbusiveReviewNotification($spreviewId, $this->siteLangId);
-
-            //send notification to admin
+           
             $notificationData = array(
                 'notification_record_type' => Notification::TYPE_PRODUCT_REVIEW,
                 'notification_record_id' => $spreviewId,
@@ -2049,6 +2056,7 @@ class BuyerController extends BuyerBaseController
                 LibHelper::dieJsonError($message);
             }
         } else {
+            */
             $notificationData = array(
                 'notification_record_type' => Notification::TYPE_PRODUCT_REVIEW,
                 'notification_record_id' => $spreviewId,
@@ -2061,7 +2069,7 @@ class BuyerController extends BuyerBaseController
                 $message = Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId);
                 LibHelper::dieJsonError($message);
             }
-        }
+        /* } */
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }

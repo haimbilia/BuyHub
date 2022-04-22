@@ -13,7 +13,7 @@ if (CommonHelper::demoUrl()) { ?>
     </div>
 <?php } ?>
 
-<?php if ($controllerName == 'home' && $action == 'index') {
+<?php if ($controllerName == 'Home' && $action == 'index') {
     $this->includeTemplate('_partial/footerTrustBanners.php');
 } ?>
 
@@ -204,7 +204,6 @@ if (CommonHelper::demoUrl()) { ?>
     <?php } ?>
 </div>
 </div>
-</script>
 <?php include(CONF_THEME_PATH . '_partial/footer-part/offcanvas-elements.php'); ?>
 <a class="back-to-top" href="#top">
     <svg class="svg">

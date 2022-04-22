@@ -116,6 +116,7 @@ class PluginCommon extends MyAppModel
             self::TYPE_SHIPPING_SERVICES => "shipping-services",
             self::TYPE_SHIPMENT_TRACKING => "shipment-tracking",
             self::TYPE_DATA_MIGRATION => "data-migration",
+            self::TYPE_PAYOUTS => "payouts",
         ];
 
         if (array_key_exists($pluginType, $pluginDir)) {

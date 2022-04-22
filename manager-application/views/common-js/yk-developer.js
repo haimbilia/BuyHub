@@ -29,7 +29,16 @@ $(function () {
     /* Bind Max Length validator. */
     bindMaxLengthValidator();
 
-    $('[data-bs-toggle="popover"]').popover();
+    $('[data-bs-toggle="popover"]').popover({
+        html: true,
+        content: function () {
+            var content = $(this).attr("data-popover-html");
+            if ('undefined' != typeof content) {
+                return $(content).html();
+            }
+            return $(this).attr("data-bs-content");
+        },
+    });
     /* Bind bootstrap tooltip with ajax elements. */
     $('[data-bs-toggle="tooltip"]').tooltip({
         trigger: 'hover'
@@ -703,10 +712,13 @@ $(document).on("click", ".sidebarOpenerBtnJs", function () {
         $.cookie('adminSidebar', 0, { expires: 30, path: siteConstants.rooturl });
         $("body").attr("data-sidebar-minimize", "on");
         $(this).removeClass("active");
+        $(this).attr('title', langLbl.clickToExpand);
+
     } else {
         $.cookie('adminSidebar', 1, { expires: 30, path: siteConstants.rooturl });
         $("body").attr("data-sidebar-minimize", "off");
         $(this).addClass("active");
+        $(this).attr('title', langLbl.clickToHide);
     }
     $('#sidebar').addClass("animating");
     setInterval(function () { $('#sidebar').removeClass("animating"); }, 2000);

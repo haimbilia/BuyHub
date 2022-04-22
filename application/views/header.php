@@ -37,8 +37,7 @@ if (!isset($exculdeMainHeaderDiv)) {
 }
 
 if (!$isAppUser) {
-    $controllerName = strtolower($controllerName);
-    switch ($controllerName) {
+    switch (strtolower($controllerName)) {
         case 'checkout':
         case 'walletpay':
         case 'subscriptioncheckout':
