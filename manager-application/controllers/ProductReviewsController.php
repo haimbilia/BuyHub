@@ -255,8 +255,9 @@ class ProductReviewsController extends ListingBaseController
     {
         $frm = new Form('reviewRequestForm');
         $frm->addHiddenField('', 'spreview_id', $recordId);
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'spreview_title');
+        $frm->addTextArea(Labels::getLabel('FRM_DESCRIPTION', $this->siteLangId), 'spreview_description')->requirements()->setRequired();
         $statusArr = SelProdReview::getReviewStatusArr($this->siteLangId);
-        //unset($statusArr[SelProdReview::STATUS_PENDING]);
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'spreview_status', $statusArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
         HtmlHelper::addButtonHtml(Labels::getLabel('FRM_UPDATE_STATUS', $this->siteLangId));
         return $frm;
@@ -264,18 +265,26 @@ class ProductReviewsController extends ListingBaseController
 
     public function setup()
     {
+        $this->checkEditPrivilege();
+
         $recordId = FatApp::getPostedData('spreview_id', FatUtility::VAR_INT, 0);
-        $status = FatApp::getPostedData('spreview_status', FatUtility::VAR_INT, 0);
+       
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
+
+        $frm = $this->getForm($recordId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+
         $data = SelProdReview::getAttributesById($recordId, ['spreview_id', 'spreview_status', 'spreview_lang_id']);
         if (false == $data) {
             LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-        $assignValues = array('spreview_status' => $status);
+        }      
         $record = new SelProdReview($recordId);
-        $record->assignValues($assignValues);
+        $record->assignValues($post);
         if (!$record->save()) {
             LibHelper::exitWithError($record->getError(), true);
         }
