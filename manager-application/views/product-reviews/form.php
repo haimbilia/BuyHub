@@ -72,37 +72,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                     </svg>
                 <?php } ?>
             </span>
-        </li>
-        <li class="list-stats-item list-stats-item-full  mb-4">
-            <div class="label">
-                <?php echo Labels::getLabel('LBL_REVIEW_TITLE', $siteLangId); ?>
-            </div>
-            <div class="value">
-                <?php
-                $findKeywordStr = implode('|', $abusiveWords);
-                if ($findKeywordStr == '') {
-                    echo $data['spreview_title'];
-                } else {
-                    echo preg_replace('/' . $findKeywordStr . '/i', '<mark>$0</mark>', $data['spreview_title']);
-                }
-                ?>
-            </div>
-        </li>
-        <li class="list-stats-item list-stats-item-full  mb-4">
-            <div class="label">
-                <?php echo Labels::getLabel('LBL_Review_Comments', $siteLangId); ?>
-            </div>
-            <div class="value">
-                <?php
-                if ($findKeywordStr == '') {
-                    echo nl2br($data['spreview_description']);
-                } else {
-                    $spreviewDescription = preg_replace('/' . $findKeywordStr . '/i', '<mark>$0</mark>', $data['spreview_description']);
-                    echo nl2br($spreviewDescription);
-                }
-                ?>
-            </div>
-        </li>
+        </li>        
     </ul>
     <div class='row pt-3 pb-3'>
         <div class="col-md 12">
