@@ -121,7 +121,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                 <li class="account-nav-item">
                     <a class="account-nav-link"><?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?><i class="icon icon-arrow-right"></i></a>
                 </li>
-                <?php
+                <?php                            
                 $this->includeTemplate('_partial/header/sellerUserArea.php', ['siteLangId' => $siteLangId, 'layoutType' => applicationConstants::SCREEN_MOBILE]);
                 $this->includeTemplate('_partial/header/buyerUserArea.php', ['siteLangId' => $siteLangId, 'layoutType' => applicationConstants::SCREEN_MOBILE]);
                 ?>

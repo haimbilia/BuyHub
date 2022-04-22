@@ -3,7 +3,7 @@ if (USER::USER_SELLER_DASHBOARD != $_SESSION[UserAuthentication::SESSION_ELEMENT
     return;
 }
 
-if (User::USER_TYPE_SELLER != $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_is_buyer']) {
+if (applicationConstants::YES != $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_is_supplier']) {
     return;
 }
 
