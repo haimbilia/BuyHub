@@ -264,7 +264,7 @@ if ($orderDetail['op_shipping_duration_name'] != '') {
                             <td style="padding:10px; font-size:12px;text-align: left;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat($orderDetail['op_unit_price'], true, false, true, false, true); ?></strong></td>
                             <td style="padding:10px; font-size:12px;text-align: left;background-color: #ddd;"><strong><?php echo $orderDetail['op_qty']; ?></strong></td>
                             <?php if ($orderDetail['op_tax_collected_by_seller']) { ?>
-                                <td style="padding:10px; font-size:12px;text-align: left;background-color: #ddd;"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'TAX'), true, false, true, false, true); ?></td>
+                                <td style="padding:10px; font-size:12px;text-align: left;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'TAX'), true, false, true, false, true); ?></strong></td>
                             <?php } ?>
                             <td style="padding:10px; font-size:12px;text-align: right;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'CART_TOTAL'), true, false, true, false, true); ?></strong></td>
                         </tr>

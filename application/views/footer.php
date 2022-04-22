@@ -13,7 +13,7 @@ if (CommonHelper::demoUrl()) { ?>
     </div>
 <?php } ?>
 
-<?php if ($controllerName == 'home' && $action == 'index') {
+<?php if ($controllerName == 'Home' && $action == 'index') {
     $this->includeTemplate('_partial/footerTrustBanners.php');
 } ?>
 
