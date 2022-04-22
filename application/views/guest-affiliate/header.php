@@ -62,7 +62,7 @@ $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, 
                                     </button>
                                 </div>
                             </li>
-                            <li class="quick-nav-item">
+                            <li class="quick-nav-item item-desktop">
                                 <div class="dropdown">
                                     <button type="button" class="quick-nav-link button-account sign-in sign-in-popup-js">
                                         <svg class="svg" width="20" height="20">

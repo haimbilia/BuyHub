@@ -502,6 +502,9 @@ class UserAuthentication extends FatModel
             'user_name' => $data['user_name'],
             'user_ip' => $data['user_ip'],
             'user_email' => $data['user_email'],
+            'user_is_buyer' => $data['user_is_buyer'],
+            'user_is_seller' => $data['user_is_seller'],
+            'user_preferred_dashboard' => $data['user_preferred_dashboard'],
             'user_is_guest' => isset($data['user_is_guest']) ? $data['user_is_guest'] : false,
             'user_phone' => (isset($data['user_phone']) ? ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'] : ''),
         );
