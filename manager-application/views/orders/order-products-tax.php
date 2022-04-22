@@ -6,7 +6,7 @@
     </h5>
 </div>
 <div class="modal-body opTaxChargesJs">
-    <div class="table-responsive table-scrollable js-scrollable">
+    <div class="table-responsive table-scrollable js-scrollable" style="max-height: 400px;">
         <table class="table table-orders">
             <thead>
                 <tr>
@@ -33,8 +33,8 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td><?php echo Labels::getLabel('LBL_TOTAL_TAX', $siteLangId); ?></td>
-                    <td><?php echo CommonHelper::displayMoneyFormat($totalTax, true, true); ?></td>
+                    <th><?php echo Labels::getLabel('LBL_TOTAL_TAX', $siteLangId); ?></th>
+                    <th><?php echo CommonHelper::displayMoneyFormat($totalTax, true, true); ?></th>
                 </tr>
             </tfoot>
         </table>

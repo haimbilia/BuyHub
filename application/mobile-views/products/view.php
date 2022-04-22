@@ -35,7 +35,7 @@ foreach (array_filter($upsellProducts) as $index => $btProduct) {
     $uploadedTime = AttachedFile::setTimeParam($btProduct['product_updated_on']);
     $upsellProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($btProduct['product_id'], ImageDimension::VIEW_MEDIUM, $btProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $upsellProducts[$index]['discount'] = ($btProduct['special_price_found'] && $btProduct['selprod_price'] > $btProduct['theprice']) ? CommonHelper::showProductDiscountedText($btProduct, $siteLangId) : '';
-    $upsellProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($btProduct['selprod_price'], false, false, false);
+    $upsellProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($btProduct['selprod_price']);
     $upsellProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($btProduct['theprice']);
     $upsellProducts[$index]['ribbons'] = $selProdRibbons;
 }
@@ -54,7 +54,7 @@ foreach (array_filter($relatedProductsRs) as $index => $rProduct) {
     $uploadedTime = AttachedFile::setTimeParam($rProduct['product_updated_on']);
     $relatedProductsRs[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($rProduct['product_id'], ImageDimension::VIEW_MEDIUM, $rProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $relatedProductsRs[$index]['discount'] = ($rProduct['special_price_found'] && $rProduct['selprod_price'] > $rProduct['theprice']) ? CommonHelper::showProductDiscountedText($rProduct, $siteLangId) : '';
-    $relatedProductsRs[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($rProduct['selprod_price'], false, false, false);
+    $relatedProductsRs[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($rProduct['selprod_price']);
     $relatedProductsRs[$index]['theprice'] = CommonHelper::displayMoneyFormat($rProduct['theprice']);
     $relatedProductsRs[$index]['ribbons'] = $selProdRibbons;
 }
@@ -73,7 +73,7 @@ foreach (array_filter($recommendedProducts) as $index => $recProduct) {
     $uploadedTime = AttachedFile::setTimeParam($recProduct['product_updated_on']);
     $recommendedProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recProduct['product_id'], ImageDimension::VIEW_MEDIUM, $recProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $recommendedProducts[$index]['discount'] = ($recProduct['special_price_found'] && $recProduct['selprod_price'] > $recProduct['theprice']) ? CommonHelper::showProductDiscountedText($recProduct, $siteLangId) : '';
-    $recommendedProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recProduct['selprod_price'], false, false, false);
+    $recommendedProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recProduct['selprod_price']);
     $recommendedProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($recProduct['theprice']);
     $recommendedProducts[$index]['ribbons'] = $selProdRibbons;
 }
@@ -92,7 +92,7 @@ foreach (array_filter($recentlyViewed) as $index => $recViewed) {
     $uploadedTime = AttachedFile::setTimeParam($recViewed['product_updated_on']);
     $recentlyViewed[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recViewed['product_id'], ImageDimension::VIEW_MEDIUM, $recViewed['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $recentlyViewed[$index]['discount'] = ($recViewed['special_price_found'] && $recViewed['selprod_price'] > $recViewed['theprice']) ? CommonHelper::showProductDiscountedText($recViewed, $siteLangId) : '';
-    $recentlyViewed[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recViewed['selprod_price'], false, false, false);
+    $recentlyViewed[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recViewed['selprod_price']);
     $recentlyViewed[$index]['theprice'] = CommonHelper::displayMoneyFormat($recViewed['theprice']);
     $recentlyViewed[$index]['ribbons'] = $selProdRibbons;
 }
@@ -149,7 +149,7 @@ foreach ($shippingRates as $sn => $row) {
 if (!empty($product)) {
     $product['productPolicies'] = [];
     $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
-    $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
+    $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price']);
     $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice']);
     $product['inclusiveTax'] = FatUtility::int(FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId());
 
@@ -274,7 +274,7 @@ if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr']))
     /* Shop and SelProd Badge */
     foreach ($product['moreSellersArr'] as &$value) {
         $value['discount'] = ($value['special_price_found'] && $value['selprod_price'] > $value['theprice']) ? CommonHelper::showProductDiscountedText($value, $siteLangId) : '';
-        $value['selprod_price'] = CommonHelper::displayMoneyFormat($value['selprod_price'], false, false, false);
+        $value['selprod_price'] = CommonHelper::displayMoneyFormat($value['selprod_price']);
         $value['theprice'] = CommonHelper::displayMoneyFormat($value['theprice']);
         $value['badges'] = [];
         if (isset($shopBadgesArr[$value['shop_id']])) {

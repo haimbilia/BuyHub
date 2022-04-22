@@ -8,7 +8,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                 <tr>
                     <th><?php echo Labels::getLabel('LBL_ITEMS_SUMMARY', $siteLangId); ?></th>
                     <th><?php echo Labels::getLabel('LBL_STATUS', $siteLangId); ?></th>
-                    <th><?php echo Labels::getLabel('LBL_UNIT_PRICE', $siteLangId); ?></th>
+                    <th><?php echo Labels::getLabel('LBL_QTY.', $siteLangId); ?></th>
                     <th><?php echo Labels::getLabel('LBL_TOTAL', $siteLangId); ?></th>
                     <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId); ?></th>
                 </tr>
@@ -90,10 +90,6 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
 
             <td>
                 <div class="text-nowrap unit-price-wrap">
-                    <span class="unit-price">
-                        <?php echo CommonHelper::displayMoneyFormat($op["op_unit_price"], true, true); ?>
-                    </span>
-                    <span class="unit-price-times"><i class="fas fa-times"></i></span>
                     <span class="unit-price-qty">
                         <?php echo $op['op_qty']; ?>
                     </span>
@@ -101,9 +97,31 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
             </td>
 
             <td>
-                <span class="currency-value">
+                <span class="d-inline-block link-dotted" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#price-<?php echo $op['op_id']; ?>">
                     <?php echo CommonHelper::displayMoneyFormat($total, true, true, true, false, true); ?>
                 </span>
+                <ul class="list-stats list-stats-popover hidden" id="price-<?php echo $op['op_id']; ?>">
+                    <li class="list-stats-item">
+                        <span class="lable"><?php echo Labels::getLabel('LBL_UNIT_PRICE:'); ?> </span>
+                        <span class="value"><?php echo $op['op_unit_price'] ?></span>
+                    </li>
+                    <li class="list-stats-item">
+                    <span class="lable"><?php echo Labels::getLabel('LBL_QUANTITY:'); ?> </span>
+                        <span class="value"><?php echo $op['op_qty']; ?></span>
+                    </li>
+                    <?php if (0 < $shippingCost) { ?>
+                        <li class="list-stats-item">
+                            <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_COST:'); ?></span>
+                            <span class="value"><?php echo $shippingCost; ?></span>
+                        </li>
+                    <?php } ?>
+                    <?php if (0 < $volumeDiscount) { ?>
+                        <li class="list-stats-item">
+                            <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT:'); ?></span>
+                            <span class="value"><?php echo $volumeDiscount; ?></span>
+                        </li>
+                    <?php } ?>
+                </ul>
             </td>
             <td class="align-right">
                 <?php
