@@ -419,6 +419,7 @@
 <!-- end:: Footer -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="<?php echo JS_PATH; ?>jquery.min.js"></script>
+<script src="<?php echo JS_PATH; ?>popper.min.js"></script>
 <script src="<?php echo JS_PATH; ?>bootstrap.min.js"></script>
 <script src="<?php echo JS_PATH; ?>vendors/stellarnav.min.js"></script>
 <script src="<?php echo JS_PATH; ?>vendors/scroll-hint.min.js"></script>
