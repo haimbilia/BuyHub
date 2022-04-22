@@ -527,6 +527,7 @@ var advanceMedia = false; /* open via advance media*/
         let recordId = getCurrentFrmRecordId();
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "digitalDownloadForm", [recordId, type]), "", function (t) {
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
+            fcom.removeLoader();
             if (typeof callback == 'function') {
                 callback();
             } else {

@@ -205,8 +205,7 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		downloadsForm(product_id, selprod_id, true);
 	};
 
-	downloadsForm = function (product_id, selprod_id, callback) {
-		var getList = getList || false;
+	downloadsForm = function (product_id, selprod_id, callback) {		
 		fcom.displayProcessing(langLbl.requestProcessing);
 		fcom.ajax(fcom.makeUrl('Seller', 'sellerProductDownloadFrm', [product_id, selprod_id]), '', function (res) {
 			fcom.removeLoader();

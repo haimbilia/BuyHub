@@ -196,12 +196,6 @@ class DigitalDownload extends MyAppModel
             $frm->addSelectBox(Labels::getLabel('FRM_DIGITAL_DOWNLOAD_TYPE', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'download-type'), '')->requirements()->setRequired();
         }
         $frm->addSelectBox(Labels::getLabel('FRM_ATTACH_WITH_EXISTING_ORDERS', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');
-        // $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('FRM_UPLOAD', $langId)); 
-        // $frm->addButton('', 'attachment_link_btn', Labels::getLabel('FRM_ADD', $langId));
-
-        // $frm->addHiddenField('', 'product_id');
-        // $frm->addHiddenField('', 'selprod_id');
-
         $frm->addHiddenField('', 'record_id', $recordId);
 
         $frm->addHiddenField('', 'dd_link_id');
@@ -210,7 +204,7 @@ class DigitalDownload extends MyAppModel
         $frm->addHiddenField('', 'ref_file_id', 0);
       
         return $frm;
-    }
+    }    
 
     public static function getDownloadFormInventory($langId, $recordId = 0)
     {

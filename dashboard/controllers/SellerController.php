@@ -3,10 +3,7 @@
 class SellerController extends SellerBaseController
 {
     use RecordOperations;
-
-    // use Attributes;
-    use Options;
-    //use CustomProducts;
+    use Options;   
     use SellerProducts;
     use SellerCollections;
     use SellerUsers;

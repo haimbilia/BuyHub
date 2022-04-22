@@ -44,6 +44,12 @@ class DigitalDownloadPrivilages extends FatModel
             if (!array_key_exists('product_attachements_with_inventory', $this->product)) {
                 $this->product['product_attachements_with_inventory'] = applicationConstants::YES;
             }
+        }elseif(Product::CATALOG_TYPE_PRIMARY == $recordType){
+            $this->getProduct($recordId);
+            if (!is_array($this->product) || 1 > count($this->product)) {              
+                $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
+                return false;
+            }
         } else {
             if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
                 /* Seller Inventroy*/
@@ -63,12 +69,13 @@ class DigitalDownloadPrivilages extends FatModel
                 $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
                 return false;
             }
-        }
+        }  
 
         if (Product::PRODUCT_TYPE_DIGITAL != $this->product['product_type']) {
             $this->error = Labels::getLabel('ERR_ATTACHMENTS_OR_LINKS_ALLOWED_ONLY_WITH_DIGITAL_PRODUCTS', $langId);
             return false;
         }
+       
         if (true === $isAdmin) {
             switch ($recordType) {
                 case Product::CATALOG_TYPE_INVENTORY:               
@@ -90,15 +97,14 @@ class DigitalDownloadPrivilages extends FatModel
                     return false;
                     break;
             }
-        }
-        /* To check whether product belogs to logged seller? */
-        if (0 < $sellerUserId) {
+        }else{
+
             if (Product::CATALOG_TYPE_INVENTORY == $recordType) {
                 /* Seller Inventory */
                 $recordOwnerId = $this->sellerProduct['selprod_user_id'];
             }elseif(Product::CATALOG_TYPE_REQUEST == $recordType){
                 $recordOwnerId = $this->product['preq_user_id'];
-            } else { /* Catalog product */
+            } else { /* Catalog product */                
                 $recordOwnerId = $this->product['product_seller_id'];
             }
 
@@ -107,6 +113,7 @@ class DigitalDownloadPrivilages extends FatModel
                 return false;
             }
         }
+
         if (true == $validateAllowedWithInventory) {
             if (applicationConstants::YES == $this->product['product_attachements_with_inventory']) {
                 $this->error = Labels::getLabel('ERR_ATTACHMENTS_OR_LINKS_ALLOWED_WITH_INVENTORY', $langId);

@@ -13,6 +13,15 @@ $(document).on('change', '.language-js', function () {
     productImages(product_id, option_id, lang_id);
 });
 
+$(document).on('change', '#digitalFrmLangId,#digitalFrmdownloadType,#digitalFrmOptionId', function () {
+    let downloadType = $('#digitalFrmdownloadType').val();
+    let recordId = $('#digitalFrmRecordId').val();
+    let langId = $('#digitalFrmLangId').val();
+    let optionCombi = $('#digitalFrmOptionId').val();
+
+    getDigitalDownloads(downloadType, recordId, langId, optionCombi);
+});
+
 (function () {
     var runningAjaxMsg = 'some requests already running or this stucked into runningAjaxReq variable value, so try to relaod the page and update the same to WebMaster. ';
     var runningAjaxReq = false;
@@ -362,4 +371,30 @@ $(document).on('change', '.language-js', function () {
             }
         });
     }
+
+    fileLinkForm = function (recordId) {
+        $.ykmodal(fcom.getLoader(), false, 'modal-dialog-vertical-md');    
+        fcom.updateWithAjax(fcom.makeUrl('Products', "fileLinkForm", [recordId]), "", function (t) {
+            fcom.removeLoader();
+            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');           
+            $.ykmsg.close();
+            getDigitalDownloads(0, recordId);
+        });
+    };
+
+    getDigitalDownloads = function (downloadType, recordId, langId = 0, optionCombi = 0) {
+        let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId, showNoRecordFound : 1 };
+        if (downloadType == 1) {
+            fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
+                $.ykmsg.close();               
+                $("#digitalFrmListJs").html(res.html);
+            });
+        } else {
+            fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function (res) {
+                $.ykmsg.close();               
+                $("#digitalFrmListJs").html(res.html);
+            });
+        }
+    };
+
 })();
