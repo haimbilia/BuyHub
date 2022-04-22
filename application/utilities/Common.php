@@ -66,10 +66,10 @@ class Common
 
     public static function setHeaderBreadCrumb($template)
     {
-        $controllerName = FatApp::getController();
+        $cname = FatApp::getController();
         $action = FatApp::getAction();
 
-        $controller = new $controllerName('');
+        $controller = new $cname('');
         $template->set('siteLangId', CommonHelper::getLangId());
         $template->set('nodes', $controller->getBreadcrumbNodes($action));
     }
