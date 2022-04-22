@@ -1,7 +1,12 @@
 $(document).ready(function () {
     var canShipByPlugin = 1;
-    $(document).on('click', 'input.manualShipping-js', function () {
-        if ($(this).is(":checked")) {
+    $(document).on('click', 'input.manualShippingJs,select.manualShippingJs', function () {
+        if((this).is( "select" )){
+            manualShipping = $("select.manualShippingJs").val(); 
+        }else{
+            manualShipping = $("input.manualShippingJs:checked").val();            
+        }       
+        if (manualShipping == 1) {
             setTimeout(() => {
                 trackingUrlFld();
             }, 500);
@@ -68,7 +73,7 @@ $(document).ready(function () {
                 $(form + " input[name='tracking_number']").val(t.tracking_number);
                 canShipByPlugin = 0;
                 if ('' != t.tracking_number) {
-                    $(form + ' .manualShipping-js').attr('data-fatreq', '{"required":false}');
+                    $(form + ' .manualShippingJs').attr('data-fatreq', '{"required":false}');
                 }
                 updateStatus($(form)[0]);
             } else {
@@ -184,9 +189,10 @@ $(document).ready(function () {
             setTimeout(function () { window.location.href = fcom.makeUrl('Seller', 'viewOrder', [opId]) }, 300);
         });
     };
-    shippingRatesForm = function (opId) {
-        fcom.ajax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
+    shippingRatesForm = function (opId) {        
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
             $.ykmodal(res);
+            fcom.removeLoader();
         });
     }
     setUpShippingRate = function (frm) {

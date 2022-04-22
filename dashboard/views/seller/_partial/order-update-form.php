@@ -24,7 +24,7 @@ if ($canEdit && $displayForm && !$print) { ?>
 
 
         if (null != $manualFld) {
-            $manualFld->setFieldTagAttribute('class', 'manualShipping-js fieldsVisibility-js');
+            $manualFld->setFieldTagAttribute('class', 'manualShippingJs fieldsVisibility-js');
             $manualFld->developerTags['col'] = 4;
 
             $fld = $frm->getField('tracking_number');
