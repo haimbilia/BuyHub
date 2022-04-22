@@ -286,7 +286,7 @@ class Badge extends MyAppModel
      *
      * @param  int $langId
      * @param  array $shopIdArr
-     * @return void
+     * @return array
      */
     public static function getShopBadges(int $langId, array $shopIdArr = []): array
     {
