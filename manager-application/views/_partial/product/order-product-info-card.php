@@ -5,11 +5,10 @@ if (isset($order['op_is_batch']) && $order['op_is_batch']) {
     $prodUrl = UrlHelper::generateUrl('Products', 'batch', array($order['op_selprod_id']), CONF_WEBROOT_FRONTEND);
     $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($order['op_selprod_id'], $siteLangId, ImageDimension::VIEW_SMALL), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
     $imgOrgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($order['op_selprod_id'], $siteLangId, ImageDimension::VIEW_ORIGINAL), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-    
 } else {
     if (Product::verifyProductIsValid($order['op_selprod_id']) == true) {
         $prodUrl = UrlHelper::generateUrl('Products', 'view', array($order['op_selprod_id']), CONF_WEBROOT_FRONTEND);
-    }   
+    }
 
     $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($order['selprod_product_id'], ImageDimension::VIEW_SMALL, $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
     $imgOrgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($order['selprod_product_id'], ImageDimension::VIEW_ORIGINAL, $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
@@ -29,11 +28,32 @@ $date = isset($showDate) && $order['order_date_added']   ? HtmlHelper::formatDat
 $includeInvoiceNo = $includeInvoiceNo ?? true;
 $includeBrandName = $includeBrandName ?? true;
 $includeProductLink = $includeProductLink ?? false;
+$optionsPopover = $optionsPopover ?? false;
+
+$optionsHtm = '';
+if (!empty($options)) {
+    $ulClass = isset($horizontalAlignOptions) && $horizontalAlignOptions ? 'list-options--horizontal' : 'list-options--vertical';
+    $ulId = 'options-' .  $order['op_selprod_id'];
+    $ulClass .= (true == $optionsPopover) ? ' list-options-popover hidden' : '';
+    $optionsHtm = '<ul class="list-options ' . $ulClass . '" id="' . $ulId . '">';
+    foreach ($options as $option) {
+        $option = explode(SellerProduct::OPTION_NAME_SEPARATOR, $option);
+        if (empty(array_filter($option))) {
+            continue;
+        }
+
+        $optionsHtm .= '<li class="list-options-item">
+                            <span class="lable">' . trim($option[0]) . ':</span>
+                            <span class="value">' . trim($option[1]) . '</span>
+                        </li>';
+    }
+    $optionsHtm .= '</ul>';
+}
 ?>
 <div class="product-profile">
     <div class="product-profile__thumbnail">
         <a href="<?php echo $imgOrgSrc; ?>" data-featherlight="image">
-            <img <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?>  src="<?php echo $imgSrc; ?>" title="<?php echo $order['op_product_name']; ?>" alt="<?php echo $order['op_product_name']; ?>">
+            <img <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?> src="<?php echo $imgSrc; ?>" title="<?php echo $order['op_product_name']; ?>" alt="<?php echo $order['op_product_name']; ?>">
         </a>
     </div>
     <div class="product-profile__data">
@@ -44,12 +64,19 @@ $includeProductLink = $includeProductLink ?? false;
             </div>
         <?php } ?>
         <div class="title">
-            <?php if (true == $includeProductLink) {
-                echo '<a href="' . UrlHelper::generateFullUrl('Products', 'View', array($order['op_selprod_id']), CONF_WEBROOT_FRONT_URL) . '" target="_blank" title="' . $order['op_product_name'] . '">' . CommonHelper::subStringByWords($order['op_selprod_title'], 35) . '</a>';
-            } else {
-                echo CommonHelper::subStringByWords($order['op_selprod_title'], 35);
-            }
-            ?>
+            <?php if (true === $optionsPopover) { ?>
+                    <span class="d-inline-block link-dotted" data-html="true" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#options-<?php echo $order['op_selprod_id']; ?>">
+                <?php } ?>
+
+                <?php if (true == $includeProductLink) {
+                    echo '<a href="' . UrlHelper::generateFullUrl('Products', 'View', array($order['op_selprod_id']), CONF_WEBROOT_FRONT_URL) . '" target="_blank" title="' . $order['op_product_name'] . '">' . CommonHelper::subStringByWords($order['op_selprod_title'], 35) . '</a>';
+                } else {
+                    echo CommonHelper::subStringByWords($order['op_selprod_title'], 35);
+                } ?>
+
+                <?php if (true === $optionsPopover) { ?>
+                </span>
+            <?php } ?>
         </div>
 
         <?php if (true === $includeShopName) { ?>
@@ -71,21 +98,8 @@ $includeProductLink = $includeProductLink ?? false;
             </div>
         <?php } ?>
 
-        <?php
-        if (!empty($options)) { ?>
-            <ul class="list-options <?php echo isset($horizontalAlignOptions) && $horizontalAlignOptions ? 'list-options--horizontal' : 'list-options--vertical"'; ?>">
-                <?php foreach ($options as $option) {
-                    $option = explode(SellerProduct::OPTION_NAME_SEPARATOR, $option);
-                    if (empty(array_filter($option))) {
-                        continue;
-                    }
-                ?>
-                    <li>
-                        <span class="label"><?php echo trim($option[0]); ?>:</span>
-                        <span class="value"><?php echo trim($option[1]); ?></span>
-                    </li>
-                <?php } ?>
-            </ul>
-        <?php } ?>
+        <?php if (!empty($optionsHtm)) {
+            echo $optionsHtm;
+        } ?>
     </div>
 </div>

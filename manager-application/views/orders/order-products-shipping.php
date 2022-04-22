@@ -6,7 +6,7 @@
     </h5>
 </div>
 <div class="modal-body opShippingChargesJs">
-    <div class="table-responsive table-scrollable js-scrollable">
+    <div class="table-responsive table-scrollable js-scrollable" style="max-height: 400px;">
         <table class="table table-orders">
             <thead>
                 <tr>
@@ -44,9 +44,9 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td></td>
-                    <td><?php echo Labels::getLabel('LBL_TOTAL_SHIPPING', $siteLangId); ?></td>
-                    <td class='text-right'><?php echo CommonHelper::displayMoneyFormat($totalShipping, true, true); ?></td>
+                    <th></th>
+                    <th><?php echo Labels::getLabel('LBL_TOTAL_SHIPPING', $siteLangId); ?></th>
+                    <th class='text-right'><?php echo CommonHelper::displayMoneyFormat($totalShipping, true, true); ?></th>
                 </tr>
             </tfoot>
         </table>
