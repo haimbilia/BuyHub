@@ -77,7 +77,7 @@ foreach ($arr as $childOrder) {
                         <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartTotal, true, false, true, false, true); ?></span>
                     </li>
                     <?php
-                    $discount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT', true)) : $orderDetail['order_discount_total'];
+                    $discount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT')) : $orderDetail['order_discount_total'];
                     if (0 < $discount) { ?>
                         <li class="discounted">
                             <span class="lable"><?php echo Labels::getLabel('LBL_Discount', $siteLangId) ?></span>
@@ -87,7 +87,7 @@ foreach ($arr as $childOrder) {
                         </li>
                     <?php } ?>
                     <?php
-                    $volDiscount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'VOLUME_DISCOUNT', false)) : $orderDetail['order_volume_discount_total'];
+                    $volDiscount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'VOLUME_DISCOUNT')) : $orderDetail['order_volume_discount_total'];
                     if (0 < $volDiscount) { ?>
                         <li class="discounted">
                             <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME/LOYALTY_DISCOUNT', $siteLangId);  ?></span>
@@ -98,7 +98,7 @@ foreach ($arr as $childOrder) {
                     <?php } ?>
                     <?php
                     if (!$isSellerDashboardView) {
-                        $rewards = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'REWARDPOINT', true)) : $orderDetail['order_reward_point_value'];
+                        $rewards = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'REWARDPOINT')) : $orderDetail['order_reward_point_value'];
                         if (0 < $rewards) { ?>
                             <li class="discounted">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId); ?>

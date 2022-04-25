@@ -11,11 +11,10 @@ class WalletPayController extends MyAppController
     public function charge($orderId)
     {
         $isAjaxCall = FatUtility::isAjaxCall();
-
         $sessionOrderId = $_SESSION['shopping_cart']["order_id"] ?? '';
         $subsSessionOrderId = $_SESSION['subscription_shopping_cart']["order_id"] ?? '';
 
-        if (!$orderId || (false === MOBILE_APP_API_CALL && ((!empty($sessionOrderId) && $orderId != $sessionOrderId) || (!empty($subsSessionOrderId)) && $orderId != $subsSessionOrderId))) {
+        if (!$orderId || (false === MOBILE_APP_API_CALL && ((!empty($sessionOrderId) && $orderId != $sessionOrderId) && (!empty($subsSessionOrderId) && $orderId != $subsSessionOrderId)))) {
             $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);

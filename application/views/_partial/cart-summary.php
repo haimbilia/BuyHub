@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
 if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
-    if (true === $showHeaderButton) {?>
+    if (true === $showHeaderButton) { ?>
         <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#sideCartJs" aria-controls="side-cart">
             <svg class="svg" width="20" height="20">
                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
@@ -67,11 +67,10 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                                                         </div>
                                                         <a class="title" title="<?php echo $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
                                                         <div class="products-price">
-                                                            <span class="products-price-new">
-                                                                <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                                                            </span>
-                                                            <?php if ($product['special_price_found']) { ?>
-                                                                <span class="products-price-off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
+                                                            <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?></span>
+                                                            <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
+                                                                <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'])); ?></del>
+                                                                <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
                                                             <?php } ?>
                                                         </div>
                                                         <div class="options">

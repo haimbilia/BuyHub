@@ -1,12 +1,19 @@
 <?php
 
-if(1 > count($links)){
+if (!$showNoRecordFound) {
     return;
 }
 $arr_flds = [];
-$arr_flds['pdl_download_link'] = Labels::getLabel('LBL_DOWNLOAD_LINK', $siteLangId);
+
+if($canDo){
+    $arr_flds['pdl_download_link'] = Labels::getLabel('LBL_DOWNLOAD_LINK', $siteLangId);
+}
 $arr_flds['pdl_preview_link'] = Labels::getLabel('LBL_PREVIEW_LINK', $siteLangId);
-$arr_flds['action'] = Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId);
+if($canDo){
+    $arr_flds['action'] = Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId);
+}
+
+
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
@@ -78,11 +85,14 @@ foreach ($links as $sn => $row) {
     }
 }
 
-if (empty($links)) {
-    $tr = $tbl->appendElement('tr')->appendElement('td', ['colspan' => count($arr_flds)]);
-    $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_NO_RECORDS', $siteLangId), true);
-}
 ?>
 <div class="col-md-12">
-    <?php echo $tbl->getHtml(); ?>
+    <?php 
+    if (empty($links)) {
+        $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
+        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
+    }else{
+        echo $tbl->getHtml();
+    }    
+    ?>
 </div>

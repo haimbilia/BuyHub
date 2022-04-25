@@ -48,13 +48,6 @@ class Orders extends MyAppModel
 
     public const REPLACE_ORDER_USER_ADDRESS = 'XXX';
 
-    //public const DEFAULT_CHILD_ORDER_STATUS_ID = 1;
-
-    /* public const DB_TBL_ORDER_CANCEL_REQUEST = 'tbl_order_cancel_requests';
-    public const CANCELLATION_REQUEST_STATUS_PENDING = 0;
-    public const CANCELLATION_REQUEST_STATUS_APPROVED = 1;
-    public const CANCELLATION_REQUEST_STATUS_DECLINED = 2; */
-
 
     private $orderId;
     private $orderNo;
@@ -77,13 +70,8 @@ class Orders extends MyAppModel
         );
     }
     public static function getActiveSubscriptionStatusArr()
-    {
-        $activeSubscriptionStatuses =
-            array(FatApp::getConfig("CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0));
-
-
-
-        return $activeSubscriptionStatuses;
+    {       
+        return array(FatApp::getConfig("CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0));        
     }
 
     public static function getPaymentGatewayStatusArr($langId)
@@ -2964,8 +2952,5 @@ class Orders extends MyAppModel
 
         return (in_array($opRow['op_status_id'], $processingStatuses) && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED);
     }
-
-    public static function displayStatus()
-    {
-    }
+    
 }

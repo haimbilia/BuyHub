@@ -1,5 +1,5 @@
 <?php
-if (1 > count($attachments)) {
+if (!$showNoRecordFound) {
     return;
 }
 $arr_flds = array(   
@@ -8,6 +8,9 @@ $arr_flds = array(
     'action'  =>  Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId)
 );
 
+if(!$canDo){
+    unset($arr_flds['action']);
+}
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
@@ -29,41 +32,43 @@ foreach ($attachments as $sn => $row) {
                 break;
             case 'mainfile':
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
-                $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+               
                 if (0 < $row['afile_id']) {
-                  
-                    $ul = new HtmlElement("ul", array("class" => "actions"));     
-                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
-                    $li->appendElement(
-                        "a",
-                        array(                                
-                            'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
-                            'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
-                            'target' => '_blank'
-                        ),
-                        '<svg class="svg" width="18" height="18">
-                            <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
-                            </use>
-                        </svg>',
-                        true
-                    );
-                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
-                    $li->appendElement(
-                        "a",
-                        array(                              
-                            'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
-                            'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
-                        ),
-                        '<svg class="svg" width="18" height="18">
-                            <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
-                            </use>
-                        </svg>',
-                        true
-                    );
-                    
-                    $dvElem->appendElement('plaintext', $tdAttr, $ul->getHtml(), true);
+                    $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                    if($canDo){
+                        $ul = new HtmlElement("ul", array("class" => "actions"));     
+                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
+                        $li->appendElement(
+                            "a",
+                            array(                                
+                                'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
+                                'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
+                                'target' => '_blank'
+                            ),
+                            '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                                </use>
+                            </svg>',
+                            true
+                        );
+                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
+                        $li->appendElement(
+                            "a",
+                            array(                              
+                                'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
+                                'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
+                            ),
+                            '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                </use>
+                            </svg>',
+                            true
+                        );
+                        
+                        $dvElem->appendElement('plaintext', $tdAttr, $ul->getHtml(), true);
+                    }
                 } else {
                     $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
@@ -73,55 +78,59 @@ foreach ($attachments as $sn => $row) {
                 $ul = new HtmlElement("ul", array("class" => "actions"));                
                 if (0 < $row['prev_afile_id']) {
                     $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
-                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
-                    $li->appendElement(
-                        'a',
-                        array(
-                            'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $downloadrefType, 1, $row['preview'])),
-                            'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
-                        ),
-                        '<svg class="svg" width="18" height="18">
-                            <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
-                            </use>
-                        </svg>',
-                        true
-                    );
-                
-                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
-                    $li->appendElement(
-                        'a',
-                        array(
-                            'href' => 'javascript:void(0)',
-                            'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
-                            'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)'
-                        ),
-                        '<svg class="svg" width="18" height="18">
-                        <use
-                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
-                        </use>
-                        </svg>',
-                        true
-                    );
+                    
+                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
+                        $li->appendElement(
+                            'a',
+                            array(
+                                'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $downloadrefType, 1, $row['preview'])),
+                                'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
+                            ),
+                            '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                                </use>
+                            </svg>',
+                            true
+                        );
+                        if($canDo){                    
+                            $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
+                            $li->appendElement(
+                                'a',
+                                array(
+                                    'href' => 'javascript:void(0)',
+                                    'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
+                                    'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)'
+                                ),
+                                '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                </use>
+                                </svg>',
+                                true
+                            );
+                        }
                   
                 } else {
                     $dvElem->appendElement('div', array('class' => 'text-break'),  Labels::getLabel('LBL_NA', $siteLangId), true);
-                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
-                    $li->appendElement(
-                        "a",
-                        array(
-                            'title' => Labels::getLabel('LBL_ADD', $siteLangId),
-                            'href' => 'javascript:void(0);',
-                            'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;',
-                            'href' => 'javascript:void(0);'
-                        ),
-                        '<svg class="svg" width="18" height="18">
-                            <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
-                            </use>
-                        </svg>',
-                        true
-                    );
+                    if($canDo){
+                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
+                        $li->appendElement(
+                            "a",
+                            array(
+                                'title' => Labels::getLabel('LBL_ADD', $siteLangId),
+                                'href' => 'javascript:void(0);',
+                                'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;',
+                                'href' => 'javascript:void(0);'
+                            ),
+                            '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                </use>
+                            </svg>',
+                            true
+                        );
+                    }
                 }
                 $dvElem->appendElement('plaintext', $tdAttr, $ul->getHtml(), true);
                 break;
@@ -168,11 +177,14 @@ foreach ($attachments as $sn => $row) {
     }
 }
 
-if (empty($attachments)) {
-    $tr = $tbl->appendElement('tr')->appendElement('td', ['colspan' => count($arr_flds)]);
-    $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_NO_RECORDS', $siteLangId), true);
-}
 ?>
 <div class="col-md-12">
-    <?php echo $tbl->getHtml(); ?>
+    <?php 
+    if (empty($attachments)) {
+        $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
+        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
+    }else{
+        echo $tbl->getHtml();
+    }    
+    ?>
 </div>

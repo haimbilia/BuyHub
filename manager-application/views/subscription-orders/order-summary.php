@@ -28,6 +28,17 @@ foreach ($order['items'] as $oitem) {
                     </span>
                 </li>
                 <?php
+                $adjustedAmount = CommonHelper::orderSubscriptionAmount($order, 'ADJUSTEDAMOUNT');
+                if ($adjustedAmount != 0) {
+                ?>
+                    <li>
+                        <span class="label"><?php echo Labels::getLabel('LBL_ADJUSTED_AMOUNT', $siteLangId); ?></span>
+                        <span class="value">
+                            <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderSubscriptionAmount($order, 'ADJUSTEDAMOUNT'), true, false, true, false, true); ?>
+                        </span>
+                    </li>
+                <?php
+                }
                 if (0 < $order['order_discount_total']) { ?>
                     <li class="discounted">
                         <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId) ?></span>
@@ -40,7 +51,7 @@ foreach ($order['items'] as $oitem) {
                 if (0 < $order['order_reward_point_value']) { ?>
                     <li class="discounted">
                         <span class="label">
-                            <?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId);?>
+                            <?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId); ?>
                         </span>
                         <span class="value">
                             <?php echo '-' . CommonHelper::displayMoneyFormat($order['order_reward_point_value'], true, false, true, false, true); ?>

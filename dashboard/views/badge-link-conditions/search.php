@@ -140,7 +140,16 @@ foreach ($arrListing as $sn => $row) {
     $sr_no--;
 }
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), 'No records found');
+    $img = $this->includeTemplate('_partial/no-record-found.php', [], false, true);
+    $tbl->appendElement('tr')->appendElement(
+        'td',
+        array(
+            'colspan' => isset($arr_flds) ? count($arr_flds) : 1,
+            'class' => 'noRecordFoundJs'
+        ),
+        $img,
+        true
+    );
 }
 
 $frm = new Form('frmSearchListing');

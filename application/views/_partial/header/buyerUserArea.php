@@ -3,7 +3,7 @@ if (User::USER_TYPE_BUYER != $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]
     return;
 }
 
-if (USER::USER_BUYER_DASHBOARD != $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_preferred_dashboard']) {
+if (applicationConstants::YES != $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_preferred_dashboard']) {
     return;
 }
 $layoutType = $layoutType ?? '';
