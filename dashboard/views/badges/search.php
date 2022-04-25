@@ -139,23 +139,35 @@ foreach ($arrListing as $sn => $row) {
     }
     $sr_no--;
 }
+
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), 'No records found');
+    $img = $this->includeTemplate('_partial/no-record-found.php', [], false, true);
+    $tbl->appendElement('tr')->appendElement(
+        'td',
+        array(
+            'colspan' => isset($arr_flds) ? count($arr_flds) : 1,
+            'class' => 'noRecordFoundJs'
+        ),
+        $img,
+        true
+    );
 }
 
 $frm = new Form('frmSearchListing');
 $frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js badgesList--js');
 $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
 $frm->setFormTagAttribute('action', UrlHelper::generateUrl('Badges', 'toggleBulkStatuses'));
-$frm->addHiddenField('', 'status');
+$frm->addHiddenField('', 'status'); ?>
 
-echo $frm->getFormTag();
-echo $frm->getFieldHtml('status');
-echo $tbl->getHtml(); ?>
-</form>
-<?php $postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array(
-    'name' => 'frmSrchPaging'
-));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'siteLangId' => $siteLangId);
-$this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+<div class="js-scrollable table-wrap table-responsive">
+    <?php echo $frm->getFormTag();
+    echo $frm->getFieldHtml('status');
+    echo $tbl->getHtml();
+    echo '</form>';
+    $postedData['page'] = $page;
+    echo FatUtility::createHiddenFormFromData($postedData, array(
+        'name' => 'frmSrchPaging'
+    ));
+    $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'siteLangId' => $siteLangId);
+    $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
+</div>

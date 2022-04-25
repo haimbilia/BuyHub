@@ -99,41 +99,45 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) { ?>
                     </div>
                 <?php } else if (1 == $extraFldCount) { ?>
                     <div class="col-md-4">
-                        <?php if (null != $keyWordFld) {
-                            echo $frmSearch->getFieldHtml('keyword');
-                        } else {
-                            $fld = $frmSearch->getField($firstElement['name']);
+                        <div class="form-group">
+                            <?php if (null != $keyWordFld) {
+                                echo $frmSearch->getFieldHtml('keyword');
+                            } else {
+                                $fld = $frmSearch->getField($firstElement['name']);
 
+                                $class = (string) $fld->getFieldtagAttribute('class');
+                                $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
+                                $class = ltrim($class, ' ');
+                                $fld->setFieldtagAttribute('class', $class);
+                                if (!$fld->getFieldtagAttribute('placeholder')) {
+                                    $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
+                                }
+                                echo $frmSearch->getFieldHtml($firstElement['name']);
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <?php
+                            $flds = current($frmFields['advSrchFlds'][0]);
+                            $fld = $frmSearch->getField($flds['name']);
                             $class = (string) $fld->getFieldtagAttribute('class');
                             $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
                             $class = ltrim($class, ' ');
                             $fld->setFieldtagAttribute('class', $class);
+
                             if (!$fld->getFieldtagAttribute('placeholder')) {
-                                $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
+                                $fld->setFieldtagAttribute('placeholder', $flds['caption']);
                             }
-                            echo $frmSearch->getFieldHtml($firstElement['name']);
-                        }
-                        ?>
+                            echo $frmSearch->getFieldHtml($flds['name']); ?>
+                        </div>
                     </div>
                     <div class="col-md-4">
-                        <?php
-                        $flds = current($frmFields['advSrchFlds'][0]);
-                        $fld = $frmSearch->getField($flds['name']);
-                        $class = (string) $fld->getFieldtagAttribute('class');
-                        $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
-                        $class = ltrim($class, ' ');
-                        $fld->setFieldtagAttribute('class', $class);
-
-                        if (!$fld->getFieldtagAttribute('placeholder')) {
-                            $fld->setFieldtagAttribute('placeholder', $flds['caption']);
-                        }
-                        echo $frmSearch->getFieldHtml($flds['name']); ?>
-                    </div>
-                    <div class="col-md-2">
-                        <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                    </div>
-                    <div class="col-md-2">
-                        <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                        <div class="form-group">
+                            <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                            <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                        </div>
                     </div>
 
                 <?php } else { ?>

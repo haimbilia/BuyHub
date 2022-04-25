@@ -533,6 +533,7 @@ var advanceMedia = false; /* open via advance media*/
         $.ykmodal(fcom.getLoader(), false, 'modal-dialog-vertical-md');
         let recordId = getCurrentFrmRecordId();
         fcom.updateWithAjax(fcom.makeUrl('Products', "digitalDownloadForm", [recordId, type]), "", function (t) {
+            fcom.removeLoader();
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
             if (typeof callback == 'function') {
                 callback();

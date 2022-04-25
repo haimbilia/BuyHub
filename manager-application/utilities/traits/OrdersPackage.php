@@ -185,6 +185,14 @@ trait OrdersPackage
         $frm = $this->getPaymentForm($this->order['order_id']);
         $this->set('frm', $frm);
 
+        $oSubObj = new OrderSubscription(); 
+        $charges = [];
+        if(isset($this->get('order')['items'])){
+            $item = current($this->get('order')['items']);
+            $charges = $oSubObj->getOrderSubscriptionChargesArr($item['ossubs_id']);
+        }
+        $this->set('order',$this->get('order') +  ['charges' => $charges]);
+
         $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
         $this->set('orderStatusArr', $orderStatusArr);
         $this->_template->addJs(array('js/jquery.datetimepicker.js'), false);
