@@ -263,3 +263,11 @@ a.link {
         color: $brand-color;
     }
 }
+
+.link-dotted {
+    text-decoration: dotted underline;
+    text-underline-offset: 4px;
+    &:hover {
+        color: $brand-color;
+    }
+}

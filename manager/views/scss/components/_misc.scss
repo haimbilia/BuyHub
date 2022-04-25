@@ -2769,6 +2769,24 @@ $header-height: 65px;
             max-width: 50%;
         }
     }
+    &-triple {
+        display: flex;
+        flex-wrap: wrap;
+        li {
+            padding: 0;
+            padding-bottom: 1.5rem;
+            flex: 0 0 30%;
+            max-width: 30%;
+        }
+    }
+
+    &-popover {
+        li {
+            display: flex;
+            gap: 10px;
+            flex-direction: row !important;
+        }
+    }
 }
 .list-checkbox {
     display: flex;
