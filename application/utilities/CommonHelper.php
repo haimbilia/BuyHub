@@ -1375,7 +1375,8 @@ class CommonHelper extends FatUtility
 
         $specialPrice = $product['theprice'];
         $discount = (($originalPrice - $specialPrice) * 100) / $originalPrice;
-        return round($discount) . "% " . Labels::getLabel('LBL_Off', $langId);
+        
+        return round($discount, 2) . "% " . Labels::getLabel('LBL_Off', $langId);
     }
 
     public static function truncateCharacters($string, $limit, $break = " ", $pad = "...", $nl2br = false)
