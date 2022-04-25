@@ -1077,9 +1077,6 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addIntegerField(Labels::getLabel("FRM_MAXIMUM_REWARD_POINT", $langId), 'CONF_MAX_REWARD_POINT');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_MAXIMUM_REWARD_POINTS_LIMIT_TO_AVAIL_DISCOUNT_DURING_CHECKOUT", $langId) . "</span>";
 
-                $fld = $frm->addIntegerField(Labels::getLabel("FRM_REWARD_POINT_VALIDITY", $langId), 'CONF_REWARDS_VALIDITY_ON_PURCHASE');
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REWARD_POINT_VALIDITY_IN_DAYS_FROM_DATE_OF_CREDIT", $langId) . "</span>";
-
                 $fld = $frm->addCheckBox(
                     Labels::getLabel("FRM_ACTIVATE_REWARD_POINT_ON_EVERY_PURCHASE", $langId),
                     'CONF_ENABLE_REWARDS_ON_PURCHASE',
@@ -1091,17 +1088,19 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("MSG_BUYER_WILL_REWARD_POINT_ON_EVERY_PURCHASE_AS_DEFINED_SETTINGS", $langId));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
-                $fld = $frm->addHtml('', 'Birthday_Rewards', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_BIRTHDAY_REWARD_POINTS", $langId) . '</h3>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-                $fld =  $frm->addRadioButtons(
+                $fld = $frm->addIntegerField(Labels::getLabel("FRM_REWARD_POINT_VALIDITY", $langId), 'CONF_REWARDS_VALIDITY_ON_PURCHASE');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REWARD_POINT_VALIDITY_IN_DAYS_FROM_DATE_OF_CREDIT", $langId) . "</span>";
+                
+                $fld =  $frm->addCheckBox(
                     Labels::getLabel("FRM_ENABLE_BIRTHDAY_DISCOUNT", $langId),
                     'CONF_ENABLE_BIRTHDAY_DISCOUNT_REWARDS',
-                    applicationConstants::getYesNoArr($langId),
-                    '',
-                    array('class' => 'list-radio')
+                    1,
+                    [],
+                    false,
+                    0
                 );
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-                HtmlHelper::configureSwitchForRadio($fld);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_BIRTHDAY_REWARD_POINTS", $langId));
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_BIRTHDAY_REWARD_POINTS", $langId), 'CONF_BIRTHDAY_REWARD_POINTS');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_USER_GET_THIS_REWARD_POINTS_ON_HIS_BIRTHDAY.", $langId) . "</span>";
