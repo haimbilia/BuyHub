@@ -101,9 +101,11 @@ class CartController extends MyAppController
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
 
                 if (true === MOBILE_APP_API_CALL) {
-                    $slProduct['discount'] = ($arr['special_price_found'] && $arr['selprod_price'] > $arr['theprice']) ? CommonHelper::showProductDiscountedText($arr, $this->siteLangId) : '';
+                    $arr['discount'] = ($arr['special_price_found'] && $arr['selprod_price'] > $arr['theprice']) ? CommonHelper::showProductDiscountedText($arr, $this->siteLangId) : '';
                     $arr['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($arr['selprod_id']));
                     $arr['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($arr['product_id'], ImageDimension::VIEW_THUMB, $arr['selprod_id'], 0, $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                    $arr['theprice'] = CommonHelper::displayMoneyFormat($arr['theprice']);
+                    $arr['selprod_price'] = CommonHelper::displayMoneyFormat($arr['selprod_price']);
                     $availableProductsArr['saveForLater'][] = $arr;
                 }
             }
