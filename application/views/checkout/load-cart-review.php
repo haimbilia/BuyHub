@@ -48,11 +48,10 @@
                                             <?php echo $product['selprod_title']; ?>
                                         </a>
                                         <div class="products-price">
-                                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                                            <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?></span>
                                             <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                                                <span class="products-price-off">
-                                                    <?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?>
-                                                </span>
+                                                <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'])); ?></del>
+                                                <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
                                             <?php } ?>
                                         </div>
                                         <div class="options">
