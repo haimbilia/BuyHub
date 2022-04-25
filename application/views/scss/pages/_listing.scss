@@ -541,7 +541,7 @@
 
 .shop-slider {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     gap: 1rem;
 
     .item {

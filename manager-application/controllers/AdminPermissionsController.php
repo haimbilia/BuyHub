@@ -158,7 +158,7 @@ class AdminPermissionsController extends ListingBaseController
         $this->set("hidePaginationHtml", true);
         $this->set('page', 1);
         $this->set('pageSize', $pageSize);
-        $this->set('doNotLimitRecords', true);        
+        $this->set('recordCount', count($arrListing));        
 
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
@@ -212,7 +212,7 @@ class AdminPermissionsController extends ListingBaseController
             }
         }
 
-        $this->set('msg', $this->str_update_record);
+        $this->set('msg', Labels::getLabel('LBL_RECORDS_UPDATED_SUCCESSFULLY.'));
         $this->_template->render(false, false, 'json-success.php');
     }
 

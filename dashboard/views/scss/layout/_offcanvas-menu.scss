@@ -135,7 +135,7 @@
 }
 
 .btn-logout {
-    display: block;
+    display: block !important;
     width: 100%;
     background-color: $brand-color;
     color: $brand-color-inverse;

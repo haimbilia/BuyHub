@@ -85,7 +85,7 @@
 
                                                                         <li class="categories-list-item">
                                                                             <a class="categories-list-link" data-org-url="<?php echo $catOrgUrl; ?>" href="<?php echo $catUrl; ?>">
-                                                                                <span><?php echo $childCat['prodcat_name']; ?></span></a>
+                                                                                <?php echo $childCat['prodcat_name']; ?></a>
                                                                         </li>
 
 

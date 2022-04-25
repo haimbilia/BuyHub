@@ -48,7 +48,7 @@ class LayoutTemplate extends MyAppModel
     public static function getLayout($layoutType, $ltemplateId)
     {
         $data = static::getMultipleLayouts($layoutType, $ltemplateId);
-        if (count($data > 0)) {
+        if (count($data) > 0) {
             reset($data);
             return current($data);
         }

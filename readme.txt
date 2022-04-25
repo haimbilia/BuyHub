@@ -704,6 +704,11 @@ Updates/Fixes :
     => 063910 - iOS Web: Buyer: The user is not able to place an order
     => 063943 - iOS Web: Getting an error when the user clicks on Dashboard.
     => 063946 - iOS web: Getting a multiple issues when the user adds a product
+    => 063959 - Admin: Cart total amount is not showing correctly on the order details page at the admin's end
+    => 063958 - The special price is not showing properly at the buyer's and seller's end and the "Print" option is not working after placing an order fr the special price product
+    => 063957 - Buyer: The special price percentage is not showing correctly at the buyer's end
+    => 063954 - Buyer: Discount calculation is not correct on the order details at the buyer's end
+    => 063970 - OS web: Seller : Getting multiple issues under Promotions section.
     => 063963 - Admin: Undefined Index error is showing while opening the withdrawal requests' notification and default sorting is not showing according to the date in the withdrawal requests' table
     => 063992 - Seller: An error is showing while the seller's trying to self-ship in case of Shipping Plugin is ON and the error is not showing while the seller clicks on the "Fetch Shipping Rates" on the order details in case plugins keys are missing 
     => 063752 - Seller: Digital files and digital links of the product are not showing while viewing the marketplace details and adding the inventory at the seller's end, if those are added while adding the product at the admin's end

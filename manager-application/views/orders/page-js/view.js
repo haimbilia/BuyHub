@@ -38,7 +38,7 @@
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderProductsCharges', [orderId, chargeType]), '', function (t) {
             fcom.closeProcessing();
             fcom.removeLoader();
-            $.ykmodal(t.html, true, "modal-dialog-vertical-md");
+            $.ykmodal(t.html, true, "modal-lg");
         });
     }
 

@@ -140,12 +140,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
         </div>
         <div class="offcanvas-foot">
             <a class="btn btn-logout" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>">
-                <i class="icn">
-                    <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#logout">
-                        </use>
-                    </svg>
-                </i>
+
                 <?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
             </a>
         </div>

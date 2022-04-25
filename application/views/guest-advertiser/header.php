@@ -55,7 +55,16 @@ $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, 
                     <div class="logo-bar-end">
                         <ul class="quick-nav">
                             <?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?>
-                            <li class="quick-nav-item">
+                            <li class="quick-nav-item item-mobile">
+                                <div class="dropdown">
+                                    <button type="button" class="quick-nav-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-seller-nav" aria-controls="offcanvas-seller-nav">
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-menu"></use>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </li>
+                            <li class="quick-nav-item item-desktop">
                                 <div class="dropdown">
                                     <button type="button" class="quick-nav-link button-account sign-in sign-in-popup-js">
                                         <svg class="svg" width="20" height="20">

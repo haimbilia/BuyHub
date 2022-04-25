@@ -365,6 +365,8 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($userObj->getError());
         }
 
+        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_preferred_dashboard'] = $dasboardType;
+
         $this->set('msg', Labels::getLabel('MSG_Setup_successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -609,13 +611,13 @@ class AccountController extends LoggedUserController
                     break;
             }
         }
-        $recordCountSrch = clone $srch;      
+        $recordCountSrch = clone $srch;
         $srch->doNotCalculateRecords();
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $srch->addOrder('utxn.utxn_date', $dateOrder);       
+        $srch->addOrder('utxn.utxn_date', $dateOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->setRecordCount($recordCountSrch, $pagesize, $page, $post, true);        
+        $this->setRecordCount($recordCountSrch, $pagesize, $page, $post, true);
         $this->set('arrListing', $records);
         $this->set('postedData', $post);
         $this->set('siteLangId', $this->siteLangId);
@@ -2587,7 +2589,7 @@ class AccountController extends LoggedUserController
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_AMOUNT_TO_BE_WITHDRAWN', $langId) . ' [' . commonHelper::getDefaultCurrencySymbol() . ']', 'withdrawal_amount');
         $fld->requirement->setFloat(true);
         $walletBalance = User::getUserBalance($this->userId);
-        $fld->htmlAfterField = '<span class="form-text">'. Labels::getLabel("FRM_CURRENT_WALLET_BALANCE", $langId) . ' ' . CommonHelper::displayMoneyFormat($walletBalance, true, true) . '</span>';
+        $fld->htmlAfterField = '<span class="form-text">' . Labels::getLabel("FRM_CURRENT_WALLET_BALANCE", $langId) . ' ' . CommonHelper::displayMoneyFormat($walletBalance, true, true) . '</span>';
 
         if (User::isAffiliate()) {
             $PayMethodFld = $frm->addRadioButtons(Labels::getLabel('FRM_PAYMENT_METHOD', $langId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($langId));

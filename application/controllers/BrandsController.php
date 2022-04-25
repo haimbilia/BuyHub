@@ -57,8 +57,8 @@ class BrandsController extends MyAppController
                     $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($brandProduct['product_id'], ImageDimension::VIEW_MEDIUM, $brandProduct['selprod_id'], 0, $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                     $brandProduct['discounted_text'] = CommonHelper::showProductDiscountedText($brandProduct, $this->siteLangId);
                     $brandProduct['product_image'] = $mainImgUrl;
-                    $brandProduct['currency_selprod_price'] = CommonHelper::displayMoneyFormat($brandProduct['selprod_price'], true, false, false);
-                    $brandProduct['currency_theprice'] = CommonHelper::displayMoneyFormat($brandProduct['theprice'], true, false, false);
+                    $brandProduct['currency_selprod_price'] = CommonHelper::displayMoneyFormat($brandProduct['selprod_price']);
+                    $brandProduct['currency_theprice'] = CommonHelper::displayMoneyFormat($brandProduct['theprice']);
                 }
                 $brandsArr[$cnt]['brand_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'brand', array($val['brand_id'], $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                 $brandsArr[$cnt]['products'] = $brandProducts;

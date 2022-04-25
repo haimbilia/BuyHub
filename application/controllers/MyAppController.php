@@ -47,11 +47,10 @@ class MyAppController extends FatController
         if (!defined('CONF_MESSAGE_ERROR_HEADING')) {
             define('CONF_MESSAGE_ERROR_HEADING', Labels::getLabel('LBL_Following_error_occurred', $this->siteLangId));
         }
-
-        $controllerName = get_class($this);
-        $arr = explode('-', FatUtility::camel2dashed($controllerName));
+        
+        $arr = explode('-', FatUtility::camel2dashed($this->_controllerName));
         array_pop($arr);
-        $urlController = implode('-', $arr);
+        $urlController = implode('-', $arr);        
         $controllerName = ucfirst(FatUtility::dashed2Camel($urlController));
 
         $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);

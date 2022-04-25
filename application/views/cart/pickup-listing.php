@@ -155,10 +155,13 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                         <span class="text--dark"><?php echo $product['shop_name']; ?></span>
                                     </a>
                                 </div>
-                                <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
-                                    <div class="products-price">
-                                        <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?>
-                                    </div>
+                                <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
+                                <div class="products-price">
+                                    <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?></span>
+                                    <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
+                                        <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'])); ?></del>
+                                        <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
+                                    <?php } ?>
                                 </div>
                                 <div class="options">
                                     <p>
