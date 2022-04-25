@@ -204,7 +204,7 @@ class WithdrawalRequestsController extends ListingBaseController
             $sheetData = array();
             $exportField = [
                 'user_email' => Labels::getLabel('LBL_USER_EMAIL', $this->siteLangId),
-                'payout_address' => Labels::getLabel('LBL_PAYOUT_ADDRESS', $this->siteLangId),                
+                'payout_address' => Labels::getLabel('LBL_PAYOUT_INFO', $this->siteLangId),                
             ];
             $exportField =  $fields + $exportField;
             unset($exportField['action']);

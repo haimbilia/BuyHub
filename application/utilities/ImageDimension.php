@@ -287,6 +287,7 @@ class ImageDimension extends FatUtility
             self::VIEW_DEFAULT => [self::WIDTH => 500, self::HEIGHT => 500],
         ];
 
+        $arr[AttachedFile::RATIO_TYPE_CUSTOM] =  $arr[AttachedFile::RATIO_TYPE_SQUARE];
 
         if (!empty($sizeType)) {
             if (!array_key_exists($sizeType, $arr[$aspectRatioType])) {

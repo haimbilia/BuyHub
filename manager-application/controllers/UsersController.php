@@ -746,6 +746,7 @@ class UsersController extends ListingBaseController
         $frm = $this->getSendMailForm($recordId);
 
         $this->set('frm', $frm);
+        $this->set('user', $user);
         $this->set('recordId', $recordId);
         $this->set('includeTabs', false);
         $this->set('html', $this->_template->render(false, false, NULL, true));
@@ -878,10 +879,9 @@ class UsersController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
         $frm = new Form('sendMailFrm');
         $frm->addHiddenField('', 'user_id', $recordId);
-
+        $frm->addHTML('', 'to_info', '');
         $frm->addTextBox(Labels::getLabel('FRM_SUBJECT', $this->siteLangId), 'mail_subject')->requirements()->setRequired(true);
         $frm->addTextArea(Labels::getLabel('FRM_MESSAGE', $this->siteLangId), 'mail_message')->requirements()->setRequired(true);
-
         return $frm;
     }
 

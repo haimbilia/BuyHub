@@ -91,7 +91,6 @@ $formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId); ?>
     $(document).on('change', '#slideScreenJs', function() {
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
-
         if ($(this).val() == screenDesktop) {      
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?> x <?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
             $(minWidthBaneerEle).val('<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
