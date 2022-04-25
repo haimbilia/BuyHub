@@ -2721,7 +2721,7 @@ class BuyerController extends BuyerBaseController
         $frm->addTextBox(Labels::getLabel('FRM_PRICE_FROM'), 'price_from', '', array('placeholder' => Labels::getLabel('FRM_Price_Min', $langId) . ' [' . $currencySymbol . ']'));
         $frm->addTextBox(Labels::getLabel('FRM_PRICE_TO'), 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Price_Max', $langId) . ' [' . $currencySymbol . ']'));
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
         return $frm;
     }
 

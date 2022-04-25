@@ -68,7 +68,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                             if (1 == count($order['products'])) {
                                 echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId);
                             } else { ?>
-                                <a class="dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>)">
+                                <a class="link-dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>)">
                                     <?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId); ?>
                                 </a>
                             <?php } ?>
@@ -88,7 +88,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                                 if (1 == count($order['products'])) {
                                     echo Labels::getLabel('LBL_Tax_Charges', $siteLangId);
                                 } else { ?>
-                                    <a class="dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
+                                    <a class="link-dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
                                         <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
                                     </a>
                                 <?php } ?>
@@ -108,7 +108,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                                 if (1 == count($order['products'])) {
                                     echo $val['title'];
                                 } else { ?>
-                                    <a class="dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
+                                    <a class="link-dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
                                         <?php echo $val['title']; ?>
                                     </a>
                                 <?php } ?>
@@ -148,7 +148,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                             if (1 == count($order['products'])) {
                                 echo Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId);
                             } else { ?>
-                                <a class="dotted" href="javascript:void(0)" onclick="loadOpVolDiscount('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT; ?>)">
+                                <a class="link-dotted" href="javascript:void(0)" onclick="loadOpVolDiscount('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT; ?>)">
                                     <?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId);  ?>
                                 </a>
                             <?php } ?>
@@ -167,7 +167,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                             if (1 == count($order['products'])) {
                                 echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId);
                             } else { ?>
-                                <a class="dotted" href="javascript:void(0)" onclick="loadOpRewards('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT; ?>)">
+                                <a class="link-dotted" href="javascript:void(0)" onclick="loadOpRewards('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT; ?>)">
                                     <?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId); ?>
                                 </a>
                             <?php } ?>

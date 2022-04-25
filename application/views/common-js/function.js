@@ -212,15 +212,15 @@ $(function () {
     /* for footer */
     if ($(window).width() < 576) {
         /* FOR FOOTER TOGGLES */
-        $('.toggle__trigger-js').on('click', function () {
+        $('.js-footer-group-head').on('click', function () {
             if ($(this).hasClass('is-active')) {
                 $(this).removeClass('is-active');
-                $(this).siblings('.toggle__target-js').slideUp(); return false;
+                $(this).siblings('.js-footer-nav').slideUp(); return false;
             }
-            $('.toggle__trigger-js').removeClass('is-active');
+            $('.js-footer-group-head').removeClass('is-active');
             $(this).addClass("is-active");
-            $('.toggle__target-js').slideUp();
-            $(this).siblings('.toggle__target-js').slideDown();
+            $('.js-footer-nav').slideUp();
+            $(this).siblings('.js-footer-nav').slideDown();
         });
     }
 

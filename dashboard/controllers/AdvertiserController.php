@@ -1450,7 +1450,7 @@ class AdvertiserController extends AdvertiserBaseController
         $frm->addHiddenField('', 'page');
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
         return $frm;
     }
 
@@ -1476,7 +1476,7 @@ class AdvertiserController extends AdvertiserBaseController
             'onclick' => 'clearPromotionSearch();'
         )); */
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
 
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'promotion_id');

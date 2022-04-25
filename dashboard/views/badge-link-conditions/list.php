@@ -26,7 +26,7 @@ if (Badge::COND_MANUAL == $conditionType && $row[Badge::DB_TBL_PREFIX . 'require
 }
 
 if (!empty($frmSearch)) {
-    $frmSearch->setFormTagAttribute('class', 'form formSearch--js');
+    $frmSearch->setFormTagAttribute('class', 'form form-search formSearch--js');
     $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
     $frmSearch->developerTags['fld_default_col'] = 4;
     $fld = $frmSearch->getField('blinkcond_record_type');

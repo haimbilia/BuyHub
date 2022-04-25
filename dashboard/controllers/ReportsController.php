@@ -591,7 +591,7 @@ class ReportsController extends SellerBaseController
         $frm->addHiddenField('', 'reportColumns', '');
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
         return $frm;
     }
 
@@ -780,7 +780,7 @@ class ReportsController extends SellerBaseController
         $frm->addTextBox('', 'keyword', '');
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
         return $frm;
     }
 
@@ -825,7 +825,7 @@ class ReportsController extends SellerBaseController
         }
         $frm->addTextBox(Labels::getLabel("FRM_KEYWORD", $this->siteLangId), 'keyword');
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
         return $frm;
     }
 
@@ -890,7 +890,7 @@ class ReportsController extends SellerBaseController
         }
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
         return $frm;
     }
 

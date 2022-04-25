@@ -40,11 +40,11 @@ foreach ($arr as $childOrder) {
                         <li>
                             <span class="lable">
                                 <?php if (true === $primaryOrder) { ?>
-                                    <a class="dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $orderDetail['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>,<?php echo $childOrderDetail['op_id']; ?>)">
+                                    <a class="link-dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $orderDetail['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>,<?php echo $childOrderDetail['op_id']; ?>)">
                                         <?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId); ?>
                                     </a>
                                 <?php } else { ?>
-                                    <a class="dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $orderDetail['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>)">
+                                    <a class="link-dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $orderDetail['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>)">
                                         <?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId); ?>
                                     </a>
                                 <?php } ?>
@@ -59,12 +59,12 @@ foreach ($arr as $childOrder) {
                         <li>
                             <span class="lable">
                                 <?php if (true === $primaryOrder) { ?>
-                                    <a class="dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $orderDetail['order_id']; ?>',<?php echo OrderProduct::CHARGE_TYPE_TAX; ?>,<?php echo $childOrderDetail['op_id']; ?>)">
+                                    <a class="link-dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $orderDetail['order_id']; ?>',<?php echo OrderProduct::CHARGE_TYPE_TAX; ?>,<?php echo $childOrderDetail['op_id']; ?>)">
                                         <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
                                     </a>
-                                    
+
                                 <?php } else { ?>
-                                    <a class="dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $orderDetail['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
+                                    <a class="link-dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $orderDetail['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
                                         <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
                                     </a>
                                 <?php } ?>
@@ -98,15 +98,15 @@ foreach ($arr as $childOrder) {
                     <?php } ?>
                     <?php
                     if (!$isSellerDashboardView) {
-                    $rewards = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'REWARDPOINT')) : $orderDetail['order_reward_point_value'];
-                    if (0 < $rewards) { ?>
-                        <li class="discounted">
-                            <span class="lable"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId); ?>
-                            </span>
-                            <span class="value">
-                                <?php echo '-' . CommonHelper::displayMoneyFormat($rewards, true, false, true, false, true); ?>
-                            </span>
-                        </li>
+                        $rewards = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'REWARDPOINT')) : $orderDetail['order_reward_point_value'];
+                        if (0 < $rewards) { ?>
+                            <li class="discounted">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId); ?>
+                                </span>
+                                <span class="value">
+                                    <?php echo '-' . CommonHelper::displayMoneyFormat($rewards, true, false, true, false, true); ?>
+                                </span>
+                            </li>
                     <?php }
                     } ?>
                     <?php if (array_key_exists('order_rounding_off', $orderDetail) && 0 != $orderDetail['order_rounding_off']) { ?>
@@ -124,7 +124,7 @@ foreach ($arr as $childOrder) {
                         <span class="value">
                             <?php
                             if (true === $primaryOrder) {
-                                echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrderDetail, 'NETAMOUNT',false, ($isSellerDashboardView ? User::USER_TYPE_SELLER :false) ), true, false, true, false, true);
+                                echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrderDetail, 'NETAMOUNT', false, ($isSellerDashboardView ? User::USER_TYPE_SELLER : false)), true, false, true, false, true);
                             } else {
                                 echo CommonHelper::displayMoneyFormat($orderDetail['order_net_amount'], true, false, true, false, true);
                             }
@@ -361,7 +361,7 @@ foreach ($arr as $childOrder) {
                                 </li>
                             </ul>
                             <?php if (isset($orderDetail['payments'][$i + 1])) { ?>
-                                <hr class="dotted">
+                                <hr class="link-dotted">
                             <?php } ?>
                         <?php } ?>
 

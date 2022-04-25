@@ -158,7 +158,7 @@ class TransactionReportController extends SellerBaseController
         }
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
 
         return $frm;
     }
