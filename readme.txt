@@ -707,6 +707,7 @@ Updates/Fixes :
     => 063959 - Admin: Cart total amount is not showing correctly on the order details page at the admin's end
     => 063958 - The special price is not showing properly at the buyer's and seller's end and the "Print" option is not working after placing an order fr the special price product
     => 063957 - Buyer: The special price percentage is not showing correctly at the buyer's end
+    => 063954 - Buyer: Discount calculation is not correct on the order details at the buyer's end
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
