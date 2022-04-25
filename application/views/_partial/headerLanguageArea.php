@@ -7,11 +7,11 @@ $showDefalultLi =  (false === $hasMultipleLangs && false === $hasMultipleCurrenc
 
 if ($hasMultipleLangs || $hasMultipleCurrencies) { ?>
 
-    <div class="dropdown">
-        <button type="button" class="btn btn-outline-gray btn-dropdown dropdown-toggle-custom btn-icon" data-bs-toggle="dropdown">
+    <div class="dropdown dropdown-lang">
+        <button type="button" class="btn btn-outline-gray btn-dropdown dropdown-toggle-custom btn-icon btn-language" data-bs-toggle="dropdown">
             <?php if ($hasMultipleLangs) {
                 if ($languages[$siteLangId]['language_country_code']) { ?>
-                    <img width="14" height="14" class="icon" alt="<?php echo Labels::getLabel('LBL_Language_Flag', $siteLangId); ?>" src="<?php echo CONF_WEBROOT_URL; ?>images/flags/<?php echo FatApp::getConfig('CONF_COUNTRY_FLAG_TYPE', FatUtility::VAR_STRING, 'round'); ?>/<?php echo $languages[$siteLangId]['language_country_code'] . '.svg'; ?>">
+                    <img width="14" height="14" class="svg" alt="<?php echo Labels::getLabel('LBL_Language_Flag', $siteLangId); ?>" src="<?php echo CONF_WEBROOT_URL; ?>images/flags/<?php echo FatApp::getConfig('CONF_COUNTRY_FLAG_TYPE', FatUtility::VAR_STRING, 'round'); ?>/<?php echo $languages[$siteLangId]['language_country_code'] . '.svg'; ?>">
                 <?php } ?>
                 <span>
                     <span class="language-name">
