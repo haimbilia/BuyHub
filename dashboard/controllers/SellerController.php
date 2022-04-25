@@ -2122,17 +2122,23 @@ class SellerController extends SellerBaseController
 
         $this->set('shopLayoutTemplateId', $shopLayoutTemplateId);
 
-        $shop_id = 0;
-        $stateId = 0;
+        $shop_id = 0;       
 
         if (!false == $shopDetails) {
-            $shop_id = $shopDetails['shop_id'];
-            $stateId = $shopDetails['shop_state_id'];
+            $shop_id = $shopDetails['shop_id'];           
         }
 
         $shopLogoFrm = $this->getShopLogoForm($shop_id, $this->siteLangId);
         $shopBannerFrm = $this->getShopBannerForm($shop_id, $this->siteLangId);
         $shopBackgroundImageFrm = $this->getBackgroundImageForm($shop_id, $this->siteLangId);
+
+        $getShopDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_SHOP_BANNER);
+        $getShopLogoSquare = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE);
+        $getShopLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_RECTANGULAR);
+
+        $this->set('getShopDimensions', $getShopDimensions);
+        $this->set('getShopLogoSquare', $getShopLogoSquare);
+        $this->set('getShopLogoRactangle', $getShopLogoRactangle);
 
         $this->set('shopDetails', $shopDetails);
         $this->set('shopLogoFrm', $shopLogoFrm);
@@ -3687,13 +3693,12 @@ class SellerController extends SellerBaseController
             $frm->addHiddenField('', 'lang_id', $langId);
         }
 
-
-        $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
+        $ratioArr = AttachedFile::getRatioTypeWithCustom($this->siteLangId);       
         $frm->addRadioButtons(Labels::getLabel('FRM_RATIO', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE, array('class' => 'list-inline'));
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_SHOP_LOGO);
         $frm->addHiddenField('', 'logo_min_width');
         $frm->addHiddenField('', 'logo_min_height');
-        //$frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'shop_logo', array('accept' => 'image/*', 'data-frm' => 'frmShopLogo'));
+        
         $frm->addHTML('', 'shop_logo', '');
         return $frm;
     }

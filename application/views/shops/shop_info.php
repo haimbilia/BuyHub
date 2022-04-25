@@ -1,12 +1,8 @@
 <?php if (isset($shop)) { ?>
     <div class="shop-information">
         <div class="shop-information-start">
-            <div class="shop-information-logo">
-                <?php
-                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shop['shop_id'], 0, 0, false);
-                $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-                ?>
-                <img width="" height="" <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $shop['shop_name']; ?>">
+            <div class="shop-information-logo">                
+                <img src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $shop['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB);?>>
             </div>
             <div class="shop-information-detail">
                 <h6 class="title">
