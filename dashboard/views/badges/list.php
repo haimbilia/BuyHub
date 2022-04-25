@@ -6,7 +6,7 @@ $listingLabel = $badgeLbl ? Labels::getLabel('LBL_BADGES_LIST', $siteLangId) : L
 
 if (!empty($frmSearch)) {
     $frmSearch->setFormTagAttribute('onSubmit', 'searchRecords(this); return(false);');
-    $frmSearch->setFormTagAttribute('class', 'form formSearch--js');
+    $frmSearch->setFormTagAttribute('class', 'form form-search formSearch--js');
     $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
     $frmSearch->developerTags['fld_default_col'] = 4;
 
