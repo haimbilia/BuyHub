@@ -3,10 +3,7 @@
 class SellerController extends SellerBaseController
 {
     use RecordOperations;
-
-    // use Attributes;
-    use Options;
-    //use CustomProducts;
+    use Options;   
     use SellerProducts;
     use SellerCollections;
     use SellerUsers;
@@ -728,24 +725,17 @@ class SellerController extends SellerBaseController
         $rs = $srch->getResultSet();
 
         $orderDetail = FatApp::getDb()->fetch($rs);
-
         if (!$orderDetail) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
-        }
-
-        $charges = $orderObj->getOrderProductChargesArr($op_id);
-        $orderDetail['charges'] = $charges;
-
-        $data = array('ossubs_id' => $ossubs_id, 'ossubs_status_id' => $orderDetail['ossubs_status_id']);
-        //    $frm = $this->getOrderCommentsForm($orderDetail,$processingStatuses);
-        //$frm->fill($data);
+        } 
+        
+        $oSubObj = new OrderSubscription();
+        $orderDetail['charges'] = $oSubObj->getOrderSubscriptionChargesArr($op_id);
 
         $this->set('orderDetail', $orderDetail);
         $this->set('orderStatuses', $orderStatuses);
-        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
-        //$this->set('frm', $frm);
-        //    $this->set('displayForm',(in_array($orderDetail['op_status_id'],$processingStatuses)));
+        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));  
         $this->_template->render(true, true);
     }
 

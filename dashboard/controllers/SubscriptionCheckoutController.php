@@ -632,8 +632,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $srch->addCondition('ossubs_till_date', '<=', $endDate);
         $srch->addCondition('ossubs_till_date', '!=', '0000-00-00');
         $srch->addCondition('user_autorenew_subscription', '!=', 1);
-        $srch->addMultipleFields(array('order_user_id', 'order_id', 'order_number', 'ossubs_id', 'ossubs_type', 'ossubs_price', 'ossubs_images_allowed', 'ossubs_products_allowed', 'ossubs_inventory_allowed', 'ossubs_plan_id', 'ossubs_interval', 'ossubs_frequency', 'ossubs_commission'));
-        /* $srch->addGroupBy('order_user_id');  */
+        $srch->addMultipleFields(array('order_user_id', 'order_id', 'order_number', 'ossubs_id', 'ossubs_type', 'ossubs_price', 'ossubs_images_allowed', 'ossubs_products_allowed', 'ossubs_inventory_allowed', 'ossubs_plan_id', 'ossubs_interval', 'ossubs_frequency', 'ossubs_commission'));  
         $srch->addOrder('ossubs_id', 'desc');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -668,8 +667,6 @@ class SubscriptionCheckoutController extends LoggedUserController
         $orderData['order_payment_status'] = Orders::ORDER_PAYMENT_PENDING;
         $orderData['order_date_added'] = date('Y-m-d H:i:s');
         $orderData['order_type'] = Orders::ORDER_SUBSCRIPTION;
-
-
 
         /* order extras[ */
         $orderData['extra'] = array(
@@ -709,49 +706,30 @@ class SubscriptionCheckoutController extends LoggedUserController
 
         $orderData['order_user_comments'] = '';
         $orderData['order_admin_comments'] = '';
-
         $orderData['order_reward_point_used'] = 0;
         $orderData['order_reward_point_value'] = 0;
-
-
-
-
         $orderData['order_net_amount'] = $activeSub['ossubs_price'];
         $orderData['order_wallet_amount_charge'] = $activeSub['ossubs_price'];
 
         // Discussin Required
         $orderData['order_cart_data'] = '';
 
-        $allLanguages = Language::getAllNames();
-        //$productSelectedShippingMethodsArr = $this->cartObj->getProductShippingMethod();
+        $allLanguages = Language::getAllNames();   
 
         $orderLangData = array();
-
         $orderData['orderLangData'] = $orderLangData;
-
-
-
 
         $subscriptionLangData = array();
         foreach ($allLanguages as $lang_id => $language_name) {
             $subscriptionInfo = OrderSubscription::getAttributesByLangId($lang_id, $activeSub['ossubs_id']);
-
-
             $op_subscription_title = $subscriptionInfo['ossubs_subscription_name'];
-
-
-
             $subscriptionLangData[$lang_id] = array(
                 'ossubslang_lang_id' => $lang_id,
                 'ossubs_subscription_name' => $op_subscription_title,
-
-
             );
         }
 
         $orderData['subscriptions'][SubscriptionCart::SUBSCRIPTION_CART_KEY_PREFIX_PRODUCT . $activeSub['ossubs_plan_id']] = array(
-
-
             OrderSubscription::DB_TBL_PREFIX . 'price' => $activeSub['ossubs_price'],
             OrderSubscription::DB_TBL_PREFIX . 'images_allowed' => $activeSub['ossubs_images_allowed'],
             OrderSubscription::DB_TBL_PREFIX . 'products_allowed' => $activeSub['ossubs_products_allowed'],
@@ -762,22 +740,14 @@ class SubscriptionCheckoutController extends LoggedUserController
             OrderSubscription::DB_TBL_PREFIX . 'frequency' => $activeSub['ossubs_frequency'],
             OrderSubscription::DB_TBL_PREFIX . 'commission' => $activeSub['ossubs_commission'],
             OrderSubscription::DB_TBL_PREFIX . 'status_id' => FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"),
-
             'subscriptionsLangData' => $subscriptionLangData,
         );
-
-        $adjustAmount = 0;
-        $discount = 0;
-        $rewardPoints = 0;
-        $usedRewardPoint = 0;
-
-        //CommonHelper::printArray($cartSubscription); die();
+       
         $orderData['subscrCharges'][SubscriptionCart::SUBSCRIPTION_CART_KEY_PREFIX_PRODUCT . $activeSub['ossubs_plan_id']] = array(
 
             OrderProduct::CHARGE_TYPE_DISCOUNT => array(
                 'amount' => 0 /*[Should be negative value]*/
             ),
-
 
             OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT => array(
                 'amount' => 0 /*[Should be negative value]*/
@@ -785,15 +755,11 @@ class SubscriptionCheckoutController extends LoggedUserController
             OrderProduct::CHARGE_TYPE_ADJUST_SUBSCRIPTION_PRICE => array(
                 'amount' => 0 /*[Should be negative value]*/
             ),
-
-
-
         );
         /* [ Add order Type[ */
         $orderData['order_type'] = Orders::ORDER_SUBSCRIPTION;
         $orderData['order_renew'] = 1;
-
-        /* ] */
+   
         $orderObj = new Orders();
         if ($orderObj->addUpdateOrder($orderData, $this->siteLangId)) {
             $order_id = $orderObj->getOrderId();
@@ -806,8 +772,5 @@ class SubscriptionCheckoutController extends LoggedUserController
         }
         Message::addErrorMessage($orderObj->getError());
         FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'subscriptions'));
-
-        /* ] */
-        /* ] */
     }
 }

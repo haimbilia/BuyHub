@@ -105,9 +105,7 @@ class OrderSubscription extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-
             OrderProduct::CHARGE_TYPE_DISCOUNT => Labels::getLabel('LBL_ORDER_PRODUCT_DISCOUNT_CHARGES', $langId),
-
             OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT => Labels::getLabel('LBL_ORDER_PRODUCT_REWARD_POINT', $langId),
             OrderProduct::CHARGE_TYPE_ADJUST_SUBSCRIPTION_PRICE => Labels::getLabel('LBL_ORDER_ADJUSTMENT', $langId),
 
@@ -143,15 +141,13 @@ class OrderSubscription extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(array(Orders::DB_TBL_CHARGES_PREFIX . 'type', Orders::DB_TBL_CHARGES_PREFIX . 'amount'));
         $srch->addCondition(Orders::DB_TBL_CHARGES_PREFIX . 'op_id', '=', $ossubs_id);
-        $srch->addCondition(Orders::DB_TBL_CHARGES_PREFIX . 'order_type', '=', Orders::ORDER_SUBSCRIPTION);
-        $rs = $srch->getResultSet();
-        return $row = FatApp::getDb()->fetchAll($rs, Orders::DB_TBL_CHARGES_PREFIX . 'type');
+        $srch->addCondition(Orders::DB_TBL_CHARGES_PREFIX . 'order_type', '=', Orders::ORDER_SUBSCRIPTION);     
+        return FatApp::getDb()->fetchAll($srch->getResultSet(), Orders::DB_TBL_CHARGES_PREFIX . 'type');
     }
 
     public static function searchOrderSubscription($criteria = array(), $langId = 0)
     {
         $srch = new OrderSubscriptionSearch();
-
 
         foreach ($criteria as $key => $val) {
             if (strval($val) == '') {
@@ -228,10 +224,10 @@ class OrderSubscription extends MyAppModel
         $price = $plan['ossubs_price'];
 
         $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($langId);
-        $price = (true === $includeAmount ? CommonHelper::displayMoneyFormat($price) . " /  " : '');
+        $price = (true === $includeAmount ? CommonHelper::displayMoneyFormat($price) : '');
 
         if ($plan['ossubs_frequency'] == SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED) {
-            return $price . $subcriptionPeriodArr[$plan['ossubs_frequency']];
+            return $price ." / ". $subcriptionPeriodArr[$plan['ossubs_frequency']];
         }
         $planText = ($plan['ossubs_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_PER", $langId) : Labels::getLabel("LBL_FOR", $langId);
 

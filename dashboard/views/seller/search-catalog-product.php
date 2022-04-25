@@ -119,6 +119,22 @@
                             );
                         }
 
+                        if (1 > $row['product_seller_id'] && $row['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                            $li = $ul->appendElement("li");
+                            $li->appendElement(
+                                'a',
+                                array('href' => 'javascript:void(0)', 'onclick' => 'fileLinkForm(' . $row['product_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_LINK_OR_FILES', $siteLangId), true),
+                                '<i class="icn">
+                                <svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#icon-download">
+                                    </use>
+                                </svg>
+                            </i>',
+                                true
+                            );
+                        }
+
                         if (0 != $row['product_seller_id']) {
                             $li = $ul->appendElement("li");
                             $li->appendElement('a', array('class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "href" => UrlHelper::generateUrl('products', 'form', array($row['product_id']))), '<i class="icn">

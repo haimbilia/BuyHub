@@ -510,15 +510,13 @@ class CommonHelper extends FatUtility
 
         if (empty($opArr)) {
             trigger_error('Order Product Array should not be empty', E_USER_ERROR);
-        }
-
-        $cartTotal = $opArr['ossubs_price'];
+        }        
 
         switch (strtoupper($amountType)) {
             case 'NETAMOUNT':
+                $cartTotal = $opArr['ossubs_price'];
                 $amount = $cartTotal + $opArr['op_other_charges'];
                 break;
-
             case 'REWARDPOINT':
                 $amount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT]['opcharge_amount'] : 0;
                 break;
@@ -529,6 +527,7 @@ class CommonHelper extends FatUtility
                 $amount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_ADJUST_SUBSCRIPTION_PRICE]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_ADJUST_SUBSCRIPTION_PRICE]['opcharge_amount'] : 0;
                 break;
             case 'CART_TOTAL':
+                $cartTotal = $opArr['ossubs_price'];
                 $amount = $cartTotal;
                 break;
         }

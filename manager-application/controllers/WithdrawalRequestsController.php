@@ -59,13 +59,7 @@ class WithdrawalRequestsController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_USER_NAME_OR_EMAIL', $this->siteLangId));
         $this->getListingData(false);
-
-        $data = FatApp::getPostedData();
-        if ($data) {
-            $data['withdrawal_id'] = $data['id'];
-            unset($data['id']);
-            $frmSearch->fill($data);
-        }
+        
         $this->_template->addJs('withdrawal-requests/page-js/index.js');
         $this->includeFeatherLightJsCss();
         $this->_template->render(true, true, '_partial/listing/index.php');

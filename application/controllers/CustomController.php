@@ -583,8 +583,8 @@ class CustomController extends MyAppController
             // CommonHelper::printArray($orderFulFillmentTypeArr, true);
         } elseif ($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             $searchReplaceArray = array(
-                '{account}' => '<a href="' . UrlHelper::generateUrl('seller') . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
-                '{subscription}' => '<a href="' . UrlHelper::generateUrl('seller', 'subscriptions') . '" class="link">' . Labels::getLabel('MSG_MY_SUBSCRIPTION', $this->siteLangId) . '</a>',
+                '{account}' => '<a href="' . UrlHelper::generateUrl('seller','',[], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
+                '{subscription}' => '<a href="' . UrlHelper::generateUrl('seller', 'subscriptions',[], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_MY_SUBSCRIPTION', $this->siteLangId) . '</a>',
             );
             $textMessage = Labels::getLabel('MSG_SUBSCRIPTION_SUCCESS_ORDER_{account}_{subscription}', $this->siteLangId);
             $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);
