@@ -15,8 +15,6 @@
     <div class="content-body">
         <div class="card">
             <div class="card-body">
-
-
                 <ul class="list-stats list-stats-double">
                     <li class="list-stats-item">
                         <span class="label"><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?>: </span>
@@ -27,46 +25,58 @@
                             <?php echo Labels::getLabel('LBL_Invoice', $siteLangId); ?> #:</span>
                         <span class="value"><?php echo $orderDetail['order_number']; ?></span>
                     </li>
-
                     <li class="list-stats-item">
                         <span class="label"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?>:</span>
-                        <span class="value"><?php if ($orderDetail['ossubs_status_id'] == FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') && $orderDetail['ossubs_till_date'] < date("Y-m-d")) {
-                                                echo Labels::getLabel('LBL_Expired', $siteLangId);
-                                            } else {
-                                                echo $orderStatuses[$orderDetail['ossubs_status_id']];
-                                            } ?></span>
+                        <span class="value">
+                            <?php if ($orderDetail['ossubs_status_id'] == FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') && $orderDetail['ossubs_till_date'] < date("Y-m-d")) {
+                                echo Labels::getLabel('LBL_Expired', $siteLangId);
+                            } else {
+                                echo $orderStatuses[$orderDetail['ossubs_status_id']];
+                            } ?>
+                        </span>
                     </li>
-
                     <li class="list-stats-item">
                         <span class="label"><?php echo Labels::getLabel('LBL_Date', $siteLangId); ?>: </span>
-                        <span class="value"><?php echo FatDate::format($orderDetail['order_date_added']); ?></span>
+                        <span class="value"><?php echo FatDate::format($orderDetail['order_date_added'], true); ?></span>
                     </li>
-
-
-
-
+                    <li class="list-stats-item">
+                        <span class="label">
+                            <?php echo Labels::getLabel('LBL_Product_Upload_Limit', $siteLangId); ?>:</span>
+                        <span class="value"><?php echo $orderDetail['ossubs_products_allowed']; ?></span>
+                    </li>
+                    <li class="list-stats-item">
+                        <span class="label">
+                            <?php echo Labels::getLabel('LBL_Inventory_Upload_Limit', $siteLangId); ?>:</span>
+                        <span class="value"><?php echo $orderDetail['ossubs_inventory_allowed']; ?></span>
+                    </li>
+                    <li class="list-stats-item">
+                        <span class="label">
+                            <?php echo Labels::getLabel('LBL_Images_Limit', $siteLangId); ?>:</span>
+                        <span class="value"><?php echo $orderDetail['ossubs_images_allowed']; ?></span>
+                    </li>
                 </ul>
-
-
             </div>
             <div class="card-table">
+
+                <?php 
+                    $adjustedAmount = CommonHelper::orderSubscriptionAmount($orderDetail, 'ADJUSTEDAMOUNT');
+                ?>
 
                 <div class="js-scrollable table-wrap">
                     <table class="table">
                         <thead>
-                            <tr class="">
-                                <th><?php echo Labels::getLabel('LBL_Date_Added', $siteLangId); ?></th>
+                            <tr class="">                              
                                 <th><?php echo Labels::getLabel('LBL_Subscription_Name', $siteLangId); ?></th>
                                 <th><?php echo Labels::getLabel('LBL_Subscription_Period', $siteLangId); ?></th>
-                                <th><?php echo Labels::getLabel('LBL_Subscription_Amount', $siteLangId); ?></th>
-                                <th><?php echo Labels::getLabel('LBL_Product_Upload_Limit', $siteLangId); ?></th>
-                                <th><?php echo Labels::getLabel('LBL_Inventory_Upload_Limit', $siteLangId); ?></th>
-                                <th><?php echo Labels::getLabel('LBL_Images_Limit', $siteLangId); ?></th>
+                                <th><?php echo Labels::getLabel('LBL_Subscription_Amount', $siteLangId); ?></th>  
+                                <?php if($adjustedAmount != 0){ ?>
+                                    <th><?php echo Labels::getLabel('LBL_ADJUSTED_AMOUNT', $siteLangId); ?></th>        
+                                <?php } ?>     
+                                <th><?php echo Labels::getLabel('LBL_PAID_AMOUNT', $siteLangId); ?></th> 
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><?php echo FatDate::format($orderDetail['order_date_added'], true); ?></td>
                                 <td><?php echo OrderSubscription::getSubscriptionTitle($orderDetail, $siteLangId); ?></td>
                                 <td>
                                     <?php if ($orderDetail['ossubs_from_date'] == 0 || $orderDetail['ossubs_till_date'] == 0) {
@@ -76,9 +86,10 @@
                                     } ?>
                                 </td>
                                 <td><?php echo CommonHelper::displayMoneyFormat($orderDetail['ossubs_price']); ?></td>
-                                <td><?php echo $orderDetail['ossubs_products_allowed']; ?></td>
-                                <td><?php echo $orderDetail['ossubs_inventory_allowed']; ?></td>
-                                <td><?php echo $orderDetail['ossubs_images_allowed']; ?></td>
+                                <?php if($adjustedAmount != 0){ ?>
+                                    <td><?php echo CommonHelper::displayMoneyFormat($adjustedAmount); ?></td>
+                                <?php } ?>
+                                <td><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderSubscriptionAmount($orderDetail, 'NETAMOUNT')); ?></td>                     
                             </tr>
                         </tbody>
                     </table>

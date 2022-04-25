@@ -24,7 +24,8 @@ class SubscriptionOrdersController extends ListingBaseController
         $srch->addMultipleFields(
             array(
                 'order_number', 'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
-                'ou.user_name as buyer_user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone_dcode as buyer_phone_dcode', 'ou.user_phone as buyer_phone', 'order_net_amount',   'order_pmethod_id', 'plugin_name', 'order_discount_total', 'order_deleted', 'plugin_code', 'order_rounding_off', 'order_reward_point_value'
+                'ou.user_name as buyer_user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone_dcode as buyer_phone_dcode', 'ou.user_phone as buyer_phone',
+                'order_net_amount',   'order_pmethod_id', 'plugin_name', 'order_discount_total', 'order_deleted', 'plugin_code', 'order_rounding_off', 'order_reward_point_value'
             )
         );
         $srch->addCondition('order_id', '=', $orderId);
@@ -50,13 +51,12 @@ class SubscriptionOrdersController extends ListingBaseController
         $opSrch->addMultipleFields(
             array(
                 'ossubs_id', 'ossubs_invoice_number', 'ossubs_price', 'ossubs_type', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class',
-                'ossubs_frequency', 'ossubs_subscription_name,ossubs_interval', 'ossubs_status_id', 'ossubs_till_date', 'ossubs_from_date', 'ossubs_products_allowed', 'ossubs_inventory_allowed', 'ossubs_images_allowed'
+                'ossubs_frequency', 'ossubs_subscription_name,ossubs_interval', 'ossubs_status_id', 'ossubs_till_date', 'ossubs_from_date', 'ossubs_products_allowed', 'ossubs_inventory_allowed',
+                'ossubs_images_allowed'
             )
         );
 
-        $opRs = $opSrch->getResultSet();
-
-        $this->order['items'] = FatApp::getDb()->fetchAll($opRs, 'ossubs_id');
+        $this->order['items'] = FatApp::getDb()->fetchAll($opSrch->getResultSet(), 'ossubs_id');
         $orderObj = new Orders($this->order['order_id']);
         $this->order['comments'] = $orderObj->getOrderComments($this->siteLangId, array("order_id" => $this->order['order_id']));
         $this->order['payments'] = $orderObj->getOrderPayments(array("order_id" => $this->order['order_id']));
