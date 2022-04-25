@@ -477,7 +477,7 @@ class AffiliateController extends AffiliateBaseController
         $frm->addHiddenField('', 'total_record_count', '');
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
 
         return $frm;
     }

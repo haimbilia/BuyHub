@@ -102,46 +102,52 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                     </div>
                 <?php } else if (1 == $extraFldCount) { ?>
                     <div class="col-md-4">
-                        <?php if (null != $keyWordFld) {
-                            $fld = $frmSearch->getField('keyword');
-                            $fld->setFieldtagAttribute('autocomplete', 'off');
-                            $fld->setFieldtagAttribute('title', $fld->getFieldtagAttribute('placeholder'));
-                            echo $frmSearch->getFieldHtml('keyword');
-                        } else {
-                            $fld = $frmSearch->getField($firstElement['name']);
-                            $fld->setFieldtagAttribute('autocomplete', 'off');
+                        <div class="form-group">
+                            <?php if (null != $keyWordFld) {
+                                $fld = $frmSearch->getField('keyword');
+                                $fld->setFieldtagAttribute('autocomplete', 'off');
+                                $fld->setFieldtagAttribute('title', $fld->getFieldtagAttribute('placeholder'));
+                                echo $frmSearch->getFieldHtml('keyword');
+                            } else {
+                                $fld = $frmSearch->getField($firstElement['name']);
+                                $fld->setFieldtagAttribute('autocomplete', 'off');
 
+                                $class = (string) $fld->getFieldtagAttribute('class');
+                                $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
+                                $class = ltrim($class, ' ');
+                                $fld->setFieldtagAttribute('class', $class);
+                                if (!$fld->getFieldtagAttribute('placeholder')) {
+                                    $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
+                                }
+                                $fld->setFieldtagAttribute('title', $fld->getFieldtagAttribute('placeholder'));
+                                echo $frmSearch->getFieldHtml($firstElement['name']);
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <?php
+                            $flds = current($frmFields['advSrchFlds'][0]);
+                            $fld = $frmSearch->getField($flds['name']);
                             $class = (string) $fld->getFieldtagAttribute('class');
                             $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
                             $class = ltrim($class, ' ');
                             $fld->setFieldtagAttribute('class', $class);
+
                             if (!$fld->getFieldtagAttribute('placeholder')) {
-                                $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
+                                $fld->setFieldtagAttribute('placeholder', $flds['caption']);
                             }
                             $fld->setFieldtagAttribute('title', $fld->getFieldtagAttribute('placeholder'));
-                            echo $frmSearch->getFieldHtml($firstElement['name']);
-                        }
-                        ?>
-                    </div>
-                    <div class="col-md-4">
-                        <?php
-                        $flds = current($frmFields['advSrchFlds'][0]);
-                        $fld = $frmSearch->getField($flds['name']);
-                        $class = (string) $fld->getFieldtagAttribute('class');
-                        $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
-                        $class = ltrim($class, ' ');
-                        $fld->setFieldtagAttribute('class', $class);
-
-                        if (!$fld->getFieldtagAttribute('placeholder')) {
-                            $fld->setFieldtagAttribute('placeholder', $flds['caption']);
-                        }
-                        $fld->setFieldtagAttribute('title', $fld->getFieldtagAttribute('placeholder'));
-                        echo $frmSearch->getFieldHtml($flds['name']); ?>
+                            echo $frmSearch->getFieldHtml($flds['name']); ?>
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="btn-group">
-                            <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                            <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                        <div class="form-group">
+                            <div class="btn-group">
+                                <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                                <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
+                            </div>
                         </div>
                     </div>
                 <?php } else { ?>

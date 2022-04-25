@@ -101,7 +101,7 @@ class LoggedUserController extends DashboardBaseController
         $frm->addDateField(Labels::getLabel('FRM_TO_DATE', $langId), 'ocrequest_date_to', '', array('readonly' => 'readonly'));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
         return $frm;
     }
 
@@ -122,7 +122,7 @@ class LoggedUserController extends DashboardBaseController
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $langId), 'orrequest_date_to', '', array('readonly' => 'readonly'));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-gray');
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
         return $frm;
     }
 
