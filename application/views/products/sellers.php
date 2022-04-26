@@ -47,7 +47,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                             <div class="seller-card">
                                 <div class="seller-card-head">
                                     <a title="<?php echo $moresellers['shop_name']; ?>" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($moresellers['shop_id'])); ?>">
-                                        <img class="seller-logo" data-ratio="" src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($moresellers['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $moresellers['shop_name']; ?>">
+                                        <img class="seller-logo"  src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($moresellers['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $moresellers['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB);?>>
                                     </a>
                                 </div>
                                 <div class="seller-card-body">

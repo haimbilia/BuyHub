@@ -610,7 +610,7 @@ $(document).on("change", ".state", function () {
                 var minWidth = document.frmShopBanner.banner_min_width.value;
                 var minHeight = document.frmShopBanner.banner_min_height.value;
                 var options = {
-                    aspectRatio: aspectRatio,
+                    aspectRatio: minWidth/minHeight,
                     data: {
                         width: minWidth,
                         height: minHeight,

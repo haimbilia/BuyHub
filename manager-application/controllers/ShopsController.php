@@ -232,17 +232,12 @@ class ShopsController extends ListingBaseController
             $shopLayoutTemplateId = 10001;
         }
         $getShopDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_SHOP_BANNER);
-
         $getShopLogoSquare = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE);
-
         $getShopLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_RECTANGULAR);
-
 
         $this->set('getShopDimensions', $getShopDimensions);
         $this->set('getShopLogoSquare', $getShopLogoSquare);
         $this->set('getShopLogoRactangle', $getShopLogoRactangle);
-
-
 
         $shopDetails['ratio_type'] = AttachedFile::RATIO_TYPE_SQUARE;
         if (0 < $shop_id) {
@@ -383,7 +378,7 @@ class ShopsController extends ListingBaseController
             $land_id = array_key_first($bannerTypeArr);
             $frm->addHiddenField('', 'lang_id', $land_id);
         }
-        $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
+        $ratioArr = AttachedFile::getRatioTypeWithCustom($this->siteLangId);
         $frm->addRadioButtons(Labels::getLabel('FRM_RATIO', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_SHOP_LOGO);
         $frm->addHiddenField('', 'min_width');

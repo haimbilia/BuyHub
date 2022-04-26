@@ -174,8 +174,6 @@ class ImageController extends FatController
         $aspectRatioType = $file_row['afile_aspect_ratio'];
         $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
 
-
-
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, $sizeType, $aspectRatioType);
 
         if ($sizeType) {
@@ -185,6 +183,7 @@ class ImageController extends FatController
         }
     }
 
+    /*
     public function promotion_banner($image_name = '', $sizeType)
     {
         $default_image = 'product_default_image.jpg';
@@ -197,6 +196,7 @@ class ImageController extends FatController
                 return AttachedFile::displayImage($image_name, 50, 50, $default_image);
         }
     }
+    */
 
     public function shopBanner($recordId, $lang_id = 0, $sizeType = '', $afile_id = 0, $screen = 0)
     {

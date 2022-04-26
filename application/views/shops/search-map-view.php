@@ -10,7 +10,7 @@ if (!empty($allShops)) {
                 <ul class="gmap-list">
                     <li>
                         <div class="product-profile">
-                            <div class="product-profile-thumbnail"><img class="product-img" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg') . '" alt="' . $shop['shop_name'] . '"></div>
+                            <div class="product-profile-thumbnail"><img class="product-img" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg') . '" alt="' . $shop['shop_name'] . '" '. HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB).'></div>
                             <div class="product-profile-data"><div class="title"><a href="' . UrlHelper::generateUrl('shops', 'view', array($shop['shop_id']), '', null, false, false, true, true) . '"><strong>' . $shop['shop_name'] . '</strong></a></div></div>
                         </div>
                     </li>
@@ -24,12 +24,8 @@ if (!empty($allShops)) {
             ?>
                 <li class="stores-item" data-shopId="<?php echo $shop['shop_id']; ?>">
                     <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($shop['shop_id']), '', null, false, false, true, true); ?>">
-                        <div class="stores-photo">
-                            <?php
-                            $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shop['shop_id'], 0, 0, false);
-                            $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-                            ?>
-                            <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shop['shop_name']; ?>">
+                        <div class="stores-photo">            
+                            <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shop['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB);?>>
                         </div>
                         <div class="stores-detail">
                             <h6 class="stores-name"><?php echo $shop['shop_name']; ?></h6>
