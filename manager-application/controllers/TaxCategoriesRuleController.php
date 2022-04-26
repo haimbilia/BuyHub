@@ -369,6 +369,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         $fld->requirements()->setRequired();
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_FROM_STATE', $this->siteLangId), 'taxruleloc_from_state_id[]', array(), '', array(), '');
         $fld->requirements()->setRequired();
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_HOLD_DOWN_THE_CTRL_(WINDOWS)_OR_COMMAND_(MAC)_BUTTON_TO_SELECT_MULTIPLE_OPTIONS.', $this->siteLangId) . '</span>';
 
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_TO_COUNTRY', $this->siteLangId), 'taxruleloc_to_country_id', $countriesOptions, '', array(), Labels::getLabel('FRM_SELECT_COUNTRY', $this->siteLangId));
         $fld->requirements()->setRequired();
@@ -377,6 +378,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         $fld->requirements()->setRequired();
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_TO_STATES', $this->siteLangId), 'taxruleloc_to_state_id[]', array(), '', array(), '');
         $fld->requirements()->setRequired();
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_HOLD_DOWN_THE_CTRL_(WINDOWS)_OR_COMMAND_(MAC)_BUTTON_TO_SELECT_MULTIPLE_OPTIONS.', $this->siteLangId) . '</span>';
         /* ] */
 
         $taxStructures = TaxStructure::getAllAssoc($this->siteLangId);
