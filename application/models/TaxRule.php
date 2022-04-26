@@ -26,8 +26,7 @@ class TaxRule extends MyAppModel
      */
     public static function getSearchObject(): object
     {
-        $srch = new SearchBase(static::DB_TBL, 'taxRule');
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'taxRule');
     }
 
     /**
@@ -36,8 +35,7 @@ class TaxRule extends MyAppModel
      */
     public static function getCombinedTaxSearchObject(): object
     {
-        $srch = new SearchBase(static::DB_DETAIL_TBL, 'tc');
-        return $srch;
+        return new SearchBase(static::DB_DETAIL_TBL, 'tc');
     }
 
     /**
