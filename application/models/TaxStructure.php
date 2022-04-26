@@ -45,7 +45,7 @@ class TaxStructure extends MyAppModel
      *
      * @param  int $langId
      * @param  bool $onlyParent
-     * @return object
+     * @return array
      */
     public static function getAllAssoc($langId, $onlyParent = true): array
     {
@@ -64,7 +64,7 @@ class TaxStructure extends MyAppModel
      * getCombinedTaxes
      *
      * @param  int $parentId
-     * @return object
+     * @return array
      */
     public function getCombinedTaxes($parentId): array
     {

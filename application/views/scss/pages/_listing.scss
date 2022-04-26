@@ -74,6 +74,9 @@
         padding: 0;
         line-height: 1;
         display: block;
+        @include media-breakpoint-down(md) {
+            flex: 1;
+        }
     }
 }
 
@@ -123,6 +126,7 @@
     }
 }
 .btn-map-view {
+    white-space: nowrap;
     display: flex;
     align-items: center;
     .toggle-icon {
@@ -186,7 +190,7 @@
     position: fixed;
     bottom: 85px;
     #{$end-direction}: 10px;
-    z-index: 1051;
+    z-index: $zindex-sticky;
     border-radius: 50%;
     border: none;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);

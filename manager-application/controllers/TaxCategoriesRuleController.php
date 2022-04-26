@@ -108,7 +108,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
         $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxstr_id = taxrule_taxstr_id');
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $this->siteLangId);
-        $srch->joinTable(Tax::DB_TBL, 'INNER JOIN', 'taxcat_id = taxrule_taxcat_id');
+        $srch->joinTable(Tax::DB_TBL, 'INNER JOIN', 'taxcat_id = taxrule_taxcat_id AND taxcat_deleted = ' . applicationConstants::NO);
         $srch->joinTable(Tax::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxcat_id = taxcatlang_taxcat_id and taxcatlang_lang_id = ' . $this->siteLangId);
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('taxrule_name', 'LIKE', "%" . $post['keyword'] . "%");
@@ -369,6 +369,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         $fld->requirements()->setRequired();
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_FROM_STATE', $this->siteLangId), 'taxruleloc_from_state_id[]', array(), '', array(), '');
         $fld->requirements()->setRequired();
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_HOLD_DOWN_THE_CTRL_(WINDOWS)_OR_COMMAND_(MAC)_BUTTON_TO_SELECT_MULTIPLE_OPTIONS.', $this->siteLangId) . '</span>';
 
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_TO_COUNTRY', $this->siteLangId), 'taxruleloc_to_country_id', $countriesOptions, '', array(), Labels::getLabel('FRM_SELECT_COUNTRY', $this->siteLangId));
         $fld->requirements()->setRequired();
@@ -377,6 +378,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         $fld->requirements()->setRequired();
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_TO_STATES', $this->siteLangId), 'taxruleloc_to_state_id[]', array(), '', array(), '');
         $fld->requirements()->setRequired();
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_HOLD_DOWN_THE_CTRL_(WINDOWS)_OR_COMMAND_(MAC)_BUTTON_TO_SELECT_MULTIPLE_OPTIONS.', $this->siteLangId) . '</span>';
         /* ] */
 
         $taxStructures = TaxStructure::getAllAssoc($this->siteLangId);

@@ -1,5 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
 
@@ -17,7 +16,7 @@ if (!empty($ruleLocations)) {
     $typeId = current(array_column($ruleLocations, 'taxruleloc_type'));
 }
 
-
+$frm->setFormTagAttribute('onsubmit', 'saveRecord($("#' . $frm->getFormTagAttribute('id') . '")[0], "editRecord"); return(false);');
 $fromCountryFld = $frm->getField('taxruleloc_from_country_id');
 $fromCountryFld->value = $fromCountryId;
 $fromCountryFld->setFieldTagAttribute('onChange', 'checkStatesDefault(this.value,0,\'#taxruleloc_from_state_id\')');
