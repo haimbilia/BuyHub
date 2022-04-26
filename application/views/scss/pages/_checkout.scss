@@ -72,7 +72,8 @@
 
     &-single {
         grid-template-columns: auto;
-        max-width: 500px; margin: auto;
+        max-width: 500px;
+        margin: auto;
     }
 
     &_main {
@@ -96,7 +97,6 @@
     width: 100%;
 
     &_section {
-
         //margin-bottom: 2rem;
         &:last-child {
             margin: 0;
@@ -353,7 +353,7 @@
                     opacity: 0;
                     z-index: -1;
 
-                    &:checked+.control-label {
+                    &:checked + .control-label {
                         background: $brand-color;
                         border-color: $brand-color;
                         color: $brand-color-inverse;
@@ -770,7 +770,7 @@
     margin-bottom: 1.5rem;
     font-size: 0.8125rem;
 
-    &+& {
+    & + & {
         margin-top: 3.5rem;
     }
 
@@ -1023,7 +1023,8 @@
         font-size: 1.5rem;
     }
 
-    &-body {}
+    &-body {
+    }
 
     .block-cart-detail-top {
         margin-bottom: 0;
@@ -1050,7 +1051,8 @@
 }
 
 //Wallet
-.use-reward-block {}
+.use-reward-block {
+}
 
 .wallet-options {
     color: $txt-body;

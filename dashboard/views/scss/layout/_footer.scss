@@ -18,17 +18,19 @@ $content-space: 3.125rem;
     font-size: 0.8rem;
     display: none;
     @include media-breakpoint-down(lg) {
+        background-color: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(3px);
+        box-shadow: 0 -10px 30px 0 rgba(111, 111, 111, 0.1);
         display: flex;
         align-items: center;
         flex-flow: row nowrap;
         justify-content: space-between;
-        background-color: #fff;
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
         z-index: $zindex-fixed;
-        box-shadow: $shadow-theme;
+        //box-shadow: $shadow-theme;
         &-item {
             flex: 1 1 0%;
             &.active {

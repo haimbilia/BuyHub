@@ -13,9 +13,9 @@
         flex-direction: column;
         margin-bottom: 2rem;
         padding-bottom: 1rem;
-        border-bottom: $border-black;
         margin-top: 1rem;
         @include media-breakpoint-up(lg) {
+            border-bottom: $border-black;
             margin-top: 0;
             flex-direction: row;
         }
@@ -553,5 +553,31 @@
             padding: 0;
             padding-#{$start-direction}: 1.5rem;
         }
+    }
+}
+
+.checkout-bottom {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(3px);
+    box-shadow: 0 -10px 30px 0 rgba(111, 111, 111, 0.1);
+    display: flex;
+    align-items: center;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: calc(#{$zindex-fixed} + 10);
+    padding: 1rem;
+
+    @include media-breakpoint-up(lg) {
+        display: none;
+    }
+    .amount {
+        font-size: 1.1rem;
+        display: flex;
+        flex-direction: column;
+        color: $txt-body;
     }
 }
