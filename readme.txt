@@ -714,6 +714,9 @@ Updates/Fixes :
     => 063752 - Seller: Digital files and digital links of the product are not showing while viewing the marketplace details and adding the inventory at the seller's end, if those are added while adding the product at the admin's end
     => 064045 - Admin: Adjusted amount's details are not showing on the subscription order's details at the admin's end, in case of the admin enabled the "adjust amount" option for the subscription from the settings section
     => 063931 - Admin: Return amount is not showing correctly on the "return order request" page at the admin's end
+    => 064084 - Seller: Net amount is not showing correctly on the order details at the seller's end
+    => 064065 - Admin >> Reports >> Product variants: Advanced search button is not working.
+    => 064051 - Admin: Pagination is not working properly on the product listing page at the admin's end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
