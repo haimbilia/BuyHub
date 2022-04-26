@@ -64,7 +64,7 @@ $card-bg: #fff;
         align-items: flex-start;
         align-content: flex-start;
         @include media-breakpoint-up(md) {
-            align-items: center;
+            //align-items: center;
             align-content: flex-end;
             margin-#{$start-direction}: 2rem;
         }

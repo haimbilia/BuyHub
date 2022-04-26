@@ -1572,3 +1572,13 @@ mark,
 .any-question {
     font-size: 0.85rem;
 }
+
+.badge-image {
+    aspect-ratio: 1/1;
+    border: $border;
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
