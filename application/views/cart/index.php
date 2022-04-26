@@ -76,8 +76,9 @@
 <div class="checkout-bottom">
     <div class="amount">
         <strong>$5856</strong>
-        <a class="link-underline" href="#sticky-summary">View Detail</a>
+        <button class="link-underline" onClick="scrollToPriceSummary();"><?php echo Labels::getLabel('LBL_VIEW_SUMMARY', $siteLangId); ?></a>
     </div>
-    <button class="btn btn-brand btn-wide" type="button" onclick="goToCheckout()"><?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?>
+    <button class="btn btn-brand btn-wide" type="button" onclick="goToCheckout()">
+        <?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?>
     </button>
 </div>
