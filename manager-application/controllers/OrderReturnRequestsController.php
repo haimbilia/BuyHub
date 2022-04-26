@@ -278,6 +278,10 @@ class OrderReturnRequestsController extends ListingBaseController
         if ($attachedFile = AttachedFile::getAttachment(AttachedFile::FILETYPE_BUYER_RETURN_PRODUCT, $recordId)) {
             $this->set('attachedFile', $attachedFile);
         }
+
+        $oObj = new Orders();
+        $charges = $oObj->getOrderProductChargesArr($requestRow['orrequest_op_id']);
+        $requestRow['charges'] = $charges;
         $this->set('order', $requestRow);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
