@@ -216,7 +216,6 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-
     &-item {
         margin-bottom: 1rem;
         padding-bottom: 1rem;
@@ -803,13 +802,14 @@
 
     .shop-detail {
         display: flex;
+        gap: 1rem;
+        flex-direction: column;
         justify-content: space-between;
         //color: $txt-body;
         //flex: 1;
         width: 100%;
         /* flex: 0 0 20%;
        max-width: 20%;*/
-        border-bottom: $border;
 
         .shop-title {
             margin: 0;
@@ -820,7 +820,7 @@
             position: relative;
             display: flex;
             align-items: center;
-
+            border-bottom: $border;
             &:after {
                 content: "";
                 background: $secondary-color;
@@ -847,23 +847,23 @@
     }
 
     .shipping-method {
-        position: absolute;
-        top: auto;
-        #{$end-direction}: 0;
-
+        // position: absolute;
+        // top: auto;
+        // #{$end-direction}: 0;
         &_messages {
             font-size: inherit;
         }
-
         .form-control {
+            height: 50px;
+            border: $border;
             font-size: inherit;
-            border: none;
-            border-radius: 0px;
-            padding: 0;
-            padding-#{$start-direction}: 10px;
-            padding-#{$end-direction}: 2rem;
-            height: auto;
-            background-color: transparent;
+            border-radius: 0;
+
+            // padding: 0;
+            // padding-#{$start-direction}: 10px;
+            // padding-#{$end-direction}: 2rem;
+            //height: auto;
+            // background-color: transparent;
         }
     }
 }
