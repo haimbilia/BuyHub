@@ -28,7 +28,6 @@ foreach ($arrListing as $sn => $row) {
                     'siteLangId' => $siteLangId,
                     'href' => $href,
                     'onclick' => $onclick,
-                    'displayEmail' => false,
                     'userTitleClass' => 'text-muted'
                 ], false, true);
                 $td->appendElement('plaintext', $tdAttr, $str, true);
