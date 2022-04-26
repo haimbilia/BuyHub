@@ -188,7 +188,7 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
                         <div class="">
                             <?php $this->includeTemplate('products/products-list.php', $productsData, false); ?>
                         </div>
-                        <button class="btn btn-float link__filter btn--filters-control" data-trigger="collection-sidebar">
+                        <button class="btn btn-float link__filter btn--filters-control" data-bs-toggle="offcanvas" data-bs-target="#filters-right" aria-controls="filters-right">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter"></use>
                             </svg>
