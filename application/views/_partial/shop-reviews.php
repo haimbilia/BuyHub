@@ -51,7 +51,7 @@ if (!empty($reviews)) {
                                     <?php if (false === $shopView && !empty($shop)) { ?>
                                         <div class="product-card-start">
                                             <div class="product-card-img">  
-                                                    <img alt="<?php echo $shop['shop_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
+                                                    <img alt="<?php echo $shop['shop_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)), CONF_IMG_CACHE_TIME, '.jpg'); ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB);?> >
                                             </div>
                                         </div>
                                         <?php } ?>

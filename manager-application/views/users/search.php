@@ -25,7 +25,7 @@ foreach ($arrListing as $sn => $row) {
                     $row['extra_text'] = CommonHelper::replaceStringData($str, ['{SHOP}' => $row['shop_name']]);
                     $title = Labels::getLabel('LBL_CLICK_HERE_TO_VISIT_SHOP_LIST', $siteLangId);
                 }
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'addVerifiedBadge' => true, 'siteLangId' => $siteLangId, 'onclick' => $onclick, 'title' => $title], false, true);
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'addVerifiedBadge' => true, 'siteLangId' => $siteLangId, 'onclick' => $onclick, 'title' => $title , 'emailOnClick' => 'sendMailToUser(' . $row['user_id'] . ')'], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'credential_active':
@@ -98,24 +98,7 @@ foreach ($arrListing as $sn => $row) {
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_LOGIN_TO_USER_PROFILE', $siteLangId),
                         ]
-                    ];
-
-
-                    if (!empty($row['credential_email'])) {
-                        $data['dropdownButtons']['otherButtons'][] = [
-                            'attr' => [
-                                'href' => 'javascript:void(0)',
-                                'onclick' => 'sendMailToUser(' . $row['user_id'] . ')',
-                            ],
-                            'label' => '<i class="icn">
-                                            <svg class="svg" width="18" height="18">
-                                                <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#send-email">
-                                                </use>
-                                            </svg>
-                                        </i>' . Labels::getLabel('LBL_EMAIL_USER', $siteLangId),
-                        ];
-                    }                    
+                    ];                                      
                     $data['dropdownButtons']['otherButtons'][] = [
                         'attr' => [
                             'href' => 'javascript:void(0)',

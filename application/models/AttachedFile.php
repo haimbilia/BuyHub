@@ -84,6 +84,7 @@ class AttachedFile extends MyAppModel
 
     public const RATIO_TYPE_SQUARE = 1;
     public const RATIO_TYPE_RECTANGULAR = 2;
+    public const RATIO_TYPE_CUSTOM = 3;
 
     public const FILETYPE_PRODCAT_IMAGE_PATH = 'category/';
     public const FILETYPE_PRODUCT_IMAGE_PATH = 'product/';
@@ -173,11 +174,15 @@ class AttachedFile extends MyAppModel
 
     public static function getRatioTypeArray($langId)
     {
-        return $arr = array(
+        return array(
             static::RATIO_TYPE_SQUARE => Labels::getLabel('LBL_1:1', $langId),
             static::RATIO_TYPE_RECTANGULAR => Labels::getLabel('LBL_16:9', $langId)
-        );
-        return $arr;
+        );        
+    }
+
+    public static function getRatioTypeWithCustom($langId)
+    {
+        return  self::getRatioTypeArray($langId) + [static::RATIO_TYPE_CUSTOM => Labels::getLabel('LBL_CUSTOM_RATIO', $langId)];
     }
 
     // $compareSize in KiloByte

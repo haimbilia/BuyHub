@@ -713,6 +713,7 @@ Updates/Fixes :
     => 063992 - Seller: An error is showing while the seller's trying to self-ship in case of Shipping Plugin is ON and the error is not showing while the seller clicks on the "Fetch Shipping Rates" on the order details in case plugins keys are missing 
     => 063752 - Seller: Digital files and digital links of the product are not showing while viewing the marketplace details and adding the inventory at the seller's end, if those are added while adding the product at the admin's end
     => 064045 - Admin: Adjusted amount's details are not showing on the subscription order's details at the admin's end, in case of the admin enabled the "adjust amount" option for the subscription from the settings section
+    => 063931 - Admin: Return amount is not showing correctly on the "return order request" page at the admin's end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

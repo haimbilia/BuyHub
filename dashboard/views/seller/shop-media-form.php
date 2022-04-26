@@ -56,44 +56,47 @@ $fld->htmlAfterField ='<span class="form-text text-muted preferredDimensions-js"
 </div>
 
 <script>
-    $('input[name=banner_min_width]').val(2000);
-    $('input[name=banner_min_height]').val(500);
+    $('input[name=banner_min_width]').val(<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>);
+    $('input[name=banner_min_height]').val(<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>);
+
     $('input[name=logo_min_width]').val(150);
     $('input[name=logo_min_height]').val(150);
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
-    var aspectRatio = 4 / 1;
+    var ratioTypeCustom = <?php echo AttachedFile::RATIO_TYPE_CUSTOM; ?>;
+
     $(document).on('change', '.prefDimensions-js', function() {
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
-
         if ($(this).val() == screenDesktop) {
-            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '2000 x 500'));
-            $('input[name=banner_min_width]').val(2000);
-            $('input[name=banner_min_height]').val(500);
-            aspectRatio = 4 / 1;
+            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?> x <?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
+            $('input[name=banner_min_width]').val(<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>);
+            $('input[name=banner_min_height]').val(<?php echo $getShopDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>);
+           
         } else if ($(this).val() == screenIpad) {
-            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '1024 x 360'));
-            $('input[name=banner_min_width]').val(1024);
-            $('input[name=banner_min_height]').val(360);
-            aspectRatio = 128 / 45;
+            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopDimensions[ImageDimension::VIEW_TABLET]['width']; ?> x <?php echo $getShopDimensions[ImageDimension::VIEW_TABLET]['height']; ?>'));
+            $('input[name=banner_min_width]').val(<?php echo $getShopDimensions[ImageDimension::VIEW_TABLET]['width']; ?>);
+            $('input[name=banner_min_height]').val(<?php echo $getShopDimensions[ImageDimension::VIEW_TABLET]['height']; ?>);
         } else {
-            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '640 x 360'));
-            $('input[name=banner_min_width]').val(640);
-            $('input[name=banner_min_height]').val(360);
-            aspectRatio = 16 / 9;
+            $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopDimensions[ImageDimension::VIEW_MOBILE]['width']; ?> x <?php echo $getShopDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
+            $('input[name=banner_min_width]').val(<?php echo $getShopDimensions[ImageDimension::VIEW_MOBILE]['width']; ?>);
+            $('input[name=banner_min_height]').val(<?php echo $getShopDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>);           
         }
     });
 
     $(document).on('change', '.prefRatio-js', function() {
         if ($(this).val() == ratioTypeSquare) {
-            $('input[name=logo_min_width]').val(150);
-            $('input[name=logo_min_height]').val(150);
-            $('.logoPreferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '150 x 150'));
+            $('input[name=logo_min_width]').val(<?php echo $getShopLogoSquare['width']; ?>);
+            $('input[name=logo_min_height]').val(<?php echo $getShopLogoSquare['height']; ?>);
+            $('.logoPreferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopDimensions[ImageDimension::VIEW_MOBILE]['width']; ?> x <?php echo $getShopDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
+        }else if ($(this).val() == ratioTypeCustom) {
+            $('input[name=logo_min_width]').val('');
+            $('input[name=logo_min_height]').val('');
+            $('.logoPreferredDimensions-js').html('');
         } else {
-            $('input[name=logo_min_width]').val(150);
-            $('input[name=logo_min_height]').val(85);
-            $('.logoPreferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '150 x 85'));
+            $('input[name=logo_min_width]').val(<?php echo $getShopLogoRactangle['width']; ?>);
+            $('input[name=logo_min_height]').val(<?php echo $getShopLogoRactangle['height']; ?>);
+            $('.logoPreferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopLogoRactangle['width']; ?> x <?php echo $getShopLogoRactangle['height']; ?>'));
         }
     });
 </script>
