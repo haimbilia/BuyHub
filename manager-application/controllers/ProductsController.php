@@ -121,9 +121,10 @@ class ProductsController extends ListingBaseController
         $active = FatApp::getPostedData('active');
         if ('' != $active && $active > -1) {
             $srch->addCondition('product_active', '=', $active);
-        }
+        }     
 
-        $product_approved = FatApp::getPostedData('product_approved', FatUtility::VAR_INT, ($defaultSrchParm['product_approved'] ?? -1));  
+        $product_approved = FatApp::getPostedData('product_approved', FatUtility::VAR_INT, ($defaultSrchParm['product_approved'] ?? -1)); 
+        $post['product_approved'] = $product_approved; 
         if ($product_approved > -1) {
             $srch->addCondition('product_approved', '=', $product_approved);
         }       
