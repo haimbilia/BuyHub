@@ -83,7 +83,6 @@
 
     &_aside {
         flex: 1;
-
         @include media-breakpoint-down(lg) {
             display: none;
         }
@@ -123,17 +122,31 @@
     }
 
     &_foot {
-        //border-top: $border;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        gap: 1rem;
         margin-top: 2rem;
         padding: 2rem 0;
-        position: sticky;
-        bottom: 0;
-        background: rgba(255, 255, 255, 1);
-        backdrop-filter: blur(2px);
-        box-shadow: 0 -10px 50px -25px rgba(82, 63, 105, 0.5);
+        display: flex;
+        align-items: inherit;
+        flex-direction: column;
+
+        @include media-breakpoint-up(lg) {
+            flex-direction: row-reverse;
+            align-items: center;
+            justify-content: space-between;
+            //border-top: $border;
+            // position: sticky;
+            // bottom: 0;
+            // background: rgba(255, 255, 255, 1);
+            // backdrop-filter: blur(2px);
+            // box-shadow: 0 -10px 50px -25px rgba(82, 63, 105, 0.5);
+        }
+
+        .btn {
+            flex: 1;
+            @include media-breakpoint-up(lg) {
+                flex: inherit;
+            }
+        }
     }
 }
 
@@ -398,12 +411,10 @@
 
 .payment-area {
     border: $border;
-
     .payments-nav {
         display: flex;
         flex-direction: column;
         position: relative;
-
         &-item {
             border-bottom: $border;
 
@@ -444,10 +455,8 @@
             }
         }
     }
-
     .paypal-data {
         text-align: center;
-
         p {
             padding: 1rem;
             font-size: 0.8rem;
@@ -455,7 +464,7 @@
     }
 
     .payment-block {
-        padding: 0 2rem;
+        padding: 2rem;
     }
 }
 
@@ -1034,19 +1043,25 @@
 //btn-summary
 
 .btn-summary {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    border: $border;
+    background-color: transparent;
+
+    //@include bg-brand;
+    // position: fixed;
+    // bottom: 0;
+    // left: 0;
+    // right: 0;
     border: none;
-    @include bg-brand;
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
+    padding: 1rem 0;
     font-weight: 600;
-
+    width: 100%;
     @include media-breakpoint-up(lg) {
         display: none;
+    }
+    &-text {
+        text-decoration: underline;
     }
 }
 
@@ -1071,14 +1086,14 @@
 }
 
 .wallet-credits {
-    font-size: 1rem;
+    font-size: 0.85rem;
     margin-bottom: 1rem;
     display: flex;
     border: $border-black;
     border-radius: 0;
     margin: auto;
     align-items: center;
-    padding: 2rem;
+    padding: 1.5rem;
     width: 100%;
     background-color: transparent;
     color: $txt-black;
