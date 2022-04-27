@@ -723,7 +723,8 @@ Updates/Fixes :
     => 063991 - The fields' arrangement is not correct under the Order Summary on the Order details page at the admin's, seller's, and buyer's end
     => 063993 - Seller and Buyer: Return/Cancelled status is not showing in the timeline on the order details page at the seller's and buyer's end 
     => 064008 - Admin: The same functionality works differently on the different pages in the search field at the admin's end
-
+    => 064013 - Admin: Getting an error when the user edit the categories.
+    
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
