@@ -724,6 +724,7 @@ Updates/Fixes :
     => 063993 - Seller and Buyer: Return/Cancelled status is not showing in the timeline on the order details page at the seller's and buyer's end 
     => 064008 - Admin: The same functionality works differently on the different pages in the search field at the admin's end
     => 064013 - Admin: Getting an error when the user edit the categories.
+    => 064033 - Seller: The subscription's order summary is not correct on the confirmation page after buying the package at the seller's end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
