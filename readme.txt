@@ -717,6 +717,7 @@ Updates/Fixes :
     => 064084 - Seller: Net amount is not showing correctly on the order details at the seller's end
     => 064065 - Admin >> Reports >> Product variants: Advanced search button is not working.
     => 064051 - Admin: Pagination is not working properly on the product listing page at the admin's end
+    => 063936 - Suggestion to redesign the download file option on the return request detail page at the seller's and buyer's end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

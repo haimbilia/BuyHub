@@ -151,7 +151,15 @@
                                         $returnDataArr = CommonHelper::getOrderProductRefundAmtArr($request);
                                         echo CommonHelper::displayMoneyFormat($returnDataArr['op_refund_amount'], true, false); ?></td>
                                     <?php if (isset($attachedFile) && !empty($attachedFile)) { ?>
-                                        <td><a href="<?php echo UrlHelper::generateUrl('Buyer', 'downloadAttachedFileForReturn', array($request["orrequest_id"]));  ?>" class="button small green"> <?php echo Labels::getLabel('LBL_Download', $siteLangId); ?></a></td>
+                                        <td>
+                                            <a class="btn btn-outline-gray btn-icon" href="<?php echo UrlHelper::generateUrl('Buyer', 'downloadAttachedFileForReturn', array($request["orrequest_id"])); ?>">
+                                                <svg class="svg" width="18" height="18">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#download">
+                                                    </use>
+                                                </svg>
+                                                <?php echo Labels::getLabel('LBL_DOWNLOAD'); ?>
+                                            </a>
+                                        </td>
                                     <?php } ?>
                                 </tr>
                             </tbody>

@@ -115,13 +115,14 @@ if (null != $btn) {
                                         <span class="value"><?php echo $request['buyer_name']; ?></span>
                                     </li>
                                     <li class="list-stats-item">
-                                        <span class="label"><?php echo Labels::getLabel('Lbl_Download_attached_file', $siteLangId); ?></span>
+                                        <span class="label"><?php echo Labels::getLabel('LBL_DOWNLOAD_ATTACHED_FILE', $siteLangId); ?></span>
                                         <span class="value">
-                                            <a href="<?php echo UrlHelper::generateUrl('Seller', 'downloadAttachedFileForReturn', array($request['orrequest_id'], 0)); ?>">
+                                            <a class="btn btn-outline-gray btn-icon" href="<?php echo UrlHelper::generateUrl('Seller', 'downloadAttachedFileForReturn', array($request['orrequest_id'], 0)); ?>">
                                                 <svg class="svg" width="18" height="18">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#download">
                                                     </use>
                                                 </svg>
+                                                <?php echo Labels::getLabel('LBL_DOWNLOAD'); ?>
                                             </a>
                                         </span>
                                     </li>
