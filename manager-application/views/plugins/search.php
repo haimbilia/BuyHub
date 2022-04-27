@@ -25,7 +25,7 @@ foreach ($arrListing as $sn => $row) {
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo, 'id' => $row['plugin_id']]);
     foreach ($fields as $key => $val) {
-        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : (('select_all' == $key) ? ['class' => 'col-check'] : []);
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'dragdrop':

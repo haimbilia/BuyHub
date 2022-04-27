@@ -1247,7 +1247,7 @@ class CommonHelper extends FatUtility
         return false;
     }
 
-    public static function subStringByWords($str, $maxlength)
+    public static function subStringByWords($str, $maxlength, $trailingString = '')
     {
         if (strlen($str) < $maxlength) {
             return $str;
@@ -1257,7 +1257,7 @@ class CommonHelper extends FatUtility
         if ($rpos > 0) {
             $str = substr($str, 0, $rpos);
         }
-        return $str;
+        return $str . $trailingString;
     }
 
     public static function getWeightInGrams($unit, $val)

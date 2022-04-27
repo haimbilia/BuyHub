@@ -116,13 +116,6 @@ if (0 < $isShippingSelected && $rewardPoints > 0) { ?>
         <li class="cart-summary-item">
             <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span> <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
         </li>
-        <?php if ($cartSummary['cartVolumeDiscount']) { ?>
-            <li class="cart-summary-item">
-                <span class="label"><?php echo Labels::getLabel('LBL_Loyalty/Volume_Discount', $siteLangId); ?>
-                </span>
-                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
-            </li>
-        <?php } ?>
         <?php if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
             <li class="cart-summary-item">
                 <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
@@ -137,18 +130,25 @@ if (0 < $isShippingSelected && $rewardPoints > 0) { ?>
                 </li>
         <?php }
         } ?>
-        <?php if (!FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
-            <li class="cart-summary-item">
-                <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
-                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
-            </li>
-        <?php } ?>
         <?php if ($cartSummary['originalShipping']) { ?>
             <li class="cart-summary-item">
                 <span class="label"><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId); ?></span>
                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['shippingTotal']); ?></span>
             </li>
         <?php  } ?>
+        <?php if ($cartSummary['cartVolumeDiscount']) { ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_Loyalty/Volume_Discount', $siteLangId); ?>
+                </span>
+                <span class="value txt-secondary"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
+            </li>
+        <?php } ?>
+        <?php if (!FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
+            <li class="cart-summary-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
+                <span class="value txt-secondary"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
+            </li>
+        <?php } ?>
         <?php if (!empty($cartSummary['cartRewardPoints'])) {
             $appliedRewardPointsDiscount = CommonHelper::convertRewardPointToCurrency($cartSummary['cartRewardPoints']);
         ?>

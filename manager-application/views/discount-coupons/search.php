@@ -13,7 +13,7 @@ foreach ($arrListing as $sn => $row) {
     
     $isExpired = ($row['coupon_end_date'] != "0000-00-00" && strtotime($row['coupon_end_date']) < strtotime(date('Y-m-d'))) ? true : false;
     foreach ($fields as $key => $val) {
-        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : (('select_all' == $key) ? ['class' => 'col-check'] : []);
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':

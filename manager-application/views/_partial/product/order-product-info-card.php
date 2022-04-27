@@ -71,7 +71,7 @@ if (!empty($options)) {
                 <?php if (true == $includeProductLink) {
                     echo '<a href="' . UrlHelper::generateFullUrl('Products', 'View', array($order['op_selprod_id']), CONF_WEBROOT_FRONT_URL) . '" target="_blank" title="' . $order['op_product_name'] . '">' . CommonHelper::subStringByWords($order['op_selprod_title'], 35) . '</a>';
                 } else {
-                    echo CommonHelper::subStringByWords($order['op_selprod_title'], 35);
+                    echo '<div title="' . $order['op_selprod_title'] . '">' . CommonHelper::subStringByWords($order['op_selprod_title'], 35, '...') . '</div>';
                 } ?>
 
                 <?php if (true === $optionsPopover) { ?>
