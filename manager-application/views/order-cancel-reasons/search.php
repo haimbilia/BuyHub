@@ -12,7 +12,7 @@ foreach ($arrListing as $sn => $row) {
     $tr->setAttribute("id", $row['ocreason_id']);
 
     foreach ($fields as $key => $val) {
-        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : (('select_all' == $key) ? ['class' => 'col-check'] : []);
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':

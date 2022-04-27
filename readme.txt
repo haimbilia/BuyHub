@@ -720,6 +720,7 @@ Updates/Fixes :
     => 063936 - Suggestion to redesign the download file option on the return request detail page at the seller's and buyer's end
     => 063891 - Admin: The "Approved" status is showing for the COD orders at the admin's end
     => 064105 - Buyer: Duplicate records are creating while the admin edits the existing blog post.
+    => 064106 - Admin UI : Home page : UI is distorted
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

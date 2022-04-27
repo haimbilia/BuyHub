@@ -16,39 +16,34 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <div class="card card-tabs">
+                <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_STATISTICS', $siteLangId); ?></h3>
                         </div>
                         <div class="card-head-toolbar">
-                            <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-brand navTabsJs" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#tabs_1" data-tab="tabs_1" data-chart="true" role="tab">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-icon btn-sm" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="flaticon-more-1"></i>
+                                </button>
+                                <div class="nav nav-tabs navTabsJs dropdown-menu dropdown-menu-right dropdown-menu-anim" role="tablist">
+                                    <a class="dropdown-item tabsJs active" data-bs-toggle="tab" href="#tabs_1" data-tab="tabs_1" data-chart="true" role="tab">
                                         <?php echo Labels::getLabel('NAV_SALES', $siteLangId); ?>
                                     </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tabs_2" data-tab="tabs_2" data-chart="true" role="tab">
+                                    <a class="dropdown-item tabsJs" data-bs-toggle="tab" href="#tabs_2" data-tab="tabs_2" data-chart="true" role="tab">
                                         <?php echo Labels::getLabel('NAV_SALES_EARNINGS', $siteLangId); ?>
                                     </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tabs_3" data-tab="tabs_3" data-chart="true" role="tab">
+                                    <a class="dropdown-item tabsJs" data-bs-toggle="tab" href="#tabs_3" data-tab="tabs_3" data-chart="true" role="tab">
                                         <?php echo Labels::getLabel('NAV_BUYER/Seller_Signups', $siteLangId); ?>
                                     </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tabs_4" data-tab="tabs_4" data-chart="true" role="tab">
+                                    <a class="dropdown-item tabsJs" data-bs-toggle="tab" href="#tabs_4" data-tab="tabs_4" data-chart="true" role="tab">
                                         <?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?>
                                     </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tabs_5" data-tab="tabs_5" data-chart="true" role="tab">
+                                    <a class="dropdown-item tabsJs" data-bs-toggle="tab" href="#tabs_5" data-tab="tabs_5" data-chart="true" role="tab">
                                         <?php echo Labels::getLabel('NAV_AFFILIATE_SIGNUPS', $siteLangId); ?>
                                     </a>
-                                </li>
-                            </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">

@@ -12,14 +12,15 @@ foreach ($arrListing as $sn=>$row){
 		$cls .=' read'; 
 	}
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo, 'id' => $row['notification_id']]);
-	foreach ($fields as $key=>$val){	
-        $td = $tr->appendElement('td', []);	
+	foreach ($fields as $key=>$val){
+		$tdAttr = ('action' == $key) ? ['class' => 'align-right'] : (('select_all' == $key) ? ['class' => 'col-check'] : []);
+        $td = $tr->appendElement('td', $tdAttr);	
 		switch ($key){
 			case 'select_all':
-                $td->appendElement('plaintext', [], '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['notification_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['notification_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', [], $serialNo);
+                $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
 			case 'user_name':
 				$href = "javascript:void(0)";
@@ -40,7 +41,7 @@ foreach ($arrListing as $sn=>$row){
 					$array['user']['credential_email'] = BlogContribution::getAttributesById($row['notification_record_id'], 'bcontributions_author_email');
 				}
 				$str = $this->includeTemplate('_partial/user/user-info-card.php', $array, false, true);				
-				$td->appendElement('plaintext', [], $str , true);
+				$td->appendElement('plaintext', $tdAttr, $str , true);
 				break;
 			case 'notification':
 				$div = $td->appendElement('div', array('class' => 'd-flex'));
@@ -50,7 +51,7 @@ foreach ($arrListing as $sn=>$row){
 				
 			break;
 			case 'notification_added_on':
-				$td->appendElement('plaintext', [], HtmlHelper::formatDateTime(
+				$td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime(
 					$row[$key],
 					true,
 					true,

@@ -13,7 +13,7 @@ foreach ($arrListing as $sn => $row) {
     $cartData = !empty($row['order_cart_data']) ? json_decode(trim($row['order_cart_data']), true) : [];
     $checkoutType = !empty($cartData) ? $cartData['shopping_cart']['checkout_type'] : Shipping::FULFILMENT_SHIP;
     foreach ($fields as $key => $val) {
-        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : (('select_all' == $key) ? ['class' => 'col-check'] : []);
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
