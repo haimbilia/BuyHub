@@ -1,7 +1,5 @@
 $(document).ready(function () {
-    select2('searchFrmUserIdJs', fcom.makeUrl('Users', 'autoComplete'), {'deletedOnly' : 1}, '', function () {
-        clearSearch();
-    });
+    select2('searchFrmUserIdJs', fcom.makeUrl('Users', 'autoComplete'), {'deletedOnly' : 1});
 });
 
 (function () {

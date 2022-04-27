@@ -722,7 +722,7 @@ Updates/Fixes :
     => 064105 - Buyer: Duplicate records are creating while the admin edits the existing blog post.
     => 063991 - The fields' arrangement is not correct under the Order Summary on the Order details page at the admin's, seller's, and buyer's end
     => 063993 - Seller and Buyer: Return/Cancelled status is not showing in the timeline on the order details page at the seller's and buyer's end 
-
+    => 064008 - Admin: The same functionality works differently on the different pages in the search field at the admin's end
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
