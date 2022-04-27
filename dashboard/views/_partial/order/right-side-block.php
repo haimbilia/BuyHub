@@ -25,16 +25,14 @@ foreach ($arr as $childOrder) {
         <div class="order-block">
             <h4><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h4>
             <div class="cart-summary">
-                <ul>
-                    <?php if (isset($orderDetail['user_name'])) { ?>
-                        <li>
-                            <span class="lable"><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?> </span>
-                            <span class="value"><?php echo $orderDetail['user_name']; ?></span>
-                        </li>
-                    <?php } ?>
+                <ul>                  
                     <li>
                         <span class="lable"><?php echo Labels::getLabel('MSG_Order_Created', $siteLangId); ?> </span>
                         <span class="value"><?php echo FatDate::format($orderDetail['order_date_added']); ?></span>
+                    </li>
+                    <li>
+                        <span class="lable"><?php echo Labels::getLabel('Lbl_Cart_Total', $siteLangId) ?></span>
+                        <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartTotal, true, false, true, false, true); ?></span>
                     </li>
                     <?php if (0 < $shippingCharges && true == $canViewShippingCharges) { ?>
                         <li>
@@ -71,11 +69,7 @@ foreach ($arr as $childOrder) {
                             </span>
                             <span class="value"><?php echo CommonHelper::displayMoneyFormat($totalTax, true, false, true, false, true); ?></span>
                         </li>
-                    <?php } ?>
-                    <li>
-                        <span class="lable"><?php echo Labels::getLabel('Lbl_Cart_Total', $siteLangId) ?></span>
-                        <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartTotal, true, false, true, false, true); ?></span>
-                    </li>
+                    <?php } ?>                    
                     <?php
                     $discount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT')) : $orderDetail['order_discount_total'];
                     if (0 < $discount) { ?>

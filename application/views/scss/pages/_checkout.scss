@@ -111,7 +111,7 @@
     }
 
     &_title {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         margin: 0;
         font-weight: 600;
         color: $txt-body;
@@ -186,6 +186,9 @@
         flex-direction: row;
         justify-content: space-between;
         margin-bottom: 1rem;
+        .h5 {
+            font-size: inherit;
+        }
     }
 
     &-body {
@@ -802,7 +805,7 @@
 
     .shop-detail {
         display: flex;
-        gap: 1rem;
+        //gap: 1rem;
         flex-direction: column;
         justify-content: space-between;
         //color: $txt-body;
@@ -856,6 +859,7 @@
         .form-control {
             height: 50px;
             border: $border;
+            border-top: 0;
             font-size: inherit;
             border-radius: 0;
 
