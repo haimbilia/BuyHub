@@ -298,15 +298,15 @@
         <div class="step_foot">
             <?php if ($cartHasPhysicalProduct) {
                 $fn = Shipping::FULFILMENT_SHIP == $fulfillmentType ? 'setUpShippingMethod();' : 'setUpPickup();'; ?>
-                <button class="btn btn-brand" type="button" onclick="<?php echo $fn; ?>">
+                <button class="btn btn-brand  btn-wide" type="button" onclick="<?php echo $fn; ?>">
                     <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
                 </button>
             <?php } else { ?>
-                <button class="btn btn-brand" type="button" onclick="loadFinancialSummary(1);loadPaymentSummary();">
+                <button class="btn btn-brand btn-wide" type="button" onclick="loadFinancialSummary(1);loadPaymentSummary();">
                     <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
                 </button>
             <?php } ?>
-            <a class="btn btn-link" href="<?php echo UrlHelper::generateUrl('Cart'); ?>">
+            <a class="btn btn-underline" href="<?php echo UrlHelper::generateUrl('Cart'); ?>">
                 <?php echo Labels::getLabel('LBL_RETURN_TO_CART', $siteLangId); ?>
             </a>
         </div>
