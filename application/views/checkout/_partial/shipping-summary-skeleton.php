@@ -38,7 +38,7 @@
                 </li>
                 <?php for ($i = 0; $i < $cartItemsCount; $i++) { ?>
                     <li class="list-cart-item block-cart">
-                        <div class="block-cart-img skeleton" style="height: 200px;">
+                        <div class="block-cart-img skeleton" style="height: 150px;">
                             <!-- Product Image -->
                         </div>
                         <div class="block-cart-detail">

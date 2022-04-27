@@ -70,8 +70,8 @@ class Orders extends MyAppModel
         );
     }
     public static function getActiveSubscriptionStatusArr()
-    {       
-        return array(FatApp::getConfig("CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0));        
+    {
+        return array(FatApp::getConfig("CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0));
     }
 
     public static function getPaymentGatewayStatusArr($langId)
@@ -165,8 +165,10 @@ class Orders extends MyAppModel
             $srch->addCondition('orderstatus_priority', '>=', $orderStatusPriority);
         }
 
-        if ($isDigital) {
+        if ($isDigital === OrderStatus::FOR_DIGITAL_ONLY) {
             $srch->addCondition('orderstatus_is_digital', '=', applicationConstants::YES);
+        } elseif ($isDigital === OrderStatus::FOR_NON_DIGITAL) {
+            $srch->addCondition('orderstatus_is_digital', '=', applicationConstants::NO);
         }
 
         $srch->addCondition('orderstatus_is_active', '=', applicationConstants::ACTIVE);
@@ -2952,5 +2954,4 @@ class Orders extends MyAppModel
 
         return (in_array($opRow['op_status_id'], $processingStatuses) && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED);
     }
-    
 }

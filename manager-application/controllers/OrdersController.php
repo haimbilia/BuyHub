@@ -306,7 +306,8 @@ class OrdersController extends ListingBaseController
     {
         $frm = new Form('frmOrderComments');
         $frm->addTextArea(Labels::getLabel('FRM_YOUR_COMMENTS', $this->siteLangId), 'comments');
-        $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingOrderStatus, $orderData['op_status_id']);
+        $isDigital = isset($orderData['op_product_type']) && $orderData['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL ? OrderStatus::FOR_DIGITAL_ONLY : OrderStatus::FOR_NON_DIGITAL;
+        $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingOrderStatus, $orderData['op_status_id'], $isDigital);
 
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'op_status_id', $orderStatusArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirements()->setRequired();

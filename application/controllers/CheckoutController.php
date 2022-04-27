@@ -514,6 +514,7 @@ class CheckoutController extends MyAppController
         $address = new Address($selected_shipping_address_id, $this->siteLangId);
         $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
 
+        $this->set('cartHasPhysicalProduct', $hasPhysicalProd);
         $this->set('cartSummary', $this->cartObj->getCartFinancialSummary($this->siteLangId));
         $this->set('fulfillmentType', $fulfillmentType);
         $this->set('addresses', $addresses);

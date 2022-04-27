@@ -51,8 +51,8 @@ $(function () {
 	getPromoCode = function () {
 		fcom.updateWithAjax(fcom.makeUrl('Checkout', "getCoupons"), '', function (res) {
 			fcom.removeLoader();
-            $.ykmodal(res.html, true);
-        });
+			$.ykmodal(res.html, true);
+		});
 	};
 
 	triggerApplyCoupon = function (coupon_code) {
@@ -62,8 +62,8 @@ $(function () {
 	};
 
 	applyPromoCode = function (frm) {
-		if (!$(frm).validate()) {return};
-        if ('undefined' == typeof frm.coupon_code.value || '' == frm.coupon_code.value) {return;}		
+		if (!$(frm).validate()) { return };
+		if ('undefined' == typeof frm.coupon_code.value || '' == frm.coupon_code.value) { return; }
 		var data = fcom.frmData(frm);
 		$("#js-cartFinancialSummary").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Cart', 'applyPromoCode'), data, function (res) {
@@ -181,6 +181,12 @@ $(function () {
 			$("#js-cartFinancialSummary").hide().html(res).fadeIn();
 			fcom.removeLoader();
 		});
+	}
+
+	scrollToPriceSummary = function (type) {
+		$('html, body').animate({
+			scrollTop: ($("#sticky-summary").offset().top - $("#header").outerHeight())
+		}, 'slow');
 	}
 
 })();

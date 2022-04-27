@@ -79,7 +79,7 @@ $spackage_type = $cartSubscription['spackage_type'];
                 <?php } ?>
                 <label class="checkbox wallet-credits">
                     <input onchange="walletSelection(this)" type="checkbox" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> name="pay_from_wallet" id="pay_from_wallet" value="1">
-                    <?php echo Labels::getLabel('LBL_WALLET_CREDITS:', $siteLangId); ?>
+                    <?php echo Labels::getLabel('LBL_WALLET_CREDITS:', $siteLangId); ?>&nbsp;
                     <strong><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true); ?></strong>
                 </label>
 
