@@ -4,8 +4,11 @@ $clearFormFn = isset($clearFormFn) ? $clearFormFn : 'getForm(' . $frmType . ')';
 
 HtmlHelper::formatFormFields($frm, 6);
 $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
-$frm->setFormTagAttribute('class', 'form form--settings modalFormJs checkboxSwitchJs layout--' . $formLayout);
-$frm->setFormTagAttribute('dir', $formLayout);
+$frm->setFormTagAttribute('class', 'form form--settings modalFormJs checkboxSwitchJs');
+if (CommonHelper::getLayoutDirection() != $formLayout) {
+    $frm->addFormTagAttribute('class', "layout--" . $formLayout);
+    $frm->setFormTagAttribute('dir', $formLayout);
+}
 $frm->setFormTagAttribute('data-onclear', $clearFormFn);
 $frm->setFormTagAttribute('id', 'frmConfSetting');
 
