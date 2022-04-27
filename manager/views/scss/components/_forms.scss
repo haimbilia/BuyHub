@@ -206,6 +206,7 @@ $input-color: #474747;
     }
     select {
         @include select;
+        
     }
     textarea {
         @include input;
@@ -297,6 +298,13 @@ $input-color: #474747;
             padding-#{$start-direction}: 30px;
             padding-#{$end-direction}: 1rem;
             background-position: calc(100% - 12px) center;
+        }
+    }
+    &[dir="rtl"] {
+        select {
+            padding-#{$start-direction}: 30px;
+            padding-#{$end-direction}: 1rem;
+            background-position: calc(0% + 12px) center;
         }
     }
 }
