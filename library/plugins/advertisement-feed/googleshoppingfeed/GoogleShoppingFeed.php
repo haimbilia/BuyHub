@@ -103,8 +103,8 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
             $product->setColor($color);
             $product->setItemGroupId($prodDetail['abprod_item_group_identifier']);
             $product->setBrand(ucfirst($prodDetail['brand_name']));
-            $product->setLink(UrlHelper::generateFullUrl('Products', 'View', array($prodDetail['selprod_id'])));
-            $product->setImageLink(UrlHelper::generateFullUrl('image', 'product', array($prodDetail['product_id'], ImageDimension::VIEW_MEDIUM, $prodDetail['selprod_id'], 0, $this->langId)));
+            $product->setLink(UrlHelper::generateFullUrl('Products', 'View', array($prodDetail['selprod_id']), CONF_WEBROOT_FRONTEND));
+            $product->setImageLink(UrlHelper::generateFullUrl('image', 'product', array($prodDetail['product_id'], ImageDimension::VIEW_MEDIUM, $prodDetail['selprod_id'], 0, $this->langId), CONF_WEBROOT_FRONTEND));
             $product->setContentLanguage(strtolower($prodDetail['language_code']));
             $product->setTargetCountry(strtoupper($prodDetail['country_code']));
             $product->setChannel('online');
@@ -127,6 +127,7 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
                 $price->setCurrency($data['currency_code']);
             }
             $product->setPrice($price);
+            CommonHelper::printArray($product, true);
 
             $request = $service->products->insert($this->merchantId, $product);
             $batch->add($request, $product->getOfferId());
