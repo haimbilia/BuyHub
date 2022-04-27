@@ -61,6 +61,14 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                     <span class="label"><?php echo Labels::getLabel('LBL_ADDED_ON', $siteLangId); ?></span>
                     <span class="value"><?php echo FatDate::format($order['order_date_added']); ?></span>
                 </li>
+                <li>
+                    <span class="label"><?php echo Labels::getLabel('Lbl_Cart_Total', $siteLangId) ?></span>
+                    <span class="value">
+                        <span class="currency-value" dir="ltr">
+                            <?php echo CommonHelper::displayMoneyFormat($cartTotal, true, false, true, false, true); ?>
+                        </span>
+                    </span>
+                </li>
                 <?php if (0 < $shippingCharges) { ?>
                     <li>
                         <span class="label">
@@ -120,15 +128,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                             </span>
                         </li>
                 <?php }
-                } ?>
-                <li>
-                    <span class="label"><?php echo Labels::getLabel('Lbl_Cart_Total', $siteLangId) ?></span>
-                    <span class="value">
-                        <span class="currency-value" dir="ltr">
-                            <?php echo CommonHelper::displayMoneyFormat($cartTotal, true, false, true, false, true); ?>
-                        </span>
-                    </span>
-                </li>
+                } ?>              
                 <?php
                 $discount = (0 < $opSellerId) ? abs($discount) : $order['order_discount_total'];
                 if (0 < $discount) { ?>

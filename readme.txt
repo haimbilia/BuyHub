@@ -717,7 +717,9 @@ Updates/Fixes :
     => 064084 - Seller: Net amount is not showing correctly on the order details at the seller's end
     => 064065 - Admin >> Reports >> Product variants: Advanced search button is not working.
     => 064051 - Admin: Pagination is not working properly on the product listing page at the admin's end
+    => 063991 - The fields' arrangement is not correct under the Order Summary on the Order details page at the admin's, seller's, and buyer's end
     
+
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
