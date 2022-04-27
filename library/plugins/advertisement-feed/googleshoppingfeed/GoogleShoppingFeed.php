@@ -94,7 +94,7 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
                 return array_key_exists('option_is_color', $v) && 1 == $v['option_is_color'];
             });
             $color = !empty($colorOption) ? array_shift($colorOption)['optionvalue_identifier'] : '';
-
+            
             $product = new Google_Service_ShoppingContent_Product();
             $product->setId($prodDetail['selprod_id']);
             $product->setOfferId($prodDetail['selprod_id']);
@@ -103,8 +103,8 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
             $product->setColor($color);
             $product->setItemGroupId($prodDetail['abprod_item_group_identifier']);
             $product->setBrand(ucfirst($prodDetail['brand_name']));
-            $product->setLink(UrlHelper::generateFullUrl('Products', 'View', array($prodDetail['selprod_id'])));
-            $product->setImageLink(UrlHelper::generateFullUrl('image', 'product', array($prodDetail['product_id'], ImageDimension::VIEW_MEDIUM, $prodDetail['selprod_id'], 0, $this->langId)));
+            $product->setLink(UrlHelper::generateFullUrl('Products', 'View', array($prodDetail['selprod_id']), CONF_WEBROOT_FRONTEND));
+            $product->setImageLink(UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($prodDetail['product_id'], ImageDimension::VIEW_DESKTOP, $prodDetail['selprod_id'], 0, $this->langId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg'));
             $product->setContentLanguage(strtolower($prodDetail['language_code']));
             $product->setTargetCountry(strtoupper($prodDetail['country_code']));
             $product->setChannel('online');
