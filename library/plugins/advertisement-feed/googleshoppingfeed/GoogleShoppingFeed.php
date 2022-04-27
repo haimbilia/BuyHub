@@ -127,7 +127,6 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
                 $price->setCurrency($data['currency_code']);
             }
             $product->setPrice($price);
-            CommonHelper::printArray($product, true);
 
             $request = $service->products->insert($this->merchantId, $product);
             $batch->add($request, $product->getOfferId());
