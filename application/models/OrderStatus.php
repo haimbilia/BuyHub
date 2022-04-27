@@ -8,6 +8,9 @@ class OrderStatus extends MyAppModel
     public const DB_TBL_LANG = 'tbl_orders_status_lang';
     public const DB_TBL_LANG_PREFIX = 'orderstatuslang_';
 
+    public const FOR_DIGITAL_ONLY = 1;
+    public const FOR_NON_DIGITAL = 2;
+
     public const ORDER_REFUNDED = 9;
 
     public function __construct($id = 0)
