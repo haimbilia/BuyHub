@@ -536,6 +536,14 @@ class SellerController extends SellerBaseController
             $opTimeLineStatus = array_diff($opTimeLineStatus, [FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS")]);
         }
 
+        if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
+            $opTimeLineStatus[] = FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS");
+        }
+
+        if (FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
+            $opTimeLineStatus[] = FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS");
+        }
+
         $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $opTimeLineStatus);
 
         $orderTimeLine = [];

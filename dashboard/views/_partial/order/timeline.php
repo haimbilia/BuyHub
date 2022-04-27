@@ -70,11 +70,11 @@
                                                 }
                                                 $str .=  '<div><a class="link" href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'" . $trackingNumber . "'" . ',' . "'" . $childOrderDetail['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . Labels::getLabel("MSG_TRACK", $siteLangId) . '</a></div>';
                                                 if (empty($childOrderDetail['opship_tracking_url']) && !empty($trackingNumber)) {
-                                                    $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["opshipping_label"]) . "</em>";
+                                                    $str .=  Labels::getLabel("LBL_VIA", $siteLangId)."<em>" . CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["opshipping_label"]) . "</em>";
                                                 }
                                             }
                                         }
-                                        if (!empty($childOrderDetail['opship_tracking_url'])) {
+                                        if (!empty($childOrderDetail['opship_tracking_url']) && empty($row['oshistory_tracking_url'])) {
                                             $trackingUrls = (array) explode(', ', $childOrderDetail['opship_tracking_url']);
                                             $str .= '<br>';
                                             foreach ($trackingUrls as $url) {

@@ -718,7 +718,7 @@ Updates/Fixes :
     => 064065 - Admin >> Reports >> Product variants: Advanced search button is not working.
     => 064051 - Admin: Pagination is not working properly on the product listing page at the admin's end
     => 063991 - The fields' arrangement is not correct under the Order Summary on the Order details page at the admin's, seller's, and buyer's end
-    
+    => 063993 - Seller and Buyer: Return/Cancelled status is not showing in the timeline on the order details page at the seller's and buyer's end 
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
