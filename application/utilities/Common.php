@@ -214,13 +214,13 @@ class Common
 
         $cacheData = CacheHelper::get('FOOTER_TRUST_BANNERS'. $siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($cacheData) {          
-            $template->set('footerData', json_encode($cacheData, true));
+            $template->set('trustBannerData', json_decode($cacheData, true));
             return;
         }
         $obj = new Extrapage();
-        $footerData = $obj->getContentByPageType(Extrapage::FOOTER_TRUST_BANNERS, $siteLangId);
-        $template->set('footerData', $footerData);
-        CacheHelper::create('FOOTER_TRUST_BANNERS'. $siteLangId, json_encode($cacheData), CacheHelper::TYPE_BLOCK_CONTENT);
+        $trustBannerData = $obj->getContentByPageType(Extrapage::FOOTER_TRUST_BANNERS, $siteLangId);
+        CacheHelper::create('FOOTER_TRUST_BANNERS'. $siteLangId, json_encode($trustBannerData), CacheHelper::TYPE_BLOCK_CONTENT);
+        $template->set('trustBannerData', $trustBannerData);
     }
 
     public static function footerMetaContent($template)
@@ -229,13 +229,13 @@ class Common
 
         $cacheData = CacheHelper::get('FOOTER_META_CONTENT'. $siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($cacheData) {          
-            $template->set('footerData', json_encode($cacheData, true));
+            $template->set('footerData', json_decode($cacheData, true));
             return;
         }
         $obj = new Extrapage();
         $footerData = $obj->getContentByPageType(Extrapage::FOOTER_META_CONTENT, $siteLangId);
+        CacheHelper::create('FOOTER_META_CONTENT'. $siteLangId, json_encode($footerData), CacheHelper::TYPE_BLOCK_CONTENT);
         $template->set('footerData', $footerData);
-        CacheHelper::create('FOOTER_META_CONTENT'. $siteLangId, json_encode($cacheData), CacheHelper::TYPE_BLOCK_CONTENT);
     }
 
     public static function getNewsLetterForm($langId)

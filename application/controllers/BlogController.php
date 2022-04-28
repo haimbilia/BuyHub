@@ -8,6 +8,11 @@ class BlogController extends MyAppController
         $this->set('blogPage', true);
         $this->set('bodyClass', 'is--blog');
         $this->_template->addJs('js/blog.js');
+        if (!FatUtility::isAjaxCall()) {
+            FatApp::setViewDataProvider('_partial/blogNavigation.php', array('Navigation', 'blogNavigation'));
+            FatApp::setViewDataProvider('_partial/footer-part/blog-search-form.php', array('Navigation', 'blogNavigationSearchForm'));
+            FatApp::setViewDataProvider('_partial/blogSidePanel.php', array('Common', 'blogSidePanelArea'));
+        }
     }
 
     public function getBreadcrumbNodes($action)
