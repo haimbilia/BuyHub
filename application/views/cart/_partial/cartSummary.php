@@ -11,7 +11,7 @@ require('coupons-section.php'); ?>
         <?php if ($cartSummary['cartVolumeDiscount']) { ?>
             <li class="cart-summary-item">
                 <span class="label"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?></span>
-                <span class="value txt-secondary"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
             </li>
         <?php } ?>
 
@@ -24,7 +24,7 @@ require('coupons-section.php'); ?>
         <?php if (!FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
             <li class="cart-summary-item">
                 <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
-                <span class="value txt-secondary"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
             </li>
         <?php } ?>
         <?php $netChargeAmt = $cartSummary['cartTotal'] - ((0 < $cartSummary['cartVolumeDiscount']) ? $cartSummary['cartVolumeDiscount'] : 0);
