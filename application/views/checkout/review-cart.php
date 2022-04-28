@@ -28,7 +28,7 @@
                             <tr class="<?php echo (!$product['in_stock']) ? 'disabled' : '';
                                         echo ($product['is_digital_product']) ? 'digital_product_tab-js' : 'physical_product_tab-js'; ?>">
                                 <td>
-                                    <figure class="item__pic"><a href="<?php echo $productUrl; ?>"><img src="<?php echo $imageUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB);?> alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>"></a></figure>
+                                    <figure class="item__pic"><a href="<?php echo $productUrl; ?>"><img src="<?php echo $imageUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB); ?> alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>"></a></figure>
                                 </td>
                                 <td>
                                     <div class="product-profile-data">
@@ -43,7 +43,8 @@
                                             <?php
                                                 }
                                             } ?>
-                                            | <?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?> <?php echo $product['quantity']; ?>                                        </div>
+                                            | <?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?> <?php echo $product['quantity']; ?>
+                                        </div>
                                     </div>
                                 </td>
                                 <td><span class="item__price"><?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?> </span>
@@ -53,11 +54,9 @@
                                 </td>
                                 <td>
                                     <a href="javascript:void(0)" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')" class="icons-wrapper">
-                                        <i class="icn">
-                                            <svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin"></use>
-                                            </svg>
-                                        </i>
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin"></use>
+                                        </svg>
                                     </a>
                                 </td>
                             </tr>
