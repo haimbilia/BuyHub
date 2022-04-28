@@ -725,6 +725,7 @@ Updates/Fixes :
     => 063993 - Seller and Buyer: Return/Cancelled status is not showing in the timeline on the order details page at the seller's and buyer's end 
     => 064015 - Buyer: Volume discount should be shown in different color
     => 064017 - Admin: Product's name is not visible.
+    => 064116 - Advertiser UI: UI is distorted under promotions section.
 
 
 UAT points:
