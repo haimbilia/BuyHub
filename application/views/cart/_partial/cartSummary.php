@@ -38,7 +38,8 @@ require('coupons-section.php'); ?>
         <div class="amount">
             <strong><?php echo CommonHelper::displayMoneyFormat($netChargeAmt); ?></strong>
             <button class="link-underline" onClick="scrollToPriceSummary();">
-                <?php echo Labels::getLabel('LBL_SUMMARY', $siteLangId); ?></a>
+                <?php echo Labels::getLabel('LBL_SUMMARY', $siteLangId); ?>
+            </button>
         </div>
         <div class="further-actions">
 

@@ -24,19 +24,6 @@
         </div>
     </div>
 </section>
-<div class="checkout-bottom">
-    <div class="amount">
-        <strong>$xxxx50.60</strong>
-        <button class="link-underline" onClick="scrollToPriceSummary();">
-            <?php echo Labels::getLabel('LBL_SUMMARY', $siteLangId); ?></a>
-    </div>
-    <div class="further-actions">
-
-        <button class="btn btn-brand btn-wide" type="button" onclick="goToCheckout()">
-            <?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?>
-        </button>
-    </div>
-</div>
 <input id="hasAddress" class="d-none" value="<?php echo (empty($addresses) || count($addresses) == 0) ? 0 : 1 ?>">
 <script type="text/javascript">
     <?php if (isset($defaultAddress)) { ?>

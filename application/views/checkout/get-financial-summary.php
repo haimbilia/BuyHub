@@ -45,7 +45,7 @@ if (0 < $isShippingSelected && 1 > count($paymentMethods)) {
                 </div>
             </li>
         </ul>
-    <?php }
+<?php }
 } ?>
 
 <div class="cart-total-head">
@@ -121,6 +121,29 @@ if (0 < $isShippingSelected && 1 > count($paymentMethods)) {
         <?php } ?>
 
     </ul>
+
+    <?php if (1 > $isShippingSelected) { ?>
+        <div class="checkout-bottom">
+            <div class="amount">
+                <strong><?php echo CommonHelper::displayMoneyFormat($orderNetAmt); ?></strong>
+                <button class="link-underline" onClick="scrollToFinancialSummary();">
+                    <?php echo Labels::getLabel('LBL_SUMMARY', $siteLangId); ?>
+                </button>
+            </div>
+            <div class="further-actions">
+                <?php if ($cartHasPhysicalProduct) {
+                    $fn = Shipping::FULFILMENT_SHIP == $fulfillmentType ? 'setUpShippingMethod();' : 'setUpPickup();'; ?>
+                    <button class="btn btn-brand btn-wide" type="button" onclick="<?php echo $fn; ?>">
+                        <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
+                    </button>
+                <?php } else { ?>
+                    <button class="btn btn-brand btn-wide" type="button" onclick="loadFinancialSummary(1);loadPaymentSummary();">
+                        <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
+                    </button>
+                <?php } ?>
+            </div>
+        </div>
+    <?php } ?>
 </div>
 <?php if (1 > $isShippingSelected) { ?>
     <div class="cart-total-foot">
