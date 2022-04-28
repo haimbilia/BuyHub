@@ -26,7 +26,7 @@
                                 </span>
                             </div>
                         </div>
-                        <span class="">
+                        <span>
                             <?php $categoryIds = !empty($blogPostData['categoryIds']) ? explode(',', $blogPostData['categoryIds']) : array();
                             $categoryNames = !empty($blogPostData['categoryNames']) ? explode('~', $blogPostData['categoryNames']) : array();
                             $categories = array_combine($categoryIds, $categoryNames); ?>
@@ -41,57 +41,58 @@
                             <?php }
                             } ?>
                         </span>
-                        <div class="dropdown share-blog">
-                            <button class="btn btn-outline-brand btn-wide btn-icon dropdown-toggle no-after" type="button" data-bs-toggle="dropdown">
-                                Share
+                        <div class="share-blog">
+                            <button class="btn btn-outline-brand btn-wide btn-icon no-after" type="button" data-bs-toggle="modal" data-bs-target="#socialSharing<?php echo $blogPostData['post_id']; ?>">
                                 <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#share">
                                     </use>
                                 </svg>
+                                <?php echo Labels::getLabel('LBL_SHARE'); ?>
                             </button>
-                            <div class="dropdown-menu dropdown-menu-anim">
-                                <ul class="social-sharing">
-                                    <li class="social-facebook">
-                                        <a class="social-link st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Blog', 'postDetail', array($blogPostData['post_id'])); ?>/">
-                                            <i class="icn">
-                                                <svg class="svg" width="16" height="16">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
-                                                    </use>
-                                                </svg>
-                                            </i>
-                                        </a>
-                                    </li>
-                                    <li class="social-twitter">
-                                        <a class="social-link st-custom-button" data-network="twitter">
-                                            <i class="icn">
-                                                <svg class="svg" width="16" height="16">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
-                                                    </use>
-                                                </svg></i>
-                                        </a>
-                                    </li>
-                                    <li class="social-pintrest">
-                                        <a class="social-link st-custom-button" data-network="pinterest">
-                                            <i class="icn">
-                                                <svg class="svg" width="16" height="16">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
-                                                    </use>
-                                                </svg>
-                                            </i>
-                                        </a>
-                                    </li>
-                                    <li class="social-email">
-                                        <a class="social-link st-custom-button" data-network="email">
-                                            <i class="icn">
-                                                <svg class="svg" width="16" height="16">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
-                                                    </use>
-                                                </svg>
-                                            </i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <?php 
+                                $htm = '<ul class="social-sharing">
+                                            <li class="social-facebook">
+                                                <a class="social-link st-custom-button" data-network="facebook" data-url="' . UrlHelper::generateFullUrl('Blog', 'postDetail', array($blogPostData['post_id'])) . '/">
+                                                    <i class="icn">
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#fb">
+                                                            </use>
+                                                        </svg>
+                                                    </i>
+                                                </a>
+                                            </li>
+                                            <li class="social-twitter">
+                                                <a class="social-link st-custom-button" data-network="twitter">
+                                                    <i class="icn">
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#tw">
+                                                            </use>
+                                                        </svg></i>
+                                                </a>
+                                            </li>
+                                            <li class="social-pintrest">
+                                                <a class="social-link st-custom-button" data-network="pinterest">
+                                                    <i class="icn">
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#pt">
+                                                            </use>
+                                                        </svg>
+                                                    </i>
+                                                </a>
+                                            </li>
+                                            <li class="social-email">
+                                                <a class="social-link st-custom-button" data-network="email">
+                                                    <i class="icn">
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#envelope">
+                                                            </use>
+                                                        </svg>
+                                                    </i>
+                                                </a>
+                                            </li>
+                                        </ul>';
+                                echo HtmlHelper::getModalStructure('socialSharing' . $blogPostData['post_id'], Labels::getLabel('LBL_SHARE_TO_YOUR_SOCIAL_LINKS'), $htm); 
+                            ?>
                         </div>
                     </div>
                 </div>
