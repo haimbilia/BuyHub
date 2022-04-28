@@ -297,7 +297,7 @@ $("document").ready(function () {
                 setCheckoutFlow("PAYMENT");
                 setTimeout(() => {
                     fcom.removeLoader();
-                }, 2000);
+                }, 3000);
             }
         );
     };

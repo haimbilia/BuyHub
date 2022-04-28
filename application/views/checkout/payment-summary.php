@@ -46,6 +46,62 @@ if (0 < count($paymentMethods)) { ?>
                 </li>
             </ul>
         <?php } ?>
+        
+        <?php if ($rewardPointBalance > 0) { ?>
+            <div class="step_section">
+                <div class="step_head">
+                    <h5 class="step_title"><?php echo Labels::getLabel('LBL_REWARD_POINTS', $siteLangId); ?></h5>
+                </div>
+                <div class="step_body">
+                    <?php
+                    if (empty($cartSummary['cartRewardPoints'])) {
+                        $redeemRewardFrm->setFormTagAttribute('class', 'form form-apply');
+                        $redeemRewardFrm->setFormTagAttribute('onsubmit', 'useRewardPoints(this); return false;');
+                        $redeemRewardFrm->setJsErrorDisplay('afterfield');
+                        $fld = $redeemRewardFrm->getField('redeem_rewards');
+                        $fld->setFieldTagAttribute('class', 'form-control');
+                        $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Use_Reward_Point', $siteLangId));
+
+                        echo $redeemRewardFrm->getFormTag(); ?>
+                        <?php echo $redeemRewardFrm->getFieldHtml('redeem_rewards'); ?>
+                        <?php echo $redeemRewardFrm->getFieldHtml('btn_submit'); ?>
+                        </form>
+                        <?php echo $redeemRewardFrm->getExternalJs(); ?>
+
+                        <p class="txt-sm">
+                            <?php
+                            $cartTotal = isset($cartSummary['cartTotal']) ? $cartSummary['cartTotal'] : 0;
+                            $cartDiscounts = isset($cartSummary['cartDiscounts']["coupon_discount_total"]) ? $cartSummary['cartDiscounts']["coupon_discount_total"] : 0;
+                            $canBeUsed = min(min($rewardPointBalance, CommonHelper::convertCurrencyToRewardPoint($cartTotal - $cartDiscounts)), FatApp::getConfig('CONF_MAX_REWARD_POINT', FatUtility::VAR_INT, 0));
+                            $str = Labels::getLabel('LBL_MAXIMUM_{REWARDS}_OUT_OF_{AVAILABLE-REWARDS}_REWARD_POINTS_CAN_BE_REDEEMED_FOR_THIS_ORDER.', $siteLangId);
+                            echo CommonHelper::replaceStringData($str, ['{REWARDS}' => '<b>' . $canBeUsed . '</b>', '{AVAILABLE-REWARDS}' => '<b>' . $rewardPointBalance . '</b>']); ?>
+                        </p>
+                    <?php } else { ?>
+                        <div class="info">
+                            <span>
+                                <svg class="svg">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                                    </use>
+                                </svg> <?php echo Labels::getLabel('LBL_REWARD_POINTS', $siteLangId); ?>
+                                <strong><?php echo $cartSummary['cartRewardPoints']; ?>
+                                    (<?php echo CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($cartSummary['cartRewardPoints']), true, false, true, false, true); ?>)</strong>
+                                <?php echo Labels::getLabel('LBL_SUCCESSFULLY_USED', $siteLangId); ?>
+                            </span>
+                            <ul class="list-actions">
+                                <li>
+                                    <a class="link" href="javascript:void(0);" onclick="removeRewardPoints()">
+                                        <svg class="svg" width="24" height="24">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
+                                            </use>
+                                        </svg>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+        <?php } ?>
 
         <div class="step_section">
             <div class="step_head">
