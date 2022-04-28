@@ -732,6 +732,12 @@ $("document").ready(function () {
         );
     };
 
+    scrollToFinancialSummary = function () {
+		$('html, body').animate({
+			scrollTop: $(financialSummary).offset().top
+		}, 'slow');
+	}
+
     $(document).on('click', '.addrListJs', function () {
         $('.addrListJs').removeClass('is-active');
         $(this).addClass('is-active');

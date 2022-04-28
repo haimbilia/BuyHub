@@ -79,12 +79,13 @@
     &_main {
         position: relative;
         padding: 0;
+        margin-bottom: 2rem;
     }
 
     &_aside {
         flex: 1;
         @include media-breakpoint-down(lg) {
-            display: none;
+            //display: none;
         }
     }
 }
@@ -95,11 +96,11 @@
     flex-direction: column;
     width: 100%;
 
-    &_section {
-        //margin-bottom: 2rem;
-        &:last-child {
-            margin: 0;
-        }
+    &_section ~ &_section {
+        margin-top: 3rem;
+        // &:last-child {
+        //     margin: 0;
+        // }
     }
 
     &_head {
@@ -107,7 +108,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1.8rem;
+        margin-bottom: 1rem;
     }
 
     &_title {

@@ -639,7 +639,7 @@ mark,
 .skeleton {
     background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 80%), lightgray;
     border-radius: 2px;
-    height: 20px;
+    height: 10px;
     margin: 2px 0;
     position: relative;
     overflow: hidden;
@@ -669,7 +669,6 @@ mark,
 .grid-layout {
     display: grid;
     grid-gap: 5rem;
-
     grid-template-columns: minmax(auto, 24%) 1fr;
 }
 

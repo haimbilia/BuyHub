@@ -611,6 +611,10 @@ function bytesToSize(bytes) {
 }
 
 function geocodeSetData(results) {
+    if (null == document.getElementById("lat") || null == document.getElementById("lng")) {
+        return false;
+    }
+
     document.getElementById("lat").value = marker.getPosition().lat();
     document.getElementById("lng").value = marker.getPosition().lng();
     if (results[0]) {

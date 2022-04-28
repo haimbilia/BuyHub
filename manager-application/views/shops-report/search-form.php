@@ -30,6 +30,10 @@ $sortByFld->setFieldTagAttribute('id', 'sortBy');
 $sortOrderFld = $frmSearch->getField('sortOrder');
 $sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
 
+$clearBtn = $frmSearch->getField('btn_clear');
+$fld = $frmSearch->getField('btn_submit');
+$fld->attachField($clearBtn);
+
 echo $frmSearch->getFormTag();
 HtmlHelper::renderHiddenFields($frmSearch);
 ?>
@@ -89,8 +93,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
         <div class="col-md-4">
             <div class="form-group">
                 <label class="label"></label>
-                <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
-
+                <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
             </div>
         </div>
         <div class="col-md-4">
