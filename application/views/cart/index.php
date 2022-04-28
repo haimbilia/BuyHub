@@ -36,7 +36,9 @@
                                     </ul>
                                 </div>
                             <?php } ?>
-                            <div class="processing-wrap" id="cartList"></div>
+                            <div class="processing-wrap" id="cartList">
+                                <?php include(CONF_THEME_PATH . 'cart/_partial/items-summary-skeleton.php'); ?>
+                            </div>
                         </main>
                         <aside class="cart-page_aside">
                             <div class="sticky-summary" id="sticky-summary">
@@ -72,13 +74,4 @@
 
         </div>
     </section>
-</div>
-<div class="checkout-bottom">
-    <div class="amount">
-        <strong>$5856</strong>
-        <button class="link-underline" onClick="scrollToPriceSummary();"><?php echo Labels::getLabel('LBL_VIEW_SUMMARY', $siteLangId); ?></a>
-    </div>
-    <button class="btn btn-brand btn-wide" type="button" onclick="goToCheckout()">
-        <?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?>
-    </button>
 </div>
