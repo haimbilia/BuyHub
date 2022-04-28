@@ -103,34 +103,34 @@
 .products {
     position: relative;
     text-align: center;
-    background: $bg-white;
+    //background: $bg-white;
     //border-radius: $radius4;
-    overflow: hidden;
+    //overflow: hidden;
     //border: $border;
-    outline: $border;
+    // outline: $border;
     transition: all 0.2s linear;
     animation: slideRight 600ms ease both;
     a {
-        color: inherit;
-        font-size: inherit;
+        // color: inherit;
+        // font-size: inherit;
     }
     &:hover {
         border-color: $brand-color;
         .products-body {
             .products-img {
                 img {
-                    transform: scale3d(0.9, 0.9, 0.9);
+                    //transform: scale3d(0.9, 0.9, 0.9);
                 }
             }
         }
     }
-    .products-head {
+    &-head {
         height: 80px;
-        .products-head-date {
+        &-date {
             color: inherit;
             font-size: 0.875em;
         }
-        .products-head-lable {
+        &-lable {
             display: inline;
             line-height: 1;
             vertical-align: baseline;
@@ -161,78 +161,130 @@
             }
         }
     }
-    &_body {
+    &-body {
         position: relative;
-        .products-img {
-            --aspect-ratio: 1/1;
+    }
+    &-foot {
+        padding: 15px;
+        color: $txt-body;
+        text-align: center;
+    }
+    &-img {
+        --aspect-ratio: 1/1;
+        display: block;
+        margin: 0 0 15px;
+        //padding-bottom: calc(100% / (var(--aspect-ratio)));
+        aspect-ratio: 1/1;
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        background-color: $bg-gray;
+
+        &:before {
+            color: #dadada;
+            //content: "";
+            //background: url(images/loading.gif) no-repeat center;
+            background-size: 100%;
+            font-size: 100px;
+            height: 20px;
+            #{$start-direction}: calc(50% - 10px);
+            line-height: 46px;
+            margin: 0;
+            position: absolute;
+            text-align: center;
+            top: calc(50% - 10px);
+            width: 20px;
+        }
+        &:after {
+            position: absolute;
+            top: 0;
+            left: -75%;
+            z-index: 2;
             display: block;
             margin: 0 0 15px;
             padding-bottom: calc(100% / (var(--aspect-ratio)));
             position: relative;
             width: 100%;
-            overflow: hidden;
-            background-color: #fcfcfc;
-            &:before {
-                color: #dadada;
-                //content: "";
-                //background: url(images/loading.gif) no-repeat center;
-                background-size: 100%;
-                font-size: 100px;
-                height: 20px;
-                #{$start-direction}: calc(50% - 10px);
-                line-height: 46px;
-                margin: 0;
-                position: absolute;
-                text-align: center;
-                top: calc(50% - 10px);
-                width: 20px;
-            }
-            img {
-                mix-blend-mode: multiply;
-                object-fit: cover;
-                max-width: 100%;
-                width: 100%;
-                bottom: 0;
-                #{$start-direction}: 0;
-                margin: auto;
-                position: absolute;
-                #{$end-direction}: 0;
-                top: 0;
-                transition: all 0.5s linear;
-                transform: scale3d(0.8, 0.8, 0.8);
+            bottom: 0;
+            #{$start-direction}: 0;
+            margin: auto;
+            position: absolute;
+            #{$end-direction}: 0;
+            top: 0;
+            transition: all 0.5s linear;
+            //transform: scale3d(0.8, 0.8, 0.8);
+        }
+        &:hover {
+            &:after {
+                animation: shine 0.75s;
             }
         }
-    }
-    &_foot {
-        padding-bottom: 15px;
-        color: $txt-body;
-        .actions {
-            margin-top: 0.5rem;
+        img {
+            border: solid 1px lighten($border-color, 8);
+            mix-blend-mode: multiply;
+            object-fit: cover;
+            max-width: 100%;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: all 0.5s linear;
         }
     }
-    .products-title {
+    &-title {
         color: inherit;
         margin: 0 auto;
-        padding: 10px;
+        padding: 0;
+        margin-bottom: 1rem;
         font-size: 0.9em;
         font-weight: 400;
-        min-height: 62px;
+        // overflow: hidden;
+        // white-space: nowrap;
+        //text-overflow: ellipsis;
+        //max-width: 200px;
+        //min-height: 62px;
         a {
             color: inherit;
             font-size: inherit;
             font-weight: inherit;
         }
     }
-    .products-category {
+    &-category {
         color: lighten($txt-body, 50%);
         font-size: 0.8em;
         font-weight: 400;
     }
-
+    &-price {
+        display: inline-flex;
+        align-items: center;
+        // justify-content: center;
+        font-size: 0.85rem;
+        color: inherit;
+        padding: 0;
+        gap: 5px;
+        // display: inline-flex;
+        //justify-content: center;
+        &-new {
+            font-weight: 600;
+        }
+        &-old {
+            //padding: 0 6px;
+            text-decoration: line-through;
+            color: $txt-gray;
+        }
+        &-off {
+            // padding: 0 6px;
+            font-weight: 400;
+            color: $txt-body;
+        }
+    }
     .products-head-specification {
         color: lighten($txt-body, 50%);
         font-size: 1em;
-        font-weight: 300;
+        font-weight: $font-weight-light;
     }
     &.item--sold {
         opacity: 0.3;
@@ -251,7 +303,7 @@
         li {
             color: lighten($txt-body, 50%);
             font-size: 0.9em;
-            font-weight: 300;
+            font-weight: $font-weight-light;
             margin: 4px 0;
             position: relative;
             padding: 0 16px;

@@ -58,14 +58,12 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                       $submitFld->developerTags['col'] = 4;
                                     } */
                     echo $frmSearchCatalogProduct->getFormHtml(); ?>
-
                     <div class="card-table">
                         <div id="listing"> </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
