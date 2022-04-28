@@ -195,55 +195,10 @@ if (0 < $isShippingSelected && $rewardPoints > 0) { ?>
             <?php } ?>
         </div>
     </div>
-    <?php } else {
-    if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
-        <div class="divider"></div>
-        <div class="cart-total-foot">
-            <div class="cart-action">
-                <label class="checkbox wallet-credits">
-                    <input onchange="walletSelection(this)" type="checkbox" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> name="pay_from_wallet" id="pay_from_wallet" value="1">
-                    <?php echo Labels::getLabel('LBL_WALLET_CREDITS:', $siteLangId); ?>&nbsp;
-                    <strong><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true); ?></strong>
-                </label>
-
-                <?php if ($cartSummary["cartWalletSelected"] && $userWalletBalance >= $cartSummary['orderNetAmount']) {
-                    $btnSubmitFld = $walletPaymentForm->getField('btn_submit');
-                    $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand btn-block');
-                    $btnSubmitFld->value = Labels::getLabel('LBL_PAY', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, false);
-                    $walletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
-                    $walletPaymentForm->developerTags['fld_default_col'] = 12;
-
-                    echo $walletPaymentForm->getFormTag();
-                    echo $walletPaymentForm->getFieldHTML('order_id');
-                    echo $walletPaymentForm->getFieldHTML('btn_submit');
-                    echo $walletPaymentForm->getExternalJS();
-                ?>
-                    </form>
-
-                    <script>
-                        function confirmOrder(frm) {
-                            var data = fcom.frmData(frm);
-                            var action = $(frm).attr('action');
-                            fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(ans) {
-                                fcom.removeLoader();
-                                $(location).attr("href", action);
-                            });
-                        }
-                    </script>
-                <?php } else { ?>
-                    <p class="txt-sm">
-                        <?php echo Labels::getLabel('LBL_USE_MY_WALLET_BALANCE_TO_PAY_FOR_MY_ORDER', $siteLangId); ?>
-                    </p>
-                <?php } ?>
-            </div>
+<?php } elseif (1 > count($paymentMethods) && 1 > $userWalletBalance) { ?>
+    <div class="cart-total-foot">
+        <div class="mt-4">
+            <?php echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.', $siteLangId)); ?>
         </div>
-    <?php }
-
-    if (1 > count($paymentMethods) && 1 > $userWalletBalance) { ?>
-        <div class="cart-total-foot">
-            <div class="mt-4">
-                <?php echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.', $siteLangId)); ?>
-            </div>
-        </div>
-<?php }
-} ?>
+    </div>
+<?php } ?>
