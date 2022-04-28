@@ -9,6 +9,11 @@ function searhSettings(e) {
             $(this).hide();
             $('.settingListJs').show();
         }
+
+        $('.noRecordFoundJs').parent().hide();
+        if (1 > $('.settingListJs .setting:visible').length) {
+            $('.noRecordFoundJs').parent().show();
+        }
     });
 };
 

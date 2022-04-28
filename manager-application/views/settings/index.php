@@ -388,6 +388,9 @@
                         <?php } ?>
                     </div>
                 <?php } ?>
+                <div style="display: none;">
+                    <?php $this->includeTemplate('_partial/no-record-found.php'); ?>
+                </div>
             </div>
         </div>
     </div>
