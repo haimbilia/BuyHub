@@ -84,7 +84,7 @@
     &_aside {
         flex: 1;
         @include media-breakpoint-down(lg) {
-            display: none;
+            //display: none;
         }
     }
 }
