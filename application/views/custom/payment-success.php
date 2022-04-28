@@ -196,7 +196,8 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                     <div class="cart-page_main">
                                         <div class="cart-page-head">
                                             <h2 class="h2">
-                                                <?php echo Labels::getLabel('LBL_ORDER_DETAIL', $siteLangId); ?></h2>
+                                                <?php echo Labels::getLabel('LBL_ORDER_DETAIL', $siteLangId); ?>
+                                            </h2>
                                         </div>
 
                                         <ul class="list-cart">
@@ -217,7 +218,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                         <div class="block-cart-img">
                                                             <div class="products-img">
                                                                 <a href="<?php echo $productUrl; ?>">
-                                                                    <img src="<?php echo $imageUrl; ?>" alt="<?php echo $product['op_product_name']; ?>" title="<?php echo $product['op_product_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI);?>>
+                                                                    <img src="<?php echo $imageUrl; ?>" alt="<?php echo $product['op_product_name']; ?>" title="<?php echo $product['op_product_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI); ?>>
                                                                 </a>
 
                                                             </div>
@@ -246,7 +247,9 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                     </li>
                                                 <?php }
                                             } else {
-                                                foreach ($products as $subscription) { ?>
+                                                foreach ($products as $subscription) {
+                                                    $subTotal += $subscription['ossubs_price'];
+                                                ?>
                                                     <li class="list-cart-item"><?php echo Labels::getLabel("LBL_COMMISION_RATE", $siteLangId); ?> <span><?php echo CommonHelper::displayComissionPercentage($subscription['ossubs_commission']); ?>%</span></li>
                                                     <li class="list-cart-item"><?php echo Labels::getLabel("LBL_ACTIVE_PRODUCTS", $siteLangId); ?> <span><?php echo $subscription['ossubs_products_allowed']; ?></span></li>
                                                     <li class="list-cart-item"><?php echo Labels::getLabel("LBL_PRODUCT_INVENTORY", $siteLangId); ?> <span><?php echo $subscription['ossubs_inventory_allowed']; ?></span></li>
@@ -308,11 +311,21 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                             </li>
                                                         <?php  } ?>
                                                         <?php if (array_key_exists('order_rounding_off', $orderInfo) && $orderInfo['order_rounding_off'] != 0) { ?>
-                                                            <li>
+                                                            <li class="cart-summary-item">
                                                                 <span class="label"><?php echo (0 < $orderInfo['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?></span>
                                                                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_rounding_off']); ?></span>
                                                             </li>
                                                         <?php } ?>
+                                                        <?php
+                                                        if (Orders::ORDER_SUBSCRIPTION == $orderInfo['order_type']) {                                                       
+                                                            $adjustedAmount = CommonHelper::orderSubscriptionAmount(current($orderInfo['orderProducts']), 'ADJUSTEDAMOUNT');
+                                                            if (0 != $adjustedAmount) { ?>
+                                                                <li class="cart-summary-item">
+                                                                    <span class="label"><?php echo Labels::getLabel('LBL_ADJUSTED_AMOUNT', $siteLangId); ?></span>
+                                                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($adjustedAmount); ?></span>
+                                                                </li>
+                                                        <?php }
+                                                        } ?>
                                                         <li class="cart-summary-item highlighted">
                                                             <span class="label"><?php echo Labels::getLabel('LBL_NET_AMOUNT', $siteLangId); ?></span>
                                                             <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_net_amount']); ?></span>
@@ -345,4 +358,3 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
     </section>
 
 </div>
-

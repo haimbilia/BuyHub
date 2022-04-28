@@ -38,14 +38,14 @@
 				$('#' + t.recordId).remove();
 			}
 
-			if (0 == newParendId) {
+			if (0 == newParendId && oldParentId == '') {
 				$(".categoriesListJs").append(t.listingHtml);
-			} else if (oldParentId != newParendId && 0 < $('#' + newParendId).length) {
+			} else if (oldParentId != newParendId && 0 < $('#' + newParendId).length) {				
 				$('#' + newParendId).replaceWith(t.listingHtml);
 				$('#' + newParendId).find('.sortableListsOpener i').click();
-			} else if (0 < $('#' + t.recordId).length) {
+			} else if (0 < $('#' + t.recordId).length) {				
 				$('#' + t.recordId).replaceWith(t.listingHtml);
-			} else if (0 < t.newRecord && 0 < $('#' + t.parentCatId).length) {
+			} else if (0 < t.newRecord && 0 < $('#' + t.parentCatId).length) {				
 				$('#' + t.parentCatId).replaceWith(t.listingHtml);
 			} else {
 				$(".categoriesListJs").append(t.listingHtml);

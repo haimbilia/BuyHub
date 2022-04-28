@@ -726,7 +726,9 @@ Updates/Fixes :
     => 064015 - Buyer: Volume discount should be shown in different color
     => 064017 - Admin: Product's name is not visible.
     => 064116 - Advertiser UI: UI is distorted under promotions section.
-
+    => 064008 - Admin: The same functionality works differently on the different pages in the search field at the admin's end
+    => 064013 - Admin: Getting an error when the user edit the categories.
+    => 064033 - Seller: The subscription's order summary is not correct on the confirmation page after buying t
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

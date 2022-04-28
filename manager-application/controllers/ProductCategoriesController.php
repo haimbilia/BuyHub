@@ -311,9 +311,13 @@ class ProductCategoriesController extends ListingBaseController
 
         $recordId = FatUtility::int($post['prodcat_id']);
 
-        $oldParentCatId = ProductCategory::getAttributesById($recordId, 'prodcat_parent');
-        if (0 < $recordId && false === $oldParentCatId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        $oldParentCatId = NULL;
+        if(0 < $recordId){
+            $prodCatData = ProductCategory::getAttributesById($recordId, ['prodcat_parent','prodcat_deleted']);
+            if (false === $prodCatData || 0 < $prodCatData['prodcat_deleted']) {
+                LibHelper::exitWithError($this->str_invalid_request_id, true);
+            }
+            $oldParentCatId = $prodCatData['prodcat_parent'];
         }
 
         $newParentCatId = FatUtility::int($post['prodcat_parent']);
