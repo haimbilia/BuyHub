@@ -277,6 +277,7 @@
 .sticky-summary {
     position: sticky;
     top: 100px;
+    z-index: 1;
 }
 
 .buttons-group {
