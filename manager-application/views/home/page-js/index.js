@@ -144,7 +144,7 @@
 		data = "type=" + type;
 		$('#' + tab).html(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('home', 'searchStatistics'), data, function (t) {
-            fcom.closeProcessing();
+			fcom.closeProcessing();
 			fcom.removeLoader();
 			$('#' + tab).html(t.html);
 		});
@@ -211,30 +211,31 @@ $(document).ready(function () {
 				}
 			});
 	});
-});
-
-$(".navTabsJs li a").click(function () {
-	$(this).parents('.tabs_nav_container:first').find(".tabs_panel").hide();
-	var activeTab = $(this).attr("data-tab");
-
-	if ($(this).attr('data-chart')) {
-		if (layoutDirection != 'rtl') {
-			$position = 'start';
-		} else {
-			$position = 'end';
+	
+	$(document).on('click', ".navTabsJs a",function () {
+		// $(this).parents('.tabs_nav_container:first').find(".tabs_panel").hide();
+		var activeTab = $(this).attr("data-tab");
+		$('.tabsJs.active').removeClass('active');
+		$(this).addClass('active');
+		if ($(this).attr('data-chart')) {
+			if (layoutDirection != 'rtl') {
+				$position = 'start';
+			} else {
+				$position = 'end';
+			}
+			if (activeTab == 'tabs_1') {
+				callChart('monthlysalesJs', $SalesChartKey, $SalesChartVal, $position);
+			} else if (activeTab == 'tabs_2') {
+				callChart('monthlysalesearningsJs', $SalesEarningsKey, $SalesEarningsVal, $position);
+			} else if (activeTab == 'tabs_3') {
+				callChart('monthlySignupsJs', $signupsKey, $signupsVal, $position);
+			} else if (activeTab == 'tabs_5') {
+				callChart('monthlyAffiliateSignupsJs', $affiliateSignupsKey, $affiliateSignupsVal, $position);
+			} else if (activeTab == 'tabs_4') {
+				callChart('monthlyProductsJs', $productsKey, $productsVal, $position);
+			}
 		}
-		if (activeTab == 'tabs_1') {
-			callChart('monthlysalesJs', $SalesChartKey, $SalesChartVal, $position);
-		} else if (activeTab == 'tabs_2') {
-			callChart('monthlysalesearningsJs', $SalesEarningsKey, $SalesEarningsVal, $position);
-		} else if (activeTab == 'tabs_3') {
-			callChart('monthlySignupsJs', $signupsKey, $signupsVal, $position);
-		} else if (activeTab == 'tabs_5') {
-			callChart('monthlyAffiliateSignupsJs', $affiliateSignupsKey, $affiliateSignupsVal, $position);
-		} else if (activeTab == 'tabs_4') {
-			callChart('monthlyProductsJs', $productsKey, $productsVal, $position);
-		}
-	}
+	});
 });
 
 $(function () {

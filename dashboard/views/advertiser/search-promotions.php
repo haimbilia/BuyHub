@@ -94,10 +94,10 @@ foreach ($arrListing as $sn => $row) {
                             "onclick" => "promotionForm(" . $row['promotion_id'] . ")"
                         ),
                         '<svg class="svg" width="18" height="18">
-        <use
-            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
-        </use>
-    </svg>',
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                            </use>
+                        </svg>',
                         true
                     );
                 }
@@ -123,15 +123,19 @@ foreach ($arrListing as $sn => $row) {
         }
     }
     $sr_no--;
-}
-echo $tbl->getHtml();
-if (count($arrListing) == 0) {
-    $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
-    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
-}
-$postedData['page'] = $page;
-echo FatUtility::createHiddenFormFromData($postedData, array(
-    'name' => 'frmPromotionSearchPaging'
-));
-$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount);
-$this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+} ?>
+
+<div class="js-scrollable table-wrap table-responsive">
+    <?php
+    echo $tbl->getHtml();
+    if (count($arrListing) == 0) {
+        $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
+        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
+    }
+    $postedData['page'] = $page;
+    echo FatUtility::createHiddenFormFromData($postedData, array(
+        'name' => 'frmPromotionSearchPaging'
+    ));
+    $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount);
+    $this->includeTemplate('_partial/pagination.php', $pagingArr, false); ?>
+</div>

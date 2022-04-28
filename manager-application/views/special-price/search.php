@@ -16,7 +16,7 @@ foreach ($arrListing as $sn => $row) {
 
     $editListingFrm = new Form('editListingFrm-' . $splPriceId, array('id' => 'editListingFrm-' . $splPriceId));
     foreach ($fields as $key => $val) {
-        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : (('select_all' == $key) ? ['class' => 'col-check'] : []);
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':

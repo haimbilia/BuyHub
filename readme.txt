@@ -720,9 +720,18 @@ Updates/Fixes :
     => 063936 - Suggestion to redesign the download file option on the return request detail page at the seller's and buyer's end
     => 063891 - Admin: The "Approved" status is showing for the COD orders at the admin's end
     => 064105 - Buyer: Duplicate records are creating while the admin edits the existing blog post.
+    => 064106 - Admin UI : Home page : UI is distorted    
     => 063991 - The fields' arrangement is not correct under the Order Summary on the Order details page at the admin's, seller's, and buyer's end
     => 063993 - Seller and Buyer: Return/Cancelled status is not showing in the timeline on the order details page at the seller's and buyer's end 
-
+    => 064015 - Buyer: Volume discount should be shown in different color
+    => 064017 - Admin: Product's name is not visible.
+    => 064116 - Advertiser UI: UI is distorted under promotions section.
+    => 064008 - Admin: The same functionality works differently on the different pages in the search field at the admin's end
+    => 064013 - Admin: Getting an error when the user edit the categories.
+    => 064033 - Seller: The subscription's order summary is not correct on the confirmation page after buying t
+    => 064100 - Buyer: Getting an error under blog post section.
+    => 064096 - Buyer: Blogs: Getting a wrong error message, When the user clicks on any blog category
+    => 064109 - Buyer: UI is not correct under blogs section
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

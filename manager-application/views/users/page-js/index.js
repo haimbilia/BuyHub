@@ -1,8 +1,5 @@
 $(document).ready(function () {
-    select2('searchFrmUserIdJs', fcom.makeUrl(controllerName, 'autoComplete'), {}, '', function () {
-        clearSearch();
-    });
-
+    select2('searchFrmUserIdJs', fcom.makeUrl(controllerName, 'autoComplete'));
     //redirect user to login page
     $(document).on('click', 'a#redirectJs', function (event) {
         event.stopPropagation();

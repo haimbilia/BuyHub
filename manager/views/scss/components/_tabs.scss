@@ -38,4 +38,10 @@
             margin-#{$end-direction}: 0;
         }
     }
+    &.dropdown-menu{
+        display: none;
+        &.show{
+            display: block;
+        }
+    }
 }
