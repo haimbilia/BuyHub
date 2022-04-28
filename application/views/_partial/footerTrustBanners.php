@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-<?php if ($footerData) { ?>
+<?php if ($trustBannerData) { ?>
     <section class="section">        
-        <?php echo FatUtility::decodeHtmlEntities($footerData['epage_content']); ?> 
+        <?php echo FatUtility::decodeHtmlEntities($trustBannerData['epage_content']); ?> 
     </section>
 <?php } ?>
