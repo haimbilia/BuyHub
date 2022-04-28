@@ -464,16 +464,16 @@ $("document").ready(function () {
     walletSelection = function (el) {
         var wallet = $(el).is(":checked") ? 1 : 0;
         var data = "payFromWallet=" + wallet;
+
+        $(shippingSummaryDiv).prepend(fcom.getLoader());
+        $(financialSummary).prepend(fcom.getLoader(true));
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "walletSelection"),
             data,
             function (ans) {
-                fcom.removeLoader();
+                financialSummaryAjax = paymentSummaryAjax = 1;
                 loadFinancialSummary(1);
                 loadPaymentSummary();
-                setTimeout(() => {
-                    fcom.removeLoader();
-                }, 2000);
             }
         );
     };
