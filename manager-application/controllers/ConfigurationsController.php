@@ -610,7 +610,8 @@ class ConfigurationsController extends ListingBaseController
                 $countriesArr = $countryObj->getCountriesAssocArr($langId, true, 'country_code');
                 $countryFld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $langId), 'CONF_GEO_DEFAULT_COUNTRY', $countriesArr, '', [], Labels::getLabel('FRM_SELECT', $langId));
                 $countryFld->setFieldTagAttribute('id', 'geo_country_code');
-                $countryFld->setFieldTagAttribute('onChange', 'getStatesByCountryCode(this.value,' . FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1) . ',\'#geo_state_code\', \'state_code\')');
+                $defaultState = FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1);
+                $countryFld->setFieldTagAttribute('onChange', 'getStatesByCountryCode(this.value,' . (empty($defaultState) ? 1 : $defaultState) . ',\'#geo_state_code\', \'state_code\')');
 
                 $stateFld = $frm->addSelectBox(Labels::getLabel('FRM_STATE', $langId), 'CONF_GEO_DEFAULT_STATE', array(), '', [], Labels::getLabel('FRM_SELECT', $langId));
                 $stateFld->setFieldTagAttribute('id', 'geo_state_code');
