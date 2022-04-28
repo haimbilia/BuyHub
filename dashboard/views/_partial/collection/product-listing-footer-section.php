@@ -14,7 +14,12 @@
     </div>
 <?php }  ?>
     <?php } */ ?>
-    <div class="products_category"><a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id']), CONF_WEBROOT_FRONTEND); ?>"><?php echo $product['prodcat_name']; ?> </a></div>
-    <div class="products_title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>"><?php echo $product['selprod_title']; ?> </a></div>
+    <div class="products-category">
+        <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id']), CONF_WEBROOT_FRONTEND); ?>"><?php echo $product['prodcat_name']; ?> </a>
+    </div>
+    <div class="products-title">
+        <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>">
+            <?php echo $product['selprod_title']; ?> </a>
+    </div>
     <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
 </div>
