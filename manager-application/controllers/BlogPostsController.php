@@ -133,7 +133,7 @@ class BlogPostsController extends ListingBaseController
 
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {           
-            $data = BlogPost::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['ln.*', 'post_id','IFNULL(post_title,post_identifier) as post_title'], applicationConstants::JOIN_RIGHT);
+            $data = BlogPost::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['ln.*', 'm.*','IFNULL(post_title,post_identifier) as post_title'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
