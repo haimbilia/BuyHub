@@ -31,6 +31,18 @@
         </div>
     </div>
 </section>
+<div class="checkout-bottom">
+    <a class="btn btn-underline" href="">
+        Return to cart </a>
+    <button class="btn btn-brand btn-wide" type="button" onclick="goToCheckout()">
+        Continue </button>
+</div>
+
+
+<div class="checkout-bottom">
+    <a class="btn btn-underline" href=""> Return to cart </a>
+    <button class="btn btn-brand btn-wide" type="button"> Continue </button>
+</div>
 
 
 <!-- offcanvas-order-summary -->

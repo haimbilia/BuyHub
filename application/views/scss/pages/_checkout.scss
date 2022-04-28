@@ -1070,7 +1070,33 @@
 }
 
 //Wallet
-.use-reward-block {
+
+.wallet-payment {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row wrap;
+    gap: 1.5rem;
+    padding: 1.6rem 2rem;
+    border-bottom: $border;
+
+    &-txt {
+        margin-top: 1rem;
+        font-size: 0.85rem;
+    }
+    .wallet-credits {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        display: flex;
+        margin: auto;
+        align-items: center;
+        padding: 0;
+        width: 100%;
+        background-color: transparent;
+        color: $txt-black;
+        strong {
+            font-weight: 600;
+        }
+    }
 }
 
 .wallet-options {
@@ -1086,24 +1112,6 @@
     &-value {
         font-weight: 600;
         font-size: 1.4rem;
-    }
-}
-
-.wallet-credits {
-    font-size: 0.85rem;
-    margin-bottom: 1rem;
-    display: flex;
-    border: $border-black;
-    border-radius: 0;
-    margin: auto;
-    align-items: center;
-    padding: 1.5rem;
-    width: 100%;
-    background-color: transparent;
-    color: $txt-black;
-
-    strong {
-        font-weight: 600;
     }
 }
 
