@@ -730,6 +730,7 @@ Updates/Fixes :
     => 064013 - Admin: Getting an error when the user edit the categories.
     => 064033 - Seller: The subscription's order summary is not correct on the confirmation page after buying t
     => 064100 - Buyer: Getting an error under blog post section.
+    => 064096 - Buyer: Blogs: Getting a wrong error message, When the user clicks on any blog category
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

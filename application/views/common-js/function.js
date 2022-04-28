@@ -111,7 +111,6 @@ $(function () {
         var activeTab = $(this).find("a").attr("href");
         $(activeTab).fadeIn();
         return false;
-        setSlider();
     });
 
     if (CONF_ENABLE_GEO_LOCATION && className != 'CheckoutController' && className != 'CartController') {
@@ -665,8 +664,8 @@ function displayGeoAddress(address) {
 
 function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'formatted_address', saveCookie = true, callback = 'googleSelectedAddress') {
     if (1 > $("#" + elementId).length) {
-        var msg = (langLbl.fieldNotFound).replace('{field}', elementId + ' Field');
-        fcom.displayErrorMessage(msg);
+        /* var msg = (langLbl.fieldNotFound).replace('{field}', elementId + ' Field');
+        fcom.displayErrorMessage(msg); */
         return false;
     }
     var fieldElement = document.getElementById(elementId);
