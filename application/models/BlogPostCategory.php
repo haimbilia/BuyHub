@@ -285,19 +285,21 @@ class BlogPostCategory extends MyAppModel
         }
         $bpCatSrch = new BlogPostCategorySearch($langId, $isActive);
         $bpCatSrch->doNotCalculateRecords();
-        $bpCatSrch->doNotLimitRecords();        
+        $bpCatSrch->doNotLimitRecords();
         $bpCatSrch->setParent($parentId);
         $bpCatSrch->addOrder('bpcategory_display_order', 'asc');
 
         if (true === $excludeDeleted) {
             $bpCatSrch->addCondition('bpc.bpcategory_deleted', '=', applicationConstants::NO);
         }
+        if ($forSelectBox) {
+            $bpCatSrch->addMultipleFields(array('bpcategory_id', 'IFNULL(bpcategory_name, bpcategory_identifier) as bpcategory_name'));
+        }
 
         $rs = $bpCatSrch->getResultSet();
         if ($forSelectBox) {
-            $bpCatSrch->addMultipleFields(array('bpcategory_id', 'IFNULL(bpcategory_name,bpcategory_identifier) as bpcategory_name'));
             $categoriesArr = FatApp::getDb()->fetchAllAssoc($rs);
-        } else {            
+        } else {
             $categoriesArr = FatApp::getDb()->fetchAll($rs);
         }
 
@@ -399,8 +401,8 @@ class BlogPostCategory extends MyAppModel
         if ($this->mainTableRecordId < 1) {
             return false;
         }
-        $parentCatId = FatUtility::int($parentCatId);         
-        FatApp::getDb()->updateFromArray(static::DB_TBL, array(static::DB_TBL_PREFIX . 'parent' => $parentCatId), array('smt' => static::DB_TBL_PREFIX . 'id = ?', 'vals' => array($this->mainTableRecordId)));     
+        $parentCatId = FatUtility::int($parentCatId);
+        FatApp::getDb()->updateFromArray(static::DB_TBL, array(static::DB_TBL_PREFIX . 'parent' => $parentCatId), array('smt' => static::DB_TBL_PREFIX . 'id = ?', 'vals' => array($this->mainTableRecordId)));
         return true;
     }
 
@@ -442,13 +444,13 @@ class BlogPostCategory extends MyAppModel
         }
         return $parentIds;
     }
-    
+
     public static function getChildIds($bpCategoryId, array $childIds = []): array
     {
         $bpCatSrch = new BlogPostCategorySearch(0, false);
         $bpCatSrch->addFld('bpcategory_id');
         $bpCatSrch->doNotCalculateRecords();
-        $bpCatSrch->doNotLimitRecords();        
+        $bpCatSrch->doNotLimitRecords();
         if (is_array($bpCategoryId)) {
             $bpCatSrch->addCondition('bpcategory_parent', 'in', $bpCategoryId);
         } else {
