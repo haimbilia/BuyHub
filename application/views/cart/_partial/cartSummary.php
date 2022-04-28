@@ -37,11 +37,15 @@ require('coupons-section.php'); ?>
     <div class="checkout-bottom">
         <div class="amount">
             <strong><?php echo CommonHelper::displayMoneyFormat($netChargeAmt); ?></strong>
-            <button class="link-underline" onClick="scrollToPriceSummary();"><?php echo Labels::getLabel('LBL_VIEW_SUMMARY', $siteLangId); ?></a>
+            <button class="link-underline" onClick="scrollToPriceSummary();">
+                <?php echo Labels::getLabel('LBL_SUMMARY', $siteLangId); ?></a>
         </div>
-        <button class="btn btn-brand btn-wide" type="button" onclick="goToCheckout()">
-            <?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?>
-        </button>
+        <div class="further-actions">
+
+            <button class="btn btn-brand btn-wide" type="button" onclick="goToCheckout()">
+                <?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?>
+            </button>
+        </div>
     </div>
 </div>
 <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>

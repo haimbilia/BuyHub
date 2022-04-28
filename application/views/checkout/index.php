@@ -31,17 +31,19 @@
         </div>
     </div>
 </section>
-<div class="checkout-bottom">
-    <a class="btn btn-underline" href="">
-        Return to cart </a>
-    <button class="btn btn-brand btn-wide" type="button" onclick="goToCheckout()">
-        Continue </button>
-</div>
-
 
 <div class="checkout-bottom">
-    <a class="btn btn-underline" href=""> Return to cart </a>
-    <button class="btn btn-brand btn-wide" type="button"> Continue </button>
+    <div class="amount">
+        <strong>$26,079.60</strong>
+        <button class="link-underline" onClick="scrollToPriceSummary();">
+            <?php echo Labels::getLabel('LBL_SUMMARY', $siteLangId); ?></a>
+    </div>
+    <div class="further-actions">
+
+        <button class="btn btn-brand btn-wide" type="button" onclick="goToCheckout()">
+            <?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?>
+        </button>
+    </div>
 </div>
 
 
