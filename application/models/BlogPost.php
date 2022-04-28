@@ -9,8 +9,6 @@ class BlogPost extends MyAppModel
     public const DB_POST_TO_CAT_TBL = 'tbl_blog_post_to_category';
     public const DB_POST_TO_CAT_TBL_PREFIX = 'ptc_';
     public const REWRITE_URL_PREFIX = 'blog/post-detail/';
-    
-    public const SHORT_DESC_LENGTH = 130;
 
     private $db;
 
