@@ -42,6 +42,7 @@ class CartController extends MyAppController
         $this->set('pickUpProductsCount', count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]));
         $this->set('total', $cartObj->countProducts());
         $this->set('hasPhysicalProduct', $cartObj->hasPhysicalProduct());
+        $this->set('cartItemsCount', $cartObj->countProducts());
         $this->_template->render();
     }
 
