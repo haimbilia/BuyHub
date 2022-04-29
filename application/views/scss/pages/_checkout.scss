@@ -607,6 +607,7 @@
 }
 
 .addresses {
+    display: block;
     &-checkbox {
         position: absolute;
         #{$start-direction}: 1.5rem;

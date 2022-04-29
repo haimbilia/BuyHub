@@ -16,16 +16,18 @@ $innova_settings = array(
 );
 
 FatApp::setViewDataProvider('_partial/cart-summary.php', array('Common', 'cartSummary'));
-/* offcanvas Forms */
-FatApp::setViewDataProvider('_partial/footer-part/headerSearchFormArea.php', array('Common', 'headerSearchFormArea'));
-FatApp::setViewDataProvider('_partial/headerUserArea.php', array('Common', 'headerUserArea'));
-FatApp::setViewDataProvider('_partial/headerNavigation.php', array('Navigation', 'headerNavigation'));
-FatApp::setViewDataProvider('_partial/headerLanguageArea.php', array('Common', 'headerLanguageArea'));
-FatApp::setViewDataProvider('_partial/custom/header-breadcrumb.php', array('Common', 'setHeaderBreadCrumb'));
-FatApp::setViewDataProvider('_partial/footerNewsLetterForm.php', array('Common', 'footerNewsLetterForm'));
-FatApp::setViewDataProvider('_partial/headerTopNavigation.php', array('Navigation', 'headerTopNavigation'));
-FatApp::setViewDataProvider('_partial/footerNavigation.php', array('Navigation', 'footerNavigation'));
-FatApp::setViewDataProvider('_partial/footerSocialMedia.php', array('Common', 'footerSocialMedia'));
-FatApp::setViewDataProvider('_partial/footerTrustBanners.php', array('Common', 'footerTrustBanners'));
-FatApp::setViewDataProvider('_partial/footerMetaContent.php', array('Common', 'footerMetaContent'));
-// FatApp::setViewDataProvider('_partial/faq-list.php', array('Common', 'faqList'));
+if (!FatUtility::isAjaxCall()) {
+    /* offcanvas Forms */
+    FatApp::setViewDataProvider('_partial/footer-part/headerSearchFormArea.php', array('Common', 'headerSearchFormArea'));
+    FatApp::setViewDataProvider('_partial/headerUserArea.php', array('Common', 'headerUserArea'));
+    FatApp::setViewDataProvider('_partial/headerNavigation.php', array('Navigation', 'headerNavigation'));
+    FatApp::setViewDataProvider('_partial/headerLanguageArea.php', array('Common', 'headerLanguageArea'));
+    FatApp::setViewDataProvider('_partial/custom/header-breadcrumb.php', array('Common', 'setHeaderBreadCrumb'));
+    FatApp::setViewDataProvider('_partial/footerNewsLetterForm.php', array('Common', 'footerNewsLetterForm'));
+    FatApp::setViewDataProvider('_partial/headerTopNavigation.php', array('Navigation', 'headerTopNavigation'));
+    FatApp::setViewDataProvider('_partial/footerNavigation.php', array('Navigation', 'footerNavigation'));
+    FatApp::setViewDataProvider('_partial/footerSocialMedia.php', array('Common', 'footerSocialMedia'));
+    FatApp::setViewDataProvider('_partial/footerTrustBanners.php', array('Common', 'footerTrustBanners'));
+    FatApp::setViewDataProvider('_partial/footerMetaContent.php', array('Common', 'footerMetaContent'));
+    // FatApp::setViewDataProvider('_partial/faq-list.php', array('Common', 'faqList'));
+}
