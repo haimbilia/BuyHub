@@ -122,9 +122,8 @@ $(function () {
 	};
 
 	removeFromWishlist = function (selprod_id, wish_list_id, event) {
-		if (!confirm(langLbl.confirmDelete)) { return false; };
+		if (!confirm(langLbl.confirmDelete)) { return false; };		
 		addRemoveWishListProduct(selprod_id, wish_list_id, event);
-		listCartProducts();
 	};
 
 	moveToCart = function (selprod_id, wish_list_id, event, fulfilmentType) {

@@ -738,6 +738,7 @@ Updates/Fixes :
     => 064142 - Buyer: Continue button is showing twice on checkout page.
     => 063950 - Seller: Upload media is not working while adding the digital product at the seller's end
     => 063714 - Buyer: Geo Location: Locations drop down overlaps with the Delivery locations section. 
+    => 064140 - Buyer: The user is unable to remove the items from the 'Save for later' section.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
