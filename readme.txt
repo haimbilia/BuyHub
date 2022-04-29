@@ -735,6 +735,7 @@ Updates/Fixes :
     => 064064 - Admin: Search button is missing for filters under report section.
     => 064055 - Admin: States listing is not showing while enabling the default Geo-Location option under the Product's settings
     => 064054 - Admin: No Record Found message is not showing
+    => 064142 - Buyer: Continue button is showing twice on checkout page.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

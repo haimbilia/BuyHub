@@ -446,7 +446,6 @@ $("document").ready(function () {
                 if ('' == res.html) {
                     $('.checkoutPageJs').hide();
                     setTimeout(() => {
-                        $(pageContent).remove();
                         $('.checkoutPageJs').addClass('checkout-page-single').fadeIn();
                     }, 200);
                 } else {
