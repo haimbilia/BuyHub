@@ -65,43 +65,45 @@
                                     <?php echo 0 < $pickUpBy ? $productData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
                                 </h6>
                             </div>
-                            <div class="shop-address js-slot-addr_<?php echo $pickUpBy; ?>">
-                                <?php if (!empty($levelItems['pickup_address'])) {
-                                    $fromTime = date('H:i', strtotime($address["time_slot_from"]));
-                                    $toTime = date('H:i', strtotime($address["time_slot_to"]));
-                                ?>
-                                    <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
-                                        <?php if (strlen($address['addr_address2']) > 0) {
-                                            echo ", " . $address['addr_address2']; ?>
-                                        <?php } ?>
-                                    </p>
-                                    <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
-                                    <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
-                                    <?php if (strlen($address['addr_phone']) > 0) {
-                                        $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
+                            <div class="shop-selected">
+                                <div class="shop-address js-slot-addr_<?php echo $pickUpBy; ?>">
+                                    <?php if (!empty($levelItems['pickup_address'])) {
+                                        $fromTime = date('H:i', strtotime($address["time_slot_from"]));
+                                        $toTime = date('H:i', strtotime($address["time_slot_to"]));
                                     ?>
-                                        <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
-                                    <?php } ?>
-                                    <p class="time-txt"><i class="fas fa-calendar-day"></i><?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
-                                    </p>
-                                <?php } ?>
-                            </div>
-                            <div class="shipping-method js-slot-addr-<?php echo $pickUpBy; ?>" data-addr-id="<?php echo $seletedAddrId; ?>">
-                                <input type="hidden" name="slot_id[<?php echo $pickUpBy; ?>]" class="js-slot-id" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotId; ?>">
-                                <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date" data-level="<?php echo $pickUpBy; ?>" value="<?php echo isset($seletedSlotDate) ? $seletedSlotDate : ''; ?>">
-                                <?php if (count($levelItems['pickup_options']) > 0) { ?>
-                                    <a class="text-link pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0); return false;" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, <?php echo $shopId; ?>)">
-                                        <?php
-                                        if (!empty($levelItems['pickup_address'])) {
-                                            echo Labels::getLabel('LBL_CHANGE_PICKUP', $siteLangId);
-                                        } else {
-                                            echo Labels::getLabel('LBL_SELECT_PICKUP', $siteLangId);
-                                        }
+                                        <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
+                                            <?php if (strlen($address['addr_address2']) > 0) {
+                                                echo ", " . $address['addr_address2']; ?>
+                                            <?php } ?>
+                                        </p>
+                                        <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
+                                        <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
+                                        <?php if (strlen($address['addr_phone']) > 0) {
+                                            $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                                         ?>
-                                    </a>
-                                <?php } else {
-                                    echo Labels::getLabel('MSG_NO_PICKUP_ADDRESS_CONFIGURED', $siteLangId);
-                                } ?>
+                                            <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
+                                        <?php } ?>
+                                        <p class="time-txt"><i class="fas fa-calendar-day"></i><?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
+                                        </p>
+                                    <?php } ?>
+                                </div>
+                                <div class="shipping-method js-slot-addr-<?php echo $pickUpBy; ?>" data-addr-id="<?php echo $seletedAddrId; ?>">
+                                    <input type="hidden" name="slot_id[<?php echo $pickUpBy; ?>]" class="js-slot-id" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotId; ?>">
+                                    <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date" data-level="<?php echo $pickUpBy; ?>" value="<?php echo isset($seletedSlotDate) ? $seletedSlotDate : ''; ?>">
+                                    <?php if (count($levelItems['pickup_options']) > 0) { ?>
+                                        <button class="btn btn-brand pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0); return false;" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, <?php echo $shopId; ?>)">
+                                            <?php
+                                            if (!empty($levelItems['pickup_address'])) {
+                                                echo Labels::getLabel('LBL_CHANGE_PICKUP', $siteLangId);
+                                            } else {
+                                                echo Labels::getLabel('LBL_SELECT_PICKUP', $siteLangId);
+                                            }
+                                            ?>
+                                        </button>
+                                    <?php } else {
+                                        echo Labels::getLabel('MSG_NO_PICKUP_ADDRESS_CONFIGURED', $siteLangId);
+                                    } ?>
+                                </div>
                             </div>
                         </li>
                         <!-- Header -->

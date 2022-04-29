@@ -46,7 +46,7 @@ if (0 < count($paymentMethods)) { ?>
                 </li>
             </ul>
         <?php } ?>
-        
+
         <?php if ($rewardPointBalance > 0) { ?>
             <div class="step_section">
                 <div class="step_head">
