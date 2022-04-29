@@ -38,9 +38,7 @@
 				$('#' + t.recordId).remove();
 			}
 
-			if (0 == newParendId) {
-				$(".categoriesListJs").append(t.listingHtml);
-			} else if (oldParentId != newParendId && 0 < $('#' + newParendId).length) {
+			if (oldParentId != newParendId && 0 < $('#' + newParendId).length) {
 				$('#' + newParendId).replaceWith(t.listingHtml);
 				$('#' + newParendId).find('.sortableListsOpener i').click();
 			} else if (0 < $('#' + t.recordId).length) {

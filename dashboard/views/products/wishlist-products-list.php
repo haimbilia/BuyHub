@@ -49,7 +49,7 @@ $vtype = $postedData['vtype'] ?? false;
                                         </use>
                                     </svg> <?php echo Labels::getLabel('LBL_NOT_SERVICEABLE', $siteLangId); ?></div>
                             <?php } ?>
-                            <div class="products_img">
+                            <div class="products-img">
                                 <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
                                 <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id']), CONF_WEBROOT_FRONTEND) ?>">
                                     <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']); ?>
@@ -72,11 +72,14 @@ $vtype = $postedData['vtype'] ?? false;
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
                                 </svg></i> <span class="rate"><?php echo round($product['prod_rating'],1);?></span> <?php if(round($product['prod_rating'])==0 ){  ?> <span class="be-first"> <a
                                     href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Be_the_first_to_review_this_product', $siteLangId); ?> </a> </span> <?php } ?> </div> <?php } */ ?>
-                            <div class="products_category">
+                            <div class="products-category">
                                 <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id']), CONF_WEBROOT_FRONTEND); ?>"><?php echo html_entity_decode($product['prodcat_name'], ENT_QUOTES, 'UTF-8'); ?> </a>
                             </div>
-                            <div class="products_title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>"><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
-                                </a></div> <?php $this->includeTemplate('_partial/collection-product-price.php', array('product' => $product, 'siteLangId' => $siteLangId), false); ?>
+                            <div class="products-title">
+                                <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>"><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
+                                </a>
+                            </div>
+                            <?php $this->includeTemplate('_partial/collection-product-price.php', array('product' => $product, 'siteLangId' => $siteLangId), false); ?>
 
                             <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $product,  'siteLangId' => $siteLangId, 'showActionBtns' => $showActionBtns, 'isWishList' => $isWishList, 'selProdRibbons' => $selProdRibbons), false); ?>
                         </div>

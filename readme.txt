@@ -725,9 +725,16 @@ Updates/Fixes :
     => 063993 - Seller and Buyer: Return/Cancelled status is not showing in the timeline on the order details page at the seller's and buyer's end 
     => 064015 - Buyer: Volume discount should be shown in different color
     => 064017 - Admin: Product's name is not visible.
+    => 064116 - Advertiser UI: UI is distorted under promotions section.
     => 064008 - Admin: The same functionality works differently on the different pages in the search field at the admin's end
     => 064013 - Admin: Getting an error when the user edit the categories.
     => 064033 - Seller: The subscription's order summary is not correct on the confirmation page after buying t
+    => 064100 - Buyer: Getting an error under blog post section.
+    => 064096 - Buyer: Blogs: Getting a wrong error message, When the user clicks on any blog category
+    => 064109 - Buyer: UI is not correct under blogs section
+    => 064064 - Admin: Search button is missing for filters under report section.
+    => 064055 - Admin: States listing is not showing while enabling the default Geo-Location option under the Product's settings
+    => 064054 - Admin: No Record Found message is not showing
     => 063950 - Seller: Upload media is not working while adding the digital product at the seller's end
 
 UAT points:

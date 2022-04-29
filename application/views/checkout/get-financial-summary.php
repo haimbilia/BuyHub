@@ -45,66 +45,8 @@ if (0 < $isShippingSelected && 1 > count($paymentMethods)) {
                 </div>
             </li>
         </ul>
-    <?php }
-}
-
-if (0 < $isShippingSelected && $rewardPoints > 0) { ?>
-    <div class="cart-total-head">
-        <h3 class="cart-total-title">
-            <?php echo Labels::getLabel('LBL_REWARD_POINTS', $siteLangId); ?>
-        </h3>
-    </div>
-    <div class="cart-total-body">
-        <div class="cart-summary mb-4">
-            <?php
-            if (empty($cartSummary['cartRewardPoints'])) {
-                $redeemRewardFrm->setFormTagAttribute('class', 'form form-apply');
-                $redeemRewardFrm->setFormTagAttribute('onsubmit', 'useRewardPoints(this); return false;');
-                $redeemRewardFrm->setJsErrorDisplay('afterfield');
-                $fld = $redeemRewardFrm->getField('redeem_rewards');
-                $fld->setFieldTagAttribute('class', 'form-control');
-                $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Use_Reward_Point', $siteLangId));
-
-                echo $redeemRewardFrm->getFormTag(); ?>
-                <?php echo $redeemRewardFrm->getFieldHtml('redeem_rewards'); ?>
-                <?php echo $redeemRewardFrm->getFieldHtml('btn_submit'); ?>
-                </form>
-                <?php echo $redeemRewardFrm->getExternalJs(); ?>
-
-                <p class="txt-sm">
-                    <?php
-                    $cartTotal = isset($cartSummary['cartTotal']) ? $cartSummary['cartTotal'] : 0;
-                    $cartDiscounts = isset($cartSummary['cartDiscounts']["coupon_discount_total"]) ? $cartSummary['cartDiscounts']["coupon_discount_total"] : 0;
-                    $canBeUsed = min(min($rewardPoints, CommonHelper::convertCurrencyToRewardPoint($cartTotal - $cartDiscounts)), FatApp::getConfig('CONF_MAX_REWARD_POINT', FatUtility::VAR_INT, 0));
-                    $str = Labels::getLabel('LBL_MAXIMUM_{REWARDS}_OUT_OF_{AVAILABLE-REWARDS}_REWARD_POINTS_CAN_BE_REDEEMED_FOR_THIS_ORDER.', $siteLangId);
-                    echo CommonHelper::replaceStringData($str, ['{REWARDS}' => '<b>' . $canBeUsed . '</b>', '{AVAILABLE-REWARDS}' => '<b>' . $rewardPoints . '</b>']); ?>
-                </p>
-            <?php } else { ?>
-                <div class="info">
-                    <span>
-                        <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
-                            </use>
-                        </svg> <?php echo Labels::getLabel('LBL_REWARD_POINTS', $siteLangId); ?>
-                        <strong><?php echo $cartSummary['cartRewardPoints']; ?>
-                            (<?php echo CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($cartSummary['cartRewardPoints']), true, false, true, false, true); ?>)</strong>
-                        <?php echo Labels::getLabel('LBL_SUCCESSFULLY_USED', $siteLangId); ?>
-                    </span>
-                    <ul class="list-actions">
-                        <li>
-                            <a class="link" href="javascript:void(0);" onclick="removeRewardPoints()">
-                                <svg class="svg" width="24" height="24">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                                    </use>
-                                </svg>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            <?php } ?>
-        </div>
-    </div>
-<?php } ?>
+<?php }
+} ?>
 
 <div class="cart-total-head">
     <h3 class="cart-total-title">
@@ -140,13 +82,13 @@ if (0 < $isShippingSelected && $rewardPoints > 0) { ?>
             <li class="cart-summary-item">
                 <span class="label"><?php echo Labels::getLabel('LBL_Loyalty/Volume_Discount', $siteLangId); ?>
                 </span>
-                <span class="value txt-secondary"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
             </li>
         <?php } ?>
         <?php if (!FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
             <li class="cart-summary-item">
                 <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
-                <span class="value txt-secondary"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
             </li>
         <?php } ?>
         <?php if (!empty($cartSummary['cartRewardPoints'])) {
@@ -166,7 +108,7 @@ if (0 < $isShippingSelected && $rewardPoints > 0) { ?>
         <?php if (0 < $cartSummary['totalSaving']) { ?>
             <li class="cart-summary-item">
                 <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
-                <span class="value text-success"><?php echo CommonHelper::displayMoneyFormat($cartSummary['totalSaving']); ?></span>
+                <span class="value txt-secondary"><?php echo CommonHelper::displayMoneyFormat($cartSummary['totalSaving']); ?></span>
             </li>
         <?php } ?>
         <?php $orderNetAmt = $cartSummary['orderNetAmount']; ?>
@@ -179,6 +121,29 @@ if (0 < $isShippingSelected && $rewardPoints > 0) { ?>
         <?php } ?>
 
     </ul>
+
+    <?php if (1 > $isShippingSelected) { ?>
+        <div class="checkout-bottom">
+            <div class="amount">
+                <strong><?php echo CommonHelper::displayMoneyFormat($orderNetAmt); ?></strong>
+                <button class="link-underline" onClick="scrollToFinancialSummary();">
+                    <?php echo Labels::getLabel('LBL_SUMMARY', $siteLangId); ?>
+                </button>
+            </div>
+            <div class="further-actions">
+                <?php if ($cartHasPhysicalProduct) {
+                    $fn = Shipping::FULFILMENT_SHIP == $fulfillmentType ? 'setUpShippingMethod();' : 'setUpPickup();'; ?>
+                    <button class="btn btn-brand btn-wide" type="button" onclick="<?php echo $fn; ?>">
+                        <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
+                    </button>
+                <?php } else { ?>
+                    <button class="btn btn-brand btn-wide" type="button" onclick="loadFinancialSummary(1);loadPaymentSummary();">
+                        <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
+                    </button>
+                <?php } ?>
+            </div>
+        </div>
+    <?php } ?>
 </div>
 <?php if (1 > $isShippingSelected) { ?>
     <div class="cart-total-foot">
@@ -195,55 +160,10 @@ if (0 < $isShippingSelected && $rewardPoints > 0) { ?>
             <?php } ?>
         </div>
     </div>
-    <?php } else {
-    if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
-        <div class="divider"></div>
-        <div class="cart-total-foot">
-            <div class="cart-action">
-                <label class="checkbox wallet-credits">
-                    <input onchange="walletSelection(this)" type="checkbox" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> name="pay_from_wallet" id="pay_from_wallet" value="1">
-                    <?php echo Labels::getLabel('LBL_WALLET_CREDITS:', $siteLangId); ?>&nbsp;
-                    <strong><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true); ?></strong>
-                </label>
-
-                <?php if ($cartSummary["cartWalletSelected"] && $userWalletBalance >= $cartSummary['orderNetAmount']) {
-                    $btnSubmitFld = $walletPaymentForm->getField('btn_submit');
-                    $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand btn-block');
-                    $btnSubmitFld->value = Labels::getLabel('LBL_PAY', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], true, false, true, false, false);
-                    $walletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
-                    $walletPaymentForm->developerTags['fld_default_col'] = 12;
-
-                    echo $walletPaymentForm->getFormTag();
-                    echo $walletPaymentForm->getFieldHTML('order_id');
-                    echo $walletPaymentForm->getFieldHTML('btn_submit');
-                    echo $walletPaymentForm->getExternalJS();
-                ?>
-                    </form>
-
-                    <script>
-                        function confirmOrder(frm) {
-                            var data = fcom.frmData(frm);
-                            var action = $(frm).attr('action');
-                            fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(ans) {
-                                fcom.removeLoader();
-                                $(location).attr("href", action);
-                            });
-                        }
-                    </script>
-                <?php } else { ?>
-                    <p class="txt-sm">
-                        <?php echo Labels::getLabel('LBL_USE_MY_WALLET_BALANCE_TO_PAY_FOR_MY_ORDER', $siteLangId); ?>
-                    </p>
-                <?php } ?>
-            </div>
+<?php } elseif (1 > count($paymentMethods) && 1 > $userWalletBalance) { ?>
+    <div class="cart-total-foot">
+        <div class="mt-4">
+            <?php echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.', $siteLangId)); ?>
         </div>
-    <?php }
-
-    if (1 > count($paymentMethods) && 1 > $userWalletBalance) { ?>
-        <div class="cart-total-foot">
-            <div class="mt-4">
-                <?php echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.', $siteLangId)); ?>
-            </div>
-        </div>
-<?php }
-} ?>
+    </div>
+<?php } ?>

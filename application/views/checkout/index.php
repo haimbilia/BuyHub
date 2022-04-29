@@ -5,13 +5,6 @@
 <section class="section" data-content="">
     <div class="container">
         <div class="checkout-page checkoutPageJs">
-            <button class="btn-summary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                <span class="btn-summary-text">
-                    <?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?>
-
-                </span>
-                <span class="btn-summary-price" id="netAmountSummary"></span>
-            </button>
             <main class="checkout-page_main checkout-content-js">
                 <?php include(CONF_THEME_PATH . 'checkout/_partial/shipping-summary-skeleton.php'); ?>
             </main>
@@ -31,18 +24,6 @@
         </div>
     </div>
 </section>
-
-
-<!-- offcanvas-order-summary -->
-<div class="offcanvas offcanvas-start  offcanvas-order-summary" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-    <div class="offcanvas-header">
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body summary-listing-js">
-        <?php include(CONF_THEME_PATH . 'checkout/_partial/price-summary-skeleton.php'); ?>
-    </div>
-</div>
-
 <input id="hasAddress" class="d-none" value="<?php echo (empty($addresses) || count($addresses) == 0) ? 0 : 1 ?>">
 <script type="text/javascript">
     <?php if (isset($defaultAddress)) { ?>

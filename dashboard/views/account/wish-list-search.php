@@ -30,15 +30,14 @@
                                                     </use>
                                                 </svg> <?php //echo str_replace('{n}', $wishlist['totalProducts'], Labels::getLabel('LBL_View_{n}_items', $siteLangId)); 
                                                         ?>
-
                                             </a> <?php
                                                 } ?>
                                         <?php if ((!isset($wishlist['uwlist_type']) || (isset($wishlist['uwlist_type']) && $wishlist['uwlist_type'] != UserWishList::TYPE_FAVOURITE)) && $wishlist['uwlist_type'] != UserWishList::TYPE_DEFAULT_WISHLIST) { ?>
-                                            <a href="javascript:void(0)" onclick="deleteWishList(<?php echo $wishlist['uwlist_id']; ?>);" class="icons-wrapper"><i class="icn shop"><svg class="svg">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
-                                                        </use>
-                                                    </svg>
-                                                </i>
+                                            <a href="javascript:void(0)" onclick="deleteWishList(<?php echo $wishlist['uwlist_id']; ?>);" class="icons-wrapper">
+                                                <svg class="svg" width="18" height="18">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
+                                                    </use>
+                                                </svg>
                                             </a>
                                         <?php
                                         } ?>

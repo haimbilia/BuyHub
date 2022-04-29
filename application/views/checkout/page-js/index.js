@@ -13,6 +13,9 @@ var paymentDiv = "#payment";
 var financialSummary = ".summary-listing-js";
 var reviewSection = ".review-section-js";
 
+var paymentSummaryAjax = 0;
+var financialSummaryAjax = 0;
+
 async function checkLogin() {
     let ans = await $.ajax({
         url: fcom.makeUrl("GuestUser", "checkAjaxUserLoggedIn"),
@@ -105,12 +108,14 @@ $("document").ready(function () {
         if (1 > $(financialSummary + ' .skeleton').length) {
             $(financialSummary).prepend(fcom.getLoader(true));
         }
-
+        financialSummaryAjax = 1;
         fcom.updateWithAjax(fcom.makeUrl("Checkout", "getFinancialSummary", [isShippingSelected]), "",
             function (ans) {
-                fcom.removeLoader();
                 $(financialSummary).hide().html(ans.html).fadeIn();
                 $("#netAmountSummary").hide().html(ans.netAmount).fadeIn();
+                if (0 == paymentSummaryAjax) {
+                    fcom.removeLoader();
+                }
             }
         );
     };
@@ -287,17 +292,16 @@ $("document").ready(function () {
 
     setUpShippingMethod = function () {
         $(shippingSummaryDiv).prepend(fcom.getLoader());
+        $(financialSummary).prepend(fcom.getLoader(true));
         var data = $("#shipping-summary select").serialize();
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "setUpShippingMethod"),
             data,
             function (t) {
+                financialSummaryAjax = paymentSummaryAjax = 1;
                 loadPaymentSummary();
                 loadFinancialSummary(1);
                 setCheckoutFlow("PAYMENT");
-                setTimeout(() => {
-                    fcom.removeLoader();
-                }, 2000);
             }
         );
     };
@@ -432,14 +436,15 @@ $("document").ready(function () {
     };
 
     loadPaymentSummary = function () {
+        paymentSummaryAjax = 1;
         $(pageContent).prepend(fcom.getLoader(true));
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "PaymentSummary"),
             '',
             function (res) {
+                paymentSummaryAjax = 0;
                 if ('' == res.html) {
                     $('.checkoutPageJs').hide();
-                    fcom.removeLoader();
                     setTimeout(() => {
                         $(pageContent).remove();
                         $('.checkoutPageJs').addClass('checkout-page-single').fadeIn();
@@ -447,13 +452,11 @@ $("document").ready(function () {
                 } else {
                     $(pageContent).hide().html(res.html).fadeIn();
                     $(paymentDiv).addClass("is-current");
-                    setTimeout(() => {
-                        if (0 < $(pageContent + ' .loaderJs').length) {
-                            fcom.removeLoader();
-                        }
-                    }, 1000);
                 }
 
+                if (0 == financialSummaryAjax) {
+                    fcom.removeLoader();
+                }
             }
         );
     };
@@ -461,16 +464,16 @@ $("document").ready(function () {
     walletSelection = function (el) {
         var wallet = $(el).is(":checked") ? 1 : 0;
         var data = "payFromWallet=" + wallet;
+
+        $(shippingSummaryDiv).prepend(fcom.getLoader());
+        $(financialSummary).prepend(fcom.getLoader(true));
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "walletSelection"),
             data,
             function (ans) {
-                fcom.removeLoader();
+                financialSummaryAjax = paymentSummaryAjax = 1;
                 loadFinancialSummary(1);
                 loadPaymentSummary();
-                setTimeout(() => {
-                    fcom.removeLoader();
-                }, 2000);
             }
         );
     };
@@ -728,6 +731,12 @@ $("document").ready(function () {
             }
         );
     };
+
+    scrollToFinancialSummary = function () {
+		$('html, body').animate({
+			scrollTop: $(financialSummary).offset().top
+		}, 'slow');
+	}
 
     $(document).on('click', '.addrListJs', function () {
         $('.addrListJs').removeClass('is-active');

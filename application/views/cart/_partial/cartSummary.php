@@ -11,7 +11,7 @@ require('coupons-section.php'); ?>
         <?php if ($cartSummary['cartVolumeDiscount']) { ?>
             <li class="cart-summary-item">
                 <span class="label"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?></span>
-                <span class="value txt-secondary"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount']); ?></span>
             </li>
         <?php } ?>
 
@@ -24,7 +24,7 @@ require('coupons-section.php'); ?>
         <?php if (!FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && !empty($cartSummary['cartDiscounts'])) { ?>
             <li class="cart-summary-item">
                 <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId); ?></span>
-                <span class="value txt-secondary"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
+                <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartDiscounts']['coupon_discount_total']); ?></span>
             </li>
         <?php } ?>
         <?php $netChargeAmt = $cartSummary['cartTotal'] - ((0 < $cartSummary['cartVolumeDiscount']) ? $cartSummary['cartVolumeDiscount'] : 0);
@@ -34,6 +34,20 @@ require('coupons-section.php'); ?>
             <span class="value"><?php echo CommonHelper::displayMoneyFormat($netChargeAmt); ?></span>
         </li>
     </ul>
+    <div class="checkout-bottom">
+        <div class="amount">
+            <strong><?php echo CommonHelper::displayMoneyFormat($netChargeAmt); ?></strong>
+            <button class="link-underline" onClick="scrollToPriceSummary();">
+                <?php echo Labels::getLabel('LBL_SUMMARY', $siteLangId); ?>
+            </button>
+        </div>
+        <div class="further-actions">
+
+            <button class="btn btn-brand btn-wide" type="button" onclick="goToCheckout()">
+                <?php echo Labels::getLabel('LBL_Checkout', $siteLangId); ?>
+            </button>
+        </div>
+    </div>
 </div>
 <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
     <p class="included">

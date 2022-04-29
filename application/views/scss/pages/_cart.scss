@@ -176,11 +176,14 @@
     }
 
     .cart-action {
-        margin-top: 1.5rem;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        grid-gap: 1rem;
+        display: none;
+        @include media-breakpoint-up(lg) {
+            margin-top: 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            grid-gap: 1rem;
+        }
         .link-underline {
             display: inline-block;
             width: fit-content;
@@ -277,6 +280,7 @@
 .sticky-summary {
     position: sticky;
     top: 100px;
+    z-index: 1;
 }
 
 .buttons-group {

@@ -1096,6 +1096,7 @@ class CheckoutController extends MyAppController
             }
         }
 
+        $rewardPoints = 0;
         if ($cartProducts) {
             foreach ($cartProducts as $cartProduct) {
                 $codEnabled = $cartProduct['isProductShippedBySeller'] ? $cartProduct['selprod_cod_enabled'] : $cartProduct['product_cod_enabled'];
@@ -1355,7 +1356,6 @@ class CheckoutController extends MyAppController
                     $shippingCost = 0;
                 } */
 
-                $rewardPoints = 0;
                 $rewardPoints = $orderData['order_reward_point_value'];
                 $usedRewardPoint = 0;
                 if ($rewardPoints > 0) {
@@ -1420,6 +1420,19 @@ class CheckoutController extends MyAppController
         if ($userWalletBalance >= $cartSummary['orderNetAmount'] && $cartSummary['cartWalletSelected']) {
             $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => 0));
         }
+
+        $walletPaymentForm = $this->getWalletPaymentForm($this->siteLangId);
+        if ((FatUtility::convertToType($userWalletBalance, FatUtility::VAR_FLOAT) > 0) && $cartSummary['cartWalletSelected'] && $cartSummary['orderNetAmount'] > 0) {
+            $orderId = $_SESSION['order_id'] ?? '';
+            $walletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($orderId)));
+            $walletPaymentForm->fill(array('order_id' => $orderId));
+            $walletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
+            $walletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
+        }
+        $this->set('walletPaymentForm', $walletPaymentForm);
+
+        $this->set('redeemRewardFrm', $this->getRewardsForm($this->siteLangId));
+        $this->set('rewardPointBalance', UserRewardBreakup::rewardPointBalance($userId));
 
         $cartHasDigitalProduct = $this->cartObj->hasDigitalProduct();
         $this->set('paymentMethods', $paymentMethods);
@@ -2027,15 +2040,8 @@ class CheckoutController extends MyAppController
         $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
         $products = $this->cartObj->getProducts($this->siteLangId);
         $shippingAddress = $this->cartObj->getCartShippingAddress();
-        $walletPaymentForm = $this->getWalletPaymentForm($this->siteLangId);
         $userWalletBalance = User::getUserBalance($userId, true);
-        if ((FatUtility::convertToType($userWalletBalance, FatUtility::VAR_FLOAT) > 0) && $cartSummary['cartWalletSelected'] && $cartSummary['orderNetAmount'] > 0) {
-            $orderId = $_SESSION['order_id'] ?? '';
-            $walletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($orderId)));
-            $walletPaymentForm->fill(array('order_id' => $orderId));
-            $walletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
-            $walletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
-        }
+
         $fulfillmentType = $this->cartObj->getCartCheckoutType();
         /* Payment Methods[ */
         $splitPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);
@@ -2068,7 +2074,7 @@ class CheckoutController extends MyAppController
             $this->set('billingAddressArr', $billingAddressArr);
         }
         /* ] */
-
+        
         $this->set('shippingAddress', $shippingAddress);
         $this->set('isShippingSelected', $isShippingSelected);
         $this->set('products', $products);
@@ -2076,11 +2082,8 @@ class CheckoutController extends MyAppController
         $this->set('cartHasPhysicalProduct', $this->cartObj->hasPhysicalProduct());
         $this->set('fulfillmentType', $fulfillmentType);
         $this->set('netAmount', CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount']));
-        $this->set('redeemRewardFrm', $this->getRewardsForm($this->siteLangId));
-        $this->set('rewardPoints', UserRewardBreakup::rewardPointBalance($userId));
         $this->set('userWalletBalance', $userWalletBalance);
         $this->set('canUseWalletForPayment', PaymentMethods::canUseWalletForPayment());
-        $this->set('walletPaymentForm', $walletPaymentForm);
         $this->set('html', $this->_template->render(false, false, 'checkout/get-financial-summary.php', true));
         $this->_template->render(false, false, 'json-success.php', false, false);
     }

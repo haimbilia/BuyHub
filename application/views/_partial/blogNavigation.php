@@ -20,6 +20,7 @@
                         if (!$cat) {
                             break;
                         }
+
                         $noOfCharAllowedInNav = $noOfCharAllowedInNav - mb_strlen($cat);
                         if ($noOfCharAllowedInNav < 0) {
                             break;
@@ -31,7 +32,8 @@
                          <?php $mainNavigation = array_slice($categoriesArr, 0, $navLinkCount, true);
                             foreach ($mainNavigation as $id => $cat) { ?>
                              <li class="nav-blog-item">
-                                 <a class="nav-blog-link" href="<?php echo UrlHelper::generateUrl('Blog', 'category', array($id)); ?>"><?php echo $cat; ?>
+                                 <a class="nav-blog-link" href="<?php echo UrlHelper::generateUrl('Blog', 'category', array($id)); ?>">
+                                     <?php echo $cat; ?>
                                  </a>
                              </li>
                          <?php } ?>

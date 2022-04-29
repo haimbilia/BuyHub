@@ -250,7 +250,7 @@ class MyAppModel extends FatModel
             if (!array_key_exists($primaryTableJoinType, $joinTypes)) {
                 trigger_error('INVALID_JOIN_TYPE', E_ERROR);
             }
-            $srch->joinTable(static::DB_TBL, $joinTypes[$primaryTableJoinType] . ' JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id and ln.' . $prefix . 'lang_lang_id=' . $langId,'m');
+            $srch->joinTable(static::DB_TBL, $joinTypes[$primaryTableJoinType] . ' JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id and ln.' . $prefix . 'lang_lang_id=' . $langId, 'm');
         }
 
         $srch->doNotCalculateRecords();
@@ -280,7 +280,7 @@ class MyAppModel extends FatModel
                 $srch->addFld($attr);
             }
         }
-        
+
         $rs = $srch->getResultSet();
         $row = $db->fetch($rs);
 
