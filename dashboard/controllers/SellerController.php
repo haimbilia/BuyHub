@@ -2143,7 +2143,6 @@ class SellerController extends SellerBaseController
         $getShopDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_SHOP_BANNER);
         $getShopLogoSquare = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE);
         $getShopLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_RECTANGULAR);
-
         $this->set('getShopDimensions', $getShopDimensions);
         $this->set('getShopLogoSquare', $getShopLogoSquare);
         $this->set('getShopLogoRactangle', $getShopLogoRactangle);

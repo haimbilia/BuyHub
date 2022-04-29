@@ -94,14 +94,9 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
     var getAspectRatioDes = '<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['aspectRatio']; ?>';
-    getAspectRatioDes = getAspectRatioDes.split(":");
-    if (getAspectRatioDes) {
-        var aspectRatioDes = getAspectRatioDes[0] / getAspectRatioDes[1];
-    } else {
-        var aspectRatioDes = 4 / 1;
-    }
 
-    $(document).on('change', '#slideScreenJs', function(e) {
+
+    $(document).off('change', '#slideScreenJs').on('change', '#slideScreenJs', function(e) {
         e.stopPropagation();
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
@@ -112,32 +107,20 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?> x <?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
             $(minWidthBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
-            
-            aspectRatio = aspectRatioDes;
+
+
         } else if ($(this).val() == screenIpad) {
-            var getAspectRatioIpad = '<?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['aspectRatio']; ?>';
-            getAspectRatioIpad = getAspectRatioIpad.split(":");
-            if (getAspectRatioIpad) {
-                var aspectRatioIpad = getAspectRatioIpad[0] / getAspectRatioIpad[1];
-            } else {
-                var aspectRatioIpad = 128 / 45;
-            }
+
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['width']; ?> x <?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['height']; ?>'));
             $(minWidthBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['height']; ?>');
-            aspectRatio = aspectRatioIpad;
+
         } else {
-            var getAspectRatioMob = '<?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['aspectRatio']; ?>';
-            getAspectRatioMob = getAspectRatioMob.split(":");
-            if (getAspectRatioMob) {
-                var aspectRatioMob = getAspectRatioMob[0] / getAspectRatioMob[1];
-            } else {
-                var aspectRatioMob = 16 / 9;
-            }
+
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['width']; ?> x <?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
             $(minWidthBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
-            aspectRatio = aspectRatioMob;
+
         }
 
         let slideScreen = $(this).val();

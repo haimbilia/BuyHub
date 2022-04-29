@@ -51,9 +51,9 @@ class BrandRequestsController extends ListingBaseController
             'brand-requests/page-js/index.js'
         ]);
         $this->includeFeatherLightJsCss();
-        
+
         $this->getListingData();
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_BRAND_NAME', $this->siteLangId));        
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_BRAND_NAME', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -89,7 +89,7 @@ class BrandRequestsController extends ListingBaseController
             'listingHtml' => $this->_template->render(false, false, 'brand-requests/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
-        
+
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
@@ -146,8 +146,8 @@ class BrandRequestsController extends ListingBaseController
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);      
-        $srch->addOrder($sortBy, $sortOrder);        
+        $srch->setPageSize($pageSize);
+        $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $records);
         $this->set('postedData', $post);
@@ -229,11 +229,11 @@ class BrandRequestsController extends ListingBaseController
         }
 
         $this->setLangData($brand, [$brand::tblFld('name') => $post[$brand::tblFld('name')]]);
-        
+
         $brandData = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('IFNULL(brand_name,brand_identifier) as brand_name', 'brand_id', 'brand_identifier', 'brand_active', 'brand_featured', 'brand_status', 'brand_seller_id'), applicationConstants::JOIN_RIGHT);
         $email = new EmailHandler();
         if ($post['brand_status'] != Brand::BRAND_REQUEST_PENDING) {
-            if (!$email->sendBrandRequestStatusChangeNotification($this->siteLangId, $brandData)) {                
+            if (!$email->sendBrandRequestStatusChangeNotification($this->siteLangId, $brandData)) {
                 LibHelper::exitWithError(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
             }
         }
@@ -263,7 +263,7 @@ class BrandRequestsController extends ListingBaseController
         $fld->requirements()->setRequired();
         $frm->addCheckBox(Labels::getLabel('FRM_BRAND_APPROVAL', $this->siteLangId), 'brand_status', applicationConstants::YES, [], false, applicationConstants::NO);
         $frm->addCheckBox(Labels::getLabel('FRM_BRAND_STATUS', $this->siteLangId), 'brand_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
-        
+
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -305,13 +305,14 @@ class BrandRequestsController extends ListingBaseController
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
         $imageFrm = $this->getBrandImageForm($recordId);
         $getBrandRequestDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_BRAND_IMAGE);
-        $getBrandRequestLogoSquare = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_SQUARE);
-        $getBrandRequestLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_RECTANGULAR);
-        
+        $getBrandRequestLogoSquare = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE);
+        $getBrandRequestLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_RECTANGULAR);
+
         $imageFrm->fill($data);
-        $this->set('getBrandRequestLogoSquare',$getBrandRequestLogoSquare);
-        $this->set('getBrandRequestLogoRactangle',$getBrandRequestLogoRactangle);
+        $this->set('getBrandRequestLogoSquare', $getBrandRequestLogoSquare);
+        $this->set('getBrandRequestLogoRactangle', $getBrandRequestLogoRactangle);
         $this->set('recordId', $recordId);
+        $this->set('ratio_type', $data['ratio_type']);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
         $this->set('languageCount', count($languages));
@@ -332,11 +333,11 @@ class BrandRequestsController extends ListingBaseController
         }
         if ($file_type == 'logo') {
             $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true);
-            
+
             $aspectRatioType = $brandLogo['afile_aspect_ratio'];
-            $aspectRatioType = ($aspectRatioType > 0 ) ? $aspectRatioType : 1;
+            $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
             $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_THUMB, $aspectRatioType);
-            $this->set('aspectRatioType',$aspectRatioType);
+            $this->set('aspectRatioType', $aspectRatioType);
             $this->set('image', $brandLogo);
             $this->set('imageFunction', 'brandReal');
             $this->set('imageBrandDimensions', $imageBrandDimensions);
@@ -486,21 +487,21 @@ class BrandRequestsController extends ListingBaseController
         if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        
-        $brandObj = new Brand($recordId); 
+
+        $brandObj = new Brand($recordId);
         $brandObj->setFldValue($brandObj::tblFld('status'), $status);
         if (!$brandObj->save()) {
             LibHelper::exitWithError($brandObj->getError(), true);
-        }   
-        
+        }
+
         $brandData = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('IFNULL(brand_name,brand_identifier) as brand_name', 'brand_id', 'brand_identifier', 'brand_active', 'brand_featured', 'brand_status', 'brand_seller_id'), applicationConstants::JOIN_RIGHT);
         $email = new EmailHandler();
         if ($status != Brand::BRAND_REQUEST_PENDING) {
-            if (!$email->sendBrandRequestStatusChangeNotification($this->siteLangId, $brandData)) {                
+            if (!$email->sendBrandRequestStatusChangeNotification($this->siteLangId, $brandData)) {
                 LibHelper::exitWithError(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
             }
         }
-     
+
         $this->set('msg', Labels::getLabel('MSG_BRAND_APPROVED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -513,12 +514,12 @@ class BrandRequestsController extends ListingBaseController
         }
 
         $arr = [
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'brand_logo' => Labels::getLabel('LBL_Logo', $this->siteLangId),
             'brand_name' => Labels::getLabel('LBL_Brand_Name', $this->siteLangId),
             'brand_requested_on' => Labels::getLabel('LBL_Requested_On', $this->siteLangId),
             'brand_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
-            'brand_status' => Labels::getLabel('LBL_BRAND_APPROVAL', $this->siteLangId),            
+            'brand_status' => Labels::getLabel('LBL_BRAND_APPROVAL', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('brandRequestTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);

@@ -19,7 +19,7 @@ $fld->developerTags['fieldWrapperRowExtraClass'] = 'form-group mb-3';
 $fld->value = '<h5>' . Labels::getLabel('LBL_LOGO', $siteLangId) . '</h5>';
 
 $fld = $logoFrm->getField('logo');
-$fld->htmlAfterField = '<span class="form-text text-muted logoPreferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '500 x 500') . '</span>';
+$fld->htmlAfterField = '<span class="form-text text-muted logoPreferredDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '' . $getBrandRequestLogoSquare['width'] . ' x ' . $getBrandRequestLogoSquare['height'] . '') . '</span>';
 $fld->value = '<span id="logoListingJs"></span>';
 
 // $ratioFld->attachField($fld);
@@ -36,7 +36,7 @@ $fld->developerTags['fieldWrapperRowExtraClass'] = 'form-group mb-3';
 $fld->value = '<h5>' . Labels::getLabel('LBL_BANNER', $siteLangId) . '</h5>';
 
 $fld = $imageFrm->getField('banner');
-$fld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500') . '</span>';
+$fld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '' . $getBrandRequestLogoRactangle['width'] . ' x ' . $getBrandRequestLogoRactangle['height'] . '') . '</span>';
 $fld->value = '<span id="imageListingJs"></span>';
 
 $imageLangFld = $imageFrm->getField('lang_id');
@@ -80,28 +80,28 @@ $formTitle = Labels::getLabel('LBL_BRAND_SETUP', $siteLangId); ?>
     var minHeightBaneerEle = $('#<?php echo $imageFrm->getFormTagAttribute('id'); ?> input[name=min_height]');
 
 
-    /* $(minWidthBaneerEle).val('<?php /* echo $getBrandRequestDimensions[ImageDimension::VIEW_DESKTOP]['width']; */ ?>');
-    $(minHeightBaneerEle).val('<?php /* echo $getBrandRequestDimensions[ImageDimension::VIEW_DESKTOP]['height']; */ ?>');
- */
-
-    /* $(minWidthBaneerEle).val(2000);
-    $(minHeightBaneerEle).val(500);
-    $(minWidthLogoEle).val(150);
-    $(minHeightLogoEle).val(150); */
+    $(minWidthBaneerEle).val('<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
+    $(minHeightBaneerEle).val('<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
+    var selectedRatioType = <?php echo $ratio_type; ?>;
 
-    var getAspectRatioDes = '<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_DESKTOP]['aspectRatio']; ?>';
-    getAspectRatioDes = getAspectRatioDes.split(":");
-    if (getAspectRatioDes) {
-        var aspectRatioDes = getAspectRatioDes[0] / getAspectRatioDes[1];
+    if (selectedRatioType == ratioTypeSquare) {
+
+        $(minWidthLogoEle).val('<?php echo $getBrandRequestLogoSquare['width']; ?>');
+        $(minHeightLogoEle).val('<?php echo $getBrandRequestLogoSquare['height']; ?>');
+        $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBrandRequestLogoSquare['width']; ?> x <?php echo $getBrandRequestLogoSquare['height']; ?>'));
+
     } else {
-        var aspectRatioDes = 4 / 1;
+        $(minWidthLogoEle).val('<?php echo $getBrandRequestLogoRactangle['width']; ?>');
+        $(minHeightLogoEle).val('<?php echo $getBrandRequestLogoRactangle['height']; ?>');
+        $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBrandRequestLogoRactangle['width']; ?> x <?php echo $getBrandRequestLogoRactangle['height']; ?>'));
+
     }
 
 
-   /*  var aspectRatio = 4 / 1; */
-    $(document).on('change', '#slideScreenJs', function() {
+    /*  var aspectRatio = 4 / 1; */
+    $(document).off('change', '#slideScreenJs').on('change', '#slideScreenJs', function() {
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
 
@@ -111,66 +111,28 @@ $formTitle = Labels::getLabel('LBL_BRAND_SETUP', $siteLangId); ?>
             $(minWidthBaneerEle).val('<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
 
-            aspectRatio = aspectRatioDes;
-
-           /*  $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '2000 x 500'));
-            $(minWidthBaneerEle).val(2000);
-            $(minHeightBaneerEle).val(500);
-            aspectRatio = 4 / 1; */
-
-
-
         } else if ($(this).val() == screenIpad) {
-          /*   $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '1024 x 360'));
-            $(minWidthBaneerEle).val(1024);
-            $(minHeightBaneerEle).val(360);
-            aspectRatio = 128 / 45; */
 
-            var getAspectRatioIpad = '<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_DESKTOP]['aspectRatio']; ?>';
-            getAspectRatioIpad = getAspectRatioIpad.split(":");
-            if (getAspectRatioIpad) {
-                var aspectRatioIpad = getAspectRatioIpad[0] / getAspectRatioIpad[1];
-            } else {
-                var aspectRatioIpad = 128 / 45;
-            }
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_TABLET]['width']; ?> x <?php echo $getBrandRequestDimensions[ImageDimension::VIEW_TABLET]['height']; ?>'));
             $(minWidthBaneerEle).val('<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_TABLET]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_TABLET]['height']; ?>');
-            aspectRatio = aspectRatioIpad;
-
 
         } else {
 
-            var getAspectRatioMob = '<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_TABLET]['aspectRatio']; ?>';
-            getAspectRatioMob = getAspectRatioMob.split(":");
-            if (getAspectRatioMob) {
-                var aspectRatioMob = getAspectRatioMob[0] / getAspectRatioMob[1];
-            } else {
-                var aspectRatioMob = 16 / 9;
-            }
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_MOBILE]['width']; ?> x <?php echo $getBrandRequestDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
-
             $(minWidthBaneerEle).val('<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_MOBILE]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
-            aspectRatio = aspectRatioMob;
 
-
-
-
-           /*  $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '640 x 360'));
-            $(minWidthBaneerEle).val(640);
-            $(minHeightBaneerEle).val(360);
-            aspectRatio = 16 / 9; */
         }
 
         var slide_screen = $(this).val();
         var brand_id = $(this).closest("form").find('input[name="brand_id"]').val();
         var lang_id = $("#imageLanguageJs").val();
-        loadImages(brand_id, 'image', slide_screen, lang_id);        
+        loadImages(brand_id, 'image', slide_screen, lang_id);
     });
 
 
-    $(document).on('change', '.brandPrefRatioJs', function() {
+    $(document).off('change', '.brandPrefRatioJs').on('change', '.brandPrefRatioJs', function() {
         if ($(this).val() == ratioTypeSquare) {
             $(minWidthLogoEle).val('<?php echo $getBrandRequestLogoSquare['width']; ?>');
             $(minHeightLogoEle).val('<?php echo $getBrandRequestLogoSquare['height']; ?>');
@@ -181,20 +143,4 @@ $formTitle = Labels::getLabel('LBL_BRAND_SETUP', $siteLangId); ?>
             $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBrandRequestLogoRactangle['width']; ?> x <?php echo $getBrandRequestLogoRactangle['height']; ?>'));
         }
     });
-
-
-
-   
-      /*   $(document).on('change', '.brandPrefRatioJs', function() {
-        if ($(this).val() == ratioTypeSquare) {
-            $(minWidthLogoEle).val(500);
-            $(minHeightLogoEle).val(500);
-            $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '500 x 500'));
-        } else {
-            $(minWidthLogoEle).val(500);
-            $(minHeightLogoEle).val(280);
-            $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '500 x 280'));
-        }
-    }); */
-    
 </script>

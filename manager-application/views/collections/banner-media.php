@@ -100,7 +100,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     
 
 
-    $(document).on('change', '#slideScreenJs', function() {
+    $(document).off('change', '#slideScreenJs').on('change', '#slideScreenJs', function() {
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
 
