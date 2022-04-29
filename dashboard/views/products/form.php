@@ -406,22 +406,22 @@ if (0 < $recordId) {
         </div>
     </div>
     </form>
+    <table id="variantCloneJs" class="hidden">
+        <?php echo getVariantUiTr($langId, -1);  ?>
+    </table>
+    <?php echo $frm->getExternalJS();
+    $imgFrm->setFormTagAttribute('class', 'hidden');
+    $imgFrm->setFormTagAttribute('name', 'hiddenMediaFrm');
+    $imgFrm->setFormTagAttribute('id', 'hiddenMediaFrmJs');
+    $fld = $imgFrm->getField('prod_image');
+    $fld->addFieldTagAttribute('onChange', "loadCropper(this)");
+    $fld->addFieldTagAttribute('id', "hiddenMediaFrmFileJs");
+    $fld->addFieldTagAttribute('accept', "image/*");
+    $fld->addFieldTagAttribute('data-name', Labels::getLabel("FRM_PRODUCT_IMAGE", $siteLangId));
+    echo $imgFrm->getFormHtml();
+    ?>
 </div>
-<table id="variantCloneJs" class="hidden">
-    <?php echo getVariantUiTr($langId, -1);  ?>
-</table>
-<?php echo $frm->getExternalJS();
-$imgFrm->setFormTagAttribute('class', 'hidden');
-$imgFrm->setFormTagAttribute('name', 'hiddenMediaFrm');
-$imgFrm->setFormTagAttribute('id', 'hiddenMediaFrmJs');
-$fld = $imgFrm->getField('prod_image');
-$fld->addFieldTagAttribute('onChange', "loadCropper(this)");
-$fld->addFieldTagAttribute('id', "hiddenMediaFrmFileJs");
-$fld->addFieldTagAttribute('accept', "image/*");
-$fld->addFieldTagAttribute('data-name', Labels::getLabel("FRM_PRODUCT_IMAGE", $siteLangId));
-echo $imgFrm->getFormHtml();
 
-?>
 <script>
     var canEditTags = <?php echo $canEditTags ? 1 : 0; ?>;
     var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $langId); ?>';

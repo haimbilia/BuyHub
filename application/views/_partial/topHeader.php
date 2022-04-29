@@ -80,9 +80,9 @@
                         <?php } ?>
                     </div>
                     <div class="top-bar__right">
-                        <ul class="quick-nav">
-                            <!-- <?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?> -->
-                            <?php $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
+                        <ul class="quick-nav">                           
+                            <?php                             
+                            $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
                             <li class="quick-nav-item item-desktop wishListJs">
                                 <button type="button" class="quick-nav-link button-store">
 
@@ -128,7 +128,8 @@
         <div class="main-bar no-print">
             <div class="container">
                 <div class="main-bar__inner">
-                    <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
+                    <?php                     
+                    $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
                     <div class="main-search">
                         <button class="btn-mega-search toggle--search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-controls="offcanvas-mega-search">
 

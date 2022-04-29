@@ -642,9 +642,9 @@ function defaultSetUpLogin(frm, v) {
             var cls = fcom.processingClass;
             if (typeof counter !== "undefined") {
                 cls += '-' + counter
-            }
-            // $("."+ cls).remove(); 
-            $.ykmsg.close();
+            }           
+            $("."+ cls).remove(); 
+           // $.ykmsg.close();
         },
 
         displaySuccessMessage: function (msg) {

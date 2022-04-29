@@ -474,7 +474,7 @@ var advanceMedia = false; /* open via advance media*/
         var other_data = $('form[name="' + frmName + '"]').serializeArray();
         $.each(other_data, function (key, input) {
             formData.append(input.name, input.value);
-        });
+        });       
 
         $.ajax({
             url: fcom.makeUrl('Products', "uploadMedia"),
@@ -494,7 +494,7 @@ var advanceMedia = false; /* open via advance media*/
                     return;
                 }
                 $("#modalBoxJs").modal("hide");
-                if (advanceMedia) {
+                if (advanceMedia == true) {
                     $.ykmodal.show();
                     productImages(ans.record_id, ans.file_type, ans.option_id, ans.lang_id);
                 }
@@ -523,7 +523,7 @@ var advanceMedia = false; /* open via advance media*/
         }
         fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('Products', 'images', [recordId, fileType, 0, 0]), { isDefaultLayout: 1 }, function (t) {
-            $.ykmsg.close();
+            fcom.closeProcessing();
             $('#productDefaultImagesJs li').not(":first").remove();
             $('#productDefaultImagesJs').append(t.html);
         }, { fOutMode: 'json' });

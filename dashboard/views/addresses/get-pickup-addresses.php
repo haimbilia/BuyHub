@@ -4,7 +4,7 @@ if (!empty($addresses)) { ?>
         <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Pick_Up', $siteLangId); ?></h5>
     </div>
     <div class="modal-body form-edit">
-        <div class="form-edit-body loaderContainerJs">
+        <div class="loaderContainerJs">
             <div class="pick-section">
                 <div class="pickup-option">
                     <ul class="pickup-option__list">
@@ -31,7 +31,6 @@ if (!empty($addresses)) { ?>
                             </li>
                         <?php } ?>
                     </ul>
-
                     <div class="pickup-time">
                         <div class="calendar">
                             <div class="js-datepicker calendar-pickup"></div>

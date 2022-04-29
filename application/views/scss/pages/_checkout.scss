@@ -391,6 +391,7 @@
                         padding: 0.5rem 0.7rem;
                         display: block;
                         text-align: center;
+                        white-space: nowrap;
                     }
                 }
             }
@@ -606,6 +607,7 @@
 }
 
 .addresses {
+    display: block;
     &-checkbox {
         position: absolute;
         #{$start-direction}: 1.5rem;
@@ -843,11 +845,17 @@
             }
         }
     }
+    .shop-selected {
+        display: flex;
+        gap: 1rem;
+        flex-flow: row wrap;
+        align-items: center;
+        margin-top: 1.5rem;
+    }
 
     .shop-address {
         flex: 1;
         color: $txt-gray;
-        margin-top: 1.5rem;
     }
 
     .shipping-method {
