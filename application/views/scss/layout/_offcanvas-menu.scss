@@ -17,11 +17,11 @@
         &-item {
             flex: 1 1 0%;
             &.active {
-                background-image: linear-gradient($secondary-color, $secondary-color);
-                background-position: 100% 0;
-                background-repeat: no-repeat;
-                background-size: 100% 2px;
-                transition: background-size 0.3s;
+                // background-image: linear-gradient($secondary-color, $secondary-color);
+                // background-position: 100% 0;
+                // background-repeat: no-repeat;
+                // background-size: 100% 2px;
+                // transition: background-size 0.3s;
             }
         }
         &-link {
@@ -32,10 +32,14 @@
             display: flex;
             align-items: center;
             flex-direction: column;
+            color: $txt-body;
             .svg {
                 width: 20px;
                 height: 20px;
                 fill: $secondary-color;
+            }
+            &:hover {
+                color: currentColor;
             }
         }
     }

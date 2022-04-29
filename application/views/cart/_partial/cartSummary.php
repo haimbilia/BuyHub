@@ -34,6 +34,7 @@ require('coupons-section.php'); ?>
             <span class="value"><?php echo CommonHelper::displayMoneyFormat($netChargeAmt); ?></span>
         </li>
     </ul>
+    <!-- Used for Mobile/Tab View -->
     <div class="checkout-bottom">
         <div class="amount">
             <strong><?php echo CommonHelper::displayMoneyFormat($netChargeAmt); ?></strong>

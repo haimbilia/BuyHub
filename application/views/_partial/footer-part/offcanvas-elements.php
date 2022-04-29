@@ -1,10 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <!-- Header Search Form -->
-<?php $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
+<?php
+$this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
 
 <div class="zeynep">
-    <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]); ?>
+    <?php
+    $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]); ?>
 </div>
 <div class="zeynep-overlay"></div>
 
@@ -81,7 +83,8 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
         </div>
         <div class="offcanvas-body p-0">
             <ul class="seller-nav">
-                <?php $this->includeTemplate('_partial/headerTopNavigation.php', ['liClass' => 'seller-nav-item', 'aClass' => 'seller-nav-link']); ?>
+                <?php                
+                $this->includeTemplate('_partial/headerTopNavigation.php', ['liClass' => 'seller-nav-item', 'aClass' => 'seller-nav-link']); ?>
             </ul>
         </div>
     </div>
