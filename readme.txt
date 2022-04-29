@@ -738,7 +738,8 @@ Updates/Fixes :
     => 063950 - Seller: Upload media is not working while adding the digital product at the seller's end
     => 063714 - Buyer: Geo Location: Locations drop down overlaps with the Delivery locations section. 
     => 064030 - Suggestion to remove the "Delete" button on the subscription-checkout page and give a "Back button" on the same page
-
+    => 064038 - Admin: Commission is not updating at the admin's end, If the seller buying a different package plan with a different commission
+    
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
