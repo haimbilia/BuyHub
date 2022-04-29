@@ -160,6 +160,8 @@ class UrlHelper extends FatUtility
 
     public static function staticContentProvider($controller, $action)
     {
+        $controller = strtolower($controller);
+        $action = strtolower($action);
         if (in_array($controller, array('js-css', 'image', 'fonts', 'images', 'js', 'img', 'innovas', 'assetmanager'))) {
             return true;
         }
@@ -187,7 +189,7 @@ class UrlHelper extends FatUtility
             'custom' => [
                 'update-screen-resolution'
             ],
-            'Account' => [
+            'account' => [
                 'user-profile-image'
             ],
             'home' => [

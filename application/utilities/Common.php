@@ -2,8 +2,11 @@
 
 class Common
 {
+    public static function test($template){
+        die('dsdsdsdsdsd');
+    }
     public static function cartSummary($template)
-    {
+    { 
         $cartObj = new Cart();
         $cartObj->invalidateCheckoutType();
         $siteLangId = CommonHelper::getLangId();       
