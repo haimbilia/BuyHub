@@ -20,7 +20,8 @@ if (CommonHelper::demoUrl()) { ?>
 
 <?php if (FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 0)) { ?>
     <section class="section bg-newsletter" style="background-image:url(<?php echo CONF_WEBROOT_URL; ?>images/bg/bg-newsletter.png) ;">
-        <?php $this->includeTemplate('_partial/footerNewsLetterForm.php'); ?>
+        <?php
+        $this->includeTemplate('_partial/footerNewsLetterForm.php'); ?>
     </section>
 <?php  } ?>
 
@@ -51,12 +52,14 @@ if (CommonHelper::demoUrl()) { ?>
                         <?php } ?>
                     </ul>
 
-                    <?php $this->includeTemplate('_partial/headerLanguageArea.php'); ?>
+                    <?php
+                    $this->includeTemplate('_partial/headerLanguageArea.php'); ?>
 
                 </div>
                 <div class="footer-layout-col">
                     <div class="row">
-                        <?php $this->includeTemplate('_partial/footerNavigation.php'); ?>
+                        <?php
+                        $this->includeTemplate('_partial/footerNavigation.php'); ?>
                     </div>
                 </div>
 
@@ -96,7 +99,8 @@ if (CommonHelper::demoUrl()) { ?>
         </div>
     </section>
 
-    <?php $this->includeTemplate('_partial/footerMetaContent.php'); ?>
+    <?php
+    $this->includeTemplate('_partial/footerMetaContent.php'); ?>
 
     <?php if ('cart' != strtolower($controllerName)) { ?>
         <!-- Mobile menu -->
