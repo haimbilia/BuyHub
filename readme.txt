@@ -737,6 +737,7 @@ Updates/Fixes :
     => 064054 - Admin: No Record Found message is not showing
     => 063950 - Seller: Upload media is not working while adding the digital product at the seller's end
     => 063714 - Buyer: Geo Location: Locations drop down overlaps with the Delivery locations section. 
+    => 064030 - Suggestion to remove the "Delete" button on the subscription-checkout page and give a "Back button" on the same page
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
