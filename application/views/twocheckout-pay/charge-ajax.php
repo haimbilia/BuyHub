@@ -107,9 +107,6 @@ if (null != $btn) {
                 </div>
             </div>
         </div>
-        <div class="total-pay"><?php echo CommonHelper::displayMoneyFormat($paymentAmount) ?>
-            <small>(<?php echo Labels::getLabel('LBL_Total_Payable', $siteLangId); ?>)</small>
-        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
@@ -121,9 +118,9 @@ if (null != $btn) {
                             <?php
                             $btn = $frm->getField('btn_submit');
                             $btn->addFieldTagAttribute('class', 'btn btn-secondary');
+                            $btn->value = $btn->value . ': ' . CommonHelper::displayMoneyFormat($paymentAmount);
                             echo $frm->getFieldHtml('btn_submit');
                             ?>
-                            <a href="<?php echo $cancelBtnUrl; ?>" class="btn btn-outline-brand"><?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?></a>
                         </div>
                     </div>
                 </div>

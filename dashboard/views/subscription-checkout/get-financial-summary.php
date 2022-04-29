@@ -37,11 +37,12 @@ $spackage_type = $cartSubscription['spackage_type'];
             </li>
         <?php } ?>
     </ul>
-    <div class="divider"></div>
     <?php
-    if ($spackage_type != SellerPackages::FREE_TYPE) {
-        require(CONF_INSTALLATION_PATH . 'application/views/cart/_partial/coupons-section.php');
-    } ?>
+    if ($spackage_type != SellerPackages::FREE_TYPE) { ?>
+        <div class="mt-5">
+            <?php require(CONF_INSTALLATION_PATH . 'application/views/cart/_partial/coupons-section.php'); ?>
+        </div>
+    <?php } ?>
 
     <ul class="cart-summary">
         <li class="cart-summary-item">
