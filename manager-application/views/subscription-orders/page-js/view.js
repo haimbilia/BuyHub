@@ -18,4 +18,8 @@
             });
         }
     };
+
+    viewPaymemntGatewayResponse = function (data) {
+        $.ykmodal('<div class="form-edit-body">'+data+"</div>", true);
+    };
 })();

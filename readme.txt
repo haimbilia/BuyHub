@@ -739,6 +739,7 @@ Updates/Fixes :
     => 063714 - Buyer: Geo Location: Locations drop down overlaps with the Delivery locations section. 
     => 064030 - Suggestion to remove the "Delete" button on the subscription-checkout page and give a "Back button" on the same page
     => 064038 - Admin: Commission is not updating at the admin's end, If the seller buying a different package plan with a different commission
+    => 064041 - Admin: Subscription Orders : View button is clickable but it's now working under Order Payments. 
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

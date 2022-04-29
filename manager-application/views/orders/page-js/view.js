@@ -31,7 +31,7 @@
         });
     };
     viewPaymemntGatewayResponse = function (data) {
-        $.ykmodal(data, true);
+        $.ykmodal('<div class="form-edit-body">'+data+"</div>", true);
     };
 
     getOpCharges = function (orderId, chargeType) {
