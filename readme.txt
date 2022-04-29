@@ -736,6 +736,7 @@ Updates/Fixes :
     => 064055 - Admin: States listing is not showing while enabling the default Geo-Location option under the Product's settings
     => 064054 - Admin: No Record Found message is not showing
     => 063950 - Seller: Upload media is not working while adding the digital product at the seller's end
+    => 063714 - Buyer: Geo Location: Locations drop down overlaps with the Delivery locations section. 
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
