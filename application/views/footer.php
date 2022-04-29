@@ -13,7 +13,7 @@ if (CommonHelper::demoUrl()) { ?>
     </div>
 <?php } ?>
 
-<?php if ($controllerName == 'Home' && $action == 'index') {    
+<?php if ($controllerName == 'Home' && $action == 'index') {
     $this->includeTemplate('_partial/footerTrustBanners.php');
 } ?>
 
@@ -61,7 +61,7 @@ if (CommonHelper::demoUrl()) { ?>
                 </div>
 
                 <div class="footer-layout-col">
-                    <?php                     
+                    <?php
                     $this->includeTemplate('_partial/footerSocialMedia.php'); ?>
                 </div>
             </div>
@@ -97,7 +97,7 @@ if (CommonHelper::demoUrl()) { ?>
     </section>
 
     <?php $this->includeTemplate('_partial/footerMetaContent.php'); ?>
-    
+
     <?php if ('cart' != strtolower($controllerName)) { ?>
         <!-- Mobile menu -->
         <ul class="mobile-actions">
