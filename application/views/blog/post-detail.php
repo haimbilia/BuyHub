@@ -49,50 +49,6 @@
                                 </svg>
                                 <?php echo Labels::getLabel('LBL_SHARE'); ?>
                             </button>
-                            <?php 
-                                $htm = '<ul class="social-sharing">
-                                            <li class="social-facebook">
-                                                <a class="social-link st-custom-button" data-network="facebook" data-url="' . UrlHelper::generateFullUrl('Blog', 'postDetail', array($blogPostData['post_id'])) . '/">
-                                                    <i class="icn">
-                                                        <svg class="svg" width="16" height="16">
-                                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#fb">
-                                                            </use>
-                                                        </svg>
-                                                    </i>
-                                                </a>
-                                            </li>
-                                            <li class="social-twitter">
-                                                <a class="social-link st-custom-button" data-network="twitter">
-                                                    <i class="icn">
-                                                        <svg class="svg" width="16" height="16">
-                                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#tw">
-                                                            </use>
-                                                        </svg></i>
-                                                </a>
-                                            </li>
-                                            <li class="social-pintrest">
-                                                <a class="social-link st-custom-button" data-network="pinterest">
-                                                    <i class="icn">
-                                                        <svg class="svg" width="16" height="16">
-                                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#pt">
-                                                            </use>
-                                                        </svg>
-                                                    </i>
-                                                </a>
-                                            </li>
-                                            <li class="social-email">
-                                                <a class="social-link st-custom-button" data-network="email">
-                                                    <i class="icn">
-                                                        <svg class="svg" width="16" height="16">
-                                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#envelope">
-                                                            </use>
-                                                        </svg>
-                                                    </i>
-                                                </a>
-                                            </li>
-                                        </ul>';
-                                echo HtmlHelper::getModalStructure('socialSharing' . $blogPostData['post_id'], Labels::getLabel('LBL_SHARE_TO_YOUR_SOCIAL_LINKS'), $htm); 
-                            ?>
                         </div>
                     </div>
                 </div>
@@ -173,20 +129,81 @@
 
                 <?php }
                 } ?>
-
             </div>
-            <?php if (false === CommonHelper::isAppUser()) { ?>
-                <?php $this->includeTemplate('_partial/blogSidePanel.php', array('popularPostList' => $popularPostList, 'featuredPostList' => $featuredPostList)); ?>
-
-            <?php } ?>
-            <?php /* <div class="col-md-3 colums__right">
-            <div class="wrapper--adds" >
-              <div class="grids" id="div--banners"> </div>
-            </div>
-          </div>  */ ?>
+            <?php if (false === CommonHelper::isAppUser()) {
+                $this->includeTemplate('_partial/blogSidePanel.php', array('popularPostList' => $popularPostList, 'featuredPostList' => $featuredPostList));
+            } ?>
         </div>
     </div>
 </section>
+
+<div class="modal fade" id="socialSharing<?php echo $blogPostData['post_id']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"> </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="share-wrap">
+                    <h6><?php echo Labels::getLabel('LBL_SHARE_THIS_VIA', $siteLangId); ?></h6>
+                    <ul class="social-sharing">
+                        <li class="social-facebook">
+                            <a class="social-link st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Blog', 'postDetail', array($blogPostData['post_id'])) . '/'; ?>">
+                                <i class="icn">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
+                                        </use>
+                                    </svg>
+                                </i>
+                            </a>
+                        </li>
+                        <li class="social-twitter">
+                            <a class="social-link st-custom-button" data-network="twitter">
+                                <i class="icn">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
+                                        </use>
+                                    </svg>
+                                </i>
+                            </a>
+                        </li>
+                        <li class="social-pintrest">
+                            <a class="social-link st-custom-button" data-network="pinterest">
+                                <i class="icn">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
+                                        </use>
+                                    </svg>
+                                </i>
+                            </a>
+                        </li>
+                        <li class="social-email">
+                            <a class="social-link st-custom-button" data-network="email">
+                                <i class="icn">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                                        </use>
+                                    </svg>
+                                </i>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="gap"></div>
+                    <h6><?php echo Labels::getLabel('MSG_OR_COPY_LINK', $siteLangId); ?></h6>
+                    <div class="clipboard">
+                        <span class="clipboard_url clipboardTextJs">
+                            <?php echo UrlHelper::generateFullUrl('Blog', 'postDetail', array($blogPostData['post_id'])); ?>
+                        </span>
+                        <a class="clipboard_btn" href="javascript:void(0);" onclick="copyText($(this))" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
+                            <i class="far fa-copy"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <?php if (false === CommonHelper::isAppUser()) { ?>
     <script>
         var boolLoadComments = (<?php echo FatUtility::int($blogPostData['post_comment_opened']); ?>) ? true : false;
