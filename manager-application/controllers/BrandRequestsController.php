@@ -312,6 +312,7 @@ class BrandRequestsController extends ListingBaseController
         $this->set('getBrandRequestLogoSquare', $getBrandRequestLogoSquare);
         $this->set('getBrandRequestLogoRactangle', $getBrandRequestLogoRactangle);
         $this->set('recordId', $recordId);
+        $this->set('ratio_type', $data['ratio_type']);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
         $this->set('languageCount', count($languages));

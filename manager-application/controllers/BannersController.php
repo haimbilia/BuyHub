@@ -437,7 +437,7 @@ class BannersController extends ListingBaseController
         $this->set('langId', $langId);
         $this->set('slideScreen', $slideScreen);
         $this->checkEditPrivilege(true);
-        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->set('html', $this->_template->render(false, false, NULL, true, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
