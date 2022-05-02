@@ -1,4 +1,4 @@
-var formClass = '.addUpdateForm--js ';
+var formClass = '.badgeLinkCondtionJs ';
 
 $(document).on('change', formClass + '[name="blinkcond_record_type"]', function () {
     if ("" == $(this).val() && REC_COND_MANUAL == $(formClass + ".recCond--js").val()) {

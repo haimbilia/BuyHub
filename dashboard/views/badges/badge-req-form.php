@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'form modalFormJs');
+$frm->setFormTagAttribute('class', 'form badgeLinkCondtionJs modalFormJs');
 $frm->setFormTagAttribute('data-onclear', "addBadgeReqForm(" . $badgeReqId . ", " . $badgeId . ")");
 $frm->setFormTagAttribute('onsubmit', 'setupBadgeReq(this); return(false);');
 

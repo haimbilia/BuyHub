@@ -23,18 +23,9 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
         var action = $(frm).attr('action')
         var getExternalLibraryUrl = $(frm).data('external');
         fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('SubscriptionCheckout', 'confirmOrder'), data, function(res) {
+        fcom.updateWithAjax(fcom.makeUrl('SubscriptionCheckout', 'confirmOrder'), data, function(res) {
             fcom.removeLoader();
-            try {
-                var ans = $.parseJSON(res);
-                if (1 > ans.status) {
-                    fcom.displayErrorMessage(ans.msg);
-                    return false;
-                }
-
-            } catch (e) {
-                // console.log(e);
-            }
+            fcom.displaySuccessMessage(res.msg);
 
             if ('undefined' != typeof getExternalLibraryUrl) {
                 fcom.ajax(getExternalLibraryUrl, '', function(t) {

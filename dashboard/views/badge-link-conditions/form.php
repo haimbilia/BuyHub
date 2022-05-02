@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'form addUpdateForm--js');
+$frm->setFormTagAttribute('class', 'form badgeLinkCondtionJs');
 $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
 
 $fld = $frm->getField('auto_update_other_langs_data');
