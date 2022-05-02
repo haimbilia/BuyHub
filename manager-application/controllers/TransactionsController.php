@@ -97,9 +97,8 @@ class TransactionsController extends ListingBaseController
         }      
         
         $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
-        $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'uc.credential_user_id = u.user_id', 'uc');
-        
-        $srch->doNotCalculateRecords();       
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'uc.credential_user_id = u.user_id', 'uc');        
+            
         $srch->addMultipleFields(array('utxn.*', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
         if ($customSortBy != false && $customOrder != false) {
             $srch->addOrder($customSortBy, $customOrder);
@@ -108,6 +107,7 @@ class TransactionsController extends ListingBaseController
         }
 
         $recordCountSrch = clone $srch;
+        $srch->doNotCalculateRecords();  
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
