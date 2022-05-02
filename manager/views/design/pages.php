@@ -50,7 +50,7 @@
                             </div>
                         </div>
                         <div class="demo-switch">
-                            <ul class="list-items list-items--icon">
+                            <ul class="list-items ">
                                 <li class="list-item">
                                     <a href="javascript:0;">
                                         <span class="icon">
@@ -106,7 +106,7 @@
                             </ul>
                         </div>
                         <div class="demo-action">
-                            <ul class="list-items list-items--icon">
+                            <ul class="list-items ">
                                 <li class="list-item">
                                     <a href="javascript:0;">
                                         <span class="icon">

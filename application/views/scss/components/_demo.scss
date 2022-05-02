@@ -64,6 +64,8 @@
     flex-direction: column;
     &-restore {
         margin-bottom: 1rem;
+        background-color: transparent;
+        border: 0;
         .restore {
             text-align: center;
             padding: 2.5rem;
@@ -81,40 +83,42 @@
     }
     &-switch {
         flex: 1;
-        border-top: $border;
-        border-bottom: $border;
+        // border-top: $border;
+        // border-bottom: $border;
         padding: 1rem 0;
     }
     &-action {
-        margin-top: 1rem;
-    }
-    .list-items {
         display: flex;
-        flex-direction: column;
-        .list-item {
+        gap: 1rem;
+        margin-top: 1rem;
+        text-align: center;
+    }
+    .views {
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+        &-item {
             display: flex;
-            a {
-                padding: 0.5rem 0;
-                text-decoration: none;
-                color: $txt-gray;
-                font-size: 0.85rem;
-                &:hover {
-                    color: $brand-color;
-                }
+            text-align: center;
+
+            &.is-active {
+                color: $brand-color;
             }
         }
-        &--icon {
-            .list-item {
-                a {
-                    .icon {
-                        margin-#{$end-direction}: 0.5rem;
-                        .svg {
-                            width: 1rem;
-                            height: 1rem;
-                            fill: currentColor;
-                        }
-                    }
-                }
+        &-links {
+            padding: 0.5rem 0;
+            text-decoration: none;
+            color: $txt-gray;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            gap: 10px;
+            .svg {
+                margin: 0 auto;
+            }
+            &:hover {
+                color: $brand-color;
             }
         }
     }
