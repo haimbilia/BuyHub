@@ -1412,7 +1412,6 @@ class CheckoutController extends MyAppController
             if ($cartSummary['orderNetAmount'] <= 0) {
                 $confirmForm->addFormTagAttribute('action', UrlHelper::generateUrl('ConfirmPay', 'Charge', array($order_id)));
                 $confirmForm->fill(array('order_id' => $order_id));
-                /* $confirmForm->setFormTagAttribute('onsubmit', 'confirmOrderWithoutPayment(this); return(false);'); */
                 $confirmForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM_ORDER', $this->siteLangId));
             }
         }

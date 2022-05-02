@@ -2146,7 +2146,7 @@ class Orders extends MyAppModel
         $processingStatuses = array_diff($processingStatuses, unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
         $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0));
 
-        $digitalProdOrderStatusArr = Orders::getOrderProductStatusArr(CommonHelper::getLangId(), array(), 0, true);
+        $digitalProdOrderStatusArr = Orders::getOrderProductStatusArr(CommonHelper::getLangId(), array(), 0, OrderStatus::FOR_DIGITAL_ONLY);
         $digitalProductOrderStatusArr = array();
         foreach ($digitalProdOrderStatusArr as $k => $v) {
             $digitalProductOrderStatusArr[] = $k;

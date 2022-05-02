@@ -16,6 +16,19 @@ $(document).on('change', '.badgeTriggerTypeJs', function () {
     }
 });
 
+$(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', function () {
+    $("input[name='record_ids']").val("");
+    $('table.recordListing--js tr').remove();
+    $(".badgeLinkCondtionJs .recordIds--js").removeAttr('disabled');
+    if (RECORD_TYPE_SHOP == $(this).val()) {
+        $(".badgeLinkCondtionJs .recordIds--js").attr('disabled', 'disabled');
+    } else {
+        var recordNameSelector = $(".badgeLinkCondtionJs .recordIds--js");
+        if ("" == recordNameSelector.val() || "undefined" == recordNameSelector.val()) { return; }
+        $(".badgeLinkCondtionJs .recordIds--js").val('').trigger('change');
+    }
+});
+
 (function () {
     var dv = '#listing';
     var controller = 'Badges';
@@ -193,10 +206,10 @@ $(document).on('change', '.badgeTriggerTypeJs', function () {
             },
             minimumInputLength: 0,
             templateResult: function (result) {
-                return result.text || result.value;
+                return result.text || result.name || result.value;
             },
             templateSelection: function (result) {
-                return result.text || result.value;
+                return result.text || result.name || result.value;
             }
         }).on('select2:selecting', function (e) {
             var position = 0;

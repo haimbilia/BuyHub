@@ -274,7 +274,6 @@ class SubscriptionCheckoutController extends LoggedUserController
         if ($cartSummary['orderNetAmount'] == 0 || $cartSummary['orderNetAmount'] == 0) {
             $confirmPaymentFrm->addFormTagAttribute('action', UrlHelper::generateUrl('ConfirmPay', 'Charge', array($order_id), CONF_WEBROOT_FRONTEND));
             $confirmPaymentFrm->fill(array('order_id' => $order_id));
-            $confirmPaymentFrm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
             $confirmPaymentFrm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         }
         $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr();
@@ -436,8 +435,7 @@ class SubscriptionCheckoutController extends LoggedUserController
 
         $post = $frm->getFormDataFromArray($post);
         if (!isset($post['order_id']) || $post['order_id'] == '') {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $orderObj = new Orders();
         $order_id = $post['order_id'];
@@ -452,14 +450,12 @@ class SubscriptionCheckoutController extends LoggedUserController
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         if (!$orderInfo) {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
         }
 
 
         if ($cartSummary['orderPaymentGatewayCharges'] == 0 && $plugin_id) {
-            Message::addErrorMessage(Labels::getLabel('ERR_AMOUNT_FOR_PAYMENT_GATEWAY_MUST_BE_GREATER_THAN_ZERO.', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::dieJsonError(Labels::getLabel('ERR_AMOUNT_FOR_PAYMENT_GATEWAY_MUST_BE_GREATER_THAN_ZERO.', $this->siteLangId));
         }
 
         if ($cartSummary['cartWalletSelected'] && $userWalletBalance >= $cartSummary['orderNetAmount'] && !$plugin_id) {
@@ -474,14 +470,12 @@ class SubscriptionCheckoutController extends LoggedUserController
         $paymentMethodRow = Plugin::getAttributesById($plugin_id);
 
         if (!$paymentMethodRow || $paymentMethodRow['plugin_active'] != Plugin::ACTIVE && $cartSummary['orderPaymentGatewayCharges'] > 0) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Invalid_Payment_method,_Please_contact_Webadmin.", $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::dieJsonError(Labels::getLabel("LBL_Invalid_Payment_method,_Please_contact_Webadmin.", $this->siteLangId));
         }
 
 
         if ($cartSummary['cartWalletSelected'] && $cartSummary['orderPaymentGatewayCharges'] == 0) {
-            Message::addErrorMessage(Labels::getLabel('ERR_TRY_TO_PAY_USING_WALLET_BALANCE_AS_AMOUNT_FOR_PAYMENT_GATEWAY_IS_NOT_ENOUGH.', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::dieJsonError(Labels::getLabel('ERR_TRY_TO_PAY_USING_WALLET_BALANCE_AS_AMOUNT_FOR_PAYMENT_GATEWAY_IS_NOT_ENOUGH.', $this->siteLangId));
         }
 
 
