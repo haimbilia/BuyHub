@@ -8,6 +8,7 @@
 }
 
 .table {
+    font-size: 100%;
     background-color: #fff;
     margin-bottom: 0;
     text-align: #{$start-direction};
@@ -71,9 +72,12 @@
             text-decoration: underline;
         }
     }
-    table {
-        font-size: 100%;
+
+    .col-check {
+        width: 20px;
+        padding-#{$end-direction}: 0;
     }
+
     &-justified {
         thead {
             th:last-child {
