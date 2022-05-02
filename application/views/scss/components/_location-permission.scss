@@ -82,7 +82,8 @@
         margin-bottom: 1.5rem;
     }
     .geo-location_body {
-        border: $border;
+        //border: $border;
+        padding: 0;
     }
 }
 .location-popup-width {

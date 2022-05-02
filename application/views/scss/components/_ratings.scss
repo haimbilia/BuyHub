@@ -6,13 +6,14 @@
     justify-content: flex-start;
     font-size: 0.85rem;
     line-height: 1.5;
+    gap: 5px;
     a {
         color: inherit;
         font-size: inherit;
     }
 
     .svg {
-        margin-#{$end-direction}: 8px;
+        // margin-#{$end-direction}: 8px;
         fill: $secondary-color;
     }
     .rate {
