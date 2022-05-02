@@ -1,8 +1,3 @@
-$(document).on("change", '[name="breq_record_type"]', function () {
-    $("input[name='record_ids']").val("");
-    $('table.recordListing--js tr').remove();
-});
-
 $(document).on('change', '#brandlogoLanguageJs', function () {
     var lang_id = $(this).val();
     var brand_id = $(this).closest("form").find('input[name="brand_id"]').val();
@@ -13,6 +8,19 @@ $(document).on('change', '#catLanguageJs', function () {
     let lang_id = $(this).val();
     let recordId = $(this).closest("form").find('input[name="record_id"]').val();
     categoryReqMediaForm(recordId, lang_id);
+});
+
+$(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', function () {
+    $("input[name='record_ids']").val("");
+    $('table.recordListing--js tr').remove();
+    $(".badgeLinkCondtionJs .recordIds--js").removeAttr('disabled');
+    if (RECORD_TYPE_SHOP == $(this).val()) {
+        $(".badgeLinkCondtionJs .recordIds--js").attr('disabled', 'disabled');
+    } else {
+        var recordNameSelector = $(".badgeLinkCondtionJs .recordIds--js");
+        if ("" == recordNameSelector.val() || "undefined" == recordNameSelector.val()) { return; }
+        $(".badgeLinkCondtionJs .recordIds--js").val('').trigger('change');
+    }
 });
 
 (function () {

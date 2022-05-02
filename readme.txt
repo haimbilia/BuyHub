@@ -744,6 +744,7 @@ Updates/Fixes :
     => 064041 - Admin: Subscription Orders : View button is clickable but it's now working under Order Payments.
     => 064035 - Seller: 404 error page is showing while the seller clicks on the "My Account" and "My Subscription" option after buying the subscription package
     => 064136 - Addition of Products under "Buy Together Products List" on the Product Detail Page
+    => 064081 - Seller: "Link to" option is showing if the record type is "Shop" and dropdown listing is not showing properly while linking the record under the Badges section at the seller's end 
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

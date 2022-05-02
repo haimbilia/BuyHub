@@ -492,7 +492,6 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
 
         $recordType = FatApp::getPostedData('blinkcond_record_type', FatUtility::VAR_INT, 0);
-        //$records = FatApp::getPostedData('record_ids', FatUtility::VAR_STRING, '');
         $records = FatApp::getPostedData('badgelink_record_ids', FatUtility::VAR_STRING, '');
         if (BadgeLinkCondition::RECORD_TYPE_SHOP == $recordType) {
             $shopId = Shop::getAttributesByUserId($sellerId, 'shop_id');
