@@ -270,7 +270,7 @@ class AdminUsersController extends ListingBaseController
         $post = FatApp::getPostedData();
 
         $recordId = FatUtility::int($post['admin_id']);
-        if (2 > $recordId || $recordId == $this->admin_id) {
+        if (1 == $recordId || $recordId == $this->admin_id) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 

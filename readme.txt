@@ -743,7 +743,8 @@ Updates/Fixes :
     => 064038 - Admin: Commission is not updating at the admin's end, If the seller buying a different package plan with a different commission
     => 064041 - Admin: Subscription Orders : View button is clickable but it's now working under Order Payments. 
     => 064042 - Admin: Wrong Payment Mode is showing and commission rates* are not showing while viewing the subscription order details at the admin's end
-
+    => 064049 - Admin: User is unable add a admin user.
+    
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
