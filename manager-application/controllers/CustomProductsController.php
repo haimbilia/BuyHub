@@ -1516,14 +1516,14 @@ class CustomProductsController extends ListingBaseController
         switch ($action) {
             case 'index':
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
-                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_MASTER_PRODUCT_REQUESTS', $this->siteLangId);
                 $nodes = [
                     ['title' => $pageTitle]
                 ];
                 break;
             case 'form':
                 $pageData = PageLanguageData::getAttributesByKey('MASTER_PRODUCT_REQUEST_FORM', $this->siteLangId);
-                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_MASTER_PRODUCT_REQUESTS', $this->siteLangId);
                 $nodes = [
                     ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('CustomProducts')],
                     ['title' => Labels::getLabel('LBL_FORM', $this->siteLangId)]
