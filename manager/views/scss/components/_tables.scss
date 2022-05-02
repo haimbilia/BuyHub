@@ -19,9 +19,7 @@
             &:last-child {
                 //padding-#{$end-direction}: 0;
             }
-            &.col-check {
-                width: 20px;
-            }
+
             &.col-sr {
                 width: 25px;
             }
@@ -74,6 +72,10 @@
         &.selected {
             background-color: $bg-gray;
         }
+    }
+    .col-check {
+        width: 20px;
+        padding-#{$end-direction}: 0;
     }
     &-sm {
         th {
