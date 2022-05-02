@@ -746,6 +746,7 @@ Updates/Fixes :
     => 064049 - Admin: User is unable add a admin user.
     => 064113 - Seller: Digital files and links are not uploading while adding the digital product at the seller's end
     => 064091 - Blogs: Blogs categories are showing on the front -end even no blog post is linked with it.
+    => 064058 - Admin: Page's title is not showing correctly while selecting some of the options under the Getting settings section
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
