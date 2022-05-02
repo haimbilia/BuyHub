@@ -172,4 +172,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             searchBrandRequests();
         }
     });
+
+    var RECORD_TYPE_SHOP = <?php echo BadgeLinkCondition::RECORD_TYPE_SHOP; ?>;
 </script>

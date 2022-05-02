@@ -1665,24 +1665,10 @@ $(document).on("click", "#btn-demo", function () {
 });
 $(document).on("click", ".add-to-cart--js", function (event) {
     ykevents.addToCart();
-    $btn = $(this);
     event.preventDefault();
-    var data = fcom.frmData(document.frmBuyProduct);
-    var yourArray = [];
     var selprodId = $(this).siblings('input[name="selprod_id"]').val();
     var quantity = document.frmBuyProduct.quantity.value;
-    if (typeof mainSelprodId != "undefined" && mainSelprodId == selprodId) {
-        $(".list-addons--js")
-            .find("input")
-            .each(function (e) {
-                if (
-                    $(this).val() > 0 &&
-                    !$(this).closest(".addon--js").hasClass("cancelled--js")
-                ) {
-                    data = data + "&" + $(this).attr("data-lang") + "=" + $(this).val();
-                }
-            });
-    }
+   
     cart.add(selprodId, quantity);
     return false;
 });

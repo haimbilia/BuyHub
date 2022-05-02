@@ -365,8 +365,25 @@ class Navigation
 
     public static function blogNavigation($template)
     {
-        $siteLangId = CommonHelper::getLangId();
-        $categoriesArr = BlogPostCategory::getRootBlogPostCatArr($siteLangId);
+        $siteLangId = CommonHelper::getLangId();      
+        $categoriesArr = CacheHelper::get('blogCategoriesHeaderCache' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        if ($categoriesArr) {
+            $categoriesArr = json_decode($categoriesArr, true);
+        } else {
+           
+            $categoriesArr = BlogPostCategory::getRootBlogPostCatArr($siteLangId, true);
+            foreach($categoriesArr as $id => $category){         
+                $srch = BlogPost::getSearchObject(0,true,true,true);          
+                $srch->addCondition('ptc_bpcategory_id', '=', $id); 
+                $srch->doNotCalculateRecords();
+                $srch->setPageSize(1);     
+                if(!FatApp::getDb()->fetch($srch->getResultSet())){
+                    unset($categoriesArr[$id]);
+                }
+            }           
+            CacheHelper::create('blogCategoriesHeaderCache' . $siteLangId, json_encode($categoriesArr), CacheHelper::TYPE_BLOG_CATEGORY);
+        }
+
         $template->set('categoriesArr', $categoriesArr);
         $template->set('siteLangId', $siteLangId);
     }

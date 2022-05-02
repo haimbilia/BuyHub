@@ -43,6 +43,10 @@ $op = current($order['items']); ?>
             <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_IMAGES_LIMIT', $siteLangId); ?>:</span>
                 <span class="value"><?php echo $op['ossubs_images_allowed']; ?></span>
+            </li>           
+            <li class="list-stats-item">
+                <span class="lable"><?php echo Labels::getLabel('LBL_Commision_rate', $siteLangId); ?>:</span>
+                <span class="value"><?php echo $op['ossubs_commission']."%"; ?></span>
             </li>
 
             <li class="list-stats-item">

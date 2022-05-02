@@ -3,6 +3,13 @@ var cart = {
     add: function (selprod_id, quantity, isRedirectToCart) {
         isRedirectToCart = (typeof (isRedirectToCart) != 'undefined') ? true : false;
         var data = 'selprod_id=' + selprod_id + '&quantity=' + (typeof (quantity) != 'undefined' ? quantity : 1);
+        if (0 < $(".list-addons--js").length && typeof mainSelprodId != 'undefined' && mainSelprodId == selprod_id) {
+            $(".list-addons--js").find("input").each(function (e) {
+                if (($(this).val() > 0) && (!$(this).closest(".addon--js").hasClass("cancelled--js"))) {
+                    data = data + '&' + $(this).attr('data-lang') + "=" + $(this).val();
+                }
+            });
+        }
         ykevents.addToCart();
         fcom.updateWithAjax(fcom.makeUrl('Cart', 'add'), data, function (ans) {
             fcom.removeLoader();

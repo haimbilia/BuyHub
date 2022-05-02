@@ -12,7 +12,9 @@
                     <div class="page-title">
                         <h1>
                             <?php
-                            if (array_key_exists('pageTitle', $this->variables)) {
+                            if (0 < SiteTourHelper::getStepIndex()) {
+                                echo Labels::getLabel('NAV_GETTING_STARTED', $siteLangId);
+                            }elseif (array_key_exists('pageTitle', $this->variables)) {
                                 echo $this->variables['pageTitle'];
                             } else {
                                 echo Labels::getLabel('NAV_DASHBOARD', $siteLangId);

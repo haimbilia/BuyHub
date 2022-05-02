@@ -1,5 +1,5 @@
 <?php
-if (!$showNoRecordFound) {
+if (!$showNoRecordFound && empty($attachments)) {
     return;
 }
 $arr_flds = array(   
