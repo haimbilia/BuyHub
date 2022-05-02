@@ -405,18 +405,18 @@ class applicationConstants
     public static function getMonthsArr($langId)
     {
         return array(
-            '01' => Labels::getLabel('LBL_January', $langId),
-            '02' => Labels::getLabel('LBL_Februry', $langId),
-            '03' => Labels::getLabel('LBL_March', $langId),
-            '04' => Labels::getLabel('LBL_April', $langId),
-            '05' => Labels::getLabel('LBL_May', $langId),
-            '06' => Labels::getLabel('LBL_June', $langId),
-            '07' => Labels::getLabel('LBL_July', $langId),
-            '08' => Labels::getLabel('LBL_August', $langId),
-            '09' => Labels::getLabel('LBL_September', $langId),
-            '10' => Labels::getLabel('LBL_October', $langId),
-            '11' => Labels::getLabel('LBL_November', $langId),
-            '12' => Labels::getLabel('LBL_December', $langId),
+            '01' => '01 ' . Labels::getLabel('LBL_January', $langId),
+            '02' => '02 ' . Labels::getLabel('LBL_Februry', $langId),
+            '03' => '03 ' . Labels::getLabel('LBL_March', $langId),
+            '04' => '04 ' . Labels::getLabel('LBL_April', $langId),
+            '05' => '05 ' . Labels::getLabel('LBL_May', $langId),
+            '06' => '06 ' . Labels::getLabel('LBL_June', $langId),
+            '07' => '07 ' . Labels::getLabel('LBL_July', $langId),
+            '08' => '08 ' . Labels::getLabel('LBL_August', $langId),
+            '09' => '09 ' . Labels::getLabel('LBL_September', $langId),
+            '10' => '10 ' . Labels::getLabel('LBL_October', $langId),
+            '11' => '11 ' . Labels::getLabel('LBL_November', $langId),
+            '12' => '12 ' . Labels::getLabel('LBL_December', $langId),
         );
     }
 

@@ -732,14 +732,17 @@ $("document").ready(function () {
     };
 
     scrollToFinancialSummary = function () {
-		$('html, body').animate({
-			scrollTop: $(financialSummary).offset().top
-		}, 'slow');
-	}
+        $('html, body').animate({
+            scrollTop: $(financialSummary).offset().top
+        }, 'slow');
+    }
 
     $(document).on('click', '.addrListJs', function () {
         $('.addrListJs').removeClass('is-active');
         $(this).addClass('is-active');
     });
-
+    
+    $(document).on('keydown', '#cc_number', function () {
+        $(this).addClass(getCardType($(this).val()).toLowerCase());
+    });
 })();

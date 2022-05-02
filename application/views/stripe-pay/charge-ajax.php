@@ -203,19 +203,14 @@ if (isset($client_secret)) { ?>
                 </div>
             </div>
         </div>
-        <div class="total-pay">
-            <?php echo CommonHelper::displayMoneyFormat($paymentAmount) ?> <small>(<?php echo Labels::getLabel('LBL_Total_Payable', $siteLangId); ?>)</small> </div>
+        
         <div class="row justify-content-between">
-            <div class="col">
-                <a href="<?php echo $cancelBtnUrl; ?>" class="btn btn-outline-gray btn-wide">
-                    <?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?>
-                </a>
-            </div>
             <div class="col-auto">
                 <?php
                 $btn = $frm->getField('btn_submit');
                 $btn->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
                 $btn->addFieldTagAttribute('data-processing-text', Labels::getLabel('LBL_PLEASE_WAIT..', $siteLangId));
+                $btn->value = $btn->value . ': ' . CommonHelper::displayMoneyFormat($paymentAmount);
                 echo $frm->getFieldHtml('btn_submit'); ?>
             </div>
         </div>

@@ -146,7 +146,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_SELLER_APPROVAL_REQUEST', $this->siteLangId));
-        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 

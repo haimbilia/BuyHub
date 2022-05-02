@@ -37,7 +37,9 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit && $canEdit && $row['usuprequest_status'] == User::SUPPLIER_REQUEST_PENDING) {
-                    $data['editButton'] = [];
+                    $data['editButton'] = [
+                        'onclick' => 'editRecord(' . $row['usuprequest_id'] . ', true)'
+                    ];
                 }
                 $data['otherButtons'] = [
                     [

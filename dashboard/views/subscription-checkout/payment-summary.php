@@ -9,6 +9,12 @@ $noPaymentMethod = (1 > count($paymentMethods) && (!$canUseWalletForPayment || (
             <div class="step_section">
                 <div class="step_head">
                     <h5 class="step_title">
+                        <a class="btn btn-back back" type="button" href="<?php echo UrlHelper::generateUrl('seller','packages'); ?>">
+                            <svg class="svg" width="24" height="24">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                                </use>
+                            </svg>
+                        </a>
                         <?php echo Labels::getLabel('LBL_PAYMENT_SUMMARY', $siteLangId); ?>
                     </h5>
                 </div>
@@ -53,11 +59,6 @@ $noPaymentMethod = (1 > count($paymentMethods) && (!$canUseWalletForPayment || (
                                 <?php if ($userWalletBalance > 0 && $cartSummary['orderNetAmount'] > 0 && $canUseWalletForPayment) { ?>
                                     <div class="wallet-payment">
                                         <div>
-                                            <?php if ($subscriptionType == SellerPackages::PAID_TYPE) { ?>
-                                                <p class="note">
-                                                    <?php echo Labels::getLabel('LBL_NOTE_PLEASE_MAINTAIN_WALLET_BALANCE_FOR_FURTHER_AUTO_RENEWAL_PAYMENTS', $siteLangId); ?>
-                                                </p>
-                                            <?php } ?>
                                             <label class="checkbox wallet-credits">
                                                 <?php if ($canUseWallet) { ?>
                                                     <input onchange="walletSelection(this)" type="checkbox" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> name="pay_from_wallet" id="pay_from_wallet" value="1">
@@ -72,6 +73,11 @@ $noPaymentMethod = (1 > count($paymentMethods) && (!$canUseWalletForPayment || (
                                                     echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_PAYMENT_CANNOT_BE_MADE_DUE_TO_A_LOW_BALANCE', $siteLangId));
                                                 } ?>
                                             </p>
+                                            <?php if ($subscriptionType == SellerPackages::PAID_TYPE) { ?>
+                                                <p class="note">
+                                                    <?php echo Labels::getLabel('LBL_NOTE_PLEASE_MAINTAIN_WALLET_BALANCE_FOR_FURTHER_AUTO_RENEWAL_PAYMENTS', $siteLangId); ?>
+                                                </p>
+                                            <?php } ?>
                                         </div>
                                         <?php if ($cartSummary["cartWalletSelected"] && $userWalletBalance >= $cartSummary['orderNetAmount']) {
                                             $btnSubmitFld = $walletPaymentForm->getField('btn_submit');

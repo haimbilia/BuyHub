@@ -1334,7 +1334,7 @@ class CheckoutController extends MyAppController
                         'op_selprod_cancellation_age' => $productInfo['cancellation_age'],
                         'op_product_warranty' => $productInfo['product_warranty'],
                         'op_prodcat_id' => $productInfo['prodcat_id'],
-                        'op_special_price' => 0 < $cartProduct['special_price_found'] ? $cartProduct['selprod_price'] - $cartProduct['actualPrice'] : 0,
+                        'op_special_price' => ($cartProduct['selprod_price'] > $cartProduct['theprice']) ? $cartProduct['selprod_price'] - $cartProduct['actualPrice'] : 0,
                     ],
                     'op_rounding_off' => $cartProduct['rounding_off'],
                     'selprod_product_id' => $productInfo['selprod_product_id'],
@@ -2074,7 +2074,7 @@ class CheckoutController extends MyAppController
             $this->set('billingAddressArr', $billingAddressArr);
         }
         /* ] */
-        
+
         $this->set('shippingAddress', $shippingAddress);
         $this->set('isShippingSelected', $isShippingSelected);
         $this->set('products', $products);

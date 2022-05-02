@@ -24,24 +24,17 @@ $spackage_type = $cartSubscription['spackage_type'];
                         $spackagePrice = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price'] : '';
                         $interval = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval'] : 0;
                         echo  $spackageName . ' / ' . SellerPackagePlans::getPlanPeriod($subscription, $spackagePrice); ?>
-                    </div>
-                    <div class="col-auto">
-                        <a href="javascript::void(0)" onclick="subscription.remove('<?php echo md5($subscription['key']); ?>')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                            <svg class="svg" width="16" height="16">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
-                                </use>
-                            </svg>
-                        </a>
-                    </div>
+                    </div>                    
                 </div>
             </li>
         <?php } ?>
     </ul>
-    <div class="divider"></div>
     <?php
-    if ($spackage_type != SellerPackages::FREE_TYPE) {
-        require(CONF_INSTALLATION_PATH . 'application/views/cart/_partial/coupons-section.php');
-    } ?>
+    if ($spackage_type != SellerPackages::FREE_TYPE) { ?>
+        <div class="mt-5">
+            <?php require(CONF_INSTALLATION_PATH . 'application/views/cart/_partial/coupons-section.php'); ?>
+        </div>
+    <?php } ?>
 
     <ul class="cart-summary">
         <li class="cart-summary-item">

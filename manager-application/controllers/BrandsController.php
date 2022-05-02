@@ -305,6 +305,7 @@ class BrandsController extends ListingBaseController
         $this->set('getBrandRequestDimensions', $getBrandRequestDimensions);
 
         $this->set('recordId', $recordId);
+        $this->set('ratio_type', $data['ratio_type']);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
         $this->set('languageCount', count($languages));
