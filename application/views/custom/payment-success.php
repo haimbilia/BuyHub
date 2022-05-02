@@ -44,7 +44,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                 if (Orders::ORDER_PRODUCT == $orderInfo['order_type']) {
                                     $msg = Labels::getLabel('LBL_YOUR_ORDER_{ORDER-ID}_HAS_BEEN_PLACED!', $siteLangId);
                                     $orderDetailUrl = UrlHelper::generateUrl('Buyer', 'viewOrder', array($orderInfo['order_id']), CONF_WEBROOT_DASHBOARD);
-                                    $orderDetailLinkHtml = '<a href="' . $orderDetailUrl . '" class="link">#' . $orderInfo['order_number'] . '</a>';
+                                    $orderDetailLinkHtml = '<a href="' . $orderDetailUrl . '" class="link-underline">#' . $orderInfo['order_number'] . '</a>';
                                 } else {
                                     $msg = Labels::getLabel('LBL_ORDER_#{ORDER-ID}_TRANSACTION_COMPLETED!', $siteLangId);
                                     $orderDetailLinkHtml = $orderInfo['order_number'];
@@ -81,10 +81,12 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                     &nbsp;&nbsp;&nbsp;
                                     <span class="no-print">
 
-                                        <a class="btn btn-link" onclick="window.print();" href="javascript:void(0)"> <svg class="svg" width="22px" height="22px">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#print" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#print">
+                                        <a class="btn btn-link btn-icon" onclick="window.print();" href="javascript:void(0)">
+                                            <svg class="svg" width="22px" height="22px">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#print">
                                                 </use>
-                                            </svg> <?php echo Labels::getLabel("LBL_PRINT", $siteLangId); ?></a>
+                                            </svg>
+                                            <?php echo Labels::getLabel("LBL_PRINT", $siteLangId); ?></a>
                                     </span>
                                 </p>
                             <?php } ?>
@@ -317,7 +319,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                             </li>
                                                         <?php } ?>
                                                         <?php
-                                                        if (Orders::ORDER_SUBSCRIPTION == $orderInfo['order_type']) {                                                       
+                                                        if (Orders::ORDER_SUBSCRIPTION == $orderInfo['order_type']) {
                                                             $adjustedAmount = CommonHelper::orderSubscriptionAmount(current($orderInfo['orderProducts']), 'ADJUSTEDAMOUNT');
                                                             if (0 != $adjustedAmount) { ?>
                                                                 <li class="cart-summary-item">
