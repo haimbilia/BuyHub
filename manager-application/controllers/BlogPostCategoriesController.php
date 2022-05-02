@@ -190,6 +190,8 @@ class BlogPostCategoriesController extends ListingBaseController
 
         $row = BlogPostCategory::getData($this->siteLangId, $updateRecordId, true, false);
         $this->set("row", $row);
+
+        CacheHelper::clear(CacheHelper::TYPE_BLOG_CATEGORY );
         
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
@@ -291,6 +293,7 @@ class BlogPostCategoriesController extends ListingBaseController
         if (!$this->modelObj->changeStatus($status)) {
             LibHelper::exitWithError($this->modelObj->getError(), true);
         }
+        CacheHelper::clear(CacheHelper::TYPE_BLOG_CATEGORY );
         Product::updateMinPrices();
     }
 
@@ -322,5 +325,7 @@ class BlogPostCategoriesController extends ListingBaseController
         if (!$obj->save()) {
             LibHelper::exitWithError($obj->getError(), true);
         }
+        
+        CacheHelper::clear(CacheHelper::TYPE_BLOG_CATEGORY );       
     }
 }

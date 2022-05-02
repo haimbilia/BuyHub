@@ -260,7 +260,9 @@ class BlogPostsController extends ListingBaseController
                     break;
                 }
             }
-        }       
+        }   
+        
+        CacheHelper::clear(CacheHelper::TYPE_BLOG_CATEGORY );
 
         $this->set('msg', Labels::getLabel('MSG_BLOG_POST_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('recordId', $recordId);
@@ -277,6 +279,8 @@ class BlogPostsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $this->markAsDeleted($recordId);
+
+        CacheHelper::clear(CacheHelper::TYPE_BLOG_CATEGORY );
 
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
@@ -296,6 +300,7 @@ class BlogPostsController extends ListingBaseController
             }
             $this->markAsDeleted($recordId);
         }
+        CacheHelper::clear(CacheHelper::TYPE_BLOG_CATEGORY );
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }

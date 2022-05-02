@@ -745,7 +745,8 @@ Updates/Fixes :
     => 064042 - Admin: Wrong Payment Mode is showing and commission rates* are not showing while viewing the subscription order details at the admin's end
     => 064049 - Admin: User is unable add a admin user.
     => 064113 - Seller: Digital files and links are not uploading while adding the digital product at the seller's end
-
+    => 064091 - Blogs: Blogs categories are showing on the front -end even no blog post is linked with it.
+    
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
