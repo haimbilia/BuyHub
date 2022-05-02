@@ -1,10 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <!-- Header Search Form -->
-<?php $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
+<?php
+$this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
 
 <div class="zeynep">
-    <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]); ?>
+    <?php
+    $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]); ?>
 </div>
 <div class="zeynep-overlay"></div>
 
@@ -52,19 +54,8 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
                         $geoAddress = Labels::getLabel("LBL_Location", $siteLangId);
                     }
                     $geoAddress =  isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress;
-                    ?>
-                    <button class="button-geo-location geo-location_trigger" type="button" data-bs-toggle="collapse" data-bs-target="#geo-location-mobile" aria-expanded="false" aria-controls="geo-location-mobile">
-
-                        <svg class="svg" width="18" height="18">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#gps">
-                            </use>
-                        </svg>
-
-                        <div class="geo-location-selected">
-                            <?php echo $geoAddress; ?>
-                        </div>
-                    </button>
-                    <div class="collapse geo-location_dropdown-menu" id="geo-location-mobile">
+                    ?>                   
+                    <div class="geo-location_dropdown-menu">
                         <div class="geo-location_body"> <input autocomplete="no" id="ga-autoComplete-mobile" class="geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
                             <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
 
@@ -92,7 +83,8 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
         </div>
         <div class="offcanvas-body p-0">
             <ul class="seller-nav">
-                <?php $this->includeTemplate('_partial/headerTopNavigation.php', ['liClass' => 'seller-nav-item', 'aClass' => 'seller-nav-link']); ?>
+                <?php                
+                $this->includeTemplate('_partial/headerTopNavigation.php', ['liClass' => 'seller-nav-item', 'aClass' => 'seller-nav-link']); ?>
             </ul>
         </div>
     </div>

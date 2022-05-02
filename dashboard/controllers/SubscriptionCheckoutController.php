@@ -38,23 +38,10 @@ class SubscriptionCheckoutController extends LoggedUserController
     {
         $cartSummary = $this->scartObj->getSubscriptionCartFinancialSummary($this->siteLangId);
 
-        $walletPaymentForm = $this->getWalletPaymentForm($this->siteLangId);
-        $userWalletBalance = User::getUserBalance($this->userParentId, true);
-        if ((FatUtility::convertToType($userWalletBalance, FatUtility::VAR_FLOAT) > 0) && $cartSummary['cartWalletSelected'] && $cartSummary['orderNetAmount'] > 0) {
-            $orderId = $_SESSION['subscription_shopping_cart']["order_id"] ?? '';
-            $walletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($orderId), CONF_WEBROOT_FRONTEND));
-            $walletPaymentForm->fill(array('order_id' => $orderId));
-            $walletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
-            $walletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
-        }
-
         $orderId = $_SESSION['subscription_shopping_cart']["order_id"] ?? '';
         $this->set('couponsList', DiscountCoupons::getValidSubscriptionCoupons($this->userParentId, $this->siteLangId, '', $orderId));
-        $this->set('canUseWalletForPayment', PaymentMethods::canUseWalletForPayment());
-        $this->set('userWalletBalance', $userWalletBalance);
         $this->set('PromoCouponsFrm', $this->getPromoCouponsForm($this->siteLangId));
         $this->set('cartSummary', $cartSummary);
-        $this->set('walletPaymentForm', $walletPaymentForm);
         $this->set('subscriptions', $this->scartObj->getSubscription($this->siteLangId));
 
         $this->_template->render(false, false);
@@ -273,15 +260,15 @@ class SubscriptionCheckoutController extends LoggedUserController
             $this->scartObj->clear();
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrder', array($order_id)));
         }
-        $WalletPaymentForm = $this->getWalletPaymentForm($this->siteLangId);
+        $walletPaymentForm = $this->getWalletPaymentForm($this->siteLangId);
         $confirmPaymentFrm = $this->getConfirmPaymentForm($this->siteLangId);
         $userWalletBalance = User::getUserBalance($userId);
 
         if ($userWalletBalance >= $cartSummary['orderNetAmount'] && $cartSummary['cartWalletSelected']) {
-            $WalletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($order_id), CONF_WEBROOT_FRONTEND));
-            $WalletPaymentForm->fill(array('order_id' => $order_id));
-            $WalletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
-            $WalletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
+            $walletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($order_id), CONF_WEBROOT_FRONTEND));
+            $walletPaymentForm->fill(array('order_id' => $order_id));
+            $walletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
+            $walletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
         }
 
         if ($cartSummary['orderNetAmount'] == 0 || $cartSummary['orderNetAmount'] == 0) {
@@ -302,7 +289,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $this->set('excludePaymentGatewaysArr', $excludePaymentGatewaysArr);
         $this->set('cartSummary', $cartSummary);
         $this->set('orderInfo', $orderInfo);
-        $this->set('WalletPaymentForm', $WalletPaymentForm);
+        $this->set('walletPaymentForm', $walletPaymentForm);
         $this->set('confirmPaymentFrm', $confirmPaymentFrm);
         $this->_template->render(false, false);
     }

@@ -170,7 +170,7 @@ $fld->developerTags['col'] = 12;
                                     </p>
                                 </div>
                                 <div class="contact-address-item">
-                                    <?php                                    
+                                    <?php
                                     $this->includeTemplate('_partial/footerSocialMedia.php'); ?></div>
                             </div>
 

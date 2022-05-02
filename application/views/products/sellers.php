@@ -60,7 +60,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                     </span>
                                     <span class="price">
                                         <?php echo CommonHelper::displayMoneyFormat($moresellers['theprice']);
-                                        if ($moresellers['special_price_found'] && $moresellers['selprod_price'] > $moresellers['theprice']) { ?>
+                                        if ($moresellers['selprod_price'] > $moresellers['theprice']) { ?>
                                             <span class="item__price_old"><?php echo CommonHelper::displayMoneyFormat($moresellers['selprod_price']); ?></span>
                                             <div class="item__price_off"><?php echo CommonHelper::showProductDiscountedText($moresellers, $siteLangId); ?></div>';
                                         <?php } ?>

@@ -33,7 +33,7 @@ class CustomProductsController extends ListingBaseController
         $frmSearch = $this->getSearchForm($fields);
 
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_MASTER_PRODUCT_REQUESTS', $this->siteLangId);
 
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);

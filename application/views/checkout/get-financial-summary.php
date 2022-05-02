@@ -1,53 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-
-if (0 < $isShippingSelected && 1 > count($paymentMethods)) {
-    if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $shippingAddressId == $billingAddressId) { ?>
-        <div class="step_section">
-            <div class="step_head">
-                <label class="checkbox">
-                    <input onclick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1">
-                    <?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?>
-                </label>
-            </div>
-        </div>
-    <?php } else { ?>
-        <ul class="review-block">
-            <li class="review-block-item">
-                <div class="review-block-head">
-                    <h5 class="h5">
-                        <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?>
-                    </h5>
-
-                    <div class="review-block-action" role="cell">
-                        <button class="link-underline" onClick="loadAddressDiv(1)">
-                            <span>
-                                <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-                <div class="review-block-body" role="cell">
-                    <div class="delivery-address">
-                        <p><?php echo $billingAddressArr['addr_name'] . ', ' . $billingAddressArr['addr_address1']; ?>
-                            <?php if (strlen($billingAddressArr['addr_address2']) > 0) {
-                                echo ", " . $billingAddressArr['addr_address2']; ?>
-                            <?php } ?>
-                        </p>
-                        <p><?php echo $billingAddressArr['addr_city'] . ", " . $billingAddressArr['state_name'] . ", " . $billingAddressArr['country_name'] . ", " . $billingAddressArr['addr_zip']; ?>
-                        </p>
-
-                        <?php if (strlen($billingAddressArr['addr_phone']) > 0) {
-                            $addrPhone = ValidateElement::formatDialCode($billingAddressArr['addr_phone_dcode']) . $billingAddressArr['addr_phone'];
-                        ?>
-                            <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
-                        <?php } ?>
-                    </div>
-                </div>
-            </li>
-        </ul>
-<?php }
-} ?>
-
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="cart-total-head">
     <h3 class="cart-total-title">
         <?php echo Labels::getLabel('LBL_PRICE_SUMMARY', $siteLangId); ?>
@@ -123,6 +74,7 @@ if (0 < $isShippingSelected && 1 > count($paymentMethods)) {
     </ul>
 
     <?php if (1 > $isShippingSelected) { ?>
+        <!-- Used for Mobile/Tab View -->
         <div class="checkout-bottom">
             <div class="amount">
                 <strong><?php echo CommonHelper::displayMoneyFormat($orderNetAmt); ?></strong>
@@ -158,12 +110,6 @@ if (0 < $isShippingSelected && 1 > count($paymentMethods)) {
                     <?php echo Labels::getLabel('LBL_Continue', $siteLangId); ?>
                 </button>
             <?php } ?>
-        </div>
-    </div>
-<?php } elseif (1 > count($paymentMethods) && 1 > $userWalletBalance) { ?>
-    <div class="cart-total-foot">
-        <div class="mt-4">
-            <?php echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_PAYMENT_METHOD_IS_NOT_AVAILABLE._PLEASE_CONTACT_YOUR_ADMINISTRATOR.', $siteLangId)); ?>
         </div>
     </div>
 <?php } ?>

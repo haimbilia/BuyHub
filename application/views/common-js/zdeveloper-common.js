@@ -386,12 +386,7 @@ setupWishList = function (frm, event) {
 };
 addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
     event.stopPropagation();
-    if (isUserLogged() == 0) {
-        loginPopUpBox();
-        return false;
-    }
-    wish_list_id =
-        typeof wish_list_id != "undefined" ? parseInt(wish_list_id) : 0;
+    wish_list_id = (typeof wish_list_id != "undefined" ? parseInt(wish_list_id) : 0);
     var dv = ".collection-ui-popup";
     var action = "addRemoveWishListProduct";
     var alternateData = "";
@@ -401,6 +396,10 @@ addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
             action = "updateRemoveWishListProduct";
             alternateData = $("#wishlistForm").serialize();
         }
+    }
+
+    if (0 < $('#cartList').length) {
+        $('#cartList').prepend(fcom.getLoader());
     }
     fcom.updateWithAjax(
         fcom.makeUrl(
@@ -431,6 +430,10 @@ addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
                 }
                 if ("updateRemoveWishListProduct" == action) {
                     viewWishListItems(oldWishListId);
+                }
+
+                if ('function' == typeof listCartProducts) {
+                    listCartProducts();
                 }
             }
         }
