@@ -107,7 +107,6 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
         }
     }
 
-    // $this->includeTemplate('_partial/topHeaderDashboard.php', $commonHeadData, false);
     if ($controllerName != 'SubscriptionCheckout') { ?>
         <div class="wrapper">
         <?php } ?>
