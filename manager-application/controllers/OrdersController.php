@@ -1150,4 +1150,61 @@ class OrdersController extends ListingBaseController
 
         die(FatUtility::convertToJson($json));
     }
+
+    private static function attachmentForm(int $recordId, int $langId, bool $bothTypesAvailable = true)
+    {
+        $frm = new Form('frmDownload');
+        if (true === $bothTypesAvailable) {
+            $digitalDownloadTypeArr = applicationConstants::digitalDownloadTypeArr($langId);
+            $frm->addSelectBox(Labels::getLabel('FRM_DIGITAL_DOWNLOAD_TYPE', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'download-type'), '')->requirements()->setRequired();
+        }
+
+        $frm->addHiddenField('', 'record_id', $recordId);
+        return $frm;
+    }
+
+    public function viewAttachments(int $opId)
+    {
+        $productType = OrderProduct::getAttributesById($opId, 'op_product_type');
+        if ($productType != Product::PRODUCT_TYPE_DIGITAL) {
+            LibHelper::exitWithError(Labels::getLabel('LBL_INVLID_PRODUCT_TYPE', $this->siteLangId), true);
+        }
+        $digitalDownloads = Orders::getOrderProductDigitalDownloads($opId);
+        $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($opId);
+        $frm = $this->attachmentForm($opId, $this->siteLangId, (!empty($digitalDownloads) && !empty($digitalDownloadLinks)));
+
+        $this->set("digitalDownloads", $digitalDownloads);
+        $this->set("digitalDownloadLinks", $digitalDownloadLinks);
+        $this->set("frm", $frm);
+        $this->set("formTitle", Labels::getLabel('LBL_ATTACHMENTS'));
+
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    public function downloadOpAttachment($aFileId, $recordId)
+    {
+        $aFileId = FatUtility::int($aFileId);
+        $recordId = FatUtility::int($recordId);
+        $fileType = AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD;
+
+        if (1 > $aFileId || 1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, true);
+            CommonHelper::redirectUserReferer();
+        }
+
+        $file_row = AttachedFile::getAttributesById($aFileId);
+        if ($file_row == false || $file_row['afile_record_id'] != $recordId || $file_row['afile_type'] != $fileType) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('Orders', 'view', array($recordId)));
+        }
+
+        if (!file_exists(CONF_UPLOADS_PATH . $file_row['afile_physical_path'])) {
+            LibHelper::exitWithError(Labels::getLabel('LBL_FILE_NOT_FOUND', $this->siteLangId), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('Orders', 'view', array($recordId)));
+        }
+
+        $fileName = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+        AttachedFile::downloadAttachment($fileName, $file_row['afile_name']);
+    }
 }
