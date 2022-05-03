@@ -60,7 +60,7 @@ foreach ($arrListing as $sn => $row) {
                     ?>
                         <span class="timeline-v4__item-text">
                             <b><?php echo Labels::getLabel('LBL_TRACKING_NUMBER', $siteLangId); ?>:</b>
-                            <a href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_TRACK', $siteLangId); ?>" class="link link--dark timeline-v4__item-link" onclick="trackOrder('<?php echo trim($trackingNumber); ?>', '<?php echo trim($carrier); ?>','<?php echo $row['op_invoice_number']; ?>','<?php echo $row['op_order_id']; ?>','<?php echo $row['op_id']; ?>')">
+                            <a href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_TRACK', $siteLangId); ?>" class="link link-text" onclick="trackOrder('<?php echo trim($trackingNumber); ?>', '<?php echo trim($carrier); ?>','<?php echo $row['op_invoice_number']; ?>','<?php echo $row['op_order_id']; ?>','<?php echo $row['op_id']; ?>')">
                                 <?php echo $trackingNumber; ?>
                             </a>
                             <?php if(!empty($row["opshipping_label"])) { ?>
@@ -80,7 +80,7 @@ foreach ($arrListing as $sn => $row) {
                     <?php } ?>
                     <?php if (!empty($row['oshistory_tracking_url'])) { ?>
                         <span class="timeline-v4__item-user-name">
-                            <a href="<?php echo $row['oshistory_tracking_url']; ?>" target="_blank" class="link link--dark timeline-v4__item-link">
+                            <a href="<?php echo $row['oshistory_tracking_url']; ?>" target="_blank" class="link link-text">
                                 <?php echo Labels::getLabel('LBL_CLICK_HERE_TO_TRACK', $siteLangId); ?>
                             </a>
                         </span>
