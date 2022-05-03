@@ -1839,3 +1839,5 @@ UPDATE `tbl_email_templates` SET `etpl_body` = '\r\n<table width=\"600px\" cells
 
 ALTER TABLE `tbl_user_withdrawal_requests_specifics` CHANGE `uwrs_value` `uwrs_value` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_CUSTOM_RATIO", "1", "Custom", "1");
+INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_SOLD_QUANTITY", "1", "Quantity", "1");
+

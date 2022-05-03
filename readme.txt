@@ -753,7 +753,8 @@ Updates/Fixes :
     => 064058 - Admin: Page's title is not showing correctly while selecting some of the options under the Getting settings section
     => 063965 - Admin: Transaction details are not showing correctly at the seller's/buyer's/affiliat's/advertiser's end while sending the withdrawal request to the admin 
     => 063900 - Order ID is not showing with the transaction details at the admin's and seller's end 
-    
+    => 063909 - "Quantity" and "Combined tax's value" are not shown after placing the order at the buyer's end and seller's end and different terms are used for the same functionality i.e. Shipping charges and Delivery Charges
+
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 

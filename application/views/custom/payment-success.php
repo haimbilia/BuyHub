@@ -239,7 +239,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                                         </div>
                                                                         <div class="options">
                                                                             <p class=""> <?php echo $product['op_selprod_options']; ?></p>
-                                                                            <span class="product-qty"><?php echo $product['op_qty']; ?></span>
+                                                                            <span class="product-qty"><?php echo Labels::getLabel("LBL_SOLD_QUANTITY", $siteLangId) .":".$product['op_qty']; ?></span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -308,7 +308,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                         <?php } ?>
                                                         <?php if (0 < $shippingCharges) { ?>
                                                             <li class="cart-summary-item">
-                                                                <span class="label"><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId); ?></span>
+                                                                <span class="label"><?php echo Labels::getLabel('LBL_SHIPPING_CHARGES', $siteLangId); ?></span>
                                                                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($shippingCharges); ?></span>
                                                             </li>
                                                         <?php  } ?>
