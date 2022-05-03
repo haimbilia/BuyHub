@@ -34,8 +34,8 @@ class UserRewards extends MyAppModel
         $rewarPointArr = array(
             'urp_user_id' => $userId,
             'urp_points' => '-' . $rewardPointUsed,
-            'urp_used_order_id' => $orderId,
-            'urp_comments' => 'Reward Points used in checkout with order ID ' . $orderNo,
+            'urp_used_order_id' => $orderId,           
+            'urp_comments' => Labels::getLabel('LBL_REWARD_POINT_USED_IN_CHECKOUT_WITH_ORDERID', $langId) . $orderNo,            
         );
         $rewardsRecord->assignValues($rewarPointArr);
         if (!$rewardsRecord->save()) {
@@ -132,5 +132,15 @@ class UserRewards extends MyAppModel
                 }
             }
         }
+    }
+
+    public static function isRewardPointUsed(int $rewardId)
+    {
+        $srch = new SearchBase(UserRewardBreakup::DB_TBL, 'urb');
+        $srch->addCondition('urpbreakup_urp_id', '=', $rewardId);
+        $srch->addCondition('urpbreakup_used', '=', applicationConstants::YES);        
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 }
