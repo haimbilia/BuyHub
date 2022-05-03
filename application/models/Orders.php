@@ -2034,7 +2034,7 @@ class Orders extends MyAppModel
             $commissionFees = $childOrderInfo['op_commission_charged'] - $childOrderInfo['op_refund_commission'];
 
             if ($commissionFees > 0 && false === $alreadyPaid) {
-                $comments = sprintf(Labels::getLabel('LBL_CHARGED_COMMISSION_FOR_ORDER', $langId), $formattedInvoiceNumber);
+                $comments = str_replace("{invoicenumber}",$formattedInvoiceNumber, Labels::getLabel('LBL_CHARGED_COMMISSION_FOR_ORDER_{invoicenumber}', $langId));
                 $txnArray["utxn_user_id"] = $childOrderInfo['op_selprod_user_id'];
                 $txnArray["utxn_debit"] = $commissionFees;
                 $txnArray["utxn_credit"] = 0;

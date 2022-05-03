@@ -752,7 +752,8 @@ Updates/Fixes :
     => 064091 - Blogs: Blogs categories are showing on the front -end even no blog post is linked with it.
     => 064058 - Admin: Page's title is not showing correctly while selecting some of the options under the Getting settings section
     => 063965 - Admin: Transaction details are not showing correctly at the seller's/buyer's/affiliat's/advertiser's end while sending the withdrawal request to the admin 
-
+    => 063900 - Order ID is not showing with the transaction details at the admin's and seller's end 
+    
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
