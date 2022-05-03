@@ -4,11 +4,10 @@ $canViewTaxCharges = isset($canViewTaxCharges) ? $canViewTaxCharges : false;
 $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
 
 $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderDetail['plugin_code']);
-$cartTotal = 0;
-$shippingCharges = 0;
-$totalTax = 0;
+$cartTotal = $shippingCharges = $totalTax = $selProdTotalSpecialPrice = 0;
 
 foreach ($arr as $childOrder) {
+    $selProdTotalSpecialPrice += $childOrder['op_special_price'] * $childOrder["op_qty"];
     $cartTotal = $cartTotal + CommonHelper::orderProductAmount($childOrder, 'cart_total');
     $shippingCharges = $shippingCharges + CommonHelper::orderProductAmount($childOrder, 'shipping');
     if (empty($childOrder['taxOptions'])) {
@@ -19,13 +18,17 @@ foreach ($arr as $childOrder) {
         }
     }
 }
+
+$discount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT')) : $orderDetail['order_discount_total'];
+$volDiscount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'VOLUME_DISCOUNT')) : $orderDetail['order_volume_discount_total'];
+$totalSaving = $selProdTotalSpecialPrice + $discount + $volDiscount;
 ?>
 <div class="col-md-4">
     <div class="ml-md-4">
         <div class="order-block">
             <h4><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h4>
             <div class="cart-summary">
-                <ul>                  
+                <ul>
                     <li>
                         <span class="lable"><?php echo Labels::getLabel('MSG_Order_Created', $siteLangId); ?> </span>
                         <span class="value"><?php echo FatDate::format($orderDetail['order_date_added']); ?></span>
@@ -69,10 +72,8 @@ foreach ($arr as $childOrder) {
                             </span>
                             <span class="value"><?php echo CommonHelper::displayMoneyFormat($totalTax, true, false, true, false, true); ?></span>
                         </li>
-                    <?php } ?>                    
-                    <?php
-                    $discount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT')) : $orderDetail['order_discount_total'];
-                    if (0 < $discount) { ?>
+                    <?php } ?>
+                    <?php if (0 < $discount && !$isSellerDashboardView) { ?>
                         <li class="discounted">
                             <span class="lable"><?php echo Labels::getLabel('LBL_Discount', $siteLangId) ?></span>
                             <span class="value">
@@ -80,9 +81,7 @@ foreach ($arr as $childOrder) {
                             </span>
                         </li>
                     <?php } ?>
-                    <?php
-                    $volDiscount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'VOLUME_DISCOUNT')) : $orderDetail['order_volume_discount_total'];
-                    if (0 < $volDiscount) { ?>
+                    <?php if (0 < $volDiscount) { ?>
                         <li class="discounted">
                             <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME/LOYALTY_DISCOUNT', $siteLangId);  ?></span>
                             <span class="value">
@@ -113,6 +112,7 @@ foreach ($arr as $childOrder) {
                             </span>
                         </li>
                     <?php } ?>
+
                     <li class="highlighted">
                         <span class="lable"><?php echo Labels::getLabel('LBL_NET_AMOUNT', $siteLangId) ?></span>
                         <span class="value">
@@ -129,10 +129,10 @@ foreach ($arr as $childOrder) {
             </div>
 
         </div>
-        <?php if (isset($totalSaving) && 0 < $totalSaving) { ?>
+        <?php if (isset($totalSaving) && 0 < $totalSaving && !$isSellerDashboardView) { ?>
             <div class="total-savings">
                 <img class="total-savings-img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/savings.svg" alt="">
-                <p><?php echo Labels::getLabel('MSG_YOUR_TOTAL_SAVINGS_AMOUNT_ON_THIS_ORDER', $siteLangId); ?></p>
+                <p><?php echo Labels::getLabel('MSG_TOTAL_SAVINGS_AMOUNT_ON_THIS_ORDER', $siteLangId); ?></p>
                 <span class="amount"><?php echo CommonHelper::displayMoneyFormat($totalSaving, true, false, true, false, true); ?></span>
 
             </div>

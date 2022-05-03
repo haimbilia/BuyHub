@@ -24,7 +24,8 @@
     right: 0;
     background: darken($brand-color, 10);
     color: lighten($brand-color, 55%);
-    z-index: 99;
+    //z-index: 99;
+    z-index: $zindex-fixed;
     align-items: center;
     justify-content: space-between;
     padding: 1rem;

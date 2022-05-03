@@ -510,7 +510,7 @@ class CommonHelper extends FatUtility
 
         if (empty($opArr)) {
             trigger_error('Order Product Array should not be empty', E_USER_ERROR);
-        }        
+        }
 
         switch (strtoupper($amountType)) {
             case 'NETAMOUNT':
@@ -1374,7 +1374,7 @@ class CommonHelper extends FatUtility
 
         $specialPrice = $product['theprice'];
         $discount = (($originalPrice - $specialPrice) * 100) / $originalPrice;
-        
+
         return round($discount, 2) . "% " . Labels::getLabel('LBL_Off', $langId);
     }
 

@@ -20,7 +20,14 @@ class RewardsController extends ListingBaseController
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['searchFrmTemplate'] = 'rewards/search-form.php';
-
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'title' => Labels::getLabel('LBL_CREDIT', $this->siteLangId),
+            ],
+            'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add"></use>
+                        </svg><span>' . Labels::getLabel('BTN_CREDIT', $this->siteLangId) . '</span>',
+        ];
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
@@ -31,7 +38,7 @@ class RewardsController extends ListingBaseController
         $this->_template->addJs(array('js/select2.js', 'rewards/page-js/index.js'));
         $this->_template->addCss(array('css/select2.min.css'));
         $this->includeFeatherLightJsCss();
-        $this->_template->render(true, true, '_partial/listing/index.php');
+        $this->_template->render(true, true, '_partial/listing/index.php', false, false);
     }
 
     public function search()

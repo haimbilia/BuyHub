@@ -220,10 +220,9 @@ class TagsController extends ListingBaseController
 
     protected function getFormColumns(int $langId = 0): array
     {
-
-        $relatedProdsTblHeadingCols = CacheHelper::get('tagsTblHeadingCols' . $langId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($relatedProdsTblHeadingCols) {
-            return json_decode($relatedProdsTblHeadingCols, true);
+        $tblHeadingCols = CacheHelper::get('tagsTblHeadingCols' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [

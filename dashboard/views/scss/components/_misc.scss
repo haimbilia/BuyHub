@@ -1282,7 +1282,7 @@ mark,
     white-space: nowrap;
     padding: 4px;
     border: solid 1px transparent;
-    border-radius: $radius-common;
+    border-radius: 3px;
     background-color: $bg-gray;
     cursor: text;
     &:hover,
@@ -1305,6 +1305,10 @@ mark,
         outline: solid 2px $brand-color;
         border: none;
     }
+}
+.edit-price {
+    display: flex;
+    align-items: center;
 }
 
 .clipboard {
