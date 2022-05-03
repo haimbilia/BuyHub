@@ -1,3 +1,8 @@
+$(document).on('change', '.downloadTypeJs', function () {
+    $('.downloadTypeSectionJs').hide();
+    $('.downloadType-' + $(this).val()).fadeIn();
+});
+
 (function () {
     var itemSummaryJs = ".itemSummaryJs";
     var orderSummaryJs = ".orderSummaryJs";
@@ -31,7 +36,7 @@
         });
     };
     viewPaymemntGatewayResponse = function (data) {
-        $.ykmodal('<div class="form-edit-body">'+data+"</div>", true);
+        $.ykmodal('<div class="form-edit-body">' + data + "</div>", true);
     };
 
     getOpCharges = function (orderId, chargeType) {
@@ -114,7 +119,7 @@
         });
     };
 
-    updateStatus = function (frm) {       
+    updateStatus = function (frm) {
         if (!$(frm).validate()) return;
         var op_id = $(frm.op_id).val();
         var data = fcom.frmData(frm);
@@ -133,8 +138,8 @@
         var manualShipping = 0;
         if (0 < $("input.manualShippingJs").length) {
             manualShipping = $("input.manualShippingJs:checked").val();
-        }else if(0 < $("select.manualShippingJs").length){            
-            manualShipping = $("select.manualShippingJs").val();            
+        } else if (0 < $("select.manualShippingJs").length) {
+            manualShipping = $("select.manualShippingJs").val();
         }
         $.ykmodal(fcom.getLoader());
         if (0 < canShipByPlugin && 1 != manualShipping && orderShippedStatus == orderStatusId) {
@@ -143,7 +148,7 @@
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) {
                 fcom.removeLoader();
                 $("#allSellerJs").trigger('change');
-                getOrderCommentForm( frm.order_id.value, frm.op_id.value);                
+                getOrderCommentForm(frm.order_id.value, frm.op_id.value);
             });
         }
     };
@@ -169,7 +174,7 @@
     /* ShipStation */
 
     proceedToShipment = function (opId) {
-        fcom.displayProcessing();        
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl('ShippingServices', 'proceedToShipment', [opId]), '', function (t) {
             fcom.removeLoader();
             fcom.closeProcessing();
@@ -177,10 +182,10 @@
             if (1 > t.status) {
                 fcom.displayErrorMessage(t.msg);
 
-                if('openShipUser' in t && t.openShipUser == 1){
+                if ('openShipUser' in t && t.openShipUser == 1) {
                     setTimeout(function () {
-                        getShippingUsersForm(t.orderId,t.opId);
-                    }, 1000);                   
+                        getShippingUsersForm(t.orderId, t.opId);
+                    }, 1000);
                 }
                 return;
             }
@@ -209,8 +214,8 @@
     }
 
     fetchTrackingDetail = function (trackingId, opInvoiceId) {
-        $.ykmodal(fcom.getLoader(),false);
-        fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {          
+        $.ykmodal(fcom.getLoader(), false);
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
             $.ykmodal(res, false);
             fcom.removeLoader();
             fcom.closeProcessing();
@@ -218,8 +223,8 @@
     }
 
     trackOrder = function (trackingNumber, courier, orderNumber, orderId, op_id) {
-        $.ykmodal(fcom.getLoader(),false);
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), {orderId,op_id}, function (res) {
+        $.ykmodal(fcom.getLoader(), false);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), { orderId, op_id }, function (res) {
             fcom.closeProcessing();
             $.ykmodal(res.html, false);
             fcom.removeLoader();
@@ -313,11 +318,11 @@
             setTimeout(function () { window.location.reload(); }, 300);
         });
     };
-    
-    shippingRatesForm = function(opId) {
+
+    shippingRatesForm = function (opId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (t) {
             fcom.closeProcessing();
-            $.ykmodal(t.html,true);
+            $.ykmodal(t.html, true);
             fcom.removeLoader();
         });
     };
@@ -340,4 +345,11 @@
             setTimeout(function () { window.location.reload(); }, 300);
         });
     };
+
+    viewAttachments = function (opId) {
+        fcom.updateWithAjax(fcom.makeUrl('Orders', 'viewAttachments', [opId]), '', function (t) {
+            fcom.closeProcessing();
+            $.ykmodal(t.html, false, 'modal-dialog-vertical-md')
+        });
+    }
 })();

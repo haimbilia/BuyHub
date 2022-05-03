@@ -36,6 +36,7 @@ foreach ($arrListing as $sn => $row) {
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
+                    'recordId' => $row['urp_id'],
                 ];
 
                 $data['otherButtons'][] = [
@@ -48,7 +49,11 @@ foreach ($arrListing as $sn => $row) {
                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#comment">
                                     </use>
                                 </svg>',
-                ];
+                ];                
+
+                if ($canEdit &&  strtotime('now') < strtotime($row['urp_date_expiry']) && !UserRewards::isRewardPointUsed($row['urp_id'])) {                
+                    $data['deleteButton'] = [];
+                }
 
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);

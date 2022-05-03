@@ -280,7 +280,7 @@
                                                             </tr>
                                                             <?php if ($childOrder['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL) {  ?>
                                                                 <tr>
-                                                                    <td style="padding:10px;text-align: center;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId) ?></td>
+                                                                    <td style="padding:10px;text-align: center;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_SHIPPING_CHARGES', $siteLangId) ?></td>
                                                                     <td style="padding:10px;text-align: center;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'shipping'), true, false, true, false, true); ?></td>
                                                                 </tr>
                                                             <?php } ?>

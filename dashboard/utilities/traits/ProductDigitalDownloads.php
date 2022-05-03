@@ -92,9 +92,7 @@ trait ProductDigitalDownloads
 
         $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
 
-        $data = [
-            'record_id' => $selProdId,            
-        ];
+        $data = ['record_id' => $selProdId];
         $frm->fill($data);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('canDo', $canDo);

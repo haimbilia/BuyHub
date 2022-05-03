@@ -25,7 +25,7 @@
         } ?>
         <?php if ($cartSummary['originalShipping']) { ?>
             <li class="cart-summary-item">
-                <span class="label"><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId); ?></span>
+                <span class="label"><?php echo Labels::getLabel('LBL_SHIPPING_CHARGES', $siteLangId); ?></span>
                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['shippingTotal']); ?></span>
             </li>
         <?php  } ?>

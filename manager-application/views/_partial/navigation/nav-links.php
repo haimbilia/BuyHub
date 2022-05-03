@@ -3,7 +3,7 @@ $quickSearch = $quickSearch ?? false;
 $quickSearchUlClass = ($quickSearch ? 'quickMenujs' : '');
 $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
 ?>
-<ul class="menu <?php echo $quickSearchUlClass; ?>">
+<ul class="menu <?php echo $quickSearchUlClass; ?>" id="sidebarNavLinks">
     <?php if (!$quickSearch) { ?>
         <li class="menu-item dropdownJs">
             <button class="menu-section navLinkJs" type="button" data-selector='["Home"]' title="<?php echo Labels::getLabel('NAV_HOME', $siteLangId); ?>" onclick="redirectFn('<?php echo UrlHelper::generateUrl(); ?>')">
@@ -42,7 +42,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
             </button>
-            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_PRODUCT_MANAGEMENT" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_PRODUCT_MANAGEMENT" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
                 <ul class="nav nav-level">
                     <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
@@ -175,7 +175,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
             </button>
-            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_REQUESTS" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_REQUESTS" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
                 <ul class="nav nav-level">
                     <?php if ($objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
@@ -362,7 +362,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
             </button>
-            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_ORDERS" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_ORDERS" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
                 <ul class="nav nav-level">
                     <?php if ($objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
@@ -476,7 +476,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
             </button>
-            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_USERS" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_USERS" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
                 <ul class="nav nav-level">
                     <?php if ($objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
@@ -592,7 +592,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
             </button>
-            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_PROMOTIONS" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_PROMOTIONS" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
                 <ul class="nav nav-level">
                     <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
@@ -785,7 +785,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
             </button>
-            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_BLOG" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_BLOG" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
                 <ul class="nav nav-level">
                     <?php if ($objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
@@ -858,7 +858,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
             </button>
-            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_TAX" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_TAX" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
                 <ul class="nav nav-level">
                     <?php if ($objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
@@ -924,7 +924,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
             </button>
-            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_CMS" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_CMS" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
                 <ul class="nav nav-level">
                     <?php if ($objPrivilege->canViewSlides(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
@@ -1079,7 +1079,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
             </button>
-            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_REPORTS" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_REPORTS" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
                 <ul class="nav nav-level" <?php if (!$quickSearch) { ?>id="reportsNav" <?php } ?>>
                     <?php
                     if (
@@ -1091,7 +1091,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     ) {
                     ?>
                         <li class="nav_item hasNestedChildJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-parent="#salesReportNav" href="#salesReportNav" aria-expanded="true">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" href="#salesReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1102,7 +1102,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                 <?php } ?>
                             </a>
-                            <div <?php if (!$quickSearch) { ?>id="salesReportNav" <?php } ?> class="panel-collapse <?php echo $collapseClass; ?> collapseJs">
+                            <div <?php if (!$quickSearch) { ?>id="salesReportNav" <?php } ?> class="panel-collapse <?php echo $collapseClass; ?> collapseJs" data-bs-parent="#reportsNav">
                                 <ul class="nav nav-level">
                                     <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
@@ -1152,7 +1152,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     ) {
                     ?>
                         <li class="nav_item hasNestedChildJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-parent="#usersReportNav" href="#usersReportNav" aria-expanded="true">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" href="#usersReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1166,7 +1166,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                 <?php } ?>
                             </a>
-                            <div <?php if (!$quickSearch) { ?>id="usersReportNav" <?php } ?> class="panel-collapse <?php echo $collapseClass; ?> collapseJs">
+                            <div <?php if (!$quickSearch) { ?>id="usersReportNav" <?php } ?> class="panel-collapse <?php echo $collapseClass; ?> collapseJs" data-bs-parent="#reportsNav">
                                 <ul class="nav nav-level">
                                     <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                         <li class="nav_item navItemJs">
@@ -1210,7 +1210,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <?php } ?>
                     <?php if ($objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item hasNestedChildJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-parent="#financialReportNav" href="#financialReportNav" aria-expanded="true">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" href="#financialReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1222,7 +1222,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                 <?php } ?>
                             </a>
-                            <div <?php if (!$quickSearch) { ?>id="financialReportNav" <?php } ?> class="panel-collapse <?php echo $collapseClass; ?> collapseJs">
+                            <div <?php if (!$quickSearch) { ?>id="financialReportNav" <?php } ?> class="panel-collapse <?php echo $collapseClass; ?> collapseJs" data-bs-parent="#reportsNav">
                                 <ul class="nav nav-level">
                                     <li class="nav_item navItemJs">
                                         <a href="<?php echo UrlHelper::generateUrl('EarningsReport'); ?>" class="nav_link navLinkJs ">
@@ -1255,7 +1255,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <?php } ?>
                     <?php if ($objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item hasNestedChildJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-parent="#subscriptionReportNav" href="#subscriptionReportNav" aria-expanded="true">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom collapsed" data-bs-toggle="collapse" href="#subscriptionReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1266,7 +1266,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                 <?php } ?>
                             </a>
-                            <div <?php if (!$quickSearch) { ?>id="subscriptionReportNav" <?php } ?> class="panel-collapse <?php echo $collapseClass; ?> collapseJs">
+                            <div <?php if (!$quickSearch) { ?>id="subscriptionReportNav" <?php } ?> class="panel-collapse <?php echo $collapseClass; ?> collapseJs" data-bs-parent="#reportsNav">
                                 <ul class="nav nav-level">
                                     <li class="nav_item navItemJs">
                                         <a href="<?php echo UrlHelper::generateUrl('SubscriptionPlanReport'); ?>" class="nav_link navLinkJs ">
@@ -1320,7 +1320,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
             </button>
-            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_IMPORT_EXPORT" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_IMPORT_EXPORT" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
                 <ul class="nav nav-level">
                     <li class="nav_item navItemJs">
                         <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ImportExport"]' href="<?php echo UrlHelper::generateUrl('ImportExport'); ?>">
@@ -1361,7 +1361,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                 <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
             <?php } ?>
         </button>
-        <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_SHIPPING" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+        <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_SHIPPING" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
             <ul class="nav nav-level">
                 <?php if ($objPrivilege->canViewShippingCompanyUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                     <li class="nav_item navItemJs">
@@ -1463,7 +1463,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 <?php } ?>
             </button>
-            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_SEO" <?php } ?> aria-labelledby="" data-parent="#sidebar-menu">
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_SEO" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
                 <ul class="nav nav-level">
                     <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">

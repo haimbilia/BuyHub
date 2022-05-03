@@ -106,7 +106,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                         <span class="value"><?php echo $op['op_unit_price'] ?></span>
                     </li>
                     <li class="list-stats-item">
-                    <span class="lable"><?php echo Labels::getLabel('LBL_QUANTITY:'); ?> </span>
+                        <span class="lable"><?php echo Labels::getLabel('LBL_QUANTITY:'); ?> </span>
                         <span class="value"><?php echo $op['op_qty']; ?></span>
                     </li>
                     <?php if (0 < $shippingCost) { ?>
@@ -326,6 +326,23 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                         }
                     }
 
+                    $digitalDownloads = Orders::getOrderProductDigitalDownloads($op['op_id']);
+                    $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($op['op_id']);
+                    if ($op['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL && (!empty($digitalDownloads) || !empty($digitalDownloadLinks))) {
+                        $data['dropdownButtons']['otherButtons'][] = [
+                            'attr' => [
+                                'href' => 'javascript:void(0)',
+                                'onclick' => 'viewAttachments(' . $op['op_id'] . ')',
+                            ],
+                            'label' => '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#link">
+                                                </use>
+                                            </svg>
+                                        </i>' . Labels::getLabel('LBL_VIEW_ATTACHMENTS', $siteLangId),
+                        ];
+                    }
                     $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false);
                 ?>
             </td>

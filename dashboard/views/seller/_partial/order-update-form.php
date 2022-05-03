@@ -98,14 +98,16 @@ if ($canEdit && $displayForm && !$print) { ?>
                     if ($row['afile_lang_id'] > 0) {
                         $lang_name = $languages[$row['afile_lang_id']];
                     }
-
-                    $fileName = '<a href="' . UrlHelper::generateUrl('Seller', 'downloadOpAttachment', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '">' . $row['afile_name'] . '</a>';
-                    $downloads = '<li><a href="' . UrlHelper::generateUrl('Seller', 'downloadOpAttachment', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '"><svg class="svg" width="18" height="18">
-                        <use
-                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
-                        </use>
-                    </svg></a></li>';
-
+                    $fileName = $row['afile_name'];
+                    $downloads = '';
+                    if ($canDownload) {
+                        $fileName = '<a href="' . UrlHelper::generateUrl('Seller', 'downloadOpAttachment', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '">' . $row['afile_name'] . '</a>';
+                        $downloads = '<li><a href="' . UrlHelper::generateUrl('Seller', 'downloadOpAttachment', array($row['afile_id'], $row['afile_record_id'], AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD)) . '"><svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                                        </use>
+                                    </svg></a></li>';
+                    }
                     $expiry = Labels::getLabel('LBL_N/A', $siteLangId);
                     if ($row['expiry_date'] != '') {
                         $expiry = FatDate::Format($row['expiry_date']);

@@ -77,7 +77,7 @@
                 </tr>
                 <?php if ($cartSummary['shippingTotal']) { ?>
                     <tr>
-                        <td><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId); ?></td>
+                        <td><?php echo Labels::getLabel('LBL_SHIPPING_CHARGES', $siteLangId); ?></td>
                         <td><?php echo CommonHelper::displayMoneyFormat($cartSummary['shippingTotal']); ?></td>
                     </tr>
                 <?php } ?>

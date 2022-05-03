@@ -3,7 +3,7 @@
 class SellerController extends SellerBaseController
 {
     use RecordOperations;
-    use Options;   
+    use Options;
     use SellerProducts;
     use SellerCollections;
     use SellerUsers;
@@ -412,7 +412,7 @@ class SellerController extends SellerBaseController
             array(
                 'ops.*', 'order_id', 'order_number', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_order_id', 'orderstatus_id', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'op_is_batch', 'op_selprod_id', 'selprod_product_id', 'pm.plugin_code', 'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone',
                 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_product_type',
-                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off', 'ops_plugin.plugin_code as opshipping_plugin_code', 'op_selprod_cancellation_age as cancellation_age', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit'
+                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off', 'ops_plugin.plugin_code as opshipping_plugin_code', 'op_selprod_cancellation_age as cancellation_age', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_special_price'
             )
         );
         $srch->addCondition('op_selprod_user_id', '=', $userId);
@@ -565,10 +565,19 @@ class SellerController extends SellerBaseController
         $productType = !empty($orderDetail['selprod_product_id']) ? Product::getAttributesById($orderDetail['selprod_product_id'], 'product_type') : 0;
 
         $cancelledDate = "";
-        if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
+        if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id'] && isset($orderTimeLine[$orderDetail['orderstatus_id']])) {
             $cancelledDate = current($orderTimeLine[$orderDetail['orderstatus_id']])['oshistory_date_added'];
         }
 
+        $ddpObj = new DigitalDownloadPrivilages();
+        $canDownload = $ddpObj->canDownload(
+            $orderDetail['op_selprod_id'],
+            Product::CATALOG_TYPE_INVENTORY,
+            $userId,
+            $this->siteLangId
+        );
+
+        $this->set('canDownload', $canDownload);
         $this->set('arr', [$orderDetail]);
         $this->set('unitTypeArray', ShippingPackage::getUnitTypes($this->siteLangId));
 
@@ -585,6 +594,7 @@ class SellerController extends SellerBaseController
         $this->set('digitalDownloads', $digitalDownloads);
         $this->set('digitalDownloadLinks', $digitalDownloadLinks);
         $this->set('canAttachMoreFiles', $canAttachMoreFiles);
+        $this->set('userId', $userId);
         $this->set('languages', Language::getAllNames());
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('frm', $frm);
@@ -736,14 +746,14 @@ class SellerController extends SellerBaseController
         if (!$orderDetail) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
-        } 
-        
+        }
+
         $oSubObj = new OrderSubscription();
         $orderDetail['charges'] = $oSubObj->getOrderSubscriptionChargesArr($op_id);
 
         $this->set('orderDetail', $orderDetail);
         $this->set('orderStatuses', $orderStatuses);
-        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));  
+        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -2130,10 +2140,10 @@ class SellerController extends SellerBaseController
 
         $this->set('shopLayoutTemplateId', $shopLayoutTemplateId);
 
-        $shop_id = 0;       
+        $shop_id = 0;
 
         if (!false == $shopDetails) {
-            $shop_id = $shopDetails['shop_id'];           
+            $shop_id = $shopDetails['shop_id'];
         }
 
         $shopLogoFrm = $this->getShopLogoForm($shop_id, $this->siteLangId);
@@ -3700,12 +3710,12 @@ class SellerController extends SellerBaseController
             $frm->addHiddenField('', 'lang_id', $langId);
         }
 
-        $ratioArr = AttachedFile::getRatioTypeWithCustom($this->siteLangId);       
+        $ratioArr = AttachedFile::getRatioTypeWithCustom($this->siteLangId);
         $frm->addRadioButtons(Labels::getLabel('FRM_RATIO', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE, array('class' => 'list-inline'));
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_SHOP_LOGO);
         $frm->addHiddenField('', 'logo_min_width');
         $frm->addHiddenField('', 'logo_min_height');
-        
+
         $frm->addHTML('', 'shop_logo', '');
         return $frm;
     }
@@ -4542,12 +4552,12 @@ class SellerController extends SellerBaseController
                             continue;
                         }
                         /* ] */
-                       
+
                         $frm->addTextBox(Labels::getLabel('FRM_COST_PRICE', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'varients[' . $j . '][selprod_cost' . $optionKey . ']');
                         $frm->addTextBox(Labels::getLabel('FRM_PRICE', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'varients[' . $j . '][selprod_price' . $optionKey . ']');
                         $frm->addTextBox(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'varients[' . $j . '][selprod_stock' . $optionKey . ']');
                         $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'varients[' . $j . '][selprod_sku' . $optionKey . ']');
-                       
+
                         $i++;
                     }
                 }
@@ -4566,7 +4576,7 @@ class SellerController extends SellerBaseController
                 $fld_sku = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'selprod_sku');
                 if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
                     $fld_sku->requirements()->setRequired();
-                }                
+                }
             }
         }
         $frm->addTextArea(Labels::getLabel('FRM_ANY_EXTRA_COMMENT_FOR_BUYER', $this->siteLangId), 'selprod_comments' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));

@@ -20,7 +20,14 @@ class RewardsController extends ListingBaseController
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['searchFrmTemplate'] = 'rewards/search-form.php';
-
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'title' => Labels::getLabel('LBL_CREDIT', $this->siteLangId),
+            ],
+            'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add"></use>
+                        </svg><span>' . Labels::getLabel('BTN_CREDIT', $this->siteLangId) . '</span>',
+        ];
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
@@ -31,7 +38,7 @@ class RewardsController extends ListingBaseController
         $this->_template->addJs(array('js/select2.js', 'rewards/page-js/index.js'));
         $this->_template->addCss(array('css/select2.min.css'));
         $this->includeFeatherLightJsCss();
-        $this->_template->render(true, true, '_partial/listing/index.php');
+        $this->_template->render(true, true, '_partial/listing/index.php', false, false);
     }
 
     public function search()
@@ -54,11 +61,11 @@ class RewardsController extends ListingBaseController
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'urp_date_added');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'urp_date_added';
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
-
+      
         $userId = FatApp::getPostedData('urp_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
 
@@ -77,7 +84,7 @@ class RewardsController extends ListingBaseController
             $srch->addCondition('urp.urp_user_id', '=', $userId);
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        $srch->doNotCalculateRecords();
+        $srch->doNotCalculateRecords();       
         
         $srch->addMultipleFields(['urp.*', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email']);
         $srch->addOrder($sortBy, $sortOrder);
@@ -212,6 +219,56 @@ class RewardsController extends ListingBaseController
             'urp_points',
             'action',
         ];
+    }
+
+    public function deleteRecord()
+    {
+        $this->objPrivilege->canEditUsers();
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $rewardData = UserRewards::getAttributesById($recordId, ['urp_date_expiry','urp_points','urp_user_id']);
+
+        if(false === $rewardData || strtotime('now') > strtotime($rewardData['urp_date_expiry'])){
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        if(UserRewards::isRewardPointUsed($recordId)){
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }  
+        
+        $db = FatApp::getDb();
+        $db->startTransaction();
+        $updateValues = array('urpbreakup_used' => 1, 'urpbreakup_used_date' => date('Y-m-d H:i:s'));
+        $whr = array('smt' => 'urpbreakup_urp_id = ?', 'vals' => array($recordId));
+        if(!$db->updateFromArray(UserRewardBreakup::DB_TBL, $updateValues, $whr)){
+            $db->rollbackTransaction();
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_DEDUCT_REWARD_POINTS1', $this->siteLangId));
+        }
+
+        $rewarPointArr = array(
+            'urp_user_id' => $rewardData['urp_user_id'],
+            'urp_points' => '-' . $rewardData['urp_points'],
+            'urp_used_order_id' => 0,           
+            'urp_comments' => Labels::getLabel('LBL_REWARD_POINT_DEDUCTED_BY_ADMIN', $this->siteLangId), 
+            'urp_date_added' => date('Y-m-d')                 
+        );
+        
+        if(!$db->insertFromArray(UserRewards::DB_TBL, $rewarPointArr)){          
+            $db->rollbackTransaction();
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_DEDUCT_REWARD_POINTS2', $this->siteLangId));
+        }
+
+        $db->commitTransaction();
+        
+        $emailObj = new EmailHandler();
+        $emailObj->sendRewardPointsNotification($this->siteLangId, $recordId);
+        
+        $this->set('msg', Labels::getLabel('MSG_REWARD_POINT_DEDEUCTED_SUCCESFULLY', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     protected function excludeKeysForSort($fields = []): array

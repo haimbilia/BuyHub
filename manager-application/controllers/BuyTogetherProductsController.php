@@ -344,9 +344,9 @@ class BuyTogetherProductsController extends ListingBaseController
 
     protected function getFormColumns(): array
     {
-        $relatedProdsTblHeadingCols = CacheHelper::get('relatedProdsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($relatedProdsTblHeadingCols) {
-            return json_decode($relatedProdsTblHeadingCols, true);
+        $tblHeadingCols = CacheHelper::get('buyTogetherProdsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [
@@ -356,7 +356,7 @@ class BuyTogetherProductsController extends ListingBaseController
             'upsell_products' => Labels::getLabel('LBL_BUY_TOGETHER_PRODUCTS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('relatedProdsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('buyTogetherProdsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }

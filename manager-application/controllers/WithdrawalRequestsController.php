@@ -350,8 +350,15 @@ class WithdrawalRequestsController extends ListingBaseController
 
         $assignFields = array('utxn_status' => Transactions::STATUS_COMPLETED);
         if ($post['withdrawal_status'] == Transactions::WITHDRAWL_STATUS_APPROVED) {
-            $oldTrxComment = Transactions::getAttributesById($recordId, 'utxn_comments');
-            $assignFields['utxn_comments'] = $oldTrxComment . " (" . $comment . ")";
+            $transSrch = Transactions::getSearchObject();
+            $transSrch->addCondition('utxn_withdrawal_id','=',$recordId);
+            $transSrch->addFld('utxn_comments');
+            $transSrch->setPageSize(1);
+            $transSrch->doNotCalculateRecords();
+            $oldTransData = FatApp::getDb()->fetch($transSrch->getResultSet());
+            if(false !== $oldTransData && !empty($comment)){
+                $assignFields['utxn_comments'] = $oldTransData['utxn_comments'] . " (" . $comment . ")";
+            }                       
         }
 
         FatApp::getDb()->updateFromArray(
