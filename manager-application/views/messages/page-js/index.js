@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    bindUserSelect2('searchFrmBuyerIdJs', { user_is_buyer: 1, deletedUser: 1});
-    bindUserSelect2('searchFrmSellerIdJs', { user_is_seller: 1, deletedUser: 1});
+    bindUserSelect2('searchFrmBuyerIdJs', { user_is_buyer: 1, deletedUser: 1 });
+    bindUserSelect2('searchFrmSellerIdJs', { user_is_seller: 1, deletedUser: 1 });
     $('.listingRecordJs .listItemJs.is-active').trigger('click');
 });
 
@@ -35,7 +35,8 @@ $(document).ready(function () {
             fcom.closeProcessing();
             fcom.removeLoader();
             $(dv).replaceWith(res.listingHtml);
-            $('[data-thread-id=' + $('.threadJs').data('threadId') + ']').addClass('is-active');
+            // $('[data-thread-id=' + $('.threadJs').data('threadId') + ']').addClass('is-active');            
+            $('li.listItemJs').first().addClass('is-active').trigger('click');
         });
     };
 })();
