@@ -263,7 +263,7 @@ class DigitalDownloadPrivilages extends FatModel
                 break;
             case Product::CATALOG_TYPE_INVENTORY:
                 $this->getSellerProduct($recordId);
-
+                
                 if (1 > count($this->sellerProduct)) {
                     $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
                     return false;

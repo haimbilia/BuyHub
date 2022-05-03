@@ -3,7 +3,7 @@
 class SellerController extends SellerBaseController
 {
     use RecordOperations;
-    use Options;   
+    use Options;
     use SellerProducts;
     use SellerCollections;
     use SellerUsers;
@@ -569,6 +569,15 @@ class SellerController extends SellerBaseController
             $cancelledDate = current($orderTimeLine[$orderDetail['orderstatus_id']])['oshistory_date_added'];
         }
 
+        $ddpObj = new DigitalDownloadPrivilages();
+        $canDownload = $ddpObj->canDownload(
+            $orderDetail['op_selprod_id'],
+            Product::CATALOG_TYPE_INVENTORY,
+            $userId,
+            $this->siteLangId
+        );
+
+        $this->set('canDownload', $canDownload);
         $this->set('arr', [$orderDetail]);
         $this->set('unitTypeArray', ShippingPackage::getUnitTypes($this->siteLangId));
 
@@ -585,6 +594,7 @@ class SellerController extends SellerBaseController
         $this->set('digitalDownloads', $digitalDownloads);
         $this->set('digitalDownloadLinks', $digitalDownloadLinks);
         $this->set('canAttachMoreFiles', $canAttachMoreFiles);
+        $this->set('userId', $userId);
         $this->set('languages', Language::getAllNames());
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('frm', $frm);
@@ -736,14 +746,14 @@ class SellerController extends SellerBaseController
         if (!$orderDetail) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
-        } 
-        
+        }
+
         $oSubObj = new OrderSubscription();
         $orderDetail['charges'] = $oSubObj->getOrderSubscriptionChargesArr($op_id);
 
         $this->set('orderDetail', $orderDetail);
         $this->set('orderStatuses', $orderStatuses);
-        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));  
+        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->_template->render(true, true);
     }
 
@@ -2130,10 +2140,10 @@ class SellerController extends SellerBaseController
 
         $this->set('shopLayoutTemplateId', $shopLayoutTemplateId);
 
-        $shop_id = 0;       
+        $shop_id = 0;
 
         if (!false == $shopDetails) {
-            $shop_id = $shopDetails['shop_id'];           
+            $shop_id = $shopDetails['shop_id'];
         }
 
         $shopLogoFrm = $this->getShopLogoForm($shop_id, $this->siteLangId);
@@ -3700,12 +3710,12 @@ class SellerController extends SellerBaseController
             $frm->addHiddenField('', 'lang_id', $langId);
         }
 
-        $ratioArr = AttachedFile::getRatioTypeWithCustom($this->siteLangId);       
+        $ratioArr = AttachedFile::getRatioTypeWithCustom($this->siteLangId);
         $frm->addRadioButtons(Labels::getLabel('FRM_RATIO', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE, array('class' => 'list-inline'));
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_SHOP_LOGO);
         $frm->addHiddenField('', 'logo_min_width');
         $frm->addHiddenField('', 'logo_min_height');
-        
+
         $frm->addHTML('', 'shop_logo', '');
         return $frm;
     }
@@ -4542,12 +4552,12 @@ class SellerController extends SellerBaseController
                             continue;
                         }
                         /* ] */
-                       
+
                         $frm->addTextBox(Labels::getLabel('FRM_COST_PRICE', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'varients[' . $j . '][selprod_cost' . $optionKey . ']');
                         $frm->addTextBox(Labels::getLabel('FRM_PRICE', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'varients[' . $j . '][selprod_price' . $optionKey . ']');
                         $frm->addTextBox(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'varients[' . $j . '][selprod_stock' . $optionKey . ']');
                         $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'varients[' . $j . '][selprod_sku' . $optionKey . ']');
-                       
+
                         $i++;
                     }
                 }
@@ -4566,7 +4576,7 @@ class SellerController extends SellerBaseController
                 $fld_sku = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'selprod_sku');
                 if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
                     $fld_sku->requirements()->setRequired();
-                }                
+                }
             }
         }
         $frm->addTextArea(Labels::getLabel('FRM_ANY_EXTRA_COMMENT_FOR_BUYER', $this->siteLangId), 'selprod_comments' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
