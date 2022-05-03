@@ -1,6 +1,6 @@
 <?php
 
-if (!$showNoRecordFound) {
+if (!$showNoRecordFound && empty($links)) {
     return;
 }
 $arr_flds = [];

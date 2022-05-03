@@ -1,13 +1,10 @@
 <?php
 
 $arr_flds['listserial'] = Labels::getLabel('LBL_#', $siteLangId);
-
 if (true === $canDoDigDownload) {
     $arr_flds['pdl_download_link'] = Labels::getLabel('LBL_Download_Link', $siteLangId);
 }
-
 $arr_flds['pdl_preview_link'] = Labels::getLabel('LBL_Preview_Link', $siteLangId);
-//$arr_flds['pdl_lang_id'] = Labels::getLabel('LBL_Link_language', $siteLangId);
 
 if (true === $canDoDigDownload) {
     $arr_flds['action'] = Labels::getLabel('LBL_Action', $siteLangId);
@@ -81,11 +78,14 @@ foreach ($records as $sn => $row) {
     }
 }
 
-if (empty($records)) {
-    $tr = $tbl->appendElement('tr')->appendElement('td', ['colspan' => count($arr_flds)]);
-    $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_No_Records', $siteLangId), true);
-}
 ?>
 <div class="col-md-12">
-    <?php echo $tbl->getHtml(); ?>
+    <?php
+    if (empty($records)) {
+        echo $tbl->getHtml();
+        $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
+        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
+    }else{    
+        echo $tbl->getHtml();
+    } ?>
 </div>

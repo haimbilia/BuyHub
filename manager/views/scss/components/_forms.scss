@@ -206,7 +206,6 @@ $input-color: #474747;
     }
     select {
         @include select;
-        
     }
     textarea {
         @include input;
@@ -416,7 +415,7 @@ form.custom-form {
     flex-wrap: wrap;
     align-items: stretch;
     width: 100%;
-    gap: 10px;
+    //gap: 10px;
     input {
         position: relative;
         flex: 1 1 auto;

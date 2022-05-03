@@ -350,10 +350,8 @@ class OrderPayment extends Orders
             $this->error = Message::addErrorMessage(Labels::getLabel('ERR_WALLET_BALANCE_IS_LESS_THAN_AMOUNT_TO_BE_CHARGE', $defaultSiteLangId));
             return false;
         }
-
-        $formattedOrderValue = "#" . $orderInfo["order_id"];
+       
         $transObj = new Transactions();
-
         $transaction_comment = Orders::getOrderCommentById($orderInfo["order_id"], $defaultSiteLangId);
         $txnDataArr = array(
             'utxn_user_id' => $orderInfo["order_user_id"],
@@ -363,7 +361,7 @@ class OrderPayment extends Orders
             'utxn_comments' => $transaction_comment,
             'utxn_type' => Transactions::TYPE_ORDER_PAYMENT
         );
-        if (!$txnId = $transObj->addTransaction($txnDataArr)) {
+        if (!$transObj->addTransaction($txnDataArr)) {
             $this->error = $transObj->getError();
             return false;
         }

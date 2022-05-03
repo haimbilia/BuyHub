@@ -269,6 +269,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             $walletPaymentForm->fill(array('order_id' => $order_id));
             $walletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
             $walletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
+            $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => 0));
         }
 
         if ($cartSummary['orderNetAmount'] == 0 || $cartSummary['orderNetAmount'] == 0) {

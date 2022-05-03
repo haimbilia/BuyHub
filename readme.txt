@@ -745,7 +745,13 @@ Updates/Fixes :
     => 064035 - Seller: 404 error page is showing while the seller clicks on the "My Account" and "My Subscription" option after buying the subscription package
     => 064136 - Addition of Products under "Buy Together Products List" on the Product Detail Page
     => 064081 - Seller: "Link to" option is showing if the record type is "Shop" and dropdown listing is not showing properly while linking the record under the Badges section at the seller's end 
-    
+    => 064041 - Admin: Subscription Orders : View button is clickable but it's now working under Order Payments. 
+    => 064042 - Admin: Wrong Payment Mode is showing and commission rates* are not showing while viewing the subscription order details at the admin's end
+    => 064049 - Admin: User is unable add a admin user.
+    => 064113 - Seller: Digital files and links are not uploading while adding the digital product at the seller's end
+    => 064091 - Blogs: Blogs categories are showing on the front -end even no blog post is linked with it.
+    => 064058 - Admin: Page's title is not showing correctly while selecting some of the options under the Getting settings section
+
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
