@@ -757,6 +757,7 @@ Updates/Fixes :
     => 063900 - Order ID is not showing with the transaction details at the admin's and seller's end 
     => 063909 - "Quantity" and "Combined tax's value" are not shown after placing the order at the buyer's end and seller's end and different terms are used for the same functionality i.e. Shipping charges and Delivery Charges
     => 063815 - Getting a UI design issue for the "shipping tracking link" at the admin's, seller's, and buyer's end
+    => 060863 - Admin UI: Getting multiple issues under the side's menu section
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
