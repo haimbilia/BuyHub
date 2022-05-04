@@ -1,11 +1,7 @@
 <div class="wrapper">
     <?php if (FatApp::getConfig('CONF_LOADER', FatUtility::VAR_INT, 0)) { ?>
-        <div id="loader-wrapper">
-            <div class="yokart-loader">
-                <img alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/yokart-loader.svg">
-            </div>
-            <div class="loader-section section-left"></div>
-            <div class="loader-section section-right"></div>
+        <div class="page-loader">
+            <span> Loading... <i class="loader-line"></i></span>
         </div>
     <?php } ?>
     <!--header start here-->
@@ -80,8 +76,8 @@
                         <?php } ?>
                     </div>
                     <div class="top-bar__right">
-                        <ul class="quick-nav">                           
-                            <?php                             
+                        <ul class="quick-nav">
+                            <?php
                             $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
                             <li class="quick-nav-item item-desktop wishListJs">
                                 <button type="button" class="quick-nav-link button-store">
@@ -128,7 +124,7 @@
         <div class="main-bar no-print">
             <div class="container">
                 <div class="main-bar__inner">
-                    <?php                     
+                    <?php
                     $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
                     <div class="main-search">
                         <button class="btn-mega-search toggle--search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-controls="offcanvas-mega-search">

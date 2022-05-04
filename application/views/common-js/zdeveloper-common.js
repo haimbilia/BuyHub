@@ -764,7 +764,7 @@ sendResetPasswordLink = function (user) {
             return '<div class="processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
         getPageLoader: function () {
-            return '<div id="loader-wrapper"><div class="yokart-loader"><img src="/images/retina/yokart-loader.svg"></div><div class="loader-section section-left"></div><div class="loader-section section-right"></div>';
+            return '<div class="page-loader"><span> Loading... <i class="loader-line"></i></span></div>';
         },
         scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {
@@ -1668,7 +1668,7 @@ $(document).on("click", ".add-to-cart--js", function (event) {
     event.preventDefault();
     var selprodId = $(this).siblings('input[name="selprod_id"]').val();
     var quantity = document.frmBuyProduct.quantity.value;
-   
+
     cart.add(selprodId, quantity);
     return false;
 });

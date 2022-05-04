@@ -75,7 +75,7 @@
                         $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'label-info';
                     }
 
-                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $labelClass), $orderStatus . '<br>', true);
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $labelClass), $order['orderstatus_id'] .' ' . $order['op_status_id'] . $orderStatus . '<br>', true);
                     break;
                 case 'action':
                     $ul = $td->appendElement("ul", array("class" => "actions"), '', true);

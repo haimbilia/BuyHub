@@ -756,6 +756,8 @@ Updates/Fixes :
     => 063965 - Admin: Transaction details are not showing correctly at the seller's/buyer's/affiliat's/advertiser's end while sending the withdrawal request to the admin 
     => 063900 - Order ID is not showing with the transaction details at the admin's and seller's end 
     => 063909 - "Quantity" and "Combined tax's value" are not shown after placing the order at the buyer's end and seller's end and different terms are used for the same functionality i.e. Shipping charges and Delivery Charges
+    => 063815 - Getting a UI design issue for the "shipping tracking link" at the admin's, seller's, and buyer's end
+    => 060863 - Admin UI: Getting multiple issues under the side's menu section
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
@@ -779,6 +781,7 @@ UAT points:
     => 063631 - Seller UI: Spacing issue on seller registration page.
     => 063632 - Advertiser: Double background images are showing while registering as an advertiser at the front-end and getting a UI issue while editing the content block of the advertiser at the admin's end.
     => 063813 - Seller: Shop Inventory >> Add product: UI is distorted.
+    => 064034 - Web iOS: Admin: Comment popup is not opened when the user clicks on the 'view comment' icon under subscription order section.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

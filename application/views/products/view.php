@@ -38,16 +38,8 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
         /* Recomended Products */
     } ?>
 
-    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && !empty($reviews)) {
+    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $canSubmitFeedback) {
         echo $frmReviewSearch->getFormHtml();
-        /* $this->includeTemplate('_partial/product-reviews.php', [
-            'reviews' => $reviews, 
-            'ratingAspects' => $ratingAspects, 
-            'siteLangId' => $siteLangId, 
-            'product_id' => $product['product_id'], 
-            'canSubmitFeedback' => $canSubmitFeedback
-            'productview' => $productviewk
-        ], false); */
         $product_id = $product['product_id'];
         include(CONF_THEME_PATH . '_partial/product-reviews.php');
     } ?>
