@@ -44,21 +44,21 @@
                             <div class="wishlists">
                                 <div class="wishlists__head">
                                     <h3 class="heading">
-                                        <?php echo (isset($wishlist['uwlist_type']) && $wishlist['uwlist_type'] == UserWishList::TYPE_DEFAULT_WISHLIST) ? Labels::getLabel('LBL_Default_list', $siteLangId) : $wishlist['uwlist_title']; ?></h3>
-
+                                        <?php echo (isset($wishlist['uwlist_type']) && $wishlist['uwlist_type'] == UserWishList::TYPE_DEFAULT_WISHLIST) ? Labels::getLabel('LBL_Default_list', $siteLangId) : $wishlist['uwlist_title']; ?>
+                                    </h3>
                                     <div class="actions">
-
-                                        <?php
-                                        if ($wishlist['totalProducts'] > 0) {
-                                        ?>
+                                        <?php if ($wishlist['totalProducts'] > 0) {
+                                            $functionName = 'searchFavouriteListItems';
+                                            if (!isset($wishlist['uwlist_type']) || (isset($wishlist['uwlist_type']) && $wishlist['uwlist_type'] != UserWishList::TYPE_FAVOURITE)) {
+                                                $functionName = 'searchWishListItems';
+                                            } ?>
                                             <a href="javascript:void(0)" class="icons-wrapper" onclick="<?php echo $functionName; ?>(<?php echo $wishlist['uwlist_id']; ?>);">
                                                 <svg class="svg" width="18" height="18">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
                                                     </use>
-                                                </svg> <?php //echo str_replace('{n}', $wishlist['totalProducts'], Labels::getLabel('LBL_View_{n}_items', $siteLangId)); 
-                                                        ?>
-                                            </a> <?php
-                                                } ?>
+                                                </svg>
+                                            </a>
+                                        <?php } ?>
                                         <?php if ((!isset($wishlist['uwlist_type']) || (isset($wishlist['uwlist_type']) && $wishlist['uwlist_type'] != UserWishList::TYPE_FAVOURITE)) && $wishlist['uwlist_type'] != UserWishList::TYPE_DEFAULT_WISHLIST) { ?>
                                             <a href="javascript:void(0)" onclick="deleteWishList(<?php echo $wishlist['uwlist_id']; ?>);" class="icons-wrapper">
                                                 <svg class="svg" width="18" height="18">
@@ -66,11 +66,8 @@
                                                     </use>
                                                 </svg>
                                             </a>
-                                        <?php
-                                        } ?>
-
+                                        <?php } ?>
                                     </div>
-
                                 </div>
                                 <div class="wishlists__body">
                                     <?php if ($wishlist['products']) { ?>
@@ -107,18 +104,10 @@
                                     <?php
                                     } else {
                                         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => Labels::getLabel('LBL_No_items_added_to_this_wishlist.', $siteLangId)));
-                                    }
-
-                                    $functionName = 'searchFavouriteListItems';
-                                    if (!isset($wishlist['uwlist_type']) || (isset($wishlist['uwlist_type']) && $wishlist['uwlist_type'] != UserWishList::TYPE_FAVOURITE)) {
-                                        $functionName = 'searchWishListItems';
                                     } ?>
-
                                 </div>
-
                             </div>
-                <?php
-                        } else {
+                <?php } else {
                             $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
                         }
                     }
