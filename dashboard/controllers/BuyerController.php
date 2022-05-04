@@ -311,13 +311,18 @@ class BuyerController extends BuyerBaseController
                 $processingStatuses = array_diff($processingStatuses, [FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS")]);
             }
 
-            if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
-                $processingStatuses[] = FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS");
+            if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id'] || FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
+                $processingStatuses[] = $childOrderDetail['orderstatus_id'];
+                $processingStatuses = array_diff($processingStatuses, [FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS")]);
             }
 
-            if (FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
-                $processingStatuses[] = FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS");
+            if (FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
+                $processingStatuses[] = $childOrderDetail['orderstatus_id'];
+                $processingStatuses = array_diff($processingStatuses, [FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS")]);
             }
+            
+            $processingStatuses[] = $childOrderDetail['orderstatus_id'];
+            
             $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingStatuses);
         }
 
