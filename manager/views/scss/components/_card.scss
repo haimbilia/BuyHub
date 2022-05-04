@@ -22,8 +22,8 @@ $card: "card";
     &-head {
         $selfHead: &;
         display: flex;
-        //align-items: stretch;
-        align-items: center;
+        align-items: flex-start;
+        //align-items: center;
         justify-content: space-between;
         position: relative;
         padding: 20px $card-space;

@@ -87,10 +87,9 @@ if (!empty($order['payments'])) { ?>
                             </ul>
                         </td>
                     </tr>
-                <?php }                 
-                echo $commentModalsText;
-                ?>
+                <?php } ?>
             </tbody>
         </table>
     </div>
+    <?php echo $commentModalsText; ?>
 <?php } ?>

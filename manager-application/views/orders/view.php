@@ -42,7 +42,7 @@
                                 <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_ORDER_PAYMENTS', $siteLangId); ?></h3>
                             </div>
                         </div>
-                        <div class="card-body">
+                        <div class="card-table">
                             <?php if ($paymentFormCond) {
                                 require_once(CONF_THEME_PATH . 'orders/payment-form.php'); ?>
                                 <div class="separator separator-dashed my-5"></div>
