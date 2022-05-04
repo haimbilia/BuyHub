@@ -372,7 +372,11 @@ function showSelectedFilters() {
     if (($("#filters a").length) > 0) {
         $('#resetAllJs,#mapFilterJs').css('display', 'block');
     } else {
-        $('#resetAllJs,#mapFilterJs').css('display', 'none');
+        if (1 > $('#filterSearchForm input[name="keyword"]').length) {
+            $('#resetAllJs,#mapFilterJs').css('display', 'none');
+        } else if ('' == $('#filterSearchForm input[name="keyword"]').val()) {
+            $('#resetAllJs,#mapFilterJs').css('display', 'none');
+        }
     }
 }
 
@@ -616,7 +620,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         }
         $("input[id=keyword]").val(keyword);
         reloadProductListing(frm);
-        $('#resetAllJs').css('display', 'block');
+        $('#resetAllJs').show();
     };
 
     loadProductListingfilters = function (frm) {
@@ -778,7 +782,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         data = data + "&curr_page=" + $currentPageUrl;
         fcom.updateWithAjax(fcom.makeUrl('SavedProductsSearch', 'setup', [], siteConstants.webroot_dashboard), data, function (ans) {
             fcom.closeProcessing();
-			fcom.removeLoader();
+            fcom.removeLoader();
             if (ans.status) {
                 $.facebox.close();
             }
