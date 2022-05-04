@@ -44,8 +44,13 @@ $outline: solid 1px $border-color;
 //backgrounds colors
 $bg-white: #fff;
 $bg-white-inverse: $txt-body;
+
+$bg-brand: $brand-color;
 $bg-brand-light: rgba(var(--brand-color-alpha), 0.1);
+
+$bg-secondary: $secondary-color;
 $bg-secondary-light: rgba(var(--secondary-color-alpha), 0.1);
+
 $bg-light: #f3f4f5;
 $bg-gray: #f3f4f5;
 $gray-light: #f3f4f5;

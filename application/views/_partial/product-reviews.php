@@ -54,8 +54,8 @@ $productView = $productView ?? false;
                                     <div class="product-card">
                                         <?php if (false === $productView && !empty($product)) { ?>
                                             <div class="product-card-start">
-                                                <div class="product-card-img">                                                
-                                                    <img alt="<?php echo $product['product_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL);?>>
+                                                <div class="product-card-img">
+                                                    <img alt="<?php echo $product['product_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?>>
                                                 </div>
                                             </div>
                                         <?php } ?>
@@ -66,7 +66,6 @@ $productView = $productView ?? false;
                                                 <div class="product-description">
                                                     <?php include(CONF_THEME_PATH . 'products/product-info.php'); ?>
                                                 </div>
-
                                             <?php } ?>
 
 
