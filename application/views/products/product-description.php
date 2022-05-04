@@ -39,41 +39,43 @@
                     <h6 class="h6"><?php echo $option['option_name']; ?></h6>
                 </div>
                 <?php if ($option['values']) { ?>
-                    <ul class="select-options <?php echo ($option['option_is_color']) ? 'select-options-color' : 'select-options-size'; ?>">
-                        <?php foreach ($option['values'] as $opVal) {
-                            $isAvailable = true;
-                            if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
-                                $optionUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
-                            } else {
-                                $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id']);
-                                $optionUrlArr = explode("::", $optionUrl);
-                                if (is_array($optionUrlArr) && count($optionUrlArr) == 2) {
-                                    $optionUrl = $optionUrlArr[0];
-                                    $isAvailable = false;
-                                }
-                            }
-
-                            $colorStyle = '';
-                            if ($option['option_is_color']) {
-                                if ($opVal['optionvalue_color_code'] != '') {
-                                    $colorStyle = 'style="background-color:#' . $opVal['optionvalue_color_code'] . '"';
+                    <div class="options-block-body">
+                        <ul class="select-options <?php echo ($option['option_is_color']) ? 'select-options-color' : 'select-options-size'; ?>">
+                            <?php foreach ($option['values'] as $opVal) {
+                                $isAvailable = true;
+                                if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
+                                    $optionUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
                                 } else {
-                                    $colorStyle = 'style="background-color:' . $opVal['optionvalue_name'] . '"';
+                                    $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id']);
+                                    $optionUrlArr = explode("::", $optionUrl);
+                                    if (is_array($optionUrlArr) && count($optionUrlArr) == 2) {
+                                        $optionUrl = $optionUrlArr[0];
+                                        $isAvailable = false;
+                                    }
                                 }
-                            }
 
-                            $title = $opVal['optionvalue_name'];
-                            if (!$isAvailable) {
-                                $title = Labels::getLabel('LBL_Not_Available', $siteLangId);
-                            }
-                        ?>
-                            <li class="select-options-item <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? 'selected' : ''; ?>">
-                                <a class="btn-option <?php echo (!$optionUrl) ? ' is-disabled' : ''; ?>" data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $title; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>" <?php echo $colorStyle; ?>>
-                                    <?php echo ($option['option_is_color']) ? '' : $opVal['optionvalue_name'];  ?>
-                                </a>
-                            </li>
-                        <?php } ?>
-                    </ul>
+                                $colorStyle = '';
+                                if ($option['option_is_color']) {
+                                    if ($opVal['optionvalue_color_code'] != '') {
+                                        $colorStyle = 'style="background-color:#' . $opVal['optionvalue_color_code'] . '"';
+                                    } else {
+                                        $colorStyle = 'style="background-color:' . $opVal['optionvalue_name'] . '"';
+                                    }
+                                }
+
+                                $title = $opVal['optionvalue_name'];
+                                if (!$isAvailable) {
+                                    $title = Labels::getLabel('LBL_Not_Available', $siteLangId);
+                                }
+                            ?>
+                                <li class="select-options-item <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? 'selected' : ''; ?>">
+                                    <a class="btn-option <?php echo (!$optionUrl) ? ' is-disabled' : ''; ?>" data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $title; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>" <?php echo $colorStyle; ?>>
+                                        <?php echo ($option['option_is_color']) ? '' : $opVal['optionvalue_name'];  ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
                 <?php } ?>
             </div>
         <?php $count++;
@@ -87,13 +89,9 @@
     <?php
     if (0 < $currentStock) {
         if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) {  ?>
-            <div class="not-available">
-                <svg class="svg" width="16" height="16">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
-                    </use>
-                </svg>
+            <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
                 <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_YOUR_LOCATION', $siteLangId); ?>
-            </div>
+            </button>
             <?php } else {
             echo $frmBuyProduct->getFormTag();
             $qtyField =  $frmBuyProduct->getField('quantity');
@@ -126,19 +124,16 @@
 
                     </div>
                 </div>
-                <div class="buy-group">
-                    <?php if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
-                        //echo $frmBuyProduct->getFieldHtml('btnProductBuy');
-                        echo $frmBuyProduct->getFieldHtml('btnAddToCart');
-                    }
-                    echo $frmBuyProduct->getFieldHtml('selprod_id'); ?>
-                </div>
+                <?php if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
+                    echo $frmBuyProduct->getFieldHtml('btnAddToCart');
+                }
+                echo $frmBuyProduct->getFieldHtml('selprod_id'); ?>
             <?php } ?>
             </form>
         <?php echo $frmBuyProduct->getExternalJs();
         }
     } else { ?>
-        <div class="tag-soldout" tag--soldout-full">
+        <div class="tag-soldout tag--soldout-full">
             <h3>
                 <?php echo Labels::getLabel('LBL_Sold_Out', $siteLangId); ?></h3>
             <p>
@@ -148,7 +143,7 @@
     <?php }
 
     if (strtotime($product['selprod_available_from']) > strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
-        <div class="tag-soldout" tag--soldout-full">
+        <div class="tag-soldout tag--soldout-full">
             <h3><?php echo Labels::getLabel('LBL_Not_Available', $siteLangId); ?></h3>
             <p>
                 <?php echo str_replace('{available-date}', FatDate::Format($product['selprod_available_from']), Labels::getLabel('LBL_This_item_will_be_available_from_{available-date}', $siteLangId)); ?>
@@ -209,7 +204,7 @@
                     <li class="list-addons-item addon--js <?php echo $cancelClass; ?>">
                         <div class="product-profile">
                             <figure class="product-profile__pic">
-                                <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], ImageDimension::VIEW_MINI, $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI);?>>
+                                <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], ImageDimension::VIEW_MINI, $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI); ?>>
                                 </a>
                             </figure>
                             <div class="product-profile-data">
