@@ -73,7 +73,7 @@ if (!empty($reviews)) {
                                                 <?php } ?>
                                                 <div class="rating-block">
                                                     <div class="average-rating">
-                                                        <span class="rate"><?php echo round($avgRating, 1); ?>
+                                                        <span class="rate"><?php echo round($shopRating, 1); ?>
                                                             <svg class="svg" width="16" height="16">
                                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                                                                 </use>
@@ -85,18 +85,13 @@ if (!empty($reviews)) {
                                             </div>
                                         </div>
                                     </div>
-
-
-
                                     <div class="divider"></div>
-                                    <?php
-                                    $this->includeTemplate('_partial/product-overall-ratings.php', [
+                                    <?php $this->includeTemplate('_partial/product-overall-ratings.php', [
                                         'reviews' => $reviews,
                                         'ratingAspects' => $ratingAspects,
                                         'siteLangId' => $siteLangId,
                                         'canSubmitFeedback' => false,
-                                    ], false);
-                                    ?>
+                                    ], false); ?>
                                 </div>
                             </div>
                             <!-- Rating Section -->

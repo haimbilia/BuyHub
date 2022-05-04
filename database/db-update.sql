@@ -1841,3 +1841,4 @@ ALTER TABLE `tbl_user_withdrawal_requests_specifics` CHANGE `uwrs_value` `uwrs_v
 INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_CUSTOM_RATIO", "1", "Custom", "1");
 INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_SOLD_QUANTITY", "1", "Quantity", "1");
 
+UPDATE `tbl_configurations` SET `conf_val` = '7' WHERE `tbl_configurations`.`conf_name` = 'CONF_DEFAULT_COMPLETED_ORDER_STATUS';

@@ -1951,9 +1951,8 @@ class Orders extends MyAppModel
 
 
             /* Start Order Payment to Vendor [ */
-            $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
-            $comments = sprintf(Labels::getLabel('LBL_RECEIVED_CREDITS_FOR_ORDER', $langId), $formattedInvoiceNumber);
-
+            $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];           
+            $comments = str_replace("{invoicenumber}",$formattedInvoiceNumber, Labels::getLabel('LBL_RECEIVED_CREDITS_FOR_ORDER_{invoicenumber}', $langId));
             $availQty = $childOrderInfo['op_qty'] - $childOrderInfo['op_refund_qty'];
 
             $taxCharges = isset($childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_TAX][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount']) ? $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_TAX][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] : 0;
@@ -2054,7 +2053,7 @@ class Orders extends MyAppModel
             $affiliateCommissionFees = $childOrderInfo['op_affiliate_commission_charged'] - $childOrderInfo['op_refund_affiliate_commission'];
             if ($affiliateCommissionFees > 0 && $childOrderInfo['order_affiliate_user_id'] > 0) {
                 $commentString = Labels::getLabel('MSG_COMMISSION_RECEIVED_ORDER{invoicenumber}_PLACED_BY_REFERRAR_USER', $langId);
-                $commentString = str_replace("invoicenumber", $formattedInvoiceNumber, $commentString);
+                $commentString = str_replace("{invoicenumber}", $formattedInvoiceNumber, $commentString);
                 $txnArray["utxn_user_id"] = $childOrderInfo['order_affiliate_user_id'];
                 $txnArray["utxn_credit"] = $affiliateCommissionFees;
                 $txnArray["utxn_debit"] = 0;

@@ -225,7 +225,6 @@ class ReviewsController extends MyAppController
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
 
-        //echo $selProdReviewObj->getQuery();exit;
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         $this->set('reviews', $reviews);
 
