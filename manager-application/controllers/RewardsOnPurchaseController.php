@@ -24,6 +24,13 @@ class RewardsOnPurchaseController extends ListingBaseController
                 'onclick' => "addNew(true)",
             ]
         ];
+        $actionItemsData['headerHtmlContent'] = '<a href="'.UrlHelper::generateUrl('configurations','index', [Configurations::FORM_REWARD_POINTS]).'" class="btn btn-icon btn-outline-brand ms-2" title="" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="'.Labels::getLabel('FRM_REWARD_GLOBAL_SETTINGS', $this->siteLangId).'">
+            <svg class="svg btn-icon-start" width="18" height="18">
+                <use xlink:href="'.CONF_WEBROOT_URL.'images/retina/sprite-actions.svg#gear">
+                </use>
+            </svg>                                
+        </a>';   
+             
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
@@ -36,7 +43,7 @@ class RewardsOnPurchaseController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PURCHASE_AMOUNT', $this->siteLangId));
         $this->getListingData();
         
-        $this->_template->render(true, true, '_partial/listing/index.php');
+        $this->_template->render(true, true, '_partial/listing/index.php', false, false);
     }
 
     public function search()
