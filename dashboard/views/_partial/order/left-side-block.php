@@ -32,13 +32,13 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                         <?php if ($isSellerDashboardView) { ?>
                             <li class="dropdown-menu-item">
                                 <a class="dropdown-menu-link no-print" target="_blank" href="<?php echo UrlHelper::generateUrl('Seller', 'viewInvoice', [$orderDetail['op_id']]); ?>" title="
-								<?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?>">
-                                    <span><?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?></span>
+								<?php echo Labels::getLabel('LBL_ORDER_RECEIPT', $siteLangId); ?>">
+                                    <span><?php echo Labels::getLabel('LBL_ORDER_RECEIPT', $siteLangId); ?></span>
                                 </a>
                             </li>
                             <li class="dropdown-menu-item">
-                                <a class="dropdown-menu-link no-print" target="_blank" href="<?php echo UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $orderDetail['op_id']]); ?>" title="<?php echo Labels::getLabel('LBL_BUYER_INVOICE', $siteLangId); ?>">
-                                    <span><?php echo Labels::getLabel('LBL_BUYER_INVOICE', $siteLangId); ?></span>
+                                <a class="dropdown-menu-link no-print" target="_blank" href="<?php echo UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $orderDetail['op_id']]); ?>" title="<?php echo Labels::getLabel('LBL_BUYER_ORDER_RECEIPT', $siteLangId); ?>">
+                                    <span><?php echo Labels::getLabel('LBL_BUYER_ORDER_RECEIPT', $siteLangId); ?></span>
                                 </a>
                             </li>
                             <?php
@@ -125,7 +125,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                 <a class="dropdown-menu-link no-print" href="javascript:void(0)" onclick="return addItemsToCart('<?php echo $orderDetail['order_id']; ?>');"><?php echo Labels::getLabel('LBL_Buy_Again', $siteLangId); ?></a>
                             </li>
                             <li class="dropdown-menu-item">
-                                <a class="dropdown-menu-link no-print" href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" title="<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_INVOICE', $siteLangId); ?></a>
+                                <a class="dropdown-menu-link no-print" href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" title="<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_ORDER_RECEIPT', $siteLangId); ?></a>
                             </li>
                         <?php } ?>
                     </ul>
