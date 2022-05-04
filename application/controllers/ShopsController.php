@@ -665,7 +665,7 @@ class ShopsController extends MyAppController
             FatUtility::dieJsonError($message);
         }
 
-        if ($shopData['shop_user_id'] == $loggedUserId) {
+        if ($shopData['shop_user_id'] == $loggedUserId || !User::isBuyer()) {
             $message = Labels::getLabel('ERR_YOU_ARE_NOT_ALLOWED_TO_SEND_MESSAGE', $this->siteLangId);
             FatUtility::dieJsonError($message);
         }

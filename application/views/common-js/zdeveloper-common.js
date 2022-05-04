@@ -821,8 +821,8 @@ sendResetPasswordLink = function (user) {
             if (typeof counter !== "undefined") {
                 cls += '-' + counter
             }
-            // $("."+ cls).remove(); 
-            $.ykmsg.close();
+            $("."+ cls).remove(); 
+            //$.ykmsg.close();
         },
 
         displaySuccessMessage: function (msg) {
