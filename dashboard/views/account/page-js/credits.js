@@ -37,7 +37,7 @@ $(function () {
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Account', 'setupRequestWithdrawal'), data, function (t) {
             fcom.removeLoader();
-            searchRecords(document.frmRecordSearch);
+            window.location = fcom.makeUrl('Account', 'credits');
             $.ykmodal.close();
         });
     };

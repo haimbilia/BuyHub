@@ -270,7 +270,7 @@ if ($orderDetail['op_shipping_duration_name'] != '') {
                             <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('Lbl_Cart_Total', $siteLangId) ?></td>
                             <td style="padding:10px; ;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'cart_total'), true, false, true, false, true); ?></td>
                         </tr>
-                        <?php if ($shippedBySeller && $orderDetail['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL) { ?>
+                        <?php if ($shippedBySeller && $orderDetail['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && 0 < CommonHelper::orderProductAmount($orderDetail, 'shipping')) { ?>
                             <tr>
                                 <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_SHIPPING_CHARGES', $siteLangId) ?></td>
                                 <td style="padding:10px; ;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'shipping'), true, false, true, false, true); ?></td>

@@ -1091,7 +1091,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addIntegerField(Labels::getLabel("FRM_REWARD_POINT_VALIDITY", $langId), 'CONF_REWARDS_VALIDITY_ON_PURCHASE');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REWARD_POINT_VALIDITY_IN_DAYS_FROM_DATE_OF_CREDIT", $langId) . "</span>";
-                
+                $fld = $frm->addHtml('', 'rewardSetting', '<a href="'.UrlHelper::generateUrl('rewardsOnPurchase').'">' . Labels::getLabel("LBL_REWARD_ON_PURCHASE_CRITERIA", $langId) . '</a>');
                 $fld =  $frm->addCheckBox(
                     Labels::getLabel("FRM_ENABLE_BIRTHDAY_DISCOUNT", $langId),
                     'CONF_ENABLE_BIRTHDAY_DISCOUNT_REWARDS',
