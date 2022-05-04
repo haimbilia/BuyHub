@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
 
 <!-- offcanvas-mega-search -->
-<div class="offcanvas offcanvas-mega-search" data-bs-backdrop="false" tabindex="-1" id="mega-nav-search" aria-labelledby="mega-nav-searchLabel">
+<div class="offcanvas offcanvas-top offcanvas-mega-search" tabindex="-1" id="mega-nav-search" aria-labelledby="mega-nav-searchLabel">
     <?php $headerSrchFrm->getFormTag();
     $headerSrchFrm->setFormTagAttribute('class', ' mega-search-form');
 
@@ -18,6 +18,17 @@
     ?>
 
     <div class="mega-search">
+        <div class="logo">
+            <a href="<?php echo UrlHelper::generateUrl(); ?>">
+                <?php
+                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+                $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+                $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                ?>
+                <img width="120" height="37" <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
+            </a>
+        </div>
         <div class="mega-search-inner">
             <?php echo $headerSrchFrm->getFormTag(); ?>
             <?php echo $headerSrchFrm->getFieldHTML('keyword'); ?>
@@ -25,8 +36,9 @@
             <?php echo $headerSrchFrm->getFieldHTML('category'); ?>
             </form>
             <?php echo $headerSrchFrm->getExternalJS(); ?>
-            <button type="button" class="btn btn-close text-reset btn-search-close" data-bs-dismiss="offcanvas" aria-label="Close">
-            </button>
+
         </div>
+        <button type="button" class="btn btn-close text-reset btn-search-close" data-bs-dismiss="offcanvas" aria-label="Close">
+        </button>
     </div>
 </div>
