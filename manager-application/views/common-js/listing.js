@@ -255,8 +255,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "deleteRecord"),
             data,
-            function () {
+            function (t) {
                 fcom.closeProcessing();
+                console.log(t.msg);
+                fcom.displaySuccessMessage(t.msg);
                 reloadList();
             }
         );

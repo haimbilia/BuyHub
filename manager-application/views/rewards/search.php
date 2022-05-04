@@ -49,10 +49,21 @@ foreach ($arrListing as $sn => $row) {
                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#comment">
                                     </use>
                                 </svg>',
-                ];                
+                ];                 
+                
 
                 if ($canEdit &&  strtotime('now') < strtotime($row['urp_date_expiry']) && !UserRewards::isRewardPointUsed($row['urp_id'])) {                
-                    $data['deleteButton'] = [];
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => 'javascript:void(0);',
+                            'title' => Labels::getLabel('LBL_REVERT_REWARD', $siteLangId),
+                            'onclick' => 'deleteRecord(' . $row['urp_id'] . ')'
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#counterclockwise">
+                                        </use>
+                                    </svg>',
+                    ]; 
                 }
 
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);

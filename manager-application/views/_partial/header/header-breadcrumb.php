@@ -27,12 +27,18 @@
         ?>
     </ul>
     <?php
+    $newRecordBtn = $newRecordBtn ?? false;
+    $headerHtmlContent = isset($headerHtmlContent) ? $headerHtmlContent : false;
 
-    if (isset($headerHtmlContent) && NULL != $headerHtmlContent) {
+    if ($headerHtmlContent && $newRecordBtn) {
+        echo '<div class="btn-group">';
+    } 
+
+
+    if ($headerHtmlContent && !$newRecordBtn) {
         echo $headerHtmlContent;
     }
 
-    $newRecordBtn = $newRecordBtn ?? false;
     $newRecordBtnAttrs = $newRecordBtnAttrs ?? [];
     if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
         $href = "javascript:void(0)";
@@ -55,5 +61,12 @@
         </a>
     <?php
     }
+
+    if ($headerHtmlContent && $newRecordBtn) {
+        echo $headerHtmlContent;
+    }
+    if ($headerHtmlContent && $newRecordBtn) {
+        echo '</div>';
+    } 
     ?>
 </div>
