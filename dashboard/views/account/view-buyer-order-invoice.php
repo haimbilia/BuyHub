@@ -241,7 +241,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                     <table class="tbl-border" width="100%" border="0" cellpadding="10" cellspacing="0">
                         <thead>
                             <tr>
-                                <th width="<?php echo ($col6) ? '30%' : '40%'; ?>" style="padding:10px;text-align: left; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Item', $siteLangId); ?></th>
+                                <th width="<?php echo ($col6) ? '30%' : ((0 != $totalSavings) ? '40%' : '55%'); ?>" style="padding:10px;text-align: left; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Item', $siteLangId); ?></th>
                                 <th width="15%" style="padding:10px;text-align: center; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Price', $siteLangId); ?></th>
                                 <th width="10%" style="padding:10px;text-align: center; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Qty', $siteLangId); ?></th>
                                 <?php if ($col6) { ?>
@@ -253,7 +253,9 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                         } ?>
                                     </th>
                                 <?php } ?>
-                                <th width="15%" style="padding:10px;text-align: center; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Savings', $siteLangId); ?></th>
+                                <?php if (0 != $totalSavings) { ?>
+                                    <th width="15%" style="padding:10px;text-align: center; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Savings', $siteLangId); ?></th>
+                                <?php } ?>
                                 <th width="<?php echo ($col6) ? '15%' : '20%'; ?>" style="padding:10px;text-align: center; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Total_Amount', $siteLangId); ?></th>
                             </tr>
                         </thead>
@@ -265,7 +267,9 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                 <?php if ($col6) { ?>
                                     <td style="padding:10px;text-align: left;"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'TAX'), true, false, true, false, true); ?></td>
                                 <?php } ?>
-                                <td style="padding:10px;text-align: center;font-size:12px;"><?php echo CommonHelper::displayMoneyFormat($totalSavings); ?></td>
+                                <?php if (0 != $totalSavings) { ?>
+                                    <td style="padding:10px;text-align: center;font-size:12px;"><?php echo CommonHelper::displayMoneyFormat($totalSavings); ?></td>
+                                <?php } ?>
                                 <td style="padding:10px;text-align: center;font-size:12px;"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'CART_TOTAL'), true, false, true, false, true); ?></td>
                             </tr>
 
@@ -276,13 +280,14 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                 <?php if ($col6) { ?>
                                     <td style="padding:10px; ;text-align: left;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'TAX'), true, false, true, false, true); ?></strong></td>
                                 <?php } ?>
-                                <td style="padding:10px;text-align: center;font-size:12px;background-color: #ddd;"><?php echo CommonHelper::displayMoneyFormat($totalSavings); ?></td>
+                                <?php if (0 != $totalSavings) { ?>
+                                    <td style="padding:10px;text-align: center;font-size:12px;background-color: #ddd;"><?php echo CommonHelper::displayMoneyFormat($totalSavings); ?></td>
+                                <?php } ?>
                                 <td style="padding:10px; ;text-align: right;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'CART_TOTAL'), true, false, true, false, true); ?></strong></td>
                             </tr>
                             <tr>
-                                <td style="padding:10px;font-size:15px;text-align: left;font-weight:700; vertical-align: top;" colspan="<?php echo ($col6) ? '3' : '2'; ?>" rowspan="6">
-                                    <?php
-                                    if ($totalSavings != 0) {
+                                <td style="padding:10px;font-size:15px;text-align: left;font-weight:700; vertical-align: top;" colspan="<?php echo ($col6) ? '3' : ((0 != $totalSavings) ? '2' : '1'); ?>" rowspan="6">
+                                    <?php if (0 != $totalSavings) {
                                         $str = Labels::getLabel("LBL_You_have_saved_{totalsaving}_on_this_order", $siteLangId);
                                         $str = str_replace("{totalsaving}", -$totalSavings, $str);
                                         echo $str;
