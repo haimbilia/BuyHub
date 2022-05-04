@@ -38,7 +38,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
         /* Recomended Products */
     } ?>
 
-    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $canSubmitFeedback) {
+    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && (!empty($reviews) || $canSubmitFeedback)) {
         echo $frmReviewSearch->getFormHtml();
         $product_id = $product['product_id'];
         include(CONF_THEME_PATH . '_partial/product-reviews.php');
