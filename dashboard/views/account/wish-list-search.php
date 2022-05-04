@@ -11,6 +11,33 @@
         </div>
         <div class="card-body">
             <div class="account-fav-listing">
+                <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::YES) { ?>
+                    <div class="wishlists">
+                        <div class="wishlists__head">
+                            <h3 class="heading">
+                                <?php echo Labels::getLabel('LBL_Create_new_list', $siteLangId); ?>
+                            </h3>
+                        </div>
+                        <div class="wishlists__body">
+                            <div class="form">
+                                <?php
+                                $frm->setFormTagAttribute('onsubmit', 'setupWishList2(this,event); return(false);');
+                                $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
+                                $frm->developerTags['fld_default_col'] = 12;
+                                $titleFld = $frm->getField('uwlist_title');
+                                $titleFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Enter_List_Name', $siteLangId));
+                                $titleFld->setFieldTagAttribute('title', Labels::getLabel('LBL_List_Name', $siteLangId));
+
+                                $btnSubmitFld = $frm->getField('btn_submit');
+                                $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
+                                $btnSubmitFld->value = Labels::getLabel('LBL_Create', $siteLangId);
+                                $btnSubmitFld->developerTags['noCaptionTag'] = true;
+
+                                echo $frm->getFormHtml(); ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
                 <?php if ($wishLists) {
                     foreach ($wishLists as $wishlist) {
                         if (count($wishlist['products']) > 0 || FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::YES) { ?>
@@ -90,40 +117,11 @@
                                 </div>
 
                             </div>
-                    <?php
+                <?php
                         } else {
                             $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
                         }
                     }
-                }
-                if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::YES) {
-                    ?>
-                    <div class="wishlists">
-                        <div class="wishlists__head">
-                            <h3 class="heading">
-                                <?php echo Labels::getLabel('LBL_Create_new_list', $siteLangId); ?>
-                            </h3>
-                        </div>
-                        <div class="wishlists__body">
-                            <div class="form">
-                                <?php
-                                $frm->setFormTagAttribute('onsubmit', 'setupWishList2(this,event); return(false);');
-                                $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
-                                $frm->developerTags['fld_default_col'] = 12;
-                                $titleFld = $frm->getField('uwlist_title');
-                                $titleFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Enter_List_Name', $siteLangId));
-                                $titleFld->setFieldTagAttribute('title', Labels::getLabel('LBL_List_Name', $siteLangId));
-
-                                $btnSubmitFld = $frm->getField('btn_submit');
-                                $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
-                                $btnSubmitFld->value = Labels::getLabel('LBL_Create', $siteLangId);
-                                $btnSubmitFld->developerTags['noCaptionTag'] = true;
-
-                                echo $frm->getFormHtml(); ?>
-                            </div>
-                        </div>
-                    </div>
-                <?php
                 } ?>
             </div>
         </div>
