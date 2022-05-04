@@ -698,7 +698,7 @@ class BuyerController extends BuyerBaseController
                 'order_pmethod_id', 'order_status', 'plugin_name', 'IFNULL(orrequest_id, 0) as return_request',
                 'IFNULL(ocrequest_id, 0) as cancel_request', 'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age',
                 'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age', 'order_payment_status',
-                'order_deleted', 'plugin_code', 'opshipping_fulfillment_type', 'op_rounding_off', 'selprod_product_id'
+                'order_deleted', 'plugin_code', 'opshipping_fulfillment_type', 'op_rounding_off', 'selprod_product_id', 'orderstatus_id'
             )
         );
 

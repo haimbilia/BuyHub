@@ -14,7 +14,7 @@
             <a class="shop-nav-link <?php echo $action == 'shop' ? 'active' : '' ?>" href="<?php echo UrlHelper::generateUrl('reviews', 'shop', array($shop_id)); ?>"><?php echo Labels::getLabel('LBL_SHOP_REVIEW', $siteLangId); ?></a>
         </li>
     <?php } ?>
-    <?php if (!UserAuthentication::isUserLogged() || (UserAuthentication::isUserLogged() && ((User::isBuyer()) || (User::isSeller())) && (UserAuthentication::getLoggedUserId() != $shop_user_id))) { ?>
+    <?php if (!UserAuthentication::isUserLogged() || (UserAuthentication::isUserLogged() && User::isBuyer() && (UserAuthentication::getLoggedUserId() != $shop_user_id))) { ?>
         <li class="shop-nav-item">
             <a class="shop-nav-link <?php echo $action == 'sendMessage' ? 'active' : '' ?>" href="<?php echo UrlHelper::generateUrl('shops', 'sendMessage', array($shop_id)); ?>"><?php echo Labels::getLabel('LBL_SHOP_CONTACT', $siteLangId); ?></a>
         </li>
