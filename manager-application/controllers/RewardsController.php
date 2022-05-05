@@ -254,7 +254,7 @@ class RewardsController extends ListingBaseController
             'urp_points' => '-' . $rewardData['urp_points'],
             'urp_used_order_id' => 0,           
             'urp_comments' => Labels::getLabel('LBL_REWARD_POINT_DEDUCTED_BY_ADMIN', $this->siteLangId), 
-            'urp_date_added' => date('Y-m-d')                 
+            'urp_date_added' => date('Y-m-d H:i:s')                 
         );
         
         if(!$db->insertFromArray(UserRewards::DB_TBL, $rewarPointArr)){          

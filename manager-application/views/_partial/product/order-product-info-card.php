@@ -26,28 +26,34 @@ if (isset($order['totOrders']) && $order['totOrders'] > 1) {
 $date = isset($showDate) && $order['order_date_added']   ? HtmlHelper::formatDateTime($order['order_date_added']) : '';
 
 $includeInvoiceNo = $includeInvoiceNo ?? true;
-$includeBrandName = $includeBrandName ?? true;
-$includeProductLink = $includeProductLink ?? false;
-$optionsPopover = $optionsPopover ?? false;
+$includeBrandName = $includeBrandName ?? true; // 
+$includeProductLink = $includeProductLink ?? false;//
+$optionsPopover = $optionsPopover ?? true;
 
-$optionsHtm = '';
+$optionsHtml = '';
+$optionsHtmlPopup = '';
 if (!empty($options)) {
     $ulClass = isset($horizontalAlignOptions) && $horizontalAlignOptions ? 'list-options--horizontal' : 'list-options--vertical';
     $ulId = 'options-' .  $order['op_selprod_id'];
     $ulClass .= (true == $optionsPopover) ? ' list-options-popover hidden' : '';
-    $optionsHtm = '<ul class="list-options ' . $ulClass . '" id="' . $ulId . '">';
+    $optionsHtml .= $optionsHtmlPopup = '<ul class="list-options ' . $ulClass . '" id="' . $ulId . '">';
+    $optionsHtml .= '<li class="list-options-item">
+        <span class="lable">' . Labels::getLabel('LBL_BRAND', $siteLangId) . ':</span>
+        <span class="value">' . $order['op_brand_name'] . '</span>
+    </li>';
+
     foreach ($options as $option) {
         $option = explode(SellerProduct::OPTION_NAME_SEPARATOR, $option);
         if (empty(array_filter($option))) {
             continue;
         }
 
-        $optionsHtm .= '<li class="list-options-item">
+        $optionsHtmlPopup.= $optionsHtml .= '<li class="list-options-item">
                             <span class="lable">' . trim($option[0]) . ':</span>
                             <span class="value">' . trim($option[1]) . '</span>
                         </li>';
     }
-    $optionsHtm .= '</ul>';
+    $optionsHtml .= '</ul>';
 }
 ?>
 <div class="product-profile">
@@ -65,16 +71,10 @@ if (!empty($options)) {
         <?php } ?>
         <div class="title">
             <?php if (true === $optionsPopover) { ?>
-                    <span class="d-inline-block link-dotted" data-html="true" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#options-<?php echo $order['op_selprod_id']; ?>">
-                <?php } ?>
-
-                <?php if (true == $includeProductLink) {
-                    echo '<a href="' . UrlHelper::generateFullUrl('Products', 'View', array($order['op_selprod_id']), CONF_WEBROOT_FRONT_URL) . '" target="_blank" title="' . $order['op_product_name'] . '">' . CommonHelper::subStringByWords($order['op_selprod_title'], 35) . '</a>';
-                } else {
-                    echo '<div title="' . $order['op_selprod_title'] . '">' . CommonHelper::subStringByWords($order['op_selprod_title'], 35, '...') . '</div>';
-                } ?>
-
-                <?php if (true === $optionsPopover) { ?>
+                <span class="d-inline-block link-dotted" data-html="true" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#options-<?php echo $order['op_selprod_id']; ?>">
+                <?php }
+            echo '<div title="' . $order['op_selprod_title'] . '">' . CommonHelper::subStringByWords($order['op_selprod_title'], 35, '...') . '</div>';
+            if (true === $optionsPopover) { ?>
                 </span>
             <?php } ?>
         </div>
@@ -98,8 +98,8 @@ if (!empty($options)) {
             </div>
         <?php } ?>
 
-        <?php if (!empty($optionsHtm)) {
-            echo $optionsHtm;
+        <?php if (!empty($optionsHtml)) {
+            echo $optionsHtml;
         } ?>
     </div>
 </div>

@@ -1842,3 +1842,4 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_i
 INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_SOLD_QUANTITY", "1", "Quantity", "1");
 
 UPDATE `tbl_configurations` SET `conf_val` = '7' WHERE `tbl_configurations`.`conf_name` = 'CONF_DEFAULT_COMPLETED_ORDER_STATUS';
+ALTER TABLE `tbl_user_reward_points` CHANGE `urp_date_added` `urp_date_added` DATETIME NOT NULL;

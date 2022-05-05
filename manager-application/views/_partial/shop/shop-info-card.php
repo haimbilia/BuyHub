@@ -6,6 +6,7 @@ $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo'
 $getShopAspectRatio = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB);
 $onclick = !empty($onclick) ? "onclick = '" . $onclick . "'" : "onclick = 'redirectToShop(" . $shop['shop_id'] . ")'";
 $useFeatherLightJs = $useFeatherLightJs ?? 0;
+$showImage = $showImage ?? true;
 
 $imgOrgUrl = 'javascript:void(0)';
 $cls = 'product-profile';
@@ -16,9 +17,11 @@ if (1 == $useFeatherLightJs) {
 }
 ?>
 <a href="<?php echo $imgOrgUrl; ?>" class="<?php echo $cls; ?>" <?php echo $onclick; ?>>
-    <div class="product-profile__thumbnail" data-ratio="<?php echo $getShopAspectRatio[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>">
-        <img data-aspect-ratio="<?php echo $getShopAspectRatio[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $imgSrc; ?>">
-    </div>
+    <?php if($showImage){ ?>
+        <div class="product-profile__thumbnail" data-ratio="<?php echo $getShopAspectRatio[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>">
+            <img data-aspect-ratio="<?php echo $getShopAspectRatio[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $imgSrc; ?>">
+        </div>
+    <?php } ?>  
     <div class="product-profile__data">
         <div class="title"><?php echo $shop['shop_name']; ?></div>
         <?php if (!empty($shop['user_name'])) { ?>

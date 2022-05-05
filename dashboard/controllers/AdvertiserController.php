@@ -1346,7 +1346,7 @@ class AdvertiserController extends AdvertiserBaseController
         }
 
 
-        $frm->addSelectBox(Labels::getLabel('FRM_DURATION', $this->siteLangId), 'promotion_duration', Promotion::getPromotionBudgetDurationArr($this->siteLangId), '', array(
+        $frm->addSelectBox(Labels::getLabel('FRM_BUDGET_DURATION_FOR', $this->siteLangId), 'promotion_duration', Promotion::getPromotionBudgetDurationArr($this->siteLangId), '', array(
             'id' => 'promotion_duration'
         ), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
 

@@ -10,6 +10,7 @@ $fld = $frm->getField('promotion_end_date');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('promotion_start_time');
+$fld->htmlAfterField = '<span class="form-text">' . Labels::getLabel('LBL_SERVER_TIME', $siteLangId).': '.FatDate::format('now', true) . '</span>';
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('promotion_end_time');
