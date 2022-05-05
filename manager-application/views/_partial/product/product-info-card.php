@@ -13,7 +13,6 @@ $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
 $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $product['product_identifier'];
 ?>
-
 <div class="product-profile">
     <div class="product-profile__thumbnail">
         <a href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_ORIGINAL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" data-featherlight="image">
@@ -23,7 +22,7 @@ $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $produc
         <?php if ($redirectSelprod) { ?>
             <a href="javascript:void(0)" onclick="redirectToSellerProduct(<?php echo $product['selprod_id']; ?>);">
             <?php } ?>
-            <div class="title" title="<?php echo $productTitle; ?>" data-bs-toggle='tooltip' data-bs-placement='top'>
+            <div class="title" data-html="true" tabindex="0" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="hover focus" data-popover-html="#options-<?php echo $product['selprod_id']; ?>">
                 <?php echo CommonHelper::subStringByWords($productTitle, 35); ?>
             </div>
             <?php if ($redirectSelprod) { ?>
@@ -40,16 +39,24 @@ $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $produc
         } ?>
         <?php if (true == $displayOptions) {
             $options = isset($options) ? $options : SellerProduct::getSellerProductOptions($product['selprod_id'], true, $siteLangId);
-            if (0 < count($options) || isset($sellerName) || isset($shopName)) { ?>
-                <ul class="list-options <?php echo isset($horizontalAlignOptions) && $horizontalAlignOptions ? 'list-options--horizontal' : 'list-options--vertical"'; ?>">
+            $options = count($options) ? $options : [];
+
+            if ($options) { ?>
+                <ul class="list-options list-options--horizontal">
                     <?php foreach ($options as $option) { ?>
-                        <li class="">
-                            <span class="label"><?php echo $option['option_name']; ?>:</span>
+                        <li class="">                          
                             <span class="value"><?php echo $option['optionvalue_name']; ?></span>
                         </li>
                     <?php
                     }
-                    if (isset($sellerName)) {
+                ?>
+                </ul>
+                <?php
+            }
+
+            if(isset($sellerName) || isset($shopName)){ ?>
+            <ul class="list-options list-options--vertical">
+            <?php       if (isset($sellerName)) {
                     ?>
                         <li class="">
                             <span class="label"><?php echo Labels::getLabel('LBL_SELLER', $siteLangId); ?>:</span>
@@ -63,8 +70,24 @@ $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $produc
                             <span class="value"><?php echo $shopName; ?></span>
                         </li>
                     <?php } ?>
-                </ul>
+                </ul>                        
         <?php }
-        } ?>
+        }        
+        ?>         
+        <div class="hidden"  id="options-<?php echo $product['selprod_id']; ?>">
+                <p><?php echo $productTitle;?></p>   
+                <?php if (true == $displayOptions && $options) { ?> 
+                <ul class="list-options list-options--vertical list-options-popover">            
+                    <?php
+                    foreach ($options as $option) {                       
+                        echo '<li class="list-options-item">
+                                <span class="lable">' . $option['option_name'] . ':</span>
+                                <span class="value">' . $option['optionvalue_name'] . '</span>
+                            </li>';
+                    }
+                    ?>
+                </ul> 
+                <?php } ?>    
+        </div>
     </div>
 </div>

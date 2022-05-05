@@ -26,35 +26,6 @@ if (isset($order['totOrders']) && $order['totOrders'] > 1) {
 $date = isset($showDate) && $order['order_date_added']   ? HtmlHelper::formatDateTime($order['order_date_added']) : '';
 
 $includeInvoiceNo = $includeInvoiceNo ?? true;
-$includeBrandName = $includeBrandName ?? true; // 
-$includeProductLink = $includeProductLink ?? false;//
-$optionsPopover = $optionsPopover ?? true;
-
-$optionsHtml = '';
-$optionsHtmlPopup = '';
-if (!empty($options)) {
-    $ulClass = isset($horizontalAlignOptions) && $horizontalAlignOptions ? 'list-options--horizontal' : 'list-options--vertical';
-    $ulId = 'options-' .  $order['op_selprod_id'];
-    $ulClass .= (true == $optionsPopover) ? ' list-options-popover hidden' : '';
-    $optionsHtml .= $optionsHtmlPopup = '<ul class="list-options ' . $ulClass . '" id="' . $ulId . '">';
-    $optionsHtml .= '<li class="list-options-item">
-        <span class="lable">' . Labels::getLabel('LBL_BRAND', $siteLangId) . ':</span>
-        <span class="value">' . $order['op_brand_name'] . '</span>
-    </li>';
-
-    foreach ($options as $option) {
-        $option = explode(SellerProduct::OPTION_NAME_SEPARATOR, $option);
-        if (empty(array_filter($option))) {
-            continue;
-        }
-
-        $optionsHtmlPopup.= $optionsHtml .= '<li class="list-options-item">
-                            <span class="lable">' . trim($option[0]) . ':</span>
-                            <span class="value">' . trim($option[1]) . '</span>
-                        </li>';
-    }
-    $optionsHtml .= '</ul>';
-}
 ?>
 <div class="product-profile">
     <div class="product-profile__thumbnail">
@@ -70,15 +41,10 @@ if (!empty($options)) {
             </div>
         <?php } ?>
         <div class="title">
-            <?php if (true === $optionsPopover) { ?>
-                <span class="d-inline-block link-dotted" data-html="true" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#options-<?php echo $order['op_selprod_id']; ?>">
-                <?php }
-            echo '<div title="' . $order['op_selprod_title'] . '">' . CommonHelper::subStringByWords($order['op_selprod_title'], 35, '...') . '</div>';
-            if (true === $optionsPopover) { ?>
-                </span>
-            <?php } ?>
+            <span class="d-inline-block" data-html="true" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#options-<?php echo $order['op_selprod_id']; ?>">
+                <?php echo CommonHelper::subStringByWords($order['op_selprod_title'], 35, '...'); ?>
+            </span>
         </div>
-
         <?php if (true === $includeShopName) { ?>
             <div class="sold_by">
                 <svg class="svg" width="20" height="20">
@@ -86,20 +52,49 @@ if (!empty($options)) {
                     </use>
                 </svg> <?php echo $shopName; ?>
             </div>
-        <?php } ?>
-        <?php if (true == $includeBrandName) { ?>
+        <?php }
+
+        if (!empty($options)) {
+        ?>
             <div class="brand">
                 <ul class="list-options list-options--horizontal">
-                    <li>
-                        <span class="label"><?php echo Labels::getLabel('LBL_BRAND', $siteLangId); ?>:</span>
-                        <span class="value"><?php echo $order['op_brand_name']; ?></span>
-                    </li>
+                    <?php
+                    foreach ($options as $option) {
+                        $option = explode(SellerProduct::OPTION_NAME_SEPARATOR, $option);
+                        if (empty(array_filter($option))) {
+                            continue;
+                        }
+                        echo '<li class="list-options-item">                                   
+                                    <span class="value">' . trim($option[1]) . '</span>
+                                </li>';
+                    }
+                    ?>
                 </ul>
             </div>
         <?php } ?>
-
-        <?php if (!empty($optionsHtml)) {
-            echo $optionsHtml;
-        } ?>
+        <div class="hidden" id="options-<?php echo $order['op_selprod_id']; ?>">
+            <p><?php echo $order['op_selprod_title']; ?></p>
+            <?php if (!empty($options)) {
+            ?>
+                <ul class="list-options list-options--vertical list-options-popover">
+                    <li class="list-options-item">
+                        <span class="lable"><?php echo Labels::getLabel('LBL_BRAND', $siteLangId); ?>:</span>
+                        <span class="value"><?php echo $order['op_brand_name']; ?></span>
+                    </li>
+                    <?php
+                    foreach ($options as $option) {
+                        $option = explode(SellerProduct::OPTION_NAME_SEPARATOR, $option);
+                        if (empty(array_filter($option))) {
+                            continue;
+                        }
+                        echo '<li class="list-options-item">
+                                <span class="lable">' . trim($option[0]) . ':</span>
+                                <span class="value">' . trim($option[1]) . '</span>
+                            </li>';
+                    }
+                    ?>
+                </ul>
+            <?php } ?>
+        </div>
     </div>
 </div>
