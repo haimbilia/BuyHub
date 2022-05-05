@@ -189,7 +189,7 @@ $sharing-height: 50px;
         border: $border;
         border-radius: 0;
         background-color: transparent;
-        color: $star-color;
+        color: $brand-color;
         &.active {
             @include bg-brand;
         }
