@@ -1190,6 +1190,10 @@
     &__foot {
         padding: 1rem;
     }
+    .add-wishlist {
+        text-align: center;
+    }
+
     .form--creatlist {
         position: absolute;
         #{$start-direction}: 50%;

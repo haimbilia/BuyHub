@@ -127,6 +127,7 @@ class AdminPermissionsController extends ListingBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        $permissionType = FatApp::getPostedData('permission_type', FatUtility::VAR_INT, -1);             
 
         $arrListing = AdminPrivilege::getPermissionModulesArr();
         if (!empty($keyword)) {
@@ -143,7 +144,6 @@ class AdminPermissionsController extends ListingBaseController
             case applicationConstants::SORT_DESC:
                 arsort($arrListing);
                 break;
-
             default:
                 asort($arrListing);
                 break;
@@ -152,8 +152,14 @@ class AdminPermissionsController extends ListingBaseController
         $userData = [];
         if ($recordId > 0) {
             $userData = AdminUsers::getUserPermissions($recordId);
-        }
-
+            if(-1 < $permissionType){               
+                foreach($userData as $userPerm){                   
+                    if($userPerm['admperm_value'] != $permissionType){                       
+                        unset($arrListing[$userPerm['admperm_section_id']]);
+                    }
+                }
+            }
+        } 
         $this->set("arrListing", $arrListing);
         $this->set("hidePaginationHtml", true);
         $this->set('page', 1);
@@ -182,11 +188,14 @@ class AdminPermissionsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
+        $frm->addSelectBox(Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId), 'permission_type', AdminPrivilege::getPermissionArr(), '',[], Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId));
+
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'module');
         }
 
-        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addSearchButton($frm);       
+        HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;
     }
 

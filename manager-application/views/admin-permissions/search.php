@@ -31,13 +31,18 @@ foreach ($arrListing as $moduleId => $moduleName) {
                             continue;
                         }
 
-                        $selected = '';
-                        if (isset($userData[$moduleId]) && !empty($userData[$moduleId]) && $userData[$moduleId]['admperm_value'] == $key) {
-                            $selected = 'selected';
+                        $checked = '';
+                        if (isset($userData[$moduleId]) && !empty($userData[$moduleId]) && $userData[$moduleId]['admperm_value'] == $key) {                           
+                            $checked = 'checked';
                         }
-                        $options .= "<option value=" . $key . " " . $selected . ">" . $list . "</option>";
+                        $options .= '<li>
+                            <label class="radio">
+                            <input type="radio" name="'.$moduleId.'" value="'.$key .'" '.$checked.' onchange="updatePermission(' . $moduleId . ',this.value)">'.$list.'
+                            </label>
+                        </li>';
                     }
-                    $td->appendElement('plaintext', $tdAttr, "<select class='form-select focused' onChange='updatePermission(" . $moduleId . ",this.value)'>" . $options . "</select>", true);
+                     
+                    $td->appendElement('plaintext', $tdAttr, '<ul class="list-radio">' . $options . '</ul>', true);
                 }
                 break;
         }
