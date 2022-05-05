@@ -20,7 +20,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'selprod_title':
-                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['product' => $row, 'options' => $row['options'], 'displayProductName' => true, 'canViewProducts' => $canViewProducts, 'siteLangId' => $siteLangId], false, true);
+                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['product' => $row, 'options' => $row['options'], 'displayProductName' => true, 'canViewProducts' => $canViewProducts, 'siteLangId' => $siteLangId ,'redirectSelprod' => false], false, true);
                 $td->appendElement('plaintext', array(), $str, true);
                 break;
             case 'user_name':

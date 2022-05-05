@@ -23,13 +23,15 @@ $(document).ready(function () {
 
 (function () {
     bindProductNameSelect2 = function () {
-        select2("productNameJs", fcom.makeUrl('SpecialPrice', 'autoCompleteProducts'), {},
+        select2("productNameJs", fcom.makeUrl('SellerProducts', 'autoComplete'), {showSellerPrice : 1},
             function (e) {
                 var parentForm = $("#productNameJs").closest('form').attr('id');
-                $("#" + parentForm + " input[name='splprice_selprod_id']").val(e.params.args.data.id);
+                $("#" + parentForm + " input[name='splprice_selprod_id']").val(e.params.args.data.id);               
+                $("#specialCurrentPrice").text(currentPriceLbl + ": "+ e.params.args.data.price);                
             }, function (e) {
                 var parentForm = $("#productNameJs").closest('form').attr('id');
                 $("#" + parentForm + " input[name='splprice_selprod_id']").val('');
+                $("#specialCurrentPrice").text('');  
             });
     }
 

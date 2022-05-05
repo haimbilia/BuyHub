@@ -31,6 +31,7 @@ foreach ($arrListing as $sn => $row) {
                     'siteLangId' => $siteLangId,
                     'href' => $href,
                     'onclick' => $onclick,
+                    'showImage'=> false,
                 ], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
