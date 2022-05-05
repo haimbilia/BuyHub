@@ -758,6 +758,8 @@ Updates/Fixes :
     => 063909 - "Quantity" and "Combined tax's value" are not shown after placing the order at the buyer's end and seller's end and different terms are used for the same functionality i.e. Shipping charges and Delivery Charges
     => 063815 - Getting a UI design issue for the "shipping tracking link" at the admin's, seller's, and buyer's end
     => 060863 - Admin UI: Getting multiple issues under the side's menu section
+    => 064218 - Buyer: There should be placeholder image for blogs
+    => 064051 - Admin: Pagination is not working properly on the product listing page at the admin's end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

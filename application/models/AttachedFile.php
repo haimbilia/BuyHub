@@ -646,7 +646,6 @@ class AttachedFile extends MyAppModel
             $imagePath = $noImage;
         }
 
-        // $fileMimeType = mime_content_type($imagePath);
         if (strpos($_SERVER['REQUEST_URI'], '?t=') === false) {
             $filemtime = filemtime($imagePath);
             $_SERVER['REQUEST_URI'] = rtrim($_SERVER['REQUEST_URI'], '/') . '/?t=' . $filemtime;
