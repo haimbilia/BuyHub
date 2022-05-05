@@ -1,3 +1,9 @@
+/* Refresh page on on browser page. */
+var perfEntries = performance.getEntriesByType("navigation");
+if ('back_forward' === perfEntries[0].type) {
+    location.reload(true);
+}
+
 $(document).on("click", ".headerColumnJs", function (e) {
     if (1 == $('.listingRecordJs tr').length) {
         return;

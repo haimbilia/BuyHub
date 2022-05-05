@@ -759,6 +759,7 @@ Updates/Fixes :
     => 063815 - Getting a UI design issue for the "shipping tracking link" at the admin's, seller's, and buyer's end
     => 060863 - Admin UI: Getting multiple issues under the side's menu section
     => 064218 - Buyer: There should be placeholder image for blogs
+    => 064051 - Admin: Pagination is not working properly on the product listing page at the admin's end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
