@@ -246,7 +246,7 @@ class RewardsController extends ListingBaseController
         $whr = array('smt' => 'urpbreakup_urp_id = ?', 'vals' => array($recordId));
         if(!$db->updateFromArray(UserRewardBreakup::DB_TBL, $updateValues, $whr)){
             $db->rollbackTransaction();
-            LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_DEDUCT_REWARD_POINTS1', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_REVERT_REWARD_POINTS', $this->siteLangId));
         }
 
         $rewarPointArr = array(
@@ -259,7 +259,7 @@ class RewardsController extends ListingBaseController
         
         if(!$db->insertFromArray(UserRewards::DB_TBL, $rewarPointArr)){          
             $db->rollbackTransaction();
-            LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_DEDUCT_REWARD_POINTS2', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_REVERT_REWARD_POINTS', $this->siteLangId));
         }
 
         $db->commitTransaction();
@@ -267,7 +267,7 @@ class RewardsController extends ListingBaseController
         $emailObj = new EmailHandler();
         $emailObj->sendRewardPointsNotification($this->siteLangId, $recordId);
         
-        $this->set('msg', Labels::getLabel('MSG_REWARD_POINT_DEDEUCTED_SUCCESFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_REWARD_POINT_REVERTED_SUCCESFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

@@ -1,3 +1,9 @@
+/* Refresh page on on browser page. */
+var perfEntries = performance.getEntriesByType("navigation");
+if ('back_forward' === perfEntries[0].type) {
+    location.reload(true);
+}
+
 $(document).on("click", ".headerColumnJs", function (e) {
     if (1 == $('.listingRecordJs tr').length) {
         return;
@@ -255,8 +261,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "deleteRecord"),
             data,
-            function () {
+            function (t) {
                 fcom.closeProcessing();
+                console.log(t.msg);
+                fcom.displaySuccessMessage(t.msg);
                 reloadList();
             }
         );

@@ -20,7 +20,7 @@
                     </ul>
 
                     <button class="btn btn-outline-gray btn-icon" type="button" onclick="editRule(<?php echo $row['taxrule_id']; ?>)" title="Edit">
-                        <svg class="svg btn-icon-start" width="18" height="18">
+                        <svg class="svg btn-icon-start" width="14" height="14">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                             </use>
                         </svg>

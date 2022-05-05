@@ -190,6 +190,9 @@ $sharing-height: 50px;
         border-radius: 0;
         background-color: transparent;
         color: $star-color;
+        &.active {
+            @include bg-brand;
+        }
     }
     .via-social-sharing {
         flex: 1;

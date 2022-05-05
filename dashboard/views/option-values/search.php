@@ -25,7 +25,7 @@
             switch ($key) {
                 case 'dragdrop':
                     $td->appendElement('i', array('class' => 'fas fa-arrows-alt'));
-                    $td->setAttribute("class", 'dragHandle');
+                    $td->setAttribute("class", 'dragHandle handleJs');
                     break;
                 case 'optionvalue_identifier':
                     if ($row['optionvalue_name'] != '') {
@@ -75,6 +75,7 @@
 <script>
     $(document).ready(function() {
         $(".sortable--js tbody").sortable({
+            handle: '.handleJs',
             helper: fixWidthHelper,
             start: fixPlaceholderStyle,
             stop: function() {
@@ -94,6 +95,6 @@
                     }
                 });
             }
-        }).disableSelection();
+        });
     });
 </script>

@@ -197,6 +197,7 @@ $sidebar-width: 280px;
             padding: 0.5rem 0;
             font-size: 0.8rem;
             padding-#{$start-direction}: 26px;
+            padding-#{$end-direction}: 15px;
             &::before {
                 background: rgba(0, 0, 0, 0.08);
                 //content: "";

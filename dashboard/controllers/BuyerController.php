@@ -320,9 +320,9 @@ class BuyerController extends BuyerBaseController
                 $processingStatuses[] = $childOrderDetail['orderstatus_id'];
                 $processingStatuses = array_diff($processingStatuses, [FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS")]);
             }
-            
+
             $processingStatuses[] = $childOrderDetail['orderstatus_id'];
-            
+
             $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingStatuses);
         }
 
@@ -1921,7 +1921,7 @@ class BuyerController extends BuyerBaseController
             if (!empty($enteredAbusiveWordsArr)) {
                 $errStr = Labels::getLabel("LBL_Word_{abusiveword}_is/are_not_allowed_to_post", $this->siteLangId);
                 $errStr = str_replace("{abusiveword}", '"' . implode(", ", $enteredAbusiveWordsArr) . '"', $errStr);
-                LibHelper::dieJsonError($errStr);           
+                LibHelper::dieJsonError($errStr);
             }
         }
 
@@ -1929,7 +1929,7 @@ class BuyerController extends BuyerBaseController
             if (!empty($enteredAbusiveWordsArr)) {
                 $errStr = Labels::getLabel("LBL_Word_{abusiveword}_is/are_not_allowed_to_post", $this->siteLangId);
                 $errStr = str_replace("{abusiveword}", '"' . implode(", ", $enteredAbusiveWordsArr) . '"', $errStr);
-                LibHelper::dieJsonError($errStr);              
+                LibHelper::dieJsonError($errStr);
             }
         }
         /* ] */
@@ -2070,18 +2070,18 @@ class BuyerController extends BuyerBaseController
             }
         } else {
             */
-            $notificationData = array(
-                'notification_record_type' => Notification::TYPE_PRODUCT_REVIEW,
-                'notification_record_id' => $spreviewId,
-                'notification_user_id' => UserAuthentication::getLoggedUserId(),
-                'notification_label_key' => Notification::PRODUCT_REVIEW_NOTIFICATION,
-                'notification_added_on' => date('Y-m-d H:i:s'),
-            );
+        $notificationData = array(
+            'notification_record_type' => Notification::TYPE_PRODUCT_REVIEW,
+            'notification_record_id' => $spreviewId,
+            'notification_user_id' => UserAuthentication::getLoggedUserId(),
+            'notification_label_key' => Notification::PRODUCT_REVIEW_NOTIFICATION,
+            'notification_added_on' => date('Y-m-d H:i:s'),
+        );
 
-            if (!Notification::saveNotifications($notificationData)) {
-                $message = Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId);
-                LibHelper::dieJsonError($message);
-            }
+        if (!Notification::saveNotifications($notificationData)) {
+            $message = Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId);
+            LibHelper::dieJsonError($message);
+        }
         /* } */
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
@@ -3052,6 +3052,13 @@ class BuyerController extends BuyerBaseController
 
         $msg = Labels::getLabel("MSG_REQUEST_SUBMITTED_SUCCESSFULLY", $this->siteLangId);
         FatUtility::dieJsonSuccess($msg);
-    }   
+    }
     
+    public function getCancellationRequestComment()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $this->set('comments', OrderCancelRequest::getAttributesById($recordId, 'ocrequest_message'));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
 }
