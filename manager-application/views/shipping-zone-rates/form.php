@@ -39,6 +39,7 @@ $fld->value = '<a href="javascript:void(0)" class="btn btn-icon btn-outline-bran
                 </a>';
 
 $cndFld = $frm->getField('shiprate_condition_type');
+$cndFld->developerTags['noCaptionTag'] = true;
 $cndFld->setWrapperAttribute('class', 'condition-field--js ' . $extraClass);
 $cndFld->addOptionListTagAttribute('class', 'list-radio');
 
