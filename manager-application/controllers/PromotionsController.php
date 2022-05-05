@@ -132,8 +132,8 @@ class PromotionsController extends ListingBaseController
         $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
         $srch->joinPromotionsLogForCount();
         $srch->joinActiveUser(false);
-        $srch->joinShops($this->siteLangId); 
-        $srch->addCondition('pr.promotion_deleted', '=', applicationConstants::NO); 
+        $srch->joinShops($this->siteLangId);
+        $srch->addCondition('pr.promotion_deleted', '=', applicationConstants::NO);
 
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('pr.promotion_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -153,7 +153,7 @@ class PromotionsController extends ListingBaseController
         $active = FatApp::getPostedData('active');
         if ('' != $active && '-1' != $active) {
             $srch->addCondition('pr.promotion_active', '=', $active);
-        }        
+        }
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
         $promotionId = FatApp::getPostedData('promotion_id', FatUtility::VAR_INT, $recordId);
@@ -189,22 +189,22 @@ class PromotionsController extends ListingBaseController
             $srch->addCondition('promotion_type', '=', $type);
         }
         $srch->addGroupBy('pr.promotion_id');
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(pr_l.promotion_name,pr.promotion_identifier)as promotion_name', 'user_name', 'credential_username', 'credential_email', 'credential_email', 'pr.promotion_type', 'pr.promotion_budget', 'pr.promotion_duration', 'promotion_approved', 'bbl.blocation_promotion_cost', 'pri.impressions', 'pri.clicks', 'pri.orders', 'bbl.blocation_id', 'shop_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_id', 'user_updated_on', 'shop_updated_on']);
-        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
+        $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arrListing", $records); 
-        $this->set('postedData', $post); 
+        $this->set("arrListing", $records);
+        $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditPromotions($this->admin_id, true)); 
+        $this->set('canEdit', $this->objPrivilege->canEditPromotions($this->admin_id, true));
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('typeArr', Promotion::getTypeArr($this->siteLangId));
@@ -807,7 +807,7 @@ class PromotionsController extends ListingBaseController
 
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_promotion_name', $langId), 'promotion_name');
-       
+
         return $frm;
     }
 
@@ -837,7 +837,7 @@ class PromotionsController extends ListingBaseController
         $frm->addTextBox(Labels::getLabel('FRM_CLICKS_TO_(NUMBER)', $this->siteLangId), 'click_to');
         $frm->addHiddenField('', 'promotion_id');
         $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'type', array('-1' => Labels::getLabel('FRM_ALL_TYPE', $this->siteLangId)) + Promotion::getTypeArr($this->siteLangId), '', array(), '');
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;
@@ -874,7 +874,7 @@ class PromotionsController extends ListingBaseController
             $promotioTypeArr = Promotion::getTypeArr($this->siteLangId);
         }
         $pTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'promotion_type', $promotioTypeArr, '', array(), '');
-        $frm->addSelectBox(Labels::getLabel('FRM_DURATION', $this->siteLangId), 'promotion_duration', Promotion::getPromotionBudgetDurationArr($this->siteLangId), '', array('id' => 'promotion_duration'), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_BUDGET_DURATION_FOR', $this->siteLangId), 'promotion_duration', Promotion::getPromotionBudgetDurationArr($this->siteLangId), '', array('id' => 'promotion_duration'), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
 
         /* Shop [ */
         $frm->addTextBox(Labels::getLabel('FRM_SHOP', $this->siteLangId), 'promotion_shop', '', array('readonly' => true))->requirements()->setRequired(true);;
@@ -895,7 +895,7 @@ class PromotionsController extends ListingBaseController
         $prodReqObj = new FormFieldRequirement('promotion_product', Labels::getLabel('FRM_PRODUCT', $this->siteLangId));
         $prodReqObj->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId), 'promotion_product_cpc', FatApp::getConfig('CONF_CPC_PRODUCT', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
+        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId).'[' . $this->siteDefaultCurrencyCode . ']', 'promotion_product_cpc', FatApp::getConfig('CONF_CPC_PRODUCT', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
         /* ]*/
 
         /* Banner Url [*/
@@ -949,7 +949,7 @@ class PromotionsController extends ListingBaseController
         }
         $frm->addSelectBox(Labels::getLabel('FRM_LAYOUT_TYPE', $this->siteLangId), 'banner_blocation_id', $locationArr, '', array(), '');
 
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_BUDGET', $this->siteLangId), 'promotion_budget');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_BUDGET', $this->siteLangId).'[' . $this->siteDefaultCurrencyCode . ']', 'promotion_budget');
         $fld->requirements()->setRequired();
         $fld->requirements()->setFloatPositive(true);
 
@@ -1087,7 +1087,7 @@ class PromotionsController extends ListingBaseController
     {
         return [
             'select_all',
-           /*  'listSerial', */
+            /*  'listSerial', */
             'promotion_name',
             'user_name',
             'promotion_type',

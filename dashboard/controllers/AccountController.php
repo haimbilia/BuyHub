@@ -2265,9 +2265,10 @@ class AccountController extends LoggedUserController
         $parentAndTheirChildIds = [];
         switch ($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) {
             case 'B':
-                $srch->addCondition('ttm.message_from', '=', UserAuthentication::getLoggedUserId());
+                $srch->addCondition('tth.thread_started_by', '=', UserAuthentication::getLoggedUserId());            
                 break;
             case 'S':
+                $srch->addCondition('tth.thread_started_by', '!=', UserAuthentication::getLoggedUserId());
                 $parentAndTheirChildIds = User::getParentAndTheirChildIds($this->userParentId, false, true);
                 $cnd = $srch->addCondition('ttm.message_from', 'IN', $parentAndTheirChildIds);
                 $cnd->attachCondition('ttm.message_to', 'IN', $parentAndTheirChildIds, 'OR');

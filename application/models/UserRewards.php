@@ -20,7 +20,7 @@ class UserRewards extends MyAppModel
     public function save()
     {
         if (!($this->mainTableRecordId > 0)) {
-            $this->setFldValue('urp_date_added', date('Y-m-d'));
+            $this->setFldValue('urp_date_added', date('Y-m-d H:i:s'));
         }
         $output = parent::save();
         static::getAndSetRewardsPointBreakup($this->getMainTableRecordId());

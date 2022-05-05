@@ -241,6 +241,23 @@ class SpecialPriceController extends ListingBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Dates', $this->siteLangId), true);
         }
 
+        $prodSrch = new ProductSearch($this->siteLangId);
+        $prodSrch->joinSellerProducts();
+        $prodSrch->addCondition('selprod_id', '=', $selprod_id);
+        $prodSrch->addMultipleFields(array('product_min_selling_price', 'selprod_price'));
+        $prodSrch->setPageSize(1);
+        $rs = $prodSrch->getResultSet();
+        $product = FatApp::getDb()->fetch($rs);
+
+        if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price'] || $post['splprice_price'] >= $product['selprod_price']) {
+            $str = Labels::getLabel('MSG_Price_must_between_min_selling_price_{minsellingprice}_and_selling_price_{sellingprice}', $this->siteLangId);
+            $minSellingPrice = CommonHelper::displayMoneyFormat($product['product_min_selling_price'], false, true, true);
+            $sellingPrice = CommonHelper::displayMoneyFormat($product['selprod_price'], false, true, true);
+
+            $message = CommonHelper::replaceStringData($str, array('{minsellingprice}' => $minSellingPrice, '{sellingprice}' => $sellingPrice));
+            LibHelper::exitWithError($message);
+        }
+
         /* Check if same date already exists [ */
         $tblRecord = new TableRecord(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE);
 
@@ -297,79 +314,7 @@ class SpecialPriceController extends ListingBaseController
         }
 
         return $splPriceId;
-    }
-
-    public function autoCompleteProducts()
-    {
-        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        $page = (2 > $page) ? 1 : $page;
-
-        $post = FatApp::getPostedData();
-
-        $srch = SellerProduct::getSearchObject($this->siteLangId);
-        $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
-        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
-        $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'tuc.credential_user_id = sp.selprod_user_id', 'tuc');
-        $srch->joinTable(SellerProduct::DB_TBL_RELATED_PRODUCTS, 'LEFT JOIN', 'trp.related_sellerproduct_id = sp.selprod_id', 'trp');
-
-        if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
-            $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', 'tb.brand_id = product_brand_id and tb.brand_active = ' . applicationConstants::YES . ' and tb.brand_deleted = ' . applicationConstants::NO, 'tb');
-        } else {
-            $srch->joinTable(Brand::DB_TBL, 'LEFT JOIN', 'tb.brand_id = product_brand_id', 'tb');
-            $srch->addDirectCondition("(case WHEN brand_id > 0 THEN (tb.brand_active = " . applicationConstants::YES . " AND tb.brand_deleted = " . applicationConstants::NO . ") else TRUE end)");
-        }
-
-        $srch->addOrder('product_name');
-        if (isset($post['keyword']) && '' != $post['keyword']) {
-            $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
-            $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
-            $cnd->attachCondition('product_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
-        }
-
-        if (!empty($post['selProdId']) && 0 < FatUtility::int($post['selProdId'])) {
-            $selprod_user = SellerProduct::getAttributesById($post['selProdId'], array('selprod_user_id'));
-            $srch->addCondition('selprod_user_id', '=', 'mysql_func_' . $selprod_user['selprod_user_id'], 'AND', true);
-            $srch->addCondition('selprod_id', '!=', 'mysql_func_' . $post['selProdId'], 'AND', true);
-        }
-
-        if (array_key_exists('selprod_user_id', $post) && 0 < $post['selprod_user_id']) {
-            $srch->addCondition('selprod_user_id', '=', 'mysql_func_' . $post['selprod_user_id'], 'AND', true);
-        }
-
-        $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
-        $srch->addCondition(Product::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-        $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
-        $srch->addMultipleFields(array('selprod_id as id', 'IFNULL(selprod_title ,product_name) as product_name', 'product_identifier', 'credential_username', 'selprod_price', 'selprod_stock'));
-       
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $db = FatApp::getDb();
-        $rs = $srch->getResultSet();
-        $products = array();
-        if ($rs) {
-            $products = $db->fetchAll($rs, 'id');
-        }
-
-        $json = array();
-        foreach ($products as $key => $option) {
-            $options = SellerProduct::getSellerProductOptions($key, true, $this->siteLangId);
-            $variantsStr = '';
-            array_walk($options, function ($item, $key) use (&$variantsStr) {
-                $variantsStr .= ' | ' . $item['option_name'] . ' : ' . $item['optionvalue_name'];
-            });
-            $userName = isset($option["credential_username"]) ? " | " . $option["credential_username"] : '';
-            $json[] = array(
-                'id' => $key,
-                'text' => strip_tags(html_entity_decode($option['product_name'], ENT_QUOTES, 'UTF-8')) . $variantsStr . $userName,
-                'product_identifier' => strip_tags(html_entity_decode($option['product_identifier'], ENT_QUOTES, 'UTF-8')),
-                'price' => $option['selprod_price'],
-                'stock' => $option['selprod_stock']
-            );
-        }
-        die(json_encode(['pageCount' => $srch->pages(), 'results' => $json]));
-    }
+    }    
 
     public function autoCompleteSeller()
     {

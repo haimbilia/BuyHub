@@ -131,46 +131,5 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                 </div>
             <?php } ?>
         </div>
-    </div>
-    <!-- <div class="communication-sidebar userJs">
-        <div class="card card-stretch mb-0">
-            <div class="card-body">
-                <div class="message__user">
-                    <div class="user user-circle">
-                        <img src="<?php echo $userImageUrl; ?>" alt="<?php echo $fromUserName; ?>">
-                    </div>
-                    <h3 class="message__user-name"><?php echo $fromUserName; ?></h3>
-                    <ul class="list__group">
-                        <li class="list__group-item">
-                            <div class="list__group-icon">
-                                <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-mail">
-                                    </use>
-                                </svg>
-                            </div>
-                            <div class="list__group-title">
-                                <h4><?php echo $fromEmail; ?></h4>
-                            </div>
-                        </li>
-
-                        <?php if (!empty($fromPhoneNo)) { ?>
-                            <li class="list__group-item">
-                                <div class="list__group-icon">
-                                    <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-phone">
-                                        </use>
-                                    </svg>
-                                </div>
-                                <div class="list__group-title">
-                                    <h4>
-                                        <?php echo $fromPhoneNo; ?>
-                                    </h4>
-                                </div>
-                            </li>
-                        <?php } ?>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div> -->
+    </div>   
 <?php } ?>
