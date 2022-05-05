@@ -248,7 +248,8 @@ class ShippingZoneRatesController extends ListingBaseController
         $frm->addFloatField(Labels::getLabel('FRM_COST', $this->siteLangId), 'shiprate_cost');
         $frm->addHtml('', 'add_condition', '');
 
-        $frm->addRadioButtons('', 'shiprate_condition_type', $conditionTypes, ShippingRate::CONDITION_TYPE_WEIGHT, array('class' => 'list-inline'));
+        $fld = $frm->addRadioButtons('', 'shiprate_condition_type', $conditionTypes, ShippingRate::CONDITION_TYPE_WEIGHT, array('class' => 'list-inline'));
+        HtmlHelper::configureSwitchForRadio($fld);
 
         $fldCndTypeUnReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('FRM_CONDITION_TYPE', $this->siteLangId));
         $fldCndTypeUnReq->setRequired(false);
