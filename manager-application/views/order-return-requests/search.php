@@ -49,7 +49,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'product':
-                $html = $this->includeTemplate('_partial/product/order-product-info-card.php', ['order' => $row, 'siteLangId' => $siteLangId, 'horizontalAlignOptions' => true], false, true);
+                $html = $this->includeTemplate('_partial/product/order-product-info-card.php', ['order' => $row, 'siteLangId' => $siteLangId], false, true);
                 $td->appendElement('plaintext', $tdAttr, $html, true);
                 break;
             case 'orrequest_type':
