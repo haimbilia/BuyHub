@@ -895,7 +895,7 @@ class PromotionsController extends ListingBaseController
         $prodReqObj = new FormFieldRequirement('promotion_product', Labels::getLabel('FRM_PRODUCT', $this->siteLangId));
         $prodReqObj->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId), 'promotion_product_cpc', FatApp::getConfig('CONF_CPC_PRODUCT', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
+        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId).'[' . $this->siteDefaultCurrencyCode . ']', 'promotion_product_cpc', FatApp::getConfig('CONF_CPC_PRODUCT', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
         /* ]*/
 
         /* Banner Url [*/
@@ -949,7 +949,7 @@ class PromotionsController extends ListingBaseController
         }
         $frm->addSelectBox(Labels::getLabel('FRM_LAYOUT_TYPE', $this->siteLangId), 'banner_blocation_id', $locationArr, '', array(), '');
 
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_BUDGET', $this->siteLangId), 'promotion_budget');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_BUDGET', $this->siteLangId).'[' . $this->siteDefaultCurrencyCode . ']', 'promotion_budget');
         $fld->requirements()->setRequired();
         $fld->requirements()->setFloatPositive(true);
 

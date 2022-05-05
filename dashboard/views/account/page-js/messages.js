@@ -16,7 +16,7 @@ $(document).ready(function () {
 
 		fcom.ajax(fcom.makeUrl('Account', 'messageSearch'), data, function (res) {
 			fcom.removeLoader();
-			$(dv).html(res);
+			$(dv).replaceWith(res);
 			$('[data-thread-id=' + $('.threadJs').data('threadId') + ']').addClass('is-active');
 		});
 	};

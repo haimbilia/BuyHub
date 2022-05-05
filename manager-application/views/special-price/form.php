@@ -10,7 +10,11 @@ $fld = $frm->getField('product_name');
 $fld->addFieldTagAttribute('id', 'productNameJs');
 $fld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_SELECT_PRODUCT', $siteLangId));
 
+$fld = $frm->getField('splprice_price');
+$fld->htmlAfterField = '<span class="form-text text-muted" id="specialCurrentPrice"></span>';
+
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script>
     bindProductNameSelect2();
+    let currentPriceLbl = '<?php echo Labels::getLabel('LBL_CURRENT_PRICE', $siteLangId);?>';
 </script>

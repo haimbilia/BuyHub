@@ -313,7 +313,7 @@ redirectToProduct = function (id, extraData = {}) {
     if (0 < id) {
         extraData['product_id'] = id;
     }
-    redirectfunc(fcom.makeUrl('Products'), extraData, 0, true);
+    redirectFn(fcom.makeUrl('Products','form',[id]));
 };
 
 redirectToSellerProduct = function (id, extraData = {}) {

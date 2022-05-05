@@ -16,7 +16,7 @@ $btn-line-height: $btn-height;
     font-size: $btn-font-size;
     font-weight: $btn-font-weight;
     line-height: $btn-line-height;
-
+    white-space: nowrap;
     &-brand {
         @include bg-brand;
         &:hover {
