@@ -13,15 +13,15 @@
             <div class="account-fav-listing">
                 <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::YES) { ?>
                     <div class="wishlists">
-                        <div class="wishlists__head">
-                            <h3 class="heading">
-                                <?php echo Labels::getLabel('LBL_Create_new_list', $siteLangId); ?>
-                            </h3>
-                        </div>
+
                         <div class="wishlists__body">
-                            <div class="form">
+                            <div class="add-wishlist">
+                                <h6 class="h6">
+                                    <?php echo Labels::getLabel('LBL_Create_new_list', $siteLangId); ?>
+                                </h6>
                                 <?php
                                 $frm->setFormTagAttribute('onsubmit', 'setupWishList2(this,event); return(false);');
+                                $frm->addFormTagAttribute('class', 'form');
                                 $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
                                 $frm->developerTags['fld_default_col'] = 12;
                                 $titleFld = $frm->getField('uwlist_title');
@@ -34,6 +34,7 @@
                                 $btnSubmitFld->developerTags['noCaptionTag'] = true;
 
                                 echo $frm->getFormHtml(); ?>
+
                             </div>
                         </div>
                     </div>
