@@ -38,7 +38,8 @@
 }
 
 .message__list {
-    max-height: calc(100vh - 280px);
+    min-height: calc(100vh - 280px);
+    max-height: calc(100vh - 380px);
     overflow-y: auto;
     &-item {
         display: flex;
