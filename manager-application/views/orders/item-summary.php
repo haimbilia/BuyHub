@@ -100,23 +100,23 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                 <span class="d-inline-block link-dotted" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#price-<?php echo $op['op_id']; ?>">
                     <?php echo CommonHelper::displayMoneyFormat($total, true, true, true, false, true); ?>
                 </span>
-                <ul class="list-stats list-stats-popover hidden" id="price-<?php echo $op['op_id']; ?>">
-                    <li class="list-stats-item">
+                <ul class="list-popover hidden" id="price-<?php echo $op['op_id']; ?>">
+                    <li class="list-popover-item">
                         <span class="lable"><?php echo Labels::getLabel('LBL_UNIT_PRICE:'); ?> </span>
                         <span class="value"><?php echo $op['op_unit_price'] ?></span>
                     </li>
-                    <li class="list-stats-item">
+                    <li class="list-popover-item">
                         <span class="lable"><?php echo Labels::getLabel('LBL_QUANTITY:'); ?> </span>
                         <span class="value"><?php echo $op['op_qty']; ?></span>
                     </li>
                     <?php if (0 < $shippingCost) { ?>
-                        <li class="list-stats-item">
+                        <li class="list-popover-item">
                             <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_COST:'); ?></span>
                             <span class="value"><?php echo $shippingCost; ?></span>
                         </li>
                     <?php } ?>
                     <?php if (0 < $volumeDiscount) { ?>
-                        <li class="list-stats-item">
+                        <li class="list-popover-item">
                             <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT:'); ?></span>
                             <span class="value"><?php echo $volumeDiscount; ?></span>
                         </li>

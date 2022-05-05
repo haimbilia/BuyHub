@@ -76,8 +76,8 @@ $includeInvoiceNo = $includeInvoiceNo ?? true;
             <p><?php echo $order['op_selprod_title']; ?></p>
             <?php if (!empty($options)) {
             ?>
-                <ul class="list-options list-options--vertical list-options-popover">
-                    <li class="list-options-item">
+                <ul class="list-popover">
+                    <li class="list-popover-item">
                         <span class="lable"><?php echo Labels::getLabel('LBL_BRAND', $siteLangId); ?>:</span>
                         <span class="value"><?php echo $order['op_brand_name']; ?></span>
                     </li>
@@ -87,7 +87,7 @@ $includeInvoiceNo = $includeInvoiceNo ?? true;
                         if (empty(array_filter($option))) {
                             continue;
                         }
-                        echo '<li class="list-options-item">
+                        echo '<li class="list-popover-item">
                                 <span class="lable">' . trim($option[0]) . ':</span>
                                 <span class="value">' . trim($option[1]) . '</span>
                             </li>';

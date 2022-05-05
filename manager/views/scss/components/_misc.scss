@@ -2705,7 +2705,9 @@ $header-height: 65px;
     word-break: break-word;
     font-size: 0.85rem;
     min-width: 250px;
+    list-style: none;
     &-item {
+        list-style: none;
         padding: 0.8rem 0;
         display: flex;
         flex-direction: column;
@@ -2795,6 +2797,9 @@ $header-height: 65px;
         display: block;
         padding: 0.8rem 1rem;
     }
+}
+.list-popover {
+    list-style: none;
 }
 
 .or {
@@ -3152,7 +3157,7 @@ $header-height: 65px;
     &__selected-flag {
         background-color: $input-bg;
         border-radius: $input-border-radius;
-       // margin-#{$end-direction}: 10px !important;
+        // margin-#{$end-direction}: 10px !important;
         position: absolute;
         .form[dir="rtl"] & {
             margin-#{$start-direction}: 10px !important;
