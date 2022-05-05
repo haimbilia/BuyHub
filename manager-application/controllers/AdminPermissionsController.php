@@ -148,7 +148,6 @@ class AdminPermissionsController extends ListingBaseController
                 asort($arrListing);
                 break;
         }
-
         $userData = [];
         if ($recordId > 0) {
             $userData = AdminUsers::getUserPermissions($recordId);
@@ -188,7 +187,7 @@ class AdminPermissionsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId), 'permission_type', AdminPrivilege::getPermissionArr(), '',[], Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId), 'permission_type', [-1 => Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId)] + AdminPrivilege::getPermissionArr(), '',[], '');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'module');
@@ -282,7 +281,7 @@ class AdminPermissionsController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
            /*  'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId), */
             'module' => Labels::getLabel('LBL_MODULE', $this->siteLangId),
-            'permission' => Labels::getLabel('LBL_PERMISSIONS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_PERMISSIONS', $this->siteLangId),
         ];
 
         CacheHelper::create('adminUsersPermissionTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -295,7 +294,7 @@ class AdminPermissionsController extends ListingBaseController
             'select_all',
             /* 'listSerial', */
             'module',
-            'permission'
+            'action'
         ];
     }
 

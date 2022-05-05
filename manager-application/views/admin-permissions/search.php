@@ -22,7 +22,7 @@ foreach ($arrListing as $moduleId => $moduleName) {
             case 'module':
                 $td->appendElement('plaintext', $tdAttr, $moduleName, true);
                 break;
-            case 'permission':
+            case 'action':
                 if ($canView) {
                     $listing = AdminPrivilege::getPermissionArr();
                     $options = '';
@@ -42,7 +42,7 @@ foreach ($arrListing as $moduleId => $moduleName) {
                         </li>';
                     }
                      
-                    $td->appendElement('plaintext', $tdAttr, '<ul class="list-radio">' . $options . '</ul>', true);
+                    $td->appendElement('plaintext', $tdAttr, '<ul class="list-radio justify-content-end">' . $options . '</ul>', true);
                 }
                 break;
         }

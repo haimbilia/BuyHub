@@ -22,10 +22,9 @@ $shopName = $order['op_shop_name'] ?? '';
 if (isset($order['totOrders']) && $order['totOrders'] > 1) {
     $otherInfo = Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'])) . '">' . $order['order_number'] . "</a>";
 }
-
 $date = isset($showDate) && $order['order_date_added']   ? HtmlHelper::formatDateTime($order['order_date_added']) : '';
-
 $includeInvoiceNo = $includeInvoiceNo ?? true;
+
 ?>
 <div class="product-profile">
     <div class="product-profile__thumbnail">
@@ -73,7 +72,7 @@ $includeInvoiceNo = $includeInvoiceNo ?? true;
             </div>
         <?php } ?>
         <div class="hidden" id="options-<?php echo $order['op_selprod_id']; ?>">
-            <p><?php echo $order['op_selprod_title']; ?></p>
+            <p><strong><?php echo $order['op_selprod_title']; ?></strong></p>
             <?php if (!empty($options)) {
             ?>
                 <ul class="list-popover">
