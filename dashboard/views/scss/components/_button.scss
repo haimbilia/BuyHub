@@ -54,11 +54,11 @@
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
         &:focus {
-            box-shadow: $shadow2;
+            //box-shadow: $shadow2;
         }
         &:hover {
             color: var(--brand-color-inverse);
-            box-shadow: $shadow1;
+            //box-shadow: $shadow1;
         }
     }
 
