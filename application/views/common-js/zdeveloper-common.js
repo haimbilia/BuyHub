@@ -891,7 +891,7 @@ sendResetPasswordLink = function (user) {
 })(jQuery);
 $(function () {
     var typingTimer;
-    var doneTypingInterval = 800;
+    var doneTypingInterval = 400;
     var $input = $("#header_search_keyword");
     $input.focus(function (e) {
         searchProductTagsAuto($input.val());

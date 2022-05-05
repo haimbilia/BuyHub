@@ -3,7 +3,7 @@
     languageToggle = function (el) {
         let langId = $(el).val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('tags', 'index'), { lang_id: langId }, function (t) {
+        fcom.ajax(fcom.makeUrl('Tags', 'index'), { lang_id: langId }, function (t) {
             $('.mainJs').replaceWith(t);
             fcom.removeLoader();
         });
