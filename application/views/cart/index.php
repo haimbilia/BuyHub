@@ -6,9 +6,9 @@
                 <?php if ($total > 0) { ?>
                     <div class="cart-page">
                         <main class="cart-page_main">
-                            <?php if ($hasPhysicalProduct) { ?>
-                                <div class="cart-page-head">
-                                    <h2 class="h2"><?php echo Labels::getLabel('LBL_YOUR_SHOPPING_BAG'); ?></h2>
+                            <div class="cart-page-head">
+                                <h2 class="h2"><?php echo Labels::getLabel('LBL_YOUR_SHOPPING_BAG'); ?></h2>
+                                <?php if ($hasPhysicalProduct) { ?>
                                     <ul class="shiporpickup" id="js-shiporpickup">
                                         <li class="shiporpickup-item" onclick="listCartProducts(<?php echo Shipping::FULFILMENT_SHIP; ?>)">
                                             <label class="control-label radio is-active shippingLblJs">
@@ -34,8 +34,8 @@
                                             </label>
                                         </li>
                                     </ul>
-                                </div>
-                            <?php } ?>
+                                <?php } ?>
+                            </div>
                             <div class="processing-wrap" id="cartList">
                                 <?php include(CONF_THEME_PATH . 'cart/_partial/items-summary-skeleton.php'); ?>
                             </div>

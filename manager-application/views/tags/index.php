@@ -4,8 +4,8 @@ $actionItemsData = $actionItemsData + [
     'keywordPlaceholder' => $keywordPlaceholder ?? Labels::getLabel('FRM_SEARCH', $siteLangId)
 ];
 ?>
-<main class="main mainJs">
-    <div class="container" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="'.$formLayout.'"' : ''; ?>>
+<main class="main mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="' . $formLayout . '"' : ''; ?>>
+    <div class="container">
         <?php
         $this->includeTemplate('_partial/header/header-breadcrumb.php', $actionItemsData, false); ?>
         <div class="row">

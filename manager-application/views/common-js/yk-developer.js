@@ -494,6 +494,9 @@ function initMap(lat = 40.72, lng = -73.96, elementId = "map") {
     if (1 > $("#" + elementId).length) {
         return;
     }
+    
+    if (typeof google !== 'object' || typeof google.maps !== 'object') { return; }
+
     map = new google.maps.Map(document.getElementById(elementId), {
         zoom: 12,
         center: latlng,

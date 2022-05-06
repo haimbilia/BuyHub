@@ -276,7 +276,7 @@ $(document).ready(function () {
             fcom.closeProcessing();
             var profileId = $('input[name="profile_id"]').val();
             searchZone(profileId);
-            
+
         });
     }
 
@@ -331,17 +331,22 @@ $(document).on("search", "." + $.ykmodal.element + " input[type='search']", func
 $(document).on('keyup', '.continentJs', function () {
     var filter = $(this).val();
     if (filter.length <= 1) {
-        $('.zones--js').find(".filter-country--js").show();
-        $('.zones--js').find(".country--js").show();
-        $('.zones--js').find(".zone-name--js").show();
-        $('.zones--js').find(".zones--js").show();
-        $('.zones--js').find(".list-zones li").show();
+        $('.zones--js').find(".country--js, .zone-name--js, .zones--js, li").show();
+        if (filter.length < 1) {
+            $('.list-zones').find("ul li").each(function () {
+                $(this).closest('ul').removeClass('collapsed').addClass('collapse');
+            });
+            $('.zones--js').find('.li-display').removeClass('li-display');
+        }
         return;
     }
     $('.zones--js').find(".zone-name--js").each(function () {
         if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
             $(this).hide();
             $(this).closest('.zones--js').removeClass('li-display');
+            if ($(this).is("li")) {
+                $(this).closest('ul').removeClass('collapsed').addClass('collapse');
+            }
         } else {
             $(this).show();
             $(this).closest('.zones--js').addClass('li-display');
@@ -352,6 +357,9 @@ $(document).on('keyup', '.continentJs', function () {
         if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
             $(this).closest('.filter-country--js').hide();
             $(this).closest('.filter-country--js').removeClass('li-display');
+            if ($(this).is("li")) {
+                $(this).closest('ul').removeClass('collapsed').addClass('collapse');
+            }
         } else {
             $(this).closest('.filter-country--js').show();
             $(this).closest('.filter-country--js').addClass('li-display');
@@ -362,6 +370,7 @@ $(document).on('keyup', '.continentJs', function () {
         if ($(this).text().search(new RegExp(filter, "gi")) < 0) {
             $(this).hide();
             $(this).removeClass('li-display');
+            $(this).closest('ul').removeClass('collapsed').addClass('collapse');
         } else {
             $(this).show();
             $(this).addClass('li-display');
@@ -369,6 +378,9 @@ $(document).on('keyup', '.continentJs', function () {
     });
 
     $('.li-display').each(function () {
+        if ($(this).is("li")) {
+            $(this).closest('ul').removeClass('collapse').addClass('collapsed');
+        }
         $(this).closest('.zones--js').find('.zone-name--js').show();
         $(this).closest('.zones--js.li-display').find('.filter-country--js').show();
         if ($(this).closest('.zones--js').find('.filter-country--js.li-display .li-display').length > 0) {

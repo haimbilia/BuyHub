@@ -99,7 +99,7 @@ if (!empty($digitalDownloads)) { ?>
 <?php if (!empty($digitalDownloadLinks)) { ?>
     <div class="mt-5">
         <h6>
-            <?php echo Labels::getLabel('LBL_Download_Links', $siteLangId); ?>
+            <?php echo Labels::getLabel('LBL_DOWNLOAD_LINKS', $siteLangId); ?>
         </h6>
         <div class="js-scrollable table-wrap table-responsive">
             <table class="table">
@@ -144,7 +144,7 @@ if (!empty($digitalDownloads)) { ?>
                                 <?php echo $sr_no; ?>
                             </td>
                             <td>
-                                <div class="text-break">
+                                <div class="text-break" style="width: 200px;">
                                     <a target="_blank" onclick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
                                         <?php echo $link; ?>
                                     </a>

@@ -535,15 +535,15 @@ class SellerController extends SellerBaseController
         if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
             $opTimeLineStatus = array_diff($opTimeLineStatus, [FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS")]);
         }
-
-        if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
-            $opTimeLineStatus[] = FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS");
-        }
-
-        if (FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
-            $opTimeLineStatus[] = FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS");
-        }
-
+        
+        if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id'] || FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
+            $opTimeLineStatus[] = $orderDetail['orderstatus_id'];
+            $opTimeLineStatus = array_diff($opTimeLineStatus, [FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS")]);
+        } 
+        if (FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
+            $opTimeLineStatus[] = $orderDetail['orderstatus_id'];
+            $opTimeLineStatus = array_diff($opTimeLineStatus, [FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS")]);
+        }    
         $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $opTimeLineStatus);
 
         $orderTimeLine = [];

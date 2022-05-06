@@ -312,6 +312,12 @@ $sharing-height: 50px;
     }
 }
 
+.buyer-wishlist {
+    max-height: 250px;
+    overflow: auto;
+    margin-bottom: 1.5rem;
+}
+
 .descriptions {
     &-item {
         border-bottom: $border;

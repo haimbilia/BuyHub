@@ -1203,15 +1203,12 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BADGE_ICON, $sizeType);
 
         if ($sizeType) {
-
             if (is_numeric($sizeType)) {
                 AttachedFile::displayImage($image_name, $sizeType, $sizeType, $default_image, $filePath);
             } else {
                 AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image, $filePath);
             }
         } else {
-
-
             AttachedFile::displayOriginalImage($image_name, $default_image, $filePath);
         }
     }
