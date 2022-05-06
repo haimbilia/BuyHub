@@ -88,10 +88,12 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                         $fromFld->setFieldTagAttribute('class', 'js-slot-from-' . $i . ' fromTime-js');
                                         $fromFld->setFieldTagAttribute('data-row', $row);
                                         $fromFld->setFieldTagAttribute('onChange', 'displayAddRowValues(' . $i . ', this)');
+                                        $fromFld->addFieldTagAttribute('style', 'min-width:70px;');
                                         $fromFld->value = $fromTime;
 
                                         $toFld = $frm->getField('tslot_to_time[' . $i . '][]');
                                         $toFld->setFieldTagAttribute('class', 'js-slot-to-' . $i);
+                                        $toFld->addFieldTagAttribute('style', 'min-width:70px;');
                                         $toFld->setFieldTagAttribute('data-row', $row);
                                         $toFld->setFieldTagAttribute('onChange', 'displayAddRowValues(' . $i . ', this)');
                                         $toFld->value = $toTime;
@@ -143,12 +145,14 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                     $fromFld->setFieldTagAttribute('disabled', 'true');
                                     $fromFld->setFieldTagAttribute('data-row', $row);
                                     $fromFld->setFieldTagAttribute('class', 'js-slot-from-' . $i . ' fromTime-js');
+                                    $fromFld->addFieldTagAttribute('style', 'min-width:70px;');
                                     $fromFld->setFieldTagAttribute('onChange', 'displayAddRowValues(' . $i . ', this)');
 
                                     $toFld = $frm->getField('tslot_to_time[' . $i . '][]');
                                     $toFld->setFieldTagAttribute('disabled', 'true');
                                     $toFld->setFieldTagAttribute('data-row', $row);
                                     $toFld->setFieldTagAttribute('class', 'js-slot-to-' . $i);
+                                    $toFld->addFieldTagAttribute('style', 'min-width:70px;');
                                     $toFld->setFieldTagAttribute('onChange', 'displayAddRowValues(' . $i . ', this)'); ?>
                                     <tr data-count="<?php echo $i; ?>" class="rows timeSlotJs jsDay-<?php echo $i; ?> row-<?php echo $row; ?>">
                                         <td class="align-middle jsWeekDay">

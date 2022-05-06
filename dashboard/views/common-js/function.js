@@ -666,6 +666,9 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     if (1 > $("#" + elementId).length) {
         return;
     }
+    
+    if (typeof google !== 'object' || typeof google.maps !== 'object') { return; }
+
     map = new google.maps.Map(document.getElementById(elementId), {
         zoom: 12,
         center: latlng
@@ -843,7 +846,7 @@ select2 = function (
     }
 
     var obj = ele.closest('form').length ? ele.closest('form') : null;
-    
+
     ele.select2({
         dropdownParent: obj,
         closeOnSelect: ele.data("closeOnSelect") || true,
@@ -894,10 +897,10 @@ select2 = function (
                 callbackOnUnSelect(e);
             }
         }).on('select2:open', function (e) {
-            if (ele.attr('multiple') == undefined) {         
-                $('#select2-'+ elmId +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
-            }else{         
-                $('#select2-'+ elmId +'-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-multiple");
+            if (ele.attr('multiple') == undefined) {
+                $('#select2-' + elmId + '-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+            } else {
+                $('#select2-' + elmId + '-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-multiple");
             }
         });
 
@@ -913,11 +916,11 @@ select2 = function (
 
     if (0 < ele.closest(".advancedSearchJs").length || 0 < ele.closest(".form-group").length) {
         select2Selector.$container.addClass("custom-select2-width");
-    }    
-  
+    }
+
     if (ele.attr('multiple') != undefined) {
         select2Selector.$container.addClass("custom-select2 custom-select2-multiple");
-    }else{
+    } else {
         select2Selector.$container.addClass("custom-select2 custom-select2-single");
     }
 };
