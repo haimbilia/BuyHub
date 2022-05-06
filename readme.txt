@@ -760,6 +760,7 @@ Updates/Fixes :
     => 060863 - Admin UI: Getting multiple issues under the side's menu section
     => 064218 - Buyer: There should be placeholder image for blogs
     => 064051 - Admin: Pagination is not working properly on the product listing page at the admin's end
+    => 063901 - iOS Web > Buyer :Orders: Getting multiple issues on Order detail page.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

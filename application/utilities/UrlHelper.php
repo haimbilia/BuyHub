@@ -9,7 +9,7 @@ class UrlHelper extends FatUtility
     public static function getUrlScheme()
     {
         $pageURL = 'http';
-        if (isset($_SERVER['HTTPS']) && $_SERVER["HTTPS"] == "on") {
+        if ((isset($_SERVER['HTTPS']) && $_SERVER["HTTPS"] == "on") || FatApp::getConfig('CONF_USE_SSL', FatUtility::VAR_INT, 0)) {
             $pageURL .= "s";
         }
         $pageURL .= "://";

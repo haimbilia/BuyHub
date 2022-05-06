@@ -245,10 +245,11 @@ function recentlyViewedProducts(selprodId) {
         "",
         function (ans) {
             fcom.removeLoader();
-            $("#recentlyViewedProductsDiv").html(ans);
-            /*$(".js-collection-corner:not(.slick-initialized)").slick(
-                getSlickSliderSettings(5, 1, langLbl.layoutDirection, true)
-            );*/
+            if ('' == ans) {
+                $("#recentlyViewedProductsDiv").remove();
+            } else {
+                $("#recentlyViewedProductsDiv").html(ans);
+            }
         }
     );
 }
@@ -821,7 +822,7 @@ sendResetPasswordLink = function (user) {
             if (typeof counter !== "undefined") {
                 cls += '-' + counter
             }
-            $("."+ cls).remove(); 
+            $("." + cls).remove();
             //$.ykmsg.close();
         },
 
