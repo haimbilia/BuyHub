@@ -1586,3 +1586,21 @@ mark,
         object-fit: cover;
     }
 }
+//Wishlist
+.wishlist-toolbars {
+    display: flex;
+    flex-flow: row wrap;
+    &-item {
+    }
+}
+.actions-wishlist {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    position: absolute;
+    top: 50%;
+    #{$start-direction}: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    padding: 10px;
+    display: flex;
+}

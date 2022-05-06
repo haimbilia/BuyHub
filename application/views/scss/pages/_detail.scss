@@ -334,14 +334,14 @@ $sharing-height: 50px;
         display: flex;
         cursor: pointer;
         .plus {
-            color: #000;
+            color: $txt-black;
             position: absolute;
             #{$end-direction}: 0;
             top: 5px;
             transition: transform 0.2s ease-in-out;
         }
         &:not(.collapsed) {
-            color: $secondary-color;
+            //color: $secondary-color;
             .plus {
                 transform: rotate(227deg);
             }

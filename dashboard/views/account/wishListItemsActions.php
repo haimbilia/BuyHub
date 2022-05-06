@@ -3,7 +3,7 @@ $uwlist_id = $uwlist_id ?? 0;
 if (isset($products) && 0 < count($products)) {
     $function = (true == $isWishList) ? 'removeSelectedFromWishlist(' . $uwlist_id . ', event)' : 'removeSelectedFromFavtlist(event)';
 ?>
-    <ul>
+    <ul class="wishlist-toolbars">
         <li title="<?php echo Labels::getLabel('LBL_SELECT_ALL_ITEMS', $siteLangId); ?>" data-bs-toggle="tooltip" data-bs-placement="top">
             <label class="btn btn-outline-gray checkbox checkbox-inline select-all">
                 <input type="checkbox" class="selectAll-js" onclick="selectAll($(this));">
