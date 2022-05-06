@@ -17,7 +17,8 @@ $(document).ready(function () {
         $('.listItemJs.is-active').removeClass('is-active');
         currEle.addClass('is-active');
         $('.threadJs').prepend(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewThread", [threadId]), '', function (t) {
+        let searchkeyword = $(obj).data('searchkeyword');
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewThread", [threadId]), {searchkeyword}, function (t) {
             fcom.closeProcessing();
             $('.userJs').remove();
             $('.threadJs').replaceWith(t.html);
