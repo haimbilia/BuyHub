@@ -648,7 +648,7 @@ class ImageDimension extends FatUtility
     {
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 60, self::HEIGHT => 60],
-            self::VIEW_MINI => [self::WIDTH => 35, self::HEIGHT => 35]
+            self::VIEW_MINI => [self::WIDTH => 40, self::HEIGHT => 40]
         ];
         return self::returnData($arr, self::VIEW_THUMB, $sizeType);
     }
