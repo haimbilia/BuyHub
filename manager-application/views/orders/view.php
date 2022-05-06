@@ -45,13 +45,12 @@
                         <?php if ($paymentFormCond) { ?>
                             <div class="card-body">
                                 <?php require_once(CONF_THEME_PATH . 'orders/payment-form.php'); ?>
-                                <div class="separator separator-dashed my-5"></div>
                             </div>
+                            <?php if (!empty($order['payments'])) { ?>
+                                <div class="separator separator-dashed my-3"></div>
+                            <?php } ?>
                         <?php } ?>
-
-                        <div class="card-table">
-                            <?php require_once(CONF_THEME_PATH . 'orders/payment-history.php'); ?>
-                        </div>
+                        <?php require_once(CONF_THEME_PATH . 'orders/payment-history.php'); ?>
                     </div>
                 <?php } ?>
             </div>
