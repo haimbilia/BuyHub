@@ -3,9 +3,7 @@ $displayProductNotAvailableLable = false;
 if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
     $displayProductNotAvailableLable = true;
 }
-if ($recentViewedProducts) {
-?>
-
+if ($recentViewedProducts) { ?>
     <div class="container">
         <div class="section-head">
             <div class="section-heading">

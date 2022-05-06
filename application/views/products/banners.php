@@ -40,6 +40,7 @@
                 <?php } ?>
             </div>
         <?php }
+        
         if (isset($val['banner_record_id']) && $val['banner_record_id'] > 0 && $val['banner_type'] == Banner::TYPE_PPC) {
             Promotion::updateImpressionData($val['banner_record_id']);
         } ?>
