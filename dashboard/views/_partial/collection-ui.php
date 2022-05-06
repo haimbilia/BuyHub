@@ -23,7 +23,7 @@ if ($showAddToFavorite) {
 
     <?php if (true ==  $showActionBtns) { ?>
 
-        <ul class="actions">
+        <ul class="actions actions-wishlist">
             <?php if ($product['in_stock'] &&  time() >= strtotime($product['selprod_available_from'])) { ?>
                 <li>
                     <label class="checkbox">
