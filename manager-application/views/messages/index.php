@@ -26,6 +26,7 @@
 
                         $fld = $frmSearch->getField('message_by');
                         $fld->addFieldtagAttribute('id', 'searchFrmBuyerIdJs');
+                        $fld->addFieldtagAttribute('data-dropdownParent-id', 'messageDropMenu');
 
                         $fld = $frmSearch->getField('keyword');
                         $fld->addFieldtagAttribute('class', 'form-control omni-search');
@@ -33,6 +34,7 @@
 
                         $fld = $frmSearch->getField('message_to');
                         $fld->addFieldtagAttribute('id', 'searchFrmSellerIdJs');
+                        $fld->addFieldtagAttribute('data-dropdownParent-id', 'messageDropMenu');
 
                         echo $frmSearch->getFormTag();
                         echo $frmSearch->getFieldHtml('page');
@@ -48,7 +50,7 @@
                                         </svg>
                                     </span>
                                 </button>
-                                <div class="dropdown-menu dropDownMenuBlockClose dropdown-menu-right dropdown-menu-anim communication-filter">
+                                <div class="dropdown-menu dropDownMenuBlockClose dropdown-menu-right dropdown-menu-anim communication-filter" id="messageDropMenu">
                                     <div class="form-group">
                                         <label class="label">
                                             <?php

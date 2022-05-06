@@ -84,7 +84,14 @@ $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageD
                                 </div>
                                 <div class="message-detail">
                                     <div class="message">
-                                        <?php echo nl2br($row['message_text']); ?>
+                                        <?php 
+
+                                        if(!empty($searchkeyword)){
+                                            echo str_ireplace($searchkeyword, "<mark>" . $searchkeyword . "</mark>", nl2br($row['message_text']));
+                                        }else{
+                                            echo nl2br($row['message_text']); 
+                                        }
+                                        ?>
                                     </div>
                                     <span class="time"> <?php if ($row['thread_started_by'] != $row['message_from_user_id']) { ?>
                                             <?php echo $toUserName; ?> -

@@ -778,11 +778,10 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'));
         }
         $row['link'] = UrlHelper::generateFullUrl('GuestUser', 'resetPassword', array($row['user_id'], $token));
-        $row['credential_email'] = $usernameOrEmail;
         $email = new EmailHandler();
         if (!$email->sendForgotPasswordLinkEmail($this->siteLangId, $row)) {
-            $message = Labels::getLabel("ERR_PASSWORD_RESET_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId);
-            $error = true;
+            $message = Labels::getLabel("ERR_PASSWORD_RESET_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId);     
+             FatUtility::dieJsonError($message);       
         }
         $message = Labels::getLabel("MSG_YOUR_PASSWORD_RESET_INSTRUCTIONS_TO_YOUR_EMAIL", $this->siteLangId);
 

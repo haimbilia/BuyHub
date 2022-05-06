@@ -8,7 +8,7 @@ if (1 == $page) {
 if (!empty($arrListing)) {
     foreach ($arrListing as $sn => $row) {
         $isActive = $sn === $activeIndex ? ' is-active' : '';
-        $attr = ['class' => 'message__list-item' . $isActive . ' listItemJs', 'data-thread-id' => $row['thread_id'], 'onclick' => 'viewThread(this)'];
+        $attr = ['class' => 'message__list-item' . $isActive . ' listItemJs', 'data-thread-id' => $row['thread_id'], 'onclick' => 'viewThread(this)','data-searchkeyword'=> $searchkeyword];
         if (1 == $page) {
             $li = $ul->appendElement('li', $attr);
         } else {

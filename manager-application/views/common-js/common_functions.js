@@ -205,10 +205,10 @@ select2 = function (
         return false;
     }
 
-    var obj = ele.closest('form').length ? ele.closest('form') : null;
+    var obj = ele.closest('form').length ? ele.closest('form') : null;    
 
     ele.select2({
-        dropdownParent: obj,
+        dropdownParent: ele.data('dropdownparent-id') ? $('#'+ ele.data('dropdownparent-id')) : obj,
         closeOnSelect: ele.data("closeOnSelect") || true,
         data: data,
         /*dir: layoutDirection,*/
