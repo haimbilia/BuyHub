@@ -15,11 +15,10 @@
         cursor: pointer;
         font-weight: bold;
         height: 20px;
-        margin-right: 10px;
         margin-top: 5px;
-
         position: absolute;
-        right: 0;
+        z-index: 1;
+        #{$end-direction}: 8px;
 
         // This padding is to account for the bottom border for the first
         // selection row and the top border of the second selection row.
@@ -33,7 +32,6 @@
         border: 1px solid #aaa;
         border-radius: 4px;
         box-sizing: border-box;
-
         display: inline-block;
         margin-left: 5px;
         margin-top: 5px;
@@ -100,7 +98,7 @@
         }
 
         .select2-selection__clear {
-            float: left;
+            //float: left;
             margin-left: 10px;
             margin-right: auto;
         }

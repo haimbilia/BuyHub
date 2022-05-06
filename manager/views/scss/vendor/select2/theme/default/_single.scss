@@ -10,11 +10,11 @@
 
     .select2-selection__clear {
         cursor: pointer;
-        float: right;
+        // float: right;
         font-weight: bold;
         height: 26px;
-        margin-right: 20px;
-        padding-right: 0px;
+        // margin-right: 20px;
+        // padding-right: 0px;
     }
 
     .select2-selection__placeholder {
@@ -53,7 +53,7 @@
 &[dir="rtl"] {
     .select2-selection--single {
         .select2-selection__clear {
-            float: left;
+            // float: left;
         }
 
         .select2-selection__arrow {
