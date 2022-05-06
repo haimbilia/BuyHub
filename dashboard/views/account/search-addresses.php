@@ -6,7 +6,6 @@ if (!empty($addresses)) {
     <ul class="my-addresses">
         <li class="my-addresses-item my-addresses-add">
             <button class="btn btn-add-address" type="button" onclick="addAddressForm(0)">
-
                 <svg xmlns="http://www.w3.org/2000/svg" class="svg mb-2" width="38" height="38" fill="currentColor" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"></path>
                     <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"></path>
@@ -66,9 +65,9 @@ if (!empty($addresses)) {
     <ul class="my-addresses">
         <li class="my-addresses-item my-addresses-add">
             <button class="btn btn-add-address" type="button" onclick="addAddressForm(0)">
-                <svg xmlns="http://www.w3.org/2000/svg" class="svg mb-4" width="52" height="52" viewBox="0 0 24 24" fill="#000000">
-                    <path d="M0 0h24v24H0z" fill="none" />
-                    <path d="M20 1v3h3v2h-3v3h-2V6h-3V4h3V1h2zm-8 12c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm1-9.94v2.02A6.53 6.53 0 0 0 12 5c-3.35 0-6 2.57-6 6.2 0 2.34 1.95 5.44 6 9.14 4.05-3.7 6-6.79 6-9.14V11h2v.2c0 3.32-2.67 7.25-8 11.8-5.33-4.55-8-8.48-8-11.8C4 6.22 7.8 3 12 3c.34 0 .67.02 1 .06z" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="svg mb-2" width="38" height="38" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"></path>
+                    <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"></path>
                 </svg>
                 <?php echo Labels::getLabel('LBL_ADD_NEW_ADDRESS', $siteLangId); ?>
             </button>

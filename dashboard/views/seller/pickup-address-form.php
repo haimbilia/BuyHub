@@ -73,7 +73,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                             $row = 0;
                             for ($i = 0; $i < count($daysArr); $i++) {
                                 $dayFld = $frm->getField('tslot_day[' . $i . ']');
-                                $dayFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+                                $dayFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox checkbox-flex');
                                 $dayFld->developerTags['cbHtmlAfterCheckbox'] = '<i class="input-helper"></i>';
                                 $dayFld->setFieldTagAttribute('onChange', 'displayFields(' . $i . ', this)');
                                 $dayFld->setFieldTagAttribute('class', 'slotDays-js');
