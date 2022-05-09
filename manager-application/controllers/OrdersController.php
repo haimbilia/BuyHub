@@ -231,9 +231,9 @@ class OrdersController extends ListingBaseController
 
         $orderObj = new Orders($opRow['order_id']);
         if ($opRow['plugin_code'] == 'CashOnDelivery') {
-            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true, $opRow['op_product_type']);
         } else if ($opRow['plugin_code'] == 'PayAtStore') {
-            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, false, true);
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $opRow['op_product_type'], true);
         } else {
             $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $opRow['op_product_type']);
         }
@@ -306,9 +306,10 @@ class OrdersController extends ListingBaseController
     {
         $frm = new Form('frmOrderComments');
         $frm->addTextArea(Labels::getLabel('FRM_YOUR_COMMENTS', $this->siteLangId), 'comments');
-        $isDigital = isset($orderData['op_product_type']) && $orderData['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL ? OrderStatus::FOR_DIGITAL_ONLY : OrderStatus::FOR_NON_DIGITAL;
-        $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingOrderStatus, $orderData['op_status_id'], $isDigital);
-
+        //$isDigital = isset($orderData['op_product_type']) && $orderData['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL ? OrderStatus::FOR_DIGITAL_ONLY : OrderStatus::FOR_NON_DIGITAL;
+        //$orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingOrderStatus, $orderData['op_status_id'], $isDigital);
+        $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingOrderStatus, $orderData['op_status_id']);
+              
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'op_status_id', $orderStatusArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirements()->setRequired();
 
@@ -825,12 +826,13 @@ class OrdersController extends ListingBaseController
         }
 
         if ($orderDetail['plugin_code'] == 'CashOnDelivery') {
-            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true, $orderDetail['op_product_type']);
         } else if ($orderDetail['plugin_code'] == 'PayAtStore') {
-            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, false, true);
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $orderDetail['op_product_type'], true);
         } else {
             $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $orderDetail['op_product_type']);
-        }
+        }      
+        
         $frm = $this->getOrderCommentsForm($orderDetail, $processingStatuses);
         if (1 == $shippedByPlugin) {
             $fld = $frm->getField('op_status_id');
