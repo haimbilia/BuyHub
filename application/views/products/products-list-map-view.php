@@ -14,8 +14,7 @@
         </div>
     </div>
     <div class="interactive-stores-list">
-        <?php
-        $productsData['colMdVal'] = 3;
+        <?php       
         $this->includeTemplate('products/products-list.php', $productsData, false); ?>
     </div>
 </div>

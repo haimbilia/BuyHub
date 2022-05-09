@@ -97,9 +97,10 @@ class MessagesController extends ListingBaseController
             $srch->addCondition('tth.thread_id', '=', $post['thread_id']);
         }
         $srch->addCondition('ttm.message_deleted', '=', 0);
-        if (isset($post['keyword']) && '' != $post['keyword']) {
-            $condition = $srch->addCondition('tth.thread_subject', 'like', '%' . $post['keyword'] . '%');
-            $condition->attachCondition('ttm.message_text', 'like', '%' . $post['keyword'] . '%');
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        if (!empty($keyword)) {
+            $condition = $srch->addCondition('tth.thread_subject', 'like', '%' . $keyword . '%');
+            $condition->attachCondition('ttm.message_text', 'like', '%' . $keyword . '%');
         }
 
         $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
@@ -133,6 +134,7 @@ class MessagesController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
+        $this->set('searchkeyword', FatApp::getPostedData('keyword', FatUtility::VAR_STRING));        
 
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
@@ -162,7 +164,8 @@ class MessagesController extends ListingBaseController
         $srch->addCondition('message_deleted', '=', applicationConstants::NO);
         $srch->addCondition('tth.thread_id', '=', $threadId);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());      
-        $this->set("threadListing", $records);
+        $this->set("threadListing", $records);       
+        $this->set('searchkeyword', FatApp::getPostedData('searchkeyword', FatUtility::VAR_STRING)); 
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }

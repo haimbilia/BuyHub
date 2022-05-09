@@ -20,7 +20,9 @@
             // max-width: 40%;
             display: flex;
             @include media-breakpoint-down(sm) {
-                flex: 1;
+                // flex: 1;
+                flex: 0 0 50%;
+                max-width: 50%;
             }
             img {
                 width: 100%;

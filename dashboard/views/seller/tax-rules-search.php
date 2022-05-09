@@ -33,9 +33,8 @@
                 <ul class="list-stats list-stats-double">
                     <?php if (!empty($ruleSpecificCombinedData) && $row['taxstr_is_combined'] > 0) { ?>
                         <li class="list-stats-item">
-                            <div class="stats">
-                                <h6 class="title-sub"> <?php echo Labels::getLabel('LBL_Combined_Taxes(%)', $siteLangId); ?></h6>
-                            </div>
+                            <span class="lable"><?php echo Labels::getLabel('LBL_TAX_STRUCTURE_NAME', $siteLangId); ?>: </span>
+                            <span class="value"><?php echo $row['taxstr_name']; ?></span>
                         </li>
                         <?php
                         foreach ($ruleSpecificCombinedData as $comData) { ?>
@@ -48,7 +47,7 @@
                     } else {
                         ?>
                         <li class="list-stats-item">
-                            <span class="lable"><?php echo Labels::getLabel('LBL_Tax_Name', $siteLangId); ?>: </span>
+                            <span class="lable"><?php echo Labels::getLabel('LBL_TAX_STRUCTURE_NAME', $siteLangId); ?>: </span>
                             <span class="value"><?php echo $row['taxstr_name']; ?></span>
 
                         </li>
