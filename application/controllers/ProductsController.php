@@ -483,22 +483,24 @@ class ProductsController extends MyAppController
     public function view($selprod_id = 0)
     {
         $selprod_id = FatUtility::int($selprod_id);
-        if (true === MOBILE_APP_API_CALL && 1 > $selprod_id) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+        if (1 > $selprod_id) {
+            if (true === MOBILE_APP_API_CALL) {
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+            }
+            FatUtility::exitWithErrorCode(404);
         }
 
         $product = $this->getProductDetail($selprod_id);
-        /* ] */
-        $loggedUserId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $loggedUserId = UserAuthentication::getLoggedUserId();
-        }
-
         if (!$product) {
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             }
             FatUtility::exitWithErrorCode(404);
+        }
+
+        $loggedUserId = 0;
+        if (UserAuthentication::isUserLogged()) {
+            $loggedUserId = UserAuthentication::getLoggedUserId();
         }
 
         if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) {
@@ -549,9 +551,10 @@ class ProductsController extends MyAppController
         $selProdReviewObj->setPageSize(1);
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         $this->set('reviews', $reviews);
+
         $subscription = false;
         $allowed_images = -1;
-        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, applicationConstants::NO)) {
             $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($this->siteLangId, $product['selprod_user_id'], array('ossubs_images_allowed'));
             $allowed_images = $currentPlanData['ossubs_images_allowed'];
             $subscription = true;
@@ -831,15 +834,12 @@ class ProductsController extends MyAppController
         $this->set('shop', $shop);
         $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id']));
         $this->set('productImagesArr', $productGroupImages);
-        //    $this->set( 'productGroups', $productGroups );
+
+
         $frmReviewSearch = $this->getReviewSearchForm(5);
         $frmReviewSearch->fill(array('selprod_id' => $selprod_id));
         $this->set('frmReviewSearch', $frmReviewSearch);
         $this->set('currentStock', $product['selprod_stock'] - Product::tempHoldStockCount($selprod_id));
-        /* Get product Polls [ */
-        /*$pollQuest = Polling::getProductPoll($product['product_id'], $this->siteLangId);
-        $this->set('pollQuest', $pollQuest);*/
-        /* ] */
 
         /* Get Product Volume Discount (if any)[ */
         $this->set('volumeDiscountRows', $sellerProduct->getVolumeDiscounts());
@@ -864,12 +864,11 @@ class ProductsController extends MyAppController
         $this->set('recommendedProductsRibbons', $recommendedProductsRibbons);
         /* ]  */
 
-        if (User::checkPersonalizedCookiesEnabled() == true) {
-            $this->setRecentlyViewedItem($selprod_id);
-        }
-        //$this->setRecentlyViewedItem($selprod_id);
-
         if (false === MOBILE_APP_API_CALL) {
+            if (User::checkPersonalizedCookiesEnabled() == true) {
+                $this->setRecentlyViewedItem($selprod_id);
+            }
+
             $this->_template->addJs(array('js/slick.js', 'js/modaal.js', 'js/product-detail.js', 'js/magnific-popup.js', 'js/jw-player.js', 'js/slick-carousels.js'));
         } else {
             $recentlyViewed = FatApp::getPostedData('recentlyViewed');
@@ -934,8 +933,10 @@ class ProductsController extends MyAppController
             $et->sendRequest();
         }
 
-        $this->includeFeatherLight();
-        $this->_template->addJs(['js/popper.min.js', 'js/slick.min.js', 'js/jquery.fancybox.min.js']);
+        if (false === MOBILE_APP_API_CALL) {
+            $this->includeFeatherLight();
+            $this->_template->addJs(['js/popper.min.js', 'js/slick.min.js', 'js/jquery.fancybox.min.js']);
+        }
         $this->_template->render();
     }
 
