@@ -31,11 +31,13 @@ class ShopsController extends MyAppController
     {
         $db = FatApp::getDb();
         $data = FatApp::getPostedData();
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : FatUtility::int($data['page']);
-        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+        $page = (empty($data['page']) || FatUtility::int($data['page']) <= 0) ? 1 : FatUtility::int($data['page']);
+        $pageSize = applicationConstants::getFrontEndPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $searchForm = $this->getShopSearchForm($this->siteLangId);
         $post = $searchForm->getFormDataFromArray($data);
+        $post['page'] = $page;
+        $post['pageSize'] = $pageSize;
 
         /* SubQuery, Shop have products[ */
         $prodShopSrch = new ProductSearch($this->siteLangId);
@@ -48,10 +50,6 @@ class ShopsController extends MyAppController
         $prodShopSrch->doNotLimitRecords();
         $prodShopSrch->joinSellerSubscription($this->siteLangId, true);
         $prodShopSrch->addSubscriptionValidCondition();
-
-        //$rs = $prodShopSrch->getResultSet();
-        /* $productRows = FatApp::getDb()->fetchAll($rs);
-        $shopMainRootArr = array_unique(array_column($productRows,'shop_id')); */
         /* ] */
 
         $srch = new ShopSearch($this->siteLangId);
@@ -60,30 +58,27 @@ class ShopsController extends MyAppController
         $srch->joinShopState();
         $srch->joinSellerSubscription();
         $srch->joinTable('(' . $prodShopSrch->getQuery() . ')', 'INNER JOIN', 'temp.shop_id = s.shop_id', 'temp');
-        /* if($shopMainRootArr){
-        $srch->addCondition('shop_id', 'in', $shopMainRootArr);
-        } */
+
         $loggedUserId = 0;
         if (UserAuthentication::isUserLogged()) {
             $loggedUserId = UserAuthentication::getLoggedUserId();
         }
 
         /* sub query to find out that logged user have marked shops as favorite or not[ */
-        $favSrchObj = new UserFavoriteShopSearch();
+        /* $favSrchObj = new UserFavoriteShopSearch();
         $favSrchObj->doNotCalculateRecords();
         $favSrchObj->doNotLimitRecords();
         $favSrchObj->addMultipleFields(array('ufs_shop_id', 'ufs_id'));
         $favSrchObj->addCondition('ufs_user_id', '=', $loggedUserId);
-        $srch->joinTable('(' . $favSrchObj->getQuery() . ')', 'LEFT OUTER JOIN', 'ufs_shop_id = s.shop_id', 'ufs');
+        $srch->joinTable('(' . $favSrchObj->getQuery() . ')', 'LEFT OUTER JOIN', 'ufs_shop_id = s.shop_id', 'ufs'); */
         /* ] */
 
-        $srch->addMultipleFields(
-            array(
-                's.shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_description',
-                'shop_country_l.country_name as country_name', 'shop_state_l.state_name as state_name', 'shop_city',
-                'IFNULL(ufs.ufs_id, 0) as is_favorite'
-            )
-        );
+        $flds = [
+            's.shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_description',
+            'shop_country_l.country_name as country_name', 'shop_state_l.state_name as state_name', 'shop_city',
+            /* 'IFNULL(ufs.ufs_id, 0) as is_favorite' */
+        ];
+        $srch->addMultipleFields($flds);
 
         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $srch->addMultipleFields(['shop_lat', 'shop_lng']);
@@ -94,13 +89,15 @@ class ShopsController extends MyAppController
             $srch->addCondition('shop_featured', '=', $featured);
         }
 
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->addGroupBy('s.shop_id');
+        $removeFlds = array_diff($flds, ['s.shop_id']);
+        $this->setRecordCount(clone $srch, $post['pageSize'], $post['page'], $post, false, $removeFlds);
+        $srch->doNotCalculateRecords();
 
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
         $srch->addOrder('shop_created_on');
-        $srch->addGroupBy('shop_id');
+
         $shopRs = $srch->getResultSet();
         $allShops = $db->fetchAll($shopRs, 'shop_id');
 
@@ -110,20 +107,19 @@ class ShopsController extends MyAppController
         $productSrchObj->setGeoAddress();
         $productSrchObj->joinProductToCategory($this->siteLangId);
         $productSrchObj->doNotCalculateRecords();
-        /* $productSrchObj->setPageSize( 10 ); */
         $productSrchObj->setDefinedCriteria();
         $productSrchObj->joinSellerSubscription($this->siteLangId, true);
         $productSrchObj->addSubscriptionValidCondition();
         $productSrchObj->validateAndJoinDeliveryLocation();
         // $productSrchObj->joinProductRating();
 
-        if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+        /* if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $productSrchObj->joinFavouriteProducts($loggedUserId);
             $productSrchObj->addFld('IFNULL(ufp_id, 0) as ufp_id');
         } else {
             $productSrchObj->joinUserWishListProducts($loggedUserId);
             $productSrchObj->addFld('IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        }
+        } */
 
         $productSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $productSrchObj->addMultipleFields(
@@ -153,16 +149,11 @@ class ShopsController extends MyAppController
         }
         $this->set('allShops', $allShops);
         $this->set('totalProdCountToDisplay', $totalProdCountToDisplay);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
 
-        $startRecord = ($page - 1) * $pagesize + 1;
-        $endRecord = $pagesize;
-        $totalRecords = $srch->recordCount();
+        $startRecord = ($page - 1) * $pageSize + 1;
+        $endRecord = $pageSize;
+        $totalRecords = $post['total_record_count'];
         if ($totalRecords < $endRecord) {
             $endRecord = $totalRecords;
         }
@@ -187,6 +178,7 @@ class ShopsController extends MyAppController
     {
         $frm = new Form('frmSearchShops');
         $frm->addHiddenField('', 'featured', 0);
+        $frm->addHiddenField('', 'total_record_count');
         return $frm;
     }
 

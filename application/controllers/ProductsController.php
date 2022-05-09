@@ -1079,13 +1079,13 @@ class ProductsController extends MyAppController
 
         $srch->addGroupBy('product_id');
 
-        if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+        /* if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $srch->joinFavouriteProducts($userId);
             $srch->addFld('IFNULL(ufp_id, 0) as ufp_id');
         } else {
             $srch->joinUserWishListProducts($userId);
             $srch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        }
+        } */
 
         $srch->addCondition('selprod_id', '!=', $selprod_id);
         $srch->addCondition('product_id', 'in', array_keys($recommendedProds));
@@ -1141,10 +1141,6 @@ class ProductsController extends MyAppController
             return $cookiesProductsArr;
         }
 
-        $loggedUserId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $loggedUserId = UserAuthentication::getLoggedUserId();
-        }
         $prodSrch = new ProductSearch($this->siteLangId);
         $prodSrch->setGeoAddress();
         $prodSrch->setDefinedCriteria();
@@ -1154,13 +1150,18 @@ class ProductsController extends MyAppController
         $prodSrch->joinProductToCategory();
         $prodSrch->doNotCalculateRecords();
         $prodSrch->doNotLimitRecords();
+        /* 
+        $loggedUserId = 0;
+        if (UserAuthentication::isUserLogged()) {
+            $loggedUserId = UserAuthentication::getLoggedUserId();
+        }
         if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $prodSrch->joinFavouriteProducts($loggedUserId);
             $prodSrch->addFld('IFNULL(ufp_id, 0) as ufp_id');
         } else {
             $prodSrch->joinUserWishListProducts($loggedUserId);
             $prodSrch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        }
+        } */
         $prodSrch->addCondition('selprod_id', 'IN', $cookiesProductsArr);
         $prodSrch->addMultipleFields(
             array(
@@ -1239,13 +1240,13 @@ class ProductsController extends MyAppController
             }
 
             $prodSrch->doNotLimitRecords();
-            if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+            /* if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
                 $prodSrch->joinFavouriteProducts($loggedUserId);
                 $prodSrch->addFld('IFNULL(ufp_id, 0) as ufp_id');
             } else {
                 $prodSrch->joinUserWishListProducts($loggedUserId);
                 $prodSrch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-            }
+            } */
             // $prodSrch->joinProductRating();
             $prodSrch->addCondition('selprod_id', 'IN', $ids);
             $prodSrch->addMultipleFields(
@@ -1560,13 +1561,13 @@ class ProductsController extends MyAppController
         $productSrchObj->setPageSize(1);
         $productSrchObj->setDefinedCriteria();
 
-        if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+        /* if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $productSrchObj->joinFavouriteProducts($loggedUserId);
             $productSrchObj->addFld('IFNULL(ufp_id, 0) as ufp_id');
         } else {
             $productSrchObj->joinUserWishListProducts($loggedUserId);
             $productSrchObj->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        }
+        } */
         $productSrchObj->joinProductRating();
         $productSrchObj->addMultipleFields(
             array(
@@ -1851,7 +1852,7 @@ class ProductsController extends MyAppController
 
         $data = array(
             'products' => $products,
-           /* 'moreSellersProductsArr' => $moreSellersArr, *//* seller products which is related to same options*/
+            /* 'moreSellersProductsArr' => $moreSellersArr, *//* seller products which is related to same options*/
             'category' => $category,
             'categoryId' => $categoryId,
             'postedData' => $get,

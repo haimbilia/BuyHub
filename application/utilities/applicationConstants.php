@@ -287,7 +287,7 @@ class applicationConstants
 
     public static function allowedFileExtensions()
     {
-        $extensions = array('zip', 'txt', 'png', 'jpeg', 'jpg', 'gif', 'bmp', 'ico', 'tiff', 'tif', 'svg', 'svgz', 'rar', 'msi', 'cab', 'mp3', 'pdf', 'psd', 'ai', 'eps', 'ps', 'doc', 'docx','csv');
+        $extensions = array('zip', 'txt', 'png', 'jpeg', 'jpg', 'gif', 'bmp', 'ico', 'tiff', 'tif', 'svg', 'svgz', 'rar', 'msi', 'cab', 'mp3', 'pdf', 'psd', 'ai', 'eps', 'ps', 'doc', 'docx', 'csv');
 
         return array_merge($extensions, static::allowedVideoFileExtensions());
     }
@@ -491,6 +491,14 @@ class applicationConstants
         return $pageSize;
     }
 
+    public static function getFrontEndPageSize(int $pageSize)
+    {
+        if (!in_array($pageSize, self::getPageSizeValues())) {
+            return FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+        }
+        return $pageSize;
+    }
+
     public static function getSortOrder(string $sortOrder, string $defaultOrder = self::SORT_ASC)
     {
         if (!in_array($sortOrder, [self::SORT_ASC, self::SORT_DESC])) {
@@ -519,14 +527,14 @@ class applicationConstants
     }
 
     public static function getBkImageSizeTypes($langId): array
-    {        
+    {
         return array(
             'auto' => Labels::getLabel('LBL_AUTO', $langId),
             'length' => Labels::getLabel('LBL_LENGTH', $langId),
             'cover' => Labels::getLabel('LBL_COVER', $langId),
             'contain' => Labels::getLabel('LBL_CONTAIN', $langId),
             'initial' => Labels::getLabel('LBL_INITIAL', $langId),
-            'inherit' => Labels::getLabel('LBL_INHERIT', $langId),            
+            'inherit' => Labels::getLabel('LBL_INHERIT', $langId),
         );
     }
 }
