@@ -2,6 +2,12 @@
     <?php if ($product['selprod_stock'] <= 0) { ?>
         <span class="tag-soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
     <?php  } ?>
+    <?php
+    if (!empty($selProdRibbons)) {
+        foreach ($selProdRibbons as $ribbRow) {
+            $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+        }
+    } ?>
     <div class=" products-body">
         <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
             <div class="not-available">

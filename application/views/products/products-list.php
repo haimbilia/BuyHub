@@ -8,8 +8,6 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
 
 ?>
 <div id="productsList">
-    <?php
-    ?>
     <div class="product-listing" data-view="<?php echo $colMdVal; ?>">
         <?php
         if ($products) {
@@ -37,14 +35,19 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                         <?php if ($product['in_stock'] == 0) { ?>
                             <span class="tag-soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
                         <?php } ?>
-                        <div class=" products-body">
+                        <?php
+                        if (!empty($selProdRibbons)) {
+                            foreach ($selProdRibbons as $ribbRow) {
+                                $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+                            }
+                        } ?>
+                        <div class="products-body">
                             <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
                                 <div class="not-available"><svg class="svg">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                                         </use>
                                     </svg> <?php echo Labels::getLabel('LBL_NOT_SERVICEABLE', $siteLangId); ?></div>
                             <?php } ?>
-
                             <div class="products-img">
                                 <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
                                 <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])) ?>">
