@@ -602,6 +602,7 @@ class OrdersController extends ListingBaseController
         $srch->joinShopState();
         $srch->addOrderProductCharges();
         $srch->joinShippingCharges();
+        $srch->joinOrderProductSpecifics();
         $srch->addCondition('order_id', '=', $orderId);
         if (0 < $opId) {
             $srch->addCondition('op_id', '=', $opId);
