@@ -3275,35 +3275,5 @@ trait SellerProducts
         die(json_encode(['badges' => $badges]));
     }
 
-    public function getBreadcrumbNodes($action)
-    {
-        if (FatUtility::isAjaxCall()) {
-            return;
-        }
-
-        $className = get_class($this);
-        $arr = explode('-', FatUtility::camel2dashed($className));
-        array_pop($arr);
-        $urlController = implode('-', $arr);
-        $className = ucwords(implode(' ', $arr));
-
-        if ($action == 'index') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
-            $this->nodes[] = array('title' => $title);
-        } else if ($action == 'productSeo') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_META_TAGS', $this->siteLangId)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
-            $this->nodes[] = array('title' => $title);
-        } else if ($action == 'productUrlRewriting') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_URL_REWRITING', $this->siteLangId)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
-            $this->nodes[] = array('title' => $title);
-        } else {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
-            $this->nodes[] = array('title' => $title);
-        }
-        return $this->nodes;
-    }
+    
 }

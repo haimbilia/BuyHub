@@ -97,6 +97,7 @@ class Address extends MyAppModel
             $srch->joinTable(TimeSlot::DB_TBL, 'INNER JOIN', 'ts.tslot_record_id = addr.addr_id', 'ts');
             $srch->addGroupBy(static::tblFld('id'));
         }
+
         if (0 < $this->mainTableRecordId) {
             $srch->addCondition(self::tblFld('id'), '=', $this->mainTableRecordId);
             $rs = $srch->getResultSet();

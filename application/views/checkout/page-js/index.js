@@ -204,6 +204,7 @@ $("document").ready(function () {
                     if ($("#hasAddress").length > 0) {
                         $("#hasAddress").val(1);
                     }
+                    showShippingSummaryDiv(t.addr_id);
                     /* if ($(frm.addr_id).val() == 0 ) { */
                     if ($(frm.addr_id).val() == 0 || address_type == 1) {
                         loadAddressDiv(address_type);
@@ -211,7 +212,6 @@ $("document").ready(function () {
                             setDefaultAddress(t.addr_id);
                         }, 1000);
                     } else {
-                        /* showShippingSummaryDiv(t.addr_id); */
                         setUpAddressSelection(t.addr_id);
                         /* loadFinancialSummary(); */
                     }

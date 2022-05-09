@@ -28,11 +28,11 @@ class BadgeLinkConditionsController extends SellerBaseController
         $this->objectType = $this->badgeData['badge_type'];
         switch ($this->objectType) {
             case Badge::TYPE_BADGE:
-                $this->objectTypeName = Labels::getLabel('LBL_BADGE', $this->siteLangId);
+                $this->objectTypeName = Labels::getLabel('LBL_BADGES', $this->siteLangId);
                 $this->objectCtrlName = 'Badges';
                 break;
             case Badge::TYPE_RIBBON:
-                $this->objectTypeName = Labels::getLabel('LBL_RIBBON', $this->siteLangId);
+                $this->objectTypeName = Labels::getLabel('LBL_RIBBONS', $this->siteLangId);
                 $this->objectCtrlName = 'Ribbons';
                 break;
 
