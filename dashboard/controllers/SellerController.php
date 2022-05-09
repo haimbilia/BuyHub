@@ -519,9 +519,9 @@ class SellerController extends SellerBaseController
 
 
         if ($orderDetail['plugin_code'] == 'CashOnDelivery') {
-            $opTimeLineStatus = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
+            $opTimeLineStatus = $orderObj->getAdminAllowedUpdateOrderStatuses(true, $orderDetail['op_product_type']);
         } else if ($orderDetail['plugin_code'] == 'PayAtStore') {
-            $opTimeLineStatus = $orderObj->getAdminAllowedUpdateOrderStatuses(false, false, true);
+            $opTimeLineStatus = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $orderDetail['op_product_type'], true);
         } else {
             $opTimeLineStatus = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $orderDetail['op_product_type']);
         }
