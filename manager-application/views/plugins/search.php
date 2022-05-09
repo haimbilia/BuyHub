@@ -154,6 +154,7 @@ $frm->addHiddenField('', 'status'); ?>
             'canEdit' => $canEdit,
             'siteLangId' => $siteLangId,
             'statusButtons' => (1 < count($arrListing) && $canEdit && !$isKingPinType),
+            'otherButtons' => $otherButtons ?? [],
         ];
        
         if($pluginType == Plugin::TYPE_TAX_SERVICES ){

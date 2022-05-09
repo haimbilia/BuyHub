@@ -765,6 +765,16 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
         return true;
     }
+
+    updateCurrencyRates = function (converterClass) {
+        if (!confirm(langLbl.updateCurrencyRates)) {
+            return false;
+        }
+        fcom.updateWithAjax(fcom.makeUrl(converterClass, 'update'), '', function (res) {
+            fcom.closeProcessing();
+            fcom.displaySuccessMessage(res.msg);
+        });
+    };
 })();
 
 $(document).on("click", ".selectItemJs", function () {

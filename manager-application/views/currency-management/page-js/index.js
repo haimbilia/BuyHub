@@ -53,14 +53,4 @@ $(document).ajaxComplete(function () {
             },
         });
     };
-
-    updateCurrencyRates = function (converterClass) {
-        if (!confirm(langLbl.updateCurrencyRates)) {
-            return false;
-        }
-        
-        fcom.updateWithAjax(fcom.makeUrl(converterClass, 'update'), '', function (res) {
-            fcom.closeProcessing();
-        });
-    };
 })();
