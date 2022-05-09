@@ -193,9 +193,9 @@ class CollectionsController extends ListingBaseController
     {
         $typeLayouts = Collections::getTypeSpecificLayouts($this->siteLangId);
         $formTitle = $typeLayouts[$type][$layoutType] ?? '';
-        $str = Labels::getLabel('LBL_{LAYOUT-NAME}', $this->siteLangId);
+        $str = Labels::getLabel('LBL_{LAYOUT-NAME}_SETUP', $this->siteLangId);
         if (true === $this->bannersTab) {
-            $str = Labels::getLabel('LBL_{LAYOUT-NAME}_-_BANNERS', $this->siteLangId);
+            $str = Labels::getLabel('LBL_{LAYOUT-NAME}_SETUP_-_BANNERS', $this->siteLangId);
         }
         $this->set('formTitle', CommonHelper::replaceStringData($str, ['{LAYOUT-NAME}' => $formTitle]));
         $this->set('formBackButtonAttr', ['onclick' => $backBtnOnclick]);
