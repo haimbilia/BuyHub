@@ -535,15 +535,15 @@ class SellerController extends SellerBaseController
         if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
             $opTimeLineStatus = array_diff($opTimeLineStatus, [FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS")]);
         }
-        
+
         if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id'] || FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
             $opTimeLineStatus[] = $orderDetail['orderstatus_id'];
             $opTimeLineStatus = array_diff($opTimeLineStatus, [FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS")]);
-        } 
+        }
         if (FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
             $opTimeLineStatus[] = $orderDetail['orderstatus_id'];
             $opTimeLineStatus = array_diff($opTimeLineStatus, [FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS")]);
-        }    
+        }
         $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $opTimeLineStatus);
 
         $orderTimeLine = [];
@@ -5984,10 +5984,30 @@ class SellerController extends SellerBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-        $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-        $this->nodes[] = array('title' => $title);
+        if (FatUtility::isAjaxCall()) {
+            return;
+        }
 
+        $className = get_class($this);
+        $arr = explode('-', FatUtility::camel2dashed($className));
+        array_pop($arr);
+        $urlController = implode('-', $arr);
+        $className = ucwords(implode(' ', $arr));
+
+        if ($action == 'index') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'productSeo') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_META_TAGS', $this->siteLangId)]);
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'productUrlRewriting') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_URL_REWRITING', $this->siteLangId)]);
+            $this->nodes[] = array('title' => $title);
+        } else {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+            $this->nodes[] = array('title' => $title);
+        }
         return $this->nodes;
     }
 }

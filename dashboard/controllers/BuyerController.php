@@ -3053,7 +3053,7 @@ class BuyerController extends BuyerBaseController
         $msg = Labels::getLabel("MSG_REQUEST_SUBMITTED_SUCCESSFULLY", $this->siteLangId);
         FatUtility::dieJsonSuccess($msg);
     }
-    
+
     public function getCancellationRequestComment()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);

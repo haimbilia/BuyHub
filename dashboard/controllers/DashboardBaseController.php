@@ -359,7 +359,6 @@ class DashboardBaseController extends FatController
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
-        $urlController = implode('-', $arr);
         $className = ucwords(implode(' ', $arr));
 
         if ($action == 'index') {
@@ -368,7 +367,6 @@ class DashboardBaseController extends FatController
         } else {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
             $this->nodes[] = array('title' => $title);
         }
         return $this->nodes;
