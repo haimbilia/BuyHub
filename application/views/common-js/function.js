@@ -715,6 +715,8 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
         if (eval("typeof " + callback) == 'function') {
             window[callback](data);
         }
+
+        $("body").removeClass("loaded");
         location.reload();
     });
 }

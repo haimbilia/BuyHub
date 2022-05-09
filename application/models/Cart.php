@@ -314,7 +314,7 @@ class Cart extends FatModel
                     continue;
                 }
 
-                $sellerProductRow = $cartProdsData[$selprod_id];
+                $sellerProductRow = $cartProdsData[$selprod_id] ?? [];
                 if (!$sellerProductRow) {
                     Message::addErrorMessage(Labels::getLabel('ERR_PRODUCT_NOT_AVAILABLE_OR_OUT_OF_STOCK_SO_REMOVED_FROM_CART_LISTING', $siteLangId));
                     $this->removeCartKey($key, $selprod_id, $quantity);

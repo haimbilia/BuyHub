@@ -2913,11 +2913,11 @@ class BuyerController extends BuyerBaseController
         }
 
         $cartObj = new Cart();
-        $cartInfo = json_decode($orderDetail['order_cart_data'], true);
+        $cartInfo = LibHelper::isJson($orderDetail['order_cart_data']) ? json_decode($orderDetail['order_cart_data'], true) : unserialize($orderDetail['order_cart_data']);
         unset($cartInfo['shopping_cart']);
         $outOfStock = false;
         foreach ($cartInfo as $key => $quantity) {
-            $keyDecoded = json_decode(base64_decode($key), true);
+            $keyDecoded = LibHelper::isJson($orderDetail['order_cart_data']) ? json_decode(base64_decode($key), true) : unserialize(base64_decode($key));
 
             $selprod_id = 0;
 
