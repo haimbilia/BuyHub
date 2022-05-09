@@ -1,7 +1,7 @@
 <div class="wrapper">
     <?php if (FatApp::getConfig('CONF_LOADER', FatUtility::VAR_INT, 0)) { ?>
         <div class="page-loader">
-            <span> Loading... <i class="loader-line"></i></span>
+            <span><?php echo Labels::getLabel('LBL_Loading...'); ?><i class="loader-line"></i></span>
         </div>
     <?php } ?>
     <!--header start here-->

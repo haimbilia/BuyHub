@@ -33,7 +33,6 @@ class CurrencyManagementController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $currencyPlugins = Plugin::getNamesByType(Plugin::TYPE_CURRENCY_CONVERTER, $this->siteLangId);
         $currency = new Currency();
         $currencyConverter = $currency->getCurrencyConverterApi();
 
@@ -41,7 +40,7 @@ class CurrencyManagementController extends ListingBaseController
         $actionItemsData['statusButtons'] = true;
         $actionItemsData['performBulkAction'] = true;
 
-        if (!empty($currencyPlugins) && 0 < count($currencyPlugins) && false !== $currencyConverter) {
+        if (false !== $currencyConverter) {
             $actionItemsData['otherButtons'] = [
                 [
                     'attr' => [

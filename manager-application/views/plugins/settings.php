@@ -4,7 +4,7 @@ HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('data-onclear', 'editSettingForm("' . $keyName . '")');
 $frm->setFormTagAttribute('onsubmit', 'setupPluginsSettings($("#'.$frm->getFormTagAttribute('id').'")[0]); return(false);');
-$formTitle = CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $siteLangId), ['{PLUGIN-NAME}' => $identifier]);
+$formTitle = CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_CONFIGURATIONS', $siteLangId), ['{PLUGIN-NAME}' => $identifier]);
 $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
 ?>
 

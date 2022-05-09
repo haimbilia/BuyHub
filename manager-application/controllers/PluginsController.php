@@ -154,6 +154,29 @@ class PluginsController extends ListingBaseController
             $otherPluginTypes = rtrim($otherPluginTypes, ', ');
         }
 
+        if (Plugin::TYPE_CURRENCY_CONVERTER == $type) {
+            $currency = new Currency();
+            $currencyConverter = $currency->getCurrencyConverterApi();
+            if ($currencyConverter) {
+                $otherButtons = [
+                    [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'class' => 'btn btn-outline-brand btn-icon',
+                            'onclick' => "updateCurrencyRates('" . $currencyConverter . "')",
+                            'title' => Labels::getLabel('LBL_SYNC_CURRENCY_VALUE', $this->siteLangId)
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#sync-currency">
+                                        </use>
+                                    </svg><span>' . Labels::getLabel('BTN_SYNC', $this->siteLangId) . '</span>',
+                    ]
+                ];
+                $this->set("otherButtons", $otherButtons);
+            }
+        }
+
         $this->set("arrListing", $arrListing);
         $this->set('recordCount', $srch->recordCount());
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));

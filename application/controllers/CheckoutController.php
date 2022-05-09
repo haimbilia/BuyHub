@@ -186,7 +186,6 @@ class CheckoutController extends MyAppController
             }
 
             $currencyId = FatUtility::int($appCurrency);
-            $currencyObj = new Currency();
             if (0 < $currencyId) {
                 $currencies = Currency::getCurrencyAssoc($this->siteLangId);
                 if (array_key_exists($currencyId, $currencies)) {

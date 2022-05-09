@@ -3100,7 +3100,7 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($e->getMessage());
         }
 
-        $graphNode = $response->getGraphNode();
+        // $graphNode = $response->getGraphNode();
 
         $this->set('msg', Labels::getLabel('MSG_Shared_Successfully!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -3804,15 +3804,12 @@ class AccountController extends LoggedUserController
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'profileInfo') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId)]);
-            //$this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'bankInfoForm') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_BANK_ACCOUNT_INFORMATION', $this->siteLangId)]);
-            //$this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'cookiesPreferencesForm') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_COOKIE_PREFERENCES', $this->siteLangId)]);
-            //$this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
             $this->nodes[] = array('title' => $title);
         } else if ($action == 'messages' || $action == 'credits' || $action == 'changeEmailPassword') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
@@ -3820,7 +3817,6 @@ class AccountController extends LoggedUserController
         } else {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController, '', [], CONF_WEBROOT_DASHBOARD));
             $this->nodes[] = array('title' => $title);
         }
         return $this->nodes;
