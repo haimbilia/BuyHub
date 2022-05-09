@@ -12,6 +12,11 @@ class ImportExportController extends ListingBaseController
 
     public function index()
     {
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->_template->addJs(['js/import-export.js']);
         $this->set('action', 'export'); /* To load initial Tab. */
         $this->set('includeDropZone', true);
