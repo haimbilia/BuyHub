@@ -16,12 +16,7 @@
     position: relative;
     margin-bottom: 4rem;
     min-width: 0;
-    .badges-wrap {
-        z-index: 1;
-        position: absolute;
-        #{$end-direction}: 1rem;
-        top: 1rem;
-    }
+    
     .product-gallery {
         position: sticky;
         top: calc(#{$header-height} + 30px);
