@@ -3,6 +3,8 @@
 $totReviews = 0;
 $rate_5_width = $rate_4_width = $rate_3_width = $rate_2_width = $rate_1_width = 0;
 $totReviews = (!empty($reviews['totReviews'])) ? FatUtility::int($reviews['totReviews']) : 0;
+$totReviews += (!empty($reviews['totalType'])) ? FatUtility::int($reviews['totalType']) : 0;
+
 $totRatings = (!empty($reviews['totRatings'])) ? FatUtility::int($reviews['totRatings']) : 0;
 
 if ($totReviews) {
@@ -70,7 +72,7 @@ if ($totReviews) {
         </li>
     </ul>
 </div>
-<?php if(0 < count($ratingAspects)){ ?> 
+<?php if (0 < count($ratingAspects)) { ?>
     <div class="divider"></div>
     <div class="rating-block">
         <h5 class="title-sub"><?php echo Labels::getLabel('LBL_BY_CATEGORY', $siteLangId); ?></h5>
@@ -99,7 +101,7 @@ if ($totReviews) {
             <?php } ?>
         </ul>
     </div>
-<?php } ?> 
+<?php } ?>
 <?php if ($canSubmitFeedback) { ?>
     <div class="divider"></div>
     <div class="rating-block">
