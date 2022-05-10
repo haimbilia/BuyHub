@@ -110,6 +110,8 @@ class SelProdRating extends MyAppModel
         $srch->addCondition(RatingType::DB_TBL_PREFIX . 'type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
         $srch->addCondition('spreview_selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
         $srch->addGroupBy('sprating_ratingtype_id');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
         $srch->addMultipleFields([
             'sprating_ratingtype_id',
             'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name',

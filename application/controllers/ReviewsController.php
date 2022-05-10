@@ -102,7 +102,7 @@ class ReviewsController extends MyAppController
             $ratings->joinTable(
                 RatingType::DB_TBL,
                 'INNER JOIN',
-                'rt.ratingtype_id = sprating_ratingtype_id',
+                'rt.ratingtype_id = sprating_ratingtype_id AND rt.ratingtype_active = ' . applicationConstants::ACTIVE,
                 'rt'
             );
             $ratings->joinTable(
