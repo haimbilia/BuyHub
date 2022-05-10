@@ -208,21 +208,23 @@ class ReviewsController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }
 
-        $selProdRatingSrch = SelProdRating::getSearchObj();
+        /* $selProdRatingSrch = SelProdRating::getSearchObj();
         $selProdRatingSrch->doNotCalculateRecords();
-        $selProdRatingSrch->addMultipleFields(array('sprating_spreview_id', 'round(avg(sprating_rating),2) seller_rating'));
-        $selProdRatingSrch->addCondition('sprating_ratingtype_id', 'in', array(RatingType::RATING_DELIVERY, RatingType::RATING_SELLER_STOCK_AVAILABILITY, RatingType::RATING_SELLER_PACKAGING_QUALITY));
+        $selProdRatingSrch->addMultipleFields(array('sprating_spreview_id', 'round(avg(sprating_rating),2) sprating_rating'));
+        $selProdRatingSrch->addCondition('sprating_ratingtype_id', 'in', array(RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY));
         $selProdRatingSrch->addGroupBy('sprating_spreview_id');
-        $spratingQuery = $selProdRatingSrch->getQuery();
-
+        $spratingQuery = $selProdRatingSrch->getQuery(); */
+        /*ToDO: Optimize required, Currenly fixing the bug */
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinProducts($this->siteLangId);
         $selProdReviewObj->joinSellerProducts($this->siteLangId);
-        $selProdReviewObj->joinTable("($spratingQuery)", 'left join', 'spr.spreview_id = selRating.sprating_spreview_id', 'selRating');
+        $selProdReviewObj->joinSelProdRating($this->siteLangId);
+        $selProdReviewObj->addCondition('sprating_ratingtype_id', 'in', array(RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY));
+        // $selProdReviewObj->joinTable("($spratingQuery)", 'left join', 'spr.spreview_id = selRating.sprating_spreview_id', 'selRating');
         $selProdReviewObj->addGroupBy('spr.spreview_seller_user_id');
         $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $selProdReviewObj->addCondition('spreview_seller_user_id', '=', $shop['shop_user_id']);
-        $selProdReviewObj->addMultipleFields(array('spr.spreview_seller_user_id', 'count(*) as totReviews', "ROUND(AVG(seller_rating),2) as avg_seller_rating", 'sum(if(round(seller_rating)=1,1,0)) rated_1', 'sum(if(round(seller_rating)=2,1,0)) rated_2', 'sum(if(round(seller_rating)=3,1,0)) rated_3', 'sum(if(round(seller_rating)=4,1,0)) rated_4', 'sum(if(round(seller_rating)=5,1,0)) rated_5', 'count(distinct(ratingtype_type)) as totalType'));
+        $selProdReviewObj->addMultipleFields(array('spr.spreview_seller_user_id', 'count(*) as totReviews', "ROUND(AVG(sprating_rating),2) as avg_seller_rating", 'sum(if(round(sprating_rating)=1,1,0)) rated_1', 'sum(if(round(sprating_rating)=2,1,0)) rated_2', 'sum(if(round(sprating_rating)=3,1,0)) rated_3', 'sum(if(round(sprating_rating)=4,1,0)) rated_4', 'sum(if(round(sprating_rating)=5,1,0)) rated_5', 'count(distinct(ratingtype_type)) as totalType'));
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
 
@@ -276,23 +278,26 @@ class ReviewsController extends MyAppController
         $orderBy = FatApp::getPostedData('orderBy', FatUtility::VAR_STRING, 'most_recent');
         $page = ($page) ? $page : 1;
         $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10));
-        $selProdRatingSrch = SelProdRating::getSearchObj();
+        /*ToDO: Optimize required, Currenly fixing the bug */
+        /* $selProdRatingSrch = SelProdRating::getSearchObj();
         $selProdRatingSrch->doNotCalculateRecords();
-        $selProdRatingSrch->addMultipleFields(array('sprating_spreview_id', 'round(avg(sprating_rating),2) seller_rating'));
-        $selProdRatingSrch->addCondition('sprating_ratingtype_id', 'in', array(RatingType::RATING_DELIVERY, RatingType::RATING_SELLER_STOCK_AVAILABILITY, RatingType::RATING_SELLER_PACKAGING_QUALITY));
+        $selProdRatingSrch->addMultipleFields(array('sprating_spreview_id', 'round(avg(sprating_rating),2) sprating_rating'));
+       $selProdRatingSrch->addCondition('sprating_ratingtype_id', 'in', array(RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY));
         $selProdRatingSrch->addGroupBy('sprating_spreview_id');
-        $spratingQuery = $selProdRatingSrch->getQuery();
+        $spratingQuery = $selProdRatingSrch->getQuery(); */
 
         $srch = new SelProdReviewSearch();
         $srch->joinProducts($this->siteLangId);
         $srch->joinSellerProducts($this->siteLangId);
-        $srch->joinTable("($spratingQuery)", 'left join', 'spr.spreview_id = selRating.sprating_spreview_id', 'selRating');
+        $srch->joinSelProdRating();
+        $srch->addCondition('sprating_ratingtype_id', 'in', array(RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY));
+        // $srch->joinTable("($spratingQuery)", 'left join', 'spr.spreview_id = selRating.sprating_spreview_id', 'selRating');
         $srch->joinUser();
         $srch->joinSelProdReviewHelpful();
 
         $srch->addCondition('spr.spreview_seller_user_id', '=', $sellerId);
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
-        $srch->addMultipleFields(array('selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'spreview_id', 'spreview_seller_user_id', "ROUND(AVG(seller_rating),2) as shop_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
+        $srch->addMultipleFields(array('selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'spreview_id', 'spreview_seller_user_id', "ROUND(AVG(sprating_rating),2) as shop_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
         $srch->addGroupBy('spr.spreview_id');
         if (0 < $reviewId) {
             $srch->addCondition('spr.spreview_id', '=', $reviewId);
@@ -309,10 +314,8 @@ class ReviewsController extends MyAppController
                 $srch->addOrder('spr.spreview_posted_on', 'desc');
                 break;
         }
-
-        $records = (array) FatApp::getDb()->fetchAll($srch->getResultSet(), 'spreview_id');
-
-        $recordRatings = (array) SelProdRating::getReviewsAndRatings($sellerId, $this->siteLangId);
+        $records = (array) FatApp::getDb()->fetchAll($srch->getResultSet(), 'spreview_id');        
+        $recordRatings = (array) SelProdRating::getReviewsAndRatings($sellerId, $this->siteLangId, true, [RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY]);
         $this->set('recordRatings', $recordRatings);
         $this->set('reviewsList', $records);
         $this->set('page', $page);
