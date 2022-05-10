@@ -1846,4 +1846,4 @@ ALTER TABLE `tbl_user_reward_points` CHANGE `urp_date_added` `urp_date_added` DA
 INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_TAX_STRUCTURE_NAME", "1", "Structure Name", "1");
 
 -- ---- Display Ribbon Only for Right Position. ---- --
-UPDATE `tbl_badge_link_conditions` SET `blinkcond_position` = '1'
+UPDATE `tbl_badge_link_conditions` SET `blinkcond_position` = '1' WHERE `blinkcond_position` = '2';
