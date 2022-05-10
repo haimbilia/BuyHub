@@ -413,21 +413,21 @@ addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
         function (ans) {
             if (ans.status == 1) {
                 $(document).trigger("close.facebox");
-                $(dv + " .is-active").removeClass("is-active");
+                $(dv + " .active").removeClass("active");
                 if (ans.productIsInAnyList) {
-                    $("[data-id=" + selprod_id + "]").addClass("is-active");
+                    $("[data-id=" + selprod_id + "]").addClass("active");
                 } else {
-                    $("[data-id=" + selprod_id + "]").removeClass("is-active");
+                    $("[data-id=" + selprod_id + "]").removeClass("active");
                 }
                 if (ans.action == "A") {
                     ykevents.addToWishList();
                     $(dv)
                         .find(".wishListCheckBox_" + ans.wish_list_id)
-                        .addClass("is-active");
+                        .addClass("active");
                 } else if (ans.action == "R") {
                     $(dv)
                         .find(".wishListCheckBox_" + ans.wish_list_id)
-                        .removeClass("is-active");
+                        .removeClass("active");
                 }
                 if ("updateRemoveWishListProduct" == action) {
                     viewWishListItems(oldWishListId);
