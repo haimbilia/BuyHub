@@ -15,22 +15,15 @@ if (isset($prodcat_code)) {
 <?php if ($shopCatFilters) {
     $searchFrm->setFormTagAttribute('onSubmit', 'searchProducts(this); return(false);');
     $keywordFld = $searchFrm->getField('keyword');
-    $keywordFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_PRODUCT_SEARCH', $siteLangId));
-    // $keywordFld->htmlAfterField = '<input name="btnSrchSubmit" value="" type="submit" class="input-submit">';
-    /*$keywordFld = $frmProductSearch->getField('keyword');
-    $keywordFld->overrideFldType("hidden");*/ ?>
+    $keywordFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_PRODUCT_SEARCH', $siteLangId)); ?>
     <div class="product-search">
-        <!--<form class="form">
-        <input placeholder="Search" class="form-control omni-search" value="" type="text">
-        <input name="btnSrchSubmit" value="" class="input-submit" type="submit">
-    </form>-->
         <?php
         $searchFrm->addFormTagAttribute('class', 'form');
         $searchFrm->setFormTagAttribute('id', 'filterSearchForm');
         echo $searchFrm->getFormTag();
         $fld = $searchFrm->getField('keyword');
         $fld->overrideFldType('search');
-        $fld->addFieldTagAttribute("class", "form-control omni-search");
+        $fld->addFieldTagAttribute("class", "form-control omni-search filterSearchJs");
         echo $searchFrm->getFieldHTML('keyword');
         echo $searchFrm->getFieldHTML('shop_id');
         echo $searchFrm->getFieldHTML('join_price');
@@ -41,7 +34,7 @@ if (isset($prodcat_code)) {
 } ?>
 
 <div class="" id="filters_body--js">
-    <div class="sidebar-widget">
+    <div class="sidebar-widget resetFilterSectionJs" style="display: none;">
         <div class="selected-filters-head">
             <h5> <?php echo Labels::getLabel('LBL_Filtered_by_:', $siteLangId); ?></h5>
             <button type="button" class="link-underline link-underline-black" id="resetAllJs" onClick="resetListingFilter()" style="display:none;">

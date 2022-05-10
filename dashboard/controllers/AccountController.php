@@ -1135,6 +1135,10 @@ class AccountController extends LoggedUserController
         /* ] */
 
         $userObj = new User($this->userId);
+        if (isset($post['user_phone']) && empty($post['user_phone'])) {
+            $userObj->setFldValue('user_phone', 'mysql_func_null', true);
+            $userObj->setFldValue('user_phone_dcode', '');
+        }
         $userObj->assignValues($post);
         if (!$userObj->save()) {
             $message = Labels::getLabel($userObj->getError(), $this->siteLangId);
@@ -2265,7 +2269,7 @@ class AccountController extends LoggedUserController
         $parentAndTheirChildIds = [];
         switch ($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) {
             case 'B':
-                $srch->addCondition('tth.thread_started_by', '=', UserAuthentication::getLoggedUserId());            
+                $srch->addCondition('tth.thread_started_by', '=', UserAuthentication::getLoggedUserId());
                 break;
             case 'S':
                 $srch->addCondition('tth.thread_started_by', '!=', UserAuthentication::getLoggedUserId());
