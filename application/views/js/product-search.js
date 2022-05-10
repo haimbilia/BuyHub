@@ -1,6 +1,16 @@
 var searchArr = [];
 var page = 1;
 
+/* Reset result on clear(cross) icon on keyword search field. */
+$(document).on("search", ".filterSearchJs", function () {
+    if ("" == $(this).val()) {
+        $("input[id=keyword]").val('');
+        reloadProductListing(document.frmProductSearch);
+        showSelectedFilters();
+    }
+});
+/* Reset result on clear(cross) icon on keyword search field. */
+
 $(function () {
 
     /* [is use to reload page when user hit back button */
@@ -370,13 +380,9 @@ function removePageSideFromLink() {
 
 function showSelectedFilters() {
     if (($("#filters a").length) > 0) {
-        $('#resetAllJs,#mapFilterJs').css('display', 'block');
+        $('.resetFilterSectionJs, #resetAllJs,#mapFilterJs').css('display', 'block');
     } else {
-        if (1 > $('#filterSearchForm input[name="keyword"]').length) {
-            $('#resetAllJs,#mapFilterJs').css('display', 'none');
-        } else if ('' == $('#filterSearchForm input[name="keyword"]').val()) {
-            $('#resetAllJs,#mapFilterJs').css('display', 'none');
-        }
+        $('.resetFilterSectionJs, #resetAllJs,#mapFilterJs').css('display', 'none');
     }
 }
 
@@ -596,6 +602,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         }
         var data = fcom.frmData(frm);
         var currUrl = getSearchQueryUrl(true);
+        console.log(currUrl);
         fcom.ajax(currUrl, data, function (res) {
             fcom.removeLoader();
             $('#productsList').replaceWith(res); frmProductSearchPaging

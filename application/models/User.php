@@ -127,7 +127,7 @@ class User extends MyAppModel
 
     public $parentId = 0;
     private $loginWithOtp = false;
-    private $loginWithSocialAccount = false;    
+    private $loginWithSocialAccount = false;
 
     public function __construct($userId = 0, $parentId = 0)
     {
@@ -576,7 +576,7 @@ class User extends MyAppModel
         if ($joinUserCredentials) {
             $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
         }
-        
+
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
 
@@ -629,8 +629,8 @@ class User extends MyAppModel
             trigger_error("Lang id not passed", E_USER_ERROR);
         }
         $srch = SupplierFormFields::getSearchObject();
-        $srch->addMultipleFields(['*','IFNULL(sformfield_caption,sformfield_identifier) as sformfield_caption']);
-        
+        $srch->addMultipleFields(['*', 'IFNULL(sformfield_caption,sformfield_identifier) as sformfield_caption']);
+
 
         $srch->joinTable(
             SupplierFormFields::DB_TBL . '_lang',
@@ -2760,12 +2760,12 @@ class User extends MyAppModel
             }
         }
 
-        if(!empty($socialAccountId)){
+        if (!empty($socialAccountId)) {
             $this->loginWithSocialAccount = true;
         }
 
-        if(!$this->doLogin($row['credential_username'], $row['credential_password'])){
-            return false; 
+        if (!$this->doLogin($row['credential_username'], $row['credential_password'])) {
+            return false;
         }
         unset($row['credential_password']);
         return $row;
@@ -3132,7 +3132,7 @@ class User extends MyAppModel
             $userSelectedCookies = $user->getUserSelectedCookies();
             return (!empty($userSelectedCookies) && $userSelectedCookies['ucp_statistical'] == 1) ? true : false;
         } else {
-            return (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == 1) ? true : false;
+            return (isset($_COOKIE['ykStatisticalCookies']) && 1 == $_COOKIE['ykStatisticalCookies']) ? true : false;
         }
     }
 
@@ -3147,7 +3147,7 @@ class User extends MyAppModel
             $userSelectedCookies = $user->getUserSelectedCookies();
             return (!empty($userSelectedCookies) && $userSelectedCookies['ucp_personalized'] == 1) ? true : false;
         } else {
-            return (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? true : false;
+            return (isset($_COOKIE['ykPersonaliseCookies']) && 1 == $_COOKIE['ykPersonaliseCookies']) ? true : false;
         }
     }
 

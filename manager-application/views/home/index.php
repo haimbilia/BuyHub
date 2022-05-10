@@ -23,8 +23,8 @@
                         </div>
                         <div class="card-head-toolbar">
                             <div class="dropdown">
-                                <button type="button" class="btn btn-icon btn-sm" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="flaticon-more-1"></i>
+                                <button type="button" class="btn btn-icon btn-sm dropdown-toggle dropdownBtnJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <?php echo Labels::getLabel('NAV_SALES', $siteLangId); ?>
                                 </button>
                                 <div class="nav nav-tabs navTabsJs dropdown-menu dropdown-menu-right dropdown-menu-anim" role="tablist">
                                     <a class="dropdown-item tabsJs active" data-bs-toggle="tab" href="#tabs_1" data-tab="tabs_1" data-chart="true" role="tab">

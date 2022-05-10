@@ -71,13 +71,20 @@ class CategoryController extends MyAppController
             }
         }
 
-        $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
+        $pageSize = 10;
         if (array_key_exists('pageSize', $get)) {
             $pageSize = FatUtility::int($get['pageSize']);
             if (0 >= $pageSize) {
                 $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
             }
         }
+
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
+        }
+
+        $get['page'] = $page;
+        $get['pageSize'] = $pageSize;
 
         $srch = Product::getListingObj($get, $this->siteLangId, $userId);
 
@@ -87,15 +94,6 @@ class CategoryController extends MyAppController
         }
 
         $products = FatApp::getDb()->fetchAll($srch->getResultSet());
-        /*
-        $moreSellersArr = [];
-        if ($get['vtype'] == 'map') {
-            if (0 < count($products)) {
-                $selprodCodes = array_column($products, 'selprod_code');
-                $moreSellersArr = Product::getMoreSeller($selprodCodes, $this->siteLangId);
-            }
-        }
-        */
 
         $selProdIdsArr = array_column($products, 'selprod_id');
         $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
@@ -107,7 +105,7 @@ class CategoryController extends MyAppController
             'products' => $products,
             'tLeftRibbons' => $tLeftRibbons,
             'tRightRibbons' => $tRightRibbons,
-           /* 'moreSellersProductsArr' => $moreSellersArr,*/
+            /* 'moreSellersProductsArr' => $moreSellersArr,*/
             'page' => $page,
             'pageSize' => $pageSize,
             'categoryId' => $categoryId,

@@ -37,7 +37,7 @@ class CustomController extends MyAppController
     {
         $frm = $this->contactUsForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
-        
+
         if (false === $post) {
             $message = $frm->getValidationErrors();
             if (true === MOBILE_APP_API_CALL) {
@@ -47,7 +47,7 @@ class CustomController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'ContactUs'));
         }
         $frm->expireSecurityToken(FatApp::getPostedData());
-        
+
         if (false === MOBILE_APP_API_CALL && !CommonHelper::verifyCaptcha()) {
             $message = Labels::getLabel('ERR_THAT_CAPTCHA_WAS_INCORRECT', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
@@ -168,7 +168,6 @@ class CustomController extends MyAppController
 
         $json['recordCount'] = $srch->recordCount();
 
-
         if (isset($srchCondition)) {
             $srchCondition->remove();
         }
@@ -256,8 +255,6 @@ class CustomController extends MyAppController
 
     public function faqCategoriesPanel()
     {
-        $searchFrm = $this->getSearchFaqForm();
-        $post = $searchFrm->getFormDataFromArray(FatApp::getPostedData());
         $srch = FaqCategory::getSearchObject($this->siteLangId);
         $srch->joinTable('tbl_faqs', 'LEFT OUTER JOIN', 'faq_faqcat_id = faqcat_id and faq_active = ' . applicationConstants::ACTIVE . '  and faq_deleted = ' . applicationConstants::NO);
         $srch->joinTable('tbl_faqs_lang', 'LEFT OUTER JOIN', 'faqlang_faq_id = faq_id');
@@ -265,8 +262,6 @@ class CustomController extends MyAppController
         $srch->addCondition('faqcat_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('faqcat_type', '=', FaqCategory::FAQ_PAGE);
         $srch->setPageSize(1);
-        $qry = $srch->getQuery();
-        // echo $qry; die;
         $question = FatApp::getPostedData('question', FatUtility::VAR_STRING, '');
         if (!empty($question)) {
             $srchCondition = $srch->addCondition('faq_title', 'like', "%$question%");
@@ -288,12 +283,10 @@ class CustomController extends MyAppController
         }
         $rsCat = $srch->getResultSet();
         $recordsCategories = FatApp::getDb()->fetchAll($rsCat);
-        // CommonHelper::printArray($recordsCategories);
         $faqMainCat = FatApp::getConfig("CONF_FAQ_PAGE_MAIN_CATEGORY", null, '');
 
         $this->set('siteLangId', $this->siteLangId);
         $this->set('list', $records);
-        // commonHelper::printArray($recordsCategories); die;
         $this->set('listCategories', $recordsCategories);
         $this->set('faqMainCat', $faqMainCat);
         $this->set('page', 'faq');
@@ -583,8 +576,8 @@ class CustomController extends MyAppController
             // CommonHelper::printArray($orderFulFillmentTypeArr, true);
         } elseif ($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             $searchReplaceArray = array(
-                '{account}' => '<a href="' . UrlHelper::generateUrl('seller','',[], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
-                '{subscription}' => '<a href="' . UrlHelper::generateUrl('seller', 'subscriptions',[], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_MY_SUBSCRIPTION', $this->siteLangId) . '</a>',
+                '{account}' => '<a href="' . UrlHelper::generateUrl('seller', '', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
+                '{subscription}' => '<a href="' . UrlHelper::generateUrl('seller', 'subscriptions', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_MY_SUBSCRIPTION', $this->siteLangId) . '</a>',
             );
             $textMessage = Labels::getLabel('MSG_SUBSCRIPTION_SUCCESS_ORDER_{account}_{subscription}', $this->siteLangId);
             $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);
@@ -620,7 +613,7 @@ class CustomController extends MyAppController
         $orderInfo['orderProducts'] = $orderObj->getChildOrders(['order_id' => $orderInfo['order_id']], $orderInfo['order_type'], $orderInfo['order_language_id'], true);
 
         $this->set('textMessage', $textMessage);
-        $this->set('orderInfo', $orderInfo);     
+        $this->set('orderInfo', $orderInfo);
 
         $this->set('orderFulFillmentTypeArr', $orderFulFillmentTypeArr);
         if (CommonHelper::isAppUser() && false ===  MOBILE_APP_API_CALL) {
@@ -776,7 +769,7 @@ class CustomController extends MyAppController
         $fld_phn->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_PLEASE_ENTER_VALID_PHONE_NUMBER_FORMAT.', $this->siteLangId));
 
         $frm->addTextArea(Labels::getLabel('FRM_YOUR_MESSAGE', $this->siteLangId), 'message', '')->requirements()->setRequired();
-        
+
         CommonHelper::addCaptchaField($frm);
         $fld = $frm->addCheckBox('', 'agree', 1);
         $fld->requirements()->setRequired();
@@ -822,16 +815,10 @@ class CustomController extends MyAppController
             if (!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)) {
                 FatUtility::dieJsonError($user->getError());
             }
-        } else {
-            $_SESSION['cookies_enabled'] = true;
-            if ($statisticalCookies == 1) {
-                $_SESSION['yk_statistical_cookies'] = $statisticalCookies;
-            }
-            if ($personaliseCookies == 1) {
-                $_SESSION['yk_personalise_cookies'] = $personaliseCookies;
-            }
+        } else {            
+            setcookie('ykStatisticalCookies', $statisticalCookies, time() + 3600 * 24 * 10, CONF_WEBROOT_FRONT_URL);
+            setcookie('ykPersonaliseCookies', $personaliseCookies, time() + 3600 * 24 * 10, CONF_WEBROOT_FRONT_URL);
         }
-
         $this->_template->render(false, false, 'json-success.php');
     }
 

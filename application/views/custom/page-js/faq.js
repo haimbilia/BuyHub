@@ -1,6 +1,5 @@
 window.recordCount = 0;
 $(function () {
-	searchFaqs('faq', 0);
 	faqRightPanel();
 });
 
@@ -8,7 +7,6 @@ $(function () {
 	var dv = '#listing';
 	var dvCategoryPanel = '#categoryPanel';
 	var currPage = 1;
-	var faqCatId = 1;
 
 	reloadListing = function () {
 		searchFaqs('faq', 0);
@@ -48,7 +46,6 @@ $(function () {
 	};
 
 	faqRightPanel = function () {
-
 		fcom.updateWithAjax(fcom.makeUrl('Custom', 'faqCategoriesPanel'), '', function (ans) {
 			fcom.closeProcessing();
 			fcom.removeLoader();
@@ -57,6 +54,11 @@ $(function () {
 			$(dvCategoryPanel).html(ans.categoriesPanelHtml);
 
 			window.recordCount = ans.recordCount;
+			if (0 < $('.faqCatIdJs.is--active').length) {
+				$('.faqCatIdJs.is--active').click();
+			} else {
+				$('.faqCatIdJs:first').click();
+			}
 
 		}, '', false);
 	}
@@ -73,40 +75,6 @@ $(function () {
 	};
 
 })();
-
-/******** for faq accordians  ****************/
-
-/*
-$(document).on('click','.accordians__trigger-js',function(){
- if($(this).hasClass('is-active')){
-	 $(this).removeClass('is-active');
-	 $(this).siblings('.accordians__target-js').slideUp();
-	 return false;
- }
-$('.accordians__trigger-js').removeClass('is-active');
-$(this).addClass("is-active");
-$('.accordians__target-js').slideUp();
-$(this).siblings('.accordians__target-js').slideDown();
-});
-*/
-
-/*
-$(document).on('click','.nav--vertical-js li',function(){
-
-	if(!window.recordCount)
-	{
-		document.frmSearchFaqs.reset();
-		$this = $(this).find('a');
-		searchFaqs(document.frmSearchFaqs , 0 ,function(){$this.trigger('click');});
-		event.stopPropagation();
-		return false;
-	}
-	else{
-		$('.nav--vertical-js li').removeClass('is-active');
-		$(this).addClass('is-active');
-	}
-});
-*/
 
 /* for click scroll function */
 $(document).on('click', ".scroll", function (event) {

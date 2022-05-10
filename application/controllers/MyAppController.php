@@ -47,10 +47,10 @@ class MyAppController extends FatController
         if (!defined('CONF_MESSAGE_ERROR_HEADING')) {
             define('CONF_MESSAGE_ERROR_HEADING', Labels::getLabel('LBL_Following_error_occurred', $this->siteLangId));
         }
-        
+
         $arr = explode('-', FatUtility::camel2dashed($this->_controllerName));
         array_pop($arr);
-        $urlController = implode('-', $arr);        
+        $urlController = implode('-', $arr);
         $controllerName = ucfirst(FatUtility::dashed2Camel($urlController));
 
         $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
@@ -927,5 +927,42 @@ class MyAppController extends FatController
 
         LibHelper::exitWithError(Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
         FatApp::redirectUser(UrlHelper::generateUrl('maintenance'));
+    }
+
+    public function setRecordCount(object $recordCountSrch, int $pageSize, int $page, &$post, $isGroupSearch = false, $removeFlds = [])
+    {
+        if ($pageSize < 1) {
+            return;
+        }
+
+        if ($page > 1 && !empty($post['total_record_count'])) {
+            $this->setPageRecord($post['total_record_count'], $pageSize, $page);
+            return;
+        }
+
+        $recordCountSrch->doNotLimitRecords();
+        if ($isGroupSearch == false) {
+            if (!empty($removeFlds)) {
+                $recordCountSrch->removeFld($removeFlds);
+            }
+            $recordCountSrch->addFld('count(*) as totalRecords');
+            $recordCountSrch->doNotCalculateRecords();            
+            $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
+            $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
+        } else {
+            $recordCountSrch->getResultSet();
+            $defaultRecordCount = $recordCountSrch->recordCount();
+        }
+
+        $this->setPageRecord($defaultRecordCount, $pageSize, $page);
+        $post['total_record_count'] = $defaultRecordCount;
+    }
+
+    private function setPageRecord($recordCount, $pageSize, $page)
+    {
+        $this->set('pageCount', ($recordCount > 0) ? ceil($recordCount / $pageSize) : 0);
+        $this->set('recordCount', $recordCount);
+        $this->set('pageSize', $pageSize);
+        $this->set('page', $page);
     }
 }

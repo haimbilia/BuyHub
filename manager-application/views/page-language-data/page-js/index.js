@@ -15,8 +15,10 @@ saveLangData = function (frm) {
     if (!$(frm).validate()) { return; }
 
     const data = fcom.frmData(frm);
+    $.ykmodal(fcom.getLoader());
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (res) {
-        fcom.closeProcessing();
+        fcom.removeLoader();
+        fcom.displaySuccessMessage(res.msg);
         reloadList();
     });
 };

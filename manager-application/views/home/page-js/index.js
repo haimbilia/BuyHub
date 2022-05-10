@@ -217,6 +217,7 @@ $(document).ready(function () {
 		var activeTab = $(this).attr("data-tab");
 		$('.tabsJs.active').removeClass('active');
 		$(this).addClass('active');
+		$('.dropdownBtnJs').text($(this).text());
 		if ($(this).attr('data-chart')) {
 			if (layoutDirection != 'rtl') {
 				$position = 'start';

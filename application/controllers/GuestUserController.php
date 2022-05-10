@@ -176,8 +176,8 @@ class GuestUserController extends MyAppController
         $user = new User($userId);
         $userSelectedCookies = $user->getUserSelectedCookies();
         if (CommonHelper::checkCookiesEnabledSession() && empty($userSelectedCookies)) {
-            $statisticalCookies = (isset($_SESSION['yk_statistical_cookies']) && $_SESSION['yk_statistical_cookies'] == 1) ? 1 : 0;
-            $personaliseCookies = (isset($_SESSION['yk_personalise_cookies']) && $_SESSION['yk_personalise_cookies'] == 1) ? 1 : 0;
+            $statisticalCookies = (isset($_COOKIE['ykStatisticalCookies']) && 1 == $_COOKIE['ykStatisticalCookies']) ? 1 : 0;
+            $personaliseCookies = (isset($_COOKIE['ykPersonaliseCookies']) && 1 == $_COOKIE['ykPersonaliseCookies']) ? 1 : 0;
             if (!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)) {
                 $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $user->getError());
                 LibHelper::dieJsonResponse($resp);
@@ -482,7 +482,7 @@ class GuestUserController extends MyAppController
         }
 
         $frm->expireSecurityToken(FatApp::getPostedData());
-        
+
         if (1 > $signUpWithPhone && !FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
             $cartObj = new Cart();
             $isCheckOutPage = (isset($post['isCheckOutPage']) && $cartObj->hasProducts()) ? FatUtility::int($post['isCheckOutPage']) : 0;
@@ -780,8 +780,8 @@ class GuestUserController extends MyAppController
         $row['link'] = UrlHelper::generateFullUrl('GuestUser', 'resetPassword', array($row['user_id'], $token));
         $email = new EmailHandler();
         if (!$email->sendForgotPasswordLinkEmail($this->siteLangId, $row)) {
-            $message = Labels::getLabel("ERR_PASSWORD_RESET_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId);     
-             FatUtility::dieJsonError($message);       
+            $message = Labels::getLabel("ERR_PASSWORD_RESET_EMAIL_COULD_NOT_BE_SENT", $this->siteLangId);
+            FatUtility::dieJsonError($message);
         }
         $message = Labels::getLabel("MSG_YOUR_PASSWORD_RESET_INSTRUCTIONS_TO_YOUR_EMAIL", $this->siteLangId);
 

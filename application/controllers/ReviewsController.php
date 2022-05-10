@@ -36,7 +36,7 @@ class ReviewsController extends MyAppController
         $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $selProdReviewObj->addCondition('spreview_product_id', '=', $product['product_id']);
         $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', "ROUND(AVG(sprating_rating),2) as prod_rating", "count(spreview_id) as totReviews"));
-        $selProdReviewObj->addMultipleFields(array('count(spreview_postedby_user_id) totReviews', 'sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5'));
+        $selProdReviewObj->addMultipleFields(array('count(spreview_postedby_user_id) totReviews', 'sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'count(distinct(ratingtype_type)) as totalType'));
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         $this->set('reviews', $reviews);
 
@@ -48,7 +48,7 @@ class ReviewsController extends MyAppController
         }
         $this->set('canSubmitFeedback', $canSubmitFeedback);
         $frmReviewSearch = $this->getProductReviewSearchForm(FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG'));
-        $frmReviewSearch->fill(array('selprod_id' => $selprod_id,'review_id' => $reviewId));
+        $frmReviewSearch->fill(array('selprod_id' => $selprod_id, 'review_id' => $reviewId));
         $this->set('frmReviewSearch', $frmReviewSearch);
 
         $ratingAspects = SelProdRating::getAvgSelProdReviewsRating($selprod_id, $this->siteLangId);
@@ -80,9 +80,9 @@ class ReviewsController extends MyAppController
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $srch->addMultipleFields(array('spreview_id', 'spreview_selprod_id', 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
         $srch->addGroupBy('spr.spreview_id');
-        if(0 < $reviewId){
-            $srch->addCondition('spr.spreview_id', '=', $reviewId);   
-        } 
+        if (0 < $reviewId) {
+            $srch->addCondition('spr.spreview_id', '=', $reviewId);
+        }
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
 
@@ -102,7 +102,7 @@ class ReviewsController extends MyAppController
             $ratings->joinTable(
                 RatingType::DB_TBL,
                 'INNER JOIN',
-                'rt.ratingtype_id = sprating_ratingtype_id',
+                'rt.ratingtype_id = sprating_ratingtype_id AND rt.ratingtype_active = ' . applicationConstants::ACTIVE,
                 'rt'
             );
             $ratings->joinTable(
@@ -116,6 +116,7 @@ class ReviewsController extends MyAppController
 
             $ratings->addCondition('sprating_spreview_id', 'IN', array_keys($records));
             $ratings->addCondition('ratingtype_type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
+            $ratings->doNotLimitRecords();
             $recordRatings = (array) FatApp::getDb()->fetchAll($ratings->getResultSet());
         }
 
@@ -173,16 +174,16 @@ class ReviewsController extends MyAppController
         $loggedUserId = 0;
         if (UserAuthentication::isUserLogged()) {
             $loggedUserId = UserAuthentication::getLoggedUserId();
-            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(),'user_parent');
+            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(), 'user_parent');
             $userParentId = (0 < $userParent) ? $userParent : UserAuthentication::getLoggedUserId();
             $this->set('userParentId', $userParentId);
         }
         if (UserAuthentication::isUserLogged()) {
-            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(),'user_parent');
+            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(), 'user_parent');
             $userParentId = (0 < $userParent) ? $userParent : UserAuthentication::getLoggedUserId();
             $this->set('userParentId', $userParentId);
         }
-        
+
         /* sub query to find out that logged user have marked current shop as favorite or not[ */
         $favSrchObj = new UserFavoriteShopSearch();
         $favSrchObj->doNotCalculateRecords();
@@ -191,12 +192,12 @@ class ReviewsController extends MyAppController
         $favSrchObj->addCondition('ufs_user_id', '=', $loggedUserId);
         $favSrchObj->addCondition('ufs_shop_id', '=', $shop_id);
         $srch->joinTable('(' . $favSrchObj->getQuery() . ')', 'LEFT OUTER JOIN', 'ufs_shop_id = shop_id', 'ufs');
-          /* ] */
+        /* ] */
 
         $srch->addMultipleFields(
             array(
                 'shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
-                'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city','user_regdate','IFNULL(ufs.ufs_id, 0) as is_favorite'
+                'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city', 'user_regdate', 'IFNULL(ufs.ufs_id, 0) as is_favorite'
             )
         );
         $srch->addCondition('shop_id', '=', $shop_id);
@@ -221,7 +222,7 @@ class ReviewsController extends MyAppController
         $selProdReviewObj->addGroupBy('spr.spreview_seller_user_id');
         $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $selProdReviewObj->addCondition('spreview_seller_user_id', '=', $shop['shop_user_id']);
-        $selProdReviewObj->addMultipleFields(array('spr.spreview_seller_user_id', 'count(*) as totReviews', "ROUND(AVG(seller_rating),2) as avg_seller_rating", 'sum(if(round(seller_rating)=1,1,0)) rated_1', 'sum(if(round(seller_rating)=2,1,0)) rated_2', 'sum(if(round(seller_rating)=3,1,0)) rated_3', 'sum(if(round(seller_rating)=4,1,0)) rated_4', 'sum(if(round(seller_rating)=5,1,0)) rated_5'));
+        $selProdReviewObj->addMultipleFields(array('spr.spreview_seller_user_id', 'count(*) as totReviews', "ROUND(AVG(seller_rating),2) as avg_seller_rating", 'sum(if(round(seller_rating)=1,1,0)) rated_1', 'sum(if(round(seller_rating)=2,1,0)) rated_2', 'sum(if(round(seller_rating)=3,1,0)) rated_3', 'sum(if(round(seller_rating)=4,1,0)) rated_4', 'sum(if(round(seller_rating)=5,1,0)) rated_5', 'count(distinct(ratingtype_type)) as totalType'));
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
 
@@ -230,35 +231,35 @@ class ReviewsController extends MyAppController
 
         $frmReviewSearch = $this->getProductReviewSearchForm(FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG'));
         $frmReviewSearch->fill(array('shop_id' => $shop_id, 'review_id' => $reviewId));
-        $this->set('frmReviewSearch', $frmReviewSearch);    
-        $this->set('ratingAspects', SelProdRating::getAvgShopReviewsRating($shop['shop_user_id'], $this->siteLangId)); 
-       
+        $this->set('frmReviewSearch', $frmReviewSearch);
+        $this->set('ratingAspects', SelProdRating::getAvgShopReviewsRating($shop['shop_user_id'], $this->siteLangId));
+
         $srchSplat = SocialPlatform::getSearchObject($this->siteLangId);
         $srchSplat->doNotCalculateRecords();
         $srchSplat->doNotLimitRecords();
-        $srchSplat->addCondition('splatform_user_id', '=', $shop['shop_user_id']);           
+        $srchSplat->addCondition('splatform_user_id', '=', $shop['shop_user_id']);
         $socialPlatforms = FatApp::getDb()->fetchAll($srchSplat->getResultSet());
-        $this->set('socialPlatforms', $socialPlatforms);        
+        $this->set('socialPlatforms', $socialPlatforms);
 
         $shop_rating = 0;
         if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
             $shop_rating = SelProdRating::getSellerRating($shop['shop_user_id']);
-        }  
+        }
         $this->set('shopRating', $shop_rating);
         $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id']));
-        $this->set('collectionData', ShopCollection::getShopCollectionsDetail($shop_id, $this->siteLangId));        
-        $this->set('template_id', SHOP::TEMPLATE_ONE);      
+        $this->set('collectionData', ShopCollection::getShopCollectionsDetail($shop_id, $this->siteLangId));
+        $this->set('template_id', SHOP::TEMPLATE_ONE);
         $this->set('shop', $shop);
         if (UserAuthentication::isUserLogged()) {
-            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(),'user_parent');
+            $userParent = User::getAttributesById(UserAuthentication::getLoggedUserId(), 'user_parent');
             $userParentId = (0 < $userParent) ? $userParent : UserAuthentication::getLoggedUserId();
             $this->set('userParentId', $userParentId);
         }
 
         $this->includeFeatherLight();
-        if(1 > $reviewId){
+        if (1 > $reviewId) {
             $this->_template->render();
-        }        
+        }
     }
 
     public function searchForShop()
@@ -293,9 +294,9 @@ class ReviewsController extends MyAppController
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $srch->addMultipleFields(array('selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'spreview_id', 'spreview_seller_user_id', "ROUND(AVG(seller_rating),2) as shop_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
         $srch->addGroupBy('spr.spreview_id');
-        if(0 < $reviewId){
-            $srch->addCondition('spr.spreview_id', '=', $reviewId);   
-        } 
+        if (0 < $reviewId) {
+            $srch->addCondition('spr.spreview_id', '=', $reviewId);
+        }
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -320,15 +321,15 @@ class ReviewsController extends MyAppController
         $this->set('reviewId', $reviewId);
 
         $srch = new ShopSearch($this->siteLangId);
-        $srch->setDefinedCriteria($this->siteLangId);        
-        $srch->doNotCalculateRecords();        
+        $srch->setDefinedCriteria($this->siteLangId);
+        $srch->doNotCalculateRecords();
         $srch->addMultipleFields(
             array(
-                'shop_id','shop_created_on', 'shop_name',
+                'shop_id', 'shop_created_on', 'shop_name',
                 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city'
             )
         );
-        $srch->addCondition('shop_id', '=', $shop_id);      
+        $srch->addCondition('shop_id', '=', $shop_id);
         $shop = FatApp::getDb()->fetch($srch->getResultSet());
         if (!$shop) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
@@ -352,7 +353,7 @@ class ReviewsController extends MyAppController
         $json['html'] = $this->_template->render(false, false, 'reviews/search-for-shop.php', true, false);
         $json['loadMoreBtnHtml'] = $this->_template->render(false, false, 'reviews/load-more-shop-reviews-btn.php', true, false);
         FatUtility::dieJsonSuccess($json);
-    }   
+    }
 
     public function productPermalink($selprod_id, $reviewId)
     {
@@ -370,7 +371,7 @@ class ReviewsController extends MyAppController
         if ($sellerId <= 0) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             CommonHelper::redirectUserReferer();
-        }       
+        }
 
         $db = FatApp::getDb();
 
@@ -391,7 +392,7 @@ class ReviewsController extends MyAppController
 
         $shopId = $shop['shop_id'];
         $this->_template->addJs(array('reviews/page-js/shop.js'));
-        $this->shop($shopId, $reviewId);        
+        $this->shop($shopId, $reviewId);
         $this->_template->render();
     }
 

@@ -483,22 +483,24 @@ class ProductsController extends MyAppController
     public function view($selprod_id = 0)
     {
         $selprod_id = FatUtility::int($selprod_id);
-        if (true === MOBILE_APP_API_CALL && 1 > $selprod_id) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+        if (1 > $selprod_id) {
+            if (true === MOBILE_APP_API_CALL) {
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+            }
+            FatUtility::exitWithErrorCode(404);
         }
 
         $product = $this->getProductDetail($selprod_id);
-        /* ] */
-        $loggedUserId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $loggedUserId = UserAuthentication::getLoggedUserId();
-        }
-
         if (!$product) {
             if (true === MOBILE_APP_API_CALL) {
                 FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             }
             FatUtility::exitWithErrorCode(404);
+        }
+
+        $loggedUserId = 0;
+        if (UserAuthentication::isUserLogged()) {
+            $loggedUserId = UserAuthentication::getLoggedUserId();
         }
 
         if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) {
@@ -544,14 +546,16 @@ class ProductsController extends MyAppController
         /* over all catalog product reviews */
         $selProdReviewObj = $this->getSelProdReviewObj();
         $selProdReviewObj->addCondition('spreview_product_id', '=', $product['product_id']);
-        $selProdReviewObj->addMultipleFields(array('sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'SUM(sprating_rating) as totRatings'));
+        $selProdReviewObj->addMultipleFields(array('sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'SUM(sprating_rating) as totRatings', 'count(distinct(ratingtype_type)) as totalType'));
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
+
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         $this->set('reviews', $reviews);
+
         $subscription = false;
         $allowed_images = -1;
-        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, applicationConstants::NO)) {
             $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($this->siteLangId, $product['selprod_user_id'], array('ossubs_images_allowed'));
             $allowed_images = $currentPlanData['ossubs_images_allowed'];
             $subscription = true;
@@ -831,15 +835,12 @@ class ProductsController extends MyAppController
         $this->set('shop', $shop);
         $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id']));
         $this->set('productImagesArr', $productGroupImages);
-        //    $this->set( 'productGroups', $productGroups );
+
+
         $frmReviewSearch = $this->getReviewSearchForm(5);
         $frmReviewSearch->fill(array('selprod_id' => $selprod_id));
         $this->set('frmReviewSearch', $frmReviewSearch);
         $this->set('currentStock', $product['selprod_stock'] - Product::tempHoldStockCount($selprod_id));
-        /* Get product Polls [ */
-        /*$pollQuest = Polling::getProductPoll($product['product_id'], $this->siteLangId);
-        $this->set('pollQuest', $pollQuest);*/
-        /* ] */
 
         /* Get Product Volume Discount (if any)[ */
         $this->set('volumeDiscountRows', $sellerProduct->getVolumeDiscounts());
@@ -864,12 +865,11 @@ class ProductsController extends MyAppController
         $this->set('recommendedProductsRibbons', $recommendedProductsRibbons);
         /* ]  */
 
-        if (User::checkPersonalizedCookiesEnabled() == true) {
-            $this->setRecentlyViewedItem($selprod_id);
-        }
-        //$this->setRecentlyViewedItem($selprod_id);
-
         if (false === MOBILE_APP_API_CALL) {
+            if (User::checkPersonalizedCookiesEnabled() == true) {
+                $this->setRecentlyViewedItem($selprod_id);
+            }
+
             $this->_template->addJs(array('js/slick.js', 'js/modaal.js', 'js/product-detail.js', 'js/magnific-popup.js', 'js/jw-player.js', 'js/slick-carousels.js'));
         } else {
             $recentlyViewed = FatApp::getPostedData('recentlyViewed');
@@ -934,8 +934,10 @@ class ProductsController extends MyAppController
             $et->sendRequest();
         }
 
-        $this->includeFeatherLight();
-        $this->_template->addJs(['js/popper.min.js', 'js/slick.min.js', 'js/jquery.fancybox.min.js']);
+        if (false === MOBILE_APP_API_CALL) {
+            $this->includeFeatherLight();
+            $this->_template->addJs(['js/popper.min.js', 'js/slick.min.js', 'js/jquery.fancybox.min.js']);
+        }
         $this->_template->render();
     }
 
@@ -1079,13 +1081,13 @@ class ProductsController extends MyAppController
 
         $srch->addGroupBy('product_id');
 
-        if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+        /* if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $srch->joinFavouriteProducts($userId);
             $srch->addFld('IFNULL(ufp_id, 0) as ufp_id');
         } else {
             $srch->joinUserWishListProducts($userId);
             $srch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        }
+        } */
 
         $srch->addCondition('selprod_id', '!=', $selprod_id);
         $srch->addCondition('product_id', 'in', array_keys($recommendedProds));
@@ -1141,10 +1143,6 @@ class ProductsController extends MyAppController
             return $cookiesProductsArr;
         }
 
-        $loggedUserId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $loggedUserId = UserAuthentication::getLoggedUserId();
-        }
         $prodSrch = new ProductSearch($this->siteLangId);
         $prodSrch->setGeoAddress();
         $prodSrch->setDefinedCriteria();
@@ -1154,13 +1152,18 @@ class ProductsController extends MyAppController
         $prodSrch->joinProductToCategory();
         $prodSrch->doNotCalculateRecords();
         $prodSrch->doNotLimitRecords();
+        /* 
+        $loggedUserId = 0;
+        if (UserAuthentication::isUserLogged()) {
+            $loggedUserId = UserAuthentication::getLoggedUserId();
+        }
         if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $prodSrch->joinFavouriteProducts($loggedUserId);
             $prodSrch->addFld('IFNULL(ufp_id, 0) as ufp_id');
         } else {
             $prodSrch->joinUserWishListProducts($loggedUserId);
             $prodSrch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        }
+        } */
         $prodSrch->addCondition('selprod_id', 'IN', $cookiesProductsArr);
         $prodSrch->addMultipleFields(
             array(
@@ -1239,13 +1242,13 @@ class ProductsController extends MyAppController
             }
 
             $prodSrch->doNotLimitRecords();
-            if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+            /* if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
                 $prodSrch->joinFavouriteProducts($loggedUserId);
                 $prodSrch->addFld('IFNULL(ufp_id, 0) as ufp_id');
             } else {
                 $prodSrch->joinUserWishListProducts($loggedUserId);
                 $prodSrch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-            }
+            } */
             // $prodSrch->joinProductRating();
             $prodSrch->addCondition('selprod_id', 'IN', $ids);
             $prodSrch->addMultipleFields(
@@ -1560,13 +1563,13 @@ class ProductsController extends MyAppController
         $productSrchObj->setPageSize(1);
         $productSrchObj->setDefinedCriteria();
 
-        if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+        /* if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $productSrchObj->joinFavouriteProducts($loggedUserId);
             $productSrchObj->addFld('IFNULL(ufp_id, 0) as ufp_id');
         } else {
             $productSrchObj->joinUserWishListProducts($loggedUserId);
             $productSrchObj->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        }
+        } */
         $productSrchObj->joinProductRating();
         $productSrchObj->addMultipleFields(
             array(
@@ -1851,7 +1854,7 @@ class ProductsController extends MyAppController
 
         $data = array(
             'products' => $products,
-           /* 'moreSellersProductsArr' => $moreSellersArr, *//* seller products which is related to same options*/
+            /* 'moreSellersProductsArr' => $moreSellersArr, *//* seller products which is related to same options*/
             'category' => $category,
             'categoryId' => $categoryId,
             'postedData' => $get,
