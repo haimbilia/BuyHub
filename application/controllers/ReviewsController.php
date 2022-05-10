@@ -36,7 +36,7 @@ class ReviewsController extends MyAppController
         $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $selProdReviewObj->addCondition('spreview_product_id', '=', $product['product_id']);
         $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', "ROUND(AVG(sprating_rating),2) as prod_rating", "count(spreview_id) as totReviews"));
-        $selProdReviewObj->addMultipleFields(array('count(spreview_postedby_user_id) totReviews', 'sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5'));
+        $selProdReviewObj->addMultipleFields(array('count(spreview_postedby_user_id) totReviews', 'sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'count(distinct(ratingtype_type)) as totalType'));
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         $this->set('reviews', $reviews);
 
@@ -102,7 +102,7 @@ class ReviewsController extends MyAppController
             $ratings->joinTable(
                 RatingType::DB_TBL,
                 'INNER JOIN',
-                'rt.ratingtype_id = sprating_ratingtype_id',
+                'rt.ratingtype_id = sprating_ratingtype_id AND rt.ratingtype_active = ' . applicationConstants::ACTIVE,
                 'rt'
             );
             $ratings->joinTable(
@@ -222,7 +222,7 @@ class ReviewsController extends MyAppController
         $selProdReviewObj->addGroupBy('spr.spreview_seller_user_id');
         $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $selProdReviewObj->addCondition('spreview_seller_user_id', '=', $shop['shop_user_id']);
-        $selProdReviewObj->addMultipleFields(array('spr.spreview_seller_user_id', 'count(*) as totReviews', "ROUND(AVG(seller_rating),2) as avg_seller_rating", 'sum(if(round(seller_rating)=1,1,0)) rated_1', 'sum(if(round(seller_rating)=2,1,0)) rated_2', 'sum(if(round(seller_rating)=3,1,0)) rated_3', 'sum(if(round(seller_rating)=4,1,0)) rated_4', 'sum(if(round(seller_rating)=5,1,0)) rated_5'));
+        $selProdReviewObj->addMultipleFields(array('spr.spreview_seller_user_id', 'count(*) as totReviews', "ROUND(AVG(seller_rating),2) as avg_seller_rating", 'sum(if(round(seller_rating)=1,1,0)) rated_1', 'sum(if(round(seller_rating)=2,1,0)) rated_2', 'sum(if(round(seller_rating)=3,1,0)) rated_3', 'sum(if(round(seller_rating)=4,1,0)) rated_4', 'sum(if(round(seller_rating)=5,1,0)) rated_5', 'count(distinct(ratingtype_type)) as totalType'));
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
 

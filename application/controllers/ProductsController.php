@@ -546,9 +546,10 @@ class ProductsController extends MyAppController
         /* over all catalog product reviews */
         $selProdReviewObj = $this->getSelProdReviewObj();
         $selProdReviewObj->addCondition('spreview_product_id', '=', $product['product_id']);
-        $selProdReviewObj->addMultipleFields(array('sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'SUM(sprating_rating) as totRatings'));
+        $selProdReviewObj->addMultipleFields(array('sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'SUM(sprating_rating) as totRatings', 'count(distinct(ratingtype_type)) as totalType'));
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
+
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         $this->set('reviews', $reviews);
 

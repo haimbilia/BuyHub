@@ -11,9 +11,15 @@ if (CommonHelper::demoUrl()) { ?>
         </a>
 
     </div>
-<?php } ?>
+<?php }
 
-<?php if ($controllerName == 'Home' && $action == 'index') {
+if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VAR_STRING, '') && UserAuthentication::getLoggedUserId(true) > 0) {    
+?>
+
+<div class="engagespot-btn" id="engagespotUI"> 
+</div>
+<?php }
+if ($controllerName == 'Home' && $action == 'index') {
     $this->includeTemplate('_partial/footerTrustBanners.php');
 } ?>
 
@@ -209,19 +215,29 @@ if (CommonHelper::demoUrl()) { ?>
                 <span class="btn btn-outline-brand btn-sm cookie-preferences-js"><?php echo Labels::getLabel('LBL_Set_Cookie_Preferences', $siteLangId); ?></span>
             </div>
         <?php }  ?>
-    </div><?php } ?>
-<?php if (!isset($_SESSION['geo_location']) && FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '') != '') { ?>
-    <script defer src='https://maps.google.com/maps/api/js?key=<?php echo FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''); ?>&libraries=places'>
-    </script>
-
-<?php } ?>
-<?php if (FatApp::getConfig('CONF_ENABLE_LIVECHAT', FatUtility::VAR_STRING, '')) {
+    </div>
+<?php } 
+if (!isset($_SESSION['geo_location']) && FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '') != '') { ?>
+    <script defer src="https://maps.google.com/maps/api/js?key=<?php echo FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''); ?>&libraries=places"></script>
+<?php }  
+if (FatApp::getConfig('CONF_ENABLE_LIVECHAT', FatUtility::VAR_STRING, '')) {
     echo FatApp::getConfig('CONF_LIVE_CHAT_CODE', FatUtility::VAR_STRING, '');
 } ?>
 <?php if (FatApp::getConfig('CONF_SITE_TRACKER_CODE', FatUtility::VAR_STRING, '') && User::checkStatisticalCookiesEnabled() == true) {
     echo FatApp::getConfig('CONF_SITE_TRACKER_CODE', FatUtility::VAR_STRING, '');
-} ?>
+} 
 
+if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VAR_STRING, '') && UserAuthentication::getLoggedUserId(true) > 0) { ?>
+   <script>
+        $.getScript( "https://cdn.engagespot.co/engagespot-client.min.js", function( data, textStatus, jqxhr ) {           
+            Engagespot.render('#engagespotUI', {
+                apiKey: "<?php echo FatApp::getConfig("CONF_ENGAGESPOT_API_KEY", FatUtility::VAR_STRING, '');?>",
+                userId: "<?php echo User::getCredentialName(UserAuthentication::getLoggedUserId(true));?>",
+                userSignature: "<?php echo base64_encode(hash_hmac('sha256', User::getCredentialName(UserAuthentication::getLoggedUserId(true)), FatApp::getConfig("CONF_ENGAGESPOT_SECRET_KEY", FatUtility::VAR_STRING, ''),true));?>"
+            });          
+        });       
+    </script>  
+<?php } ?> 
 <div class="no-print">
     <?php if (CommonHelper::demoUrl()) { ?>
         <!--Start of Tawk.to Script-->

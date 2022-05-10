@@ -1275,6 +1275,8 @@ $(function () {
                 } else {
                     $("#cookieInfoBox").hide("slow");
                     $("#cookieInfoBox").remove();
+                    /*  $.cookie('ykStatisticalCookies', data.statistical_cookies, { expires: 10, path: siteConstants.rooturl });
+                     $.cookie('ykPersonaliseCookies', data.personalise_cookies, { expires: 10, path: siteConstants.rooturl }); */
                     $.facebox.close();
                 }
             }

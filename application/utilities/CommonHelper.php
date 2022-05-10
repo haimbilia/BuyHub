@@ -1777,7 +1777,7 @@ class CommonHelper extends FatUtility
 
     public static function checkCookiesEnabledSession()
     {
-        return (isset($_SESSION['cookies_enabled']) && $_SESSION['cookies_enabled'] == true) ? true : false;
+        return ((isset($_COOKIE['ykStatisticalCookies']) && 1 == $_COOKIE['ykStatisticalCookies']) || (isset($_COOKIE['ykPersonaliseCookies']) && 1 == $_COOKIE['ykPersonaliseCookies']));
     }
 
 

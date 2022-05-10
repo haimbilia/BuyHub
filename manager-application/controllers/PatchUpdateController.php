@@ -329,6 +329,7 @@ class PatchUpdateController extends ListingBaseController
             'CONF_GOOGLE_PUSH_NOTIFICATION_API_KEY' => '',
             'CONF_FACEBOOK_PIXEL_ID' => '',
             'CONF_ENGAGESPOT_API_KEY' => '',
+            'CONF_ENGAGESPOT_SECRET_KEY' => '',
             'CONF_ENGAGESPOT_PUSH_NOTIFICATION_CODE' => '',
             'CONF_GOOGLEMAP_API_KEY' => '',
             'CONF_MAILCHIMP_KEY' => '',
