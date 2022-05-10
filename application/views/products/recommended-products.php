@@ -31,13 +31,13 @@
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>
                     <div class="item">
                         <div class="products">
-                            <?php
-                            if (!empty($selProdRibbons)) {
-                                foreach ($selProdRibbons as $ribbRow) {
-                                    $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
-                                }
-                            } ?>
                             <div class="products-body">
+                                <?php
+                                if (!empty($selProdRibbons)) {
+                                    foreach ($selProdRibbons as $ribbRow) {
+                                        $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+                                    }
+                                } ?>
                                 <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
                                 <div class="products-img">
                                     <a title="<?php echo $rProduct['selprod_title']; ?>" href="<?php echo !isset($rProduct['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($rProduct['promotion_record_id'])); ?>">

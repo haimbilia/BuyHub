@@ -1,6 +1,5 @@
 html {
     font-size: 14px;
-    overflow-x: hidden;
 
     @include media-breakpoint-up(md) {
         font-size: 13px;
@@ -702,4 +701,12 @@ mark,
         background-color: transparent;
         background-position: center;
     }
+}
+
+
+.badges-wrap {
+    z-index: 1;
+    position: absolute;
+    #{$end-direction}: 0.25rem;
+    top: 0.25rem;
 }
