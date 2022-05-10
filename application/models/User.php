@@ -3160,4 +3160,22 @@ class User extends MyAppModel
     {
         return (false !== strpos($name, ' ') ? (explode(' ', $name))[1] : $name);
     }
+
+    public static function getCredentialName(int $userId): string
+    {
+        if (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['credential_username'])  && !empty($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['credential_username'])) {
+            return $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['credential_username'];
+        }
+
+        $srch = new SearchBase(static::DB_TBL_CRED, 'uc');
+        $srch->addFld('credential_username');
+        $srch->addCondition('credential_user_id', '=', $userId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        if ($result) {
+            return $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['credential_username'] = $result['credential_username'];
+        }
+        return '';
+    }
 }

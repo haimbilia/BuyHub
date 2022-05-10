@@ -426,10 +426,6 @@ class ConfigurationsController extends ListingBaseController
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ENABLE_LANGUAGE_SPECIFIC_URLS_MSG", $langId));
 
-
-                $fld = $frm->addTextBox(Labels::getLabel('FRM_TWITTER_USERNAME', $langId), 'CONF_TWITTER_USERNAME');
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_TWITTER_USERNAME_MSG", $langId) . '</span>';
-
                 $fld2 = $frm->addTextarea(Labels::getLabel('FRM_SITE_TRACKER_CODE', $langId), 'CONF_SITE_TRACKER_CODE');
                 $fld2->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld2->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_SITE_TRACKER_CODE_MSG", $langId) . ' http://www.google.com/analytics/</span>';
@@ -1237,9 +1233,12 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_API_KEY", $langId), 'CONF_ENGAGESPOT_API_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_API_KEY_PROVIDED_BY_ENGAGESPOT.", $langId) . "</span>";
 
-                $fld = $frm->addTextarea(Labels::getLabel("FRM_ENGAGESPOT_CODE", $langId), 'CONF_ENGAGESPOT_PUSH_NOTIFICATION_CODE');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_CODE_PROVIDED_BY_THE_ENGAGESPOT_FOR_INTEGRATION.", $langId) . "</span>";
+                $fld = $frm->addTextBox(Labels::getLabel("FRM_SECRET_KEY", $langId), 'CONF_ENGAGESPOT_SECRET_KEY');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_SECRET_KEY_PROVIDED_BY_ENGAGESPOT.", $langId) . "</span>";
+
+                // $fld = $frm->addTextarea(Labels::getLabel("FRM_ENGAGESPOT_CODE", $langId), 'CONF_ENGAGESPOT_PUSH_NOTIFICATION_CODE');
+                // $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                // $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_CODE_PROVIDED_BY_THE_ENGAGESPOT_FOR_INTEGRATION.", $langId) . "</span>";
 
 
                 $fld = $frm->addHtml('', 'GoogleMap', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_GOOGLE_MAP_API", $langId) . '</h3>');
@@ -1887,6 +1886,9 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addTextarea(Labels::getLabel("FRM_FACEBOOK_POST_DESCRIPTION", $langId), 'CONF_SOCIAL_FEED_FACEBOOK_POST_DESCRIPTION_' . $langId);
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_DESCRIPTION_SHARED_ON_FACEBOOK", $langId) . "</span>";
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
+                $fld = $frm->addTextBox(Labels::getLabel('FRM_TWITTER_USERNAME', $langId), 'CONF_TWITTER_USERNAME');
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_TWITTER_USERNAME_MSG", $langId) . '</span>';
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_TWITTER_APP_KEY", $langId), 'CONF_TWITTER_API_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_APPLICATION_ID_USED_IN_POST.", $langId) . "</span>";
