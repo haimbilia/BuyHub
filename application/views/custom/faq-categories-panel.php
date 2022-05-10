@@ -10,7 +10,7 @@ if (count($listCategories)) {
 }
 if (isset($listCategories) && is_array($listCategories)) {
     foreach ($listCategories as $faqCat) { ?>
-        <a href="javascript:void(0);" onClick="searchFaqs('<?php echo $page; ?>', <?php echo $faqCat['faqcat_id']; ?>);" id="<?php echo $faqCat['faqcat_id']; ?>" class="<?php echo ($faqCat['faqcat_id'] == $faqMainCat ? 'is--active' : '') ?>"><?php echo $faqCat['faqcat_name']; ?></a>
+        <a href="javascript:void(0);" onClick="searchFaqs('<?php echo $page; ?>', <?php echo $faqCat['faqcat_id']; ?>);" id="<?php echo $faqCat['faqcat_id']; ?>" class="faqCatIdJs <?php echo ($faqCat['faqcat_id'] == $faqMainCat ? 'is--active' : '') ?>"><?php echo $faqCat['faqcat_name']; ?></a>
 <?php
     }
 }

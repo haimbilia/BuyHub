@@ -168,7 +168,6 @@ class CustomController extends MyAppController
 
         $json['recordCount'] = $srch->recordCount();
 
-
         if (isset($srchCondition)) {
             $srchCondition->remove();
         }
@@ -256,8 +255,6 @@ class CustomController extends MyAppController
 
     public function faqCategoriesPanel()
     {
-        $searchFrm = $this->getSearchFaqForm();
-        $post = $searchFrm->getFormDataFromArray(FatApp::getPostedData());
         $srch = FaqCategory::getSearchObject($this->siteLangId);
         $srch->joinTable('tbl_faqs', 'LEFT OUTER JOIN', 'faq_faqcat_id = faqcat_id and faq_active = ' . applicationConstants::ACTIVE . '  and faq_deleted = ' . applicationConstants::NO);
         $srch->joinTable('tbl_faqs_lang', 'LEFT OUTER JOIN', 'faqlang_faq_id = faq_id');
@@ -265,8 +262,6 @@ class CustomController extends MyAppController
         $srch->addCondition('faqcat_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('faqcat_type', '=', FaqCategory::FAQ_PAGE);
         $srch->setPageSize(1);
-        $qry = $srch->getQuery();
-        // echo $qry; die;
         $question = FatApp::getPostedData('question', FatUtility::VAR_STRING, '');
         if (!empty($question)) {
             $srchCondition = $srch->addCondition('faq_title', 'like', "%$question%");
@@ -288,12 +283,10 @@ class CustomController extends MyAppController
         }
         $rsCat = $srch->getResultSet();
         $recordsCategories = FatApp::getDb()->fetchAll($rsCat);
-        // CommonHelper::printArray($recordsCategories);
         $faqMainCat = FatApp::getConfig("CONF_FAQ_PAGE_MAIN_CATEGORY", null, '');
 
         $this->set('siteLangId', $this->siteLangId);
         $this->set('list', $records);
-        // commonHelper::printArray($recordsCategories); die;
         $this->set('listCategories', $recordsCategories);
         $this->set('faqMainCat', $faqMainCat);
         $this->set('page', 'faq');
