@@ -1,11 +1,11 @@
-$(function (){
+$(function () {
 	// Target your element
 	//searchProducts( document.frmProductSearch );	
-	if($(".shop-navigations").length){
+	if ($(".shop-navigations").length) {
 		$('.shop-navigations').colourBrightness();
 	}
 
-	if($(".input-field").length){
+	if ($(".input-field").length) {
 		$('.input-field').colourBrightness();
 	}
 });

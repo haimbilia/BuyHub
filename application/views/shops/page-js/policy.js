@@ -1,5 +1,10 @@
-$(function (){
+$(function () {
 	// Target your element
-	$('.shop-navigations').colourBrightness();
-	$('.input-field').colourBrightness();
+	if ($(".shop-navigations").length) {
+		$('.shop-navigations').colourBrightness();
+	}
+
+	if ($(".input-field").length) {
+		$('.input-field').colourBrightness();
+	}
 });

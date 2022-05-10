@@ -513,7 +513,6 @@ class ShopsController extends MyAppController
             $userParentId = (0 < $userParent) ? $userParent : UserAuthentication::getLoggedUserId();
             $this->set('userParentId', $userParentId);
         }
-
         $this->_template->render();
     }
 
