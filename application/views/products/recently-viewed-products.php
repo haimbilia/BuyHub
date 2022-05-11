@@ -35,14 +35,14 @@ if ($recentViewedProducts) { ?>
                 }
                 $productUrl = UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>
                 <div class="item">
-                    <div class="products">
-                        <?php
-                        if (!empty($selProdRibbons)) {
-                            foreach ($selProdRibbons as $ribbRow) {
-                                $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
-                            }
-                        } ?>
+                    <div class="products">                        
                         <div class="products-body">
+                            <?php
+                            if (!empty($selProdRibbons)) {
+                                foreach ($selProdRibbons as $ribbRow) {
+                                    $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+                                }
+                            } ?>
                             <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $rProduct) && 0 == $rProduct['availableInLocation']) { ?>
                                 <div class="not-available"><svg class="svg">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">

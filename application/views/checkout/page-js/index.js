@@ -512,9 +512,9 @@ $("document").ready(function () {
 
     setCheckoutFlow = function (type) {
         var obj = $(".checkout-progress");
-        obj.find("div").removeClass("is-complete");
-        obj.find("div").removeClass("is-active");
-        obj.find("div").removeClass("pending");
+        obj.find(".checkoutNav-js").removeClass("is-complete");
+        obj.find(".checkoutNav-js").removeClass("is-active");
+        obj.find(".checkoutNav-js").removeClass("pending");
         switch (type) {
             case "BILLING":
                 obj.find(".billing-js").addClass("is-active");

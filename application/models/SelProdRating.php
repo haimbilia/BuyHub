@@ -56,7 +56,7 @@ class SelProdRating extends MyAppModel
         return self::getRatingAspectsArr($langId, Shipping::FULFILMENT_ALL, applicationConstants::ACTIVE, RatingType::TYPE_DELIVERY);
     }
 
-    public static function getReviewsAndRatings($recordId, $langId, $isSeller = true)
+    public static function getReviewsAndRatings($recordId, $langId, $isSeller = true, $type = [])
     {
         $recordId = FatUtility::int($recordId);
         $srch = new SelProdReviewSearch();
@@ -65,6 +65,9 @@ class SelProdRating extends MyAppModel
         $srch->joinSelProdRating($langId);
         $srch->joinOrderProduct();
         $srch->joinOrderProductShipping();
+        if (!empty($type)) {
+            $srch->addCondition('sprating_ratingtype_id', 'in', $type);
+        }
         $srch->addMultipleFields(['sprating_spreview_id', 'ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 'sprating_rating']);
         $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN TRUE ELSE `ratingtype_type` != '" . RatingType::TYPE_DELIVERY . "' END)");
         $srch->doNotCalculateRecords();
@@ -77,7 +80,7 @@ class SelProdRating extends MyAppModel
         }
 
         $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
-        $srch->addOrder('ratingtype_id');
+        $srch->addOrder('ratingtype_id');       
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($rs);
     }
