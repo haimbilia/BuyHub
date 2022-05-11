@@ -591,7 +591,7 @@ class HomeController extends MyAppController
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
             $srch->addOrder('collection_display_order', 'ASC');
-            $srch->addMultipleFields(array('collection_id', 'IFNULL(collection_name,collection_identifier) as collection_name', 'IFNULL( collection_description, "" ) as collection_description', 'IFNULL(collection_link_caption, "") as collection_link_caption', 'collection_link_url', 'collection_layout_type', 'collection_type', 'collection_criteria', 'collection_child_records', 'collection_primary_records', 'collection_display_media_only', 'collection_for_app', 'collection_for_web', 'collection_display_order'));
+            $srch->addMultipleFields(array('collection_id', 'IFNULL(collection_name,collection_identifier) as collection_name', 'IFNULL( collection_description, "" ) as collection_description', 'IFNULL(collection_link_caption, "") as collection_link_caption', 'collection_link_url', 'collection_layout_type', 'collection_type', 'collection_criteria', 'collection_child_records', 'collection_primary_records', 'collection_display_media_only', 'collection_for_app', 'collection_for_web', 'collection_display_order', 'collection_updated_on'));
 
             $applicableForCol = (true === MOBILE_APP_API_CALL) ? 'collection_for_app' : 'collection_for_web';
             $srch->addCondition($applicableForCol, '=', applicationConstants::YES);
@@ -623,8 +623,7 @@ class HomeController extends MyAppController
             }
 
             if (true === MOBILE_APP_API_CALL && 0 < $collection['collection_display_media_only'] && !in_array($collection['collection_type'], Collections::COLLECTION_WITHOUT_MEDIA)) {
-                $imgUpdatedOn = Collections::getAttributesById($collection_id, 'collection_updated_on');
-                $uploadedTime = AttachedFile::setTimeParam($imgUpdatedOn);
+                $uploadedTime = AttachedFile::setTimeParam($collection['collection_updated_on']);
 
                 $collection['collection_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'collectionReal', array($collection_id, $langId, ImageDimension::VIEW_MOBILE, AttachedFile::FILETYPE_COLLECTION_IMAGE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 $collections[] = $collection;
@@ -1167,7 +1166,7 @@ class HomeController extends MyAppController
 
                     /* fetch Testimonial data[ */
                     $attr = [
-                        'testimonial_id', 'testimonial_user_name', 'IFNULL(testimonial_title, testimonial_identifier) as testimonial_title', 'testimonial_text'
+                        'testimonial_id', 'testimonial_user_name', 'IFNULL(testimonial_title, testimonial_identifier) as testimonial_title', 'testimonial_text', 'testimonial_added_on'
                     ];
                     $testimonialSrchObj = Testimonial::getSearchObject($langId, true);
                     $testimonialSrchObj = clone $testimonialSrchObj;
