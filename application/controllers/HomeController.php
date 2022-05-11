@@ -73,15 +73,15 @@ class HomeController extends MyAppController
         $this->set('collections', $collections);
         $this->set('isWishlistEnable', FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1));
 
+        if (true === MOBILE_APP_API_CALL) {
+            $this->_template->render();
+            die;
+        }
+
         $displayProductNotAvailableLable = false;
         //availableInLocation
         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $displayProductNotAvailableLable = true;
-        }
-
-        if (true === MOBILE_APP_API_CALL) {
-            $this->_template->render();
-            die;
         }
 
         $this->_template->addJs('js/slick.min.js');
@@ -1252,6 +1252,7 @@ class HomeController extends MyAppController
         $slidesSrch = new SearchBase('(' . $srchSlide->getQuery() . ') as t');
         $slidesSrch->addMultipleFields(array('slide_id', 'slide_type', 'slide_record_id', 'slide_url', 'slide_target', 'slide_title', 'promotion_id', 'userBalance', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'promotion_budget', 'promotion_duration', 'slide_img_updated_on'));
         $slidesSrch->addOrder('', 'rand()');
+        $slidesSrch->doNotCalculateRecords();
 
         if (0 < $ppcSlidesPageSize) {
             $ppcSrch = clone $slidesSrch;
@@ -1307,6 +1308,7 @@ class HomeController extends MyAppController
         $shopObj->addBudgetCondition();
         $shopObj->addOrder('', 'rand()');
         $shopObj->setPageSize($shopPageSize);
+        $shopObj->doNotCalculateRecords();
 
         $rs = $shopObj->getResultSet();
         $i = 0;
