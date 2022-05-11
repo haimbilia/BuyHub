@@ -1,5 +1,4 @@
 <?php
-
 class SavedProductsSearchController extends LoggedUserController
 {
     public function __construct($action)
@@ -56,12 +55,23 @@ class SavedProductsSearchController extends LoggedUserController
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $curr_page = FatApp::getPostedData('curr_page', FatUtility::VAR_STRING, UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_FRONTEND));
         $searchedUrlString = !isset($_SERVER['HTTP_REFERER']) ? $curr_page : str_replace($curr_page, '', $_SERVER['HTTP_REFERER']);
+
+        $url = ltrim(ltrim($searchedUrlString, '/'), '?');
+        $srch = SavedSearchProduct::getSearchObject();
+        $srch->addFld('pssearch_id');
+        $srch->addCondition('pssearch_url', 'LIKE', $url);
+        $srch->setPageSize(1);
+        $srch->doNotCalculateRecords();
+        $rs = $srch->getResultSet();
+        $result = FatApp::getDb()->fetch($rs);
+        if (!empty($result)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_THIS_SEARCH_QUERY_ALREADY_SAVED_UNDER_SAVED_SEARCHES.'), true);
+        }
 
         $post['pssearch_type'] = FatApp::getPostedData('pssearch_type', FatUtility::VAR_INT, 0);
         $post['pssearch_record_id'] = FatApp::getPostedData('pssearch_record_id', FatUtility::VAR_INT, 0);
@@ -73,7 +83,7 @@ class SavedProductsSearchController extends LoggedUserController
         $savedSearchProduct->assignValues($post);
 
         if (!$savedSearchProduct->save()) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_CAN_NOT_BE_SAVED', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_CAN_NOT_BE_SAVED', $this->siteLangId), true);
         }
 
         $this->set('msg', Labels::getLabel('MSG_Saved_successfully', $this->siteLangId));

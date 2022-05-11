@@ -18,20 +18,22 @@ $(function () {
         location.reload(true);
     });
     /* is use to reload page when user hit back button] */
-    var frm = document.frmProductSearch;
 
-    var frmSiteSearch = document.frmSiteSearch;
-    $(frmSiteSearch.keyword).val($(frm.keyword).val());
-    setSelectedCatValue($(frm.category).val());
+    if ('undefined' != typeof document.frmProductSearch) {
+        var frm = document.frmProductSearch;
+        var frmSiteSearch = document.frmSiteSearch;
+        $(frmSiteSearch.keyword).val($(frm.keyword).val());
+        setSelectedCatValue($(frm.category).val());
 
-    $.each(frm.elements, function (index, elem) {
-        if (elem.type != 'text' && elem.type != 'textarea' && elem.type != 'hidden' && elem.type != 'submit') {
-            /* i.e for selectbox */
-            $(elem).change(function () {
-                reloadProductListing(frm);
-            });
-        }
-    });
+        $.each(frm.elements, function (index, elem) {
+            if (elem.type != 'text' && elem.type != 'textarea' && elem.type != 'hidden' && elem.type != 'submit') {
+                /* i.e for selectbox */
+                $(elem).change(function () {
+                    reloadProductListing(frm);
+                });
+            }
+        });
+    }
     /* ] */
 
     /* form submit upon onchange of elements not inside form tag[ */
