@@ -40,8 +40,8 @@ if (Badge::TYPE_BADGE == $badgeType) {
     $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
     $imageHtml = '<img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], ImageDimension::VIEW_THUMB, $icon['afile_screen']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $badgeName . '" alt="' . $badgeName . '">';
 } else {
-    $ribbon = $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $badgeData], false, true);
-    $imageHtml = '<div class="badge-wrap">' . $ribbon . '</div>';
+    $badgeData['blinkcond_position'] = Badge::RIBB_POS_TRIGHT;
+    $imageHtml = $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $badgeData], false, true);
 }
 
 ?>
@@ -52,7 +52,10 @@ if (Badge::TYPE_BADGE == $badgeType) {
             <div class="card-body">
                 <div class="row justify-content-between">
                     <div class="col-lg-3 badgeImageSection--js">
-                        <div class=" badge-image"> <?php echo $imageHtml; ?></div>
+                        <div class=" badge-image" data-ratio="1:1">
+                            <?php echo $imageHtml; ?>
+                            <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/defaults/product_default_image.jpg">
+                        </div>
                     </div>
                     <div class="col-lg-8">
                         <?php echo $frm->getFormTag();

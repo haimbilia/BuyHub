@@ -504,7 +504,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         if (Badge::COND_MANUAL == $recordCondition && BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType) {
             if (empty($records) || '[]' == $records) {
                 FatUtility::dieJsonError(Labels::getLabel('ERR_LINK_TO_IS_MANDATORY', $this->siteLangId));
-            }          
+            }
         }
 
         $fromDate = FatApp::getPostedData('blinkcond_from_date', FatUtility::VAR_STRING, '');
@@ -646,7 +646,7 @@ class BadgeLinkConditionsController extends SellerBaseController
             $recordTypesArr = BadgeLinkCondition::getRecordTypeArr($this->siteLangId);
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', $recordTypesArr);
             $fld->requirement->setRequired((Badge::COND_MANUAL == $recordCondition));
-        }     
+        }
 
         $frm->addSelectBox(Labels::getLabel('FRM_LINK_TO', $this->siteLangId), 'badgelink_record_ids[]', [], '', ['placeholder' => Labels::getLabel('FRM_SEARCH_RECORD', $this->siteLangId)], '');
 
@@ -775,21 +775,25 @@ class BadgeLinkConditionsController extends SellerBaseController
         $params = FatApp::getParameters();
         $this->validateBadge(current($params));
 
-        $str = Labels::getLabel('LBL_{OBJECT-TYPE}_-_{OBJECT-NAME}', $this->siteLangId);
+        $str = Labels::getLabel('LBL_{OBJECT-NAME}', $this->siteLangId);
         $pageTitle = CommonHelper::replaceStringData($str, [
-            '{OBJECT-TYPE}' => $this->objectTypeName,
             '{OBJECT-NAME}' => $this->badgeData['badge_name'],
         ]);
 
-        if ($action == 'list') {          
+        if ($action == 'list') {
             $this->nodes = [
-                ['title' => $this->objectTypeName, 'href' => UrlHelper::generateUrl('badges','list',[$params[1]])],
+                ['title' => $this->objectTypeName, 'href' => UrlHelper::generateUrl('badges', 'list', [$params[1]])],
                 ['title' => $pageTitle]
             ];
+        } else if ($action == 'conditionForm') {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+            $this->nodes[] = array('title' => ucwords($this->objectTypeName), 'href' => UrlHelper::generateUrl('badges', 'list', [$params[1]]));
+            $this->nodes[] = ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('badgeLinkConditions', 'list', [$params[0], $params[1]])];
+            $this->nodes[] = ['title' => $title];
         } else {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($this->objectTypeName), 'href' => UrlHelper::generateUrl($this->objectCtrlName));
             $this->nodes[] = array('title' => $title);
         }
         return $this->nodes;
