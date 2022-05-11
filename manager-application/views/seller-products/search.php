@@ -75,6 +75,21 @@ foreach ($arrListing as $sn => $row) {
                     ];
                 }
 
+                $data['otherButtons'] = [
+                    [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => "productMissingInfo(" . $row['selprod_id'] . ")",
+                            'title' => Labels::getLabel('LBL_PRODUCT_MISSING_INFO', $siteLangId)
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#warning">
+                                        </use>
+                                    </svg>'
+                    ]
+                ];
+
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;

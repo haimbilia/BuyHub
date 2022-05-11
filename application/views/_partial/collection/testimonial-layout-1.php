@@ -11,11 +11,13 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
             </div>
 
             <div class="<?php echo (1 < count($collection['testimonials'])) ? 'js-slider-testimonials' : ''; ?> slider-testimonials">
-                <?php foreach ($collection['testimonials'] as $testimonial) { ?>
+                <?php foreach ($collection['testimonials'] as $testimonial) {
+                    $uploadedTime = AttachedFile::setTimeParam($testimonial['testimonial_added_on']);
+                ?>
                     <div>
                         <div class="slider-testimonials-item">
                             <div class="slider-testimonials-image">
-                                <img class="slider-testimonials-user" alt="<?php echo $testimonial['testimonial_user_name']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $siteLangId, ImageDimension::VIEW_MEDIUM)) . '?t=' . time(); ?>">
+                                <img class="slider-testimonials-user" alt="<?php echo $testimonial['testimonial_user_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $siteLangId, ImageDimension::VIEW_MEDIUM)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                             </div>
                             <div class="slider-testimonials-data">
                                 <div class="slider-testimonials-text">

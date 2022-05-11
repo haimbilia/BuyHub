@@ -3275,5 +3275,24 @@ trait SellerProducts
         die(json_encode(['badges' => $badges]));
     }
 
+    public function productMissingInfo()
+    {
+        $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
+        
+        $selProdId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (1 > $selProdId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $sellerProductRow = SellerProduct::getAttributesById($selProdId, ['selprod_id'], false, false);
+        if (!$sellerProductRow) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $this->set('infoArr', SellerProduct::getProdMissingInfo($selProdId, $this->siteLangId));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
     
 }
