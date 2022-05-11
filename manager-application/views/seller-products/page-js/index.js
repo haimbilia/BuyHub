@@ -49,6 +49,15 @@
             }
         });
     }
+    productMissingInfo = function(selProdId){     
+        fcom.updateWithAjax(fcom.makeUrl('SellerProducts', 'productMissingInfo'), {recordId: selProdId}, function(t) { 
+            fcom.closeProcessing();
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+            
+        });
+    }
+    
 })();
 
 $(function () {

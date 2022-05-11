@@ -160,4 +160,12 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 		$("#frmSellerProductsListing").attr({ 'action': fcom.makeUrl('Seller', 'volumeDiscount'), 'target': "_blank" }).removeAttr('onsubmit').submit();
 		loadSellerProducts(document.frmRecordSearch);
 	};
+	productMissingInfo = function(selProdId){     
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'productMissingInfo'), {recordId: selProdId}, function(t) { 
+            fcom.closeProcessing();
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+            
+        });
+    }
 })();

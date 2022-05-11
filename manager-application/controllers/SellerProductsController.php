@@ -1,5 +1,7 @@
 <?php
 
+use Google\Service\Dfareporting\Country;
+
 class SellerProductsController extends ListingBaseController
 {
 
@@ -2624,6 +2626,23 @@ class SellerProductsController extends ListingBaseController
             FatUtility::dieJsonSuccess(UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . $seoUrl);
         }
         LibHelper::exitWithError(Labels::getLabel('ERR_NOT_AVAILABLE._PLEASE_TRY_USING_ANOTHER_KEYWORD', $this->siteLangId), true);
+    }
+
+    public function productMissingInfo()
+    {
+        $selProdId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (1 > $selProdId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $sellerProductRow = SellerProduct::getAttributesById($selProdId, ['selprod_id'], false, false);
+        if (!$sellerProductRow) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $this->set('infoArr', SellerProduct::getProdMissingInfo($selProdId, $this->siteLangId));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     protected function getFormColumns(): array

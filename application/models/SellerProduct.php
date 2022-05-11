@@ -1490,4 +1490,132 @@ class SellerProduct extends MyAppModel
         }
         return $arrListing;
     }
+
+    public static function getProdMissingInfo(int $selProdId, $langId): array
+    {
+        $validationArr = [
+            'selprod_deleted' => ['title' => Labels::getLabel('LBL_SELLER_PRODUCT_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
+            'product_active' => ['title' => Labels::getLabel('LBL_PRODUCT_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
+            'product_approved' => ['title' => Labels::getLabel('LBL_PRODUCT_APPROVED', $langId),'currentStatus'=> '', 'valid' => false],
+            'product_deleted' => ['title' => Labels::getLabel('LBL_PRODUCT_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
+            'prodcat_active' => ['title' => Labels::getLabel('LBL_PRODUCT_CATEGORY_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
+            'prodcat_deleted' => ['title' => Labels::getLabel('LBL_PRODUCT_CATEGORY_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
+            'prodcat_status' => ['title' => Labels::getLabel('LBL_PRODUCT_CATEGORY_STATUS', $langId),'currentStatus'=> '', 'valid' => false],
+            'taxcat_active' => ['title' => Labels::getLabel('LBL_TAX_CATEGORY_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
+            'taxcat_deleted' => ['title' => Labels::getLabel('LBL_TAX_CATEGORY_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
+            'brand_active' => ['title' => Labels::getLabel('LBL_BRAND_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
+            'brand_deleted' => ['title' => Labels::getLabel('LBL_BRAND_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
+            'user_deleted' => ['title' => Labels::getLabel('LBL_SELLER_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
+            'credential_active' => ['title' => Labels::getLabel('LBL_SELLER_CREDENTIAL_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
+            'credential_verified' => ['title' => Labels::getLabel('LBL_SELLER_CREDENTIAL_VERIFIED', $langId),'currentStatus'=> '', 'valid' => false],
+            'shop_active' => ['title' => Labels::getLabel('LBL_SHOP_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
+            'shop_supplier_display_status' => ['title' => Labels::getLabel('LBL_SHOP_DISPLAY_STATUS', $langId),'currentStatus'=> '', 'valid' => false],
+            'country_active' => ['title' => Labels::getLabel('LBL_SHOP_COUNTRY_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
+            'state_active' => ['title' => Labels::getLabel('LBL_SHOP_STATE_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
+        ];
+
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $validationArr['subscription'] = ['title' => Labels::getLabel('LBL_SELLER_SUBSCRIPTION_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false];
+        }
+
+        $selProd = SellerProduct::getAttributesById($selProdId, ['selprod_deleted', 'selprod_product_id', 'selprod_user_id']);
+
+        if ($selProd) {
+            $validationArr['selprod_deleted']['valid'] = $selProd['selprod_deleted'] === applicationConstants::NO;
+            $validationArr['selprod_deleted']['currentStatus'] = $selProd['selprod_deleted'];
+            if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+                $currentActivePlan = OrderSubscription::getUserCurrentActivePlanDetails($langId, $selProd['selprod_user_id'], array(OrderSubscription::DB_TBL_PREFIX . 'till_date', OrderSubscription::DB_TBL_PREFIX . 'price', OrderSubscription::DB_TBL_PREFIX . 'type'));
+                $validationArr['subscription']['valid'] = FatDate::diff(date("Y-m-d"), $currentActivePlan[OrderSubscription::DB_TBL_PREFIX . 'till_date']) < 0;
+                $validationArr['subscription']['currentStatus'] = $validationArr['subscription']['valid'] ? 1 :0;
+            }
+            $product = Product::getAttributesById($selProd['selprod_product_id'], ['product_approved', 'product_active', 'product_deleted', 'product_brand_id']);
+            if ($product) {
+                $validationArr['product_active']['valid'] = $product['product_active'] === applicationConstants::YES;
+                $validationArr['product_active']['currentStatus'] = $product['product_active'];
+                $validationArr['product_approved']['valid'] = $product['product_approved'] === applicationConstants::YES;
+                $validationArr['product_approved']['currentStatus'] = $product['product_approved'];
+                $validationArr['product_deleted']['valid'] = $product['product_deleted'] === applicationConstants::NO;
+                $validationArr['product_deleted']['currentStatus'] = $product['product_deleted'];
+
+                $prodToCatObj = new SearchBase(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'ptc');
+                $prodToCatObj->addFld('ptc_prodcat_id');
+                $prodToCatObj->addCondition('ptc_product_id', '=', $selProd['selprod_product_id']);
+                $prodToCatObj->doNotCalculateRecords();
+                $prodToCatObj->setPageSize(1);
+                $prodToCat = FatApp::getDb()->fetch($prodToCatObj->getResultSet());
+                if ($prodToCat) {
+                    $prodCat = ProductCategory::getAttributesById($prodToCat['ptc_prodcat_id'], ['prodcat_active', 'prodcat_deleted', 'prodcat_status']);
+                    if ($prodCat) {                        
+                        $validationArr['prodcat_active']['valid'] = $prodCat['prodcat_active'] === applicationConstants::YES;
+                        $validationArr['prodcat_active']['currentStatus'] = $prodCat['prodcat_active'];
+                        $validationArr['prodcat_deleted']['valid'] = $prodCat['prodcat_deleted'] === applicationConstants::NO;
+                        $validationArr['prodcat_deleted']['currentStatus'] = $prodCat['prodcat_deleted'];
+                        $validationArr['prodcat_status']['valid'] = $prodCat['prodcat_status'] === applicationConstants::YES;
+                        $validationArr['prodcat_status']['currentStatus'] = $prodCat['prodcat_status'];
+                    }
+                }
+
+                $prodToTaxObj = new SearchBase(Tax::DB_TBL_PRODUCT_TO_TAX, 'ptt');
+                $prodToTaxObj->addFld('ptt_taxcat_id');
+                $prodToTaxObj->addCondition('ptt_product_id', '=', $selProd['selprod_product_id']);
+                $prodToTaxObj->doNotCalculateRecords();
+                $prodToTaxObj->setPageSize(1);
+                $prodToTax = FatApp::getDb()->fetch($prodToTaxObj->getResultSet());
+                if ($prodToTax) {
+                    $tax = Tax::getAttributesById($prodToTax['ptt_taxcat_id'], ['taxcat_active', 'taxcat_deleted']);
+                    if ($tax) {
+                        $validationArr['taxcat_active']['valid'] = $tax['taxcat_active'] === applicationConstants::YES;
+                        $validationArr['taxcat_active']['currentStatus'] = $tax['taxcat_active'];
+                        $validationArr['taxcat_deleted']['valid'] = $tax['taxcat_deleted'] === applicationConstants::NO;
+                        $validationArr['taxcat_deleted']['currentStatus'] = $tax['taxcat_deleted'];
+                    }
+                }
+
+                $brand = Brand::getAttributesById($product['product_brand_id'], ['brand_active', 'brand_deleted']);
+                if ($brand) {
+                    $validationArr['brand_active']['valid'] = $brand['brand_active'] === applicationConstants::YES;
+                    $validationArr['brand_active']['currentStatus'] = $brand['brand_active'];
+                    $validationArr['brand_deleted']['valid'] = $brand['brand_deleted'] === applicationConstants::NO;
+                    $validationArr['brand_deleted']['currentStatus'] = $brand['brand_deleted'];
+                }
+
+                $userObj = User::getSearchObject(true, 0, false);
+                $userObj->addMultipleFields(['user_deleted', 'credential_active', 'credential_verified']);
+                $userObj->addCondition('user_id', '=', $selProd['selprod_user_id']);
+                $userObj->doNotCalculateRecords();
+                $userObj->setPageSize(1);
+                $seller = FatApp::getDb()->fetch($userObj->getResultSet());
+                if ($seller) {
+                    $validationArr['user_deleted']['valid'] = $seller['user_deleted'] === applicationConstants::NO;
+                    $validationArr['user_deleted']['currentStatus'] = $seller['user_deleted'];
+                    $validationArr['credential_active']['valid'] = $seller['credential_active'] === applicationConstants::YES;
+                    $validationArr['credential_active']['currentStatus'] = $seller['credential_active'];
+                    $validationArr['credential_verified']['valid'] = $seller['credential_verified'] === applicationConstants::YES;
+                    $validationArr['credential_verified']['currentStatus'] = $seller['credential_verified'];
+
+                    $shop = Shop::getAttributesByUserId($selProd['selprod_user_id'], ['shop_active', 'shop_supplier_display_status', 'shop_country_id', 'shop_state_id']);
+                    if ($shop) {
+                        $validationArr['shop_active']['valid'] = $shop['shop_active'] === applicationConstants::YES;
+                        $validationArr['shop_active']['currentStatus'] = $shop['shop_active'];
+                        $validationArr['shop_supplier_display_status']['valid'] = $shop['shop_supplier_display_status'] === applicationConstants::YES;
+                        $validationArr['shop_supplier_display_status']['currentStatus'] = $shop['shop_supplier_display_status'];
+                        $shopCountry = Countries::getAttributesById($shop['shop_country_id'], ['country_active']);
+                        if ($shopCountry) {
+                            $validationArr['country_active']['valid'] = $shopCountry['country_active'] === applicationConstants::YES;
+                            $validationArr['country_active']['currentStatus'] = $shopCountry['country_active'];
+                        }
+
+                        $shopState = States::getAttributesById($shop['shop_state_id'], ['state_active']);
+                        if ($shopState) {
+                            $validationArr['state_active']['valid'] = $shopState['state_active'] === applicationConstants::YES;
+                            $validationArr['state_active']['currentStatus'] = $shopState['state_active'];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $validationArr;
+    }
+    
 }
