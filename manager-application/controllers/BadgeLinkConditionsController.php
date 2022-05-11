@@ -49,11 +49,11 @@ class BadgeLinkConditionsController extends ListingBaseController
         $this->objectType = $this->badgeData['badge_type'];
         switch ($this->objectType) {
             case Badge::TYPE_BADGE:
-                $this->objectTypeName = Labels::getLabel('LBL_BADGE', $this->siteLangId);
+                $this->objectTypeName = Labels::getLabel('LBL_BADGES', $this->siteLangId);
                 $this->objectCtrlName = 'Badges';
                 break;
             case Badge::TYPE_RIBBON:
-                $this->objectTypeName = Labels::getLabel('LBL_RIBBON', $this->siteLangId);
+                $this->objectTypeName = Labels::getLabel('LBL_RIBBONS', $this->siteLangId);
                 $this->objectCtrlName = 'Ribbons';
                 break;
 
@@ -268,7 +268,7 @@ class BadgeLinkConditionsController extends ListingBaseController
                 $recordType = $badgeLink['blinkcond_record_type'];
                 if (array_key_exists('badgelink_record_id', $badgeLink) && empty($badgeLink['badgelink_record_id'])) {
                     $dataToFill = $badgeLink;
-                    break;
+                    continue;
                 }
 
                 $recordId = $badgeLink['badgelink_record_id'];
@@ -717,12 +717,9 @@ class BadgeLinkConditionsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $params = FatApp::getParameters();
         $this->validateBadge(current($params));
-        /* $this->set('ribbRow', $this->badgeData);
-        $ribbon = $this->_template->render(false, false, '_partial/ribbon-ui.php', true); */
 
-        $str = Labels::getLabel('LBL_{OBJECT-TYPE}_-_{OBJECT-NAME}', $this->siteLangId);
+        $str = Labels::getLabel('LBL_{OBJECT-NAME}', $this->siteLangId);
         $pageTitle = CommonHelper::replaceStringData($str, [
-            '{OBJECT-TYPE}' => $this->objectTypeName,
             '{OBJECT-NAME}' => $this->badgeData['badge_name'],
         ]);
 
