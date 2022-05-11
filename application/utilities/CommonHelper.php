@@ -863,7 +863,7 @@ class CommonHelper extends FatUtility
             return 0;
         }
         $percent = $percentage / $total;
-        return $percent_friendly = number_format($percent * 100, 2) . '%';
+        return number_format($percent * 100, 2) . '%';
     }
 
     public static function addCaptchaField($frm)
