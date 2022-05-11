@@ -32,8 +32,7 @@ class SavedSearchProduct extends MyAppModel
 
     public static function getSearchObject()
     {
-        $srch = new SearchBase(static::DB_TBL, 'sps');
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'sps');
     }
 
     public static function getSearchPageFullUrl($type, $recordId)
@@ -65,7 +64,6 @@ class SavedSearchProduct extends MyAppModel
     public static function getSearhResultFormat($arr, $langId = 0)
     {
         $result = [];
-        $seperator = ' , ';
         $count = 1;
         foreach ($arr as $key => $row) {
             switch ($key) {
@@ -153,87 +151,4 @@ class SavedSearchProduct extends MyAppModel
         }
         return $result;
     }
-
-    /* public static function getSearhResultFormat($arr,$langId = 0){
-    $string = '';
-    $seperator = ' , ';
-    foreach($arr as $key=>$row){
-    switch($key){
-                case 'price-min-range':
-                    $string.= Labels::getLabel('LBL_Price',$langId).' ';
-                    $string.= $row.' - ';
-                break;
-                case 'price-max-range':
-                    $string.= $row.''.$seperator;
-                break;
-                case 'featured':
-                    $string.= Labels::getLabel('LBL_Featured',$langId).''.$seperator;
-                break;
-                case 'currency_id':
-                    $currency = Currency::getAttributesById($row,array('currency_code'));
-                    if($currency){
-                        $string.= $currency['currency_code'].''.$seperator;
-                    }
-                break;
-                case 'brand':
-                    $brand = Brand::getSearchObject($langId);
-                    $brand->addMultipleFields(array('IFNULL(brand_name,brand_identifier) as brand_name,brand_identifier'));
-                    $brand->addCondition('brand_id','in',$row);
-                    $rs = $brand->getResultSet();
-                    $brandData = FatApp::getDb()->fetchAll($rs);
-                    if(!empty($brandData)){
-                        $string.= Labels::getLabel('LBL_Brand',$langId).' : ';
-                        foreach($brandData as $val){
-                            $string.= ($val['brand_name']!='')?$val['brand_name']:$val['brand_identifier'];
-                            $string.= $seperator;
-                        }
-                    }
-                break;
-                case 'prodcat':
-                    $productCategory = ProductCategory::getSearchObject(false,$langId);
-                    $productCategory->addMultipleFields(array('IFNULL(prodcat_name,prodcat_identifier) as prodcat_name,prodcat_identifier'));
-                    $productCategory->addCondition('prodcat_id','in',$row);
-                    $rs = $productCategory->getResultSet();
-                    $productCategoryData = FatApp::getDb()->fetchAll($rs);
-                    if(!empty($productCategoryData)){
-                        $string.= Labels::getLabel('LBL_Category',$langId).' : ';
-                        foreach($productCategoryData as $val){
-                            $string.= ($val['prodcat_name']!='')?$val['prodcat_name']:$val['prodcat_identifier'];
-                            $string.= $seperator;
-                        }
-                    }
-                break;
-                case 'condition':
-                    $conditionArr = Product::getConditionArr($langId);
-                    $string.= Labels::getLabel('LBL_Condition',$langId).' : ';
-                    foreach($row as $val){
-                        if(!array_key_exists($val,$conditionArr)){
-                            continue;
-                        }
-                        $string.= $conditionArr[$val].''.$seperator;
-                    }
-                break;
-                case 'optionvalue':
-                    $optionValue = OptionValue::getSearchObject($langId);
-                    $optionValue->addMultipleFields(array('IFNULL(optionvalue_name,optionvalue_identifier) as optionvalue_name,optionvalue_identifier'));
-                    $optionValue->addCondition('optionvalue_id','in',$row);
-                    $rs = $optionValue->getResultSet();
-                    $optionValueData = FatApp::getDb()->fetchAll($rs);
-                    if(!empty($optionValueData)){
-                        $string.= Labels::getLabel('LBL_Options',$langId).' : ';
-                        foreach($optionValueData as $val){
-                            $string.= ($val['optionvalue_name']!='')?$val['optionvalue_name']:$val['optionvalue_identifier'];
-                            $string.= $seperator;
-                        }
-                    }
-                break;
-                case 'availability':
-                    if(in_array(1,$row)){
-                        $string.= Labels::getLabel('LBL_Exclude_Out_of_stock',$langId).$seperator ;
-                    }
-                break;
-    }
-    }
-    return rtrim($string,$seperator);
-    } */
 }

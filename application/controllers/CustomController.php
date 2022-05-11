@@ -750,13 +750,6 @@ class CustomController extends MyAppController
         return $frm;
     }
 
-    private function getfavoriteShopsForm()
-    {
-        $frm = new Form('frmSearchfavoriteShops');
-        $frm->addHiddenField('', 'user_id');
-        return $frm;
-    }
-
     private function contactUsForm()
     {
         $frm = new Form('frmContact');

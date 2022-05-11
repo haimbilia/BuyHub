@@ -54,7 +54,7 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
                         $geoAddress = Labels::getLabel("LBL_Location", $siteLangId);
                     }
                     $geoAddress =  isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress;
-                    ?>                   
+                    ?>
                     <div class="geo-location_dropdown-menu">
                         <div class="geo-location_body"> <input autocomplete="no" id="ga-autoComplete-mobile" class="geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
                             <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
@@ -83,11 +83,13 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
         </div>
         <div class="offcanvas-body p-0">
             <ul class="seller-nav">
-                <?php                
+                <?php
                 $this->includeTemplate('_partial/headerTopNavigation.php', ['liClass' => 'seller-nav-item', 'aClass' => 'seller-nav-link']); ?>
             </ul>
         </div>
     </div>
 <?php } ?>
-<!-- Blog Search Form -->
-<?php $this->includeTemplate('_partial/footer-part/blog-search-form.php'); ?>
+<?php if (!in_array($controllerName, ['Blog'])) { ?>
+    <!-- Blog Search Form -->
+<?php $this->includeTemplate('_partial/footer-part/blog-search-form.php');
+} ?>

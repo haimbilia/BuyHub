@@ -1197,7 +1197,8 @@ class ImageController extends FatController
         $badgeId = FatUtility::int($badgeId);
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeId, 0, $langId);
-        $image_name = AttachedFile::setNamePrefix($file_row['afile_physical_path'], $sizeType);
+        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $filePath = AttachedFile::FILETYPE_BADGE_IMAGE_PATH;
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BADGE_ICON, $sizeType);

@@ -33,7 +33,7 @@ class ShopsController extends MyAppController
         $data = FatApp::getPostedData();
         $page = (empty($data['page']) || FatUtility::int($data['page']) <= 0) ? 1 : FatUtility::int($data['page']);
         $pageSize = applicationConstants::getFrontEndPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-
+        
         $searchForm = $this->getShopSearchForm($this->siteLangId);
         $post = $searchForm->getFormDataFromArray($data);
         $post['page'] = $page;
@@ -59,24 +59,10 @@ class ShopsController extends MyAppController
         $srch->joinSellerSubscription();
         $srch->joinTable('(' . $prodShopSrch->getQuery() . ')', 'INNER JOIN', 'temp.shop_id = s.shop_id', 'temp');
 
-        $loggedUserId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $loggedUserId = UserAuthentication::getLoggedUserId();
-        }
-
-        /* sub query to find out that logged user have marked shops as favorite or not[ */
-        /* $favSrchObj = new UserFavoriteShopSearch();
-        $favSrchObj->doNotCalculateRecords();
-        $favSrchObj->doNotLimitRecords();
-        $favSrchObj->addMultipleFields(array('ufs_shop_id', 'ufs_id'));
-        $favSrchObj->addCondition('ufs_user_id', '=', $loggedUserId);
-        $srch->joinTable('(' . $favSrchObj->getQuery() . ')', 'LEFT OUTER JOIN', 'ufs_shop_id = s.shop_id', 'ufs'); */
-        /* ] */
 
         $flds = [
             's.shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_description',
             'shop_country_l.country_name as country_name', 'shop_state_l.state_name as state_name', 'shop_city',
-            /* 'IFNULL(ufs.ufs_id, 0) as is_favorite' */
         ];
         $srch->addMultipleFields($flds);
 
@@ -91,7 +77,7 @@ class ShopsController extends MyAppController
 
         $srch->addGroupBy('s.shop_id');
         $removeFlds = array_diff($flds, ['s.shop_id']);
-        $this->setRecordCount(clone $srch, $post['pageSize'], $post['page'], $post, false, $removeFlds);
+        $this->setRecordCount(clone $srch, $post['pageSize'], $post['page'], $post, true, $removeFlds);
         $srch->doNotCalculateRecords();
 
         $srch->setPageNumber($page);
@@ -100,7 +86,6 @@ class ShopsController extends MyAppController
 
         $shopRs = $srch->getResultSet();
         $allShops = $db->fetchAll($shopRs, 'shop_id');
-
         $totalProdCountToDisplay = 4;
 
         $productSrchObj = new ProductSearch($this->siteLangId);

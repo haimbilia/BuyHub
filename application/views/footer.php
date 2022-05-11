@@ -13,11 +13,11 @@ if (CommonHelper::demoUrl()) { ?>
     </div>
 <?php }
 
-if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VAR_STRING, '') && UserAuthentication::getLoggedUserId(true) > 0) {    
+if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VAR_STRING, '') && UserAuthentication::getLoggedUserId(true) > 0) {
 ?>
 
-<div class="engagespot-btn" id="engagespotUI"> 
-</div>
+    <div class="engagespot-btn" id="engagespotUI">
+    </div>
 <?php }
 if ($controllerName == 'Home' && $action == 'index') {
     $this->includeTemplate('_partial/footerTrustBanners.php');
@@ -37,7 +37,13 @@ if ($controllerName == 'Home' && $action == 'index') {
             <div class="footer-layout">
                 <div class="footer-layout-col footer-logo-wrap">
                     <div class="footer-logo">
-                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/logos/logo-footer.png" alt="">
+                        <?php
+                        $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+                        $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                        $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        ?>
+                        <img width="120" height="37" <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
                     </div>
 
                     <ul class="contact-info">
@@ -216,28 +222,28 @@ if ($controllerName == 'Home' && $action == 'index') {
             </div>
         <?php }  ?>
     </div>
-<?php } 
+<?php }
 if (!isset($_SESSION['geo_location']) && FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '') != '') { ?>
-    <script defer src="https://maps.google.com/maps/api/js?key=<?php echo FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''); ?>&libraries=places"></script>
-<?php }  
+    <script async src="https://maps.google.com/maps/api/js?key=<?php echo FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''); ?>&libraries=places"></script>
+<?php }
 if (FatApp::getConfig('CONF_ENABLE_LIVECHAT', FatUtility::VAR_STRING, '')) {
     echo FatApp::getConfig('CONF_LIVE_CHAT_CODE', FatUtility::VAR_STRING, '');
 } ?>
 <?php if (FatApp::getConfig('CONF_SITE_TRACKER_CODE', FatUtility::VAR_STRING, '') && User::checkStatisticalCookiesEnabled() == true) {
     echo FatApp::getConfig('CONF_SITE_TRACKER_CODE', FatUtility::VAR_STRING, '');
-} 
+}
 
 if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VAR_STRING, '') && UserAuthentication::getLoggedUserId(true) > 0) { ?>
-   <script>
-        $.getScript( "https://cdn.engagespot.co/engagespot-client.min.js", function( data, textStatus, jqxhr ) {           
+    <script>
+        $.getScript("https://cdn.engagespot.co/engagespot-client.min.js", function(data, textStatus, jqxhr) {
             Engagespot.render('#engagespotUI', {
-                apiKey: "<?php echo FatApp::getConfig("CONF_ENGAGESPOT_API_KEY", FatUtility::VAR_STRING, '');?>",
-                userId: "<?php echo User::getCredentialName(UserAuthentication::getLoggedUserId(true));?>",
-                userSignature: "<?php echo base64_encode(hash_hmac('sha256', User::getCredentialName(UserAuthentication::getLoggedUserId(true)), FatApp::getConfig("CONF_ENGAGESPOT_SECRET_KEY", FatUtility::VAR_STRING, ''),true));?>"
-            });          
-        });       
-    </script>  
-<?php } ?> 
+                apiKey: "<?php echo FatApp::getConfig("CONF_ENGAGESPOT_API_KEY", FatUtility::VAR_STRING, ''); ?>",
+                userId: "<?php echo User::getCredentialName(UserAuthentication::getLoggedUserId(true)); ?>",
+                userSignature: "<?php echo base64_encode(hash_hmac('sha256', User::getCredentialName(UserAuthentication::getLoggedUserId(true)), FatApp::getConfig("CONF_ENGAGESPOT_SECRET_KEY", FatUtility::VAR_STRING, ''), true)); ?>"
+            });
+        });
+    </script>
+<?php } ?>
 <div class="no-print">
     <?php if (CommonHelper::demoUrl()) { ?>
         <!--Start of Tawk.to Script-->

@@ -601,6 +601,9 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
         /* types: ['address'] */
         fields: ["formatted_address", "geometry", "name", "address_components"],
     }
+
+    if (typeof google !== 'object' || typeof google.maps !== 'object') { return; }
+    
     var autocomplete = new google.maps.places.Autocomplete(fieldElement, options);
     google.maps.event.addListener(autocomplete, 'place_changed', function () {
         var place = autocomplete.getPlace();
