@@ -1493,8 +1493,7 @@ class SellerProduct extends MyAppModel
 
     public static function getProdMissingInfo(int $selProdId, $langId): array
     {
-        $validationArr = [
-            'selprod_deleted' => ['title' => Labels::getLabel('LBL_SELLER_PRODUCT_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
+        $validationArr = [          
             'product_active' => ['title' => Labels::getLabel('LBL_PRODUCT_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
             'product_approved' => ['title' => Labels::getLabel('LBL_PRODUCT_APPROVED', $langId),'currentStatus'=> '', 'valid' => false],
             'product_deleted' => ['title' => Labels::getLabel('LBL_PRODUCT_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
@@ -1506,8 +1505,8 @@ class SellerProduct extends MyAppModel
             'brand_active' => ['title' => Labels::getLabel('LBL_BRAND_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
             'brand_deleted' => ['title' => Labels::getLabel('LBL_BRAND_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
             'user_deleted' => ['title' => Labels::getLabel('LBL_SELLER_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
-            'credential_active' => ['title' => Labels::getLabel('LBL_SELLER_CREDENTIAL_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
-            'credential_verified' => ['title' => Labels::getLabel('LBL_SELLER_CREDENTIAL_VERIFIED', $langId),'currentStatus'=> '', 'valid' => false],
+            'credential_active' => ['title' => Labels::getLabel('LBL_SELLER_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
+            'credential_verified' => ['title' => Labels::getLabel('LBL_SELLER_VERIFIED', $langId),'currentStatus'=> '', 'valid' => false],
             'shop_active' => ['title' => Labels::getLabel('LBL_SHOP_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
             'shop_supplier_display_status' => ['title' => Labels::getLabel('LBL_SHOP_DISPLAY_STATUS', $langId),'currentStatus'=> '', 'valid' => false],
             'country_active' => ['title' => Labels::getLabel('LBL_SHOP_COUNTRY_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
@@ -1520,9 +1519,7 @@ class SellerProduct extends MyAppModel
 
         $selProd = SellerProduct::getAttributesById($selProdId, ['selprod_deleted', 'selprod_product_id', 'selprod_user_id']);
 
-        if ($selProd) {
-            $validationArr['selprod_deleted']['valid'] = $selProd['selprod_deleted'] === applicationConstants::NO;
-            $validationArr['selprod_deleted']['currentStatus'] = $selProd['selprod_deleted'];
+        if ($selProd) {           
             if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
                 $currentActivePlan = OrderSubscription::getUserCurrentActivePlanDetails($langId, $selProd['selprod_user_id'], array(OrderSubscription::DB_TBL_PREFIX . 'till_date', OrderSubscription::DB_TBL_PREFIX . 'price', OrderSubscription::DB_TBL_PREFIX . 'type'));
                 $validationArr['subscription']['valid'] = FatDate::diff(date("Y-m-d"), $currentActivePlan[OrderSubscription::DB_TBL_PREFIX . 'till_date']) < 0;
