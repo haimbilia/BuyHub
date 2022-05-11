@@ -78,7 +78,7 @@
 
  <!-- Load the HubSpot tracking code -->
  <!-- Start of HubSpot Embed Code -->
- <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/2865881.js"></script>
+ <script type="text/javascript" id="hs-script-loader" defer src="//js.hs-scripts.com/2865881.js"></script>
  <!-- End of HubSpot Embed Code -->
 
  <!-- Tracking subsequent page views -->
