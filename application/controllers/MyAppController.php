@@ -913,7 +913,7 @@ class MyAppController extends FatController
 
     private function checkMaintenance()
     {
-        if (FatApp::getConfig("CONF_MAINTENANCE", FatUtility::VAR_INT, 0) == ApplicationConstants::NO) {
+        if (FatApp::getConfig("CONF_MAINTENANCE", FatUtility::VAR_INT, 0) == applicationConstants::NO) {
             return true;
         }
 

@@ -18,6 +18,7 @@
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (res) {
             fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             reloadList();
         });
     };
@@ -102,6 +103,7 @@
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'setupSettings'), data, function (t) {
             fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             reloadList();
             
         });

@@ -90,15 +90,13 @@ $formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId); ?>
 
     $(minWidthBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
     $(minHeightBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
-    var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
-    var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
+  
    
     $(document).on('change', '#slideScreenJs', function() {
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
 
-        if ($(this).val() == screenDesktop) {
-          
+        if ($(this).val() == screenDesktop) {          
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['width'] .
                                         " x " . $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
             $(minWidthBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
