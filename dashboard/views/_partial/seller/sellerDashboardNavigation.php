@@ -85,12 +85,17 @@ $plugin = new Plugin();
                 <?php } ?>
             </ul>
         </li>
-    <?php } ?>
-
-    <?php if (
-        $userPrivilege->canViewShippingProfiles(UserAuthentication::getLoggedUserId(), true) ||
-        $userPrivilege->canViewShippingPackages(UserAuthentication::getLoggedUserId(), true)
-    ) { ?>
+    <?php } 
+    
+    $shippingObj = new Shipping($siteLangId);
+    $shippingProfileEnabled = $userPrivilege->canViewShippingProfiles(UserAuthentication::getLoggedUserId(), true) && !FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && (!$shippingObj->getShippingApiObj($userParentId) || Shop::getAttributesByUserId($userParentId, 'shop_use_manual_shipping_rates'));
+    $shippingPackagesEnabled = $userPrivilege->canViewShippingPackages(UserAuthentication::getLoggedUserId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1) && FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0);
+        
+    if (
+        $shippingProfileEnabled ||
+        $shippingPackagesEnabled
+    ) {        
+        ?>
         <li class="dashboard-menu-item dropdownJs">
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-shipping" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
@@ -107,9 +112,8 @@ $plugin = new Plugin();
                 <?php } ?>
             </button>
             <ul class="menu-sub menu-sub-accordion <?php echo $collapseClass; ?>" id="nav-shipping" aria-labelledby="" data-parent="#dashboard-menu">
-                <?php
-                $shippingObj = new Shipping($siteLangId);
-                if ($userPrivilege->canViewShippingProfiles(UserAuthentication::getLoggedUserId(), true) && !FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && (!$shippingObj->getShippingApiObj($userParentId) || Shop::getAttributesByUserId($userParentId, 'shop_use_manual_shipping_rates'))) {
+                <?php               
+                if ($shippingProfileEnabled) {
                 ?>
                     <li class="menu-sub-item navItemJs">
                         <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'shippingprofile') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Shipping_Profiles', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>">
@@ -117,21 +121,19 @@ $plugin = new Plugin();
                             </span>
                         </a>
                     </li>
-                <?php } ?>
-
-                <?php if ($userPrivilege->canViewShippingPackages(UserAuthentication::getLoggedUserId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1) && FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) { ?>
+                <?php }
+                if ($shippingPackagesEnabled) { ?>
                     <li class="menu-sub-item navItemJs">
                         <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'shippingpackages') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Shipping_Packages', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>">
                             <span class="menu-sub-title navTextJs">
                                 <?php echo Labels::getLabel('LBL_Shipping_Packages', $siteLangId); ?></span>
                         </a>
-
                     </li>
                 <?php } ?>
             </ul>
         </li>
-    <?php } ?>
-    <?php if (
+    <?php } 
+    if (
         $userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true) ||
         $userPrivilege->canViewCancellationRequests(UserAuthentication::getLoggedUserId(), true) ||
         $userPrivilege->canViewReturnRequests(UserAuthentication::getLoggedUserId(), true)
