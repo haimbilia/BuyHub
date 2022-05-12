@@ -86,17 +86,12 @@ $formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId); ?>
     var ratioTypeCustom = <?php echo AttachedFile::RATIO_TYPE_CUSTOM; ?>;
     var selectedRatioType = <?php echo $ratio_type; ?>;
 
-
-
     if (selectedRatioType == ratioTypeSquare) {
-
-
         $(minWidthLogoEle).val('<?php echo $getShopLogoSquare['width']; ?>');
         $(minHeightLogoEle).val('<?php echo $getShopLogoSquare['height']; ?>');
         $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopLogoSquare['width']; ?> x <?php echo $getShopLogoSquare['height']; ?>'));
 
     } else if (selectedRatioType == ratioTypeRectangular) {
-
         $(minWidthLogoEle).val('<?php echo $getShopLogoRactangle['width']; ?>');
         $(minHeightLogoEle).val('<?php echo $getShopLogoRactangle['height']; ?>');
         $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getShopLogoRactangle['width']; ?> x <?php echo $getShopLogoRactangle['height']; ?>'));
@@ -106,10 +101,6 @@ $formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId); ?>
         $(minHeightLogoEle).val('');
         $('.logoPreferredDimensionsJs').html('');
     }
-
-
-
-
     $(document).off('change', '#slideScreenJs').on('change', '#slideScreenJs', function() {
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;

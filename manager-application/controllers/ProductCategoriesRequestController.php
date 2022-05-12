@@ -259,20 +259,16 @@ class ProductCategoriesRequestController extends ListingBaseController
             }
         }
 
-        $getCategoryRequestDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_CATEGORY_BANNER);
-        $getCategoryRequestLogoSquare = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_SQUARE);
-        $getCategoryRequestLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON,ImageDimension::VIEW_DEFAULT,AttachedFile::RATIO_TYPE_RECTANGULAR);
-
+        $bannerDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_CATEGORY_BANNER);
+        $logoDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON,ImageDimension::VIEW_DEFAULT);
 
         $logoFrm->fill($data);
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
         $imageFrm = $this->getImageForm($recordId);
         $imageFrm->fill($data);
 
-        $this->set('getCategoryRequestDimensions', $getCategoryRequestDimensions);
-        $this->set('getCategoryRequestLogoSquare', $getCategoryRequestLogoSquare);
-        $this->set('getCategoryRequestLogoRactangle', $getCategoryRequestLogoRactangle);
-
+        $this->set('bannerDimensions', $bannerDimensions);
+        $this->set('logoDimensions', $logoDimensions);
 
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
@@ -403,10 +399,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         } else {
             $lang_id = array_key_first($languagesAssocArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);
-        }
-
-        $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
-        $frm->addRadioButtons(Labels::getLabel('FRM_RATIO', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
+        }       
 
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_CATEGORY_ICON);
         $frm->addHiddenField('', 'min_width');

@@ -693,7 +693,7 @@ class ImageDimension extends FatUtility
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_COLLECTION_PAGE => [self::WIDTH => 48, self::HEIGHT => 48],
-            self::VIEW_DEFAULT => [self::WIDTH => 60, self::HEIGHT => 60]
+            self::VIEW_DEFAULT => [self::WIDTH => 100, self::HEIGHT => 100]
         ];
 
         return self::returnData($arr, self::VIEW_THUMB, $sizeType);

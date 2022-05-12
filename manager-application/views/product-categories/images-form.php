@@ -108,48 +108,16 @@ $formTitle = Labels::getLabel('LBL_CATEGORY_SETUP', $siteLangId); ?>
             $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?> x <?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
             $(minWidthBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
-            aspectRatio = aspectRatioDes;
-         /*    $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '2000 x 500'));
-            $('input[name=banner_min_width]').val(2000);
-            $('input[name=banner_min_height]').val(500); 
-            aspectRatio = 4 / 1;*/
+           
         } else if ($(this).val() == screenIpad) {
-
-            var getAspectRatioIpad = '<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['aspectRatio']; ?>';
-            getAspectRatioIpad = getAspectRatioIpad.split(":");
-            if (getAspectRatioIpad) {
-                var aspectRatioIpad = getAspectRatioIpad[0] / getAspectRatioIpad[1];
-            } else {
-                var aspectRatioIpad = 128 / 45;
-            }
             $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_TABLET]['width']; ?> x <?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_TABLET]['height']; ?>'));
             $(minWidthBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_TABLET]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_TABLET]['height']; ?>');
-            aspectRatio = aspectRatioIpad;
-
-
-           /*  $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '1024 x 360'));
-            $('input[name=banner_min_width]').val(1024);
-            $('input[name=banner_min_height]').val(360);
-            aspectRatio = 128 / 45; */
-        } else {
-            var getAspectRatioMob = '<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_TABLET]['aspectRatio']; ?>';
-            getAspectRatioMob = getAspectRatioMob.split(":");
-            if (getAspectRatioMob) {
-                var aspectRatioMob = getAspectRatioMob[0] / getAspectRatioMob[1];
-            } else {
-                var aspectRatioMob = 16 / 9;
-            }
+        } else {        
             $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_MOBILE]['width']; ?> x <?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
-
             $(minWidthBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_MOBILE]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
-            aspectRatio = aspectRatioMob;
-
-          /*   $('.preferredDimensions-js').html((langLbl.preferredDimensions).replace(/%s/g, '640 x 360'));
-            $('input[name=banner_min_width]').val(640);
-            $('input[name=banner_min_height]').val(360);
-            aspectRatio = 16 / 9; */
+     
         }
     });
 </script>
