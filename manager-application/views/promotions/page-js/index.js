@@ -102,8 +102,8 @@ $(document).on('change', "select[name='promotion_type']", function () {
             return;
         }
         data = 'promotionId=' + promotionId + '&bannerId=' + bannerId + '&langId=' + langId + '&screen=' + screen;
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeMedia'), data, function (res) {
-            fcom.closeProcessing();
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeMedia'), data, function (t) {
+            fcom.displaySuccessMessage(t.msg);
             images(promotionId, langId, screen);
         });
     };

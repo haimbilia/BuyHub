@@ -92,7 +92,7 @@ $(document).ready(function () {
         }
         $(dv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'removeMediaImage', [file_type, lang_id]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
             getForm(document.frmConfiguration.form_type.value, lang_id);
         });
@@ -209,7 +209,7 @@ $(document).ready(function () {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'deleteVerificationFile', [fileType]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             getForm(document.frmConfiguration.form_type.value, document.frmConfiguration.lang_id.value);
         });
     };

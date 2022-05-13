@@ -16,8 +16,7 @@
         if (!$(frm).validate()) { return; }
 
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (res) {
-            fcom.closeProcessing();
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (t) {
             fcom.displaySuccessMessage(t.msg);
             reloadList();
         });
@@ -102,7 +101,6 @@
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'setupSettings'), data, function (t) {
-            fcom.closeProcessing();
             fcom.displaySuccessMessage(t.msg);
             reloadList();
             
@@ -120,7 +118,7 @@
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('EmailTemplates', 'removeEmailLogo', [lang_id]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             editSettingsForm(lang_id);
         });
     };  

@@ -12,7 +12,7 @@
     deleteBackgroundImage = function (recordId, afileId ,type, langId) {
         if (!confirm(langLbl.confirmDelete)) { return; }
         fcom.updateWithAjax(fcom.makeUrl('ContentBlock', 'removeMedia'), {recordId, afileId, type, langId}, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             backgroundImage(recordId, 'THUMB' ,langId);
             reloadList();
             $('.resetModalFormJs').click();

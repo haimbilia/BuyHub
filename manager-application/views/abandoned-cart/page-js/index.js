@@ -58,7 +58,7 @@ $(document).ready(function () {
 	sendDiscountNotification = function (abandonedcartId, couponId) {
 		var data = 'abandonedcartId=' + abandonedcartId + '&couponId=' + couponId;
 		fcom.updateWithAjax(fcom.makeUrl('AbandonedCart', 'discountNotification'), data, function (t) {
-			fcom.closeProcessing();
+			fcom.displaySuccessMessage(t.msg);
 			reloadList();
 		});
 	};

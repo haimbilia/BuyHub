@@ -27,7 +27,7 @@
             fcom.makeUrl(controllerName, "removeMedia"),
             {recordId},
             function (t) {
-                fcom.closeProcessing();
+                fcom.displaySuccessMessage(t.msg);
                 mediaForm(recordId)        
             }
         );

@@ -69,8 +69,8 @@ $(document).ajaxComplete(function () {
         fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "deleteRecord"),
             data,
-            function () {
-                fcom.closeProcessing();
+            function (t) {
+                fcom.displaySuccessMessage(t.msg);
                 reloadList();
             }
         );

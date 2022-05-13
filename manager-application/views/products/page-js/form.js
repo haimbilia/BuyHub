@@ -20,8 +20,8 @@
             return;
         }
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
-            fcom.closeProcessing();
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (t) {
+            fcom.displaySuccessMessage(t.msg);
             langForm(res.langId, 0, res.recordId);
         });
     };
@@ -260,7 +260,7 @@
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId }, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             prodSpecifications();
         });
     };
@@ -725,7 +725,7 @@
         data += '&frow=' + fullRow;
 
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalFile'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             let recordId = getCurrentFrmRecordId();      
             let langId = $('#digitalFrmLangId').val() || 0;     
             let optionComb = $('#digitalFrmOptionId').val() || 0; 
@@ -739,7 +739,7 @@
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             let recordId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalLink, recordId);
         });

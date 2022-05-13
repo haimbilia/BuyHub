@@ -18,6 +18,7 @@
         }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setup'), data, function (res) {
+            fcom.displaySuccessMessage(t.msg);
             langForm(res.langId, 0, res.recordId);
         });
     };
@@ -316,7 +317,7 @@
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) { return false; }
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteImage', [record_id, image_id]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             productImages(record_id, t.optionId, t.langId);
             if (t.isDefaultLayout) {
                 productDefaultImages();
@@ -635,8 +636,8 @@
         }
         data += '&frow=' + fullRow;
 
-        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteDigitalFile'), data, function (res) {
-            fcom.closeProcessing();
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteDigitalFile'), data, function (t) {
+            fcom.displaySuccessMessage(t.msg);
             let recordId = getCurrentFrmRecordId();      
             let langId = $('#digitalFrmLangId').val() || 0;     
             let optionComb = $('#digitalFrmOptionId').val() || 0; 
@@ -650,9 +651,8 @@
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
-            fcom.closeProcessing();
-            let productId = getCurrentFrmRecordId();
-            getDigitalDownloads(typeDigitalLink, productId);
+            fcom.displaySuccessMessage(t.msg);
+            getDigitalDownloads(typeDigitalLink, getCurrentFrmRecordId());
         });
     };
 

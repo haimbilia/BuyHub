@@ -20,19 +20,28 @@ $(document).on('change', '.downloadTypeJs', function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updatePayment'), data, function (t) {
-            window.location.reload();
+            fcom.displaySuccessMessage(t.msg);
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
         });
     };
     approve = function (orderPaymentId) {
         if (!confirm(langLbl.confirmUpdate)) { return; }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'approvePayment', [orderPaymentId]), '', function (t) {
-            window.location.reload();
+            fcom.displaySuccessMessage(t.msg);
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
         });
     };
     reject = function (orderPaymentId) {
         if (!confirm(langLbl.confirmUpdate)) { return; }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'rejectPayment', [orderPaymentId]), '', function (t) {
-            window.location.reload();
+            fcom.displaySuccessMessage(t.msg);
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
         });
     };
     viewPaymemntGatewayResponse = function (data) {
@@ -146,6 +155,7 @@ $(document).on('change', '.downloadTypeJs', function () {
             proceedToShipment(op_id);
         } else {
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) {
+                fcom.displaySuccessMessage(t.msg);
                 fcom.removeLoader();
                 $("#allSellerJs").trigger('change');
                 getOrderCommentForm(frm.order_id.value, frm.op_id.value);
@@ -159,13 +169,14 @@ $(document).on('change', '.downloadTypeJs', function () {
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updateShippingUser'), data, function (t) {
             fcom.removeLoader();
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
         });
     };
 
     /* ShipStation */
     generateLabel = function (opId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {
+            fcom.displaySuccessMessage(t.msg);
             setTimeout(function () {
                 location.reload();
             }, 300);
@@ -315,6 +326,7 @@ $(document).on('change', '.downloadTypeJs', function () {
 
     cancelPickup = function (opId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'cancelPickup', [opId]), '', function (t) {
+            fcom.displaySuccessMessage(t.msg);
             setTimeout(function () { window.location.reload(); }, 300);
         });
     };

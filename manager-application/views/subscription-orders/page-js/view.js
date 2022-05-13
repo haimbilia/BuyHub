@@ -3,7 +3,10 @@
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updatePayment'), data, function (t) {
-            window.location.reload();
+            fcom.displaySuccessMessage(t.msg);
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
         });
     };
 

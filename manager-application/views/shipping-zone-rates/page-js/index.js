@@ -63,7 +63,7 @@ $(document).ready(function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Zones', 'setup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             reloadList();
             if (t.langId > 0) {
                 editZoneLangForm(t.zoneId, t.langId);
@@ -84,7 +84,7 @@ $(document).ready(function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Zones', 'langSetup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             reloadList();
             if (t.langId > 0) {
                 editZoneLangForm(t.zoneId, t.langId);

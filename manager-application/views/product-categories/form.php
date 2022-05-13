@@ -90,7 +90,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
             fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'removeRatingType'), 'prt_prodcat_id=' +
                 prodCatId + '&prt_ratingtype_id=' + rt_id,
                 function(t) {
-                    fcom.closeProcessing();
+                    fcom.displaySuccessMessage(t.msg);
                 });
 
         }

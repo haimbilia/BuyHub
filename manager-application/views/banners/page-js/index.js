@@ -58,7 +58,7 @@ $(document).on('change', '#imageLanguageJs', function (e) {
             loadImages(bannerLocationId, recordId, 'logo', slideScreen, langId);
             reloadList();
             $('.resetModalFormJs').click();
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
         });
     };
 

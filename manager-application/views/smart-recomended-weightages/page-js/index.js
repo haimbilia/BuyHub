@@ -15,7 +15,7 @@
 
         var data = 'swsetting_key=' + obj.attr('data-id') + '&weightage=' + value;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             obj.attr('data-value', value);
         });
     };

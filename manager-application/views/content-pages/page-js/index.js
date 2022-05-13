@@ -48,7 +48,7 @@ $(document).on('change', '#imageLanguageJs', function () {
     deleteBackgroundImage = function (recordId, afileId, langId) {
         if (!confirm(langLbl.confirmDelete)) { return; }
         fcom.updateWithAjax(fcom.makeUrl('ContentPages', 'removeMedia', [recordId, afileId]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             backgroundImage(recordId, langId);
             reloadList();
             $('.resetModalFormJs').click();

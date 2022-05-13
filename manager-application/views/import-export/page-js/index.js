@@ -40,8 +40,8 @@ $(document).ready(function () {
         let frm = document.forms[formName];
         var data = fcom.frmData(frm);
         $(dv).prepend(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'updateSettings'), data, function (ans) {
-            fcom.closeProcessing();
+        fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'updateSettings'), data, function (t) {
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
             loadForm('settings');
         });

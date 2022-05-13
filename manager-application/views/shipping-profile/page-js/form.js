@@ -15,7 +15,7 @@ $(document).ready(function () {
         var data = fcom.frmData(frm);
         var profileId = $('input[name="shipprofile_id"]').val();
         fcom.updateWithAjax(fcom.makeUrl('shippingProfile', 'setup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             if (profileId <= 0) {
                 window.location.replace(fcom.makeUrl('shippingProfile', 'form', [t.profileId]));
             }
@@ -106,7 +106,7 @@ $(document).ready(function () {
         }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'setup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             var profileId = $('input[name="profile_id"]').val();
             searchProducts(profileId);
             document.frmProfileProducts.reset();
@@ -119,7 +119,7 @@ $(document).ready(function () {
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'removeProduct', [productId]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             var profileId = $('input[name="profile_id"]').val();
             searchProductsSection(profileId);
         });
@@ -175,7 +175,7 @@ $(document).ready(function () {
         /*var data = fcom.frmData(frm);*/
         var data = $(frm).serialize();
         fcom.updateWithAjax(fcom.makeUrl('shippingZones', 'setup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             var profileId = $('input[name="profile_id"]').val();
             setTimeout(() => {
                 searchZone(profileId, true);
@@ -190,7 +190,7 @@ $(document).ready(function () {
         }
 
         fcom.updateWithAjax(fcom.makeUrl('shippingZones', 'deleteZone', [zoneId]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             var profileId = $('input[name="profile_id"]').val();
             searchZone(profileId);
             searchProductsSection(profileId);
@@ -227,7 +227,7 @@ $(document).ready(function () {
         $("input[name='btn_submit']").attr('disabled', 'disabled');
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'setup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             $("input[name='btn_submit']").removeAttr('disabled');
             var profileId = $('input[name="profile_id"]').val();
             searchZone(profileId);
@@ -254,7 +254,7 @@ $(document).ready(function () {
         $("input[name='btn_submit']").attr('disabled', 'disabled');
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'langSetup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             $("input[name='btn_submit']").removeAttr('disabled');
             var profileId = $('input[name="profile_id"]').val();
             searchZone(profileId);
@@ -273,7 +273,7 @@ $(document).ready(function () {
         }
 
         fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'deleteRate', [rateId]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             var profileId = $('input[name="profile_id"]').val();
             searchZone(profileId);
 

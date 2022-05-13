@@ -10,7 +10,6 @@
 
     updateFile = function (labelType = 1) {
         fcom.updateWithAjax(fcom.makeUrl('Labels', 'updateJsonFile', [labelType]), '', function (ans) {
-            fcom.closeProcessing();
             fcom.displaySuccessMessage(ans.msg);
         });
     };
