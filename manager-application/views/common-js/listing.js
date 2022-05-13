@@ -715,7 +715,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (1 > autoTableColumWidth) {
             return false;
         }
-
+        
         $('.listingTableJs .tableHeadJs th').each(function () {
             var arr = {
                 'width': $(this).outerWidth(true),
