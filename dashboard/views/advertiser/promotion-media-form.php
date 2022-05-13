@@ -13,7 +13,7 @@ $langFld->addFieldTagAttribute('class', 'banner-language-js');
 $screenFld = $mediaFrm->getField('banner_screen');
 $screenFld->addFieldTagAttribute('class', 'banner-screen-js');
 
-$preferredDimensionsStr = '<span class="form-text text-muted uploadimage--info" > ' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), $bannerWidth . ' * ' . $bannerHeight) . '</span>';
+$preferredDimensionsStr = '<span class="form-text text-muted uploadimage--info" ></span>';
 
 $uploadfld->htmlAfterField = $preferredDimensionsStr;
 unset($languages[CommonHelper::getDefaultFormLangId()]);
@@ -46,46 +46,39 @@ unset($languages[CommonHelper::getDefaultFormLangId()]);
     </div>    
 </div>
 <script>
-    $('input[name=banner_min_width]').val(1350);
-    $('input[name=banner_min_height]').val(405);
-    var aspectRatio = 10 / 3;  
+
     $(document).off('change', '.banner-screen-js').on('change', '.banner-screen-js', function() {
         var promotionType = <?php echo $promotionType ?>;
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
 
         if (promotionType == <?php echo Promotion::TYPE_SLIDES ?>) {
-            if ($(this).val() == screenDesktop) {
-                $('.uploadimage--info').html((langLbl.preferredDimensions).replace(/%s/g, '1350 * 405'));
-                $('input[name=banner_min_width]').val(1350);
-                $('input[name=banner_min_height]').val(405);
-                aspectRatio = 10 / 3;
-            } else if ($(this).val() == screenIpad) {
-                $('.uploadimage--info').html((langLbl.preferredDimensions).replace(/%s/g, '1024 * 360'));
-                $('input[name=banner_min_width]').val(1024);
-                $('input[name=banner_min_height]').val(360);
-                aspectRatio = 128 / 45;
-            } else {
-                $('.uploadimage--info').html((langLbl.preferredDimensions).replace(/%s/g, '640 * 360'));
-                $('input[name=banner_min_width]').val(640);
-                $('input[name=banner_min_height]').val(360);
-                aspectRatio = 16 / 9;
+            if ($(this).val() == screenDesktop) {            
+                $('input[name=banner_min_width]').val(<?php echo $silesScreenDimensions[ImageDimension::VIEW_DESKTOP]['width'];?>);
+                $('input[name=banner_min_height]').val(<?php echo $silesScreenDimensions[ImageDimension::VIEW_DESKTOP]['height'];?>);               
+            } else if ($(this).val() == screenIpad) {               
+                $('input[name=banner_min_width]').val(<?php echo $silesScreenDimensions[ImageDimension::VIEW_DESKTOP]['width'];?>);
+                $('input[name=banner_min_height]').val(<?php echo $silesScreenDimensions[ImageDimension::VIEW_TABLET]['height'];?>);
+                
+            } else {              
+                $('input[name=banner_min_width]').val(<?php echo $silesScreenDimensions[ImageDimension::VIEW_MOBILE]['width'];?>);
+                $('input[name=banner_min_height]').val(<?php echo $silesScreenDimensions[ImageDimension::VIEW_MOBILE]['height'];?>);                
             }
+            $('.uploadimage--info').html((langLbl.preferredDimensions).replace(/%s/g, $('input[name=banner_min_width]').val() +' * '+ $('input[name=banner_min_height]').val()));
         } else if (promotionType == <?php echo Promotion::TYPE_BANNER ?>) {
             var deviceType = $(this).val();
             fcom.ajax(fcom.makeUrl('Advertiser', 'getBannerLocationDimensions', [<?php echo $recordId; ?>, deviceType]), '', function(t) {
                 var ans = $.parseJSON(t);
                 $('.uploadimage--info').html((langLbl.preferredDimensions).replace(/%s/g, ans.bannerWidth + ' * ' + ans.bannerHeight));
                 $('input[name=banner_min_width]').val(ans.bannerWidth);
-                $('input[name=banner_min_height]').val(ans.bannerHeight);
-                if (deviceType == screenDesktop) {
-                    aspectRatio = 10 / 3;
-                } else if (deviceType == screenIpad) {
-                    aspectRatio = 10 / 3;
-                } else {
-                    aspectRatio = 16 / 9;
-                }
+                $('input[name=banner_min_height]').val(ans.bannerHeight);                
             });
         }
+        var screen_id = $(this).val();
+        var promotion_id = $("input[name='promotion_id']").val();
+        var lang_id = $(".banner-language-js").val();
+        images(promotion_id, lang_id, screen_id);
+
     });
+    $('.banner-screen-js').trigger('change');
 </script>

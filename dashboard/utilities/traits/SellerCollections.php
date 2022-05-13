@@ -428,6 +428,7 @@ trait SellerCollections
     {
         $collectionMediaFrm = $this->getShopCollectionMediaForm($scollection_id);
         $this->set('frm', $collectionMediaFrm);
+        $this->set('imageDimension', ImageDimension::getData(ImageDimension::TYPE_SHOP_COLLECTION_IMAGE, ImageDimension::VIEW_SHOP));
         $this->set('languages', Language::getAllNames());
         $this->set('scollection_id', $scollection_id);
         $this->_template->render(false, false);

@@ -75,7 +75,7 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
 $settingFrm->addFormTagAttribute('data-callbackfn', 'logoFormCallback');
 
 $fld = $settingFrm->getField('email_logo');
-$fld->value = '<label class="label">' . Labels::getLabel('LBL_ICON', $lang_id) . '</label>' . HtmlHelper::getfileInputHtml(
+$fld->value = '<label class="label">' . Labels::getLabel('LBL_EMAIL_LOGO', $lang_id) . '</label>' . HtmlHelper::getfileInputHtml(
     ['onChange' => 'loadImageCropper(this)', 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_EMAIL_LOGO", $lang_id)],
     $lang_id,
     ($canEdit ? 'removeEmailLogo(' . $lang_id . ')' : ''),

@@ -83,17 +83,8 @@ $(document).on('change', "select[name='promotion_type']", function () {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [promotion_id, lang_id, screen_id]), '', function (t) {
             fcom.closeProcessing();
             fcom.removeLoader();
-            var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
-            if (0 < uploadedContentEle.length) {
-                uploadedContentEle.remove();
-            }
-
-            if ('' != t) {
-                $(".dropzoneContainerJs").append(t.html);
-                $(".dropzoneUploadJs").hide();
-            } else {
-                $(".dropzoneUploadJs").show();
-            }
+            $("#imageListingJs").html(t.html);
+            console.log(t.html);
         });
     };
 

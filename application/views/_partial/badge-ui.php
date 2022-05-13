@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
-$size = isset($size) ? $size : 'MINI';
+$size = isset($size) ? $size : ImageDimension::VIEW_MINI;
 
 $html = "";
 if (is_array($badgesArr) && !empty($badgesArr)) {

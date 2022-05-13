@@ -416,8 +416,8 @@ class ImageDimension extends FatUtility
         $arr =  [
             self::VIEW_MINI => [self::WIDTH => 72, self::HEIGHT => 72],
             self::VIEW_SMALL => [self::WIDTH => 114, self::HEIGHT => 114],
+            self::VIEW_THUMB => [self::WIDTH => 150, self::HEIGHT => 150],
         ];
-
 
         if (!empty($sizeType)) {
             if (!array_key_exists($sizeType, $arr)) {
@@ -434,7 +434,7 @@ class ImageDimension extends FatUtility
             return $arr[$sizeType];
         }
 
-        return $arr;
+        return self::returnData($arr, self::VIEW_SMALL, $sizeType);
     }
 
     public static function getMobileLogoImageData(string $sizeType = ''): array
@@ -590,7 +590,7 @@ class ImageDimension extends FatUtility
             self::VIEW_MEDIUM => [self::WIDTH => 300, self::HEIGHT => 300],
             self::VIEW_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
             self::VIEW_MINI_THUMB => [self::WIDTH => 42, self::HEIGHT => 52],
-            self::VIEW_DEFAULT => [self::WIDTH => 118, self::HEIGHT => 276]
+            self::VIEW_DEFAULT => [self::WIDTH => 200, self::HEIGHT => 200]
         ];
 
         return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
@@ -621,7 +621,7 @@ class ImageDimension extends FatUtility
     {
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
-            self::VIEW_SHOP => [self::WIDTH => 610, self::HEIGHT => 343]
+            self::VIEW_SHOP => [self::WIDTH => 610, self::HEIGHT => 305]
         ];
 
         return self::returnData($arr, self::VIEW_SHOP, $sizeType);
@@ -820,6 +820,16 @@ class ImageDimension extends FatUtility
     {
         $arr =  [
             self::VIEW_DEFAULT => [self::WIDTH => 1000, self::HEIGHT => 563]
+        ];
+
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
+    }
+
+    public static function getPaymentPageLogo(string $sizeType = ''): array
+    {
+        $arr =  [
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
+            self::VIEW_DEFAULT => [self::WIDTH => 100, self::HEIGHT => 100]
         ];
 
         return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);

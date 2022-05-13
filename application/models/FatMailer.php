@@ -405,7 +405,7 @@ class FatMailer extends FatModel
                 $imgSrc = UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'images/' . $row['splatform_icon_class'] . '.png';
             }
             $social_media_icons .= '<a style="display: inline-block; margin: 0 4px"" href="' . $url . '" ' . $target_blank . ' title="' . $title . '" >
-                    <img alt="' . $title . '" width="24" style="margin:1px auto 0; display:block;" src = "' . $imgSrc . '"/>
+                    <img alt="' . $title . '" '.HtmlHelper::getImgDimParm(ImageDimension::TYPE_SOCIAL_PLATFORM, ImageDimension::VIEW_NORMAL).' style="margin:1px auto 0; display:block;" src = "' . $imgSrc . '"/>
                 </a>';
         }
 

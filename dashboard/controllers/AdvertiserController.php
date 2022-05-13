@@ -868,15 +868,19 @@ class AdvertiserController extends AdvertiserBaseController
         $promotionType = $promotionDetails['promotion_type'];
 
         $mediaFrm = $this->getPromotionMediaForm($recordId, $promotionType);
-        $bannerWidth = '1200';
-        $bannerHeight = '360';
+        $bannerWidth = '';
+        $bannerHeight = '';
         if ($promotionType == Promotion::TYPE_BANNER) {
             $bannerWidth = FatUtility::convertToType($promotionDetails['blocation_banner_width'], FatUtility::VAR_FLOAT);
             $bannerHeight = FatUtility::convertToType($promotionDetails['blocation_banner_height'], FatUtility::VAR_FLOAT);
         }
 
+        $silesScreenDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_SLIDE);       
+
         $this->set('bannerWidth', $bannerWidth);
         $this->set('bannerHeight', $bannerHeight);
+        $this->set('silesScreenDimensions', $silesScreenDimensions);
+
         $this->set('promotionType', $promotionType);
         $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
         $this->set('screenTypeArr', array(

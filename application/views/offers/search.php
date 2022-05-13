@@ -6,14 +6,13 @@ if (!empty($arrListing) && is_array($arrListing)) {
         $title = ($row['coupon_title'] == '') ? $row['coupon_identifier'] : $row['coupon_title'];
         $uploadedTime = AttachedFile::setTimeParam($row['coupon_updated_on']);
         $imgUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'coupon', array($row['coupon_id'], $siteLangId, ImageDimension::VIEW_NORMAL), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-        $imageCouponDimensions = ImageDimension::getData(ImageDimension::TYPE_COUPON, ImageDimension::VIEW_NORMAL);
-?>
+        ?>
         <div class="col-md-6">
             <div class="box--offer">
                 <div class="row">
                     <div class="col-md-4 col-sm-4">
                         <div class="offer">
-                            <div class="offer__logo"><img src="<?php echo $imgUrl; ?>" alt="<?php echo $title; ?>" title="<?php echo $title; ?>" data-aspect-ratio="<?php echo $imageCouponDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>"></div>
+                            <div class="offer__logo"><img src="<?php echo $imgUrl; ?>" alt="<?php echo $title; ?>" title="<?php echo $title; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_COUPON, ImageDimension::VIEW_NORMAL); ?>></div>
                         </div>
                     </div>
                     <div class="col-md-8 col-sm-8">

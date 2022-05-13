@@ -625,18 +625,21 @@ class PromotionsController extends ListingBaseController
         }
 
         $mediaFrm = $this->getMediaForm($recordId, $promotionType);
-        $bannerWidth = $this->minWidth;
-        $bannerHeight = $this->minHeight;
+        $bannerWidth = '';
+        $bannerHeight = '';
         $fileType = AttachedFile::FILETYPE_HOME_PAGE_BANNER;
         if ($promotionType == Promotion::TYPE_BANNER) {
             $fileType = AttachedFile::FILETYPE_BANNER;
             $bannerWidth = FatUtility::convertToType($promotionDetails['blocation_banner_width'], FatUtility::VAR_FLOAT);
             $bannerHeight = FatUtility::convertToType($promotionDetails['blocation_banner_height'], FatUtility::VAR_FLOAT);
         }
-        $mediaFrm->fill(['file_type' => $fileType, 'min_width' => $bannerWidth, 'min_height' => $bannerHeight]);
+        $mediaFrm->fill(['file_type' => $fileType]);
+
+        $silesScreenDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_SLIDE);       
 
         $this->set('bannerWidth', $bannerWidth);
         $this->set('bannerHeight', $bannerHeight);
+        $this->set('silesScreenDimensions', $silesScreenDimensions);
         $this->set('promotionType', $promotionType);
         $this->set('recordId', $recordId);
 
@@ -695,9 +698,9 @@ class PromotionsController extends ListingBaseController
                 break;
         }
 
-        if (!false == $imgDetail) {
-            $bannerImgArr = AttachedFile::getMultipleAttachments($attachedFileType, $promotionRecordId, 0, $lang_id, (count($languages) > 1) ? false : true, $screen);
-            $this->set('bannerImgArr', $bannerImgArr);
+        if (!false == $imgDetail) {            
+            $image = AttachedFile::getAttachment($attachedFileType, $promotionRecordId, 0, $lang_id, (count($languages) > 1) ? false : true, $screen);
+            $this->set('image', $image);
         }
 
         $this->set('promotionType', $promotionType);

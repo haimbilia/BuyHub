@@ -7,7 +7,7 @@ foreach ($paymentMethods as $key => $val) {
     }
     $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $val['plugin_id']);
     $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-    $paymentMethods[$key]['image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'plugin', array($val['plugin_id'], 'ICON'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $paymentMethods[$key]['image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'plugin', array($val['plugin_id'], ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 }
 
 $orderNetAmount = (!empty($orderInfo['order_net_amount']) && 0 < $orderInfo['order_net_amount'] ? $orderInfo['order_net_amount'] : 0);

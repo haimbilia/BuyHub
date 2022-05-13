@@ -719,7 +719,7 @@ $(document).on("change", ".state", function () {
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
                 var options = {
-                    aspectRatio: 16 / 9,
+                    aspectRatio: collectionMediaWidth / collectionMediaHeight,
                     data: {
                         width: collectionMediaWidth,
                         height: collectionMediaHeight,

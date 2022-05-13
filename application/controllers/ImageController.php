@@ -539,19 +539,14 @@ class ImageController extends FatController
         $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 100 : 120);
-                $h = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 100 : 68);
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-            default:
-                $w = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 60 : 120);
-                $h = ($file_row['afile_aspect_ratio'] == AttachedFile::RATIO_TYPE_SQUARE  ? 60 : 68);
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                // AttachedFile::displayOriginalImage($image_name, $default_image);
-                break;
-        }
+
+        $imageDimensions = ImageDimension::getPaymentPageLogo($sizeType);      
+
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
+        } else {
+            AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'],  $default_image);
+        }        
     }
 
     public function watermarkImage($lang_id = 0, $sizeType = '')
@@ -578,43 +573,19 @@ class ImageController extends FatController
     {
         $lang_id = FatUtility::int($lang_id);
         $recordId = 0;
-        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_APPLE_TOUCH_ICON, $recordId, 0, $lang_id);
+        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_APPLE_TOUCH_ICON, $recordId, 0, $lang_id);            
+        
         $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
-        $default_image = 'product_default_image.jpg';
+        $default_image = 'brand_deafult_image.jpg';
+        
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_APPLE_TOUCH_ICON, $sizeType);
-
         if ($sizeType) {
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
-
-
-        /*   switch (strtoupper($sizeType)) {
-            case 'MINI':
-                $w = 72;
-                $h = 72;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-            case 'SMALL':
-                $w = 114;
-                $h = 114;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-            default:
-                $arr = explode('-', $sizeType);
-                if (count($arr) > 0) {
-                    list($w, $h) = $arr;
-                    AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                } else {
-                    AttachedFile::displayOriginalImage($image_name, $default_image);
-                }
-                break;
-        } */
     }
 
     public function mobileLogo($lang_id = 0, $sizeType = '')
@@ -629,10 +600,8 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_MOBILE_LOGO, $sizeType);
 
         if ($sizeType) {
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-
             AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'], $default_image);
         }
     }
@@ -648,26 +617,10 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_INVOICE_LOGO, $sizeType);
 
         if ($sizeType) {
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-
             AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'], $default_image);
         }
-
-
-        /*  switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 100;
-                $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-            default:
-                $h = 37;
-                $w = 168;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-        } */
     }
 
     public function CategoryCollectionBgImage($langId = 0, $sizeType = '')
@@ -688,24 +641,6 @@ class ImageController extends FatController
         }
     }
 
-    /* public function BrandCollectionBgImage($langId = 0, $sizeType = '')
-    {
-        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_COLLECTION_BG_IMAGE, $recordId, 0, $langId);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
-        $default_image = 'no_image.jpg';
-        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 100;
-                $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-            default:
-                AttachedFile::displayOriginalImage($image_name, $default_image);
-                break;
-        }
-    } */
-
     public function coupon($coupon_id, $lang_id = 0, $sizeType = '')
     {
         $coupon_id = FatUtility::int($coupon_id);
@@ -717,10 +652,8 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_COUPON, $sizeType);
 
         if ($sizeType) {
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-
             AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'], $default_image);
         }
     }
@@ -735,10 +668,8 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_META, $sizeType);
 
         if ($sizeType) {
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-
             AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'], $default_image);
         }
     }
@@ -797,41 +728,6 @@ class ImageController extends FatController
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
         exit;
-
-
-        /*   if ($sizeType) {
-            switch (strtoupper($sizeType)) {
-                case 'THUMB':
-                    $w = 200;
-                    $h = 100;
-                    AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false, true, false);
-                    break;
-                case 'MOBILE':
-                    $w = 640;
-                    $h = 360;
-                    AttachedFile::displayImage($image_name, $w, $h);
-                    break;
-                case 'TABLET':
-                    $w = 1024;
-                    $h = 360;
-                    AttachedFile::displayImage($image_name, $w, $h);
-                    break;
-             
-                case 'DESKTOP':
-                    $w = 2000;
-                    $h = 666;
-                    AttachedFile::displayImage($image_name, $w, $h);
-                    break;
-                default:
-                    $w = 1350;
-                    $h = 405;
-                    AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false, true, false);
-                    break;
-            }
-        } else {
-           
-            AttachedFile::displayOriginalImage($image_name, $default_image);
-        } */
     }
 
 
@@ -854,29 +750,6 @@ class ImageController extends FatController
         }
     }
 
-
-    /* Moved in banner controller
-    function banner( $banner_id, $sizeType = ''){
-    $default_image = 'brand_deafult_image.jpg';
-    $banner_id = FatUtility::int($banner_id);
-
-    $file_row = AttachedFile::getAttachment( AttachedFile::FILETYPE_BANNER, $banner_id );
-    $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ?  $file_row['afile_physical_path'] : '';
-
-    switch( strtoupper( $sizeType ) ){
-    case 'THUMB':
-                $w = 200;
-                $h = 100;
-                AttachedFile::displayImage( $image_name, $w, $h, $default_image );
-    break;
-    default:
-                $w = 1320;
-                $h = 440;
-                AttachedFile::displayImage( $image_name, $w, $h, $default_image );
-    break;
-    }
-    } */
-
     public function SocialPlatform($splatform_id, $sizeType = '')
     {
         $default_image = 'brand_deafult_image.jpg';
@@ -889,10 +762,8 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SOCIAL_PLATFORM, $sizeType);
 
         if ($sizeType) {
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-
             AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'], $default_image);
         }
     }
@@ -1119,15 +990,11 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_PLUGIN_IMAGE, $sizeType);
 
         if ($sizeType) {
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
     }
-
-
 
     public function review($recordId, $lang_id = 0, $sizeType = '', $afile_id = 0, $displayUniversalImage = true)
     {
@@ -1151,10 +1018,8 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_REVIEW_IMAGE, $sizeType);
 
         if ($sizeType) {
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
     }
@@ -1211,14 +1076,12 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BADGE_REQUEST_IMAGE, $sizeType);
 
         if ($sizeType) {
-
             if (is_numeric($sizeType)) {
                 AttachedFile::displayImage($image_name, $sizeType, $sizeType, $default_image, $filePath);
             } else {
                 AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image, $filePath);
             }
         } else {
-
             AttachedFile::displayOriginalImage($image_name, $default_image, $filePath);
         }
     }

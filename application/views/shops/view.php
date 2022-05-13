@@ -13,7 +13,7 @@
                 <div class="js-carousel shop-slider" data-slides="3,3,2,2">
                     <?php foreach ($collectionData as $collection) { ?>
                         <div class="item">
-                            <img class="" src="<?php echo UrlHelper::generateFileUrl('Image', 'shopCollectionImage', array($collection['scollection_id'], $siteLangId, ImageDimension::VIEW_SHOP)); ?>" alt="" data-ratio="2:1">
+                            <img class="" src="<?php echo UrlHelper::generateFileUrl('Image', 'shopCollectionImage', array($collection['scollection_id'], $siteLangId, ImageDimension::VIEW_SHOP)); ?>"  <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_COLLECTION_IMAGE, ImageDimension::VIEW_SHOP);?>>
                             <div class="overlay-content">
                                 <h4><?php echo $collection['scollection_name']; ?></h4>
                                 <!--<p>From the runway to your wardrobe</p>-->

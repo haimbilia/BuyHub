@@ -2,21 +2,12 @@ $(document).ready(function () {
 	searchRecords(document.frmRecordSearch);
 });
 $(document).on('change', '.banner-language-js', function () {
-	;
-	// $(document).delegate('.banner-language-js','change',function(){
 	var lang_id = $(this).val();
 	var promotion_id = $("input[name='promotion_id']").val();
 	var screen_id = $(".banner-screen-js").val();
 	images(promotion_id, lang_id, screen_id);
 });
-$(document).on('change', '.banner-screen-js', function () {
-	;
-	// $(document).delegate('.banner-screen-js','change',function(){
-	var screen_id = $(this).val();
-	var promotion_id = $("input[name='promotion_id']").val();
-	var lang_id = $(".banner-language-js").val();
-	images(promotion_id, lang_id, screen_id);
-});
+
 $(document).on('blur', "input[name='promotion_budget']", function () {
 	;
 	// $(document).delegate("input[name='promotion_budget']",'blur',function(){
@@ -174,7 +165,7 @@ $(document).on('change', "select[name='banner_blocation_id']", function () {
 				var minWidth = document.frmPromotionMedia.banner_min_width.value;
 				var minHeight = document.frmPromotionMedia.banner_min_height.value;
 				var options = {
-					aspectRatio: aspectRatio,
+					aspectRatio: minWidth/minHeight,
 					data: {
 						width: minWidth,
 						height: minHeight,

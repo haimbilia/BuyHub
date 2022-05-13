@@ -9,19 +9,9 @@ $screenFld = $mediaFrm->getField('banner_screen');
 $screenFld->addFieldTagAttribute('class', 'displayJs');
 
 $fld = $mediaFrm->getField('banner_image');
-$fld->value = HtmlHelper::getfileInputHtml(
-    [
-        'onChange' => 'loadImageCropper(this)',
-        'accept' => 'image/*',
-        'data-name' => Labels::getLabel("FRM_PROMOTION_BANNER", $siteLangId),
-        'data-frm'=> $mediaFrm->getFormTagAttribute('name')
-    ],
-    $siteLangId,
-    '',
-    '',
-    [],
-    'dropzone-custom dropzoneContainerJs'
-);
+$fld->value = '<span id="imageListingJs"></span>';
+
+$fld->htmlAfterField = '<span class="form-text text-muted logoPreferredDimensionsJs"></span>';
 
 $otherButtons = [
     [
@@ -51,18 +41,24 @@ $formTitle = Labels::getLabel('LBL_PROMOTION_SETUP', $siteLangId); ?>
 
         if (promotionType == <?php echo Promotion::TYPE_SLIDES ?>) {
             if ($(this).val() == screenDesktop) {
-                $('.uploadimageInfoJs').html((langLbl.preferredDimensions).replace(/%s/g, '1350 * 405'));
+                $('input[name=min_width]').val(<?php echo $silesScreenDimensions[ImageDimension::VIEW_DESKTOP]['width'];?>);
+                $('input[name=min_height]').val(<?php echo $silesScreenDimensions[ImageDimension::VIEW_DESKTOP]['height'];?>);               
+                
             } else if ($(this).val() == screenIpad) {
-                $('.uploadimageInfoJs').html((langLbl.preferredDimensions).replace(/%s/g, '1024 * 360'));
+                $('input[name=min_width]').val(<?php echo $silesScreenDimensions[ImageDimension::VIEW_DESKTOP]['width'];?>);
+                $('input[name=min_height]').val(<?php echo $silesScreenDimensions[ImageDimension::VIEW_TABLET]['height'];?>); 
             } else {
-                $('.uploadimageInfoJs').html((langLbl.preferredDimensions).replace(/%s/g, '640 * 360'));
+                $('input[name=min_width]').val(<?php echo $silesScreenDimensions[ImageDimension::VIEW_MOBILE]['width'];?>);
+                $('input[name=min_height]').val(<?php echo $silesScreenDimensions[ImageDimension::VIEW_MOBILE]['height'];?>);                
             }
+            $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, $('input[name=min_width]').val() +' * '+ $('input[name=min_height]').val()));
         } else if (promotionType == <?php echo Promotion::TYPE_BANNER ?>) {
             var deviceType = $(this).val();
             fcom.ajax(fcom.makeUrl('Promotions', 'getBannerLocationDimensions', [<?php echo $recordId; ?>, deviceType]), '', function(t) {
                 var ans = $.parseJSON(t);
-                $('.uploadimageInfoJs').html((langLbl.preferredDimensions).replace(/%s/g, ans.bannerWidth + ' * ' + ans.bannerHeight));
+                $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, ans.bannerWidth + ' * ' + ans.bannerHeight));
             });
         }
     });
+    $('.displayJs').trigger('change');
 </script>
