@@ -359,7 +359,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "langSetup"), data, function (t) {
             fcom.removeLoader();
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
 
             if (t.langId == langLbl.defaultFormLangId) {
                 reloadList();

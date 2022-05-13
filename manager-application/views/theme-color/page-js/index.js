@@ -125,7 +125,7 @@ $(document).ready(function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('ThemeColor', 'setupFontStyle'), data, function (t) {
-            fcom.closeProcessing();            
+            fcom.displaySuccessMessage(t.msg);
         });
     };
 
@@ -134,6 +134,7 @@ $(document).ready(function () {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('ThemeColor', 'resetToDefault'), '', function (t) {
+            fcom.displaySuccessMessage(t.msg);
             location.reload();
         });
     };

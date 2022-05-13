@@ -262,8 +262,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             fcom.makeUrl(controllerName, "deleteRecord"),
             data,
             function (t) {
-                fcom.closeProcessing();
-                console.log(t.msg);
                 fcom.displaySuccessMessage(t.msg);
                 reloadList();
             }
@@ -540,7 +538,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             ]),
             "",
             function (t) {
-                fcom.closeProcessing();
+                fcom.displaySuccessMessage(t.msg);
                 loadImages(recordId, fileType, slide_screen, langId);
                 reloadList();
             }
@@ -717,7 +715,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (1 > autoTableColumWidth) {
             return false;
         }
-
+        
         $('.listingTableJs .tableHeadJs th').each(function () {
             var arr = {
                 'width': $(this).outerWidth(true),
@@ -771,7 +769,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl(converterClass, 'update'), '', function (res) {
-            fcom.closeProcessing();
             fcom.displaySuccessMessage(res.msg);
         });
     };

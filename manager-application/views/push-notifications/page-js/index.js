@@ -41,7 +41,7 @@
         }
         data = "recordId=" + recordId + "&langId=" + langId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'clone'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             reloadList();
             $.ykmodal(t.html, false);
             fcom.removeLoader();

@@ -54,7 +54,7 @@ bindSortable = function() {
 deleteMedia = function (recordId, afileId ,fileType, langId, slideScreen) {
     if (!confirm(langLbl.confirmDelete)) { return; }
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeMedia'), {recordId, afileId, fileType, langId, slideScreen}, function (t) {
-        fcom.closeProcessing();
+        fcom.displaySuccessMessage(t.msg);
         loadImages(recordId, 'THUMB' , slideScreen, langId);
         reloadList();
         $('.resetModalFormJs').click();

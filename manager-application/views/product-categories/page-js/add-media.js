@@ -108,7 +108,7 @@
 	deleteCatImage = function (fileId, prodcatId, imageType, langId, slide_screen) {
 		if (!confirm(langLbl.confirmDeleteImage)) { return; }
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'removeImage', [fileId, prodcatId, imageType, langId, slide_screen]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
 			categoryImages(prodcatId, imageType, slide_screen, langId);
 
 		});

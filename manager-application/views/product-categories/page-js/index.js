@@ -23,7 +23,7 @@
 
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
 			fcom.removeLoader();
 			if (0 < $('.noRecordFoundJs').length) {
 				$('.noRecordFoundJs').remove();
@@ -76,8 +76,8 @@
 		fcom.updateWithAjax(
 			fcom.makeUrl(controllerName, "deleteRecord"),
 			data,
-			function () {
-				fcom.closeProcessing();
+			function (t) {
+				fcom.displaySuccessMessage(t.msg);
 				var oldRecordParent = $('#' + recordId).parent().closest('.liJs');
 				var oldRecordParentId = oldRecordParent.attr('id');
 				if (1 == oldRecordParent.find('.ul-' + oldRecordParentId + ' > li').length) {
@@ -234,8 +234,8 @@
 
 	updateCatOrder = function (data) {
 		$("#sorting-categories").prepend(fcom.getLoader());
-		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'updateOrder'), data, function (res) {
-            fcom.closeProcessing();
+		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'updateOrder'), data, function (t) {
+            fcom.displaySuccessMessage(t.msg);
 			fcom.removeLoader();
 		});
 	}

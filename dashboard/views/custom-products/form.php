@@ -232,8 +232,7 @@ if (0 < $recordId) {
                                 </div>
                             </div>
                             <div id="specificationsListSeprJs" class="separator separator-dashed my-4 hidden"></div>
-                            <div id="specificationsListJs">
-                            </div>
+                            <div id="specificationsListJs"></div>
                         </div>
                     </div>
                 </div>

@@ -13,7 +13,7 @@ setup = function (frm) {
     var data = fcom.frmData(frm);
     $.ykmodal(fcom.getLoader());
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
-        fcom.closeProcessing();
+        fcom.displaySuccessMessage(t.msg);
     });
 };
 

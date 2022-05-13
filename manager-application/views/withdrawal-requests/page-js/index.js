@@ -21,6 +21,7 @@
 
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
             reloadList();
             $.ykmodal.close();

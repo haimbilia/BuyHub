@@ -93,24 +93,28 @@
                 <span class="text-muted"><?php echo Labels::getLabel('MSG_CUSTOMIZE_PRODUCT_VARIENTS_INCLUDING_SIZE_COLOR_ETC', $langId); ?></span>
             </div> <i class="dropdown-toggle-custom-arrow"></i>
         </div>
+        <div class="card-table p-0 show" id="stock-block1">
+            <div class="table-responsive table-scrollable js-scrollable">
+                <table class="table table-variants" id="variantsJs">
+                    <thead class="tableHeadJs">
+                        <tr>
+                            <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
+                            <th width="40%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                            <th class="align-right" width="20%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $optionCount = count($productOptions);
+                        for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
+                            echo getVariantUiTr($langId, $i, ($productOptions[$i] ?? []));
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <div class="card-body p-0 show" id="stock-block1">
-            <table class="table table-variants listingTableJs" id="variantsJs">
-                <thead class="tableHeadJs">
-                    <tr>
-                        <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                        <th width="40%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                        <th class="align-right" width="20%"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $optionCount = count($productOptions);
-                    for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
-                        echo getVariantUiTr($langId, $i, ($productOptions[$i] ?? []));
-                    }
-                    ?>
-                </tbody>
-            </table>
             <div class="separator separator-dashed my-4"></div>
             <div class="px-4">
                 <div class="row justify-content-between">
@@ -255,8 +259,8 @@
                 <div class="card-head-label">
                     <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
                     <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
-                </div>     
-                <i class="dropdown-toggle-custom-arrow"></i>       
+                </div>
+                <i class="dropdown-toggle-custom-arrow"></i>
             </div>
             <div class="card-body show" id="digital-file-block">
                 <div id="digitalFilesDefaultListJs">
@@ -283,8 +287,8 @@
                 <div class="card-head-label">
                     <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
                     <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?> </span>
-                </div> 
-                <i class="dropdown-toggle-custom-arrow"></i>              
+                </div>
+                <i class="dropdown-toggle-custom-arrow"></i>
             </div>
             <div class="card-body show" id="digital-link-block">
                 <div id="digitalLinksDefaultListJs">
@@ -305,7 +309,7 @@
                     </div>
                 </div>
             <?php } ?>
-        
+
         </div>
     <?php } ?>
 </div>

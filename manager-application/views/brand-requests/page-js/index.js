@@ -26,7 +26,7 @@
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('BrandRequests', 'removeBrandMedia', [brandId, fileType, afileId]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             brandImages(brandId, fileType, slide_screen, langId);
             reloadList();
         });

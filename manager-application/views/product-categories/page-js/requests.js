@@ -70,7 +70,7 @@ $(document).ready(function () {
 		}
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'setup', [1]), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
 			reloadList();
 		});
 	};
@@ -235,8 +235,7 @@ $(document).ready(function () {
 	deleteImage = function (fileId, prodcatId, imageType, langId, slide_screen) {
 		if (!confirm(langLbl.confirmDeleteImage)) { return; }
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'removeImage', [fileId, prodcatId, imageType, langId, slide_screen]), '', function (t) {
-            fcom.closeProcessing();
-			//categoryImages( prodcatId, imageType, slide_screen, langId );
+            fcom.displaySuccessMessage(t.msg);
 			if (imageType == 'icon') {
 				$("#icon-imageListingJs").html('');
 				$("[name='cat_icon_image_id[" + langId + "]']").val('');

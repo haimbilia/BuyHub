@@ -56,7 +56,7 @@
         $.ykmodal(fcom.getLoader());
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupLink'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
             if (t.langId > 0 && t.nlinkId > 0) {
                 linkLangForm($(frm.nlink_nav_id).val(), t.nlinkId, t.langId);
@@ -91,7 +91,7 @@
     deleteLink = function (navId, nlinkId) {
         if (!confirm(langLbl.confirmDelete)) { return; }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'deleteLink'), 'navId=' + navId + '&nlinkId=' + nlinkId, function (res) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(res.msg);
             $(".subRecordsCountJs-" + navId).text(res.subRecordsCount);
             if (1 > res.subRecordsCount) {
                 $('.openerJs[data-record-id="' + navId + '"]').removeClass('fa-caret-down').addClass('fa-caret-right').hide();

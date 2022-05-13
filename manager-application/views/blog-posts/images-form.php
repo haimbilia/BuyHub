@@ -57,7 +57,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                 var sort = mysortarr.join('-');
                 data = '&post_id=' + post_id + '&ids=' + sort;
                 fcom.updateWithAjax(fcom.makeUrl('BlogPosts', 'setImageOrder'), data, function(t) {
-                    fcom.closeProcessing();
+                    fcom.displaySuccessMessage(t.msg);
                     mediaForm(post_id);
                 });
             }

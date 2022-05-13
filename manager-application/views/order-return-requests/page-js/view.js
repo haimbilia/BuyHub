@@ -47,7 +47,6 @@
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupMessage'), data, function (t) {
-            fcom.closeProcessing();
             fcom.displaySuccessMessage(t.msg);
             location.reload();
         });
@@ -70,7 +69,6 @@
         var transferLocation = $(".refundToWalletJs:checked").val();
         if (0 != transferLocation && !confirm(langLbl.areYouSure)) { return; }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupUpdateStatus'), data, function (t) {
-            fcom.closeProcessing();
             fcom.displaySuccessMessage(t.msg);
             window.location.reload();
         });

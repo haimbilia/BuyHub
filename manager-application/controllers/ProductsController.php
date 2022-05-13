@@ -755,7 +755,7 @@ class ProductsController extends ListingBaseController
         $this->checkEditPrivilege();
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
 
-        if (empty($productIdsArr)) {
+        if (empty($recordIdsArr)) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 

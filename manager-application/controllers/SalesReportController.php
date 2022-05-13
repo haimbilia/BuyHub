@@ -61,7 +61,7 @@ class SalesReportController extends ListingBaseController
             $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
             $fld->overrideFldType('search');
         }
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -124,11 +124,11 @@ class SalesReportController extends ListingBaseController
             $srch->addFld('op_invoice_number');
         }
 
-        
-        $srch->setDateCondition($fromDate, $toDate); 
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
-        $srch->doNotCalculateRecords();  
-        $srch->setOrderBy($sortBy, $sortOrder); 
+
+        $srch->setDateCondition($fromDate, $toDate);
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords();
+        $srch->setOrderBy($sortBy, $sortOrder);
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -185,8 +185,8 @@ class SalesReportController extends ListingBaseController
         }
 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);   
-        $this->set("arrListing", $db->fetchAll($srch->getResultSet())); 
+        $srch->setPageSize($pageSize);
+        $this->set("arrListing", $db->fetchAll($srch->getResultSet()));
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -261,6 +261,7 @@ class SalesReportController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
+        $params = FatApp::getParameters();
         switch ($action) {
             case 'index':
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
@@ -268,8 +269,16 @@ class SalesReportController extends ListingBaseController
                 $this->nodes = [
                     ['title' => Labels::getLabel('NAV_REPORTS', $this->siteLangId)],
                     ['title' => Labels::getLabel('NAV_SALES_REPORTS', $this->siteLangId)],
-                    ['title' => $pageTitle]
                 ];
+                if (!empty($params)) {
+                    $this->nodes[] = [
+                        'title' => Labels::getLabel('NAV_SALES_REPORTS', $this->siteLangId),
+                        'href' => UrlHelper::generateUrl("SalesReport"),
+                    ];
+                    $this->nodes[] = ['title' => current($params)];
+                } else {
+                    $this->nodes[] = ['title' => $pageTitle];
+                }
                 break;
             default:
                 parent::getBreadcrumbNodes($action);

@@ -7,7 +7,7 @@ $(document).ready(function () {
         if (!confirm(langLbl.confirmRestore)) { return; }
         var data = 'user_id=' + userId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'restore'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             reloadList();
         });
     };

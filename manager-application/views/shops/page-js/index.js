@@ -26,7 +26,7 @@
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Shops', 'removeMedia', [shopId, fileType, afileId]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             shopImages(shopId, fileType, slide_screen, langId);
             reloadList();
         });

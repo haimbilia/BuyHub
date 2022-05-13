@@ -136,7 +136,7 @@ $(document).ready(function () {
 
         var data = 'linkType=' + linkType + "&id=" + itemId + '&recordId=' + recordId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeItem'), data, function (t) { 
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
         });
     }
 

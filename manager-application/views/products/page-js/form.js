@@ -20,9 +20,9 @@
             return;
         }
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
-            fcom.closeProcessing();
-            langForm(res.langId, 0, res.recordId);
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (t) {
+            fcom.displaySuccessMessage(t.msg);
+            langForm(t.langId, 0, t.recordId);
         });
     };
 
@@ -94,7 +94,7 @@
     removeTagData = function (e) {
         var tag_id = e.detail.tag.id;
         var product_id = getCurrentFrmRecordId();
-        if (1 > product_id) {
+        if (1 > product_id || '' == tag_id) {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) {
@@ -131,7 +131,7 @@
             whitelist: [],
             delimiters: "#",
             editTags: false,
-        }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);
+        }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete).on('dropdown:select', addTagData).on('focus', getTagsAutoComplete);
     };
 
     addSpecification = function () {
@@ -260,7 +260,7 @@
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId }, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             prodSpecifications();
         });
     };
@@ -725,7 +725,7 @@
         data += '&frow=' + fullRow;
 
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalFile'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             let recordId = getCurrentFrmRecordId();      
             let langId = $('#digitalFrmLangId').val() || 0;     
             let optionComb = $('#digitalFrmOptionId').val() || 0; 
@@ -739,7 +739,7 @@
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             let recordId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalLink, recordId);
         });

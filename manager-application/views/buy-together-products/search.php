@@ -98,7 +98,7 @@ if ($printData) {
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl('BuyTogetherProducts', 'deleteSelprodProduct', [mainRecordId, recomendedSelprodId]), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
         });
     }
 

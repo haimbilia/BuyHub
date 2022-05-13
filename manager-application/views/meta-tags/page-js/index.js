@@ -92,7 +92,7 @@ $(document).on('blur', '.metaUrlJs', function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             reloadList();
             if (t.langId > 0) {
                 editMetaTagLangForm(t.metaId, t.langId, t.metaType, t.metaTagRecordId);
@@ -113,7 +113,7 @@ $(document).on('blur', '.metaUrlJs', function () {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langSetup'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             reloadList();
             if (t.langId > 0) {
                 editMetaTagLangForm(t.metaId, t.langId, metaType);

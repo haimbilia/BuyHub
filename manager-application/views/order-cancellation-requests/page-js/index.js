@@ -23,7 +23,7 @@ $(function () {
 
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupUpdateStatus'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             searchOrderCancellationRequests(document.frmRequestSearch);
             
         });

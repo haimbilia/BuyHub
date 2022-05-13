@@ -39,10 +39,6 @@ $(document).on('click', '#showPass', function () {
         }
 
         fcom.updateWithAjax(fcom.makeUrl("adminGuest", "sendResetPasswordLink", [user]), '', function (t) {
-            if (0 == t.status) {
-                fcom.displayErrorMessage(t.errorMsg);
-                return false;
-            }
             fcom.displaySuccessMessage(t.msg);
         });
     };

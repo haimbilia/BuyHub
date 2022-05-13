@@ -98,7 +98,7 @@ $(document).ajaxComplete(function () {
 
     syncCategories = function () {
         fcom.updateWithAjax(fcom.makeUrl('PatchUpdate', 'updateTaxCategories'), '', function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
         }, {}, false);
     };
@@ -173,7 +173,7 @@ $(document).ajaxComplete(function () {
             fcom.makeUrl('plugins', "deleteIcon"),
             { recordId },
             function (t) {
-                fcom.closeProcessing();
+                fcom.displaySuccessMessage(t.msg);
                 editRecord(recordId);
             }
         );

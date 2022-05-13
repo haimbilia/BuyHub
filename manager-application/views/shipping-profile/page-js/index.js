@@ -5,8 +5,8 @@
             return;
         }
         data = 'id=' + shippingProfileId;
-        fcom.updateWithAjax(fcom.makeUrl('shippingProfile', 'deleteRecord'), data, function () {
-            fcom.closeProcessing();
+        fcom.updateWithAjax(fcom.makeUrl('shippingProfile', 'deleteRecord'), data, function (t) {
+            fcom.displaySuccessMessage(t.msg);
             reloadList();
         });
     }; 

@@ -3,7 +3,8 @@ function setSiteDefaultLang(langId) {
     fcom.updateWithAjax(
         fcom.makeUrl("Home", "setLanguage", [langId]),
         "",
-        function (res) {
+        function (t) {
+            fcom.displaySuccessMessage(t.msg);
             setTimeout(function () {
                 window.location.reload(1);
             }, 6000);

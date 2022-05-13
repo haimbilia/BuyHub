@@ -39,7 +39,7 @@ $(document).ready(function () {
         var data = fcom.frmData(frm);
         $.ykmodal(fcom.getLoader(), true);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updatePassword'), data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
             $.ykmodal.close();
         });
@@ -58,7 +58,6 @@ $(document).ready(function () {
         var data = fcom.frmData(frm);
         $.ykmodal(fcom.getLoader(), true);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'sendMail'), data, function (t) {
-            fcom.closeProcessing();
             fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
             $.ykmodal.close();
@@ -83,7 +82,7 @@ $(document).ready(function () {
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'markSellerAsBuyer'), { userId: userId }, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             reloadList();
             fcom.removeLoader();
         });
@@ -92,7 +91,7 @@ $(document).ready(function () {
     sendSetPasswordEmail = function (userId) {
         fcom.displayProcessing();
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'resendSetPasswordEmail'), { userId: userId }, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
         });
     };
