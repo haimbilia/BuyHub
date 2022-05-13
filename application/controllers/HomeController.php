@@ -974,7 +974,7 @@ class HomeController extends MyAppController
                         if (true === MOBILE_APP_API_CALL) {
                             $shopsData['shop_id'] = $shopsData['shop_id'];
                             $shopsData['shop_logo'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopLogo', array($shopsData['shop_id'], $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
-                            $shopsData['shop_banner'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopBanner', array($shopsData['shop_id'], $this->siteLangId, 'MOBILE', 0, applicationConstants::SCREEN_MOBILE)), CONF_IMG_CACHE_TIME, '.jpg');
+                            $shopsData['shop_banner'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopBanner', array($shopsData['shop_id'], $this->siteLangId, ImageDimension::VIEW_MOBILE, 0, applicationConstants::SCREEN_MOBILE)), CONF_IMG_CACHE_TIME, '.jpg');
 
                             $collections[$ind]['shops'][$counter] = $shopsData;
 
@@ -1075,7 +1075,7 @@ class HomeController extends MyAppController
                     /* ] */
                     if (true === MOBILE_APP_API_CALL) {
                         array_walk($blogPostsDetail, function (&$value, &$key) {
-                            $value['post_image'] = UrlHelper::generateFullUrl('Image', 'blogPostFront', array($value['post_id'], $this->siteLangId, ''));
+                            $value['post_image'] = UrlHelper::generateFullUrl('Image', 'blogPostFront', array($value['post_id'], $this->siteLangId, ImageDimension::VIEW_LAYOUT2));
                         });
                     }
                     $collections[$ind] = $collection;
@@ -1341,7 +1341,7 @@ class HomeController extends MyAppController
                 $sponsoredShops[$i]['shopData']['promotion_id'] = $shops['promotion_id'];
                 $sponsoredShops[$i]['shopData']['rating'] = $rating;
                 $sponsoredShops[$i]['shopData']['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', array($shops['shop_id'], $langId));
-                $sponsoredShops[$i]['shopData']['shop_banner'] = UrlHelper::generateFullUrl('image', 'shopBanner', array($shops['shop_id'], $langId));
+                $sponsoredShops[$i]['shopData']['shop_banner'] = UrlHelper::generateFullUrl('image', 'shopBanner', array($shops['shop_id'], $langId, ImageDimension::VIEW_MOBILE));
 
                 foreach ($prodData as &$product) {
                     $selProdRibbons = [];

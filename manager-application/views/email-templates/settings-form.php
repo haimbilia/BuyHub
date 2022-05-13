@@ -83,7 +83,7 @@ $fld->value = '<label class="label">' . Labels::getLabel('LBL_ICON', $lang_id) .
     $imgArr,
     'mt-3 dropzone-custom dropzoneContainerJs'
 );
-
+$fld->htmlAfterField='<span class="form-text text-muted logoPreferredDimensionsJs"></span>';
 
 ?>
 <div id="editor_default_content" style="display:none;">
@@ -98,22 +98,20 @@ $fld->value = '<label class="label">' . Labels::getLabel('LBL_ICON', $lang_id) .
     <div class="form-edit-body loaderContainerJs">
         <?php echo $settingFrm->getFormHtml(); ?>
     </div>
-
     <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
-
-<script>
-    $('input[name=min_width]').val(150);
-    $('input[name=min_height]').val(150);
-    var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
-    var aspectRatio = 16 / 9;
-    $(document).on('change', '.prefRatio-js', function() {
+<script> 
+    var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;  
+    $(document).on('change', '.prefRatio-js', function() {       
         if ($(this).val() == ratioTypeSquare) {
-            $('input[name=min_width]').val(150);
-            $('input[name=min_height]').val(150);
-        } else {
-            $('input[name=min_width]').val(150);
-            $('input[name=min_height]').val(85);
+            $('input[name=min_width]').val(<?php echo $logoSqDimensions['width'];?>);
+            $('input[name=min_height]').val(<?php echo $logoSqDimensions['height'];?>);
+            $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $logoSqDimensions['width']; ?> x <?php echo $logoSqDimensions['height']; ?>'));
+        } else {      
+            $('input[name=min_width]').val(<?php echo $logoRecDimensions['width'];?>);
+            $('input[name=min_height]').val(<?php echo $logoRecDimensions['height'];?>);
+            $('.logoPreferredDimensionsJs').html(langLbl.preferredDimensions.replace(/%s/g, '<?php echo $logoRecDimensions['width']; ?> x <?php echo $logoRecDimensions['height']; ?>'));
         }
     });
+    $('.prefRatio-js').trigger('change');
 </script>

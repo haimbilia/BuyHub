@@ -318,6 +318,10 @@ class EmailTemplatesController extends ListingBaseController
             }
             $settingFrm->fill(current($translatedData));
         }
+        
+        if( 0 < $emailLogo['afile_id'] && 0 < $emailLogo['afile_aspect_ratio']){           
+            $settingFrm->fill(['CONF_EMAIL_TEMPLATE_LOGO_RATIO'=> $emailLogo['afile_aspect_ratio']]);
+        }
 
         $this->set('image', $emailLogo);
         $this->set('languages', Language::getAllNames());
@@ -325,6 +329,8 @@ class EmailTemplatesController extends ListingBaseController
         $this->set('settingFrm', $settingFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('canEdit', $this->objPrivilege->canEditEmailTemplates($this->admin_id, true));
+        $this->set('logoSqDimensions', ImageDimension::getData(ImageDimension::TYPE_EMAIL_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE)); 
+        $this->set('logoRecDimensions', ImageDimension::getData(ImageDimension::TYPE_EMAIL_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_RECTANGULAR));     
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -406,7 +412,7 @@ class EmailTemplatesController extends ListingBaseController
     {
         $this->objPrivilege->canEditEmailTemplates();
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        $aspectRatio = FatApp::getPostedData('ratio_type', FatUtility::VAR_INT, 0);
+        $aspectRatio = FatApp::getPostedData('CONF_EMAIL_TEMPLATE_LOGO_RATIO', FatUtility::VAR_INT, 0);
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
             LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);

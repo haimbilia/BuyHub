@@ -417,7 +417,7 @@ class FatMailer extends FatModel
             '{website_name}' => FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId),
             '{website_url}' => UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL),
             '{admin_login_url}' => UrlHelper::generateUrl('adminGuest', 'loginForm'),
-            '{Company_Logo}' => '<img style="max-width:100%" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'emailLogo', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" />',
+            '{Company_Logo}' => '<img style="max-width:100%" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'emailLogo', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" />',
             '{current_date}' => date('M d, Y'),
             '{social_media_icons}' => $social_media_icons,
             '{contact_us_url}' => UrlHelper::generateFullUrl('custom', 'contactUs', array(), CONF_WEBROOT_FRONT_URL),

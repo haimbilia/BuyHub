@@ -339,6 +339,7 @@ class BlogPostsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('displayFooterButtons', false);
         $this->set('activeGentab', false);
+        $this->set('imageDimension', ImageDimension::getData(ImageDimension::TYPE_BLOG_POST, ImageDimension::VIEW_DEFAULT));        
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }

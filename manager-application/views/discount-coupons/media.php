@@ -40,19 +40,8 @@ $otherButtons = [
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
 <script type="text/javascript">
-    $(function() {
-        var getAspectRatio = '<?php echo $getImageDimensions[ImageDimension::VIEW_NORMAL]['aspectRatio']; ?>';
-
-        getAspectRatio = getAspectRatio.split(":");
-        if (getAspectRatio) {
-            var getAspectRatio = getAspectRatio[0] / getAspectRatio[1];
-        } else {
-            var getAspectRatio = 60 / 60;
-        }
-
-
+    $(function() {    
         $('input[name=min_width]').val('<?php echo $getImageDimensions['width']; ?>');
-        $('input[name=min_height]').val('<?php echo $getImageDimensions['height']; ?>');
-        var aspectRatio = getAspectRatio;
+        $('input[name=min_height]').val('<?php echo $getImageDimensions['height']; ?>'); 
     });
 </script>

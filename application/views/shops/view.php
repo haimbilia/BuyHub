@@ -1,5 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
-$bgUrl = UrlHelper::generateFullUrl('Image', 'shopBackgroundImage', array($shop['shop_id'], $siteLangId, 0, 0, $template_id));
 ?>
 <div id="body" class="body template-<?php echo $template_id; ?>">
     <?php

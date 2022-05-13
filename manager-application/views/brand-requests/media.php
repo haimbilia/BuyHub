@@ -114,13 +114,9 @@ $formTitle = Labels::getLabel('LBL_PRODUCT_BRAND_REQUEST_SETUP', $siteLangId); ?
             $(minHeightBaneerEle).val('<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_TABLET]['height']; ?>');
 
         } else {
-
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_MOBILE]['width']; ?> x <?php echo $getBrandRequestDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
-
             $(minWidthBaneerEle).val('<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_MOBILE]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $getBrandRequestDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
-
-
 
         }
 

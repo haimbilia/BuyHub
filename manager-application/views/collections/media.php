@@ -67,7 +67,8 @@ if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA)) {
 }
 
 $includeTabs = ($collection_layout_type != Collections::TYPE_PENDING_REVIEWS1);
-require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');
+?>
 
 <script type="text/javascript">
     $('input[name=min_width]').val(<?php echo $imageDimension['width'];?>);
