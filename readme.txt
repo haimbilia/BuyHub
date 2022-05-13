@@ -762,6 +762,7 @@ Updates/Fixes :
     => 064051 - Admin: Pagination is not working properly on the product listing page at the admin's end
     => 063901 - iOS Web > Buyer :Orders: Getting multiple issues on Order detail page.
     => 063898 - The "In Process" status is showing after "Approved" while changing the status for the digital orders at the admin's end and the "In Process" status is showing in the timeline of the seller and buyer 
+    => 064342 - Admin: The user is unable to delete products under product catalog section.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

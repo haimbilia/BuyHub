@@ -22,7 +22,7 @@
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (t) {
             fcom.displaySuccessMessage(t.msg);
-            langForm(res.langId, 0, res.recordId);
+            langForm(t.langId, 0, t.recordId);
         });
     };
 
