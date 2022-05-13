@@ -246,7 +246,7 @@ class ShopsController extends MyAppController
                 $data['shop']['rating'] = SelProdRating::getSellerRating($data['shop']['shop_user_id']);
             }
             $data['shop']['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', array($data['shop']['shop_id'], $this->siteLangId));
-            $data['shop']['shop_banner'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopBanner', array($data['shop']['shop_id'], $this->siteLangId, 'MOBILE', 0, applicationConstants::SCREEN_MOBILE)), CONF_IMG_CACHE_TIME, '.jpg');
+            $data['shop']['shop_banner'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopBanner', array($data['shop']['shop_id'], $this->siteLangId, ImageDimension::VIEW_MOBILE , 0, applicationConstants::SCREEN_MOBILE)), CONF_IMG_CACHE_TIME, '.jpg');
         }
 
         /* Shop and SelProd Badge */

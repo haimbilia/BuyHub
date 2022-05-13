@@ -115,7 +115,7 @@ class ImageDimension extends FatUtility
                 $imageDimensions = self::getBrandImageData($sizeType);
                 break;
             case self::TYPE_EMAIL_LOGO:
-                $imageDimensions = self::getEmailLogoImageData($sizeType);
+                $imageDimensions = self::getEmailLogoImageData($sizeType, $aspectRatioType);
                 break;
             case self::TYPE_SOCIAL_FEED:
                 $imageDimensions = self::getSocialFeedImageData($sizeType);
@@ -302,7 +302,7 @@ class ImageDimension extends FatUtility
     public static function getShopBannerImageData(string $sizeType = ''): array
     {
         $arr =  [
-            self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 500],
+            self::VIEW_DESKTOP => [self::WIDTH => 2048, self::HEIGHT => 512],
             self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
             self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
             self::VIEW_THUMB => [self::WIDTH => 250, self::HEIGHT => 100],
@@ -366,14 +366,28 @@ class ImageDimension extends FatUtility
         return self::returnData($arr, self::VIEW_DESKTOP, $sizeType);
     }
 
-    public static function getEmailLogoImageData(string $sizeType = ''): array
+    public static function getEmailLogoImageData(string $sizeType = '', int $aspectRatioType): array
     {
-        $arr =  [
-            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
-            self::VIEW_DEFAULT => [self::WIDTH => 100, self::HEIGHT => 100],
+        $arr = [
+            AttachedFile::RATIO_TYPE_SQUARE => [
+                self::VIEW_THUMB => [self::WIDTH => 150, self::HEIGHT => 150],
+                self::VIEW_DEFAULT => [self::WIDTH => 150, self::HEIGHT => 150],
+            ],
+            AttachedFile::RATIO_TYPE_RECTANGULAR =>
+            [
+                self::VIEW_THUMB => [self::WIDTH => 150, self::HEIGHT => 85],
+                self::VIEW_DEFAULT => [self::WIDTH => 150, self::HEIGHT => 85],
+            ]
         ];
 
-        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
+        if (!empty($sizeType)) {
+            if (!array_key_exists($sizeType, $arr[$aspectRatioType])) {
+                return $arr[$aspectRatioType][self::VIEW_DEFAULT];
+            }
+            return $arr[$aspectRatioType][$sizeType];
+        }
+
+        return $arr[$aspectRatioType];
     }
 
     public static function getSocialFeedImageData(string $sizeType = ''): array
@@ -459,7 +473,6 @@ class ImageDimension extends FatUtility
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_NORMAL => [self::WIDTH => 120, self::HEIGHT => 120],
             self::VIEW_DEFAULT => [self::WIDTH => 600, self::HEIGHT => 400],
-
         ];
 
         return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
@@ -552,10 +565,10 @@ class ImageDimension extends FatUtility
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_SMALL => [self::WIDTH => 200, self::HEIGHT => 200],
-            self::VIEW_LAYOUT1 => [self::WIDTH => 1350, self::HEIGHT => 759],
+            self::VIEW_LAYOUT1 => [self::WIDTH => 800, self::HEIGHT => 450],
             self::VIEW_LAYOUT2 => [self::WIDTH => 645, self::HEIGHT => 363],
             self::VIEW_FEATURED => [self::WIDTH => 510, self::HEIGHT => 287],
-            self::VIEW_DEFAULT => [self::WIDTH => 400, self::HEIGHT => 400]
+            self::VIEW_DEFAULT => [self::WIDTH => 1024, self::HEIGHT => 576]
         ];
         return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }

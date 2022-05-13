@@ -2148,7 +2148,7 @@ class SellerController extends SellerBaseController
 
         $shopLogoFrm = $this->getShopLogoForm($shop_id, $this->siteLangId);
         $shopBannerFrm = $this->getShopBannerForm($shop_id, $this->siteLangId);
-        $shopBackgroundImageFrm = $this->getBackgroundImageForm($shop_id, $this->siteLangId);
+       
 
         $getShopDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_SHOP_BANNER);
         $getShopLogoSquare = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE);
@@ -2159,8 +2159,7 @@ class SellerController extends SellerBaseController
 
         $this->set('shopDetails', $shopDetails);
         $this->set('shopLogoFrm', $shopLogoFrm);
-        $this->set('shopBannerFrm', $shopBannerFrm);
-        $this->set('shopBackgroundImageFrm', $shopBackgroundImageFrm);
+        $this->set('shopBannerFrm', $shopBannerFrm);  
         $this->set('language', Language::getAllNames());
         $this->set('shop_id', $shop_id);
         $this->_template->render(false, false);
@@ -2188,7 +2187,6 @@ class SellerController extends SellerBaseController
 
         if (!false == $shopDetails) {
             $shop_id = $shopDetails['shop_id'];
-
             if ($imageType == 'logo') {
                 $logoAttachments = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false);
                 $this->set('image', $logoAttachments);
@@ -2197,10 +2195,6 @@ class SellerController extends SellerBaseController
                 $bannerAttachments = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_BANNER, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false, $slide_screen);
                 $this->set('image', $bannerAttachments);
                 $this->set('imageFunction', 'shopBanner');
-            } else {
-                $backgroundAttachments = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_BACKGROUND_IMAGE, $shop_id, 0, $lang_id, (count($languages) <= 1) ? true : false);
-                $this->set('image', $backgroundAttachments);
-                $this->set('imageFunction', 'shopBackgroundImage');
             }
         }
         $this->set('imageType', $imageType);

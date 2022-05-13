@@ -14,7 +14,7 @@ if (isset($collections) && count($collections)) {
                                             <picture>
 												<?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blog['post_id']);?>
                                                 <img data-ratio="16:9"
-                                                src="<?php echo UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blog['post_id'], $siteLangId, '')); ?>"
+                                                src="<?php echo UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blog['post_id'], $siteLangId, ImageDimension::VIEW_LAYOUT2)); ?>"
                                                 alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blog['post_title'];?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $blog['post_title'];?>">
                                             </picture>
                                         </a>

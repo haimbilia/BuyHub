@@ -256,6 +256,7 @@ class ImageController extends FatController
         }
     }
 
+    /*
     public function shopBackgroundImage($recordId, $lang_id = 0, $sizeType = '', $afile_id = 0, $templateId = '')
     {
         switch ($templateId) {
@@ -308,6 +309,7 @@ class ImageController extends FatController
                 break;
         }
     }
+    */
 
     public function brandReal($recordId, $langId = 0, $sizeType = '', $afile_id = 0)
     {
@@ -498,32 +500,17 @@ class ImageController extends FatController
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $default_image = AttachedFile::setNamePrefix($default_image, $sizeType);
 
-        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_EMAIL_LOGO, $sizeType);
+        $aspectRatioType = $file_row['afile_aspect_ratio'];
+        $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;       
+
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_EMAIL_LOGO, $sizeType, $aspectRatioType);
 
         if ($sizeType) {
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'],  $default_image);
         }
 
-        /*  switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 100;
-                $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
-                break;
-            default:
-                $w = 100;
-                $h = 100;
-                if ($image_name == '' || empty($image_name)) {
-                    AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
-                } else {
-                
-                    AttachedFile::displayOriginalImage($image_name, $default_image);
-                }
-                break;
-        } */
     }
 
     public function socialFeed($lang_id = 0, $sizeType = '')
