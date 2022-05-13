@@ -364,12 +364,11 @@ class SellerController extends SellerBaseController
             $srch->addMaxPriceCondition($priceTo);
         }
         $rs = $srch->getResultSet();
-        // echo $srch->getQuery();
         $orders = FatApp::getDb()->fetchAll($rs);
 
-        $oObj = new Orders();
+        $oObj = new OrderSubscription();
         foreach ($orders as &$order) {
-            $charges = $oObj->getOrderProductChargesArr($order['ossubs_id']);
+            $charges = $oObj->getOrderSubscriptionChargesArr($order['ossubs_id']);
             $order['charges'] = $charges;
         }
         $orderStatuses = Orders::getOrderSubscriptionStatusArr($this->siteLangId);
@@ -729,13 +728,10 @@ class SellerController extends SellerBaseController
             CommonHelper::redirectUserReferer();
         }
 
-        $orderObj = new Orders();
-
         $orderStatuses = Orders::getOrderSubscriptionStatusArr($this->siteLangId);
         $userId = $this->userParentId;
 
         $srch = new OrderSubscriptionSearch($this->siteLangId, true, true);
-
         $srch->joinOrderUser();
         $srch->addOrderProductCharges();
         $srch->addCondition('order_user_id', '=', $userId);
