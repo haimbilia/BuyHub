@@ -94,7 +94,7 @@
     removeTagData = function (e) {
         var tag_id = e.detail.tag.id;
         var product_id = getCurrentFrmRecordId();
-        if (1 > product_id) {
+        if (1 > product_id || '' == tag_id) {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) {
@@ -131,7 +131,7 @@
             whitelist: [],
             delimiters: "#",
             editTags: false,
-        }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);
+        }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete).on('dropdown:select', addTagData).on('focus', getTagsAutoComplete);
     };
 
     addSpecification = function () {

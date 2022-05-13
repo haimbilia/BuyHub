@@ -89,7 +89,6 @@
     };
 
     getTagsAutoComplete = function (e) {
-
         let keyword = e.detail.value;
         let langId = getCurrentFrmLangId();
         var list = [];
@@ -116,7 +115,7 @@
             whitelist: [],
             delimiters: "#",
             editTags: false,
-        }).on('add', addTagData).on('input', getTagsAutoComplete);
+        }).on('add', addTagData).on('input', getTagsAutoComplete).on('focus', getTagsAutoComplete);
     };
 
     addSpecification = function () {
@@ -166,10 +165,10 @@
         }
 
 
-        if(appendEle.find('table').hasClass('hide')){
-            appendEle.find('table').removeClass('hide');        
-            fixTableColumnWidth();            
-        }        
+        if (appendEle.find('table').hasClass('hide')) {
+            appendEle.find('table').removeClass('hide');
+            fixTableColumnWidth();
+        }
 
         $('#sp_label').val('');
         $('#sp_value').val('');
@@ -416,8 +415,8 @@
     };
     loadCropper = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            if(!validateFileUpload(inputBtn.files[0])){
-                return;    
+            if (!validateFileUpload(inputBtn.files[0])) {
+                return;
             }
             loadCropperSkeleton(false);
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
@@ -430,7 +429,7 @@
                 var frmName = $(inputBtn).closest('form').attr('name');
                 var minWidth = document[frmName].min_width.value;
                 var minHeight = document[frmName].min_height.value;
-              
+
                 var options = {
                     aspectRatio: minWidth / minHeight,
                     data: {
@@ -547,11 +546,11 @@
             url: fcom.makeUrl('CustomProducts', 'setupDigitalDownload'),
             type: "POST",
             data: data,
-            dataType:"json",
+            dataType: "json",
             processData: false,
             contentType: false,
             success: function (t) {
-                fcom.removeLoader();               
+                fcom.removeLoader();
                 if (t.status == 0) {
                     fcom.displayErrorMessage(t.msg);
                     return;
@@ -563,7 +562,7 @@
                 digitalDownloadsForm(t.downloadType, function () {
                     $(".option-comb-id-js").val(t.optionComb);
                     $(".file-language-js").val(t.langId);
-                    getDigitalDownloads(t.downloadType, t.recordId, t.langId, t.optionComb);        
+                    getDigitalDownloads(t.downloadType, t.recordId, t.langId, t.optionComb);
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -573,37 +572,37 @@
     };
     getDigitalDownloads = function (downloadType, recordId, langId = 0, optionCombi = 0) {
         let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
-        if (downloadType == 1) {         
+        if (downloadType == 1) {
             fcom.ajax(fcom.makeUrl('CustomProducts', 'getDigitalDownloadLinks'), data, function (res) {
                 if (langId == 0 && optionCombi == 0) {
                     $("#digitalLinksDefaultListJs").html(res.html);
-                    if(res.html == ''){                      
+                    if (res.html == '') {
                         $('#digital-link-block').collapse('hide');
-                        $('#digital-links').find('.dropdown-toggle-custom').attr('data-bs-toggle','');
-                        $('#digital-links').find('.dropdown-toggle-custom-arrow').addClass('hide');                        
-                    }else{
-                        $('#digital-links').find('.dropdown-toggle-custom').attr('data-bs-toggle','collapse');
+                        $('#digital-links').find('.dropdown-toggle-custom').attr('data-bs-toggle', '');
+                        $('#digital-links').find('.dropdown-toggle-custom-arrow').addClass('hide');
+                    } else {
+                        $('#digital-links').find('.dropdown-toggle-custom').attr('data-bs-toggle', 'collapse');
                         $('#digital-links').find('.dropdown-toggle-custom-arrow').removeClass('hide');
                         $('#digital-link-block').collapse('show');
                     }
                 }
-                
+
                 $("#digitalFrmListJs").html(res.html);
             }, { fOutMode: 'json' });
         } else {
             fcom.ajax(fcom.makeUrl('CustomProducts', 'getDigitalDownloadAttachments'), data, function (res) {
                 if (langId == 0 && optionCombi == 0) {
                     $("#digitalFilesDefaultListJs").html(res.html);
-                    if(res.html == ''){                  
+                    if (res.html == '') {
                         $('#digital-file-block').collapse('hide');
-                        $('#digital-files').find('.dropdown-toggle-custom').attr('data-bs-toggle','');
-                        $('#digital-files').find('.dropdown-toggle-custom-arrow').addClass('hide');                  
-                    }else{
-                        $('#digital-files').find('.dropdown-toggle-custom').attr('data-bs-toggle','collapse');
+                        $('#digital-files').find('.dropdown-toggle-custom').attr('data-bs-toggle', '');
+                        $('#digital-files').find('.dropdown-toggle-custom-arrow').addClass('hide');
+                    } else {
+                        $('#digital-files').find('.dropdown-toggle-custom').attr('data-bs-toggle', 'collapse');
                         $('#digital-files').find('.dropdown-toggle-custom-arrow').removeClass('hide');
-                        $('#digital-file-block').collapse('show');                     
+                        $('#digital-file-block').collapse('show');
                     }
-                  
+
                 }
                 $("#digitalFrmListJs").html(res.html);
             }, { fOutMode: 'json' });
@@ -638,9 +637,9 @@
 
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteDigitalFile'), data, function (t) {
             fcom.displaySuccessMessage(t.msg);
-            let recordId = getCurrentFrmRecordId();      
-            let langId = $('#digitalFrmLangId').val() || 0;     
-            let optionComb = $('#digitalFrmOptionId').val() || 0; 
+            let recordId = getCurrentFrmRecordId();
+            let langId = $('#digitalFrmLangId').val() || 0;
+            let optionComb = $('#digitalFrmOptionId').val() || 0;
             getDigitalDownloads(typeDigitalFile, recordId, langId, optionComb);
         });
     };
