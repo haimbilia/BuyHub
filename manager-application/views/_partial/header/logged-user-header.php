@@ -1,9 +1,7 @@
 <div class="app">
-    <?php $this->includeTemplate('_partial/navigation/left-navigation.php'); ?>
-    <?php
-
-    $getProfileImageData = ImageDimension::getData(ImageDimension::TYPE_USER_PROFILE_IMAGE, ImageDimension::VIEW_CROPED);
-
+    <?php 
+        $this->includeTemplate('_partial/navigation/left-navigation.php');
+        $getProfileImageData = ImageDimension::getData(ImageDimension::TYPE_USER_PROFILE_IMAGE, ImageDimension::VIEW_CROPED); 
     ?>
     <div class="wrap">
         <header class="main-header mainHeaderJs">
