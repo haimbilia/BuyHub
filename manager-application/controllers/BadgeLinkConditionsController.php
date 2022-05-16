@@ -131,9 +131,9 @@ class BadgeLinkConditionsController extends ListingBaseController
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'blinkcond_id');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'blinkcond_id';
         }
 
         if (Badge::COND_AUTO == $this->badgeData['badge_trigger_type']) {
@@ -512,6 +512,9 @@ class BadgeLinkConditionsController extends ListingBaseController
 
         if (Badge::COND_MANUAL == $triggerType && !empty($records)) {
             $db = FatApp::getDb();
+            if (!$db->deleteRecords(BadgeLinkCondition::DB_TBL_BADGE_LINKS, array('smt' => 'badgelink_blinkcond_id = ?', 'vals' => array($blinkCondId)))) {
+                LibHelper::exitWithError($db->getError(), true);
+            }
             foreach ($records as $recordId) {
                 if (false === BadgeLinkCondition::isUniqueRecord($badgeType, $recordType, $recordId, $position)) {
                     if (empty($msg)) {

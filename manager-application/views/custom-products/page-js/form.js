@@ -18,7 +18,7 @@
         }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setup'), data, function (res) {
-            fcom.displaySuccessMessage(t.msg);
+            fcom.displaySuccessMessage(res.msg);
             langForm(res.langId, 0, res.recordId);
         });
     };

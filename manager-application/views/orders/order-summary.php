@@ -109,7 +109,11 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                         </li>
                     <?php }
                 } else {
-                    foreach ($taxOptionsTotal as $key => $val) { ?>
+                    foreach ($taxOptionsTotal as $key => $val) { 
+                        if (1 > $val['value']) {
+                            continue;
+                        }
+                        ?>
                         <li>
                             <span class="label">
                                 <?php
