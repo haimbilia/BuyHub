@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	select2('searchFrmUserIdJs', fcom.makeUrl('Users', 'autoComplete'), { user_is_buyer: 1, credential_active: 1, credential_verified: 1 });
+	select2('searchFrmUserIdJs', fcom.makeUrl('Users', 'autoComplete'), { user_is_buyer: 1, credential_active: 1 });
 
 	select2('searchFrmSellerProductJs', fcom.makeUrl('SellerProducts', 'autoComplete'));
 });
