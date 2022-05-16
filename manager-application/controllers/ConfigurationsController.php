@@ -1813,7 +1813,7 @@ class ConfigurationsController extends ListingBaseController
                 if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'firstPurchaseCoupon', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'firstPurchaseCoupon', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
                     }
                 }
@@ -1841,7 +1841,7 @@ class ConfigurationsController extends ListingBaseController
                 if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'metaImage', array($langId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'metaImage', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
                         $selectedRadio = $fileData['afile_aspect_ratio'];
                     }

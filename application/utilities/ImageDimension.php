@@ -482,6 +482,7 @@ class ImageDimension extends FatUtility
     public static function getMetaImageData(string $sizeType = ''): array
     {
         $arr =  [
+            self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_DEFAULT => [self::WIDTH => 600, self::HEIGHT => 400]
         ];
 
