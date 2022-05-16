@@ -766,7 +766,8 @@ Updates/Fixes :
     => 064321 - Paid amount's details are showing incorrect on the view-subscription-order at the seller's end, in case the admin enabled the "adjust amount" option for the subscription from the settings section. 
     => 064325 - Admin: Incorrect message is showing when the user removes the tag under product form section.
     => 064332 - Admin: UI is distorted under specifications section
-    
+    => 064359 - Banner images are not showing under category section
+
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
