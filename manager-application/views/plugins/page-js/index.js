@@ -44,7 +44,9 @@ $(document).ajaxComplete(function () {
             }
             fcom.removeLoader();
             setTabActive(type);
-            window.history.pushState('', '', fcom.makeUrl('plugins', 'index', [type]));
+            if($('.pluginTypesJs').length){
+                window.history.pushState('', '', fcom.makeUrl('plugins', 'index', [type]));
+            }            
             $(dv).html(res.listingHtml);
             fixTableColumnWidth();
         }, { fOutMode: 'json' });

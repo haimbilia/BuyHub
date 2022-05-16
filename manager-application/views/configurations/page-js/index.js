@@ -1,5 +1,7 @@
 $(document).ready(function () {
-    $('.settings-inner').scrollTop($('.settings-inner li.is-active').offset().top - $('.settings-inner').offset().top);
+    if($('.pluginTypesJs').length){
+        $('.settings-inner').scrollTop($('.settings-inner li.is-active').offset().top - $('.settings-inner').offset().top);
+    }
     $(document).on("click", "#testMail-js", function () {
         fcom.ajax(fcom.makeUrl('Configurations', 'testEmail'), '', function (t) {
             var ans = $.parseJSON(t);
