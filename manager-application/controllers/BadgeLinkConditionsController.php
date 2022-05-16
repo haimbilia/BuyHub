@@ -131,11 +131,11 @@ class BadgeLinkConditionsController extends ListingBaseController
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'blinkcond_id');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'blinkcond_id';
         }
-
+        
         if (Badge::COND_AUTO == $this->badgeData['badge_trigger_type']) {
             unset(
                 $fields['cond_seller_name'],
