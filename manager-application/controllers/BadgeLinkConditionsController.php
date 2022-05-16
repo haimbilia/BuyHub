@@ -135,7 +135,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = 'blinkcond_id';
         }
-        
+
         if (Badge::COND_AUTO == $this->badgeData['badge_trigger_type']) {
             unset(
                 $fields['cond_seller_name'],
@@ -512,6 +512,9 @@ class BadgeLinkConditionsController extends ListingBaseController
 
         if (Badge::COND_MANUAL == $triggerType && !empty($records)) {
             $db = FatApp::getDb();
+            if (!$db->deleteRecords(BadgeLinkCondition::DB_TBL_BADGE_LINKS, array('smt' => 'badgelink_blinkcond_id = ?', 'vals' => array($blinkCondId)))) {
+                LibHelper::exitWithError($db->getError(), true);
+            }
             foreach ($records as $recordId) {
                 if (false === BadgeLinkCondition::isUniqueRecord($badgeType, $recordType, $recordId, $position)) {
                     if (empty($msg)) {
