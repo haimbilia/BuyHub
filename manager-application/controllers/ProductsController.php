@@ -392,7 +392,7 @@ class ProductsController extends ListingBaseController
             return;
         }
 
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/jquery-sortable-lists.js','brands/page-js/index.js','product-categories/page-js/add-media.js'));
+        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/jquery-sortable-lists.js','brands/page-js/index.js','product-categories/page-js/add-media.js', 'product-categories/page-js/saveCategoryRecord.js'));
         $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css', 'css/select2.min.css']);
         $this->set("includeEditor", true);                   
         $this->_template->render();

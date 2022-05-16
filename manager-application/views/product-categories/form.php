@@ -1,5 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$frm->setFormTagAttribute('onsubmit', 'saveCategoryRecord($("#' . $frm->getFormTagAttribute('id') . '")[0]); return(false);');
+
 $fld = $frm->getField('prodcat_identifier');
 $fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','prodcat_id');getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val(),'','pre',true)");
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
