@@ -888,6 +888,7 @@ class CustomProductsController extends ListingBaseController
             }
         }
 
+        $data['preq_content'] = [];
         foreach ($post['options'] as $index => $optionId) {
             $data['preq_content']['product_option'][] = $optionId;
             $opValuesArr = array_column(json_decode($post['optionValues'][$index]), 'id');

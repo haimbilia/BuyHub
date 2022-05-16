@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    if($('.pluginTypesJs').length){
+    if($('.settings-inner').length){
         $('.settings-inner').scrollTop($('.settings-inner li.is-active').offset().top - $('.settings-inner').offset().top);
     }
     $(document).on("click", "#testMail-js", function () {
