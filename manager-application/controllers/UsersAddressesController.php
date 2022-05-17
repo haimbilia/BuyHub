@@ -254,7 +254,7 @@ class UsersAddressesController extends ListingBaseController
             $fld->requirements()->setRequired(true);
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LABEL', $this->siteLangId), 'addr_title');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_TITLE', $this->siteLangId), 'addr_title');
         $fld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_E.g:_My_Office_Address', $this->siteLangId));
 
         $frm->addRequiredField(Labels::getLabel('FRM_CONTACT_PERSON_NAME', $this->siteLangId), 'addr_name');
@@ -306,7 +306,7 @@ class UsersAddressesController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
             /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
-            'addr_title' => Labels::getLabel('LBL_Address_Label', $this->siteLangId),
+            'addr_title' => Labels::getLabel('LBL_ADDRESS_TITLE', $this->siteLangId),
             'user_address' => Labels::getLabel('LBL_Address', $this->siteLangId),
             'addr_phone' => Labels::getLabel('LBL_Phone', $this->siteLangId),
             'addr_is_default' => Labels::getLabel('LBL_Default', $this->siteLangId),
