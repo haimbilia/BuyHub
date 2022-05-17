@@ -316,6 +316,10 @@ class CustomProductsController extends SellerBaseController
         $data['preq_status'] = $requestStatus;
         $data['preq_user_id'] = $userId;
 
+        if($isNewProduct){
+            $data['preq_added_on'] = date('Y-m-d H:i:s');
+        }
+
         $prodReqObj = new ProductRequest($recordId);
         $prodReqObj->assignValues($data);
         if (!$prodReqObj->save()) {
