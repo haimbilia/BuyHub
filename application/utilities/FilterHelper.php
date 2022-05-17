@@ -39,7 +39,8 @@ class FilterHelper extends FatUtility
         $prodSrchObj->joinSellerSubscription(0, false, true);
         $prodSrchObj->addSubscriptionValidCondition();
         $prodSrchObj->validateAndJoinDeliveryLocation();
-
+        $prodSrchObj->joinProductToTax();
+        
         if (array_key_exists('category', $post)) {
             $prodSrchObj->addCategoryCondition($post['category']);
         }
