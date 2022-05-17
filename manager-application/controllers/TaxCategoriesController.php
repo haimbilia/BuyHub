@@ -191,28 +191,6 @@ class TaxCategoriesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteRecord()
-    {
-        $this->objPrivilege->canEditTax();
-        $post = FatApp::getPostedData();
-        if ($post == false) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['recordId']);
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $taxObj = new Tax($recordId);
-        $taxObj->assignValues(array('taxcat_deleted' => applicationConstants::YES));
-        if (!$taxObj->save()) {
-            LibHelper::exitWithError($taxObj->getError(), true);
-        }
-        $this->set('msg', $this->str_setup_successful);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
     public function autoComplete()
     {
         $pagesize = 20;
