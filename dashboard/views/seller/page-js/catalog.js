@@ -68,8 +68,8 @@ $(document).on('change', '#digitalFrmLangId,#digitalFrmdownloadType,#digitalFrmO
         var data = 'shippedBy=seller&product_id=' + product_id;
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpshippedBy'), data, function (t) {
             var frm = document.frmCatalogProductSearchPaging;
-            $(document.frmSearchCatalogProduct.page).val($(frm.page).val());
-            searchCatalogProducts(document.frmSearchCatalogProduct);
+            $(document.frmRecordSearch.page).val($(frm.page).val());
+            searchCatalogProducts(document.frmRecordSearch);
         });
     };
 
@@ -77,8 +77,8 @@ $(document).on('change', '#digitalFrmLangId,#digitalFrmdownloadType,#digitalFrmO
         var data = 'shippedBy=admin&product_id=' + product_id;
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setUpshippedBy'), data, function (t) {
             var frm = document.frmCatalogProductSearchPaging;
-            $(document.frmSearchCatalogProduct.page).val($(frm.page).val());
-            searchCatalogProducts(document.frmSearchCatalogProduct);
+            $(document.frmRecordSearch.page).val($(frm.page).val());
+            searchCatalogProducts(document.frmRecordSearch);
         });
     };
 
@@ -117,14 +117,14 @@ $(document).on('change', '#digitalFrmLangId,#digitalFrmdownloadType,#digitalFrmO
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupSellerShipping'), (data), function (t) {
             runningAjaxReq = false;
             productId = t.product_id;
-            searchCatalogProducts(document.frmSearchCatalogProduct);
+            searchCatalogProducts(document.frmRecordSearch);
         });
     }
 
     clearSearch = function () {
         $('input[name="badge_id"], input[name="ribbon_id"], select[name="badge_name"], select[name="ribbon_name"]').val('').trigger('change');
-        document.frmSearchCatalogProduct.reset();
-        searchCatalogProducts(document.frmSearchCatalogProduct);
+        document.frmRecordSearch.reset();
+        searchCatalogProducts(document.frmRecordSearch);
     };
 
     customProductImages = function (productId) {

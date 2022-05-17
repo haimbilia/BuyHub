@@ -99,8 +99,9 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     </i>',
                         true
                     );
-                    $productOptions = Product::getProductOptions($row['selprod_product_id'], $siteLangId);
-                    if (is_array($productOptions) && count($productOptions)) {
+                    //$productOptions = Product::getProductOptions($row['selprod_product_id'], $siteLangId);
+                    $available = Product::availableForAddToStore($row['selprod_product_id'], $userParentId);
+                    if ($available) {
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',

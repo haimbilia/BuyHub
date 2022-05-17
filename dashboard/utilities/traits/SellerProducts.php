@@ -117,6 +117,7 @@ trait SellerProducts
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('canEdit', $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true));
         $this->set('postedData', $post);
+        $this->set('userParentId', $userId);
         $this->_template->render(false, false);
     }
 

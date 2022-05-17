@@ -1123,7 +1123,7 @@ class SellerController extends SellerBaseController
 
         $frmSearchCatalogProduct = $this->getCatalogProductSearchForm($type);
         $this->set('canEdit', $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId(), true));
-        $this->set("frmSearchCatalogProduct", $frmSearchCatalogProduct);
+        $this->set("frmSearch", $frmSearchCatalogProduct);
         $this->set('canRequestProduct', User::canRequestProduct());
         $this->set('canAddCustomProduct', User::canAddCustomProduct());
         $this->set('canAddCustomProductAvailableToAllSellers', User::canAddCustomProductAvailableToAllSellers());
