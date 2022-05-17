@@ -172,6 +172,10 @@ class OptionValuesController extends LoggedUserController
         $frm->addHiddenField('', 'optionvalue_id', $optionvalue_id);
         $frm->addHiddenField('', 'optionvalue_option_id', $option_id);
         $frm->addRequiredField(Labels::getLabel('FRM_OPTION_VALUE_NAME', $this->siteLangId), 'optionvalue_name');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_DISPLAY_ORDER', $this->siteLangId), 'optionvalue_display_order');
+        $fld->requirements()->setInt();
+        $fld->requirements()->setPositive();
+        $fld->requirements()->setRange(1, 9999999999);
         $optionRow = Option::getAttributesById($option_id);
         if ($optionRow && $optionRow['option_is_color']) {
             $fld = $frm->addTextBox(Labels::getLabel('FRM_OPTION_VALUE_COLOR', $this->siteLangId), 'optionvalue_color_code');

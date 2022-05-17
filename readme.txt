@@ -767,6 +767,7 @@ Updates/Fixes :
     => 064325 - Admin: Incorrect message is showing when the user removes the tag under product form section.
     => 064332 - Admin: UI is distorted under specifications section
     => 064359 - Banner images are not showing under category section
+    => 064386 - Seller: Display order field is missing at seller's end under 'Option values for seller option' section.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
