@@ -724,10 +724,8 @@ class Importexport extends ImportexportCommon
             $urlKeywords = $this->getAllRewriteUrls(ProductCategory::REWRITE_URL_PREFIX);
         }
 
-        $useCategoryId = false;
-        if ($this->settings['CONF_USE_CATEGORY_ID']) {
-            $useCategoryId = true;
-        } else {
+        $categoriesIdentifiers = [];
+        if (!$this->settings['CONF_USE_CATEGORY_ID']) {
             $categoriesIdentifiers = $this->getAllCategoryIdentifiers();
         }
 
