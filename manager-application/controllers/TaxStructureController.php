@@ -367,6 +367,59 @@ class TaxStructureController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
+    public function deleteRecord()
+    {
+        $this->objPrivilege->canEditTax();
+        $post = FatApp::getPostedData();
+        if ($post == false) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $recordId = FatUtility::int($post['recordId']);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $db = FatApp::getDb();
+
+        $srch = TaxStructure::getSearchObject();
+        $srch->addFld('IFNULL(taxcat_identifier,taxcat_name) as taxcat_name');;
+        $srch->joinTable(
+            TaxRule::DB_TBL,
+            'INNER JOIN',
+            'taxstr_id = tr.taxrule_taxstr_id',
+            'tr'
+        );
+        $srch->joinTable(
+            Tax::DB_TBL,
+            'INNER JOIN',
+            'tc.taxcat_id = tc.taxcat_id and tc.taxcat_deleted = 0',
+            'tc'
+        );
+        $srch->joinTable(
+            Tax::DB_TBL_LANG,
+            'INNER JOIN',
+            'tc.taxcat_id = tcl.taxcatlang_taxcat_id and tcl.taxcatlang_lang_id = ' . $this->siteLangId,
+            'tcl'
+        );
+        $srch->addCondition('taxstr_id', '=', $recordId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        if ($row = $db->fetch($srch->getResultSet())) {
+            LibHelper::exitWithError(CommonHelper::replaceStringData(Labels::getLabel('ERR_UNABLE_TO_DELETE_AS_IT_IS_ATTACHED_TO_TAX_CATEGORY_:{CATEGORY-NAME}', $this->siteLangId), ["{CATEGORY-NAME}" => $row['taxcat_name']]));
+        }
+      
+        if (!$db->deleteRecords(TaxStructure::DB_TBL, array('smt' => TaxStructure::DB_TBL_PREFIX . 'id = ?', 'vals' => array($recordId)))) {
+            LibHelper::exitWithError($db->getError(), true);
+        }
+
+        if (!$db->deleteRecords(TaxStructure::DB_TBL_LANG, array('smt' => TaxStructure::DB_TBL_LANG_PREFIX .TaxStructure::DB_TBL_PREFIX. 'id = ?', 'vals' => array($recordId)))) {
+            LibHelper::exitWithError($db->getError(), true);
+        }
+        $this->set('msg', $this->str_delete_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
     protected function getFormColumns(): array
     {
         $taxStructureTblHeadingCols = CacheHelper::get('taxStructureTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');

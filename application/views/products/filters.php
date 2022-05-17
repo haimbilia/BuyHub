@@ -149,7 +149,7 @@ if (isset($prodcat_code)) {
     <?php } ?>
 
 
-    <?php if (isset($priceArr) && $priceArr) { ?>
+    <?php if (isset($priceArr) && $priceArr && $priceArr['minPrice'] != $priceArr['maxPrice']) { ?>
 
         <div class="sidebar-widget">
             <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#price" aria-expanded="true" aria-controls="price">
