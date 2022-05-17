@@ -5,6 +5,8 @@ if (!isset($tbody)) {
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
 
+$collectionLayoutTypeArr = Collections::getLayoutTypeArr($siteLangId);
+
 foreach ($arrListing as $sn => $row) {
     $serialNo = ($sn + 1);
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
@@ -31,7 +33,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, Collections::getTypeArr($siteLangId)[$row[$key]]);
                 break;
             case 'collection_layout_type':
-                $td->appendElement('plaintext', $tdAttr, '<div class="layout-type"><svg class="svg"  width="164" height="94">
+                $td->appendElement('plaintext', $tdAttr, '<div class="layout-type" data-bs-toggle="tooltip" title="'.($collectionLayoutTypeArr[$row[$key]] ?? '').'"><svg class="svg"  width="164" height="94">
                 <use
                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-layout.svg#' . Collections::layoutIconClass($row[$key]) . '">
                 </use>

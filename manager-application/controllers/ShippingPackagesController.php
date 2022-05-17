@@ -182,6 +182,33 @@ class ShippingPackagesController extends ListingBaseController
         return $frm;
     }
 
+    public function deleteRecord()
+    {
+        $this->objPrivilege->canEditShippingPackages();
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $prodObj = Product::getSearchObject();
+        $prodObj->addFld('product_id');
+        $prodObj->addCondition('product_ship_package', '=', $recordId);
+        $prodObj->doNotCalculateRecords();
+        $prodObj->setPageSize(1);
+        if (FatApp::getDb()->fetch($prodObj->getResultSet())) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_SHIPPING_PACKAGE_LINKED_TO_PRODUCT', $this->siteLangId));
+        }
+
+        $obj =  new ShippingPackage($recordId);
+        if (!$obj->deleteRecord(false)) {
+            LibHelper::exitWithError($obj->getError(), true);
+        }
+       
+        $this->set('msg', $this->str_delete_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
     protected function getFormColumns(): array
     {
         $shopsTblHeadingCols = CacheHelper::get('shippingPackTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');

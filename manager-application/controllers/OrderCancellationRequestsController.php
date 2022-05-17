@@ -64,7 +64,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId), 'ocrequest_status', OrderCancelRequest::getRequestStatusArr($this->siteLangId), '', [], Labels::getLabel('FRM_ALL_REQUEST_STATUS', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId), 'ocrequest_status', OrderCancelRequest::getRequestStatusArr($this->siteLangId), '', [], Labels::getLabel('FRM_ALL', $this->siteLangId));
 
         $frm->addSelectBox(Labels::getLabel('FRM_ORDER_PAYMENT_STATUS', $this->siteLangId), 'op_status_id', Orders::getOrderProductStatusArr($this->siteLangId), '', array(), Labels::getLabel('FRM_ALL_ORDER_PAYMENT_STATUS', $this->siteLangId));
 
