@@ -40,13 +40,13 @@ if (!empty($postList)) {
     } ?>
 <?php
 } ?>
-<?php $postList = array_slice($postList, 1);
+<?php $postListSecondUI = array_slice($postList, 1, 6);
 if (!empty($postList)) { ?>
     <section class="section">
         <div class="container">
             <div class="collection-2">
                 <?php $count = 1;
-                foreach ($postList as $blogPost) { ?>
+                foreach ($postListSecondUI as $blogPost) { ?>
                     <div class="post">
                         <div class="post-head">
                             <figure class="post-media">
@@ -92,9 +92,7 @@ if (!empty($postList)) { ?>
                     <h2>
                         <?php echo Labels::getLabel('LBL_Featured_Blogs', $siteLangId); ?>
                     </h2>
-                </div>
-                <?php if (count($featuredPostList) > 4) { ?>
-                <?php } ?>
+                </div>             
             </div>
             <div class="collection-2">
                 <?php foreach ($featuredPostList as $blogPost) { ?>
@@ -126,7 +124,7 @@ if (!empty($postList)) { ?>
     </section>
 <?php } ?>
 
-<?php $postList = array_slice($postList, 2);
+<?php $postList = array_slice($postList, 7);
 if (!empty($postList)) { ?>
     <section class="section">
         <div class="container">

@@ -56,19 +56,21 @@ class BlogController extends MyAppController
     {
         $srch = $this->getBlogSearchObject();
         $srch->addOrder('post_added_on', 'desc');
-        $srch->setPageSize(7);
+        $srch->setPageSize(11);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
         $featuredSrch = $this->getBlogSearchObject();
         $featuredSrch->addCondition('post_featured', '=', applicationConstants::YES);
+        $featuredSrch->setPageSize(6);
         $featuredSrch->addOrder('post_added_on', 'desc');
         $featuredRs = $featuredSrch->getResultSet();
         $featuredRecords = FatApp::getDb()->fetchAll($featuredRs);
 
-        $popularSrch = $this->getBlogSearchObject();
+        $popularSrch = $this->getBlogSearchObject(false);       
         $popularSrch->addOrder('post_view_count', 'DESC');
-        $popularSrch->setPageSize(7);
+        $popularSrch->addOrder('post_published', 'DESC');
+        $popularSrch->setPageSize(6);
         $popularRs = $popularSrch->getResultSet();
         $popularRecords = FatApp::getDb()->fetchAll($popularRs);
         $this->set('postList', $records);
@@ -78,9 +80,9 @@ class BlogController extends MyAppController
         $this->_template->render();
     }
 
-    private function getBlogSearchObject()
+    private function getBlogSearchObject($addDefaultOrder = true)
     {
-        $srch = BlogPost::getSearchObject($this->siteLangId, true, false, true);
+        $srch = BlogPost::getSearchObject($this->siteLangId, true, false, true, $addDefaultOrder);
         $srch->addMultipleFields(array('bp.*', 'IFNULL(bp_l.post_title,post_identifier) as post_title', 'bp_l.post_author_name', 'group_concat(bpcategory_id) categoryIds', 'group_concat(IFNULL(bpcategory_name, bpcategory_identifier) SEPARATOR "~") categoryNames', 'group_concat(GETBLOGCATCODE(bpcategory_id)) AS categoryCodes', 'post_description'));
         $srch->addCondition('postlang_post_id', 'is not', 'mysql_func_null', 'and', true);
         $srch->addCondition('post_published', '=', applicationConstants::YES);
