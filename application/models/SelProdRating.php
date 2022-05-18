@@ -80,7 +80,7 @@ class SelProdRating extends MyAppModel
         }
 
         $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
-        $srch->addOrder('ratingtype_id');       
+        $srch->addOrder('ratingtype_id');
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($rs);
     }
@@ -123,7 +123,7 @@ class SelProdRating extends MyAppModel
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
-    public static function getAvgShopReviewsRating(int $shopUserId, int $langId): array
+    public static function getAvgShopReviewsRatingObj(int $shopUserId, int $langId): object
     {
         $srch = new SelProdReviewSearch();
         $srch->joinOrderProduct();
@@ -138,8 +138,8 @@ class SelProdRating extends MyAppModel
             'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name',
             'IFNULL(ROUND(AVG(sprating_rating),2),0) as prod_rating'
         ]);
-        $srch->addOrder('sprating_ratingtype_id');
+        $srch->addOrder('sprating_ratingtype_id', 'DESC');
         $srch->getResultSet();
-        return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
+        return $srch;
     }
 }
