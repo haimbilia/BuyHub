@@ -131,7 +131,7 @@ class GuestUserController extends MyAppController
 
         $loginWithOtp = FatApp::getPostedData('loginWithOtp', FatUtility::VAR_INT, 0);
         $frm = $this->getLoginForm($loginWithOtp);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], !MOBILE_APP_API_CALL);
         if ($post == false) {
             $resp = LibHelper::formatResponse(applicationConstants::FAILURE, current($frm->getValidationErrors()));
             LibHelper::dieJsonResponse($resp);
@@ -204,9 +204,9 @@ class GuestUserController extends MyAppController
                 Message::addErrorMessage(Labels::getLabel('ERR_COOKIES_NOT_ADDED', $this->siteLangId));
             }
         }
-
-        $frm->expireSecurityToken(FatApp::getPostedData());
-
+        if(!MOBILE_APP_API_CALL){
+            $frm->expireSecurityToken(FatApp::getPostedData());
+        }    
         setcookie('uc_id', $userId, time() + 3600 * 24 * 30, CONF_WEBROOT_URL);
 
         $data = User::getAttributesById($userId, array('user_preferred_dashboard', 'user_registered_initially_for'));
@@ -437,7 +437,7 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
         }
 
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], !MOBILE_APP_API_CALL);
         if ($post == false) {
             $message = Labels::getLabel(current($frm->getValidationErrors()), $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
@@ -480,8 +480,9 @@ class GuestUserController extends MyAppController
             LibHelper::exitWithError($message, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'registrationForm', CONF_WEBROOT_FRONTEND));
         }
-
-        $frm->expireSecurityToken(FatApp::getPostedData());
+        if(!MOBILE_APP_API_CALL){
+            $frm->expireSecurityToken(FatApp::getPostedData());
+        }
 
         if (1 > $signUpWithPhone && !FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
             $cartObj = new Cart();
@@ -796,7 +797,7 @@ class GuestUserController extends MyAppController
     {
         $withPhone = FatApp::getPostedData('withPhone', FatUtility::VAR_INT, 0);
         $frm = $this->getForgotForm($withPhone);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], !MOBILE_APP_API_CALL);
         if (false === $post) {
             if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
                 FatUtility::dieJsonError(current($frm->getValidationErrors()));
@@ -804,7 +805,9 @@ class GuestUserController extends MyAppController
             Message::addErrorMessage($frm->getValidationErrors());
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
         }
-        $frm->expireSecurityToken(FatApp::getPostedData());
+        if(!MOBILE_APP_API_CALL){
+            $frm->expireSecurityToken(FatApp::getPostedData());
+        }        
 
         if (false === MOBILE_APP_API_CALL && FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '') != '' && FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '') != '') {
             if (!CommonHelper::verifyCaptcha()) {
