@@ -2,15 +2,16 @@
 
 class Common
 {
-    public static function test($template){
+    public static function test($template)
+    {
         die('dsdsdsdsdsd');
     }
     public static function cartSummary($template)
-    { 
+    {
         $cartObj = new Cart();
         $cartObj->invalidateCheckoutType();
-        $siteLangId = CommonHelper::getLangId();       
-        
+        $siteLangId = CommonHelper::getLangId();
+
         /*
         $loggedUserId = 0;
         if (UserAuthentication::isUserLogged()) {
@@ -28,15 +29,20 @@ class Common
         */
         if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
             $cartObj->excludeTax();
-        }        
+        }
         $productsArr = $cartObj->getProducts($siteLangId);
-        $cartSummary = $cartObj->getCartFinancialSummary($siteLangId);        
-
+        $cartSummary = $cartObj->getCartFinancialSummary($siteLangId);
+        
+        $saveForLaterProducts = [];
+        if (UserAuthentication::isUserLogged()) {
+            $saveForLaterProducts = UserWishList::savedForLaterItems(UserAuthentication::getLoggedUserId(), $siteLangId);
+        }
+        $template->set('saveForLaterProducts', $saveForLaterProducts);
         $template->set('siteLangId', $siteLangId);
         $template->set('products', $productsArr);
         $template->set('cartSummary', $cartSummary);
         //$template->set('totalWishListItems', $totalWishListItems);
-        $template->set('totalCartItems', $cartObj->countProducts());        
+        $template->set('totalCartItems', $cartObj->countProducts());
     }
 
     public static function countWishList()
@@ -89,8 +95,8 @@ class Common
             $template->set('userEmail', UserAuthentication::getLoggedUserAttribute('user_email'));
             $template->set('profilePicUrl', $profileImage);
             $template->set('userPhone', UserAuthentication::getLoggedUserAttribute('user_phone'));
-         
-            if(CONF_WEBROOT_URL === CONF_WEBROOT_DASHBOARD){
+
+            if (CONF_WEBROOT_URL === CONF_WEBROOT_DASHBOARD) {
 
                 $shopDetails = Shop::getAttributesByUserId($userId, array('shop_id'), false);
                 $shop_id = 0;
@@ -102,7 +108,7 @@ class Common
                 $activeTab = 'B';
                 $sellerActiveTabControllers = array('Seller');
                 $buyerActiveTabControllers = array('Buyer');
-    
+
                 if (in_array($controller, $sellerActiveTabControllers)) {
                     $activeTab = 'S';
                 } elseif (in_array($controller, $buyerActiveTabControllers)) {
@@ -110,13 +116,13 @@ class Common
                 } elseif (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'])) {
                     $activeTab = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'];
                 }
-    
+
                 $shop = new Shop(0, $userId);
                 $isShopActive = $shop->isActive();
                 $template->set('shop_id', $shop_id);
-                $template->set('activeTab', $activeTab);  
+                $template->set('activeTab', $activeTab);
                 $template->set('isShopActive', $isShopActive);
-            } 
+            }
         }
     }
 
@@ -215,14 +221,14 @@ class Common
     {
         $siteLangId = CommonHelper::getLangId();
 
-        $cacheData = CacheHelper::get('FOOTER_TRUST_BANNERS'. $siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($cacheData) {          
+        $cacheData = CacheHelper::get('FOOTER_TRUST_BANNERS' . $siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($cacheData) {
             $template->set('trustBannerData', json_decode($cacheData, true));
             return;
         }
         $obj = new Extrapage();
         $trustBannerData = $obj->getContentByPageType(Extrapage::FOOTER_TRUST_BANNERS, $siteLangId);
-        CacheHelper::create('FOOTER_TRUST_BANNERS'. $siteLangId, json_encode($trustBannerData), CacheHelper::TYPE_BLOCK_CONTENT);
+        CacheHelper::create('FOOTER_TRUST_BANNERS' . $siteLangId, json_encode($trustBannerData), CacheHelper::TYPE_BLOCK_CONTENT);
         $template->set('trustBannerData', $trustBannerData);
     }
 
@@ -230,14 +236,14 @@ class Common
     {
         $siteLangId = CommonHelper::getLangId();
 
-        $cacheData = CacheHelper::get('FOOTER_META_CONTENT'. $siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($cacheData) {          
+        $cacheData = CacheHelper::get('FOOTER_META_CONTENT' . $siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($cacheData) {
             $template->set('footerData', json_decode($cacheData, true));
             return;
         }
         $obj = new Extrapage();
         $footerData = $obj->getContentByPageType(Extrapage::FOOTER_META_CONTENT, $siteLangId);
-        CacheHelper::create('FOOTER_META_CONTENT'. $siteLangId, json_encode($footerData), CacheHelper::TYPE_BLOCK_CONTENT);
+        CacheHelper::create('FOOTER_META_CONTENT' . $siteLangId, json_encode($footerData), CacheHelper::TYPE_BLOCK_CONTENT);
         $template->set('footerData', $footerData);
     }
 

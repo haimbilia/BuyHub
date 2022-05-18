@@ -101,24 +101,24 @@ class BlogPostsController extends ListingBaseController
         if (isset($post['post_published']) && $post['post_published'] != '') {
             $srch->addCondition('bp.post_published', '=', $post['post_published']);
         }
- 
+
         if (isset($post['post_id']) && $post['post_id'] != '') {
             $srch->addCondition('bp.post_id', '=', $post['post_id']);
         }
-        
+
         if (isset($post['bpcat_id']) && $post['bpcat_id'] != '') {
             $srch->addCondition('bpcategory_id', '=', $post['bpcat_id']);
         }
 
         $srch->addGroupby('post_id');
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
-        $srch->doNotCalculateRecords();  
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array('*', 'COALESCE(post_title,post_identifier) post_title', 'group_concat(COALESCE(bpcategory_name ,bpcategory_identifier)) categories'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);  
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
-        $this->set('postedData', $post); 
+        $srch->addOrder($sortBy, $sortOrder);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
+        $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -132,8 +132,8 @@ class BlogPostsController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
         $frm = $this->getForm($recordId);
-        if (0 < $recordId) {           
-            $data = BlogPost::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['ln.*', 'm.*','IFNULL(post_title,post_identifier) as post_title'], applicationConstants::JOIN_RIGHT);
+        if (0 < $recordId) {
+            $data = BlogPost::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['ln.*', 'm.*', 'IFNULL(post_title,post_identifier) as post_title'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -239,8 +239,8 @@ class BlogPostsController extends ListingBaseController
             FatApp::getDb()->deleteRecords(UrlRewrite::DB_TBL, array('smt' => 'urlrewrite_original = ?', 'vals' => array($blogOriginalUrl)));
         } else {
             $record->rewriteUrl($post['urlrewrite_custom']);
-        } 
-              
+        }
+
         /* ] */
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
@@ -260,9 +260,9 @@ class BlogPostsController extends ListingBaseController
                     break;
                 }
             }
-        }   
-        
-        CacheHelper::clear(CacheHelper::TYPE_BLOG_CATEGORY );
+        }
+
+        CacheHelper::clear(CacheHelper::TYPE_BLOG_CATEGORY);
 
         $this->set('msg', Labels::getLabel('MSG_BLOG_POST_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('recordId', $recordId);
@@ -280,7 +280,7 @@ class BlogPostsController extends ListingBaseController
         }
         $this->markAsDeleted($recordId);
 
-        CacheHelper::clear(CacheHelper::TYPE_BLOG_CATEGORY );
+        CacheHelper::clear(CacheHelper::TYPE_BLOG_CATEGORY);
 
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
@@ -300,8 +300,8 @@ class BlogPostsController extends ListingBaseController
             }
             $this->markAsDeleted($recordId);
         }
-        CacheHelper::clear(CacheHelper::TYPE_BLOG_CATEGORY );
-        $this->set('msg', $this->str_delete_record);
+        CacheHelper::clear(CacheHelper::TYPE_BLOG_CATEGORY);
+        $this->set('msg', Labels::getLabel('MSG_RECORDS_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -333,13 +333,13 @@ class BlogPostsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $frm = $this->getImagesFrm($recordId);
-        
+
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('displayFooterButtons', false);
         $this->set('activeGentab', false);
-        $this->set('imageDimension', ImageDimension::getData(ImageDimension::TYPE_BLOG_POST, ImageDimension::VIEW_DEFAULT));        
+        $this->set('imageDimension', ImageDimension::getData(ImageDimension::TYPE_BLOG_POST, ImageDimension::VIEW_DEFAULT));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -496,7 +496,7 @@ class BlogPostsController extends ListingBaseController
 
         $frm->addTextBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'categories');
         $frm->addCheckBox(Labels::getLabel('FRM_ALLOW_COMMENTS', $this->siteLangId), 'post_comment_opened', 1, array(), false, 0);
-        
+
         $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'post_featured', 1, array(), false, 0);
         $frm->addSelectBox(Labels::getLabel('FRM_POST_STATUS', $this->siteLangId), 'post_published', $postStatusArr, '', array(), '');
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -519,7 +519,7 @@ class BlogPostsController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $langId), 'post_title');
         $frm->addRequiredField(Labels::getLabel('FRM_POST_AUTHOR_NAME', $langId), 'post_author_name');
         $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $langId), 'post_description')->requirements()->setRequired(true);
-       
+
         return $frm;
     }
 
@@ -537,7 +537,7 @@ class BlogPostsController extends ListingBaseController
 
         $postStatusArr = BlogPost::getBlogPostStatusArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_POST_STATUS', $this->siteLangId), 'post_published', $postStatusArr, '', array('class' => 'form-control'), Labels::getLabel('FRM_POST_STATUS', $this->siteLangId));
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -610,7 +610,7 @@ class BlogPostsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'post_title' => Labels::getLabel('LBL_POST_TITLE', $this->siteLangId),
             'categories' => Labels::getLabel('LBL_POST_CATEGORY', $this->siteLangId),
             'post_published_on' => Labels::getLabel('LBL_PUBLISHED_DATE', $this->siteLangId),
@@ -626,7 +626,7 @@ class BlogPostsController extends ListingBaseController
     {
         return [
             'select_all',
-           /*  'listSerial', */
+            /*  'listSerial', */
             'post_title',
             'categories',
             'post_published_on',

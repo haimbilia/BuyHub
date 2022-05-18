@@ -197,6 +197,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $(listingTableJs).prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl(controllerName, "search"), data, function (res) {
+            if (0 == res.status) {
+                fcom.displayErrorMessage(res.msg);
+                return;
+            }
             if (res.headSection) {
                 $('.tableHeadJs').replaceWith(res.headSection);
             }
@@ -453,7 +457,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         data = fcom.frmData(frm);
 
         fcom.updateWithAjax(frm.action, data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
             $(".selectAllJs").prop("checked", false);
             callback();

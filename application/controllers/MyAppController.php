@@ -194,7 +194,7 @@ class MyAppController extends FatController
         $jsVariables['defaultCountryCode'] = $defaultCountryCode;
         $jsVariables['siteCurrencyId'] = $this->siteCurrencyId;
 
-        if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
+        if (false === MOBILE_APP_API_CALL && (!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
             setcookie('_ykGeoLat', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72), time() + (86400 * 30), CONF_WEBROOT_FRONTEND,  $_SERVER['SERVER_NAME']); // 86400 = 1 day
             setcookie('_ykGeoLng', FatApp::getConfig('CONF_GEO_DEFAULT_LNG', FatUtility::VAR_INT, -73.96), time() + (86400 * 30), CONF_WEBROOT_FRONTEND,  $_SERVER['SERVER_NAME']); // 86400 = 1 day
             setcookie('_ykGeoStateCode', FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, ''), time() + (86400 * 30), CONF_WEBROOT_FRONTEND,  $_SERVER['SERVER_NAME']); // 86400 = 1 day
@@ -267,13 +267,14 @@ class MyAppController extends FatController
         $this->set('currencySymbol', $this->currencySymbol);
 
         $user_id = $this->getAppLoggedUserId();
-        $userObj = new User($user_id);
+        /* $userObj = new User($user_id);
         $srch = $userObj->getUserSearchObj();
         $srch->addMultipleFields(array('u.*'));
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
-        $this->user_details = FatApp::getDb()->fetch($rs, 'user_id');
+        $this->user_details = FatApp::getDb()->fetch($rs, 'user_id'); */
+
         /*$cObj = new Cart($user_id, 0, $this->app_user['temp_user_id']);
         $this->cartItemsCount = $cObj->countProducts();
         $this->set('cartItemsCount', $this->cartItemsCount);*/
@@ -946,7 +947,7 @@ class MyAppController extends FatController
                 $recordCountSrch->removeFld($removeFlds);
             }
             $recordCountSrch->addFld('count(*) as totalRecords');
-            $recordCountSrch->doNotCalculateRecords();            
+            $recordCountSrch->doNotCalculateRecords();
             $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
             $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
         } else {

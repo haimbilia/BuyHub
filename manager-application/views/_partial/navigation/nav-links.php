@@ -6,7 +6,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
 <ul class="menu <?php echo $quickSearchUlClass; ?>" id="sidebarNavLinks">
     <?php if (!$quickSearch) { ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section navLinkJs" type="button" data-selector='["Home"]' title="<?php echo Labels::getLabel('NAV_HOME', $siteLangId); ?>" onclick="redirectFn('<?php echo UrlHelper::generateUrl(); ?>')">
+            <button class="menu-section navLinkJs" type="button" data-selector='["Home"]' onclick="redirectFn('<?php echo UrlHelper::generateUrl(); ?>')">
                 <span class="menu-icon">
                     <svg class="svg " width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-dashboard">
@@ -30,7 +30,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ) {
     ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_PRODUCT_MANAGEMENT" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PRODUCT_MANAGEMENT', $siteLangId); ?>">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_PRODUCT_MANAGEMENT" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-product-catalog">
@@ -163,7 +163,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ) {
     ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_REQUESTS" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?>">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_REQUESTS" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-requests">
@@ -350,7 +350,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ) {
     ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_ORDERS" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_ORDERS" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-orders">
@@ -464,7 +464,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ) {
     ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_USERS" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?>">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_USERS" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-users">
@@ -580,7 +580,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ) {
     ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_PROMOTIONS" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?>">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_PROMOTIONS" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-promotions">
@@ -773,7 +773,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ) {
     ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_BLOG" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?>">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_BLOG" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-blog">
@@ -846,7 +846,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ) {
     ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_TAX" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?>">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_TAX" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-sales-tax">
@@ -912,7 +912,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ) {
     ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_CMS" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?>">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_CMS" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-CMS">
@@ -1067,7 +1067,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ) {
     ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_REPORTS" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?>">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_REPORTS" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-reports">
@@ -1308,7 +1308,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ) {
     ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_IMPORT_EXPORT" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_IMPORT_EXPORT" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-import-export">
@@ -1349,7 +1349,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ?>
     <?php } ?>
     <li class="menu-item dropdownJs">
-        <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_SHIPPING" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?>">
+        <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_SHIPPING" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
             <span class="menu-icon">
                 <svg class="svg" width="24" height="24">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-shipping-pickup">
@@ -1451,7 +1451,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     ) {
     ?>
         <li class="menu-item dropdownJs">
-            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_SEO" <?php } ?> aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?>">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_SEO" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
                 <span class="menu-icon">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-SEO">

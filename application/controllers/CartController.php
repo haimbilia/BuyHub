@@ -64,32 +64,7 @@ class CartController extends MyAppController
             Shipping::FULFILMENT_PICKUP => [],
         ];
 
-        /* Save For Later Products Listing [ */
-        $srch = new UserWishListProductSearch($this->siteLangId);
-        $srch->joinWishLists();
-        $srch->joinSellerProducts();
-        $srch->joinProducts();
-        $srch->joinBrands();
-        $srch->joinSellers();
-        $srch->joinShops();
-        $srch->joinProductToCategory();
-        $srch->joinSellerSubscription($this->siteLangId, true);
-        $srch->addSubscriptionValidCondition();
-        $srch->joinSellerProductSpecialPrice();
-        $srch->addCondition('uwlist_user_id', '=', 'mysql_func_' . $loggedUserId, 'AND', true);
-        $srch->addCondition('uwlist_type', '=', 'mysql_func_' . UserWishList::TYPE_SAVE_FOR_LATER, 'AND', true);
-        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-        $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
-
-        /* groupby added, beacause if same product is linked with multiple categories, then showing in repeat for each category[ */
-        $srch->addGroupBy('selprod_id');
-        /* ] */
-
-        $srch->addMultipleFields(array('uwlp_uwlist_id', 'selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_id', 'IFNULL(product_name, product_identifier) as product_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'IFNULL(splprice_price, selprod_price) AS theprice', 'selprod_price', 'IFNULL(shop_name, shop_identifier) as shop_name', 'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found'));
-        $srch->doNotCalculateRecords();
-        $srch->addOrder('uwlp_added_on', 'DESC');
-        $rs = $srch->getResultSet();
-        $saveForLaterProducts = FatApp::getDb()->fetchAll($rs);
+        $saveForLaterProducts = UserWishList::savedForLaterItems($loggedUserId, $this->siteLangId);
 
         $availableProductsArr = [
             'notAvailable' => [],
@@ -822,6 +797,12 @@ class CartController extends MyAppController
         $this->set('cartSummary', $cartSummary);
         $this->set('totalCartItems', $cartObj->countProducts());
         $this->set('showHeaderButton', true);
+        $saveForLaterProducts = [];
+        if (UserAuthentication::isUserLogged()) {
+            $saveForLaterProducts = UserWishList::savedForLaterItems(UserAuthentication::getLoggedUserId(), $this->siteLangId);
+        }
+        $this->set('saveForLaterProducts', $saveForLaterProducts);
+
         $buttonHtml = $this->_template->render(false, false, '_partial/cart-summary.php', true);
         $this->set('showHeaderButton', false);
         $offCanvasHtml = $this->_template->render(false, false, '_partial/cart-summary.php', true);

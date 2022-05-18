@@ -629,6 +629,8 @@ class Collections extends MyAppModel
         $srch->joinTable(ProductCategory::DB_TBL, 'INNER JOIN', ProductCategory::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id');
 
         $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT JOIN', 'lang.prodcatlang_prodcat_id = ' . ProductCategory::DB_TBL_PREFIX . 'id AND prodcatlang_lang_id = ' . $lang_id, 'lang');
+        $srch->addCondition('prodcat_active', '=', applicationConstants::YES);
+        $srch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
         $srch->addMultipleFields(['prodcat_id as id', 'IFNULL(prodcat_name, prodcat_identifier) as text']);
         $srch->addOrder('ctr_display_order', 'ASC');
         $data = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());

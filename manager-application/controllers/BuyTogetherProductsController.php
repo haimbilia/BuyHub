@@ -115,7 +115,7 @@ class BuyTogetherProductsController extends ListingBaseController
             $srch->addGroupBy('upsell_sellerproduct_id');
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
-            $rs = $srch->getResultSet();            
+            $rs = $srch->getResultSet();
             $upsellProds[$productId]['products'] = FatApp::getDb()->fetchAll($rs);
             $upsellProds[$productId]['credential_username'] = $upsellProd['credential_username'];
         }
@@ -324,7 +324,7 @@ class BuyTogetherProductsController extends ListingBaseController
             }
             $this->markAsDeleted($recordId);
         }
-        $this->set('msg', $this->str_delete_record);
+        $this->set('msg', Labels::getLabel('MSG_RECORDS_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -370,7 +370,7 @@ class BuyTogetherProductsController extends ListingBaseController
     protected function setCustomColumnWidth(): void
     {
         $arr = [
-           /*  'listSerial' => [
+            /*  'listSerial' => [
                 'width' => '5%'
             ], */
             'product_name' => [

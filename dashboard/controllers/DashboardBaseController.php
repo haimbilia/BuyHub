@@ -297,13 +297,13 @@ class DashboardBaseController extends FatController
         $this->set('currencySymbol', $this->currencySymbol);
 
         $user_id = $this->getAppLoggedUserId();
-        $userObj = new User($user_id);
+        /* $userObj = new User($user_id);
         $srch = $userObj->getUserSearchObj();
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array('u.*'));
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
-        $this->user_details = $this->db->fetch($rs, 'user_id');
+        $this->user_details = $this->db->fetch($rs, 'user_id'); */
 
         $this->totalFavouriteItems = UserFavorite::getUserFavouriteItemCount($user_id);
         $this->set('totalFavouriteItems', $this->totalFavouriteItems);

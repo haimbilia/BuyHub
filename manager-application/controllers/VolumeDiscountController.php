@@ -408,7 +408,7 @@ class VolumeDiscountController extends ListingBaseController
             $this->markAsDeleted($recordId);
         }
 
-        $this->set('msg', $this->str_delete_record);
+        $this->set('msg', Labels::getLabel('MSG_RECORDS_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

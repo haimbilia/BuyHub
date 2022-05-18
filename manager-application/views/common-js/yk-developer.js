@@ -136,7 +136,7 @@ $(function () {
             if (typeof counter !== "undefined") {
                 cls += '-' + counter
             }
-            $("."+ cls).remove(); 
+            $("." + cls).remove();
             //$.ykmsg.close();
         },
 
@@ -445,7 +445,9 @@ $(function () {
     */
 
     $(document).ajaxComplete(function () {
-        $('[data-bs-toggle="popover"]').popover();
+        setTimeout((function () {
+            $('[data-bs-toggle="popover"]').popover();
+        }), 500);
 
         /* Bind bootstrap tooltip with ajax elements. */
         $('[data-bs-toggle="tooltip"]').tooltip({
@@ -494,7 +496,7 @@ function initMap(lat = 40.72, lng = -73.96, elementId = "map") {
     if (1 > $("#" + elementId).length) {
         return;
     }
-    
+
     if (typeof google !== 'object' || typeof google.maps !== 'object') { return; }
 
     map = new google.maps.Map(document.getElementById(elementId), {
