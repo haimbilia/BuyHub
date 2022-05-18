@@ -130,13 +130,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
                         <?php echo Labels::getLabel("NAV_UPDATE_CREDENTIALS", $siteLangId); ?>
                         <i class="icon icon-arrow-right"></i>
                     </a>
-                </li>
-                <li class="account-nav-item">
-                    <a class="account-nav-link" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId); ?>">
-                        <?php echo Labels::getLabel("NAV_LOGOUT", $siteLangId); ?>
-                        <i class="icon icon-arrow-right"></i>
-                    </a>
-                </li>
+                </li>               
             </ul>
         </div>
         <div class="offcanvas-foot">

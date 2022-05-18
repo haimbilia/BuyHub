@@ -63,7 +63,7 @@ $(document).ready(function () {
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateUserPassword'), data, function (t) {
             $.ykmodal.close();
-            $.ykmsg.close();
+            fcom.displaySuccessMessage(t.msg);
             reloadList();
         });
     };

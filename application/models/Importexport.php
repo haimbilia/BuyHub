@@ -1,4 +1,3 @@
-
 <?php
 
 class Importexport extends ImportexportCommon
@@ -320,11 +319,13 @@ class Importexport extends ImportexportCommon
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportProductOptions($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
+                    /*    
                     case Importexport::PRODUCT_TAG:
                         $sheetName = Labels::getLabel('LBL_MARKETPLACE_PRODUCT_TAGS', $langId) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportProductTags($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
+                    */
                     case Importexport::PRODUCT_SPECIFICATION:
                         $sheetName = (!$sellerDashboard ? Labels::getLabel('LBL_MY_PRODUCT_SPECIFICATIONS', $langId) : Labels::getLabel('LBL_Marketplace_Product_Specifications', $langId)) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
@@ -353,11 +354,13 @@ class Importexport extends ImportexportCommon
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportProductOptions($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
+                    /*    
                     case Importexport::PRODUCT_TAG:
                         $sheetName = Labels::getLabel('LBL_SELLER_PRODUCT_TAGS', $langId) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportProductTags($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
+                    */    
                     case Importexport::PRODUCT_SPECIFICATION:
                         $sheetName = ((0 < $userId) ? Labels::getLabel('LBL_MY_PRODUCT_SPECIFICATIONS', $langId) : Labels::getLabel('LBL_SELLER_PRODUCT_SPECIFICATIONS', $langId)) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
@@ -571,11 +574,13 @@ class Importexport extends ImportexportCommon
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId, true);
                         $this->importProductOptions($csvFilePointer, $post, $langId, $userId);
                         break;
+                    /*    
                     case Importexport::PRODUCT_TAG:
                         $sheetName = Labels::getLabel('LBL_PRODUCT_TAGS_ERROR', $langId);
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId, true);
                         $this->importProductTags($csvFilePointer, $post, $langId, $userId);
                         break;
+                    */    
                     case Importexport::PRODUCT_SPECIFICATION:
                         $sheetName = Labels::getLabel('LBL_PRODUCT_SPECIFICATIONS_ERROR', $langId);
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId, true);
@@ -724,10 +729,8 @@ class Importexport extends ImportexportCommon
             $urlKeywords = $this->getAllRewriteUrls(ProductCategory::REWRITE_URL_PREFIX);
         }
 
-        $useCategoryId = false;
-        if ($this->settings['CONF_USE_CATEGORY_ID']) {
-            $useCategoryId = true;
-        } else {
+        $categoriesIdentifiers = [];
+        if (!$this->settings['CONF_USE_CATEGORY_ID']) {
             $categoriesIdentifiers = $this->getAllCategoryIdentifiers();
         }
 
@@ -2394,7 +2397,7 @@ class Importexport extends ImportexportCommon
         $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
-
+    /*
     private function exportProductTags($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
     {
         $userId = FatUtility::int($userId);
@@ -2436,11 +2439,10 @@ class Importexport extends ImportexportCommon
         $srch->addOrder('product_id');
         $rs = $srch->getResultSet();
         $sheetData = array();
-        /* Sheet Heading Row [ */
+       
         $headingsArr = $this->getProductTagColoumArr($langId);
         CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
-        /* ] */
-
+     
         while ($row = $this->db->fetch($rs)) {
             $sheetData = array();
             foreach ($headingsArr as $columnKey => $heading) {
@@ -2451,7 +2453,7 @@ class Importexport extends ImportexportCommon
         }
         CommonHelper::writeExportDataToCSV($this->CSVfileObj, array(), true, $this->CSVfileName);
     }
-
+    
     public function importProductTags($csvFilePointer, $post, $langId, $userId = null)
     {
         $userId = FatUtility::int($userId);
@@ -2556,7 +2558,7 @@ class Importexport extends ImportexportCommon
         $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
         FatUtility::dieJsonSuccess($success);
     }
-
+    */
     private function exportProductSpecification($langId, $offset = null, $noOfRows = null, $minId = null, $maxId = null, $userId = null)
     {
         $userId = FatUtility::int($userId);

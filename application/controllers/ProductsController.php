@@ -1438,9 +1438,8 @@ class ProductsController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-
-        $html = $this->_template->render(false, false, 'products/search-producttags-autocomplete.php', true, false);
-        $this->set('html', $html);
+       
+        $this->set('html', $this->_template->render(false, false, 'products/search-producttags-autocomplete.php', true, false));
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
 

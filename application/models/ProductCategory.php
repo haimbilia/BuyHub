@@ -472,7 +472,11 @@ class ProductCategory extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         $srch = static::getSearchObject(false, $langId, $active, $status);
-        $srch->addFld('m.prodcat_id, COALESCE(prodcat_name,m.prodcat_identifier) as prodcat_identifier, m.prodcat_parent');
+        if (0 < $langId) {
+            $srch->addFld('m.prodcat_id, COALESCE(pc_l.prodcat_name, m.prodcat_identifier) as prodcat_name, m.prodcat_identifier, m.prodcat_parent');
+        } else {
+            $srch->addFld('m.prodcat_id, m.prodcat_identifier, m.prodcat_parent');
+        }
         $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition('m.prodCat_id', '=', 'mysql_func_' . FatUtility::int($prodCat_id), 'AND', true);
         $rs = $srch->getResultSet();
@@ -484,7 +488,8 @@ class ProductCategory extends MyAppModel
         }
 
         if ($records) {
-            $name = strip_tags($records['prodcat_identifier']) . $seprator . $name_suffix;
+            $name = $records['prodcat_name'] ?? $records['prodcat_identifier'];
+            $name = strip_tags($name) . $seprator . $name_suffix;
             if ($records['prodcat_parent'] > 0) {
                 $name = $this->getParentTreeStructure($records['prodcat_parent'], $level + 1, $name, $langId, $active, $status);
             }
@@ -512,11 +517,18 @@ class ProductCategory extends MyAppModel
     public function getProdCatAutoSuggest($keywords = '', $limit = 20, $langId = 0, $excludeRecords = [])
     {
         $srch = static::getSearchObject(false, $langId);
-        $srch->addFld('m.prodcat_id, m.prodcat_identifier, m.prodcat_parent');
+        if (0 < $langId) {
+            $srch->addFld('m.prodcat_id, COALESCE(pc_l.prodcat_name, m.prodcat_identifier) as prodcat_name, m.prodcat_identifier, m.prodcat_parent');
+        } else {
+            $srch->addFld('m.prodcat_id, m.prodcat_identifier, m.prodcat_parent');
+        }
         $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition('m.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         if (!empty($keywords)) {
-            $srch->addCondition('m.prodcat_identifier', 'like', '%' . $keywords . '%');
+            $cnd = $srch->addCondition('m.prodcat_identifier', 'like', '%' . $keywords . '%');
+            if (0 < $langId) {
+                $cnd->attachCondition('pc_l.prodcat_name', 'LIKE', '%' . $keywords . '%');
+            }
         }
 
         if (!empty($excludeRecords) && is_array($excludeRecords)) {
@@ -525,7 +537,11 @@ class ProductCategory extends MyAppModel
 
         $srch->addOrder('m.prodcat_parent', 'asc');
         $srch->addOrder('m.prodcat_display_order', 'asc');
-        $srch->addOrder('m.prodcat_identifier', 'asc');
+        if (0 < $langId) {
+            $srch->addOrder('pc_l.prodcat_name', 'asc');
+        } else {
+            $srch->addOrder('m.prodcat_identifier', 'asc');
+        }
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
@@ -537,7 +553,7 @@ class ProductCategory extends MyAppModel
             if ($row['prodcat_parent'] > 0) {
                 $return[$row['prodcat_id']] = $this->getParentTreeStructure($row['prodcat_id'], 0, '', $langId);
             } else {
-                $return[$row['prodcat_id']] = $row['prodcat_identifier'];
+                $return[$row['prodcat_id']] = (0 < $langId) ? $row['prodcat_name'] : $row['prodcat_identifier'];
             }
         }
         return $return;
@@ -1677,6 +1693,4 @@ class ProductCategory extends MyAppModel
         }
         return true;
     }
-
-
 }

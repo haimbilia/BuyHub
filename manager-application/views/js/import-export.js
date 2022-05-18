@@ -91,7 +91,7 @@
                 processData: false,
                 contentType: false,
                 success: function (t) {
-                    fcom.closeProcessing();
+                    fcom.removeLoader();
                     try {
                         var ans = JSON.parse(t);
                         if (ans.status == 1) {
