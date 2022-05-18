@@ -103,10 +103,15 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                                             </div>
                                         </div>
                                     </li>
-                            <?php
+                                <?php
                                 }
                             } else {
-                                echo Labels::getLabel('LBL_Your_cart_is_empty', $siteLangId);
+                                echo Labels::getLabel('LBL_YOUR_CART_IS_EMPTY', $siteLangId);
+                                if (isset($saveForLaterProducts) && !empty($saveForLaterProducts)) { ?>
+                                    <a class="link-underline" href="<?php echo UrlHelper::generateUrl('Cart'); ?>">
+                                        <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_VIEW_SAVED_FOR_LATER_({ITEMS-COUNT})_ITEMS', $siteLangId), ['{ITEMS-COUNT}' => count($saveForLaterProducts)]); ?>
+                                    </a>
+                            <?php }
                             } ?>
                         </ul>
                     </div>
@@ -141,7 +146,13 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                 <div class="block-empty m-auto text-center">
                     <img class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty_cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Record_Found', $siteLangId); ?>" width="80">
                     <h4>
-                        <?php echo Labels::getLabel('LBL_Your_Shopping_Bag_is_Empty', $siteLangId); ?></h4>
+                        <?php echo Labels::getLabel('LBL_YOUR_SHOPPING_BAG_IS_EMPTY', $siteLangId); ?>
+                    </h4>
+                    <?php if (isset($saveForLaterProducts) && !empty($saveForLaterProducts)) { ?>
+                        <a class="link-underline" href="<?php echo UrlHelper::generateUrl('Cart'); ?>">
+                            <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_VIEW_SAVED_FOR_LATER_({ITEMS-COUNT})_ITEMS', $siteLangId), ['{ITEMS-COUNT}' => count($saveForLaterProducts)]); ?>
+                        </a>
+                    <?php } ?>
                 </div>
             <?php } ?>
         </div>
