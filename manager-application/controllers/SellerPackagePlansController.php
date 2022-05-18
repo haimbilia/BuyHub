@@ -219,7 +219,7 @@ class SellerPackagePlansController extends ListingBaseController
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_PLAN_DISPLAY_ORDER', $this->siteLangId), 'spplan_display_order');
         $fld->requirements()->setIntPositive();
 
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'spplan_active', applicationConstants::getActiveInactiveArr($this->siteLangId), '', array(), '');
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'spplan_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         return $frm;
     }
