@@ -6,9 +6,9 @@ if ($fld != null) {
     HtmlHelper::configureSwitchForCheckbox($fld);
     $fld->developerTags['noCaptionTag'] = true;
 
-    if (1 == $recordId) {
-        $fld->setFieldTagAttribute('disabled', 'disabled');
-    }
+    // if (1 == $recordId) {
+    //     $fld->setFieldTagAttribute('disabled', 'disabled');
+    // }
 }
 
 $generalTab = [

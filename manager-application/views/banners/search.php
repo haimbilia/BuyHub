@@ -13,7 +13,8 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $disabled = (1 == $row['banner_id']) ? 'disabled' : '';
+                //$disabled = (1 == $row['banner_id']) ? 'disabled' : '';
+                $disabled = '';
                 $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs ' . $disabled . '" type="checkbox" ' . $disabled . ' name="record_ids[]" value=' . $row['banner_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
@@ -35,7 +36,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $linkTargetsArr[$row[$key]], true);
                 break;
             case 'banner_active':
-                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['banner_id'], $row[$key], (1 == $row['banner_id']));
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['banner_id'], $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'action':

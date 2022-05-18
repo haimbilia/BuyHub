@@ -325,7 +325,7 @@ class SellerPackagesController extends ListingBaseController
         switch ($action) {
             case 'index':
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
-                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('NAV_SELLER_PACKAGES', $this->siteLangId);
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]

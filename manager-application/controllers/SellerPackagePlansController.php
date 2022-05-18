@@ -298,7 +298,7 @@ class SellerPackagePlansController extends ListingBaseController
         switch ($action) {
             case 'list':
                 $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_PACKAGES', $this->siteLangId);
-                $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_SELLER_PACKAGES', $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('NAV_SELLER_PACKAGES', $this->siteLangId);
 
                 $url = FatApp::getQueryStringData('url');
                 $urlParts = explode('/', $url);
