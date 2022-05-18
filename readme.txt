@@ -770,6 +770,7 @@ Updates/Fixes :
     => 064386 - Seller: Display order field is missing at seller's end under 'Option values for seller option' section.
     => 064382 - Seller: Getting multiple issues under Marketplace Products Requests section
     => 064412 - Suggestion: To add a new menu or button on the buyer end to view the 'Saved for later products
+    => 064410 - Admin: Getting multiple issues under category collection section
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
