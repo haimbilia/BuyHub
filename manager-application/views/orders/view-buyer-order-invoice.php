@@ -170,7 +170,9 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
             $volumeDiscount = abs(CommonHelper::orderProductAmount($childOrder, 'VOLUME_DISCOUNT'));
             $totalSavings = ($childOrder['op_special_price'] * $childOrder["op_qty"]) + $couponDiscount + $volumeDiscount;
 
-            $col6 = ($childOrder['op_tax_collected_by_seller']);
+            $tax = CommonHelper::orderProductAmount($childOrder, 'TAX');
+
+            $col6 = ($childOrder['op_tax_collected_by_seller']) && $tax > 0;
         ?>
             <?php if ($count != 0) { ?>
                 <br pagebreak="true" />
@@ -241,7 +243,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                     <table class="tbl-border" width="100%" border="0" cellpadding="10" cellspacing="0">
                         <thead>
                             <tr>
-                                <th width="<?php echo ($col6) ? '35%' : ((0 != $totalSavings) ? '40%' : '55%'); ?>" style="padding:10px;text-align: left; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Item', $siteLangId); ?></th>
+                                <th width="<?php echo ($col6) ? '35%' : '55%'; ?>" style="padding:10px;text-align: left; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Item', $siteLangId); ?></th>
                                 <th width="15%" style="padding:10px;text-align: center; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Price', $siteLangId); ?></th>
                                 <th width="10%" style="padding:10px;text-align: center; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Qty', $siteLangId); ?></th>
                                 <?php if ($col6) { ?>
@@ -262,7 +264,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                 <td style="padding:10px;text-align: left;"><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?></td>
                                 <td style="padding:10px;text-align: left;"><?php echo $childOrder['op_qty']; ?></td>
                                 <?php if ($col6) { ?>
-                                    <td style="padding:10px;text-align: left;"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'TAX'), true, false, true, false, true); ?></td>
+                                    <td style="padding:10px;text-align: left;"><?php echo CommonHelper::displayMoneyFormat($tax, true, false, true, false, true); ?></td>
                                 <?php } ?>                            
                                 <td style="padding:10px;text-align: center;font-size:12px;"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'CART_TOTAL'), true, false, true, false, true); ?></td>
                             </tr>
@@ -272,12 +274,12 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                 <td style="padding:10px; ;text-align: left;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?></strong></td>
                                 <td style="padding:10px; ;text-align: left;background-color: #ddd;"><strong><?php echo $childOrder['op_qty']; ?></strong></td>
                                 <?php if ($col6) { ?>
-                                    <td style="padding:10px; ;text-align: left;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'TAX'), true, false, true, false, true); ?></strong></td>
+                                    <td style="padding:10px; ;text-align: left;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat($tax, true, false, true, false, true); ?></strong></td>
                                 <?php } ?>                           
                                 <td style="padding:10px; ;text-align: right;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'CART_TOTAL'), true, false, true, false, true); ?></strong></td>
                             </tr>
                             <tr>
-                                <td style="padding:10px;font-size:15px;text-align: left;font-weight:700; vertical-align: top;" colspan="<?php echo ($col6) ? '2' : ((0 != $totalSavings) ? '2' : '1'); ?>" rowspan="6">
+                                <td style="padding:10px;font-size:15px;text-align: left;font-weight:700; vertical-align: top;" colspan="<?php echo ($col6) ? '2' : '1'; ?>" rowspan="6">
                                     <?php if (0 != $totalSavings) {
                                         $str = Labels::getLabel("LBL_You_have_saved_{totalsaving}_on_this_order", $siteLangId);
                                         $str = str_replace("{totalsaving}", CommonHelper::displayMoneyFormat(-$totalSavings, true, false, true, false, true), $str);
@@ -294,10 +296,10 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                     <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'shipping'), true, false, true, false, true); ?></td>
                                 </tr>
                             <?php } ?>
-                            <?php if (CommonHelper::orderProductAmount($childOrder, 'TAX') > 0) { ?>
+                            <?php if ($tax > 0) { ?>
                                 <tr>
                                     <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId) ?></td>
-                                    <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'TAX'), true, false, true, false, true); ?></td>
+                                    <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($tax, true, false, true, false, true); ?></td>
                                 </tr>
                             <?php }                            
                             $rewardPointDiscount = CommonHelper::orderProductAmount($childOrder, 'REWARDPOINT');
@@ -342,10 +344,10 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                     <table width="100%" border="0" cellpadding="0" cellspacing="0">
                         <tbody>
                             <tr>
-                                <td style="padding:15px;vertical-align: top;"><strong><?php echo $childOrder['op_shop_name']; ?></strong><br><span><?php echo Labels::getLabel('LBL_Authorized_Signatory', $siteLangId); ?> </span>
+                                <td height="60" style="padding:15px;vertical-align: top;"><strong><?php echo $childOrder['op_shop_name']; ?></strong><br><span><?php echo Labels::getLabel('LBL_Authorized_Signatory', $siteLangId); ?> </span>
                                 </td>
 
-                                <?php if ($childOrder['op_tax_collected_by_seller']) { ?>
+                                <?php if ($col6) { ?>
                                     <td style="background-color: #ddd;">
                                         <table width="100%" border="0" cellpadding="10" cellspacing="0">
                                             <tbody>
