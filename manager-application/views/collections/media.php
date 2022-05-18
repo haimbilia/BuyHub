@@ -6,6 +6,7 @@ $frm->setFormTagAttribute('data-onclear', 'collectionMediaForm(' . $recordId . '
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 
 $displayMediaOnlyObj = $frm->getField('collection_display_media_only');
+HtmlHelper::configureSwitchForCheckbox($displayMediaOnlyObj);
 $displayMediaOnlyObj->developerTags['noCaptionTag'] = true;
 $displayMediaOnlyObj->setFieldTagAttribute('class', 'displayMediaOnlyJs');
 $displayMediaOnlyObj->setFieldTagAttribute('onclick', 'displayMediaOnly(' . $recordId . ', this)');
@@ -13,7 +14,7 @@ if (0 < $displayMediaOnly) {
     $displayMediaOnlyObj->setFieldTagAttribute('checked', 'checked');
 }
 
-$str = '<br><span class="form-text text-muted">' . Labels::getLabel('LBL_IF_USED_FOR_MOBILE_APPLICATIONS', $siteLangId) . '</span>';
+$str = '<span class="form-text text-muted">' . Labels::getLabel('LBL_IF_USED_FOR_MOBILE_APPLICATIONS', $siteLangId) . '</span>';
 $displayMediaOnlyObj->htmlAfterField = $str;
 
 $fld = $frm->getField('collection_image');

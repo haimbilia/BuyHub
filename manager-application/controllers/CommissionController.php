@@ -208,8 +208,8 @@ class CommissionController extends ListingBaseController
             $srch->addCondition('commsetting_product_id', '=', $post['commsetting_product_id']);
             $srch->addCondition('commsetting_user_id', '=', $post['commsetting_user_id']);
             $srch->addCondition('commsetting_prodcat_id', '=', $post['commsetting_prodcat_id']);
-            $srch->setPageSize(1);            ;   
-            if (FatApp::getDb()->fetch($srch->getResultSet())) {              
+            $srch->setPageSize(1);;
+            if (FatApp::getDb()->fetch($srch->getResultSet())) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_ALREADY_ADDED,_CATEGORY_OR_USER', $this->siteLangId), true);
             }
         }
@@ -304,7 +304,7 @@ class CommissionController extends ListingBaseController
             }
             $this->markAsDeleted($recordId);
         }
-        $this->set('msg', $this->str_delete_record);
+        $this->set('msg', Labels::getLabel('MSG_RECORDS_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -383,7 +383,7 @@ class CommissionController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-          /*   'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*   'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'commsetting_prodcat_id' => Labels::getLabel('LBL_CATEGORY', $this->siteLangId),
             'commsetting_user_id' => Labels::getLabel('LBL_SHOP/_SELLER_NAME', $this->siteLangId),
             'commsetting_product_id' => Labels::getLabel('LBL_PRODUCT', $this->siteLangId),
@@ -398,7 +398,7 @@ class CommissionController extends ListingBaseController
     {
         return [
             'select_all',
-           /*  'listSerial', */
+            /*  'listSerial', */
             'commsetting_prodcat_id',
             'commsetting_user_id',
             'commsetting_product_id',

@@ -316,8 +316,6 @@ class CategoryController extends MyAppController
 
     public function structure()
     {
-        $productCategory = new productCategory();
-
         $prodSrchObj = (true === MOBILE_APP_API_CALL ? false : new ProductCategorySearch($this->siteLangId));
         $parentId = FatApp::getPostedData('parentId', FatUtility::VAR_INT, 0);
         $includeChild = true;
@@ -328,6 +326,7 @@ class CategoryController extends MyAppController
         $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId, $includeChild, false, false, $prodSrchObj, true);
 
         if (false === MOBILE_APP_API_CALL) {
+            $productCategory = new ProductCategory();
             $categoriesArr = $productCategory->getCategoryTreeArr($this->siteLangId, $categoriesArr, array('prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(GETCATCODE(prodcat_id),1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'GETCATCODE(prodcat_id) as prodcat_code'));
         }
 
