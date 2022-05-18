@@ -772,6 +772,7 @@ Updates/Fixes :
     => 064412 - Suggestion: To add a new menu or button on the buyer end to view the 'Saved for later products
     => 064410 - Admin: Getting multiple issues under category collection section
     => 064409 - Admin: CMS: There should be a successful message after deletion of the records under collection section
+    => 064432 - Suggestion: Admin: Disabled records should be shown greyed out
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
