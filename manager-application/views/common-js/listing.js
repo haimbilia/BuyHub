@@ -453,7 +453,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         data = fcom.frmData(frm);
 
         fcom.updateWithAjax(frm.action, data, function (t) {
-            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
             $(".selectAllJs").prop("checked", false);
             callback();

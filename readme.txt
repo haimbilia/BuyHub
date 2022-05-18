@@ -771,6 +771,7 @@ Updates/Fixes :
     => 064382 - Seller: Getting multiple issues under Marketplace Products Requests section
     => 064412 - Suggestion: To add a new menu or button on the buyer end to view the 'Saved for later products
     => 064410 - Admin: Getting multiple issues under category collection section
+    => 064409 - Admin: CMS: There should be a successful message after deletion of the records under collection section
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

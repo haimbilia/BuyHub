@@ -154,7 +154,7 @@ class UploadBulkImagesController extends ListingBaseController
             $directory = CONF_UPLOADS_PATH . base64_decode($uploadDir) . '/';
             $msg = $obj->deleteSingleBulkMediaDir($directory);
         }
-        $this->set('msg', $msg);
+        $this->set('msg', Labels::getLabel('MSG_RECORDS_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
