@@ -119,6 +119,7 @@ class BrandRequestsController extends ListingBaseController
         $prodBrandObj = new Brand();
         $srch = $prodBrandObj->getSearchObject(0, true, false, false);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = brand_seller_id', 'u');
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.credential_user_id = u.user_id', 'uc');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
         $srch->joinTable(Brand::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'brandlang_brand_id = b.brand_id AND brandlang_lang_id = ' . $this->siteLangId, 'bl');
@@ -142,7 +143,7 @@ class BrandRequestsController extends ListingBaseController
 
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array('b.*', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name', 'bl.brand_name'));
+        $srch->addMultipleFields(array('b.*', 'u.user_name','user_id','credential_username', 'credential_email', 'ifnull(shop_name, shop_identifier) as shop_name', 'bl.brand_name'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
@@ -156,6 +157,7 @@ class BrandRequestsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
+        $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
     }
 
     /**
@@ -517,6 +519,7 @@ class BrandRequestsController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'brand_logo' => Labels::getLabel('LBL_Logo', $this->siteLangId),
             'brand_name' => Labels::getLabel('LBL_Brand_Name', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             'brand_requested_on' => Labels::getLabel('LBL_Requested_On', $this->siteLangId),
             'brand_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'brand_status' => Labels::getLabel('LBL_BRAND_APPROVAL', $this->siteLangId),
@@ -532,6 +535,7 @@ class BrandRequestsController extends ListingBaseController
             'select_all',
             'brand_logo',
             'brand_name',
+            'user_name',
             'brand_requested_on',
             'brand_active',
             'brand_status',

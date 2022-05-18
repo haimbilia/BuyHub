@@ -22,6 +22,16 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
+            case 'user_name':
+                if ($canViewUsers) {
+                    $href = "javascript:void(0)";
+                    $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
+                    $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId, 'displayProfileImage'=> false, 'href' => $href, 'onclick' => $onclick,], false, true);
+                    $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
+                } else {
+                    $td->appendElement('plaintext', $tdAttr, $row[$key], true);
+                }
+                break;     
             case 'brand_logo':
                 $uploadedTime = AttachedFile::setTimeParam($row['brand_updated_on']);
                 $languages = Language::getAllNames();
