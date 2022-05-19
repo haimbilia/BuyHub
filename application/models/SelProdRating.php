@@ -123,23 +123,19 @@ class SelProdRating extends MyAppModel
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
-    public static function getAvgShopReviewsRatingObj(int $shopUserId, int $langId): object
+    public static function getAvgShopReviewsRatingObj(int $shopUserId, int $langId = 0): object
     {
         $srch = new SelProdReviewSearch();
         $srch->joinOrderProduct();
         $srch->joinOrderProductShipping();
         $srch->joinSelProdRating($langId);
-        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN ('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `ratingtype_type` IN ('" . RatingType::TYPE_SHOP . "') END)");
+        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `sprating_ratingtype_id` IN ('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `sprating_ratingtype_id` IN ('" . RatingType::TYPE_SHOP . "') END)");
 
         $srch->addCondition('op_selprod_user_id', '=', 'mysql_func_' . $shopUserId, 'AND', true);
-        $srch->addGroupBy('sprating_ratingtype_id');
-        $srch->addMultipleFields([
-            'sprating_ratingtype_id',
-            'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name',
-            'IFNULL(ROUND(AVG(sprating_rating),2),0) as prod_rating'
-        ]);
-        $srch->addOrder('sprating_ratingtype_id', 'DESC');
-        $srch->getResultSet();
+        $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
+        $srch->addCondition('spr.spreview_seller_user_id', '=', $shopUserId);
+
+        // $srch->addOrder('sprating_ratingtype_id', 'DESC');
         return $srch;
     }
 }
