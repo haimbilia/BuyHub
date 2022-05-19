@@ -773,6 +773,7 @@ Updates/Fixes :
     => 064410 - Admin: Getting multiple issues under category collection section
     => 064409 - Admin: CMS: There should be a successful message after deletion of the records under collection section
     => 064432 - Suggestion: Admin: Disabled records should be shown greyed out
+    => 064451 - Admin >> CMS: 'Update other languages data' is not working under FAQs section.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
