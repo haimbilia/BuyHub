@@ -5,7 +5,7 @@
             <?php echo Labels::getLabel('LBL_SHOP_STORE_HOME', $siteLangId); ?>
         </a>
     </li>
-    <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
+    <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && 0 < $shopTotalReviews) { ?>
         <li class="shop-nav-item">
             <a class="shop-nav-link <?php echo $action == 'topProducts' ? 'active' : '' ?>" href="<?php echo UrlHelper::generateUrl('shops', 'topProducts', array($shop_id)); ?>">
                 <?php echo Labels::getLabel('LBL_SHOP_TOP_PRODUCTS', $siteLangId); ?></a>
