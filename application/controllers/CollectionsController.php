@@ -9,9 +9,6 @@ class CollectionsController extends MyAppController
     public function view($collection_id)
     {
         $searchForm = $this->getCollectionSearchForm($collection_id);
-
-        /* Collection Data[ */
-
         $collectionSrch = Collections::getSearchObject(true, $this->siteLangId);
         $collectionSrch->addMultipleFields(
             array(

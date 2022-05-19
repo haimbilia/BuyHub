@@ -501,7 +501,7 @@ class ImageController extends FatController
         $default_image = AttachedFile::setNamePrefix($default_image, $sizeType);
 
         $aspectRatioType = $file_row['afile_aspect_ratio'];
-        $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;       
+        $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_EMAIL_LOGO, $sizeType, $aspectRatioType);
 
@@ -510,7 +510,6 @@ class ImageController extends FatController
         } else {
             AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'],  $default_image);
         }
-
     }
 
     public function socialFeed($lang_id = 0, $sizeType = '')
@@ -540,13 +539,13 @@ class ImageController extends FatController
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
-        $imageDimensions = ImageDimension::getPaymentPageLogo($sizeType);      
+        $imageDimensions = ImageDimension::getPaymentPageLogo($sizeType);
 
         if ($sizeType) {
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'],  $default_image);
-        }        
+        }
     }
 
     public function watermarkImage($lang_id = 0, $sizeType = '')
@@ -573,11 +572,11 @@ class ImageController extends FatController
     {
         $lang_id = FatUtility::int($lang_id);
         $recordId = 0;
-        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_APPLE_TOUCH_ICON, $recordId, 0, $lang_id);            
-        
+        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_APPLE_TOUCH_ICON, $recordId, 0, $lang_id);
+
         $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
         $default_image = 'brand_deafult_image.jpg';
-        
+
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_APPLE_TOUCH_ICON, $sizeType);
@@ -905,10 +904,8 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_TESTIMONIAL, $sizeType);
 
         if ($sizeType) {
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
-
             AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'], $default_image);
         }
     }

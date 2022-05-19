@@ -1172,7 +1172,6 @@ class HomeController extends MyAppController
                     $testimonialSrchObj = clone $testimonialSrchObj;
                     $testimonialSrchObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'testimonial_id = ctr.ctr_record_id', 'ctr');
                     $testimonialSrchObj->addMultipleFields($attr);
-                    //$testimonialSrchObj->addCondition('testimonial_id', 'IN', array_keys($testimonialIds));
                     $testimonialSrchObj->addGroupBy('testimonial_id');
                     $testimonialSrchObj->addOrder('ctr.ctr_display_order', 'ASC');
                     $testimonialSrchObj->setPageSize(Collections::LIMIT_TESTIMONIAL_LAYOUT1);
