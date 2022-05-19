@@ -144,7 +144,9 @@ var fcom = {
 				fcom.displayErrorMessage(ans.msg);
 				return;
 			}
-			fcom.displaySuccessMessage(ans.msg);
+			if ('undefined' != typeof ans.msg) {
+				fcom.displaySuccessMessage(ans.msg);
+			}
 			fn(ans);
 		}, o);
 	},

@@ -12,13 +12,12 @@ var cart = {
         }
         ykevents.addToCart();
         fcom.updateWithAjax(fcom.makeUrl('Cart', 'add'), data, function (ans) {
+            fcom.closeProcessing();
             fcom.removeLoader();
             if (ans['redirect']) {
                 location = ans['redirect'];
             }
-            setTimeout(function () {
-                $.ykmsg.close();
-            }, 3000);
+            fcom.displaySuccessMessage(ans.msg);
 
             /* isRedirectToCart needed from product detail page */
             if (isRedirectToCart) {
@@ -27,7 +26,6 @@ var cart = {
                 }, 300);
             } else {
                 $('span.cartQuantity').html(ans.total);
-                $('html, body').animate({ scrollTop: 0 }, 'slow');
                 cart.loadCartSummary();
             }
 

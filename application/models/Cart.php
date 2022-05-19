@@ -499,8 +499,12 @@ class Cart extends FatModel
                         continue;
                     }
 
+                    $tempHoldStock = Product::tempHoldStockCount($sellerProductRow['selprod_id']);
+                    $availableStock = $sellerProductRow['selprod_stock'] - $tempHoldStock;
+                    $isOutOfStock = ((int)($sellerProductRow['selprod_min_order_qty'] > $availableStock));
+
                     /* Has Stock */
-                    if (!$sellerProductRow['in_stock'] && true === $this->isAnyOutOfStock) {
+                    if ((!$sellerProductRow['in_stock'] && true === $this->isAnyOutOfStock) || 0 < $isOutOfStock) {
                         $this->isAnyOutOfStock = false;
                     }
                     /* Has Stock */

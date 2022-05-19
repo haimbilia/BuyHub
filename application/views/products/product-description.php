@@ -87,7 +87,7 @@
     <!-- Add To Cart -->
 
     <?php
-    if (0 < $currentStock) {
+    if (0 < $currentStock && !$isOutOfStock) {
         if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) {  ?>
             <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
                 <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_YOUR_LOCATION', $siteLangId); ?>
@@ -103,7 +103,8 @@
                     <div class="options-block-head">
                         <h6 class="h6"><?php echo $qtyFieldName; ?></h6>
                         <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
-                            <span class="decrease decrease-js not-allowed"><i class="icn">
+                            <span class="decrease decrease-js not-allowed">
+                                <i class="icn">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
                                         </use>
@@ -113,7 +114,8 @@
                             <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
                                 <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
                             </div>
-                            <span class="increase increase-js"><i class="icn">
+                            <span class="increase increase-js">
+                                <i class="icn">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                                         </use>
@@ -200,7 +202,9 @@
                     if ($usproduct['selprod_stock'] <= 0) {
                         $cancelClass = 'cancel cancelled--js';
                         $uncheckBoxClass = 'remove-add-on';
-                    } ?>
+                    }
+
+                ?>
                     <li class="list-addons-item addon--js <?php echo $cancelClass; ?>">
                         <div class="product-profile">
                             <figure class="product-profile__pic">
@@ -214,21 +218,24 @@
                                     <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice']); ?>
                                 </div>
                                 <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                    <span class="decrease decrease-js"><i class="icn">
+                                    <span class="decrease decrease-js not-allowed">
+                                        <i class="icn">
                                             <svg class="svg" width="16" height="16">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
                                                 </use>
                                             </svg>
                                         </i></span>
                                     <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                        <input type="text" value="1" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
+                                        <input type="text" value="<?php echo $usproduct['selprod_min_order_qty']; ?>" data-min-qty="<?php echo $usproduct['selprod_min_order_qty']; ?>" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
                                     </div>
-                                    <span class="increase increase-js"><i class="icn">
+                                    <span class="increase increase-js">
+                                        <i class="icn">
                                             <svg class="svg" width="16" height="16">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                                                 </use>
                                             </svg>
-                                        </i></span>
+                                        </i>
+                                    </span>
                                 </div>
                             </div>
                             <?php if ($usproduct['selprod_stock'] <= 0) { ?>

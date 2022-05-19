@@ -840,7 +840,10 @@ class ProductsController extends MyAppController
         $frmReviewSearch = $this->getReviewSearchForm(5);
         $frmReviewSearch->fill(array('selprod_id' => $selprod_id));
         $this->set('frmReviewSearch', $frmReviewSearch);
-        $this->set('currentStock', $product['selprod_stock'] - Product::tempHoldStockCount($selprod_id));
+
+        $currentStock = $product['selprod_stock'] - Product::tempHoldStockCount($selprod_id);
+        $this->set('currentStock', $currentStock);
+        $this->set('isOutOfStock', ((int)($product['selprod_min_order_qty'] > $currentStock)));
 
         /* Get Product Volume Discount (if any)[ */
         $this->set('volumeDiscountRows', $sellerProduct->getVolumeDiscounts());
@@ -1438,7 +1441,7 @@ class ProductsController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-       
+
         $this->set('html', $this->_template->render(false, false, 'products/search-producttags-autocomplete.php', true, false));
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
