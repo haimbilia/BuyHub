@@ -776,6 +776,7 @@ Updates/Fixes :
     => 064451 - Admin >> CMS: 'Update other languages data' is not working under FAQs section.
     => 064457 - The order amount does not get credited to the buyer's wallet on order cancellation.
     => 064461 - The buyer is able to place the return request by uploading the invalid files in the upload media field.
+    => 064459 - Buyer: FAQ Category collection is not displaying at the front-end.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

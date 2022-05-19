@@ -70,6 +70,11 @@ class Collections extends MyAppModel
     public const COLLECTION_CRITERIA_PRICE_LOW_TO_HIGH = 1;
     public const COLLECTION_CRITERIA_PRICE_HIGH_TO_LOW = 2;
 
+    /*[ layout applicable types */
+    public const FOR_WEB = 1;
+    public const FOR_APP = 2;
+    /*   layout applicable types ]*/
+
     public const COLLECTION_WITHOUT_MEDIA = [
         self::COLLECTION_TYPE_SHOP,
         self::COLLECTION_TYPE_BRAND,
@@ -169,6 +174,16 @@ class Collections extends MyAppModel
         ];
     }
 
+    public static function getLayoutApplicableTypes(int $langId): array
+    {
+        if (1 > $langId) {
+            trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $langId), E_USER_ERROR);
+        }
+        return [
+            self::FOR_WEB => Labels::getLabel('LBL_WEB', $langId),
+            self::FOR_APP => Labels::getLabel('LBL_APP', $langId),            
+        ];
+    }
     /**
      * getLayoutTypeArr
      *

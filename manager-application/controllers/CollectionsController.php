@@ -139,6 +139,16 @@ class CollectionsController extends ListingBaseController
         if ($collection_layout_type > 0) {
             $srch->addCondition('collection_layout_type', '=', 'mysql_func_' . $collection_layout_type, 'AND', true);
         }
+
+        $applicableFor = FatApp::getPostedData('applicable_for', FatUtility::VAR_INT, 0);
+        if ($applicableFor === Collections::FOR_WEB) {
+            $srch->addCondition('collection_for_web', '=', applicationConstants::YES);
+            $srch->addCondition('collection_for_app', '=', applicationConstants::NO);
+        } elseif ($applicableFor === Collections::FOR_APP) {
+            $srch->addCondition('collection_for_web', '=', applicationConstants::NO);
+            $srch->addCondition('collection_for_app', '=', applicationConstants::YES);
+        }
+
         $srch->addMultipleFields(array('c.*', 'c_l.collection_name'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -154,6 +164,7 @@ class CollectionsController extends ListingBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('applicableTypes', Collections::getLayoutApplicableTypes($this->siteLangId));
     }
 
     protected function getSearchForm(array $fields = [])
@@ -173,6 +184,7 @@ class CollectionsController extends ListingBaseController
         unset($typeArr[Collections::COLLECTION_TYPE_CONTENT_BLOCK]);
         $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'collection_type', $typeArr);
         $frm->addSelectBox(Labels::getLabel('FRM_LAYOUT_TYPE', $this->siteLangId), 'collection_layout_type', Collections::getLayoutTypeArr($this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_APPLICABLE_FOR', $this->siteLangId), 'applicable_for', Collections::getLayoutApplicableTypes($this->siteLangId), '', [], Labels::getLabel('FRM_BOTH', $this->siteLangId));
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);/*clearBtn*/
@@ -271,7 +283,7 @@ class CollectionsController extends ListingBaseController
                 return Collections::LIMIT_BLOG_LAYOUT1;
                 break;
         }
-    }
+    }  
 
     public function setup()
     {
@@ -1297,6 +1309,7 @@ class CollectionsController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'collection_display_order' => Labels::getLabel('LBL_DISPLAY_ORDER', $this->siteLangId),
             'collection_name' => Labels::getLabel('LBL_COLLECTION_NAME', $this->siteLangId),
+            'applicable_for' => Labels::getLabel('LBL_APPLICABLE_FOR', $this->siteLangId),
             'collection_type' => Labels::getLabel('LBL_TYPE', $this->siteLangId),
             'collection_layout_type' => Labels::getLabel('LBL_LAYOUT_TYPE', $this->siteLangId),
             'collection_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -1311,8 +1324,9 @@ class CollectionsController extends ListingBaseController
         return [
             'dragdrop',
             'select_all',
-            'collection_display_order',
+            'collection_display_order',           
             'collection_name',
+            'applicable_for',
             'collection_type',
             'collection_layout_type',
             'collection_active',
