@@ -36,7 +36,7 @@ class CustomController extends MyAppController
     public function contactSubmit()
     {
         $frm = $this->contactUsForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], !MOBILE_APP_API_CALL);
 
         if (false === $post) {
             $message = $frm->getValidationErrors();
@@ -46,7 +46,11 @@ class CustomController extends MyAppController
             Message::addErrorMessage($message);
             FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'ContactUs'));
         }
-        $frm->expireSecurityToken(FatApp::getPostedData());
+        
+        if(!MOBILE_APP_API_CALL){
+            $frm->expireSecurityToken(FatApp::getPostedData());
+        }      
+        
 
         if (false === MOBILE_APP_API_CALL && !CommonHelper::verifyCaptcha()) {
             $message = Labels::getLabel('ERR_THAT_CAPTCHA_WAS_INCORRECT', $this->siteLangId);

@@ -25,6 +25,7 @@
         echo $frmProductSearch->getFieldHtml('category');
         echo $frmProductSearch->getFieldHtml('sortOrder');
         echo $frmProductSearch->getFieldHtml('page');
+        echo $frmProductSearch->getFieldHtml('pageSize');
         echo $frmProductSearch->getFieldHtml('shop_id');
         echo $frmProductSearch->getFieldHtml('collection_id');
         echo $frmProductSearch->getFieldHtml('join_price');

@@ -1817,9 +1817,9 @@ class EmailHandler extends FatModel
             $receipentsInfo = User::getSubUsersReceipents($msgDetail["seller_id"], 'canViewReturnRequests');
             $bccEmails = $receipentsInfo['email'];
 
-            if(!empty($msgDetail["buyer_email"])){
+            if(!empty($msgDetail["op_shop_owner_email"])){
                 $mailerObj = (new FatMailer($langId, 'return_request_message_user'))
-                ->setTo($msgDetail["buyer_email"])
+                ->setTo($msgDetail["op_shop_owner_email"])
                 ->setVariables($arrReplacements);
 
                 foreach ($bccEmails as $emailId => $emailName) {
