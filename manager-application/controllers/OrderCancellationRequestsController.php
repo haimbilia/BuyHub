@@ -42,12 +42,6 @@ class OrderCancellationRequestsController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_INVOICE_NUMBER_AND_COMMENT', $this->siteLangId));
         $this->getListingData();
 
-        $data = FatApp::getPostedData();
-        if ($data) {
-            $data['ocrequest_id'] = FatUtility::int($data['id']);
-            unset($data['id']);
-            $frmSearch->fill($data);
-        }
         $this->_template->addJs(['js/select2.js', 'order-cancellation-requests/page-js/index.js']);
         $this->_template->addCss(array('css/select2.min.css'));
         $this->includeFeatherLightJsCss();
@@ -133,7 +127,7 @@ class OrderCancellationRequestsController extends ListingBaseController
             $cnd = $srch->addCondition('op_invoice_number', '=', $keyword);
             $cnd->attachCondition('op_order_id', '=', $keyword);
             $cnd->attachCondition('ocrequest_message', 'LIKE', "%" . $keyword . "%");
-        }
+        }        
 
         if (isset($post['ocrequest_status']) && $post['ocrequest_status'] != '') {
             $ocrequest_status = FatUtility::int($post['ocrequest_status']);
@@ -143,15 +137,17 @@ class OrderCancellationRequestsController extends ListingBaseController
         if (isset($post['op_status_id']) && $post['op_status_id'] != '') {
             $op_status_id = FatUtility::int($post['op_status_id']);
             $srch->addCondition('op_status_id', '=', $op_status_id);
-        }
-        if (isset($post['ocrequest_id']) && $post['ocrequest_id'] > 0) {
-            $srch->addCondition('ocrequest_id', '=', $post['ocrequest_id']);
+        }  
+
+        $reasonId = FatApp::getPostedData('ocrequest_ocreason_id', FatUtility::VAR_INT, 0); 
+        if (0 < $reasonId) {        
+            $srch->addCondition('ocrequest_ocreason_id', '=', $reasonId);
         }
 
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
-        $reasonId = FatApp::getPostedData('ocrequest_ocreason_id', FatUtility::VAR_INT, $recordId);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);        
+        $reasonId = FatApp::getPostedData('ocrequest_id', FatUtility::VAR_INT, $recordId);   
         if (0 < $reasonId) {
-            $srch->addCondition('ocrequest_ocreason_id', '=', $reasonId);
+            $srch->addCondition('ocrequest_id', '=', $reasonId);
         }
 
         $buyer = FatApp::getPostedData('buyer', FatUtility::VAR_INT, 0);
@@ -260,7 +256,7 @@ class OrderCancellationRequestsController extends ListingBaseController
             unset($moveRefundLocationArr[PaymentMethods::MOVE_TO_CUSTOMER_CARD]);
         } else {
             unset($moveRefundLocationArr[PaymentMethods::MOVE_TO_CUSTOMER_WALLET]);
-        }
+        }      
         $frm->addRadioButtons(Labels::getLabel('FRM_TRANSFER_REFUND', $this->siteLangId), 'ocrequest_refund_in_wallet', $moveRefundLocationArr, PaymentMethods::MOVE_TO_ADMIN_WALLET, array('class' => 'list-radio'));
         $fld1 = new FormFieldRequirement('ocrequest_refund_in_wallet', Labels::getLabel('FRM_TRANSFER_REFUND', $langId));
         $fld1->setRequired(false);

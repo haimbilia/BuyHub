@@ -6,7 +6,7 @@ $(function () {
         if ('1' === $(this).val()) {
             $('[name="ocrequest_refund_in_wallet"]').attr('disabled', false);
         } else {
-            $('[name="ocrequest_refund_in_wallet"]').attr('disabled', true).val(0);
+            $('[name="ocrequest_refund_in_wallet"]').attr('disabled', true)
         }
     });
 });
