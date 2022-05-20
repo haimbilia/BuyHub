@@ -1,29 +1,15 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $colMdVal = isset($colMdVal) ? $colMdVal : 4;
-$displayProductNotAvailableLable = false;
+$displayProductNotAvailableLabel = false;
 if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
-    $displayProductNotAvailableLable = true;
+    $displayProductNotAvailableLabel = true;
 }
 
 $vtype = $postedData['vtype'] ?? false;
-// $productListClass = '';
-// if ($vtype == 'list') {
-//     $productListClass = 'listing-products--list';
-// } elseif ($vtype == 'grid') {
-//     $productListClass = 'listing-products--grid';
-// }
-
 ?>
-<div id="productsList" class="<?php // echo $productListClass; 
-                                ?>">
-    <?php
-    // if (false && $vtype == 'map') {
-    //     include(CONF_THEME_PATH . 'products/products-list-map.php');
-    // } else {
-    ?>
+<div id="productsList">
     <div class="product-listing" data-view="<?php echo $colMdVal; ?>">
         <?php if ($products) {
-            $showActionBtns = !empty($showActionBtns) ? $showActionBtns : false;
             $isWishList = isset($isWishList) ? $isWishList : 0;
             foreach ($products as $product) {
                 $selProdRibbons = [];
@@ -34,21 +20,31 @@ $vtype = $postedData['vtype'] ?? false;
                 if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                     $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                 }
+                $isNotServiceable = (true == $displayProductNotAvailableLabel && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']);
+                $showActionBtns = !empty($showActionBtns) ? $showActionBtns : false;
+                $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND);
 
-                $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?> <div class="items">
+                $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
+                $availableStock = $product['selprod_stock'] - $tempHoldStock;
+                $isOutOfStock = ((int)($product['selprod_min_order_qty'] > $availableStock));
+        ?>
+
+                <div class="items">
                     <!--product tile-->
                     <div class="products">
                         <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $product,  'siteLangId' => $siteLangId], false); ?>
-                        <?php if ($product['in_stock'] == 0) { ?>
+                        <?php if ($product['in_stock'] == 0 || 0 < $isOutOfStock) { ?>
                             <span class="tag--soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
                         <?php  } ?>
                         <div class="products-body">
-                            <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $product,  'siteLangId' => $siteLangId, 'showActionBtns' => $showActionBtns, 'isWishList' => $isWishList, 'selProdRibbons' => $selProdRibbons), false); ?>
-                            <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
-                                <div class="not-available"><svg class="svg">
+                            <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $product,  'siteLangId' => $siteLangId, 'showActionBtns' => ($showActionBtns && false === $isNotServiceable), 'isWishList' => $isWishList, 'selProdRibbons' => $selProdRibbons, 'isOutOfStock' => $isOutOfStock), false); ?>
+                            <?php if ($isNotServiceable) { ?>
+                                <div class="not-available">
+                                    <svg class="svg">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                                         </use>
-                                    </svg> <?php echo Labels::getLabel('LBL_NOT_SERVICEABLE', $siteLangId); ?></div>
+                                    </svg> <?php echo Labels::getLabel('LBL_NOT_SERVICEABLE', $siteLangId); ?>
+                                </div>
                             <?php } ?>
                             <div class="products-img">
                                 <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
@@ -68,11 +64,7 @@ $vtype = $postedData['vtype'] ?? false;
                                 </a>
                             </div>
                         </div>
-                        <div class="products-foot"> <?php /* if(round($product['prod_rating'])>0 && FatApp::getConfig("CONF_ALLOW_REVIEWS",FatUtility::VAR_INT,0)){ ?> <div class="products__rating">
-                            <i class="icn"><svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
-                                </svg></i> <span class="rate"><?php echo round($product['prod_rating'],1);?></span> <?php if(round($product['prod_rating'])==0 ){  ?> <span class="be-first"> <a
-                                    href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Be_the_first_to_review_this_product', $siteLangId); ?> </a> </span> <?php } ?> </div> <?php } */ ?>
+                        <div class="products-foot">
                             <div class="products-category">
                                 <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id']), CONF_WEBROOT_FRONTEND); ?>"><?php echo html_entity_decode($product['prodcat_name'], ENT_QUOTES, 'UTF-8'); ?> </a>
                             </div>

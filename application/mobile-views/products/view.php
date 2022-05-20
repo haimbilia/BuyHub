@@ -329,6 +329,7 @@ if (!empty($reviews)) {
 $data = array(
     'reviews' => empty($reviews) ? (object) array() : $reviews,
     'codEnabled' => (true === $codEnabled ? 1 : 0),
+    'isOutOfStock' => $isOutOfStock,
     // 'shippingRates' => $shippingRates,
     'shippingDetails' => empty($shippingDetails) ? (object) array() : $shippingDetails,
     'optionRows' => $optionRows,

@@ -49,18 +49,15 @@ class SelProdReview extends MyAppModel
     {
         $userId = FatUtility::int($userId);
 
-        $srch = new SelProdReviewSearch();
+        $srch = SelProdRating::getAvgShopReviewsRatingObj($userId);
         $srch->joinUser();
         $srch->joinSeller();
         $srch->joinSellerProducts();
         $srch->joinProducts();
-        $srch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
         $srch->addMultipleFields(array('count(*) as numOfReviews'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('spreview_seller_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->addGroupby('spreview_seller_user_id');
-        $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
 
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);

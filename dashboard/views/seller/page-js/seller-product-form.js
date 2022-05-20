@@ -71,8 +71,6 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 				sellerProductDownloadFrm(t.product_id, t.selprod_id);
 				return;
 			}
-			//window.location.replace(fcom.makeUrl('Seller', 'products'));
-			setTimeout(function () { window.location.href = fcom.makeUrl('Seller', 'products'); }, 1000);
 		});
 	};
 
