@@ -777,9 +777,14 @@ Updates/Fixes :
     => 064457 - The order amount does not get credited to the buyer's wallet on order cancellation.
     => 064461 - The buyer is able to place the return request by uploading the invalid files in the upload media field.
     => 064459 - Buyer: FAQ Category collection is not displaying at the front-end.
+    => 064466 - Suggestion: Records should be displayed in listing according to the display order.
+    => 064470 - Admin: Unable to change the status when the session expires or the user is logged out
+    => 064464 - Inconsistency issue in special price on admin and seller end
+    => 064400 - Undefined Index Notice appears on the seller registration page
     => 064466 - Suggestion: Records should be displayed in listing according to the display order. 
     => 064465 - Admin: Accordion icon is not displaying when the user adds new links under 'Quick links' section
     => 064469 - The previously selected zones do not appear when the admin tries to edit any combined tax rule.
+    
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 

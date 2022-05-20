@@ -73,7 +73,7 @@ $(document).ready(function () {
             var data = 'attribute=' + attribute + "&splprice_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
             fcom.displayProcessing();
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updateColValue'), data, function (ans) {      
-                fcom.closeProcessing();        
+                fcom.displaySuccessMessage(ans.msg);        
                 if (ans.status != 1) {                   
                     value = oldValue;
                     updatedValue = formattedValue;

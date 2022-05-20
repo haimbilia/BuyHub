@@ -13,11 +13,9 @@
         $submitFld->setFieldTagAttribute('class', 'btn');
         echo $blogSearchFrm->getFormTag();
         echo $blogSearchFrm->getFieldHTML('keyword');
-        echo $blogSearchFrm->getFieldHTML('btnProductSrchSubmit');
         echo $blogSearchFrm->getExternalJS(); ?>
         </form>
     </div>
 
-    <button type="button" class="btn btn-close text-reset btn-search-close" data-bs-dismiss="offcanvas" aria-label="Close">
-    </button>
+    <button type="button" class="btn btn-close text-reset btn-search-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 </div>

@@ -32,7 +32,9 @@ class SupplierController extends MyAppController
         $block2 = $obj->getContentByPageType(Extrapage::SELLER_PAGE_BLOCK2, $this->siteLangId);
         $block3 = $obj->getContentByPageType(Extrapage::SELLER_PAGE_BLOCK3, $this->siteLangId);
         $slogan = $obj->getContentByPageType(Extrapage::SELLER_BANNER_SLOGAN, $this->siteLangId);
-        $slogan['epage_extra_info'] = !empty($slogan['epage_extra_info']) ? json_decode($slogan['epage_extra_info'], true) : [];
+        if (!empty($slogan)) {
+            $slogan['epage_extra_info'] = !empty($slogan['epage_extra_info']) ? json_decode($slogan['epage_extra_info'], true) : [];
+        }
 
         $srch = FaqCategory::getSearchObject($this->siteLangId);
         $srch->joinTable('tbl_faqs', 'LEFT OUTER JOIN', 'faq_faqcat_id = faqcat_id and faq_active = ' . applicationConstants::ACTIVE . '  and faq_deleted = ' . applicationConstants::NO);

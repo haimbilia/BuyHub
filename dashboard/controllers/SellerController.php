@@ -2144,7 +2144,7 @@ class SellerController extends SellerBaseController
 
         $shopLogoFrm = $this->getShopLogoForm($shop_id, $this->siteLangId);
         $shopBannerFrm = $this->getShopBannerForm($shop_id, $this->siteLangId);
-       
+
 
         $getShopDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_SHOP_BANNER);
         $getShopLogoSquare = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE);
@@ -2155,7 +2155,7 @@ class SellerController extends SellerBaseController
 
         $this->set('shopDetails', $shopDetails);
         $this->set('shopLogoFrm', $shopLogoFrm);
-        $this->set('shopBannerFrm', $shopBannerFrm);  
+        $this->set('shopBannerFrm', $shopBannerFrm);
         $this->set('language', Language::getAllNames());
         $this->set('shop_id', $shop_id);
         $this->_template->render(false, false);
@@ -5120,19 +5120,19 @@ class SellerController extends SellerBaseController
         $product = FatApp::getDb()->fetch($rs);
 
         if (strtotime($post['splprice_start_date']) < strtotime($product['selprod_available_from'])) {
-            $str = Labels::getLabel('MSG_Special_Price_Date_Must_Be_Greater_Or_Than_Equal_To_{availablefrom}', $this->siteLangId);
-            $message = CommonHelper::replaceStringData($str, array('{availablefrom}' => date('Y-m-d', strtotime($product['selprod_available_from']))));
+            $str = Labels::getLabel('ERR_SPECIAL_PRICE_DATE_MUST_BE_GREATER_OR_THAN_EQUAL_TO_{AVAILABLEFROM}', $this->siteLangId);
+            $message = CommonHelper::replaceStringData($str, array('{AVAILABLEFROM}' => date('Y-m-d', strtotime($product['selprod_available_from']))));
             FatUtility::dieJsonError($message);
         }
 
-        /* if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price'] || $post['splprice_price'] >= $product['selprod_price']) {
-          $str = Labels::getLabel('MSG_Price_must_between_min_selling_price_{minsellingprice}_and_selling_price_{sellingprice}', $this->siteLangId);
-          $minSellingPrice = CommonHelper::displayMoneyFormat($product['product_min_selling_price'], false, true, true);
-          $sellingPrice = CommonHelper::displayMoneyFormat($product['selprod_price'], false, true, true);
+        if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price']) {
+            $str = Labels::getLabel('ERR_PRICE_MUST_BETWEEN_MIN_SELLING_PRICE_{MINSELLINGPRICE}_AND_SELLING_PRICE_{SELLINGPRICE}', $this->siteLangId);
+            $minSellingPrice = CommonHelper::displayMoneyFormat($product['product_min_selling_price'], false, true, true);
+            $sellingPrice = CommonHelper::displayMoneyFormat($product['selprod_price'], false, true, true);
 
-          $message = CommonHelper::replaceStringData($str, array('{minsellingprice}' => $minSellingPrice, '{sellingprice}' => $sellingPrice));
-          FatUtility::dieJsonError($message);
-          } */
+            $message = CommonHelper::replaceStringData($str, array('{MINSELLINGPRICE}' => $minSellingPrice, '{SELLINGPRICE}' => $sellingPrice));
+            FatUtility::dieJsonError($message);
+        }
 
         /* Check if same date already exists [ */
         $tblRecord = new TableRecord(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE);
@@ -5165,7 +5165,7 @@ class SellerController extends SellerBaseController
         if ($tblRecord->loadFromDb($condition)) {
             $specialPriceRow = $tblRecord->getFlds();
             if ($specialPriceRow['splprice_id'] != $splprice_id) {
-                FatUtility::dieJsonError(Labels::getLabel('ERR_Special_price_for_this_date_already_added', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_SPECIAL_PRICE_FOR_THIS_DATE_ALREADY_ADDED', $this->siteLangId));
             }
         }
         /* ] */
@@ -5216,10 +5216,11 @@ class SellerController extends SellerBaseController
         $value = FatApp::getPostedData('value');
         $selProdId = FatApp::getPostedData('selProdId', FatUtility::VAR_INT, 0);
 
-        $selprodPrice = SellerProduct::getAttributesById($selProdId, 'selprod_price');
+        /* Can add greater than selling price. */
+        /* $selprodPrice = SellerProduct::getAttributesById($selProdId, 'selprod_price');
         if ($selprodPrice < $value && 'splprice_price' == $attribute) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_SPECIAL_PRICE_MUST_BE_LESS_THAN_EQUAL_TO_ORIGNAL_PRICE', $this->siteLangId));
-        }
+        } */
 
         $dataToUpdate = array(
             'splprice_selprod_id' => $selProdId,
