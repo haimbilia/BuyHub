@@ -89,7 +89,8 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
         </div>
     </div>
 <?php } ?>
-<?php if (!in_array($controllerName, ['Blog'])) { ?>
-    <!-- Blog Search Form -->
-<?php $this->includeTemplate('_partial/footer-part/blog-search-form.php');
+
+<?php if ('Blog' == $controllerName) {
+    /* Blog Search Form */
+    $this->includeTemplate('_partial/footer-part/blog-search-form.php');
 } ?>
