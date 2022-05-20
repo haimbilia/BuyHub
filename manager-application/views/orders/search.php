@@ -81,12 +81,16 @@ foreach ($arrListing as $sn => $row) {
                     $twoDaysAfter = date('Y-m-d H:i:s', strtotime($row['order_date_added'] . ' + 2 days'));
                     $attr = [
                         'class' => 'disabled',
-                        'title' => Labels::getLabel('ERR_NOT_ALLOWED_TO_DELETE_THIS_ORDER', $siteLangId),
+                        'title' => Labels::getLabel('ERR_PAID_ORDERS_CANNOT_BE_DELETED.', $siteLangId),
                         'onclick' => 'javascript:void(0);',
                     ];
+
                     if (!$row['order_deleted'] && $row['order_payment_status'] == Orders::ORDER_PAYMENT_PENDING && $twoDaysAfter < date('Y-m-d H:i:s')) {
                         $attr = [];
+                    } else if ((!$row['order_deleted'] && $row['order_payment_status'] == Orders::ORDER_PAYMENT_PENDING && $twoDaysAfter >= date('Y-m-d H:i:s'))) {
+                        $attr['title'] = Labels::getLabel('ERR_YOU_CAN_DELETE_THIS_PENDING_ORDER_AFTER_2_DAYS.', $siteLangId);
                     }
+
                     $data['deleteButton'] = $attr;
                 }
 
