@@ -44,9 +44,9 @@ function checkStatesDefault(countryId, stateIds, field) {
             $(field).find("option[value='-1']").hide();   
         }       
         if ($.isArray(stateIds)) {
-            $(stateIds).each(function (index, val) {
-                $(field).find("option[value=" + val + "]").attr('selected', 'selected');
-            });
+            setTimeout(function(){
+                $(field).val(stateIds);   
+            },500); 
         }
         $('select[name="taxruleloc_type"]').trigger('change');
     });
