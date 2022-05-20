@@ -134,7 +134,7 @@ class CheckoutController extends MyAppController
                                 $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
                                 $msg = Labels::getLabel('ERR_{PRODUCT-NAME}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId);
                                 if (0 < $isOutOfMinOrderQty) {
-                                    $msg = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_MIN_PURCHASE_QUANTITY_IS_HIGHER_THAN_AVAILABLE_STOCK_LIMIT._SO_UNABLE_TO_PROCEED_FURTHER', $this->siteLangId);
+                                    $msg = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_MIN_PURCHASE_QUANTITY_IS_HIGHER_THAN_AVAILABLE_STOCK_LIMIT._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
                                 }
                                 $this->errMessage = CommonHelper::replaceStringData($msg, ['{PRODUCT-NAME}' => $productName]);
                                 Message::addErrorMessage($this->errMessage);
