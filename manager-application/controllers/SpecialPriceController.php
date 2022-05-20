@@ -214,7 +214,7 @@ class SpecialPriceController extends ListingBaseController
         $dataToUpdate += $otherColumnsValue;
 
         if (!$this->updateSelProdSplPrice($dataToUpdate)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Something_went_wrong._Please_Try_Again.', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_SOMETHING_WENT_WRONG._PLEASE_TRY_AGAIN.', $this->siteLangId), true);
         }
 
         if ('splprice_price' == $attribute) {
@@ -249,12 +249,12 @@ class SpecialPriceController extends ListingBaseController
         $rs = $prodSrch->getResultSet();
         $product = FatApp::getDb()->fetch($rs);
 
-        if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price'] || $post['splprice_price'] >= $product['selprod_price']) {
-            $str = Labels::getLabel('MSG_Price_must_between_min_selling_price_{minsellingprice}_and_selling_price_{sellingprice}', $this->siteLangId);
+        if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price'] ) {
+            $str = Labels::getLabel('ERR_PRICE_MUST_BETWEEN_MIN_SELLING_PRICE_{MINSELLINGPRICE}_AND_SELLING_PRICE_{SELLINGPRICE}', $this->siteLangId);
             $minSellingPrice = CommonHelper::displayMoneyFormat($product['product_min_selling_price'], false, true, true);
             $sellingPrice = CommonHelper::displayMoneyFormat($product['selprod_price'], false, true, true);
 
-            $message = CommonHelper::replaceStringData($str, array('{minsellingprice}' => $minSellingPrice, '{sellingprice}' => $sellingPrice));
+            $message = CommonHelper::replaceStringData($str, array('{MINSELLINGPRICE}' => $minSellingPrice, '{SELLINGPRICE}' => $sellingPrice));
             LibHelper::exitWithError($message);
         }
 
@@ -289,7 +289,7 @@ class SpecialPriceController extends ListingBaseController
         if ($tblRecord->loadFromDb($condition)) {
             $specialPriceRow = $tblRecord->getFlds();
             if ($specialPriceRow['splprice_id'] != $splprice_id) {
-                LibHelper::exitWithError(Labels::getLabel('ERR_Special_price_for_this_date_already_added', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_SPECIAL_PRICE_FOR_THIS_DATE_ALREADY_ADDED', $this->siteLangId), true);
             }
         }
         /* ] */

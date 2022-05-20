@@ -779,6 +779,7 @@ Updates/Fixes :
     => 064459 - Buyer: FAQ Category collection is not displaying at the front-end.
     => 064466 - Suggestion: Records should be displayed in listing according to the display order.
     => 064470 - Admin: Unable to change the status when the session expires or the user is logged out
+    => 064464 - Inconsistency issue in special price on admin and seller end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
