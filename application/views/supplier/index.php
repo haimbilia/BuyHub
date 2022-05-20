@@ -13,7 +13,7 @@ if (!empty($slogan)) {
     $imageSizeType = $slogan['epage_extra_info'] && array_key_exists(Extrapage::TYPE_BKGROUND_IMAGE_SIZE, $slogan['epage_extra_info']) ? $slogan['epage_extra_info'][Extrapage::TYPE_BKGROUND_IMAGE_SIZE] : 'auto';
     $bgImageUrl .= "background-size: $imageSizeType;";
 
-    $pageContent = FatUtility::decodeHtmlEntities($slogan['epage_content']);
+    $pageContent = FatUtility::decodeHtmlEntities(nl2br($slogan['epage_content']));
 }
 ?>
 

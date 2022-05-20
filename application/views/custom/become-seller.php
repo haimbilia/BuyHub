@@ -22,25 +22,6 @@
             <?php if (isset($contentBlocks[Extrapage::SELLER_PAGE_BLOCK1]['epage_content']) && $contentBlocks[Extrapage::SELLER_PAGE_BLOCK1]['epage_content'] != '') { ?>
                 <div class="threecols">
                     <?php echo CommonHelper::renderHtml($contentBlocks[Extrapage::SELLER_PAGE_BLOCK1]['epage_content']); ?>
-                    <?php /* <div class="box box--white box--small">
-					<div class="box__content">
-						<h2>Fees & Documents</h2>
-						<p>All you need is to have a business</p>
-					</div>
-				</div>
-				<div class="box box--white box--large">
-					<div class="box__content">
-						<img src="<?php echo CONF_WEBROOT_URL; ?>images/icon_user.svg" alt="">
-						<h2>Become a Seller</h2>
-						<p>Open a shop and have more opportunities</p>
-					</div>
-				</div>
-				<div class="box box--white box--small">
-					<div class="box__content">
-						<h2>Explore the way</h2>
-						<p>How to easily sell your product</p>
-					</div>
-				</div> */ ?>
                 </div>
             <?php } ?>
 

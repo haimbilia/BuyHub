@@ -1,18 +1,24 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$bgImageUrl = '';
+$pageContent = '';
+if (!empty($slogan)) {
+    $haveBgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE, $slogan['epage_id'], 0, $siteLangId);
+    $bgImageUrl = ($haveBgImage) ? "background-image:url(" . UrlHelper::generateFileUrl('Image', 'cblockBackgroundImage', array($slogan['epage_id'], $siteLangId, ImageDimension::VIEW_DEFAULT, AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE)) . ");" : "background-image:url(" . CONF_WEBROOT_URL . "images/seller-bg.png);";
+    $imageRepeatType = $slogan['epage_extra_info'] && array_key_exists(Extrapage::TYPE_BKGROUND_IMAGE_REPEAT, $slogan['epage_extra_info']) ? $slogan['epage_extra_info'][Extrapage::TYPE_BKGROUND_IMAGE_REPEAT] : 'repeat';
+    $bgImageUrl .= "background-repeat: $imageRepeatType;";
+    $imageSizeType = $slogan['epage_extra_info'] && array_key_exists(Extrapage::TYPE_BKGROUND_IMAGE_SIZE, $slogan['epage_extra_info']) ? $slogan['epage_extra_info'][Extrapage::TYPE_BKGROUND_IMAGE_SIZE] : 'auto';
+    $bgImageUrl .= "background-size: $imageSizeType;";
+
+    $pageContent = FatUtility::decodeHtmlEntities(nl2br($slogan['epage_content']));
+}
+?>
 <div id="body" class="body">
-    <?php $haveBgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE, $slogan['epage_id'], 0, $siteLangId);
-    $bgImageUrl = ($haveBgImage) ? "background-image:url(" . UrlHelper::generateFileUrl('Image', 'cblockBackgroundImage', array($slogan['epage_id'], $siteLangId, ImageDimension::VIEW_DEFAULT, AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE)) . ");" : "background-image:url(" . CONF_WEBROOT_URL . "images/seller-bg.png);"; 
-    $imageRepeatType = $slogan['epage_extra_info'] && array_key_exists(Extrapage::TYPE_BKGROUND_IMAGE_REPEAT, $slogan['epage_extra_info']) ? $slogan['epage_extra_info'][Extrapage::TYPE_BKGROUND_IMAGE_REPEAT]: 'repeat';
-    $bgImageUrl .= "background-repeat: $imageRepeatType;"; 
-    $imageSizeType = $slogan['epage_extra_info'] && array_key_exists(Extrapage::TYPE_BKGROUND_IMAGE_SIZE, $slogan['epage_extra_info']) ? $slogan['epage_extra_info'][Extrapage::TYPE_BKGROUND_IMAGE_SIZE]: 'auto';
-    $bgImageUrl .= "background-size: $imageSizeType;";   
-    ?>
     <div class="hero-banner" style="<?php echo $bgImageUrl; ?>">
         <div class="container">
             <div class="hero-banner-inner">
                 <div class="seller-slogan">
                     <div class="seller-slogan-txt">
-                        <?php echo FatUtility::decodeHtmlEntities(nl2br($slogan['epage_content'])); ?>
+                        <?php echo $pageContent; ?>
                     </div>
                 </div>
                 <div class="seller-register-form">
