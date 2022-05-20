@@ -33,7 +33,7 @@ if (!empty($slogan)) {
                     echo $sellerFrm->getFormHtml(); ?>
 
                     <div class="cms">
-                        <?php echo FatUtility::decodeHtmlEntities($formText['epage_content']); ?>
+                        <?php echo isset($formText['epage_content']) ? FatUtility::decodeHtmlEntities($formText['epage_content']) : ''; ?>
                     </div>
 
                 </div>
