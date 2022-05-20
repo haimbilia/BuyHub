@@ -349,11 +349,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         data = "recordId=" + recordId + "&status=" + status;
         fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
-            function (res) {
+            function (ans) {
                 fcom.removeLoader();
                 fcom.closeProcessing();
                 $(obj).prop("checked", 1 == status);
-                var ans = JSON.parse(res);
                 if (ans.status == 1) {
                     fcom.displaySuccessMessage(ans.msg);
                     $(obj).attr({ onclick: "updateStatus(event, this, " + recordId + ", " + oldStatus + ", '" + callback + "')", "data-old-status": status });
@@ -365,7 +364,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     fcom.displayErrorMessage(ans.msg);
                 }
                 fcom.removeLoader();
-            }
+            }, { 'fOutMode': 'json' }
         );
     };
 
@@ -719,7 +718,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (1 > autoTableColumWidth) {
             return false;
         }
-        
+
         $('.listingTableJs .tableHeadJs th').each(function () {
             var arr = {
                 'width': $(this).outerWidth(true),
