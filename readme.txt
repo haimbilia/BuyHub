@@ -777,6 +777,7 @@ Updates/Fixes :
     => 064457 - The order amount does not get credited to the buyer's wallet on order cancellation.
     => 064461 - The buyer is able to place the return request by uploading the invalid files in the upload media field.
     => 064459 - Buyer: FAQ Category collection is not displaying at the front-end.
+    => 064466 - Suggestion: Records should be displayed in listing according to the display order. 
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
