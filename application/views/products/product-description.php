@@ -87,7 +87,7 @@
     <!-- Add To Cart -->
 
     <?php
-    if (0 < $currentStock && !$isOutOfStock) {
+    if (0 < $currentStock && !$isOutOfMinOrderQty) {
         if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) {  ?>
             <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
                 <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_YOUR_LOCATION', $siteLangId); ?>

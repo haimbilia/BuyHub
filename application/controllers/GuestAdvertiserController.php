@@ -19,7 +19,9 @@ class GuestAdvertiserController extends MyAppController
 
         $obj = new Extrapage();
         $slogan = $obj->getContentByPageType(Extrapage::ADVERTISER_BANNER_SLOGAN, $this->siteLangId);
-        $slogan['epage_extra_info'] = !empty($slogan['epage_extra_info']) ? json_decode($slogan['epage_extra_info'], true) : [];
+        if (!empty($slogan)) {
+            $slogan['epage_extra_info'] = !empty($slogan['epage_extra_info']) ? json_decode($slogan['epage_extra_info'], true) : [];
+        }
         
         $this->set('slogan', $slogan);
         $this->set('siteLangId', $this->siteLangId);

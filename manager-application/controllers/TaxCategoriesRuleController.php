@@ -280,7 +280,7 @@ class TaxCategoriesRuleController extends ListingBaseController
             if ($post['taxrule_id'] != $location['taxruleloc_taxrule_id']) {
                 $combination[] = $location['taxruleloc_from_country_id'] . "-" . $location['taxruleloc_from_state_id'] . "-" . $location['taxruleloc_to_country_id'] . "-" . $location['taxruleloc_to_state_id'] . "-" . $location['taxruleloc_type'];
             }
-        }
+        }       
         foreach ($post['taxruleloc_from_state_id'] as $fromState) {
             if (count($post['taxruleloc_from_state_id']) > 1 && $fromState == -1) {
                 continue;
@@ -288,12 +288,9 @@ class TaxCategoriesRuleController extends ListingBaseController
             foreach ($post['taxruleloc_to_state_id'] as $toState) {
                 if (count($post['taxruleloc_to_state_id']) > 1 && $toState == -1) {
                     continue;
-                }
-                $isUnique = 1;
-                if ($post['taxruleloc_type'] == TaxRule::TYPE_EXCLUDE_STATES) {
-                    $isUnique = null;
-                }
-                $key = $post['taxruleloc_from_country_id'] . "-" . $fromState . "-" . $post['taxruleloc_to_country_id'] . "-" . $toState . "-" . $post['taxruleloc_type'] . "-" . $isUnique;
+                }                
+                $key = $post['taxruleloc_from_country_id'] . "-" . $fromState . "-" . $post['taxruleloc_to_country_id'] . "-" . $toState . "-" . $post['taxruleloc_type'];
+                       
                 if (in_array($key, $combination)) {
                     LibHelper::exitWithError(Labels::getLabel('ERR_COMBINATION_OF_COUNTRY_STATE_AND_STATE_TYPE_ALREADY_EXIST_IN_CATEGORY', $this->siteLangId), true);
                 }

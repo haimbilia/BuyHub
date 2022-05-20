@@ -501,10 +501,10 @@ class Cart extends FatModel
 
                     $tempHoldStock = Product::tempHoldStockCount($sellerProductRow['selprod_id']);
                     $availableStock = $sellerProductRow['selprod_stock'] - $tempHoldStock;
-                    $isOutOfStock = ((int)($sellerProductRow['selprod_min_order_qty'] > $availableStock));
+                    $isOutOfMinOrderQty = ((int)($sellerProductRow['selprod_min_order_qty'] > $availableStock));
 
                     /* Has Stock */
-                    if ((!$sellerProductRow['in_stock'] && true === $this->isAnyOutOfStock) || 0 < $isOutOfStock) {
+                    if ((!$sellerProductRow['in_stock'] && true === $this->isAnyOutOfStock) || 0 < $isOutOfMinOrderQty) {
                         $this->isAnyOutOfStock = false;
                     }
                     /* Has Stock */

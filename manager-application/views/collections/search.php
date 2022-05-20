@@ -44,6 +44,10 @@ foreach ($arrListing as $sn => $row) {
                 $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['collection_id'], $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
+            case 'applicable_for':
+                $str = $this->includeTemplate('collections/layout_applicable_for.php', ['row' => $row, 'applicableTypes' => $applicableTypes], false, true);
+                $td->appendElement('plaintext', $tdAttr, $str, true);
+                break;     
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,

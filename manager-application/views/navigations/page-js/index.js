@@ -70,7 +70,7 @@
             $(".subRecordsCountJs-" + navId).text(t.subRecordsCount);
             setTimeout(() => {
                 togglePlusMinus($('.openerJs[data-record-id="' + navId + '"]')[0], 1);
-                getNavLinks(navId, nlinkId);
+                getNavLinks(navId);
             }, 500);
         });
     }
@@ -119,7 +119,7 @@
         }
         $(dv).prepend(fcom.getLoader());
 
-        var includeWrapper = (0 < $("#childrens-" + navId).length) ? 0 : 1;
+        var includeWrapper = 1 < nlinkId && (0 < $("#childrens-" + navId).length) ? 0 : 1;      
         var data = 'recordId=' + navId;
         if (0 < nlinkId) {
             data += '&nlinkId=' + nlinkId;
@@ -144,6 +144,8 @@
                 $("#childrens-" + navId).remove();
             }
             $("#parent-" + navId).append(res.html);
+            $("#parent-" + navId +" .openerJs").show();
+            
             bindSortable();
         });
     }

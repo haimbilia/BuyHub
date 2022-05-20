@@ -843,7 +843,7 @@ class ProductsController extends MyAppController
 
         $currentStock = $product['selprod_stock'] - Product::tempHoldStockCount($selprod_id);
         $this->set('currentStock', $currentStock);
-        $this->set('isOutOfStock', ((int)($product['selprod_min_order_qty'] > $currentStock)));
+        $this->set('isOutOfMinOrderQty', ((int)($product['selprod_min_order_qty'] > $currentStock)));
 
         /* Get Product Volume Discount (if any)[ */
         $this->set('volumeDiscountRows', $sellerProduct->getVolumeDiscounts());

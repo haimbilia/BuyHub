@@ -20,5 +20,8 @@ if (array_key_exists('products', $data)) {
         $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price']);
         $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice']);
         $product['ribbons'] = $selProdRibbons;
+
+        $currentStock = $product['selprod_stock'] - Product::tempHoldStockCount($product['selprod_id']);
+        $product['isOutOfMinOrderQty'] = ((int)($product['selprod_min_order_qty'] > $currentStock));
     }
 }

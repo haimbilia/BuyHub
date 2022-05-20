@@ -26,18 +26,18 @@ $vtype = $postedData['vtype'] ?? false;
 
                 $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
                 $availableStock = $product['selprod_stock'] - $tempHoldStock;
-                $isOutOfStock = ((int)($product['selprod_min_order_qty'] > $availableStock));
+                $isOutOfMinOrderQty = ((int)($product['selprod_min_order_qty'] > $availableStock));
         ?>
 
                 <div class="items">
                     <!--product tile-->
                     <div class="products">
                         <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $product,  'siteLangId' => $siteLangId], false); ?>
-                        <?php if ($product['in_stock'] == 0 || 0 < $isOutOfStock) { ?>
+                        <?php if ($product['in_stock'] == 0 || 0 < $isOutOfMinOrderQty) { ?>
                             <span class="tag--soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
                         <?php  } ?>
                         <div class="products-body">
-                            <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $product,  'siteLangId' => $siteLangId, 'showActionBtns' => ($showActionBtns && false === $isNotServiceable), 'isWishList' => $isWishList, 'selProdRibbons' => $selProdRibbons, 'isOutOfStock' => $isOutOfStock), false); ?>
+                            <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $product,  'siteLangId' => $siteLangId, 'showActionBtns' => ($showActionBtns && false === $isNotServiceable), 'isWishList' => $isWishList, 'selProdRibbons' => $selProdRibbons, 'isOutOfMinOrderQty' => $isOutOfMinOrderQty), false); ?>
                             <?php if ($isNotServiceable) { ?>
                                 <div class="not-available">
                                     <svg class="svg">

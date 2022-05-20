@@ -331,8 +331,8 @@ class CartController extends MyAppController
 
                 $tempHoldStock = Product::tempHoldStockCount($selprod_id);
                 $availableStock = $sellerProductRow['selprod_stock'] - $tempHoldStock;
-                $isOutOfStock = ((int)($minQty > $availableStock));
-                if (0 < $isOutOfStock) {
+                $isOutOfMinOrderQty = ((int)($minQty > $availableStock));
+                if (0 < $isOutOfMinOrderQty) {
                     $hasError = true;
                     continue;
                 }
@@ -439,8 +439,8 @@ class CartController extends MyAppController
 
             $tempHoldStock = Product::tempHoldStockCount($sellerProductRow['selprod_id']);
             $availableStock = $sellerProductRow['selprod_stock'] - $tempHoldStock;
-            $isOutOfStock = ((int)($sellerProductRow['selprod_min_order_qty'] > $availableStock));
-            if (0 < $isOutOfStock) {
+            $isOutOfMinOrderQty = ((int)($sellerProductRow['selprod_min_order_qty'] > $availableStock));
+            if (0 < $isOutOfMinOrderQty) {
                 $productAdd = false;
                 $message = Labels::getLabel('MSG_MIN_ORDER_QUANTITY_OF_{PRODUCT-NAME}_IS_HIGHER_THAN_AVAILABLE_STOCK._CANNOT_BE_ADDED_TO_CART', $this->siteLangId);
                 $message = CommonHelper::replaceStringData($message, ['{PRODUCT-NAME}' => FatUtility::decodeHtmlEntities($sellerProductRow['product_name'])]);

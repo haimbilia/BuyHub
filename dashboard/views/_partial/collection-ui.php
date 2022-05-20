@@ -13,10 +13,10 @@ if (!isset($showAddToFavorite)) {
 }
 
 
-if (!isset($isOutOfStock)) {
+if (!isset($isOutOfMinOrderQty)) {
     $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
     $availableStock = $product['selprod_stock'] - $tempHoldStock;
-    $isOutOfStock = ((int)($product['selprod_min_order_qty'] > $availableStock));
+    $isOutOfMinOrderQty = ((int)($product['selprod_min_order_qty'] > $availableStock));
 }
 
 if ($showAddToFavorite) {
@@ -30,7 +30,7 @@ if ($showAddToFavorite) {
 
     <?php if (true ==  $showActionBtns) { ?>
         <ul class="actions actions-wishlist">
-            <?php if ($product['in_stock'] &&  time() >= strtotime($product['selprod_available_from']) && 0 == $isOutOfStock) { ?>
+            <?php if ($product['in_stock'] &&  time() >= strtotime($product['selprod_available_from']) && 0 == $isOutOfMinOrderQty) { ?>
                 <li>
                     <label class="checkbox">
                         <input type="checkbox" name='selprod_id[]' class="selectItem--js" value="<?php echo $product['selprod_id']; ?>" />
