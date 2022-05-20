@@ -1151,6 +1151,7 @@ $(function () {
         fcom.displayProcessing();
         $.ykmodal(fcom.getLoader(), true);
         fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function (t) {
+            fcom.closeProcessing();
             $.ykmodal(t.html, true);
             fcom.removeLoader();
         });
