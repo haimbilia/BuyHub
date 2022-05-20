@@ -85,7 +85,7 @@ class Product extends MyAppModel
     public const WARRANTY_TYPE_DAY = 0;
     public const WARRANTY_TYPE_MONTH = 1;
     public const WARRANTY_TYPE_YEAR = 2;
-    
+
     public const VIEW_MORE_SELLER_COUNT = 2;
 
     public function __construct($id = 0)
@@ -1545,9 +1545,7 @@ class Product extends MyAppModel
             $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
             $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', 'spr.spreview_product_id', "ROUND(AVG(sprating_rating),2) as prod_rating", "count(spreview_id) as totReviews"));
             $selProdRviewSubQuery = $selProdReviewObj->getQuery();
-            /*$srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_selprod_id = selprod_id', 'sq_sprating');*/
             $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
-            //$srch->addFld('coalesce(prod_rating,0) prod_rating');
             $srch->addMultipleFields(['COALESCE(prod_rating,0) prod_rating', 'COALESCE(totReviews,0) totReviews']);
         }
 
@@ -1661,7 +1659,7 @@ END,   special_price_found ) as special_price_found'
             $sortBy = $criteria['sortBy'];
         }
 
-        $sortOrder = 'asc';
+        /*$sortOrder = 'asc';
         if (array_key_exists('sortOrder', $criteria)) {
             $sortOrder = $criteria['sortOrder'];
         }
@@ -1706,7 +1704,7 @@ END,   special_price_found ) as special_price_found'
                     $srch->addOrder('keyword_relevancy', 'DESC');
                     break;
             }
-        }
+        } */
 
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         // $srch->addCondition('selprod_available_from', '>=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
@@ -1714,11 +1712,78 @@ END,   special_price_found ) as special_price_found'
         $srch->addGroupBy('product_id');
         if (!empty($keyword)) {
             $srch->addGroupBy('keywordmatched');
-            $srch->addOrder('keywordmatched', 'desc');
+            // $srch->addOrder('keywordmatched', 'desc');
         }
-        
+
         return $srch;
     }
+
+    public static function setOrderOnListingObj(&$srch, &$get = [])
+    {
+        $srch->doNotCalculateRecords();
+        $sortBy = 'popularity';
+        if (array_key_exists('keyword', $get) && !empty($get['keyword'])) {
+            $sortBy = 'keyword_relevancy';
+        }
+
+        if (array_key_exists('sortBy', $get)) {
+            $sortBy = $get['sortBy'];
+        }
+
+        $sortOrder = 'asc';
+        if (array_key_exists('sortOrder', $get)) {
+            $sortOrder = $get['sortOrder'];
+        }
+
+        if (!empty($sortBy)) {
+            $sortByArr = explode("_", $sortBy);
+            $sortBy = isset($sortByArr[0]) ? $sortByArr[0] : $sortBy;
+            $sortOrder = isset($sortByArr[1]) ? $sortByArr[1] : $sortOrder;
+
+            if (!in_array($sortOrder, array('asc', 'desc'))) {
+                $sortOrder = 'asc';
+            }
+
+            if (!in_array($sortBy, array('keyword', 'price', 'popularity', 'rating', 'discounted'))) {
+                $sortOrder = 'keyword_relevancy';
+            }
+
+            switch ($sortBy) {
+                case 'keyword':
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
+                        $srch->addOrder('availableInLocation', 'DESC');
+                    }
+                    $srch->addOrder('keyword_relevancy', 'DESC');
+                    break;
+                case 'price':
+                    $srch->addOrder('theprice', $sortOrder);
+                    break;
+                case 'popularity':
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
+                        $srch->addOrder('availableInLocation', 'DESC');
+                    }
+                    $srch->addOrder('selprod_sold_count', $sortOrder);
+                    break;
+                case 'discounted':
+                    $srch->addFld('ROUND(((selprod_price - theprice)*100)/selprod_price) as discountedValue');
+                    $srch->addOrder('discountedValue', 'DESC');
+                    break;
+                case 'rating':
+                    $srch->addOrder('prod_rating', $sortOrder);
+                    break;
+                default:
+                    $srch->addOrder('keyword_relevancy', 'DESC');
+                    break;
+            }
+        }
+
+        if (array_key_exists('keyword', $get) && !empty($get['keyword'])) {
+            $srch->addOrder('keywordmatched', 'desc');
+        }
+
+        return $srch;
+    }
+
     public static function getActiveCount($sellerId, $prodId = 0)
     {
         if (0 > FatUtility::int($sellerId)) {
