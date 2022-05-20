@@ -778,6 +778,7 @@ Updates/Fixes :
     => 064461 - The buyer is able to place the return request by uploading the invalid files in the upload media field.
     => 064459 - Buyer: FAQ Category collection is not displaying at the front-end.
     => 064466 - Suggestion: Records should be displayed in listing according to the display order. 
+    => 064465 - Admin: Accordion icon is not displaying when the user adds new links under 'Quick links' section
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

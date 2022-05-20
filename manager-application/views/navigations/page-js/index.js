@@ -119,9 +119,7 @@
         }
         $(dv).prepend(fcom.getLoader());
 
-        var includeWrapper = 1 < nlinkId && (0 < $("#childrens-" + navId).length) ? 0 : 1;
-        console.log(1 < nlinkId);
-
+        var includeWrapper = 1 < nlinkId && (0 < $("#childrens-" + navId).length) ? 0 : 1;      
         var data = 'recordId=' + navId;
         if (0 < nlinkId) {
             data += '&nlinkId=' + nlinkId;
@@ -146,6 +144,8 @@
                 $("#childrens-" + navId).remove();
             }
             $("#parent-" + navId).append(res.html);
+            $("#parent-" + navId +" .openerJs").show();
+            
             bindSortable();
         });
     }
