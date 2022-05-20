@@ -23,6 +23,9 @@ foreach ($products as $key => &$product) {
         }
     }
     $product['optionsTitle'] = rtrim($optionTitle, ', ');
+
+    $currentStock = $product['selprod_stock'] - Product::tempHoldStockCount($product['selprod_id']);
+    $product['isOutOfMinOrderQty'] = ((int)($product['selprod_min_order_qty'] > $currentStock));
 }
 
 $data = array(

@@ -126,14 +126,14 @@ class CheckoutController extends MyAppController
                         } else {
                             $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
                             $availableStock = $product['selprod_stock'] - $tempHoldStock;
-                            $isOutOfStock = ((int)($product['selprod_min_order_qty'] > $availableStock));
+                            $isOutOfMinOrderQty = ((int)($product['selprod_min_order_qty'] > $availableStock));
 
                             $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
-                            if ($availableStock < ($product['quantity'] - $userTempHoldStock) || 0 < $isOutOfStock) {
+                            if ($availableStock < ($product['quantity'] - $userTempHoldStock) || 0 < $isOutOfMinOrderQty) {
                                 $key = false;
                                 $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
                                 $msg = Labels::getLabel('ERR_{PRODUCT-NAME}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId);
-                                if (0 < $isOutOfStock) {
+                                if (0 < $isOutOfMinOrderQty) {
                                     $msg = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_MIN_PURCHASE_QUANTITY_IS_HIGHER_THAN_AVAILABLE_STOCK_LIMIT._SO_UNABLE_TO_PROCEED_FURTHER', $this->siteLangId);
                                 }
                                 $this->errMessage = CommonHelper::replaceStringData($msg, ['{PRODUCT-NAME}' => $productName]);
