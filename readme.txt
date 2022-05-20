@@ -779,7 +779,7 @@ Updates/Fixes :
     => 064459 - Buyer: FAQ Category collection is not displaying at the front-end.
     => 064466 - Suggestion: Records should be displayed in listing according to the display order. 
     => 064465 - Admin: Accordion icon is not displaying when the user adds new links under 'Quick links' section
-    
+    => 064469 - The previously selected zones do not appear when the admin tries to edit any combined tax rule.
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
