@@ -773,7 +773,11 @@ Updates/Fixes :
     => 064410 - Admin: Getting multiple issues under category collection section
     => 064409 - Admin: CMS: There should be a successful message after deletion of the records under collection section
     => 064432 - Suggestion: Admin: Disabled records should be shown greyed out
-
+    => 064451 - Admin >> CMS: 'Update other languages data' is not working under FAQs section.
+    => 064457 - The order amount does not get credited to the buyer's wallet on order cancellation.
+    => 064461 - The buyer is able to place the return request by uploading the invalid files in the upload media field.
+    => 064459 - Buyer: FAQ Category collection is not displaying at the front-end.
+    
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
