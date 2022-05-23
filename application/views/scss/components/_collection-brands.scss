@@ -1,16 +1,18 @@
 .brand-layout-1 {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    //grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-auto-flow: column;
     grid-gap: 1px;
-    justify-content: center;
+    //justify-content: center;
     flex: 0 0 100%;
 
     @include media-breakpoint-up(lg) {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        //grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
         grid-gap: 3rem;
     }
 
     .brand {
+        aspect-ratio: 16/9;
         &-logo {
             // width: 160px;
             // height: 90px;
@@ -27,6 +29,8 @@
             img {
                 max-width: 100px;
                 margin: auto;
+                object-fit: cover;
+                width: 100%;
                 &[data-ratio="16:9"] {
                     max-width: 120px;
                 }

@@ -18,6 +18,7 @@
         }
     }
     &-image {
+        aspect-ratio: 1/1;
         margin-bottom: 1rem;
         position: relative;
         @include media-breakpoint-up(lg) {
@@ -26,6 +27,7 @@
                 display: inline-block;
             }
         }
+
         &:before {
             @include media-breakpoint-up(lg) {
                 content: "";
@@ -41,13 +43,16 @@
         }
     }
     &-user {
+        object-fit: cover;
         margin: auto;
         @include media-breakpoint-down(lg) {
             border-radius: 50%;
+            min-width: 100px;
             width: 100px;
             height: 100px;
         }
         @include media-breakpoint-up(lg) {
+            min-width: 17.5rem;
             width: 17.5rem;
             height: 17.5rem;
             position: relative;
@@ -56,6 +61,7 @@
         }
     }
     &-data {
+        overflow: hidden;
         flex: 1;
         font-size: 1.3rem;
         @include media-breakpoint-up(lg) {
@@ -67,6 +73,7 @@
     &-text {
         //max-width: 512px;
         p {
+            color: $txt-gray;
             font-weight: $font-weight-light;
         }
     }

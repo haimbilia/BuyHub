@@ -1604,3 +1604,19 @@ mark,
     padding: 10px;
     display: flex;
 }
+.card-toggle {
+    .dropdown-toggle-custom-arrow {
+        position: relative;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: none;
+    }
+    .card-toolbar {
+        @include media-breakpoint-up(md) {
+            margin-#{$start-direction}: auto;
+        }
+    }
+}

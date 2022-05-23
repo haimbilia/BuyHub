@@ -35,7 +35,8 @@
         height: auto;
     }
     .dropdown-toggle-custom-arrow {
-        #{$end-direction}: 1rem;
+        position: static;
+        //#{$end-direction}: 1rem;
     }
 }
 
