@@ -5,9 +5,9 @@ class GoogleShoppingFeedSettingsController extends AdvertisementFeedSettingsCont
     public static function form($langId)
     {
         $frm = new Form('frmGoogleFeed');
+        $frm->addRequiredField(Labels::getLabel('FRM_API_KEY', $langId), 'developer_key');
         $frm->addRequiredField(Labels::getLabel('FRM_CLIENT_ID', $langId), 'client_id');
         $frm->addRequiredField(Labels::getLabel('FRM_CLIENT_SECRET', $langId), 'client_secret');
-        $frm->addRequiredField(Labels::getLabel('FRM_DEVELOPER_KEY', $langId), 'developer_key');
         /* 
         $channel = [
             'local' => Labels::getLabel('LBL_LOCAL', $langId),
