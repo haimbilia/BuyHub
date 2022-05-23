@@ -27,7 +27,7 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                         $displayProductNotAvailableLable = true;
                     }
 
-                    include('product-layout-4-list.php');
+                    include('product-layout-3-list.php');
                     $gridKey++;
                 } ?>
             </div>
