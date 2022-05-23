@@ -795,6 +795,15 @@ class ImageDimension extends FatUtility
             ];
         }
 
+        if ($layout == Collections::TYPE_BANNER_LAYOUT3) {
+            $arr =  [
+                self::VIEW_DESKTOP => [self::WIDTH => 800, self::HEIGHT => 600],
+                self::VIEW_MOBILE => [self::WIDTH => 800, self::HEIGHT => 600],
+                self::VIEW_TABLET => [self::WIDTH => 800, self::HEIGHT => 600],
+                self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 150],
+            ];
+        }
+
         if (empty($layout)) {
             $arr =  [
                 self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 666],
