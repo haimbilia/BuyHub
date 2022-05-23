@@ -274,7 +274,7 @@ if (0 < $recordId) {
                             <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
                         </div>
                         <div class="collapse" id="digital-file-block">
-                            <div class="card-body">
+                            <div class="card-table">
                                 <div id="digitalFilesDefaultListJs">
                                 </div>
                             </div>
@@ -283,13 +283,13 @@ if (0 < $recordId) {
                             <div class="card-foot">
                                 <div class="row justify-content-end">
                                     <div class="col-auto">
-                                        <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);">
+                                        <button class="btn btn-icon btn-outline-gray btn-sm" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);">
                                             <svg class="svg btn-icon-start" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                                                 </use>
                                             </svg>
                                             <span><?php echo Labels::getLabel('BTN_DIGITAL_FILES', $langId); ?></span>
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -304,7 +304,7 @@ if (0 < $recordId) {
                             <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
                         </div>
                         <div class="collapse" id="digital-link-block">
-                            <div class="card-body">
+                            <div class="card-table">
                                 <div id="digitalLinksDefaultListJs">
                                 </div>
                             </div>
@@ -313,13 +313,13 @@ if (0 < $recordId) {
                             <div class="card-foot">
                                 <div class="row justify-content-end">
                                     <div class="col-auto">
-                                        <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
+                                        <button class="btn btn-icon btn-outline-gray btn-sm" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
                                             <svg class="svg btn-icon-start" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                                                 </use>
                                             </svg>
                                             <span><?php echo Labels::getLabel('BTN_DIGITAL_LINKS', $langId); ?></span>
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
