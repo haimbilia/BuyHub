@@ -71,7 +71,7 @@ class CategoryController extends MyAppController
             }
         }
 
-        $pageSize = 10;
+        $pageSize = 1;
         if (array_key_exists('pageSize', $get)) {
             $pageSize = FatUtility::int($get['pageSize']);
             if (0 >= $pageSize) {
@@ -87,7 +87,17 @@ class CategoryController extends MyAppController
         $get['pageSize'] = $pageSize;
 
         $srch = Product::getListingObj($get, $this->siteLangId, $userId);
-
+        $flds = array(
+            'prodcat_code', 'product_id', 'prodcat_id', 'COALESCE(product_name, product_identifier) as product_name', 'product_model',  'product_updated_on', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+            'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
+            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
+            'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
+            'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
+            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
+        );
+        $removeFlds = array_diff($flds, ['1']);
+        $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $removeFlds);        
+        Product::setOrderOnListingObj($srch, $get);
         $srch->setPageNumber($page);
         if ($pageSize) {
             $srch->setPageSize($pageSize);
@@ -106,12 +116,12 @@ class CategoryController extends MyAppController
             'tLeftRibbons' => $tLeftRibbons,
             'tRightRibbons' => $tRightRibbons,
             /* 'moreSellersProductsArr' => $moreSellersArr,*/
-            'page' => $page,
-            'pageSize' => $pageSize,
+            'page' => $this->pageData['page'],
+            'pageSize' => $this->pageData['pageSize'],
+            'pageCount' => $this->pageData['pageCount'],
+            'recordCount' => $this->pageData['recordCount'],
             'categoryId' => $categoryId,
-            'pageCount' => $srch->pages(),
             'postedData' => $get,
-            'recordCount' => $srch->recordCount(),
             'pageTitle' => $category['prodcat_name'],
             'canonicalUrl' => UrlHelper::generateFullUrl('Category', 'view', array($categoryId)),
             'productSearchPageType' => SavedSearchProduct::PAGE_CATEGORY,
@@ -124,13 +134,12 @@ class CategoryController extends MyAppController
 
         if (FatUtility::isAjaxCall()) {
             $this->set('products', $products);
-            $this->set('page', $page);
-            /*$this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);*/
+            /* $this->set('page', $page);           
             $this->set('pageCount', $srch->pages());
-            $this->set('postedData', $get);
             $this->set('recordCount', $srch->recordCount());
+            $this->set('pageSize', $data['pageSize']); */
+            $this->set('postedData', $get);
             $this->set('siteLangId', $this->siteLangId);
-            $this->set('pageSize', $data['pageSize']);
             $this->set('pageSizeArr', $data['pageSizeArr']);
             $this->set('tRightRibbons', $tRightRibbons);
             $this->set('tLeftRibbons', $tLeftRibbons);

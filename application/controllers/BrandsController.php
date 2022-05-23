@@ -9,7 +9,7 @@ class BrandsController extends MyAppController
 
     public function index()
     {
-        $brandSrch = Brand::getListingObj($this->siteLangId, array( 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'), true);
+        $brandSrch = Brand::getListingObj($this->siteLangId, array('brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'), true);
         $brandSrch->doNotCalculateRecords();
         $brandSrch->doNotLimitRecords();
         $brandSrch->addOrder('brand_name', 'asc');
@@ -33,9 +33,11 @@ class BrandsController extends MyAppController
             $productCustomSrchObj->addGroupBy('selprod_id');
 
             $productCustomSrchObj->addMultipleFields(
-                array('product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
-                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'ifnull(sq_sprating.prod_rating,0) prod_rating ', 'ifnull(sq_sprating.totReviews,0) totReviews', 'selprod_sold_count', 'selprod_min_order_qty')
+                array(
+                    'product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                    'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
+                    'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'ifnull(sq_sprating.prod_rating,0) prod_rating ', 'ifnull(sq_sprating.totReviews,0) totReviews', 'selprod_sold_count', 'selprod_min_order_qty'
+                )
             );
             if (UserAuthentication::isUserLogged()) {
                 $productCustomSrchObj->addFld(array('IF(ufp_id > 0, 1, 0) as isfavorite', 'IFNULL(ufp_id, 0) as ufp_id'));
@@ -83,7 +85,7 @@ class BrandsController extends MyAppController
 
         $db = FatApp::getDb();
 
-        $brandSrch = Brand::getListingObj($this->siteLangId, array( 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'), true);
+        $brandSrch = Brand::getListingObj($this->siteLangId, array('brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'), true);
         $brandSrch->addCondition('brand_id', '=', $brandId);
         $brandSrch->addOrder('brand_name', 'asc');
         $brandSrch->doNotCalculateRecords();
@@ -123,7 +125,7 @@ class BrandsController extends MyAppController
             }
         }
 
-        $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
+        $pageSize = 1;
         if (array_key_exists('pageSize', $get)) {
             $pageSize = FatUtility::int($get['pageSize']);
             if (0 >= $pageSize) {
@@ -131,7 +133,26 @@ class BrandsController extends MyAppController
             }
         }
 
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
+        }
+
+        $get['page'] = $page;
+        $get['pageSize'] = $pageSize;
+
         $srch = Product::getListingObj($get, $this->siteLangId, $userId);
+        $flds = array(
+            'prodcat_code', 'product_id', 'prodcat_id', 'COALESCE(product_name, product_identifier) as product_name', 'product_model',  'product_updated_on', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+            'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
+            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
+            'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
+            'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
+            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
+        );
+        $removeFlds = array_diff($flds, ['1']);
+        $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $removeFlds);
+        Product::setOrderOnListingObj($srch, $get);
+
         $srch->setPageNumber($page);
         if ($pageSize) {
             $srch->setPageSize($pageSize);
@@ -140,25 +161,16 @@ class BrandsController extends MyAppController
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs);
-        /*
-        $moreSellersArr = [];
-        if($get['vtype'] == 'map'){            
-            if(0 < count($products)){           
-                $selprodCodes = array_column($products, 'selprod_code');               
-                $moreSellersArr = Product::getMoreSeller($selprodCodes, $this->siteLangId);
-            }
-        }
-        */
 
         $data = array(
             'frmProductSearch' => $frm,
             'products' => $products,
             /*'moreSellersProductsArr' => $moreSellersArr,*/
-            'page' => $page,
-            'pageSize' => $pageSize,
-            'pageCount' => $srch->pages(),
+            'page' => $this->pageData['page'],
+            'pageSize' => $this->pageData['pageSize'],
+            'pageCount' => $this->pageData['pageCount'],
+            'recordCount' => $this->pageData['recordCount'],
             'postedData' => $get,
-            'recordCount' => $srch->recordCount(),
             'pageTitle' => $brand['brand_name'],
             'canonicalUrl' => UrlHelper::generateFullUrl('Brands', 'view', array($brandId)),
             'productSearchPageType' => SavedSearchProduct::PAGE_BRAND,
@@ -169,15 +181,11 @@ class BrandsController extends MyAppController
             'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId)
         );
 
-        if (FatUtility::isAjaxCall()) {       
+        if (FatUtility::isAjaxCall()) {
             $this->set('products', $products);
-           /* $this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);*/
-            $this->set('page', $page);
-            $this->set('pageCount', $srch->pages());
-            $this->set('postedData', $get);
-            $this->set('recordCount', $srch->recordCount());
+            /* $this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);*/
             $this->set('siteLangId', $this->siteLangId);
-            $this->set('pageSize', $data['pageSize']);
+            $this->set('postedData', $get);
             $this->set('pageSizeArr', $data['pageSizeArr']);
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
@@ -209,17 +217,17 @@ class BrandsController extends MyAppController
             $cond->attachCondition('brand_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
         $srch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);
-       
-        if($fetchAllRecords == 1){
+
+        if ($fetchAllRecords == 1) {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
-        }else{
+        } else {
             $srch->setPageNumber($page);
             $srch->setPageSize($pagesize);
         }
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
-        $brands = $db->fetchAll($rs, 'brand_id');        
+        $brands = $db->fetchAll($rs, 'brand_id');
         $json = array(
             'pageCount' => $srch->pages()
         );
@@ -267,29 +275,27 @@ class BrandsController extends MyAppController
         $nodes = array();
         $parameters = FatApp::getParameters();
         switch ($action) {
-        case 'view':
-            $nodes[] = array('title' => Labels::getLabel('MSG_BRANDS', $this->siteLangId), 'href' => UrlHelper::generateUrl('brands'));
-            if (isset($parameters[0]) && $parameters[0] > 0) {
-                $brandId = FatUtility::int($parameters[0]);
-                if ($brandId > 0) {
-                    $brandSrch = Brand::getListingObj($this->siteLangId, array( 'IFNULL(brand_name, brand_identifier) as brand_name', ));
-                    $brandSrch->doNotCalculateRecords();
-                    $brandSrch->setPageSize(1);
-                    $brandSrch->addCondition('brand_id', '=', $brandId);
-                    $brandRs = $brandSrch->getResultSet();
-                    $brandsArr = FatApp::getDb()->fetch($brandRs);
-                    $nodes[] = array('title' => $brandsArr['brand_name']);
+            case 'view':
+                $nodes[] = array('title' => Labels::getLabel('MSG_BRANDS', $this->siteLangId), 'href' => UrlHelper::generateUrl('brands'));
+                if (isset($parameters[0]) && $parameters[0] > 0) {
+                    $brandId = FatUtility::int($parameters[0]);
+                    if ($brandId > 0) {
+                        $brandSrch = Brand::getListingObj($this->siteLangId, array('IFNULL(brand_name, brand_identifier) as brand_name',));
+                        $brandSrch->doNotCalculateRecords();
+                        $brandSrch->setPageSize(1);
+                        $brandSrch->addCondition('brand_id', '=', $brandId);
+                        $brandRs = $brandSrch->getResultSet();
+                        $brandsArr = FatApp::getDb()->fetch($brandRs);
+                        $nodes[] = array('title' => $brandsArr['brand_name']);
+                    }
                 }
-            }
 
-            break;
+                break;
 
-        case 'index':
-            $nodes[] = array('title' => Labels::getLabel('MSG_Brands', $this->siteLangId));
+            case 'index':
+                $nodes[] = array('title' => Labels::getLabel('MSG_Brands', $this->siteLangId));
 
-            break;
-
-
+                break;
         }
         return $nodes;
     }

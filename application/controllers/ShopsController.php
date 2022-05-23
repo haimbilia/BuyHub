@@ -33,7 +33,7 @@ class ShopsController extends MyAppController
         $data = FatApp::getPostedData();
         $page = (empty($data['page']) || FatUtility::int($data['page']) <= 0) ? 1 : FatUtility::int($data['page']);
         $pageSize = applicationConstants::getFrontEndPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-        
+
         $searchForm = $this->getShopSearchForm($this->siteLangId);
         $post = $searchForm->getFormDataFromArray($data);
         $post['page'] = $page;
@@ -246,7 +246,7 @@ class ShopsController extends MyAppController
                 $data['shop']['rating'] = SelProdRating::getSellerRating($data['shop']['shop_user_id']);
             }
             $data['shop']['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', array($data['shop']['shop_id'], $this->siteLangId));
-            $data['shop']['shop_banner'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopBanner', array($data['shop']['shop_id'], $this->siteLangId, ImageDimension::VIEW_MOBILE , 0, applicationConstants::SCREEN_MOBILE)), CONF_IMG_CACHE_TIME, '.jpg');
+            $data['shop']['shop_banner'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopBanner', array($data['shop']['shop_id'], $this->siteLangId, ImageDimension::VIEW_MOBILE, 0, applicationConstants::SCREEN_MOBILE)), CONF_IMG_CACHE_TIME, '.jpg');
         }
 
         /* Shop and SelProd Badge */
@@ -1083,7 +1083,7 @@ class ShopsController extends MyAppController
             }
         }
 
-        $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
+        $pageSize = 1;
         if (array_key_exists('pageSize', $get)) {
             $pageSize = FatUtility::int($get['pageSize']);
             if (0 >= $pageSize) {
@@ -1091,7 +1091,25 @@ class ShopsController extends MyAppController
             }
         }
 
+        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
+        }
+
+        $get['page'] = $page;
+        $get['pageSize'] = $pageSize;
+
         $srch = Product::getListingObj($get, $this->siteLangId, $userId);
+        $flds = array(
+            'prodcat_code', 'product_id', 'prodcat_id', 'COALESCE(product_name, product_identifier) as product_name', 'product_model',  'product_updated_on', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+            'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
+            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
+            'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
+            'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
+            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
+        );
+        $removeFlds = array_diff($flds, ['1']);
+        $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $removeFlds);
+        Product::setOrderOnListingObj($srch, $get);
 
         $srch->setPageNumber($page);
         if ($pageSize) {
@@ -1105,12 +1123,12 @@ class ShopsController extends MyAppController
         $data = array(
             'products' => $products,
             'shop' => $shop,
-            'page' => $page,
-            'pageSize' => $pageSize,
+            'page' => $this->pageData['page'],
+            'pageSize' => $this->pageData['pageSize'],
+            'pageCount' => $this->pageData['pageCount'],
+            'recordCount' => $this->pageData['recordCount'],
             'shopId' => $shop_id,
-            'pageCount' => $srch->pages(),
             'postedData' => $get,
-            'recordCount' => $srch->recordCount(),
             'siteLangId' => $this->siteLangId
         );
         return $data;
