@@ -161,7 +161,7 @@ class BadgeLinkConditionsController extends SellerBaseController
             $srch->joinSellerProducts($this->siteLangId);
             $srch->addFld(['selprod_id', 'selprod_title']);
             $srch->addCondition('selprod_user_id', '=', UserAuthentication::getLoggedUserId());
-            $srch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
+            $srch->addCondition('ratingtype_type', '=', RatingType::TYPE_PRODUCT);
             $srch->addHaving('rating', 'BETWEEN', [$condition['blinkcond_condition_from'], $condition['blinkcond_condition_to']]);
 
             if (!empty($keyword)) {

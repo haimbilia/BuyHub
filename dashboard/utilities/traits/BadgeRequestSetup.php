@@ -42,13 +42,14 @@ trait BadgeRequestSetup
 
         if (0 < $badgeReqId || 0 < $badgeId) {
             $frm->addHiddenField('', 'badge_id', $badgeId);
-            $frm->addDateTimeField(Labels::getLabel('FRM_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
-            $frm->addDateTimeField(Labels::getLabel('FRM_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
         } else {
             $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->siteLangId);
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELECT_BADGE', $this->siteLangId), 'badge_id', $approvalRequiredBadges, '', [], '');
             $fld->requirements()->setRequired(true);
         }
+
+        $frm->addDateTimeField(Labels::getLabel('FRM_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
+        $frm->addDateTimeField(Labels::getLabel('FRM_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
 
         if (0 < $badgeReqId) {
             $frm->addHiddenField('', 'breq_record_type',);
@@ -133,38 +134,34 @@ trait BadgeRequestSetup
         }
 
         /* Badge Condition Setup if not added. */
-        if (1 > $badgeLinkCondId) {
-            if (1 > $recordType) {
-                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_RECORD_TYPE', $this->siteLangId));
-            }
-
-            $fromDate = FatApp::getPostedData('blinkcond_from_date', FatUtility::VAR_STRING, '');
-            $toDate = FatApp::getPostedData('blinkcond_to_date', FatUtility::VAR_STRING, '');
-
-            if (!empty($fromDate) && !empty($toDate) && $fromDate > $toDate) {
-                FatUtility::dieJsonError(Labels::getLabel('ERR_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', $this->siteLangId));
-            }
-
-            if (false === BadgeLinkCondition::isUnique($badgeId, $sellerId, $recordType)) {
-                FatUtility::dieJsonError(Labels::getLabel('ERR_REQUEST_FOR_THIS_BADGE_ALREADY_APPROVED/_PENDING', $this->siteLangId));
-            }
-
-            $data = [
-                'blinkcond_badge_id' => $badgeId,
-                'blinkcond_record_type' => $recordType,
-                'blinkcond_from_date' => $fromDate,
-                'blinkcond_to_date' => $toDate,
-                'blinkcond_user_id' => $sellerId,
-            ];
-            $record = new BadgeLinkCondition($badgeLinkCondId);
-            $record->assignValues($data);
-            if (!$record->save()) {
-                FatUtility::dieJsonError($record->getError());
-            }
-
-            $badgeLinkCondId = $record->getMainTableRecordId();
-            $post['breq_blinkcond_id'] = $badgeLinkCondId;
+        if (1 > $recordType) {
+            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_RECORD_TYPE', $this->siteLangId));
         }
+
+        $fromDate = FatApp::getPostedData('blinkcond_from_date', FatUtility::VAR_STRING, '');
+        $toDate = FatApp::getPostedData('blinkcond_to_date', FatUtility::VAR_STRING, '');
+
+        if (!empty($fromDate) && !empty($toDate) && $fromDate > $toDate) {
+            FatUtility::dieJsonError(Labels::getLabel('ERR_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', $this->siteLangId));
+        }
+
+        $data = [
+            'blinkcond_badge_id' => $badgeId,
+            'blinkcond_record_type' => $recordType,
+            'blinkcond_from_date' => $fromDate,
+            'blinkcond_to_date' => $toDate,
+            'blinkcond_user_id' => $sellerId,
+        ];
+
+        $record = new BadgeLinkCondition($badgeLinkCondId);
+        $record->assignValues($data);
+        if (!$record->save()) {
+            FatUtility::dieJsonError($record->getError());
+        }
+
+        $badgeLinkCondId = $record->getMainTableRecordId();
+        $post['breq_blinkcond_id'] = $badgeLinkCondId;
+
         /* Badge Condition Setup if added. */
         $post['breq_requested_on'] = date('Y-m-d H:i:s');
         $post['breq_user_id'] = UserAuthentication::getLoggedUserId();

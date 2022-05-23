@@ -1363,7 +1363,7 @@ class SellerProduct extends MyAppModel
     {
         $avgRatingSrch = self::rateObj();
         $avgRatingSrch->addCondition('spreview_selprod_id', '=', 'mysql_func_' . $recordId, 'AND', true);
-        $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
+        $avgRatingSrch->addCondition('ratingtype_type', '=', RatingType::TYPE_PRODUCT);
         $avgRatingData = (array) FatApp::getDb()->fetch($avgRatingSrch->getResultSet());
         if (empty($avgRatingData)) {
             return 0;
@@ -1381,7 +1381,7 @@ class SellerProduct extends MyAppModel
     {
         $avgRatingSrch = self::rateObj();
         $avgRatingSrch->addCondition('spreview_product_id', '=', 'mysql_func_' . $recordId, 'AND', true);
-        $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', 'mysql_func_' . RatingType::RATING_PRODUCT, 'AND', true);
+        $avgRatingSrch->addCondition('ratingtype_type', '=', 'mysql_func_' . RatingType::TYPE_PRODUCT, 'AND', true);
         $avgRatingData = (array) FatApp::getDb()->fetch($avgRatingSrch->getResultSet());
         if (empty($avgRatingData)) {
             return 0;
@@ -1399,7 +1399,7 @@ class SellerProduct extends MyAppModel
     {
         $avgRatingSrch = self::rateObj();
         $avgRatingSrch->addCondition('spreview_seller_user_id', '=', 'mysql_func_' . $recordId, 'AND', true);
-        $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', 'mysql_func_' . RatingType::RATING_SHOP, true);
+        $avgRatingSrch->addCondition('ratingtype_type', '=', 'mysql_func_' . RatingType::TYPE_SHOP, true);
         $avgRatingData = (array) FatApp::getDb()->fetch($avgRatingSrch->getResultSet());
         if (empty($avgRatingData)) {
             return 0;

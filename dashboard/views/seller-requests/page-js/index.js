@@ -432,8 +432,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
 
     backToListing = function () {
         searchBadgeRequests();
-        $('.editRecord--js').html("");
-        $('.pagebody--js').fadeIn();
+        $.ykmodal.close();
     }
 
     setupBadgeReq = function (frm) {
