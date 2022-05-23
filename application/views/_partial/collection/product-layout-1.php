@@ -15,7 +15,7 @@
                     </div>
                 </div>
             </div>
-            <div class="product-listing js-carousel" id="product-listing-1" data-slides="4,4,3,2" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class=" product-layout-1 product-listing js-carousel" id="product-listing-1" data-slides="4,4,3,2" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tLeftRibbons = $collection['tLeftRibbons'];
                 $tRightRibbons = $collection['tRightRibbons'];

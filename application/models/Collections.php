@@ -30,7 +30,6 @@ class Collections extends MyAppModel
     public const TYPE_PRODUCT_LAYOUT1 = 1;
     public const TYPE_PRODUCT_LAYOUT2 = 2;
     public const TYPE_PRODUCT_LAYOUT3 = 3;
-    public const TYPE_PRODUCT_LAYOUT4 = 19;
     public const TYPE_CATEGORY_LAYOUT1 = 4;
     public const TYPE_CATEGORY_LAYOUT2 = 5;
     public const TYPE_CATEGORY_LAYOUT3 = 20;
@@ -52,8 +51,7 @@ class Collections extends MyAppModel
 
     public const LIMIT_PRODUCT_LAYOUT1 = 12;
     public const LIMIT_PRODUCT_LAYOUT2 = 6;
-    public const LIMIT_PRODUCT_LAYOUT3 = 12;
-    public const LIMIT_PRODUCT_LAYOUT4 = 3;
+    public const LIMIT_PRODUCT_LAYOUT3 = 3;
     public const LIMIT_CATEGORY_LAYOUT1 = 8;
     public const LIMIT_CATEGORY_LAYOUT1_PRODUCT = 3;
     public const LIMIT_CATEGORY_LAYOUT2 = 4;
@@ -200,7 +198,6 @@ class Collections extends MyAppModel
             self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
             self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_PRODUCT_LAYOUT2', $langId),
             self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_PRODUCT_LAYOUT3', $langId),
-            self::TYPE_PRODUCT_LAYOUT4 => Labels::getLabel('LBL_PRODUCT_LAYOUT4', $langId),
             self::TYPE_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_CATEGORY_LAYOUT1', $langId),
             self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_CATEGORY_LAYOUT2', $langId),
             self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_CATEGORY_LAYOUT3', $langId),
@@ -261,7 +258,6 @@ class Collections extends MyAppModel
                 self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
                 self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_PRODUCT_LAYOUT2', $langId),
                 self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_PRODUCT_LAYOUT3', $langId),
-                self::TYPE_PRODUCT_LAYOUT4 => Labels::getLabel('LBL_PRODUCT_LAYOUT4', $langId),
             ],
             self::COLLECTION_TYPE_SHOP => [
                 self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_SHOP_LAYOUT1', $langId),
@@ -917,7 +913,6 @@ class Collections extends MyAppModel
             self::TYPE_PRODUCT_LAYOUT1 => 'product-layout-1',
             self::TYPE_PRODUCT_LAYOUT2 => 'product-layout-2',
             self::TYPE_PRODUCT_LAYOUT3 => 'product-layout-3',
-            self::TYPE_PRODUCT_LAYOUT4 => 'product-layout-4',
             self::TYPE_CATEGORY_LAYOUT1 => 'category-layout-1',
             self::TYPE_CATEGORY_LAYOUT2 => 'category-layout-2',
             self::TYPE_CATEGORY_LAYOUT3 => 'category-layout-3',

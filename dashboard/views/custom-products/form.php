@@ -114,7 +114,8 @@ if (0 < $recordId) {
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?>
                             </h3>
                             <span class="text-muted"><?php echo Labels::getLabel('MSG_CUSTOMIZE_PRODUCT_VARIENTS_INCLUDING_SIZE_COLOR_ETC', $langId); ?></span>
-                        </div> <i class="dropdown-toggle-custom-arrow"></i>
+                        </div>
+                        <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
                     </div>
                     <div class="collapse" id="stock-block1">
                         <div class="card-body p-0">
@@ -188,7 +189,8 @@ if (0 < $recordId) {
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_SPECIFICATIONS', $langId); ?>
                             </h3>
                             <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_RELATED_SPECIFICATIONS', $langId); ?></span>
-                        </div> <i class="dropdown-toggle-custom-arrow"></i>
+                        </div>
+                        <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
                     </div>
                     <div class="collapse" id="specifications-block">
                         <div class="card-body">
@@ -242,7 +244,8 @@ if (0 < $recordId) {
                             <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_TAX_AND_SHIPPING', $siteLangId); ?>
                             </h3>
                             <span class="text-muted"><?php echo Labels::getLabel('MSG_SETUP_TAX_AND_SHIPPING_INFORMATION_OF_THE_PRODUCT', $siteLangId); ?></span>
-                        </div> <i class="dropdown-toggle-custom-arrow"></i>
+                        </div>
+                        <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
                     </div>
                     <div class="collapse show" id="stock-block4">
                         <div class="card-body">
@@ -268,10 +271,10 @@ if (0 < $recordId) {
                                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
                                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
                             </div>
-                            <i class="dropdown-toggle-custom-arrow"></i>
+                            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
                         </div>
                         <div class="collapse" id="digital-file-block">
-                            <div class="card-body">
+                            <div class="card-table">
                                 <div id="digitalFilesDefaultListJs">
                                 </div>
                             </div>
@@ -280,13 +283,13 @@ if (0 < $recordId) {
                             <div class="card-foot">
                                 <div class="row justify-content-end">
                                     <div class="col-auto">
-                                        <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);">
+                                        <button class="btn btn-icon btn-outline-gray btn-sm" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);">
                                             <svg class="svg btn-icon-start" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                                                 </use>
                                             </svg>
                                             <span><?php echo Labels::getLabel('BTN_DIGITAL_FILES', $langId); ?></span>
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -298,10 +301,10 @@ if (0 < $recordId) {
                                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
                                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?></span>
                             </div>
-                            <i class="dropdown-toggle-custom-arrow"></i>
+                            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
                         </div>
                         <div class="collapse" id="digital-link-block">
-                            <div class="card-body">
+                            <div class="card-table">
                                 <div id="digitalLinksDefaultListJs">
                                 </div>
                             </div>
@@ -310,13 +313,13 @@ if (0 < $recordId) {
                             <div class="card-foot">
                                 <div class="row justify-content-end">
                                     <div class="col-auto">
-                                        <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
+                                        <button class="btn btn-icon btn-outline-gray btn-sm" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
                                             <svg class="svg btn-icon-start" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                                                 </use>
                                             </svg>
                                             <span><?php echo Labels::getLabel('BTN_DIGITAL_LINKS', $langId); ?></span>
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

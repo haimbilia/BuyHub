@@ -116,9 +116,11 @@ $(document).on('change', '.prefDimensionsJs', function () {
     };
 
     removeCollectionRecord = function (collection_id, recordId) {
+        /*
         if (!confirm(langLbl.confirmRemoveProduct)) {
             return false;
         }
+        */
         fcom.ajax(fcom.makeUrl(controllerName, 'removeCollectionRecord'), 'collection_id=' + collection_id + '&record_id=' + recordId, function (t) { });
     };
 

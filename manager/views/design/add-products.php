@@ -266,7 +266,7 @@
                                         <span class="text-muted">Add options like Color, size
                                             etc for your product</span>
                                     </div>
-                                    <i class="dropdown-toggle-custom-arrow"></i>
+                                    <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
                                 </div>
                                 <div class="card-body show" id="stock-block1">
                                     <form class="form" action="">
@@ -522,7 +522,9 @@
                                         <h3 class="card-head-title">Media
                                         </h3>
                                         <span class="text-muted">Attach media files for the product </span>
-                                    </div> <i class="dropdown-toggle-custom-arrow"></i>
+                                    </div>
+                                    <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+
                                 </div>
                                 <div class="card-body show" id="stock-block2">
                                     <div class="dropzone dropzone-custom">
@@ -695,7 +697,9 @@
                                         <span class="text-muted">Product Specifications are added in this
 
                                             <span class="input-helper"></span>section</span>
-                                    </div> <i class="dropdown-toggle-custom-arrow"></i>
+                                    </div>
+                                    <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+
                                 </div>
                                 <div class="card-body show" id="stock-block3">
                                     <form class="form" action="">
@@ -762,7 +766,8 @@
                                         <span class="text-muted">Add Tax and Shipping details from
                                             this
                                             <span class="input-helper"></span>section</span>
-                                    </div> <i class="dropdown-toggle-custom-arrow"></i>
+                                    </div>
+                                    <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
                                 </div>
                                 <div class="card-body show" id="stock-block4">
                                     <form class="form" action="">

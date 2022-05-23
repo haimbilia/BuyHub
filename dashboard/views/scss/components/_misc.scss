@@ -1323,7 +1323,7 @@ mark,
     display: flex;
     align-items: center;
     font-size: 0.8rem;
-    padding: 0.5rem 0.8rem;
+    //padding: 0.5rem 0.8rem;
     line-height: 1;
     border: $border;
     &_url {
@@ -1355,7 +1355,7 @@ mark,
         font-size: 0.8rem;
         border: none;
         border-radius: $radius4;
-        padding: 0;
+        //padding: 0;
         color: $txt-gray;
         margin-#{$end-direction}: 10px;
         &:focus {
@@ -1603,4 +1603,20 @@ mark,
     z-index: 1;
     padding: 10px;
     display: flex;
+}
+.card-toggle {
+    .dropdown-toggle-custom-arrow {
+        position: relative;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: none;
+    }
+    .card-toolbar {
+        @include media-breakpoint-up(md) {
+            margin-#{$start-direction}: auto;
+        }
+    }
 }

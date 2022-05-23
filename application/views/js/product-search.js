@@ -632,6 +632,8 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
             return;
         }
         $("input[id=keyword]").val(keyword);
+        removePageSideFromLink();
+        removePaginationFromLink();
         reloadProductListing(frm);
         $('#resetAllJs').show();
     };

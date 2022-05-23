@@ -2,20 +2,20 @@
 if (!$showNoRecordFound && empty($attachments)) {
     return;
 }
-$arr_flds = array(   
+$arr_flds = array(
     'mainfile' => Labels::getLabel('LBL_DD_FILE', $siteLangId),
-    'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),   
+    'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),
     'action'  =>  Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId)
 );
 
-if(!$canDo){
+if (!$canDo) {
     unset($arr_flds['action']);
 }
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
-    $tdAttr = ('action' == $key) ? ['class' => 'align-right','width'=>'20%'] : ['width'=> '40%'];
+    $tdAttr = ('action' == $key) ? ['class' => 'align-right', 'width' => '20%'] : ['width' => '40%'];
     $e = $th->appendElement('th', $tdAttr, $val);
 }
 
@@ -32,15 +32,15 @@ foreach ($attachments as $sn => $row) {
                 break;
             case 'mainfile':
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
-               
+
                 if (0 < $row['afile_id']) {
                     $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
-                    if($canDo){
-                        $ul = new HtmlElement("ul", array("class" => "actions"));     
-                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
+                    if ($canDo) {
+                        $ul = new HtmlElement("ul", array("class" => "actions"));
+                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
                         $li->appendElement(
                             "a",
-                            array(                                
+                            array(
                                 'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
                                 'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
                                 'target' => '_blank'
@@ -52,10 +52,10 @@ foreach ($attachments as $sn => $row) {
                             </svg>',
                             true
                         );
-                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
+                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
                         $li->appendElement(
                             "a",
-                            array(                              
+                            array(
                                 'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
                                 'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
                             ),
@@ -66,7 +66,7 @@ foreach ($attachments as $sn => $row) {
                             </svg>',
                             true
                         );
-                        
+
                         $dvElem->appendElement('plaintext', $tdAttr, $ul->getHtml(), true);
                     }
                 } else {
@@ -74,46 +74,45 @@ foreach ($attachments as $sn => $row) {
                 }
                 break;
             case 'preview':
-                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));               
-                $ul = new HtmlElement("ul", array("class" => "actions"));                
+                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
+                $ul = new HtmlElement("ul", array("class" => "actions"));
                 if (0 < $row['prev_afile_id']) {
                     $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
-                    
-                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
-                        $li->appendElement(
-                            'a',
-                            array(
-                                'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $downloadrefType, 1, $row['preview'])),
-                                'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
-                            ),
-                            '<svg class="svg" width="18" height="18">
+
+                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
+                    $li->appendElement(
+                        'a',
+                        array(
+                            'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $downloadrefType, 1, $row['preview'])),
+                            'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
+                        ),
+                        '<svg class="svg" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
                                 </use>
                             </svg>',
-                            true
-                        );
-                        if($canDo){                    
-                            $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
-                            $li->appendElement(
-                                'a',
-                                array(
-                                    'href' => 'javascript:void(0)',
-                                    'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
-                                    'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)'
-                                ),
-                                '<svg class="svg" width="18" height="18">
+                        true
+                    );
+                    if ($canDo) {
+                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
+                        $li->appendElement(
+                            'a',
+                            array(
+                                'href' => 'javascript:void(0)',
+                                'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
+                                'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)'
+                            ),
+                            '<svg class="svg" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
                                 </use>
                                 </svg>',
-                                true
-                            );
-                        }
-                  
+                            true
+                        );
+                    }
                 } else {
                     $dvElem->appendElement('div', array('class' => 'text-break'),  Labels::getLabel('LBL_NA', $siteLangId), true);
-                    if($canDo){
+                    if ($canDo) {
                         $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
                         $li->appendElement(
                             "a",
@@ -178,13 +177,13 @@ foreach ($attachments as $sn => $row) {
 }
 
 ?>
-<div class="col-md-12">
-    <?php 
+<div class="">
+    <?php
     if (empty($attachments)) {
         $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
-    }else{
+    } else {
         echo $tbl->getHtml();
-    }    
+    }
     ?>
 </div>
