@@ -1817,7 +1817,23 @@ class ProductsController extends MyAppController
                 }
             }
         } else {
+            $get['page'] = $page;
+            $get['pageSize'] = $pageSize;
+
             $srch = Product::getListingObj($get, $this->siteLangId, $userId);
+
+            $flds = array(
+                'prodcat_code', 'product_id', 'prodcat_id', 'COALESCE(product_name, product_identifier) as product_name', 'product_model',  'product_updated_on', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+                'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
+                'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
+                'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
+                'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
+            );
+            $removeFlds = array_diff($flds, ['1']);
+            $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $removeFlds);
+            Product::setOrderOnListingObj($srch, $get);
+
             $srch->setPageNumber($page);
             if ($pageSize) {
                 $srch->setPageSize($pageSize);
@@ -1860,10 +1876,10 @@ class ProductsController extends MyAppController
             'category' => $category,
             'categoryId' => $categoryId,
             'postedData' => $get,
-            'page' => $page,
-            'pageCount' => $srch->pages(),
-            'pageSize' => $pageSize,
-            'recordCount' => $srch->recordCount(),
+            'page' => $this->pageData['page'],
+            'pageSize' => $this->pageData['pageSize'],
+            'pageCount' => $this->pageData['pageCount'],
+            'recordCount' => $this->pageData['recordCount'],
             'siteLangId' => $this->siteLangId
         );
         return $data;
@@ -1884,7 +1900,22 @@ class ProductsController extends MyAppController
 
         $pageSize = !empty($post['pageSize']) ? FatUtility::int($post['pageSize']) : FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
 
+        $post['page'] = $page;
+        $post['pageSize'] = $pageSize;
+
         $srch = Product::getListingObj($post, $this->siteLangId, $userId);
+        $flds = array(
+            'prodcat_code', 'product_id', 'prodcat_id', 'COALESCE(product_name, product_identifier) as product_name', 'product_model',  'product_updated_on', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+            'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
+            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
+            'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
+            'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
+            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
+        );
+        $removeFlds = array_diff($flds, ['1']);
+        $this->setRecordCount(clone $srch, $post['pageSize'], $post['page'], $post, true, $removeFlds);
+        Product::setOrderOnListingObj($srch, $get);
+
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
@@ -1898,10 +1929,10 @@ class ProductsController extends MyAppController
             'products' => $products,
             'tLeftRibbons' => $tLeftRibbons,
             'tRightRibbons' => $tRightRibbons,
-            'page' => $page,
-            'pageCount' => $srch->pages(),
-            'pageSize' => $pageSize,
-            'recordCount' => $srch->recordCount()
+            'page' => $this->pageData['page'],
+            'pageSize' => $this->pageData['pageSize'],
+            'pageCount' => $this->pageData['pageCount'],
+            'recordCount' => $this->pageData['recordCount'],
         );
         $this->set('data', $data);
         $this->_template->render();

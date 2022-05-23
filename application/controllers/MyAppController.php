@@ -564,6 +564,7 @@ class MyAppController extends FatController
         $frm->addHiddenField('', 'top_products', 0);
         $frm->addHiddenField('', 'currency_id', $this->siteCurrencyId);
         $frm->addSubmitButton('', 'btnProductSrchSubmit', '');
+        $frm->addHiddenField('', 'total_record_count');
         $frm->addHiddenField('', 'vtype');
         return $frm;
     }
@@ -961,6 +962,13 @@ class MyAppController extends FatController
 
     private function setPageRecord($recordCount, $pageSize, $page)
     {
+        $this->pageData = [
+            'pageCount' => ($recordCount > 0) ? ceil($recordCount / $pageSize) : 0,
+            'recordCount' => $recordCount,
+            'pageSize' => $pageSize,
+            'page' => $page
+        ];
+
         $this->set('pageCount', ($recordCount > 0) ? ceil($recordCount / $pageSize) : 0);
         $this->set('recordCount', $recordCount);
         $this->set('pageSize', $pageSize);
