@@ -5,6 +5,9 @@ class FilterHelper extends FatUtility
     public const LAYOUT_DEFAULT = 1;
     public const LAYOUT_TOP = 2;
 
+    public const ENCRYPTION_KEY = 'vt%qkpCDRWB*bq@R&#4e';
+    public const ENCRYPTION_IV = 'r&!qmJ#zvQaIK9VKsnZa';
+
     public static function getLayouts(int $langId)
     {
         return [
@@ -40,7 +43,7 @@ class FilterHelper extends FatUtility
         $prodSrchObj->addSubscriptionValidCondition();
         $prodSrchObj->validateAndJoinDeliveryLocation();
         $prodSrchObj->joinProductToTax();
-        
+
         if (array_key_exists('category', $post)) {
             $prodSrchObj->addCategoryCondition($post['category']);
         }
@@ -316,6 +319,11 @@ class FilterHelper extends FatUtility
         return unserialize($options);
     }
 
+    public static function getPageSizeValues()
+    {
+        return [10, 12, 24, 48];
+    }
+
     public static function getPageSizeArr($langId)
     {
         $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
@@ -349,5 +357,20 @@ class FilterHelper extends FatUtility
             },
             ARRAY_FILTER_USE_KEY
         );
+    }
+
+    public static function encrypt($string)
+    {
+        $key = hash('sha256', self::ENCRYPTION_KEY);
+        $iv = substr(hash('sha256', self::ENCRYPTION_IV), 0, 16);
+        $output = openssl_encrypt($string, "AES-256-CBC", $key, 0, $iv);
+        return base64_encode($output);
+    }
+
+    public static function decrypt($string)
+    {
+        $key = hash('sha256', self::ENCRYPTION_KEY);
+        $iv = substr(hash('sha256', self::ENCRYPTION_IV), 0, 16);
+        return openssl_decrypt(base64_decode($string), "AES-256-CBC", $key, 0, $iv);
     }
 }

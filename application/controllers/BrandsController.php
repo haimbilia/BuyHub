@@ -109,7 +109,7 @@ class BrandsController extends MyAppController
         if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $get['vtype'] == 'map') {
             $get['vtype'] = 'grid';
         }
-        $frm->fill($get);
+        // $frm->fill($get);
 
 
         $userId = 0;
@@ -133,7 +133,7 @@ class BrandsController extends MyAppController
             }
         }
 
-        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+        if (!in_array($pageSize, FilterHelper::getPageSizeValues())) {
             $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
         }
 
@@ -162,6 +162,7 @@ class BrandsController extends MyAppController
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs);
 
+        $frm->fill($get);
         $data = array(
             'frmProductSearch' => $frm,
             'products' => $products,

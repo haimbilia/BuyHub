@@ -35,7 +35,7 @@ class CategoryController extends MyAppController
         if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $get['vtype'] == 'map') {
             $get['vtype'] = 'grid';
         }
-        $frm->fill($get);
+        // $frm->fill($get);
 
         $productCategorySearch = new ProductCategorySearch($this->siteLangId, true, true, false, false);
         $productCategorySearch->addCondition('prodcat_id', '=', $categoryId);
@@ -79,7 +79,7 @@ class CategoryController extends MyAppController
             }
         }
 
-        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+        if (!in_array($pageSize, FilterHelper::getPageSizeValues())) {
             $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
         }
 
@@ -95,8 +95,7 @@ class CategoryController extends MyAppController
             'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
             'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
         );
-        $removeFlds = array_diff($flds, ['1']);
-        $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $removeFlds);        
+        $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $flds);
         Product::setOrderOnListingObj($srch, $get);
         $srch->setPageNumber($page);
         if ($pageSize) {
@@ -109,6 +108,7 @@ class CategoryController extends MyAppController
         $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
         $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
+        $frm->fill($get);
         $data = array(
             'frmProductSearch' => $frm,
             'category' => $category,

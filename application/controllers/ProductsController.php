@@ -105,9 +105,11 @@ class ProductsController extends MyAppController
         if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $get['vtype'] == 'map') {
             $get['vtype'] = 'grid';
         }
-
-        $frm->fill($get);
+        
         $data = $this->getListingData($get);
+        $get = $data['postedData'];
+        $frm->fill($get);
+
         if (array_key_exists('keyword', $get) && count($data['products'])) {
             $searchItemObj = new SearchItem();
             $searchData = array('keyword' => $get['keyword']);
@@ -549,7 +551,6 @@ class ProductsController extends MyAppController
         $selProdReviewObj->addMultipleFields(array('sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'SUM(sprating_rating) as totRatings', 'count(distinct(ratingtype_id)) as totalType'));
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
-
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());        
         $this->set('reviews', $reviews);
 

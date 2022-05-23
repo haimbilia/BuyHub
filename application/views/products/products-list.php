@@ -90,6 +90,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
 
             $postedData['page'] = (isset($page)) ? $page : 1;
             $postedData['recordDisplayCount'] = $recordCount;
+            $postedData['pageRecordCount'] = FilterHelper::encrypt($recordCount);
             echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
             $pagingArr = array('pageCount' => $pageCount, 'page' => $postedData['page'], 'recordCount' => $recordCount, 'callBackJsFunc' => $searchFunction);
     ?>
@@ -111,6 +112,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
 <?php } else { ?>
 </div> <?php
             $arr['recordDisplayCount'] = $recordCount;
+            $arr['pageRecordCount'] = FilterHelper::encrypt($recordCount);
             echo FatUtility::createHiddenFormFromData($arr, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
             $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
             $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
