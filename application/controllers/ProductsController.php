@@ -1331,6 +1331,8 @@ class ProductsController extends MyAppController
             $prodSrchObj->joinSellers();
             $prodSrchObj->setGeoAddress();
             $prodSrchObj->joinShops();
+            $prodSrchObj->joinProductToCategory($this->siteLangId);
+            $prodSrchObj->joinProductToTax();
             /*$prodSrchObj->validateAndJoinDeliveryLocation(false, false);*/
             $prodSrchObj->joinBrands($this->siteLangId);
 

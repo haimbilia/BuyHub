@@ -91,20 +91,12 @@ class ShopsController extends MyAppController
         $productSrchObj = new ProductSearch($this->siteLangId);
         $productSrchObj->setGeoAddress();
         $productSrchObj->joinProductToCategory($this->siteLangId);
+        $productSrchObj->joinProductToTax();
         $productSrchObj->doNotCalculateRecords();
         $productSrchObj->setDefinedCriteria();
         $productSrchObj->joinSellerSubscription($this->siteLangId, true);
         $productSrchObj->addSubscriptionValidCondition();
         $productSrchObj->validateAndJoinDeliveryLocation();
-        // $productSrchObj->joinProductRating();
-
-        /* if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-            $productSrchObj->joinFavouriteProducts($loggedUserId);
-            $productSrchObj->addFld('IFNULL(ufp_id, 0) as ufp_id');
-        } else {
-            $productSrchObj->joinUserWishListProducts($loggedUserId);
-            $productSrchObj->addFld('IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        } */
 
         $productSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $productSrchObj->addMultipleFields(
