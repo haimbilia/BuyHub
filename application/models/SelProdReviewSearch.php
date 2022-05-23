@@ -111,7 +111,7 @@ class SelProdReviewSearch extends SearchBase
         }
     }
 
-    public function joinSelProdRatingByType($ratingType, $obj = 'sprt')
+    /* public function joinSelProdRatingByType($ratingType, $obj = 'sprt')
     {
         if (!$ratingType) {
             trigger_error(Labels::getLabel('ERR_Please_supply_rating_type_argument.', $this->commonLangId), E_USER_ERROR);
@@ -126,7 +126,7 @@ class SelProdReviewSearch extends SearchBase
                 trigger_error(Labels::getLabel('ERR_Please_supply_non_empty_rating_types_array', $this->commonLangId), E_USER_ERROR);
             }
         }
-    }
+    } */
 
     public function joinSelProdReviewHelpful()
     {

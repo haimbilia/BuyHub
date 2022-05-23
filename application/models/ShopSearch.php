@@ -140,7 +140,8 @@ class ShopSearch extends SearchBase
         $srch = new SelProdReviewSearch();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->joinSelProdRatingByType(RatingType::TYPE_PRODUCT);
+        $srch->joinSelProdRating();
+        $srch->addCondition('rt.ratingtype_type', '=', RatingType::TYPE_PRODUCT);        
         $srch->addGroupby('spreview_seller_user_id');
         $srch->addMultipleFields(array('count(spreview_id) as totReviews', 'spreview_seller_user_id'));
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'spreview.spreview_seller_user_id = s.shop_user_id', 'spreview');
