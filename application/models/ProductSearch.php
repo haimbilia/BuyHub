@@ -1128,7 +1128,7 @@ class ProductSearch extends SearchBase
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinSellerProducts();
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', 'mysql_func_' . RatingType::RATING_PRODUCT, 'AND', true);
+        $selProdReviewObj->addCondition('ratingtype_type', '=', 'mysql_func_' . RatingType::TYPE_PRODUCT, 'AND', true);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->doNotLimitRecords();
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');

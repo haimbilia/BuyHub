@@ -37,6 +37,7 @@
         // background-color: $brand-color;
         // color:  lighten($brand-color, 55%);
         @include bg-brand();
+        border-color: $brand-color;
         &:hover {
             background-color: darken($brand-color, 5%);
             color: lighten($brand-color, 55%) !important;

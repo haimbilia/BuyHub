@@ -130,7 +130,7 @@ class ProductReviewsController extends ListingBaseController
         $srch->joinShops($this->siteLangId);
         $srch->joinProducts();
         $srch->joinSellerProducts($this->siteLangId);
-        $srch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
+        $srch->joinSelProdRatingByType(RatingType::TYPE_PRODUCT);
 
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
@@ -201,7 +201,7 @@ class ProductReviewsController extends ListingBaseController
         $srch = new SelProdReviewSearch($this->siteLangId);
         $srch->joinUser();
         $srch->joinProducts();
-        //$srch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
+        //$srch->joinSelProdRatingByType(RatingType::TYPE_PRODUCT);
         $srch->addMultipleFields(array('IFNULL(product_name,product_identifier) as product_name', 'uc.credential_username as reviewed_by', 'spreview_id', 'spreview_posted_on', 'spreview_status', 'spreview_title', 'spreview_description'));
         $srch->addOrder('spreview_posted_on', 'DESC');
         $srch->addCondition('spreview_id', '=', $recordId);

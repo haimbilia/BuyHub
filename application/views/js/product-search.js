@@ -603,8 +603,7 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
             getSetSelectedOptionsUrl(frm);
         }
         var data = fcom.frmData(frm);
-        var currUrl = getSearchQueryUrl(true);
-        console.log(currUrl);
+        var currUrl = getSearchQueryUrl(true);     
         fcom.ajax(currUrl, data, function (res) {
             fcom.removeLoader();
             $('#productsList').replaceWith(res); frmProductSearchPaging
@@ -628,6 +627,8 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
             return;
         }
         $("input[id=keyword]").val(keyword);
+        removePageSideFromLink();
+        removePaginationFromLink();
         reloadProductListing(frm);
         $('#resetAllJs').show();
     };

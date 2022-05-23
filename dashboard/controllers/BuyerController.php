@@ -225,27 +225,7 @@ class BuyerController extends BuyerBaseController
             );
             $srch->addFld(array('*', 'IFNULL(orrequest_id, 0) as return_request', 'IFNULL(ocrequest_id, 0) as cancel_request'));
         }
-
-        $rs = $srch->getResultSet();
-
-        $childOrderDetail = FatApp::getDb()->fetchAll($rs, 'op_id');
-
-        foreach ($childOrderDetail as $op_id => $val) {
-            $childOrderDetail[$op_id]['charges'] = $orderDetail['charges'][$op_id];
-
-            $opChargesLog = new OrderProductChargeLog($op_id);
-            $taxOptions = $opChargesLog->getData($this->siteLangId);
-            $childOrderDetail[$op_id]['taxOptions'] = $taxOptions;
-        }
-
-        $shippingApiObj = NULL;
-        if ($opId > 0) {
-            $childOrderDetail = array_shift($childOrderDetail);
-            $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($childOrderDetail['op_selprod_user_id'], $childOrderDetail['opshipping_by_seller_user_id']);
-            if ($childOrderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
-                $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $childOrderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
-            }
-        }
+        $childOrderDetail = FatApp::getDb()->fetchAll($srch->getResultSet(), 'op_id');
 
         if (empty($childOrderDetail) || 1 > count($childOrderDetail)) {
             $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
@@ -255,6 +235,22 @@ class BuyerController extends BuyerBaseController
             Message::addErrorMessage($message);
             CommonHelper::redirectUserReferer();
         }
+
+        foreach ($childOrderDetail as $op_id => $val) {
+            $childOrderDetail[$op_id]['charges'] = $orderDetail['charges'][$op_id];
+
+            $opChargesLog = new OrderProductChargeLog($op_id);          
+            $childOrderDetail[$op_id]['taxOptions'] = $opChargesLog->getData($this->siteLangId);
+        }
+
+        $shippingApiObj = NULL;
+        if ($opId > 0) {
+            $childOrderDetail = array_shift($childOrderDetail);
+            $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($childOrderDetail['op_selprod_user_id'], $childOrderDetail['opshipping_by_seller_user_id']);
+            if ($childOrderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
+                $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $childOrderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+            }
+        }       
 
         $address = $orderObj->getOrderAddresses($orderDetail['order_id']);
         $orderDetail['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE] ?? [];
@@ -269,9 +265,11 @@ class BuyerController extends BuyerBaseController
             $orderDetail['comments'] = $orderObj->getOrderComments($this->siteLangId, array("order_id" => $orderDetail['order_id']));
         }
 
-        $childOrderProducts = $orderObj->getChildOrders(['order_id' => $orderDetail['order_id']]);
-        $childOrderProdCount = count($childOrderProducts);
-        if (1 > $opId || 1 == $childOrderProdCount) {
+        $opSrchObj = Orders::searchOrderProducts(['order_id'=> $orderDetail['order_id']]);
+        $opSrchObj->addFld('count(*) as opCount');
+        $opSrchObj->doNotCalculateRecords();
+        $childOrderProductsCountData = FatApp::getDb()->fetch($opSrchObj->getResultSet());      
+        if (1 > $opId || 1 == $childOrderProductsCountData['opCount']) {
             $payments = $orderObj->getOrderPayments(array("order_id" => $orderDetail['order_id']));
             if (true === MOBILE_APP_API_CALL) {
                 $payments = array_values($payments);
@@ -360,13 +358,10 @@ class BuyerController extends BuyerBaseController
         $this->set('orderProductStatusArr', $orderProductStatusArr);
         $this->set('orderTimeLine', $orderTimeLine);
         $this->set('orderStatusArr', $orderStatusArr);
-        $this->set('cancelledDate', $cancelledDate);
-
-        // CommonHelper::printArray($childOrderDetail);
+        $this->set('cancelledDate', $cancelledDate);    
         $this->set('orderDetail', $orderDetail);
         $this->set('childOrderDetail', $childOrderDetail);
-        $this->set('primaryOrder', $primaryOrderDisplay);
-        $this->set('childOrderProdCount', $childOrderProdCount);
+        $this->set('primaryOrder', $primaryOrderDisplay);       
         $this->set('digitalDownloads', $digitalDownloads);
         $this->set('digitalDownloadLinks', $digitalDownloadLinks);
         $this->set('productType', $productType);

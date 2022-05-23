@@ -5,8 +5,7 @@ $rate_5_width = $rate_4_width = $rate_3_width = $rate_2_width = $rate_1_width = 
 $totReviews = (!empty($reviews['totReviews'])) ? FatUtility::int($reviews['totReviews']) : 0;
 $totReviews *= (!empty($reviews['totalType'])) ? FatUtility::int($reviews['totalType']) : 0;
 
-$totRatings = (!empty($reviews['totRatings'])) ? FatUtility::int($reviews['totRatings']) : 0;
-
+$totalType = (!empty($reviews['totalType'])) ? FatUtility::int($reviews['totalType']) : 0;
 if ($totReviews) {
     $rated_1 = FatUtility::int($reviews['rated_1']);
     $rated_2 = FatUtility::int($reviews['rated_2']);
@@ -22,7 +21,7 @@ if ($totReviews) {
 }
 ?>
 <div class="rating-block">
-    <p class="text-muted text-info"><?php echo $totRatings . ' ' . Labels::getLabel('LBL_RATINGS', $siteLangId); ?></p>
+    <p class="text-muted text-info"><?php echo $totalType . ' ' . Labels::getLabel('LBL_RATING`S_TYPE', $siteLangId); ?></p>
     <ul class="progress-block">
         <li class="progress-block-item">
             <span class="star">
