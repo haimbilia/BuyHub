@@ -95,7 +95,7 @@ class AdminShopSearch extends SearchBase
         $ratingSrch->joinUser();
         $ratingSrch->joinSeller();
         $ratingSrch->joinProducts();
-        $ratingSrch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
+        $ratingSrch->joinSelProdRatingByType(RatingType::TYPE_PRODUCT);
         $ratingSrch->addMultipleFields(array('spreview_seller_user_id', 'count(*) as numOfReviews'));
         $ratingSrch->addDirectCondition('( spreview_seller_user_id  IN (' . implode(',', $shopUserIds) . '))');
         $ratingSrch->addGroupby('spreview_seller_user_id');

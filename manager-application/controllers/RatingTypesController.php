@@ -147,18 +147,21 @@ class RatingTypesController extends ListingBaseController
         $post['ratingtype_name'] = trim($post['ratingtype_name']);
 
         $recordId = FatApp::getPostedData('ratingtype_id', FatUtility::VAR_INT, 0);
-        $restrictTypes = [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY];
 
         $post['ratingtype_type'] = RatingType::TYPE_OTHER;
-        if (in_array($recordId, $restrictTypes)) {
-            $post['ratingtype_type'] = $recordId;
+        if (0 < $recordId) {
+            $ratingType = RatingType::getAttributesById($recordId, 'ratingtype_type');
+            $restrictTypes = [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY];
+            if (in_array($ratingType, $restrictTypes)) {
+                $post['ratingtype_type'] = $ratingType;
+            }
         }
 
         if (!in_array($recordId, $restrictTypes)) {
             $post['ratingtype_identifier'] = $post['ratingtype_name'];
         }
 
-        if (RatingType::TYPE_PRODUCT == $recordId) {
+        if (RatingType::TYPE_PRODUCT == $post['ratingtype_type']) {
             $post['ratingtype_active'] = applicationConstants::ACTIVE;
         }
 

@@ -29,7 +29,7 @@ class ReviewsController extends MyAppController
         $selProdReviewObj->joinProducts($this->siteLangId);
         $selProdReviewObj->joinSellerProducts($this->siteLangId);
         $selProdReviewObj->joinSelProdRating();
-        $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
+        $selProdReviewObj->addCondition('ratingtype_type', '=', RatingType::TYPE_PRODUCT);
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
         $selProdReviewObj->addGroupBy('spr.spreview_product_id');
@@ -205,7 +205,7 @@ class ReviewsController extends MyAppController
         $selProdReviewObj->joinProducts($this->siteLangId);
         $selProdReviewObj->joinSellerProducts($this->siteLangId);
         $selProdReviewObj->addGroupBy('spr.spreview_seller_user_id');
-        $selProdReviewObj->addMultipleFields(array('spr.spreview_seller_user_id', 'count(*) as totReviews', "ROUND(AVG(sprating_rating),2) as avg_seller_rating", 'sum(if(round(sprating_rating)=1,1,0)) rated_1', 'sum(if(round(sprating_rating)=2,1,0)) rated_2', 'sum(if(round(sprating_rating)=3,1,0)) rated_3', 'sum(if(round(sprating_rating)=4,1,0)) rated_4', 'sum(if(round(sprating_rating)=5,1,0)) rated_5', 'count(distinct(sprating_ratingtype_id)) as totalType'));
+        $selProdReviewObj->addMultipleFields(array('spr.spreview_seller_user_id', 'count(*) as totReviews', "ROUND(AVG(sprating_rating),2) as avg_seller_rating", 'sum(if(round(sprating_rating)=1,1,0)) rated_1', 'sum(if(round(sprating_rating)=2,1,0)) rated_2', 'sum(if(round(sprating_rating)=3,1,0)) rated_3', 'sum(if(round(sprating_rating)=4,1,0)) rated_4', 'sum(if(round(sprating_rating)=5,1,0)) rated_5', 'count(distinct(ratingtype_type)) as totalType'));
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
 
