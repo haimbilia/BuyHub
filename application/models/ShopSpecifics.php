@@ -33,7 +33,7 @@ class ShopSpecifics extends MyAppModel
         $srch->addGroupBy('spr.spreview_selprod_id');
         $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
         $srch->addMultipleFields(['shop.shop_id as shop_id', 'ROUND(AVG(sprating_rating),2) as shopRating', '0 as completionRate', '0 as completedOrders', '0 as returnAcceptanceRate', '0 as orderCancelationRate']);
-        $srch->addCondition('sprating_ratingtype_id', '=', 'mysql_func_' . RatingType::RATING_SHOP, 'AND', true);
+        $srch->addCondition('ratingtype_type', '=', 'mysql_func_' . RatingType::TYPE_SHOP, 'AND', true);
         if (!empty($shopIdArr)) {
             $srch->addCondition('shop.shop_id', 'in', $shopIdArr);
         }

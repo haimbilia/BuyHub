@@ -1538,7 +1538,7 @@ class Product extends MyAppModel
         if (true === $includeRating) {
             $selProdReviewObj = new SelProdReviewSearch();
             $selProdReviewObj->joinSelProdRating();
-            $selProdReviewObj->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
+            $selProdReviewObj->addCondition('ratingtype_type', '=', RatingType::TYPE_PRODUCT);
             $selProdReviewObj->doNotCalculateRecords();
             $selProdReviewObj->doNotLimitRecords();
             $selProdReviewObj->addGroupBy('spr.spreview_product_id');

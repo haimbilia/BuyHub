@@ -95,7 +95,7 @@ class SelProdRating extends MyAppModel
         $srch->joinOrderProduct();
         $srch->joinOrderProductShipping();
         $srch->addMultipleFields(array("ROUND(AVG(sprating_rating),2) as avg_rating"));
-        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `ratingtype_type` = '" . RatingType::TYPE_SHOP . "' END)");
+        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::TYPE_DELIVERY . "') ELSE `ratingtype_type` = '" . RatingType::TYPE_SHOP . "' END)");
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('spreview_seller_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
@@ -129,7 +129,7 @@ class SelProdRating extends MyAppModel
         $srch->joinOrderProduct();
         $srch->joinOrderProductShipping();
         $srch->joinSelProdRating($langId);
-        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `sprating_ratingtype_id` IN ('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `sprating_ratingtype_id` IN ('" . RatingType::TYPE_SHOP . "') END)");
+        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN ('" . RatingType::TYPE_SHOP . "', '" . RatingType::TYPE_DELIVERY . "') ELSE `ratingtype_type` IN ('" . RatingType::TYPE_SHOP . "') END)");
 
         $srch->addCondition('op_selprod_user_id', '=', 'mysql_func_' . $shopUserId, 'AND', true);
         $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);

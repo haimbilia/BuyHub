@@ -173,7 +173,7 @@ class UserSearch extends SearchBase
         $srch->joinOrderProduct();
         $srch->joinOrderProductShipping();
         $srch->addMultipleFields(array('ROUND(AVG(sprating_rating),2) as avg_rating', 'spreview_seller_user_id'));
-        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `ratingtype_type` = '" . RatingType::TYPE_SHOP . "' END)");
+        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::TYPE_DELIVERY . "') ELSE `ratingtype_type` = '" . RatingType::TYPE_SHOP . "' END)");
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);

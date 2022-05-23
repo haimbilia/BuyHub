@@ -16,7 +16,7 @@ foreach ($arrListing as $sn => $row) {
         switch ($key) {
             case 'select_all':
                 $disabled = $class = "";
-                if ($row['ratingtype_id'] == RatingType::TYPE_PRODUCT) {
+                if ($row['ratingtype_type'] == RatingType::TYPE_PRODUCT) {
                     $class = 'disabled';
                     $disabled = "disabled='disabled'";
                 }
@@ -35,7 +35,7 @@ foreach ($arrListing as $sn => $row) {
                     $name .= HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel('LBL_DEFAULT', $siteLangId));
                 }
                 $infoLabel = '';
-                switch ($row['ratingtype_id']) {
+                switch ($row['ratingtype_type']) {
                     case RatingType::TYPE_PRODUCT:
                         $infoLabel = Labels::getLabel('LBL_PRODUCT_RATING_TYPE_TOOLTIP_INFO', $siteLangId);
                         break;
@@ -52,8 +52,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $name, true);
                 break;
             case 'ratingtype_active':
-                $title = ($row['ratingtype_id'] == RatingType::TYPE_PRODUCT) ? Labels::getLabel('LBL_PRODUCT_RATING_TYPE_TOOLTIP_INFO', $siteLangId) : '';
-                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['ratingtype_id'], $row[$key], (!$canEdit || $row['ratingtype_id'] == RatingType::TYPE_PRODUCT), $title);
+                $title = ($row['ratingtype_type'] == RatingType::TYPE_PRODUCT) ? Labels::getLabel('LBL_PRODUCT_RATING_TYPE_TOOLTIP_INFO', $siteLangId) : '';
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['ratingtype_id'], $row[$key], (!$canEdit || $row['ratingtype_type'] == RatingType::TYPE_PRODUCT), $title);
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'action':
