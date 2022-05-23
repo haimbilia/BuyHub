@@ -88,6 +88,7 @@ $errorMsg = CommonHelper::replaceStringData($str, ['{LIMIT}' => Collections::LIM
     var actionName = '<?php echo $actionName; ?>';
     var recordId = '<?php echo $recordId; ?>';
     var recordLimit = <?php echo Collections::LIMIT_COLLECTION_RECORDS ?>;
+    
     $(function() {
         select2('collectionItemJs', fcom.makeUrl(ctrlName, actionName), function(obj) {
             return {
@@ -101,7 +102,14 @@ $errorMsg = CommonHelper::replaceStringData($str, ['{LIMIT}' => Collections::LIM
             }
             updateRecord(e, recordId);
         }, function(e) {
-            var item = e.params.args.data;
+            if (!confirm(langLbl.confirmRemoveProduct)) {
+                e.preventDefault();
+                return false;
+            }
+            var item = e.params.args.data;          
+            let data = $('#collectionItemJs').select2('data');
+            data = data.filter((option) => option.id!= item.id).map(option => option.id);    
+            $('#collectionItemJs').val(data).trigger('change');                      
             removeCollectionRecord(recordId, item.id);
         });
     });
