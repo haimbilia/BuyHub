@@ -7,7 +7,7 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                     <h2><?php echo ($collection['collection_name'] != '') ?  $collection['collection_name'] : ''; ?></h2>
                 </div>
             </div>
-            <div class="product-layout-1">
+            <div class="product-layout-2">
                 <?php
                 $tLeftRibbons = $collection['tLeftRibbons'];
                 $tRightRibbons = $collection['tRightRibbons'];

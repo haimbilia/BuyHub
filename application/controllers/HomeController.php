@@ -151,6 +151,7 @@ class HomeController extends MyAppController
                     }
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout2;
                     break;
+
                 case Collections::TYPE_PRODUCT_LAYOUT3:
                     $homePageProdLayout3 = CacheHelper::get('homePageProdLayout3' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageProdLayout3) {
@@ -162,18 +163,6 @@ class HomeController extends MyAppController
                         CacheHelper::create('homePageProdLayout3' . $collection['collection_id'] . $cacheKey, $homePageProdLayout3, CacheHelper::TYPE_COLLECTIONS);
                     }
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout3;
-                    break;
-                case Collections::TYPE_PRODUCT_LAYOUT4:
-                    $homePageProdLayout4 = CacheHelper::get('homePageProdLayout4' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-                    if (!$homePageProdLayout4) {
-                        $tpl = new FatTemplate('', '');
-                        $tpl->set('siteLangId', $this->siteLangId);
-                        $tpl->set('collection', $collection);
-                        $tpl->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
-                        $homePageProdLayout4 = $tpl->render(false, false, '_partial/collection/product-layout-4.php', true, true);
-                        CacheHelper::create('homePageProdLayout4' . $collection['collection_id'] . $cacheKey, $homePageProdLayout4, CacheHelper::TYPE_COLLECTIONS);
-                    }
-                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout4;
                     break;
                 case Collections::TYPE_CATEGORY_LAYOUT1:
                     $homePageCatLayout1 = CacheHelper::get('homePageCatLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');

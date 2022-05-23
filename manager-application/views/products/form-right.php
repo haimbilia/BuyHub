@@ -91,7 +91,8 @@
                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?>
                 </h3>
                 <span class="text-muted"><?php echo Labels::getLabel('MSG_CUSTOMIZE_PRODUCT_VARIENTS_INCLUDING_SIZE_COLOR_ETC', $langId); ?></span>
-            </div> <i class="dropdown-toggle-custom-arrow"></i>
+            </div>
+            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
         </div>
         <div class="card-table p-0 show" id="stock-block1">
             <div class="table-responsive table-scrollable js-scrollable">
@@ -181,7 +182,8 @@
                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_SPECIFICATIONS', $langId); ?>
                 </h3>
                 <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_RELATED_SPECIFICATIONS', $langId); ?></span>
-            </div> <i class="dropdown-toggle-custom-arrow"></i>
+            </div>
+            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
         </div>
         <div class="card-body p-0 show" id="specifications-block">
             <div class="p-4" id="specificationsFormJs">
@@ -236,7 +238,8 @@
                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_TAX_AND_SHIPPING', $siteLangId); ?>
                 </h3>
                 <span class="text-muted"><?php echo Labels::getLabel('MSG_SETUP_TAX_AND_SHIPPING_INFORMATION_OF_THE_PRODUCT', $siteLangId); ?></span>
-            </div> <i class="dropdown-toggle-custom-arrow"></i>
+            </div>
+            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
         </div>
         <div class="card-body show" id="stock-block4">
             <div class="row">
@@ -260,7 +263,7 @@
                     <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
                     <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
                 </div>
-                <i class="dropdown-toggle-custom-arrow"></i>
+                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
             </div>
             <div class="card-body show" id="digital-file-block">
                 <div id="digitalFilesDefaultListJs">
@@ -288,7 +291,7 @@
                     <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
                     <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?> </span>
                 </div>
-                <i class="dropdown-toggle-custom-arrow"></i>
+                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
             </div>
             <div class="card-body show" id="digital-link-block">
                 <div id="digitalLinksDefaultListJs">
