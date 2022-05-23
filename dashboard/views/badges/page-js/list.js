@@ -59,12 +59,6 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
         });
     };
 
-    backToListing = function () {
-        searchRecords(document.frmRecordSearch);
-        $('.editRecord--js').html("");
-        $('.pagebody--js').fadeIn();
-    }
-
     clearSearch = function () {
         document.frmRecordSearch.reset();
         $('.badgeApprovalJs').val('').removeAttr('disabled');
@@ -95,31 +89,19 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
     };
 
     /* Badge Request [ */
-    addBadgeReqForm = function (badgeReqId, badgeId) {
+    addBadgeReqForm = function (badgeReqId, badgeId = 0) {
         fcom.ajax(fcom.makeUrl(controller, 'badgeReqForm', [badgeReqId, badgeId]), '', function (t) {
-            $('.pagebody--js').hide();
-            var editRecordEle = $('.editRecord--js');
-            if (1 > editRecordEle.parents('.card-body').length && 1 > editRecordEle.parents('.card').length) {
-                $('.editRecord--js').html('<div class="card"><div class="card-body">' + t + '</div></div>');
-            } else if (1 > editRecordEle.parents('.card-body').length) {
-                $('.editRecord--js').html('<div class="card-body">' + t + '</div>');
-            } else {
-                $('.editRecord--js').html(t);
-            }
-
-            bindRecordsSelect2();
-            updateRecordIds();
-            $("select[name='breq_blinkcond_id']").trigger('change');
-            if (0 < badgeReqId) {
-                reloadRecordsList(badgeReqId, 1);
-            }
-            $('input[name="blinkcond_from_date"], ' + 'input[name="blinkcond_to_date"]').datetimepicker({
-                minDate: new Date(),
-                dateFormat: 'yy-mm-dd'
-            });
+            $.ykmodal(t);
+            setTimeout(() => {
+                bindRecordsSelect2();
+                updateRecordIds();
+                $("select[name='breq_blinkcond_id']").trigger('change');
+                if (0 < badgeReqId) {
+                    reloadRecordsList(badgeReqId, 1);
+                }
+            }, 500);
         });
     };
-
 
     setupBadgeReq = function (frm) {
         if (!$(frm).validate()) { return; }
@@ -142,7 +124,8 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
                     return false;
                 }
                 fcom.displaySuccessMessage(ans.msg);
-                backToListing();
+                $.ykmodal.close();
+                searchRecords(document.frmRecordSearch);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -306,10 +289,4 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
         fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'deleteBadgeRequest', [badgeReqId]), '', function (t) { searchRecords(document.frmRecordSearch) });
     }
 
-})()
-
-
-$(document).on("click", ".submitBtnJs", function () {
-    var form = $('form[name=frmBadgeReq]');
-    form.submit();
-});
+})();
