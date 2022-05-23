@@ -1028,9 +1028,7 @@ class ShopsController extends MyAppController
 
 
     private function getListingData($get, $includeShopData = true)
-    {
-        $db = FatApp::getDb();
-
+    {        
         $shop_id = 0;
         if (array_key_exists('shop_id', $get)) {
             $shop_id = FatUtility::int($get['shop_id']);
@@ -1072,7 +1070,7 @@ class ShopsController extends MyAppController
             } */
             //echo $srch->getQuery();
             $shopRs = $srch->getResultSet();
-            $shop = $db->fetch($shopRs);
+            $shop = FatApp::getDb()->fetch($shopRs);
         }
 
         $page = 1;
@@ -1115,10 +1113,8 @@ class ShopsController extends MyAppController
         if ($pageSize) {
             $srch->setPageSize($pageSize);
         }
-
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $products = $db->fetchAll($rs);
+        //echo $srch->getQuery();
+        $products = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $data = array(
             'products' => $products,
