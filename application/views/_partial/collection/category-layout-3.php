@@ -5,7 +5,7 @@
             <div class="section-head section-head-center">
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
             </div>
-            <div class="category-layout-1">
+            <div class="category-layout-3">
                 <?php foreach ($collection['categories'] as $category) { ?>
                     <div class="category">
                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $category['prodcat_id']);
