@@ -21,7 +21,7 @@ if ($totReviews) {
 }
 ?>
 <div class="rating-block">
-    <p class="text-muted text-info"><?php echo $totalType . ' ' . Labels::getLabel('LBL_RATINGS', $siteLangId); ?></p>
+    <p class="text-muted text-info"><?php echo $totalType . ' ' . Labels::getLabel('LBL_RATING`S_TYPE', $siteLangId); ?></p>
     <ul class="progress-block">
         <li class="progress-block-item">
             <span class="star">
