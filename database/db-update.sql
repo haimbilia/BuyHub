@@ -1847,3 +1847,11 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_i
 
 -- ---- Display Ribbon Only for Right Position. ---- --
 UPDATE `tbl_badge_link_conditions` SET `blinkcond_position` = '1' WHERE `blinkcond_position` = '2';
+
+DELETE FROM `tbl_extra_pages` WHERE `tbl_extra_pages`.`epage_id` = 15;
+DELETE FROM `tbl_extra_pages_lang` WHERE `tbl_extra_pages_lang`.`epagelang_epage_id` = 15;
+DELETE FROM `tbl_extra_pages_lang` WHERE `tbl_extra_pages_lang`.`epagelang_epage_id` = 15;
+
+DELETE FROM `tbl_extra_pages` WHERE `tbl_extra_pages`.`epage_id` = 47;
+DELETE FROM `tbl_extra_pages_lang` WHERE `tbl_extra_pages_lang`.`epagelang_epage_id` = 47;
+DELETE FROM `tbl_extra_pages_lang` WHERE `tbl_extra_pages_lang`.`epagelang_epage_id` = 47;
