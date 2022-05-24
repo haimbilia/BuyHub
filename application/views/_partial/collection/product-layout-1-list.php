@@ -1,6 +1,6 @@
-<div class="products <?php echo (isset($layoutClass)) ? $layoutClass : ''; ?> <?php if ($product['selprod_stock'] <= 0) { ?> item--sold  <?php } ?>">
+<div class="products <?php echo (isset($layoutClass)) ? $layoutClass : ''; ?> <?php if ($product['selprod_stock'] <= 0) { ?> out-of-stock <?php } ?>">
     <?php if ($product['selprod_stock'] <= 0) { ?>
-        <span class="tag-soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
+        <span class="out-of-stock-txt"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
     <?php  } ?>
     <div class="products-body">
         <?php
@@ -14,7 +14,8 @@
                 <svg class="svg">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                     </use>
-                </svg> <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?>
+                </svg>
+                <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?>
             </div>
         <?php } ?>
 

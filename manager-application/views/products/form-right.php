@@ -126,7 +126,7 @@
                         <?php
                         $fld = $frm->getField('upc_type');
                         HtmlHelper::configureSwitchForRadio($fld);
-                        $fld->addOptionListTagAttribute('class', 'list-radio');
+                        $fld->addOptionListTagAttribute('class', 'list-radio my-2');
                         $fld->addFieldTagAttribute('onchange', 'upcType()');
                         $fld->addFieldTagAttribute('class', 'upc_type');
                         echo $fld->getHtml();

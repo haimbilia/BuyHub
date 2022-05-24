@@ -86,7 +86,7 @@ class HtmlHelper
     {
         $currDate = strtotime(date("Y-m-d H:i:s"));
         $theDate = strtotime($date);
-        $diff = round(($currDate - $theDate) / (60 * 60 * 24));      
+        $diff = round(($currDate - $theDate) / (60 * 60 * 24));
         switch ($diff) {
             case 0:
                 return Labels::getLabel('LBL_TODAY', $langId);
@@ -490,7 +490,7 @@ class HtmlHelper
                     data-placement="top" title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '"
                     data-original-title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '">
                     <a href="' . $imgOrgSrc . '" data-featherlight="image">
-                    <img '.HtmlHelper::getImgDimParm($dimensionType, ImageDimension::VIEW_MINI).'
+                    <img ' . HtmlHelper::getImgDimParm($dimensionType, ImageDimension::VIEW_MINI) . '
                         src="' . $imgSrc . '"
                         alt="' . ($image['afile_attribute_alt'] ?? $defaultImageName) . '"></a>
                 </span>';
@@ -504,7 +504,7 @@ class HtmlHelper
                 data-placement="top" 
                 data-original-title="' . $defaultImageName . '">
                 <a href="' . CONF_WEBROOT_FRONTEND . 'images/defaults/product_default_image.jpg" data-featherlight="image">
-                <img '.HtmlHelper::getImgDimParm($dimensionType, ImageDimension::VIEW_MINI).'
+                <img ' . HtmlHelper::getImgDimParm($dimensionType, ImageDimension::VIEW_MINI) . '
                     src="' . CONF_WEBROOT_FRONTEND . 'images/defaults/product_default_image.jpg"
                     alt="' . $defaultImageName . '">
             </span>';
@@ -548,7 +548,7 @@ class HtmlHelper
 
         switch ($fld->fldType) {
             case 'radio':
-                $fld->addOptionListTagAttribute('class', 'list-radio');
+                $fld->addOptionListTagAttribute('class', 'list-radio my-3');
                 HtmlHelper::configureSwitchForRadio($fld);
                 break;
             case 'hidden':

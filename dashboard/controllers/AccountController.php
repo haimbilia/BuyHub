@@ -2586,7 +2586,7 @@ class AccountController extends LoggedUserController
         $frm = new Form('frmWithdrawal');
 
         $payoutPlugins = Plugin::getNamesWithCode(Plugin::TYPE_PAYOUTS, $this->siteLangId);
-        if (0 < count($payoutPlugins)) {
+        if (0 <div count($payoutPlugins)) {
             $payouts = [-1 => Labels::getLabel("LBL_BANK_PAYOUT", $this->siteLangId)] + $payoutPlugins;
             $frm->addSelectBox(Labels::getLabel('FRM_SELECT_PAYOUT', $this->siteLangId), 'payout', $payouts, -1, array(), '');
         }
@@ -2776,13 +2776,16 @@ class AccountController extends LoggedUserController
         $ifsc->requirements()->setRegularExpressionToValidate(ValidateElement::USERNAME_REGEX);
 
         $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $this->siteLangId), 'ub_bank_address', '');
-        $htm = '<div class="info p-3">
-                    <span>
-                        <svg class="svg">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info" href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info">
+        $htm = '<div class="alert alert-info" role="alert">
+                    <div class="alert-icon">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info">
                             </use>
-                        </svg>' . Labels::getLabel('LBL_YOUR_BANK_INFORMATION_IS_SAFE_WITH_US.', $this->siteLangId) . '
-                    </span>
+                        </svg>
+                     </div> 
+                        <div class="alert-text"> ' . Labels::getLabel('LBL_YOUR_BANK_INFORMATION_IS_SAFE_WITH_US.', $this->siteLangId) . '
+                        </div>
+                </div>
                 </div>';
         $frm->addHtml('bank_info_safety_text', 'bank_info_safety_text', $htm);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));

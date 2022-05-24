@@ -4,7 +4,7 @@
     margin-top: 2rem;
     &-item {
         border-bottom: $border;
-        padding: 1rem 1.5rem;
+        padding: 1.5rem 1.5rem;
         &.is-active {
             background-color: $bg-gray;
         }
@@ -19,13 +19,14 @@
         font-weight: 600;
     }
     .sold-price {
+        font-weight: 500;
         font-size: 1.125rem;
     }
     .sold-by {
         font-size: 0.8rem;
         display: flex;
         margin-bottom: 0.6rem;
-
+        color: $txt-gray;
         &-txt {
             padding-right: 10px;
             color: $txt-gray;

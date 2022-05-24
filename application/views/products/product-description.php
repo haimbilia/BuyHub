@@ -135,7 +135,7 @@
         <?php echo $frmBuyProduct->getExternalJs();
         }
     } else { ?>
-        <div class="tag-soldout tag--soldout-full">
+        <div class="out-of-stock-txt tag--soldout-full">
             <h3>
                 <?php echo Labels::getLabel('LBL_Sold_Out', $siteLangId); ?></h3>
             <p>
@@ -145,7 +145,7 @@
     <?php }
 
     if (strtotime($product['selprod_available_from']) > strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
-        <div class="tag-soldout tag--soldout-full">
+        <div class="out-of-stock-txt tag--soldout-full">
             <h3><?php echo Labels::getLabel('LBL_Not_Available', $siteLangId); ?></h3>
             <p>
                 <?php echo str_replace('{available-date}', FatDate::Format($product['selprod_available_from']), Labels::getLabel('LBL_This_item_will_be_available_from_{available-date}', $siteLangId)); ?>
@@ -239,7 +239,7 @@
                                 </div>
                             </div>
                             <?php if ($usproduct['selprod_stock'] <= 0) { ?>
-                                <div class="tag-soldout">
+                                <div class="out-of-stock-txt">
                                     <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
                                 </div>
                             <?php  } ?>
