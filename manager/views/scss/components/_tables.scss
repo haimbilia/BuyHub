@@ -91,6 +91,28 @@
     }
     &-variants {
         table-layout: fixed;
+
+        thead th {
+            &:first-child {
+                padding-#{$start-direction}: 1.5625rem;
+            }
+            &:last-child {
+                padding-#{$end-direction}: 1.5625rem;
+            }
+        }
+        tbody td {
+            &:first-child {
+                padding-#{$start-direction}: 1.5625rem;
+            }
+            &:last-child {
+                padding-#{$end-direction}: 1.5625rem;
+            }
+        }
+
+        td,
+        th {
+            padding: 1rem 5px;
+        }
     }
     &-slots {
         thead th {
