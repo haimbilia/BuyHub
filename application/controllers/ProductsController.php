@@ -813,8 +813,8 @@ class ProductsController extends MyAppController
         }
         $this->set('selProdRibbons', $selProdRibbons);
 
-        $ratingAspects = SelProdRating::getAvgSelProdReviewsRating($selprod_id, $this->siteLangId);
-
+        $ratingAspects = SelProdRating::getProdRatingAspects($product['product_id'], $this->siteLangId);
+        
         $this->set('ratingAspects', $ratingAspects);
         $this->set('productView', true);
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);

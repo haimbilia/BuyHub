@@ -51,7 +51,7 @@ class ReviewsController extends MyAppController
         $frmReviewSearch->fill(array('selprod_id' => $selprod_id, 'review_id' => $reviewId));
         $this->set('frmReviewSearch', $frmReviewSearch);
 
-        $ratingAspects = SelProdRating::getAvgSelProdReviewsRating($selprod_id, $this->siteLangId);
+        $ratingAspects = SelProdRating::getProdRatingAspects($product['product_id'], $this->siteLangId);
         $this->set('ratingAspects', $ratingAspects);
 
         $this->includeFeatherLight();
