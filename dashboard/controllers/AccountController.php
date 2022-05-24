@@ -2586,7 +2586,7 @@ class AccountController extends LoggedUserController
         $frm = new Form('frmWithdrawal');
 
         $payoutPlugins = Plugin::getNamesWithCode(Plugin::TYPE_PAYOUTS, $this->siteLangId);
-        if (0 <div count($payoutPlugins)) {
+        if (0 < count($payoutPlugins)) {
             $payouts = [-1 => Labels::getLabel("LBL_BANK_PAYOUT", $this->siteLangId)] + $payoutPlugins;
             $frm->addSelectBox(Labels::getLabel('FRM_SELECT_PAYOUT', $this->siteLangId), 'payout', $payouts, -1, array(), '');
         }
