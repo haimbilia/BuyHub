@@ -106,12 +106,12 @@ class SelProdRating extends MyAppModel
         return ($record == false) ? 0 : $record['avg_rating'];
     }
 
-    public static function getAvgSelProdReviewsRating(int $selProdId, int $langId): array
+    public static function getProdRatingAspects(int $productId, int $langId): array
     {
         $srch = new SelProdReviewSearch();
         $srch->joinSelProdRating($langId);
         $srch->addCondition(RatingType::DB_TBL_PREFIX . 'type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
-        $srch->addCondition('spreview_selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
+        $srch->addCondition('spreview_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
         $srch->addGroupBy('sprating_ratingtype_id');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();

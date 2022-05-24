@@ -785,6 +785,8 @@ Updates/Fixes :
     => 064465 - Admin: Accordion icon is not displaying when the user adds new links under 'Quick links' section
     => 064469 - The previously selected zones do not appear when the admin tries to edit any combined tax rule.
     => 064403 - Admin >> CMS: Brands are showing multiple times under 'Brand layout2 setup' section.
+    => 064044 - Admin: UI is not correct under Subscription section
+    => 064402 - UI issue on the media section on the shop details page.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

@@ -734,12 +734,10 @@ class GuestUserController extends MyAppController
     {
         $frm = $this->getForgotForm($withPhone);
         $frm->addSecurityToken();
-        $obj = new Extrapage();
-        $pageData = $obj->getContentByPageType(Extrapage::FORGOT_PAGE_RIGHT_BLOCK, $this->siteLangId);
-
+       
         $this->set('smsPluginStatus', SmsArchive::canSendSms(SmsTemplate::LOGIN));
         $this->set('withPhone', $withPhone);
-        $this->set('pageData', $pageData);
+       
         $this->set('frm', $frm);
         $this->set('siteLangId', $this->siteLangId);
 

@@ -182,7 +182,7 @@ class AttachedFile extends MyAppModel
 
     public static function getRatioTypeWithCustom($langId)
     {
-        return  self::getRatioTypeArray($langId) + [static::RATIO_TYPE_CUSTOM => Labels::getLabel('LBL_CUSTOM_RATIO', $langId)];
+        return  self::getRatioTypeArray($langId) + [static::RATIO_TYPE_CUSTOM => Labels::getLabel('LBL_FREE', $langId)];
     }
 
     // $compareSize in KiloByte

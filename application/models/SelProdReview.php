@@ -54,7 +54,7 @@ class SelProdReview extends MyAppModel
         $srch->joinSeller();
         $srch->joinSellerProducts();
         $srch->joinProducts();
-        $srch->addMultipleFields(array('count(*) as numOfReviews'));
+        $srch->addMultipleFields(array('count(distinct(spreview_id)) as numOfReviews'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addGroupby('spreview_seller_user_id');

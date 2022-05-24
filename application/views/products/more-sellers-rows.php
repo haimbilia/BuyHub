@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $count = 1;
+$shopTotalReviews = $shopTotalReviews ?? 0;
 foreach ($sellers as $key => $sellerDetail) {
     $isActive = array_key_exists('isActive', $sellerDetail) && true === $sellerDetail['isActive'];
     if ($count > Product::VIEW_MORE_SELLER_COUNT) { ?>
@@ -10,7 +11,7 @@ foreach ($sellers as $key => $sellerDetail) {
         </li>
     <?php break;
     }
-
+    $shopTotalReviews = $sellerDetail['shopTotalReviews'] ?? $shopTotalReviews;
     if (1 == $count && !array_key_exists('isActive', $sellerDetail)) {
         echo '<li class="more-sellers-head">' . Labels::getLabel('LBL_MORE_SELLERS', $siteLangId) . '</li>';
     }
@@ -36,7 +37,9 @@ foreach ($sellers as $key => $sellerDetail) {
                 <?php
                 }
                 ?>
-                <a href="<?php echo UrlHelper::generateUrl('reviews', 'shop', array($sellerDetail['shop_id'])); ?>" class="totals-review"><?php echo $shopTotalReviews ?? 0; ?> <?php echo Labels::getLabel('LBL_REVIEWS', $siteLangId); ?> </a>
+                <a href="<?php echo UrlHelper::generateUrl('reviews', 'shop', array($sellerDetail['shop_id'])); ?>" class="totals-review"><?php echo $shopTotalReviews; ?>
+                    <?php echo Labels::getLabel('LBL_REVIEWS', $siteLangId); ?>
+                </a>
             </div>
             <!-- Shop Badge  -->
             <?php
