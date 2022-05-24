@@ -43,6 +43,17 @@ $(document).ready(function () {
         showFormActionsBtns();
     });
 
+    $('[data-bs-toggle="popover"]').popover({
+        html: true,
+        content: function () {
+            var content = $(this).attr("data-popover-html");
+            if ('undefined' != typeof content) {
+                return $(content).html();
+            }
+            return $(this).attr("data-bs-content");
+        },
+    });
+
     /*  if (0 < $(".js-widget-scroll").length) {
          slickWidgetScroll();
      } */

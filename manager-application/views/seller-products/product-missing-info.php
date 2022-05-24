@@ -7,7 +7,7 @@
     </h5>
 </div>
 <div class="modal-body">
-    <div class="form-edit-body loaderContainerJs">
+    <div class="loaderContainerJs">
         <?php
 
         $yesNoArr = applicationConstants::getYesNoArr($siteLangId);
@@ -42,7 +42,7 @@
             }
         }
         ?>
-        <div class="col-md-12">
+        <div>
             <?php echo $tbl->getHtml(); ?>
         </div>
     </div>

@@ -721,16 +721,15 @@ function defaultSetUpLogin(frm, v) {
     fcom.ajax(
         fcom.makeUrl("GuestUser", "login"),
         fcom.frmData(frm),
-        function (t) {
+        function (ans) {
             fcom.removeLoader();
-            var ans = JSON.parse(t);
             if (ans.status == 1) {
                 fcom.displaySuccessMessage(ans.msg);
                 location.href = ans.redirectUrl;
                 return;
             }
             fcom.displayErrorMessage(ans.msg);
-        }
+        }, {'fOutMode' : 'json'}
     );
     return false;
 }

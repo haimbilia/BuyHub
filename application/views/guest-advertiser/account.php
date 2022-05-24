@@ -21,13 +21,15 @@ if (!empty($slogan)) {
             <div class="hero-banner-inner">
                 <div class="seller-slogan">
                     <div class="seller-slogan-txt">
-                        <?php echo $pageContent; ?>
+                        <?php if (isset($slogan['epage_label'])) { ?>
+                            <h3><?php echo $slogan['epage_label']; ?></h3>
+                        <?php } ?>
+                        <p><?php echo $pageContent; ?></p>
                     </div>
                 </div>
                 <div class="seller-register-form affiliate-register-form" id="regFrmBlock">
                     <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
                 </div>
-
             </div>
         </div>
     </div>

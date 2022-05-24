@@ -176,7 +176,7 @@ class UserAuthentication extends FatModel
         }
 
         $browser = CommonHelper::userAgent();
-        if (strtotime($authRow['uauth_expiry']) < strtotime('now') || $authRow['uauth_browser'] != $browser || CommonHelper::userIp() != $authRow['uauth_last_ip']) {
+        if (strtotime($authRow['uauth_expiry']) < strtotime('now') || $authRow['uauth_browser'] != $browser || CommonHelper::getClientIp() != $authRow['uauth_last_ip']) {
             self::clearLoggedUserLoginCookie();
             return false;
         }
@@ -437,10 +437,7 @@ class UserAuthentication extends FatModel
                 }
 
                 if (FatUtility::isAjaxCall() || true === MOBILE_APP_API_CALL) {
-                    $json['status'] = 0;
-                    $json['msg'] = $this->error;
-                    $json['notVerified'] = 1;
-                    die(json_encode($json));
+                    LibHelper::exitWithError($this->error, false, false, ['notVerified' => 1]);
                 }
                 return false;
             }
@@ -524,7 +521,7 @@ class UserAuthentication extends FatModel
                 return false;
             }
 
-            $row['user_ip'] = CommonHelper::userIp();
+            $row['user_ip'] = CommonHelper::getClientIp();
             $this->setSession($row);
             return true;
         }

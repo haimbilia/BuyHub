@@ -10,13 +10,7 @@ foreach ($arr as $childOrder) {
     $selProdTotalSpecialPrice += $childOrder['op_special_price'] * $childOrder["op_qty"];
     $cartTotal = $cartTotal + CommonHelper::orderProductAmount($childOrder, 'cart_total');
     $shippingCharges = $shippingCharges + CommonHelper::orderProductAmount($childOrder, 'shipping');
-    if (empty($childOrder['taxOptions'])) {
-        $totalTax = $totalTax + CommonHelper::orderProductAmount($childOrder, 'TAX');
-    } else {
-        foreach ($childOrder['taxOptions'] as $key => $val) {
-            $totalTax = $totalTax + $val['value'];
-        }
-    }
+    $totalTax = $totalTax + CommonHelper::orderProductAmount($childOrder, 'TAX');
 }
 
 $discount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT')) : $orderDetail['order_discount_total'];
