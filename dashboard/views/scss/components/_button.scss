@@ -53,6 +53,8 @@
     &-brand {
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
+        border-color: var(--brand-color);
+
         &:focus {
             //box-shadow: $shadow2;
         }
@@ -72,6 +74,8 @@
     &-secondary {
         background-color: var(--secondary-color);
         color: var(--secondary-color-inverse);
+        border-color: var(--secondary-color);
+
         &:hover {
             color: var(--secondary-color-inverse);
         }
@@ -87,6 +91,7 @@
 
     &-white {
         background: #fff;
+        border-color: #fff;
         color: #000;
     }
     &-outline-white {
@@ -96,6 +101,7 @@
     }
     &-gray {
         background-color: $bg-gray;
+        border-color: $bg-gray;
         color: $txt-body;
     }
     &-outline-gray {

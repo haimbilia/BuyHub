@@ -19,6 +19,8 @@ $btn-line-height: $btn-height;
     white-space: nowrap;
     &-brand {
         @include bg-brand;
+        border-color: $brand-color;
+
         &:hover {
             color: $brand-color-inverse;
         }
