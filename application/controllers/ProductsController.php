@@ -819,7 +819,7 @@ class ProductsController extends MyAppController
         $this->set('productView', true);
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
 
-        //$currSellerArr = Product::getMoreSeller($product['selprod_code'], $this->siteLangId, $product['selprod_user_id'], true);      
+        //$currSellerArr = Product::getMoreSeller($product['selprod_code'], $this->siteLangId, $product['selprod_user_id'], true);
         $this->set('sellers', [$product]);
 
         $this->set('currSelprodId', $selprod_id);
@@ -948,11 +948,9 @@ class ProductsController extends MyAppController
     public function moreSellersRows(string $selprodCode, int $sellerId)
     {
         $moreSellers = Product::getMoreSeller($selprodCode, $this->siteLangId, $sellerId);
-        $productsArr = [];
-        foreach ($moreSellers as $sellerDetail) {
-            $productsArr[$sellerDetail['selprod_id']] = $this->getProductDetail($sellerDetail['selprod_id']);
+        foreach ($moreSellers as &$sellerDetail) {
+            $sellerDetail['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($sellerDetail['shop_user_id']);
         }
-        $this->set('productsArr', $productsArr);
         $this->set('sellers', $moreSellers);
         $this->_template->render(false, false);
     }
