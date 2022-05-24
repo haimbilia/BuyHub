@@ -114,7 +114,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_langData['language_code'])) {
             return self::$_langData['language_code'];
         }
-        return Language::getAttributesById(self::$_lang_id, ['language_code']);
+        return Language::getAttributesById(self::$_lang_id, 'language_code');
     }
 
     public static function getLangCountryCode()
@@ -122,7 +122,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_langData['language_country_code'])) {
             return self::$_langData['language_country_code'];
         }
-        return Language::getAttributesById(self::$_lang_id, ['language_country_code']);
+        return Language::getAttributesById(self::$_lang_id, 'language_country_code');
     }
 
     public static function getLayoutDirection()
@@ -130,7 +130,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_langData['language_layout_direction'])) {
             return self::$_langData['language_layout_direction'];
         }
-        return Language::getAttributesById(self::$_lang_id, ['language_layout_direction']);
+        return Language::getAttributesById(self::$_lang_id, 'language_layout_direction');
     }
 
     public static function getCurrencyId()
@@ -143,7 +143,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_symbol_left'])) {
             return self::$_currencyData['currency_symbol_left'];
         }
-        return Currency::getAttributesById(self::$_lang_id, ['currency_symbol_left']);
+        return Currency::getAttributesById(self::$_lang_id, 'currency_symbol_left');
     }
 
     public static function getCurrencySymbolRight()
@@ -151,7 +151,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_symbol_right'])) {
             return self::$_currencyData['currency_symbol_right'];
         }
-        return Currency::getAttributesById(self::$_lang_id, ['currency_symbol_right']);
+        return Currency::getAttributesById(self::$_lang_id, 'currency_symbol_right');
     }
 
     public static function getCurrencyCode()
@@ -159,7 +159,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_code'])) {
             return self::$_currencyData['currency_code'];
         }
-        return Currency::getAttributesById(self::$_lang_id, ['currency_code']);
+        return Currency::getAttributesById(self::$_lang_id, 'currency_code');
     }
 
     public static function getCurrencyValue()
@@ -167,7 +167,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_value'])) {
             return self::$_currencyData['currency_value'];
         }
-        return Currency::getAttributesById(self::$_lang_id, ['currency_value']);
+        return Currency::getAttributesById(self::$_lang_id, 'currency_value');
     }
 
     public static function userAgent()
