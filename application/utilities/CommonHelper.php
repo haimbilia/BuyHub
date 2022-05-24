@@ -111,17 +111,26 @@ class CommonHelper extends FatUtility
 
     public static function getLangCode()
     {
-        return self::$_langData['language_code'];
+        if (isset(self::$_langData['language_code'])) {
+            return self::$_langData['language_code'];
+        }
+        return Language::getAttributesById(self::$_lang_id, ['language_code']);
     }
 
     public static function getLangCountryCode()
     {
-        return self::$_langData['language_country_code'];
+        if (isset(self::$_langData['language_country_code'])) {
+            return self::$_langData['language_country_code'];
+        }
+        return Language::getAttributesById(self::$_lang_id, ['language_country_code']);
     }
 
     public static function getLayoutDirection()
     {
-        return self::$_langData['language_layout_direction'];
+        if (isset(self::$_langData['language_layout_direction'])) {
+            return self::$_langData['language_layout_direction'];
+        }
+        return Language::getAttributesById(self::$_lang_id, ['language_layout_direction']);
     }
 
     public static function getCurrencyId()
@@ -131,22 +140,34 @@ class CommonHelper extends FatUtility
 
     public static function getCurrencySymbolLeft()
     {
-        return self::$_currencyData['currency_symbol_left'];
+        if (isset(self::$_currencyData['currency_symbol_left'])) {
+            return self::$_currencyData['currency_symbol_left'];
+        }
+        return Currency::getAttributesById(self::$_lang_id, ['currency_symbol_left']);
     }
 
     public static function getCurrencySymbolRight()
     {
-        return self::$_currencyData['currency_symbol_right'];
+        if (isset(self::$_currencyData['currency_symbol_right'])) {
+            return self::$_currencyData['currency_symbol_right'];
+        }
+        return Currency::getAttributesById(self::$_lang_id, ['currency_symbol_right']);
     }
 
     public static function getCurrencyCode()
     {
-        return self::$_currencyData['currency_code'];
+        if (isset(self::$_currencyData['currency_code'])) {
+            return self::$_currencyData['currency_code'];
+        }
+        return Currency::getAttributesById(self::$_lang_id, ['currency_code']);
     }
 
     public static function getCurrencyValue()
     {
-        return self::$_currencyData['currency_value'];
+        if (isset(self::$_currencyData['currency_value'])) {
+            return self::$_currencyData['currency_value'];
+        }
+        return Currency::getAttributesById(self::$_lang_id, ['currency_value']);
     }
 
     public static function userAgent()
@@ -350,7 +371,7 @@ class CommonHelper extends FatUtility
                 $amount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_TAX]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_TAX]['opcharge_amount'] : 0;
                 if ($userType == User::USER_TYPE_SELLER && $opArr['op_tax_collected_by_seller'] == 0) {
                     $amount = 0;
-                }                
+                }
                 break;
             case 'VOLUME_DISCOUNT':
                 $amount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT]['opcharge_amount'] : 0;
