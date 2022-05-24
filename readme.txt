@@ -786,6 +786,7 @@ Updates/Fixes :
     => 064469 - The previously selected zones do not appear when the admin tries to edit any combined tax rule.
     => 064403 - Admin >> CMS: Brands are showing multiple times under 'Brand layout2 setup' section.
     => 064467 - The tax amount appears wrong on the order details page.
+    => 064550 - Admin: Getting an error when the user clicks on save button under Banner setup section.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
