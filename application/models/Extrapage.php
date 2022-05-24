@@ -24,7 +24,7 @@ class Extrapage extends MyAppModel
     public const SELLER_PAGE_FORM_TEXT = 24;
     public const FOOTER_TRUST_BANNERS = 26;
     public const CHECKOUT_PAGE_HEADER_BLOCK = 27;
-    
+
     public const ADMIN_PRODUCTS_CATEGORIES_INSTRUCTIONS = 28;
     // public const GENERAL_SETTINGS_INSTRUCTIONS = 29; /* Not Required this data moved to help center. */
     public const ADMIN_BRANDS_INSTRUCTIONS = 30;
@@ -42,8 +42,8 @@ class Extrapage extends MyAppModel
     public const SELLER_INVENTORY_INSTRUCTIONS = 42;
     public const PRODUCT_REQUEST_INSTRUCTIONS = 43;
     public const ADMIN_TYPE_POLICY_POINTS = 44;
-    public const ADMIN_ZONE_MANAGEMENT_INSTRUCTIONS = 45;  
-    public const FOOTER_META_CONTENT = 46;  
+    public const ADMIN_ZONE_MANAGEMENT_INSTRUCTIONS = 45;
+    public const FOOTER_META_CONTENT = 46;
 
     public const CONTENT_PAGES = 0;
     public const CONTENT_IMPORT_INSTRUCTION = 1;
@@ -91,18 +91,17 @@ class Extrapage extends MyAppModel
         }
 
         return array(
-        static::CONTACT_US_CONTENT_BLOCK => Labels::getLabel('LBL_CONTACT_US_CONTENT_BLOCK', $langId),
-        static::LOGIN_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_LOGIN_PAGE_RIGHT_BLOCK', $langId),
-        static::REGISTRATION_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_REGISTRATION_PAGE_RIGHT_BLOCK', $langId),
-        static::FORGOT_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_FORGOT_PAGE_RIGHT_BLOCK', $langId),
-        static::RESET_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_RESET_PAGE_RIGHT_BLOCK', $langId),
-        static::SELLER_PAGE_BLOCK1 => Labels::getLabel('LBL_SELLER_PAGE_BLOCK1', $langId),
-        static::SELLER_PAGE_BLOCK2 => Labels::getLabel('LBL_SELLER_PAGE_BLOCK2', $langId),
-        static::SELLER_PAGE_BLOCK3 => Labels::getLabel('LBL_SELLER_PAGE_BLOCK3', $langId),
-        static::SELLER_BANNER_SLOGAN => Labels::getLabel('LBL_SELLER_BANNER_SLOGAN', $langId),
-        static::SUBSCRIPTION_PAGE_BLOCK => Labels::getLabel('LBL_SUBSCRIPTION_PAGE_BLOCK', $langId),
-        static::ADVERTISER_BANNER_SLOGAN => Labels::getLabel('LBL_ADVERTISER_BANNER_SLOGAN', $langId),
-        static::AFFILIATE_BANNER_SLOGAN => Labels::getLabel('LBL_AFFILIATE_BANNER_SLOGAN', $langId),
+            static::CONTACT_US_CONTENT_BLOCK => Labels::getLabel('LBL_CONTACT_US_CONTENT_BLOCK', $langId),
+            static::LOGIN_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_LOGIN_PAGE_RIGHT_BLOCK', $langId),
+            static::REGISTRATION_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_REGISTRATION_PAGE_RIGHT_BLOCK', $langId),
+            static::RESET_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_RESET_PAGE_RIGHT_BLOCK', $langId),
+            static::SELLER_PAGE_BLOCK1 => Labels::getLabel('LBL_SELLER_PAGE_BLOCK1', $langId),
+            static::SELLER_PAGE_BLOCK2 => Labels::getLabel('LBL_SELLER_PAGE_BLOCK2', $langId),
+            static::SELLER_PAGE_BLOCK3 => Labels::getLabel('LBL_SELLER_PAGE_BLOCK3', $langId),
+            static::SELLER_BANNER_SLOGAN => Labels::getLabel('LBL_SELLER_BANNER_SLOGAN', $langId),
+            static::SUBSCRIPTION_PAGE_BLOCK => Labels::getLabel('LBL_SUBSCRIPTION_PAGE_BLOCK', $langId),
+            static::ADVERTISER_BANNER_SLOGAN => Labels::getLabel('LBL_ADVERTISER_BANNER_SLOGAN', $langId),
+            static::AFFILIATE_BANNER_SLOGAN => Labels::getLabel('LBL_AFFILIATE_BANNER_SLOGAN', $langId),
         );
     }
 
@@ -117,25 +116,14 @@ class Extrapage extends MyAppModel
         unset($data['btn_submit']);
         unset($data['epage_id']);
 
-        $assignValues = $data;
-        /* $assignValues = array(
-        'epage_identifier'=>$data['epage_identifier'],
-        ); */
-
         if (!FatApp::getDb()->updateFromArray(
             static::DB_TBL,
-            $assignValues,
+            $data,
             array('smt' => static::DB_TBL_PREFIX . 'id = ? ', 'vals' => array((int)$epage_id))
         )) {
             $this->error = FatApp::getDb()->getError();
             return false;
         }
-
-        /* $assignValues = array(
-        'epage_active'=>$data['epage_active'],
-        );
-        FatApp::getDb()->updateFromArray(static::DB_TBL, $assignValues,
-        array('smt' => static::DB_TBL_PREFIX . 'id = ? and epage_default = ?', 'vals' => array((int)$epage_id,0))); */
 
         return true;
     }
@@ -163,9 +151,9 @@ class Extrapage extends MyAppModel
         }
 
         return array(
-        static::SELLER_BANNER_SLOGAN => Labels::getLabel('LBL_SELLER_BANNER_SLOGAN', $langId),
-        static::ADVERTISER_BANNER_SLOGAN => Labels::getLabel('LBL_ADVERTISER_BANNER_SLOGAN', $langId),
-        static::AFFILIATE_BANNER_SLOGAN => Labels::getLabel('LBL_AFFILIATE_BANNER_SLOGAN', $langId),
+            static::SELLER_BANNER_SLOGAN => Labels::getLabel('LBL_SELLER_BANNER_SLOGAN', $langId),
+            static::ADVERTISER_BANNER_SLOGAN => Labels::getLabel('LBL_ADVERTISER_BANNER_SLOGAN', $langId),
+            static::AFFILIATE_BANNER_SLOGAN => Labels::getLabel('LBL_AFFILIATE_BANNER_SLOGAN', $langId),
         );
     }
 
@@ -257,5 +245,22 @@ class Extrapage extends MyAppModel
             return false;
         }
         return $translatedData;
+    }
+    
+    /**
+     * nonHtmlEditorBlocks
+     *
+     * @param  mixed $block
+     * @return void
+     */
+    public static function nonHtmlEditorBlocks(int $block): bool
+    {
+        $arr = [
+            static::ADVERTISER_BANNER_SLOGAN,
+            static::SELLER_BANNER_SLOGAN,
+            static::AFFILIATE_BANNER_SLOGAN,
+        ];
+
+        return in_array($block, $arr);
     }
 }

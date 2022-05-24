@@ -251,30 +251,20 @@ class BannersController extends ListingBaseController
             LibHelper::exitWithError($bannerObj->getError(), true);
         }
 
-        $langId = $this->siteLangId;
-        $langData = array(
-            'bannerlang_banner_id' => $recordId,
-            'bannerlang_lang_id' => $this->siteLangId,
-            'banner_title' => $post['banner_title'],
-        );
-
-        if (!$bannerObj->updateLangData($this->siteLangId, $langData)) {
+        $recordId = $bannerObj->getMainTableRecordId();  
+        if (!$bannerObj->updateLangData(CommonHelper::getDefaultFormLangId(), ['banner_title' => $post['banner_title']])) {
             LibHelper::exitWithError($bannerObj->getError(), true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Banner::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId,CommonHelper::getDefaultFormLangId())) {
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
-        $newTabLangId = 0;
-        if ($recordId == 0) {
-            $recordId = $bannerObj->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
+        $newTabLangId = 0;       
         $languages = (array)Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         foreach ($languages as $langId => $langName) {
             $newTabLangId = $langId;

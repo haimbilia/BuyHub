@@ -21,7 +21,10 @@ if (!empty($bannerSlogan)) {
             <div class="hero-banner-inner">
                 <div class="seller-slogan">
                     <div class="seller-slogan-txt">
-                        <?php echo $pageContent; ?>
+                        <?php if (isset($bannerSlogan['epage_label'])) { ?>
+                            <h3><?php echo $bannerSlogan['epage_label']; ?></h3>
+                        <?php } ?>
+                        <p><?php echo $pageContent; ?></p>
                     </div>
                 </div>
                 <div class="seller-register-form">

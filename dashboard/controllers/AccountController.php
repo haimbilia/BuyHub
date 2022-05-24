@@ -2786,7 +2786,7 @@ class AccountController extends LoggedUserController
                         <div class="alert-text"> ' . Labels::getLabel('LBL_YOUR_BANK_INFORMATION_IS_SAFE_WITH_US.', $this->siteLangId) . '
                         </div>
                 </div>
-                </div>';
+                </>';
         $frm->addHtml('bank_info_safety_text', 'bank_info_safety_text', $htm);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;

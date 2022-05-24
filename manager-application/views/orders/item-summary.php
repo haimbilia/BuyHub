@@ -34,6 +34,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
 
                     $shippingCost = CommonHelper::orderProductAmount($op, 'SHIPPING');
                     $volumeDiscount = CommonHelper::orderProductAmount($op, 'VOLUME_DISCOUNT');
+                    $tax = CommonHelper::orderProductAmount($op, 'TAX');                   
                     $total = CommonHelper::orderProductAmount($op, 'cart_total') + $shippingCost + $volumeDiscount;
 
                     $op['order_id'] = $order['order_id'];
@@ -120,6 +121,12 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             <li class="list-popover-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT:'); ?></span>
                                 <span class="value"><?php echo $volumeDiscount; ?></span>
+                            </li>
+                        <?php } ?>
+                        <?php if (0 < $tax) { ?>
+                            <li class="list-popover-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_TAX:'); ?></span>
+                                <span class="value"><?php echo $tax; ?></span>
                             </li>
                         <?php } ?>
                     </ul>

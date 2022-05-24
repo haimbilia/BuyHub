@@ -271,7 +271,7 @@ class CommonHelper extends FatUtility
         //return $rewardPoints = static::convertCurrencyToRewardPoint($rewardPointValues);
     }
 
-    public static function orderProductAmount($opArr = array(), $amountType = 'netamount', $pricePerItem = false, $userType = false)
+    public static function orderProductAmount($opArr = array(), $amountType = 'NETAMOUNT', $pricePerItem = false, $userType = false)
     {
         $amount = 0;
 
@@ -347,8 +347,10 @@ class CommonHelper extends FatUtility
                 $amount = $cartTotal;
                 break;
             case 'TAX':
-                //$amount = FatUtility::convertToType($opArr['op_tax_total'] , FatUtility::VAR_FLOAT);
                 $amount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_TAX]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_TAX]['opcharge_amount'] : 0;
+                if ($userType == User::USER_TYPE_SELLER && $opArr['op_tax_collected_by_seller'] == 0) {
+                    $amount = 0;
+                }                
                 break;
             case 'VOLUME_DISCOUNT':
                 $amount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT]['opcharge_amount'] : 0;
