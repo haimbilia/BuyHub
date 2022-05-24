@@ -85,6 +85,9 @@ class SearchItem extends MyAppModel
                     case 'pagesize':
                         $arr_url_params['pageSize'] = $valueString;
                         break;
+                    case 'pagerecordcount':
+                        $arr_url_params['pageRecordCount'] = $valueString;
+                        break;
                     case 'availability':
                         $dashPosition = strpos($valueString, '-');
                         $id = substr($valueString, 0, $dashPosition);

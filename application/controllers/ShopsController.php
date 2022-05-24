@@ -130,7 +130,7 @@ class ShopsController extends MyAppController
 
         $startRecord = ($page - 1) * $pageSize + 1;
         $endRecord = $pageSize;
-        $totalRecords = $post['total_record_count'];
+        $totalRecords = $post['pageRecordCount'];
         if ($totalRecords < $endRecord) {
             $endRecord = $totalRecords;
         }
@@ -155,7 +155,7 @@ class ShopsController extends MyAppController
     {
         $frm = new Form('frmSearchShops');
         $frm->addHiddenField('', 'featured', 0);
-        $frm->addHiddenField('', 'total_record_count');
+        $frm->addHiddenField('', 'pageRecordCount');
         return $frm;
     }
 
@@ -197,7 +197,7 @@ class ShopsController extends MyAppController
 
         if (false === MOBILE_APP_API_CALL) {
             $frm = $this->getProductSearchForm();
-            $frm->fill($get);
+            $frm->fill($data['postedData']);
 
             $arr = array(
                 'frmProductSearch' => $frm,
@@ -431,9 +431,9 @@ class ShopsController extends MyAppController
         $get['top_products'] = 1;
         $get['shop_id'] = $shop_id;
 
-        $frm->fill($get);
-
+       
         $data = $this->getListingData($get);
+        $frm->fill($data['postedData']);
 
         $arr = array(
             'frmProductSearch' => $frm,
@@ -526,9 +526,9 @@ class ShopsController extends MyAppController
         $fld = $frm->getField('sortBy');
         $fld->value = 'popularity_desc';
         $fld->fldType = 'hidden';
-        $frm->fill($get);
-
+       
         $data = $this->getListingData($get);
+        $frm->fill($data['postedData']);
 
         $selProdIdsArr = array_column($data['products'], 'selprod_id');
         $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
@@ -1081,7 +1081,7 @@ class ShopsController extends MyAppController
             }
         }
 
-        if (!in_array($pageSize, applicationConstants::getPageSizeValues())) {
+        if (!in_array($pageSize, FilterHelper::getPageSizeValues())) {
             $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
         }
 

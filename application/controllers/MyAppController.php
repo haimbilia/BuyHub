@@ -564,7 +564,7 @@ class MyAppController extends FatController
         $frm->addHiddenField('', 'top_products', 0);
         $frm->addHiddenField('', 'currency_id', $this->siteCurrencyId);
         $frm->addSubmitButton('', 'btnProductSrchSubmit', '');
-        $frm->addHiddenField('', 'total_record_count');
+        $frm->addHiddenField('', 'pageRecordCount');
         $frm->addHiddenField('', 'vtype');
         return $frm;
     }
@@ -937,8 +937,13 @@ class MyAppController extends FatController
             return;
         }
 
-        if ($page > 1 && !empty($post['total_record_count'])) {
-            $this->setPageRecord($post['total_record_count'], $pageSize, $page);
+        $pageRecordCount = 0;
+        if (1 < $page && !empty($post['pageRecordCount'])) {
+            $pageRecordCount = FilterHelper::decrypt($post['pageRecordCount']);
+        }
+
+        if (0 < $pageRecordCount) {
+            $this->setPageRecord($pageRecordCount, $pageSize, $page);
             return;
         }
 
@@ -952,12 +957,16 @@ class MyAppController extends FatController
             $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
             $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
         } else {
+            if (!empty($removeFlds)) {
+                $recordCountSrch->removeFld($removeFlds);
+            }
+
             $recordCountSrch->getResultSet();
             $defaultRecordCount = $recordCountSrch->recordCount();
         }
 
         $this->setPageRecord($defaultRecordCount, $pageSize, $page);
-        $post['total_record_count'] = $defaultRecordCount;
+        $post['pageRecordCount'] = FilterHelper::encrypt($defaultRecordCount);
     }
 
     private function setPageRecord($recordCount, $pageSize, $page)

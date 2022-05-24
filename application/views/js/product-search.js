@@ -494,6 +494,9 @@ function getSearchQueryUrl(includeBaseUrl) {
     var vtype = $("form[name=frmProductSearch] input[name=vtype]").val();
     url = url + setQueryParamSeperator(url) + 'vtype' + valueSeperator + vtype;
 
+    var pageRecordCount = $("form[name=frmProductSearch] input[name=pageRecordCount]").val();
+    url = url + setQueryParamSeperator(url) + 'pagerecordcount' + valueSeperator + pageRecordCount;
+
     /* var page = parseInt($("input[name=page]").val());
     if(page > 1){
         url = url +setQueryParamSeperator(url)+'page-'+page;
@@ -603,12 +606,14 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
             getSetSelectedOptionsUrl(frm);
         }
         var data = fcom.frmData(frm);
-        var currUrl = getSearchQueryUrl(true);     
+        var currUrl = getSearchQueryUrl(true);
+
         fcom.ajax(currUrl, data, function (res) {
             fcom.removeLoader();
-            $('#productsList').replaceWith(res); frmProductSearchPaging
+            $('#productsList').replaceWith(res);
             var frm = document.frmProductSearchPaging;
             var recordCount = parseInt($(frm.recordDisplayCount).val());
+            $("form[name=frmProductSearch] input[name=pageRecordCount]").val($(document.frmProductSearchPaging.pageRecordCount).val());
             $('#total_records').html(recordCount);
             if (1 > recordCount) {
                 $('.saveSearch-js').hide();

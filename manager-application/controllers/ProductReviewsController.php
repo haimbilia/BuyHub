@@ -68,7 +68,7 @@ class ProductReviewsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_REVIEW_FOR', $this->siteLangId), 'reviewed_for_id', []);
         $statusArr = SelProdReview::getReviewStatusArr($this->siteLangId);
         $reqLbl = Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId);
-        $frm->addSelectBox($reqLbl, 'spreview_status', $statusArr, '',[], Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId));
+        $frm->addSelectBox($reqLbl, 'spreview_status', $statusArr, '', [], Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId));
 
         $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
@@ -130,7 +130,8 @@ class ProductReviewsController extends ListingBaseController
         $srch->joinShops($this->siteLangId);
         $srch->joinProducts();
         $srch->joinSellerProducts($this->siteLangId);
-        $srch->joinSelProdRatingByType(RatingType::TYPE_PRODUCT);
+        $srch->joinSelProdRating();
+        $srch->addCondition('rt.ratingtype_type', '=', RatingType::TYPE_PRODUCT);
 
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
@@ -200,8 +201,7 @@ class ProductReviewsController extends ListingBaseController
         $frm = $this->getForm($recordId);
         $srch = new SelProdReviewSearch($this->siteLangId);
         $srch->joinUser();
-        $srch->joinProducts();
-        //$srch->joinSelProdRatingByType(RatingType::TYPE_PRODUCT);
+        $srch->joinProducts();       
         $srch->addMultipleFields(array('IFNULL(product_name,product_identifier) as product_name', 'uc.credential_username as reviewed_by', 'spreview_id', 'spreview_posted_on', 'spreview_status', 'spreview_title', 'spreview_description'));
         $srch->addOrder('spreview_posted_on', 'DESC');
         $srch->addCondition('spreview_id', '=', $recordId);
@@ -268,7 +268,7 @@ class ProductReviewsController extends ListingBaseController
         $this->checkEditPrivilege();
 
         $recordId = FatApp::getPostedData('spreview_id', FatUtility::VAR_INT, 0);
-       
+
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -282,7 +282,7 @@ class ProductReviewsController extends ListingBaseController
         $data = SelProdReview::getAttributesById($recordId, ['spreview_id', 'spreview_status', 'spreview_lang_id']);
         if (false == $data) {
             LibHelper::exitWithError($this->str_invalid_request, true);
-        }      
+        }
         $record = new SelProdReview($recordId);
         $record->assignValues($post);
         if (!$record->save()) {
@@ -303,13 +303,13 @@ class ProductReviewsController extends ListingBaseController
      */
     protected function getFormColumns(): array
     {
-        $ContentPageTblHeadingCols = CacheHelper::get($this->pageKey.'headingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $ContentPageTblHeadingCols = CacheHelper::get($this->pageKey . 'headingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($ContentPageTblHeadingCols) {
             return json_decode($ContentPageTblHeadingCols, true);
         }
 
         $arr = [
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'selprod_title' => Labels::getLabel('LBL_PRODUCT', $this->siteLangId),
             'seller_username' => Labels::getLabel('LBL_REVIEW_FOR', $this->siteLangId),
             'reviewed_by' => Labels::getLabel('LBL_REVIEWED_BY', $this->siteLangId),
@@ -318,7 +318,7 @@ class ProductReviewsController extends ListingBaseController
             'spreview_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId)
         ];
-        CacheHelper::create($this->pageKey.'headingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create($this->pageKey . 'headingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 

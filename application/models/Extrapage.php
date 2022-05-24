@@ -11,7 +11,7 @@ class Extrapage extends MyAppModel
     public const CONTACT_US_CONTENT_BLOCK = 1;
     public const LOGIN_PAGE_RIGHT_BLOCK = 13;
     public const REGISTRATION_PAGE_RIGHT_BLOCK = 14;
-    public const FORGOT_PAGE_RIGHT_BLOCK = 15;
+    // public const FORGOT_PAGE_RIGHT_BLOCK = 15;
     public const SELLER_PAGE_BLOCK1 = 16;
     public const SELLER_PAGE_BLOCK2 = 17;
     public const SELLER_PAGE_BLOCK3 = 25;
