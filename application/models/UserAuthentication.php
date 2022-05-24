@@ -176,7 +176,7 @@ class UserAuthentication extends FatModel
         }
 
         $browser = CommonHelper::userAgent();
-        if (strtotime($authRow['uauth_expiry']) < strtotime('now') || $authRow['uauth_browser'] != $browser || CommonHelper::userIp() != $authRow['uauth_last_ip']) {
+        if (strtotime($authRow['uauth_expiry']) < strtotime('now') || $authRow['uauth_browser'] != $browser || CommonHelper::getClientIp() != $authRow['uauth_last_ip']) {
             self::clearLoggedUserLoginCookie();
             return false;
         }
@@ -524,7 +524,7 @@ class UserAuthentication extends FatModel
                 return false;
             }
 
-            $row['user_ip'] = CommonHelper::userIp();
+            $row['user_ip'] = CommonHelper::getClientIp();
             $this->setSession($row);
             return true;
         }
