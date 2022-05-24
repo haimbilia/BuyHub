@@ -30,8 +30,9 @@ $(function () {
 	};
 
 	companyDetailsForm = function (data) {
-		$(dv).html(fcom.getLoader());
+		$(dv).prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('GuestAdvertiser', 'companyDetailsForm'), data, function (t) {
+			fcom.removeLoader();
 			$(dv).html(t);
 		});
 	}

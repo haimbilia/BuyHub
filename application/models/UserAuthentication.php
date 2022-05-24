@@ -437,10 +437,7 @@ class UserAuthentication extends FatModel
                 }
 
                 if (FatUtility::isAjaxCall() || true === MOBILE_APP_API_CALL) {
-                    $json['status'] = 0;
-                    $json['msg'] = $this->error;
-                    $json['notVerified'] = 1;
-                    die(json_encode($json));
+                    LibHelper::exitWithError($this->error, false, false, ['notVerified' => 1]);
                 }
                 return false;
             }
