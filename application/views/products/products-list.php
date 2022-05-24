@@ -33,7 +33,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                     <!--product tile-->
                     <div class="products">
                         <?php if ($product['in_stock'] == 0) { ?>
-                            <span class="tag-soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
+                            <span class="out-of-stock-txt"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
                         <?php } ?>
                         <div class="products-body">
                             <?php

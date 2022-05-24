@@ -16,7 +16,7 @@
     position: relative;
     margin-bottom: 4rem;
     min-width: 0;
-    
+
     .product-gallery {
         position: sticky;
         top: calc(#{$header-height} + 30px);
@@ -280,7 +280,7 @@ $sharing-height: 50px;
             border-bottom: none;
         }
     }
-    .tag-soldout {
+    .out-of-stock-txt {
         border-radius: $radius3;
         width: auto;
         height: auto;

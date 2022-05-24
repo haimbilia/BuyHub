@@ -248,13 +248,13 @@ a.link {
 
 .back {
     color: $txt-body;
-    margin-#{$end-direction}: 0.5rem;
+    //margin-#{$end-direction}: 0.5rem;
     &:hover {
         text-decoration: none;
     }
     .svg {
         [dir="rtl"] & {
-            margin-#{$start-direction}: 0.5rem;
+            //margin-#{$start-direction}: 0.5rem;
             transform: scaleX(-1);
         }
     }

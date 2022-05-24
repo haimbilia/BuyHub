@@ -1,8 +1,8 @@
 <div class="grid grid-<?php echo $gridKey; ?>">
-    <div class="products <?php echo (isset($layoutClass)) ? $layoutClass : ''; ?> <?php if ($product['selprod_stock'] <= 0) { ?> item--sold  <?php } ?>">
+    <div class="products <?php echo (isset($layoutClass)) ? $layoutClass : ''; ?> <?php if ($product['selprod_stock'] <= 0) { ?> out-of-stock <?php } ?>">
         <?php if ($product['selprod_stock'] <= 0) { ?>
-            <span class="tag-soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
-        <?php } ?>        
+            <span class="out-of-stock-txt"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
+        <?php } ?>
         <div class="products-body">
             <?php
             if (!empty($selProdRibbons)) {

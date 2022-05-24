@@ -49,13 +49,14 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
         <?php if (!empty($message)) { ?>
-            <div class="info p-3 mb-4">
-                <span>
-                    <svg class="svg">
+            <div class="alert alert-info" role="alert">
+                <div class="alert-icon">
+                    <svg class="svg" width="18" height="18">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                         </use>
-                    </svg><?php echo $message; ?>
-                </span>
+                    </svg>
+                </div>
+                <div class="alert-text"> <?php echo $message; ?> </div>
             </div>
         <?php } ?>
         <div class="row">
