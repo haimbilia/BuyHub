@@ -26,13 +26,15 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     <div class="content-body">
         <div class="row">
             <div class="col-md-12">
-                <div class="info p-3">
-                    <span>
-                        <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                <div class="alert alert-info" role="alert">
+                    <div class="alert-icon">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                             </use>
-                        </svg><?php echo Labels::getLabel('MSG_Minimum_balance_Required_For_Promotions', $siteLangId) . ' : ' . CommonHelper::displaymoneyformat(FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE')); ?>
-                    </span>
+                        </svg>
+                    </div>
+                    <div class="alert-text"> <?php echo Labels::getLabel('MSG_Minimum_balance_Required_For_Promotions', $siteLangId) . ' : ' . CommonHelper::displaymoneyformat(FatApp::getConfig('CONF_PPC_MIN_WALLET_BALANCE')); ?>
+                    </div>
                 </div>
             </div>
         </div>

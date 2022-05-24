@@ -2776,14 +2776,17 @@ class AccountController extends LoggedUserController
         $ifsc->requirements()->setRegularExpressionToValidate(ValidateElement::USERNAME_REGEX);
 
         $frm->addTextArea(Labels::getLabel('FRM_BANK_ADDRESS', $this->siteLangId), 'ub_bank_address', '');
-        $htm = '<div class="info p-3">
-                    <span>
-                        <svg class="svg">
-                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info" href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info">
+        $htm = '<div class="alert alert-info" role="alert">
+                    <div class="alert-icon">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#info">
                             </use>
-                        </svg>' . Labels::getLabel('LBL_YOUR_BANK_INFORMATION_IS_SAFE_WITH_US.', $this->siteLangId) . '
-                    </span>
-                </div>';
+                        </svg>
+                     </div> 
+                        <div class="alert-text"> ' . Labels::getLabel('LBL_YOUR_BANK_INFORMATION_IS_SAFE_WITH_US.', $this->siteLangId) . '
+                        </div>
+                </div>
+                </>';
         $frm->addHtml('bank_info_safety_text', 'bank_info_safety_text', $htm);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;

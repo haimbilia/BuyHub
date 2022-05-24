@@ -501,47 +501,7 @@
             </g>
         </symbol>
         <symbol id="shop-layout-1"  viewBox="0 0 140 70" >
-            <g id="shop-layout-1" transform="translate(-4712 -885)">
-                <path id="Path_79" data-name="Path 79" d="M4,0H136a4,4,0,0,1,4,4V66a4,4,0,0,1-4,4H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0Z" transform="translate(4712 885)" fill="#fff"/>
-                <g id="Group_392" data-name="Group 392" transform="translate(0 1)">
-                    <g id="Group_389" data-name="Group 389" transform="translate(0 9)">
-                        <g id="Group_339" data-name="Group 339" transform="translate(-223 211)">
-                            <rect id="Rectangle_330" data-name="Rectangle 330" width="34" height="34" transform="translate(4988 673)" fill="#e8e8e8"/>
-                            <path id="Icon_metro-image" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(4996.429 681.144)" fill="#a5a5a5"/>
-                        </g>
-                        <g id="Group_340" data-name="Group 340" transform="translate(-268 14)">
-                            <rect id="Rectangle_331" data-name="Rectangle 331" width="12" height="2" transform="translate(5044 908)" fill="#d4d4d4"/>
-                            <rect id="Rectangle_332" data-name="Rectangle 332" width="20" height="2" transform="translate(5040 911)" fill="#d4d4d4"/>
-                            <rect id="Rectangle_333" data-name="Rectangle 333" width="16" height="4" transform="translate(5042 915)" fill="#707070"/>
-                        </g>
-                    </g>
-                    <g id="Group_390" data-name="Group 390">
-                        <g id="Group_342" data-name="Group 342" transform="translate(-265 239)">
-                            <rect id="Rectangle_334" data-name="Rectangle 334" width="34" height="34" transform="translate(4988 673)" fill="#e8e8e8"/>
-                            <path id="Icon_metro-image-2" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(4996.429 681.144)" fill="#a5a5a5"/>
-                        </g>
-                        <g id="Group_343" data-name="Group 343" transform="translate(-268 6)">
-                            <rect id="Rectangle_335" data-name="Rectangle 335" width="12" height="2" transform="translate(5002 891)" fill="#d4d4d4"/>
-                            <rect id="Rectangle_336" data-name="Rectangle 336" width="20" height="2" transform="translate(4998 894)" fill="#d4d4d4"/>
-                            <rect id="Rectangle_337" data-name="Rectangle 337" width="16" height="4" transform="translate(5000 898)" fill="#707070"/>
-                        </g>
-                    </g>
-                    <g id="Group_391" data-name="Group 391" transform="translate(84)">
-                        <g id="Group_342-2" data-name="Group 342" transform="translate(-265 239)">
-                            <rect id="Rectangle_334-2" data-name="Rectangle 334" width="34" height="34" transform="translate(4988 673)" fill="#e8e8e8"/>
-                            <path id="Icon_metro-image-3" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(4996.429 681.144)" fill="#a5a5a5"/>
-                        </g>
-                        <g id="Group_343-2" data-name="Group 343" transform="translate(-268 6)">
-                            <rect id="Rectangle_335-2" data-name="Rectangle 335" width="12" height="2" transform="translate(5002 891)" fill="#d4d4d4"/>
-                            <rect id="Rectangle_336-2" data-name="Rectangle 336" width="20" height="2" transform="translate(4998 894)" fill="#d4d4d4"/>
-                            <rect id="Rectangle_337-2" data-name="Rectangle 337" width="16" height="4" transform="translate(5000 898)" fill="#707070"/>
-                        </g>
-                    </g>
-                </g>
-            </g>
-        </symbol>
-        <symbol id="shop-layout-2"  viewBox="0 0 140 70" >
-            <g id="shop-layout-2" transform="translate(-4713 -956)">
+            <g id="shop-layout-1" transform="translate(-4713 -956)">
                 <path id="Path_78" data-name="Path 78" d="M4,0H136a4,4,0,0,1,4,4V66a4,4,0,0,1-4,4H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0Z" transform="translate(4713 956)" fill="#fff"/>
                 <g id="Group_337" data-name="Group 337" transform="translate(-267 -6)">
                     <g id="Group_327" data-name="Group 327" transform="translate(-1 7)">
@@ -595,6 +555,46 @@
                 </g>
             </g>
         </symbol>
+        <symbol id="shop-layout-2"  viewBox="0 0 140 70" >
+            <g id="shop-layout-2" transform="translate(-4712 -885)">
+                <path id="Path_79" data-name="Path 79" d="M4,0H136a4,4,0,0,1,4,4V66a4,4,0,0,1-4,4H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0Z" transform="translate(4712 885)" fill="#fff"/>
+                <g id="Group_392" data-name="Group 392" transform="translate(0 1)">
+                    <g id="Group_389" data-name="Group 389" transform="translate(0 9)">
+                        <g id="Group_339" data-name="Group 339" transform="translate(-223 211)">
+                            <rect id="Rectangle_330" data-name="Rectangle 330" width="34" height="34" transform="translate(4988 673)" fill="#e8e8e8"/>
+                            <path id="Icon_metro-image" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(4996.429 681.144)" fill="#a5a5a5"/>
+                        </g>
+                        <g id="Group_340" data-name="Group 340" transform="translate(-268 14)">
+                            <rect id="Rectangle_331" data-name="Rectangle 331" width="12" height="2" transform="translate(5044 908)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_332" data-name="Rectangle 332" width="20" height="2" transform="translate(5040 911)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_333" data-name="Rectangle 333" width="16" height="4" transform="translate(5042 915)" fill="#707070"/>
+                        </g>
+                    </g>
+                    <g id="Group_390" data-name="Group 390">
+                        <g id="Group_342" data-name="Group 342" transform="translate(-265 239)">
+                            <rect id="Rectangle_334" data-name="Rectangle 334" width="34" height="34" transform="translate(4988 673)" fill="#e8e8e8"/>
+                            <path id="Icon_metro-image-2" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(4996.429 681.144)" fill="#a5a5a5"/>
+                        </g>
+                        <g id="Group_343" data-name="Group 343" transform="translate(-268 6)">
+                            <rect id="Rectangle_335" data-name="Rectangle 335" width="12" height="2" transform="translate(5002 891)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_336" data-name="Rectangle 336" width="20" height="2" transform="translate(4998 894)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_337" data-name="Rectangle 337" width="16" height="4" transform="translate(5000 898)" fill="#707070"/>
+                        </g>
+                    </g>
+                    <g id="Group_391" data-name="Group 391" transform="translate(84)">
+                        <g id="Group_342-2" data-name="Group 342" transform="translate(-265 239)">
+                            <rect id="Rectangle_334-2" data-name="Rectangle 334" width="34" height="34" transform="translate(4988 673)" fill="#e8e8e8"/>
+                            <path id="Icon_metro-image-3" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(4996.429 681.144)" fill="#a5a5a5"/>
+                        </g>
+                        <g id="Group_343-2" data-name="Group 343" transform="translate(-268 6)">
+                            <rect id="Rectangle_335-2" data-name="Rectangle 335" width="12" height="2" transform="translate(5002 891)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_336-2" data-name="Rectangle 336" width="20" height="2" transform="translate(4998 894)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_337-2" data-name="Rectangle 337" width="16" height="4" transform="translate(5000 898)" fill="#707070"/>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </symbol>
         <symbol id="testimonial-layout-1"  viewBox="0 0 140 70" >
             <g id="testimonial-layout-1" transform="translate(-4713 -1526)">
                 <path id="Path_83" data-name="Path 83" d="M4,0H136a4,4,0,0,1,4,4V66a4,4,0,0,1-4,4H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0Z" transform="translate(4713 1526)" fill="#fff"/>
@@ -614,6 +614,116 @@
                     </g>
                     <path id="Icon_ionic-ios-arrow-back" data-name="Icon ionic-ios-arrow-back" d="M12.629,10.193l3.027-3.025a.572.572,0,1,0-.81-.807L11.417,9.788a.571.571,0,0,0-.017.788l3.444,3.451a.572.572,0,0,0,.81-.807Z" transform="translate(4709.75 1550.806)" fill="#a5a5a5"/>
                     <path id="Icon_ionic-ios-arrow-back-2" data-name="Icon ionic-ios-arrow-back" d="M14.445,10.193,11.418,7.168a.572.572,0,1,1,.81-.807l3.429,3.427a.571.571,0,0,1,.017.788l-3.444,3.451a.572.572,0,0,1-.81-.807Z" transform="translate(4829.75 1550.806)" fill="#a5a5a5"/>
+                </g>
+            </g>
+        </symbol>
+        <symbol id="sponsored-product-layout"  viewBox="0 0 140 70" >
+            <g  transform="translate(-4714 -51)">
+                <path id="Path_56" data-name="Path 56" d="M4,0H136a4,4,0,0,1,4,4V66a4,4,0,0,1-4,4H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0Z" transform="translate(4714 51)" fill="#fff"/>
+                <g id="Group_235" data-name="Group 235">
+                    <g id="Group_225" data-name="Group 225" transform="translate(-267)">
+                        <g id="Group_223" data-name="Group 223">
+                            <rect id="Rectangle_191" data-name="Rectangle 191" width="10" height="2" transform="translate(4998 93)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_192" data-name="Rectangle 192" width="20" height="2" transform="translate(4993 96)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_193" data-name="Rectangle 193" width="16" height="2" transform="translate(4995 99)" fill="#d4d4d4"/>
+                            <path id="Path_57" data-name="Path 57" d="M0,0H12V2H0Z" transform="translate(4997 103)" fill="#707070"/>
+                        </g>
+                        <g id="Group_224" data-name="Group 224">
+                            <rect id="Rectangle_194" data-name="Rectangle 194" width="24" height="24" transform="translate(4991 67)" fill="#e8e8e8"/>
+                            <path id="Icon_metro-image" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(4994.429 70.144)" fill="#a5a5a5"/>
+                        </g>
+                    </g>
+                    <g id="Group_228" data-name="Group 228" transform="translate(-203)">
+                        <g id="Group_226" data-name="Group 226">
+                            <rect id="Rectangle_195" data-name="Rectangle 195" width="10" height="2" transform="translate(4998 93)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_196" data-name="Rectangle 196" width="20" height="2" transform="translate(4993 96)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_197" data-name="Rectangle 197" width="16" height="2" transform="translate(4995 99)" fill="#d4d4d4"/>
+                            <path id="Path_58" data-name="Path 58" d="M0,0H12V2H0Z" transform="translate(4997 103)" fill="#707070"/>
+                        </g>
+                        <g id="Group_227" data-name="Group 227">
+                            <rect id="Rectangle_198" data-name="Rectangle 198" width="24" height="24" transform="translate(4991 67)" fill="#e8e8e8"/>
+                            <path id="Icon_metro-image-2" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(4994.429 70.144)" fill="#a5a5a5"/>
+                        </g>
+                    </g>
+                    <g id="Group_231" data-name="Group 231" transform="translate(-235)">
+                        <g id="Group_229" data-name="Group 229">
+                            <rect id="Rectangle_199" data-name="Rectangle 199" width="10" height="2" transform="translate(4998 93)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_200" data-name="Rectangle 200" width="20" height="2" transform="translate(4993 96)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_201" data-name="Rectangle 201" width="16" height="2" transform="translate(4995 99)" fill="#d4d4d4"/>
+                            <path id="Path_59" data-name="Path 59" d="M0,0H12V2H0Z" transform="translate(4997 103)" fill="#707070"/>
+                        </g>
+                        <g id="Group_230" data-name="Group 230">
+                            <rect id="Rectangle_202" data-name="Rectangle 202" width="24" height="24" transform="translate(4991 67)" fill="#e8e8e8"/>
+                            <path id="Icon_metro-image-3" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(4994.429 70.144)" fill="#a5a5a5"/>
+                        </g>
+                    </g>
+                    <g id="Group_234" data-name="Group 234" transform="translate(-171)">
+                        <g id="Group_232" data-name="Group 232">
+                            <rect id="Rectangle_203" data-name="Rectangle 203" width="10" height="2" transform="translate(4998 93)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_204" data-name="Rectangle 204" width="20" height="2" transform="translate(4993 96)" fill="#d4d4d4"/>
+                            <rect id="Rectangle_205" data-name="Rectangle 205" width="16" height="2" transform="translate(4995 99)" fill="#d4d4d4"/>
+                            <path id="Path_60" data-name="Path 60" d="M0,0H12V2H0Z" transform="translate(4997 103)" fill="#707070"/>
+                        </g>
+                        <g id="Group_233" data-name="Group 233">
+                            <rect id="Rectangle_206" data-name="Rectangle 206" width="24" height="24" transform="translate(4991 67)" fill="#e8e8e8"/>
+                            <path id="Icon_metro-image-4" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(4994.429 70.144)" fill="#a5a5a5"/>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </symbol>
+        <symbol id="sponsored-shop-layout"  viewBox="0 0 140 70" >
+            <g id="sponsored-shop-layout" transform="translate(-4713 -956)">
+                <path id="Path_78" data-name="Path 78" d="M4,0H136a4,4,0,0,1,4,4V66a4,4,0,0,1-4,4H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0Z" transform="translate(4713 956)" fill="#fff"/>
+                <g id="Group_337" data-name="Group 337" transform="translate(-267 -6)">
+                    <g id="Group_327" data-name="Group 327" transform="translate(-1 7)">
+                        <rect id="Rectangle_310" data-name="Rectangle 310" width="24" height="37" transform="translate(4991 972)" fill="#e8e8e8"/>
+                        <g id="Group_325" data-name="Group 325" transform="translate(-45.578 -4.578)">
+                            <rect id="Rectangle_311" data-name="Rectangle 311" width="14" height="14" rx="7" transform="translate(5041.578 980.578)" fill="#fff"/>
+                            <path id="Icon_metro-image" data-name="Icon metro-image" d="M9.674,4.33h0v5.682H3.044V4.331h6.63Zm0-.474H3.044a.475.475,0,0,0-.474.474v5.684a.475.475,0,0,0,.474.474H9.675a.475.475,0,0,0,.474-.474V4.33A.475.475,0,0,0,9.675,3.856ZM8.728,5.514a.71.71,0,1,1-.71-.71A.71.71,0,0,1,8.728,5.514ZM9.2,9.54H3.518V8.592L5.176,5.751,7.07,8.119h.474L9.2,6.7Z" transform="translate(5042.007 980.722)" fill="#a5a5a5"/>
+                        </g>
+                        <g id="Group_326" data-name="Group 326" transform="translate(0 -6)">
+                            <rect id="Rectangle_312" data-name="Rectangle 312" width="12" height="2" transform="translate(4997 1000)" fill="#bcbcbc"/>
+                            <rect id="Rectangle_313" data-name="Rectangle 313" width="16" height="2" transform="translate(4995 1003)" fill="#bcbcbc"/>
+                            <rect id="Rectangle_314" data-name="Rectangle 314" width="16" height="4" transform="translate(4995 1007)" fill="#707070"/>
+                        </g>
+                    </g>
+                    <g id="Group_330" data-name="Group 330" transform="translate(63 7)">
+                        <rect id="Rectangle_315" data-name="Rectangle 315" width="24" height="37" transform="translate(4991 972)" fill="#e8e8e8"/>
+                        <g id="Group_328" data-name="Group 328" transform="translate(-45.578 -4.578)">
+                            <rect id="Rectangle_316" data-name="Rectangle 316" width="14" height="14" rx="7" transform="translate(5041.578 980.578)" fill="#fff"/>
+                            <path id="Icon_metro-image-2" data-name="Icon metro-image" d="M9.674,4.33h0v5.682H3.044V4.331h6.63Zm0-.474H3.044a.475.475,0,0,0-.474.474v5.684a.475.475,0,0,0,.474.474H9.675a.475.475,0,0,0,.474-.474V4.33A.475.475,0,0,0,9.675,3.856ZM8.728,5.514a.71.71,0,1,1-.71-.71A.71.71,0,0,1,8.728,5.514ZM9.2,9.54H3.518V8.592L5.176,5.751,7.07,8.119h.474L9.2,6.7Z" transform="translate(5042.007 980.722)" fill="#a5a5a5"/>
+                        </g>
+                        <g id="Group_329" data-name="Group 329" transform="translate(0 -6)">
+                            <rect id="Rectangle_317" data-name="Rectangle 317" width="12" height="2" transform="translate(4997 1000)" fill="#bcbcbc"/>
+                            <rect id="Rectangle_318" data-name="Rectangle 318" width="16" height="2" transform="translate(4995 1003)" fill="#bcbcbc"/>
+                            <rect id="Rectangle_319" data-name="Rectangle 319" width="16" height="4" transform="translate(4995 1007)" fill="#707070"/>
+                        </g>
+                    </g>
+                    <g id="Group_333" data-name="Group 333" transform="translate(31 7)">
+                        <rect id="Rectangle_320" data-name="Rectangle 320" width="24" height="37" transform="translate(4991 972)" fill="#e8e8e8"/>
+                        <g id="Group_331" data-name="Group 331" transform="translate(-45.578 -4.578)">
+                            <rect id="Rectangle_321" data-name="Rectangle 321" width="14" height="14" rx="7" transform="translate(5041.578 980.578)" fill="#fff"/>
+                            <path id="Icon_metro-image-3" data-name="Icon metro-image" d="M9.674,4.33h0v5.682H3.044V4.331h6.63Zm0-.474H3.044a.475.475,0,0,0-.474.474v5.684a.475.475,0,0,0,.474.474H9.675a.475.475,0,0,0,.474-.474V4.33A.475.475,0,0,0,9.675,3.856ZM8.728,5.514a.71.71,0,1,1-.71-.71A.71.71,0,0,1,8.728,5.514ZM9.2,9.54H3.518V8.592L5.176,5.751,7.07,8.119h.474L9.2,6.7Z" transform="translate(5042.007 980.722)" fill="#a5a5a5"/>
+                        </g>
+                        <g id="Group_332" data-name="Group 332" transform="translate(0 -6)">
+                            <rect id="Rectangle_322" data-name="Rectangle 322" width="12" height="2" transform="translate(4997 1000)" fill="#bcbcbc"/>
+                            <rect id="Rectangle_323" data-name="Rectangle 323" width="16" height="2" transform="translate(4995 1003)" fill="#bcbcbc"/>
+                            <rect id="Rectangle_324" data-name="Rectangle 324" width="16" height="4" transform="translate(4995 1007)" fill="#707070"/>
+                        </g>
+                    </g>
+                    <g id="Group_336" data-name="Group 336" transform="translate(95 7)">
+                        <rect id="Rectangle_325" data-name="Rectangle 325" width="24" height="37" transform="translate(4991 972)" fill="#e8e8e8"/>
+                        <g id="Group_334" data-name="Group 334" transform="translate(-45.578 -4.578)">
+                            <rect id="Rectangle_326" data-name="Rectangle 326" width="14" height="14" rx="7" transform="translate(5041.578 980.578)" fill="#fff"/>
+                            <path id="Icon_metro-image-4" data-name="Icon metro-image" d="M9.674,4.33h0v5.682H3.044V4.331h6.63Zm0-.474H3.044a.475.475,0,0,0-.474.474v5.684a.475.475,0,0,0,.474.474H9.675a.475.475,0,0,0,.474-.474V4.33A.475.475,0,0,0,9.675,3.856ZM8.728,5.514a.71.71,0,1,1-.71-.71A.71.71,0,0,1,8.728,5.514ZM9.2,9.54H3.518V8.592L5.176,5.751,7.07,8.119h.474L9.2,6.7Z" transform="translate(5042.007 980.722)" fill="#a5a5a5"/>
+                        </g>
+                        <g id="Group_335" data-name="Group 335" transform="translate(0 -6)">
+                            <rect id="Rectangle_327" data-name="Rectangle 327" width="12" height="2" transform="translate(4997 1000)" fill="#bcbcbc"/>
+                            <rect id="Rectangle_328" data-name="Rectangle 328" width="16" height="2" transform="translate(4995 1003)" fill="#bcbcbc"/>
+                            <rect id="Rectangle_329" data-name="Rectangle 329" width="16" height="4" transform="translate(4995 1007)" fill="#707070"/>
+                        </g>
+                    </g>
                 </g>
             </g>
         </symbol>

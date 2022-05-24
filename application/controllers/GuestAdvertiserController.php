@@ -22,7 +22,7 @@ class GuestAdvertiserController extends MyAppController
         if (!empty($slogan)) {
             $slogan['epage_extra_info'] = !empty($slogan['epage_extra_info']) ? json_decode($slogan['epage_extra_info'], true) : [];
         }
-        
+
         $this->set('slogan', $slogan);
         $this->set('siteLangId', $this->siteLangId);
 
@@ -32,13 +32,12 @@ class GuestAdvertiserController extends MyAppController
     public function form()
     {
         if (UserAuthentication::isUserLogged()) {
-            Message::addErrorMessage(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
         }
 
         $userId = $this->getRegisteredAdvertiserId();
         if ($userId > 0) {
-            $this->companyDetailsForm($userId);
+            $this->profileConfirmation($userId);
         } else {
             $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
             $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
@@ -63,17 +62,17 @@ class GuestAdvertiserController extends MyAppController
     {
         $frm = $this->getAdvertiserRegistrationForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
+
         if ($post == false) {
-            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+            LibHelper::exitWithError(current($frm->getValidationErrors()));
         }
 
         if (UserAuthentication::isUserLogged()) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
         }
 
         $approvalFrm = $this->getCompanyDetailsForm();
-        
+
         unset($post['btn_submit']);
         $approvalFrm->fill($post);
 
@@ -146,7 +145,7 @@ class GuestAdvertiserController extends MyAppController
         if (isset($_COOKIE['affiliate_referrer_code_signup']) && $_COOKIE['affiliate_referrer_code_signup'] != '') {
             $affiliateReferrerCodeSignup = $_COOKIE['affiliate_referrer_code_signup'];
         }
-        
+
         $userObj->setUpRewardEntry($userObj->getMainTableRecordId(), $this->siteLangId, $referrerCodeSignup, $affiliateReferrerCodeSignup);
 
         if (FatApp::getConfig('CONF_NOTIFY_ADMIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
@@ -184,28 +183,26 @@ class GuestAdvertiserController extends MyAppController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-  
-
     public function profileConfirmation($userId)
     {
         $userId = FatUtility::int($userId);
 
         if (!$this->isRegisteredSupplierId($userId)) {
-            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
 
         if (UserAuthentication::isUserLogged()) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_USER_ALREADY_LOGGED_IN', $this->siteLangId));
         }
 
         $userObj = new User($userId);
-        $userdata = $userObj->getUserInfo(array('credential_active', 'credential_verified','credential_email','credential_password'), false, false);
+        $userdata = $userObj->getUserInfo(array('credential_active', 'credential_verified', 'credential_email', 'credential_password'), false, false);
 
         if (false == $userdata) {
-            FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_ACCESS", $this->siteLangId));
         }
 
-        if (/* $userdata['credential_active'] == applicationConstants::ACTIVE &&  */$userdata['credential_verified'] == applicationConstants::YES) {
+        if ($userdata['credential_verified'] == applicationConstants::YES) {
             $success_message = Labels::getLabel('MSG_SUCCESS_USER_SIGNUP_VERIFIED', $this->siteLangId);
         } else {
             $success_message = Labels::getLabel('MSG_SUCCESS_USER_SIGNUP', $this->siteLangId);
@@ -214,10 +211,10 @@ class GuestAdvertiserController extends MyAppController
 
         if (FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1)  && $userdata['credential_active'] == applicationConstants::YES) {
             $authentication = new UserAuthentication();
-            if (!$authentication->login($userdata['credential_email'], $userdata['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {              
-                FatUtility::dieJsonError($authentication->getError());
+            if (!$authentication->login($userdata['credential_email'], $userdata['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {
+                LibHelper::exitWithError($authentication->getError());
             }
-            $this->set('redirectUrl', UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));            
+            $this->set('redirectUrl', UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
         unset($_SESSION['registered_supplier']['id']);
@@ -228,10 +225,7 @@ class GuestAdvertiserController extends MyAppController
 
     private function getRegisteredAdvertiserId()
     {
-        if (!isset($_SESSION['registered_supplier']['id'])) {
-            return false;
-        }
-        return $_SESSION['registered_supplier']['id'];
+        return $_SESSION['registered_supplier']['id'] ?? 0;
     }
 
     private function isRegisteredSupplierId($userId)
@@ -300,6 +294,4 @@ class GuestAdvertiserController extends MyAppController
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_Submit', $this->siteLangId));
         return $frm;
     }
-
- 
 }

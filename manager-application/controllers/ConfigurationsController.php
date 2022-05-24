@@ -1453,6 +1453,8 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_SELLER_SUBSCRIPTION_STATUSES", $langId), 'CONF_SELLER_SUBSCRIPTION_STATUS', $orderSubscriptionStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checkbox'];
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 break;
 
             case Configurations::FORM_SYSTEM:
