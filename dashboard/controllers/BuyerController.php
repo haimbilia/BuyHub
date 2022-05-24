@@ -2185,18 +2185,20 @@ class BuyerController extends BuyerBaseController
                 LibHelper::dieJsonError(current($frm->getValidationErrors()));
             }
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
-        }
+        }       
 
-        $uploadedFile = $_FILES['file']['tmp_name'];
-        if (filesize($uploadedFile) > 10240000) {
-            $message = Labels::getLabel('ERR_PLEASE_UPLOAD_FILE_SIZE_LESS_THAN_10MB', $this->siteLangId);
-            LibHelper::dieJsonError($message);
-        }
-
-        if (getimagesize($uploadedFile) === false && mime_content_type($uploadedFile) != 'application/zip') {
-            $message = Labels::getLabel('ERR_ONLY_IMAGE_EXTENSIONS_AND_ZIP_IS_ALLOWED', $this->siteLangId);
-            LibHelper::dieJsonError($message);
-        }        
+        if(isset($_FILES['file']['tmp_name'])  && !empty($_FILES['file']['tmp_name'])){
+            $uploadedFile = $_FILES['file']['tmp_name'];
+            if (filesize($uploadedFile) > 10240000) {
+                $message = Labels::getLabel('ERR_PLEASE_UPLOAD_FILE_SIZE_LESS_THAN_10MB', $this->siteLangId);
+                LibHelper::dieJsonError($message);
+            }
+    
+            if (getimagesize($uploadedFile) === false && mime_content_type($uploadedFile) != 'application/zip') {
+                $message = Labels::getLabel('ERR_ONLY_IMAGE_EXTENSIONS_AND_ZIP_IS_ALLOWED', $this->siteLangId);
+                LibHelper::dieJsonError($message);
+            }   
+        }             
 
         if (abs($opDetail['opcharge_amount']) > 0) {
             $orrequestQty = FatUtility::int($post['orrequest_qty']);
@@ -2260,7 +2262,7 @@ class BuyerController extends BuyerBaseController
 
         /* attach file with request [ */
 
-        if (isset($_FILES['file']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
+        if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
             $fileHandlerObj = new AttachedFile();
             if (!$fileHandlerObj->saveAttachment($_FILES['file']['tmp_name'], AttachedFile::FILETYPE_BUYER_RETURN_PRODUCT, $orrequest_id, 0, $_FILES['file']['name'], -1, true)) {
                 LibHelper::dieJsonError($fileHandlerObj->getError());
