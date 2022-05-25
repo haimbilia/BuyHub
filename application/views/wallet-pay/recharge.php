@@ -42,7 +42,7 @@ foreach ($paymentMethods as $key => $val) {
                                                     <?php echo $pmethodName; ?>
                                                 </a>
 
-                                                <div class="accordion-collapse <?php echo $showFirstElement; ?> collapse payment-block paymentBlockJs <?php echo $pmethodCode . '-js'; ?>" id="<?php echo $pmethodCode; ?>-section" aria-labelledby="headingOne" data-bs-parent="#payment_methods_tab"></div>
+                                                <div class="accordion-collapse <?php echo $showFirstElement; ?> collapse payment-block paymentBlockJs <?php echo $pmethodCode . '-js'; ?>" id="<?php echo $pmethodCode; ?>-section" data-bs-parent="#payment_methods_tab"></div>
                                             </li>
                                         <?php
                                         } ?>

@@ -3,7 +3,7 @@
      <span class="restore-btn-label">Restore</span>
  </button>
 
- <div class="offcanvas offcanvas-end offcanvas-restore" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+ <div class="offcanvas offcanvas-end offcanvas-restore" tabindex="-1" id="offcanvasRight">
      <div class="offcanvas-header bg-shape">
 
          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>

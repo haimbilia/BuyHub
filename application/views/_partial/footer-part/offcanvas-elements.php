@@ -16,7 +16,7 @@ $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
 <?php } ?>
 
 <!-- offcanvas-filters -->
-<div class="offcanvas offcanvas-end offcanvas-filters" tabindex="-1" id="filters-right" aria-labelledby="filters-right">
+<div class="offcanvas offcanvas-end offcanvas-filters" tabindex="-1" id="filters-right">
     <div class="offcanvas-header">
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
@@ -77,7 +77,7 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
 <?php } ?>
 <?php if (in_array($controllerName, ['Supplier', 'GuestAffiliate', 'GuestAdvertiser']) && in_array($action, ['index', 'account'])) { ?>
     <!-- offcanvas-seller-nav -->
-    <div class="offcanvas offcanvas-start offcanvas-seller-nav" tabindex="-1" id="offcanvas-seller-nav" aria-labelledby="offcanvas-seller-nav">
+    <div class="offcanvas offcanvas-start offcanvas-seller-nav" tabindex="-1" id="offcanvas-seller-nav">
         <div class="offcanvas-header">
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>

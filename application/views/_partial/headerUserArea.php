@@ -14,7 +14,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                         </span>
                     </button>
 
-                    <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
+                    <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
                         <li class="dropdown-menu-item">
                             <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD, null, false, false, false); ?>">
                                 <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName; ?>
@@ -77,7 +77,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                         <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_name']; ?></span>
                 </button>
 
-                <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
+                <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
                     <li class="dropdown-menu-item">
                         <a class="dropdown-menu-link" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>"><?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?></a>
                     </li>
