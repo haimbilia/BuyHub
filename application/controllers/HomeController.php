@@ -88,7 +88,7 @@ class HomeController extends MyAppController
         $this->_template->addJs('js/slick-carousels.js');
         $apiCall = (true === MOBILE_APP_API_CALL) ? 1 : 0;
         $geoAddress = Address::getYkGeoData();
-        $cacheKey = $this->siteLangId . '-' . $this->siteCurrencyId . '-' . $apiCall . '-' . serialize($geoAddress);
+        $cacheKey = $this->siteLangId . '-' . CommonHelper::getCurrencyId() . '-' . $apiCall . '-' . serialize($geoAddress);
         $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);
 
         $collectionTemplates = array();
@@ -565,7 +565,7 @@ class HomeController extends MyAppController
         $langId = $this->siteLangId;
         $apiCall = (true === MOBILE_APP_API_CALL) ? 1 : 0;
         $geoAddress = Address::getYkGeoData();
-        $cacheKey = $langId . '_' . $this->siteCurrencyId . '_' . $apiCall . '_' . serialize($geoAddress);
+        $cacheKey = $langId . '_' . CommonHelper::getCurrencyId() . '_' . $apiCall . '_' . serialize($geoAddress);
         $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);
 
 
@@ -1547,7 +1547,7 @@ class HomeController extends MyAppController
         $data['isWishlistEnable'] = FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1);
         $data['canSendSms'] = SmsArchive::canSendSms() ? 1 : 0;
         $data['canAddReview'] = FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 1);
-        $data['currency_id'] = $this->siteCurrencyId;
+        $data['currency_id'] = CommonHelper::getCurrencyId();
         $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
         $data['defaultCountry'] = [
             'country_id' => $defultCountryId,
@@ -1611,7 +1611,7 @@ class HomeController extends MyAppController
                 "name" => $websiteName,
                 "short_name" => $websiteName,
                 "description" => isset($metas['meta_description']) ? $metas['meta_description'] : $websiteName,
-                "lang" => $this->siteLangCode,
+                "lang" => CommonHelper::getLangCode(),
                 "start_url" => CONF_WEBROOT_URL,
                 "display" => "standalone",
                 "background_color" => FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59"),

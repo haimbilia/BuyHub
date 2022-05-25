@@ -23,5 +23,4 @@
             ?>
         </div>
     </div>
-    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

@@ -61,7 +61,7 @@ echo $registerFrm->getFormTag();
         <div class="col-lg-12">
             <div class="form-group">
                 <?php echo $registerFrm->getFieldHtml('user_password'); ?>
-                <span class="text-muted form-text"><?php echo sprintf(Labels::getLabel('LBL_Example_password', $siteLangId), 'User@123') ?></span>
+                <span class="text-muted form-text"><?php echo sprintf(Labels::getLabel('LBL_EXAMPLE_PASSWORD', $siteLangId), 'User@123') ?></span>
             </div>
         </div>
         <div class="col-lg-12">

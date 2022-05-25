@@ -1,11 +1,10 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (0 < $withPhone) {
     $frm->setFormTagAttribute('onsubmit', 'getOtpForm(this); return(false);');
 }
 ?>
 <div id="body" class="body enter-page forgotPwForm">
-    <div class="form-sign">
+    <div id="otpFom" class="form-sign">
         <?php
         $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
         $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
@@ -19,10 +18,11 @@ if (0 < $withPhone) {
             <div class="card-sign">
                 <div class="card-sign_head">
                     <h1 class="title">
-                        <?php echo Labels::getLabel('LBL_Forgot_Password?', $siteLangId); ?></h1>
+                        <?php echo Labels::getLabel('LBL_FORGOT_PASSWORD?', $siteLangId); ?>
+                    </h1>
                     <p>
                         <?php if (1 > $withPhone) {
-                            echo Labels::getLabel('LBL_Forgot_Password_Msg', $siteLangId);
+                            echo Labels::getLabel('LBL_FORGOT_PASSWORD_MSG', $siteLangId);
                         } else {
                             echo Labels::getLabel('LBL_RECOVER_PASSWORD_FORM_MSG', $siteLangId);
                         } ?>
@@ -53,7 +53,7 @@ if (0 < $withPhone) {
                 $btnFld->setFieldTagAttribute('class', 'btn btn-secondary btn-block');
                 if (1 > $withPhone) {
                     $frmFld = $frm->getField('user_email_username');
-                    $frmFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Username_or_email', $siteLangId));
+                    $frmFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_USERNAME_OR_EMAIL', $siteLangId));
                 } else {
                     $frmFld = $frm->getField('user_phone');
                 }
@@ -64,10 +64,9 @@ if (0 < $withPhone) {
                 echo $frm->getFormHtml(); ?>
             </div>
             <div class="card-sign_foot">
-                <h6> <?php echo Labels::getLabel('LBL_Back_to_login', $siteLangId); ?></h6>
                 <div class="more-links">
                     <a href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm'); ?>" class="link-underline">
-                        <?php echo Labels::getLabel('LBL_Click_Here', $siteLangId); ?>
+                        <?php echo Labels::getLabel('LBL_BACK_TO_LOGIN', $siteLangId); ?>
                     </a>
                 </div>
             </div>

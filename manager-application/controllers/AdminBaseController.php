@@ -42,8 +42,6 @@ class AdminBaseController extends FatController
     {
         CommonHelper::initCommonVariables(true);
         $this->siteLangId = CommonHelper::getLangId();
-        $this->siteLangCode = CommonHelper::getLangCode();
-        $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
 
         $curdLangLabelCache = CacheHelper::get('curdLangLabelCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$curdLangLabelCache) {
@@ -247,8 +245,8 @@ class AdminBaseController extends FatController
 
     public function includeDatePickerLangJs()
     {
-        $langCode = strtolower($this->siteLangCode);
-        $langCountryCode = strtoupper($this->siteLangCountryCode);
+        $langCode = strtolower(CommonHelper::getLangCode());
+        $langCountryCode = strtoupper(CommonHelper::getLangCountryCode());
         $jsPath = FatCache::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
         if ($jsPath) {
             if ($jsPath == 'notfound') {

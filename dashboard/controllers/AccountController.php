@@ -515,7 +515,7 @@ class AccountController extends LoggedUserController
         $orderData['order_language_id'] = $languageRow['language_id'];
         $orderData['order_language_code'] = $languageRow['language_code'];
 
-        $currencyRow = Currency::getAttributesById($this->siteCurrencyId);
+        $currencyRow = Currency::getAttributesById(CommonHelper::getCurrencyId());
         $orderData['order_currency_id'] = $currencyRow['currency_id'];
         $orderData['order_currency_code'] = $currencyRow['currency_code'];
         $orderData['order_currency_value'] = $currencyRow['currency_value'];
@@ -3803,7 +3803,6 @@ class AccountController extends LoggedUserController
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
-        $urlController = implode('-', $arr);
         $className = ucwords(implode(' ', $arr));
 
         if ($action == 'index') {
@@ -3818,7 +3817,7 @@ class AccountController extends LoggedUserController
         } else if ($action == 'cookiesPreferencesForm') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_COOKIE_PREFERENCES', $this->siteLangId)]);
             $this->nodes[] = array('title' => $title);
-        } else if ($action == 'messages' || $action == 'credits' || $action == 'changeEmailPassword') {
+        } else if ($action == 'messages' || $action == 'credits') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
             $this->nodes[] = array('title' => $title);
         } else {

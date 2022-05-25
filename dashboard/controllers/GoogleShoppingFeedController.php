@@ -744,7 +744,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $productData = $this->getData();
         $data = [
             'batchId' => $this->adsBatchId,
-            'currency_code' => strtoupper(Currency::getAttributesById($this->siteCurrencyId, 'currency_code')),
+            'currency_code' => strtoupper(Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code')),
             'data' => $productData
         ];
 
