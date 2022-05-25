@@ -99,7 +99,7 @@
                             </li>
                             <?php if ($controllerName != 'Cart' && (User::isBuyer(true) || (!UserAuthentication::isUserLogged()))) { ?>
                                 <li class="quick-nav-item" id="cartSummaryJs">
-                                    <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#sideCartJs" aria-controls="side-cart">
+                                    <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#sideCartJs">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
                                         </svg>

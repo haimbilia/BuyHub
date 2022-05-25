@@ -362,7 +362,8 @@ class HtmlHelper
     public static function getImgDimParm(int $dimensionType, string $sizeType)
     {
         $dimensions = ImageDimension::getData($dimensionType, $sizeType);
-        return ' data-aspect-ratio="' . $dimensions[$sizeType]['aspectRatio'] . '"  width="' . $dimensions[ImageDimension::WIDTH] . '" height="' . $dimensions[ImageDimension::HEIGHT] . '"';
+        return ' data-aspect-ratio="' . $dimensions[$sizeType]['aspectRatio'] . '" ';
+        // return ' data-aspect-ratio="' . $dimensions[$sizeType]['aspectRatio'] . '"  width="' . $dimensions[ImageDimension::WIDTH] . '" height="' . $dimensions[ImageDimension::HEIGHT] . '"';
     }
 
     public static function getModalStructure(string $id, string $title, string $body)

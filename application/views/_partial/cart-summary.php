@@ -1,8 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
-
 if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
     if (true === $showHeaderButton) { ?>
-        <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#sideCartJs" aria-controls="side-cart">
+        <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#sideCartJs">
             <svg class="svg" width="20" height="20">
                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
             </svg>

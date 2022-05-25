@@ -98,7 +98,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
 <?php
 
 $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearch' => $frmProductSearch, 'siteLangId' => $siteLangId, 'recordCount' => $recordCount, 'pageTitle' => (isset($pageTitle)) ? $pageTitle : 'Products'), false);  ?>
-<section class="section productsAndFiltersJs">
+<div class="section productsAndFiltersJs">
     <div class="container">
         <div class="collection-search">
             <div class="collection-search-head">
@@ -161,7 +161,7 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
                             <?php }
                             } ?>
                         </ul>
-                        <?php echo $frmProductSearch->getFieldHtml('pageSize'); ?>
+                        <?php /* echo $frmProductSearch->getFieldHtml('pageSize'); */ ?>
                     </div>
 
                 </div>
@@ -202,7 +202,7 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
     if ($vtype == "map") {
         include(CONF_THEME_PATH . 'products/products-list-map-view.php');
     } ?>
-</section>
+</div>
 <section>
     <div class="container">
         <div class="row">
