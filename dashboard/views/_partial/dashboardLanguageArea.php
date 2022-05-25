@@ -49,7 +49,7 @@ if ($currencies && count($currencies) > 1) { ?>
         <ul class="menu-sub menu-sub-accordion <?php echo $collapseClass; ?>" id="nav-currency" aria-labelledby="" data-parent="#dashboard-menu">
             <?php foreach ($currencies as $currencyId => $currency) { ?>
                 <li class="menu-sub-item navItemJs">
-                    <a class="menu-sub-link noCollapseJs navLinkJs <?php echo (false === $quickSearch && $siteCurrencyId == $currencyId) ? 'active' : ''; ?>" href="javascript:void(0);" onclick="setSiteDefaultCurrency(<?php echo $currencyId; ?>)">
+                    <a class="menu-sub-link noCollapseJs navLinkJs <?php echo (false === $quickSearch && CommonHelper::getCurrencyId() == $currencyId) ? 'active' : ''; ?>" href="javascript:void(0);" onclick="setSiteDefaultCurrency(<?php echo $currencyId; ?>)">
                         <span class="menu-sub-title navTextJs">
                             <?php echo $currency; ?>
                         </span>

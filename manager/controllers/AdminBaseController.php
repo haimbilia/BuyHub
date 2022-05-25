@@ -65,9 +65,7 @@ class AdminBaseController extends FatController
     private function setCommonValues()
     {
         CommonHelper::initCommonVariables(true);
-        $this->adminLangId = CommonHelper::getLangId();       
-        $this->siteLangCode = CommonHelper::getLangCode();
-        $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
+        $this->adminLangId = CommonHelper::getLangId();              
 
         $this->unAuthorizeAccess = Labels::getLabel('LBL_Unauthorized_Access', $this->adminLangId);
         $this->str_add_record = Labels::getLabel('LBL_Record_Added_Successfully', $this->adminLangId);
@@ -255,8 +253,8 @@ class AdminBaseController extends FatController
 
     public function includeDatePickerLangJs()
     {
-        $langCode = strtolower($this->siteLangCode);
-        $langCountryCode = strtoupper($this->siteLangCountryCode);
+        $langCode = strtolower(CommonHelper::getLangCode());
+        $langCountryCode = strtoupper(CommonHelper::getLangCountryCode());
         $jsPath = FatCache::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
         if ($jsPath) {
             if ($jsPath == 'notfound') {

@@ -53,6 +53,16 @@ class CommonHelper extends FatUtility
                 self::$_currency_id = FatUtility::int($_SERVER['HTTP_X_CURRENCY_ID']);
             }
 
+            $post = FatApp::getPostedData();
+
+            if (array_key_exists('language', $post)) {
+                self::$_lang_id = FatUtility::int($post['language']);
+            }
+
+            if (array_key_exists('currency', $post)) {
+                self::$_currency_id = FatUtility::int($post['currency']);
+            }
+
             return;
         }
 
@@ -114,7 +124,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_langData['language_code'])) {
             return self::$_langData['language_code'];
         }
-        return Language::getAttributesById(self::$_lang_id, 'language_code');
+        return self::$_langData['language_code'] = Language::getAttributesById(self::$_lang_id, 'language_code');
     }
 
     public static function getLangCountryCode()

@@ -1,9 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $commonHeadData = array(
-    'siteLangId' => $siteLangId,
-    'siteLangCode' => $siteLangCode,
-    'siteLangCountryCode' => $siteLangCountryCode,
+    'siteLangId' => $siteLangId,    
     'controllerName' => $controllerName,
     'action' => $action,
     'cacheTimeStamp' => $cacheTimeStamp,

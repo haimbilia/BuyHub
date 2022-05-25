@@ -26,7 +26,7 @@ class GuestUserController extends MyAppController
 
         $loginFrm = $this->getLoginForm($signInWithPhone);
         $loginFrm->addSecurityToken();
-        $loginData = array(
+        $loginFrmData = array(
             'loginFrm' => $loginFrm,
             'socialLoginApis' => $socialLoginApis,
             'siteLangId' => $this->siteLangId,
@@ -36,7 +36,7 @@ class GuestUserController extends MyAppController
 
         $this->set('signInWithPhone', $signInWithPhone);
         $this->set('signinpopup', FatApp::getPostedData('signinpopup', FatUtility::VAR_INT, 0));
-        $this->set('loginData', $loginData);
+        $this->set('loginData', $loginFrmData);
         $this->set('exculdeMainHeaderDiv', true);
 
         $fOutMode = FatApp::getPostedData('fOutMode', FatUtility::VAR_STRING);

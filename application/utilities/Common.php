@@ -32,7 +32,7 @@ class Common
         }
         $productsArr = $cartObj->getProducts($siteLangId);
         $cartSummary = $cartObj->getCartFinancialSummary($siteLangId);
-        
+
         $saveForLaterProducts = [];
         if (UserAuthentication::isUserLogged()) {
             $saveForLaterProducts = UserWishList::savedForLaterItems(UserAuthentication::getLoggedUserId(), $siteLangId);
@@ -158,7 +158,6 @@ class Common
     public static function headerLanguageArea($template)
     {
         $template->set('siteLangId', CommonHelper::getLangId());
-        $template->set('siteCurrencyId', CommonHelper::getCurrencyId());
         $template->set('languages', Language::getAllNames(false));
         $template->set('currencies', Currency::getCurrencyAssoc(CommonHelper::getLangId()));
     }

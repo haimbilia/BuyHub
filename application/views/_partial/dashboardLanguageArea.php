@@ -29,7 +29,7 @@
                     </i><span class="menu-item__title"> <?php echo Labels::getLabel('LBL_Currency', $siteLangId); ?></span></a>
                 <ul class="accordianbody">
                     <?php foreach ($currencies as $currencyId => $currency) { ?>
-                        <li <?php echo ($siteCurrencyId == $currencyId) ? 'class="is-active"' : ''; ?>><a href="javascript:void(0);" onClick="setSiteDefaultCurrency(<?php echo $currencyId; ?>)"> <?php echo $currency; ?></a></li>
+                        <li <?php echo (CommonHelper::getCurrencyId() == $currencyId) ? 'class="is-active"' : ''; ?>><a href="javascript:void(0);" onClick="setSiteDefaultCurrency(<?php echo $currencyId; ?>)"> <?php echo $currency; ?></a></li>
                     <?php } ?>
                 </ul>
             </div>
