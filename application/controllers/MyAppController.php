@@ -40,9 +40,9 @@ class MyAppController extends FatController
 
         $controllerName = rtrim($this->_controllerName, 'Controller');
 
-        $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
         if (!FatUtility::isAjaxCall() && !in_array($this->_controllerName, ['Cart', 'Checkout'])) {
             /* to keep track of temporary hold the product stock, update time in each row of tbl_product_stock_hold against current user[ */
+            $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
             $cartObj->excludeTax();
             $cartProducts = $cartObj->getBasketProducts($this->siteLangId);
             if ($cartProducts) {
@@ -54,6 +54,7 @@ class MyAppController extends FatController
         }
 
         if (true === MOBILE_APP_API_CALL) {
+            $cartObj = $cartObj ?? new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
             $this->cartItemsCount = $cartObj->countProducts();
             $this->set('cartItemsCount', $this->cartItemsCount);
         }
