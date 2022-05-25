@@ -515,7 +515,7 @@ class AccountController extends LoggedUserController
         $orderData['order_language_id'] = $languageRow['language_id'];
         $orderData['order_language_code'] = $languageRow['language_code'];
 
-        $currencyRow = Currency::getAttributesById($this->siteCurrencyId);
+        $currencyRow = Currency::getAttributesById(CommonHelper::getCurrencyId());
         $orderData['order_currency_id'] = $currencyRow['currency_id'];
         $orderData['order_currency_code'] = $currencyRow['currency_code'];
         $orderData['order_currency_value'] = $currencyRow['currency_value'];

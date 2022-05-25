@@ -32,11 +32,8 @@ class DashboardBaseController extends FatController
 
     public function initCommonVariables()
     {
-        $this->siteLangId = CommonHelper::getLangId();
-        $this->siteLangCode = CommonHelper::getLangCode();
-        $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
-        $this->siteCurrencyId = CommonHelper::getCurrencyId();
-
+        $this->siteLangId = CommonHelper::getLangId();        
+        
         $curdLangLabelCache = FatCache::get('curdLangLabelCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$curdLangLabelCache) {
             $arr = [
@@ -68,17 +65,14 @@ class DashboardBaseController extends FatController
             CommonHelper::setAppUser();
         }
 
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('siteLangCode', $this->siteLangCode);
-        $this->set('siteCurrencyId', $this->siteCurrencyId);
-        $this->set('siteLangCountryCode', $this->siteLangCountryCode);
-
-        $loginData = array(
+        $this->set('siteLangId', $this->siteLangId);      
+        
+        $loginFrmData = array(
             'loginFrm' => $this->getLoginForm(),
             'siteLangId' => $this->siteLangId,
             'showSignUpLink' => true
         );
-        $this->set('loginData', $loginData);
+        $this->set('loginData', $loginFrmData);
         if (!defined('CONF_MESSAGE_ERROR_HEADING')) {
             define('CONF_MESSAGE_ERROR_HEADING', Labels::getLabel('MSG_FOLLOWING_ERROR_OCCURRED', $this->siteLangId));
         }
@@ -218,7 +212,7 @@ class DashboardBaseController extends FatController
 
             $jsVariables['controllerName'] = $controllerName;
             $jsVariables['defaultCountryCode'] = $defaultCountryCode;
-            $jsVariables['siteCurrencyId'] = $this->siteCurrencyId;
+            $jsVariables['siteCurrencyId'] = CommonHelper::getCurrencyId();
             $jsVariables['layoutDirection'] = CommonHelper::getLayoutDirection();
             $this->set('jsVariables', $jsVariables);
 
@@ -286,12 +280,11 @@ class DashboardBaseController extends FatController
             $_COOKIE['defaultSiteLang'] = $this->siteLangId;
         }
 
-        if (array_key_exists('currency', $post)) {
-            $this->siteCurrencyId = FatUtility::int($post['currency']);
-            $_COOKIE['defaultSiteCurrency'] = $this->siteCurrencyId;
+        if (array_key_exists('currency', $post)) {            
+            $_COOKIE['defaultSiteCurrency'] = CommonHelper::getCurrencyId();
         }
 
-        $currencyRow = Currency::getAttributesById($this->siteCurrencyId);
+        $currencyRow = Currency::getAttributesById(CommonHelper::getCurrencyId());
 
         $this->currencySymbol = !empty($currencyRow['currency_symbol_left']) ? $currencyRow['currency_symbol_left'] : $currencyRow['currency_symbol_right'];
         $this->set('currencySymbol', $this->currencySymbol);
@@ -644,8 +637,8 @@ class DashboardBaseController extends FatController
 
     public function includeDatePickerLangJs()
     {
-        $langCode = strtolower($this->siteLangCode);
-        $langCountryCode = strtoupper($this->siteLangCountryCode);
+        $langCode = strtolower(CommonHelper::getLangCode());
+        $langCountryCode = strtoupper(CommonHelper::getLangCountryCode());
         $jsPath = CacheHelper::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
         if ($jsPath) {
             if ($jsPath == 'notfound') {

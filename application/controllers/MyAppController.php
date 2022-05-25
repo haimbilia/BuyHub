@@ -19,42 +19,34 @@ class MyAppController extends FatController
         CommonHelper::initCommonVariables();
 
         $this->siteLangId = CommonHelper::getLangId();
-        $this->siteLangCode = CommonHelper::getLangCode();
-        $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
-        $this->siteCurrencyId = CommonHelper::getCurrencyId();
 
         $this->app_user['temp_user_id'] = 0;
-        if (true === MOBILE_APP_API_CALL) {
-            $this->setApiVariables();
-        }
+        $this->setApiVariables();
 
         if (0 < FatApp::getPostedData('appUser', FatUtility::VAR_INT, 0)) {
             CommonHelper::setAppUser();
         }
+
         $cacheTimeStamp = UrlHelper::getCacheTimestamp($this->siteLangId);
+
         $this->set('siteLangId', $this->siteLangId);
-        $this->set('siteLangCode', $this->siteLangCode);
-        $this->set('siteCurrencyId', $this->siteCurrencyId);
-        $this->set('siteLangCountryCode', $this->siteLangCountryCode);
         $this->set('cacheTimeStamp', $cacheTimeStamp);
 
-        $loginData = array(
+        $loginFrmData = array(
             'loginFrm' => $this->getLoginForm(),
             'siteLangId' => $this->siteLangId,
             'showSignUpLink' => true
         );
-        $this->set('loginData', $loginData);
+        $this->set('loginData', $loginFrmData);
+
         if (!defined('CONF_MESSAGE_ERROR_HEADING')) {
             define('CONF_MESSAGE_ERROR_HEADING', Labels::getLabel('LBL_Following_error_occurred', $this->siteLangId));
         }
 
-        $arr = explode('-', FatUtility::camel2dashed($this->_controllerName));
-        array_pop($arr);
-        $urlController = implode('-', $arr);
-        $controllerName = ucfirst(FatUtility::dashed2Camel($urlController));
+        $controllerName = rtrim($this->_controllerName, 'Controller');
 
         $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
-        if (!FatUtility::isAjaxCall() && !in_array($controllerName, ['Cart', 'Checkout'])) {
+        if (!FatUtility::isAjaxCall() && !in_array($this->_controllerName, ['Cart', 'Checkout'])) {
             /* to keep track of temporary hold the product stock, update time in each row of tbl_product_stock_hold against current user[ */
             $cartObj->excludeTax();
             $cartProducts = $cartObj->getBasketProducts($this->siteLangId);
@@ -192,7 +184,7 @@ class MyAppController extends FatController
 
         $jsVariables['controllerName'] = $controllerName;
         $jsVariables['defaultCountryCode'] = $defaultCountryCode;
-        $jsVariables['siteCurrencyId'] = $this->siteCurrencyId;
+        $jsVariables['siteCurrencyId'] = CommonHelper::getCurrencyId();
 
         if (false === MOBILE_APP_API_CALL && (!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
             setcookie('_ykGeoLat', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72), time() + (86400 * 30), CONF_WEBROOT_FRONTEND,  $_SERVER['SERVER_NAME']); // 86400 = 1 day
@@ -221,6 +213,10 @@ class MyAppController extends FatController
 
     private function setApiVariables()
     {
+        if (false === MOBILE_APP_API_CALL) {
+            return;
+        }
+
         $post = FatApp::getPostedData();
 
         $this->appToken = CommonHelper::getAppToken();
@@ -257,27 +253,15 @@ class MyAppController extends FatController
         }
 
         if (array_key_exists('currency', $post)) {
-            $this->siteCurrencyId = FatUtility::int($post['currency']);
-            $_COOKIE['defaultSiteCurrency'] = $this->siteCurrencyId;
+            $_COOKIE['defaultSiteCurrency'] = CommonHelper::getCurrencyId();
         }
 
-        $currencyRow = Currency::getAttributesById($this->siteCurrencyId);
+        $currencyRow = Currency::getAttributesById(CommonHelper::getCurrencyId());
 
         $this->currencySymbol = !empty($currencyRow['currency_symbol_left']) ? $currencyRow['currency_symbol_left'] : $currencyRow['currency_symbol_right'];
         $this->set('currencySymbol', $this->currencySymbol);
 
         $user_id = $this->getAppLoggedUserId();
-        /* $userObj = new User($user_id);
-        $srch = $userObj->getUserSearchObj();
-        $srch->addMultipleFields(array('u.*'));
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $this->user_details = FatApp::getDb()->fetch($rs, 'user_id'); */
-
-        /*$cObj = new Cart($user_id, 0, $this->app_user['temp_user_id']);
-        $this->cartItemsCount = $cObj->countProducts();
-        $this->set('cartItemsCount', $this->cartItemsCount);*/
 
         if (array_key_exists('favouriteItemsCount', $post)) {
             $this->totalFavouriteItems = UserFavorite::getUserFavouriteItemCount($user_id);
@@ -562,7 +546,7 @@ class MyAppController extends FatController
         $frm->addHiddenField('', 'join_price', 0);
         $frm->addHiddenField('', 'featured', 0);
         $frm->addHiddenField('', 'top_products', 0);
-        $frm->addHiddenField('', 'currency_id', $this->siteCurrencyId);
+        $frm->addHiddenField('', 'currency_id', CommonHelper::getCurrencyId());
         $frm->addSubmitButton('', 'btnProductSrchSubmit', '');
         $frm->addHiddenField('', 'pageRecordCount');
         $frm->addHiddenField('', 'vtype');
@@ -700,8 +684,8 @@ class MyAppController extends FatController
 
     public function includeDatePickerLangJs()
     {
-        $langCode = strtolower($this->siteLangCode);
-        $langCountryCode = strtoupper($this->siteLangCountryCode);
+        $langCode = strtolower(CommonHelper::getLangCode());
+        $langCountryCode = strtoupper(CommonHelper::getLangCountryCode());
         $jsPath = CacheHelper::get('datepickerlangfilePath' . $langCode . "-" . $langCountryCode, CONF_DEF_CACHE_TIME, '.txt');
         if ($jsPath) {
             if ($jsPath == 'notfound') {

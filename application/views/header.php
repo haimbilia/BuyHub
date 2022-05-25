@@ -5,8 +5,7 @@ array_walk($jsVariables, function (&$item1, $key) {
     $item1 = html_entity_decode($item1, ENT_QUOTES, 'UTF-8');
 });
 $commonHeadData = array(
-    'siteLangId' => $siteLangId,
-    'siteLangCode' => $siteLangCode,
+    'siteLangId' => $siteLangId,    
     'cacheTimeStamp' => $cacheTimeStamp,
     'controllerName' => $controllerName,
     'action' => $action,

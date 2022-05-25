@@ -23,7 +23,7 @@ if ($hasMultipleLangs || $hasMultipleCurrencies) { ?>
             if ($hasMultipleCurrencies) {
                 echo (CommonHelper::getCurrencySymbolRight()) ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft(); ?>
                     <span class="currency-name">
-                        <?php echo $currencies[$siteCurrencyId]; ?>
+                        <?php echo $currencies[CommonHelper::getCurrencyId()]; ?>
                     </span>
                 <?php } ?>
                 </span>
@@ -54,7 +54,7 @@ if ($hasMultipleLangs || $hasMultipleCurrencies) { ?>
                     </h6>
                     <ul class="list-options">
                         <?php foreach ($currencies as $currencyId => $currency) { ?>
-                            <li class="list-options-item <?php echo ($siteCurrencyId == $currencyId) ? ' is-active' : ''; ?>">
+                            <li class="list-options-item <?php echo (CommonHelper::getCurrencyId() == $currencyId) ? ' is-active' : ''; ?>">
                                 <a class="list-options-link" href="javascript:void(0);" onClick="setSiteDefaultCurrency(<?php echo $currencyId; ?>)"> <?php echo $currency; ?>
                                 </a>
                             </li>

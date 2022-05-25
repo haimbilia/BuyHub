@@ -2,8 +2,7 @@
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $commonHeadData = array(
-    'siteLangId' => $siteLangId,
-    'siteLangCode' => $siteLangCode,
+    'siteLangId' => $siteLangId,    
     'controllerName' => $controllerName,
     'action' => $action,
     'jsVariables' => $jsVariables,
