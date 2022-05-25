@@ -1125,6 +1125,10 @@ mark,
         border: 1px dashed #000;
         padding: 4px 10px;
         border-radius: 100px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 148px;
         @include media-breakpoint-down(sm) {
             min-width: inherit;
         }
