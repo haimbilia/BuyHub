@@ -5,13 +5,10 @@ array_walk($jsVariables, function (&$item1, $key) {
     $item1 = html_entity_decode($item1, ENT_QUOTES, 'UTF-8');
 });
 $commonHeadData = array(
-    'siteLangId' => $siteLangId,    
-    'cacheTimeStamp' => $cacheTimeStamp,
+    'siteLangId' => $siteLangId,        
     'controllerName' => $controllerName,
     'action' => $action,
     'jsVariables' => $jsVariables,
-    'currencySymbolLeft' => $currencySymbolLeft,
-    'currencySymbolRight' => $currencySymbolRight,
     'canonicalUrl' => isset($canonicalUrl) ? $canonicalUrl : '',
 );
 

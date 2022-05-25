@@ -70,8 +70,8 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     var CONF_ENABLE_GEO_LOCATION = ' . (FatApp::getConfig("CONF_ENABLE_GEO_LOCATION", FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) ? 1 : 0 ). ';
     var CONF_MAINTENANCE = ' . FatApp::getConfig("CONF_MAINTENANCE", FatUtility::VAR_INT, 0) . ';
     var extendEditorJs = ' . $extendEditorJs . ';   
-    var currencySymbolLeft = "' . $currencySymbolLeft . '";
-    var currencySymbolRight = "' . $currencySymbolRight . '";   
+    var currencySymbolLeft = "' . CommonHelper::getCurrencySymbolLeft() . '";
+    var currencySymbolRight = "' . CommonHelper::getCurrencySymbolRight() . '";   
     var controllerName = "' . LibHelper::getControllerName() . '";
     var className = "' . FatApp::getController() . '";
     var actionName = "' . FatApp::getAction() . '";

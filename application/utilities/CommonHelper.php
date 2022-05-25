@@ -132,7 +132,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_langData['language_country_code'])) {
             return self::$_langData['language_country_code'];
         }
-        return Language::getAttributesById(self::$_lang_id, 'language_country_code');
+        return self::$_langData['language_country_code'] = Language::getAttributesById(self::$_lang_id, 'language_country_code');
     }
 
     public static function getLayoutDirection()
@@ -140,7 +140,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_langData['language_layout_direction'])) {
             return self::$_langData['language_layout_direction'];
         }
-        return Language::getAttributesById(self::$_lang_id, 'language_layout_direction');
+        return self::$_langData['language_layout_direction'] = Language::getAttributesById(self::$_lang_id, 'language_layout_direction');
     }
 
     public static function getCurrencyId()
@@ -153,7 +153,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_symbol_left'])) {
             return self::$_currencyData['currency_symbol_left'];
         }
-        return Currency::getAttributesById(self::$_lang_id, 'currency_symbol_left');
+        return self::$_currencyData['currency_symbol_left'] = Currency::getAttributesById(self::$_lang_id, 'currency_symbol_left');
     }
 
     public static function getCurrencySymbolRight()
@@ -161,7 +161,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_symbol_right'])) {
             return self::$_currencyData['currency_symbol_right'];
         }
-        return Currency::getAttributesById(self::$_lang_id, 'currency_symbol_right');
+        return self::$_currencyData['currency_symbol_right'] = Currency::getAttributesById(self::$_lang_id, 'currency_symbol_right');
     }
 
     public static function getCurrencyCode()
@@ -169,7 +169,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_code'])) {
             return self::$_currencyData['currency_code'];
         }
-        return Currency::getAttributesById(self::$_lang_id, 'currency_code');
+        return self::$_currencyData['currency_code'] = Currency::getAttributesById(self::$_lang_id, 'currency_code');
     }
 
     public static function getCurrencyValue()
@@ -177,12 +177,12 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_value'])) {
             return self::$_currencyData['currency_value'];
         }
-        return Currency::getAttributesById(self::$_lang_id, 'currency_value');
+        return self::$_currencyData['currency_value'] = Currency::getAttributesById(self::$_lang_id, 'currency_value');
     }
 
     public static function userAgent()
     {
-        return isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        return $_SERVER['HTTP_USER_AGENT'] ?? '';
     }
 
     public static function getAppScreenType()
@@ -589,13 +589,13 @@ class CommonHelper extends FatUtility
                 $currency_id,
                 array('currency_symbol_left', 'currency_symbol_right')
             );
-            $currencySymbolLeft = $currencyData['currency_symbol_left'];
-            $currencySymbolRight = $currencyData['currency_symbol_right'];
+            $symbolLeft = $currencyData['currency_symbol_left'];
+            $symbolRight = $currencyData['currency_symbol_right'];
         } else {
-            $currencySymbolLeft = self::getCurrencySymbolLeft();
-            $currencySymbolRight = self::getCurrencySymbolRight();
+            $symbolLeft = self::getCurrencySymbolLeft();
+            $symbolRight = self::getCurrencySymbolRight();
         }
-        return   $currencySymbolLeft . $currencySymbolRight;
+        return   $symbolLeft . $symbolRight;
     }
 
     public static function numberStringFormat($number)
@@ -637,8 +637,8 @@ class CommonHelper extends FatUtility
     {
         $val = FatUtility::convertToType($val, FatUtility::VAR_FLOAT);
         $currencyValue = self::getCurrencyValue();
-        $currencySymbolLeft = self::getCurrencySymbolLeft();
-        $currencySymbolRight = self::getCurrencySymbolRight();
+        $symbolLeft = self::getCurrencySymbolLeft();
+        $symbolRight = self::getCurrencySymbolRight();
 
         if ($showInConfiguredDefaultCurrency) {
             $currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
@@ -647,8 +647,8 @@ class CommonHelper extends FatUtility
                 array('currency_code', 'currency_symbol_left', 'currency_symbol_right', 'currency_value')
             );
             $currencyValue = $currencyData['currency_value'];
-            $currencySymbolLeft = $currencyData['currency_symbol_left'];
-            $currencySymbolRight = $currencyData['currency_symbol_right'];
+            $symbolLeft = $currencyData['currency_symbol_left'];
+            $symbolRight = $currencyData['currency_symbol_right'];
         }
 
         $val = $val * $currencyValue;
@@ -669,12 +669,12 @@ class CommonHelper extends FatUtility
             $sign .= ' ';
 
             if (true === MOBILE_APP_API_CALL || false === $withHtml) {
-                return trim($sign . $currencySymbolLeft . $val . $currencySymbolRight);
+                return trim($sign . $symbolLeft . $val . $symbolRight);
             }
 
-            $currencySymbolLeft = !empty($currencySymbolLeft) ? "<span class='currency-symbol'>" . $currencySymbolLeft . "</span>" : $currencySymbolLeft;
-            $currencySymbolRight = !empty($currencySymbolRight) ? "<span class='currency-symbol'>" . $currencySymbolRight . "</span>" : $currencySymbolRight;
-            return "<span class='currency-value' dir='ltr'>" . trim($sign . $currencySymbolLeft . $val . $currencySymbolRight) . "</span>";
+            $symbolLeft = !empty($symbolLeft) ? "<span class='currency-symbol'>" . $symbolLeft . "</span>" : $symbolLeft;
+            $symbolRight = !empty($symbolRight) ? "<span class='currency-symbol'>" . $symbolRight . "</span>" : $symbolRight;
+            return "<span class='currency-value' dir='ltr'>" . trim($sign . $symbolLeft . $val . $symbolRight) . "</span>";
         }
 
         return trim($sign . $val);
@@ -1479,11 +1479,7 @@ class CommonHelper extends FatUtility
             $currencyId,
             array('currency_code', 'currency_symbol_left', 'currency_symbol_right', 'currency_value')
         );
-
-        $currencySymbolLeft = $currencyData['currency_symbol_left'];
-        $currencySymbolRight = $currencyData['currency_symbol_right'];
-
-        $symbol = $currencySymbolRight ? $currencySymbolRight : $currencySymbolLeft;
+        $symbol = $currencyData['currency_symbol_right'] ?? $currencyData['currency_symbol_left'];
 
         return empty($symbol) ? '' : " ($symbol)";
     }

@@ -226,13 +226,19 @@ class UrlHelper extends FatUtility
 
     public static function getCacheTimestamp($langId)
     {
+        global $cacheTimeParam;
+
+        if (!empty($cacheTimeParam)) {
+            return $cacheTimeParam;
+        }
+
         $cacheTimeStamp = CacheHelper::get('cacheTimeStamp' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$cacheTimeStamp || empty($cacheTimeStamp)) {
             $cacheTimeStamp = date('Y-m-d H:i:s');
             CacheHelper::create('cacheTimeStamp' . $langId, $cacheTimeStamp);
         }
 
-        return AttachedFile::setTimeParam($cacheTimeStamp);
+        return $cacheTimeParam = AttachedFile::setTimeParam($cacheTimeStamp);
     }
 
     public static function getCanonical($controllerName, $langId = SYSTEM_LANG_ID)

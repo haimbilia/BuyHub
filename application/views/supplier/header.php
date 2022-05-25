@@ -5,9 +5,6 @@ $commonHeadData = array(
     'controllerName' => $controllerName,
     'action' => $action,
     'jsVariables' => $jsVariables,
-    'cacheTimeStamp' => $cacheTimeStamp,
-    'currencySymbolLeft' => $currencySymbolLeft,
-    'currencySymbolRight' => $currencySymbolRight,
     'canonicalUrl' => isset($canonicalUrl) ? $canonicalUrl : '',
 );
 

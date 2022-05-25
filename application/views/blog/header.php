@@ -4,10 +4,7 @@ $commonHeadData = array(
     'siteLangId' => $siteLangId,    
     'controllerName' => $controllerName,
     'action' => $action,
-    'cacheTimeStamp' => $cacheTimeStamp,
     'jsVariables' => $jsVariables,
-    'currencySymbolLeft' => $currencySymbolLeft,
-    'currencySymbolRight' => $currencySymbolRight,
     'canonicalUrl' => isset($canonicalUrl) ? $canonicalUrl : '',
 );
 
