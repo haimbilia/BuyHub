@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="review-total">
     <div class="review-total-head">
-        <h3 class="review-total-title dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#review-cart" aria-haspopup="true" aria-expanded="false" aria-controls="review-cart">
+        <h3 class="review-total-title dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#review-cart" aria-haspopup="true" aria-expanded="false">
             <?php echo Labels::getLabel('LBL_REVIEW_CART', $siteLangId); ?>
             <span class="count-items">
                 <?php echo count($products) . ' ' . Labels::getLabel('LBL_ITEMS', $siteLangId); ?>

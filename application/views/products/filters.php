@@ -44,7 +44,7 @@ if (isset($prodcat_code)) {
     </div>
     <?php if (isset($categoriesArr) && $categoriesArr) { ?>
         <div class="sidebar-widget">
-            <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#category" aria-expanded="true" aria-controls="category">
+            <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#category" aria-expanded="true">
                 <?php echo Labels::getLabel('LBL_Categories', $siteLangId); ?>
             </div>
             <div class="sidebar-widget_body collapse show" id="category">
@@ -150,7 +150,7 @@ if (isset($prodcat_code)) {
     <?php if (isset($priceArr) && $priceArr && $priceArr['minPrice'] != $priceArr['maxPrice']) { ?>
 
         <div class="sidebar-widget">
-            <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#price" aria-expanded="true" aria-controls="price">
+            <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#price" aria-expanded="true">
                 <?php echo Labels::getLabel('LBL_Price', $siteLangId) . ' (' . (CommonHelper::getCurrencySymbolRight() ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft()) . ')'; ?>
             </div>
             <div class="sidebar-widget_body collapse show" id="price">

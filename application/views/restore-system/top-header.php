@@ -1,4 +1,4 @@
- <button class="restore-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+ <button class="restore-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">
      <!-- <span class="restore-btn-icon"></span> -->
      <span class="restore-btn-label">Restore</span>
  </button>

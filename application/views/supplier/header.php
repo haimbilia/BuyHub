@@ -49,7 +49,7 @@ $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, 
                         $this->includeTemplate('_partial/headerTopNavigation.php'); ?>
                         <li class="quick-nav-item item-mobile">
                             <div class="dropdown">
-                                <button type="button" class="quick-nav-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-seller-nav" aria-controls="offcanvas-seller-nav">
+                                <button type="button" class="quick-nav-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-seller-nav">
                                     <svg class="svg" width="20" height="20">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-menu"></use>
                                     </svg>

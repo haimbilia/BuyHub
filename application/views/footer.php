@@ -146,7 +146,7 @@ if ($controllerName == 'Home' && $action == 'index') {
             </li>
             <li class="mobile-actions-item" role="none">
                 <?php if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) {        ?>
-                    <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-account" aria-controls="offcanvas-account">
+                    <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-account">
                     <?php } else { ?>
                         <button class="mobile-actions-link sign-in-popup-js" type="button">
                         <?php  } ?>
@@ -160,7 +160,7 @@ if ($controllerName == 'Home' && $action == 'index') {
 
             <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
                 <li class="mobile-actions-item" role="none">
-                    <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-gps-location" aria-controls="offcanvas-gps-location">
+                    <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-gps-location">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-location">
                             </use>
