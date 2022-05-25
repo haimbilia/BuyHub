@@ -3,11 +3,11 @@
     <section class="section">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-6 <?php echo (empty($pageData)) ? '' : ''; ?>">
+                <div class="col-md-4 <?php echo (empty($pageData)) ? '' : ''; ?>">
                     <div class="section-head">
                         <div class="section-heading mb-3">
-                            <h3><?php echo empty($user_password) ? Labels::getLabel('LBL_SET_PASSWORD', $siteLangId) : Labels::getLabel('LBL_Reset_Password', $siteLangId); ?></h3>
-                            <p><?php echo empty($user_password) ? Labels::getLabel('LBL_SET_PASSWORD_MSG', $siteLangId) : Labels::getLabel('LBL_Reset_Password_Msg', $siteLangId); ?></p>
+                            <h3><?php echo empty($user_password) ? Labels::getLabel('LBL_SET_PASSWORD', $siteLangId) : Labels::getLabel('LBL_RESET_PASSWORD', $siteLangId); ?></h3>
+                            <p><?php echo empty($user_password) ? Labels::getLabel('LBL_SET_PASSWORD_MSG', $siteLangId) : Labels::getLabel('LBL_RESET_PASSWORD_MSG', $siteLangId); ?></p>
                         </div>
                     </div>
                     <?php

@@ -4,7 +4,7 @@ $frm->setFormTagAttribute('data-onclear', "userPasswordForm(" . $userId . ")");
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->developerTags['fld_default_col'] = 12;
 $newPwd = $frm->getField('new_password');
-$newPwd->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Example_password', $siteLangId), 'User@123') . '</span>';
+$newPwd->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_EXAMPLE_PASSWORD', $siteLangId), 'User@123') . '</span>';
 ?>
 <div class="modal-header">
     <h5 class="modal-title">

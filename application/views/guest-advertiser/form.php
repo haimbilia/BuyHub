@@ -66,10 +66,7 @@ $btn->addFieldTagAttribute("class", "btn btn-brand");
             <div class="caption-wraper"><label class="form-label"><?php echo Labels::getLabel('LBL_PASSWORD', $siteLangId); ?> <span class="mandatory">*</span></label></div>
             <div class="field-wraper">
                 <div class="field_cover"><?php echo $frm->getFieldHTML('user_password'); ?></div>
-                <span class="form-text text-muted"><?php echo sprintf(
-                                                        Labels::getLabel('LBL_Example_password', $siteLangId),
-                                                        'User@123'
-                                                    ) ?></span>
+                <span class="form-text text-muted"><?php echo sprintf(Labels::getLabel('LBL_EXAMPLE_PASSWORD', $siteLangId), 'User@123'); ?></span>
             </div>
         </div>
     </div>
