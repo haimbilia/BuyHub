@@ -19,7 +19,11 @@
                     $pageData = $obj->getContentByPageType(Extrapage::PRODUCT_REQUEST_INSTRUCTIONS, $siteLangId);
                     break;
             }
-            echo isset($pageData['epage_content']) && !empty($pageData['epage_content']) ? $pageData['epage_content'] : $pageData['epage_default_content'];
+            if (!empty($pageData)) {
+                echo isset($pageData['epage_content']) && !empty($pageData['epage_content']) ? $pageData['epage_content'] : $pageData['epage_default_content'];
+            } else {
+                echo Labels::getLabel('LBL_NO_INSTRUCTIONS_FOUND!');
+            }
             ?>
         </div>
     </div>
