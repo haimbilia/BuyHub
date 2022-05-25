@@ -1,7 +1,7 @@
 .filter-left {
     display: grid;
     grid-template-columns: 280px 1fr;
-    grid-gap: 60px;
+    grid-gap: 100px;
     @include media-breakpoint-down(md) {
         display: block;
     }
@@ -13,7 +13,6 @@
         // border-radius: $radius4;
         //padding: 1.5rem;
         display: block;
-
         @include media-breakpoint-down(md) {
             border-radius: 0;
             position: fixed;

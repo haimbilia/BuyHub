@@ -52,10 +52,11 @@
             <path d="M736,577 C737.65825,577 739,578.34175 739,580 C739,578.34175 740.34175,577 742,577 C740.34175,577 739,575.65825 739,574 C739,575.65825 737.65825,577 736,577 Z" id="bubble-rounded" stroke="#3CBC83" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
         </svg>
     </div>
-    <h2>
-        <?php echo Labels::getLabel('LBL_Your_Shopping_Bag_is_Empty', $siteLangId); ?></h2>
+    <h4>
+        <?php echo Labels::getLabel('LBL_Your_Shopping_Bag_is_Empty', $siteLangId); ?></h4>
     <a href="<?php echo UrlHelper::generateUrl('Home'); ?>" class="btn btn-outline-brand btn-wide">
-        <?php echo Labels::getLabel('LBL_Go_To_Homepage', $siteLangId); ?></a>
+        <?php echo Labels::getLabel('LBL_Go_To_Homepage', $siteLangId); ?>
+    </a>
     <?php if ($EmptyCartItems) { ?>
         <ul class="links-inline mt-4">
             <?php

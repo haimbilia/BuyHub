@@ -226,7 +226,12 @@
         .title {
             font-weight: 600;
             margin: 0;
+            margin-bottom: 0.5rem;
             font-size: 1.125rem;
+        }
+        p {
+            color: $txt-gray;
+            font-size: 0.8rem;
         }
     }
     &_body {

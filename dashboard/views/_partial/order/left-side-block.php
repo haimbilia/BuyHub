@@ -145,14 +145,68 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                     </thead>
                     <tbody>
                         <?php
-                        foreach ($arr as $childOrder) { ?>
+                        foreach ($arr as $childOrder) {
+                            $shippingCost = CommonHelper::orderProductAmount($childOrder, 'SHIPPING');
+                            $volumeDiscount = CommonHelper::orderProductAmount($childOrder, 'VOLUME_DISCOUNT');
+                            $tax = CommonHelper::orderProductAmount($childOrder, 'TAX', false, ($isSellerDashboardView ? User::USER_TYPE_SELLER : User::USER_TYPE_BUYER));
+
+                        ?>
                             <tr>
                                 <td>
                                     <?php $this->includeTemplate('_partial/product/product-info-html.php', $this->variables + ['order' => $childOrder], false); ?>
                                 </td>
-                                <td><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?></td>
+                                <td>
+                                    <?php if ($childOrder['op_selprod_price'] > $childOrder['op_unit_price']) { ?>
+                                        <strong>
+                                        <?php
+                                    }
+                                    echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?>
+                                        <?php
+                                        if ($childOrder['op_selprod_price'] > $childOrder['op_unit_price']) { ?>
+                                        </strong>
+                                        <br />
+                                        <del>
+                                            <?php echo CommonHelper::displayMoneyFormat($childOrder['op_selprod_price'], true, false, true, false, true); ?>
+                                        </del>
+                                    <?php
+                                        } ?>
+                                </td>
                                 <td><?php echo $childOrder['op_qty']; ?></td>
-                                <td><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder), true, false, true, false, true); ?></td>
+                                <td>
+                                    <span class="d-inline-block link-dotted" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#price-<?php echo $childOrder['op_id']; ?>">
+                                        <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'NETAMOUNT', false, ($isSellerDashboardView ? User::USER_TYPE_SELLER : User::USER_TYPE_BUYER)), true, false, true, false, true); ?>
+                                    </span>
+                                    <div class="hidden" id="price-<?php echo $childOrder['op_id']; ?>">
+                                        <ul class="list-popover">
+                                            <li class="list-popover-item">
+                                                <span class="lable"><?php echo Labels::getLabel('LBL_UNIT_PRICE:'); ?> </span>
+                                                <span class="value"><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?></span>
+                                            </li>
+                                            <li class="list-popover-item">
+                                                <span class="lable"><?php echo Labels::getLabel('LBL_QUANTITY:'); ?> </span>
+                                                <span class="value"><?php echo $childOrder['op_qty']; ?></span>
+                                            </li>
+                                            <?php if (0 < $shippingCost) { ?>
+                                                <li class="list-popover-item">
+                                                    <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_COST:'); ?></span>
+                                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($shippingCost, true, false, true, false, true); ?></span>
+                                                </li>
+                                            <?php } ?>
+                                            <?php if (0 != $volumeDiscount) { ?>
+                                                <li class="list-popover-item">
+                                                    <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT:'); ?></span>
+                                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></span>
+                                                </li>
+                                            <?php } ?>
+                                            <?php if (0 < $tax) { ?>
+                                                <li class="list-popover-item">
+                                                    <span class="lable"><?php echo Labels::getLabel('LBL_TAX:'); ?></span>
+                                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($tax, true, false, true, false, true); ?></span>
+                                                </li>
+                                            <?php } ?>
+                                        </ul>
+                                    </div>
+                                </td>
                             </tr>
                         <?php } ?>
                     </tbody>

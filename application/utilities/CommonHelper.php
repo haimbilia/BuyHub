@@ -1,83 +1,14 @@
 <?php
 class CommonHelper extends FatUtility
 {
-    private static $_ip;
-    private static $_user_agent;
     private static $_lang_id;
-    private static $_lang_code;
-    private static $_lang_country_code;
-    private static $_layout_direction;
     private static $_currency_id;
-    private static $_currency_symbol_left;
-    private static $_currency_symbol_right;
-    private static $_currency_code;
-    private static $_currency_value;
-    private static $_default_currency_symbol_left;
-    private static $_default_currency_symbol_right;
-    private static $_appToken;
-    private static $_appScreen = applicationConstants::SCREEN_MOBILE;
+    private static $_langData = [];
+    private static $_currencyData = [];
 
     public static function initCommonVariables($isAdmin = false)
     {
-        self::$_ip = self::getClientIp();
-        self::$_user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        self::$_lang_id = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
-        self::$_currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
-
-        if (!$isAdmin) {
-            if (true === MOBILE_APP_API_CALL) {
-                if (!empty($_SERVER['HTTP_X_LANGUAGE_ID'])) {
-                    self::$_lang_id = FatUtility::int($_SERVER['HTTP_X_LANGUAGE_ID']);
-                }
-
-                if (!empty($_SERVER['HTTP_X_CURRENCY_ID'])) {
-                    self::$_currency_id = FatUtility::int($_SERVER['HTTP_X_CURRENCY_ID']);
-                }
-
-                if (!empty($_SERVER['HTTP_X_SCREEN_TYPE'])) {
-                    self::$_appScreen = FatUtility::int($_SERVER['HTTP_X_SCREEN_TYPE']);
-                }
-            } else {
-                if (isset($_COOKIE['defaultSiteLang'])) {
-                    $languages = Language::getAllNames();
-                    if (array_key_exists($_COOKIE['defaultSiteLang'], $languages)) {
-                        self::$_lang_id = FatUtility::int(trim($_COOKIE['defaultSiteLang']));
-                    }
-                }
-
-                if (SYSTEM_LANG_ID > 0 && count(LANG_CODES_ARR) > 1 && 0 < FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && defined('SYSTEM_FRONT') && SYSTEM_FRONT === true) {
-                    self::$_lang_id = SYSTEM_LANG_ID;
-                }
-
-                if (isset($_COOKIE['defaultSiteCurrency'])) {
-                    $currencies = Currency::getCurrencyAssoc(self::$_lang_id);
-                    if (array_key_exists($_COOKIE['defaultSiteCurrency'], $currencies)) {
-                        self::$_currency_id = FatUtility::int(trim($_COOKIE['defaultSiteCurrency']));
-                    }
-                } else {
-                    if (!empty($_SERVER['HTTP_X_CURRENCY_ID'])) {
-                        self::$_currency_id = FatUtility::int($_SERVER['HTTP_X_CURRENCY_ID']);
-                    }
-                }
-
-                if (!isset($_COOKIE['defaultSiteLang']) && !empty($_SERVER['HTTP_X_LANGUAGE_ID'])) {
-                    self::$_lang_id = FatUtility::int($_SERVER['HTTP_X_LANGUAGE_ID']);
-                }
-            }
-
-            if (true === MOBILE_APP_API_CALL && array_key_exists('HTTP_X_TOKEN', $_SERVER) && !empty($_SERVER['HTTP_X_TOKEN'])) {
-                self::$_appToken = ($_SERVER['HTTP_X_TOKEN'] != '') ? $_SERVER['HTTP_X_TOKEN'] : '';
-            }
-        } else {
-            if (isset($_COOKIE['defaultAdminSiteLang'])) {
-                $languages = Language::getAllNames();
-                if (array_key_exists($_COOKIE['defaultAdminSiteLang'], $languages)) {
-                    self::$_lang_id = FatUtility::int(trim($_COOKIE['defaultAdminSiteLang']));
-                }
-            } else {
-                self::$_lang_id = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-            }
-        }
+        self::setClassVariables($isAdmin);
 
         $currencyNdLangData = CacheHelper::get('currencyNdLangData' .  self::$_currency_id . '-' . self::$_lang_id, CONF_DEF_CACHE_TIME, '.txt');
         if ($currencyNdLangData) {
@@ -92,7 +23,7 @@ class CommonHelper extends FatUtility
 
             $langData = Language::getAttributesById(
                 self::$_lang_id,
-                ['language_country_code', 'language_code']
+                ['language_country_code', 'language_code', 'language_layout_direction']
             );
 
             $arr = [
@@ -102,19 +33,63 @@ class CommonHelper extends FatUtility
             CacheHelper::create('currencyNdLangData' . self::$_currency_id . '-' . self::$_lang_id, FatUtility::convertToJson($arr), CacheHelper::TYPE_CURRENCY);
         }
 
-        self::$_lang_code = $langData['language_code'];
-        self::$_lang_country_code = $langData['language_country_code'];
+        self::$_langData = $langData;
+        self::$_currencyData = $currencyData;
+    }
 
-        self::$_currency_symbol_left = $currencyData['currency_symbol_left'];
-        self::$_currency_symbol_right = $currencyData['currency_symbol_right'];
-        self::$_currency_code = $currencyData['currency_code'];
-        self::$_currency_value = $currencyData['currency_value'];
-        self::$_layout_direction = Language::getLayoutDirection(self::$_lang_id);
+    private static function setClassVariables($isAdmin = false)
+    {
+        self::$_currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
+
+        $langKey = (!$isAdmin) ? 'CONF_DEFAULT_SITE_LANG' : 'CONF_ADMIN_DEFAULT_LANG';
+        self::$_lang_id = FatApp::getConfig($langKey, FatUtility::VAR_INT, 1);
+
+        if (true === MOBILE_APP_API_CALL) {
+            if (!empty($_SERVER['HTTP_X_LANGUAGE_ID'])) {
+                self::$_lang_id = FatUtility::int($_SERVER['HTTP_X_LANGUAGE_ID']);
+            }
+
+            if (!empty($_SERVER['HTTP_X_CURRENCY_ID'])) {
+                self::$_currency_id = FatUtility::int($_SERVER['HTTP_X_CURRENCY_ID']);
+            }
+
+            return;
+        }
+
+        if ($isAdmin && isset($_COOKIE['defaultAdminSiteLang'])) {
+            $languages = Language::getAllNames();
+            if (array_key_exists($_COOKIE['defaultAdminSiteLang'], $languages)) {
+                self::$_lang_id = FatUtility::int(trim($_COOKIE['defaultAdminSiteLang']));
+            }
+            return;
+        }
+
+
+        if (isset($_COOKIE['defaultSiteLang'])) {
+            $languages = Language::getAllNames();
+            if (array_key_exists($_COOKIE['defaultSiteLang'], $languages)) {
+                self::$_lang_id = FatUtility::int(trim($_COOKIE['defaultSiteLang']));
+            }
+        }
+
+        if (SYSTEM_LANG_ID > 0 && count(LANG_CODES_ARR) > 1 && 0 < FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && defined('SYSTEM_FRONT') && SYSTEM_FRONT === true) {
+            self::$_lang_id = SYSTEM_LANG_ID;
+        }
+
+        if (isset($_COOKIE['defaultSiteCurrency'])) {
+            $currencies = Currency::getCurrencyAssoc(self::$_lang_id);
+            if (array_key_exists($_COOKIE['defaultSiteCurrency'], $currencies)) {
+                self::$_currency_id = FatUtility::int(trim($_COOKIE['defaultSiteCurrency']));
+            }
+        }
     }
 
     public static function getAppToken()
     {
-        return self::$_appToken;
+        if (array_key_exists('HTTP_X_TOKEN', $_SERVER) && !empty($_SERVER['HTTP_X_TOKEN'])) {
+            return ($_SERVER['HTTP_X_TOKEN'] != '') ? $_SERVER['HTTP_X_TOKEN'] : '';
+        }
+        return '';
     }
 
     public static function getLangId(): int
@@ -136,17 +111,26 @@ class CommonHelper extends FatUtility
 
     public static function getLangCode()
     {
-        return self::$_lang_code;
+        if (isset(self::$_langData['language_code'])) {
+            return self::$_langData['language_code'];
+        }
+        return Language::getAttributesById(self::$_lang_id, 'language_code');
     }
 
     public static function getLangCountryCode()
     {
-        return self::$_lang_country_code;
+        if (isset(self::$_langData['language_country_code'])) {
+            return self::$_langData['language_country_code'];
+        }
+        return Language::getAttributesById(self::$_lang_id, 'language_country_code');
     }
 
     public static function getLayoutDirection()
     {
-        return self::$_layout_direction;
+        if (isset(self::$_langData['language_layout_direction'])) {
+            return self::$_langData['language_layout_direction'];
+        }
+        return Language::getAttributesById(self::$_lang_id, 'language_layout_direction');
     }
 
     public static function getCurrencyId()
@@ -156,37 +140,48 @@ class CommonHelper extends FatUtility
 
     public static function getCurrencySymbolLeft()
     {
-        return self::$_currency_symbol_left;
+        if (isset(self::$_currencyData['currency_symbol_left'])) {
+            return self::$_currencyData['currency_symbol_left'];
+        }
+        return Currency::getAttributesById(self::$_lang_id, 'currency_symbol_left');
     }
 
     public static function getCurrencySymbolRight()
     {
-        return self::$_currency_symbol_right;
+        if (isset(self::$_currencyData['currency_symbol_right'])) {
+            return self::$_currencyData['currency_symbol_right'];
+        }
+        return Currency::getAttributesById(self::$_lang_id, 'currency_symbol_right');
     }
 
     public static function getCurrencyCode()
     {
-        return self::$_currency_code;
+        if (isset(self::$_currencyData['currency_code'])) {
+            return self::$_currencyData['currency_code'];
+        }
+        return Currency::getAttributesById(self::$_lang_id, 'currency_code');
     }
 
     public static function getCurrencyValue()
     {
-        return self::$_currency_value;
-    }
-
-    public static function userIp()
-    {
-        return self::$_ip;
+        if (isset(self::$_currencyData['currency_value'])) {
+            return self::$_currencyData['currency_value'];
+        }
+        return Currency::getAttributesById(self::$_lang_id, 'currency_value');
     }
 
     public static function userAgent()
     {
-        return self::$_user_agent;
+        return isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
     }
 
     public static function getAppScreenType()
     {
-        return self::$_appScreen;
+        $appScreen = applicationConstants::SCREEN_MOBILE;
+        if (!empty($_SERVER['HTTP_X_SCREEN_TYPE'])) {
+            $appScreen = FatUtility::int($_SERVER['HTTP_X_SCREEN_TYPE']);
+        }
+        return $appScreen;
     }
 
     public static function getClientIp()
@@ -293,11 +288,11 @@ class CommonHelper extends FatUtility
 
     public static function rewardPointDiscount($orderNetAmount, $rewardPoints)
     {
-        return $rewardPointValues = min(static::convertRewardPointToCurrency($rewardPoints), $orderNetAmount);
+        return min(static::convertRewardPointToCurrency($rewardPoints), $orderNetAmount);
         //return $rewardPoints = static::convertCurrencyToRewardPoint($rewardPointValues);
     }
 
-    public static function orderProductAmount($opArr = array(), $amountType = 'netamount', $pricePerItem = false, $userType = false)
+    public static function orderProductAmount($opArr = array(), $amountType = 'NETAMOUNT', $pricePerItem = false, $userType = false)
     {
         $amount = 0;
 
@@ -373,8 +368,10 @@ class CommonHelper extends FatUtility
                 $amount = $cartTotal;
                 break;
             case 'TAX':
-                //$amount = FatUtility::convertToType($opArr['op_tax_total'] , FatUtility::VAR_FLOAT);
                 $amount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_TAX]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_TAX]['opcharge_amount'] : 0;
+                if ($userType == User::USER_TYPE_SELLER && $opArr['op_tax_collected_by_seller'] == 0) {
+                    $amount = 0;
+                }
                 break;
             case 'VOLUME_DISCOUNT':
                 $amount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT]['opcharge_amount'] : 0;
