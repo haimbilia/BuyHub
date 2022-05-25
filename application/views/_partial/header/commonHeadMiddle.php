@@ -1,18 +1,18 @@
-<link rel="shortcut icon" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId)) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="apple-touch-icon" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId)) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="apple-touch-icon" sizes="57x57" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '57-57')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="apple-touch-icon" sizes="60x60" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '60-60')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="apple-touch-icon" sizes="72x72" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '72-72')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="apple-touch-icon" sizes="76x76" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '76-76')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="apple-touch-icon" sizes="114x114" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '114-114')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="apple-touch-icon" sizes="120x120" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '120-120')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="apple-touch-icon" sizes="144x144" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '144-144')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="apple-touch-icon" sizes="152x152" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '152-152')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="apple-touch-icon" sizes="180x180" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '180-180')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="icon" type="image/png" sizes="192x192" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '192-192')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="icon" type="image/png" sizes="32x32" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '32-32')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="icon" type="image/png" sizes="96x96" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '96-96')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
-<link rel="icon" type="image/png" sizes="16x16" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '16-16')) . $cacheTimeStamp, CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="shortcut icon" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId)) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="apple-touch-icon" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId)) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="apple-touch-icon" sizes="57x57" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '57-57')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="apple-touch-icon" sizes="60x60" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '60-60')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="apple-touch-icon" sizes="72x72" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '72-72')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="apple-touch-icon" sizes="76x76" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '76-76')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="apple-touch-icon" sizes="114x114" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '114-114')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="apple-touch-icon" sizes="120x120" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '120-120')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="apple-touch-icon" sizes="144x144" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '144-144')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="apple-touch-icon" sizes="152x152" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '152-152')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="apple-touch-icon" sizes="180x180" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '180-180')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="icon" type="image/png" sizes="192x192" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '192-192')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="icon" type="image/png" sizes="32x32" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '32-32')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="icon" type="image/png" sizes="96x96" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '96-96')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
+<link rel="icon" type="image/png" sizes="16x16" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId, '16-16')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
 <link rel="manifest" href="<?php echo UrlHelper::generateUrl('Home', 'pwaManifest'); ?>">
 <?php
 if ($canonicalUrl == '') {
@@ -53,7 +53,7 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     <link rel="preload" href="<?php echo $googleFontFamilyUrl; ?>" as="font">
 <?php
 } else { ?>
-     
+
     <link rel="preload" href="https://fonts.googleapis.com/css?family=Montserrat:700,300,regular,500,600&subset=cyrillic,cyrillic-ext,latin,latin-ext,vietnamese" as="font">
 <?php } ?>
 
@@ -90,8 +90,8 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     var CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES = ' . FatApp::getConfig("CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES", FatUtility::VAR_INT, 3) . ';
     var CONF_ENABLE_GEO_LOCATION = ' . (FatApp::getConfig("CONF_ENABLE_GEO_LOCATION", FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) ? 1 : 0) . ';
     var CONF_MAINTENANCE = ' . FatApp::getConfig("CONF_MAINTENANCE", FatUtility::VAR_INT, 0) . ';
-    var currencySymbolLeft = "' . $currencySymbolLeft . '";
-    var currencySymbolRight = "' . $currencySymbolRight . '";   
+    var currencySymbolLeft = "' . CommonHelper::getCurrencySymbolLeft() . '";
+    var currencySymbolRight = "' . CommonHelper::getCurrencySymbolRight() . '";   
     var className = "' . FatApp::getController() . '";
     var actionName = "' . FatApp::getAction() . '";
     var productSearchUrl = "' . $productSearchUrl . '";   

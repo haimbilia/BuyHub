@@ -32,8 +32,8 @@ class DashboardBaseController extends FatController
 
     public function initCommonVariables()
     {
-        $this->siteLangId = CommonHelper::getLangId();        
-        
+        $this->siteLangId = CommonHelper::getLangId();
+
         $curdLangLabelCache = FatCache::get('curdLangLabelCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$curdLangLabelCache) {
             $arr = [
@@ -65,8 +65,8 @@ class DashboardBaseController extends FatController
             CommonHelper::setAppUser();
         }
 
-        $this->set('siteLangId', $this->siteLangId);      
-        
+        $this->set('siteLangId', $this->siteLangId);
+
         $loginFrmData = array(
             'loginFrm' => $this->getLoginForm(),
             'siteLangId' => $this->siteLangId,
@@ -232,11 +232,6 @@ class DashboardBaseController extends FatController
             }
         }
 
-        $currencySymbolLeft = CommonHelper::getCurrencySymbolLeft();
-        $currencySymbolRight = CommonHelper::getCurrencySymbolRight();
-
-        $this->set('currencySymbolLeft', $currencySymbolLeft);
-        $this->set('currencySymbolRight', $currencySymbolRight);
         $this->set('controllerName', $controllerName);
         $this->set('isAppUser', CommonHelper::isAppUser());
         $this->set('action', $this->action);
@@ -280,7 +275,7 @@ class DashboardBaseController extends FatController
             $_COOKIE['defaultSiteLang'] = $this->siteLangId;
         }
 
-        if (array_key_exists('currency', $post)) {            
+        if (array_key_exists('currency', $post)) {
             $_COOKIE['defaultSiteCurrency'] = CommonHelper::getCurrencyId();
         }
 
