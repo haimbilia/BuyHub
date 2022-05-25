@@ -64,13 +64,13 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
         <meta property="og:title" content="<?php echo $title; ?>" />
         <meta property="og:site_name" content="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, ''); ?>" />
         <meta property="og:url" content="<?php echo UrlHelper::getCurrUrl(); ?>" />
-        <meta property="og:description" content="<?php echo $description; ?> " />
+        <meta property="og:description" content="<?php echo html_entity_decode($description, ENT_QUOTES, 'utf-8'); ?> " />
         <meta property="og:image" content="<?php echo $image; ?>" />
         <?php if (!empty(FatApp::getConfig("CONF_TWITTER_USERNAME", FatUtility::VAR_STRING, ''))) { ?>
             <meta name="twitter:card" content="summary_large_image">
             <meta name="twitter:site" content="@<?php echo FatApp::getConfig("CONF_TWITTER_USERNAME", FatUtility::VAR_STRING, ''); ?>">
             <meta name="twitter:title" content="<?php echo $title; ?>">
-            <meta name="twitter:description" content="<?php echo $description; ?>">
+            <meta name="twitter:description" content="<?php echo html_entity_decode($description, ENT_QUOTES, 'utf-8'); ?>">
             <meta name="twitter:image" content="<?php echo $image; ?>">
 
     <?php }
