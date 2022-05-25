@@ -49,8 +49,6 @@ if ($isWishList) {
                                 $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
                                 $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
                                 ?>
-                                <!-- Shop Badge  -->
-
                             </div>
                             <div class="featured-item__foot">
                                 <div class="featured_footer mt-3">

@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
 
 <!-- offcanvas-mega-search -->
-<div class="offcanvas offcanvas-top offcanvas-mega-search" tabindex="-1" id="mega-nav-search" aria-labelledby="mega-nav-searchLabel">
+<div class="offcanvas offcanvas-top offcanvas-mega-search" tabindex="-1" id="mega-nav-search">
     <?php $headerSrchFrm->getFormTag();
     $headerSrchFrm->setFormTagAttribute('class', ' mega-search-form');
 

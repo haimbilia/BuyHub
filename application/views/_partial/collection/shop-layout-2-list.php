@@ -42,7 +42,7 @@
                     </div>
                 <?php } ?>
                 <div class="shop-action">
-                    <a href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id'], Promotion::REDIRECT_SHOP, $shop['shopData']['promotion_record_id']))); ?>"> <button class="btn btn-outline-black btn-sm" type="button"><?php echo Labels::getLabel('LBL_Shop_Now', $siteLangId); ?></button></a>
+                    <a class="btn btn-outline-black btn-sm" href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id'], Promotion::REDIRECT_SHOP, $shop['shopData']['promotion_record_id']))); ?>"> <?php echo Labels::getLabel('LBL_Shop_Now', $siteLangId); ?></a>
                 </div>
 
             </div>

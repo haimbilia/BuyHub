@@ -17,7 +17,7 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
         </button>
     <?php } else { ?>
         <!-- offcanvas-side-cart -->
-        <div class="offcanvas offcanvas-end offcanvas-side-cart" tabindex="-1" id="sideCartJs" aria-labelledby="side-cartLabel">
+        <div class="offcanvas offcanvas-end offcanvas-side-cart" tabindex="-1" id="sideCartJs">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title">
                     <?php echo Labels::getLabel('LBL_ITEMS', $siteLangId); ?> <span class="count-items"> (<?php echo $totalCartItems; ?>) </span>

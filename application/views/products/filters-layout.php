@@ -6,7 +6,7 @@
                 $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shop['shop_id'], 0, 0, false);
                 $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
                 ?>
-                <img src="<?php echo UrlHelper::generateUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $shop['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB);?>>
+                <img src="<?php echo UrlHelper::generateUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $shop['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB); ?>>
             </div>
 
             <div class="shop-info">
@@ -37,7 +37,6 @@
                     $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
                     $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
                     ?>
-                    <!-- Shop Badge  -->
                 </div>
 
                 <div class="shop-btn-group">

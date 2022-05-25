@@ -40,13 +40,9 @@
             <!-- Shop Badge  -->
             <?php
             $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shopData']['shop_id']]);
-            $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
-            ?>
-            <!-- Shop Badge  -->
-
+            $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false); ?>
             <div class="shop-foot">
-
-                <a href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id'], Promotion::REDIRECT_SHOP, $shop['shopData']['promotion_record_id']))); ?>" class="btn btn-outline-black btn-sm">
+                <a class="btn btn-outline-black btn-sm" href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id'], Promotion::REDIRECT_SHOP, $shop['shopData']['promotion_record_id']))); ?>">
                     <?php echo Labels::getLabel('LBL_Shop_Now', $siteLangId); ?></a>
             </div>
 

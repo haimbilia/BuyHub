@@ -44,10 +44,7 @@
                                             <?php echo $faq['faq_title']; ?>
                                         </button>
                                         <div class="collapse <?php echo ($i == 0 ? 'show' : ''); ?>" id="faqCollapse<?php echo $faqId; ?>" data-parent="#faqCollapseParent<?php echo $faqCatId; ?>">
-
-                                            <p class="faq_data">
-                                                <?php echo FatUtility::decodeHtmlEntities($faq['faq_content']); ?>
-                                            </p>
+                                            <p class="faq_data"><?php echo FatUtility::decodeHtmlEntities($faq['faq_content']); ?></p>
                                         </div>
                                     </li>
                                 <?php $i++;
