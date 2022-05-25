@@ -93,7 +93,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
 <!-- Product Schema Code -->
 <?php
 $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']); ?>
-<script defer type="application/ld+json">
+<script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "Product",

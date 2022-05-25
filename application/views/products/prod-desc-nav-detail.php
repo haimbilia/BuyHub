@@ -9,7 +9,7 @@
             <?php } ?>
             <?php if (count($productSpecifications) > 0) { ?>
                 <div class="descriptions-item">
-                    <h2 class="descriptions-head" data-bs-toggle="collapse" data-bs-target="#specification" aria-expanded="true" aria-controls="specification"><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?>
+                    <h2 class="descriptions-head" data-bs-toggle="collapse" data-bs-target="#specification" aria-expanded="true" ><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?>
                         <svg class="svg plus" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
@@ -33,7 +33,7 @@
             <?php } ?>
             <?php if (trim($product['product_description']) != '') { ?>
                 <div class="descriptions-item">
-                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true" aria-controls="description"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?>
+                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?>
                         <svg class="svg plus" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
@@ -50,7 +50,7 @@
             <?php } ?>
             <?php if ($youtube_embed_code) { ?>
                 <div class="descriptions-item">
-                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#video" aria-expanded="true" aria-controls="collapseOne"><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?>
+                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#video" aria-expanded="true"><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?>
                         <svg class="svg plus" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
@@ -69,7 +69,7 @@
             <?php } ?>
             <?php if ($shop['shop_payment_policy'] != '' || !empty($shop["shop_delivery_policy"] != "") || !empty($shop["shop_delivery_policy"] != "")) { ?>
                 <div class="descriptions-item">
-                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#policies" aria-expanded="true" aria-controls="policies"><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?>
+                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#policies" aria-expanded="true"><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?>
                         <svg class="svg plus" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
@@ -99,7 +99,7 @@
             <?php } ?>
             <?php if (!empty($product['selprodComments'])) { ?>
                 <div class="descriptions-item">
-                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#extra_comments" aria-expanded="true" aria-controls="extra_comments"><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?>
+                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#extra_comments" aria-expanded="true"><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?>
                         <svg class="svg plus" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
