@@ -1,6 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$currencySymbolLeft = isset($currencySymbolLeft) ? $currencySymbolLeft : CommonHelper::getCurrencySymbolLeft();
-$currencySymbolRight = isset($currencySymbolRight) ? $currencySymbolRight : CommonHelper::getCurrencySymbolRight();
 
 $catCodeArr = array();
 

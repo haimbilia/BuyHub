@@ -18,10 +18,10 @@
         }
     }
     &-image {
-        aspect-ratio: 1/1;
         margin-bottom: 1rem;
         position: relative;
         @include media-breakpoint-up(lg) {
+            aspect-ratio: 1/1;
             margin-bottom: 0;
             img {
                 display: inline-block;

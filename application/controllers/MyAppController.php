@@ -2,7 +2,7 @@
 
 class MyAppController extends FatController
 {
-    public $app_user = array();
+    public $app_user = ['temp_user_id' => 0];
     public $appToken = '';
 
     public function __construct($action)
@@ -19,18 +19,13 @@ class MyAppController extends FatController
         CommonHelper::initCommonVariables();
 
         $this->siteLangId = CommonHelper::getLangId();
-
-        $this->app_user['temp_user_id'] = 0;
         $this->setApiVariables();
 
         if (0 < FatApp::getPostedData('appUser', FatUtility::VAR_INT, 0)) {
             CommonHelper::setAppUser();
         }
 
-        $cacheTimeStamp = UrlHelper::getCacheTimestamp($this->siteLangId);
-
         $this->set('siteLangId', $this->siteLangId);
-        $this->set('cacheTimeStamp', $cacheTimeStamp);
 
         $loginFrmData = array(
             'loginFrm' => $this->getLoginForm(),
@@ -165,7 +160,7 @@ class MyAppController extends FatController
                     'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->siteLangId),
                     'searchAsIMoveTheMap' => Labels::getLabel('MSG_SEARCH_AS_I_MOVE_THE_MAP', $this->siteLangId),
                     'currentSearchLocation' => Labels::getLabel('LBL_CURRENT_SEARCH_LOCATION', $this->siteLangId),
-                    'cacheTimeStamp' => $cacheTimeStamp,
+                    'cacheTimeStamp' => UrlHelper::getCacheTimestamp($this->siteLangId),
                     'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
                     'copiedText' => Labels::getLabel('LBL_COPIED_TEXT', $this->siteLangId),
                     'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
@@ -199,12 +194,7 @@ class MyAppController extends FatController
             setcookie('_ykGeoAddress', $address, time() + (86400 * 30), CONF_WEBROOT_FRONTEND, $_SERVER['SERVER_NAME']); // 86400 = 1 day
         }
 
-        $currencySymbolLeft = CommonHelper::getCurrencySymbolLeft();
-        $currencySymbolRight = CommonHelper::getCurrencySymbolRight();
         $this->includeDatePickerLangJs();
-
-        $this->set('currencySymbolLeft', $currencySymbolLeft);
-        $this->set('currencySymbolRight', $currencySymbolRight);
         $this->set('jsVariables', $jsVariables);
         $this->set('controllerName', $controllerName);
         $this->set('isAppUser', CommonHelper::isAppUser());
@@ -221,7 +211,6 @@ class MyAppController extends FatController
 
         $this->appToken = CommonHelper::getAppToken();
 
-        $this->app_user['temp_user_id'] = 0;
         if (!empty($_SERVER['HTTP_X_TEMP_USER_ID'])) {
             $this->app_user['temp_user_id'] = $_SERVER['HTTP_X_TEMP_USER_ID'];
         }
