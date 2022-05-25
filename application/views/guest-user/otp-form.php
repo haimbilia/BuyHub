@@ -47,7 +47,7 @@ $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <p class="note">
+                    <p class="form-text text-muted">
                         <?php echo Labels::getLabel('LBL_ENTER_THE_OTP_YOU_RECEIVED_ON_YOUR_PHONE_NUMBER', $siteLangId); ?>
                     </p>
                 </div>
