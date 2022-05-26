@@ -54,7 +54,7 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                         'jpgImageUrl' => [ImageDimension::VIEW_MOBILE => $mobileUrl, ImageDimension::VIEW_TABLET => $tabletUrl, ImageDimension::VIEW_DESKTOP => $desktopUrl],
                         'imageUrl' => $desktopUrl,
                         'ratio' => $bannerDimension['aspectRatio'],
-                        'alt' => $val['banner_title'],
+                        'alt' => !empty($val['banner_title']) ? $val['banner_title'] : $val['promotion_name'],
                         'siteLangId' => $siteLangId,
                     ];
 
