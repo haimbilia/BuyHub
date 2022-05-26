@@ -16,7 +16,7 @@ $commonHeadData = array(
     'action' => $action,
     'jsVariables' => $jsVariables,
     'extendEditorJs' => $extendEditorJs,
-    'currencySymbolRight' => $currencySymbolRight,
+    'currencySymbolRight' => CommonHelper::getCurrencySymbolRight(),
     'canonicalUrl' => isset($canonicalUrl) ? $canonicalUrl : '',
 );
 

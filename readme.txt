@@ -789,6 +789,7 @@ Updates/Fixes :
     => 064550 - Admin: Getting an error when the user clicks on save button under Banner setup section.
     => 064501 - A syntax error occurs when the user tries to place an order refund request.
     => 064576 - The user profile image is missing in the commission history popup
+    => 064573 - Undefined Index Notice appears on the buyer dashboard.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
