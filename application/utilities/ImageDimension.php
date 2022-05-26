@@ -1,4 +1,4 @@
-Slider<?php
+<?php
 class ImageDimension extends FatUtility
 {
     public const TYPE_SLIDE = 1;
