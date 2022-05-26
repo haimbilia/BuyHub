@@ -530,68 +530,68 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
             }
 
             $(".optionname--js").select2({
-                dropdownParent: $(".optionname--js").closest('form'),
-                closeOnSelect: true,
-                dir: langLbl.layoutDirection,
-                allowClear: true,
-                placeholder: $(".optionname--js").attr('placeholder'),
-                ajax: {
-                    url: fcom.makeUrl('Seller', 'getOptions', [productId]),
-                    dataType: 'json',
-                    delay: 250,
-                    method: 'post',
-                    data: function(params) {
-                        if ('undefined' != typeof params.term && '' != params.term) {
-                            fcom.displayProcessing();
-                        }
-                        return {
-                            keyword: params.term, // search term
-                            selectedOptions: JSON.stringify(selectedOptions),
-                        };
+                    dropdownParent: $(".optionname--js").closest('form'),
+                    closeOnSelect: true,
+                    dir: langLbl.layoutDirection,
+                    allowClear: true,
+                    placeholder: $(".optionname--js").attr('placeholder'),
+                    ajax: {
+                        url: fcom.makeUrl('Seller', 'getOptions', [productId]),
+                        dataType: 'json',
+                        delay: 250,
+                        method: 'post',
+                        data: function(params) {
+                            if ('undefined' != typeof params.term && '' != params.term) {
+                                fcom.displayProcessing();
+                            }
+                            return {
+                                keyword: params.term, // search term
+                                selectedOptions: JSON.stringify(selectedOptions),
+                            };
+                        },
+                        processResults: function(data, params) {
+                            if (0 < (data.options).length) {
+                                $.ykmsg.close();
+                            }
+                            return {
+                                results: data.options
+                            };
+                        },
+                        cache: false
                     },
-                    processResults: function(data, params) {
-                        if (0 < (data.options).length) {
-                            $.ykmsg.close();
-                        }
-                        return {
-                            results: data.options
-                        };
+                    minimumInputLength: 0,
+                    templateResult: function(result) {
+                        return result.name;
                     },
-                    cache: false
-                },
-                minimumInputLength: 0,
-                templateResult: function(result) {
-                    return result.name;
-                },
-                templateSelection: function(result) {
-                    return result.name || result.text;
-                },
-                language: {
-                    noResults: function(params) {
-                        return langLbl.typeToSearch + " " + optionNamesHtm;
+                    templateSelection: function(result) {
+                        return result.name || result.text;
+                    },
+                    language: {
+                        noResults: function(params) {
+                            return langLbl.typeToSearch + " " + optionNamesHtm;
+                        }
+                    },
+                    escapeMarkup: function(markup) {
+                        return markup;
                     }
-                },
-                escapeMarkup: function(markup) {
-                    return markup;
-                }
 
-            }).on('select2:selecting', function(e) {
-                var item = e.params.args.data;
-                if (0 < $('table#optionsTable-js tbody tr#' + item.id).length) {
-                    $(".optionname--js").val(null).trigger('change');
-                    fcom.displayErrorMessage(langLbl.alreadySelected);
-                    return;
-                } else {
-                    $('input[name="inv_option_name"]').val(item.name);
-                    $('input[name="inv_option_id"]').val(item.id);
-                }
+                }).on('select2:selecting', function(e) {
+                    var item = e.params.args.data;
+                    if (0 < $('table#optionsTable-js tbody tr#' + item.id).length) {
+                        $(".optionname--js").val(null).trigger('change');
+                        fcom.displayErrorMessage(langLbl.alreadySelected);
+                        return;
+                    } else {
+                        $('input[name="inv_option_name"]').val(item.name);
+                        $('input[name="inv_option_id"]').val(item.id);
+                    }
 
-            }).on('select2:unselecting', function(e) {
-                $('input[name="inv_option_id"], input[name="inv_option_name"]').val('');
-            }).on('select2:open', function(e) {    
-                $(".optionname--js").data("select2").$dropdown.addClass("custom-select2 custom-select2-single");
-            })
-            .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");
+                }).on('select2:unselecting', function(e) {
+                    $('input[name="inv_option_id"], input[name="inv_option_name"]').val('');
+                }).on('select2:open', function(e) {
+                    $(".optionname--js").data("select2").$dropdown.addClass("custom-select2 custom-select2-single");
+                })
+                .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");
         }
 
         addInvOption = function() {

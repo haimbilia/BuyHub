@@ -7,9 +7,7 @@ $frm->developerTags['fld_default_col'] = 8;
 $btnSubmit = $frm->getField('btn_submit');
 $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
 $btnSubmit->setFieldTagAttribute('disabled', "disabled");
-
 $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-
 <div class="content-wrapper content-space">
     <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -40,7 +38,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 $prodImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selProdCodeArr[0], ImageDimension::VIEW_MEDIUM, $opDetail['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                             } ?>
                                             <a href="<?php echo UrlHelper::generateUrl('products', 'view', array($opDetail['op_selprod_id']), CONF_WEBROOT_FRONTEND) ?>">
-                                                <img <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM);?> src="<?php echo $prodImg; ?>" alt="<?php echo $prodTitle; ?>" title="<?php echo $prodTitle; ?>">
+                                                <img <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM); ?> src="<?php echo $prodImg; ?>" alt="<?php echo $prodTitle; ?>" title="<?php echo $prodTitle; ?>">
                                             </a>
                                         </div>
                                         <div class="product-profile__description">
@@ -169,9 +167,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         <div class="row justify-content-center mt-4">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <span class="checkbox">
-                                        <?php echo $frm->getFieldHtml('agree'); ?>
-                                    </span>
+                                    <?php
+                                    $fld = $frm->getField('agree');
+                                    $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+                                    echo $frm->getFieldHtml('agree');
+                                    ?>
                                 </div>
                                 <?php
                                 echo $frm->getFieldHtml('op_id');
