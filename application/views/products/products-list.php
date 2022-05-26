@@ -27,15 +27,14 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                 } else if (isset($product['ribbons'])) {
                     $selProdRibbons = $product['ribbons'];
                 }
-
                 $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>
                 <div class="item productsListItemsJs" data-shopId="<?php echo $product['shop_id']; ?>">
                     <!--product tile-->
                     <div class="products">
-                        <?php if ($product['in_stock'] == 0) { ?>
-                            <span class="out-of-stock-txt"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
-                        <?php } ?>
                         <div class="products-body">
+                            <?php if ($product['in_stock'] == 0) { ?>
+                                <div class="out-of-stock-txt"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></div>
+                            <?php } ?>
                             <?php
                             if (!empty($selProdRibbons)) {
                                 foreach ($selProdRibbons as $ribbRow) {
@@ -53,7 +52,6 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                 <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])) ?>">
                                     <?php
                                     $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
-
                                     $pictureAttr = [
                                         'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_CLAYOUT1, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
                                         'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT1, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],

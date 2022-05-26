@@ -1,19 +1,22 @@
 /*cookies*/
 
 .cc-window {
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 5px;
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(3px);
     color: $txt-body;
-    bottom: 0;
-    #{$start-direction}: 0;
+    bottom: 1rem;
+    #{$start-direction}: 1rem;
     opacity: 1;
     position: fixed;
-    #{$end-direction}: 0;
+    //#{$end-direction}: 0;
     transition: all 0.3s ease 0s;
     width: fit-content;
     margin: auto;
     z-index: 1050;
+    border-radius: 10px;
+    padding: 1rem;
+    max-width: 380px;
     .box-cookies {
         font-size: 13px;
         font-weight: 400;
@@ -27,7 +30,7 @@
         flex-direction: column;
         flex-flow: row wrap;
         @include media-breakpoint-up(lg) {
-            flex-direction: row;
+            flex-direction: column;
         }
         a {
             text-decoration: underline;
@@ -37,6 +40,15 @@
     .cookie-alert {
         p {
             color: $txt-gray;
+        }
+    }
+    .cookies-actions {
+        display: flex;
+        gap: 1rem;
+        flex-direction: column;
+        .btn {
+            border-radius: 6px;
+            flex: 1;
         }
     }
 }
