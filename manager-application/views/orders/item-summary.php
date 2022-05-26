@@ -34,8 +34,10 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
 
                     $shippingCost = CommonHelper::orderProductAmount($op, 'SHIPPING');
                     $volumeDiscount = CommonHelper::orderProductAmount($op, 'VOLUME_DISCOUNT');
+                    $rewardPoint = CommonHelper::orderProductAmount($op, 'REWARDPOINT');
+                    $discount = CommonHelper::orderProductAmount($op, 'DISCOUNT');
                     $tax = CommonHelper::orderProductAmount($op, 'TAX');                   
-                    $total = CommonHelper::orderProductAmount($op, 'cart_total') + $shippingCost + $volumeDiscount;
+                    $total = (CommonHelper::orderProductAmount($op, 'cart_total') + $shippingCost) + $volumeDiscount;
 
                     $op['order_id'] = $order['order_id'];
                     $op['order_number'] = $order['order_number'];
@@ -99,7 +101,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
 
             <td>
                 <span class="d-inline-block link-dotted" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#price-<?php echo $op['op_id']; ?>">
-                    <?php echo CommonHelper::displayMoneyFormat($total, true, true, true, false, true); ?>
+                    <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($op, 'NETAMOUNT'), true, true, true, false, true); ?>
                 </span>
                 <div class="hidden" id="price-<?php echo $op['op_id']; ?>">
                     <ul class="list-popover">
@@ -117,18 +119,30 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                 <span class="value"><?php echo $shippingCost; ?></span>
                             </li>
                         <?php } ?>
-                        <?php if (0 < $volumeDiscount) { ?>
+                        <?php if (!empty($volumeDiscount)) { ?>
                             <li class="list-popover-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT:'); ?></span>
                                 <span class="value"><?php echo $volumeDiscount; ?></span>
                             </li>
                         <?php } ?>
-                        <?php if (0 < $tax) { ?>
+                        <?php if (!empty($discount)) { ?>
+                            <li class="list-popover-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_DISCOUNT:'); ?></span>
+                                <span class="value"><?php echo $discount; ?></span>
+                            </li>
+                        <?php } ?>
+                        <?php if (!empty($rewardPoint)) { ?>
+                            <li class="list-popover-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT:'); ?></span>
+                                <span class="value"><?php echo $rewardPoint; ?></span>
+                            </li>
+                        <?php } ?>
+                        <?php /* if (0 < $tax) { ?>
                             <li class="list-popover-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_TAX:'); ?></span>
                                 <span class="value"><?php echo $tax; ?></span>
                             </li>
-                        <?php } ?>
+                        <?php } */ ?>
                     </ul>
                 </div>
             </td>
