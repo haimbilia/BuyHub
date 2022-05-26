@@ -239,7 +239,7 @@ class BuyerController extends BuyerBaseController
         foreach ($childOrderDetail as $op_id => $val) {
             $childOrderDetail[$op_id]['charges'] = $orderDetail['charges'][$op_id];
 
-            $opChargesLog = new OrderProductChargeLog($op_id);          
+            $opChargesLog = new OrderProductChargeLog($op_id);
             $childOrderDetail[$op_id]['taxOptions'] = $opChargesLog->getData($this->siteLangId);
         }
 
@@ -250,7 +250,7 @@ class BuyerController extends BuyerBaseController
             if ($childOrderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP) {
                 $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj(($shippedBySeller ? $childOrderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
             }
-        }       
+        }
 
         $address = $orderObj->getOrderAddresses($orderDetail['order_id']);
         $orderDetail['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE] ?? [];
@@ -265,10 +265,10 @@ class BuyerController extends BuyerBaseController
             $orderDetail['comments'] = $orderObj->getOrderComments($this->siteLangId, array("order_id" => $orderDetail['order_id']));
         }
 
-        $opSrchObj = Orders::searchOrderProducts(['order_id'=> $orderDetail['order_id']]);
+        $opSrchObj = Orders::searchOrderProducts(['order_id' => $orderDetail['order_id']]);
         $opSrchObj->addFld('count(*) as opCount');
         $opSrchObj->doNotCalculateRecords();
-        $childOrderProductsCountData = FatApp::getDb()->fetch($opSrchObj->getResultSet());      
+        $childOrderProductsCountData = FatApp::getDb()->fetch($opSrchObj->getResultSet());
         if (1 > $opId || 1 == $childOrderProductsCountData['opCount']) {
             $payments = $orderObj->getOrderPayments(array("order_id" => $orderDetail['order_id']));
             if (true === MOBILE_APP_API_CALL) {
@@ -358,10 +358,10 @@ class BuyerController extends BuyerBaseController
         $this->set('orderProductStatusArr', $orderProductStatusArr);
         $this->set('orderTimeLine', $orderTimeLine);
         $this->set('orderStatusArr', $orderStatusArr);
-        $this->set('cancelledDate', $cancelledDate);    
+        $this->set('cancelledDate', $cancelledDate);
         $this->set('orderDetail', $orderDetail);
         $this->set('childOrderDetail', $childOrderDetail);
-        $this->set('primaryOrder', $primaryOrderDisplay);       
+        $this->set('primaryOrder', $primaryOrderDisplay);
         $this->set('digitalDownloads', $digitalDownloads);
         $this->set('digitalDownloadLinks', $digitalDownloadLinks);
         $this->set('productType', $productType);
@@ -2185,20 +2185,20 @@ class BuyerController extends BuyerBaseController
                 LibHelper::dieJsonError(current($frm->getValidationErrors()));
             }
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
-        }       
+        }
 
-        if(isset($_FILES['file']['tmp_name'])  && !empty($_FILES['file']['tmp_name'])){
+        if (isset($_FILES['file']['tmp_name'])  && !empty($_FILES['file']['tmp_name'])) {
             $uploadedFile = $_FILES['file']['tmp_name'];
             if (filesize($uploadedFile) > 10240000) {
                 $message = Labels::getLabel('ERR_PLEASE_UPLOAD_FILE_SIZE_LESS_THAN_10MB', $this->siteLangId);
                 LibHelper::dieJsonError($message);
             }
-    
+
             if (getimagesize($uploadedFile) === false && mime_content_type($uploadedFile) != 'application/zip') {
                 $message = Labels::getLabel('ERR_ONLY_IMAGE_EXTENSIONS_AND_ZIP_IS_ALLOWED', $this->siteLangId);
                 LibHelper::dieJsonError($message);
-            }   
-        }             
+            }
+        }
 
         if (abs($opDetail['opcharge_amount']) > 0) {
             $orrequestQty = FatUtility::int($post['orrequest_qty']);
@@ -3055,5 +3055,42 @@ class BuyerController extends BuyerBaseController
         $this->set('comments', OrderCancelRequest::getAttributesById($recordId, 'ocrequest_message'));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        if (FatUtility::isAjaxCall()) {
+            return;
+        }
+
+        $className = get_class($this);
+        $arr = explode('-', FatUtility::camel2dashed($className));
+        array_pop($arr);
+        $className = ucwords(implode(' ', $arr));
+
+        if ($action == 'index') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'viewOrder') {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_ORDERS'), 'href' => UrlHelper::generateUrl("Buyer", "Orders"));
+            $this->nodes[] = array('title' => ucwords($action));
+        } else if ($action == 'orderFeedback') {
+            $params = FatApp::getParameters();
+            $orderId = OrderProduct::getAttributesById(current($params), 'op_order_id');
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_ORDERS'), 'href' => UrlHelper::generateUrl("Buyer", "orders"));
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_VIEW_ORDER'), 'href' => UrlHelper::generateUrl("Buyer", "viewOrder", [$orderId, current($params)]));
+            $this->nodes[] = array('title' => ucwords($action));
+        } else if ($action == 'viewOrderReturnRequest') {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_ORDER_RETURN_REQUESTS'), 'href' => UrlHelper::generateUrl("Buyer", "orderReturnRequests"));
+            $this->nodes[] = array('title' => ucwords($action));
+        } else {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+            $this->nodes[] = array('title' => ucwords($title));
+        }
+        return $this->nodes;
     }
 }
