@@ -36,11 +36,13 @@ foreach ($arrListing as $sn => $row) {
                             <b><?php echo Labels::getLabel('LBL_Product', $siteLangId); ?>:</b> <?php echo CommonHelper::displayText($row['product_name']); ?>
                         </span>
                     <?php } ?>
-                    <?php if (!empty($row['vendor'])) { ?>
+                    <?php if (!empty($row['vendor'])) {
+                        $uploadedTime = AttachedFile::setTimeParam($row['vendor_updated_on']);
+                    ?>
                         <span class="timeline-v4__item-user-name" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('LBL_SELLER', $siteLangId); ?>">
                             <a href="javascript:void(0);" onclick="redirectUser(<?php echo $row['vendor_id']; ?>)" class="timeline-v4__item-link user-profile user-profile-sm">
                                 <figure class="user-profile_photo">
-                                    <img src="/yokart/manager/images/users/100_1.jpg" alt="image">
+                                    <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($row['vendor_id'], ImageDimension::VIEW_MINI_THUMB, true), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="image">
                                 </figure>
                                 <div class="user-profile_data">
                                     <?php echo CommonHelper::displayText($row['vendor']); ?></div>
