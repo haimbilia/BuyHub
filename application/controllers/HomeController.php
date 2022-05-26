@@ -439,7 +439,7 @@ class HomeController extends MyAppController
                 'IF(currency_id = ' . $defaultCurrencyId . ', 1, 0) as isDefault'
             )
         );
-        $currencies = $this->db->fetchAll($cObj->getResultSet());
+        $currencies = FatApp::getDb()->fetchAll($cObj->getResultSet());
         $this->set('data', ['currencies' => $currencies]);
         $this->_template->render();
     }
