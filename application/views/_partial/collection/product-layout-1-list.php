@@ -31,7 +31,6 @@
                     'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : ImageDimension::VIEW_CLAYOUT1, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                     'siteLangId' => $siteLangId,
                 ];
-
                 $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
                 ?>
             </a>

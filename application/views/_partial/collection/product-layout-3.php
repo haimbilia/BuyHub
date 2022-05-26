@@ -11,7 +11,7 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                 <?php
                 $tLeftRibbons = $collection['tLeftRibbons'];
                 $tRightRibbons = $collection['tRightRibbons'];
-                $gridKey = 1;
+                $i = 1;
                 foreach ($collection['products'] as $product) {
                     $selProdRibbons = [];
                     if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
@@ -26,9 +26,9 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                     if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
                         $displayProductNotAvailableLable = true;
                     }
-
+                    $prodImgSize = ImageDimension::VIEW_LARGE;
                     include('product-layout-3-list.php');
-                    $gridKey++;
+                    $i++;
                 } ?>
             </div>
             <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>

@@ -1,4 +1,4 @@
-<?php
+Slider<?php
 class ImageDimension extends FatUtility
 {
     public const TYPE_SLIDE = 1;
@@ -98,7 +98,7 @@ class ImageDimension extends FatUtility
                 break;
             case self::TYPE_USER:
                 $imageDimensions = self::getUserImageData($sizeType);
-                break;           
+                break;
             case self::TYPE_SHOP_LOGO:
                 $imageDimensions = self::getShopLogoImageData($sizeType, $aspectRatioType);
                 break;
@@ -271,7 +271,7 @@ class ImageDimension extends FatUtility
         ];
 
         return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
-    }   
+    }
 
     public static function getShopLogoImageData(string $sizeType = '', int $aspectRatioType): array
     {
