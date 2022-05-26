@@ -1855,3 +1855,4 @@ DELETE FROM `tbl_extra_pages_lang` WHERE `tbl_extra_pages_lang`.`epagelang_epage
 DELETE FROM `tbl_extra_pages` WHERE `tbl_extra_pages`.`epage_id` = 47;
 DELETE FROM `tbl_extra_pages_lang` WHERE `tbl_extra_pages_lang`.`epagelang_epage_id` = 47;
 DELETE FROM `tbl_extra_pages_lang` WHERE `tbl_extra_pages_lang`.`epagelang_epage_id` = 47;
+UPDATE `tbl_collections` SET `collection_primary_records` = '3' WHERE `tbl_collections`.`collection_layout_type` = 3;

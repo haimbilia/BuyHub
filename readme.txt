@@ -793,6 +793,7 @@ Updates/Fixes :
     => 064571 - An error occurs when the admin tries to add the commission for any category or user
     => 064563 - Admin: Total record's count is not showing under FAQs section.
     => 064558 - Suggestion: A icon or button should be present to go to the commission settings page from the commission setup page.
+    => 064556 - The product name appears twice on the order details page on buyer and seller end
     => 064582 - The tax structure name appears on the checkout page at the buyer's end in case of a single tax structure.
     => 064583 - The admin is able to add a tax rate of more than 100%. 
     => 064585 - success message URL is appearing even without making a purchase

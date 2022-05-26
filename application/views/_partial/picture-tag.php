@@ -13,6 +13,7 @@ $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
 <picture>
     <?php
     $emptyWebpUrlCount = 0;
+    $webpItmesCount =  count($webpImageUrl);
     foreach ($webpImageUrl as $key => $url) {
         if (empty($url)) {
             $emptyWebpUrlCount++;
@@ -22,7 +23,7 @@ $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
         $mediaArr = ImageDimension::getPictureTagMedia($key);
 
         $media = 'media="(' . $mediaArr['key'] . ':' . $mediaArr['value'] . 'px)"';
-        if (1 < $emptyWebpUrlCount) {
+        if (1 < $emptyWebpUrlCount || $webpItmesCount == 1) {
             $media = '';
         }
 
@@ -31,6 +32,7 @@ $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
     <?php } ?>
     <?php
     $emptyJpgUrlCount = 0;
+    $jpgItmesCount =  count($jpgImageUrl);
     foreach ($jpgImageUrl as $key => $url) {
         if (empty($url)) {
             $emptyJpgUrlCount++;
@@ -40,7 +42,7 @@ $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
         $mediaArr = ImageDimension::getPictureTagMedia($key);
 
         $media = 'media="(' . $mediaArr['key'] . ':' . $mediaArr['value'] . 'px)"';
-        if (1 < $emptyJpgUrlCount) {
+        if (1 < $emptyJpgUrlCount  || $jpgItmesCount == 1) {
             $media = '';
         }
     ?>
