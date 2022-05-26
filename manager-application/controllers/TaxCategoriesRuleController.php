@@ -351,6 +351,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_RULE_NAME', $this->siteLangId), 'taxrule_name');
         $fld = $frm->addFloatField(Labels::getLabel('FRM_TAX_RATE(%)', $this->siteLangId), 'trr_rate', '');
         $fld->requirements()->setPositive();
+        $fld->requirements()->setRange(0,100);
 
         /* ] */
 
