@@ -531,21 +531,21 @@ mark,
         border-radius: 0;
         &-prev span {
             display: inline-block;
-            border-right: 1px solid black;
+            border-#{$end-direction}: 1px solid black;
             border-bottom: 1px solid black;
             width: 10px;
             height: 10px;
-            transform: rotate(-225deg);
+            transform: rotate(136deg * $transform-direction);
             margin-#{$end-direction}: -7px;
         }
 
         &-next span {
             display: inline-block;
-            border-right: 1px solid black;
+            border-#{$end-direction}: 1px solid black;
             border-bottom: 1px solid black;
             width: 10px;
             height: 10px;
-            transform: rotate(-45deg);
+            transform: rotate(-45deg * $transform-direction);
             margin-#{$start-direction}: -7px;
         }
     }
