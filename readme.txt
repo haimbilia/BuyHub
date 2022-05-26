@@ -793,6 +793,7 @@ Updates/Fixes :
     => 064571 - An error occurs when the admin tries to add the commission for any category or user
     => 064563 - Admin: Total record's count is not showing under FAQs section.
     => 064558 - Suggestion: A icon or button should be present to go to the commission settings page from the commission setup page.
+    => 064556 - The product name appears twice on the order details page on buyer and seller end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
