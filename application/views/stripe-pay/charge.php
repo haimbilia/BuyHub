@@ -39,7 +39,7 @@ if (isset($client_secret)) {
                             url: '<?php echo UrlHelper::generateUrl('StripePay', 'StripeSuccess') ?>',
                             data: data,
                             success: function(data) {
-                                location.href = '<?php echo UrlHelper::generateUrl('custom', 'paymentSuccess', array($order_id), CONF_WEBROOT_URL); ?>';
+                                location.href = '<?php echo UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderInfo['order_number']), CONF_WEBROOT_URL); ?>';
                             }
                         });
 

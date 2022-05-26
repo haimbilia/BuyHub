@@ -193,4 +193,16 @@ class Configurations extends FatModel
             /* self::FORM_SERVER => 'server', */
         ];
     }
+
+    public static function redirectionLink(int $formType): array
+    {
+        $arr = [
+            Configurations::FORM_COMMISSION => [
+                'link' => UrlHelper::generateUrl('Commission'),
+                'title' => Labels::getLabel('FRM_SITE_COMMISSION_SETTINGS'),
+            ]
+        ];
+        
+        return $arr[$formType] ?? [];
+    }
 }

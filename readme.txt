@@ -792,6 +792,14 @@ Updates/Fixes :
     => 064573 - Undefined Index Notice appears on the buyer dashboard.
     => 064571 - An error occurs when the admin tries to add the commission for any category or user
     => 064563 - Admin: Total record's count is not showing under FAQs section.
+    => 064558 - Suggestion: A icon or button should be present to go to the commission settings page from the commission setup page.
+    => 064556 - The product name appears twice on the order details page on buyer and seller end
+    => 064582 - The tax structure name appears on the checkout page at the buyer's end in case of a single tax structure.
+    => 064583 - The admin is able to add a tax rate of more than 100%.
+    => 064596 - Admin: Unwanted 'Slider' text is showing for the searched users
+    => 064583 - The admin is able to add a tax rate of more than 100%. 
+    => 064585 - success message URL is appearing even without making a purchase
+    => 064594 - Admin: Suggestion to show the latest added records on the top of the listing page.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

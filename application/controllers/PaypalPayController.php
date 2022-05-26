@@ -146,7 +146,7 @@ class PaypalPayController extends PaymentController
         /* Recording Payment in DB */
         $orderPaymentObj->addOrderPayment(self::KEY_NAME, $paypalOrderId, $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($post));
         /* End Recording Payment in DB */
-        $json['redirecUrl'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
+        $json['redirecUrl'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo()));
         FatUtility::dieJsonSuccess($json);
     }
 

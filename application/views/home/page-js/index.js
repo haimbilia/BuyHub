@@ -5,6 +5,7 @@ $(function () {
 
 
     $('.js-hero-slider').slick({
+        rtl: ('rtl' == langLbl.layoutDirection),
         autoplay: true,
         autoplaySpeed: 8000,
         draggable: true,

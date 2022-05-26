@@ -289,8 +289,9 @@ $(function () {
             }
         });
         /* scroll body to 0px on click */
-        $('.back-to-top a').on('click', function () {
-            $('body,html').animate({
+        $('.back-to-top').on('click', function (e) {
+            e.preventDefault();
+            $('html, body').animate({
                 scrollTop: 0
             }, 800);
             return false;

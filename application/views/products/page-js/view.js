@@ -30,9 +30,31 @@ $(function () {
     /* bannerAdds(); */
     reviews(document.frmReviewSearch);
 
+    $(document).on('click', ".btnAddToCart--js", function (event) {
+        event.preventDefault();
+        var data = $("#frmBuyProduct").serialize();
+        var selprod_id = $(this).attr('data-id');
+        var quantity = $(this).attr('data-min-qty');
+        data = "selprod_id=" + selprod_id + "&quantity=" + quantity;
+        ykevents.addToCart();
+        fcom.updateWithAjax(fcom.makeUrl('cart', 'add'), data, function (ans) {
+            fcom.closeProcessing();
+            fcom.removeLoader();
+            if (ans['redirect']) {
+                location = ans['redirect'];
+                return false;
+            }
+            $('span.cartQuantity').html(ans.total);
+            cart.loadCartSummary();
+        });
+        return false;
+    });
+});
 
+$(window).on('load', function () {
     /* Product Gallery */
     $("#detail .main-img-slider").slick({
+        rtl: ('rtl' == langLbl.layoutDirection),
         slidesToShow: 1,
         slidesToScroll: 1,
         infinite: true,
@@ -70,6 +92,7 @@ $(function () {
 
     /* Thumbnail/alternates slider for product page */
     $(".thumb-nav").slick({
+        rtl: ('rtl' == langLbl.layoutDirection),
         slidesToShow: 4,
         slidesToScroll: 1,
         infinite: true,
@@ -115,26 +138,6 @@ $(function () {
         $(".thumb-nav .slick-slide:not(.slick-cloned)").eq(currentSlide).addClass("slick-current");
     });
     /* Product Gallery */
-
-    $(document).on('click', ".btnAddToCart--js", function (event) {
-        event.preventDefault();
-        var data = $("#frmBuyProduct").serialize();
-        var selprod_id = $(this).attr('data-id');
-        var quantity = $(this).attr('data-min-qty');
-        data = "selprod_id=" + selprod_id + "&quantity=" + quantity;
-        ykevents.addToCart();
-        fcom.updateWithAjax(fcom.makeUrl('cart', 'add'), data, function (ans) {
-            fcom.closeProcessing();
-            fcom.removeLoader();
-            if (ans['redirect']) {
-                location = ans['redirect'];
-                return false;
-            }
-            $('span.cartQuantity').html(ans.total);
-            cart.loadCartSummary();
-        });
-        return false;
-    });
 });
 
 function moreSellerRows(selprodCode, sellerId) {

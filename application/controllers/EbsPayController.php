@@ -191,7 +191,7 @@ class EbsPayController extends PaymentController
             $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
             if ($response['ResponseCode'] == '0') {
                 $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $response['TransactionID'], $paymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($response));
-                FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
+                FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
             } else {              
                 SystemLog::transaction(json_encode($response), self::KEY_NAME . "-" . $orderId);
                 $orderPaymentObj->addOrderPaymentComments(serialize($response));

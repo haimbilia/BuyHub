@@ -151,7 +151,7 @@ class StripeConnectPayController extends PaymentController
         if ($this->orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
             $cancelBtnUrl = CommonHelper::getPaymentFailurePageUrl();
         }
-        $successUrl = CommonHelper::generateFullUrl('custom', 'paymentSuccess', [$this->orderId]);
+        $successUrl = CommonHelper::generateFullUrl('custom', 'paymentSuccess', [$this->orderInfo['order_number']]);
 
         $data = array();
         $orderFormattedData = $this->stripeConnect->formatCustomerDataFromOrder($this->orderInfo);

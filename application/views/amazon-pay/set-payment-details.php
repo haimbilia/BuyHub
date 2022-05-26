@@ -39,7 +39,7 @@ if(isset($amazon) && strlen($orderId) > 0 &&  $orderInfo["order_payment_status"]
 	if( strlen($amazon['merchant_id']) > 0 && strlen($amazon['access_key']) > 0 && strlen($amazon['secret_key']) > 0 && strlen($amazon['client_id']) > 0 && strlen(FatApp::getConfig('CONF_TRANSACTION_MODE',FatUtility::VAR_STRING,'0')) > 0) {
 		?>
 		<script type="text/javascript">
-			var redirectAfterSuccess = '<?php echo UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId), CONF_WEBROOT_URL); ?>';
+			var redirectAfterSuccess = '<?php echo UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderNo), CONF_WEBROOT_URL); ?>';
 			var orderId  = '<?php echo $orderId; ?>';
 			window.onAmazonLoginReady = function () {
 				amazon.Login.setClientId('<?php echo $amazon['client_id']; ?>');

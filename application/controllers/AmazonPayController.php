@@ -56,6 +56,7 @@ class AmazonPayController extends PaymentController
         $this->set('paymentAmount', $paymentAmount);
         $this->set('orderInfo', $orderInfo);
         $this->set('orderId', $orderId);
+        $this->set('orderNo', $orderInfo['order_number']);
         if ($this->error) {
             $this->set('error', $this->error);
         }

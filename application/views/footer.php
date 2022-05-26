@@ -298,7 +298,7 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
 </div>
 </div>
 <?php include(CONF_THEME_PATH . '_partial/footer-part/offcanvas-elements.php'); ?>
-<a class="back-to-top" href="#top">
+<a class="back-to-top">
     <svg class="svg">
         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#up-arrow"></use>
     </svg>

@@ -146,7 +146,7 @@ class PaynowPayController extends PaymentController
         unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME][self::KEY_NAME . '_paymentId']);
         /* Unset Session Element On Payment Success.  */
 
-        FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
+        FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
     }
     
     /**

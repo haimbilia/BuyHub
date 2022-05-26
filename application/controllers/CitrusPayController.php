@@ -68,14 +68,14 @@ class CitrusPayController extends PaymentController
         foreach ($post as $key => $value) {
             $request .= '&' . $key . '=' . urlencode(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
         }
-        if ($paymentGatewayCharge > 0) {
+        if ($paymentGatewayCharge > 0) {       
             if (strtoupper($post['TxStatus']) == 'SUCCESS') {
                 //resp signature validation
                 $str = $post['TxId'] . $post['TxStatus'] . $post['amount'] . $post['pgTxnNo'] . $post['issuerRefNo'] . $post['authIdCode'] . $post['firstName'] . $post['lastName'] . $post['pgRespCode'] . $post['addressZip'];
                 $respSig = $post['signature'];
                 if (hash_hmac('sha1', $str, $this->settings['merchant_secret_key']) == $respSig) {
                     $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $post['pgTxnNo'], $paymentGatewayCharge, Labels::getLabel("LBL_Received_Payment", $this->siteLangId), $request);
-                    FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
+                    FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
                 } else {
                     $request .= "\n\n Citrus :: Invalid or forged transactiond.  \n\n";
                     $orderPaymentObj->addOrderPaymentComments($request);
