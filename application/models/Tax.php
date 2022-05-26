@@ -608,7 +608,7 @@ class Tax extends MyAppModel
             $optionsSum += $tax;
             $data['options'][] = array(
                 'taxstr_id' => $taxCategoryRow['taxrule_taxstr_id'],
-                'name' => isset($taxCategoryRow['taxstr_name']) ? $taxCategoryRow['taxstr_name'] : $defaultTaxName,
+                'name' => $defaultTaxName,
                 'percentageValue' => $taxCategoryRow['trr_rate'],
                 'inPercentage' => 1,
                 'value' => $tax,
