@@ -35,7 +35,7 @@ class ConfigurationsController extends ListingBaseController
         $this->set('activeTab', $activeTab);
         $this->set('tourStep', SiteTourHelper::getStepIndex());
         $this->_template->addJs('js/jscolor.js');
-        $this->_template->render();
+        $this->_template->render(true, true, NULL, false, false);
     }
 
     public function setGeneralForm($frmType, $langId)
@@ -78,6 +78,17 @@ class ConfigurationsController extends ListingBaseController
             $this->set('languagesNames', Language::getAllNames());
         }
 
+        $redirection = Configurations::redirectionLink($frmType);
+        if (!empty($redirection)) {
+            $headerHtmlContent = '<a href="' . $redirection['link'] . '" class="btn btn-icon btn-outline-gray ms-2" title="" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="' . $redirection['title'] . '">
+                                    <svg class="svg btn-icon-start" width="18" height="18">
+                                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#gear">
+                                        </use>
+                                    </svg>                                
+                                </a>';
+            $this->set('headerHtmlContent', $headerHtmlContent);
+        }
+
         $tabs = Configurations::getTabsArr($langId);
         $tabsMsgArr = Configurations::getTabsMsgArr($langId);
         $this->set('tabs', $tabs);
@@ -93,7 +104,7 @@ class ConfigurationsController extends ListingBaseController
             $langId = CommonHelper::getDefaultFormLangId();
         }
         $this->setGeneralForm($frmType, $langId);
-        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->set('html', $this->_template->render(false, false, NULL, true, false));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 

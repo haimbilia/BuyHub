@@ -16,7 +16,7 @@ $frm->setFormTagAttribute('onsubmit', 'setup($("#frmConfSetting")); return(false
 
 $stateData =  $frmType == Configurations::FORM_PRODUCT ? $stateData = FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_INT, 1) : FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1);
 $displayMap = $frmType == Configurations::FORM_PRODUCT;
-
+$headerHtmlContent = $headerHtmlContent ?? '';
 ?>
 <div id="frmBlockJs" class="card setting-card">
     <div class="card-head">
@@ -35,6 +35,9 @@ $displayMap = $frmType == Configurations::FORM_PRODUCT;
                     </select>
                 </div>
             <?php } ?>
+            <?php if (!empty($headerHtmlContent)) {
+                echo $headerHtmlContent;
+            } ?>
         </div>
     </div>
     <div class="card-body">
