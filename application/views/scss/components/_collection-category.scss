@@ -8,22 +8,21 @@
     }
     .category {
         display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
+        flex-flow: row wrap;
         background-color: $bg-gray;
-
         &:nth-child(even) {
             flex-direction: row-reverse;
         }
         &-head {
-            // flex: 0 0 40%;
-            // max-width: 40%;
+            flex: 0 0 40%;
+            max-width: 40%;
             aspect-ratio: 1/1;
             display: flex;
             @include media-breakpoint-down(sm) {
                 // flex: 1;
                 flex: 0 0 50%;
                 max-width: 50%;
+                gap: 1px;
             }
             img {
                 width: 100%;

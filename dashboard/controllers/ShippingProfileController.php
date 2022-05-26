@@ -263,4 +263,30 @@ class ShippingProfileController extends SellerBaseController
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
+
+    public function getBreadcrumbNodes($action)
+    {
+        if (FatUtility::isAjaxCall()) {
+            return;
+        }
+
+        $className = get_class($this);
+        $arr = explode('-', FatUtility::camel2dashed($className));
+        array_pop($arr);
+        $className = ucwords(implode(' ', $arr));
+
+        if ($action == 'index') {
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
+            $this->nodes[] = array('title' => $title);
+        } else if ($action == 'form') {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_SHIPPING_PROFILE'), 'href' => UrlHelper::generateUrl("ShippingProfile"));
+            $this->nodes[] = array('title' => ucwords($action));
+        } else {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+            $this->nodes[] = array('title' => ucwords($title));
+        }
+        return $this->nodes;
+    }
 }

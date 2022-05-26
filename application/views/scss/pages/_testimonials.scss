@@ -32,13 +32,13 @@
             @include media-breakpoint-up(lg) {
                 content: "";
                 position: absolute;
-                left: 0;
+                #{$start-direction}: 0;
                 top: 0;
                 z-index: 0;
                 width: 12.9rem;
                 height: 12.9rem;
-                background: var(--brand-color);
-                border-top-left-radius: 100px;
+                background: $brand-color;
+                border-top-#{$start-direction}-radius: 100px;
             }
         }
     }
@@ -104,7 +104,7 @@
         &:before {
             content: "";
             display: inline-block;
-            border-right: 2px solid black;
+            border-#{$end-direction}: 2px solid black;
             border-bottom: 2px solid black;
             width: 24px;
             height: 24px;
@@ -114,7 +114,7 @@
                 #{$start-direction}: -150px;
             }
             &:before {
-                transform: rotate(-225deg);
+                transform: rotate(136deg * $transform-direction);
                 margin-right: -7px;
             }
         }
@@ -124,7 +124,7 @@
             }
             &:before {
                 margin-left: -7px;
-                transform: rotate(-45deg);
+                transform: rotate(-45deg * $transform-direction);
             }
         }
     }

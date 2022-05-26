@@ -4,15 +4,13 @@
 
 .acc-triger:before {
     background: #000;
-    content: '';
+    content: "";
     height: 2px;
     position: absolute;
     #{$end-direction}: 0;
     top: 50%;
     font-weight: 800;
-    
     transform: rotate(90deg);
-    
     transition: all 0.2s ease-in-out;
     width: 10px;
 }
@@ -20,7 +18,7 @@
 .acc-triger:after {
     font-weight: 800;
     background: #000;
-    content: '';
+    content: "";
     height: 2px;
     position: absolute;
     #{$end-direction}: 0;
@@ -29,7 +27,6 @@
 }
 
 .acc-triger.active:before {
-    
     transform: rotate(0deg);
 }
 
