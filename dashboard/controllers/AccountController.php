@@ -886,11 +886,10 @@ class AccountController extends LoggedUserController
                 $hasDigitalProducts = 1;
             }
             $splitPaymentMethods = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);
-            $bankInfo = $this->bankInfo();
+            $this->loadBankInfoForm();
             $personalInfo = $this->personalInfo();
             $personalInfo['userImage'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($this->userId, ImageDimension::VIEW_SMALL, true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('personalInfo', empty($personalInfo) ? (object) array() : $personalInfo);
-            $this->set('bankInfo', empty($bankInfo) ? (object) array() : $bankInfo);
             $this->set('privacyPolicyLink', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_STRING, ''));
             $this->set('hasDigitalProducts', $hasDigitalProducts);
             $this->set('splitPaymentMethods', $splitPaymentMethods);
@@ -1170,8 +1169,8 @@ class AccountController extends LoggedUserController
         $data = $userObj->getUserBankInfo();
 
         if (true === MOBILE_APP_API_CALL) {
-            $this->set('data', ['bankInfo' => (object) $data]);
-            $this->_template->render();
+            $this->set('bankInfo', (object) $data);
+            return;
         }
 
         $frm = $this->getBankInfoForm();
