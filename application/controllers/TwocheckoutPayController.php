@@ -116,7 +116,7 @@ class TwocheckoutPayController extends PaymentController
                 /* Recording Payment in DB */
                 $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $request['invoice_id'], $orderPaymentAmount, Labels::getLabel("LBL_Received_Payment", $this->siteLangId), json_encode($request));
                 /* End Recording Payment in DB */
-                FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
+                FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
             }
         }
         SystemLog::transaction(json_encode($request), self::KEY_NAME . "-" . $orderId);
@@ -221,7 +221,7 @@ class TwocheckoutPayController extends PaymentController
                         if ($responseCode == 'APPROVED') {
                             /* Recording Payment in DB */
                             $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $transactionId, $orderPaymentAmount, Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), $message);
-                            $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
+                            $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo()));
                             /* End Recording Payment in DB */
                         }
                     } else {

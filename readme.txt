@@ -797,6 +797,8 @@ Updates/Fixes :
     => 064582 - The tax structure name appears on the checkout page at the buyer's end in case of a single tax structure.
     => 064583 - The admin is able to add a tax rate of more than 100%.
     => 064596 - Admin: Unwanted 'Slider' text is showing for the searched users
+    => 064583 - The admin is able to add a tax rate of more than 100%. 
+    => 064585 - success message URL is appearing even without making a purchase
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

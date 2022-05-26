@@ -503,14 +503,20 @@ class CustomController extends MyAppController
         FatApp::redirectUser(UrlHelper::generateFullUrl('Checkout'));
     }
 
-    public function paymentSuccess($orderId)
+    public function paymentSuccess($orderNo)
     {
-        if (!$orderId) {
+        if (empty($orderNo)) {
+            FatUtility::exitWithErrorCode(404);
+        }
+        
+        $orderInfo = Orders::getOrderByOrderNo($orderNo, $this->siteLangId);
+        if(false === $orderInfo){
             FatUtility::exitWithErrorCode(404);
         }
 
-        $orderObj = new Orders();
-        $orderInfo = $orderObj->getOrderById($orderId, $this->siteLangId);
+        $showOrderDetails = UserAuthentication::isGuestUserLogged()  || UserAuthentication::isUserLogged();
+
+        $orderId = $orderInfo['order_id'];
 
         $user = [];
         if ($orderInfo['order_user_id'] > 0) {
@@ -551,8 +557,7 @@ class CustomController extends MyAppController
                 $cartObj->updateUserCart();
             }
         }
-
-        $orderFulFillmentTypeArr = [];
+      
         if ($orderInfo['order_type'] == Orders::ORDER_PRODUCT) {
             if (!empty($user)) {
                 $searchReplaceArray = array(
@@ -564,20 +569,20 @@ class CustomController extends MyAppController
                 $textMessage = Labels::getLabel('MSG_CUSTOMER_SUCCESS_ORDER', $this->siteLangId);
             }
 
-            $srch = new OrderProductSearch($this->siteLangId);
-            $srch->joinShippingCharges();
-            $srch->joinAddress();
-            $srch->addCondition('op_order_id', '=', $orderId);
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            if(true === $showOrderDetails){ 
+                $srch = new OrderProductSearch($this->siteLangId);
+                $srch->joinShippingCharges();
+                $srch->joinAddress();
+                $srch->addCondition('op_order_id', '=', $orderId);
+                $srch->doNotCalculateRecords();
+                $srch->doNotLimitRecords();
 
-            $srch->addMultipleFields(
-                array('ops.*', 'op_product_type', 'op_invoice_number', 'addr.*', 'ts.*', 'tc.*', 'COALESCE(state_name, state_identifier) as state_name', 'COALESCE(country_name, country_code) as country_name')
-            );
-            $srch->addGroupBy('opshipping_pickup_addr_id');
-            $rs = $srch->getResultSet();
-            $orderFulFillmentTypeArr = FatApp::getDb()->fetchAll($rs);
-            // CommonHelper::printArray($orderFulFillmentTypeArr, true);
+                $srch->addMultipleFields(
+                    array('ops.*', 'op_product_type', 'op_invoice_number', 'addr.*', 'ts.*', 'tc.*', 'COALESCE(state_name, state_identifier) as state_name', 'COALESCE(country_name, country_code) as country_name')
+                );
+                $srch->addGroupBy('opshipping_pickup_addr_id');
+                $this->set('orderFulFillmentTypeArr', FatApp::getDb()->fetchAll($srch->getResultSet()));  
+            }  
         } elseif ($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             $searchReplaceArray = array(
                 '{account}' => '<a href="' . UrlHelper::generateUrl('seller', '', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
@@ -604,22 +609,24 @@ class CustomController extends MyAppController
             $textMessage = str_replace('{contactus}', '<a href="' . UrlHelper::generateUrl('custom', 'contactUs') . '" class="link">' . Labels::getLabel('MSG_Store_Owner', $this->siteLangId) . '</a>', Labels::getLabel('MSG_GUEST_SUCCESS_ORDER_{contactus}', $this->siteLangId));
         }
 
+        $orderObj = new Orders();
+        if(true === $showOrderDetails){           
+            $address = $orderObj->getOrderAddresses($orderInfo['order_id']);
+            if (!empty($address)) {
+                $orderInfo['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE];
+                $orderInfo['shippingAddress'] = (!empty($address[Orders::SHIPPING_ADDRESS_TYPE]) ? $address[Orders::SHIPPING_ADDRESS_TYPE] : []);
+            }            
+        }
+        $orderInfo['orderProducts'] = $orderObj->getChildOrders(['order_id' => $orderInfo['order_id']], $orderInfo['order_type'], $orderInfo['order_language_id'], true);
+
         if (UserAuthentication::isGuestUserLogged()) {
             unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]);
         }
 
-        $address = $orderObj->getOrderAddresses($orderInfo['order_id']);
-        if (!empty($address)) {
-            $orderInfo['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE];
-            $orderInfo['shippingAddress'] = (!empty($address[Orders::SHIPPING_ADDRESS_TYPE]) ? $address[Orders::SHIPPING_ADDRESS_TYPE] : []);
-        }
-
-        $orderInfo['orderProducts'] = $orderObj->getChildOrders(['order_id' => $orderInfo['order_id']], $orderInfo['order_type'], $orderInfo['order_language_id'], true);
-
         $this->set('textMessage', $textMessage);
         $this->set('orderInfo', $orderInfo);
-
-        $this->set('orderFulFillmentTypeArr', $orderFulFillmentTypeArr);
+        $this->set('showOrderDetails', $showOrderDetails);
+      
         if (CommonHelper::isAppUser() && false ===  MOBILE_APP_API_CALL) {
             $this->set('exculdeMainHeaderDiv', true);
             $this->_template->render(false, false);

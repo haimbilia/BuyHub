@@ -66,7 +66,7 @@ class PayAtStorePayController extends MyAppController
                 Product::recordProductWeightage($opSelprodCode, SmartWeightageSettings::PRODUCT_ORDER_PAID);
             }
         }
-        $successUrl = UrlHelper::generateFullUrl('custom', 'paymentSuccess', array($orderInfo['id']));
+        $successUrl = UrlHelper::generateFullUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo()));
         if (FatUtility::isAjaxCall()) {
             $json['redirect'] = $successUrl;
             FatUtility::dieJsonSuccess($json);

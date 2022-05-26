@@ -1044,6 +1044,22 @@ class Orders extends MyAppModel
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
+    public static function getOrderByOrderNo($order_no, $langId = 0)
+    {
+        if (empty($order_no)) {
+            trigger_error(Labels::getLabel('ERR_ORDER_NO_IS_NOT_PASSED', $this->commonLangId), E_USER_ERROR);
+        }
+        $srch = static::getSearchObject($langId);
+        $srch->joinTable(Plugin::DB_TBL, 'LEFT JOIN', 'order_pmethod_id = plugin_id');
+        if (0 < $langId) {
+            $srch->joinTable(Plugin::DB_TBL_LANG, 'LEFT OUTER JOIN', 'plugin_id = pm_l.pluginlang_plugin_id AND pm_l.pluginlang_lang_id = ' . $langId, 'pm_l');
+        }
+        $srch->addCondition('order_number', '=', $order_no);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        return FatApp::getDb()->fetch($srch->getResultSet());
+    }
+
     public function getOrderAddresses($order_id, $opId = 0)
     {
         $opId = FatUtility::int($opId);

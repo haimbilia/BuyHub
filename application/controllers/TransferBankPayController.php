@@ -84,7 +84,7 @@ class TransferBankPayController extends PaymentController
                 $this->_template->render();
             }
 
-            $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
+            $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo()));
         } else {
             $msg = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {

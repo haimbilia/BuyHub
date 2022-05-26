@@ -8,20 +8,6 @@
 </script>
 <?php
 $products = $orderInfo['orderProducts'];
-$shippingMethod = '';
-if (Orders::ORDER_PRODUCT == $orderInfo['order_type']) {
-    foreach ($products as $op) {
-        $shippingMethod .= !empty($op['opshipping_label']) ? '<li>' . $op['opshipping_label'] . '</li>' : '';
-    }
-}
-
-$fulfillmentType = Shipping::FULFILMENT_SHIP;
-array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
-    if (Product::PRODUCT_TYPE_PHYSICAL == $row['op_product_type']) {
-        $fulfillmentType = $row['opshipping_fulfillment_type'];
-        return;
-    }
-});
 ?>
 <div id="body" class="body">
     <section class="section">
@@ -91,107 +77,125 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                 </p>
                             <?php } ?>
                         </div>
-
-                        <ul class="completed-detail">
-                            <?php if (!empty($orderInfo['shippingAddress'])) {
-                                $shippingAddress = $orderInfo['shippingAddress']; ?>
-                                <li class="completed-detail-item">
-                                    <h4>
-
-                                        <?php echo Labels::getLabel("LBL_SHIPPING_ADDRESS", $siteLangId); ?>
-                                    </h4>
-                                    <p>
-                                        <strong><?php echo $shippingAddress['oua_name']; ?></strong>
-                                        <br>
-                                        <?php
-                                        echo $shippingAddress['oua_address1'];
-                                        if (!empty($shippingAddress['oua_address2'])) {
-                                            echo ', ' . $shippingAddress['oua_address2'];
-                                        }
-                                        echo '<br>' . $shippingAddress['oua_city'] . ', ' . $shippingAddress['oua_state'];
-                                        echo '<br>' . $shippingAddress['oua_country'] . '(' . $shippingAddress['oua_zip'] . ')';
-                                        echo '<br>' . ValidateElement::formatDialCode($shippingAddress['oua_phone_dcode']) . $shippingAddress['oua_phone'];
-                                        ?>
-                                    </p>
-                                </li>
-                                <?php }
-                            if (Orders::ORDER_PRODUCT == $orderInfo['order_type']) {
-                                if (!empty($orderFulFillmentTypeArr) && Shipping::FULFILMENT_PICKUP == $fulfillmentType) { ?>
+                        <?php if(true === $showOrderDetails){   ?>          
+                            <ul class="completed-detail">
+                                <?php if (!empty($orderInfo['shippingAddress'])) {
+                                    $shippingAddress = $orderInfo['shippingAddress']; ?>
                                     <li class="completed-detail-item">
                                         <h4>
-                                            <?php echo Labels::getLabel('LBL_ORDER_PICKUP', $siteLangId); ?>
-                                        </h4>
 
-                                        <?php
-                                        foreach ($orderFulFillmentTypeArr as $orderAddDet) {
-                                            if (empty($orderAddDet['addr_id'])) {
-                                                continue;
-                                            }
-                                        ?>
-                                            <p>
-                                                <strong>
-                                                    <?php
-                                                    $opshippingDate = isset($orderAddDet['opshipping_date']) ? $orderAddDet['opshipping_date'] . ' ' : '';
-                                                    $timeSlotFrom = isset($orderAddDet['opshipping_time_slot_from']) ? $orderAddDet['opshipping_time_slot_from'] . ' - ' : '';
-                                                    $timeSlotTo = isset($orderAddDet['opshipping_time_slot_to']) ? $orderAddDet['opshipping_time_slot_to'] : '';
-                                                    echo '#' . $orderAddDet['op_invoice_number'] . '<br>' . $opshippingDate . $timeSlotFrom . $timeSlotTo;
-                                                    ?>
-                                                </strong><br>
-                                                <?php echo $orderAddDet['addr_name']; ?>,
-                                                <?php
-                                                $address1 = !empty($orderAddDet['addr_address1']) ? $orderAddDet['addr_address1'] : '';
-                                                $address2 = !empty($orderAddDet['addr_address2']) ? ', ' . $orderAddDet['addr_address2'] : '';
-                                                $city = !empty($orderAddDet['addr_city']) ? '<br>' . $orderAddDet['addr_city'] : '';
-                                                $state = !empty($orderAddDet['state_name']) ? ', ' . $orderAddDet['state_name'] : '';
-                                                $country = !empty($orderAddDet['country_name']) ? ', ' . $orderAddDet['country_name'] : '';
-                                                $zip = !empty($orderAddDet['addr_zip']) ? '(' . $orderAddDet['addr_zip'] . ')' : '';
-                                                $phone = !empty($orderAddDet['addr_phone']) ? $orderAddDet['addr_phone'] : '';
-                                                if (!empty($phone) && array_key_exists('addr_phone_dcode', $orderAddDet)) {
-                                                    $phone = ValidateElement::formatDialCode($orderAddDet['addr_phone_dcode']) . $phone;
-                                                }
-                                                $phone = '<br>' . $phone;
-                                                echo $address1 . $address2 . $city . $state . $country . $zip . $phone;
-                                                ?>
-                                            </p>
-                                        <?php } ?>
-                                    </li>
-                                <?php } else if (!empty($shippingMethod)) { ?>
-                                    <li class="completed-detail-item">
-                                        <h4>
-                                            <?php echo Labels::getLabel('LBL_SHIPPING_METHOD', $siteLangId); ?>
-                                        </h4>
-                                        <p><?php echo Labels::getLabel('LBL_PREFERRED_METHOD', $siteLangId); ?>: <br>
-                                        <ol class="preferred-shipping-list">
-                                            <?php echo $shippingMethod; ?>
-                                        </ol>
-                                        </p>
-                                    </li>
-                                <?php }
-                                if (!empty($orderInfo['billingAddress'])) { ?>
-                                    <li class="completed-detail-item">
-                                        <?php $billingAddress = $orderInfo['billingAddress']; ?>
-                                        <h4>
-
-                                            <?php echo Labels::getLabel("LBL_BILLING_ADDRESS", $siteLangId); ?>
+                                            <?php echo Labels::getLabel("LBL_SHIPPING_ADDRESS", $siteLangId); ?>
                                         </h4>
                                         <p>
-                                            <strong><?php echo $billingAddress['oua_name']; ?></strong><br>
+                                            <strong><?php echo $shippingAddress['oua_name']; ?></strong>
+                                            <br>
                                             <?php
-                                            echo $billingAddress['oua_address1'];
-                                            if (!empty($billingAddress['oua_address2'])) {
-                                                echo ', ' . $billingAddress['oua_address2'];
+                                            echo $shippingAddress['oua_address1'];
+                                            if (!empty($shippingAddress['oua_address2'])) {
+                                                echo ', ' . $shippingAddress['oua_address2'];
                                             }
-                                            echo '<br>' . $billingAddress['oua_city'] . ', ' . $billingAddress['oua_state'];
-                                            echo '<br>' . $billingAddress['oua_country'] . '(' . $billingAddress['oua_zip'] . ')';
-                                            echo '<br>' . ValidateElement::formatDialCode($billingAddress['oua_phone_dcode']) . $billingAddress['oua_phone'];
+                                            echo '<br>' . $shippingAddress['oua_city'] . ', ' . $shippingAddress['oua_state'];
+                                            echo '<br>' . $shippingAddress['oua_country'] . '(' . $shippingAddress['oua_zip'] . ')';
+                                            echo '<br>' . ValidateElement::formatDialCode($shippingAddress['oua_phone_dcode']) . $shippingAddress['oua_phone'];
                                             ?>
                                         </p>
                                     </li>
-                            <?php }
-                            } ?>
-                        </ul>
+                                    <?php }
+                                if (Orders::ORDER_PRODUCT == $orderInfo['order_type']) {
+                                    $shippingMethod = '';
+                                    if (Orders::ORDER_PRODUCT == $orderInfo['order_type']) {
+                                        foreach ($products as $op) {
+                                            $shippingMethod .= !empty($op['opshipping_label']) ? '<li>' . $op['opshipping_label'] . '</li>' : '';
+                                        }
+                                    }
+                                    
+                                    $fulfillmentType = Shipping::FULFILMENT_SHIP;
+                                    array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
+                                        if (Product::PRODUCT_TYPE_PHYSICAL == $row['op_product_type']) {
+                                            $fulfillmentType = $row['opshipping_fulfillment_type'];
+                                            return;
+                                        }
+                                    });
+                                    if (!empty($orderFulFillmentTypeArr) && Shipping::FULFILMENT_PICKUP == $fulfillmentType) { ?>
+                                        <li class="completed-detail-item">
+                                            <h4>
+                                                <?php echo Labels::getLabel('LBL_ORDER_PICKUP', $siteLangId); ?>
+                                            </h4>
+
+                                            <?php
+                                            foreach ($orderFulFillmentTypeArr as $orderAddDet) {
+                                                if (empty($orderAddDet['addr_id'])) {
+                                                    continue;
+                                                }
+                                            ?>
+                                                <p>
+                                                    <strong>
+                                                        <?php
+                                                        $opshippingDate = isset($orderAddDet['opshipping_date']) ? $orderAddDet['opshipping_date'] . ' ' : '';
+                                                        $timeSlotFrom = isset($orderAddDet['opshipping_time_slot_from']) ? $orderAddDet['opshipping_time_slot_from'] . ' - ' : '';
+                                                        $timeSlotTo = isset($orderAddDet['opshipping_time_slot_to']) ? $orderAddDet['opshipping_time_slot_to'] : '';
+                                                        echo '#' . $orderAddDet['op_invoice_number'] . '<br>' . $opshippingDate . $timeSlotFrom . $timeSlotTo;
+                                                        ?>
+                                                    </strong><br>
+                                                    <?php echo $orderAddDet['addr_name']; ?>,
+                                                    <?php
+                                                    $address1 = !empty($orderAddDet['addr_address1']) ? $orderAddDet['addr_address1'] : '';
+                                                    $address2 = !empty($orderAddDet['addr_address2']) ? ', ' . $orderAddDet['addr_address2'] : '';
+                                                    $city = !empty($orderAddDet['addr_city']) ? '<br>' . $orderAddDet['addr_city'] : '';
+                                                    $state = !empty($orderAddDet['state_name']) ? ', ' . $orderAddDet['state_name'] : '';
+                                                    $country = !empty($orderAddDet['country_name']) ? ', ' . $orderAddDet['country_name'] : '';
+                                                    $zip = !empty($orderAddDet['addr_zip']) ? '(' . $orderAddDet['addr_zip'] . ')' : '';
+                                                    $phone = !empty($orderAddDet['addr_phone']) ? $orderAddDet['addr_phone'] : '';
+                                                    if (!empty($phone) && array_key_exists('addr_phone_dcode', $orderAddDet)) {
+                                                        $phone = ValidateElement::formatDialCode($orderAddDet['addr_phone_dcode']) . $phone;
+                                                    }
+                                                    $phone = '<br>' . $phone;
+                                                    echo $address1 . $address2 . $city . $state . $country . $zip . $phone;
+                                                    ?>
+                                                </p>
+                                            <?php } ?>
+                                        </li>
+                                    <?php } else if (!empty($shippingMethod)) { ?>
+                                        <li class="completed-detail-item">
+                                            <h4>
+                                                <?php echo Labels::getLabel('LBL_SHIPPING_METHOD', $siteLangId); ?>
+                                            </h4>
+                                            <p><?php echo Labels::getLabel('LBL_PREFERRED_METHOD', $siteLangId); ?>: <br>
+                                            <ol class="preferred-shipping-list">
+                                                <?php echo $shippingMethod; ?>
+                                            </ol>
+                                            </p>
+                                        </li>
+                                    <?php }
+                                    if (!empty($orderInfo['billingAddress'])) { ?>
+                                        <li class="completed-detail-item">
+                                            <?php $billingAddress = $orderInfo['billingAddress']; ?>
+                                            <h4>
+
+                                                <?php echo Labels::getLabel("LBL_BILLING_ADDRESS", $siteLangId); ?>
+                                            </h4>
+                                            <p>
+                                                <strong><?php echo $billingAddress['oua_name']; ?></strong><br>
+                                                <?php
+                                                echo $billingAddress['oua_address1'];
+                                                if (!empty($billingAddress['oua_address2'])) {
+                                                    echo ', ' . $billingAddress['oua_address2'];
+                                                }
+                                                echo '<br>' . $billingAddress['oua_city'] . ', ' . $billingAddress['oua_state'];
+                                                echo '<br>' . $billingAddress['oua_country'] . '(' . $billingAddress['oua_zip'] . ')';
+                                                echo '<br>' . ValidateElement::formatDialCode($billingAddress['oua_phone_dcode']) . $billingAddress['oua_phone'];
+                                                ?>
+                                            </p>
+                                        </li>
+                                <?php }
+                                } ?>
+                            </ul>
+                        <?php } ?>
                     </div>
-                    <?php if ($orderInfo['order_type'] != Orders::ORDER_WALLET_RECHARGE) { ?>
+                    <?php                    
+                    
+                    if(true === $showOrderDetails){ 
+                    if ($orderInfo['order_type'] != Orders::ORDER_WALLET_RECHARGE) { ?>
                         <div class="row justify-content-center">
                             <div class="col-md-12">
                                 <div class="completed-cart cart-page">
@@ -352,7 +356,9 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                 </div>
                             </div>
                         </div>
-                    <?php } ?>
+                    <?php }
+                    } ?>
+                   
                 </div>
             </div>
         </div>
