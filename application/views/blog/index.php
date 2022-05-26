@@ -92,7 +92,7 @@ if (!empty($postList)) { ?>
                     <h2>
                         <?php echo Labels::getLabel('LBL_Featured_Blogs', $siteLangId); ?>
                     </h2>
-                </div>             
+                </div>
             </div>
             <div class="collection-2">
                 <?php foreach ($featuredPostList as $blogPost) { ?>
@@ -208,6 +208,7 @@ if (!empty($postList)) { ?>
     var rtl = (layoutDirection == 'rtl') ? true : false;
     $(function() {
         $('.js-popular-stories').slick({
+            rtl: ('rtl' == langLbl.layoutDirection),
             dots: false,
             arrows: false,
             infinite: false,

@@ -54,6 +54,7 @@ $(function () {
 $(window).on('load', function () {
     /* Product Gallery */
     $("#detail .main-img-slider").slick({
+        rtl: ('rtl' == langLbl.layoutDirection),
         slidesToShow: 1,
         slidesToScroll: 1,
         infinite: true,
@@ -91,6 +92,7 @@ $(window).on('load', function () {
 
     /* Thumbnail/alternates slider for product page */
     $(".thumb-nav").slick({
+        rtl: ('rtl' == langLbl.layoutDirection),
         slidesToShow: 4,
         slidesToScroll: 1,
         infinite: true,
