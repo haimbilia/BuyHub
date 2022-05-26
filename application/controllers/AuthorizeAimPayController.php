@@ -228,7 +228,7 @@ class AuthorizeAimPayController extends PaymentController
                         } else {
                             $json['msg'] = $message;
                             $json['description'] = $decription;
-                            $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
+                            $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderInfo['order_number']));
                         }
                     } else {
                         $json['errorMsg'] = Labels::getLabel('ERR_TRANSACTION_FAILED', $this->siteLangId);

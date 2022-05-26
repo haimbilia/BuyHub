@@ -92,7 +92,7 @@ class WalletPayController extends MyAppController
             $this->set('msg', Labels::getLabel("MSG_PAYMENT_FROM_WALLET_MADE_SUCCESSFULLY", $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
-        FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'paymentSuccess', array($orderId)));
+        FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
     }
 
     public function Recharge($orderId, $appParam = '', $appLang = '1', $appCurrency = '1')

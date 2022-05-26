@@ -25,6 +25,11 @@ class OrderPayment extends Orders
         return round($orderPaymentGatewayCharge, 2);
     }
 
+    public function getOrderNo()
+    {       
+        return $this->attributes['order_number'];
+    }
+
     public function getOrderPrimaryinfo()
     {
         $arrOrder = array();

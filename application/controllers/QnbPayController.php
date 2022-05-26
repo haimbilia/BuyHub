@@ -117,7 +117,7 @@ class QnbPayController extends PaymentController
             $msg = $orderPaymentObj->getError();
             $this->logFailure($orderId, $msg);
         }
-        FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
+        FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
     }
 
     public function paymentFailed()

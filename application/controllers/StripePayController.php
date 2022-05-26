@@ -282,7 +282,7 @@ class StripePayController extends PaymentController
             $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $charge['id'], ($payment_amount), Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($charge));
             /* End Recording Payment in DB */
             if (false === MOBILE_APP_API_CALL) {
-                FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($_POST['order_id'])));
+                FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
             }
         } else {  
             SystemLog::transaction(json_encode($charge), self::KEY_NAME . "-" . $_POST['order_id']);

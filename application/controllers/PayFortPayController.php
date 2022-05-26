@@ -111,7 +111,7 @@ class PayFortPayController extends PaymentController
 
             $gateWayCharges = ($paymentGatewayCharge / 100);
             $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $_REQUEST['fort_id'], $gateWayCharges, 'Received Payment', json_encode($_REQUEST));
-            FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
+            FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
         } else {
             $orderPaymentObj->addOrderPaymentComments('#' . $_REQUEST['response_code'] . ': ' . $_REQUEST['response_message']);
         } 

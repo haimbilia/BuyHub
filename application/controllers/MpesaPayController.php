@@ -102,7 +102,7 @@ class MpesaPayController extends PaymentController
 
                 $msg = Labels::getLabel('MSG_WAITING_FOR_CONFIRMATION', $this->siteLangId);
                 $json['msg'] = $response['ResponseDescription'] . ' ' . $msg;
-                $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId));
+                $json['redirect'] = UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo()));
             } else {
                 $msg = Labels::getLabel('ERR_SOMETHING_WENT_WRONG', $this->siteLangId);
                 $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());

@@ -167,7 +167,7 @@ class BraintreePayController extends PaymentController
                             $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $charge['transaction']->id, ($payment_amount / 100), Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($charge));
                             /* End Recording Payment in DB */
 
-                            FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderInfo['id'])));
+                            FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderInfo['order_number'])));
                         } else {
                             SystemLog::transaction(json_encode($charge), self::KEY_NAME . "-" . $orderInfo['id']);
                             $orderPaymentObj->addOrderPaymentComments($message);

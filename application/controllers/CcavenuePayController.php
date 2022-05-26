@@ -120,14 +120,14 @@ class CcavenuePayController extends PaymentController
         }
         $orderPaymentObj = new OrderPayment($orderId);
         $paymentGatewayCharge = $orderPaymentObj->getOrderPaymentGatewayAmount();
-        if ($paymentGatewayCharge > 0) {
+        if ($paymentGatewayCharge > 0) {          
             $total_paid_match = ((float) $paid_amount == $paymentGatewayCharge);
             if (!$total_paid_match) {
                 $request .= "\n\n CCAvenue :: TOTAL PAID MISMATCH! " . strtolower($paid_amount) . "\n\n";
             }
             if ($order_status == "Success" && $total_paid_match) {
                 $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $tracking_id, $paymentGatewayCharge, Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($post));
-                FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId)));
+                FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
             } else {              
                 SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);
                 $orderPaymentObj->addOrderPaymentComments($request);

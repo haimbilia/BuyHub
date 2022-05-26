@@ -80,7 +80,7 @@ class YocoPayController extends PaymentController
         $response = $this->plugin->getResponse();
         if (isset($response['status']) && strtolower($response['status']) == 'successful') {
             $orderPaymentObj->addOrderPayment(self::KEY_NAME, $response['id'], ($paymentAmount), Labels::getLabel("MSG_RECEIVED_PAYMENT", $this->siteLangId), json_encode($response));
-            die(json_encode(['status' => 1, 'redirectUrl' => UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderId))]));
+            die(json_encode(['status' => 1, 'redirectUrl' => UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo()))]));
         }
         $msg = $response['displayMessage'] ?? Labels::getLabel("ERR_PAYMENT_FAILED", $this->siteLangId);     
         SystemLog::transaction(json_encode($response),self::KEY_NAME . "-" . $orderId);
