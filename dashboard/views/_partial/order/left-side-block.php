@@ -193,6 +193,12 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($shippingCost, true, false, true, false, true); ?></span>
                                                 </li>
                                             <?php } ?>
+                                            <?php if (0 < $tax) { ?>
+                                                <li class="list-popover-item">
+                                                    <span class="lable"><?php echo Labels::getLabel('LBL_TAX:'); ?></span>
+                                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($tax, true, false, true, false, true); ?></span>
+                                                </li>
+                                            <?php } ?>
                                             <?php if (false === $isSellerDashboardView) { ?>
                                                 <?php if (!empty($volumeDiscount)) { ?>
                                                     <li class="list-popover-item">
@@ -213,12 +219,6 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                                     </li>
                                                 <?php } ?>
                                             <?php } ?>
-                                            <?php /* if (0 < $tax) { ?>
-                                                <li class="list-popover-item">
-                                                    <span class="lable"><?php echo Labels::getLabel('LBL_TAX:'); ?></span>
-                                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($tax, true, false, true, false, true); ?></span>
-                                                </li>
-                                            <?php } */ ?>
                                         </ul>
                                     </div>
                                 </td>

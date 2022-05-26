@@ -119,6 +119,12 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                 <span class="value"><?php echo $shippingCost; ?></span>
                             </li>
                         <?php } ?>
+                        <?php if (0 < $tax) { ?>
+                            <li class="list-popover-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_TAX:'); ?></span>
+                                <span class="value"><?php echo $tax; ?></span>
+                            </li>
+                        <?php } ?>
                         <?php if (!empty($volumeDiscount)) { ?>
                             <li class="list-popover-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT:'); ?></span>
@@ -137,12 +143,6 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                 <span class="value"><?php echo $rewardPoint; ?></span>
                             </li>
                         <?php } ?>
-                        <?php /* if (0 < $tax) { ?>
-                            <li class="list-popover-item">
-                                <span class="lable"><?php echo Labels::getLabel('LBL_TAX:'); ?></span>
-                                <span class="value"><?php echo $tax; ?></span>
-                            </li>
-                        <?php } */ ?>
                     </ul>
                 </div>
             </td>
