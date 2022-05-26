@@ -45,16 +45,18 @@ $secondaryColor = FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_RGB', FatUtility
 $secondaryColor = (false === strpos($secondaryColor, 'rgb') ? 'rgb(' . $secondaryColor . ')' : $secondaryColor);
 $secondaryColorInverse = FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_INVERSE_RGB', FatUtility::VAR_STRING, "rgb(255,255,255)");
 $secondaryColorInverse = (false === strpos($secondaryColorInverse, 'rgb') ? 'rgb(' . $secondaryColorInverse . ')' : $secondaryColorInverse);
-
+?>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<?php
 if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
     $googleFontFamily =  '"' . str_replace("+", " ", explode('-', $googleFontFamily)[0]) . '" !important';
 ?>
-    <link rel="preload" href="<?php echo $googleFontFamilyUrl; ?>" as="font">
+    <link href="<?php echo $googleFontFamilyUrl; ?>" rel="stylesheet">
 <?php
 } else { ?>
-
-    <link rel="preload" href="https://fonts.googleapis.com/css?family=Montserrat:700,300,regular,500,600&subset=cyrillic,cyrillic-ext,latin,latin-ext,vietnamese" as="font">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <?php } ?>
 
 <style>
