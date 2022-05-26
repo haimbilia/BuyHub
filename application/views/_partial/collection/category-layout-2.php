@@ -20,10 +20,10 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                         <div class="category-head">
                             <?php
                             $pictureAttr = [
-                                'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'WEBPMEDIUM', 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
-                                'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'MEDIUM', 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
+                                'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'WEBP' . ImageDimension::VIEW_MEDIUM, 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
+                                'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, ImageDimension::VIEW_MEDIUM, 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
                                 'ratio' => '4:1',
-                                'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'MEDIUM', 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, ImageDimension::VIEW_MEDIUM, 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                 'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $category['prodcat_name'],
                                 'siteLangId' => $siteLangId,
                             ];
