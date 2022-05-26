@@ -350,7 +350,7 @@ class PatchUpdateController extends ListingBaseController
         FatApp::getDb()->query("INSERT INTO `tbl_plugin_settings` (`pluginsetting_plugin_id`, `pluginsetting_key`, `pluginsetting_value`) VALUES (21, 'otp_verification', '0'), (37, 'otp_verification', '0')");
         FatApp::getDb()->query("TRUNCATE tbl_commission_settings");
         FatApp::getDb()->query("TRUNCATE tbl_commission_setting_history");
-        FatApp::getDb()->query("INSERT INTO `tbl_commission_settings` (`commsetting_id`, `commsetting_product_id`, `commsetting_user_id`, `commsetting_prodcat_id`, `commsetting_fees`, `commsetting_is_mandatory`, `commsetting_deleted`, `commsetting_by_package`) VALUES (NULL, '', '', '', '2', '1', '', '0')");
+        FatApp::getDb()->query("INSERT INTO `tbl_commission_settings` (`commsetting_id`, `commsetting_product_id`, `commsetting_user_id`, `commsetting_prodcat_id`, `commsetting_fees`, `commsetting_is_mandatory`, `commsetting_by_package`) VALUES (NULL, '', '', '', '2', '1','0')");
         echo "Done";
     }
 
