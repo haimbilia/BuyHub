@@ -1,10 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 foreach ($collections as $collectionIndex => &$collectionData) {
-    if (array_key_exists('theprice', $collectionData)) {
-        $collectionData['theprice'] = CommonHelper::displayMoneyFormat($collectionData['theprice']);
-    }
-
     if (array_key_exists('tLeftRibbons', $collectionData) || array_key_exists('tRightRibbons', $collectionData)) {
         $tLeftRibbons = $collectionData['tLeftRibbons'];
         $tRightRibbons = $collectionData['tRightRibbons'];
