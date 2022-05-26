@@ -1,9 +1,11 @@
 <div class="grid grid-<?php echo $i; ?>">
     <div class="products <?php echo (isset($layoutClass)) ? $layoutClass : ''; ?> <?php if ($product['selprod_stock'] <= 0) { ?> out-of-stock <?php } ?>">
-        <?php if ($product['selprod_stock'] <= 0) { ?>
-            <span class="out-of-stock-txt"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
-        <?php } ?>
         <div class="products-body">
+            <?php if ($product['selprod_stock'] <= 0) { ?>
+                <div class="out-of-stock-txt">
+                    <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
+                </div>
+            <?php } ?>
             <?php
             if (!empty($selProdRibbons)) {
                 foreach ($selProdRibbons as $ribbRow) {

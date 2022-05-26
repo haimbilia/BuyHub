@@ -214,11 +214,20 @@ if ($controllerName == 'Home' && $action == 'index') {
     <div class="cc-window no-print">
         <?php if (FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, '')) { ?>
             <div class="box-cookies" id="cookieInfoBox">
-                <span id="cookieconsent:desc" class="cc-message">
-                    <?php echo FatUtility::decodeHtmlEntities(mb_substr(FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, ''), 0, 500)); ?>
-                    <a href="<?php echo UrlHelper::generateUrl('cms', 'view', array(FatApp::getConfig('CONF_COOKIES_BUTTON_LINK', FatUtility::VAR_INT))); ?>"><?php echo Labels::getLabel('LBL_Read_More', $siteLangId); ?></a></span>
-                <span class="btn btn-brand btn-sm cc-cookie-accept-js"><?php echo Labels::getLabel('LBL_Accept_Cookies', $siteLangId); ?></span>
-                <span class="btn btn-outline-brand btn-sm cookie-preferences-js"><?php echo Labels::getLabel('LBL_Set_Cookie_Preferences', $siteLangId); ?></span>
+                <p id="cookieconsent:desc" class="cc-message">
+                    <?php echo FatUtility::decodeHtmlEntities(mb_substr(FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, ''), 0, 600)); ?>
+                    <a href="<?php echo UrlHelper::generateUrl('cms', 'view', array(FatApp::getConfig('CONF_COOKIES_BUTTON_LINK', FatUtility::VAR_INT))); ?>">
+                        <?php echo Labels::getLabel('LBL_Read_More', $siteLangId); ?></a>
+                </p>
+                <div class="cookies-actions">
+                    <button class="btn btn-outline-gray cookie-preferences-js">
+                        <?php echo Labels::getLabel('LBL_Set_Cookie_Preferences', $siteLangId); ?>
+                    </button>
+                    <button class="btn btn-brand cc-cookie-accept-js">
+                        <?php echo Labels::getLabel('LBL_Accept_Cookies', $siteLangId); ?>
+                    </button>
+                </div>
+
             </div>
         <?php }  ?>
     </div>

@@ -38,7 +38,7 @@ class MyAppController extends FatController
             define('CONF_MESSAGE_ERROR_HEADING', Labels::getLabel('LBL_Following_error_occurred', $this->siteLangId));
         }
 
-        $controllerName = rtrim($this->_controllerName, 'Controller');
+        $controllerName = substr($this->_controllerName, 0, '-' . strlen('Controller'));
 
         if (!FatUtility::isAjaxCall() && !in_array($this->_controllerName, ['Cart', 'Checkout'])) {
             /* to keep track of temporary hold the product stock, update time in each row of tbl_product_stock_hold against current user[ */

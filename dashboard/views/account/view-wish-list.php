@@ -15,8 +15,8 @@ $btn->setFieldTagAttribute('class', 'btn-apply');
     <h5 class="modal-title">
         <?php echo Labels::getLabel('LBL_Your_List', $siteLangId); ?></h5>
 </div>
-<div class="modal-body form-edit">
-    <div class="form-edit-body loaderContainerJs">
+<div class="modal-body">
+    <div class="loaderContainerJs">
         <?php if ($wishLists) { ?>
             <div class="buyer-wishlist">
                 <ul class="listing--check">

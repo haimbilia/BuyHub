@@ -164,7 +164,7 @@
         width: 20px;
         height: 20px;
         flex: 0 0 20px;
-        transform: rotate(45deg);
+        transform: rotate(45deg * $transform-direction);
         margin-#{$start-direction}: 0.5rem;
         &:hover {
             color: #ef4546;
@@ -215,7 +215,7 @@
             border: none;
             border-#{$start-direction}: 2px solid #333;
             border-bottom: 2px solid #333;
-            transform: rotate(-45deg);
+            transform: rotate(-45deg * $transform-direction);
             margin-#{$start-direction}: 0.5rem;
             margin-top: -4px;
         }
