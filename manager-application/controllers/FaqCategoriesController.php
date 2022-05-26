@@ -83,14 +83,14 @@ class FaqCategoriesController extends ListingBaseController
         $srch->addOrder('faqcat_display_order', 'ASC');
         $srch->addOrder('faqcat_active', 'DESC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-
         $canViewFaq = $this->objPrivilege->canViewFaq(0, true);
         $this->set("canViewFaq", $canViewFaq);
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $this->set("activeInactiveArr", $activeInactiveArr);
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
+        $this->set('recordCount', count($records));
+        $this->set('hidePaginationHtml', true);
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);

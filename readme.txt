@@ -791,6 +791,7 @@ Updates/Fixes :
     => 064576 - The user profile image is missing in the commission history popup
     => 064573 - Undefined Index Notice appears on the buyer dashboard.
     => 064571 - An error occurs when the admin tries to add the commission for any category or user
+    => 064563 - Admin: Total record's count is not showing under FAQs section.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
