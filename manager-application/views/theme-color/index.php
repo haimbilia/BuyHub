@@ -5,7 +5,7 @@ $frm->setFormTagAttribute('onsubmit', 'setupFontStyle(this); return(false);');
 $fld = $frm->getField('btn_clear');
 $fld->addFieldTagAttribute('onclick', 'resetToDefault();');
 
-$googleFontFamily = "Poppins";
+$googleFontFamily = "Montserrat";
 $fontWeight = FatApp::getConfig('CONF_THEME_FONT_WEIGHT', FatUtility::VAR_STRING, "");
 $disabled  = empty($fontWeight) ? 'disabled="disabled"' : '';
 

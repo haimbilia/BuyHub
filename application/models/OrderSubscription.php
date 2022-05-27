@@ -75,15 +75,6 @@ class OrderSubscription extends MyAppModel
         $srch->doNotCalculateRecords(true);
         $srch->addOrder(Orders::DB_TBL_PREFIX . 'id', 'desc');
         $rs = $srch->getResultSet();
-        /*$row = FatApp::getDb()->fetch($rs, $flds);
-        if ($row==false) {
-            return '';
-        }
-        if (count($flds)==1) {
-            return $row[$flds[0]];
-        } else {
-            return $row;
-        } */
         return FatApp::getDb()->fetch($rs);
     }
 
@@ -227,7 +218,7 @@ class OrderSubscription extends MyAppModel
         $price = (true === $includeAmount ? CommonHelper::displayMoneyFormat($price) : '');
 
         if ($plan['ossubs_frequency'] == SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED) {
-            return $price ." / ". $subcriptionPeriodArr[$plan['ossubs_frequency']];
+            return $price . " / " . $subcriptionPeriodArr[$plan['ossubs_frequency']];
         }
         $planText = ($plan['ossubs_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_PER", $langId) : Labels::getLabel("LBL_FOR", $langId);
 
