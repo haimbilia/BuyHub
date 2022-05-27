@@ -42,7 +42,7 @@ $prm_budget_dur_arr = Promotion::getPromotionBudgetDurationArr($siteLangId); ?>
                     } elseif ($row['promotion_type'] == Promotions::PROMOTE_SHOP) {
                         $td->appendElement('plaintext', array(), '<div class="avtar"><img src="' . UrlHelper::generateFileUrl('image', 'shop', array($product['promotion_shop_id'], ImageDimension::VIEW_MINI, 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND) . '" alt="' . $row["shop_identifier"] . '"></div>', true);
                     } elseif ($row['promotion_type'] == Promotions::PROMOTE_BANNER) {
-                        // $td->appendElement('plaintext', array(), '<div class="avtar"><img src="'.UrlHelper::generateFileUrl('image','promotion-banner',array($row["promotion_banner_file"],'MINI')).'" alt=""></div>' , true);
+                        // $td->appendElement('plaintext', array(), '<div class="avtar"><img src="'.UrlHelper::generateFileUrl('image','promotion-banner',array($row["promotion_banner_file"],ImageDimension::VIEW_MINI)).'" alt=""></div>' , true);
                     }
                     break;
                 case 'promotion_id':

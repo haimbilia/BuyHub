@@ -386,7 +386,7 @@ class TestimonialsController extends ListingBaseController
         $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $recordId, 0, $langId, $universalImage);
         $this->set('image', $cbgImage);
         $this->set('imageFunction', 'testimonial');
-        $this->set('file_type', 'THUMB');
+        $this->set('file_type', ImageDimension::VIEW_THUMB);
         $this->set('recordId', $recordId);
         $this->checkEditPrivilege(true);
         $this->set('html', $this->_template->render(false, false, NULL, true));

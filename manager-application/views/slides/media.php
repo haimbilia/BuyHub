@@ -16,7 +16,7 @@ $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
 $screenFld = $imageFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
 $screenFld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $slideDimensions[ImageDimension::VIEW_DESKTOP]['width'] .
-" x " . $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
+    " x " . $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
 
 $imgArr = [];
 $imageRecordId = $image['afile_record_id'];
@@ -78,9 +78,9 @@ $otherButtons = [
 $formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId); ?>
 
 <?php require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
-    <div class="form-edit-body loaderContainerJs">
-        <?php echo $imageFrm->getFormHtml(); ?>
-    </div>
+<div class="form-edit-body loaderContainerJs">
+    <?php echo $imageFrm->getFormHtml(); ?>
+</div>
 </div>
 
 
@@ -90,35 +90,35 @@ $formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId); ?>
 
     $(minWidthBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
     $(minHeightBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
-  
-   
+
+
     $(document).on('change', '#slideScreenJs', function() {
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
 
-        if ($(this).val() == screenDesktop) {          
+        if ($(this).val() == screenDesktop) {
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['width'] .
-                                        " x " . $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
+                                                                                            " x " . $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
             $(minWidthBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
-           
+
         } else if ($(this).val() == screenIpad) {
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $slideDimensions[ImageDimension::VIEW_TABLET]['width'] .
-                                        " x " . $slideDimensions[ImageDimension::VIEW_TABLET]['height']; ?>'));
+                                                                                            " x " . $slideDimensions[ImageDimension::VIEW_TABLET]['height']; ?>'));
             $(minWidthBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_TABLET]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_TABLET]['height']; ?>');
-          
+
         } else {
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $slideDimensions[ImageDimension::VIEW_MOBILE]['width'] .
-                                        " x " . $slideDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
+                                                                                            " x " . $slideDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
             $(minWidthBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
             $(minHeightBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
-           
+
         }
 
         let slideScreen = $(this).val();
         let recordId = $(this).closest("form").find('input[name="slide_id"]').val();
         let langId = $("#imageLanguageJs").val();
-        loadImages(recordId, 'THUMB', slideScreen, langId);
+        loadImages(recordId, '<?php echo ImageDimension::VIEW_THUMB; ?>', slideScreen, langId);
     });
 </script>

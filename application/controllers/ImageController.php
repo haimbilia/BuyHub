@@ -183,21 +183,6 @@ class ImageController extends FatController
         }
     }
 
-    /*
-    public function promotion_banner($image_name = '', $sizeType)
-    {
-        $default_image = 'product_default_image.jpg';
-        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        switch (strtoupper($sizeType)) {
-            case 'MINI':
-                return AttachedFile::displayImage($image_name, 50, 50, $default_image);
-                break;
-            default:
-                return AttachedFile::displayImage($image_name, 50, 50, $default_image);
-        }
-    }
-    */
-
     public function shopBanner($recordId, $lang_id = 0, $sizeType = '', $afile_id = 0, $screen = 0)
     {
         $default_image = 'banner-default-image.png';

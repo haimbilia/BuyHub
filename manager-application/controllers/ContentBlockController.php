@@ -546,7 +546,7 @@ class ContentBlockController extends ListingBaseController
         $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $langId, $universalImage);
         $this->set('image', $cbgImage);
         $this->set('imageFunction', 'cblockBackgroundImage');
-        $this->set('file_type', 'THUMB');
+        $this->set('file_type', ImageDimension::VIEW_THUMB);
         $this->set('recordId', $recordId);
         $this->checkEditPrivilege(true);
         $this->set('html', $this->_template->render(false, false, NULL, true));

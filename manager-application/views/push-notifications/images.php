@@ -3,7 +3,7 @@
 if (!empty($images)) {
     foreach ($images as $afile_id => $row) {
         $uploadedTime = AttachedFile::setTimeParam($row['afile_updated_at']);
-        $imgUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'pushNotificationImage', array($row['afile_record_id'], 0, "THUMB", 0, $row['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $imgUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'pushNotificationImage', array($row['afile_record_id'], 0, ImageDimension::VIEW_THUMB, 0, $row['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 ?>
         <div class="dropzone-uploaded dropzoneUploadedJs">
             <img src="<?php echo $imgUrl; ?>" title="<?php echo $row['afile_name']; ?>" alt="<?php echo $row['afile_name']; ?>">

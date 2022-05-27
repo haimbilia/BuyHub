@@ -9,7 +9,7 @@
             $toImage = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'shopLogo', array($message['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
         } else {
             if ($message['orrmsg_from_admin_id']) {
-                $toImage = UrlHelper::generateFileUrl('Image', 'siteLogo', array($siteLangId, 'THUMB'), CONF_WEBROOT_FRONTEND);
+                $toImage = UrlHelper::generateFileUrl('Image', 'siteLogo', array($siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND);
             } else {
 
                 $userImgUpdatedOn = User::getAttributesById($message['orrmsg_from_user_id'], 'user_updated_on');
