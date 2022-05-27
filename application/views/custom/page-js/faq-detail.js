@@ -44,7 +44,7 @@ $(function () {
 
 		$(dv).prepend(fcom.getLoader());
 
-		fcom.updateWithAjax(fcom.makeUrl('Custom', 'SearchFaqsDetail', [faqcatId, faqId]), '', function (ans) {
+		fcom.updateWithAjax(fcom.makeUrl('Custom', 'searchFaqsDetail', [faqcatId, faqId]), '', function (ans) {
 			fcom.closeProcessing();
 
 			$(dv).find('.loader-yk').remove();
@@ -56,7 +56,7 @@ $(function () {
 		});
 	};
 	getFaq = function (faqCatId, faqId) {
-		fcom.updateWithAjax(fcom.makeUrl('Custom', 'SearchFaqsDetail', [faqCatId, faqId]), '', function (ans) {
+		fcom.updateWithAjax(fcom.makeUrl('Custom', 'searchFaqsDetail', [faqCatId, faqId]), '', function (ans) {
 			fcom.closeProcessing();
 			fcom.removeLoader();
 			$(dv).find('.loader-yk').remove();

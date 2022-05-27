@@ -804,6 +804,7 @@ Updates/Fixes :
     => 064593 - An error occurs when the admin tries to edit any commission in which product and seller are added.
     => 064612 - Continue button get disappears if new address added on billing address selection, checkout.
     => 064601 - Search is not working under FAQs section.
+    => 064597 - Suggestion to add 'No records found' template under FAQs section
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

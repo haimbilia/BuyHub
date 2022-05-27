@@ -42,7 +42,7 @@ $(function (){
 			$('.is--active').removeClass('is--active');
 			$('#'+catId).addClass('is--active');
 		}
-		fcom.updateWithAjax(fcom.makeUrl('Custom','SearchFaqs', [page, catId]), '', function(ans){
+		fcom.updateWithAjax(fcom.makeUrl('Custom','searchFaqs', [page, catId]), '', function(ans){
 			fcom.closeProcessing();
 			$(dv).find('.loader-yk').remove();
 			$(dv).html(ans.html);
