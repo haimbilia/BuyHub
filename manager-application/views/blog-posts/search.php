@@ -18,7 +18,7 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="post_ids[]" value=' . $row['post_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['post_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'post_published_on':
                 $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row['post_published_on'], true), true);
@@ -30,8 +30,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
             case 'post_published':
-                $statusHtm = BlogPost::getStatusHtml($siteLangId, $row[$key]);
-                $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['post_id'], $row[$key],false,'','searchRecords()');
+                $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'child_count':
                 if ($row[$key] == 0) {

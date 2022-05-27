@@ -1,19 +1,23 @@
 .restore-btn {
     @include bg-brand;
     border: none;
-    box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+    //box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
     position: fixed;
-    z-index: 9;
-    #{$end-direction}: 0;
-    top: calc(50% - 50px);
-    transform: rotate(-90deg) translate3d(0, -40px, 0);
-    transform-origin: right top;
-    padding: calc(0.55rem + 1px) calc(1.25rem + 1px);
+    z-index: 9999;
+    #{$end-direction}: 2rem;
+    top: calc(50% - 200px);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    //transform: rotate(-90deg) translate3d(0, -40px, 0);
+    //transform-origin: right top;
+    padding: 10px;
     display: flex;
+    justify-content: center;
     align-items: center;
     font-size: 0.9rem;
     &:hover {
-        color: currentColor;
+        color: #fff;
     }
 
     &-icon {
@@ -25,7 +29,6 @@
         height: 1.2rem;
         margin: 0.25em;
         width: 1.2rem;
-
         &:before,
         &:after {
             border-style: solid;
@@ -49,78 +52,105 @@
         }
     }
     &-label {
-        margin-#{$start-direction}: 8px;
+        //margin-#{$start-direction}: 8px;
     }
 }
+
 .modal-restore {
     .modal-dialog-vertical {
         max-width: 280px !important;
     }
 }
-
+.offcanvas-restore {
+    max-width: 220px;
+    top: calc(50% - 200px);
+    #{$end-direction}: 2rem;
+    bottom: auto;
+    background-color: transparent;
+    .offcanvas-body {
+        padding: 0;
+    }
+}
 .demo {
+    color: $txt-body;
     height: 100%;
     display: flex;
     flex-direction: column;
     &-restore {
+        display: flex;
+        justify-content: flex-end;
         margin-bottom: 1rem;
-        background-color: transparent;
-        border: 0;
-        .restore {
-            text-align: center;
-            padding: 2.5rem;
-            &-title {
-                font-size: 1rem;
-                font-weight: 500;
-                margin-bottom: 0.25rem;
-            }
-            &-counter {
-                color: $brand-color;
-                font-size: 2rem;
-                font-weight: 700;
-            }
+        margin-#{$end-direction}: 3rem;
+        &-btn {
+            font-weight: 600;
+            background-color: #fff;
+            border-radius: 30px;
+            border: 0;
+            gap: 8px;
+            padding: 0.6rem 1rem;
+            display: flex;
+        }
+
+        &-title {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        &-counter {
+            font-size: 1rem;
+            font-weight: 600;
         }
     }
     &-switch {
         flex: 1;
         // border-top: $border;
         // border-bottom: $border;
-        padding: 1rem 0;
     }
     &-action {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         gap: 1rem;
         margin-top: 1rem;
-        text-align: center;
     }
     .views {
         display: flex;
-        gap: 1rem;
-        justify-content: space-between;
-        &-item {
-            display: flex;
-            text-align: center;
+        flex-direction: column;
 
+        &-item {
+            border-bottom: $border;
+            display: flex;
             &.is-active {
                 color: $brand-color;
             }
+            &:first-child {
+                a {
+                    padding-top: 0;
+                }
+            }
+            &:last-child {
+                border-bottom: none;
+            }
         }
         &-links {
-            padding: 0.5rem 0;
+            padding: 0.8rem 0;
             text-decoration: none;
             color: $txt-gray;
             font-size: 0.85rem;
             display: flex;
-            flex-direction: column;
-            text-align: center;
+            flex-direction: row;
+            align-items: center;
+            font-weight: 600;
             gap: 10px;
-            .svg {
-                margin: 0 auto;
-            }
+
             &:hover {
                 color: $brand-color;
             }
         }
     }
+}
+.demo-bg-wrap {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 1.5rem;
 }

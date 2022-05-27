@@ -8,7 +8,10 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord($("#frmBlogPostJs"));');
 $fld = $frm->getField('post_author_name');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('post_published');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+}
 
 $fld = $frm->getField('categories');
 $fld->addFieldTagAttribute('class', 'tagifyJs');

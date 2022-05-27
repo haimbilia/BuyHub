@@ -12,6 +12,21 @@ class BlogPostsController extends ListingBaseController
     }
 
     /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditBlogPosts($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditBlogPosts();
+        }
+    }
+
+    /**
      * setLangTemplateData - This function is use to automate load langform and save it. 
      *
      * @param  array $constructorArgs
@@ -19,7 +34,7 @@ class BlogPostsController extends ListingBaseController
      */
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
-        $this->objPrivilege->canEditBlogPosts();
+        $this->checkEditPrivilege();
         $this->setModel($constructorArgs);
         //$this->modelObj = (new ReflectionClass('BlogPost'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('title'), $this->modelObj::tblFld('author_name'), $this->modelObj::tblFld('description')];
@@ -40,7 +55,52 @@ class BlogPostsController extends ListingBaseController
                 'onclick' => 'addNew(false, "modal-dialog-vertical-md")',
             ],
         ];
-        $actionItemsData['deleteButton'] = true;
+
+        $actionItemsData['otherButtons'] = [
+            [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
+                    'onclick' => "toggleBulkStatues(1,'')",
+                    'title' => Labels::getLabel('LBL_PUBLISHED', $this->siteLangId)
+                ],
+                'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#active">
+                                </use>
+                            </svg><span>' . Labels::getLabel('LBL_PUBLISHED', $this->siteLangId) . '</span>',
+            ],
+            [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
+                    'onclick' => "toggleBulkStatues(0,'')",
+                    'title' => Labels::getLabel('LBL_UNPUBLISHED', $this->siteLangId)
+                ],
+                'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#in-active">
+                                </use>
+                            </svg><span>' . Labels::getLabel('LBL_UNPUBLISHED', $this->siteLangId) . '</span>',
+            ],    
+                  
+        ];
+        if($this->objPrivilege->canEditBlogPosts($this->admin_id, true)){
+            $actionItemsData['otherButtons'][] = [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
+                    'onclick' => "deleteSelected()",
+                    'title' => Labels::getLabel('BTN_DELETE_RECORDS', $this->siteLangId)
+                ],
+                'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                </use>
+                            </svg><span>' . Labels::getLabel('BTN_DELETE', $this->siteLangId) . '</span>',
+            ];
+        }
+
         $actionItemsData['formAction'] = 'deleteSelected';
         $actionItemsData['performBulkAction'] = true;
 
@@ -128,7 +188,7 @@ class BlogPostsController extends ListingBaseController
 
     public function form()
     {
-        $this->objPrivilege->canEditBlogPosts();
+        $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
         $frm = $this->getForm($recordId);
@@ -176,7 +236,7 @@ class BlogPostsController extends ListingBaseController
 
     public function setup()
     {
-        $this->objPrivilege->canEditBlogPosts();
+        $this->checkEditPrivilege();
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -272,7 +332,7 @@ class BlogPostsController extends ListingBaseController
 
     public function deleteRecord()
     {
-        $this->objPrivilege->canEditBlogPosts();
+        $this->checkEditPrivilege();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if ($recordId < 1) {
@@ -287,8 +347,8 @@ class BlogPostsController extends ListingBaseController
 
     public function deleteSelected()
     {
-        $this->objPrivilege->canEditBlogPosts();
-        $recordIdsArr = FatUtility::int(FatApp::getPostedData('post_ids'));
+        $this->checkEditPrivilege();
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
 
         if (empty($recordIdsArr)) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -362,14 +422,14 @@ class BlogPostsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('images', $post_images);
         $this->set('recordId', $recordId);
-        $this->set('canEdit', $this->objPrivilege->canEditBlogPosts($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditBlogPosts(true));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setImageOrder()
     {
-        $this->objPrivilege->canEditBlogPosts();
+        $this->checkEditPrivilege();
         $postObj = new BlogPost();
         $post = FatApp::getPostedData();
         $recordId = FatUtility::int($post['post_id']);
@@ -387,7 +447,7 @@ class BlogPostsController extends ListingBaseController
 
     public function uploadMedia()
     {
-        $this->objPrivilege->canEditBlogPosts();
+        $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
@@ -440,7 +500,7 @@ class BlogPostsController extends ListingBaseController
 
     public function deleteImage($recordId = 0, $afile_id = 0, $langId = 0)
     {
-        $this->objPrivilege->canEditBlogPosts();
+        $this->checkEditPrivilege();
         $recordId = FatUtility::int($recordId);
         $afile_id = FatUtility::int($afile_id);
         $langId = FatUtility::int($langId);
@@ -498,7 +558,8 @@ class BlogPostsController extends ListingBaseController
         $frm->addCheckBox(Labels::getLabel('FRM_ALLOW_COMMENTS', $this->siteLangId), 'post_comment_opened', 1, array(), false, 0);
 
         $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'post_featured', 1, array(), false, 0);
-        $frm->addSelectBox(Labels::getLabel('FRM_POST_STATUS', $this->siteLangId), 'post_published', $postStatusArr, '', array(), '');
+        $frm->addCheckBox($postStatusArr[applicationConstants::PUBLISHED], 'post_published', 1, array(), false, 0);
+       
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         $languageArr = Language::getDropDownList();
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -601,6 +662,21 @@ class BlogPostsController extends ListingBaseController
         die(json_encode($json));
     }
 
+    protected function changeStatus(int $recordId, int $status)
+    {
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $this->setModel([$recordId]);
+        $this->modelObj->assignValues(['post_published' => $status, 'post_published_on' => (applicationConstants::ACTIVE == $status ? date('Y-m-d H:i:s') : '')]);
+
+        if (!$this->modelObj->save()) {
+            LibHelper::exitWithError($this->modelObj->getError(), true);
+        }
+    }
+
     protected function getFormColumns(): array
     {
         $blogPostsItemsTblHeadingCols = CacheHelper::get('blogPostsItemsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -609,12 +685,11 @@ class BlogPostsController extends ListingBaseController
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),          
             'post_title' => Labels::getLabel('LBL_POST_TITLE', $this->siteLangId),
             'categories' => Labels::getLabel('LBL_POST_CATEGORY', $this->siteLangId),
             'post_published_on' => Labels::getLabel('LBL_PUBLISHED_DATE', $this->siteLangId),
-            'post_published' => Labels::getLabel('LBL_POST_STATUS', $this->siteLangId),
+            'post_published' => Labels::getLabel('LBL_PUBLISHED', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('blogPostsItemsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -625,8 +700,7 @@ class BlogPostsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'select_all',
-            /*  'listSerial', */
+            'select_all',          
             'post_title',
             'categories',
             'post_published_on',

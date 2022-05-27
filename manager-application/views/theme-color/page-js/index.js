@@ -102,6 +102,7 @@ $(document).ready(function () {
     loadGoogleFont = function (item) {
         var name = item.font;
         name = 0 < name.indexOf(" - ") ? name.substring(0, name.indexOf(" - ")) : name;
+        console.log(item.subset);
         $.ajax({
             url: fcom.makeUrl('ThemeColor', 'loadGoogleFont'),
             data: { fIsAjax: 1, name: name, weight: item.weight, subset: item.subset },
@@ -112,6 +113,7 @@ $(document).ready(function () {
                     $('link[data-font="googleFontCssJs"]').remove();
                     $('head').append(resp.html);
                     $('.googleFontsJs').find('text').attr('font-family', name);
+                    console.log($(resp.html).attr('href'));
                     $("input[name='CONF_THEME_FONT_FAMILY_URL']").val($(resp.html).attr('href'));
                 }
             },
@@ -142,7 +144,7 @@ $(document).ready(function () {
     addElement = function (e) {
         var weight = e.detail.tag.id;
         var subsetArr = e.detail.data.subset;
-        var selectedWeights = $("input[name='CONF_THEME_FONT_WEIGHT']").val();
+        var selectedWeights = $("input[name='CONF_THEME_FONT_WEIGHT']").val();               
         if ('' != selectedWeights) {
             var weightsArr = JSON.parse(selectedWeights);
             for (let i = 0; i < weightsArr.length; i++) {
@@ -202,7 +204,7 @@ $(document).ready(function () {
             dropdown: {          
                 enabled: 0 // show suggestions dropdown after 1 typed character
             },
-        }).on('input', getVariants).on('focus', getVariants).on('add', addElement);
+        }).on('input', getVariants).on('focus', getVariants).on('dropdown:select', addElement);
     };
     tagifyElement();
 
