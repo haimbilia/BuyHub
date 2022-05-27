@@ -4,8 +4,8 @@
     //box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
     position: fixed;
     z-index: 9999;
-    #{$end-direction}: 1rem;
-    top: calc(50% - 50px);
+    #{$end-direction}: 2rem;
+    top: calc(50% - 200px);
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -17,7 +17,7 @@
     align-items: center;
     font-size: 0.9rem;
     &:hover {
-        color: currentColor;
+        color: #fff;
     }
 
     &-icon {
@@ -29,7 +29,6 @@
         height: 1.2rem;
         margin: 0.25em;
         width: 1.2rem;
-
         &:before,
         &:after {
             border-style: solid;
@@ -63,9 +62,14 @@
     }
 }
 .offcanvas-restore {
-    top: auto;
+    max-width: 220px;
+    top: calc(50% - 200px);
+    #{$end-direction}: 2rem;
     bottom: auto;
     background-color: transparent;
+    .offcanvas-body {
+        padding: 0;
+    }
 }
 .demo {
     color: $txt-body;
@@ -73,11 +77,18 @@
     display: flex;
     flex-direction: column;
     &-restore {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 1rem;
+        margin-#{$end-direction}: 3rem;
         &-btn {
-            margin-bottom: 1rem;
+            font-weight: 600;
             background-color: #fff;
-            border-radius: 20px;
+            border-radius: 30px;
             border: 0;
+            gap: 8px;
+            padding: 0.6rem 1rem;
+            display: flex;
         }
 
         &-title {
@@ -94,39 +105,44 @@
         flex: 1;
         // border-top: $border;
         // border-bottom: $border;
-        padding: 1rem;
     }
     &-action {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         gap: 1rem;
         margin-top: 1rem;
-        text-align: center;
     }
     .views {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
-        justify-content: space-between;
+
         &-item {
+            border-bottom: $border;
             display: flex;
-            text-align: center;
             &.is-active {
                 color: $brand-color;
             }
+            &:first-child {
+                a {
+                    padding-top: 0;
+                }
+            }
+            &:last-child {
+                border-bottom: none;
+            }
         }
         &-links {
-            padding: 0.5rem 0;
+            padding: 0.8rem 0;
             text-decoration: none;
             color: $txt-gray;
             font-size: 0.85rem;
             display: flex;
             flex-direction: row;
-            //text-align: center;
+            align-items: center;
+            font-weight: 600;
             gap: 10px;
-            .svg {
-                margin: 0 auto;
-            }
+
             &:hover {
                 color: $brand-color;
             }
@@ -136,4 +152,5 @@
 .demo-bg-wrap {
     background-color: #fff;
     border-radius: 10px;
+    padding: 1.5rem;
 }
