@@ -16,7 +16,7 @@ if (!empty($list) && is_array($list)) {
 
 <script>
     $(function() {
-        $(document).off("keyup").on("keyup", '.faq-input', function() {
+        $(document).off("keyup").on("keyup", '#faqQuestionJs', function() {           
             // Get user input from search box
             var filter_text = $(this).val();
 

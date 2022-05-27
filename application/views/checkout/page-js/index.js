@@ -204,17 +204,25 @@ $("document").ready(function () {
                     if ($("#hasAddress").length > 0) {
                         $("#hasAddress").val(1);
                     }
-                    showShippingSummaryDiv(t.addr_id);
-                    /* if ($(frm.addr_id).val() == 0 ) { */
-                    if ($(frm.addr_id).val() == 0 || address_type == 1) {
-                        loadAddressDiv(address_type);
-                        setTimeout(function () {
-                            setDefaultAddress(t.addr_id);
-                        }, 1000);
+
+                    if (address_type == 1) {
+                        if ($(frm.addr_id).val() != 0 && $(frm.shipping_addr_id).val() == $(frm.addr_id).val()) {
+                            setUpAddressSelection(t.addr_id);
+                            $.ykmodal.close();
+                        } else {
+                            loadAddressDiv(address_type);
+                            setTimeout(function () {
+                                setDefaultAddress(t.addr_id);
+                                setUpBillingAddressSelection();
+                                $.ykmodal.close();
+                            }, 1000);
+                        }
                     } else {
+                        showShippingSummaryDiv(t.addr_id);
                         setUpAddressSelection(t.addr_id);
-                        /* loadFinancialSummary(); */
+                        $.ykmodal.close();
                     }
+
                 }
             }
         );
@@ -224,7 +232,7 @@ $("document").ready(function () {
         $("input[name='shipping_address_id']").each(function () {
             $(this).removeAttr("checked");
         });
-        $(".address-" + id + " input[name=shipping_address_id]").attr(
+        $(".s-" + id + " input[name=shipping_address_id]").attr(
             "checked",
             "checked"
         );
@@ -255,6 +263,7 @@ $("document").ready(function () {
                         }
                         loadShippingSummaryDiv();
                         loadFinancialSummary();
+                        $.ykmodal.close();
                     }
                 }
             }
@@ -636,7 +645,7 @@ $("document").ready(function () {
         }
     };
 
-    setUpBillingAddressSelection = function (elm) {
+    setUpBillingAddressSelection = function () {
         var billing_address_id = $('input[name="shipping_address_id"]:checked').val();
         var isShippingSameAsBilling = 0;
         var data = "billing_address_id=" + billing_address_id + "&isShippingSameAsBilling=" + isShippingSameAsBilling;
@@ -646,6 +655,7 @@ $("document").ready(function () {
                 loadFinancialSummary(1);
                 loadPaymentSummary();
                 setCheckoutFlow("PAYMENT");
+                $.ykmodal.close();
             }
         );
     };
@@ -741,7 +751,7 @@ $("document").ready(function () {
         $('.addrListJs').removeClass('is-active');
         $(this).addClass('is-active');
     });
-    
+
     $(document).on('keydown', '#cc_number', function () {
         $(this).addClass(getCardType($(this).val()).toLowerCase());
     });
