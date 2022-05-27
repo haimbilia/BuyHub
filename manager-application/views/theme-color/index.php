@@ -38,7 +38,7 @@ if (!empty($googleFontFamilyUrl)) {
 <main class="main">
     <div class="container">
         <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
-        <div class="grid-layout">
+        <div class="grid-layout theme-layout">
             <div class="grid-layout-left">
                 <div class="card">
                     <div class="card-body">
