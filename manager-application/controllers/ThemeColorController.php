@@ -25,9 +25,9 @@ class ThemeColorController extends ListingBaseController
         $record = Configurations::getConfigurations($fields);
 
         $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
-        if (!empty($this->apiKey) && array_key_exists('CONF_THEME_FONT_FAMILY', $record) && ('' == $record['CONF_THEME_FONT_FAMILY'] || 'Poppins' == $googleFontFamily)) {
-            $record['CONF_THEME_FONT_FAMILY'] = 'Poppins';
-            $record['CONF_THEME_FONT_WEIGHT'] = '[{"id":"regular","value":"Poppins - Regular","subset":["devanagari","latin","latin-ext"]}]';
+        if (!empty($this->apiKey) && array_key_exists('CONF_THEME_FONT_FAMILY', $record) && ('' == $record['CONF_THEME_FONT_FAMILY'] || 'Montserrat' == $googleFontFamily)) {
+            $record['CONF_THEME_FONT_FAMILY'] = 'Montserrat';
+            $record['CONF_THEME_FONT_WEIGHT'] = '[{"id":"300","value":"Montserrat - 300","subset":["devanagari","latin","latin-ext"]},{"id":"regular","value":"Montserrat - Regular","subset":["devanagari","latin","latin-ext"]},{"id":"500","value":"Montserrat - 500","subset":["devanagari","latin","latin-ext"]},{"id":"600","value":"Montserrat - 600","subset":["devanagari","latin","latin-ext"]},{"id":"700","value":"Montserrat - 700","subset":["devanagari","latin","latin-ext"]}]';
         }
 
         $frm = $this->getFontsForm();
@@ -174,7 +174,7 @@ class ThemeColorController extends ListingBaseController
     public function setupFontStyle()
     {
         $this->objPrivilege->canEditThemeColor();
-
+        
         $frm = $this->getFontsForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
@@ -182,7 +182,7 @@ class ThemeColorController extends ListingBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         $fontFamily = FatApp::getPostedData('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
-        $post['CONF_THEME_FONT_FAMILY'] = empty($this->apiKey) ? 'Poppins' : $fontFamily;
+        $post['CONF_THEME_FONT_FAMILY'] = empty($this->apiKey) ? 'Montserrat' : $fontFamily;
         $record = new Configurations();
         if (!$record->update($post)) {
             LibHelper::exitWithError($record->getError(), true);
@@ -211,7 +211,7 @@ class ThemeColorController extends ListingBaseController
             "CONF_SECONDARY_THEME_COLOR_INVERSE" => "#ffffff",
             "CONF_SECONDARY_THEME_COLOR_INVERSE_RGB" => "255,255,255",
             "CONF_SECONDARY_THEME_COLOR_INVERSE_HSL" => "0,0%,100%",
-            "CONF_THEME_FONT_WEIGHT" => '[{"id":"regular","value":"Montserrat - Regular","subset":["devanagari","latin","latin-ext"]}]',
+            "CONF_THEME_FONT_WEIGHT" => '[{"id":"300","value":"Montserrat - 300","subset":["devanagari","latin","latin-ext"]},{"id":"regular","value":"Montserrat - Regular","subset":["devanagari","latin","latin-ext"]},{"id":"500","value":"Montserrat - 500","subset":["devanagari","latin","latin-ext"]},{"id":"600","value":"Montserrat - 600","subset":["devanagari","latin","latin-ext"]},{"id":"700","value":"Montserrat - 700","subset":["devanagari","latin","latin-ext"]}]',
         ];
 
         $record = new Configurations();

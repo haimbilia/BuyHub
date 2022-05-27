@@ -105,7 +105,7 @@ class ProductsController extends MyAppController
         if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $get['vtype'] == 'map') {
             $get['vtype'] = 'grid';
         }
-        
+
         $data = $this->getListingData($get);
         $get = $data['postedData'];
         $frm->fill($get);
@@ -467,6 +467,7 @@ class ProductsController extends MyAppController
         }
 
         $selProdReviewObj = $this->getSelProdReviewObj();
+        $selProdReviewObj->addCondition('spr.spreview_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
         $prodSrch->joinTable('(' . $selProdReviewObj->getQuery() . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
         $prodSrch->addMultipleFields(
             array(
@@ -508,11 +509,11 @@ class ProductsController extends MyAppController
         if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) {
             $selProdOption = explode('_', $product['selprod_code']);
             array_shift($selProdOption);
+
+            $optionComb = '0';
             if (0 < count($selProdOption)) {
                 $optionComb = implode('_', $selProdOption);
                 $optionComb = ['0', $optionComb];
-            } else {
-                $optionComb = '0';
             }
 
             $recordId = $selprod_id;
@@ -522,17 +523,13 @@ class ProductsController extends MyAppController
                 $productType = Product::CATALOG_TYPE_PRIMARY;
             }
 
-            $records = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb, 0, null, true);
-
-            $product['preview_links'] = $records;
-
-            $records = [];
+            $product['preview_links'] = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb, 0, null, true);
 
             $attrs = [
                 'afile_id as prev_afile_id', 'pddr_id', 'pddr_options_code', 'afile_record_id', 'afile_record_subid', 'afile_lang_id', 'afile_name as preview', 'afile_type', 'afile_id'
             ];
 
-            $records = DigitalDownloadSearch::getAttachments(
+            $product['preview_attachments'] = DigitalDownloadSearch::getAttachments(
                 $recordId,
                 $productType,
                 $optionComb,
@@ -541,8 +538,6 @@ class ProductsController extends MyAppController
                 AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW,
                 $attrs
             );
-
-            $product['preview_attachments'] = $records;
         }
 
         /* over all catalog product reviews */
@@ -551,7 +546,7 @@ class ProductsController extends MyAppController
         $selProdReviewObj->addMultipleFields(array('sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'SUM(sprating_rating) as totRatings', 'count(distinct(ratingtype_id)) as totalType'));
         $selProdReviewObj->doNotCalculateRecords();
         $selProdReviewObj->setPageSize(1);
-        $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());        
+        $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         $this->set('reviews', $reviews);
 
         $subscription = false;
@@ -814,7 +809,7 @@ class ProductsController extends MyAppController
         $this->set('selProdRibbons', $selProdRibbons);
 
         $ratingAspects = SelProdRating::getProdRatingAspects($product['product_id'], $this->siteLangId);
-        
+
         $this->set('ratingAspects', $ratingAspects);
         $this->set('productView', true);
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
@@ -1838,7 +1833,7 @@ class ProductsController extends MyAppController
             $srch->setPageNumber($page);
             if ($pageSize) {
                 $srch->setPageSize($pageSize);
-            }          
+            }
             $products = FatApp::getDb()->fetchAll($srch->getResultSet());
         }
 
