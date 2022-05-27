@@ -802,6 +802,7 @@ Updates/Fixes :
     => 064594 - Admin: Suggestion to show the latest added records on the top of the listing page.
     => 064591 - Suggestion: Please add placeholder image for 'Banner Layout2'
     => 064593 - An error occurs when the admin tries to edit any commission in which product and seller are added.
+    => 064612 - Continue button get disappears if new address added on billing address selection, checkout.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

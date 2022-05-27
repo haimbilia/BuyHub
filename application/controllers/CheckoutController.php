@@ -540,7 +540,13 @@ class CheckoutController extends MyAppController
         $this->cartObj->removeProductPickUpAddresses();
         $post = FatApp::getPostedData();
 
-        $shippingServices = isset($post['shipping_services']) ? $post['shipping_services'] : [];
+        $criteria = ['hasBillingAddress' => true];
+        if (!$this->isEligibleForNextStep($criteria)) {
+            LibHelper::exitWithError($this->errMessage, true);
+        }
+
+
+        $shippingServices = $post['shipping_services'] ?? [];
         $this->cartObj->setselectedShipping($shippingServices);
 
         $cartProducts = $this->cartObj->getProducts($this->siteLangId);
@@ -844,22 +850,11 @@ class CheckoutController extends MyAppController
 
         if (!$this->isEligibleForNextStep($criteria)) {
             $this->errMessage = !empty($this->errMessage) ? $this->errMessage : Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($this->errMessage);
-            }
-            if (Message::getErrorCount()) {
-                $this->errMessage = Message::getHtml();
-            }
-            Message::addErrorMessage($this->errMessage);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->errMessage);
         }
 
         if ($this->cartObj->getError() != '') {
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($this->cartObj->getError());
-            }
-            Message::addErrorMessage($this->cartObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->cartObj->getError());
         }
         $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
 
@@ -1402,11 +1397,7 @@ class CheckoutController extends MyAppController
             $order_id = $orderObj->getMainTableRecordId();
             $_SESSION['order_id'] = $order_id;
         } else {
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($orderObj->getError());
-            }
-            Message::addErrorMessage($orderObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($orderObj->getError());
         }
 
         $userWalletBalance = User::getUserBalance($userId, true);
@@ -1895,6 +1886,9 @@ class CheckoutController extends MyAppController
 
         $address = new Address($address_id, $this->siteLangId);
         $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
+
+        $shippingAddressId = $this->cartObj->getCartShippingAddress();
+        $addresses['shipping_addr_id'] = $shippingAddressId;
 
         $stateId = 0;
         if ($address_id) {
