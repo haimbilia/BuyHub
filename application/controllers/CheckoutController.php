@@ -540,7 +540,12 @@ class CheckoutController extends MyAppController
         $this->cartObj->removeProductPickUpAddresses();
         $post = FatApp::getPostedData();
 
-        $criteria = ['hasBillingAddress' => true];
+        if ($this->cartObj->hasPhysicalProduct()) {
+            $criteria = ['hasShippingAddress' => true];
+        } else {
+            $criteria = ['hasBillingAddress' => true];
+        }
+        
         if (!$this->isEligibleForNextStep($criteria)) {
             LibHelper::exitWithError($this->errMessage, true);
         }
