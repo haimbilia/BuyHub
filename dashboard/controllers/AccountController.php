@@ -3807,9 +3807,6 @@ class AccountController extends LoggedUserController
         if ($action == 'index') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
             $this->nodes[] = array('title' => $title);
-        } else if ($action == 'profileInfo') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId)]);
-            $this->nodes[] = array('title' => $title);
         } else if ($action == 'bankInfoForm') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_BANK_ACCOUNT_INFORMATION', $this->siteLangId)]);
             $this->nodes[] = array('title' => $title);
@@ -3819,6 +3816,9 @@ class AccountController extends LoggedUserController
         } else if ($action == 'messages' || $action == 'credits') {
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
             $this->nodes[] = array('title' => $title);
+        } else if ($action == 'changeEmailPassword') {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('LBL_UPDATE_CREDENTIALS')));
         } else {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);

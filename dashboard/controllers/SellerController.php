@@ -6014,6 +6014,10 @@ class SellerController extends SellerBaseController
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_ORDER_RETURN_REQUESTS'), 'href' => UrlHelper::generateUrl("Seller", "orderReturnRequests"));
             $this->nodes[] = array('title' => ucwords($action));
+        } else if ($action == 'userPermissions') {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_USERS'), 'href' => UrlHelper::generateUrl("Seller", "users"));
+            $this->nodes[] = array('title' => ucwords($action));
         } else {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);

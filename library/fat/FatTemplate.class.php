@@ -276,6 +276,10 @@ class FatTemplate
 
     public function addJs($file)
     {
+        if (true === MOBILE_APP_API_CALL) {
+            return;
+        }
+
         if (is_array($file)) {
             foreach ($file as $fl) {
                 $this->addJs($fl);
@@ -289,6 +293,10 @@ class FatTemplate
 
     public function addCss($file)
     {
+        if (true === MOBILE_APP_API_CALL) {
+            return;
+        }
+
         if (is_array($file)) {
             foreach ($file as $fl) {
                 $this->addCss($fl);
