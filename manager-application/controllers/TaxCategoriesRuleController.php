@@ -365,7 +365,7 @@ class TaxCategoriesRuleController extends ListingBaseController
 
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_FROM_COUNTRY', $this->siteLangId), 'taxruleloc_from_country_id', $countriesOptions, '', array(), Labels::getLabel('FRM_SELECT_COUNTRY', $this->siteLangId));
         $fld->requirements()->setRequired();
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_FROM_STATE', $this->siteLangId), 'taxruleloc_from_state_id[]', array(), '', array(), '');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_FROM_STATE', $this->siteLangId), 'taxruleloc_from_state_id[]', [-1 => Labels::getLabel('FRM_ALL', $this->siteLangId)], '', array(), '');
         $fld->requirements()->setRequired();
         $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_HOLD_DOWN_THE_CTRL_(WINDOWS)_OR_COMMAND_(MAC)_BUTTON_TO_SELECT_MULTIPLE_OPTIONS.', $this->siteLangId) . '</span>';
 
@@ -374,7 +374,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         $locattionTypeOtions = TaxRule::getTypeOptions($this->siteLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_TO_STATE_TYPE', $this->siteLangId), 'taxruleloc_type', $locattionTypeOtions, '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirements()->setRequired();
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_TO_STATES', $this->siteLangId), 'taxruleloc_to_state_id[]', array(), '', array(), '');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_TO_STATES', $this->siteLangId), 'taxruleloc_to_state_id[]', [-1 => Labels::getLabel('FRM_ALL', $this->siteLangId)], '', array(), '');
         $fld->requirements()->setRequired();
         $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_HOLD_DOWN_THE_CTRL_(WINDOWS)_OR_COMMAND_(MAC)_BUTTON_TO_SELECT_MULTIPLE_OPTIONS.', $this->siteLangId) . '</span>';
         /* ] */
