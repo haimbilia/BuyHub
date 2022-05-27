@@ -1171,8 +1171,8 @@ class Product extends MyAppModel
             return true;
         }
         $srch = new SearchBase(static::DB_PRODUCT_SHIPPED_BY_SELLER, 'psbs');
-        $srch->addCondition('psbs_product_id', '=', $productId);
-        $srch->addCondition('psbs_user_id', '=', $selProdSellerId);
+        $srch->addCondition('psbs_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
+        $srch->addCondition('psbs_user_id', '=', 'mysql_func_' . $selProdSellerId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $row = FatApp::getDb()->fetch($srch->getResultSet());
@@ -2196,6 +2196,7 @@ END,   special_price_found ) as special_price_found'
         $moreSellerSrch->addHaving('in_stock', '>', 0);
         $moreSellerSrch->addOrder('theprice');
         $moreSellerSrch->addGroupBy('selprod_id');
+        $moreSellerSrch->doNotCalculateRecords();
 
         return FatApp::getDb()->fetchAll($moreSellerSrch->getResultSet());
     }
