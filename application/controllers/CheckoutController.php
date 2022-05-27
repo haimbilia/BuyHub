@@ -66,7 +66,7 @@ class CheckoutController extends MyAppController
         $this->set('exculdeMainHeaderDiv', true);
     }
 
-    private function isEligibleForNextStep(&$criteria = array())
+    private function isEligibleForNextStep(&$criteria = array(), bool $addErrorMessage = true)
     {
         if (empty($criteria)) {
             return true;
@@ -77,7 +77,9 @@ class CheckoutController extends MyAppController
                     if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
                         $key = false;
                         $this->errMessage = Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED.', $this->siteLangId);
-                        Message::addErrorMessage($this->errMessage);
+                        if (true === $addErrorMessage) {
+                            Message::addErrorMessage($this->errMessage);
+                        }
                         return false;
                     }
                     break;
@@ -85,7 +87,9 @@ class CheckoutController extends MyAppController
                     if (!$this->cartObj->hasProducts()) {
                         $key = false;
                         $this->errMessage = Labels::getLabel('ERR_YOUR_CART_SEEMS_TO_BE_EMPTY,_PLEASE_TRY_AFTER_RELOADING_THE_PAGE.', $this->siteLangId);
-                        Message::addErrorMessage($this->errMessage);
+                        if (true === $addErrorMessage) {
+                            Message::addErrorMessage($this->errMessage);
+                        }
                         return false;
                     }
                     break;
@@ -104,7 +108,9 @@ class CheckoutController extends MyAppController
                             $stock = false;
                             $key = false;
                             $this->errMessage = Labels::getLabel('ERR_PRODUCTS_ARE_OUT_OF_STOCK.', $this->siteLangId);
-                            Message::addErrorMessage($this->errMessage);
+                            if (true === $addErrorMessage) {
+                                Message::addErrorMessage($this->errMessage);
+                            }
                             return false;
                             break;
                         }
@@ -119,7 +125,9 @@ class CheckoutController extends MyAppController
                                     $productName = (isset($pgproduct['selprod_title']) && $pgproduct['selprod_title'] != '') ? $pgproduct['selprod_title'] : $pgproduct['name'];
 
                                     $this->errMessage = str_replace('{product-name}', $productName, Labels::getLabel('ERR_{product-name}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId));
-                                    Message::addErrorMessage($this->errMessage);
+                                    if (true === $addErrorMessage) {
+                                        Message::addErrorMessage($this->errMessage);
+                                    }
                                     return false;
                                 }
                             }
@@ -137,7 +145,9 @@ class CheckoutController extends MyAppController
                                     $msg = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_MIN_PURCHASE_QUANTITY_IS_HIGHER_THAN_AVAILABLE_STOCK_LIMIT._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
                                 }
                                 $this->errMessage = CommonHelper::replaceStringData($msg, ['{PRODUCT-NAME}' => $productName]);
-                                Message::addErrorMessage($this->errMessage);
+                                if (true === $addErrorMessage) {
+                                    Message::addErrorMessage($this->errMessage);
+                                }
                                 return false;
                             }
                         }
@@ -147,7 +157,9 @@ class CheckoutController extends MyAppController
                     if (!$this->cartObj->getCartBillingAddress()) {
                         $key = false;
                         $this->errMessage = Labels::getLabel('ERR_BILLING_ADDRESS_IS_NOT_PROVIDED.', $this->siteLangId);
-                        Message::addErrorMessage($this->errMessage);
+                        if (true === $addErrorMessage) {
+                            Message::addErrorMessage($this->errMessage);
+                        }
                         return false;
                     }
                     break;
@@ -155,7 +167,9 @@ class CheckoutController extends MyAppController
                     if (!$this->cartObj->getCartShippingAddress()) {
                         $key = false;
                         $this->errMessage = Labels::getLabel('ERR_SHIPPING_ADDRESS_IS_NOT_PROVIDED.', $this->siteLangId);
-                        Message::addErrorMessage($this->errMessage);
+                        if (true === $addErrorMessage) {
+                            Message::addErrorMessage($this->errMessage);
+                        }
                         return false;
                     }
                     break;
@@ -163,7 +177,9 @@ class CheckoutController extends MyAppController
                     if (!$this->cartObj->isProductShippingMethodSet()) {
                         $key = false;
                         $this->errMessage = Labels::getLabel('ERR_SHIPPING_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART.', $this->siteLangId);
-                        Message::addErrorMessage($this->errMessage);
+                        if (true === $addErrorMessage) {
+                            Message::addErrorMessage($this->errMessage);
+                        }
                         return false;
                     }
                     break;
@@ -171,7 +187,9 @@ class CheckoutController extends MyAppController
                     if (!$this->cartObj->isProductPickUpAddrSet()) {
                         $key = false;
                         $this->errMessage = Labels::getLabel('ERR_PICKUP_METHOD_IS_NOT_SELECTED_ON_PRODUCTS_IN_CART.', $this->siteLangId);
-                        Message::addErrorMessage($this->errMessage);
+                        if (true === $addErrorMessage) {
+                            Message::addErrorMessage($this->errMessage);
+                        }
                         return false;
                     }
                     break;
@@ -545,8 +563,8 @@ class CheckoutController extends MyAppController
         } else {
             $criteria = ['hasBillingAddress' => true];
         }
-        
-        if (!$this->isEligibleForNextStep($criteria)) {
+
+        if (!$this->isEligibleForNextStep($criteria, false)) {
             LibHelper::exitWithError($this->errMessage, true);
         }
 
