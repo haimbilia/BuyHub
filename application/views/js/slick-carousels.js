@@ -63,6 +63,7 @@ $(function () {
             });
 
             _this.slick({
+                rtl: ('rtl' == langLbl.layoutDirection),
                 slidesToShow: parseInt(_slidesToShow.length > 0 ? _slidesToShow[0] : "3"),
                 slidesToScroll: 1,
                 centerMode: _this.data("mode"),

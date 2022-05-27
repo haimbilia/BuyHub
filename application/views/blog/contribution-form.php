@@ -1,5 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('class', 'form');
 $frm->setFormTagAttribute('action', UrlHelper::generateUrl('Blog', 'setupContribution'));
 $frm->developerTags['colClassPrefix'] = 'col-lg-';
@@ -8,8 +7,10 @@ $fileFld = $frm->getField('file');
 $fileFld->htmlBeforeField = '<div class="filefield"><span class="filename"></span>';
 $preferredDimensionsStr = '</div><span class="form-text text-muted">' . Labels::getLabel('MSG_Allowed_Extensions', $siteLangId) . '</span>';
 $fileFld->htmlAfterField = $preferredDimensionsStr;
+$fileFld->developerTags['col'] = 12;
 
 $btnSubmitFld = $frm->getField('btn_submit');
+$btnSubmitFld->developerTags['noCaptionTag'] = true;
 $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
 $isUserLogged = UserAuthentication::isUserLogged();
 if ($isUserLogged) {

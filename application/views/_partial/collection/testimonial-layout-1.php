@@ -50,6 +50,7 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
         <script>
             $(function() {
                 $(".js-slider-testimonials").slick({
+                    rtl: ('rtl' == langLbl.layoutDirection),
                     slidesToShow: 1,
                     dots: false,
                     arrows: true,

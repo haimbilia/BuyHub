@@ -1856,3 +1856,9 @@ DELETE FROM `tbl_extra_pages` WHERE `tbl_extra_pages`.`epage_id` = 47;
 DELETE FROM `tbl_extra_pages_lang` WHERE `tbl_extra_pages_lang`.`epagelang_epage_id` = 47;
 DELETE FROM `tbl_extra_pages_lang` WHERE `tbl_extra_pages_lang`.`epagelang_epage_id` = 47;
 UPDATE `tbl_collections` SET `collection_primary_records` = '3' WHERE `tbl_collections`.`collection_layout_type` = 3;
+
+delete from `tbl_commission_settings` where `commsetting_deleted` = 1;
+ALTER TABLE `tbl_commission_settings` DROP `commsetting_deleted`;
+
+delete from `tbl_affiliate_commission_setting_history` where `acsh_afcommsetting_deleted` = 1;
+ALTER TABLE `tbl_affiliate_commission_setting_history` DROP `acsh_afcommsetting_deleted`;

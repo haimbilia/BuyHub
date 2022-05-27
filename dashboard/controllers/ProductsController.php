@@ -15,7 +15,7 @@ class ProductsController extends SellerBaseController
 
     public function index()
     {
-        FatApp::redirectUser(UrlHelper::generateUrl('Seller','catalog'));
+        FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
     }
 
     /**
@@ -216,7 +216,7 @@ class ProductsController extends SellerBaseController
             $this->_template->render(false, false, 'json-success.php', true, false);
             return;
         }
-        $this->_template->addJs(array('seller-requests/page-js/index.js','products/page-js/form.js', 'js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
+        $this->_template->addJs(array('seller-requests/page-js/index.js', 'products/page-js/form.js', 'js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
         $this->_template->addCss(array('css/select2.min.css'));
         $this->set("includeEditor", true);
         $this->_template->render(true, true, 'products/formWithNavigation.php');
@@ -688,13 +688,13 @@ class ProductsController extends SellerBaseController
         $frm = $this->getCatalogForm($langId, $productType, $recordId);
         $shippingObj = new Shipping($this->userParentId);
         $profileFld = $frm->getField('shipping_profile');
-        if(null != $profileFld){
+        if (null != $profileFld) {
             if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) || ($shippingObj->getShippingApiObj($this->userParentId) && !Shop::getAttributesByUserId($this->userParentId, 'shop_use_manual_shipping_rates'))) {
                 $frm->removeField($profileFld);
-            } else {            
-                $profileFld->options = ShippingProfile::getProfileArr($langId, $this->userParentId, true, true);            
+            } else {
+                $profileFld->options = ShippingProfile::getProfileArr($langId, $this->userParentId, true, true);
             }
-        }        
+        }
         $fld = $frm->getField('product_approved');
         if (null != $fld) {
             $frm->removeField($fld);
@@ -830,5 +830,28 @@ class ProductsController extends SellerBaseController
         }
 
         $this->validateForm($post);
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        if (FatUtility::isAjaxCall()) {
+            return;
+        }
+
+        $className = get_class($this);
+        $arr = explode('-', FatUtility::camel2dashed($className));
+        array_pop($arr);
+        $className = ucwords(implode(' ', $arr));
+
+        if ($action == 'form') {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_CATALOG'), 'href' => UrlHelper::generateUrl("Seller", "catalog"));
+            $this->nodes[] = array('title' => ucwords($action));
+        } else {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
+            $this->nodes[] = array('title' => ucwords($title));
+        }
+        return $this->nodes;
     }
 }

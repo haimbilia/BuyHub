@@ -799,6 +799,9 @@ Updates/Fixes :
     => 064596 - Admin: Unwanted 'Slider' text is showing for the searched users
     => 064583 - The admin is able to add a tax rate of more than 100%. 
     => 064585 - success message URL is appearing even without making a purchase
+    => 064594 - Admin: Suggestion to show the latest added records on the top of the listing page.
+    => 064591 - Suggestion: Please add placeholder image for 'Banner Layout2'
+    => 064593 - An error occurs when the admin tries to edit any commission in which product and seller are added.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
