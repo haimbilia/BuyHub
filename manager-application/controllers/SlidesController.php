@@ -484,7 +484,7 @@ class SlidesController extends ListingBaseController
         $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0, $langId, false, $slideScreen);
         $this->set('image', $image);
         $this->set('imageFunction', 'Slide');
-        $this->set('file_type', 'THUMB');
+        $this->set('file_type', ImageDimension::VIEW_THUMB);
         $this->set('recordId', $recordId);
         $this->set('langId', $langId);
         $this->checkEditPrivilege(true);

@@ -61,7 +61,7 @@
             'webpImageUrl' => [ImageDimension::VIEW_MOBILE => $mobileWebpUrl, ImageDimension::VIEW_TABLET => $tabletWebpUrl, ImageDimension::VIEW_DESKTOP => $desktopWebpUrl],
             'jpgImageUrl' => [ImageDimension::VIEW_MOBILE => $mobileUrl, ImageDimension::VIEW_TABLET => $tabletUrl, ImageDimension::VIEW_DESKTOP => $desktopUrl],
             'imageUrl' => $desktopUrl,
-            'ratio' => $imageDimension['DESKTOP']['aspectRatio'],
+            'ratio' => $imageDimension[ImageDimension::VIEW_DESKTOP]['aspectRatio'],
             'alt' => '',
         ];
         $out .= $this->includeTemplate('_partial/picture-tag.php', $pictureAttr, true, true);

@@ -3646,26 +3646,7 @@ class SellerController extends SellerBaseController
 
         $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId, $fulfillmentType);
         $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $this->siteLangId), 'shop_fulfillment_type', $fulFillmentArr, applicationConstants::NO);
-
-        /* if($shop_id > 0){
-          $fld = $frm->addButton(Labels::getLabel('FRM_LOGO',$this->siteLangId),'shop_logo',Labels::getLabel('FRM_UPLOAD_FILE',$this->siteLangId),
-          array('class'=>'shopFile-Js','id'=>'shop_logo','data-file_type'=>AttachedFile::FILETYPE_SHOP_LOGO));
-          $fld->htmlAfterField='<span id="input-field'.AttachedFile::FILETYPE_SHOP_LOGO.'"></span>
-          <div><img src="'.UrlHelper::generateFileUrl('Image','shopLogo',array($shop_id, $this->siteLangId, 'THUMB')).'"></div>';
-
-          $fld1 = $frm->addButton(Labels::getLabel('FRM_BANNER',$this->siteLangId),'shop_banner',Labels::getLabel('FRM_UPLOAD_FILE',$this->siteLangId),
-          array('class'=>'shopFile-Js','id'=>'shop_banner','data-file_type'=>AttachedFile::FILETYPE_SHOP_BANNER));
-          $fld1->htmlAfterField='<span id="input-field'.AttachedFile::FILETYPE_SHOP_BANNER.'"></span>
-          <div><img src="'.UrlHelper::generateFileUrl('Image','shopBanner',array($shop_id, $this->siteLangId, 'THUMB')).'"></div>';
-          } */
-        // $frm->addHtml('', '', '<div id="map" style="width:1500px; height:500px"></div>');
-
-        /* $alphanumericFld = $frm->addRequiredField(Labels::getLabel('FRM_INVOICE_NUMBER_STARTS_FROM', $this->siteLangId), 'shop_invoice_prefix', '', array('placeholder' => Labels::getLabel('FRM_ALPHANUMERIC_VALUE', $this->siteLangId)));
-          $alphanumericFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
-          $alphanumericFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_ONLY_ALPHANUMERIC_VALUE_IS_ALLOWED.', $this->siteLangId));
-          $numericFld = $frm->addIntegerField(Labels::getLabel('FRM_INVOICE_NUMBER_STARTS_FROM', $this->siteLangId), 'shop_invoice_suffix', '', array('placeholder' => Labels::getLabel('FRM_INTEGER_VALUE', $this->siteLangId)));
-          $numericFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_ONLY_NUMERIC_VALUE_IS_ALLOWED.', $this->siteLangId));
-          $alphanumericFld->attachField($numericFld); */
+        
         $pluginObj = new Plugin();
         $sellerPluginObj = new SellerPlugin(0, $shopUserId);
         if ($pluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_active') || $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'pu_active')) {
@@ -6013,6 +5994,10 @@ class SellerController extends SellerBaseController
         } else if ($action == 'viewOrderReturnRequest') {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_ORDER_RETURN_REQUESTS'), 'href' => UrlHelper::generateUrl("Seller", "orderReturnRequests"));
+            $this->nodes[] = array('title' => ucwords($action));
+        } else if ($action == 'userPermissions') {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_USERS'), 'href' => UrlHelper::generateUrl("Seller", "users"));
             $this->nodes[] = array('title' => ucwords($action));
         } else {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));

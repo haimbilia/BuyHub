@@ -664,7 +664,7 @@ class SellerProduct extends MyAppModel
                               
 				WHEN (commsetting_product_id = '0' AND commsetting_user_id = '0' AND commsetting_prodcat_id = '0') THEN 1
 			END
-       		as matches FROM " . Commission::DB_TBL . " WHERE commsetting_deleted = 0 order by matches desc, commsetting_fees desc  limit 0,1";
+       		as matches FROM " . Commission::DB_TBL . " order by matches desc, commsetting_fees desc  limit 0,1";
         $rs = $db->query($sql);
         if ($row = $db->fetch($rs)) {
             return $row['commsetting_fees'];

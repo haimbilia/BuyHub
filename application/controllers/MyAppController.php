@@ -468,6 +468,8 @@ class MyAppController extends FatController
     {
         $siteLangId = FatUtility::int($siteLangId);
         $frm = new Form('frmAddress');
+        $frm->addHiddenField('', 'addr_id');
+        $frm->addHiddenField('', 'shipping_addr_id');
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Address_Label', $siteLangId), 'addr_title');
         $fld->requirement->setRequired(true);
         $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.g:_My_Office_Address', $siteLangId));
@@ -483,16 +485,13 @@ class MyAppController extends FatController
         $frm->addSelectBox(Labels::getLabel('LBL_State', $siteLangId), 'addr_state_id', array(), '', array(), Labels::getLabel('LBL_Select', $siteLangId))->requirement->setRequired(true);
         $frm->addRequiredField(Labels::getLabel('LBL_City', $siteLangId), 'addr_city');
 
-        $zipFld = $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $this->siteLangId), 'addr_zip');
-        /* $zipFld->requirements()->setRegularExpressionToValidate(ValidateElement::ZIP_REGEX);
-        $zipFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Only_alphanumeric_value_is_allowed.', $this->siteLangId)); */
+        $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $this->siteLangId), 'addr_zip');
 
         $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $siteLangId), 'addr_phone', '', array('class' => 'phone-js ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
-        $frm->addHiddenField('', 'addr_id');
         if ($btnOrderFlip) {
             $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $siteLangId));
             $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $siteLangId));
