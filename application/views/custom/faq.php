@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div id="body" class="body">
-    <section class="section bg-faqs" style="background-image:url(../images/bg/bg-faqs-4.jpg);">
+    <section class="section bg-faqs" style="background-image:url(<?php echo CONF_WEBROOT_URL; ?>images/bg/bg-faqs-4.jpg);">
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-6">
@@ -10,9 +10,8 @@
                         </div>
                     </div>
                     <form name="frmSearchFaqs" class="form form-faqs" action="javascript:void(0);">
-                        <input placeholder="Search" class="form-faqs-input no-focus" data-field-caption="Enter your question" type="search" name="question" value="">
+                        <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId);?>" class="form-faqs-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
                     </form>
-
                 </div>
             </div>
         </div>
