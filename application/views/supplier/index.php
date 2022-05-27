@@ -61,7 +61,8 @@ if (!empty($slogan)) {
         </section>
     <?php } ?>
 
-    <?php if ($faqCount > 0) { ?><div class="divider"></div>
+    <?php if ($faqCount > 0) { ?>
+        <div class="divider"></div>
         <section class="section">
             <div class="container">
                 <div class="row align-items-center justify-content-center">
@@ -73,7 +74,7 @@ if (!empty($slogan)) {
                         </div>
                         <div class="faqsearch">
                             <form name="frmSearchFaqs" class="form" action="javascript:void(0);">
-                                <input placeholder="Search" class="faq-input no-focus" data-field-caption="Enter your question" type="search" name="question" value="">
+                                <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId);?>" class="faq-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
                             </form>
                         </div>
                     </div>

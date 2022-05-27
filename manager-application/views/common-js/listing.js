@@ -185,7 +185,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     };
 
     searchRecords = function (frm) {
-        if (false === checkControllerName()) {
+        if (false === checkControllerName() || 'ThemeColor' == controllerName) {
             return false;
         }
 
