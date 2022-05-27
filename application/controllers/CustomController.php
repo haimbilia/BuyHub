@@ -46,11 +46,11 @@ class CustomController extends MyAppController
             Message::addErrorMessage($message);
             FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'ContactUs'));
         }
-        
-        if(!MOBILE_APP_API_CALL){
+
+        if (!MOBILE_APP_API_CALL) {
             $frm->expireSecurityToken(FatApp::getPostedData());
-        }      
-        
+        }
+
 
         if (false === MOBILE_APP_API_CALL && !CommonHelper::verifyCaptcha()) {
             $message = Labels::getLabel('ERR_THAT_CAPTCHA_WAS_INCORRECT', $this->siteLangId);
@@ -135,7 +135,7 @@ class CustomController extends MyAppController
         $this->_template->render();
     }
 
-    public function SearchFaqsDetail($catId = 0, $faqId = 0)
+    public function searchFaqsDetail($catId = 0, $faqId = 0)
     {
         $searchFrm = $this->getSearchFaqForm();
         $faqMainCat = FatApp::getConfig("CONF_FAQ_PAGE_MAIN_CATEGORY");
@@ -224,7 +224,11 @@ class CustomController extends MyAppController
 
         $question = FatApp::getPostedData('question', FatUtility::VAR_STRING, '');
         if (!empty($question)) {
-            $srchCondition = $srch->addCondition('faq_title', 'like', "%$question%");
+            $srchCondition = $srch->addCondition('faq_identifier', 'like', "%$question%");
+            $srchCondition->attachCondition('faq_title', 'LIKE', '%' . $question . '%', 'OR');
+            $srchCondition->attachCondition('faq_content', 'LIKE', '%' . $question . '%', 'OR');
+            $srchCondition->attachCondition('faqcat_name', 'LIKE', '%' . $question . '%', 'OR');
+            $srchCondition->attachCondition('faqcat_identifier', 'LIKE', '%' . $question . '%', 'OR');
             $srch->doNotLimitRecords();
         }
 
@@ -257,6 +261,37 @@ class CustomController extends MyAppController
         FatUtility::dieJsonSuccess($json);
     }
 
+    public function searchFaqsListing()
+    {
+        $question = FatApp::getPostedData('question', FatUtility::VAR_STRING, '');
+        if (empty($question)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_SEARCH_STRING'));
+        }
+
+        $srch = FaqCategory::getSearchObject($this->siteLangId);
+        $srch->joinTable('tbl_faqs', 'LEFT OUTER JOIN', 'faq_faqcat_id = faqcat_id and faq_active = ' . applicationConstants::ACTIVE . '  and faq_deleted = ' . applicationConstants::NO);
+        $srch->joinTable('tbl_faqs_lang', 'LEFT OUTER JOIN', 'faqlang_faq_id = faq_id');
+        $srch->addCondition('faqlang_lang_id', '=', $this->siteLangId);
+        $srch->addCondition('faqcat_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('faqcat_type', '=', FaqCategory::FAQ_PAGE);
+
+        $cnd = $srch->addCondition('faq_identifier', 'like', "%$question%");
+        $cnd->attachCondition('faq_title', 'LIKE', '%' . $question . '%', 'OR');
+        $cnd->attachCondition('faq_content', 'LIKE', '%' . $question . '%', 'OR');
+        $cnd->attachCondition('faqcat_name', 'LIKE', '%' . $question . '%', 'OR');
+        $cnd->attachCondition('faqcat_identifier', 'LIKE', '%' . $question . '%', 'OR');
+
+        $srch->addOrder('faqcat_display_order', 'asc');
+        $srch->addOrder('faq_faqcat_id', 'asc');
+        $srch->addOrder('faq_display_order', 'asc');
+        $srch->doNotLimitRecords();
+        $result = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $this->set('result', $result);
+        $this->set('page', 'faq');
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
     public function faqCategoriesPanel()
     {
         $srch = FaqCategory::getSearchObject($this->siteLangId);
@@ -265,17 +300,16 @@ class CustomController extends MyAppController
         $srch->addCondition('faqlang_lang_id', '=', $this->siteLangId);
         $srch->addCondition('faqcat_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('faqcat_type', '=', FaqCategory::FAQ_PAGE);
-        $srch->setPageSize(1);
         $question = FatApp::getPostedData('question', FatUtility::VAR_STRING, '');
         if (!empty($question)) {
-            $srchCondition = $srch->addCondition('faq_title', 'like', "%$question%");
+            $srchCondition = $srch->addCondition('faq_identifier', 'like', "%$question%");
+            $srchCondition->attachCondition('faq_title', 'LIKE', '%' . $question . '%', 'OR');
         }
         $srch->addOrder('faqcat_display_order', 'asc');
         $srch->addOrder('faq_faqcat_id', 'asc');
         $srch->addOrder('faq_display_order', 'asc');
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $json['recordCount'] = $srch->recordCount();
 
@@ -336,7 +370,7 @@ class CustomController extends MyAppController
         $json['categoriesPanelHtml'] = $this->_template->render(false, false, 'custom/faq-questions-panel.php', true, false);
         FatUtility::dieJsonSuccess($json);
     }
-    
+
     public function getBreadcrumbNodes($action)
     {
         $nodes = array();
@@ -454,9 +488,9 @@ class CustomController extends MyAppController
         if (empty($orderNo)) {
             FatUtility::exitWithErrorCode(404);
         }
-        
+
         $orderInfo = Orders::getOrderByOrderNo($orderNo, $this->siteLangId);
-        if(false === $orderInfo){
+        if (false === $orderInfo) {
             FatUtility::exitWithErrorCode(404);
         }
 
@@ -503,7 +537,7 @@ class CustomController extends MyAppController
                 $cartObj->updateUserCart();
             }
         }
-      
+
         if ($orderInfo['order_type'] == Orders::ORDER_PRODUCT) {
             if (!empty($user)) {
                 $searchReplaceArray = array(
@@ -515,7 +549,7 @@ class CustomController extends MyAppController
                 $textMessage = Labels::getLabel('MSG_CUSTOMER_SUCCESS_ORDER', $this->siteLangId);
             }
 
-            if(true === $showOrderDetails){ 
+            if (true === $showOrderDetails) {
                 $srch = new OrderProductSearch($this->siteLangId);
                 $srch->joinShippingCharges();
                 $srch->joinAddress();
@@ -527,8 +561,8 @@ class CustomController extends MyAppController
                     array('ops.*', 'op_product_type', 'op_invoice_number', 'addr.*', 'ts.*', 'tc.*', 'COALESCE(state_name, state_identifier) as state_name', 'COALESCE(country_name, country_code) as country_name')
                 );
                 $srch->addGroupBy('opshipping_pickup_addr_id');
-                $this->set('orderFulFillmentTypeArr', FatApp::getDb()->fetchAll($srch->getResultSet()));  
-            }  
+                $this->set('orderFulFillmentTypeArr', FatApp::getDb()->fetchAll($srch->getResultSet()));
+            }
         } elseif ($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             $searchReplaceArray = array(
                 '{account}' => '<a href="' . UrlHelper::generateUrl('seller', '', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
@@ -556,12 +590,12 @@ class CustomController extends MyAppController
         }
 
         $orderObj = new Orders();
-        if(true === $showOrderDetails){           
+        if (true === $showOrderDetails) {
             $address = $orderObj->getOrderAddresses($orderInfo['order_id']);
             if (!empty($address)) {
                 $orderInfo['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE];
                 $orderInfo['shippingAddress'] = (!empty($address[Orders::SHIPPING_ADDRESS_TYPE]) ? $address[Orders::SHIPPING_ADDRESS_TYPE] : []);
-            }            
+            }
         }
         $orderInfo['orderProducts'] = $orderObj->getChildOrders(['order_id' => $orderInfo['order_id']], $orderInfo['order_type'], $orderInfo['order_language_id'], true);
 
@@ -572,7 +606,7 @@ class CustomController extends MyAppController
         $this->set('textMessage', $textMessage);
         $this->set('orderInfo', $orderInfo);
         $this->set('showOrderDetails', $showOrderDetails);
-      
+
         if (CommonHelper::isAppUser() && false ===  MOBILE_APP_API_CALL) {
             $this->set('exculdeMainHeaderDiv', true);
             $this->_template->render(false, false);
@@ -765,7 +799,7 @@ class CustomController extends MyAppController
             if (!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)) {
                 FatUtility::dieJsonError($user->getError());
             }
-        } else {            
+        } else {
             setcookie('ykStatisticalCookies', $statisticalCookies, time() + 3600 * 24 * 10, CONF_WEBROOT_FRONT_URL);
             setcookie('ykPersonaliseCookies', $personaliseCookies, time() + 3600 * 24 * 10, CONF_WEBROOT_FRONT_URL);
         }

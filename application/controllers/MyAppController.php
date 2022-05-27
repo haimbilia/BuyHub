@@ -166,6 +166,7 @@ class MyAppController extends FatController
                     'copiedText' => Labels::getLabel('LBL_COPIED_TEXT', $this->siteLangId),
                     'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
                     'fieldNotFound' => Labels::getLabel('LBL_{field}_NOT_FOUND', $this->siteLangId),
+                    'faqsSearchStringLengthMsg' => CommonHelper::replaceStringData(Labels::getLabel('LBL_TYPE_ATLEAST_{LEN}_CHARACTERS_TO_SEARCH_IN_FAQS.', $this->siteLangId), ['{LEN}' => Faq::FAQS_SEARCH_STRING_LENGTH]),
                 );
 
                 $languages = Language::getAllNames(false);

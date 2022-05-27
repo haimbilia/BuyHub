@@ -16,7 +16,7 @@
                         <div class="masonry-content">
                             <div class="categories-thumb">
                                 <a href="<?php echo UrlHelper::generateUrl('category', 'view', array($category['prodcat_id'])); ?>">
-                                    <div class="aspect-ratio" style="padding-bottom: 45%">
+                                    <div class="aspect-ratio">
                                         <div class="categories-thumb-bg" style="background-image: url(<?php echo UrlHelper::generateFullFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId)); ?>);">
                                         </div>
                                     </div>
