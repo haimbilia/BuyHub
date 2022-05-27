@@ -207,8 +207,7 @@ class CommissionController extends ListingBaseController
             $srch = Commission::getSearchObject();
             $srch->addCondition('commsetting_product_id', '=', $post['commsetting_product_id']);
             $srch->addCondition('commsetting_user_id', '=', $post['commsetting_user_id']);
-            $srch->addCondition('commsetting_prodcat_id', '=', $post['commsetting_prodcat_id']);
-            $srch->addCondition('commsetting_deleted', '=', applicationConstants::NO);
+            $srch->addCondition('commsetting_prodcat_id', '=', $post['commsetting_prodcat_id']);          
             $srch->setPageSize(1);;
             if (FatApp::getDb()->fetch($srch->getResultSet())) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_ALREADY_ADDED,_CATEGORY_OR_USER', $this->siteLangId), true);
@@ -217,7 +216,11 @@ class CommissionController extends ListingBaseController
 
         $record = new Commission($recordId);
         if (!$record->addUpdateData($post)) {
-            LibHelper::exitWithError($record->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_COMMISSION_SETTING', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $insertId = $record->getMainTableRecordId();
@@ -284,7 +287,10 @@ class CommissionController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $this->markAsDeleted($recordId);
+        $obj = new Commission($recordId);
+        if (!$obj->deleteRecord(false)) {
+            LibHelper::exitWithError($obj->getError(), true);
+        }
 
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
@@ -303,24 +309,14 @@ class CommissionController extends ListingBaseController
             if (1 > $recordId) {
                 continue;
             }
-            $this->markAsDeleted($recordId);
+            $obj = new Commission($recordId);
+            if (!$obj->deleteRecord(false)) {
+                LibHelper::exitWithError($obj->getError(), true);
+            }
         }
         $this->set('msg', Labels::getLabel('MSG_RECORDS_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    protected function markAsDeleted($recordId)
-    {
-        $recordId = FatUtility::int($recordId);
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-        $obj = new Commission($recordId);
-        $obj->assignValues(array('commsetting_deleted' => 1));
-        if (!$obj->save()) {
-            LibHelper::exitWithError($obj->getError(), true);
-        }
-    }
+    }    
 
     public function productAutoComplete()
     {

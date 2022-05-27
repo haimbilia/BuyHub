@@ -41,8 +41,7 @@ class Commission extends MyAppModel
             'commsetting_user_id' => $data['commsetting_user_id'],
             'commsetting_prodcat_id' => $data['commsetting_prodcat_id'],
             'commsetting_fees' => $data['commsetting_fees'],
-            'commsetting_by_package' => isset($data['commsetting_by_package']) ? $data['commsetting_by_package'] : 0,
-            'commsetting_deleted' => 0,
+            'commsetting_by_package' => isset($data['commsetting_by_package']) ? $data['commsetting_by_package'] : 0,           
         );
 
         if ($this->mainTableRecordId > 0) {
@@ -65,8 +64,7 @@ class Commission extends MyAppModel
             'csh_commsetting_user_id' => $data['commsetting_user_id'],
             'csh_commsetting_prodcat_id' => $data['commsetting_prodcat_id'],
             'csh_commsetting_fees' => $data['commsetting_fees'],
-            'csh_commsetting_is_mandatory' => $data['commsetting_is_mandatory'],
-            'csh_commsetting_deleted' => $data['commsetting_deleted'],
+            'csh_commsetting_is_mandatory' => $data['commsetting_is_mandatory'],          
             'csh_added_on' => date('Y-m-d H:i:s'),
         );
         if ($this->db->insertFromArray(static::DB_TBL_HISTORY, $assignValues)) {
@@ -92,8 +90,6 @@ class Commission extends MyAppModel
         $srch->joinTable('tbl_users', 'LEFT OUTER JOIN', 'tcs.commsetting_user_id = tu.user_id', 'tu');
         $srch->joinTable('tbl_user_credentials', 'LEFT OUTER JOIN', 'tuc.credential_user_id = tu.user_id', 'tuc');
 
-        $srch->addCondition('tcs.commsetting_deleted', '=', FatUtility::int($trashed));
-
         if (empty($attr)) {
             $attr = array(
                 'tcs.*',
@@ -107,7 +103,7 @@ class Commission extends MyAppModel
         return $srch;
     }
 
-    public static function getCommissionHistorySettingsObj($langId, $trashed = 0)
+    public static function getCommissionHistorySettingsObj($langId)
     {
         $langId = FatUtility::int($langId);
 
@@ -121,8 +117,6 @@ class Commission extends MyAppModel
 
         $srch->joinTable('tbl_users', 'LEFT OUTER JOIN', 'tcsh.csh_commsetting_user_id = tu.user_id', 'tu');
         $srch->joinTable('tbl_user_credentials', 'LEFT OUTER JOIN', 'tuc.credential_user_id = tu.user_id', 'tuc');
-
-        $srch->addCondition('tcsh.csh_commsetting_deleted', '=', FatUtility::int($trashed));
 
         $srch->addMultipleFields(
             array(
