@@ -806,6 +806,7 @@ Updates/Fixes :
     => 064601 - Search is not working under FAQs section.
     => 064597 - Suggestion to add 'No records found' template under FAQs section
     => 064637 - Buyer: Review's like and dislike links are not clickable
+    => 064629 - Buyer >> Orders >> Nothing happens when the user clicks on the product's name
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
