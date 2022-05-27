@@ -37,7 +37,7 @@ $fld->value = HtmlHelper::getfileInputHtml(
 );
 
 $htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_PREFERRED_DIMENSIONS', $siteLangId), $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['width'] .
-" x " . $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
+    " x " . $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
 $htmlAfterField .= '<div id="imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
 
@@ -97,7 +97,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script type="text/javascript">
     $('input[name=min_width]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['width']; ?>');
     $('input[name=min_height]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['height']; ?>');
-    
+
 
 
     $(document).off('change', '#slideScreenJs').on('change', '#slideScreenJs', function() {
@@ -105,33 +105,30 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
 
         if ($(this).val() == screenDesktop) {
-          
+
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['width'] .
-                                        " x " . $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
+                                                                                            " x " . $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
             $('input[name=min_width]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['width']; ?>');
             $('input[name=min_height]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['height']; ?>');
-           
+
         } else if ($(this).val() == screenIpad) {
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $bannerDimensiomns[ImageDimension::VIEW_TABLET]['width'] .
-                                        " x " . $bannerDimensiomns[ImageDimension::VIEW_TABLET]['height']; ?>'));
+                                                                                            " x " . $bannerDimensiomns[ImageDimension::VIEW_TABLET]['height']; ?>'));
             $('input[name=min_width]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_TABLET]['width']; ?>');
             $('input[name=min_height]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_TABLET]['height']; ?>');
-          
+
         } else {
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['width'] .
-                                        " x " . $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['height']; ?>'));
+                                                                                            " x " . $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['height']; ?>'));
             $('input[name=min_width]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['height']; ?>');
             $('input[name=min_height]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['height']; ?>');
-           
+
         }
 
         let slideScreen = $(this).val();
         let recordId = $(this).closest("form").find('input[name="banner_id"]').val();
         let langId = $("#imageLanguageJs").val();
         let collectionId = '<?php echo $collectionId; ?>';
-        loadBannerImages(collectionId, recordId, 'THUMB', slideScreen, langId);
+        loadBannerImages(collectionId, recordId, '<?php echo ImageDimension::VIEW_THUMB; ?>', slideScreen, langId);
     });
-
-
-
 </script>

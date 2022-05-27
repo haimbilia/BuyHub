@@ -48,19 +48,21 @@ class ImageDimension extends FatUtility
     public const HEIGHT = 'height';
 
     public const VIEW_DESKTOP = 'DESKTOP';
-    public const VIEW_MOBILE = 'MOBILE';
     public const VIEW_TABLET = 'TABLET';
-    public const VIEW_THUMB = 'THUMB';
-    public const VIEW_WIDE  = 'WIDE';
-    public const VIEW_MINI_THUMB = 'MINITHUMB';
-    public const VIEW_MINI = 'MINI';
-    public const VIEW_EXTRA_SMALL = 'EXTRA-SMALL';
-    public const VIEW_SMALL = 'SMALL';
+    public const VIEW_MOBILE = 'MOBILE';
+    public const VIEW_ORIGINAL = 'ORIGINAL';
+
     public const VIEW_MEDIUM = 'MEDIUM';
+    public const VIEW_SMALL = 'SMALL';
+    public const VIEW_EXTRA_SMALL = 'EXTRA-SMALL';
+    public const VIEW_THUMB = 'THUMB';
+    public const VIEW_MINI = 'MINI';
+    public const VIEW_MINI_THUMB = 'MINITHUMB';
+
     public const VIEW_CLAYOUT3 = 'CLAYOUT3';
     public const VIEW_CLAYOUT2 = 'CLAYOUT2';
     public const VIEW_CLAYOUT1 = 'CLAYOUT1';
-    public const VIEW_ORIGINAL = 'ORIGINAL';
+
     public const VIEW_FB_RECOMMEND = 'FB_RECOMMEND';
     public const VIEW_DEFAULT = 'DEFAULT';
     public const VIEW_PREVIEW = 'PREVIEW';
@@ -80,8 +82,6 @@ class ImageDimension extends FatUtility
     public const VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT = "PRODUCTLAYOUT";
     public const VIEW_CROPED = "CROPED";
 
-
-
     public static function getData(int $type, $sizeType = '', $aspectRatioType = 1): array
     {
         $sizeType = strtoupper($sizeType);
@@ -90,7 +90,6 @@ class ImageDimension extends FatUtility
         switch ($type) {
             case self::TYPE_SLIDE:
                 $imageDimensions = self::getSlideData($sizeType);
-
                 break;
             case self::TYPE_PRODUCTS:
             case self::TYPE_CUSTOM_PRODUCTS:
@@ -306,7 +305,6 @@ class ImageDimension extends FatUtility
             self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
             self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
             self::VIEW_THUMB => [self::WIDTH => 250, self::HEIGHT => 100],
-            self::VIEW_WIDE => [self::WIDTH => 1320, self::HEIGHT => 320]
         ];
 
         return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
@@ -336,7 +334,6 @@ class ImageDimension extends FatUtility
         ];
 
         $arr[AttachedFile::RATIO_TYPE_SQUARE] =  [
-
             self::VIEW_MINI_THUMB => [self::WIDTH => 42, self::HEIGHT => 42],
             self::VIEW_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
             self::VIEW_LISTING_PAGE => [self::WIDTH => 530, self::HEIGHT => 530],

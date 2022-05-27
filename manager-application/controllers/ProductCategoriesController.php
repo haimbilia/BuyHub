@@ -416,10 +416,10 @@ class ProductCategoriesController extends ListingBaseController
            
             $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_BANNER, ImageDimension::VIEW_THUMB);
             $this->set('imageDimensions', $imageDimensions);
-        } elseif ($imageType == 'thumb') {
+        } elseif ($imageType == ImageDimension::VIEW_THUMB) {
             $catThumb = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $prodcat_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $catThumb);
-            $this->set('imageFunction', 'thumb');
+            $this->set('imageFunction', ImageDimension::VIEW_THUMB);
             $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_THUMB, ImageDimension::VIEW_THUMB);
             $this->set('imageDimensions', $imageDimensions);
         }

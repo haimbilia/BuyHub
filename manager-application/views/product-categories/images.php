@@ -22,7 +22,7 @@ if($imageType == 'icon'){
 } elseif ($imageType == 'banner') {
     $popup = 'bannerPopupImage';
     $label = Labels::getLabel("FRM_CATEGORY_BANNER_IMAGE", $siteLangId);
-} elseif ($imageType == 'thumb') {
+} elseif ($imageType == ImageDimension::VIEW_THUMB) {
     $popup = 'thumbPopupImage';
     $label = Labels::getLabel("FRM_CATEGORY_THUMB", $siteLangId);
 }
