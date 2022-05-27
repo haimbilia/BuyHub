@@ -31,23 +31,6 @@ class ImageController extends FatController
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
-        /*   switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 100;
-                $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-            case 'SMALL':
-                $w = 200;
-                $h = 200;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-            default:
-                $h = 400;
-                $w = 400;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-        } */
     }
 
     public function siteAdminLogo($lang_id = 0, $sizeType = '')
@@ -57,28 +40,7 @@ class ImageController extends FatController
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'logo_default.svg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-
-
         AttachedFile::displayImage($image_name, 0, 0, $default_image, '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
-
-
-        /* switch( strtoupper($sizeType) ){
-        case 'THUMB':
-        $w = 142;
-        $h = 45;
-        AttachedFile::displayImage( $image_name, $w, $h, $default_image );
-        break;
-        case 'SMALL':
-        $w = 200;
-        $h = 200;
-        AttachedFile::displayImage( $image_name, $w, $h, $default_image );
-        break;
-        default:
-        $h = 400;
-        $w = 400;
-        AttachedFile::displayImage( $image_name, $w, $h, $default_image );
-        break;
-        } */
     }
 
     public function profileImage($adminId, $sizeType = '', $cropedImage = false)
@@ -102,22 +64,6 @@ class ImageController extends FatController
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
-
-        /*  switch (strtoupper($sizeType)) {
-            case 'THUMB':
-                $w = 100;
-                $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-            case 'CROPED':
-                $w = 230;
-                $h = 230;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;
-            default:
-                AttachedFile::displayOriginalImage($image_name, $default_image);
-                break;
-        } */
     }
 
     public function badgeRequest($recordId, $sizeType = '')
@@ -126,8 +72,8 @@ class ImageController extends FatController
         $image_name = isset($res['afile_physical_path']) ? AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_ADMIN_BADGE_REQUEST, $sizeType);
-        
-        $default_image = 'badge_default.png';        
+
+        $default_image = 'badge_default.png';
 
         if ($sizeType) {
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image, '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);

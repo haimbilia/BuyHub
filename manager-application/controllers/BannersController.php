@@ -439,7 +439,7 @@ class BannersController extends ListingBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         $langId = 0 == $langId ? $this->siteLangId : $langId;
         $screen = FatApp::getPostedData('screen', FatUtility::VAR_INT, 0);
-        $imageType = FatApp::getPostedData('imageType', FatUtility::VAR_STRING, 'THUMB');
+        $imageType = FatApp::getPostedData('imageType', FatUtility::VAR_STRING, ImageDimension::VIEW_THUMB);
         $bannerLocationId = FatUtility::int($bannerLocationId);
 
         if (1 > $bannerLocationId || 1 > $recordId) {

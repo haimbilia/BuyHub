@@ -1655,7 +1655,7 @@ class ConfigurationsController extends ListingBaseController
                 if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'socialFeed', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'socialFeed', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
                     }
                 }
@@ -1682,7 +1682,7 @@ class ConfigurationsController extends ListingBaseController
                 if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'paymentPageLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'paymentPageLogo', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
                     }
                 }
@@ -1711,7 +1711,7 @@ class ConfigurationsController extends ListingBaseController
                 if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'watermarkImage', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'watermarkImage', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
                     }
                 }
@@ -1739,7 +1739,7 @@ class ConfigurationsController extends ListingBaseController
                 if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'appleTouchIcon', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'appleTouchIcon', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
                     }
                 }
@@ -1768,7 +1768,7 @@ class ConfigurationsController extends ListingBaseController
                 if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'mobileLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'mobileLogo', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
                     }
                 }
@@ -1796,7 +1796,7 @@ class ConfigurationsController extends ListingBaseController
                 if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
                     if (0 < $fileData['afile_id']) {
                         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'invoiceLogo', array($langId, 'THUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'invoiceLogo', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
                     }
                 }
