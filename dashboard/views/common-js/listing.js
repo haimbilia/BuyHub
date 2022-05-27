@@ -9,6 +9,7 @@ $(document).on("search", "input[type='search']", function () {
         eval(callback);
     }
 });
+/* -------------------------------------------------- */
 
 $(document).on("click", ".advSrchToggleJs", function () {
     var elm = $('.advSrchBtnJs').find('.submitBtnJs');
@@ -18,8 +19,6 @@ $(document).on("click", ".advSrchToggleJs", function () {
         elm.attr("disabled", true);
     }
 });
-
-/* Reset result on clear(cross) icon on keyword search field. */
 
 $(document).on("click", ".resetModalFormJs", function (e) {
     if ($.ykmodal.isSideBarView()) {

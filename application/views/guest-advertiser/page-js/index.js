@@ -43,7 +43,7 @@ $(function () {
 
 		$(dv).prepend(fcom.getLoader());
 
-		fcom.updateWithAjax(fcom.makeUrl('supplier', 'SearchFaqs', [catId]), '', function (ans) {
+		fcom.updateWithAjax(fcom.makeUrl('Supplier', 'searchFaqs', [catId]), '', function (ans) {
 			fcom.closeProcessing();
 
 			$(dv).find('.loader-yk').remove();
@@ -58,7 +58,7 @@ $(function () {
 
 	faqRightPanel = function () {
 
-		fcom.updateWithAjax(fcom.makeUrl('supplier', 'faqCategoriesPanel'), '', function (ans) {
+		fcom.updateWithAjax(fcom.makeUrl('Supplier', 'faqCategoriesPanel'), '', function (ans) {
 			fcom.closeProcessing();
 			fcom.removeLoader();
 

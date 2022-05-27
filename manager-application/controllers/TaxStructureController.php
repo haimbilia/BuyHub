@@ -393,7 +393,7 @@ class TaxStructureController extends ListingBaseController
         $srch->joinTable(
             Tax::DB_TBL,
             'INNER JOIN',
-            'tc.taxcat_id = tc.taxcat_id and tc.taxcat_deleted = 0',
+            'tc.taxcat_id = tr.taxrule_taxcat_id and tc.taxcat_deleted = 0',
             'tc'
         );
         $srch->joinTable(

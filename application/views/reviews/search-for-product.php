@@ -73,13 +73,13 @@ if ($reviewsList) { ?>
                     <ul class="yes-no">
                         <li class="yes-no-item"><?php Labels::getLabel('LBL_WAS_THIS_REVIEW_HELPFUL?', $siteLangId); ?></li>
                         <li class="yes-no-item">
-                            <button class="btn btn-thumb" type="button">
+                            <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>,1)">
                                 <?php echo Labels::getLabel('LBL_YES', $siteLangId); ?>
                                 <span class="counts">(<?php echo $review['helpful']; ?>)</span>
                             </button>
                         </li>
                         <li class="yes-no-item">
-                            <button class="btn btn-thumb" type="button">
+                            <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>, 0)">
                                 <?php echo Labels::getLabel('LBL_NO', $siteLangId); ?>
                                 <span class="counts">(<?php echo $review['notHelpful']; ?>)</span>
                             </button>

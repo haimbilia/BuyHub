@@ -24,7 +24,7 @@ if (!empty($postList)) {
                 </ul>
                 <h2 class="post-title">
                     <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo $blogPost['post_title'] ?></a>
-                </h2> <a class="post-link" href="#"> Read more</a>
+                </h2> <a class="post-link" href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo Labels::getLabel('LBL_READ_MORE', $siteLangId); ?></a>
 
             </div>
 
