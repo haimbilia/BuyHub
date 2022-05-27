@@ -266,7 +266,6 @@ class BlogPostsController extends ListingBaseController
 
         $record = new BlogPost($recordId);
         $record->assignValues($post);
-
         if (!$record->save()) {
             $msg = $record->getError();
             if (false !== strpos(strtolower($msg), 'duplicate')) {
@@ -284,6 +283,7 @@ class BlogPostsController extends ListingBaseController
         if (!$record->updateLangData(CommonHelper::getDefaultFormLangId(), $langData)) {
             LibHelper::exitWithError($record->getError(), true);
         }
+      
         /* link blog post to blog post categories[ */
         if (!empty($categories) && true === LibHelper::isJson($categories)) {
             $categories = array_column(json_decode($categories, true), 'id');
@@ -554,7 +554,8 @@ class BlogPostsController extends ListingBaseController
         $fld->requirements()->setRequired();
         $postStatusArr = BlogPost::getBlogPostStatusArr($this->siteLangId);
 
-        $frm->addTextBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'categories');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'categories');
+        $fld->requirements()->setRequired();
         $frm->addCheckBox(Labels::getLabel('FRM_ALLOW_COMMENTS', $this->siteLangId), 'post_comment_opened', 1, array(), false, 0);
 
         $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'post_featured', 1, array(), false, 0);

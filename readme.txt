@@ -807,6 +807,7 @@ Updates/Fixes :
     => 064597 - Suggestion to add 'No records found' template under FAQs section
     => 064637 - Buyer: Review's like and dislike links are not clickable
     => 064629 - Buyer >> Orders >> Nothing happens when the user clicks on the product's name
+    => 064640 - The wrong alert message appears when the admin tries to delete the tax structure.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
