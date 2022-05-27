@@ -5,7 +5,7 @@ $frm->setFormTagAttribute('onsubmit', 'setupFontStyle(this); return(false);');
 $fld = $frm->getField('btn_clear');
 $fld->addFieldTagAttribute('onclick', 'resetToDefault();');
 
-$googleFontFamily = "Poppins";
+$googleFontFamily = "Montserrat";
 $fontWeight = FatApp::getConfig('CONF_THEME_FONT_WEIGHT', FatUtility::VAR_STRING, "");
 $disabled  = empty($fontWeight) ? 'disabled="disabled"' : '';
 
@@ -38,7 +38,7 @@ if (!empty($googleFontFamilyUrl)) {
 <main class="main">
     <div class="container">
         <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
-        <div class="grid-layout">
+        <div class="grid-layout theme-layout">
             <div class="grid-layout-left">
                 <div class="card">
                     <div class="card-body">

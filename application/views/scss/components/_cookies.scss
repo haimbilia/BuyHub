@@ -1,9 +1,11 @@
 /*cookies*/
 
 .cc-window {
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 5px;
+    //box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 5px;
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(3px);
+    border: $border-black;
+    // border-radius: 10px;
     color: $txt-body;
     bottom: 1rem;
     #{$start-direction}: 1rem;
@@ -14,7 +16,6 @@
     width: fit-content;
     margin: auto;
     z-index: 1050;
-    border-radius: 10px;
     padding: 1rem;
     max-width: 380px;
     .box-cookies {
@@ -47,7 +48,7 @@
         gap: 1rem;
         flex-direction: column;
         .btn {
-            border-radius: 6px;
+            //border-radius: 6px;
             flex: 1;
         }
     }
