@@ -69,10 +69,10 @@
                             <a class="title" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
 
                             <div class="products-price">
-                                <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?></span>
-                                <?php if ($product['selprod_price'] > $product['theprice']) { ?>
+                                <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['actualPrice'])); ?></span>
+                                <?php if ($product['selprod_price'] > $product['actualPrice']) { ?>
                                     <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'])); ?></del>
-                                    <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
+                                    <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId, 'actualPrice')); ?></div>
                                 <?php } ?>
                             </div>
                             <div class="options">
