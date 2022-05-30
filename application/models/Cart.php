@@ -821,7 +821,7 @@ class Cart extends FatModel
             $rs = $srch->getResultSet();
             $volumeDiscountRow = FatApp::getDb()->fetch($rs);
             if ($volumeDiscountRow) {
-                $volumeDiscount = $sellerProductRow['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
+                $volumeDiscount = $sellerProductRows[$key]['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
                 $sellerProductRows[$key]['volume_discount_percentage'] = $volumeDiscountRow['voldiscount_percentage'];
                 $sellerProductRows[$key]['volume_discount'] = $volumeDiscount;
                 $sellerProductRows[$key]['volume_discount_total'] = $volumeDiscount * $quantity;
@@ -844,7 +844,7 @@ class Cart extends FatModel
             $maxConfiguredCommissionVal = FatApp::getConfig("CONF_MAX_COMMISSION");
 
             $commissionPercentage = SellerProduct::getProductCommission($sellerProductRow['selprod_id']);
-            $commission = MIN(ROUND($sellerProductRow['theprice'] * $commissionPercentage / 100, 2), $maxConfiguredCommissionVal);
+            $commission = MIN(ROUND($sellerProductRows[$key]['theprice'] * $commissionPercentage / 100, 2), $maxConfiguredCommissionVal);
             $sellerProductRows[$key]['commission_percentage'] = $commissionPercentage;
             $sellerProductRows[$key]['commission'] = ROUND($commission * $quantity, 2);
 
