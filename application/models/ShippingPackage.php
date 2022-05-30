@@ -17,7 +17,7 @@ class ShippingPackage extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'spack');
         return $srch;
     }
-    
+
     public static function getPackageIdByName($packageName)
     {
         $srch = self::getSearchObject();
@@ -30,12 +30,12 @@ class ShippingPackage extends MyAppModel
         }
         return 0;
     }
-    
+
     public static function getUnitTypes($langId)
     {
         return applicationConstants::getLengthUnitsArr($langId);
     }
-    
+
     public static function getUnitTypeHtml(int $langId, int $status): string
     {
         $arr = self::getUnitTypes($langId);
@@ -56,5 +56,21 @@ class ShippingPackage extends MyAppModel
                 break;
         }
         return HtmlHelper::getStatusHtml($status, $msg);
+    }
+
+    public static function getNames()
+    {
+        $srch = new SearchBase(static::DB_TBL);
+        $srch->addMultipleFields(
+            [
+                'shippack_id as id',
+                'CONCAT(shippack_name, " (", shippack_length, " X ", shippack_width, " X ", shippack_height, ") (", (CASE WHEN shippack_units = ' . applicationConstants::LENGTH_CENTIMETER . ' THEN "CM" WHEN shippack_units = ' . applicationConstants::LENGTH_METER . ' THEN "M" ELSE "IN" END),")") as text',
+            ]
+        );
+        $srch->addOrder(static::tblFld('name'));
+
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
     }
 }
