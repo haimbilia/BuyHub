@@ -86,7 +86,7 @@
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#wishlist">
                                         </use>
                                     </svg>
-                                    <span class="txt"><?php echo Labels::getLabel('NAV_WISHLIST', $siteLangId); ?></span>
+                                    <span class="txt"><?php echo FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) ? Labels::getLabel('NAV_WISHLIST', $siteLangId) : Labels::getLabel('LBL_FAVORITES', $siteLangId); ?></span>
                                 </button>
                             </li>
                             <li class="quick-nav-item item-mobile">

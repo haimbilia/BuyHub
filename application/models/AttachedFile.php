@@ -269,7 +269,7 @@ class AttachedFile extends MyAppModel
     public static function getAttachment($fileType, $recordId, $recordSubid = 0, $langId = 0, $displayUniversalImage = true, $screen = 0)
     {
 
-        $data = static::getMultipleAttachments($fileType, $recordId, $recordSubid, $langId, $displayUniversalImage, $screen);
+        $data = static::getMultipleAttachments($fileType, $recordId, $recordSubid, $langId, $displayUniversalImage, $screen, 1);
         if (count($data) > 0) {
             reset($data);
             return current($data);
