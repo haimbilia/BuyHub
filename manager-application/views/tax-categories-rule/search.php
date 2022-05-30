@@ -24,9 +24,7 @@ foreach ($arrListing as $sn => $row) {
 
             case 'taxcat_identifier':
                 if ($row['taxcat_name'] != '') {
-                    $td->appendElement('plaintext', array(), $row['taxcat_name'], true);
-                    $td->appendElement('br', array());
-                    $td->appendElement('plaintext', array(), '(' . $row[$key] . ')', true);
+                    $td->appendElement('plaintext', array(), $row['taxcat_name'], true);                   
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }
