@@ -1893,10 +1893,8 @@ class AccountController extends LoggedUserController
         );
 
         $srch->addOrder('ufp_id', 'desc');
-        $srch->addCondition('ufp_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
-        $rs = $srch->getResultSet();
-
-        $products = $db->fetchAll($rs);
+        $srch->addCondition('ufp_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true); 
+        $products = $db->fetchAll($srch->getResultSet());
 
         $selProdIdsArr = array_column($products, 'selprod_id');
         $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);

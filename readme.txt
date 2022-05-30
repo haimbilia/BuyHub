@@ -811,6 +811,7 @@ Updates/Fixes :
     => 064622 - Include and exclude states options should not appear when the admin selected the 'Rest of the world' in the 'To country' field while adding tax rule
     => 064666 - Admin: Getting multiple issues under threshold product section.
     => 064651 - Suggestion: To show the dimensions of the shipping package with the package name while adding a product from the seller or admin end.
+    => 064679 - Buyer: Favourite label is showing instead of Wishlist under dashboard section.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

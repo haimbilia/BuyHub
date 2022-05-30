@@ -16,7 +16,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#favourite">
                     </use>
                 </svg>',
-                'label' => Labels::getLabel('LBL_FAVORITES', $siteLangId)
+                'label' => FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) ? Labels::getLabel('NAV_WISHLIST', $siteLangId) : Labels::getLabel('LBL_FAVORITES', $siteLangId)
             ],
             [
                 'attr' => [
