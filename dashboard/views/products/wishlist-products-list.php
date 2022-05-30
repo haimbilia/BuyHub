@@ -13,10 +13,6 @@ $vtype = $postedData['vtype'] ?? false;
             $isWishList = isset($isWishList) ? $isWishList : 0;
             foreach ($products as $product) {
                 $selProdRibbons = [];
-                if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                    $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                }
-
                 if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                     $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                 }

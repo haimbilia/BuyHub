@@ -1,16 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 foreach ($collections as $collectionIndex => &$collectionData) {
-    if (array_key_exists('tLeftRibbons', $collectionData) || array_key_exists('tRightRibbons', $collectionData)) {
-        $tLeftRibbons = $collectionData['tLeftRibbons'];
+    if (array_key_exists('tRightRibbons', $collectionData)) {
         $tRightRibbons = $collectionData['tRightRibbons'];
-        unset($collectionData['tLeftRibbons'], $collectionData['tRightRibbons']);
+        unset($collectionData['tRightRibbons']);
         foreach ($collectionData['products'] as &$product) {
             $selProdRibbons = [];
-            if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-            }
-
             if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                 $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
             }

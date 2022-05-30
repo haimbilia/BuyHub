@@ -18,14 +18,9 @@ if ($relatedProductsRs) { ?>
             </div>
             <div class="js-carousel related-products" id="product-listing-rep" data-slides="4,4,3,2" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
-                $tLeftRibbons = $relatedProductsRibbons['tLeftRibbons'];
                 $tRightRibbons = $relatedProductsRibbons['tRightRibbons'];
                 foreach ($relatedProductsRs as $rProduct) {
                     $selProdRibbons = [];
-                    if (array_key_exists($rProduct['selprod_id'], $tLeftRibbons)) {
-                        $selProdRibbons[] = $tLeftRibbons[$rProduct['selprod_id']];
-                    }
-
                     if (array_key_exists($rProduct['selprod_id'], $tRightRibbons)) {
                         $selProdRibbons[] = $tRightRibbons[$rProduct['selprod_id']];
                     }

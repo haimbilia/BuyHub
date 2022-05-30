@@ -1202,18 +1202,14 @@ class Product extends MyAppModel
         return $totalProduct;
     }
 
-    public static function getProductShippingTitle($langId, $shippingDetails = array())
+    public static function getProductShippingTitle($langId, $shippingDetails = array()): string
     {
         $langId = FatUtility::int($langId);
-        if (1 > $langId) {
-            return;
+        if (1 > $langId || empty($shippingDetails)) {
+            return '';
         }
 
-        if (empty($shippingDetails)) {
-            return;
-        } else {
-            return FatUtility::decodeHtmlEntities('<em><strong>' . $shippingDetails['country_name'] . '</em></strong> ' . Labels::getLabel('LBL_BY', $langId) . ' <strong>' . $shippingDetails['scompany_name'] . '</strong> ' . Labels::getLabel('LBL_IN', $langId) . ' ' . ShippingDurations::getShippingDurationTitle($shippingDetails, $langId));
-        }
+        return FatUtility::decodeHtmlEntities('<em><strong>' . $shippingDetails['country_name'] . '</em></strong> ' . Labels::getLabel('LBL_BY', $langId) . ' <strong>' . $shippingDetails['scompany_name'] . '</strong> ' . Labels::getLabel('LBL_IN', $langId) . ' ' . ShippingDurations::getShippingDurationTitle($shippingDetails, $langId));
     }
 
     public static function isSellProdAvailableForUser($selProdCode, $langId, $userId = 0, $selprod_id = 0)

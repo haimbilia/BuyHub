@@ -502,11 +502,11 @@ $("document").ready(function () {
 
     removeRewardPoints = function () {
         checkLogin();
-        $.ykmsg.close();
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "removeRewardPoints"),
             "",
             function (res) {
+                fcom.closeProcessing();
                 loadFinancialSummary(1);
                 loadPaymentSummary();
             }

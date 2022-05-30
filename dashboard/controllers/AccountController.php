@@ -1788,19 +1788,17 @@ class AccountController extends LoggedUserController
         /* echo $srch->getQuery(); die; */
         $products = $db->fetchAll($rs);
 
-        $selprodIdsArr = $tLeftRibbons = $tRightRibbons = [];
+        $selprodIdsArr = $tRightRibbons = [];
         if (count($products)) {
             foreach ($products as &$arr) {
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
                 $selprodIdsArr[] = $arr['selprod_id'];
             }
 
-            $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selprodIdsArr);
             $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selprodIdsArr);
         }
 
         $this->set('tRightRibbons', $tRightRibbons);
-        $this->set('tLeftRibbons', $tLeftRibbons);
         $this->set('products', $products);
         $this->set('showProductShortDescription', false);
         $this->set('showProductReturnPolicy', false);
@@ -1901,11 +1899,9 @@ class AccountController extends LoggedUserController
         $products = $db->fetchAll($rs);
 
         $selProdIdsArr = array_column($products, 'selprod_id');
-        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
         $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
         $this->set('products', $products);
-        $this->set('tLeftRibbons', $tLeftRibbons);
         $this->set('tRightRibbons', $tRightRibbons);
         $this->set('showProductShortDescription', false);
         $this->set('showProductReturnPolicy', false);

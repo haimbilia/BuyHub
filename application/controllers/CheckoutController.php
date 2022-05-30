@@ -1,5 +1,7 @@
 <?php
 
+use phpDocumentor\Reflection\Types\This;
+
 class CheckoutController extends MyAppController
 {
     private $cartObj;
@@ -1673,35 +1675,17 @@ class CheckoutController extends MyAppController
     {
         $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
         if (!$cartObj->removeUsedRewardPoints()) {
-            $this->errMessage = Labels::getLabel('ERR_ACTION_TRYING_PERFORM_NOT_VALID', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($this->errMessage);
-            }
-            Message::addErrorMessage($this->errMessage);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('ERR_ACTION_TRYING_PERFORM_NOT_VALID', $this->siteLangId));
         }
         $this->set('msg', Labels::getLabel("MSG_USED_REWARD_POINT_REMOVED", $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $orderId = FatApp::getPostedData('orderId', FatUtility::VAR_STRING, '');
             if (empty($orderId)) {
-                FatUtility::dieJsonError(Labels::getLabel('ERR_ORDER_ID_IS_REQUIRED', $this->siteLangId));
+                LibHelper::exitWithError(Labels::getLabel('ERR_ORDER_ID_IS_REQUIRED', $this->siteLangId));
             }
 
-            $orderObj = new Orders();
-            $orderInfo = $orderObj->getOrderById($orderId, $this->siteLangId);
-            $financialSummary = $cartObj->getCartFinancialSummary($this->siteLangId);
             $cartSummary = $cartObj->getCartFinancialSummary($this->siteLangId);
             $cartProducts = $cartObj->getProducts($this->siteLangId);
-
-            $orderData['order_id'] = $orderId;
-            $orderData['order_type'] = $orderInfo["order_type"];
-            $orderData['order_user_id'] = $orderInfo["order_user_id"];
-            $orderData['order_net_amount'] = $financialSummary["orderNetAmount"];
-            $orderData['order_reward_point_used'] = $financialSummary["cartRewardPoints"];
-            $orderData['order_reward_point_value'] = CommonHelper::convertRewardPointToCurrency($financialSummary["cartRewardPoints"]);
-            if (!$orderObj->addUpdateOrder($orderData, $this->siteLangId)) {
-                FatUtility::dieJsonError($orderObj->getError());
-            }
 
             $this->set('cartSummary', $cartSummary);
             $this->set('products', $cartProducts);

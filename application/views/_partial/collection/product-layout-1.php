@@ -17,14 +17,9 @@
             </div>
             <div class=" product-layout-1 product-listing js-carousel" id="product-listing-<?php echo $collection['collection_id'];?>" data-slides="4,4,3,2" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
-                $tLeftRibbons = $collection['tLeftRibbons'];
                 $tRightRibbons = $collection['tRightRibbons'];
                 foreach ($collection['products'] as $product) {
                     $selProdRibbons = [];
-                    if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                        $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                    }
-
                     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                     }

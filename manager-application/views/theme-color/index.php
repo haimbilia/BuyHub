@@ -185,7 +185,10 @@ if (!empty($googleFontFamilyUrl)) {
                         </div>
                         <div class="alert alert-solid-brand " role="alert">
                             <div class="alert-icon">
-                                <i class="flaticon-warning"></i>
+                                <svg class="svg" width="20" height="20">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#warning">
+                                    </use>
+                                </svg>
                             </div>
                             <div class="alert-text text-xs">
                                 <?php echo Labels::getLabel('LBL_DISCLAIMER:_INVERSE_COLOR_SHOULD_BE_IN_CONTRAST_TO_THE_THEME_COLOR', $siteLangId); ?>
