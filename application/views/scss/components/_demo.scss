@@ -142,9 +142,12 @@
             align-items: center;
             font-weight: 600;
             gap: 10px;
-
             &:hover {
                 color: $brand-color;
+            }
+            .svg {
+                width: 24px;
+                height: 24px;
             }
         }
     }
