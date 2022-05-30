@@ -52,7 +52,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
     $(function() {
         let fnCalled = false;
         $(window).scroll(function() {
-            if ($('.relatedProductsSectionJs').isInViewport() && false == fnCalled) {
+            if (false == fnCalled) {
                 fnCalled = true;
                 interRelatedProducts(<?php echo $product['selprod_id']; ?>);
             }
