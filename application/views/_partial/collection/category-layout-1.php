@@ -30,17 +30,12 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                     <div class="tab-pane fade category-product-layout-1  <?php echo 1 == $j ? 'show active' : ''; ?>" id="tb-<?php echo $key . "-" . $collection['collection_id']; ?>">
                         <div class="product-listing" data-view="3">
                             <?php
-                            $tLeftRibbons = $category['tLeftRibbons'];
                             $tRightRibbons = $category['tRightRibbons'];
 
                             $i = 1;
                             foreach ($category['products'] as $key => $product) {
 
                                 $selProdRibbons = [];
-                                if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                                    $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                                }
-
                                 if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                                     $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                                 }

@@ -169,7 +169,6 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
             <?php
             $productsData = array(
                 'products' => $products,
-                'tLeftRibbons' => $tLeftRibbons ?? [],
                 'tRightRibbons' => $tRightRibbons ?? [],
                 /*'moreSellersProductsArr' => isset($moreSellersProductsArr) ? $moreSellersProductsArr : [],*/
                 'page' => $page,

@@ -105,7 +105,6 @@ class CategoryController extends MyAppController
         $products = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $selProdIdsArr = array_column($products, 'selprod_id');
-        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
         $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
         $frm->fill($get);
@@ -113,7 +112,6 @@ class CategoryController extends MyAppController
             'frmProductSearch' => $frm,
             'category' => $category,
             'products' => $products,
-            'tLeftRibbons' => $tLeftRibbons,
             'tRightRibbons' => $tRightRibbons,
             /* 'moreSellersProductsArr' => $moreSellersArr,*/
             'page' => $this->pageData['page'],
@@ -142,7 +140,6 @@ class CategoryController extends MyAppController
             $this->set('siteLangId', $this->siteLangId);
             $this->set('pageSizeArr', $data['pageSizeArr']);
             $this->set('tRightRibbons', $tRightRibbons);
-            $this->set('tLeftRibbons', $tLeftRibbons);
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }

@@ -155,15 +155,10 @@ class CollectionsController extends MyAppController
 
                     $collections = $db->fetchAll($rs);
                     $selProdIdsArr = array_column($collections, 'selprod_id');
-                    $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
                     $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
                     /* ] */
                     foreach ($collections as &$product) {
                         $selProdRibbons = [];
-                        if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                            $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                        }
-            
                         if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                             $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                         }
@@ -265,11 +260,9 @@ class CollectionsController extends MyAppController
                             });
                         }
                         $selProdIdsArr = array_column($products, 'selprod_id');
-                        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
                         $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
                         $val['products'] = $products;
-                        $val['tLeftRibbons'] = $tLeftRibbons;
                         $val['tRightRibbons'] = $tRightRibbons;
                         $val['totalProducts'] = $prodSrch->recordCount();
                         $val['shopRating'] = SelProdRating::getSellerRating($val['shop_user_id']);

@@ -40,13 +40,9 @@ if (!empty($allShops)) {
                         <?php
                         $displayProductNotAvailableLable = (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')));
 
-                        $tLeftRibbons = $shop['tLeftRibbons'];
                         $tRightRibbons = $shop['tRightRibbons'];
                         foreach ($shop['products'] as $product) {
                             $selProdRibbons = [];
-                            if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                                $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                            }
 
                             if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                                 $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];

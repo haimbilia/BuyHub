@@ -3,7 +3,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $shopName = $options = $otherInfo = $date = '';
 if (isset($order)) {
-    $prodUrl = 'javascript:void(0)';
+    $prodUrl = 'javascript:fcom.displayErrorMessage(\'' . Labels::getLabel('ERR_THIS_PRODUCT_IS_NOT_AVAILABLE.') . '\')';
     if (isset($order['op_is_batch']) && $order['op_is_batch']) {
         $prodUrl = UrlHelper::generateUrl('Products', 'batch', array($order['op_selprod_id']), CONF_WEBROOT_FRONTEND);
         $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($order['op_selprod_id'], $siteLangId, ImageDimension::VIEW_MINI), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');

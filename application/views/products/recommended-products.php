@@ -16,14 +16,9 @@
             </div>
             <div class="js-carousel product-listing recommended-products" id="product-listing-rp" data-slides="4,4,3,2" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
-                $tLeftRibbons = $recommendedProductsRibbons['tLeftRibbons'];
                 $tRightRibbons = $recommendedProductsRibbons['tRightRibbons'];
                 foreach ($recommendedProducts as $rProduct) {
                     $selProdRibbons = [];
-                    if (array_key_exists($rProduct['selprod_id'], $tLeftRibbons)) {
-                        $selProdRibbons[] = $tLeftRibbons[$rProduct['selprod_id']];
-                    }
-
                     if (array_key_exists($rProduct['selprod_id'], $tRightRibbons)) {
                         $selProdRibbons[] = $tRightRibbons[$rProduct['selprod_id']];
                     }

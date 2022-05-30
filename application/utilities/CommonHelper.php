@@ -1367,7 +1367,7 @@ class CommonHelper extends FatUtility
         return CommonHelper::replaceStringData($str, ["{DEFAULT-CURRENCY-SYMBOL}" => static::displayMoneyFormat($amount, true, true)]);
     }
 
-    public static function showProductDiscountedText(array $product, int $langId)
+    public static function showProductDiscountedText(array $product, int $langId, $fld = 'theprice')
     {
         $langId = FatUtility::int($langId);
         if (empty($product) || $langId <= 0) {
@@ -1379,7 +1379,7 @@ class CommonHelper extends FatUtility
             return 0;
         }
 
-        $specialPrice = $product['theprice'];
+        $specialPrice = $product[$fld];
         $discount = (($originalPrice - $specialPrice) * 100) / $originalPrice;
 
         return round($discount, 2) . "% " . Labels::getLabel('LBL_Off', $langId);

@@ -66,9 +66,9 @@ class OrderSubscription extends MyAppModel
         $srch->joinPackage($langId);
 
         //$srch->addSubscriptionValidCondition();
-        $srch->addCondition(Orders::DB_TBL_PREFIX . 'type', '=', Orders::ORDER_SUBSCRIPTION);
-        $srch->addCondition(Orders::DB_TBL_PREFIX . 'payment_status', '=', Orders::ORDER_PAYMENT_PAID);
-        $srch->addCondition(Orders::DB_TBL_PREFIX . 'user_id', '=', $userId);
+        $srch->addCondition(Orders::DB_TBL_PREFIX . 'type', '=', 'mysql_func_' . Orders::ORDER_SUBSCRIPTION, 'AND', true);
+        $srch->addCondition(Orders::DB_TBL_PREFIX . 'payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
+        $srch->addCondition(Orders::DB_TBL_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->addCondition('ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
         $srch->addMultipleFields($flds);
         $srch->setPageSize(1);

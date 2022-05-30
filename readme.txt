@@ -806,7 +806,9 @@ Updates/Fixes :
     => 064601 - Search is not working under FAQs section.
     => 064597 - Suggestion to add 'No records found' template under FAQs section
     => 064637 - Buyer: Review's like and dislike links are not clickable
+    => 064629 - Buyer >> Orders >> Nothing happens when the user clicks on the product's name
     => 064640 - The wrong alert message appears when the admin tries to delete the tax structure.
+    => 064622 - Include and exclude states options should not appear when the admin selected the 'Rest of the world' in the 'To country' field while adding tax rule
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

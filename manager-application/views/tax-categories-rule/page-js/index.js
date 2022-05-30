@@ -1,6 +1,6 @@
 
 (function () {
-    
+
     getCombinedTaxes = function (taxStrId) {
         if (taxStrId == 0) {
             return;
@@ -31,7 +31,21 @@
 
 })();
 
-function checkStatesDefault(countryId, stateIds, field) {
+function checkStatesDefault(element, stateIds, field) {
+    let countryId = element.value;
+    if (-1 == countryId) {
+        if ($(element).hasClass('toCountyElementJs')) {
+            $('select[name="taxruleloc_type"]').val(-1).trigger('change').attr('disabled', 'disabled');
+        }
+        $(field).val(-1).attr('disabled', 'disabled');
+        $(field + ' option:not(:first)').remove().val(-1);
+        return;
+    } else {
+        $(field).removeAttr('disabled');
+        if ($(element).hasClass('toCountyElementJs')) {
+            $('select[name="taxruleloc_type"]').trigger('change').removeAttr('disabled');
+        }
+    }
     fcom.updateWithAjax(fcom.makeUrl('Users', 'getStates', [countryId, 0]), '', function (res) {
         fcom.closeProcessing();
         fcom.removeLoader();
@@ -40,13 +54,13 @@ function checkStatesDefault(countryId, stateIds, field) {
         $(field).append(firstChild);
         $(field).append(res.html);
         $(field).find("option[value='']").remove();
-        if( $(field).attr('id') !=   'taxruleloc_from_state_id'){
-            $(field).find("option[value='-1']").hide();   
-        }       
+        if ($(field).attr('id') != 'taxruleloc_from_state_id') {
+            $(field).find("option[value='-1']").hide();
+        }
         if ($.isArray(stateIds)) {
-            setTimeout(function(){
-                $(field).val(stateIds);   
-            },500); 
+            setTimeout(function () {
+                $(field).val(stateIds);
+            }, 500);
         }
         $('select[name="taxruleloc_type"]').trigger('change');
     });
@@ -60,8 +74,8 @@ $('body').on('change', 'select[name="taxruleloc_type"]', function () {
         $(dv + " option[value='-1']").show();
     } else {
         $(dv).removeAttr('disabled');
-        $(dv).val( "");
+        $(dv).val("");
         $(dv + " option[value='-1']").hide();
     }
-   
+
 });

@@ -807,7 +807,6 @@ class Cart extends FatModel
                     }
                 }
             }
-
             /* update/fetch/apply theprice, according to volume discount module[ */
             $sellerProductRows[$key]['volume_discount'] = 0;
             $sellerProductRows[$key]['volume_discount_percentage'] = 0;
@@ -849,8 +848,8 @@ class Cart extends FatModel
             $sellerProductRows[$key]['commission_percentage'] = $commissionPercentage;
             $sellerProductRows[$key]['commission'] = ROUND($commission * $quantity, 2);
 
-            $totalPrice = $sellerProductRow['theprice'] * $quantity;
-            $taxableProdPrice = $sellerProductRow['theprice'] - $sellerProductRows[$key]['volume_discount'];
+            $totalPrice = $sellerProductRows[$key]['theprice'] * $quantity;
+            $taxableProdPrice = $sellerProductRows[$key]['theprice'] - $sellerProductRows[$key]['volume_discount'];
             $discountedPrice = 0;
             if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
                 if (!empty($this->discounts) && isset($this->discounts['discountedSelProdIds'][$sellerProductRow['selprod_id']])) {

@@ -20,13 +20,9 @@ foreach ($badgesArr as $bdgRow) {
 $product['badges'] = $badges;
 /* Shop and SelProd Badge */
 
-$btTLeftRibbons = $upsellProductsRibbons['tLeftRibbons'];
 $btTRightRibbons = $upsellProductsRibbons['tRightRibbons'];
 foreach (array_filter($upsellProducts) as $index => $btProduct) {
     $selProdRibbons = [];
-    if (array_key_exists($btProduct['selprod_id'], $btTLeftRibbons)) {
-        $selProdRibbons[] = $btTLeftRibbons[$btProduct['selprod_id']];
-    }
 
     if (array_key_exists($btProduct['selprod_id'], $btTRightRibbons)) {
         $selProdRibbons[] = $btTRightRibbons[$btProduct['selprod_id']];
@@ -40,13 +36,9 @@ foreach (array_filter($upsellProducts) as $index => $btProduct) {
     $upsellProducts[$index]['ribbons'] = $selProdRibbons;
 }
 
-$relTLeftRibbons = $relatedProductsRibbons['tLeftRibbons'];
 $relTRightRibbons = $relatedProductsRibbons['tRightRibbons'];
 foreach (array_filter($relatedProductsRs) as $index => $rProduct) {
     $selProdRibbons = [];
-    if (array_key_exists($rProduct['selprod_id'], $relTLeftRibbons)) {
-        $selProdRibbons[] = $relTLeftRibbons[$rProduct['selprod_id']];
-    }
 
     if (array_key_exists($rProduct['selprod_id'], $relTRightRibbons)) {
         $selProdRibbons[] = $relTRightRibbons[$rProduct['selprod_id']];
@@ -59,14 +51,9 @@ foreach (array_filter($relatedProductsRs) as $index => $rProduct) {
     $relatedProductsRs[$index]['ribbons'] = $selProdRibbons;
 }
 
-$recTLeftRibbons = $recommendedProductsRibbons['tLeftRibbons'];
 $recTRightRibbons = $recommendedProductsRibbons['tRightRibbons'];
 foreach (array_filter($recommendedProducts) as $index => $recProduct) {
     $selProdRibbons = [];
-    if (array_key_exists($recProduct['selprod_id'], $recTLeftRibbons)) {
-        $selProdRibbons[] = $recTLeftRibbons[$recProduct['selprod_id']];
-    }
-
     if (array_key_exists($recProduct['selprod_id'], $recTRightRibbons)) {
         $selProdRibbons[] = $recTRightRibbons[$recProduct['selprod_id']];
     }
@@ -78,14 +65,9 @@ foreach (array_filter($recommendedProducts) as $index => $recProduct) {
     $recommendedProducts[$index]['ribbons'] = $selProdRibbons;
 }
 
-$recentTLeftRibbons = $recentlyViewedRibbons['tLeftRibbons'];
 $recentTRightRibbons = $recentlyViewedRibbons['tRightRibbons'];
 foreach (array_filter($recentlyViewed) as $index => $recViewed) {
     $selProdRibbons = [];
-    if (array_key_exists($recViewed['selprod_id'], $recentTLeftRibbons)) {
-        $selProdRibbons[] = $recentTLeftRibbons[$recViewed['selprod_id']];
-    }
-
     if (array_key_exists($recViewed['selprod_id'], $recentTRightRibbons)) {
         $selProdRibbons[] = $recentTRightRibbons[$recViewed['selprod_id']];
     }
@@ -129,22 +111,6 @@ $arr_flds = array(
     'pship_charges' => Labels::getLabel('LBL_COST', $siteLangId),
     'pship_additional_charges' => Labels::getLabel('LBL_WITH_ANOTHER_ITEM', $siteLangId),
 );
-$shippingRatesDetail = [];
-foreach ($shippingRates as $sn => $row) {
-    foreach ($arr_flds as $key => $val) {
-        switch ($key) {
-            case 'pship_additional_charges':
-            case 'pship_charges':
-                $shippingRatesDetail[$key]['title'] = $val;
-                $shippingRatesDetail[$key]['rate'][] = CommonHelper::displayMoneyFormat($row[$key]);
-                break;
-            case 'country_name':
-                $shippingRatesDetail[$key]['title'] = $val;
-                $shippingRatesDetail[$key]['rate'][] = strip_tags(Product::getProductShippingTitle($siteLangId, $row));
-                break;
-        }
-    }
-}
 
 if (!empty($product)) {
     $product['productPolicies'] = [];
@@ -191,13 +157,6 @@ if (!empty($product)) {
                 'title' => Labels::getLabel('LBL_FREE_SHIPPING_ON_THIS_ORDER', $siteLangId),
                 'isSvg' => Plugin::RETURN_FALSE,
                 'icon' => CONF_WEBROOT_URL . 'images/freeshipping.png'
-            );
-        } elseif (count($shippingRates) > 0) {
-            $product['productPolicies'][] = array(
-                'title' => Labels::getLabel('LBL_SHIPPING_RATES', $siteLangId),
-                'isSvg' => Plugin::RETURN_FALSE,
-                'icon' => CONF_WEBROOT_URL . 'images/shipping-policies.png',
-                'shippingRatesDetail' => $shippingRatesDetail,
             );
         }
     }
@@ -330,7 +289,6 @@ $data = array(
     'reviews' => empty($reviews) ? (object) array() : $reviews,
     'codEnabled' => (true === $codEnabled ? 1 : 0),
     'isOutOfMinOrderQty' => $isOutOfMinOrderQty,
-    // 'shippingRates' => $shippingRates,
     'shippingDetails' => empty($shippingDetails) ? (object) array() : $shippingDetails,
     'optionRows' => $optionRows,
     'productSpecifications' => array(

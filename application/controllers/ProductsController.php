@@ -116,10 +116,9 @@ class ProductsController extends MyAppController
             $searchItemObj->addSearchResult($searchData);
         }
 
-        $tLeftRibbons = $tRightRibbons = [];
+        $tRightRibbons = [];
         if (isset($data['products'])) {
             $selProdIdsArr = array_column($data['products'], 'selprod_id');
-            $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
             $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
         }
 
@@ -149,7 +148,6 @@ class ProductsController extends MyAppController
 
         if (FatUtility::isAjaxCall()) {
             $this->set('products', $data['products']);
-            $this->set('tLeftRibbons', $tLeftRibbons);
             $this->set('tRightRibbons', $tRightRibbons);
             /*$this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);*/
             $this->set('page', $data['page']);
@@ -162,7 +160,6 @@ class ProductsController extends MyAppController
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
-        $data['tLeftRibbons'] = $tLeftRibbons;
         $data['tRightRibbons'] = $tRightRibbons;
         $data['tRightRibbons'] = $tRightRibbons;
         $data['showBreadcrumb'] = true;
@@ -639,21 +636,21 @@ class ProductsController extends MyAppController
             if ($codMinWalletBalance > -1 && $codMinWalletBalance > $walletBalance) {
                 $codEnabled = false;
             }
-            $shippingRates = Product::getProductShippingRates($product['product_id'], $this->siteLangId, 0, $product['selprod_user_id']);
-            $shippingDetails = Product::getProductShippingDetails($product['product_id'], $this->siteLangId, $product['selprod_user_id']);
+            // $shippingRates = Product::getProductShippingRates($product['product_id'], $this->siteLangId, 0, $product['selprod_user_id']);
+            // $shippingDetails = Product::getProductShippingDetails($product['product_id'], $this->siteLangId, $product['selprod_user_id']);
         } else {
             if ($product['product_cod_enabled']) {
                 $codEnabled = true;
             }
-            $shippingRates = Product::getProductShippingRates($product['product_id'], $this->siteLangId, 0, 0);
-            $shippingDetails = Product::getProductShippingDetails($product['product_id'], $this->siteLangId, 0);
+            // $shippingRates = Product::getProductShippingRates($product['product_id'], $this->siteLangId, 0, 0);
+            // $shippingDetails = Product::getProductShippingDetails($product['product_id'], $this->siteLangId, 0);
         }
 
         if ($product['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $shippingRates = array();
-            $shippingDetails = array();
+            // $shippingDetails = array();
         }
-        // $isProductShippedBySeller = Product::isProductShippedBySeller($product['product_id'], $product['product_seller_id'], $product['selprod_user_id']);
+
         $fulfillmentType = $product['selprod_fulfillment_type'];
         if (true == $isProductShippedBySeller) {
             if ($product['shop_fulfillment_type'] != Shipping::FULFILMENT_ALL) {
@@ -675,8 +672,8 @@ class ProductsController extends MyAppController
 
         $this->set('fulfillmentType', $fulfillmentType);
         $this->set('codEnabled', $codEnabled);
-        $this->set('shippingRates', $shippingRates);
-        $this->set('shippingDetails', $shippingDetails);
+        // $this->set('shippingRates', $shippingRates);
+        // $this->set('shippingDetails', $shippingDetails);
         /*]*/
 
         /*[ Product shipping cost */
@@ -685,8 +682,9 @@ class ProductsController extends MyAppController
         $sellerId = (false === MOBILE_APP_API_CALL) ? $product['selprod_user_id'] : 0;
         $product['moreSellersArr'] = Product::getMoreSeller($product['selprod_code'], $this->siteLangId, $sellerId);
 
-        $product['selprod_return_policies'] = SellerProduct::getSelprodPolicies($product['selprod_id'], PolicyPoint::PPOINT_TYPE_RETURN, $this->siteLangId);
-        $product['selprod_warranty_policies'] = SellerProduct::getSelprodPolicies($product['selprod_id'], PolicyPoint::PPOINT_TYPE_WARRANTY, $this->siteLangId);
+        /* $product['selprod_return_policies'] = SellerProduct::getSelprodPolicies($product['selprod_id'], PolicyPoint::PPOINT_TYPE_RETURN, $this->siteLangId);
+        $product['selprod_warranty_policies'] = SellerProduct::getSelprodPolicies($product['selprod_id'], PolicyPoint::PPOINT_TYPE_WARRANTY, $this->siteLangId); */
+
         /* Form buy product[ */
         $frm = $this->getCartForm($this->siteLangId);
         $frm->fill(array('selprod_id' => $selprod_id));
@@ -747,7 +745,6 @@ class ProductsController extends MyAppController
         $upsellProducts = $sellerProduct->getUpsellProducts($product['selprod_id'], $this->siteLangId, $loggedUserId);
         $upSellSelProdIdsArr = array_column($upsellProducts, 'selprod_id');
         $upsellProductsRibbons = [
-            'tLeftRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $upSellSelProdIdsArr),
             'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $upSellSelProdIdsArr)
         ];
 
@@ -755,7 +752,6 @@ class ProductsController extends MyAppController
         $relatedProductsRs = $this->relatedProductsById(array_keys($relatedProducts));
         $relSelProdIdsArr = array_column($relatedProducts, 'selprod_id');
         $relatedProductsRibbons = [
-            'tLeftRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $relSelProdIdsArr),
             'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $relSelProdIdsArr)
         ];
 
@@ -796,13 +792,8 @@ class ProductsController extends MyAppController
             $displayProductNotAvailableLable = true;
         }
 
-        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, [$selprod_id]);
         $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, [$selprod_id]);
-
         $selProdRibbons = [];
-        if (array_key_exists($selprod_id, $tLeftRibbons)) {
-            $selProdRibbons[] = $tLeftRibbons[$selprod_id];
-        }
         if (array_key_exists($selprod_id, $tRightRibbons)) {
             $selProdRibbons[] = $tRightRibbons[$selprod_id];
         }
@@ -857,7 +848,6 @@ class ProductsController extends MyAppController
 
         $recSelProdIdsArr = array_column($recommendedProducts, 'selprod_id');
         $recommendedProductsRibbons = [
-            'tLeftRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $recSelProdIdsArr),
             'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $recSelProdIdsArr)
         ];
         $this->set('recommendedProducts', $recommendedProducts);
@@ -882,7 +872,6 @@ class ProductsController extends MyAppController
 
             $recentSelProdIdsArr = array_column($recentlyViewed, 'selprod_id');
             $recentlyViewedRibbons = [
-                'tLeftRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $recentSelProdIdsArr),
                 'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $recentSelProdIdsArr)
             ];
             $this->set('recentlyViewed', $recentlyViewed);
@@ -1208,7 +1197,6 @@ class ProductsController extends MyAppController
         if (!empty($recentViewedProducts)) {
             $recentSelProdIdsArr = array_column($recentViewedProducts, 'selprod_id');
             $recentlyViewedRibbons = [
-                'tLeftRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $recentSelProdIdsArr),
                 'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $recentSelProdIdsArr)
             ];
         }
@@ -1916,11 +1904,9 @@ class ProductsController extends MyAppController
         $products = $db->fetchAll($rs);
 
         $selProdIdsArr = array_column($products, 'selprod_id');
-        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
         $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
         $data = array(
             'products' => $products,
-            'tLeftRibbons' => $tLeftRibbons,
             'tRightRibbons' => $tRightRibbons,
             'page' => $this->pageData['page'],
             'pageSize' => $this->pageData['pageSize'],

@@ -121,7 +121,6 @@ class ShopsController extends MyAppController
             $allShops[$val['shop_id']]['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', [$val['shop_id'], $this->siteLangId, 'SMALL']);
 
             $selProdIdsArr = array_column($allShops[$val['shop_id']]['products'], 'selprod_id');
-            $allShops[$val['shop_id']]['tLeftRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
             $allShops[$val['shop_id']]['tRightRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
         }
         $this->set('allShops', $allShops);
@@ -192,7 +191,6 @@ class ShopsController extends MyAppController
         $data = $this->getListingData($get, $includeShopData);
 
         $selProdIdsArr = array_column($data['products'], 'selprod_id');
-        $data['tLeftRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
         $data['tRightRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
         if (false === MOBILE_APP_API_CALL) {
@@ -218,7 +216,6 @@ class ShopsController extends MyAppController
                 $this->set('siteLangId', $this->siteLangId);
                 $this->set('pageSize', $data['pageSize']);
                 $this->set('pageSizeArr', $data['pageSizeArr']);
-                $this->set('tLeftRibbons', $data['tLeftRibbons']);
                 $this->set('tRightRibbons', $data['tRightRibbons']);
                 echo $this->_template->render(false, false, 'products/products-list.php', true);
                 exit;
@@ -531,11 +528,9 @@ class ShopsController extends MyAppController
         $frm->fill($data['postedData']);
 
         $selProdIdsArr = array_column($data['products'], 'selprod_id');
-        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
         $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
         $arr = array(
-            'tLeftRibbons' => $tLeftRibbons,
             'tRightRibbons' => $tRightRibbons,
             'scollection_name' => $shopcolDetails['scollection_name'],
             'canonicalUrl' => UrlHelper::generateFullUrl('Shops', 'collection', array($shop_id, $scollectionId)),

@@ -142,7 +142,7 @@ $(document).ready(function () {
     };
 
     addElement = function (e) {
-        var weight = e.detail.tag.id;
+        var weight = e.detail.data.id;
         var subsetArr = e.detail.data.subset;
         var selectedWeights = $("input[name='CONF_THEME_FONT_WEIGHT']").val();               
         if ('' != selectedWeights) {
