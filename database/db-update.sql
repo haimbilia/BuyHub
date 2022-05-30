@@ -1862,3 +1862,7 @@ ALTER TABLE `tbl_commission_settings` DROP `commsetting_deleted`;
 
 delete from `tbl_affiliate_commission_setting_history` where `acsh_afcommsetting_deleted` = 1;
 ALTER TABLE `tbl_affiliate_commission_setting_history` DROP `acsh_afcommsetting_deleted`;
+
+-- ---- CCAvenue ---- --
+INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_CCAVENUE_TEST_CREDENTIALS", "1", "To test the integration login to your CCAvenue M.A.R.S account, under Settings tab -> API Keys page. Copy the given credentials.", "1");
+-- ---- CCAvenue ---- --

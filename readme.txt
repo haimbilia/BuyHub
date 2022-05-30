@@ -809,6 +809,8 @@ Updates/Fixes :
     => 064629 - Buyer >> Orders >> Nothing happens when the user clicks on the product's name
     => 064640 - The wrong alert message appears when the admin tries to delete the tax structure.
     => 064622 - Include and exclude states options should not appear when the admin selected the 'Rest of the world' in the 'To country' field while adding tax rule
+    => 064666 - Admin: Getting multiple issues under threshold product section.
+    => 064651 - Suggestion: To show the dimensions of the shipping package with the package name while adding a product from the seller or admin end.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

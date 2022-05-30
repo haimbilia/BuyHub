@@ -67,7 +67,7 @@ class ShippingPackagesController extends ListingBaseController
             $srch->addCondition('spack.shippack_name', 'like', '%' . $post['keyword'] . '%');
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        $srch->doNotCalculateRecords(); 
+        $srch->doNotCalculateRecords();
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
@@ -136,22 +136,27 @@ class ShippingPackagesController extends ListingBaseController
         if ($page < 2) {
             $page = 1;
         }
-     
+
         $keyword = FatApp::getPostedData('keyword');
         $srch = ShippingPackage::getSearchObject();
-        $srch->addMultipleFields(array(ShippingPackage::tblFld('id') .' as id' , ShippingPackage::tblFld('name').' as text'));
+        $srch->addMultipleFields(
+            [
+                'shippack_id as id',
+                'CONCAT(shippack_name, " (", shippack_length, " X ", shippack_width, " X ", shippack_height, ") (", (CASE WHEN shippack_units = ' . applicationConstants::LENGTH_CENTIMETER . ' THEN "CM" WHEN shippack_units = ' . applicationConstants::LENGTH_METER . ' THEN "M" ELSE "IN" END),")") as text',
+            ]
+        );
         $srch->addOrder(ShippingPackage::tblFld('name'));
         if (!empty($keyword)) {
             $srch->addCondition(ShippingPackage::tblFld('name'), 'LIKE', '%' . $keyword . '%');
         }
         $srch->setPageSize($pagesize);
         $srch->setPageNumber($page);
-        $results = FatApp::getDb()->fetchAll($srch->getResultSet());      
+        $results = FatApp::getDb()->fetchAll($srch->getResultSet());
         $json = array(
             'pageCount' => $srch->pages(),
             'results' => $results,
         );
-        
+
         die(FatUtility::convertToJson($json));
     }
 
@@ -176,7 +181,7 @@ class ShippingPackagesController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'shippack_id');
         }
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -204,7 +209,7 @@ class ShippingPackagesController extends ListingBaseController
         if (!$obj->deleteRecord(false)) {
             LibHelper::exitWithError($obj->getError(), true);
         }
-       
+
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -216,7 +221,7 @@ class ShippingPackagesController extends ListingBaseController
             return json_decode($shopsTblHeadingCols, true);
         }
         $arr = [
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'shippack_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
             'dimensions' => Labels::getLabel('LBL_DIMENSIONS', $this->siteLangId),
             'shippack_units' => Labels::getLabel('LBL_UNIT', $this->siteLangId),

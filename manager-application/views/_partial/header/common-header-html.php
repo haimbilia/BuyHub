@@ -17,12 +17,12 @@
 
 </head>
 <?php $adminSidebar = $_COOKIE['adminSidebar'] ?? 0;
-$adminSidebar = (in_array(FatApp::getController(), ['ProductsController','CustomProductsController']) &&  FatApp::getAction() == 'form') ? 0 : $adminSidebar;
+$adminSidebar = (in_array(FatApp::getController(), ['ProductsController', 'CustomProductsController']) &&  FatApp::getAction() == 'form') ? 0 : $adminSidebar;
 ?>
 
 <body class="<?php echo $bodyClass; ?>" data-sidebar-minimize="<?php echo (0 < $adminSidebar) ? 'off' : 'on' ?>">
     <?php if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
         $tplFile = str_replace(CONF_APPLICATION_PATH, CONF_INSTALLATION_PATH . CONF_FRONT_END_APPLICATION_DIR, CONF_THEME_PATH);
-        $tplFile .= 'restore-system/top-header.php';
-        include_once $tplFile;
+        include_once $tplFile . 'restore-system/top-header.php';
+        include_once $tplFile . 'restore-system/page-content.php';
     } ?>

@@ -96,14 +96,14 @@ class Navigation
         }
         */
 
-        $controller = str_replace('Controller', '', FatApp::getController());
+        $controllerName = substr(FatApp::getController(), 0, '-' . strlen('Controller'));
         $activeTab = 'B';
         $sellerActiveTabControllers = array('Seller');
         $buyerActiveTabControllers = array('Buyer');
 
-        if (in_array($controller, $sellerActiveTabControllers)) {
+        if (in_array($controllerName, $sellerActiveTabControllers)) {
             $activeTab = 'S';
-        } elseif (in_array($controller, $buyerActiveTabControllers)) {
+        } elseif (in_array($controllerName, $buyerActiveTabControllers)) {
             $activeTab = 'B';
         } elseif (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'])) {
             $activeTab = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'];
@@ -116,6 +116,7 @@ class Navigation
         */
         $template->set('userPrivilege', UserPrivilege::getInstance());
         $template->set('activeTab', $activeTab);       
+        $template->set('controllerName', $controllerName);       
         $template->set('todayUnreadMessageCount', $todayUnreadMessageCount);
     }
 

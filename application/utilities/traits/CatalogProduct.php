@@ -73,7 +73,7 @@ trait CatalogProduct
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $langId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('FRM_SELECT', $langId));
             $fld->requirements()->setRequired();
             if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
-                $shipPackArr = ShippingPackage::getAllNames();
+                $shipPackArr = ShippingPackage::getNames();
                 $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PACKAGE', $langId), 'product_ship_package', $shipPackArr, '', [], Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
 
                 $weightUnitsArr = applicationConstants::getWeightUnitsArr($langId);

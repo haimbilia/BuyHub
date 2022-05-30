@@ -201,7 +201,7 @@
                     }
 
                 ?>
-                    <li class="list-addons-item addon--js <?php echo $cancelClass; ?>">
+                    <li class="list-addons-item addon--js <?php echo $cancelClass; ?> <?php echo ($usproduct['selprod_stock'] <= 0) ? 'out-of-stock' : ''; ?>" >
                         <div class="product-profile">
                             <figure class="product-profile__pic">
                                 <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], ImageDimension::VIEW_MINI, $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI); ?>>

@@ -200,10 +200,6 @@ class AdminBaseController extends FatController
 
             $this->includeDatePickerLangJs();
 
-            if (CommonHelper::demoUrl() == true) {
-                $this->_template->addCss('css/demo.css');
-            }
-
             $this->set('bodyClass', 'fb-body');
         }
 

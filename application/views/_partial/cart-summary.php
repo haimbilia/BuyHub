@@ -118,7 +118,7 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                 <div class="offcanvas-foot">
                     <ul class="cart-summary">
                         <li class="cart-summary-item">
-                            <span class="label"><?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?></span>
+                            <span class="label"><?php echo Labels::getLabel('LBL_CART_TOTAL', $siteLangId); ?></span>
                             <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
                         </li>
                         <?php if (0 < $cartSummary['cartVolumeDiscount']) { ?>
