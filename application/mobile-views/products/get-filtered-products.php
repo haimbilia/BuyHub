@@ -1,15 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 if (array_key_exists('products', $data)) {
-    $tLeftRibbons = $data['tLeftRibbons'];
     $tRightRibbons = $data['tRightRibbons'];
-    unset($data['tLeftRibbons'], $data['tRightRibbons']);
+    unset($data['tRightRibbons']);
     foreach ($data['products'] as $index => &$product) {
         $selProdRibbons = [];
-        if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-            $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-        }
-
         if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
             $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
         }

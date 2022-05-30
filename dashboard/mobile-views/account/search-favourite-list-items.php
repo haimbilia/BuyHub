@@ -2,10 +2,6 @@
 
 foreach ($products as $key => &$product) {
     $selProdRibbons = [];
-    if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-        $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-    }
-
     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
     }

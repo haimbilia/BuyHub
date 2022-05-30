@@ -116,10 +116,9 @@ class ProductsController extends MyAppController
             $searchItemObj->addSearchResult($searchData);
         }
 
-        $tLeftRibbons = $tRightRibbons = [];
+        $tRightRibbons = [];
         if (isset($data['products'])) {
             $selProdIdsArr = array_column($data['products'], 'selprod_id');
-            $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
             $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
         }
 
@@ -149,7 +148,6 @@ class ProductsController extends MyAppController
 
         if (FatUtility::isAjaxCall()) {
             $this->set('products', $data['products']);
-            $this->set('tLeftRibbons', $tLeftRibbons);
             $this->set('tRightRibbons', $tRightRibbons);
             /*$this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);*/
             $this->set('page', $data['page']);
@@ -162,7 +160,6 @@ class ProductsController extends MyAppController
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
-        $data['tLeftRibbons'] = $tLeftRibbons;
         $data['tRightRibbons'] = $tRightRibbons;
         $data['tRightRibbons'] = $tRightRibbons;
         $data['showBreadcrumb'] = true;
@@ -1200,7 +1197,6 @@ class ProductsController extends MyAppController
         if (!empty($recentViewedProducts)) {
             $recentSelProdIdsArr = array_column($recentViewedProducts, 'selprod_id');
             $recentlyViewedRibbons = [
-                'tLeftRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $recentSelProdIdsArr),
                 'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $recentSelProdIdsArr)
             ];
         }
@@ -1908,11 +1904,9 @@ class ProductsController extends MyAppController
         $products = $db->fetchAll($rs);
 
         $selProdIdsArr = array_column($products, 'selprod_id');
-        $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
         $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
         $data = array(
             'products' => $products,
-            'tLeftRibbons' => $tLeftRibbons,
             'tRightRibbons' => $tRightRibbons,
             'page' => $this->pageData['page'],
             'pageSize' => $this->pageData['pageSize'],

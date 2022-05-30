@@ -16,11 +16,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
             foreach ($products as $product) {
 
                 $selProdRibbons = [];
-                if (isset($tLeftRibbons) || isset($tRightRibbons)) {
-                    if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                        $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                    }
-
+                if (isset($tRightRibbons)) {
                     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                     }

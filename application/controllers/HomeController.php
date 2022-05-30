@@ -21,16 +21,11 @@ class HomeController extends MyAppController
                 }
 
                 $selProdIdsArr = array_column($sponsoredProds, 'selprod_id');
-                $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
                 $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
                 if (true === MOBILE_APP_API_CALL) {
                     foreach ($sponsoredProds as &$product) {
                         $selProdRibbons = [];
-                        if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                            $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                        }
-
                         if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                             $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                         }
@@ -47,7 +42,6 @@ class HomeController extends MyAppController
                 $collections[$ind]['totProducts'] = count($sponsoredProds);
 
                 if (false === MOBILE_APP_API_CALL) {
-                    $collections[$ind]['tLeftRibbons'] = $tLeftRibbons;
                     $collections[$ind]['tRightRibbons'] = $tRightRibbons;
                 }
             }
@@ -703,16 +697,11 @@ class HomeController extends MyAppController
 
                     $products = $db->fetchAll($rs, 'selprod_id');
                     $selProdIdsArr = array_keys($products);
-                    $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
                     $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
                     if (true === MOBILE_APP_API_CALL) {
                         foreach ($products as &$product) {
                             $selProdRibbons = [];
-                            if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                                $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                            }
-
                             if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                                 $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                             }
@@ -730,7 +719,6 @@ class HomeController extends MyAppController
                     $collections[$ind]['totProducts'] = $recordCount;
 
                     if (false  === MOBILE_APP_API_CALL) {
-                        $collections[$ind]['tLeftRibbons'] = $tLeftRibbons;
                         $collections[$ind]['tRightRibbons'] = $tRightRibbons;
                     }
                     /* ] */
@@ -822,7 +810,6 @@ class HomeController extends MyAppController
                             $prodData = $db->fetchAll($Prs);
 
                             $selProdIdsArr = array_column($prodData, 'selprod_id');
-                            $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
                             $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
                             $counterInd = (true === MOBILE_APP_API_CALL) ? $counter : $catData['prodcat_id'];
@@ -839,10 +826,6 @@ class HomeController extends MyAppController
 
                                 foreach ($prodData as &$product) {
                                     $selProdRibbons = [];
-                                    if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                                        $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                                    }
-
                                     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                                         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                                     }
@@ -856,7 +839,6 @@ class HomeController extends MyAppController
                                 }
                             } else {
                                 $collections[$ind]['categories'][$counterInd]['catData'] = $catData;
-                                $collections[$ind]['categories'][$counterInd]['tLeftRibbons'] = $tLeftRibbons;
                                 $collections[$ind]['categories'][$counterInd]['tRightRibbons'] = $tRightRibbons;
                             }
 
@@ -882,7 +864,6 @@ class HomeController extends MyAppController
                             $prodData = $db->fetchAll($Prs);
 
                             $selProdIdsArr = array_column($prodData, 'selprod_id');
-                            $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
                             $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
                             $counterInd = (true === MOBILE_APP_API_CALL) ? $counter : $catData['prodcat_id'];
@@ -899,10 +880,6 @@ class HomeController extends MyAppController
 
                                 foreach ($prodData as &$product) {
                                     $selProdRibbons = [];
-                                    if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                                        $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                                    }
-
                                     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                                         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                                     }
@@ -916,7 +893,6 @@ class HomeController extends MyAppController
                                 }
                             } else {
                                 $collections[$ind]['categories'][$counterInd]['catData'] = $catData;
-                                $collections[$ind]['categories'][$counterInd]['tLeftRibbons'] = $tLeftRibbons;
                                 $collections[$ind]['categories'][$counterInd]['tRightRibbons'] = $tRightRibbons;
                             }
 
@@ -1321,7 +1297,6 @@ class HomeController extends MyAppController
 
             $prodData = $db->fetchAll($Prs);
             $selProdIdsArr = array_column($prodData, 'selprod_id');
-            $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
             $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
 
             if (true === MOBILE_APP_API_CALL) {
@@ -1333,10 +1308,6 @@ class HomeController extends MyAppController
 
                 foreach ($prodData as &$product) {
                     $selProdRibbons = [];
-                    if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                        $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                    }
-
                     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                     }
@@ -1356,7 +1327,6 @@ class HomeController extends MyAppController
 
                 $sponsoredShops['rating'][$shops['shop_id']] = $rating;
                 $sponsoredShops['shops'][$shops['shop_id']]['products'] = $prodData;
-                $sponsoredShops['shops'][$shops['shop_id']]['tLeftRibbons'] = $tLeftRibbons;
                 $sponsoredShops['shops'][$shops['shop_id']]['tRightRibbons'] = $tRightRibbons;
             }
             /* ] */

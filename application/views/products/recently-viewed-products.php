@@ -22,14 +22,9 @@ if ($recentViewedProducts) { ?>
         </div>
         <div class="product-listing js-carousel recently-viewed-products" id="product-listing-rvp" data-slides="4,4,3,2" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
             <?php
-            $tLeftRibbons = isset($recentlyViewedRibbons['tLeftRibbons']) ? $recentlyViewedRibbons['tLeftRibbons'] : [];
             $tRightRibbons = isset($recentlyViewedRibbons['tRightRibbons']) ? $recentlyViewedRibbons['tRightRibbons'] : [];
             foreach ($recentViewedProducts as $rProduct) {
                 $selProdRibbons = [];
-                if (array_key_exists($rProduct['selprod_id'], $tLeftRibbons)) {
-                    $selProdRibbons[] = $tLeftRibbons[$rProduct['selprod_id']];
-                }
-
                 if (array_key_exists($rProduct['selprod_id'], $tRightRibbons)) {
                     $selProdRibbons[] = $tRightRibbons[$rProduct['selprod_id']];
                 }
