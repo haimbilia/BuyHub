@@ -796,7 +796,7 @@ class ProductsController extends MyAppController
         }
 
         $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, [$selprod_id]);
-
+        $selProdRibbons = [];
         if (array_key_exists($selprod_id, $tRightRibbons)) {
             $selProdRibbons[] = $tRightRibbons[$selprod_id];
         }
