@@ -1,4 +1,6 @@
-<?php if ($recommendedProducts) { ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+if ($recommendedProducts) { ?>
     <section class="section">
         <div class="container">
             <div class="section-head">

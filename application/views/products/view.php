@@ -20,11 +20,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
         </div>
     </section>
 
-    <?php if ($relatedProductsRs) { ?>
-        <!-- Related Products -->
-        <?php include(CONF_THEME_PATH . 'products/related-products.php'); ?>
-        <!-- Related Products -->
-    <?php } ?>
+    <div class="relatedProductsSectionJs"></div>
 
     <section class="section">
         <div class="container">
@@ -32,11 +28,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
         </div>
     </section>
 
-    <?php if ($recommendedProducts) {
-        /* Recomended Products */
-        include(CONF_THEME_PATH . 'products/recommended-products.php');
-        /* Recomended Products */
-    } ?>
+    <div class="recommendedProductsSectionJs"></div>
 
     <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && (!empty($reviews) || $canSubmitFeedback)) {
         echo $frmReviewSearch->getFormHtml();
@@ -49,7 +41,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
     <!-- Banners -->
 
 
-    <section class="section bg-gray" id="recentlyViewedProductsDiv"></section>
+    <div class="recentlyViewedProductsSectionJs"></div>
 
 </div>
 
@@ -58,7 +50,14 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
     var layout = '<?php echo CommonHelper::getLayoutDirection(); ?>';
 
     $(function() {
-        recentlyViewedProducts(<?php echo $product['selprod_id']; ?>);
+        let fnCalled = false;
+        $(window).scroll(function() {
+            if ($('.relatedProductsSectionJs').isInViewport() && false == fnCalled) {
+                fnCalled = true;
+                interRelatedProducts(<?php echo $product['selprod_id']; ?>);
+            }
+        });
+
         /*zheight = $(window).height() - 180; */
         zwidth = $(window).width() / 3 - 15;
 
