@@ -9,8 +9,8 @@
                             <h1><?php echo Labels::getLabel('LBL_Frequently_Asked_Questions', $siteLangId); ?></h1>
                         </div>
                     </div>
-                    <form name="frmSearchFaqs" class="form form-faqs" action="javascript:void(0);">
-                        <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId);?>" class="form-faqs-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
+                    <form name="frmSearchFaqs" method="post" onsubmit="searchFaqsListing(this); return(false);" class="form form-faqs">
+                        <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>" class="form-faqs-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
                     </form>
                 </div>
             </div>
@@ -19,7 +19,7 @@
     <section class="section bg-white">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-6">
+                <div class="col-lg-6 faqSectionJs">
                     <?php if ($recordCount > 0) { ?>
                         <div class="faq-filters mb-4" id="categoryPanel"></div>
                     <?php } ?>
@@ -31,5 +31,6 @@
     <script>
         var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
         var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';
+        var faqsSearchStringLength = '<?php echo Faq::FAQS_SEARCH_STRING_LENGTH; ?>';
     </script>
 </div>

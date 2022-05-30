@@ -6,12 +6,11 @@ class Faq extends MyAppModel
     public const DB_TBL_LANG = 'tbl_faqs_lang';
     public const DB_TBL_PREFIX = 'faq_';
     public const DB_TBL_LANG_PREFIX = 'faqlang_';
-    private $db;
+    public const FAQS_SEARCH_STRING_LENGTH = 5;
 
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
     }
 
     public static function getSearchObject($langId = 0, $isDeleted = true)

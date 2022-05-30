@@ -231,6 +231,10 @@ class Badge extends MyAppModel
 
     public static function getRibbons(int $langId, int $position, array $selProdIdArr)
     {
+        if (self::RIBB_POS_TLEFT == $position) {
+            /* We can remove this condition when we need to use display ribbons on top left and right */
+            return [];
+        }
         $date = date('Y-m-d H:i:00');
         $srch = new BadgeLinkConditionSearch();
         $srch->setSelProdIdArr($selProdIdArr);
@@ -374,7 +378,8 @@ class Badge extends MyAppModel
                     WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED . ' 
                         THEN ' . $orderCancellationRate . ' = blinkcond_condition_from
                     ELSE FALSE
-                END)');
+                END)'
+            );
 
             $srch->addDirectCondition(
                 '(CASE 
@@ -412,7 +417,7 @@ class Badge extends MyAppModel
             case self::COND_AUTO:
                 $status = 'success';
                 break;
-            
+
             default:
                 $status = 'warning';
                 break;

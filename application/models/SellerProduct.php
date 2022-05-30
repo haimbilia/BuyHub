@@ -388,6 +388,7 @@ class SellerProduct extends MyAppModel
             }
         }
         $srch->addGroupBy('selprod_id');
+        $srch->doNotCalculateRecords();       
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $data = array();
@@ -792,6 +793,7 @@ class SellerProduct extends MyAppModel
         if ($sellProdId > 0) {
             $srch->addCondition(static::DB_TBL_RELATED_PRODUCTS_PREFIX . 'sellerproduct_id', '=', 'mysql_func_' . $sellProdId, 'AND', true);
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         if ($sellProdId > 0) {

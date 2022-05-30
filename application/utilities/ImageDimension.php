@@ -242,9 +242,10 @@ class ImageDimension extends FatUtility
     public static function getProductImageData(string $sizeType = ''): array
     {
         $arr =  [
-            self::VIEW_CLAYOUT2 => [self::WIDTH => 398, self::HEIGHT => 398],
-            self::VIEW_CLAYOUT3 => [self::WIDTH => 160, self::HEIGHT => 160],
-            self::VIEW_CLAYOUT1 => [self::WIDTH => 286, self::HEIGHT => 286],
+            self::VIEW_CLAYOUT2 => [self::WIDTH => 468, self::HEIGHT => 468],
+            self::VIEW_CLAYOUT1 => [self::WIDTH => 341, self::HEIGHT => 341],
+            self::VIEW_CLAYOUT3 => [self::WIDTH => 300, self::HEIGHT => 300],
+
             self::VIEW_THUMB => [self::WIDTH => 100, self::HEIGHT => 100],
             self::VIEW_MINI => [self::WIDTH => 50, self::HEIGHT => 50],
             self::VIEW_EXTRA_SMALL => [self::WIDTH => 60, self::HEIGHT => 60],
@@ -735,7 +736,7 @@ class ImageDimension extends FatUtility
     public static function getCategoryBanner(string $sizeType = ''): array
     {
         $arr =  [
-            self::VIEW_THUMB => [self::WIDTH => 250, self::HEIGHT => 100],
+            self::VIEW_THUMB => [self::WIDTH => 252, self::HEIGHT => 63],
             self::VIEW_MEDIUM => [self::WIDTH => 300, self::HEIGHT => 75],
             self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
             self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
@@ -785,18 +786,18 @@ class ImageDimension extends FatUtility
 
         if ($layout == Collections::TYPE_BANNER_LAYOUT2) {
             $arr =  [
-                self::VIEW_DESKTOP => [self::WIDTH => 800, self::HEIGHT => 600],
-                self::VIEW_MOBILE => [self::WIDTH => 800, self::HEIGHT => 600],
-                self::VIEW_TABLET => [self::WIDTH => 800, self::HEIGHT => 600],
+                self::VIEW_DESKTOP => [self::WIDTH => 920, self::HEIGHT => 690],
+                self::VIEW_MOBILE => [self::WIDTH => 920, self::HEIGHT => 690],
+                self::VIEW_TABLET => [self::WIDTH => 920, self::HEIGHT => 690],
                 self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 150],
             ];
         }
 
         if ($layout == Collections::TYPE_BANNER_LAYOUT3) {
             $arr =  [
-                self::VIEW_DESKTOP => [self::WIDTH => 800, self::HEIGHT => 600],
-                self::VIEW_MOBILE => [self::WIDTH => 800, self::HEIGHT => 600],
-                self::VIEW_TABLET => [self::WIDTH => 800, self::HEIGHT => 600],
+                self::VIEW_DESKTOP => [self::WIDTH => 920, self::HEIGHT => 690],
+                self::VIEW_MOBILE => [self::WIDTH => 920, self::HEIGHT => 690],
+                self::VIEW_TABLET => [self::WIDTH => 920, self::HEIGHT => 690],
                 self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 150],
             ];
         }

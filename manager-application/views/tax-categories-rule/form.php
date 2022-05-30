@@ -19,7 +19,8 @@ if (!empty($ruleLocations)) {
 $frm->setFormTagAttribute('onsubmit', 'saveRecord($("#' . $frm->getFormTagAttribute('id') . '")[0], "editRecord"); return(false);');
 $fromCountryFld = $frm->getField('taxruleloc_from_country_id');
 $fromCountryFld->value = $fromCountryId;
-$fromCountryFld->setFieldTagAttribute('onChange', 'checkStatesDefault(this.value,0,\'#taxruleloc_from_state_id\')');
+$fromCountryFld->setFieldTagAttribute('onChange', 'checkStatesDefault(this,0,\'#taxruleloc_from_state_id\')');
+$fromCountryFld->addFieldTagAttribute('class', 'fromCountyElementJs');
 $fromStateFld = $frm->getField('taxruleloc_from_state_id[]');
 $fromStateFld->addFieldTagAttribute('multiple', 'true');
 //$fromStateFld->addFieldTagAttribute('class', 'selectpicker');
@@ -29,7 +30,8 @@ $fromStateFld->value = $fromStateIds;
 
 $toCountryFld = $frm->getField('taxruleloc_to_country_id');
 $toCountryFld->setFieldTagAttribute("id", "taxruleloc_to_country_id");
-$toCountryFld->setFieldTagAttribute('onChange', 'checkStatesDefault(this.value,0,\'#taxruleloc_to_state_id\')');
+$toCountryFld->setFieldTagAttribute('onChange', 'checkStatesDefault(this,0,\'#taxruleloc_to_state_id\')');
+$toCountryFld->addFieldTagAttribute('class', 'toCountyElementJs');
 $toCountryFld->value = $toCountryId;
 
 $typeFld = $frm->getField('taxruleloc_type');
@@ -62,8 +64,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
 <script>
     $(function () {
-        checkStatesDefault(<?php echo $fromCountryId; ?>, <?php echo json_encode($fromStateIds); ?>, '#taxruleloc_from_state_id');
-        checkStatesDefault(<?php echo $toCountryId; ?>, <?php echo json_encode($toStateIds); ?>, '#taxruleloc_to_state_id');
+        checkStatesDefault($('.fromCountyElementJs').get(0), <?php echo json_encode($fromStateIds); ?>, '#taxruleloc_from_state_id');
+        checkStatesDefault($('.toCountyElementJs').get(0), <?php echo json_encode($toStateIds); ?>, '#taxruleloc_to_state_id');
         $('#taxrule_taxstr_id').trigger('change');
        
     });

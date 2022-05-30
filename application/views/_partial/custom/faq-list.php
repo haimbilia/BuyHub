@@ -16,10 +16,17 @@ if (!empty($list) && is_array($list)) {
 
 <script>
     $(function() {
-        $(document).off("keyup").on("keyup", '#faqQuestionJs', function() {           
+        $(document).off("keyup").on("keyup", '#faqQuestionJs', function(e) {
+            if (e.which == 13) {
+                return;
+            }
             // Get user input from search box
             var filter_text = $(this).val();
-
+            if ('' == filter_text && typeof faqRightPanel === 'function') {
+                faqRightPanel();
+                return;
+            }
+            
             $('#listing .faqHeading').each(function() {
                 if ('' !== filter_text) {
                     let headingText = $(this).text();
