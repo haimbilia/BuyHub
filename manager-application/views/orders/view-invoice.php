@@ -166,7 +166,7 @@ $col6 = ($orderDetail['op_tax_collected_by_seller']) && $tax > 0 ;
     <tbody>
         <tr>
             <td style="border-bottom: solid 1px #000; text-align:center; line-height:1.5; ">
-                <strong style="padding:10px;display:block;font-size: 20px;"><?php echo Labels::getlabel('LBL_Tax_Invoice', $siteLangId); ?></strong>
+                <strong style="padding:10px;display:block;font-size: 20px;"><?php echo Labels::getlabel('LBL_ORDER_INVOICE', $siteLangId); ?></strong>
             </td>
         </tr>
         <tr>
@@ -199,12 +199,12 @@ $col6 = ($orderDetail['op_tax_collected_by_seller']) && $tax > 0 ;
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
-                            <td><strong><?php echo Labels::getLabel('LBL_Bill_to', $siteLangId); ?></strong> <br><?php echo $billingAddress; ?></td>
+                            <td><strong><?php echo Labels::getLabel('LBL_Bill_to', $siteLangId); ?></strong>: <br><?php echo $billingAddress; ?></td>
                             <?php if ($orderDetail['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && !empty($orderDetail['shippingAddress'])) { ?>
-                                <td><strong><?php echo Labels::getLabel('LBL_Ship_to', $siteLangId); ?></strong><br><?php echo $shippingAddress; ?></td>
+                                <td><strong><?php echo Labels::getLabel('LBL_Ship_to', $siteLangId); ?></strong>:<br><?php echo $shippingAddress; ?></td>
                             <?php } ?>
                             <?php if (!empty($orderDetail['pickupAddress'])) { ?>
-                                <td><?php echo Labels::getLabel('LBL_Pickup_Details', $siteLangId); ?><br> <br><?php echo $pickUpAddress; ?></td>
+                                <td><strong><?php echo Labels::getLabel('LBL_Pickup_Details', $siteLangId); ?></strong>:<br> <br><?php echo $pickUpAddress; ?></td>
                             <?php } ?>
                         </tr>
                     </tbody>
@@ -220,7 +220,7 @@ $col6 = ($orderDetail['op_tax_collected_by_seller']) && $tax > 0 ;
                         <tr>
                             <td><strong><?php echo Labels::getLabel('LBL_Order', $siteLangId); ?>:</strong> <?php echo $orderDetail['order_number']; ?><br><strong><?php echo Labels::getLabel('LBL_Invoice_Number', $siteLangId); ?>:</strong> <?php echo $orderDetail['op_invoice_number']; ?><br><strong><?php echo Labels::getLabel('LBL_Payment_Method', $siteLangId); ?>:</strong> <?php echo $paymentMethodName; ?>
                             </td>
-                            <td><strong><?php echo Labels::getLabel('LBL_Order_Date', $siteLangId); ?>:</strong><?php echo FatDate::format($orderDetail['order_date_added']); ?><br>
+                            <td><strong><?php echo Labels::getLabel('LBL_Order_Date', $siteLangId); ?>:</strong> <?php echo FatDate::format($orderDetail['order_date_added']); ?><br>
                                 <?php if (!empty($orderDetail['opship_tracking_number'])) { ?>
                                     <strong><?php echo Labels::getLabel('LBL_Tracking_ID', $siteLangId); ?>:</strong><?php echo $orderDetail['opship_tracking_number']; ?>
                                 <?php } ?>
@@ -348,7 +348,7 @@ $col6 = ($orderDetail['op_tax_collected_by_seller']) && $tax > 0 ;
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
-                            <td style="padding:20px 15px;"><strong><?php echo Labels::getLabel('LBL_Regd._office', $siteLangId); ?>:</strong><?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, '')); ?>
+                            <td style="padding:20px 15px;"><strong><?php echo Labels::getLabel('LBL_Regd._office', $siteLangId); ?>: </strong><?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, '')); ?>
                                 <?php $site_conatct = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
                                 $email_id = FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, '');
                                 if ($site_conatct || $email_id) { ?>

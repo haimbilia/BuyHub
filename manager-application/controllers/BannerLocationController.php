@@ -330,8 +330,8 @@ class BannerLocationController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
            /*  'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId), */
             'blocation_name' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
-            'blocation_banner_width' => Labels::getLabel('LBL_PREFFERED_WIDTH_(IN_PIXELS)', $this->siteLangId),
-            'blocation_banner_height' => Labels::getLabel('LBL_PREFFERED_HEIGHT_(IN_PIXELS)', $this->siteLangId),
+            'blocation_banner_width' => Labels::getLabel('LBL_PREFERRED_WIDTH_(IN_PIXELS)', $this->siteLangId),
+            'blocation_banner_height' => Labels::getLabel('LBL_PREFERRED_HEIGHT_(IN_PIXELS)', $this->siteLangId),
             'blocation_promotion_cost' => Labels::getLabel('LBL_PROMOTION_COST', $this->siteLangId),
             'blocation_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId)

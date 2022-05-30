@@ -62,7 +62,7 @@
             'jpgImageUrl' => [ImageDimension::VIEW_MOBILE => $mobileUrl, ImageDimension::VIEW_TABLET => $tabletUrl, ImageDimension::VIEW_DESKTOP => $desktopUrl],
             'imageUrl' => $desktopUrl,
             'ratio' => $imageDimension[ImageDimension::VIEW_DESKTOP]['aspectRatio'],
-            'alt' => '',
+            'alt' => $slide['slide_title'],
         ];
         $out .= $this->includeTemplate('_partial/picture-tag.php', $pictureAttr, true, true);
         $out .= '</div>';
