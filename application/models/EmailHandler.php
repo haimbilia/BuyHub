@@ -1009,8 +1009,7 @@ class EmailHandler extends FatModel
             return false;
         }
 
-        $frontEndUrl = (CONF_WEBROOT_FRONT_URL) ? CONF_WEBROOT_FRONT_URL : CONF_WEBROOT_URL;
-        $url = UrlHelper::generateFullUrl('seller', 'products', array(), $frontEndUrl);
+        $url = UrlHelper::generateFullUrl('seller', 'products', array(), CONF_WEBROOT_DASHBOARD);
         $productAnchor = "<a href='" . $url . "'>" . Labels::getLabel('LBL_CLICK_HERE', $langId) . "</a>";
 
         $arrReplacements = array(
