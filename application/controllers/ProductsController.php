@@ -740,20 +740,20 @@ class ProductsController extends MyAppController
         $this->set('optionRows', $optionRows);
 
         $sellerProduct = new SellerProduct($selprod_id);
-        $criteria = array('selprod_id');
-
         $upsellProducts = $sellerProduct->getUpsellProducts($product['selprod_id'], $this->siteLangId, $loggedUserId);
         $upSellSelProdIdsArr = array_column($upsellProducts, 'selprod_id');
         $upsellProductsRibbons = [
             'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $upSellSelProdIdsArr)
         ];
 
-        $relatedProducts = $sellerProduct->getRelatedProducts($this->siteLangId, $product['selprod_id'], $criteria);
-        $relatedProductsRs = $this->relatedProductsById(array_keys($relatedProducts));
-        $relSelProdIdsArr = array_column($relatedProducts, 'selprod_id');
-        $relatedProductsRibbons = [
-            'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $relSelProdIdsArr)
-        ];
+        if (true === MOBILE_APP_API_CALL) {
+            $relatedProducts = $sellerProduct->getRelatedProducts($this->siteLangId, $product['selprod_id'], ['selprod_id']);
+            $relatedProductsRs = $this->relatedProductsById(array_keys($relatedProducts));
+            $relSelProdIdsArr = array_column($relatedProducts, 'selprod_id');
+            $relatedProductsRibbons = [
+                'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $relSelProdIdsArr)
+            ];
+        }
 
         $srch = new ShopSearch($this->siteLangId);
         $srch->setDefinedCriteria($this->siteLangId);
@@ -811,10 +811,13 @@ class ProductsController extends MyAppController
         $this->set('currSelprodId', $selprod_id);
         $this->set('canSubmitFeedback', $canSubmitFeedback);
         $this->set('upsellProducts', !empty($upsellProducts) ? $upsellProducts : array());
-        $this->set('relatedProductsRs', !empty($relatedProductsRs) ? $relatedProductsRs : array());
 
         $this->set('upsellProductsRibbons', $upsellProductsRibbons);
-        $this->set('relatedProductsRibbons', $relatedProductsRibbons);
+
+        if (true === MOBILE_APP_API_CALL) {
+            $this->set('relatedProductsRs', !empty($relatedProductsRs) ? $relatedProductsRs : array());
+            $this->set('relatedProductsRibbons', $relatedProductsRibbons);
+        }
 
         $this->set('banners', $banners);
         $this->set('product', $product);
@@ -841,18 +844,20 @@ class ProductsController extends MyAppController
             $this->set('socialShareContent', $this->getOgTags($product, $afile_id));
         }
 
-        /* Recommnended Products [ */
-        $loggedUserId = UserAuthentication::getLoggedUserId(true);
-        $recommendedProducts = (array) $this->getRecommendedProducts($selprod_id, $this->siteLangId, $loggedUserId);
-        $recommendedProducts = (0 < count(array_filter($recommendedProducts)) ? array_filter($recommendedProducts) : []);
+        if (true === MOBILE_APP_API_CALL) {
+            /* Recommnended Products [ */
+            $loggedUserId = UserAuthentication::getLoggedUserId(true);
+            $recommendedProducts = (array) $this->getRecommendedProducts($selprod_id, $this->siteLangId, $loggedUserId);
+            $recommendedProducts = (0 < count(array_filter($recommendedProducts)) ? array_filter($recommendedProducts) : []);
 
-        $recSelProdIdsArr = array_column($recommendedProducts, 'selprod_id');
-        $recommendedProductsRibbons = [
-            'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $recSelProdIdsArr)
-        ];
-        $this->set('recommendedProducts', $recommendedProducts);
-        $this->set('recommendedProductsRibbons', $recommendedProductsRibbons);
-        /* ]  */
+            $recSelProdIdsArr = array_column($recommendedProducts, 'selprod_id');
+            $recommendedProductsRibbons = [
+                'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $recSelProdIdsArr)
+            ];
+            $this->set('recommendedProducts', $recommendedProducts);
+            $this->set('recommendedProductsRibbons', $recommendedProductsRibbons);
+            /* ]  */
+        }
 
         if (false === MOBILE_APP_API_CALL) {
             if (User::checkPersonalizedCookiesEnabled() == true) {
@@ -860,7 +865,9 @@ class ProductsController extends MyAppController
             }
 
             $this->_template->addJs(array('js/slick.js', 'js/modaal.js', 'js/product-detail.js', 'js/magnific-popup.js', 'js/jw-player.js', 'js/slick-carousels.js'));
-        } else {
+        }
+
+        if (true === MOBILE_APP_API_CALL) {
             $recentlyViewed = FatApp::getPostedData('recentlyViewed');
             $recentlyViewed = is_array($recentlyViewed) && 0 < count($recentlyViewed) ? FatUtility::int($recentlyViewed) : array();
             if (in_array($selprod_id, $recentlyViewed)) {
@@ -877,6 +884,7 @@ class ProductsController extends MyAppController
             $this->set('recentlyViewed', $recentlyViewed);
             $this->set('recentlyViewedRibbons', $recentlyViewedRibbons);
         }
+
 
         $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
         if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
@@ -1169,41 +1177,6 @@ class ProductsController extends MyAppController
             }
         );
         return $recentViewedProducts;
-    }
-    public function recentlyViewedProducts($productId = 0)
-    {
-        $productId = FatUtility::int($productId);
-        $recentViewedProducts = array();
-        $cookieProducts = isset($_COOKIE['recentViewedProducts']) ? $_COOKIE['recentViewedProducts'] : false;
-        if ($cookieProducts != false) {
-            $cookiesProductsArr = explode("_", $cookieProducts);
-            if (!isset($cookiesProductsArr) || !is_array($cookiesProductsArr) || count($cookiesProductsArr) <= 0) {
-                return '';
-            }
-            if ($productId && in_array($productId, $cookiesProductsArr)) {
-                $pos = array_search($productId, $cookiesProductsArr);
-                unset($cookiesProductsArr[$pos]);
-            }
-
-            if (isset($cookiesProductsArr) && is_array($cookiesProductsArr) && count($cookiesProductsArr)) {
-                $cookiesProductsArr = array_map('intval', $cookiesProductsArr);
-                $cookiesProductsArr = array_reverse($cookiesProductsArr);
-
-                $recentViewedProducts = $this->getRecentlyViewedProductsDetail($cookiesProductsArr);
-            }
-        }
-
-        $recentlyViewedRibbons = [];
-        if (!empty($recentViewedProducts)) {
-            $recentSelProdIdsArr = array_column($recentViewedProducts, 'selprod_id');
-            $recentlyViewedRibbons = [
-                'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $recentSelProdIdsArr)
-            ];
-        }
-
-        $this->set('recentlyViewedRibbons', $recentlyViewedRibbons);
-        $this->set('recentViewedProducts', $recentViewedProducts);
-        $this->_template->render(false, false);
     }
 
     public function relatedProductsById($ids = array())
@@ -2060,5 +2033,75 @@ class ProductsController extends MyAppController
         $db = FatApp::getDb();
         $products = $db->fetchAll($srch->getResultSet());
         die(json_encode($products));
+    }
+
+    public function interRelatedProducts(int $selprodId)
+    {
+        $this->set('product', $this->getProductDetail($selprodId));
+    
+        /* Related Products */
+        $product = $this->getProductDetail($selprodId);
+        $sellerProduct = new SellerProduct($selprodId);
+        $relatedProducts = $sellerProduct->getRelatedProducts($this->siteLangId, $product['selprod_id'], ['selprod_id']);
+        $relatedProductsRs = $this->relatedProductsById(array_keys($relatedProducts));
+        $relSelProdIdsArr = array_column($relatedProducts, 'selprod_id');
+        $relatedProductsRibbons = [
+            'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $relSelProdIdsArr)
+        ];
+
+        $this->set('relatedProductsRibbons', $relatedProductsRibbons);
+        $this->set('relatedProductsRs', !empty($relatedProductsRs) ? $relatedProductsRs : array());
+        $this->set('relatedProductsHtml', $this->_template->render(false, false, 'products/related-products.php', true, false));
+        /* ----------------- */
+
+        /* Recommended Products */
+        $loggedUserId = UserAuthentication::getLoggedUserId(true);
+        $recommendedProducts = (array) $this->getRecommendedProducts($selprodId, $this->siteLangId, $loggedUserId);
+        $recommendedProducts = (0 < count(array_filter($recommendedProducts)) ? array_filter($recommendedProducts) : []);
+
+        $recSelProdIdsArr = array_column($recommendedProducts, 'selprod_id');
+        $recommendedProductsRibbons = [
+            'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $recSelProdIdsArr)
+        ];
+        $this->set('recommendedProductsRibbons', $recommendedProductsRibbons);
+        $this->set('recommendedProducts', $recommendedProducts);
+        $this->set('recommendedProductsHtml', $this->_template->render(false, false, 'products/recommended-products.php', true, false));
+        /* ----------------- */
+
+        /* Recently Viewed Products */
+        $recentViewedProducts = array();
+        $cookieProducts = isset($_COOKIE['recentViewedProducts']) ? $_COOKIE['recentViewedProducts'] : false;
+        if ($cookieProducts != false) {
+            $cookiesProductsArr = explode("_", $cookieProducts);
+            if (!isset($cookiesProductsArr) || !is_array($cookiesProductsArr) || count($cookiesProductsArr) <= 0) {
+                return '';
+            }
+            if ($selprodId && in_array($selprodId, $cookiesProductsArr)) {
+                $pos = array_search($selprodId, $cookiesProductsArr);
+                unset($cookiesProductsArr[$pos]);
+            }
+
+            if (isset($cookiesProductsArr) && is_array($cookiesProductsArr) && count($cookiesProductsArr)) {
+                $cookiesProductsArr = array_map('intval', $cookiesProductsArr);
+                $cookiesProductsArr = array_reverse($cookiesProductsArr);
+
+                $recentViewedProducts = $this->getRecentlyViewedProductsDetail($cookiesProductsArr);
+            }
+        }
+
+        $recentlyViewedRibbons = [];
+        if (!empty($recentViewedProducts)) {
+            $recentSelProdIdsArr = array_column($recentViewedProducts, 'selprod_id');
+            $recentlyViewedRibbons = [
+                'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $recentSelProdIdsArr)
+            ];
+        }
+
+        $this->set('recentlyViewedRibbons', $recentlyViewedRibbons);
+        $this->set('recentViewedProducts', $recentViewedProducts);
+        $this->set('recentViewedProductsHtml', $this->_template->render(false, false, 'products/recently-viewed-products.php', true, false));
+        /* ----------------- */
+
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 }

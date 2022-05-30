@@ -235,22 +235,32 @@ function getStatesByCountryCode(
     );
 }
 
-function recentlyViewedProducts(selprodId) {
+function interRelatedProducts(selprodId) {
     if (typeof selprodId == "undefined") {
         selprodId = 0;
     }
-    $("#recentlyViewedProductsDiv").html(fcom.getLoader());
-    fcom.ajax(
-        fcom.makeUrl("Products", "recentlyViewedProducts", [selprodId]),
-        "",
+    fcom.updateWithAjax(
+        fcom.makeUrl("Products", "interRelatedProducts", [selprodId]), "",
         function (ans) {
             fcom.removeLoader();
-            if ('' == ans) {
-                $("#recentlyViewedProductsDiv").remove();
+            if ('' != ans.relatedProductsHtml) {
+                $('.relatedProductsSectionJs').replaceWith(ans.relatedProductsHtml);
             } else {
-                $("#recentlyViewedProductsDiv").html(ans);
+                $('.relatedProductsSectionJs').remove();
             }
-        }
+
+            if ('' != ans.recommendedProductsHtml) {
+                $('.recommendedProductsSectionJs').replaceWith(ans.recommendedProductsHtml);
+            } else {
+                $('.recommendedProductsSectionJs').remove();
+            }
+
+            if ('' != ans.recentViewedProductsHtml) {
+                $('.recentlyViewedProductsSectionJs').replaceWith(ans.recentViewedProductsHtml);
+            } else {
+                $('.recentlyViewedProductsSectionJs').remove();
+            }
+        }, { 'fOutMode': 'json' }
     );
 }
 
@@ -258,7 +268,6 @@ function resendVerificationLink(user) {
     if (user == "") {
         return false;
     }
-    fcom.displayProcessing();
     fcom.updateWithAjax(
         fcom.makeUrl("GuestUser", "resendVerification", [user]),
         "",
@@ -729,7 +738,7 @@ function defaultSetUpLogin(frm, v) {
                 return;
             }
             fcom.displayErrorMessage(ans.msg);
-        }, {'fOutMode' : 'json'}
+        }, { 'fOutMode': 'json' }
     );
     return false;
 }
@@ -1951,3 +1960,24 @@ copyText = function (obj) {
     var elOriginalText = $(obj).attr('data-original-title');
     $(obj).attr('data-original-title', langLbl.copied).tooltip('show').attr('data-original-title', elOriginalText);
 }
+
+/* Check if element is in viewport. */
+$.fn.isInViewport = function () {
+    let elem = $(this);
+    // if the element doesn't exist, abort
+    if (elem.length == 0) {
+        return;
+    }
+    var $window = jQuery(window)
+    var viewport_top = $window.scrollTop()
+    var viewport_height = $window.height()
+    var viewport_bottom = viewport_top + viewport_height
+    var $elem = jQuery(elem)
+    var top = $elem.offset().top
+    var height = $elem.height()
+    var bottom = top + height
+
+    return (top >= viewport_top && top < viewport_bottom) ||
+        (bottom > viewport_top && bottom <= viewport_bottom) ||
+        (height > viewport_height && top <= viewport_top && bottom >= viewport_bottom)
+};
