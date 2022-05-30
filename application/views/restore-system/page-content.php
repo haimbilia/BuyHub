@@ -45,7 +45,7 @@
              clearInterval(x);
              $('#restoreCounter').html("Process...");
              showRestorePopup();
-             // restoreSystem();
+             restoreSystem();
          }
      }, 1000);
 
