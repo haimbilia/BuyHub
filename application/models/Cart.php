@@ -854,7 +854,7 @@ class Cart extends FatModel
             if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
                 if (!empty($this->discounts) && isset($this->discounts['discountedSelProdIds'][$sellerProductRow['selprod_id']])) {
                     $discountedPrice = $this->discounts['discountedSelProdIds'][$sellerProductRow['selprod_id']];
-                    $taxableProdPrice = $taxableProdPrice - $discountedPrice;
+                    $taxableProdPrice = ($sellerProductRow['theprice'] - $sellerProductRows[$key]['volume_discount']) - $discountedPrice;
                 }
             }
             $taxObj = new Tax();
@@ -880,11 +880,20 @@ class Cart extends FatModel
                 if ($originalTotalPrice != $thePriceincludingTax && 0 < $taxableProdPrice && 0 < $taxData['rate']) {
                     $roundingOff = round($originalTotalPrice - $thePriceincludingTax, 2);
                 }
+                
+                if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && 0 < $discountedPrice) {
+                    $roundingOff = (0.1 < $roundingOff) ? 0 : $roundingOff;
+                }
             } else {
                 if (array_key_exists('optionsSum', $taxData) && $taxData['tax'] != $taxData['optionsSum']) {
                     $roundingOff = round($taxData['tax'] - $taxData['optionsSum'], 2);
                 }
             }
+
+            /* if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
+                $roundingOff =  ($roundingOff > 0.1)? 0 : $roundingOff;
+            } */
+
             $sellerProductRows[$key]['rounding_off'] = $roundingOff;
 
             $sellerProductRows[$key]['tax'] = $tax;
