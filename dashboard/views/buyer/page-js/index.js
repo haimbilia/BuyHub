@@ -53,7 +53,7 @@ $(document).ready(function () {
 	};
 
 	getCancellationRequestComment = function (recordId) {
-		fcom.updateWithAjax(fcom.makeUrl('Seller', "getCancellationRequestComment"), "recordId=" + recordId, function (t) {
+		fcom.updateWithAjax(fcom.makeUrl('Buyer', "getCancellationRequestComment"), "recordId=" + recordId, function (t) {
 			$.ykmodal(t.html, true);
 			fcom.removeLoader();
 		});
