@@ -659,7 +659,12 @@ class CommonHelper extends FatUtility
             $sign = '-';
         }
 
-        $val = self::numberFormat($val, $numberFormat, $stringFormat);
+
+        if ($numberFormat) {
+            $val = self::numberFormat($val, $numberFormat, $stringFormat);
+        } else {
+            $val = round($val, 2);
+        }
 
         if ($stringFormat) {
             $val = static::numberStringFormat($val);
