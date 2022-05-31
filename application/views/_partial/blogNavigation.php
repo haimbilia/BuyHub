@@ -37,6 +37,33 @@
                                  </a>
                              </li>
                          <?php } ?>
+                         <li class="nav-blog-item">
+                             <a class="nav-blog-link nav-blog-more" data-bs-toggle="collapse" href="#blog-more" role="button" aria-expanded="false" aria-controls="blog-more">More</a>
+                             <div class="collapse blog-more" id="blog-more">
+                                 <div class="container">
+                                     <ul>
+                                         <li><a href="https://www.fatbit.com/fab/category/online-learning-consulting-business-ideas/">eLearning Business Ideas (26)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/rental-startup-ideas/">Online Rental Business Ideas (26)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/online-grocery-business-models/">Online Grocery Business Ideas (31)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/ecommerce/">eCommerce (64)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/web-based-business-ideas/">Web Based Business Models (116)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/online-food-delivery-business-ideas/">Food Delivery Startup Ideas (24)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/online-ride-hailing-business-ideas/">Online Ride Hailing Business Ideas (8)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/mobile-app-development/">Mobile App Development (39)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/service-marketplace-business-ideas/">On-demand Services Business Ideas (7)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/travel-marketplace-business-ideas/">Travel Marketplace Business Ideas (22)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/seo-ppc/">SEO &amp; PPC (21)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/conversion/">Conversion (30)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/online-reputation-management/">Online Reputation Management (9)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/trends/">Tips and Trends (59)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/user-experience/">User Experience (9)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/case-studies/">Case Studies (2)</a></li>
+                                         <li><a href="https://www.fatbit.com/fab/category/design-dev/">Design &amp; Development (54)</a></li>
+                                         <li class="noBorderBottom"><a href="https://www.fatbit.com/fab/category/entrepreneurship/">Entrepreneurship (6)</a></li>
+                                     </ul>
+                                 </div>
+                             </div>
+                         </li>
                      </ul>
                  </div>
              <?php } ?>
