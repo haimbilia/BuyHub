@@ -113,12 +113,7 @@ if (null != $btn) {
                 <div class="ml-md-4">
                     <div class="order-block">
                         <h4><?php echo Labels::getLabel('LBL_REFUND_SUMMARY', $siteLangId); ?></h4>
-                        <?php
-                        
-                        $returnDataArr = CommonHelper::getOrderProductRefundAmtArr($request); 
-                        CommonHelper::printArray($returnDataArr);
-                        
-                        ?>
+                        <?php  $returnDataArr = CommonHelper::getOrderProductRefundAmtArr($request); ?>
                         <div class="cart-summary">
                             <ul>
                                 <li>
@@ -144,7 +139,7 @@ if (null != $btn) {
                                 <li>
                                     <span class="lable"><?php echo Labels::getLabel('LBL_Shipping', $siteLangId); ?></span>
                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($returnDataArr['op_refund_shipping'], true, false); ?></span>
-                                </li>
+                                </li>                               
                                 <li class="highlighted">
                                     <span class="lable"><?php echo Labels::getLabel('LBL_Total_Amount', $siteLangId); ?></span>
                                     <span class="value">
@@ -158,7 +153,6 @@ if (null != $btn) {
                                 </li>                                
                             </ul>
                         </div>
-
                     </div>
                     <div class="order-block">
                         <h4><?php echo Labels::getLabel('LBL_VENDOR_RETURN_ADDRESS', $siteLangId); ?></h4>

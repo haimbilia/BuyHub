@@ -471,9 +471,9 @@ class CommonHelper extends FatUtility
         if ($requestRow['op_qty'] == $requestRow['orrequest_qty']) {
             $op_refund_amount = $totalPaidAmtBuyer;
             $op_refund_amount += $requestRow["op_rounding_off"];
-            $deductedRewardAmount = $rewardAmountUsed;          
+           // $deductedRewardAmount = $rewardAmountUsed;          
         } else {
-            $deductedRewardAmount = $rewardAmountPerQty * $requestRow['orrequest_qty'];
+            //$deductedRewardAmount = $rewardAmountPerQty * $requestRow['orrequest_qty'];
             $op_refund_amount = $cartAmount - ($rewardAmountPerQty * $requestRow['orrequest_qty']) + $taxToRefund - $deductVolumeDiscountFromRefund - $deductCouponDiscountFromRefund;
             if (0 > $requestRow["op_rounding_off"]) {
                 $op_refund_amount += $requestRow["op_rounding_off"];
@@ -509,8 +509,10 @@ class CommonHelper extends FatUtility
             'op_refund_commission' => $op_refund_commission,
             'op_refund_affiliate_commission' => $op_refund_affiliate_commission,
             'op_refund_tax' => $taxToRefund,
+            /*
             'deductCouponDiscountAmount'=> $deductCouponDiscountFromRefund,
             'deductRewardAmount'=> $deductedRewardAmount,
+            */
         );
 
         return $opDataToUpdate;
