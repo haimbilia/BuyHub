@@ -501,7 +501,7 @@ class SlidesController extends ListingBaseController
             $langId = array_key_first($languages);
         }
 
-        $slideImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0, $langId, false);
+        $slideImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0, $langId, false, applicationConstants::SCREEN_DESKTOP);
         $slideDimensions = ImageDimension::getSlideData();
 
         $this->set('image', $slideImage);

@@ -49,7 +49,7 @@
                                 </a>
                             </div>
                             <div class="header-action__item">
-                                <a class="header-action__trigger" href="<?php echo CONF_WEBROOT_FRONT_URL; ?>" title="<?php echo Labels::getLabel('LBL_VIEW_STORE', $siteLangId); ?>">
+                                <a class="header-action__trigger" href="<?php echo CONF_WEBROOT_FRONT_URL; ?>" target="_blank" title="<?php echo Labels::getLabel('LBL_VIEW_STORE', $siteLangId); ?>">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">

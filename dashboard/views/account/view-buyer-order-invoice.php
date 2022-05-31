@@ -118,7 +118,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
     <tbody>
         <tr>
             <td style="border-bottom: solid 1px #000; text-align:center; line-height:1.5; ">
-                <strong style="padding:10px;display:block;font-size: 20px;"><?php echo Labels::getlabel('LBL_Tax_Invoice', $siteLangId); ?></strong>
+                <strong style="padding:10px;display:block;font-size: 20px;"><?php echo Labels::getlabel('LBL_ORDER_INVOICE', $siteLangId); ?></strong>
             </td>
         </tr>
         <?php $count = 0;
@@ -209,10 +209,10 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                             <tr>
                                 <td><strong><?php echo Labels::getLabel('LBL_Bill_to', $siteLangId); ?></strong> <br><?php echo $billingAddress; ?></td>
                                 <?php if ($childOrder['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && !empty($orderDetail['shippingAddress'])) { ?>
-                                    <td><strong><?php echo Labels::getLabel('LBL_Ship_to', $siteLangId); ?></strong><br><?php echo $shippingAddress; ?></td>
+                                    <td><strong><?php echo Labels::getLabel('LBL_Ship_to', $siteLangId); ?></strong>:<br><?php echo $shippingAddress; ?></td>
                                 <?php } ?>
                                 <?php if (!empty($orderDetail['pickupAddress'])) { ?>
-                                    <td><?php echo Labels::getLabel('LBL_Pickup_Details', $siteLangId); ?><br> <br><?php echo $pickUpAddress; ?></td>
+                                    <td><strong><?php echo Labels::getLabel('LBL_Pickup_Details', $siteLangId); ?></strong>:<br> <br><?php echo $pickUpAddress; ?></td>
                                 <?php } ?>
                             </tr>
                         </tbody>
@@ -228,7 +228,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                             <tr>
                                 <td><strong><?php echo Labels::getLabel('LBL_Order', $siteLangId); ?>:</strong> <?php echo $childOrder['order_number']; ?><br><strong><?php echo Labels::getLabel('LBL_Invoice_Number', $siteLangId); ?>:</strong> <?php echo $childOrder['op_invoice_number']; ?><br><strong><?php echo Labels::getLabel('LBL_Payment_Method', $siteLangId); ?>:</strong> <?php echo $paymentMethodName; ?>
                                 </td>
-                                <td><strong><?php echo Labels::getLabel('LBL_Order_Date', $siteLangId); ?>:</strong><?php echo FatDate::format($childOrder['order_date_added']); ?><br>
+                                <td><strong><?php echo Labels::getLabel('LBL_Order_Date', $siteLangId); ?>:</strong> <?php echo FatDate::format($childOrder['order_date_added']); ?><br>
                                     <?php if (!empty($childOrder['opship_tracking_number'])) { ?>
                                         <strong><?php echo Labels::getLabel('LBL_Tracking_ID', $siteLangId); ?>:</strong><?php echo $childOrder['opship_tracking_number']; ?>
                                     <?php } ?>
@@ -321,10 +321,10 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                     <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo '-' . CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></td>
                                 </tr>
                             <?php } ?>                          
-                            <?php if (array_key_exists('order_rounding_off', $orderDetail) && 0 != $orderDetail['order_rounding_off']) { ?>
+                            <?php
+                            if (array_key_exists('order_rounding_off', $orderDetail) && 0 != $orderDetail['order_rounding_off']) { ?>
                                 <tr>
-                                    <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2">
-                                        <?php echo (0 < $orderDetail['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?>
+                                    <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo (0 < $orderDetail['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?>
                                     </td>
                                     <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1">
                                         <?php echo CommonHelper::displayMoneyFormat($orderDetail['order_rounding_off'], true, false, true, false, true); ?>
@@ -382,7 +382,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
-                            <td style="padding:20px 15px;"><strong><?php echo Labels::getLabel('LBL_Regd._office', $siteLangId); ?>:</strong><?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, '')); ?>
+                            <td style="padding:20px 15px;"><strong><?php echo Labels::getLabel('LBL_Regd._office', $siteLangId); ?>: </strong><?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, '')); ?>
                                 <?php $site_conatct = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
                                 $email_id = FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, '');
                                 if ($site_conatct || $email_id) { ?>

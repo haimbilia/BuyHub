@@ -1036,7 +1036,7 @@ $(function () {
             "",
             function (ans) {
                 if (ans.status) {
-                    $("[data-id=" + selProdId + "]").addClass("is-active");
+                    $("[data-id=" + selProdId + "]").addClass("active");
                     $("[data-id=" + selProdId + "]").attr(
                         "onclick",
                         "removeFromFavorite(" + selProdId + ")"
@@ -1045,6 +1045,7 @@ $(function () {
                         "title",
                         langLbl.RemoveProductFromFavourite
                     );
+                    fcom.displaySuccessMessage(ans.msg);
                 }
             }, { fOutMode: 'json' }
         );
@@ -1066,7 +1067,7 @@ $(function () {
             "",
             function (ans) {
                 if (ans.status) {
-                    $("[data-id=" + selProdId + "]").removeClass("is-active");
+                    $("[data-id=" + selProdId + "]").removeClass("active");
                     $("[data-id=" + selProdId + "]").attr(
                         "onclick",
                         "markAsFavorite(" + selProdId + ")"
@@ -1075,6 +1076,7 @@ $(function () {
                         "title",
                         langLbl.AddProductToFavourite
                     );
+                    fcom.displaySuccessMessage(ans.msg);
                 }
             }, { fOutMode: 'json' }
         );

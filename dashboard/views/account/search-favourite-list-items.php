@@ -15,7 +15,7 @@
         </div>
         <div class="card-body">
             <form method="post" name="favtlistForm" id="favtlistForm">
-                <?php require_once(CONF_THEME_PATH . 'products/products-list.php');  ?>
+                <?php require_once(CONF_THEME_PATH . 'products/wishlist-products-list.php');  ?>
             </form>
         </div>
     </div>
