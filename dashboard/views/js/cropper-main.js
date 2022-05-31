@@ -97,6 +97,7 @@
                         break;
 
                     case 'getCroppedCanvas':
+                        $('.mediaCropButtonsJs').find('[data-method="getCroppedCanvas"]').prop("disabled",true);
                         try {
                             data.option = JSON.parse(data.option);
                         } catch (e) {
@@ -148,6 +149,9 @@
                                         formData.append("file_type", fileType);
                                     }
                                     window[callback](formData);
+                                    setTimeout(function(){
+                                        $('.mediaCropButtonsJs').find('[data-method="getCroppedCanvas"]').prop("disabled",false);
+                                    }, 1000);
                                 }, uploadedImageType);
                             }, uploadedImageType);
                         }
