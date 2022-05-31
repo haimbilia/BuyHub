@@ -378,7 +378,6 @@ class Navigation
                 $srch->doNotCalculateRecords();
                 $srch->setPageSize(1);
                 if (!FatApp::getDb()->fetch($srch->getResultSet())) {
-                    echo $id . ' ';
                     unset($categoriesArr[$id]);
                 }
             }
