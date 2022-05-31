@@ -813,6 +813,7 @@ Updates/Fixes :
     => 064651 - Suggestion: To show the dimensions of the shipping package with the package name while adding a product from the seller or admin end.
     => 064679 - Buyer: Favourite label is showing instead of Wishlist under dashboard section.
     => 064681 - Buyer: Invalid request is coming when the user clicks on the 'View more' button under Cancellation Requests section
+    => 064505 - The refund calculations appear wrong on the seller's end.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
