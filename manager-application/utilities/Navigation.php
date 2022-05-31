@@ -1,7 +1,6 @@
 <?php
 class Navigation
 {
-
     public static function setLeftNavigationVals($template)
     {
         $db = FatApp::getDb();

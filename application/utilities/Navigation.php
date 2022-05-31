@@ -115,8 +115,8 @@ class Navigation
         $template->set('isShopActive', $isShopActive);
         */
         $template->set('userPrivilege', UserPrivilege::getInstance());
-        $template->set('activeTab', $activeTab);       
-        $template->set('controllerName', $controllerName);       
+        $template->set('activeTab', $activeTab);
+        $template->set('controllerName', $controllerName);
         $template->set('todayUnreadMessageCount', $todayUnreadMessageCount);
     }
 
@@ -237,7 +237,7 @@ class Navigation
     public static function getNavigation($type = 0, $includeCategories = true)
     {
         $siteLangId = CommonHelper::getLangId();
-        $headerNavCache = CacheHelper::get('headerNavCache' . $siteLangId . '-' . $type .'-'. ($includeCategories ? 1 : 0), CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        $headerNavCache = CacheHelper::get('headerNavCache' . $siteLangId . '-' . $type . '-' . ($includeCategories ? 1 : 0), CONF_HOME_PAGE_CACHE_TIME, '.txt');
         if ($headerNavCache) {
             return  unserialize($headerNavCache);
         }
@@ -334,8 +334,8 @@ class Navigation
                 $navigation[$previous_nav_id]['pages'][$key]['children'] = isset($childrenCats) ? $childrenCats : [];
             }
         }
-        
-        CacheHelper::create('headerNavCache' . $siteLangId . '-' . $type.'-'. ($includeCategories ? 1 : 0), serialize($navigation), CacheHelper::TYPE_NAVIGATION);       
+
+        CacheHelper::create('headerNavCache' . $siteLangId . '-' . $type . '-' . ($includeCategories ? 1 : 0), serialize($navigation), CacheHelper::TYPE_NAVIGATION);
         return $navigation;
     }
 
@@ -366,29 +366,30 @@ class Navigation
 
     public static function blogNavigation($template)
     {
-        $siteLangId = CommonHelper::getLangId();      
+        $siteLangId = CommonHelper::getLangId();
         $categoriesArr = CacheHelper::get('blogCategoriesHeaderCache' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
         if ($categoriesArr) {
             $categoriesArr = json_decode($categoriesArr, true);
         } else {
-           
             $categoriesArr = BlogPostCategory::getRootBlogPostCatArr($siteLangId, true);
-            foreach($categoriesArr as $id => $category){         
-                $srch = BlogPost::getSearchObject(0,true,true,true);          
-                $srch->addCondition('ptc_bpcategory_id', '=', $id); 
+            foreach ($categoriesArr as $id => $category) {
+                $srch = BlogPost::getSearchObject(0, true, true, true);
+                $srch->addCondition('ptc_bpcategory_id', '=', $id);
                 $srch->doNotCalculateRecords();
-                $srch->setPageSize(1);     
-                if(!FatApp::getDb()->fetch($srch->getResultSet())){
+                $srch->setPageSize(1);
+                if (!FatApp::getDb()->fetch($srch->getResultSet())) {
+                    echo $id . ' ';
                     unset($categoriesArr[$id]);
                 }
-            }           
+            }
             CacheHelper::create('blogCategoriesHeaderCache' . $siteLangId, json_encode($categoriesArr), CacheHelper::TYPE_BLOG_CATEGORY);
         }
+
 
         $template->set('categoriesArr', $categoriesArr);
         $template->set('siteLangId', $siteLangId);
     }
-    
+
     public static function blogNavigationSearchForm($template)
     {
         $blog = new BlogController();

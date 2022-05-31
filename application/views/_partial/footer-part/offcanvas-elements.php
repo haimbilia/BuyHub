@@ -92,5 +92,8 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
 
 <?php if ('Blog' == $controllerName) {
     /* Blog Search Form */
-    $this->includeTemplate('_partial/footer-part/blog-search-form.php',['siteLangId'=> $siteLangId]);
+    $this->includeTemplate('_partial/footer-part/blog-search-form.php', ['siteLangId' => $siteLangId]);
+    
+    /* Blog Mobile Menu */
+    $this->includeTemplate('_partial/footer-part/blog-mobile-menu.php', ['siteLangId' => $siteLangId]);
 } ?>
