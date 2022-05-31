@@ -1802,7 +1802,7 @@ class AccountController extends LoggedUserController
         $this->set('products', $products);
         $this->set('showProductShortDescription', false);
         $this->set('showProductReturnPolicy', false);
-        $this->set('colMdVal', 3);
+        $this->set('colMdVal', 4);
         $this->set('page', $page);
         $this->set('recordCount', $srch->recordCount());
         $this->set('pageCount', $srch->pages());
@@ -1893,7 +1893,7 @@ class AccountController extends LoggedUserController
         );
 
         $srch->addOrder('ufp_id', 'desc');
-        $srch->addCondition('ufp_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true); 
+        $srch->addCondition('ufp_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         $products = $db->fetchAll($srch->getResultSet());
 
         $selProdIdsArr = array_column($products, 'selprod_id');
@@ -1903,7 +1903,7 @@ class AccountController extends LoggedUserController
         $this->set('tRightRibbons', $tRightRibbons);
         $this->set('showProductShortDescription', false);
         $this->set('showProductReturnPolicy', false);
-        $this->set('colMdVal', 5);
+        $this->set('colMdVal', 4);
         $this->set('page', $page);
         $this->set('pagingFunc', 'goToFavouriteListingSearchPage');
         $this->set('recordCount', $srch->recordCount());
