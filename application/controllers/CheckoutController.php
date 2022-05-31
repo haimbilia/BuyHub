@@ -1,7 +1,4 @@
 <?php
-
-use phpDocumentor\Reflection\Types\This;
-
 class CheckoutController extends MyAppController
 {
     private $cartObj;
