@@ -111,7 +111,7 @@ $formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId); ?>
         } else {
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $slideDimensions[ImageDimension::VIEW_MOBILE]['width'] .
                                                                                             " x " . $slideDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
-            $(minWidthBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
+            $(minWidthBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_MOBILE]['width']; ?>');
             $(minHeightBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
 
         }
