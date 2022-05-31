@@ -13,7 +13,7 @@ class CcavenuePayController extends PaymentController
 
     protected function allowedCurrenciesArr()
     {
-        return ['INR', 'USD', 'SGD', 'GBP', 'EUR', 'AED'];
+        return ['INR'];
     }
 
     private function init(): void
@@ -81,9 +81,7 @@ class CcavenuePayController extends PaymentController
 
         //$merchant_data= str_replace("#~#","&",$merchant_data);
         $merchant_data .= "currency=" . $this->systemCurrencyCode;
-
-        $encrypted_data = $this->encrypt($merchant_data, $working_key); // Method for encrypting the data.
-
+        $encrypted_data = encrypt($merchant_data, $working_key); // Method for encrypting the data.
         if (FatApp::getConfig('CONF_TRANSACTION_MODE', FatUtility::VAR_BOOLEAN, false) == true) {
             $iframe_url = 'https://secure.ccavenue.com';
         } else {
@@ -98,7 +96,7 @@ class CcavenuePayController extends PaymentController
         $post = FatApp::getPostedData();
         $workingKey = $this->settings['working_key'];
         $encResponse = $post["encResp"];            //This is the response sent by the CCAvenue Server
-        $rcvdString = $this->decrypt($encResponse, $workingKey);        //Crypto Decryption used as per the specified working key.
+        $rcvdString = decrypt($encResponse, $workingKey);        //Crypto Decryption used as per the specified working key.
         $request = $rcvdString;
         $order_status = "";
         $decryptValues = explode('&', $rcvdString);
@@ -178,23 +176,5 @@ class CcavenuePayController extends PaymentController
             $frm->addHiddenField('', 'integration_type', 'iframe_normal');
         }
         return $frm;
-    }
-
-    public function encrypt($plainText, $key)
-    {
-        $secretKey = hextobin(md5($key));
-        $initVector = pack("C*", 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f);
-        $encryptedText = openssl_encrypt($plainText, "AES-128-CBC", $secretKey, OPENSSL_RAW_DATA, $initVector);
-        $encryptedText = bin2hex($encryptedText);
-        return $encryptedText;
-    }
-
-    public function decrypt($encryptedText, $key)
-    {
-        $secretKey = hextobin(md5($key));
-        $initVector =  pack("C*", 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f);
-        $encryptedText = hextobin($encryptedText);
-        $decryptedText =  openssl_decrypt($encryptedText, "AES-128-CBC", $secretKey, OPENSSL_RAW_DATA, $initVector);
-        return $decryptedText;
     }
 }
