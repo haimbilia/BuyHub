@@ -124,14 +124,13 @@ class UserAuthentication extends FatModel
             return false;
         }
 
-        $browser = CommonHelper::userAgent();
         if (strtotime($authRow['uauth_expiry']) < strtotime('now')) {
             self::clearLoggedUserLoginCookie();
             return false;
         }
 
         $ths = new UserAuthentication();
-        if ($row = $ths->loginByAppToken($authRow)) {
+        if ($ths->loginByAppToken($authRow)) {
             return true;
         }
         return false;
