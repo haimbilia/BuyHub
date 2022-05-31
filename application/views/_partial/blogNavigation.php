@@ -75,12 +75,10 @@
                  </svg>
              </button>
              <button class="btn-blog-search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#blog-search">
-
                  <svg class="svg" width="20" height="20">
                      <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#magnifying">
                      </use>
                  </svg>
-
              </button>
          </div>
      </div>
