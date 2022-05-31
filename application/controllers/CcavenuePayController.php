@@ -13,7 +13,7 @@ class CcavenuePayController extends PaymentController
 
     protected function allowedCurrenciesArr()
     {
-        return ['INR', 'USD', 'SGD', 'GBP', 'EUR', 'AED'];
+        return ['INR'];
     }
 
     private function init(): void
