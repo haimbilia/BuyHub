@@ -2800,6 +2800,14 @@ $header-height: 65px;
 }
 .list-popover {
     list-style: none;
+    &-item {
+        padding: 4px 0;
+        display: flex;
+        justify-content: space-between;
+    }
+    .value {
+        font-weight: 600;
+    }
 }
 
 .or {
