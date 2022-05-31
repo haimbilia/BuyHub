@@ -110,8 +110,8 @@ class BuyerController extends BuyerBaseController
         /* Cancellation Request Listing [] */
         $canSrch = $this->orderCancellationRequestObj();
         $canSrch->setPageSize(applicationConstants::DASHBOARD_PAGE_SIZE);
-        $rs = $canSrch->getResultSet();
-        $cancellationRequests = FatApp::getDb()->fetchAll($rs);
+        $canSrch->addOrder('ocrequest_id','DESC');
+        $cancellationRequests = FatApp::getDb()->fetchAll($canSrch->getResultSet());
         $this->set('cancellationRequests', $cancellationRequests);
         /* ] */
 

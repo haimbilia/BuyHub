@@ -10,4 +10,5 @@ $data = array(
 
 if (empty($arrListing)) {
     $status = applicationConstants::OFF;
+    $msg = Labels::getLabel('LBL_NO_MESSAGE_FOUND');
 }
