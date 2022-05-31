@@ -139,6 +139,48 @@ $blog-header-height: 58px;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
 }
+.offcanvas-blog-nav {
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    &-item {
+        border-bottom: $border;
+    }
+
+    &-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+    }
+
+    .icon {
+        display: inline-block;
+        font-size: inherit;
+        font-style: normal;
+        height: 1em;
+        position: relative;
+        text-indent: -9999px;
+        vertical-align: middle;
+        width: 1em;
+        font-size: 0.8rem;
+        transform: scale(1);
+        margin-#{$start-direction}: auto;
+        &::before {
+            content: "";
+            display: block;
+            left: 50%;
+            position: absolute;
+            top: 50%;
+            border: 0.1rem solid currentColor;
+            border-bottom: 0;
+            border-right: 0;
+            height: 0.65em;
+            width: 0.65em;
+            transform: translate(-75%, -50%) rotate(135deg);
+        }
+    }
+}
 
 .offcanvas-blog-search {
     height: 100%;
