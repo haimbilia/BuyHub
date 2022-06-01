@@ -432,6 +432,12 @@ class ProductsController extends MyAppController
     {
         $prodSrchObj = new ProductSearch($this->siteLangId);
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id');
+        if (empty($productId)) {
+            if (true === MOBILE_APP_API_CALL) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_PRODUCT'));
+            }
+            FatUtility::exitWithErrorCode(404);
+        }
         /* fetch requested product[ */
         $prodSrch = clone $prodSrchObj;
         $prodSrch->setLocationBasedInnerJoin(false);
@@ -2038,7 +2044,7 @@ class ProductsController extends MyAppController
     public function interRelatedProducts(int $selprodId)
     {
         $this->set('product', $this->getProductDetail($selprodId));
-    
+
         /* Related Products */
         $product = $this->getProductDetail($selprodId);
         $sellerProduct = new SellerProduct($selprodId);

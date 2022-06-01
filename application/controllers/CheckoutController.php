@@ -1619,7 +1619,6 @@ class CheckoutController extends MyAppController
 
         $totalBalance = UserRewardBreakup::rewardPointBalance($loggedUserId, $orderId);
 
-        /* var_dump($totalBalance);exit; */
         if ($totalBalance == 0 || $totalBalance < $rewardPoints) {
             $this->errMessage = Labels::getLabel('ERR_INSUFFICIENT_REWARD_POINT_BALANCE', $this->siteLangId);
             FatUtility::dieJsonError($this->errMessage);
