@@ -309,6 +309,8 @@ class OptionsController extends ListingBaseController
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, $this->siteLangId);
 
         $srch = Option::getSearchObject($langId);
+
+        $srch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', OptionValue::DB_TBL_PREFIX . 'option_id = ' . Option::DB_TBL_PREFIX . 'id');
         $srch->addOrder('option_identifier');
         $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as option_name', 'option_identifier', 'option_is_separate_images', 'option_is_color', 'option_display_in_filter'));
 
@@ -330,6 +332,7 @@ class OptionsController extends ListingBaseController
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
+        $srch->addGroupBy('option_id');
 
         $options = FatApp::getDb()->fetchAll($srch->getResultSet());
 

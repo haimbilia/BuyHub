@@ -32,7 +32,6 @@ foreach ($slides as &$slideDetail) {
 
 
 $data = array(
-    'isWishlistEnable' => $isWishlistEnable,
     'slides' => $slides,
     'collections' => array_values($collections),
 );
