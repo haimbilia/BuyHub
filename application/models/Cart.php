@@ -881,9 +881,9 @@ class Cart extends FatModel
                     $roundingOff = round($originalTotalPrice - $thePriceincludingTax, 2);
                 }
                 
-                if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && 0 < $discountedPrice) {
+                /* if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && 0 < $discountedPrice) {
                     $roundingOff = (0.1 < $roundingOff) ? 0 : $roundingOff;
-                }
+                } */
             } else {
                 if (array_key_exists('optionsSum', $taxData) && $taxData['tax'] != $taxData['optionsSum']) {
                     $roundingOff = round($taxData['tax'] - $taxData['optionsSum'], 2);
