@@ -16,8 +16,6 @@
     }
     .shop-detail-side {
         text-align: center;
-        background: #373737;
-        color: #fff;
         position: relative;
         display: flex;
         align-items: center;
@@ -25,6 +23,8 @@
         flex: 1;
         max-width: 300px;
         border-radius: $radius4;
+        border: $border;
+        background-color: $bg-gray;
         position: relative;
         overflow: hidden;
         @include media-breakpoint-down(lg) {
@@ -45,7 +45,7 @@
             text-overflow: clip;
             position: absolute;
             top: 0;
-            content: "";
+            //content: "";
         }
         .products__rating {
             justify-content: center;
