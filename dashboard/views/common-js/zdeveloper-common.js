@@ -396,6 +396,8 @@ addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
                 if ("updateRemoveWishListProduct" == action) {
                     searchWishList();
                 }
+
+                $.ykmodal.close();
             }
         }
     );
@@ -653,9 +655,9 @@ function defaultSetUpLogin(frm, v) {
             var cls = fcom.processingClass;
             if (typeof counter !== "undefined") {
                 cls += '-' + counter
-            }           
-            $("."+ cls).remove(); 
-           // $.ykmsg.close();
+            }
+            $("." + cls).remove();
+            // $.ykmsg.close();
         },
 
         displaySuccessMessage: function (msg) {

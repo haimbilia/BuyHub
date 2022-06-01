@@ -33,6 +33,7 @@ $fld->value = '<a href="javascript:void(0)" class="btn btn-icon btn-outline-bran
 
 
 $cndFld = $frm->getField('shiprate_condition_type');
+$cndFld->developerTags['rdLabelAttributes'] = ['class' => 'radio'];
 $cndFld->setWrapperAttribute('class', 'condition-field--js ' . $extraClass);
 
 $minFld = $frm->getField('shiprate_min_val');
