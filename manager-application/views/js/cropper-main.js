@@ -25,7 +25,7 @@ var cropper;
     };
 
     cropImage = function (file, options, callback, inputBtn) {
-        $('#loader-js').remove();
+        $('#loader-js').remove();       
         var uploadedImageType = '';
         var container = document.querySelector('.img-container');
         if (/^image\/\w+/.test(file.type)) {
@@ -99,6 +99,7 @@ var cropper;
                         break;
 
                     case 'getCroppedCanvas':
+                        $('.mediaCropButtonsJs').find('[data-method="getCroppedCanvas"]').prop("disabled",true);                       
                         $('.imgContainerJs').prepend(fcom.getLoader());
                         try {
                             data.option = JSON.parse(data.option);
@@ -151,6 +152,9 @@ var cropper;
                                         formData.append("file_type", fileType);
                                     }
                                     window[callback](formData);
+                                    setTimeout(function(){
+                                        $('.mediaCropButtonsJs').find('[data-method="getCroppedCanvas"]').prop("disabled",false);
+                                    }, 1000);                                    
                                 }, uploadedImageType);
                             }, uploadedImageType);
                         }

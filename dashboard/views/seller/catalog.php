@@ -33,7 +33,7 @@ $keywordPlaceholder = Labels::getLabel('LBL_Search_by_keyword/EAN/ISBN/UPC_code'
 
 <script>
     $(document).ready(function() {
-        searchCatalogProducts(document.frmSearchCatalogProduct);
+        searchCatalogProducts(document.frmRecordSearch);
     });
 
     $(".btn-inline-js").click(function() {

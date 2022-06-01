@@ -9,6 +9,7 @@ class BlogController extends MyAppController
         $this->set('bodyClass', 'is--blog');
         $this->_template->addJs('js/blog.js');
         if (!FatUtility::isAjaxCall()) {
+            FatApp::setViewDataProvider('_partial/footer-part/blog-mobile-menu.php', array('Navigation', 'blogNavigation'));
             FatApp::setViewDataProvider('_partial/blogNavigation.php', array('Navigation', 'blogNavigation'));
             FatApp::setViewDataProvider('_partial/footer-part/blog-search-form.php', array('Navigation', 'blogNavigationSearchForm'));
             FatApp::setViewDataProvider('_partial/blogSidePanel.php', array('Common', 'blogSidePanelArea'));
@@ -67,7 +68,7 @@ class BlogController extends MyAppController
         $featuredRs = $featuredSrch->getResultSet();
         $featuredRecords = FatApp::getDb()->fetchAll($featuredRs);
 
-        $popularSrch = $this->getBlogSearchObject(false);       
+        $popularSrch = $this->getBlogSearchObject(false);
         $popularSrch->addOrder('post_view_count', 'DESC');
         $popularSrch->addOrder('post_published', 'DESC');
         $popularSrch->setPageSize(6);
@@ -148,7 +149,7 @@ class BlogController extends MyAppController
     }
 
     public function autocomplete()
-    {        
+    {
         $keyword = FatApp::getPostedData("keyword");
 
         $blogs = [];
@@ -160,10 +161,10 @@ class BlogController extends MyAppController
             $srch = BlogPost::getSearchObject($this->siteLangId, true, true, true, false);
             $srch->addMultipleFields(array('post_id', 'IFNULL(post_title,post_identifier) as post_title'));
             $srch->addCondition('postlang_post_id', 'is not', 'mysql_func_null', 'and', true);
-            $srch->addCondition('post_published', '=', applicationConstants::YES);         
+            $srch->addCondition('post_published', '=', applicationConstants::YES);
             $cnd = $srch->addCondition('post_title', 'LIKE', '%' . $keyword . '%');
-            $cnd->attachCondition('post_identifier', 'LIKE', '%' . $keyword . '%'); 
-            $cnd->attachCondition('post_description', 'LIKE', '%' . $keyword . '%'); 
+            $cnd->attachCondition('post_identifier', 'LIKE', '%' . $keyword . '%');
+            $cnd->attachCondition('post_description', 'LIKE', '%' . $keyword . '%');
 
             $strKeyword = FatApp::getDb()->quoteVariable('%' . $keyword . '%');
             $srch->addFld(
@@ -171,11 +172,11 @@ class BlogController extends MyAppController
             + IF(post_identifier LIKE $strKeyword, 2, 0)                
             + IF(post_description LIKE $strKeyword, 1, 0)
             AS keyword_relevancy"
-            );           
+            );
 
-            $srch->addGroupby('post_id');      
-            $srch->addOrder('keyword_relevancy','DESC');             
-            $srch->setPageSize(10);            
+            $srch->addGroupby('post_id');
+            $srch->addOrder('keyword_relevancy', 'DESC');
+            $srch->setPageSize(10);
             $blogs = FatApp::getDb()->fetchAll($srch->getResultSet());
         }
         $this->set('blogs', $blogs);
