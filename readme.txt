@@ -815,6 +815,7 @@ Updates/Fixes :
     => 064681 - Buyer: Invalid request is coming when the user clicks on the 'View more' button under Cancellation Requests section
     => 064505 - The refund calculations appear wrong on the seller's end.
     => 64697 - Admin >> Add product: Images are uploaded multiple times on multiple clicks under the media section
+    => 064704 - Radio buttons are not properly aligned with the text in the shipping rates setup popup.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
