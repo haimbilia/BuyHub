@@ -65,7 +65,6 @@ class HomeController extends MyAppController
         $slides = $this->getSlides();
         $this->set('slides', $slides);
         $this->set('collections', $collections);
-        $this->set('isWishlistEnable', FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1));
 
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
@@ -80,9 +79,8 @@ class HomeController extends MyAppController
 
         $this->_template->addJs('js/slick.min.js');
         $this->_template->addJs('js/slick-carousels.js');
-        $apiCall = (true === MOBILE_APP_API_CALL) ? 1 : 0;
         $geoAddress = Address::getYkGeoData();
-        $cacheKey = $this->siteLangId . '-' . CommonHelper::getCurrencyId() . '-' . $apiCall . '-' . serialize($geoAddress);
+        $cacheKey = $this->siteLangId . '-' . CommonHelper::getCurrencyId() . '-' . serialize($geoAddress);
         $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);
 
         $collectionTemplates = array();
@@ -557,9 +555,8 @@ class HomeController extends MyAppController
     private function getCollections($productSrchObj, &$sponsoredShopsInCollection, &$sponsoredProdsInCollection)
     {
         $langId = $this->siteLangId;
-        $apiCall = (true === MOBILE_APP_API_CALL) ? 1 : 0;
         $geoAddress = Address::getYkGeoData();
-        $cacheKey = $langId . '_' . CommonHelper::getCurrencyId() . '_' . $apiCall . '_' . serialize($geoAddress);
+        $cacheKey = $langId . '_' . CommonHelper::getCurrencyId() . '_' . FatUtility::int(MOBILE_APP_API_CALL) . '_' . serialize($geoAddress);
         $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);
 
 
@@ -1493,22 +1490,20 @@ class HomeController extends MyAppController
 
     public function splashScreenData()
     {
-        $langCode = Language::getAttributesById($this->siteLangId, 'language_code', false);
-
         $data = [
             'CONF_ENABLE_GEO_LOCATION' => FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0),
             'CONF_DEFAULT_CURRENCY_SEPARATOR' => FatApp::getConfig('CONF_DEFAULT_CURRENCY_SEPARATOR', FatUtility::VAR_STRING, '.')
         ];
 
         $data['languageLabels'] = [
-            'language_code' => $langCode,
-            'language_layout_direction' => Language::getLayoutDirection($this->siteLangId),
+            'language_code' => CommonHelper::getLangCode(),
+            'language_layout_direction' => CommonHelper::getLayoutDirection(),
             'downloadUrl' => UrlHelper::generateFullUrl('Home', 'languageLabels', array(1, $this->siteLangId)),
             'langLabelUpdatedAt' => FatApp::getConfig('CONF_LANG_LABELS_UPDATED_AT', FatUtility::VAR_INT, time())
         ];
 
         $data['appThemeSetting'] = [
-            'primaryThemeColor' => FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, ''),
+            'primaryThemeColor' => FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59"),
             'primaryInverseThemeColor' => FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''),
             'secondaryThemeColor' => FatApp::getConfig('CONF_SECONDARY_THEME_COLOR', FatUtility::VAR_STRING, ''),
             'secondaryInverseThemeColor' => FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''),

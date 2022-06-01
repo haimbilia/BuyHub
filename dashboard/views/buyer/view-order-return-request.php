@@ -147,7 +147,10 @@
                                         </div>
                                     </td>
                                     <td><?php echo $requestRequestStatusArr[$request['orrequest_status']]; ?></td>
-                                    <td><?php echo CommonHelper::displayMoneyFormat($returnDataArr['op_refund_amount'], true, false); ?></td>
+                                    <td><?php 
+                                        $returnDataArr = CommonHelper::getOrderProductRefundAmtArr($request);                                    
+                                        echo CommonHelper::displayMoneyFormat($returnDataArr['op_refund_amount'], true, false); ?>
+                                    </td>
                                     <?php if (isset($attachedFile) && !empty($attachedFile)) { ?>
                                         <td>
                                             <a class="btn btn-outline-gray btn-icon" href="<?php echo UrlHelper::generateUrl('Buyer', 'downloadAttachedFileForReturn', array($request["orrequest_id"])); ?>">

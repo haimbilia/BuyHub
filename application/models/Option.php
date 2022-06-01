@@ -5,7 +5,7 @@ class Option extends MyAppModel
     public const DB_TBL = 'tbl_options';
     public const DB_TBL_LANG = 'tbl_options_lang';
     public const DB_TBL_PREFIX = 'option_';
-	public const DB_TBL_LANG_PREFIX = 'optionlang_';
+    public const DB_TBL_LANG_PREFIX = 'optionlang_';
 
     public const OPTION_TYPE_SELECT = 1;
     public const OPTION_TYPE_CHECKBOX = 2;
@@ -42,18 +42,18 @@ class Option extends MyAppModel
     public static function requiredOptionFields()
     {
         return array(
-        ImportexportCommon::VALIDATE_POSITIVE_INT => array(
-        'option_id',
-        ),
-        ImportexportCommon::VALIDATE_NOT_NULL => array(
-        'option_identifier',
-        'option_name',
-        'option_seller_id',
-        'credential_username',
-        ),
-        ImportexportCommon::VALIDATE_INT => array(
-        'option_seller_id',
-        ),
+            ImportexportCommon::VALIDATE_POSITIVE_INT => array(
+                'option_id',
+            ),
+            ImportexportCommon::VALIDATE_NOT_NULL => array(
+                'option_identifier',
+                'option_name',
+                'option_seller_id',
+                'credential_username',
+            ),
+            ImportexportCommon::VALIDATE_INT => array(
+                'option_seller_id',
+            ),
         );
     }
 
@@ -66,15 +66,15 @@ class Option extends MyAppModel
     public static function requiredOptionValFields()
     {
         return array(
-        ImportexportCommon::VALIDATE_POSITIVE_INT => array(
-        'optionvalue_id',
-        'optionvalue_option_id',
-        ),
-        ImportexportCommon::VALIDATE_NOT_NULL => array(
-        'optionvalue_identifier',
-        'option_identifier',
-        'optionvalue_name',
-        ),
+            ImportexportCommon::VALIDATE_POSITIVE_INT => array(
+                'optionvalue_id',
+                'optionvalue_option_id',
+            ),
+            ImportexportCommon::VALIDATE_NOT_NULL => array(
+                'optionvalue_identifier',
+                'option_identifier',
+                'optionvalue_name',
+            ),
         );
     }
 
@@ -87,14 +87,14 @@ class Option extends MyAppModel
     public static function requiredProdOptionFields()
     {
         return array(
-        ImportexportCommon::VALIDATE_POSITIVE_INT => array(
-        'product_id',
-        'option_id',
-        ),
-        ImportexportCommon::VALIDATE_NOT_NULL => array(
-        'product_identifier',
-        'option_identifier',
-        ),
+            ImportexportCommon::VALIDATE_POSITIVE_INT => array(
+                'product_id',
+                'option_id',
+            ),
+            ImportexportCommon::VALIDATE_NOT_NULL => array(
+                'product_identifier',
+                'option_identifier',
+            ),
         );
     }
 
@@ -111,11 +111,11 @@ class Option extends MyAppModel
             trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $langId), E_USER_ERROR);
         }
         $arr = array(
-        static::OPTION_TYPE_SELECT => Labels::getLabel('LBL_LISTBOX', $langId),
-        /*When uncommened this then it must be handle in import/export*/
-        /*  static::OPTION_TYPE_CHECKBOX => Labels::getLabel('LBL_CHECKBOX',$langId),
-        static::OPTION_TYPE_TEXT => Labels::getLabel('LBL_TEXT',$langId),
-        static::OPTION_TYPE_TEXTAREA => Labels::getLabel('LBL_TEXTAREA',$langId), */
+            static::OPTION_TYPE_SELECT => Labels::getLabel('LBL_LISTBOX', $langId),
+            /*If uncomment this then it must be handle in import/export*/
+            /*  static::OPTION_TYPE_CHECKBOX => Labels::getLabel('LBL_CHECKBOX',$langId),
+                static::OPTION_TYPE_TEXT => Labels::getLabel('LBL_TEXT',$langId),
+                static::OPTION_TYPE_TEXTAREA => Labels::getLabel('LBL_TEXTAREA',$langId), */
         );
         return $arr;
     }
@@ -145,18 +145,6 @@ class Option extends MyAppModel
         }
         return $record;
     }
-
-
-    /* public function getOptions($optionId = 0){
-    $srch = self::getSearchObject();
-    $srch->joinTable(static::DB_TBL.'_lang','LEFT OUTER JOIN',
-    'o_l.optionlang_option_id = o.option_id','o_l');
-    if($optionId > 0){
-    $srch->addCondition('option_id','=',$optionId);
-    }
-    $srch->addOrder('option_name');
-    return $srch;
-    } */
 
     public function getMaxOrder($userId = 0)
     {
