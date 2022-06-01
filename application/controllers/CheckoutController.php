@@ -133,9 +133,9 @@ class CheckoutController extends MyAppController
                         } else {
                             $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
                             $availableStock = $product['selprod_stock'] - $tempHoldStock;
-                            $isOutOfMinOrderQty = ((int)($product['selprod_min_order_qty'] > $availableStock));
-
                             $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
+                            $isOutOfMinOrderQty = ((int)($product['selprod_min_order_qty'] > ($availableStock + $userTempHoldStock)));
+                          
                             if ($availableStock < ($product['quantity'] - $userTempHoldStock) || 0 < $isOutOfMinOrderQty) {
                                 $key = false;
                                 $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
