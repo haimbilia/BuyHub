@@ -66,14 +66,9 @@ class UrlRewritingController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-
+        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, $this->siteLangId);
+        $lang_id = 1 > $lang_id ? $this->siteLangId : $lang_id;
         $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $lang_id = $post['lang_id'];
-        } else {
-            $lang_id = array_key_first($languages);
-            $post['lang_id'] = $lang_id;
-        }
 
         $srch = UrlRewrite::getSearchObject($this->siteLangId);
         $srch->joinTable(Language::DB_TBL, 'LEFT OUTER JOIN', 'lng.language_id = ur.urlrewrite_lang_id', 'lng');
@@ -82,8 +77,8 @@ class UrlRewritingController extends ListingBaseController
             $condition->attachCondition('ur.urlrewrite_custom', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        if ($post['lang_id'] > 0) {
-            $srch->addCondition('ur.urlrewrite_lang_id', '=', 'mysql_func_' . $post['lang_id'], 'AND', true);
+        if ($lang_id > 0) {
+            $srch->addCondition('ur.urlrewrite_lang_id', '=', 'mysql_func_' . $lang_id, 'AND', true);
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
@@ -170,17 +165,18 @@ class UrlRewritingController extends ListingBaseController
                 continue;
             }
 
-            $recordId = 0;
+            $urlrewriteId = 0;
             if (array_key_exists($langId, $row)) {
-                $recordId = $row[$langId]['urlrewrite_id'];
+                $urlrewriteId = $row[$langId]['urlrewrite_id'];
             }
+
             $url = $post['urlrewrite_custom'][$langId];
             $data = [
                 'urlrewrite_original' => $originalUrl,
                 'urlrewrite_lang_id' => $langId,
                 'urlrewrite_custom' => CommonHelper::seoUrl($url)
             ];
-            $record = new UrlRewrite($recordId);
+            $record = new UrlRewrite($urlrewriteId);
             $record->assignValues($data);
 
             if (!$record->save()) {
@@ -292,7 +288,7 @@ class UrlRewritingController extends ListingBaseController
             $frm->addRequiredField($fieldName, 'urlrewrite_custom[' . $langId . ']');
         }
         $fld =  $frm->addHTML('', '', '');
-        $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_EXAMPLE:_CUSTOM_URL_EXAMPLE', $this->siteLangId) . '</small>';
+        $fld->htmlAfterField = '<span class="form-text">' . Labels::getLabel('LBL_EXAMPLE:_CUSTOM_URL_EXAMPLE', $this->siteLangId) . '</span>';
         // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
