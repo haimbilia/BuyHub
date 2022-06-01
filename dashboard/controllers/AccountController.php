@@ -3813,6 +3813,12 @@ class AccountController extends LoggedUserController
         } else if ($action == 'changeEmailPassword') {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => ucwords(Labels::getLabel('LBL_UPDATE_CREDENTIALS')));
+        } else if ($action == 'wishlist') {
+            $title = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            if (1 > FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1)) {
+                $title = Labels::getLabel('LBL_FAVORITES');
+            }
+            $this->nodes[] = array('title' => $title);
         } else {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);

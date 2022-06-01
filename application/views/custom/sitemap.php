@@ -6,7 +6,7 @@
                     <div class="section-head mb-0">
                         <div class="section-heading">
                             <h2 class="mb-0"><?php echo Labels::getLabel('LBL_SITEMAP', $siteLangId); ?></h2>
-                            <div class="breadcrumbs breadcrumbs--white">
+                            <div class="breadcrumb">
                                 <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
                             </div>
                         </div>

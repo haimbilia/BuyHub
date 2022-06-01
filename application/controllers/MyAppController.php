@@ -901,7 +901,7 @@ class MyAppController extends FatController
             return true;
         }
 
-        LibHelper::exitWithError(Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
+        LibHelper::exitWithError(Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()), false, true);
         FatApp::redirectUser(UrlHelper::generateUrl('maintenance'));
     }
 

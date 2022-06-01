@@ -65,7 +65,6 @@ class CcavenuePayController extends PaymentController
     public function iframe($orderId)
     {
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
-        $payment_gateway_charge = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (!$orderInfo['id']) {
@@ -75,12 +74,9 @@ class CcavenuePayController extends PaymentController
         $access_code = $this->settings['access_code'];
         $merchant_data = '';
         $post = FatApp::getPostedData();
-        foreach ($post as $key => $value) {
-            $merchant_data .= $key . '=' . $value . '&';
-        }
+        $post['currency'] = $this->systemCurrencyCode;
+        $merchant_data = http_build_query($post);
 
-        //$merchant_data= str_replace("#~#","&",$merchant_data);
-        $merchant_data .= "currency=" . $this->systemCurrencyCode;
         $encrypted_data = encrypt($merchant_data, $working_key); // Method for encrypting the data.
         if (FatApp::getConfig('CONF_TRANSACTION_MODE', FatUtility::VAR_BOOLEAN, false) == true) {
             $iframe_url = 'https://secure.ccavenue.com';
