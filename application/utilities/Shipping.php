@@ -264,7 +264,6 @@ class Shipping
                 if (self::LEVEL_PRODUCT != $shippingLevel && isset($this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['selProdCombinedPrice'])) {
                     if (!in_array($row['selprod_id'], $this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['seleprodIds'])) {                      
                         $this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['selProdCombinedPrice'] += ($product['theprice'] * $product['quantity']);
-                        var_dump($this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['selProdCombinedPrice']);
                         $this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['selProdCombinedWeight'] += $productWeightInOunce;
                         array_push($this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['seleprodIds'], $row['selprod_id']);
                        
