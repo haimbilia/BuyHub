@@ -6,8 +6,7 @@ class OptionValue extends MyAppModel
     public const DB_TBL_LANG = 'tbl_option_values_lang';
     public const DB_TBL_PREFIX = 'optionvalue_';
     public const DB_TBL_LANG_PREFIX = 'optionvaluelang_';
-    private $db;
-
+    
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
