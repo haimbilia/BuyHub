@@ -1493,22 +1493,20 @@ class HomeController extends MyAppController
 
     public function splashScreenData()
     {
-        $langCode = Language::getAttributesById($this->siteLangId, 'language_code', false);
-
         $data = [
             'CONF_ENABLE_GEO_LOCATION' => FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0),
             'CONF_DEFAULT_CURRENCY_SEPARATOR' => FatApp::getConfig('CONF_DEFAULT_CURRENCY_SEPARATOR', FatUtility::VAR_STRING, '.')
         ];
 
         $data['languageLabels'] = [
-            'language_code' => $langCode,
-            'language_layout_direction' => Language::getLayoutDirection($this->siteLangId),
+            'language_code' => CommonHelper::getLangCode(),
+            'language_layout_direction' => CommonHelper::getLayoutDirection(),
             'downloadUrl' => UrlHelper::generateFullUrl('Home', 'languageLabels', array(1, $this->siteLangId)),
             'langLabelUpdatedAt' => FatApp::getConfig('CONF_LANG_LABELS_UPDATED_AT', FatUtility::VAR_INT, time())
         ];
 
         $data['appThemeSetting'] = [
-            'primaryThemeColor' => FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, ''),
+            'primaryThemeColor' => FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59"),
             'primaryInverseThemeColor' => FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''),
             'secondaryThemeColor' => FatApp::getConfig('CONF_SECONDARY_THEME_COLOR', FatUtility::VAR_STRING, ''),
             'secondaryInverseThemeColor' => FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''),
