@@ -216,18 +216,8 @@ $(document).ready(function () {
 			fcom.removeLoader();
 			if (imageType == 'icon') {
 				$('#icon-imageListingJs').html(t.html);
-				var prodCatId = $("[name='prodcat_id']").val();
-				if (prodCatId == 0) {
-					var iconImageId = $("#icon-imageListingJs li").attr('id');
-					var selectedLangId = $(".icon-language-js").val();
-					$("[name='cat_icon_image_id[" + selectedLangId + "]']").val(iconImageId);
-				}
 			} else if (imageType == 'banner') {
 				$('#banner-imageListingJs').html(t.html);
-				var bannerImageId = $("#banner-imageListingJs li").attr('id');
-				var selectedLangId = $(".catBannerLanguageJs").val();
-				var screen = $(".catPrefDimensionsJs").val();
-				$("[name='cat_banner_image_id[" + selectedLangId + "_" + screen + "]']").val(bannerImageId);
 			}
 		});
 	};
@@ -238,10 +228,8 @@ $(document).ready(function () {
             fcom.displaySuccessMessage(t.msg);
 			if (imageType == 'icon') {
 				$("#icon-imageListingJs").html('');
-				$("[name='cat_icon_image_id[" + langId + "]']").val('');
 			} else if (imageType == 'banner') {
 				$("#banner-imageListingJs").html('');
-				$("[name='cat_banner_image_id[" + langId + "_" + slide_screen + "]']").val('');
 			}
 		});
 	};

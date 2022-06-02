@@ -17,17 +17,17 @@ class ProductCategoryTest extends YkModelTest
     
     public function setCategoryData()
     {     
-        $data = array('prodcat_id' => 0, 'prodcat_parent' => 0, 'prodcat_active' => 1, 'auto_update_other_langs_data' => 0, 'prodcat_name' => array('', 'Men', ''), 'cat_icon_image_id' => array(), 'cat_banner_image_id' => array()); // Existing Category
+        $data = array('prodcat_id' => 0, 'prodcat_parent' => 0, 'prodcat_active' => 1, 'auto_update_other_langs_data' => 0, 'prodcat_name' => array('', 'Men', ''), 'cat_icon_image_id' => array()); // Existing Category
         
-        $data1 = array('prodcat_id' => 0, 'prodcat_parent' => 0, 'prodcat_active' => 1, 'auto_update_other_langs_data' => 0, 'prodcat_name' => array('', 'Shoes'.rand(1, 9999), 'Shoes'.rand(1, 9999).' In Arabic'), 'cat_icon_image_id' => array(), 'cat_banner_image_id' => array()); // New Root Category
+        $data1 = array('prodcat_id' => 0, 'prodcat_parent' => 0, 'prodcat_active' => 1, 'auto_update_other_langs_data' => 0, 'prodcat_name' => array('', 'Shoes'.rand(1, 9999), 'Shoes'.rand(1, 9999).' In Arabic'), 'cat_icon_image_id' => array()); // New Root Category
         
-        $data2 = array('prodcat_id' => 0, 'prodcat_parent' => 271, 'prodcat_active' => 1, 'auto_update_other_langs_data' => 0, 'prodcat_name' => array('', 'Nike'.rand(1, 9999), 'Nike'.rand(1, 9999).' In Arabic'), 'cat_icon_image_id' => array(), 'cat_banner_image_id' => array()); // New Sub Category
+        $data2 = array('prodcat_id' => 0, 'prodcat_parent' => 271, 'prodcat_active' => 1, 'auto_update_other_langs_data' => 0, 'prodcat_name' => array('', 'Nike'.rand(1, 9999), 'Nike'.rand(1, 9999).' In Arabic'), 'cat_icon_image_id' => array()); // New Sub Category
         
-        $data3 = array('prodcat_id' => 0, 'prodcat_parent' => 0, 'prodcat_active' => 0, 'auto_update_other_langs_data' => 0, 'prodcat_name' => array('', 'Test'.rand(1, 9999), 'Test'.rand(1, 9999).' In Arabic'), 'cat_icon_image_id' => array(), 'cat_banner_image_id' => array()); // New Root Category with Inactive status
+        $data3 = array('prodcat_id' => 0, 'prodcat_parent' => 0, 'prodcat_active' => 0, 'auto_update_other_langs_data' => 0, 'prodcat_name' => array('', 'Test'.rand(1, 9999), 'Test'.rand(1, 9999).' In Arabic'), 'cat_icon_image_id' => array()); // New Root Category with Inactive status
         
-        $data4 = array('prodcat_id' => 0, 'prodcat_parent' => 0, 'prodcat_active' => 1, 'auto_update_other_langs_data' => 1, 'prodcat_name' => array('', 'AutoUpdateLang'.rand(1, 9999), ''), 'cat_icon_image_id' => array(), 'cat_banner_image_id' => array()); // New Root Category with auto update other lang data
+        $data4 = array('prodcat_id' => 0, 'prodcat_parent' => 0, 'prodcat_active' => 1, 'auto_update_other_langs_data' => 1, 'prodcat_name' => array('', 'AutoUpdateLang'.rand(1, 9999), ''), 'cat_icon_image_id' => array()); // New Root Category with auto update other lang data
         
-        $data5 = array('prodcat_id' => 266, 'prodcat_parent' => 0, 'prodcat_active' => 0, 'auto_update_other_langs_data' => 0, 'prodcat_name' => array('', 'Unit Test'.rand(1, 9999), 'Unit Test Arabic'.rand(1, 9999)), 'cat_icon_image_id' => array(), 'cat_banner_image_id' => array()); // Update Category name and status
+        $data5 = array('prodcat_id' => 266, 'prodcat_parent' => 0, 'prodcat_active' => 0, 'auto_update_other_langs_data' => 0, 'prodcat_name' => array('', 'Unit Test'.rand(1, 9999), 'Unit Test Arabic'.rand(1, 9999)), 'cat_icon_image_id' => array()); // Update Category name and status
         
         return array(
             array($data, 0, false),            
