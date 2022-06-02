@@ -7,7 +7,7 @@
             $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
             $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             ?>
-            <a href="<?php echo UrlHelper::generateUrl('Blog'); ?>">
+            <a href="<?php echo UrlHelper::generateUrl(); ?>">
                 <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId); ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>">
             </a>
         </div>
