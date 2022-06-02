@@ -133,19 +133,6 @@ class Brand extends MyAppModel
         return false;
     }
 
-    /* public function canRecordUpdateStatus($id)
-    {
-        $srch = $this->getSearchObject();
-        $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', $id);
-        $srch->addFld('b.' . static::DB_TBL_PREFIX . 'id', 'b.' . static::DB_TBL_PREFIX . 'active');
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if (!empty($row) && $row[static::DB_TBL_PREFIX . 'id'] == $id) {
-            return $row;
-        }
-        return false;
-    }
-    */
     public function rewriteUrl(string $keyword)
     {
         if ($this->mainTableRecordId < 1) {
@@ -159,16 +146,6 @@ class Brand extends MyAppModel
         $customUrl = UrlRewrite::getValidSeoUrl($seoUrl, $originalUrl, $this->mainTableRecordId);
 
         return UrlRewrite::update($originalUrl, $customUrl);
-    }
-
-    public static function recordBrandWeightage($brandId)
-    {
-        /* $brandId =  FatUtility::int($brandId);
-
-        if(1 > $brandId){ return false;}
-
-        $obj = new SmartUserActivityBrowsing();
-        return $obj->addUpdate($brandId,SmartUserActivityBrowsing::TYPE_BRAND); */
     }
 
     public static function getBrandReqStatusArr(int $langId)
@@ -194,18 +171,13 @@ class Brand extends MyAppModel
         );
     }
 
-    public static function getBrandName(int $brandId, int $langId, bool $isActive = true)
+    public static function getBrandName(int $brandId, int $langId, bool $isActive = true): string
     {
         $srch = static::getListingObj($langId, null, $isActive);
         $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $brandId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if ($row) {
-            return $row['brand_name'];
-        } else {
-            return false;
-        }
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return $row['brand_name'] ?? '';
     }
 }

@@ -395,20 +395,16 @@ class Shop extends MyAppModel
     public static function getName(int $shopId, int $langId = 0, bool $isActive = true): string
     {
         if (1 > $shopId) {
-            return false;
+            return '';
         }
 
         $srch = static::getSearchObject($isActive, $langId);
         $srch->addMultipleFields(array('IFNULL(shop_name, shop_identifier) as shop_name'));
         $srch->addCondition('shop_id', '=', 'mysql_func_' . $shopId, 'AND', true);
         $srch->setPageSize(1);
-        $shopRs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($shopRs);
-        if ($row) {
-            return $row['shop_name'];
-        }
-
-        return false;
+        $srch->doNotCalculateRecords();
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return $row['shop_name'] ?? '';
     }
 
     /**

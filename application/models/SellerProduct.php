@@ -304,8 +304,8 @@ class SellerProduct extends MyAppModel
         $srch->joinTable(static::DB_TBL . '_lang', 'LEFT JOIN', 'slang.' . static::DB_TBL_LANG_PREFIX . 'selprod_id = ' . static::DB_TBL_UPSELL_PRODUCTS_PREFIX . 'recommend_sellerproduct_id AND ' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $lang_id, 'slang');
         $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_PREFIX . 'product_id');
         $srch->joinTable(Product::DB_TBL . '_lang', 'LEFT JOIN', 'lang.productlang_product_id = ' . static::DB_TBL_LANG_PREFIX . 'selprod_id AND productlang_lang_id = ' . $lang_id, 'lang');
-        
-        if(true === $forFrontend){
+
+        if (true === $forFrontend) {
             $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'ptc.ptc_product_id = product_id', 'ptc');
             $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'c.prodcat_id = ptc.ptc_prodcat_id', 'c');
 
@@ -325,7 +325,7 @@ class SellerProduct extends MyAppModel
             );
 
             $srch->addCondition('c.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
-            $srch->addCondition('c.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);        
+            $srch->addCondition('c.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
             if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
                 $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', 'product_brand_id = brand.brand_id and brand.brand_active = ' . applicationConstants::YES . ' and brand.brand_deleted = ' . applicationConstants::NO, 'brand');
@@ -340,8 +340,7 @@ class SellerProduct extends MyAppModel
                     'IFNULL(m.splprice_price, selprod_price) AS theprice', 'selprod_min_order_qty', 'product_updated_on'
                 );
             }
-
-        }else{
+        } else {
             if (empty($attr)) {
                 $attr = array(
                     'upsell_sellerproduct_id', 'upsell_recommend_sellerproduct_id', 'selprod_id', 'product_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(product_identifier ,product_name) as product_name', 'product_identifier', 'selprod_product_id',
@@ -388,7 +387,7 @@ class SellerProduct extends MyAppModel
             }
         }
         $srch->addGroupBy('selprod_id');
-        $srch->doNotCalculateRecords();       
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $data = array();
@@ -816,13 +815,6 @@ class SellerProduct extends MyAppModel
             return false;
         }
         return true;
-
-        /* $db = FatApp::getDb();
-          if (!$db->updateFromArray(static::DB_TBL, array( static::DB_TBL_PREFIX . 'deleted' => 1), array('smt' => static::DB_TBL_PREFIX . 'id = ?','vals' => array($selprod_id)))) {
-          $this->error = $db->getError();
-          return false;
-          }
-          return true; */
     }
 
     public static function getSelprodPolicies($selprod_id, $policy_type, $langId, $limit = null, $active = true, $deleted = false)
@@ -858,7 +850,7 @@ class SellerProduct extends MyAppModel
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
-    public static function getProductDisplayTitle($selProdId, $langId, $toHtml = false)
+    public static function getProductDisplayTitle($selProdId, int $langId, bool $toHtml = false)
     {
         $prodSrch = new ProductSearch($langId, null, null, false, false);
         $prodSrch->joinSellerProducts(0, '', array(), false, false);
@@ -869,8 +861,7 @@ class SellerProduct extends MyAppModel
         }
         $prodSrch->addMultipleFields(array('selprod_id', 'product_id', 'product_identifier', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title'));
         $prodSrch->addGroupBy('selprod_id');
-        $productRs = $prodSrch->getResultSet();
-        $products = FatApp::getDb()->fetchAll($productRs, 'selprod_id');
+        $products = FatApp::getDb()->fetchAll($prodSrch->getResultSet(), 'selprod_id');
 
         $productTitle = SellerProduct::getProductsOptionsString($products, $langId, $toHtml);
         if (false == $productTitle) {
@@ -888,7 +879,7 @@ class SellerProduct extends MyAppModel
         return false;
     }
 
-    public static function getProductsOptionsString($products, $langId, $toHtml = false)
+    public static function getProductsOptionsString(array $products, int $langId, bool $toHtml = false)
     {
         if (empty($products) || empty($langId)) {
             return false;
@@ -1495,37 +1486,37 @@ class SellerProduct extends MyAppModel
 
     public static function getProdMissingInfo(int $selProdId, $langId): array
     {
-        $validationArr = [          
-            'product_active' => ['title' => Labels::getLabel('LBL_PRODUCT_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
-            'product_approved' => ['title' => Labels::getLabel('LBL_PRODUCT_APPROVED', $langId),'currentStatus'=> '', 'valid' => false],
-            'product_deleted' => ['title' => Labels::getLabel('LBL_PRODUCT_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
-            'prodcat_active' => ['title' => Labels::getLabel('LBL_PRODUCT_CATEGORY_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
-            'prodcat_deleted' => ['title' => Labels::getLabel('LBL_PRODUCT_CATEGORY_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
-            'prodcat_status' => ['title' => Labels::getLabel('LBL_PRODUCT_CATEGORY_STATUS', $langId),'currentStatus'=> '', 'valid' => false],
-            'taxcat_active' => ['title' => Labels::getLabel('LBL_TAX_CATEGORY_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
-            'taxcat_deleted' => ['title' => Labels::getLabel('LBL_TAX_CATEGORY_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
-            'brand_active' => ['title' => Labels::getLabel('LBL_BRAND_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
-            'brand_deleted' => ['title' => Labels::getLabel('LBL_BRAND_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
-            'user_deleted' => ['title' => Labels::getLabel('LBL_SELLER_DELETED', $langId),'currentStatus'=> '', 'valid' => false],
-            'credential_active' => ['title' => Labels::getLabel('LBL_SELLER_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
-            'credential_verified' => ['title' => Labels::getLabel('LBL_SELLER_VERIFIED', $langId),'currentStatus'=> '', 'valid' => false],
-            'shop_active' => ['title' => Labels::getLabel('LBL_SHOP_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
-            'shop_supplier_display_status' => ['title' => Labels::getLabel('LBL_SHOP_DISPLAY_STATUS', $langId),'currentStatus'=> '', 'valid' => false],
-            'country_active' => ['title' => Labels::getLabel('LBL_SHOP_COUNTRY_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
-            'state_active' => ['title' => Labels::getLabel('LBL_SHOP_STATE_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false],
+        $validationArr = [
+            'product_active' => ['title' => Labels::getLabel('LBL_PRODUCT_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
+            'product_approved' => ['title' => Labels::getLabel('LBL_PRODUCT_APPROVED', $langId), 'currentStatus' => '', 'valid' => false],
+            'product_deleted' => ['title' => Labels::getLabel('LBL_PRODUCT_DELETED', $langId), 'currentStatus' => '', 'valid' => false],
+            'prodcat_active' => ['title' => Labels::getLabel('LBL_PRODUCT_CATEGORY_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
+            'prodcat_deleted' => ['title' => Labels::getLabel('LBL_PRODUCT_CATEGORY_DELETED', $langId), 'currentStatus' => '', 'valid' => false],
+            'prodcat_status' => ['title' => Labels::getLabel('LBL_PRODUCT_CATEGORY_STATUS', $langId), 'currentStatus' => '', 'valid' => false],
+            'taxcat_active' => ['title' => Labels::getLabel('LBL_TAX_CATEGORY_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
+            'taxcat_deleted' => ['title' => Labels::getLabel('LBL_TAX_CATEGORY_DELETED', $langId), 'currentStatus' => '', 'valid' => false],
+            'brand_active' => ['title' => Labels::getLabel('LBL_BRAND_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
+            'brand_deleted' => ['title' => Labels::getLabel('LBL_BRAND_DELETED', $langId), 'currentStatus' => '', 'valid' => false],
+            'user_deleted' => ['title' => Labels::getLabel('LBL_SELLER_DELETED', $langId), 'currentStatus' => '', 'valid' => false],
+            'credential_active' => ['title' => Labels::getLabel('LBL_SELLER_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
+            'credential_verified' => ['title' => Labels::getLabel('LBL_SELLER_VERIFIED', $langId), 'currentStatus' => '', 'valid' => false],
+            'shop_active' => ['title' => Labels::getLabel('LBL_SHOP_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
+            'shop_supplier_display_status' => ['title' => Labels::getLabel('LBL_SHOP_DISPLAY_STATUS', $langId), 'currentStatus' => '', 'valid' => false],
+            'country_active' => ['title' => Labels::getLabel('LBL_SHOP_COUNTRY_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
+            'state_active' => ['title' => Labels::getLabel('LBL_SHOP_STATE_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
         ];
 
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-            $validationArr['subscription'] = ['title' => Labels::getLabel('LBL_SELLER_SUBSCRIPTION_ACTIVE', $langId),'currentStatus'=> '', 'valid' => false];
+            $validationArr['subscription'] = ['title' => Labels::getLabel('LBL_SELLER_SUBSCRIPTION_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false];
         }
 
         $selProd = SellerProduct::getAttributesById($selProdId, ['selprod_deleted', 'selprod_product_id', 'selprod_user_id']);
 
-        if ($selProd) {           
+        if ($selProd) {
             if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
                 $currentActivePlan = OrderSubscription::getUserCurrentActivePlanDetails($langId, $selProd['selprod_user_id'], array(OrderSubscription::DB_TBL_PREFIX . 'till_date', OrderSubscription::DB_TBL_PREFIX . 'price', OrderSubscription::DB_TBL_PREFIX . 'type'));
                 $validationArr['subscription']['valid'] = FatDate::diff(date("Y-m-d"), $currentActivePlan[OrderSubscription::DB_TBL_PREFIX . 'till_date']) > 0;
-                $validationArr['subscription']['currentStatus'] = $validationArr['subscription']['valid'] ? 1 :0;
+                $validationArr['subscription']['currentStatus'] = $validationArr['subscription']['valid'] ? 1 : 0;
             }
             $product = Product::getAttributesById($selProd['selprod_product_id'], ['product_approved', 'product_active', 'product_deleted', 'product_brand_id']);
             if ($product) {
@@ -1544,7 +1535,7 @@ class SellerProduct extends MyAppModel
                 $prodToCat = FatApp::getDb()->fetch($prodToCatObj->getResultSet());
                 if ($prodToCat) {
                     $prodCat = ProductCategory::getAttributesById($prodToCat['ptc_prodcat_id'], ['prodcat_active', 'prodcat_deleted', 'prodcat_status']);
-                    if ($prodCat) {                        
+                    if ($prodCat) {
                         $validationArr['prodcat_active']['valid'] = $prodCat['prodcat_active'] === applicationConstants::YES;
                         $validationArr['prodcat_active']['currentStatus'] = $prodCat['prodcat_active'];
                         $validationArr['prodcat_deleted']['valid'] = $prodCat['prodcat_deleted'] === applicationConstants::NO;
@@ -1616,5 +1607,4 @@ class SellerProduct extends MyAppModel
 
         return $validationArr;
     }
-    
 }

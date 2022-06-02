@@ -931,27 +931,15 @@ class ProductCategory extends MyAppModel
         }
     }
 
-    /* public static function getCatName($id,$categoryArr) {
-            if (!array_key_exists($id, $categoryArr)) {
-                $categoryArr[$id] = productCategory::getAttributesByLangId($id, 'prodcat_name');
-            }
-            return $categoryArr[$id];
-    } */
-
-    public static function getProductCategoryName($id, $langId)
+    public static function getProductCategoryName(int $catId, int $langId)
     {
         $srch = static::getSearchObject(false, $langId);
         $srch->addCondition('m.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-        $srch->addCondition('m.prodcat_id', '=', $id);
+        $srch->addCondition('m.prodcat_id', '=', $catId);
         $srch->addFld('COALESCE(prodcat_name,prodcat_identifier) as prodcat_name');
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if ($row) {
-            return $row['prodcat_name'];
-        } else {
-            return false;
-        }
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return $row['prodcat_name'] ?? '';
     }
 
     public function getCategoryTreeForSearch($siteLangId, $categories, &$globalCatTree = array(), $attr = array())
@@ -972,8 +960,6 @@ class ProductCategory extends MyAppModel
                     $globalCatTree[$catId][$key] = $val;
                 }
             } else {
-                /* $globalCatTree[$catId]['prodcat_name'] = productCategory::getAttributesByLangId($siteLangId,$catId,'prodcat_name'); */
-
                 $prodCatSrch = new ProductCategorySearch($siteLangId);
                 $prodCatSrch->addFld('COALESCE(prodcat_name,prodcat_identifier ) as prodcat_name');
                 $prodCatSrch->addCondition('prodcat_id', '=', 'mysql_func_' . $catId, 'AND', true);
@@ -983,7 +969,6 @@ class ProductCategory extends MyAppModel
                 $globalCatTree[$catId]['prodcat_name'] = $rows['prodcat_name'];
                 $globalCatTree[$catId]['prodcat_id'] = $catId;
             }
-            //$globalCatTree[$catId]['prodcat_id']['children'] = '';
             if (count($remainingCatCods) > 0) {
                 $this->getCategoryTreeForSearch($siteLangId, $remainingCatCods, $globalCatTree[$catId]['children'], $attr);
             }
