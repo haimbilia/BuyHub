@@ -108,6 +108,7 @@ class BadgesController extends ListingBaseController
 
         $srch = new BadgeSearch($this->siteLangId);
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', 'mysql_func_' . Badge::TYPE_BADGE, 'AND', true);
+        $srch->addFld('*, COALESCE(badge_name,  badge_identifier) as badge_name');
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('badge_name', 'like', '%' . $keyword . '%');

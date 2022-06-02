@@ -106,6 +106,7 @@ class RibbonsController extends ListingBaseController
 
         $srch = new BadgeSearch($this->siteLangId);
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', Badge::TYPE_RIBBON);
+        $srch->addFld('*, COALESCE(badge_name,  badge_identifier) as badge_name');
 
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
@@ -117,9 +118,7 @@ class RibbonsController extends ListingBaseController
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
