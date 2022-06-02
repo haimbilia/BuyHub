@@ -228,7 +228,8 @@ class BlogCommentsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
 
-        $frm = new Form('frmBlogComment', array('id' => 'frmBlogComment'));
+        $frm = new Form('frmBlogComment', array('id' => 'frmBlogComment'));     
+        $frm->addTextArea(Labels::getLabel('FRM_BLOG_COMMENT', $this->siteLangId), 'bpcomment_content');
         $frm->addHiddenField('', 'bpcomment_id', $recordId);
         $statusArr = BlogComment::getBlogCommentStatusArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_COMMENT_STATUS', $this->siteLangId), 'bpcomment_approved', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));

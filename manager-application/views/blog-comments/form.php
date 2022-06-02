@@ -29,11 +29,7 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
             <li class="list-stats-item">
                 <span class='lable'><?php echo Labels::getLabel('LBL_Blog_Post_Title', $siteLangId); ?></span>
                 <span class='value'><?php echo $data['post_title']; ?></span>
-            </li>
-            <li class="list-stats-item">
-                <span class='lable'><?php echo Labels::getLabel('LBL_Comment', $siteLangId); ?></span>
-                <span class='value'><?php echo nl2br($data['bpcomment_content']); ?></span>
-            </li>
+            </li>           
             <li class="list-stats-item">
                 <span class='lable'><?php echo Labels::getLabel('LBL_User_IP', $siteLangId); ?></span>
                 <span class='value'><?php echo $data['bpcomment_user_ip']; ?></span>
