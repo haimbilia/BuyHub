@@ -3,7 +3,6 @@ class HomeController extends MyAppController
 {
     public function index()
     {
-        echo Shop::getName(3, $this->siteLangId);die;
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
 
         $productSrchObj = $this->getProductSearchObj($loggedUserId);
