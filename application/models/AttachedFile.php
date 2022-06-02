@@ -642,7 +642,7 @@ class AttachedFile extends MyAppModel
         $fileMimeType = '';
         $imagePath = $uploadedFilePath . $imageName;
 
-        if (empty($imageName) || !file_exists($uploadedFilePath . $imageName)) {
+        if (empty($imageName) || !is_file($uploadedFilePath . $imageName) || !file_exists($uploadedFilePath . $imageName)) {
             $imagePath = $noImage;
         }
 

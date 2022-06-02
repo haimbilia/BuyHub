@@ -28,7 +28,7 @@ class ImageController extends FatController
             }
         }
 
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, $sizeType);
@@ -66,7 +66,7 @@ class ImageController extends FatController
         if ($file_row == false) {
             $file_row = $objectName::getAttachment($fileType, $recordId, 0, $lang_id);
         }
-        $image_name = ((0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) && !empty($file_row['afile_physical_path'])) ? AttachedFile::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
+        $image_name = ((isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) && !empty($file_row['afile_physical_path'])) ? AttachedFile::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_PRODUCTS, $sizeType);
 
@@ -142,7 +142,7 @@ class ImageController extends FatController
             $file_row = $objectName::getAttachment($fileType, $recordId, -1, $lang_id);
         }
 
-        $image_name = ((0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) && !empty($file_row['afile_physical_path'])) ? $objectName::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
+        $image_name = ((isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) && !empty($file_row['afile_physical_path'])) ? $objectName::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
         $image_name = $objectName::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_PRODUCTS, $sizeType);
         if ($sizeType) {
@@ -169,7 +169,7 @@ class ImageController extends FatController
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $recordId, 0, $lang_id, $displayUniversalImage);
         }
 
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $aspectRatioType = $file_row['afile_aspect_ratio'];
         $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
@@ -200,7 +200,7 @@ class ImageController extends FatController
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_BANNER, $recordId, 0, $lang_id, true, $screen);
         }
 
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_BANNER, $sizeType);
 
@@ -228,7 +228,7 @@ class ImageController extends FatController
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PROMOTION_MEDIA, $recordId, 0, $lang_id);
         }
 
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_PROMOTION_MEDIA, $sizeType);
@@ -240,61 +240,6 @@ class ImageController extends FatController
             AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'], $default_image);
         }
     }
-
-    /*
-    public function shopBackgroundImage($recordId, $lang_id = 0, $sizeType = '', $afile_id = 0, $templateId = '')
-    {
-        switch ($templateId) {
-            case Shop::TEMPLATE_ONE:
-                $default_image = 'images/defaults/' . 'logo-red.png';
-                break;
-            case Shop::TEMPLATE_TWO:
-                $default_image = 'images/defaults/' . 'transparent.png';
-                break;
-            case Shop::TEMPLATE_THREE:
-                $default_image = 'images/defaults/' . 'transparent.png';
-                break;
-            case Shop::TEMPLATE_FOUR:
-                $default_image = 'images/defaults/' . 'shop-bg.jpg';
-                break;
-            case Shop::TEMPLATE_FIVE:
-                $default_image = 'images/defaults/' . 'shop-5-bg.jpg';
-                break;
-            default:
-                $h = '';
-                $w = '';
-                $default_image = '';
-                break;
-        }
-
-
-        $recordId = FatUtility::int($recordId);
-        $afile_id = FatUtility::int($afile_id);
-        $lang_id = FatUtility::int($lang_id);
-
-        if ($afile_id > 0) {
-            $file_row = AttachedFile::getAttributesById($afile_id);
-            if (false == $file_row || (!false == $file_row && $file_row['afile_type'] != AttachedFile::FILETYPE_SHOP_BACKGROUND_IMAGE)) {
-                return;
-            }
-        } else {
-            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_BACKGROUND_IMAGE, $recordId, 0, $lang_id);
-        }
-
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
-        if ($image_name == '' || empty($image_name)) {
-            $image_name = $default_image;
-        }
-        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        switch (strtoupper($sizeType)) {
-            default:
-                $h = '';
-                $w = '';
-                AttachedFile::displayOriginalImage($image_name, $default_image);
-                break;
-        }
-    }
-    */
 
     public function brandReal($recordId, $langId = 0, $sizeType = '', $afile_id = 0)
     {
@@ -326,7 +271,7 @@ class ImageController extends FatController
         } else {
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, $displayUniversalImage);
         }
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $aspectRatioType = $file_row['afile_aspect_ratio'];
         $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
@@ -356,7 +301,7 @@ class ImageController extends FatController
         } else {
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_IMAGE, $recordId, 0, $langId, $displayUniversalImage, $screen);
         }
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_IMAGE, $sizeType);
@@ -391,7 +336,7 @@ class ImageController extends FatController
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId);
         }
 
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'ICON':
@@ -457,7 +402,7 @@ class ImageController extends FatController
         $lang_id = FatUtility::int($lang_id);
         $recordId = 0;
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, $recordId, 0, $lang_id, false);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
@@ -480,7 +425,7 @@ class ImageController extends FatController
         $lang_id = FatUtility::int($lang_id);
         $recordId = 0;
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_EMAIL_LOGO, $recordId, 0, $lang_id);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $default_image = AttachedFile::setNamePrefix($default_image, $sizeType);
@@ -502,7 +447,7 @@ class ImageController extends FatController
         $lang_id = FatUtility::int($lang_id);
         $recordId = 0;
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE, $recordId, 0, $lang_id);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SOCIAL_FEED, $sizeType);
@@ -520,7 +465,7 @@ class ImageController extends FatController
         $lang_id = FatUtility::int($lang_id);
         $recordId = 0;
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO, $recordId, 0, $lang_id);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
@@ -538,7 +483,7 @@ class ImageController extends FatController
         $lang_id = FatUtility::int($lang_id);
         $recordId = 0;
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_WATERMARK_IMAGE, $recordId, 0, $lang_id);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
@@ -559,7 +504,7 @@ class ImageController extends FatController
         $recordId = 0;
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_APPLE_TOUCH_ICON, $recordId, 0, $lang_id);
 
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'brand_deafult_image.jpg';
 
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
@@ -577,7 +522,7 @@ class ImageController extends FatController
         $lang_id = FatUtility::int($lang_id);
         $recordId = 0;
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_MOBILE_LOGO, $recordId, 0, $lang_id);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
@@ -595,7 +540,7 @@ class ImageController extends FatController
         $lang_id = FatUtility::int($lang_id);
         $recordId = 0;
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_INVOICE_LOGO, $recordId, 0, $lang_id);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_INVOICE_LOGO, $sizeType);
@@ -611,7 +556,7 @@ class ImageController extends FatController
     {
         $recordId = 0;
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_COLLECTION_BG_IMAGE, $recordId, 0, $langId);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_COLLECTION_BG, $sizeType);
@@ -630,7 +575,7 @@ class ImageController extends FatController
         $coupon_id = FatUtility::int($coupon_id);
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $coupon_id, 0, $lang_id);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_COUPON, $sizeType);
@@ -646,7 +591,7 @@ class ImageController extends FatController
     {
         $lang_id = FatUtility::int($lang_id);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_META_IMAGE, 0, 0, $lang_id);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_META, $sizeType);
@@ -662,7 +607,7 @@ class ImageController extends FatController
     {
         $lang_id = FatUtility::int($lang_id);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE, 0, 0, $lang_id);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_FIRST_PURCHASE_COUPON, $sizeType);
@@ -681,7 +626,7 @@ class ImageController extends FatController
         $lang_id = FatUtility::int($lang_id);
         $recordId = 0;
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_FAVICON, $recordId, 0, $lang_id);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $default_image = 'no_image.jpg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_FEVICON, $sizeType);
@@ -701,7 +646,7 @@ class ImageController extends FatController
         $slide_id = FatUtility::int($slide_id);
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide_id, 0, $lang_id, $displayUniversalImage, $screen);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $imageDimensions = ImageDimension::getSlideData($sizeType);
@@ -722,7 +667,7 @@ class ImageController extends FatController
         $banner_id = FatUtility::int($banner_id);
         $sizeType = strtoupper($sizeType);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $banner_id, 0, $lang_id, $displayUniversalImage, $screen);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $imageDimensions = ImageDimension::getBannerData($sizeType, $collectionLayoutType);
@@ -740,7 +685,7 @@ class ImageController extends FatController
         $splatform_id = FatUtility::int($splatform_id);
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $splatform_id);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SOCIAL_PLATFORM, $sizeType);
@@ -769,7 +714,7 @@ class ImageController extends FatController
         $fileType = empty($fileType) ? AttachedFile::FILETYPE_COLLECTION_IMAGE : $fileType;
         //$file_row = AttachedFile::getAttachment( AttachedFile::FILETYPE_COLLECTION_IMAGE, $collectionId );
         $file_row = AttachedFile::getAttachment($fileType, $collectionId, 0, $langId, $displayUniversalImage);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $default_image = 'banner-default-image.png';
@@ -799,7 +744,7 @@ class ImageController extends FatController
     {
         $collectionId = FatUtility::int($collectionId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_COLLECTION_BG_IMAGE, $collectionId, 0, $langId, $displayUniversalImage);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_DISPLAY_COLLECTION_BG_IMAGE, $sizeType);
 
@@ -840,7 +785,7 @@ class ImageController extends FatController
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $postId, $subRecordId, $langId, $displayUniversalImage);
         }
 
-        $image_name = (0 < $file_row['afile_id']) ? AttachedFile::FILETYPE_BLOG_POST_IMAGE_PATH . $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? AttachedFile::FILETYPE_BLOG_POST_IMAGE_PATH . $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BLOG_POST, $sizeType);
         if ($sizeType) {
@@ -858,7 +803,7 @@ class ImageController extends FatController
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BATCH_IMAGE, $prodgroup_id, 0, $lang_id);
 
-        $image_name = (0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BATCH_PRODUCT, $sizeType);
 
@@ -884,7 +829,7 @@ class ImageController extends FatController
         } else {
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $recordId, 0, $langId, $displayUniversalImage);
         }
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_TESTIMONIAL, $sizeType);
 
@@ -900,7 +845,7 @@ class ImageController extends FatController
         $cpageId = FatUtility::int($cpageId);
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $cpageId, 0, $langId);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CPAGE_BG, $sizeType);
         $default_image = 'seller-bg.png';
@@ -917,7 +862,7 @@ class ImageController extends FatController
         $cblockId = FatUtility::int($cblockId);
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment($fileType, $cblockId, 0, $langId);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $default_image = 'seller-bg.png';
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CBLOCK_BG, $sizeType);
@@ -937,7 +882,7 @@ class ImageController extends FatController
         $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_COLLECTION_IMAGE, $recordId, 0, $langId, $displayUniversalImage);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_SHOP_COLLECTION_IMAGE, $sizeType);
@@ -955,7 +900,7 @@ class ImageController extends FatController
     {
         $default_image = 'no_image.jpg';
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE, $pNotificationId);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         AttachedFile::displayOriginalImage($image_name, $default_image);
@@ -966,7 +911,7 @@ class ImageController extends FatController
         $default_image = 'product_default_image.jpg';
         $recordId = FatUtility::int($recordId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $recordId, 0, 0, $displayUniversalImage);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_PLUGIN_IMAGE, $sizeType);
@@ -987,14 +932,14 @@ class ImageController extends FatController
 
         if ($afile_id > 0) {
             $res = AttachedFile::getAttributesById($afile_id);
-            if (!false == $res && $res['afile_type'] == AttachedFile::FILETYPE_ORDER_FEEDBACK) {
+            if (isset($res['afile_type']) && $res['afile_type'] == AttachedFile::FILETYPE_ORDER_FEEDBACK) {
                 $file_row = $res;
             }
         } else {
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_ORDER_FEEDBACK, $recordId, 0, $lang_id, $displayUniversalImage);
         }
 
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_REVIEW_IMAGE, $sizeType);
@@ -1031,7 +976,7 @@ class ImageController extends FatController
         $badgeId = FatUtility::int($badgeId);
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeId, 0, $langId);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $filePath = AttachedFile::FILETYPE_BADGE_IMAGE_PATH;
 
@@ -1051,7 +996,7 @@ class ImageController extends FatController
     public function badgeRequestImage(int $bReqId, int $langId = 0, $sizeType = '')
     {
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $bReqId, 0, $langId);
-        $image_name = (0 < $file_row['afile_id'] && isset($file_row['afile_physical_path'])) ? $file_row['afile_physical_path'] : '';
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $filePath = AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH;
         $default_image = 'badge_default.png';

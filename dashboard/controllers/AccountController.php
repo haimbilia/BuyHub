@@ -964,7 +964,7 @@ class AccountController extends LoggedUserController
 
         $mode = 'Add';
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_USER_PROFILE_IMAGE, $this->userId);
-        if ($file_row != false  && 0 < $file_row['afile_id']) {
+        if (0 < $file_row['afile_id']) {
             $mode = 'Edit';
         }
 
