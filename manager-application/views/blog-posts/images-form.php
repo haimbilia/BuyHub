@@ -5,27 +5,13 @@ $frm->setFormTagAttribute('data-onclear', 'mediaForm(' . $recordId . ')');
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 
 $fld = $frm->getField('post_image');
-$fld->value = HtmlHelper::getfileInputHtml(
-    [
-        'onChange' => 'loadImageCropper(this)',
-        'accept' => 'image/*',
-        'data-name' => Labels::getLabel("FRM_BLOG_POST_IMAGE", $siteLangId),
-        'data-frm' => $frm->getFormTagAttribute('name')
-    ],
-    $siteLangId,
-    '',
-    '',
-    [],
-    'dropzone-custom dropzoneContainerJs'
-);
-
-$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), $imageDimension['width'].'*'.$imageDimension['height']) . '</span>';
-$htmlAfterField .= '<div id="imageListingJs"></div>';
-$fld->htmlAfterField = $htmlAfterField;
+$fld->value = '<div id="imageListingJs"></div>';
+$fld->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), $imageDimension['width'].'*'.$imageDimension['height']) . '</span>';;
 
 
 $langFld = $frm->getField('lang_id');
 $langFld->addFieldTagAttribute('onchange', 'loadImages(' . $recordId . ', this.value);');
+$langFld->addFieldTagAttribute('id', 'postMediaLangId');
 
 $otherButtons = [
     [
@@ -62,5 +48,6 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                 });
             }
         }).disableSelection();
+        $('#postMediaLangId').trigger('change');
     });
 </script>
