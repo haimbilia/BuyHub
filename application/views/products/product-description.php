@@ -58,7 +58,7 @@
                                 if ($option['option_is_color']) {
                                     if ($opVal['optionvalue_color_code'] != '') {
                                         $color = (false === strpos($opVal['optionvalue_color_code'], '#')) ? '#' . $opVal['optionvalue_color_code'] : $opVal['optionvalue_color_code'];
-                                        $colorStyle = 'style="background-color:#' . $opVal['optionvalue_color_code'] . '"';
+                                        $colorStyle = 'style="background-color:' . $color . '"';
                                     } else {
                                         $colorStyle = 'style="background-color:' . $opVal['optionvalue_name'] . '"';
                                     }
