@@ -1866,3 +1866,5 @@ ALTER TABLE `tbl_affiliate_commission_setting_history` DROP `acsh_afcommsetting_
 -- ---- CCAvenue ---- --
 INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_CCAVENUE_TEST_CREDENTIALS", "1", "To test the integration login to your CCAvenue M.A.R.S account, under Settings tab -> API Keys page. Copy the given credentials.", "1");
 -- ---- CCAvenue ---- --
+
+delete from tbl_attached_files where afile_type = 18 and afile_screen != '1' and afile_record_id in (SELECT ctr_record_id FROM `tbl_collections` INNER JOIN tbl_collection_to_records on ctr_collection_id = collection_id WHERE `collection_type` = 8 AND `collection_layout_type` = 12);

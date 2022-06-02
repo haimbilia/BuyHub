@@ -10,16 +10,8 @@ $frm->setFormTagAttribute('data-onclear', 'bannerMediaForm(' . $collectionId . '
 $frm->setFormTagAttribute('data-callbackfn', 'loadBannerImagesCallback');
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 
-$fld = $frm->getField('banner_screen');
-$fld->addFieldTagAttribute('id', 'slideScreenJs');
-
-if (!empty($languages)) {
-    $imageLangFld = $frm->getField('lang_id');
-
-    $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
-
-    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
-}
+$bannerFld = $frm->getField('banner_screen');
+$bannerFld->addFieldTagAttribute('id', 'slideScreenJs');
 
 $fld = $frm->getField('banner');
 $fld->value = HtmlHelper::getfileInputHtml(
@@ -40,10 +32,15 @@ $htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprin
     " x " . $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
 $htmlAfterField .= '<div id="imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
-
 $langFld = $frm->getField('lang_id');
 if (null != $langFld) {
-    $langFld->developerTags['colWidthValues'] = [null, '6', null, null];
+    $langFld->addFieldTagAttribute('id', 'imageLanguageJs');  
+    if($bannerFld->fldType !='hidden'){        
+        $bannerFld->developerTags['colWidthValues'] = [null, '6', null, null];
+        $langFld->developerTags['colWidthValues'] = [null, '6', null, null];
+    }else{
+        $langFld->developerTags['colWidthValues'] = [null, '12', null, null];
+    }    
     $langFld->addFieldTagAttribute('onchange', 'loadBannerImages(' . $collectionId . ',' . $recordId . ', this.value);');
 }
 

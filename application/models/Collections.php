@@ -316,9 +316,10 @@ class Collections extends MyAppModel
             ],
             self::TYPE_BANNER_LAYOUT2 => [
                 applicationConstants::SCREEN_DESKTOP => [
-                    'width' => 660,
-                    'height' => 198
+                    'width' => 920,
+                    'height' => 690
                 ],
+                /*
                 applicationConstants::SCREEN_IPAD => [
                     'width' => 660,
                     'height' => 198
@@ -327,6 +328,7 @@ class Collections extends MyAppModel
                     'width' => 640,
                     'height' => 360
                 ],
+                */
             ],
             self::TYPE_BANNER_LAYOUT3 => [
                 applicationConstants::SCREEN_DESKTOP => [

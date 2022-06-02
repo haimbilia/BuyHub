@@ -15,8 +15,6 @@ $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
 
 $screenFld = $imageFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
-$screenFld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $slideDimensions[ImageDimension::VIEW_DESKTOP]['width'] .
-    " x " . $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
 
 $imgArr = [];
 $imageRecordId = $image['afile_record_id'];
@@ -60,6 +58,9 @@ $slideImage->value = "<span id='imageListingJs'>" . HtmlHelper::getfileInputHtml
     $imgArr,
     'mt-3 dropzone-custom dropzoneContainerJs'
 ) . "</span>";
+
+$slideImage->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $slideDimensions[ImageDimension::VIEW_DESKTOP]['width'] .
+    " x " . $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
 
 /* Image Form */
 

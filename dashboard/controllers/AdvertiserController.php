@@ -860,8 +860,7 @@ class AdvertiserController extends AdvertiserBaseController
             'blocation_banner_height',
             'slide_id'
         ));
-        $rs = $srch->getResultSet();
-        $promotionDetails = FatApp::getDb()->fetch($rs);
+        $promotionDetails = FatApp::getDb()->fetch($srch->getResultSet());
         if (empty($promotionDetails)) {
             FatUtility::dieWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId));
         }
@@ -1410,8 +1409,7 @@ class AdvertiserController extends AdvertiserBaseController
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
         $frm->addHiddenField('', 'banner_min_width');
-        $frm->addHiddenField('', 'banner_min_height');
-        // $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'banner_image', array('accept' => 'image/*'));
+        $frm->addHiddenField('', 'banner_min_height');        
         $frm->addHTML('', 'banner_html', '');
         return $frm;
     }
