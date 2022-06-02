@@ -819,6 +819,7 @@ Updates/Fixes :
     => 064703 - Shipping rates added with price and weight conditions are also visible on the front end even if the conditions does not match
     => 064712 - Undefined Index notice appears on the order return request details page at the buyer end.
     => An error occurs on the checkout page when the buyer tries to buy the product for which the available stock quantity is the same as the minimum purchase quantity. 
+    => 064745 - A broken image appears on the product section in the shipping profile menu if no image is added to the product catalog
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
