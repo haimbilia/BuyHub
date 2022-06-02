@@ -75,9 +75,9 @@
                 height: 70%;
                 top: 15%;
                 left: 15%;
-                user-drag: none;
                 object-fit: contain;
                 margin: auto;
+
                 &[data-ratio="16:9"] {
                     max-width: 120px;
                 }
@@ -97,6 +97,8 @@
                 height: 100%;
                 object-fit: cover;
                 margin: auto;
+                //border: solid 1px #f5f6f8;
+                mix-blend-mode: multiply;
             }
         }
     }
