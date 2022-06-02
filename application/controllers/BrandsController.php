@@ -81,7 +81,6 @@ class BrandsController extends MyAppController
     public function view($brandId)
     {
         $brandId = FatUtility::int($brandId);
-        Brand::recordBrandWeightage($brandId);
 
         $db = FatApp::getDb();
 
