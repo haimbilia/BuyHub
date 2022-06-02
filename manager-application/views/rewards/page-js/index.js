@@ -22,4 +22,25 @@ $(document).ready(function () {
             fcom.removeLoader();
         });
     };
+
+    deleteRecord = function (recordId) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
+        if (!confirm(confirmRewardRevertLbl)) {
+            return;
+        }
+        data = "recordId=" + recordId;
+        fcom.updateWithAjax(
+            fcom.makeUrl(controllerName, "deleteRecord"),
+            data,
+            function (t) {
+                fcom.displaySuccessMessage(t.msg);
+                reloadList();
+            }
+        );
+    };
+
+
 })();

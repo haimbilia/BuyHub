@@ -404,7 +404,7 @@ class SpecialPriceController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
             /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'product_name' => Labels::getLabel('LBL_Product_Name', $this->siteLangId),
-            'selprod_price' => Labels::getLabel('LBL_Original_Price', $this->siteLangId),
+            'selprod_price' => Labels::getLabel('LBL_SELLING_PRICE', $this->siteLangId),
             'splprice_price' => Labels::getLabel('LBL_Special_Price', $this->siteLangId),
             'splprice_start_date' => Labels::getLabel('LBL_Start_Date', $this->siteLangId),
             'splprice_end_date' => Labels::getLabel('LBL_End_Date', $this->siteLangId),
