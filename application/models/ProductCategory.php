@@ -1225,10 +1225,6 @@ class ProductCategory extends MyAppModel
             }
         }
 
-        if ($prodCatId == 0 && isset($post['cat_icon_image_id']) && isset($post['cat_banner_image_id'])) {
-            $this->updateMedia($post['cat_icon_image_id']);
-            $this->updateMedia($post['cat_banner_image_id']);
-        }
         CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
         return true;
     }

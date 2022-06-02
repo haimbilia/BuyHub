@@ -401,22 +401,22 @@ class ProductCategoriesController extends ListingBaseController
             $lang_id = array_key_first($languages);
         }
 
-        if ($imageType == 'icon') {
+        if (strtolower($imageType) == strtolower(ImageDimension::VIEW_ICON)) {
             $catIcon = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $prodcat_id, 0, $lang_id, (count($languages) > 1 ? false : true));
             $this->set('image', $catIcon);
-            $this->set('imageFunction', 'icon');
+            $this->set('imageFunction', ImageDimension::VIEW_ICON);
             $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON, ImageDimension::VIEW_THUMB);
             $this->set('imageDimensions', $imageDimensions);
 
 
-        } elseif ($imageType == 'banner') {
+        } elseif (strtolower($imageType) == 'banner') {
             $catBanner = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $prodcat_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $catBanner);
             $this->set('imageFunction', 'banner');
            
             $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_BANNER, ImageDimension::VIEW_THUMB);
             $this->set('imageDimensions', $imageDimensions);
-        } elseif ($imageType == ImageDimension::VIEW_THUMB) {
+        } elseif (strtolower($imageType) == strtolower(ImageDimension::VIEW_THUMB)) {
             $catThumb = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $prodcat_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $catThumb);
             $this->set('imageFunction', ImageDimension::VIEW_THUMB);

@@ -94,6 +94,7 @@ class BadgesController extends SellerBaseController
             BadgeRequest::DB_TBL_PREFIX . 'status',
             BadgeLinkCondition::DB_TBL_PREFIX . 'id',
             BadgeLinkCondition::DB_TBL_PREFIX . 'user_id',
+            'COALESCE(badge_name,  badge_identifier) as badge_name'
         ]);
         $srch->addFld(Badge::DB_TBL_PREFIX . 'id');
         $srch->addGroupBy(Badge::DB_TBL_PREFIX . 'id');
