@@ -417,10 +417,9 @@ class BlogPostsController extends ListingBaseController
 
         if (!$row = BlogPost::getAttributesById($recordId)) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-        $post_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1);
+        }      
         $this->set('languages', Language::getAllNames());
-        $this->set('images', $post_images);
+        $this->set('image', AttachedFile::getAttachment(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1));
         $this->set('recordId', $recordId);
         $this->set('canEdit', $this->objPrivilege->canEditBlogPosts(true));
         $this->set('html', $this->_template->render(false, false, NULL, true));
