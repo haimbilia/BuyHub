@@ -268,11 +268,11 @@
     getShippingProfileOptions = function (userId) {
         let langId = getCurrentFrmLangId();
         fcom.ajax(fcom.makeUrl('Products', 'getShippingProfileOptions'), { userId, langId }, function (t) {
-            if (t.shippingApiActive == 1) {
-                $('#shipping_profile').data('shippingApiActive', 1);
+            if (t.showShippingProfile == 0) {
+                $('#shipping_profile').data('showShippingProfile', 1);
                 $('#shipping_profile').html('').parent().parent().addClass('hide');
             } else {
-                $('#shipping_profile').data('shippingApiActive', 0);
+                $('#shipping_profile').data('showShippingProfile', 0);
                 $('#shipping_profile').html('').parent().parent().removeClass('hide');
                 $.each(t.shipProfileArr, function (id, name) {
                     $('#shipping_profile').append(`<option value="${id}">
@@ -828,7 +828,7 @@ $(document).on('click', '.warrantyTypeJs', function () {
 });
 
 $(document).on('change', '#product_fulfillment_type', function () {
-    if ($('#shipping_profile').data('shippingApiActive') == 1) {
+    if ($('#shipping_profile').data('showShippingProfile') == 0) {
         return;
     }
 
