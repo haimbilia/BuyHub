@@ -8,36 +8,28 @@
                     $desktop_url = '';
                     $tablet_url = '';
                     $mobile_url = '';
-                    if (!AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId)) {
-                        continue;
-                    } else {
-                        $slideArr = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId);
-                        foreach ($slideArr as $slideScreen) {
-                            switch ($slideScreen['afile_screen']) {
-                                case applicationConstants::SCREEN_MOBILE:
-                                    $mobile_url = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE, ImageDimension::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT)) ;
-                                    break;
-                                case applicationConstants::SCREEN_IPAD:
-                                    $tablet_url = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD, ImageDimension::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT)) ;
-                                    break;
-                                case applicationConstants::SCREEN_DESKTOP:
-                                    $desktop_url = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, ImageDimension::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT)) ;
-                                    break;
-                            }
-                        }
-                    } ?>
+                    $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId, false, applicationConstants::SCREEN_DESKTOP);
+                    if(0 > $image['afile_id']){
+                        continue; 
+                    }  
+
+                    $desktopUrl = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, ImageDimension::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT));
+                    ?>                   
+                    
                     <div class="poster">
                         <a href="<?php echo UrlHelper::generateUrl('Banner', 'url', array($val['banner_id'])); ?>" target="<?php echo $val['banner_target']; ?>" title="<?php echo $val['banner_title']; ?>">
-                            <picture>
-                                <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
-                                <source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>" media="(max-width: 1024px)">
-                                <source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
-                                <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="">
-                            </picture>
+                          <?php
+                            $pictureAttr = [
+                                'siteLangId' => $siteLangId,
+                                'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, 'WEBP'.ImageDimension::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT))],
+                                'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => $desktopUrl],
+                                'imageUrl' => $desktopUrl,
+                                'alt' => !empty($val['banner_title']) ? $val['banner_title'] : $val['promotion_name'],
+                            ];
+                            $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                            ?>
                         </a>
-
                     </div>
-
                 <?php
                     if (isset($val['banner_record_id']) && $val['banner_record_id'] > 0 && $val['banner_type'] == Banner::TYPE_PPC) {
                         Promotion::updateImpressionData($val['banner_record_id']);
