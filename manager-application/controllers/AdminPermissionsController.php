@@ -123,6 +123,9 @@ class AdminPermissionsController extends ListingBaseController
         $postedData = FatApp::getPostedData();
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
 
+        if(empty($post['permission_type'])){
+            $post['permission_type'] = -1;
+        }
         $post['admin_id'] = $recordId;
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
@@ -187,7 +190,7 @@ class AdminPermissionsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId), 'permission_type', [-1 => Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId)] + AdminPrivilege::getPermissionArr(), '',[], '');
+        $frm->addSelectBox(Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId), 'permission_type', [-1 => Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId)] + AdminPrivilege::getPermissionArr(), -1 ,[], '');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'module');
