@@ -597,9 +597,15 @@ class PromotionsController extends ListingBaseController
 
         $srch = new PromotionSearch($this->siteLangId);
         $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
+        $srch->joinTable(
+            Collections::DB_TBL,
+            'LEFT OUTER JOIN',
+            'c.collection_id = blocation_collection_id',
+            'c'
+        );
         $srch->joinSlides();
         $srch->addCondition('promotion_id', '=', $recordId);
-        $srch->addMultipleFields(array('promotion_id', 'promotion_type', 'banner_id', 'blocation_banner_width', 'blocation_banner_height', 'slide_id'));
+        $srch->addMultipleFields(array('promotion_id', 'promotion_type', 'banner_id', 'blocation_banner_width', 'blocation_banner_height', 'slide_id','collection_layout_type'));
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -624,7 +630,7 @@ class PromotionsController extends ListingBaseController
                 break;
         }
 
-        $mediaFrm = $this->getMediaForm($recordId, $promotionType);
+        $mediaFrm = $this->getMediaForm($recordId, $promotionType, $promotionDetails['collection_layout_type']);
         $bannerWidth = '';
         $bannerHeight = '';
         $fileType = AttachedFile::FILETYPE_HOME_PAGE_BANNER;
@@ -976,7 +982,7 @@ class PromotionsController extends ListingBaseController
         return $frm;
     }
 
-    private function getMediaForm($recordId = 0, $promotionType = 0)
+    private function getMediaForm($recordId = 0, $promotionType = 0, $layoutType = 0)
     {
         $recordId = FatUtility::int($recordId);
         $frm = new Form('frmRecordImage');
@@ -996,8 +1002,14 @@ class PromotionsController extends ListingBaseController
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel("FRM_Display_For", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
+        if($layoutType == Collections::TYPE_BANNER_LAYOUT2){
+            $frm->addHiddenField('', 'banner_screen',applicationConstants::SCREEN_DESKTOP);
+        }else{
+            $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
+            $frm->addSelectBox(Labels::getLabel("FRM_Display_For", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
+        }  
+
+
         $frm->addHtml('', 'banner_image', '');
 
         return $frm;

@@ -59,8 +59,7 @@ foreach ($arrListing as $sn => $row) {
                     ],
                     [
                         'attr' => [
-                            'href' =>  'javascript:void(0);',
-                            'onclick' => 'redirectToList('.$row['blocation_id'].')' ,
+                            'href' =>   UrlHelper::generateUrl('Banners', 'list',[$row['blocation_id']]),                            
                             'title' => Labels::getLabel('LBL_BANNERS', $siteLangId),
                         ],
                         'label' => '<i class="icn">

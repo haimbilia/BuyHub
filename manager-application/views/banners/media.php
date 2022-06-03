@@ -4,15 +4,15 @@ HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form');
 $frm->setFormTagAttribute('data-callback', 'loadImages(' . $bannerLocationId . ',' . $recordId . ',"logo",' . $slideScreen . ',' . $langId . ')');
 $imageLangFld = $frm->getField('lang_id');
-if (1 < count($languages)) {
-    $imageLangFld->developerTags['colWidthValues'] = [null, '6', null, null];
-}
+// if (1 < count($languages)) {
+//     $imageLangFld->developerTags['colWidthValues'] = [null, '6', null, null];
+// }
 $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
-$screenFld = $frm->getField('slide_screen');
-if (1 < count($languages)) {
-    $screenFld->developerTags['colWidthValues'] = [null, '6', null, null];
-}
-$screenFld->addFieldTagAttribute('id', 'slideScreenJs');
+// $screenFld = $frm->getField('slide_screen');
+// if (1 < count($languages)) {
+//     $screenFld->developerTags['colWidthValues'] = [null, '6', null, null];
+// }
+// $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
 
 $imgArr = [];
 $imageRecordId = $image['afile_record_id'];
@@ -56,7 +56,7 @@ $slideImage->value = "<span id='imageListingJs'>" . HtmlHelper::getfileInputHtml
     'mt-3 dropzone-custom dropzoneContainerJs'
 ) . "</span>";
 
-$slideImage->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['width'] . ' x ' . $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
+$slideImage->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $locationDimensions['blocation_banner_width'] . ' x ' . $locationDimensions['blocation_banner_height']) . '</span>';
 
 $generalTab = [
     'attr' => [
@@ -88,45 +88,15 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     var minWidthBaneerEle = $('#<?php echo $frm->getFormTagAttribute('id'); ?> input[name=min_width]');
     var minHeightBaneerEle = $('#<?php echo $frm->getFormTagAttribute('id'); ?> input[name=min_height]');
 
-    $(minWidthBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
-    $(minHeightBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
+    $(minWidthBaneerEle).val('<?php echo $locationDimensions['blocation_banner_width']; ?>');
+    $(minHeightBaneerEle).val('<?php echo $locationDimensions['blocation_banner_height']; ?>; ?>');
+  
 
-    var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
-    var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
-    var getAspectRatioDes = '<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['aspectRatio']; ?>';
-
-
-    $(document).off('change', '#slideScreenJs').on('change', '#slideScreenJs', function(e) {
-        e.stopPropagation();
-        var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
-        var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
-        var screenMobile = <?php echo applicationConstants::SCREEN_MOBILE ?>;
-
-        if ($(this).val() == screenDesktop) {
-
-            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?> x <?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
-            $(minWidthBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
-            $(minHeightBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
-
-
-        } else if ($(this).val() == screenIpad) {
-
-            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['width']; ?> x <?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['height']; ?>'));
-            $(minWidthBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['width']; ?>');
-            $(minHeightBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_TABLET]['height']; ?>');
-
-        } else {
-
-            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['width']; ?> x <?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
-            $(minWidthBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['width']; ?>');
-            $(minHeightBaneerEle).val('<?php echo $getBannerDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
-
-        }
 
         let slideScreen = $(this).val();
         let recordId = $(this).closest("form").find('input[name="banner_id"]').val();
         let bannerLocationId = $(this).closest("form").find('input[name="blocation_id"]').val();
         let langId = $("#imageLanguageJs").val();
         loadImages(bannerLocationId, recordId, 'logo', slideScreen, langId);
-    });
+
 </script>

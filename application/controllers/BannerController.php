@@ -84,7 +84,7 @@ class BannerController extends MyAppController
         FatApp::redirectUser(UrlHelper::generateUrl(''));
     }
 
-    public function BannerImage($bannerId, $langId = 0, $screen = 0, $sizeType = '')
+    public function BannerImage($bannerId, $langId = 0, $screen = 1, $sizeType = '')
     {
         $bannerId = FatUtility::int($bannerId);
 
@@ -94,7 +94,7 @@ class BannerController extends MyAppController
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BANNER, $sizeType);
 
-        if ($sizeType != ImageDimension::VIEW_MINI_THUMB) {
+        if ($sizeType != ImageDimension::VIEW_MINI_THUMB && $sizeType != ImageDimension::VIEW_THUMB) {       
             $blocationId = Banner::getAttributesById($bannerId, 'banner_blocation_id');
             $bannerDimensions = BannerLocation::getDimensions($blocationId, $screen);
             if (array_key_exists('blocation_banner_width', $bannerDimensions)) {
