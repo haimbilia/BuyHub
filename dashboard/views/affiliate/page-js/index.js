@@ -16,8 +16,9 @@ $(document).ready(function () {
 	});
 	personalInfo();
 
-	$('.open-bulk-email-form').click(function () {
-		$('.bulk-email-form').show();
+	$('.openBulkEmailForm').click(function () {
+		$('#bulkEmailForm').appendTo("body").modal('show');
+
 	});
 });
 
@@ -58,6 +59,7 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Affiliate', 'setUpMailAffiliateSharing'), data, function (t) {
 			frm.reset();
+			$("#bulkEmailForm").modal('hide');
 		});
 	};
 

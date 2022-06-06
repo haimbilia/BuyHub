@@ -823,6 +823,7 @@ Updates/Fixes :
     => 064739 - The shipping profile field is missing on the product setup page when the shipping plugin is enabled.
     => 064803 - Shops Reports >> Blank space appears in some fields if there is no data available in the field
     => 064802 - Shop Details Page >> Notice Undefined variable appears when the user clicks on the permalink button on the shop details page
+    => 064813 - The 'Invite through email' popup gets opened up at the end of the page when the user clicks on the 'Invite through email' button
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
