@@ -823,6 +823,7 @@ Updates/Fixes :
     => 064739 - The shipping profile field is missing on the product setup page when the shipping plugin is enabled.
     => 064803 - Shops Reports >> Blank space appears in some fields if there is no data available in the field
     => 064802 - Shop Details Page >> Notice Undefined variable appears when the user clicks on the permalink button on the shop details page
+    => 064813 - The 'Invite through email' popup gets opened up at the end of the page when the user clicks on the 'Invite through email' button
     => 064796 - The update status button appears on the order details page at the admin end even if the order is marked as completed.
     => 064795 - Buyer: 'Attach with existing' orders functionality is not working for digital files
     => 064765 - Buyer: Default image is not showing properly under product detail page.

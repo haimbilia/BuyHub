@@ -3,7 +3,6 @@ jQuery.fn.reset = function () {
     $(this).each(function () { this.reset(); });
 }
 $(document).ready(function () {
-
     $('form[rel=action]').submit(function (event) {
         event.preventDefault();
         var me = $(this);

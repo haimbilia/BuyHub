@@ -99,9 +99,9 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
                                 </p>
                                 <span class="ajax_message thanks-msgX" id="fb_ajax"></span>
                             </button>
-                        </div> <?php
-                            } ?> <?php if (false !== $twitterUrl) {
-                                    ?>
+                        </div>
+                    <?php }
+                            if (false !== $twitterUrl) { ?>
                         <div class="widget widget-stats">
                             <button class="btn block-social mb-3" id="twitter_btn" type="button" style="background-color:#1DA1F2">
                                 <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
@@ -112,10 +112,9 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
                                 <span class="ajax_message thanks-msgX" id="twitter_ajax"></span>
                             </button>
                         </div>
-                    <?php
-                                    } ?>
-                    <div class="widget widget-stats open-bulk-email-form">
-                        <button class="btn block-social" type="button" style="background-color:#00B2FF">
+                    <?php } ?>
+                    <div class="widget widget-stats">
+                        <button class="btn block-social openBulkEmailForm" type="button" style="background-color:#00B2FF">
                             <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
                                 <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z" />
                             </svg>
@@ -131,11 +130,12 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
                 <div class="card">
                     <div class="card-head border-0">
                         <h5 class="card-title "><?php echo Labels::getLabel('LBL_Referred_by_me', $siteLangId); ?>
-                        </h5> <?php if (count($user_listing) > 0) {
-                                ?> <div class="action">
+                        </h5>
+                        <?php if (count($user_listing) > 0) { ?>
+                            <div class="action">
                                 <a href="<?php echo UrlHelper::generateUrl('affiliate', 'referredByMe'); ?>" class="link"><?php echo Labels::getLabel('Lbl_View_All', $siteLangId); ?></a>
-                            </div> <?php
-                                } ?>
+                            </div>
+                        <?php } ?>
                     </div>
                     <div class="card-body pt-0">
                         <div class="js-scrollable table-wrap">
@@ -274,14 +274,21 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
                         </div>
                     </div>
                 </div>
-                <div class="card bulk-email-form" style="display:none;">
-                    <div class="card-head border-0">
-                        <h5 class="card-title">
-                            <?php echo Labels::getLabel('L_Invite_friends_through_email', $siteLangId) ?></h5>
+                <div class="modal fade" id="bulkEmailForm" tabindex="-1" role="dialog" aria-labelledby="bulkEmailFormLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <?php echo Labels::getLabel('L_Invite_friends_through_email', $siteLangId) ?>
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <?php echo $sharingFrm->getFormHtml(); ?>
+                                <span class="ajax_message" id="custom_ajax"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body pt-0">
-                        <?php echo $sharingFrm->getFormHtml(); ?> <span class="ajax_message" id="custom_ajax"></span></div>
-
                 </div>
             </div>
 
