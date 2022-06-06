@@ -1397,13 +1397,24 @@ class ProductsController extends ListingBaseController
         }
         $shippingObj = new Shipping($userId);
         $shipProfileArr = [];
-        $shippingApiActive = 1;
+        $showShippingProfile = 1;
+
         if (!$shippingObj->getShippingApiObj($userId)) {
-            $shippingApiActive = 0;
-            $shipProfileArr = ShippingProfile::getProfileArr($langId, $userId, true, true);
+            $showShippingProfile = 0;            
+            if(0 >= $userId && 1 == FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0)){
+                $showShippingProfile = 1;
+            }elseif(0 < $userId){
+                if( 1 == Shop::getAttributesByUserId($userId,'shop_use_manual_shipping_rates')){
+                    $showShippingProfile = 1;
+                }
+            } 
         }
 
-        FatUtility::dieJsonSuccess(['shipProfileArr' => $shipProfileArr, 'shippingApiActive' => $shippingApiActive]);
+        if(1 === $showShippingProfile){
+            $shipProfileArr = ShippingProfile::getProfileArr($langId, $userId, true, true);
+        }
+        
+        FatUtility::dieJsonSuccess(['shipProfileArr' => $shipProfileArr, 'showShippingProfile' => $showShippingProfile]);
     }
 
     protected function getFormColumns(): array

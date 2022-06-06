@@ -1869,3 +1869,7 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_i
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) 
 VALUES ("ERR_INVENTORY_ALREADY_ADDED_FOR_THESE_OPTIONS", "1", "Not Allowed To Bind New Option. As Seller Inventory Already Added For This Product With These Options.", "1")
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+delete from tbl_attached_files where afile_type = 18 and afile_screen != '1' and afile_record_id in (SELECT ctr_record_id FROM `tbl_collections` INNER JOIN tbl_collection_to_records on ctr_collection_id = collection_id WHERE `collection_type` = 8 AND `collection_layout_type` = 12);
+UPDATE `tbl_banner_location_dimensions` SET `blocation_banner_height` = '690' , `blocation_banner_width` = '920' WHERE `tbl_banner_location_dimensions`.`bldimension_blocation_id` = 1 AND `tbl_banner_location_dimensions`.`bldimension_device_type` = 1;
+delete FROM `tbl_banner_location_dimensions` where bldimension_blocation_id = 1 and bldimension_device_type !=1;

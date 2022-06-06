@@ -16,21 +16,23 @@ if (1 == $useFeatherLightJs) {
     $cls .= ' featherLightJs';
 }
 ?>
-<a href="<?php echo $imgOrgUrl; ?>" class="<?php echo $cls; ?>" <?php echo $onclick; ?>>
-    <?php if($showImage){ ?>
+<div class="<?php echo $cls; ?>">
+    <?php if ($showImage) { ?>
         <div class="product-profile__thumbnail" data-ratio="<?php echo $getShopAspectRatio[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>">
-            <img data-aspect-ratio="<?php echo $getShopAspectRatio[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $imgSrc; ?>">
+            <a href="<?php echo $imgOrgUrl; ?>" <?php echo $onclick; ?>>
+                <img data-aspect-ratio="<?php echo $getShopAspectRatio[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $imgSrc; ?>">
+            </a>
         </div>
-    <?php } ?>  
+    <?php } ?>
     <div class="product-profile__data">
         <div class="title"><?php echo $shop['shop_name']; ?></div>
         <?php if (!empty($shop['user_name'])) { ?>
             <ul class="list-options <?php echo isset($horizontalAlignOptions) && $horizontalAlignOptions ? 'list-options--horizontal' : 'list-options--vertical"'; ?>">
                 <li>
                     <span class="label"><?php echo Labels::getLabel('LBL_SELLER', $siteLangId); ?>:</span>
-                    <span class="value"><?php echo $shop['user_name']; ?></span>
+                    <a href="javascript:void();" onclick="redirectUser(<?php echo $shop['shop_user_id']; ?>);" class="value"><?php echo $shop['user_name']; ?></a>
                 </li>
             </ul>
         <?php } ?>
     </div>
-</a>
+</div>

@@ -5,7 +5,7 @@ $(document).on('change', '#imageLanguageJs', function (e) {
     let recordId = $(this).closest("form").find('input[name="banner_id"]').val();
     let slideScreen = $(this).closest("form").find('[name="banner_screen"]').val();
     let bannerLocationId = $(this).closest("form").find('[name="blocation_id"]').val();
-    (bannerLocationId, recordId, 'logo', slideScreen, langId);
+    loadImages(bannerLocationId, recordId, 'logo', slideScreen, langId);
 });
 
 (function () {

@@ -61,9 +61,8 @@ class BannersController extends ListingBaseController
         return $frm;
     }
 
-    public function list()
-    {
-        $bannerLocationId = FatApp::getPostedData('banner_location_id', FatUtility::VAR_INT, 0);
+    public function list($bannerLocationId)
+    {       
         if (1 > $bannerLocationId) {
             Message::addErrorMessage($this->str_invalid_request);
             FatApp::redirectUser(UrlHelper::generateUrl('BannerLocation'));
@@ -90,7 +89,7 @@ class BannersController extends ListingBaseController
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
-        $this->getListingData();
+        $this->getListingData($bannerLocationId);
         $this->checkEditPrivilege(true);
 
         $this->_template->addCss('css/cropper.css');
@@ -100,9 +99,9 @@ class BannersController extends ListingBaseController
     }
 
 
-    public function getListingData()
+    public function getListingData($bannerLocationId = 0)
     {
-        $recordId = FatApp::getPostedData('banner_location_id', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('banner_location_id', FatUtility::VAR_INT, $bannerLocationId);
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
@@ -378,12 +377,13 @@ class BannersController extends ListingBaseController
         $frm->addHiddenField('', 'banner_id', $recordId);
         $frm->addHiddenField('', 'blocation_id', $bannerLocationId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(), $this->siteLangId, array(), '');
-        $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-        $displayFor = ($bannerLocationId == BannerLocation::HOME_PAGE_MOBILE_BANNER) ? applicationConstants::SCREEN_MOBILE : '';
-        $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'slide_screen', $screenArr, $displayFor, array(), '');
+        //$screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
+        //$displayFor = ($bannerLocationId == BannerLocation::HOME_PAGE_MOBILE_BANNER) ? applicationConstants::SCREEN_MOBILE : '';
+        //$frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'slide_screen', $screenArr, $displayFor, array(), '');
+        $frm->addHiddenField('', 'slide_screen', applicationConstants::SCREEN_DESKTOP);        
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BANNER);
-        $frm->addHiddenField('', 'min_width', 2000);
-        $frm->addHiddenField('', 'min_height', 666);
+        $frm->addHiddenField('', 'min_width');
+        $frm->addHiddenField('', 'min_height');
         $frm->addHTML('', 'banner_image', '');
         return $frm;
     }
@@ -402,25 +402,16 @@ class BannersController extends ListingBaseController
         }
 
         $imageFrm = $this->getMediaForm($bannerLocationId, $recordId);
-        if (!false == $bannerDetail) {
-            // $bannerImgArr = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $recordId, 0, -1);
-            // $this->set('bannerImgArr', $bannerImgArr);
+        if (!false == $bannerDetail) {          
             $bannerImge = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $recordId, 0, -1);
             $this->set('image', $bannerImge);
         }
 
-        /* $blocationData = $this->getBannerLocationById($bannerLocationId); */
-       /*  $bannerWidth = FatUtility::convertToType($blocationData['blocation_banner_width'], FatUtility::VAR_FLOAT);
-        $bannerHeight = FatUtility::convertToType($blocationData['blocation_banner_height'], FatUtility::VAR_FLOAT); */
-        $getBannerDimensions = ImageDimension::getBannerData();
+        $locationDimensions = BannerLocation::getDimensions($bannerLocationId,applicationConstants::SCREEN_DESKTOP);
         
-        $this->set('getBannerDimensions', $getBannerDimensions);
-       /*  $this->set('bannerWidth', $bannerWidth);
-        $this->set('bannerHeight', $bannerHeight); */
+        $this->set('locationDimensions', $locationDimensions);
         $this->set('frm', $imageFrm);
-        $this->set('languages', Language::getAllNames());
-        $this->set('bannerTypeArr', $this->bannerTypeArr());
-        $this->set('screenTypeArr', $this->getDisplayScreenName());
+        $this->set('languages', Language::getAllNames());       
         $this->set('bannerLocationId', $bannerLocationId);
         $this->set('recordId', $recordId);
         $this->set('banner_id', $recordId);

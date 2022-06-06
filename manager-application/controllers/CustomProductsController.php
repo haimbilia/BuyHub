@@ -273,7 +273,7 @@ class CustomProductsController extends ListingBaseController
         //ptt_taxcat_id        
         if (!empty($productData['ptt_taxcat_id'])  && 0 < $productData['ptt_taxcat_id']) {
             $taxData = Tax::getAttributesByLangId($langId, $productData['ptt_taxcat_id'], $taxCatMultiFields, applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
-            if ($catData) {
+            if ($taxData) {
                 $fld = $frm->getField('ptt_taxcat_id');
                 $fld->options = [$productData['ptt_taxcat_id'] => $taxData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
             }
@@ -690,8 +690,12 @@ class CustomProductsController extends ListingBaseController
     private function getForm($langId, $productType = 0, $recordId = 0)
     {
         $frm = $this->getCatalogForm($langId, $productType, $recordId, 1);
-        $shippingObj = new Shipping($langId);
-        if (!$shippingObj->getShippingApiObj(0)) {
+        $shippingObj = new Shipping($langId);   
+        $shippingApiEnabled = false;
+        if($shippingObj->getShippingApiObj(0)){
+            $shippingApiEnabled = true; 
+        }
+        if (!$shippingApiEnabled || ($shippingApiEnabled &&  1 == FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0))) {
             $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', ShippingProfile::getProfileArr($langId, 0, true, true));
         }
         return $frm;

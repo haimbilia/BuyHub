@@ -12,6 +12,9 @@ $langFld->addFieldTagAttribute('class', 'banner-language-js');
 
 $screenFld = $mediaFrm->getField('banner_screen');
 $screenFld->addFieldTagAttribute('class', 'banner-screen-js');
+if($screenFld->fldType == 'hidden'){
+    $langFld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
 
 $preferredDimensionsStr = '<span class="form-text text-muted uploadimage--info" ></span>';
 

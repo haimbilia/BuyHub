@@ -1,4 +1,7 @@
 <?php
+
+use Braintree\Collection;
+
 class AdvertiserController extends AdvertiserBaseController
 {
     use RecordOperations;
@@ -849,6 +852,13 @@ class AdvertiserController extends AdvertiserBaseController
 
         $srch = new PromotionSearch($this->siteLangId);
         $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
+        
+        $srch->joinTable(
+            Collections::DB_TBL,
+            'LEFT OUTER JOIN',
+            'c.collection_id = blocation_collection_id',
+            'c'
+        );
         $srch->joinSlides();
         $srch->addCondition('promotion_id', '=', $recordId);
         $srch->addCondition('promotion_user_id', '=', $userId);
@@ -858,16 +868,16 @@ class AdvertiserController extends AdvertiserBaseController
             'banner_id',
             'blocation_banner_width',
             'blocation_banner_height',
-            'slide_id'
+            'slide_id',
+            'collection_layout_type'
         ));
-        $rs = $srch->getResultSet();
-        $promotionDetails = FatApp::getDb()->fetch($rs);
+        $promotionDetails = FatApp::getDb()->fetch($srch->getResultSet());        
         if (empty($promotionDetails)) {
             FatUtility::dieWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId));
         }
         $promotionType = $promotionDetails['promotion_type'];
 
-        $mediaFrm = $this->getPromotionMediaForm($recordId, $promotionType);
+        $mediaFrm = $this->getPromotionMediaForm($recordId, $promotionType, $promotionDetails['collection_layout_type']);
         $bannerWidth = '';
         $bannerHeight = '';
         if ($promotionType == Promotion::TYPE_BANNER) {
@@ -1397,7 +1407,7 @@ class AdvertiserController extends AdvertiserBaseController
         $this->_template->render(false, false, 'cropper/index.php');
     }
 
-    private function getPromotionMediaForm($promotionId = 0, $promotionType = 0)
+    private function getPromotionMediaForm($promotionId = 0, $promotionType = 0 , $layoutType = 0)
     {
         $promotionId = FatUtility::int($promotionId);
         $frm = new Form('frmPromotionMedia');
@@ -1407,11 +1417,16 @@ class AdvertiserController extends AdvertiserBaseController
 
         $bannerTypeArr = applicationConstants::getAllLanguages();
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
-        $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
+        
+        if($layoutType == Collections::TYPE_BANNER_LAYOUT2){
+            $frm->addHiddenField('', 'banner_screen',applicationConstants::SCREEN_DESKTOP);
+        }else{
+            $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);        
+            $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
+        }       
+        
         $frm->addHiddenField('', 'banner_min_width');
-        $frm->addHiddenField('', 'banner_min_height');
-        // $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'banner_image', array('accept' => 'image/*'));
+        $frm->addHiddenField('', 'banner_min_height');        
         $frm->addHTML('', 'banner_html', '');
         return $frm;
     }

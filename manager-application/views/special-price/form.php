@@ -16,5 +16,5 @@ $fld->htmlAfterField = '<span class="form-text text-muted" id="specialCurrentPri
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script>
     bindProductNameSelect2();
-    let currentPriceLbl = '<?php echo Labels::getLabel('LBL_CURRENT_PRICE', $siteLangId);?>';
+    var currentPriceLbl = '<?php echo Labels::getLabel('LBL_SELLING_PRICE', $siteLangId);?>';
 </script>
