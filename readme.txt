@@ -821,6 +821,7 @@ Updates/Fixes :
     => An error occurs on the checkout page when the buyer tries to buy the product for which the available stock quantity is the same as the minimum purchase quantity. 
     => 064745 - A broken image appears on the product section in the shipping profile menu if no image is added to the product catalog
     => 064739 - The shipping profile field is missing on the product setup page when the shipping plugin is enabled.
+    => 064796 - The update status button appears on the order details page at the admin end even if the order is marked as completed.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

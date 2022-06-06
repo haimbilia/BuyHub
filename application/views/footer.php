@@ -215,8 +215,6 @@ if ($controllerName == 'Home' && $action == 'index') {
     !CommonHelper::getUserCookiesEnabled() &&
     FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, '')
 ) { ?>
-
-
     <div class="cc-window no-print" id="cookieInfoBox">
         <div class="box-cookies">
             <p id="cookieconsent:desc" class="cc-message">

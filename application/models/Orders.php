@@ -2961,12 +2961,12 @@ class Orders extends MyAppModel
         } else {
             $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $opRow['op_product_type']);
         }
-
         if ($opRow["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
         } else {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
         }
+        $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS", FatUtility::VAR_INT, 0));
 
         return (in_array($opRow['op_status_id'], $processingStatuses) && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED);
     }
