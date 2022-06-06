@@ -176,7 +176,7 @@ if (0 < $recordId) {
                                 <ul class="uploaded-stocks" id="productDefaultImagesJs">
                                     <li class="browse unsortableJs"><button type="button" class="browse-button" onclick="$('#hiddenMediaFrmFileJs').click();">
                                             <strong> <?php echo Labels::getLabel('LBL_UPLOAD_IMAGES(S)', $langId); ?></strong>
-                                            <span class="text-muted form-text"><?php echo Labels::getLabel('MSG_PNG,JPEG,&WEBP_ACCEPTED', $langId); ?></span></button></li>
+                                            <span class="text-muted form-text"><?php echo Labels::getLabel('MSG_PNG,JPEG_ACCEPTED', $langId); ?></span></button></li>
                                 </ul>
                                 <div class="form-text text-muted pt-2"><?php echo Labels::getLabel('MSG_PAY_ATTENTION_TO_THE_PICTURE_QUALITY', $langId); ?></div>
                             </div>
