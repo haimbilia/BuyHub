@@ -822,6 +822,7 @@ Updates/Fixes :
     => 064745 - A broken image appears on the product section in the shipping profile menu if no image is added to the product catalog
     => 064739 - The shipping profile field is missing on the product setup page when the shipping plugin is enabled.
     => 064803 - Shops Reports >> Blank space appears in some fields if there is no data available in the field
+    => 064802 - Shop Details Page >> Notice Undefined variable appears when the user clicks on the permalink button on the shop details page
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

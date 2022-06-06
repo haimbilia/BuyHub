@@ -9,6 +9,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
         'siteLangId' => $siteLangId,
         'shop' => $shop,
         'shopView' => false,
+        'shopRating' => $shopRating
     ], false);
     ?>
 </div>
