@@ -10,7 +10,7 @@ if (0 < $recordId) {
 }
 
 ?>
-<main class="main mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="'.$formLayout.'"' : ''; ?> >
+<main class="main mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="' . $formLayout . '"' : ''; ?>>
     <div class="container">
         <?php
         $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false);
@@ -33,8 +33,8 @@ if (0 < $recordId) {
 
         </form>
     </div>
-    <table class="hide" id="variantCloneJs">
-        <?php echo getVariantUiTr($langId, -1);  ?>
+    <table id="variantCloneJs" class="hide">
+        <?php $this->includeTemplate('products/get-variant-row.php', ['langId' => $langId, 'index' => -1, 'hasInventory' => $hasInventory]); ?>
     </table>
     <?php echo $frm->getExternalJS();
     $imgFrm->setFormTagAttribute('class', 'hide');
@@ -125,7 +125,7 @@ if (0 < $recordId) {
                 });
             <?php } else { ?>
                 $('select[name=\'product_seller_id\']').attr('disabled', true);
-            <?php } ?>           
+            <?php } ?>
             <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
@@ -135,53 +135,3 @@ if (0 < $recordId) {
         });
     </script>
 </main>
-
-<?php
-function getVariantUiTr($langId, $i, $productOption = [])
-{
-    $deleteClass = $i == 0 ? 'hide' : '';
-    $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
-    $confWebUrl = CONF_WEBROOT_URL;
-
-    $tagData = [];
-    if (!empty($productOption)) {
-        foreach ($productOption['optionValues'] as $key => $name) {
-            $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
-        }
-    }
-    $tagData = json_encode($tagData);
-    $tagifyPlaceholder = Labels::getLabel('FRM_TYPE_TO_SEARCH');
-
-    return <<<HTML
-    <tr class="rowJs">
-        <td >
-            <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel"> 
-            </select>
-        </td>
-        <td >
-            <input class="form-tagify optionValuesJs" placeholder="$tagifyPlaceholder" id="optionValues$i" data-index="$i" name="optionValues[]" value='$tagData'>
-        </td>
-        <td class="align-right" >
-            <ul class="actions">
-                <li class="$deleteClass optionsDeleteJs">
-                    <a href="javascript:void(0)" class="">
-                        <svg class="svg" width="18" height="18">
-                            <use xlink:href="{$confWebUrl}images/retina/sprite-actions.svg#delete">
-                            </use>
-                        </svg>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)" class="optionsAddJs">
-                        <svg class="svg" width="18" height="18">
-                            <use xlink:href="{$confWebUrl}images/retina/sprite-actions.svg#add">
-                            </use>
-                        </svg>
-                    </a>
-                </li>
-            </ul>
-        </td> 
-    </tr>
-    HTML;
-}
-?>

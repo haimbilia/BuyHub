@@ -95,20 +95,28 @@
             <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
         </div>
         <div class="card-table p-0 show" id="stock-block1">
+            <?php
+                if ($hasInventory) {
+                    echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_INVENTORY_ALREADY_ADDED_FOR_THESE_OPTIONS'));
+                }
+            ?>
             <div class="table-responsive table-scrollable js-scrollable">
                 <table class="table table-variants" id="variantsJs">
                     <thead class="tableHeadJs">
                         <tr>
                             <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
                             <th width="40%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                            <th class="align-right" width="20%"></th>
+                            <?php if (false === $hasInventory) { ?>
+                                <th class="align-right" width="20%"></th>
+                            <?php } ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $optionCount = count($productOptions);
                         for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
-                            echo getVariantUiTr($langId, $i, ($productOptions[$i] ?? []));
+                            $prodOption = $productOptions[$i] ?? [];
+                            $this->includeTemplate('products/get-variant-row.php', ['langId' => $langId, 'index' => $i, 'hasInventory' => $hasInventory, 'productOption' => $prodOption]);
                         }
                         ?>
                     </tbody>
@@ -194,8 +202,6 @@
                                 <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
                             </label>
                             <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
-                            <?php  /* <span class="form-text text-muted">Lorem ipsum dolor sit,
-                                amet consectetur adipisicing elit. </span> */ ?>
                         </div>
                     </div>
                     <div class="col-md-6">

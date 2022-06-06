@@ -1866,3 +1866,6 @@ ALTER TABLE `tbl_affiliate_commission_setting_history` DROP `acsh_afcommsetting_
 -- ---- CCAvenue ---- --
 INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_CCAVENUE_TEST_CREDENTIALS", "1", "To test the integration login to your CCAvenue M.A.R.S account, under Settings tab -> API Keys page. Copy the given credentials.", "1");
 -- ---- CCAvenue ---- --
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ("ERR_INVENTORY_ALREADY_ADDED_FOR_THESE_OPTIONS", "1", "Not Allowed To Bind New Option. As Seller Inventory Already Added For This Product With These Options.", "1")
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

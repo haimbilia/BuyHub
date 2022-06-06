@@ -121,20 +121,28 @@ if (0 < $recordId) {
                     </div>
                     <div class="collapse" id="stock-block1">
                         <div class="card-body  p-0">
+                            <?php
+                            if ($hasInventory) {
+                                echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_INVENTORY_ALREADY_ADDED_FOR_THESE_OPTIONS'));
+                            }
+                            ?>
                             <div class="js-scrollable table-wrap table-responsive">
                                 <table class="table  listingTableJs" id="variantsJs">
                                     <thead class="tableHeadJs">
                                         <tr>
                                             <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
                                             <th width="45%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                                            <th class="align-right" width="15%"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
+                                            <?php if (false === $hasInventory) { ?>
+                                                <th class="align-right" width="15%"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
+                                            <?php } ?>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         $optionCount = count($productOptions);
                                         for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
-                                            echo getVariantUiTr($langId, $i, ($productOptions[$i] ?? []));
+                                            $prodOption = $productOptions[$i] ?? [];
+                                            $this->includeTemplate('products/get-variant-row.php', ['langId' => $langId, 'index' => $i, 'hasInventory' => $hasInventory, 'productOption' => $prodOption]);
                                         }
                                         ?>
                                     </tbody>
@@ -410,7 +418,7 @@ if (0 < $recordId) {
     </div>
     </form>
     <table id="variantCloneJs" class="hidden">
-        <?php echo getVariantUiTr($langId, -1);  ?>
+        <?php $this->includeTemplate('products/get-variant-row.php', ['langId' => $langId, 'index' => -1, 'hasInventory' => $hasInventory]); ?>
     </table>
     <?php echo $frm->getExternalJS();
     $imgFrm->setFormTagAttribute('class', 'hidden');
@@ -496,51 +504,3 @@ if (0 < $recordId) {
 
     });
 </script>
-<?php
-function getVariantUiTr($langId, $i, $productOption = [])
-{
-    $deleteClass = $i == 0 ? 'hidden' : '';
-    $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
-    $confWebUrl = CONF_WEBROOT_URL;
-
-    $tagData = [];
-    if (!empty($productOption)) {
-        foreach ($productOption['optionValues'] as $key => $name) {
-            $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
-        }
-    }
-    $tagData = json_encode($tagData);
-
-    return <<<HTML
-    <tr class="rowJs">
-        <td>
-            <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel"> 
-            </select>
-        </td>
-        <td>
-            <input class="form-tagify optionValuesJs" id="optionValues$i" data-index="$i" name="optionValues[]" value='$tagData'>
-        </td>
-        <td class="align-right">
-            <ul class="actions">
-                <li class="$deleteClass optionsDeleteJs">
-                    <a href="javascript:void(0)" class="">
-                        <svg class="svg" width="18" height="18">
-                            <use xlink:href="{$confWebUrl}images/retina/sprite-actions.svg#delete">
-                            </use>
-                        </svg>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)" class="optionsAddJs">
-                        <svg class="svg" width="18" height="18">
-                            <use xlink:href="{$confWebUrl}images/retina/sprite-actions.svg#add">
-                            </use>
-                        </svg>
-                    </a>
-                </li>
-            </ul>
-        </td> 
-    </tr>
-    HTML;
-}
-?>

@@ -1284,25 +1284,23 @@ class Product extends MyAppModel
         return ($totalOptionCombination - $alreadyAddedOptions) > 0 ? true : false;
     }
 
-    public static function hasInventory($productId, $userId)
+    public static function hasInventory(int $productId, int $userId = 0): bool
     {
-        $productId = FatUtility::int($productId);
-        $userId = FatUtility::int($userId);
-        if (!$productId || !$userId) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
-        }
-        $srch = SellerProduct::getSearchObject();
-        $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
-        $srch->addCondition('selprod_product_id', '=', $productId);
-        $srch->addCondition('selprod_user_id', '=', $userId);
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->addFld('selprodoption_optionvalue_id');
-        $rs = $srch->getResultSet();
-        $alreadyAdded = FatApp::getDb()->fetchAll($rs, 'selprodoption_optionvalue_id');
-        if (empty($alreadyAdded)) {
+        if (1 > $productId) {
             return false;
         }
-        return true;
+
+        $srch = SellerProduct::getSearchObject();
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $srch->addFld('selprod_id');
+        $srch->addCondition('selprod_product_id', '=', $productId);
+        if (0 < $userId) {
+            $srch->addCondition('selprod_user_id', '=', $userId);
+        }
+        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $result = (array) FatApp::getDb()->fetch($srch->getResultSet());
+        return (0 < count($result));
     }
 
     public static function addUpdateProductSellerShipping($product_id, $data_to_be_save, $userId)

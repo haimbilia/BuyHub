@@ -2,7 +2,6 @@
 
 class ProductsController extends ListingBaseController
 {
-
     use CatalogProduct;
 
     protected string $modelClass = 'Product';
@@ -380,7 +379,7 @@ class ProductsController extends ListingBaseController
         $this->set("canEditTags", $this->objPrivilege->canEditTags($this->admin_id, true));
         $this->set("langId", $langId);
         $this->set("recordId", $recordId);
-
+        $this->set('hasInventory', Product::hasInventory($recordId));
         $this->set('isSelProdCreatedBySeller', $isSelProdCreatedBySeller);
         $this->set('isProductAddedByAdmin', $isProductAddedByAdmin);
         $this->set('productOptions', $productOptions);
@@ -1354,7 +1353,6 @@ class ProductsController extends ListingBaseController
 
     public function downloadAttachment($aFileId, $recordId, $requestType, $isPreview = 0)
     {
-
         $aFileId = FatUtility::int($aFileId);
         $recordId = FatUtility::int($recordId);
         $isPreview = FatUtility::int($isPreview);

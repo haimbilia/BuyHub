@@ -348,6 +348,7 @@ var advanceMedia = false; /* open via advance media*/
 
     tagifyOptionValue = function (element) {
         let index = $(element).data('index');
+        console.log($(element).attr('disabled'));
         let value = $.parseJSON($(element).val());
         $(element).siblings(".tagify").remove();
         var tagify = new Tagify(document.querySelector(element), {

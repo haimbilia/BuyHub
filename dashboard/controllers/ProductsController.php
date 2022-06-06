@@ -208,7 +208,8 @@ class ProductsController extends SellerBaseController
         $this->set("canEditTags", $this->userPrivilege->canEditProducts(0, true));
         $this->set("langId", $langId);
         $this->set("recordId", $recordId);
-
+        $this->set('hasInventory', Product::hasInventory($recordId));
+        
         $this->set('productOptions', $productOptions);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         if (FatUtility::isAjaxCall()) {

@@ -182,7 +182,7 @@ class AdminBaseController extends FatController
                     'off' => Labels::getLabel('LBL_OFF', $this->siteLangId),
                     'systemIdentifier' => Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $this->siteLangId),
                     'clickToHide' => Labels::getLabel('LBL_CLICK_TO_HIDE', $this->siteLangId),
-                    'clickToExpand' => Labels::getLabel('LBL_CLICK_TO_EXPAND', $this->siteLangId)
+                    'clickToExpand' => Labels::getLabel('LBL_CLICK_TO_EXPAND', $this->siteLangId),
                 );
                 foreach ($languages as $val) {
                     if (empty($val)) {
