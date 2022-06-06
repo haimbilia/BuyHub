@@ -821,7 +821,8 @@ Updates/Fixes :
     => An error occurs on the checkout page when the buyer tries to buy the product for which the available stock quantity is the same as the minimum purchase quantity. 
     => 064745 - A broken image appears on the product section in the shipping profile menu if no image is added to the product catalog
     => 064739 - The shipping profile field is missing on the product setup page when the shipping plugin is enabled.
-    
+    => 064803 - Shops Reports >> Blank space appears in some fields if there is no data available in the field
+
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 

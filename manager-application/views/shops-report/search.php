@@ -64,6 +64,16 @@ foreach ($arrListing as $sn => $row) {
             case 'adminSalesEarnings':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
+            case 'totOrders':
+            case 'totQtys':
+            case 'totRefundedQtys':
+            case 'netSoldQty':
+                $td->appendElement('plaintext', $tdAttr, (empty($row[$key]) ? 0 : $row[$key]), true, true);
+                break;
+            case 'refundedShippingFromSeller':
+            case 'refundedTaxFromSeller':
+                $td->appendElement('plaintext', $tdAttr, (empty($row[$key]) ? '0.00' : $row[$key]), true, true);
+                break;
 
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
