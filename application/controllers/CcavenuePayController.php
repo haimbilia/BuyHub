@@ -87,44 +87,32 @@ class CcavenuePayController extends PaymentController
         $iframe_url .= '/transaction/transaction.do?command=initiateTransaction&encRequest=' . $encrypted_data . '&access_code=' . $access_code;
         FatApp::redirectUser($iframe_url);
     }
+    
     public function callback()
     {
         $post = FatApp::getPostedData();
         $workingKey = $this->settings['working_key'];
         $encResponse = $post["encResp"];            //This is the response sent by the CCAvenue Server
         $rcvdString = decrypt($encResponse, $workingKey);        //Crypto Decryption used as per the specified working key.
-        $request = $rcvdString;
-        $order_status = "";
-        $decryptValues = explode('&', $rcvdString);
-        $dataSize = sizeof($decryptValues);
-        for ($i = 0; $i < $dataSize; $i++) {
-            $information = explode('=', $decryptValues[$i]);
-            if ($i == 3) {
-                $order_status = $information[1];
-            }
-            if ($i == 26) {
-                $orderId = $information[1];
-            }
-            if ($i == 10) {
-                $paid_amount = $information[1];
-            }
-            if ($i == 1) {
-                $tracking_id = $information[1];
-            }
-        }
+        parse_str($rcvdString, $response);
+        $order_status = $response['order_status'];
+        $orderId = $response['merchant_param1'];
+        $paid_amount = $response['amount'];
+        $tracking_id = $response['order_id'];
+
         $orderPaymentObj = new OrderPayment($orderId);
         $paymentGatewayCharge = $orderPaymentObj->getOrderPaymentGatewayAmount();
-        if ($paymentGatewayCharge > 0) {          
+        if ($paymentGatewayCharge > 0) {
             $total_paid_match = ((float) $paid_amount == $paymentGatewayCharge);
             if (!$total_paid_match) {
-                $request .= "\n\n CCAvenue :: TOTAL PAID MISMATCH! " . strtolower($paid_amount) . "\n\n";
+                $rcvdString .= "\n\n CCAvenue :: TOTAL PAID MISMATCH! " . strtolower($paid_amount) . "\n\n";
             }
             if ($order_status == "Success" && $total_paid_match) {
                 $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $tracking_id, $paymentGatewayCharge, Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($post));
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
-            } else {              
+            } else {
                 SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);
-                $orderPaymentObj->addOrderPaymentComments($request);
+                $orderPaymentObj->addOrderPaymentComments($rcvdString);
                 FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
             }
         }
