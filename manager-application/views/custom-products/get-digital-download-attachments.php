@@ -170,6 +170,6 @@ if (empty($attachments)) {
     $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_NO_RECORDS', $siteLangId), true);
 }
 ?>
-<div class="col-md-12">
+<div class="table-responsive table-scrollable js-scrollable">
     <?php echo $tbl->getHtml(); ?>
 </div>
