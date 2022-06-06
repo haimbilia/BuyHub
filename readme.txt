@@ -824,6 +824,7 @@ Updates/Fixes :
     => 064796 - The update status button appears on the order details page at the admin end even if the order is marked as completed.
     => 064795 - Buyer: 'Attach with existing' orders functionality is not working for digital files
     => 064765 - Buyer: Default image is not showing properly under product detail page.
+    => 064790 - Buyer: Infinite loader is coming when the user enters invalid/past expiry month.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

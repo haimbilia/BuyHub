@@ -68,6 +68,8 @@ if (isset($client_secret)) { ?>
                             if (response.error) {
                                 $("#stripeCharge").prepend('<div class="alert alert--danger">' + response.error.message + '</div>');
                                 $("#stripeCharge").find(":submit").removeAttr('disabled');
+                                fcom.removeLoader();
+                                fcom.closeProcessing();
                             } else {
 
                                 var form = $("#stripeCharge");
