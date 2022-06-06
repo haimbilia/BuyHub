@@ -370,8 +370,7 @@ $(document).on('click', '.tabs_002', function () {
 			optionCombi = $("#frmDownload select[name='option_comb_id']").val();
 		}
 
-		if (optionCombi == '') {
-			data.append('option_comb_id', 0);
+		if (optionCombi == '') {			
 			data += "&option_comb_id=0";
 		} else {
 			data += "&record_id=" + optionCombi;

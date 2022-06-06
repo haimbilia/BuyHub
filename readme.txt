@@ -822,7 +822,8 @@ Updates/Fixes :
     => 064745 - A broken image appears on the product section in the shipping profile menu if no image is added to the product catalog
     => 064739 - The shipping profile field is missing on the product setup page when the shipping plugin is enabled.
     => 064796 - The update status button appears on the order details page at the admin end even if the order is marked as completed.
-    
+    => 064795 - Buyer: 'Attach with existing' orders functionality is not working for digital files
+
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 

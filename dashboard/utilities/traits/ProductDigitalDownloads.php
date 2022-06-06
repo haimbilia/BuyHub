@@ -709,11 +709,11 @@ trait ProductDigitalDownloads
             $mainFileId = $this->setupDigitalMainFile($ddObj, $langId);
             if (1 > $mainFileId) {
                 LibHelper::exitWithError($ddObj->getError(), true);
-            }
+            }           
 
             $attachWithExistingOrders = $post['attach_with_existing_orders'];
-            if (1 === $attachWithExistingOrders) {
-                $ddObj->attachFileWithOrderedProducts($mainFileId, $post['record_id'], Product::CATALOG_TYPE_PRIMARY, $langId, $optionComb);
+            if (1 == $attachWithExistingOrders) {            
+                $ddObj->attachFileWithOrderedProducts($mainFileId, $post['record_id'], $this->getCatalogType(), $langId, $optionComb);
             }
         }
 
@@ -836,7 +836,7 @@ trait ProductDigitalDownloads
 
         $attachWithExistingOrders = FatUtility::int($post['attach_with_existing_orders']);
         if ($attachWithExistingOrders == applicationConstants::YES && '' != $downloadLink) {
-            $ddObj->attachLinkWithOrderedProducts($downloadLink, $post['record_id'], Product::CATALOG_TYPE_PRIMARY, $optionComb);
+            $ddObj->attachLinkWithOrderedProducts($downloadLink, $post['record_id'], $this->getCatalogType(), $optionComb);
         }
 
         $this->set('langId', $langId);

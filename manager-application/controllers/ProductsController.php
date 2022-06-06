@@ -1105,7 +1105,7 @@ class ProductsController extends ListingBaseController
             }
 
             $attachWithExistingOrders = $post['attach_with_existing_orders'];
-            if (1 === $attachWithExistingOrders) {
+            if (1 == $attachWithExistingOrders) {
                 $ddObj->attachFileWithOrderedProducts($mainFileId, $post['record_id'], Product::CATALOG_TYPE_PRIMARY, $langId, $optionComb);
             }
         }
