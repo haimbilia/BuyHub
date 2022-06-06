@@ -142,7 +142,7 @@ class FatMailer extends FatModel
         $footer = $ftpl->render(false, false, '_partial/emails/email-footer.php', true);
         $body = $header . $row['etpl_body'] . $footer;
         $this->variables += $this->commonVars($row['etpl_lang_id']);
-        $body = $this->replaceVariables($body);        
+        $body = $this->replaceVariables($body);
         $subject = $this->replaceVariables($row['etpl_subject']);
 
         if ($row['etpl_status'] != applicationConstants::ACTIVE) {
@@ -250,6 +250,9 @@ class FatMailer extends FatModel
         $mail->Subject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
         try {
             $mail->send();
+        } catch (phpmailerException $e) {
+            $this->error = $e->errorMessage(); //Pretty error messages from PHPMailer
+            return false;
         } catch (Exception $e) {
             $this->error = $mail->ErrorInfo;
             return false;
@@ -405,7 +408,7 @@ class FatMailer extends FatModel
                 $imgSrc = UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'images/' . $row['splatform_icon_class'] . '.png';
             }
             $social_media_icons .= '<a style="display: inline-block; margin: 0 4px"" href="' . $url . '" ' . $target_blank . ' title="' . $title . '" >
-                    <img alt="' . $title . '" '.HtmlHelper::getImgDimParm(ImageDimension::TYPE_SOCIAL_PLATFORM, ImageDimension::VIEW_NORMAL).' style="margin:1px auto 0; display:block;" src = "' . $imgSrc . '"/>
+                    <img alt="' . $title . '" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_SOCIAL_PLATFORM, ImageDimension::VIEW_NORMAL) . ' style="margin:1px auto 0; display:block;" src = "' . $imgSrc . '"/>
                 </a>';
         }
 

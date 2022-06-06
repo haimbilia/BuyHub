@@ -19,8 +19,8 @@ foreach ($arrListing as $sn => $row) {
 
             case 'shop_name':
                 $shop = $row['shop_name'];
-                $shop .= '<br/>'.Labels::getLabel('LBL_Created_On', $siteLangId).': ' . HtmlHelper::formatDateTime($row['shop_created_on'], false, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get()));
-                $shop = "<div class='info-wrap'>".$shop."</div>";
+                $shop .= '<br/>' . Labels::getLabel('LBL_Created_On', $siteLangId) . ': ' . HtmlHelper::formatDateTime($row['shop_created_on'], false, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get()));
+                $shop = "<div class='info-wrap'>" . $shop . "</div>";
                 $td->appendElement('plaintext', $tdAttr, $shop, true);
                 break;
 
@@ -64,6 +64,16 @@ foreach ($arrListing as $sn => $row) {
             case 'adminSalesEarnings':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
+            case 'totOrders':
+            case 'totQtys':
+            case 'totRefundedQtys':
+            case 'netSoldQty':
+                $td->appendElement('plaintext', $tdAttr, FatUtility::int($row[$key]), true, true);
+                break;
+            case 'refundedShippingFromSeller':
+            case 'refundedTaxFromSeller':
+                $td->appendElement('plaintext', $tdAttr, FatUtility::float($row[$key]), true, true);
+                break;
 
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
@@ -73,7 +83,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();
