@@ -92,7 +92,6 @@ class ShopsReportController extends ListingBaseController
         $srch = new ShopSearch($this->siteLangId, false, false);
         $srch->joinShopOwner(false);
         $srch->addProductsCount();
-        $srch->addReviewsCount();
         $srch->addRatingsCount();
         $srch->addFavoritesCount();
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 's.shop_id = opq.op_shop_id', 'opq');

@@ -142,7 +142,7 @@ class SelProdReviewSearch extends SearchBase
     public function joinOrderProductShipping()
     {
         if (false === $this->joinOrderProd) {
-            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_ORDER_PRODUCT.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_ORDER_PRODUCT.'), E_USER_ERROR);
         }
         $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
     }
@@ -150,7 +150,7 @@ class SelProdReviewSearch extends SearchBase
     public function joinOrderProductSpecifics()
     {
         if (false === $this->joinOrderProd) {
-            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_ORDER_PRODUCT.', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_PLEASE_JOIN_ORDER_PRODUCT.'), E_USER_ERROR);
         }
         $this->joinTable(OrderProductSpecifics::DB_TBL, 'LEFT JOIN', 'opspec.ops_op_id = op.op_id', 'opspec');
     }

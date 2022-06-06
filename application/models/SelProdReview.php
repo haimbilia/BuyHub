@@ -45,10 +45,8 @@ class SelProdReview extends MyAppModel
         return unserialize(FatApp::getConfig("CONF_REVIEW_READY_ORDER_STATUS"));
     }
 
-    public static function getSellerTotalReviews($userId)
+    public static function getSellerTotalReviews(int $userId)
     {
-        $userId = FatUtility::int($userId);
-
         $srch = SelProdRating::getAvgShopReviewsRatingObj($userId);
         $srch->joinUser();
         $srch->joinSeller();
@@ -58,13 +56,8 @@ class SelProdReview extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addGroupby('spreview_seller_user_id');
-
-        $rs = $srch->getResultSet();
-        $record = FatApp::getDb()->fetch($rs);
-        if ($record == false) {
-            return 0;
-        }
-        return $record['numOfReviews'];
+        $record = FatApp::getDb()->fetch($srch->getResultSet());
+        return $record['numOfReviews'] ?? 0;
     }
 
     public static function getProductOrderId($product_id, $loggedUserId)
