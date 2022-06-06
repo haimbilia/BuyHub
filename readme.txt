@@ -823,6 +823,7 @@ Updates/Fixes :
     => 064739 - The shipping profile field is missing on the product setup page when the shipping plugin is enabled.
     => 064796 - The update status button appears on the order details page at the admin end even if the order is marked as completed.
     => 064795 - Buyer: 'Attach with existing' orders functionality is not working for digital files
+    => 064765 - Buyer: Default image is not showing properly under product detail page.
 
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

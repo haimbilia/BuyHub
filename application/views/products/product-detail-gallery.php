@@ -28,7 +28,7 @@
                     <?php
                     }
                 } else {
-                    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_MEDIUM, 0)), CONF_IMG_CACHE_TIME, '.jpg');
+                    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_LARGE, 0)), CONF_IMG_CACHE_TIME, '.jpg');
                     $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_ORIGINAL, 0)), CONF_IMG_CACHE_TIME, '.jpg');
                     /* $mainWebpImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'WEBP' . ImageDimension::VIEW_MEDIUM, 0)), CONF_IMG_CACHE_TIME, '.webp'); */
                     ?>
@@ -37,9 +37,8 @@
                     </a>
                 <?php } ?>
             </div>
-
-            <?php if ($productImagesArr) { ?>
-                <ul class="thumb-nav">
+            <ul class="thumb-nav">
+            <?php if ($productImagesArr) { ?>                
                     <?php foreach ($productImagesArr as $afile_id => $image) {
                         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                         $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
@@ -48,8 +47,13 @@
                             <img alt="" src="<?php echo $mainImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM); ?> />
                         </li>
                     <?php } ?>
-                </ul>
-            <?php } ?>
+                
+            <?php }else{ ?>
+                <li>
+                    <img alt="" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_MEDIUM, 0)), CONF_IMG_CACHE_TIME, '.jpg'); ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM); ?> />
+                </li>
+           <?php } ?>
+           </ul>
         </div>
 
     </div>
