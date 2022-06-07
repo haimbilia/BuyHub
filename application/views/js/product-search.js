@@ -569,8 +569,8 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         maxPrice = $("#priceFilterMaxValue").data('defaultvalue');
     }
 
-    $('input[name="priceFilterMinValue"]').val(minPrice);
-    $('input[name="priceFilterMaxValue"]').val(maxPrice);
+    $('input[name="priceFilterMinValue"]').val(minPrice).trigger('change');
+    $('input[name="priceFilterMaxValue"]').val(maxPrice).trigger('change');
 
     if (addPriceFilter) {
         addPricefilter();

@@ -189,6 +189,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                                             function confirmOrder(frm) {
                                                 var data = fcom.frmData(frm);
                                                 var action = $(frm).attr('action');
+                                                $(frm.btn_submit).attr({'disabled': 'disabled'});
                                                 fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(ans) {
                                                     fcom.removeLoader();
                                                     $(location).attr("href", action);

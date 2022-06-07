@@ -89,7 +89,6 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 <ul class="cart-action">
                                     <li class="cart-action-item">
                                         <button class="btn btn-link" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );">
-
                                             <?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>
                                         </button>
                                     </li>
@@ -163,7 +162,6 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                             </div>
                         </div>
                         <div class="product-quantity">
-
                             <div class="quantity quantity-sm" data-stock="<?php echo $product['selprod_stock']; ?>">
                                 <span class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'not-allowed' : ''; ?>">
                                     <i class="icn">
@@ -225,7 +223,11 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 </button>
                             </li>
                         </ul>
-
+                        <?php if (0 >= $product['quantity']) { ?>
+                            <p class="not-available-txt out-of-stock">
+                                <?php echo Labels::getLabel('LBL_OUT_OF_STOCK', $siteLangId); ?>
+                            </p>
+                        <?php } ?>
                     </div>
                 </div>
             </li>
