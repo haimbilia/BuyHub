@@ -16,7 +16,7 @@ if (!empty($productOption)) {
         </select>
     </td>
     <td>
-        <input class="form-tagify optionValuesJs" placeholder="<?php echo Labels::getLabel('FRM_TYPE_TO_SEARCH'); ?>" id="optionValues<?php echo $index; ?>" data-index="<?php echo $index; ?>" name="optionValues[]" value="<?php echo htmlspecialchars(json_encode($tagData)); ?>" <?php echo $hasInventory ? 'disabled="disabled"' : ''; ?>>
+        <input class="form-tagify optionValuesJs" placeholder="<?php echo Labels::getLabel('FRM_TYPE_TO_SEARCH'); ?>" id="optionValues<?php echo $index; ?>" data-index="<?php echo $index; ?>" name="optionValues[]" value="<?php echo htmlspecialchars(json_encode($tagData)); ?>">
     </td>
     <?php if (false === $hasInventory) { ?>
         <td class="align-right">
