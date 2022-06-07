@@ -411,7 +411,7 @@ class AffiliateController extends AffiliateBaseController
         $siteLangId = FatUtility::int($siteLangId);
         $frm = new Form('frmPaymentInfoForm');
 
-        $frm->addRadioButtons(Labels::getLabel('FRM_PAYMENT_METHOD', $siteLangId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($siteLangId), User::AFFILIATE_PAYMENT_METHOD_CHEQUE, array('class' => 'links--inline justify-content-start'));
+        $frm->addRadioButtons(Labels::getLabel('FRM_PAYMENT_METHOD', $siteLangId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($siteLangId), User::AFFILIATE_PAYMENT_METHOD_CHEQUE, array('class' => 'list-radio'));
         $frm->addTextBox(Labels::getLabel('FRM_TAX_ID', $siteLangId), 'uextra_tax_id');
         $frm->addTextBox(Labels::getLabel('FRM_CHEQUE_PAYEE_NAME', $siteLangId), 'uextra_cheque_payee_name');
 

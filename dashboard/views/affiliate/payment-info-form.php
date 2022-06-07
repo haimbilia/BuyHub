@@ -7,6 +7,7 @@ $frm->developerTags['fld_default_col'] = 6;
 $frm->setFormTagAttribute('onsubmit', 'setUpAffiliatePaymentInfo(this); return(false);');
 
 $radioFld = $frm->getField('uextra_payment_method');
+$radioFld->developerTags['rdLabelAttributes'] = ['class' => 'radio'];
 $radioFld->setWrapperAttribute('class', 'col-lg-12');
 $radioFld->developerTags['col'] = 12;
 

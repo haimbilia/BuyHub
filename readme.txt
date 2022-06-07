@@ -828,6 +828,12 @@ Updates/Fixes :
     => 064795 - Buyer: 'Attach with existing' orders functionality is not working for digital files
     => 064765 - Buyer: Default image is not showing properly under product detail page.
     => 064790 - Buyer: Infinite loader is coming when the user enters invalid/past expiry month.
+    => 064815 - Suggestion: To show the texts underlined which are clickable
+    => 064812 - The view log button is not visible on the affiliate commission page.
+    => 064810 - Affiliate Dashboard >> UI issue on the payment info page on the Affiliate dashboard
+    => 064785 - Less count of downloadable attachments when the file title's name is same
+    => 064780 - "Something went wrong, please try it later' is coming when the user clicks on the pay button at the buyer's end
+    => 064764 - 'Zero' quantity is coming when the product is out of stock under the cart section at buyer's end
     => 064809 - Shop Details Page >> Multiple UI issues in the filters section on the shop details page. 
     => 064808 - Shop Details Page >>Multiple issues on the reviews section on the shop details page
     
