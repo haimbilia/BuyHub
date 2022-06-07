@@ -832,6 +832,7 @@ Updates/Fixes :
     => 064812 - The view log button is not visible on the affiliate commission page.
     => 064810 - Affiliate Dashboard >> UI issue on the payment info page on the Affiliate dashboard
     => 064785 - Less count of downloadable attachments when the file title's name is same
+    => 064780 - "Something went wrong, please try it later' is coming when the user clicks on the pay button at the buyer's end
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
