@@ -7,9 +7,9 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
         <div class="card-head">
             <h5 class="card-title">
                 <div class="order-number">
-                    <small class="sm-txt"><?php echo Labels::getLabel('LBL_ORDER_#', $siteLangId); ?></small>
+                    <small class="sm-txt"><?php echo Labels::getLabel('LBL_ORDER', $siteLangId); ?></small>
                     <span class="numbers">
-                        <?php echo (true == $primaryOrder) ? $childOrderDetail['op_invoice_number'] : $orderDetail['order_number']; ?>
+                        <?php echo  '#' . ((true == $primaryOrder) ? $childOrderDetail['op_invoice_number'] : $orderDetail['order_number']); ?>
                         <?php
                         if (true == $primaryOrder && FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
                             $statusName = isset($childOrderDetail['orderstatus_name']) ? $childOrderDetail['orderstatus_name'] : $childOrderDetail['orderstatus_identifier']; ?>
