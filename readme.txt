@@ -830,6 +830,7 @@ Updates/Fixes :
     => 064790 - Buyer: Infinite loader is coming when the user enters invalid/past expiry month.
     => 064815 - Suggestion: To show the texts underlined which are clickable
     => 064812 - The view log button is not visible on the affiliate commission page.
+    => 064810 - Affiliate Dashboard >> UI issue on the payment info page on the Affiliate dashboard
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
