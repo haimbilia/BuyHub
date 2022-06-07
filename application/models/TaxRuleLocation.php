@@ -49,6 +49,7 @@ class TaxRuleLocation extends MyAppModel
 
             $srch->addMultipleFields(array('taxruleloc_taxcat_id', 'taxruleloc_taxrule_id', 'taxruleloc_to_country_id', 'taxruleloc_to_state_id', 'taxruleloc_type','IFNULL(from_c_l.country_name, from_c.country_code) as from_country_name', 'IFNULL(to_c_l.country_name, to_c.country_code) as to_country_name', 'IFNULL(from_st_l.state_name, from_st.state_identifier) as from_state_name', 'IFNULL(to_st_l.state_name, to_st.state_identifier) as to_state_name'));
         }
+        $srch->doNotCalculateRecords();        
         return FatApp::getDb()->fetchAll($srch->getResultSet());       
     }
 

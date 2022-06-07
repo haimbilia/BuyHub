@@ -286,6 +286,7 @@ class PaymentMethods
         $srch->addCondition('utxn.utxn_type', '=', Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT);
         $srch->addCondition('utxn.utxn_op_id', '=', $opId);
         $srch->addOrder('utxn_debit', 'DESC');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $records = $db->fetchAll($rs, 'utxn_gateway_txn_id');
         if (!$records) {

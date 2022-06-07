@@ -185,7 +185,7 @@ class UserWishList extends MyAppModel
         if ($selprod_id) {
             $srch->addCondition('uwlp_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
         }
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs, 'uwlp_selprod_id');
     }

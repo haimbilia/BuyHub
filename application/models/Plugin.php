@@ -167,6 +167,7 @@ class Plugin extends PluginCommon
             );
         }
         $srch->addOrder('plugin_display_order', 'ASC');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         $db = FatApp::getDb();
@@ -231,6 +232,7 @@ class Plugin extends PluginCommon
                 'plg.' . static::DB_TBL_PREFIX . 'active'
             ]
         );
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         return FatApp::getDb()->fetchAllAssoc($rs);

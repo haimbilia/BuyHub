@@ -285,6 +285,7 @@ class Common
         $srch->addCondition('ttm.message_to', '=', $userId);
         $srch->addOrder('message_id', 'DESC');
         $srch->setPageSize(3);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $messages = FatApp::getDb()->fetchAll($rs);
         $template->set('messages', $messages);

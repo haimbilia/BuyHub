@@ -153,7 +153,7 @@ class Transactions extends MyAppModel
         if ($userId > 0) {
             $srch->addCondition('utxn.utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         }
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         if ($this->mainTableRecordId > 0) {

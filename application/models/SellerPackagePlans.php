@@ -30,18 +30,15 @@ class SellerPackagePlans extends MyAppModel
     public static function getSellerVisiblePackagePlans($packageId = 0)
     {
         $srch = new SellerPackagePlansSearch();
-        $srch ->joinPackage();
-        $srch->addMultipleFields(array( "spp.*", "spackage_type"));
+        $srch->joinPackage();
+        $srch->addMultipleFields(array("spp.*", "spackage_type"));
         if ($packageId > 0) {
             $srch->addCondition(SellerPackagePlans::DB_TBL_PREFIX . 'spackage_id', '=', $packageId);
         }
         $srch->addCondition('spp.spplan_active', '=', applicationConstants::YES);
         $srch->addOrder('spp.spplan_price', 'ASC');
-        $rs = $srch->getResultSet();
-        $records = array();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        return $records;
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
     public static function getSubscriptionPeriods($langId = 0)
     {
@@ -51,21 +48,21 @@ class SellerPackagePlans extends MyAppModel
             return false;
         }
         return array(
-        self::SUBSCRIPTION_PERIOD_DAYS => Labels::getLabel('LBL_DAYS', $langId),
-        /* self::SUBSCRIPTION_PERIOD_WEEKS => Labels::getLabel('LBL_Weeks', $langId), */
-        self::SUBSCRIPTION_PERIOD_MONTH => Labels::getLabel('LBL_MONTHS', $langId),
-        self::SUBSCRIPTION_PERIOD_YEAR => Labels::getLabel('LBL_YEARS', $langId),
-        self::SUBSCRIPTION_PERIOD_UNLIMITED => Labels::getLabel('LBL_UNLIMITED', $langId),
+            self::SUBSCRIPTION_PERIOD_DAYS => Labels::getLabel('LBL_DAYS', $langId),
+            /* self::SUBSCRIPTION_PERIOD_WEEKS => Labels::getLabel('LBL_Weeks', $langId), */
+            self::SUBSCRIPTION_PERIOD_MONTH => Labels::getLabel('LBL_MONTHS', $langId),
+            self::SUBSCRIPTION_PERIOD_YEAR => Labels::getLabel('LBL_YEARS', $langId),
+            self::SUBSCRIPTION_PERIOD_UNLIMITED => Labels::getLabel('LBL_UNLIMITED', $langId),
         );
     }
     public static function getSubscriptionPeriodValues()
     {
         return array(
-        self::SUBSCRIPTION_PERIOD_DAYS => 'DAY',
-        /* self::SUBSCRIPTION_PERIOD_WEEKS => self::SUBSCRIPTION_PERIOD_WEEKS, */
-        self::SUBSCRIPTION_PERIOD_MONTH => 'MONTHS',
-        self::SUBSCRIPTION_PERIOD_YEAR => 'YEAR',
-        self::SUBSCRIPTION_PERIOD_UNLIMITED => 'YEAR',
+            self::SUBSCRIPTION_PERIOD_DAYS => 'DAY',
+            /* self::SUBSCRIPTION_PERIOD_WEEKS => self::SUBSCRIPTION_PERIOD_WEEKS, */
+            self::SUBSCRIPTION_PERIOD_MONTH => 'MONTHS',
+            self::SUBSCRIPTION_PERIOD_YEAR => 'YEAR',
+            self::SUBSCRIPTION_PERIOD_UNLIMITED => 'YEAR',
         );
     }
     public static function getPlanPeriod($plan)
@@ -95,7 +92,7 @@ class SellerPackagePlans extends MyAppModel
         $period = isset($subcriptionPeriodArr[$frequency]) ? $subcriptionPeriodArr[$frequency] : '';
         return (($interval > 0) ? $interval : '') . " " . $period;
     }
-    
+
     public static function getPlanPriceWithPeriod($plan, $price)
     {
         $subcriptionPeriodArr = self::getSubscriptionPeriods(CommonHelper::getLangId());
@@ -119,8 +116,8 @@ class SellerPackagePlans extends MyAppModel
         $interval = isset($plan[SellerPackagePlans::DB_TBL_PREFIX . 'interval']) ? $plan[SellerPackagePlans::DB_TBL_PREFIX . 'interval'] : 0;
         $frequency = isset($plan[SellerPackagePlans::DB_TBL_PREFIX . 'frequency']) ? $plan[SellerPackagePlans::DB_TBL_PREFIX . 'frequency'] : '';
         $period = isset($subcriptionPeriodArr[$frequency]) ? $subcriptionPeriodArr[$frequency] : '';
-        
-        return CommonHelper::displayMoneyFormat($price) . " <span>" . " " . Labels::getLabel("LBL_PER", CommonHelper::getLangId()) . " " . (($interval > 1) ? $interval : '') . "  " . $period ."</span>";
+
+        return CommonHelper::displayMoneyFormat($price) . " <span>" . " " . Labels::getLabel("LBL_PER", CommonHelper::getLangId()) . " " . (($interval > 1) ? $interval : '') . "  " . $period . "</span>";
     }
     public static function getPlanByPackageId($spackageId = 0)
     {
@@ -131,14 +128,12 @@ class SellerPackagePlans extends MyAppModel
         }
         $srch = new SellerPackagePlansSearch();
         $srch->joinPackage(CommonHelper::getLangId());
-        $srch->addMultipleFields(array( "spackage_type", "spp.*", "spp." . SellerPackagePlans::DB_TBL_PREFIX . "price"));
+        $srch->addMultipleFields(array("spackage_type", "spp.*", "spp." . SellerPackagePlans::DB_TBL_PREFIX . "price"));
         $srch->addCondition(SellerPackagePlans::DB_TBL_PREFIX . 'spackage_id', '=', $spackageId);
 
         $srch->addOrder(SellerPackagePlans::DB_TBL_PREFIX . 'display_order');
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-        return $records;
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     public static function getCheapestPlanByPackageId($spackageId = 0)

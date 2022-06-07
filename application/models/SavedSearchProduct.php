@@ -90,6 +90,7 @@ class SavedSearchProduct extends MyAppModel
                     $brand = Brand::getSearchObject($langId);
                     $brand->addMultipleFields(array('IFNULL(brand_name,brand_identifier) as brand_name,brand_identifier'));
                     $brand->addCondition('brand_id', 'in', $row);
+                    $brand->doNotCalculateRecords();
                     $rs = $brand->getResultSet();
                     $brandData = FatApp::getDb()->fetchAll($rs);
                     if (!empty($brandData)) {
@@ -105,6 +106,7 @@ class SavedSearchProduct extends MyAppModel
                     $productCategory->addOrder('m.prodcat_active', 'DESC');
                     $productCategory->addMultipleFields(array('IFNULL(prodcat_name,prodcat_identifier) as prodcat_name,prodcat_identifier'));
                     $productCategory->addCondition('prodcat_id', 'in', $row);
+                    $productCategory->doNotCalculateRecords();
                     $rs = $productCategory->getResultSet();
                     $productCategoryData = FatApp::getDb()->fetchAll($rs);
                     if (!empty($productCategoryData)) {
@@ -130,6 +132,7 @@ class SavedSearchProduct extends MyAppModel
                     $optionValue = OptionValue::getSearchObject($langId);
                     $optionValue->addMultipleFields(array('IFNULL(optionvalue_name,optionvalue_identifier) as optionvalue_name,optionvalue_identifier'));
                     $optionValue->addCondition('optionvalue_id', 'in', $row);
+                    $optionValue->doNotCalculateRecords();
                     $rs = $optionValue->getResultSet();
                     $optionValueData = FatApp::getDb()->fetchAll($rs);
                     if (!empty($optionValueData)) {

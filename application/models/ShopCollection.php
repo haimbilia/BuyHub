@@ -128,6 +128,7 @@ class ShopCollection extends MyAppModel
         );
 
 
+        $srch->doNotCalculateRecords();
         $srch->addOrder('selprod_active', 'DESC');
         //echo $srch->getQuery();
         $rs = $srch->getResultSet();

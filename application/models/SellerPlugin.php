@@ -88,6 +88,7 @@ class SellerPlugin extends PluginCommon
             );
         }
         $srch->addOrder('plugin_display_order', 'ASC');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         $db = FatApp::getDb();

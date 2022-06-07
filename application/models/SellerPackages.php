@@ -58,6 +58,7 @@ class SellerPackages extends MyAppModel
     {
         $srch = self::getSearchObject($langId);
         $srch->addMultipleFields(array("sp.spackage_id", "IFNULL( spl.spackage_name, sp.spackage_identifier ) as spackage_name"));
+        $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
     }
 
@@ -76,6 +77,7 @@ class SellerPackages extends MyAppModel
         if (!$includeFreePackages) {
             $srch->addCondition('sp.spackage_type', '=', SellerPackages::PAID_TYPE);
         }
+        $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 

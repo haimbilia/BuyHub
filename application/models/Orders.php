@@ -1967,8 +1967,8 @@ class Orders extends MyAppModel
 
 
             /* Start Order Payment to Vendor [ */
-            $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];           
-            $comments = str_replace("{invoicenumber}",$formattedInvoiceNumber, Labels::getLabel('LBL_RECEIVED_CREDITS_FOR_ORDER_{invoicenumber}', $langId));
+            $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
+            $comments = str_replace("{invoicenumber}", $formattedInvoiceNumber, Labels::getLabel('LBL_RECEIVED_CREDITS_FOR_ORDER_{invoicenumber}', $langId));
             $availQty = $childOrderInfo['op_qty'] - $childOrderInfo['op_refund_qty'];
 
             $taxCharges = isset($childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_TAX][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount']) ? $childOrderInfo['charges'][OrderProduct::CHARGE_TYPE_TAX][OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'] : 0;
@@ -2049,7 +2049,7 @@ class Orders extends MyAppModel
             $commissionFees = $childOrderInfo['op_commission_charged'] - $childOrderInfo['op_refund_commission'];
 
             if ($commissionFees > 0 && false === $alreadyPaid) {
-                $comments = str_replace("{invoicenumber}",$formattedInvoiceNumber, Labels::getLabel('LBL_CHARGED_COMMISSION_FOR_ORDER_{invoicenumber}', $langId));
+                $comments = str_replace("{invoicenumber}", $formattedInvoiceNumber, Labels::getLabel('LBL_CHARGED_COMMISSION_FOR_ORDER_{invoicenumber}', $langId));
                 $txnArray["utxn_user_id"] = $childOrderInfo['op_selprod_user_id'];
                 $txnArray["utxn_debit"] = $commissionFees;
                 $txnArray["utxn_credit"] = 0;
@@ -2308,8 +2308,8 @@ class Orders extends MyAppModel
         $srch->joinTable(OrderProduct::DB_TBL_CHARGES, 'LEFT OUTER JOIN', 'opc.' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'op_id = op.op_id', 'opc');
         $srch->addCondition('op_order_id', '=', $orderId);
         $srch->addMultipleFields(array('op_id', OrderProduct::DB_TBL_CHARGES_PREFIX . 'type', OrderProduct::DB_TBL_CHARGES_PREFIX . 'amount'));
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetchAll($rs);
+        $srch->doNotCalculateRecords();
+        $row = FatApp::getDb()->fetchAll($srch->getResultSet());
         $charges = array();
         if (!empty($row)) {
             foreach ($row as $val) {
@@ -2401,10 +2401,8 @@ class Orders extends MyAppModel
         if ($fileId > 0) {
             $srch->addCondition('afile_id', '=', $fileId);
         }
-
-        $rs = $srch->getResultSet();
-
-        $downloads = FatApp::getDb()->fetchAll($rs);
+        $srch->doNotCalculateRecords();
+        $downloads = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $digitalDownloads = static::digitalDownloadFormat($downloads);
 
@@ -2458,9 +2456,8 @@ class Orders extends MyAppModel
         if ($link_id > 0) {
             $srch->addCondition('opddl_link_id', '=', $link_id);
         }
-        $rs = $srch->getResultSet();
-
-        $downloads = FatApp::getDb()->fetchAll($rs);
+        $srch->doNotCalculateRecords();
+        $downloads = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $digitalDownloads = static::digitalDownloadLinksFormat($downloads);
 
@@ -2668,8 +2665,8 @@ class Orders extends MyAppModel
     {
         $srch = new  OrderSearch();
         $srch->addCondition('order_user_id', '=', $userId);
-        $rs = $srch->getResultSet();
-        $orderInfo = FatApp::getDb()->fetchAll($rs);
+        $srch->doNotCalculateRecords();
+        $orderInfo = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         if (!$orderInfo) {
             return true;
@@ -2837,9 +2834,8 @@ class Orders extends MyAppModel
         $srch->addCondition('oua_type', '=', Orders::PICKUP_ADDRESS_TYPE);
         $srch->addCondition('op_product_type', '=', product::PRODUCT_TYPE_PHYSICAL);
         $srch->addGroupBy('opshipping_pickup_addr_id');
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-        return $records;
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     public function getOrderShippingData($orderId, $langId)
@@ -2851,9 +2847,8 @@ class Orders extends MyAppModel
         $srch->addCondition('order_id', '=', $orderId);
         $srch->addCondition('op_product_type', '=', product::PRODUCT_TYPE_PHYSICAL);
         $srch->addOrder('opshipping_op_id');
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-        return $records;
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     public static function isExistTransactionId($gatewayTxnId)

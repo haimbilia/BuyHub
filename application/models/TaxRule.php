@@ -140,6 +140,8 @@ class TaxRule extends MyAppModel
             $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'taxrule_taxcat_id', 'taxrule_taxstr_id', 'trr_rate', 'taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxstr_parent', 'taxstr_is_combined'));
         }
         $srch->addCondition('taxrule_taxcat_id', '=', 'mysql_func_' . $taxCatId, 'AND', true);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
         $res = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($res);
     }
@@ -152,6 +154,8 @@ class TaxRule extends MyAppModel
     {
         $srch = TaxRuleLocation::getSearchObject();
         $srch->addCondition('taxruleloc_taxrule_id', '=', 'mysql_func_' . $this->getMainTableRecordId(), 'AND', true);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
