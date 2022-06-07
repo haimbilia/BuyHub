@@ -834,6 +834,7 @@ Updates/Fixes :
     => 064785 - Less count of downloadable attachments when the file title's name is same
     => 064780 - "Something went wrong, please try it later' is coming when the user clicks on the pay button at the buyer's end
     => 064764 - 'Zero' quantity is coming when the product is out of stock under the cart section at buyer's end
+    => 064506 - Suggestion: There should be limit while linking pages under Top header section
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
