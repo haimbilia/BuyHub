@@ -77,8 +77,7 @@
                     </div>
                     <div class="top-bar__right">
                         <ul class="quick-nav">
-                            <?php
-                            $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
+                            <?php $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
                             <li class="quick-nav-item item-desktop wishListJs">
                                 <button type="button" class="quick-nav-link button-store">
 

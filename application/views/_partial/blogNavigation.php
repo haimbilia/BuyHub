@@ -40,7 +40,9 @@
                         <?php } ?>
                         <?php if (!empty($hiddenCategories)) { ?>
                             <li class="nav-blog-item">
-                                <a class="nav-blog-link nav-blog-more" data-bs-toggle="collapse" href="#blog-more" role="button" aria-expanded="false" aria-controls="blog-more">More</a>
+                                <a class="nav-blog-link nav-blog-more" data-bs-toggle="collapse" href="#blog-more" role="button" aria-expanded="false" aria-controls="blog-more">
+                                    <?php echo Labels::getLabel('LBL_MORE'); ?>
+                                </a>
                                 <div class="collapse blog-more" id="blog-more">
                                     <div class="container">
                                         <ul>
