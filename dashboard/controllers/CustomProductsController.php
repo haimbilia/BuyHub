@@ -105,7 +105,7 @@ class CustomProductsController extends SellerBaseController
                 }
             }
             $productData['product_tags'] = json_encode($tagData);
-            if (1 < $productData['preq_brand_id']) {
+            if (0 < $productData['preq_brand_id']) {
                 $productData['product_brand_id'] = $productData['preq_brand_id'];
                 $brandData = Brand::getAttributesByLangId($langId, $productData['preq_brand_id'], [Brand::tblFld('name'), Brand::tblFld('identifier')], applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
                 if (false != $brandData) {

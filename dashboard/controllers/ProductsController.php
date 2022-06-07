@@ -109,7 +109,7 @@ class ProductsController extends SellerBaseController
 
             $productData['product_tags'] = json_encode($tagData);
 
-            if (1 < $productData['product_brand_id']) {
+            if (0 < $productData['product_brand_id']) {
                 $brandData = Brand::getAttributesByLangId($langId, $productData['product_brand_id'], [Brand::tblFld('name'), Brand::tblFld('identifier')], applicationConstants::JOIN_RIGHT, applicationConstants::YES, applicationConstants::NO);
                 if (false != $brandData) {
                     $fld = $frm->getField('product_brand_id');

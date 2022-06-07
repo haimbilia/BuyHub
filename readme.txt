@@ -838,6 +838,7 @@ Updates/Fixes :
     => 064808 - Shop Details Page >>Multiple issues on the reviews section on the shop details page
     => 064791 - Suggestion: To add a tooltip icon in the date field that the user can view all the orders for specific dates by clicking on that date
     => 064818 - Shop Inventory >> UI issue on the product info popup at the seller end. 
+    => 064819 - The previously selected brand does not appear when the seller tries to edit any product.
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
