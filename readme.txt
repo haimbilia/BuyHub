@@ -829,6 +829,7 @@ Updates/Fixes :
     => 064765 - Buyer: Default image is not showing properly under product detail page.
     => 064790 - Buyer: Infinite loader is coming when the user enters invalid/past expiry month.
     => 064809 - Shop Details Page >> Multiple UI issues in the filters section on the shop details page. 
+    => 064808 - Shop Details Page >>Multiple issues on the reviews section on the shop details page
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

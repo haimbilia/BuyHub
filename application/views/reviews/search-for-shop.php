@@ -71,16 +71,22 @@ if ($reviewsList) { ?>
                     <div class="reviews-by"><?php echo CommonHelper::displayName($review['user_name']); ?> | <span class="dated"><?php echo FatDate::format($review['spreview_posted_on']); ?></span>
                     </div>
                     <ul class="yes-no">
-                        <li class="yes-no-item"><?php Labels::getLabel('LBL_WAS_THIS_REVIEW_HELPFUL?', $siteLangId); ?></li>
+                        <!-- <li class="yes-no-item"><?php // Labels::getLabel('LBL_WAS_THIS_REVIEW_HELPFUL?', $siteLangId); ?></li> -->
                         <li class="yes-no-item">
-                            <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>,1)">
-                                <?php echo Labels::getLabel('LBL_YES', $siteLangId); ?>
+                            <button class="btn btn-thumb" type="button"  title="<?php echo Labels::getLabel('LBL_LIKE', $siteLangId); ?>" onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>,1)">
+                                <svg class="svg" width="24" height="24">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#like">
+                                    </use>
+                                </svg>
                                 <span class="counts">(<?php echo $review['helpful']; ?>)</span>
                             </button>
                         </li>
                         <li class="yes-no-item">
-                            <button class="btn btn-thumb" type="button" onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>, 0)">
-                                <?php echo Labels::getLabel('LBL_NO', $siteLangId); ?>
+                            <button class="btn btn-thumb" type="button" title="<?php echo Labels::getLabel('LBL_DISLIKE', $siteLangId); ?>" onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>, 0)">
+                                <svg class="svg" width="24" height="24">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#dislike">
+                                    </use>
+                                </svg>
                                 <span class="counts">(<?php echo $review['notHelpful']; ?>)</span>
                             </button>
                         </li>
