@@ -36,6 +36,7 @@ class CashOnDeliveryPayController extends MyAppController
         $srch->joinOrderUser();
         $srch->addCondition('order_user_id', '=', $userId);
         $srch->addCondition('order_id', '=', $orderId);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         $childOrderDetail = FatApp::getDb()->fetchAll($rs, 'op_id');

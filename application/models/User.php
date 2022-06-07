@@ -291,6 +291,7 @@ class User extends MyAppModel
         if (!empty($key)) {
             $srch->addCondition('t_um.' . static::DB_TBL_META_PREFIX . 'key', '=', $key);
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $result = FatApp::getDb()->fetchAll($rs);
 
@@ -963,6 +964,7 @@ class User extends MyAppModel
         $srch->addMultipleFields(
             array('tusrv.*', 'tusff_l.sformfield_caption', 'tusff.*', 'af.afile_id', 'afile_physical_path', 'afile_name', 'IFNULL(tusrv_lang.sfreqvalue_sformfield_caption, tusff_l.sformfield_caption) as sformfield_caption')
         );
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs);
     }
@@ -2405,6 +2407,8 @@ class User extends MyAppModel
         $srch->addCondition('uauth_fcm_id', '!=', '');
         $srch->addCondition('uauth_last_access', '>=', date('Y-m-d H:i:s', strtotime("-7 DAYS")));
         $srch->addFld('uauth_fcm_id');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         if (!$row = $db->fetchAll($rs)) {
             return array();
@@ -2942,7 +2946,7 @@ class User extends MyAppModel
         } else {
             $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
         }
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs);
     }
@@ -3087,6 +3091,7 @@ class User extends MyAppModel
         if (!empty($value)) {
             $srch->addCondition(static::DB_TBL_META_PREFIX . 'value', '=', $value);
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs);
     }

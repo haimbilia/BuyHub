@@ -59,7 +59,7 @@ class AdsBatch extends MyAppModel
         if (0 < $adsBatchId) {
             $srch->addCondition(self::DB_TBL_PREFIX . 'id', '=', $adsBatchId);
         }
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         if (!$rs) {
             return false;

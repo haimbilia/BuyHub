@@ -36,7 +36,7 @@ class Cron extends MyAppModel
         if ($id > 0) {
             $srch->addCondition('cron_id', '=', FatUtility::int($id));
         }
-
+        $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet(), 'cron_id');
     }
 

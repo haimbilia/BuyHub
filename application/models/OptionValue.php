@@ -131,7 +131,7 @@ class OptionValue extends MyAppModel
                 $srch->addFld($attr);
             }
         }
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs);
 

@@ -71,9 +71,9 @@ class ShippingDurations extends MyAppModel
     public function getShippingDurationAssoc($langId)
     {
         $srch = $this->getListingObj($langId, array('sduration_id', 'sduration_name'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
-        $durationArr = FatApp::getDb()->fetchAllAssoc($rs);
-        return $durationArr;
+        return FatApp::getDb()->fetchAllAssoc($rs);
     }
 
     public function canRecordMarkDelete($id)

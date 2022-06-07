@@ -173,6 +173,7 @@ class Shipping
         $srch->addCondition('selprod_id', 'IN', $selProdIdArr);
         $srch->addMultipleFields(array('selprod_id', 'shippro_shipprofile_id'));
         $srch->addGroupBy('selprod_id');
+        $srch->doNotCalculateRecords();
         $prodSrchRs = $srch->getResultSet();
         return FatApp::getDb()->fetchAllAssoc($prodSrchRs);
     }
@@ -232,7 +233,7 @@ class Shipping
             }
 
             if (!empty($productInfo)) {
-                $product = $productInfo[$row['selprod_id']];           
+                $product = $productInfo[$row['selprod_id']];
                 $shippedBy = -1; /*Shipped by admin */
                 $shippingLevel = self::LEVEL_PRODUCT;
 
@@ -253,28 +254,26 @@ class Shipping
 
                 $combineRateId = self::LEVEL_PRODUCT == $shippingLevel ? $row['selprod_id'] : $row['shippro_shipprofile_id'];
 
-                if (self::LEVEL_PRODUCT == $shippingLevel || !isset($this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['selProdCombinedPrice'])) {                    
+                if (self::LEVEL_PRODUCT == $shippingLevel || !isset($this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['selProdCombinedPrice'])) {
                     $this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId] = [
                         'selProdCombinedPrice' => ($product['theprice'] * $product['quantity']),
                         'selProdCombinedWeight' => $productWeightInOunce,
                         'seleprodIds' => [$row['selprod_id']],
-                    ];                  
+                    ];
                 }
 
                 if (self::LEVEL_PRODUCT != $shippingLevel && isset($this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['selProdCombinedPrice'])) {
-                    if (!in_array($row['selprod_id'], $this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['seleprodIds'])) {                      
+                    if (!in_array($row['selprod_id'], $this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['seleprodIds'])) {
                         $this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['selProdCombinedPrice'] += ($product['theprice'] * $product['quantity']);
                         $this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['selProdCombinedWeight'] += $productWeightInOunce;
                         array_push($this->shippedByArr[$shippedBy][$shippingLevel][$combineRateId]['seleprodIds'], $row['selprod_id']);
-                       
                     }
                 }
             }
-            
+
 
             $res[] = $row;
-            
-        }         
+        }
         return $res;
     }
 
@@ -304,7 +303,7 @@ class Shipping
     {
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
-        
+
         foreach ($productInfo as $selprod_id => $product) {
             if (!in_array($selprod_id, $physicalSelProdIdArr)) {
                 continue;
@@ -332,7 +331,7 @@ class Shipping
                 $this->systemRatesToFetchSelprodIds[] = $product['selprod_id'];
                 continue;
             }
-            
+
             $shippingApiKey = get_class($shippingApiObj)::KEY_NAME;
 
             $cacheKey = self::CARRIER_CACHE_KEY_NAME . $this->langId . get_class($shippingApiObj) . ($isProductShippedBySeller ? $product['selprod_user_id'] : 0);
@@ -346,15 +345,15 @@ class Shipping
                     CacheHelper::create($cacheKey, serialize($carriers), CacheHelper::TYPE_SHIPING_API);
                 }
             }
-            
+
             if (empty($carriers)) {
                 $title = $shippingApiKey . " - " . $shippingApiObj->getError();
                 SystemLog::system($title, $title);
                 continue;
             }
-            
+
             $shippingApiObj->setAddress($shippingAddressDetail['addr_name'], $shippingAddressDetail['addr_address1'], $shippingAddressDetail['addr_address2'], $shippingAddressDetail['addr_city'], $shippingAddressDetail['state_name'], $shippingAddressDetail['addr_zip'], $shippingAddressDetail['country_code'], $shippingAddressDetail['addr_phone']);
-            
+
             if (empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {
                 $msg = Labels::getLabel('MSG_MISSING_LENGTH_/_WIDTH_/_HEIGHT_OR_UNIT_PARAMS_FOR_"{PRODUCT}"._PLEASE_BIND_CORRECT_PACKAGE.', $this->langId);
                 $msg = CommonHelper::replaceStringData($msg, ['{PRODUCT}' => $product['selprod_title']]);
@@ -363,7 +362,7 @@ class Shipping
                 continue;
             }
             $shopAddress = 0 < $isProductShippedBySeller ? $this->getShopAddress($product['shop_id']) : $this->getShopAddress(0);
-            
+
             if (method_exists($shippingApiObj, 'setAddressReference')) {
                 $referenceId = str_pad($shopAddress['shop_id'], 6, "0", STR_PAD_LEFT);
                 $shippingApiObj->setAddressReference($referenceId);
@@ -386,7 +385,7 @@ class Shipping
                 $shippingApiObj->setSelectedShipping($this->selectedShippingService[$product['selprod_id']]);
             }
             /* Retrieve Selected Shipping Service Detail. */
-            
+
             $shippingLevel = self::LEVEL_PRODUCT;
 
             $shippedBy = -1; /* admin shipping */
@@ -412,7 +411,7 @@ class Shipping
                 $shopAddress,
                 $shippingAddressDetail
             ];
-            
+
             foreach ($carriers as $carrier) {
                 $carrierCode = !empty($carrier) && array_key_exists('code', $carrier) ? $carrier['code'] : '';
                 $cacheKeyArr = array_merge($cacheKeyArr, [$carrierCode, $shopAddress['postalCode'], $this->langId]);
@@ -433,7 +432,7 @@ class Shipping
                         SystemLog::system($msg, 'SelProd ID-' . $product['selprod_id']);
                     }
                     continue;
-                }                
+                }
                 foreach ($shippingRates as $key => $value) {
                     $shippingCost = [
                         'id' => $value['serviceCode'],
@@ -476,7 +475,7 @@ class Shipping
     private function fetchShippingRatesFromSystem(array $productInfo, array &$physicalSelProdIdArr): bool
     {
         $counter = [];
-        
+
         foreach ($this->selProdShipRates as $rateId => $rates) {
             if (!empty($this->systemRatesToFetchSelprodIds) && !in_array($rates['selprod_id'], $this->systemRatesToFetchSelprodIds)) {
                 continue;
@@ -519,26 +518,26 @@ class Shipping
 
             switch ($shippingLevel) {
                 case self::LEVEL_PRODUCT:
-                    $this->shippedByArr[$shippedBy][$shippingLevel]['products'][$rates['selprod_id']] = $product;                    
+                    $this->shippedByArr[$shippedBy][$shippingLevel]['products'][$rates['selprod_id']] = $product;
                     $this->shippedByArr[$shippedBy][$shippingLevel]['shipping_options'][$rates['selprod_id']][] = $rates;
 
                     if (isset($this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['selprod_id']][$rates['shiprate_id']]) && $this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['selprod_id']][$rates['shiprate_id']] != null) {
                         $this->setCost($this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['selprod_id']][$rates['shiprate_id']], $shippingCost);
                     }
                     $this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['selprod_id']][$rates['shiprate_id']] = $shippingCost;
-                    
+
                     $this->filterShippingRates($this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['selprod_id']], $prodCombinedWeight, $prodCombinedPrice);
 
                     break;
                 case self::LEVEL_ORDER:
-                case self::LEVEL_SHOP:   
-                                    
+                case self::LEVEL_SHOP:
+
                     $this->shippedByArr[$shippedBy][$shippingLevel]['products'][$rates['selprod_id']] = $product;
                     $this->shippedByArr[$shippedBy][$shippingLevel]['shipping_options'][$rates['shiprate_id']] = $rates;
                     if (isset($this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['shiprate_id']]) && $this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['shiprate_id']] != null) {
                         $this->setCost($this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['shiprate_id']], $shippingCost);
                     }
-                    $this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['shiprate_id']] = $shippingCost;                   
+                    $this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$rates['shiprate_id']] = $shippingCost;
 
                     // if (!isset($counter[$shippedBy][$shippingLevel][$combineRateId]['counter'])) {
                     //     $this->filterShippingRates($this->shippedByArr[$shippedBy][$shippingLevel]['rates'], $prodCombinedWeight, $prodCombinedPrice);
@@ -569,7 +568,7 @@ class Shipping
         $shipToCountryId = isset($shippingAddressDetail['addr_country_id']) ? $shippingAddressDetail['addr_country_id'] : 0;
 
         $shipToStateId = isset($shippingAddressDetail['addr_state_id']) ? $shippingAddressDetail['addr_state_id'] : 0;
-        
+
         $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr);
         if (count($physicalSelProdIdArr)) {
             $this->selProdShipRates = $this->getSellerProductShippingRates($physicalSelProdIdArr, $shipToCountryId, $shipToStateId, $productInfo);
@@ -673,7 +672,7 @@ class Shipping
         uasort($rates, function ($a, $b) {
             return  $b['shiprate_condition_type'] - $a['shiprate_condition_type'];
         });
-        
+
         foreach ($rates as $key => $rate) {
             switch ($rate['shiprate_condition_type']) {
 
@@ -832,8 +831,8 @@ class Shipping
             }
         }
 
-        $pluginObj = PluginHelper::callPlugin($pluginData['plugin_code'], [$this->langId], $error, $this->langId, false);        
-        if (false === $pluginObj) {           
+        $pluginObj = PluginHelper::callPlugin($pluginData['plugin_code'], [$this->langId], $error, $this->langId, false);
+        if (false === $pluginObj) {
             $this->error = $error;
             return false;
         }

@@ -117,6 +117,7 @@ class ReviewsController extends MyAppController
             $ratings->addCondition('sprating_spreview_id', 'IN', array_keys($records));
             $ratings->addCondition('ratingtype_type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
             $ratings->doNotLimitRecords();
+            $ratings->doNotCalculateRecords();
             $recordRatings = (array) FatApp::getDb()->fetchAll($ratings->getResultSet());
         }
 

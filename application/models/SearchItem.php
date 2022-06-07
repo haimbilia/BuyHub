@@ -26,6 +26,7 @@ class SearchItem extends MyAppModel
         $srch->addDirectCondition("LENGTH(searchitem_keyword) > 10 and searchitem_keyword REGEXP '^[A-Za-z0-9 ]+$'");
         $srch->addMultipleFields(array('DISTINCT searchitem_keyword'));
         $srch->addOrder('searchitem_count', 'desc');
+        $srch->doNotCalculateRecords();
         $srch->setPageSize(4);
         $rs = $srch->getResultSet();
         // $this->total_records = $srch->recordCount();

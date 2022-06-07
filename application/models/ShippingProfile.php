@@ -138,6 +138,7 @@ class ShippingProfile extends MyAppModel
     {
         $shippingZoneSrch = ShippingZone::getSearchObject();
         $shippingZoneSrch->addCondition('shipzone_user_id', '=',  'mysql_func_' . $userId, 'AND', true);
+        $shippingZoneSrch->doNotCalculateRecords();
         $rs = $shippingZoneSrch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($rs);
     }
@@ -261,6 +262,8 @@ class ShippingProfile extends MyAppModel
         }
         $zSrch = ShippingProfileZone::getSearchObject();
         $zSrch->addCondition("shipprozone_shipprofile_id", "IN", $profileIds);
+        $zSrch->doNotCalculateRecords();
+        $zSrch->doNotLimitRecords();
         $zRs = $zSrch->getResultSet();
         $zonesData = FatApp::getDb()->fetchAll($zRs);
         $zones = array();

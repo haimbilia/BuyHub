@@ -220,6 +220,7 @@ class BlogPostCategory extends MyAppModel
         if ($ignoreCategoryId > 0) {
             $srch->addHaving('bpcategory_code', 'NOT LIKE', '%' . str_pad($ignoreCategoryId, 6, '0', STR_PAD_LEFT) . '%');
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs, 'bpcategory_id');
     }
@@ -243,6 +244,7 @@ class BlogPostCategory extends MyAppModel
         );
 
         $srch->addOrder('GETBLOGCATORDERCODE(bpcategory_id)');
+        $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet(), 'bpcategory_id');
     }
 
@@ -259,6 +261,7 @@ class BlogPostCategory extends MyAppModel
         }
         $srch->addOrder('bpc.bpcategory_display_order', 'asc');
         $srch->addOrder('bpc.bpcategory_identifier', 'asc');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAllAssoc($rs);
 

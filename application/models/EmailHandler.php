@@ -60,6 +60,7 @@ class EmailHandler extends FatModel
         $srch->addCondition('admin_id', '!=', 'mysql_func_' . Admin::SUPER, 'AND', true);
         $srch->addCondition('admin_email_notification', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $srch->addMultipleFields(array('admin_id', 'admin_email'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         if ($rs) {

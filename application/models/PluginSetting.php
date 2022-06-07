@@ -61,6 +61,7 @@ class PluginSetting
         $srch->addCondition('tps.' . static::DB_TBL_PREFIX . 'plugin_id', '=', $this->pluginId);
         $srch->addCondition('tps.' . static::DB_TBL_PREFIX . 'record_id', '=', $this->recordId);
         $srch->addMultipleFields(array('tps.' . static::DB_TBL_PREFIX . 'key', 'tps.' . static::DB_TBL_PREFIX . 'value'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         if (!$rs) {
             $this->error = $srch->getError();

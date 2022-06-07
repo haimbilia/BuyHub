@@ -94,7 +94,7 @@ class BannerController extends MyAppController
 
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BANNER, $sizeType);
 
-        if ($sizeType != ImageDimension::VIEW_MINI_THUMB && $sizeType != ImageDimension::VIEW_THUMB) {       
+        if ($sizeType != ImageDimension::VIEW_MINI_THUMB && $sizeType != ImageDimension::VIEW_THUMB) {
             $blocationId = Banner::getAttributesById($bannerId, 'banner_blocation_id');
             $bannerDimensions = BannerLocation::getDimensions($blocationId, $screen);
             if (array_key_exists('blocation_banner_width', $bannerDimensions)) {
@@ -103,7 +103,7 @@ class BannerController extends MyAppController
             if (array_key_exists('blocation_banner_height', $bannerDimensions)) {
                 $imageDimensions['height'] = $bannerDimensions['blocation_banner_height'];
             }
-        }       
+        }
 
         if ($sizeType) {
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], 'banner-default-image.png', '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false, true, false);
@@ -202,8 +202,9 @@ class BannerController extends MyAppController
         $srch->addCondition('banner_blocation_id', '=', $bannerLocation['blocation_id']);
         $rs = $srch->getResultSet();
 
-        return $bannerListing = $db->fetchAll($rs, 'banner_id');
+        $bannerListing = $db->fetchAll($rs, 'banner_id');
         CacheHelper::create('bannersCache' . $type . '_' . $langId, serialize($bannerListing));
+        return $bannerListing;
     }
 
     public function locationFrames($frameId, $sizeType = '')

@@ -26,6 +26,7 @@ class AdminUsers extends MyAppModel
     {
         $srch = new SearchBase(self::DB_TBL_PERMISSIONS);
         $srch->addCondition('admperm_admin_id', '=', $admperm_admin_id);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs, 'admperm_section_id');
         if (!empty($row)) {

@@ -68,6 +68,7 @@ class SelProdReview extends MyAppModel
         $selProdSrch->addCondition('selprod_active', '= ', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $selProdSrch->addCondition('selprod_deleted', '= ', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $selProdSrch->addMultipleFields(array('selprod_id'));
+        $selProdSrch->doNotCalculateRecords();
         $rs = $selProdSrch->getResultSet();
         $selprodListing = FatApp::getDb()->fetchAll($rs);
         $selProdList = array();
@@ -78,6 +79,7 @@ class SelProdReview extends MyAppModel
         $allowedReviewStatus = implode(",", SelProdReview::getBuyerAllowedOrderReviewStatuses());
         $allowedSelProdId = implode(",", $selProdList);
         $srch->addDirectCondition('order_user_id =' . $loggedUserId . ' and ( FIND_IN_SET(op_selprod_id,(\'' . $allowedSelProdId . '\')) and op_is_batch = 0) and  FIND_IN_SET(op_status_id,(\'' . $allowedReviewStatus . '\')) ');
+        $srch->doNotCalculateRecords();
         /* $srch->addOrder('order_date_added'); */
         return (array) FatApp::getDb()->fetch($srch->getResultSet());
     }

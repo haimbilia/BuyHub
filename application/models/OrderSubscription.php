@@ -183,7 +183,7 @@ class OrderSubscription extends MyAppModel
     public static function getSubscriptionEndingList($lastUserIdCond = false)
     {
         $statusArr = Orders::getActiveSubscriptionStatusArr();
-        $endDate = date("Y-m-d");
+
         $srch = new OrderSubscriptionSearch();
         $srch->joinOrders();
 
@@ -200,11 +200,8 @@ class OrderSubscription extends MyAppModel
         if ($lastUserIdCond) {
             $srch->addCondition('user_id', '>', FatApp::getConfig("CONF_CRON_SUBSCRIPTION_REMINDER_LAST_EXECUTED_USERID", FatUtility::VAR_INT, 0));
         }
-
-        $rs = $srch->getResultSet();
-        $activeSusbscriptions = FatApp::getDb()->fetchAll($rs, 'ossubs_id');
-
-        return $activeSusbscriptions;
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetchAll($srch->getResultSet(), 'ossubs_id');
     }
 
     public static function getSubscriptionTitle($plan, $langId = 0, $includeAmount = true)

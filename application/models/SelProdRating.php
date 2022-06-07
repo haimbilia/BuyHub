@@ -26,6 +26,7 @@ class SelProdRating extends MyAppModel
         $srch->addTypesCondition([$ratingType]);
         $attr = ['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name'];
         $srch->addMultipleFields($attr);
+        $srch->doNotCalculateRecords();
 
         $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
 

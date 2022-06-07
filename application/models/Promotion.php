@@ -266,12 +266,10 @@ class Promotion extends MyAppModel
         $prmSrch->addCondition('pr.promotion_user_id', '=', $user_id);
         //$prmSrch->addLastChargeCondition();
         $prmSrch->addMultipleFields(array('promotion_id', 'promotion_user_id ', "IFNULL(MAX(pcharge_end_piclick_id),0) as end_click_id", "IFNULL(MAX(pcharge_end_date),'0000-00-00') as charge_till_date"));
+        $prmSrch->doNotCalculateRecords();
         $rs = $prmSrch->getResultSet();
         $promotions = FatApp::getDb()->fetchAll($rs);
 
-
-
-        $prmObj = new Promotion();
         $promotionCharges = 0;
         foreach ($promotions as $pKey => $pVal) {
             $promotionId = $pVal['promotion_id'];
@@ -284,6 +282,7 @@ class Promotion extends MyAppModel
                 array("sum(picharge_cost) as total_cost", "min(picharge_id) as start_click_id", "max(picharge_id) as end_click_id", "MIN(picharge_datetime) as start_click_date",
                 "MAX(picharge_datetime) as end_click_date",    "count(picharge_id) as total_clicks", )
             );
+            $prChargeSummary->doNotCalculateRecords();
             $prChargeSummary->addGroupBy('pclick_promotion_id');
             $rs = $prChargeSummary->getResultSet();
             $promotionClicks = FatApp::getDb()->fetch($rs);

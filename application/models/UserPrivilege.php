@@ -240,10 +240,9 @@ class UserPrivilege
         }
 
         $srch->addMultipleFields(array('userperm_section_id', 'userperm_value'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
-        $arr = $db->fetchAllAssoc($rs);
-
-        return $arr;
+        return $db->fetchAllAssoc($rs);
     }
 
     private function cacheLoadedPermission($sellerId, $secId, $level)

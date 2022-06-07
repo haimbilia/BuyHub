@@ -352,7 +352,7 @@ class AdminPrivilege
             $srch->addCondition('admperm_section_id', '=', 'mysql_func_' . $sectionId, 'AND', true);
         }
 
-        $srch->addMultipleFields(array('admperm_section_id', 'admperm_value'));
+        $srch->addMultipleFields(array('admperm_section_id', 'admperm_value'));        
         $rs = $srch->getResultSet();
         $arr = FatApp::getDb()->fetchAllAssoc($rs);
         return $arr;
