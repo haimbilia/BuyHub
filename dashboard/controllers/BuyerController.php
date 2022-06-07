@@ -451,11 +451,11 @@ class BuyerController extends BuyerBaseController
         $zip->open($tmp_file, ZipArchive::CREATE);
 
         $fileId = [];
-        foreach ($downloads as $row) {
+        foreach ($downloads as $ind => $row) {
             $filePath = !empty($row['afile_physical_path']) ? CONF_UPLOADS_PATH . $row['afile_physical_path'] : '';
             if (file_exists($filePath)) {
                 $fileId[] = $row['afile_id'];
-                $zip->addFile($filePath, basename($row['afile_name']));
+                $zip->addFile($filePath, ($ind + 1) . '_' . basename($row['afile_name']));
             }
         }
         # close zip
