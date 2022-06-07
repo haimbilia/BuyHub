@@ -73,6 +73,7 @@ class ShippingMethods extends MyAppModel
 
         $srch = new SearchBase(static::DB_SETTING_TBL);
         $srch->addCondition('shipsetting_shippingapi_id', '=', 'mysql_func_' . $recordId, 'AND', true);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = $db->fetchAll($rs);
         if ($row == false || empty($row)) {

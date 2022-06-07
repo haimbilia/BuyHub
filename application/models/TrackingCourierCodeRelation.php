@@ -48,6 +48,7 @@ class TrackingCourierCodeRelation extends MyAppModel
         $srch = static::getSearchObject();
         $srch->addCondition('tccr_shipapi_plugin_id', '=', 'mysql_func_' . $shipApiPluginId, 'AND', true);
         $srch->addCondition('tccr_tracking_plugin_id', '=', 'mysql_func_' . $trackingApiPluginId, 'AND', true);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs);
     }

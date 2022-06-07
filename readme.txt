@@ -835,6 +835,8 @@ Updates/Fixes :
     => 064780 - "Something went wrong, please try it later' is coming when the user clicks on the pay button at the buyer's end
     => 064764 - 'Zero' quantity is coming when the product is out of stock under the cart section at buyer's end
     => 064506 - Suggestion: There should be limit while linking pages under Top header section
+    => 064809 - Shop Details Page >> Multiple UI issues in the filters section on the shop details page. 
+    => 064808 - Shop Details Page >>Multiple issues on the reviews section on the shop details page
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

@@ -101,7 +101,7 @@ class DiscountCoupons extends MyAppModel
             $srch->joinTable(ProductCategory::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'c_l.prodcatlang_prodcat_id = prodcat_id AND prodcatlang_lang_id = ' . $lang_id, 'c_l');
             $srch->addFld(array("prodcat_id", "prodcat_name"));
         }
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
 
@@ -137,9 +137,8 @@ class DiscountCoupons extends MyAppModel
             );
             $srch->addMultipleFields(array('spplan_id', "IFNULL( spl.spackage_name, sp.spackage_identifier ) as spackage_name", "spplan_interval", "spplan_frequency"));
         }
-
-        $rs = $srch->getResultSet();
-
+        $srch->doNotCalculateRecords();
+        $rs = $srch->getResultSet();        
         $row = FatApp::getDb()->fetchAll($rs, 'spplan_id');
 
         return $row;
@@ -163,8 +162,8 @@ class DiscountCoupons extends MyAppModel
             $srch->joinTable(Product::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'p_l.productlang_product_id = product_id AND productlang_lang_id = ' . $lang_id, 'p_l');
             $srch->addFld(array('product_name'));
         }
-        $rs = $srch->getResultSet();
-
+        $srch->doNotCalculateRecords();
+        $rs = $srch->getResultSet();        
         $row = FatApp::getDb()->fetchAll($rs, 'product_id');
         return $row;
     }
@@ -183,6 +182,7 @@ class DiscountCoupons extends MyAppModel
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'user_id = ctu_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'credential_user_id = user_id', 'c');
         $srch->addMultipleFields(array("user_id", "user_name", "user_phone_dcode", "user_phone", "credential_username"));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs, 'user_id');
         return $row;
@@ -206,6 +206,7 @@ class DiscountCoupons extends MyAppModel
             $srch->joinTable(Shop::DB_TBL . '_lang', 'LEFT OUTER JOIN', 's_l.shoplang_shop_id = shop_id AND shoplang_lang_id = ' . $lang_id, 's_l');
             $srch->addFld(array('shop_name'));
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         $row = FatApp::getDb()->fetchAll($rs, 'shop_id');
@@ -230,8 +231,8 @@ class DiscountCoupons extends MyAppModel
             $srch->joinTable(Brand::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'b_l.brandlang_brand_id = brand_id AND brandlang_lang_id = ' . $lang_id, 'b_l');
             $srch->addFld(array('brand_name'));
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
-
         $row = FatApp::getDb()->fetchAll($rs, 'brand_id');
         return $row;
     }

@@ -1090,6 +1090,7 @@ class CommonHelper extends FatUtility
         $array = array();
         $srch = new SearchBase($lang_table);
         $srch->addCondition($condition_field, '=', $condition_id);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         $record = FatApp::getDb()->fetchAll($rs);

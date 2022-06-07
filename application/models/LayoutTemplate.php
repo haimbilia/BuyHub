@@ -41,6 +41,7 @@ class LayoutTemplate extends MyAppModel
         }
 
         $srch->addOrder('ltemplate_id');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs, 'ltemplate_id');
     }

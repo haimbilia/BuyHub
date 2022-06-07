@@ -2718,6 +2718,7 @@ class Importexport extends ImportexportCommon
 
                     $srch = new SearchBase(Product::DB_PRODUCT_SPECIFICATION);
                     $srch->addCondition(Product::DB_PRODUCT_SPECIFICATION_PREFIX . 'product_id', '=', $productId);
+                    $srch->doNotCalculateRecords();
                     $rs = $srch->getResultSet();
                     $res = FatApp::getDb()->fetchAll($rs);
                     foreach ($res as $val) {

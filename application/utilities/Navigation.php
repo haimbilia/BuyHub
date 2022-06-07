@@ -262,6 +262,7 @@ class Navigation
         }
 
         $srch = new NavigationLinkSearch($siteLangId);
+        $srch->doNotCalculateRecords();
         if ($includeCategories) {
             $srch->joinProductCategory($siteLangId);
             $srch->addMultipleFields(array(
@@ -270,8 +271,7 @@ class Navigation
             ));
             $srch->addDirectCondition("((nlink_type = " . NavigationLinks::NAVLINK_TYPE_CATEGORY_PAGE . " AND nlink_category_id > 0 $catWithProductConditoon ) OR (nlink_type = " . NavigationLinks::NAVLINK_TYPE_CMS . " AND nlink_cpage_id > 0 ) OR  ( nlink_type = " . NavigationLinks::NAVLINK_TYPE_EXTERNAL_PAGE . " ))");
             $srch->addHaving('filtered_prodcat_active', '=', applicationConstants::ACTIVE);
-            $srch->addHaving('filtered_prodcat_deleted', '=', applicationConstants::NO);
-            $srch->doNotCalculateRecords();
+            $srch->addHaving('filtered_prodcat_deleted', '=', applicationConstants::NO);            
             $srch->doNotLimitRecords();
         } else {
             $srch->addDirectCondition("((nlink_type != " . NavigationLinks::NAVLINK_TYPE_CATEGORY_PAGE . "  ) OR (nlink_type = " . NavigationLinks::NAVLINK_TYPE_CMS . " AND nlink_cpage_id > 0 ) OR  ( nlink_type = " . NavigationLinks::NAVLINK_TYPE_EXTERNAL_PAGE . " ))");
@@ -305,7 +305,7 @@ class Navigation
         }
         $srch->addGroupBy('nav_id');
         $srch->addGroupBy('nlink_id');
-
+        
         $rs = $srch->getResultSet();
         $rows = FatApp::getDb()->fetchAll($rs);
 

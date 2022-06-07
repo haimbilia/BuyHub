@@ -177,7 +177,7 @@ class AttachedFile extends MyAppModel
         return array(
             static::RATIO_TYPE_SQUARE => Labels::getLabel('LBL_1:1', $langId),
             static::RATIO_TYPE_RECTANGULAR => Labels::getLabel('LBL_16:9', $langId)
-        );        
+        );
     }
 
     public static function getRatioTypeWithCustom($langId)
@@ -974,6 +974,7 @@ class AttachedFile extends MyAppModel
         if ($limit > 0) {
             $srch->setPageSize($limit);
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs);
         if ($row == false) {

@@ -1,6 +1,3 @@
-$(document).ready(function () {
-    shopForm();
-});
 
 $(document).on('change', '.logo-language-js', function () {
     var lang_id = $(this).val();

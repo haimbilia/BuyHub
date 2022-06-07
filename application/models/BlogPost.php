@@ -78,6 +78,7 @@ class BlogPost extends MyAppModel
         $srch->addCondition('postlang_post_id', 'is not', 'mysql_func_null', 'and', true);
         $srch->addCondition('ptc_bpcategory_id', '=', $bpcategory_id);
         $srch->addGroupby('post_id');
+        $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
@@ -107,7 +108,7 @@ class BlogPost extends MyAppModel
             $srch->joinTable(BlogPostCategory::DB_TBL_LANG, 'LEFT JOIN', BlogPostCategory::DB_TBL_PREFIX . 'id = bpc_l.' . BlogPostCategory::DB_TBL_LANG_PREFIX . BlogPostCategory::DB_TBL_PREFIX . 'id AND ' . BlogPostCategory::DB_TBL_LANG_PREFIX .'lang_id = ' . $langId, 'bpc_l');
             $srch->addFld('COALESCE(bpcategory_name, bpcategory_identifier) as bpcategory_name');
         }
-
+        $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 

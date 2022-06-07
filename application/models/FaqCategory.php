@@ -59,6 +59,7 @@ class FaqCategory extends MyAppModel
         $srch->addCondition('fc.faqcat_active', '=', applicationConstants::ACTIVE);
         $srch->addOrder('fc.faqcat_display_order', 'asc');
         $srch->addOrder('fc.faqcat_identifier', 'asc');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $categories = FatApp::getDb()->fetchAll($rs, 'faqcat_id');
         sort($categories);
@@ -74,6 +75,7 @@ class FaqCategory extends MyAppModel
         $srch->addOrder('fc.faqcat_display_order', 'ASC');
         $srch->addOrder('fc.faqcat_identifier', 'ASC');
         $srch->addMultipleFields(array('fc.faqcat_id', 'fc.faqcat_identifier'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $categories = FatApp::getDb()->fetchAllAssoc($rs, 'faqcat_id');
         return $categories;
@@ -87,6 +89,7 @@ class FaqCategory extends MyAppModel
         $srch->addOrder('fc.faqcat_display_order', 'ASC');
         $srch->addOrder('fc.faqcat_identifier', 'ASC');
         $srch->addMultipleFields(array('fc.faqcat_id', 'fc.faqcat_identifier'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $categories = FatApp::getDb()->fetchAllAssoc($rs, 'faqcat_id');
 

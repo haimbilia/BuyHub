@@ -579,9 +579,9 @@ class Product extends MyAppModel
         if ($limit > 0) {
             $srch->setPageSize($limit);
         } else {
-            $srch->doNotLimitRecords(true);
-            $srch->doNotCalculateRecords(true);
+            $srch->doNotLimitRecords();
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         /* echo $srch->getQuery();die; */
         $row = FatApp::getDb()->fetchAll($rs);
@@ -680,7 +680,7 @@ class Product extends MyAppModel
         if ($option_is_separate_images) {
             $srch->addCondition('option_is_separate_images', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         }
-
+        $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
@@ -787,6 +787,7 @@ class Product extends MyAppModel
                     static::DB_PRODUCT_SPECIFICATION_PREFIX . 'value'
                 )
             );
+            $srch->doNotCalculateRecords();
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetchAll($rs);
             foreach ($row as $resRow) {
@@ -810,7 +811,7 @@ class Product extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', Tag::DB_TBL_PREFIX . 'id = ' . static::DB_PRODUCT_TO_TAG_PREFIX . 'tag_id');
         $srch->addCondition(static::DB_PRODUCT_TO_TAG_PREFIX . 'product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
-        $srch->addCondition(Tag::tblFld('lang_id'), '=', 'mysql_func_' . $lang_id, 'AND', true);
+        $srch->addCondition(Tag::tblFld('lang_id'), '=', 'mysql_func_' . $lang_id, 'AND', true);        
         if (true == $assoc) {
             if (count($attrs)) {
                 $srch->addMultipleFields($attrs);
@@ -875,6 +876,7 @@ class Product extends MyAppModel
         $srch->addCondition(static::DB_TBL_PRODUCT_TO_CATEGORY_PREFIX . 'product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
         $srch->joinTable(ProductCategory::DB_TBL, 'INNER JOIN', ProductCategory::DB_TBL_PREFIX . 'id = ptc.' . static::DB_TBL_PRODUCT_TO_CATEGORY_PREFIX . 'prodcat_id', 'cat');
         $srch->addMultipleFields(array('prodcat_id'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
         if (!$records) {
@@ -1797,8 +1799,8 @@ END,   special_price_found ) as special_price_found'
         if ($prodId) {
             $srch->addCondition(static::DB_TBL_PREFIX . 'id', '!=', $prodId);
         }
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $srch->getResultSet();
+        // $records = FatApp::getDb()->fetchAll($rs);
         return $srch->recordCount();
     }
 
@@ -2084,6 +2086,7 @@ END,   special_price_found ) as special_price_found'
                 static::DB_PRODUCT_SPECIFICATION_PREFIX . 'group'
             )
         );
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs);
     }

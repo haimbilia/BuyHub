@@ -542,6 +542,7 @@ class ProductCategory extends MyAppModel
         } else {
             $srch->addOrder('m.prodcat_identifier', 'asc');
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
@@ -664,7 +665,7 @@ class ProductCategory extends MyAppModel
 
         $srch->addOrder('m.prodcat_display_order', 'asc');
         $srch->addOrder('prodcat_name', 'asc');
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAllAssoc($rs);
 
@@ -710,6 +711,7 @@ class ProductCategory extends MyAppModel
         }
         $srch->addOrder('m.prodcat_display_order', 'asc');
         $srch->addOrder('prodcat_name', 'asc');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAllAssoc($rs);
 
@@ -1038,7 +1040,7 @@ class ProductCategory extends MyAppModel
         if ($prodcatCode) {
             $srch->addHaving('prodrootcat_code', '=', $prodcatCode);
         }
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
@@ -1344,6 +1346,7 @@ class ProductCategory extends MyAppModel
     {
         $srch = $this->categoryObj($includeProductCount, $includeSubCategoriesCount);
         $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'parent', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
+        $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
@@ -1627,7 +1630,7 @@ class ProductCategory extends MyAppModel
         $srch->addCondition('prt_prodcat_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $srch->addCondition('ratingtype_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 'ratingtype_active', 'ratingtype_default']);
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($rs);
     }

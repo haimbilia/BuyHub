@@ -102,9 +102,8 @@ class ShippingSettings
         }
         $srch = new SearchBase(static::DB_SHIPPING_METHODS_TBL, 'tpm');
         $srch->addCondition('tpm.' . static::DB_SHIPPING_METHODS_TBL_PREFIX . 'code', '=', $code);
-        $rs = $srch->getResultSet();
-        $shipping_method = $this->db->fetch($rs);
-        return $shipping_method;
+        $srch->doNotCalculateRecords();
+        return $this->db->fetch($srch->getResultSet());
     }
 
     private function getShippingMethodFieldsById($shippingapi_id)
@@ -112,8 +111,7 @@ class ShippingSettings
         $shippingapi_id = FatUtility::int($shippingapi_id);
         $srch = new SearchBase(static::DB_SHIPPING_METHOD_SETTINGS_TBL, 'tsms');
         $srch->addCondition('tsms.' . static::DB_SHIPPING_METHOD_SETTINGS_TBL_PREFIX . 'shippingapi_id', '=', 'mysql_func_' . $shippingapi_id, 'AND', true);
-        $rs = $srch->getResultSet();
-        $shippingMethodSettings = $this->db->fetchAll($rs);
-        return $shippingMethodSettings;
+        $srch->doNotCalculateRecords();
+        return $this->db->fetchAll($srch->getResultSet());
     }
 }

@@ -65,11 +65,9 @@ class ProdSpecification extends MyAppModel
         if ($productId) {
             $srch->addCondition('ps.prodspec_product_id', '=', $productId);
         }
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
-        $data = $db->fetchAll($rs);
-
-        return $data;
+        return $db->fetchAll($rs);
     }
 }

@@ -313,6 +313,7 @@ class MyAppModel extends FatModel
                 $srch->addFld($attr);
             }
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = $db->fetchALL($rs, $prefix . 'lang_lang_id');
         if (!is_array($row)) {

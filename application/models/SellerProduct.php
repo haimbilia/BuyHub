@@ -861,6 +861,7 @@ class SellerProduct extends MyAppModel
         }
         $prodSrch->addMultipleFields(array('selprod_id', 'product_id', 'product_identifier', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title'));
         $prodSrch->addGroupBy('selprod_id');
+        $prodSrch->doNotCalculateRecords();
         $products = FatApp::getDb()->fetchAll($prodSrch->getResultSet(), 'selprod_id');
 
         $productTitle = SellerProduct::getProductsOptionsString($products, $langId, $toHtml);
@@ -1007,9 +1008,8 @@ class SellerProduct extends MyAppModel
         }
 
         $srch->addMultipleFields(array('selprod_id'));
-        $db = FatApp::getDb();
-        $rs = $srch->getResultSet();
-        $records = $db->fetchAll($rs);
+        $srch->getResultSet();
+        // $records = $db->fetchAll($rs);
         return (int) $srch->recordCount();
     }
 
@@ -1296,7 +1296,7 @@ class SellerProduct extends MyAppModel
         $optionSrch->addCondition('option_id', '!=', 'NULL');
         $optionSrch->addCondition('selprodoption_selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
         $optionSrch->addGroupBy('option_id');
-
+        $optionSrch->doNotCalculateRecords();
         $optionRs = $optionSrch->getResultSet();
         $optionRows = FatApp::getDb()->fetchAll($optionRs);
 
@@ -1308,6 +1308,7 @@ class SellerProduct extends MyAppModel
                 $optionValueSrch->addCondition('option_id', '=', $option['option_id']);
                 $optionValueSrch->addMultipleFields(array('COALESCE(product_name, product_identifier) as product_name', 'selprod_id', 'selprod_user_id', 'selprod_code', 'option_id', 'COALESCE(optionvalue_name,optionvalue_identifier) as optionvalue_name ', 'theprice', 'optionvalue_id', 'optionvalue_color_code'));
                 $optionValueSrch->addGroupBy('optionvalue_id');
+                $optionValueSrch->doNotCalculateRecords();
                 $optionValueRs = $optionValueSrch->getResultSet();
                 $optionValueRows = FatApp::getDb()->fetchAll($optionValueRs);
 

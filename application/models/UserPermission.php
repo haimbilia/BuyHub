@@ -22,6 +22,8 @@ class UserPermission extends MyAppModel
     public static function getSellerPermissions($userId = 0)
     {
         $srch = static::getSearchObject($userId);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs, 'userperm_section_id');
         if (!empty($row)) {

@@ -62,6 +62,7 @@ class UserRewards extends MyAppModel
 
         $srch = static::getSearchObject();
         $srch->addCondition('urp.urp_id', '=', 'mysql_func_' . $urpId, 'AND', true);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         $result = FatApp::getDb()->fetch($rs);
@@ -98,7 +99,8 @@ class UserRewards extends MyAppModel
             $cnd->attachCondition('urp_date_expiry', '=', '0000-00-00');
             $srch->addOrder('urp_date_added', 'asc');
             $srch->addOrder('urp_date_expiry', 'asc');
-
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
 
             $unUsedRewardsPointsArr = FatApp::getDb()->fetchAll($rs);
