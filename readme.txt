@@ -829,6 +829,7 @@ Updates/Fixes :
     => 064765 - Buyer: Default image is not showing properly under product detail page.
     => 064790 - Buyer: Infinite loader is coming when the user enters invalid/past expiry month.
     => 064815 - Suggestion: To show the texts underlined which are clickable
+    => 064812 - The view log button is not visible on the affiliate commission page.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
