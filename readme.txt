@@ -836,6 +836,7 @@ Updates/Fixes :
     => 064764 - 'Zero' quantity is coming when the product is out of stock under the cart section at buyer's end
     => 064809 - Shop Details Page >> Multiple UI issues in the filters section on the shop details page. 
     => 064808 - Shop Details Page >>Multiple issues on the reviews section on the shop details page
+    => 064791 - Suggestion: To add a tooltip icon in the date field that the user can view all the orders for specific dates by clicking on that date
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

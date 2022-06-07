@@ -17,7 +17,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'orderDate':
-                $td->appendElement('plaintext', $tdAttr, '<a href="' . UrlHelper::generateUrl('SalesReport', 'index', array($row[$key])) . '">' . HtmlHelper::formatDateTime($row[$key]) . '</a>', true);
+                $td->appendElement('plaintext', $tdAttr, '<a class="link-dotted" href="' . UrlHelper::generateUrl('SalesReport', 'index', array($row[$key])) . '">' . HtmlHelper::formatDateTime($row[$key]) . '</a>', true);
                 break;
             case 'order_net_amount':
                 $amt = CommonHelper::orderProductAmount($row);
