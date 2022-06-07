@@ -1399,7 +1399,7 @@ class ProductsController extends ListingBaseController
         $shipProfileArr = [];
         $showShippingProfile = 1;
 
-        if (!$shippingObj->getShippingApiObj($userId)) {
+        if ($shippingObj->getShippingApiObj($userId)) {
             $showShippingProfile = 0;            
             if(0 >= $userId && 1 == FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0)){
                 $showShippingProfile = 1;
