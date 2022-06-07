@@ -828,6 +828,7 @@ Updates/Fixes :
     => 064795 - Buyer: 'Attach with existing' orders functionality is not working for digital files
     => 064765 - Buyer: Default image is not showing properly under product detail page.
     => 064790 - Buyer: Infinite loader is coming when the user enters invalid/past expiry month.
+    => 064815 - Suggestion: To show the texts underlined which are clickable
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
