@@ -224,6 +224,7 @@ class Badge extends MyAppModel
                 ELSE 0
             END) as canAccess',
         ]);
+        $srch->doNotCalculateRecords();
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'id', '=', $badgeId);
         $record = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         return current($record);
@@ -342,6 +343,7 @@ class Badge extends MyAppModel
         if (!empty($shopIdArr)) {
             $srch->addCondition('sstats_shop_id', 'IN', $shopIdArr);
         }
+        $srch->doNotCalculateRecords();
         $shopStats = FatApp::getDb()->fetchAll($srch->getResultSet());
         if (empty($shopStats)) {
             return [];

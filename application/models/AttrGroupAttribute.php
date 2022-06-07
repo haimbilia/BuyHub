@@ -102,6 +102,7 @@ class AttrGroupAttribute extends MyAppModel
                 $srch->addFld($fetch_attr);
             }
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $records = array();
         if ($rs) {

@@ -73,7 +73,7 @@ class Countries extends MyAppModel
                 'country_code',
             )
         );
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($rs);
     }
@@ -89,7 +89,7 @@ class Countries extends MyAppModel
                 'COALESCE(country_name, country_code) as country_name'
             )
         );
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAllAssoc($rs);
 

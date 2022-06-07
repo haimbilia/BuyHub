@@ -335,6 +335,7 @@ class ProductsController extends MyAppController
             //$availabilitySrch->addGroupBy('in_stock');
             $availabilitySrch->addHaving('in_stock', '>', 0);
             $availabilitySrch->addMultipleFields(array('if(selprod_stock > 0,1,0) as in_stock'));
+            $availabilitySrch->doNotCalculateRecords();
             $availabilityRs = $availabilitySrch->getResultSet();
             $availabilityArr = $db->fetchAll($availabilityRs, 'in_stock');
             CacheHelper::create('availabilities' . $cacheKey, serialize($availabilityArr));
@@ -1377,6 +1378,7 @@ class ProductsController extends MyAppController
                 $prodSrchObj->addKeywordSearch($keyword, false, false);
                 $prodSrchObj->addOrder('level');
                 $prodSrchObj->addGroupBy('selprod_title');
+                $prodSrchObj->doNotCalculateRecords();
                 $prodRs = $prodSrchObj->getResultSet();
                 $prodArr = FatApp::getDb()->fetchAll($prodRs);
             }
@@ -2035,7 +2037,7 @@ class ProductsController extends MyAppController
         $srch->addCondition(Product::DB_TBL_PREFIX . 'seller_id', '=', UserAuthentication::getLoggedUserId());
 
         $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as name'));
-
+        $srch->doNotCalculateRecords();
         $db = FatApp::getDb();
         $products = $db->fetchAll($srch->getResultSet());
         die(json_encode($products));

@@ -1158,6 +1158,7 @@ class DataMigration
     {
         $srchObj = Product::getSearchObject(0, false, false);
         $srchObj->addCondition('product_identifier', "LIKE", $identifier . '%');
+        $srchObj->doNotCalculateRecords();
         $rs = $srchObj->getResultSet();
         $identifiers = FatApp::getDb()->fetchAllAssoc($rs);
 

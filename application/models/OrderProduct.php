@@ -128,8 +128,8 @@ class OrderProduct extends MyAppModel
         $srch->addCondition('o.order_user_id', '=', $userId);
         $srch->addCondition('spr.spreview_id', 'is', 'mysql_func_null', 'and', true);
         $srch->addMultipleFields(array('op_id', 'op_selprod_id', 'op_order_id', 'selprod_title', 'selprod_product_id', 'order_id', 'order_number', 'order_user_id', 'op_qty', 'op_unit_price', 'op_selprod_options'));
-        $rows = FatApp::getDb()->fetchAll($srch->getResultSet());
-        return $rows;
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     /**
@@ -244,9 +244,8 @@ class OrderProduct extends MyAppModel
                 }
             }
         }
-
-        $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetchAll($rs);
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     public function getSpecifics()

@@ -58,12 +58,14 @@ class BlogController extends MyAppController
         $srch = $this->getBlogSearchObject();
         $srch->addOrder('post_added_on', 'desc');
         $srch->setPageSize(11);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
         $featuredSrch = $this->getBlogSearchObject();
         $featuredSrch->addCondition('post_featured', '=', applicationConstants::YES);
         $featuredSrch->setPageSize(6);
+        $featuredSrch->doNotCalculateRecords();
         $featuredSrch->addOrder('post_added_on', 'desc');
         $featuredRs = $featuredSrch->getResultSet();
         $featuredRecords = FatApp::getDb()->fetchAll($featuredRs);
@@ -71,6 +73,7 @@ class BlogController extends MyAppController
         $popularSrch = $this->getBlogSearchObject(false);
         $popularSrch->addOrder('post_view_count', 'DESC');
         $popularSrch->addOrder('post_published', 'DESC');
+        $popularSrch->doNotCalculateRecords();
         $popularSrch->setPageSize(6);
         $popularRs = $popularSrch->getResultSet();
         $popularRecords = FatApp::getDb()->fetchAll($popularRs);
@@ -106,6 +109,7 @@ class BlogController extends MyAppController
         $srch->addCondition('post_published', '=', applicationConstants::YES);
         $srch->addOrder('post_added_on', 'desc');
         $srch->setPageSize(5);
+        $srch->doNotCalculateRecords();
         $srch->addGroupby('post_id');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
@@ -132,12 +136,14 @@ class BlogController extends MyAppController
         $featuredSrch->addCondition('post_featured', '=', applicationConstants::YES);
         $featuredSrch->addOrder('post_added_on', 'desc');
         $featuredSrch->setPageSize(4);
+        $featuredSrch->doNotCalculateRecords();
         $featuredRs = $featuredSrch->getResultSet();
         $featuredRecords = FatApp::getDb()->fetchAll($featuredRs);
 
         $popularSrch = $this->getBlogSearchObject();
         $popularSrch->addOrder('post_view_count', 'DESC');
         $popularSrch->setPageSize(4);
+        $popularSrch->doNotCalculateRecords();
         $popularRs = $popularSrch->getResultSet();
         $popularRecords = FatApp::getDb()->fetchAll($popularRs);
 
@@ -177,6 +183,7 @@ class BlogController extends MyAppController
             $srch->addGroupby('post_id');
             $srch->addOrder('keyword_relevancy', 'DESC');
             $srch->setPageSize(10);
+            $srch->doNotCalculateRecords();
             $blogs = FatApp::getDb()->fetchAll($srch->getResultSet());
         }
         $this->set('blogs', $blogs);
@@ -326,12 +333,14 @@ class BlogController extends MyAppController
         $featuredSrch->addCondition('post_featured', '=', applicationConstants::YES);
         $featuredSrch->addOrder('post_added_on', 'desc');
         $featuredSrch->setPageSize(4);
+        $featuredSrch->doNotCalculateRecords();
         $featuredRs = $featuredSrch->getResultSet();
         $featuredRecords = FatApp::getDb()->fetchAll($featuredRs);
 
         $popularSrch = $this->getBlogSearchObject();
         $popularSrch->addOrder('post_view_count', 'DESC');
         $popularSrch->setPageSize(4);
+        $popularSrch->doNotCalculateRecords();
         $popularRs = $popularSrch->getResultSet();
         $popularRecords = FatApp::getDb()->fetchAll($popularRs);
 

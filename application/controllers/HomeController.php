@@ -423,6 +423,7 @@ class HomeController extends MyAppController
     {
         $defaultCurrencyId = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
         $cObj = Currency::getSearchObject($this->siteLangId, true);
+        $cObj->doNotCalculateRecords();
         $cObj->addMultipleFields(
             array(
                 'currency_id',

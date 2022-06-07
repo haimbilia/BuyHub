@@ -487,6 +487,7 @@ class SupplierController extends MyAppController
             $contentPageSrch = ContentPage::getSearchObject($this->siteLangId);
             $contentPageSrch->addCondition('cpage_id', 'in', $cmsPagesToFaq);
             $contentPageSrch->addMultipleFields(array('cpage_id', 'cpage_identifier', 'cpage_title'));
+            $contentPageSrch->doNotCalculateRecords();
             $rs = $contentPageSrch->getResultSet();
             $cpages = FatApp::getDb()->fetchAll($rs);
             $this->set('cpages', $cpages);
