@@ -55,14 +55,17 @@
                         <div class="mt-4">
                             <div class="h6"><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?>:</div>
                             <div class="list list--specification">
-                                <ul class="list-stats">
+                                <ul class="list-stats list-stats-double">
                                     <?php $count = 1;
                                     foreach ($productSpecifications as $key => $specification) {
                                         if ($count > 5) {
                                             continue;
                                         } ?>
                                         <li class="list-stats-item">
-                                            <?php echo '<span>' . $specification['prodspec_name'] . " :</span> " . $specification['prodspec_value']; ?></li>
+                                            <span class="lable"><?php echo $specification['prodspec_name']; ?>:</span>
+                                            <span class="value"><?php echo $specification['prodspec_value']; ?></span>
+                                        </li>
+                           
                                     <?php $count++;
                                     } ?>
                                 </ul>
