@@ -77,6 +77,10 @@ class UrlRewritingController extends ListingBaseController
             $condition->attachCondition('ur.urlrewrite_custom', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
+        if (!empty($post['url_type'])) {
+            $srch->addCondition('ur.urlrewrite_original', 'like', $post['url_type'] . '%');
+        }
+
         if ($lang_id > 0) {
             $srch->addCondition('ur.urlrewrite_lang_id', '=', 'mysql_func_' . $lang_id, 'AND', true);
         }
@@ -261,6 +265,8 @@ class UrlRewritingController extends ListingBaseController
             $lang_id = array_key_first($langArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
+        $frm->addSelectBox(Labels::getLabel('FRM_URL_TYPE', $this->siteLangId), 'url_type', UrlRewrite::getTypeArray($this->siteLangId), '', [], Labels::getLabel('LBL_SELECT_URL_TYPE', $this->siteLangId));
+
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
