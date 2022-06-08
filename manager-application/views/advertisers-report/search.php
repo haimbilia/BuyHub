@@ -32,6 +32,10 @@ foreach ($arrListing as $sn => $row) {
                 $url = UrlHelper::generateFullUrl('Home', 'referral', [$row['user_referral_code']], CONF_WEBROOT_FRONTEND);
                 $td->appendElement('plaintext', $tdAttr, '<a href="' . $url . '" target="_blank">' . $url, '</a>', true);
                 break;
+            case 'user_is_supplier':
+                $val = applicationConstants::YES == $row[$key] ? Labels::getLabel('LBL_YES') : Labels::getLabel('LBL_NO');
+                $td->appendElement('plaintext', $tdAttr, $val, true);
+                break;
             case 'availableBalance':
             case 'totAffilateRevenue':
             case 'totAffilateSignupRevenue':

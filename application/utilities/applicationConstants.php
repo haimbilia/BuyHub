@@ -171,8 +171,8 @@ class applicationConstants
         }
 
         return array(
-            static::YES => Labels::getLabel('LBL_Yes', $langId),
-            static::NO => Labels::getLabel('LBL_No', $langId)
+            static::YES => Labels::getLabel('LBL_YES', $langId),
+            static::NO => Labels::getLabel('LBL_NO', $langId)
         );
     }
 
