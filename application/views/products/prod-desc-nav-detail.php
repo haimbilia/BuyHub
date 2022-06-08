@@ -7,9 +7,15 @@
             <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type'] && (0 < count($product['preview_attachments']) || 0 < count($product['preview_links']))) { ?>
                 <?php $this->includeTemplate('_partial/product/dd-preview-list.php', array('siteLangId' => $siteLangId, 'product' => $product), false); ?>
             <?php } ?>
-            <?php if (count($productSpecifications) > 0) { ?>
+            <?php
+            if (count($productSpecifications) > 0) {
+                $prodSpeciByGroup = array();
+                foreach ($productSpecifications as $productSpecification) {
+                    $prodSpeciByGroup[$productSpecification['prodspec_group']][] = $productSpecification;
+                }
+            ?>
                 <div class="descriptions-item">
-                    <h2 class="descriptions-head" data-bs-toggle="collapse" data-bs-target="#specification" aria-expanded="true" ><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?>
+                    <h2 class="descriptions-head" data-bs-toggle="collapse" data-bs-target="#specification" aria-expanded="true"><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?>
                         <svg class="svg plus" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
@@ -17,16 +23,18 @@
                     </h2>
                     <div id="specification" class="collapse show" data-bs-parent="#accordionExample">
                         <div class="descriptions-data">
-                            <ul class="list-specification">
-                                <?php foreach ($productSpecifications as $key => $specification) { ?>
-                                    <li class="list-specification-item">
-                                        <span class="label"><?php echo $specification['prodspec_name'] . ":"; ?></span>
-                                        <span class="value"><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
-                                        </span>
-                                    </li>
-
-                                <?php } ?>
-                            </ul>
+                            <?php foreach ($prodSpeciByGroup as $key => $speciGroup) { ?>
+                                <h6><?php echo ucfirst($key); ?></h6>
+                                <ul class="list-specification">
+                                    <?php foreach ($speciGroup as $key => $specification) { ?>
+                                        <li class="list-specification-item">
+                                            <span class="label"><?php echo $specification['prodspec_name'] . ":"; ?></span>
+                                            <span class="value"><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
+                                            </span>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
