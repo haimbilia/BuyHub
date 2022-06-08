@@ -81,7 +81,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             <ul>
                                                 <li>
                                                     <span class="total"><?php echo Labels::getLabel('LBL_Total_Promotions', $siteLangId); ?></span>
-                                                    <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($totPromotions); ?></span>
+                                                    <span class="total-numbers"><?php echo $totPromotions; ?></span>
                                                 </li>
                                                 <li>
                                                     <span class="total"><?php echo Labels::getLabel('LBL_Total_Expense', $siteLangId); ?></span>
