@@ -57,7 +57,7 @@ class PluginSettingController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($this->frmObj->getValidationErrors()), true);
         }
-        
+        $post = array_map('trim', $post);        
         $pluginSetting = new PluginSetting($post["plugin_id"]);
         if (!$pluginSetting->save($post)) {
             LibHelper::exitWithError($pluginSetting->getError(), true);

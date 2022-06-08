@@ -30,8 +30,6 @@
                 case 'optionvalue_identifier':
                     if ($row['optionvalue_name'] != '') {
                         $td->appendElement('plaintext', array(), $row['optionvalue_name'], true);
-                        $td->appendElement('br', array());
-                        $td->appendElement('plaintext', array(), '(' . $row[$key] . ')', true);
                     } else {
                         $td->appendElement('plaintext', array(), $row[$key], true);
                     }

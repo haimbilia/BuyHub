@@ -190,7 +190,7 @@ class DiscountCouponsController extends ListingBaseController
         $startDate = FatApp::getPostedData('coupon_start_date', FatUtility::VAR_STRING);
         $endDate = FatApp::getPostedData('coupon_end_date', FatUtility::VAR_STRING);
 
-        if (!empty($endDate) && time() > strtotime($endDate)) {
+        if (!empty($endDate) && time() > strtotime($endDate . '23:59:59')) {
             LibHelper::exitWithError(Labels::getLabel('LBL_COUPON_EXPIRED!!_DATE_TO_MUST_BE_GREATER_THAN_CURRENT_DATE.'), true);
         }
 

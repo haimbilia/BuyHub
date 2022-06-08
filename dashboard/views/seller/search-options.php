@@ -45,26 +45,11 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
             case 'option_identifier':
-                $optionName = (!empty($row['option_name'])) ? $row['option_name'] : $row['option_identifier'];
-                $html = '<div class="product-profile">
-				<div class="product-profile__description">
-					<div class="product-profile__title">' . $optionName . '</div>
-					<div class="product-profile__brand"> (' . $row[$key] . ') </div>
-				</div></div>';
-                $td->appendElement('plaintext', array(), $html, true);
+                $optionName = (!empty($row['option_name'])) ? $row['option_name'] : $row['option_identifier'];;
+                $td->appendElement('plaintext', array(), $optionName, true);
                 break;
             case 'action':
                 $ul = $td->appendElement("ul", array("class" => "actions"));
-                /* if(!in_array($row['option_type'],$ignoreOptionValues)){
-                    $li = $ul->appendElement("li");
-                    $li->appendElement('a',array(
-                    'href'=>UrlHelper::generateUrl('OptionValues',
-                    'index',array($row['option_id'])),
-                    'class'=>'button small green',
-                    'title'=>'Option Values'
-                    ),
-                    '<i class="ion-navicon-round icon"></i>', true);
-                } */
                 $li = $ul->appendElement("li");
                 $li->appendElement(
                     'a',
@@ -74,12 +59,12 @@ foreach ($arrListing as $sn => $row) {
                         "onclick" => "optionForm(" . $row['option_id'] . ")"
                     ),
                     '<i class="icn">
-                    <svg class="svg" width="18" height="18">
-                        <use
-                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
-                        </use>
-                    </svg>
-                </i>',
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                            </use>
+                        </svg>
+                    </i>',
                     true
                 );
                 $li = $ul->appendElement("li");
