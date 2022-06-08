@@ -446,7 +446,9 @@ $(function () {
 
     $(document).ajaxComplete(function () {
         setTimeout((function () {
-            $('[data-bs-toggle="popover"]').popover();
+            if ('undefined' != typeof $.fn.popover) {
+                $('[data-bs-toggle="popover"]').popover();
+            }
         }), 500);
 
         /* Bind bootstrap tooltip with ajax elements. */
