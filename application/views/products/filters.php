@@ -39,8 +39,7 @@ if (isset($prodcat_code)) {
                 <?php echo Labels::getLabel('LBL_Clear_All', $siteLangId); ?>
             </button>
         </div>
-        <div class="selected-filters" id="filters">
-        </div>
+        <div class="selected-filters selectedFiltersJs"></div>
     </div>
     <?php if (isset($categoriesArr) && $categoriesArr) { ?>
         <div class="sidebar-widget">
@@ -148,7 +147,6 @@ if (isset($prodcat_code)) {
 
 
     <?php if (isset($priceArr) && $priceArr && $priceArr['minPrice'] != $priceArr['maxPrice']) { ?>
-
         <div class="sidebar-widget">
             <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#price" aria-expanded="true">
                 <?php echo Labels::getLabel('LBL_Price', $siteLangId) . ' (' . (CommonHelper::getCurrencySymbolRight() ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft()) . ')'; ?>
@@ -156,7 +154,7 @@ if (isset($prodcat_code)) {
             <div class="sidebar-widget_body collapse show" id="price">
                 <div class="filter-content toggle-target">
                     <div class="prices" id="perform_price">
-                        <div id="rangeSlider"></div>
+                        <div class="rangeSlider"></div>
                     </div>
                     <div class="clear"></div>
                     <div class="slide__fields">
@@ -338,9 +336,7 @@ if (isset($prodcat_code)) {
                         $("document").ready(function() {
                             var min = 0;
                             var max = 0;
-                            <?php
-                            if (isset($priceArr) && $priceArr) {
-                            ?>
+                            <?php if (isset($priceArr) && $priceArr) { ?>
                                 var $from = $('input[name="priceFilterMinValue"]');
                                 var $to = $('input[name="priceFilterMaxValue"]');
                                 var range,
@@ -352,76 +348,78 @@ if (isset($prodcat_code)) {
                                 const len = 4;
                                 var step = (max - min) / (len - 1);
                                 var steps = Array(len).fill().map((_, idx) => min + (idx * step));
-                                var rangeSlider = document.getElementById('rangeSlider');
-                                noUiSlider.create(rangeSlider, {
-                                    start: [$from.val(), $to.val()],
-                                    step: Math.floor(step / len),
-                                    range: {
-                                        'min': [min],
-                                        'max': [max]
-                                    },
-                                    connect: true,
-                                    tooltips: true,
-                                    direction: '<?php echo CommonHelper::getLayoutDirection(); ?>',
-                                    pips: {
-                                        mode: 'values',
-                                        values: steps,
-                                        density: 4
-                                    }
+                                $('.rangeSlider').each(function() {
+                                    var rangeSlider = $(this).get(0);
+                                    noUiSlider.create(rangeSlider, {
+                                        start: [$from.val(), $to.val()],
+                                        step: Math.floor(step / len),
+                                        range: {
+                                            'min': [min],
+                                            'max': [max]
+                                        },
+                                        connect: true,
+                                        tooltips: true,
+                                        direction: '<?php echo CommonHelper::getLayoutDirection(); ?>',
+                                        pips: {
+                                            mode: 'values',
+                                            values: steps,
+                                            density: 4
+                                        }
+                                    });
+
+                                    rangeSlider.noUiSlider.on('change', function(values, handle) {
+                                        var value = values[handle];
+                                        /* handle return 0,1(min hanle and max handle) in RTL it return opposite */
+                                        if (handle) {
+                                            to = value;
+                                        } else {
+                                            from = value;
+                                        }
+                                        updateValues();
+                                        addPricefilter(true);
+                                    });
+
+                                    var updateRange = function() {
+                                        rangeSlider.noUiSlider.set([from, to]);
+                                        updateValues();
+                                        addPricefilter();
+                                    };
+
+                                    $from.on("change", function() {
+                                        from = $(this).prop("value");
+                                        if (!$.isNumeric(from)) {
+                                            from = 0;
+                                        }
+                                        if (from < min) {
+                                            from = min;
+                                        }
+                                        if (from >= max) {
+                                            from = (max - 1);
+                                        }
+                                        updateRange();
+                                    });
+
+                                    $to.on("change", function() {
+                                        to = $(this).prop("value");
+                                        if (!$.isNumeric(to)) {
+                                            to = 0;
+                                        }
+                                        if (to > max) {
+                                            to = max;
+                                        }
+                                        if (to < min) {
+                                            to = min;
+                                        }
+                                        updateRange();
+                                    });
+
+                                    var updateValues = function() {
+                                        $from.prop("value", from);
+                                        $to.prop("value", to);
+                                    };
                                 });
 
-                                rangeSlider.noUiSlider.on('change', function(values, handle) {
-                                    var value = values[handle];
-                                    /* handle return 0,1(min hanle and max handle) in RTL it return opposite */
-                                    if (handle) {
-                                        to = value;
-                                    } else {
-                                        from = value;
-                                    }
-                                    updateValues();
-                                    addPricefilter(true);
-                                });
-
-                                var updateRange = function() {
-                                    rangeSlider.noUiSlider.set([from, to]);
-                                    updateValues();
-                                    addPricefilter();
-                                };
-
-                                $from.on("change", function() {
-                                    from = $(this).prop("value");
-                                    if (!$.isNumeric(from)) {
-                                        from = 0;
-                                    }
-                                    if (from < min) {
-                                        from = min;
-                                    }
-                                    if (from >= max) {
-                                        from = (max - 1);
-                                    }
-                                    updateRange();
-                                });
-
-                                $to.on("change", function() {
-                                    to = $(this).prop("value");
-                                    if (!$.isNumeric(to)) {
-                                        to = 0;
-                                    }
-                                    if (to > max) {
-                                        to = max;
-                                    }
-                                    if (to < min) {
-                                        to = min;
-                                    }
-                                    updateRange();
-                                });
-
-                                var updateValues = function() {
-                                    $from.prop("value", from);
-                                    $to.prop("value", to);
-                                };
-                            <?php
-                            } ?>
+                            <?php } ?>
 
                             /* left side filters expand-collapse functionality [ */
                             $('.span--expand').bind('click', function() {

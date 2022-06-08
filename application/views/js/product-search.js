@@ -326,8 +326,8 @@ function addFilter(id, obj) {
     var click = "onclick=removeFilter('" + id + "')";
     $filter = $(obj).parent().text();
     $filterVal = htmlEncode($(obj).parent().text());
-    if (!$('#filters').find('a').hasClass(id)) {
-        $('#filters').prepend("<span class='chip'>" + $filterVal + " <a href='javascript:void(0);' data-yk='" + id + "' class='remove " + id + "' " + click + "><i class='fas fa-times'></i></a></span>");
+    if (!$('.selectedFiltersJs').find('a').hasClass(id)) {
+        $('.selectedFiltersJs').prepend("<span class='chip'>" + $filterVal + " <a href='javascript:void(0);' data-yk='" + id + "' class='remove " + id + "' " + click + "><i class='fas fa-times'></i></a></span>");
     }
     showSelectedFilters();
 }
@@ -345,7 +345,7 @@ function resetListingFilter() {
     document.frmProductSearch.reset();
     document.frmProductSearchPaging.reset();
     var frm = document.frmProductSearch;
-    $('#filters a').each(function () {
+    $('.selectedFiltersJs a').each(function () {
         id = $(this).attr('data-yk');
         clearFilters(id, this);
     });
@@ -381,7 +381,7 @@ function removePageSideFromLink() {
 }
 
 function showSelectedFilters() {
-    if (($("#filters a").length) > 0) {
+    if (($(".selectedFiltersJs a").length) > 0) {
         $('.resetFilterSectionJs, #resetAllJs,#mapFilterJs').css('display', 'block');
     } else {
         $('.resetFilterSectionJs, #resetAllJs,#mapFilterJs').css('display', 'none');
@@ -527,8 +527,8 @@ function addPricefilter(reloadPage) {
         reloadPage = false;
     }
     $('.price').parent().remove();
-    if (!$('#filters').find('a').hasClass('price')) {
-        $('#filters').prepend("<span class='chip'> " + currencySymbolLeft + $("input[name=priceFilterMinValue]").val() + currencySymbolRight + ' - ' + currencySymbolLeft + $("input[name=priceFilterMaxValue]").val() + currencySymbolRight + " <a href='javascript:void(0);' data-yk='price' class='remove price' onclick='removePriceFilter(this)'><i class='fas fa-times'></i></a></span>");
+    if (!$('.selectedFiltersJs').find('a').hasClass('price')) {
+        $('.selectedFiltersJs').prepend("<span class='chip'> " + currencySymbolLeft + $("input[name=priceFilterMinValue]").val() + currencySymbolRight + ' - ' + currencySymbolLeft + $("input[name=priceFilterMaxValue]").val() + currencySymbolRight + " <a href='javascript:void(0);' data-yk='price' class='remove price' onclick='removePriceFilter(this)'><i class='fas fa-times'></i></a></span>");
 
     }
     searchArr['price_min_range'] = $("input[name=priceFilterMinValue]").val();

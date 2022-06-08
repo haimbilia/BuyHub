@@ -4,7 +4,7 @@ function resetListingFilter() {
 	document.frmProductSearch.reset();
 	document.frmProductSearchPaging.reset();
 
-	$('#filters a').each(function(){
+	$('.selectedFiltersJs a').each(function(){
 		id = $(this).attr('data-yk');
 		clearFilters(id,this);
 	});
