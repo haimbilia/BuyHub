@@ -869,6 +869,7 @@ UAT points:
     => 064827 - Product Details Page>> Notice Undefined offset error appears on the product details page
     => 064432 - Suggestion: Admin: Disabled records should be shown greyed out
     => 064823 - The UI of the option name field is not correct on the seller options listing
+    => 064209 - iOS web: Applied filters values are not showing under filter by section
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
