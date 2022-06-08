@@ -4,8 +4,13 @@ $(function () {
     $('.navchild').hover(function () {
         var el = $("body");
         if ($(window).width() > 1025) {
-            $(this).toggleClass("is-focus");
-            el.toggleClass("nav_show");
+            if ($(this).hasClass('is-focus')) {
+                $(this).removeClass('is-focus');
+                el.removeClass('nav_show');
+            } else {
+                $(this).addClass('is-focus');
+                el.addClass('nav_show');
+            }
         }
         return false;
     });
@@ -31,9 +36,6 @@ $(function () {
 
     /* for mobile toggle navigation */
     $('.navs_toggle').click(function () {
-
-
-
         $(this).toggleClass("is-focus");
         var el = $("body");
         if (el.hasClass('toggled_left')) el.removeClass("toggled_left");
@@ -60,8 +62,4 @@ $(function () {
         e.stopPropagation();
 
     });
-
-
-
-
 });
