@@ -23,8 +23,10 @@
                     </h2>
                     <div id="specification" class="collapse show" data-bs-parent="#accordionExample">
                         <div class="descriptions-data">
-                            <?php foreach ($prodSpeciByGroup as $key => $speciGroup) { ?>
-                                <h6><?php echo ucfirst($key); ?></h6>
+                            <?php foreach ($prodSpeciByGroup as $key => $speciGroup) {                                 
+                                if(!empty($key)){ ?> 
+                                    <h6><?php echo ucfirst($key); ?></h6>
+                                <?php } ?>           
                                 <ul class="list-specification">
                                     <?php foreach ($speciGroup as $key => $specification) { ?>
                                         <li class="list-specification-item">
