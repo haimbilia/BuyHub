@@ -1875,3 +1875,4 @@ UPDATE `tbl_banner_location_dimensions` SET `blocation_banner_height` = '690' , 
 delete FROM `tbl_banner_location_dimensions` where bldimension_blocation_id = 1 and bldimension_device_type !=1;
 
 UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'test_email';
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_ENABLE_301', 1, 1) ON DUPLICATE KEY UPDATE conf_name = 'CONF_ENABLE_301', `conf_val` = 1,  `conf_common` = 1;
