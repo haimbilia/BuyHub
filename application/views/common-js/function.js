@@ -317,7 +317,9 @@ $(function () {
         }, 2500);
     });
 
-    $('[data-bs-toggle="popover"]').popover();
+    if ('undefined' != typeof $.fn.popover) {
+        $('[data-bs-toggle="popover"]').popover();
+    }
     /* Bind bootstrap tooltip with ajax elements. */
     $('[data-bs-toggle="tooltip"]').tooltip({
         trigger: 'hover'
@@ -330,7 +332,11 @@ $(function () {
 
 
 $(document).ajaxComplete(function () {
-    $('[data-bs-toggle="popover"]').popover();
+    setTimeout((function () {
+        if ('undefined' != typeof $.fn.popover) {
+            $('[data-bs-toggle="popover"]').popover();
+        }
+    }), 500);
 
     /* Bind bootstrap tooltip with ajax elements. */
     $('[data-bs-toggle="tooltip"]').tooltip({
