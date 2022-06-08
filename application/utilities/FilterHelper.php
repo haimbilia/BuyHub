@@ -286,23 +286,25 @@ class FilterHelper extends FatUtility
 
     public static function getOptions($langId, $categoryId, $prodSrchObj)
     {
+        if (false == ProductCategory::isLastChildCategory($categoryId)) {
+            return [];
+        }
+
         $options =  CacheHelper::get('options' . $categoryId . '-' . $langId, CONF_FILTER_CACHE_TIME, '.txt');
         if (!$options) {
             $options = array();
-            if ($categoryId && ProductCategory::isLastChildCategory($categoryId)) {
-                $selProdCodeSrch = clone $prodSrchObj;
-                $selProdCodeSrch->doNotLimitRecords();
-                /*Removed Group by as taking time for huge data. handled in fetch all second param*/
-                //$selProdCodeSrch->addGroupBy('selprod_code');
-                $selProdCodeSrch->addMultipleFields(array('product_id', 'selprod_code'));
-                $selProdCodeRs = $selProdCodeSrch->getResultSet();
-                $selProdCodeArr = FatApp::getDb()->fetchAll($selProdCodeRs, 'selprod_code');
+            $selProdCodeSrch = clone $prodSrchObj;
+            $selProdCodeSrch->doNotLimitRecords();
+            $selProdCodeSrch->doNotCalculateRecords();
+            /*Removed Group by as taking time for huge data. handled in fetch all second param*/
+            //$selProdCodeSrch->addGroupBy('selprod_code');
+            $selProdCodeSrch->addMultipleFields(array('product_id', 'selprod_code'));
+            $selProdCodeArr = FatApp::getDb()->fetchAll($selProdCodeSrch->getResultSet(), 'selprod_code');
 
-                if (!empty($selProdCodeArr)) {
-                    foreach ($selProdCodeArr as $val) {
-                        $optionsVal = SellerProduct::getSellerProductOptionsBySelProdCode($val['selprod_code'], $langId, true);
-                        $options = $options + $optionsVal;
-                    }
+            if (!empty($selProdCodeArr)) {
+                foreach ($selProdCodeArr as $val) {
+                    $optionsVal = SellerProduct::getSellerProductOptionsBySelProdCode($val['selprod_code'], $langId, true);
+                    $options = $options + $optionsVal;
                 }
             }
 
@@ -315,6 +317,7 @@ class FilterHelper extends FatUtility
                     return ($a['optionvalue_id'] < $b['optionvalue_id']) ? -1 : 1;
                 }
             );
+
             CacheHelper::create('options ' . $categoryId . '-' . $langId, serialize($options));
             return $options;
         }
