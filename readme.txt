@@ -864,6 +864,7 @@ UAT points:
     => 063813 - Seller: Shop Inventory >> Add product: UI is distorted.
     => 064034 - Web iOS: Admin: Comment popup is not opened when the user clicks on the 'view comment' icon under subscription order section.
     => 064828 - The admin is not able to add a coupon code for the current date
+    => 064827 - Product Details Page>> Notice Undefined offset error appears on the product details page
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
