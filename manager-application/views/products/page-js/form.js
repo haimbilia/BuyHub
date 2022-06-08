@@ -269,10 +269,10 @@
         let langId = getCurrentFrmLangId();
         fcom.ajax(fcom.makeUrl('Products', 'getShippingProfileOptions'), { userId, langId }, function (t) {
             if (t.showShippingProfile == 0) {
-                $('#shipping_profile').data('showShippingProfile', 1);
+                $('#shipping_profile').data('showShippingProfile', t.showShippingProfile);
                 $('#shipping_profile').html('').parent().parent().addClass('hide');
             } else {
-                $('#shipping_profile').data('showShippingProfile', 0);
+                $('#shipping_profile').data('showShippingProfile', t.showShippingProfile);
                 $('#shipping_profile').html('').parent().parent().removeClass('hide');
                 $.each(t.shipProfileArr, function (id, name) {
                     $('#shipping_profile').append(`<option value="${id}">

@@ -841,6 +841,7 @@ Updates/Fixes :
     => 064818 - Shop Inventory >> UI issue on the product info popup at the seller end. 
     => 064819 - The previously selected brand does not appear when the seller tries to edit any product.
     => 064826 - The product specification group added to the product is not visible on the front end.
+    => 064820 - The shipping profile does not appears on the product setup page on the admin end.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

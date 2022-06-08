@@ -1399,8 +1399,11 @@ class ProductsController extends ListingBaseController
         $shipProfileArr = [];
         $showShippingProfile = 1;
         if ($shippingObj->getShippingApiObj($userId)) {
-            $showShippingProfile = 0;            
-            if(0 >= $userId && 1 == FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0)){
+            $showShippingProfile = 0;      
+            if(1 === FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && 1 == FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0)){
+                $showShippingProfile = 1;
+            }      
+            elseif(0 >= $userId && 1 == FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0)){
                 $showShippingProfile = 1;
             }elseif(0 < $userId && 1 == Shop::getAttributesByUserId($userId,'shop_use_manual_shipping_rates')){
                 $showShippingProfile = 1;
