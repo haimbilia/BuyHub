@@ -1,7 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $badgeLbl = (Badge::TYPE_BADGE == $badgeType);
-$headingLabel = $badgeLbl ? Labels::getLabel('LBL_MANAGE_BADGES', $siteLangId) : Labels::getLabel('LBL_MANAGE_RIBBONS', $siteLangId);
+$instrunctionType = (Badge::TYPE_BADGE == $badgeType) ? Extrapage::SELLER_BADGES_INSTRUCTIONS : Extrapage::SELLER_RIBBONS_INSTRUCTIONS;
+
+$headingLabel = ($badgeLbl ? Labels::getLabel('LBL_MANAGE_BADGES', $siteLangId) : Labels::getLabel('LBL_MANAGE_RIBBONS', $siteLangId)) . '<i class="fa fa-question-circle" onclick="badgesInstructions(' .  $instrunctionType . ')"></i>';
 $listingLabel = $badgeLbl ? Labels::getLabel('LBL_BADGES_LIST', $siteLangId) : Labels::getLabel('LBL_RIBBONS_LIST', $siteLangId);
 
 if (!empty($frmSearch)) {

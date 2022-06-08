@@ -175,4 +175,20 @@ class BadgesController extends SellerBaseController
         $this->nodes[] = array('title' => $title);
         return $this->nodes;
     }
+
+    public function badgesInstructions(int $instrunctionType)
+    {
+        $pageData = '';
+        $obj = new Extrapage();
+        switch ($instrunctionType) {
+            case Extrapage::SELLER_BADGES_INSTRUCTIONS:
+                $pageData = $obj->getContentByPageType(Extrapage::SELLER_BADGES_INSTRUCTIONS, $this->siteLangId);
+                break;
+            case Extrapage::SELLER_RIBBONS_INSTRUCTIONS:
+                $pageData = $obj->getContentByPageType(Extrapage::SELLER_RIBBONS_INSTRUCTIONS, $this->siteLangId);
+                break;
+        }
+        $this->set('pageData', $pageData);
+        $this->_template->render(false, false, NULL, false, false);
+    }
 }

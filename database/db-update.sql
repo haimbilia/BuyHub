@@ -1875,3 +1875,11 @@ UPDATE `tbl_banner_location_dimensions` SET `blocation_banner_height` = '690' , 
 delete FROM `tbl_banner_location_dimensions` where bldimension_blocation_id = 1 and bldimension_device_type !=1;
 
 UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'test_email';
+
+INSERT IGNORE INTO `tbl_extra_pages` (`epage_id`, `epage_identifier`, `epage_type`, `epage_content_for`, `epage_active`, `epage_default`, `epage_default_content`) VALUES 
+(NULL, 'Seller Badges Instructions', '47', '0', '1', '0', '<div class="alert alert-info" role="alert"><div class="alert-text">Badges can be added by admin only.</div></div>'),
+(NULL, 'Seller Ribbons Instructions', '48', '0', '1', '0', '<div class="alert alert-info" role="alert"><div class="alert-text">Ribbons can be added by admin only.</div></div>');
+
+INSERT IGNORE INTO `tbl_extra_pages_lang` (`epagelang_epage_id`, `epagelang_lang_id`, `epage_label`, `epage_content`) VALUES 
+((select epage_id from tbl_extra_pages where epage_type='47'), '1', 'Seller Badges Instructions', '<div class="alert alert-info" role="alert"><div class="alert-text">Badges can be added by admin only.</div></div>'),
+((select epage_id from tbl_extra_pages where epage_type='48'), '1', 'Seller Ribbons Instructions', '<div class="alert alert-info" role="alert"><div class="alert-text">Ribbons can be added by admin only.</div></div>');

@@ -44,6 +44,8 @@ class Extrapage extends MyAppModel
     public const ADMIN_TYPE_POLICY_POINTS = 44;
     public const ADMIN_ZONE_MANAGEMENT_INSTRUCTIONS = 45;
     public const FOOTER_META_CONTENT = 46;
+    public const SELLER_BADGES_INSTRUCTIONS = 47;
+    public const SELLER_RIBBONS_INSTRUCTIONS = 48;
 
     public const CONTENT_PAGES = 0;
     public const CONTENT_IMPORT_INSTRUCTION = 1;
