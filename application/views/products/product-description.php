@@ -205,7 +205,8 @@
                     <li class="list-addons-item addon--js <?php echo $cancelClass; ?> <?php echo ($usproduct['selprod_stock'] <= 0) ? 'out-of-stock' : ''; ?>" >
                         <div class="product-profile">
                             <figure class="product-profile__pic">
-                                <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], ImageDimension::VIEW_MINI, $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI); ?>>
+                                <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>">
+                                    <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], ImageDimension::VIEW_MINI, $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI); ?>>
                                 </a>
                             </figure>
                             <div class="product-profile-data">
@@ -221,7 +222,8 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
                                                 </use>
                                             </svg>
-                                        </i></span>
+                                        </i>
+                                    </span>
                                     <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
                                         <input type="text" value="<?php echo $usproduct['selprod_min_order_qty']; ?>" data-min-qty="<?php echo $usproduct['selprod_min_order_qty']; ?>" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
                                     </div>

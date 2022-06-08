@@ -1,17 +1,22 @@
 <?php if (isset($shop)) { ?>
     <div class="shop-information">
         <div class="shop-information-start">
-            <div class="shop-information-logo">                
-                <img src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $shop['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB);?>>
+            <div class="shop-information-logo">
+                <img src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $shop['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB); ?>>
             </div>
             <div class="shop-information-detail">
                 <h6 class="title">
                     <?php echo $shop['shop_name']; ?>
+                    <?php
+                    $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
+                    $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+                    ?>
                     <span class="blk-txt">
                         <?php echo Labels::getLabel('LBL_Shop_Opened_On', $siteLangId); ?> <strong>
                             <?php $date = new DateTime($shop['user_regdate']);
                             echo $date->format('M d, Y'); ?>
-                        </strong></span>
+                        </strong>
+                    </span>
                 </h6>
                 <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
                     <div class="product-ratings">
@@ -26,11 +31,6 @@
                         </span>
                     </div>
                 <?php } ?>
-
-                <?php
-                $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
-                $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
-                ?>
             </div>
         </div>
 
@@ -81,8 +81,8 @@
                                 </svg> </a>
                         </li>
                     <?php } ?>
-                <?php }
-                
+                    <?php }
+
                 if ($socialPlatforms) {
                     foreach ($socialPlatforms as $row) { ?>
                         <li class="contact-social-item">
@@ -92,7 +92,7 @@
                                 </svg>
                             </a>
                         </li>
-                    <?php }
+                <?php }
                 } ?>
             </ul>
         </div>

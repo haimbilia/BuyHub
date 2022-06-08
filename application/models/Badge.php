@@ -255,9 +255,7 @@ class Badge extends MyAppModel
         $srch->addHaving('selprod_id', 'is NOT', 'mysql_func_NULL', 'AND', true);
         $srch->addOrder('blinkcond_id');
         $srch->addCondition('blnk.blinkcond_position', '=', $position);
-
-        $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetchAll($rs, 'selprod_id');
+        return FatApp::getDb()->fetchAll($srch->getResultSet(), 'selprod_id');
     }
 
     public static function getSelprodBadges(int $langId, array $selprodIdArr = [])
@@ -282,8 +280,7 @@ class Badge extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'bdg.badge_display_inside', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'breq.breq_id', 'COALESCE(sp.selprod_id,prod.product_selprod_id) as selprod_id']);
         $srch->addHaving('selprod_id', 'is NOT', 'mysql_func_NULL', 'AND', true);
-        $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetchAll($rs, 'blinkcond_badge_id');
+        return FatApp::getDb()->fetchAll($srch->getResultSet(), 'blinkcond_badge_id');
     }
 
     /**
@@ -297,7 +294,7 @@ class Badge extends MyAppModel
     {
         $manualBadges = self::getManualShopBadges($langId, $shopIdArr);
         $autoBadges = self::getAutoShopBadges($langId, $shopIdArr);
-        return array_merge($manualBadges, $autoBadges);
+        return $manualBadges + $autoBadges;
     }
 
     /**
@@ -327,7 +324,7 @@ class Badge extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'bdg.badge_display_inside', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'breq.breq_id', 'shpprod.shop_id']);
 
-        return FatApp::getDb()->fetchAll($srch->getResultSet());
+        return FatApp::getDb()->fetchAll($srch->getResultSet(), 'blinkcond_badge_id');
     }
 
     /**
@@ -403,7 +400,7 @@ class Badge extends MyAppModel
                 $srch->addGroupBy('blinkcond_badge_id');
             }
 
-            $shopAutoBadges = array_merge($shopAutoBadges, FatApp::getDb()->fetchAll($srch->getResultSet()));
+            $shopAutoBadges += FatApp::getDb()->fetchAll($srch->getResultSet(), 'blinkcond_badge_id');
         }
         return $shopAutoBadges;
     }
