@@ -146,7 +146,7 @@ if (isset($prodcat_code)) {
     <?php } ?>
 
 
-    <?php if (isset($priceArr) && $priceArr && $priceArr['minPrice'] != $priceArr['maxPrice']) { ?>
+    <?php if (isset($priceArr) && $priceArr) { ?>
         <div class="sidebar-widget">
             <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#price" aria-expanded="true">
                 <?php echo Labels::getLabel('LBL_Price', $siteLangId) . ' (' . (CommonHelper::getCurrencySymbolRight() ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft()) . ')'; ?>
