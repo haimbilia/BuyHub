@@ -95,14 +95,15 @@
                                                                         }
                                                                     }
 
-                                                                    if ($subyChild++ == 3) {
-                                                                        break;
-                                                                    } ?>
+                                                                    ?>
                                                                 </ul>
 
                                                             </div>
 
                                                         <?php
+                                                            if ($subyChild++ == 3) {
+                                                                break;
+                                                            }
                                                         } ?>
 
 
@@ -121,7 +122,7 @@
                                         </div>
                                     <?php } ?>
                                 </li>
-                        <?php }
+                <?php }
                         }
                     }
                 } ?>

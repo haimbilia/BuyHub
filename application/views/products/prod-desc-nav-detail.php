@@ -23,20 +23,26 @@
                     </h2>
                     <div id="specification" class="collapse show" data-bs-parent="#accordionExample">
                         <div class="descriptions-data">
-                            <?php foreach ($prodSpeciByGroup as $key => $speciGroup) {                                 
-                                if(!empty($key)){ ?> 
-                                    <h6><?php echo ucfirst($key); ?></h6>
-                                <?php } ?>           
-                                <ul class="list-specification">
-                                    <?php foreach ($speciGroup as $key => $specification) { ?>
-                                        <li class="list-specification-item">
-                                            <span class="label"><?php echo $specification['prodspec_name'] . ":"; ?></span>
-                                            <span class="value"><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
-                                            </span>
-                                        </li>
+                            <?php foreach ($prodSpeciByGroup as $key => $speciGroup) {
+                                if (!empty($key)) { ?>
+                                    <hgroup class="specification-group">
+                                        <h6><?php echo ucfirst($key); ?></h6>
                                     <?php } ?>
-                                </ul>
-                            <?php } ?>
+                                    <ul class="list-specification">
+                                        <?php foreach ($speciGroup as $specification) { ?>
+                                            <li class="list-specification-item">
+                                                <span class="label"><?php echo $specification['prodspec_name'] . ":"; ?></span>
+                                                <span class="value"><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
+                                                </span>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                    <?php
+                                    if (!empty($key)) { ?>
+                                    </hgroup>
+                            <?php  }
+                                }
+                            ?>
                         </div>
                     </div>
                 </div>

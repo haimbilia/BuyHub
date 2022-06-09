@@ -25,7 +25,6 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                 }
                 $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>
                 <div class="item productsListItemsJs" data-shopId="<?php echo $product['shop_id']; ?>">
-                    <!--product tile-->
                     <div class="products">
                         <div class="products-body">
                             <?php if ($product['in_stock'] == 0) { ?>

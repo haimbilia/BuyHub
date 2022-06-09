@@ -25,11 +25,11 @@ if ($top_header_navigation && count($top_header_navigation)) {
                 </li>
             <?php }
             if (!empty($hiddenNavs)) { ?>
-                <li class="nav-blog-item">
-                    <a class="nav-blog-link nav-nav-more" data-bs-toggle="collapse" href="#nav-more" role="button" aria-expanded="false" aria-controls="nav-more">
+                <li class="quick-nav-item item-desktop">
+                    <a class="quick-nav-link quick-nav-more" data-bs-toggle="collapse" href="#nav-more" role="button" aria-expanded="false" aria-controls="nav-more">
                         <?php echo Labels::getLabel('LBL_MORE'); ?>
                     </a>
-                    <div class="collapse nav-more" id="nav-more">
+                    <div class="nav-more collapse" id="nav-more">
                         <div class="container">
                             <ul>
                                 <?php
@@ -45,7 +45,7 @@ if ($top_header_navigation && count($top_header_navigation)) {
                         </div>
                     </div>
                 </li>
-        <?php }
+<?php }
         }
     }
 } ?>

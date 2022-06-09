@@ -1887,6 +1887,7 @@ trait SellerProducts
         $srch->joinTable(UrlRewrite::DB_TBL, 'LEFT OUTER JOIN', 'temp.urlrewrite_original = ur.urlrewrite_original', 'temp');
         $srch->addCondition('ur.urlrewrite_original', '=', $originalUrl);
         $srch->addMultipleFields(array('temp.*'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs, 'urlrewrite_lang_id');
 
@@ -2534,6 +2535,7 @@ trait SellerProducts
         $srch->joinTable('tbl_seller_product_policies', 'left outer join', 'spp.sppolicy_ppoint_id = pp.ppoint_id and spp.sppolicy_selprod_id=' . $post['selprod_id'], 'spp');
         $srch->addMultipleFields(array('*', 'ifnull(sppolicy_selprod_id,0) selProdId'));
         $srch->addCondition('sppolicy_selprod_id', '=', $post['selprod_id']);
+        $srch->doNotCalculateRecords();
         $policies = FatApp::getDb()->fetchAll($srch->getResultSet(), 'ppoint_id');
         foreach ($policies as $linkData) {
             $dataToSave = array('sppolicy_selprod_id' => $selprod_id, 'sppolicy_ppoint_id' => $linkData['sppolicy_ppoint_id']);
@@ -2805,6 +2807,7 @@ trait SellerProducts
         $srch->addCondition('selprod_user_id', '=', 'mysql_func_' . $this->userParentId, 'AND', true);
         $srch->addCondition(SellerProduct::DB_TBL_RELATED_PRODUCTS_PREFIX . 'sellerproduct_id', '=', $selprod_id);
         $srch->addOrder('selprod_id', 'DESC');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $relatedProds = FatApp::getDb()->fetchAll($rs);
         $json = array(
@@ -2812,9 +2815,6 @@ trait SellerProducts
             'relatedProducts' => $relatedProds
         );
         FatUtility::dieJsonSuccess($json);
-        /* $this->set('relatedProducts', $relatedProds);
-          $this->set('selprod_id', $selprod_id);
-          $this->_template->render(false, false, 'json-success.php'); */
     }
 
     private function getRelatedProductsForm()
@@ -3008,6 +3008,7 @@ trait SellerProducts
         $srch->addGroupBy('selprod_id');
         $srch->addGroupBy('upsell_sellerproduct_id');
         $srch->addOrder('selprod_id', 'DESC');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $upsellProds = FatApp::getDb()->fetchAll($rs);
         $json = array(
@@ -3272,7 +3273,7 @@ trait SellerProducts
         }
 
         $srch->setPageSize($pagesize);
-
+        $srch->doNotCalculateRecords();
         $srch->addMultipleFields([
             Badge::DB_TBL_PREFIX . 'id as id',
             'COALESCE(badge_name, badge_identifier) as name',

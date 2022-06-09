@@ -226,6 +226,7 @@ $sharing-height: 50px;
 .delivery-options {
     ul {
         padding: 1rem 1.5rem;
+        padding-top: 0;
         li {
             padding: 4px 0;
             color: $txt-gray;
@@ -344,6 +345,15 @@ $sharing-height: 50px;
     }
     &-data {
         padding: 2rem 0;
+    }
+}
+.specification-group {
+    margin: 21.5rem;
+    h6 {
+        text-decoration: underline;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        font-weight: 600;
     }
 }
 

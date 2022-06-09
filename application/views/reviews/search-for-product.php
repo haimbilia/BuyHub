@@ -38,15 +38,14 @@ if ($reviewsList) { ?>
                         }
                     ?>
                         <li class="rated-by-item">
-                            <span class="rated-by-label"><?php echo $rating['ratingtype_name']; ?></span>
                             <div class="product-ratings">
                                 <svg class="svg" width="10" height="10">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                                     </use>
                                 </svg>
+                                <span class="rate"><?php echo $rating['sprating_rating']; ?>/5</span>
+                            </div> <span class="rated-by-label"><?php echo $rating['ratingtype_name']; ?></span>
 
-                                <span class="rate"><?php echo $rating['sprating_rating']; ?> /5</span>
-                            </div>
                         </li>
                     <?php } ?>
                 </ul>
@@ -71,10 +70,11 @@ if ($reviewsList) { ?>
                     <div class="reviews-by"><?php echo CommonHelper::displayName($review['user_name']); ?> | <span class="dated"><?php echo FatDate::format($review['spreview_posted_on']); ?></span>
                     </div>
                     <ul class="yes-no">
-                        <!-- <li class="yes-no-item"><?php // Labels::getLabel('LBL_WAS_THIS_REVIEW_HELPFUL?', $siteLangId); ?></li> -->
+                        <!-- <li class="yes-no-item"><?php // Labels::getLabel('LBL_WAS_THIS_REVIEW_HELPFUL?', $siteLangId); 
+                                                        ?></li> -->
                         <li class="yes-no-item">
-                            <button class="btn btn-thumb" type="button" title="<?php echo Labels::getLabel('LBL_LIKE', $siteLangId); ?>" onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>,1)">
-                            <svg class="svg" width="24" height="24">
+                            <button class="btn btn-thumb btn-icon" type="button" title="<?php echo Labels::getLabel('LBL_LIKE', $siteLangId); ?>" onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>,1)">
+                                <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#like">
                                     </use>
                                 </svg>
@@ -82,8 +82,8 @@ if ($reviewsList) { ?>
                             </button>
                         </li>
                         <li class="yes-no-item">
-                            <button class="btn btn-thumb" type="button" title="<?php echo Labels::getLabel('LBL_DISLIKE', $siteLangId); ?>" onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>, 0)">
-                                <svg class="svg" width="24" height="24">
+                            <button class="btn btn-thumb btn-icon" type="button" title="<?php echo Labels::getLabel('LBL_DISLIKE', $siteLangId); ?>" onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>, 0)">
+                                <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#dislike">
                                     </use>
                                 </svg>
@@ -92,7 +92,7 @@ if ($reviewsList) { ?>
                         </li>
                         <?php if (1 > $reviewId) { ?>
                             <li class="yes-no-item">
-                                <a class="btn btn-light" href="<?php echo UrlHelper::generateUrl('Reviews', 'productPermalink', array($review['spreview_selprod_id'], $review['spreview_id'])) ?>">
+                                <a class="btn btn-light btn-underline" href="<?php echo UrlHelper::generateUrl('Reviews', 'productPermalink', array($review['spreview_selprod_id'], $review['spreview_id'])) ?>">
                                     <?php echo Labels::getLabel('LBL_PERMALINK', $siteLangId); ?>
                                 </a>
                             </li>
