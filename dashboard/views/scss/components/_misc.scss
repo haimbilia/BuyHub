@@ -245,14 +245,20 @@ mark,
         height: 30px;
         border-radius: 50%;
         position: absolute;
-        bottom: 0;
-        #{$end-direction}: 0;
+        top: 50%;
+        margin-top: -15px;
         background-color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 5px;
-        box-shadow: $shadow1;
+        box-shadow: $shadow4;
+    }
+    .btn-edit {
+        #{$end-direction}: -40px;
+    }
+    .btn-delete {
+        #{$end-direction}: -80px;
     }
 }
 
