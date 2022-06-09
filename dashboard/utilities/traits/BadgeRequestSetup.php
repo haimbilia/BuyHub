@@ -112,6 +112,14 @@ trait BadgeRequestSetup
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
+
+        if (isset($_FILES['breq_file']['tmp_name']) && !empty($_FILES['breq_file']['tmp_name'])) {
+            $fileHandlerObj = new AttachedFile();
+            if (false === $fileHandlerObj->validateFile($_FILES['breq_file']['tmp_name'], $_FILES['breq_file']['name'], $this->siteLangId)) {
+                FatUtility::dieJsonError($fileHandlerObj->getError());
+            }
+        }
+
         $sellerId = UserAuthentication::getLoggedUserId();
 
         $badgeLinkCondId = FatApp::getPostedData('breq_blinkcond_id', FatUtility::VAR_INT, 0);

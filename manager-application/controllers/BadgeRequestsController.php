@@ -174,7 +174,6 @@ class BadgeRequestsController extends ListingBaseController
         if (1 > $breqRecordType) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_RECORD_TYPE', $this->siteLangId), true);
         }
-
         $frm = $this->getForm($breqRecordType);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
@@ -192,12 +191,17 @@ class BadgeRequestsController extends ListingBaseController
         }
 
         $badgeReqId = FatApp::getPostedData('breq_id', FatUtility::VAR_INT, 0);
+        $record = new BadgeRequest($badgeReqId);
+        $requestData = $record->getBadgeData($this->siteLangId);
+        if (empty($requestData)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_BADGE_REQUEST', $this->siteLangId), true);
+        }
 
         $post['breq_status_updated_on'] = date('Y-m-d H:i:s');
 
         $requestStatus = FatApp::getPostedData('breq_status', FatUtility::VAR_INT, BadgeRequest::REQUEST_PENDING);
 
-        $status = BadgeRequest::getRequestStatus($post['breq_blinkcond_id'], UserAuthentication::getLoggedUserId());
+        $status = $requestData['breq_status'];
         $errMsg = BadgeRequest::REQUEST_PENDING == $status ? 'PENDING' : (BadgeRequest::REQUEST_APPROVED == $status ? 'APPROVED' : 'REJECTED');
         $errMsg = Labels::getLabel('ERR_' . $errMsg, $this->siteLangId);
 
@@ -209,9 +213,7 @@ class BadgeRequestsController extends ListingBaseController
 
         unset($post['breq_message']);
 
-        $record = new BadgeRequest($badgeReqId);
         $record->assignValues($post);
-
         if (!$record->save()) {
             LibHelper::exitWithError($record->getError(), true);
         }
@@ -235,6 +237,13 @@ class BadgeRequestsController extends ListingBaseController
                 'badgelink_breq_id' => $badgeReqId
             );
             FatApp::getDb()->insertFromArray(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $linkData, false, [], $linkData);
+        }
+
+        $email = new EmailHandler();
+        if ($requestStatus != BadgeRequest::REQUEST_PENDING) {
+            if (!$email->sendBadgeRequestStatusChangeNotification($this->siteLangId, array_merge($requestData, $post))) {
+                LibHelper::exitWithError(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
+            }
         }
 
         $this->set('msg', Labels::getLabel("MSG_REQUEST_UPDATED_SUCCESSFULLY", $this->siteLangId));
@@ -272,7 +281,7 @@ class BadgeRequestsController extends ListingBaseController
 
         $frm->addDateTimeField(Labels::getLabel('FRM_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
         $frm->addDateTimeField(Labels::getLabel('FRM_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
-        
+
         $frm->addTextArea(Labels::getLabel('FRM_MESSAGE', $this->siteLangId), 'breq_message');
         $frm->addHTML('', 'request_ref', '');
         $frm->addHTML('', 'link_type', '');
