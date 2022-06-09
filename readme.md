@@ -864,6 +864,7 @@ Updates/Fixes :
     => 064838 - Suggestion: To add Yes/No text instead of the 0/1 in the 'Is seller' field on the advertiser reports listing
     => 064835 - The currency symbol appears with the total promotions count on advertiser dashboard.
     => 064863 - Double entries of discount coupon appears for the single order when payment method is COD.
+    => 064860 - UI issue on the request withdrawal popup on the affiliate end. 
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

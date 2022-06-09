@@ -23,7 +23,10 @@ $ifscFld->developerTags['col'] = 12;
 
 if (User::isAffiliate()) {
     $paymentMethodFld = $frm->getField('uextra_payment_method');
-    $paymentMethodFld->setOptionListTagAttribute('class', 'links--inline');
+    $paymentMethodFld->setOptionListTagAttribute('class', 'radio');
+    $paymentMethodFld->developerTags['rdLabelAttributes'] = ['class' => 'radio'];
+    $paymentMethodFld->setWrapperAttribute('class', 'col-lg-12');
+    $paymentMethodFld->developerTags['col'] = 12;
 
     $checkPayeeNameFld = $frm->getField('uextra_cheque_payee_name');
     $checkPayeeNameFld->setWrapperAttribute('class', 'cheque_payment_method_fld');

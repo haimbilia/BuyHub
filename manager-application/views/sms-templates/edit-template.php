@@ -27,10 +27,17 @@ $fld->setFieldTagAttribute('class', 'stplBodyJs');
 $fld->setfieldTagAttribute('maxlength', applicationConstants::SMS_CHARACTER_LENGTH);
 $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_MAXIMUM_OF_160_CHARACTERS_ALLOWED', $siteLangId) . ' </small>';
 
+$fld = $tempFrm->getField('auto_update_other_langs_data');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
+
 $fld = $tempFrm->getField('stpl_replacements');
 $repVarArr = !empty($fld->value) && LibHelper::isJson($fld->value) ? json_decode($fld->value, true) : [];
 $repVarArr = is_array($repVarArr) ? $repVarArr : [];
-if (!empty($repVarArr))  {
+if (!empty($repVarArr)) {
     $repVarHtml = '<ul class="click-to-copy">';
     foreach ($repVarArr as $val) {
         $repVarHtml .= '<li title="' . Labels::getLabel('LBL_CLICK_TO_COPY', $siteLangId) . '" onclick="copyText(this, true);" data-bs-toggle="tooltip" data-placement="top">

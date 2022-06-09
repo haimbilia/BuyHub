@@ -13,6 +13,7 @@ class BadgeRequest extends MyAppModel
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'blinkcond_id',
         self::DB_TBL_PREFIX . 'record_type',
+        self::DB_TBL_PREFIX . 'user_id',
         self::DB_TBL_PREFIX . 'message',
         self::DB_TBL_PREFIX . 'status',
         self::DB_TBL_PREFIX . 'requested_on',
@@ -77,7 +78,7 @@ class BadgeRequest extends MyAppModel
      *
      * @param  int $condId
      * @param  mixed $attr
-     * @return void
+     * @return mixed
      */
     public static function getAttributesByConditionId($condId, $attr = null)
     {
@@ -109,5 +110,23 @@ class BadgeRequest extends MyAppModel
         }
 
         return $row;
+    }
+
+    /**
+     * getBadgeData
+     *
+     * @return array
+     */
+    public function getBadgeData(int $langId): array
+    {
+        $srch = new SearchBase(self::DB_TBL, 'breq');
+        $srch->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blc.blinkcond_id = breq.breq_blinkcond_id', 'blc');
+        $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'blc.blinkcond_badge_id =  bdg.badge_id', 'bdg');
+        $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'bdg.badge_id =  bdg_l.badgelang_badge_id AND bdg_l.badgelang_lang_id = ' . $langId, 'bdg_l');
+        $attrs = self::ATTR + BadgeLinkCondition::ATTR + Badge::ATTR;
+        $attrs[] = 'COALESCE(badge_name, badge_identifier) as badge_name';
+        $srch->addMultipleFields($attrs);
+        $srch->doNotCalculateRecords();
+        return (array)FatApp::getDb()->fetch($srch->getResultSet());
     }
 }
