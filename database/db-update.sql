@@ -1884,3 +1884,32 @@ INSERT IGNORE INTO `tbl_extra_pages` (`epage_id`, `epage_identifier`, `epage_typ
 INSERT IGNORE INTO `tbl_extra_pages_lang` (`epagelang_epage_id`, `epagelang_lang_id`, `epage_label`, `epage_content`) VALUES 
 ((select epage_id from tbl_extra_pages where epage_type='47'), '1', 'Seller Badges Instructions', '<div class="alert alert-info" role="alert"><div class="alert-text">Badges can be added by admin only.</div></div>'),
 ((select epage_id from tbl_extra_pages where epage_type='48'), '1', 'Seller Ribbons Instructions', '<div class="alert alert-info" role="alert"><div class="alert-text">Ribbons can be added by admin only.</div></div>');
+
+INSERT IGNORE INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES
+('seller_badge_request_status_change', 1, 'Seller - Badge request Change Status', 'Your Badge Request {new_request_status} at {website_name}', '<table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+	<tbody>
+		<tr>
+			<td style="background:#fff;padding:20px 0 10px; text-align:center;">
+				<h4 style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;">Updated</h4>
+				<h2 style="margin:0; font-size:34px; padding:0;">Badge Request -{badge_name}</h2>
+            </td>
+		</tr>
+		<tr>
+			<td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+					<tbody>
+						<tr>
+							<td style="padding:20px 0 30px;">
+                                <strong style="font-size:18px;color:#333;">Dear {shop_name} </strong><br />
+								Your badge approval request has been {new_request_status}&nbsp;
+                            </td>
+						</tr>
+					</tbody>
+				</table>
+            </td>
+		</tr>
+	</tbody>
+</table>', '{shop_name} - Shop Name.<br/>\r\n{website_name} Name of our website<br>\r\n{new_request_status} New Request Status (Approved/Rejected) <br>\r\n{badge_name} Badge Name (Approved/Rejected) <br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>', 1);
+
+INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES
+('seller_badge_request_status_change', 1, 'Seller - Badge request Change Status', 'Hello {user_full_name},\r\nYour request for approving {badge_name} has been {new_request_status}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller Shop\", \"variable\":\"{user_full_name}\"},{\"title\":\"Badge Name\", \"variable\":\"{badge_name}\"},{\"title\":\"New Request Status\", \"variable\":\"{new_request_status}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1);

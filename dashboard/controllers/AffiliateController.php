@@ -84,7 +84,7 @@ class AffiliateController extends AffiliateBaseController
         $this->set('affiliateTrackingUrl', $affiliateTrackingUrl);
         $this->set('userBalance', User::getUserBalance($loggedUserId));
         $this->set('userRevenue', User::getAffiliateUserRevenue($loggedUserId));
-        $this->set('todayRevenue', User::getAffiliateUserRevenue($loggedUserId, date('Y-m-d H:i:s')));
+        $this->set('todayRevenue', User::getAffiliateUserRevenue($loggedUserId, date('Y-m-d')));
         $this->_template->addJs('js/slick.min.js');
         $this->_template->render(true, true);
     }

@@ -1994,11 +1994,8 @@ class User extends MyAppModel
         if (!empty($date)) {
             $srch->addCondition('mysql_func_DATE(utxn_date)', '=', $date, 'AND', true);
         }
-        $rs = $srch->getResultSet();
-        if (!$row = FatApp::getDb()->fetch($rs)) {
-            return 0;
-        }
-        return $row["userRevenue"];
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return $row["userRevenue"] ?? 0;
     }
 
     public static function getUserLastWithdrawalRequest($userId)

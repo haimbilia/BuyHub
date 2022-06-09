@@ -283,25 +283,6 @@ class OrderPayment extends Orders
 
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();       
         $orderPaymentObj->addOrderPayment($request, 'S-' . time(), $paymentAmount, Labels::getLabel("LBL_RECEIVED_PAYMENT", $langId), Labels::getLabel('LBL_PAYMENT_FROM_USER_PAY_AT_STORE_ORDER', $langId), false, 0, Orders::ORDER_PAYMENT_PENDING);
-
-        $paymentOrderId = $this->paymentOrderId;
-        $orderDetails = $this->getOrderById($paymentOrderId);
-        if (!empty($orderDetails['order_discount_coupon_code'])) {
-            $srch = DiscountCoupons::getSearchObject();
-            $srch->addCondition('coupon_code', '=', $orderDetails['order_discount_coupon_code']);
-            $srch->doNotCalculateRecords();
-            $srch->setPageSize(1);
-            $rs = $srch->getResultSet();
-            $row = FatApp::getDb()->fetch($rs);
-            if (!empty($row)) {
-                if (!FatApp::getDb()->insertFromArray(CouponHistory::DB_TBL, array('couponhistory_coupon_id' => $row['coupon_id'], 'couponhistory_order_id' => $orderDetails['order_id'], 'couponhistory_user_id' => $orderDetails['order_user_id'], 'couponhistory_amount' => $orderDetails['order_discount_total'], 'couponhistory_added_on' => date('Y-m-d H:i:s')))) {
-                    $this->error = FatApp::getDb()->getError();
-                    return false;
-                }
-                FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD, array('smt' => 'couponhold_coupon_id = ? and couponhold_user_id = ?', 'vals' => array($row['coupon_id'], $orderDetails['order_user_id'])));
-            }
-        }
-
         return true;
     }
 
@@ -322,25 +303,6 @@ class OrderPayment extends Orders
 
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();       
         $orderPaymentObj->addOrderPayment($request, 'C-' . time(), $paymentAmount, Labels::getLabel("LBL_RECEIVED_PAYMENT", $langId), Labels::getLabel('LBL_PAYMENT_FROM_USER_COD_ORDER', $langId), false, 0, Orders::ORDER_PAYMENT_PENDING);
-
-        $paymentOrderId = $this->paymentOrderId;
-        $orderDetails = $this->getOrderById($paymentOrderId);
-        if (!empty($orderDetails['order_discount_coupon_code'])) {
-            $srch = DiscountCoupons::getSearchObject();
-            $srch->addCondition('coupon_code', '=', $orderDetails['order_discount_coupon_code']);
-            $srch->doNotCalculateRecords();
-            $srch->setPageSize(1);
-            $rs = $srch->getResultSet();
-            $row = FatApp::getDb()->fetch($rs);
-            if (!empty($row)) {
-                if (!FatApp::getDb()->insertFromArray(CouponHistory::DB_TBL, array('couponhistory_coupon_id' => $row['coupon_id'], 'couponhistory_order_id' => $orderDetails['order_id'], 'couponhistory_user_id' => $orderDetails['order_user_id'], 'couponhistory_amount' => $orderDetails['order_discount_total'], 'couponhistory_added_on' => date('Y-m-d H:i:s')))) {
-                    $this->error = FatApp::getDb()->getError();
-                    return false;
-                }
-                FatApp::getDb()->deleteRecords(DiscountCoupons::DB_TBL_COUPON_HOLD, array('smt' => 'couponhold_coupon_id = ? and couponhold_user_id = ?', 'vals' => array($row['coupon_id'], $orderDetails['order_user_id'])));
-            }
-        }
-
         return true;
     }
 
