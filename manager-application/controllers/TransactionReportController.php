@@ -71,9 +71,10 @@ class TransactionReportController extends ListingBaseController
         $srch = Transactions::getSearchObject();
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.credential_user_id = u.user_id', 'uc');
-        $srch->addMultipleFields(['utxn.utxn_id', 'utxn.utxn_order_id', 'utxn.utxn_status', 'utxn.utxn_credit', 'utxn.utxn_debit', 'utxn.utxn_date', 'utxn.utxn_comments', 'if(utxn.utxn_credit > 0, utxn.utxn_credit, if(utxn.utxn_debit>0,CONCAT("-", utxn.utxn_debit),0)) as transactionAmount', 'u.user_name', 'uc.credential_email']);
+        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'utxn_order_id = order_id', 'o');
+        $srch->addMultipleFields(['utxn.utxn_id', 'utxn.utxn_order_id', 'utxn.utxn_status', 'utxn.utxn_credit', 'utxn.utxn_debit', 'utxn.utxn_date', 'utxn.utxn_comments', 'if(utxn.utxn_credit > 0, utxn.utxn_credit, if(utxn.utxn_debit>0,CONCAT("-", utxn.utxn_debit),0)) as transactionAmount', 'u.user_name', 'uc.credential_email','order_number']);
         if (!empty($keyword)) {
-            $cond = $srch->addCondition('utxn.utxn_order_id', 'like', '%' . $keyword . '%');
+            $cond = $srch->addCondition('order_id', 'like', '%' . $keyword . '%');
             $cond->attachCondition('utxn.utxn_op_id', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('utxn.utxn_comments', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('concat("TN-" ,lpad( utxn.`utxn_id`,7,0))', 'like', '%' . $keyword . '%', 'OR', true);
@@ -110,6 +111,8 @@ class TransactionReportController extends ListingBaseController
             $statusArr = Transactions::getStatusArr($this->siteLangId);
             while ($row = FatApp::getDb()->fetch($rs)) {
                 $arr = [];
+
+              
                 foreach ($fields as $key => $val) {
                     switch ($key) {
                         case 'listSerial':
@@ -129,6 +132,9 @@ class TransactionReportController extends ListingBaseController
                         case 'utxn_status':
                             $arr[] = $statusArr[$row[$key]];
                             break;
+                        case 'order_number':
+                            $arr[] = $row[$key];
+                            break;    
                         case 'utxn_credit':
                         case 'utxn_debit':
                         case 'transactionAmount':
@@ -197,7 +203,7 @@ class TransactionReportController extends ListingBaseController
                 'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
                 'utxn_id' => Labels::getLabel('LBL_Transaction_ID', $this->siteLangId),
                 'utxn_status' => Labels::getLabel('LBL_Payment_Status', $this->siteLangId),
-                'utxn_order_id' => Labels::getLabel('LBL_Order_Id', $this->siteLangId),
+                'order_number' => Labels::getLabel('LBL_ORDER_NUMBER', $this->siteLangId),
                 'user_name' => Labels::getLabel('LBL_Name', $this->siteLangId),
                 'utxn_credit' => Labels::getLabel('LBL_Credit', $this->siteLangId),
                 'utxn_debit' => Labels::getLabel('LBL_Debit', $this->siteLangId),
@@ -213,6 +219,6 @@ class TransactionReportController extends ListingBaseController
 
     protected function getDefaultColumns(): array
     {
-        return ['utxn_date', 'utxn_id', 'user_name', 'utxn_status', 'utxn_order_id', 'transactionAmount'];
+        return ['utxn_date', 'utxn_id', 'user_name', 'utxn_status', 'order_number', 'transactionAmount'];
     }
 }

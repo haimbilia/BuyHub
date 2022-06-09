@@ -845,6 +845,7 @@ Updates/Fixes :
     => 064824 - Suggestion: To show the filters on the category page at the front end.
     => 064505 - The refund calculations appear wrong on the seller's end.
     => 064840 - Admin (Cancellation requests)>> The order cancellation reason selected by the buyer does not appear in the extra info popup on the admin end. 
+    => 064855 - Suggestion: To add the order number column in the transaction reports listing. 
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

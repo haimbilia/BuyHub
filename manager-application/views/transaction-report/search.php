@@ -31,6 +31,9 @@ foreach ($arrListing as $sn => $row) {
             case 'utxn_status':
                 $td->appendElement('plaintext', $tdAttr, $statusArr[$row[$key]], true);
                 break;
+            case 'order_number':
+                $td->appendElement('plaintext', $tdAttr, (!empty($row[$key]) ? $row[$key] : HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel("LBL_-NA-", $siteLangId))), true);
+                break;    
             case 'utxn_credit':
             case 'utxn_debit':
             case 'transactionAmount':
