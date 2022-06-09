@@ -851,6 +851,19 @@ Updates/Fixes :
     => 064840 - Admin (Cancellation requests)>> The order cancellation reason selected by the buyer does not appear in the extra info popup on the admin end. 
     => 064855 - Suggestion: To add the order number column in the transaction reports listing. 
     => 064861 - The error occurs when the user seller clicks on the product missing info icon on the shop inventory page.
+    => 063377 - Seller UI: Messages' count is still showing after reading all the messages at the seller's end and buyer's end.
+    => 063631 - Seller UI: Spacing issue on seller registration page.
+    => 063632 - Advertiser: Double background images are showing while registering as an advertiser at the front-end and getting a UI issue while editing the content block of the advertiser at the admin's end.
+    => 063813 - Seller: Shop Inventory >> Add product: UI is distorted.
+    => 064034 - Web iOS: Admin: Comment popup is not opened when the user clicks on the 'view comment' icon under subscription order section.
+    => 064828 - The admin is not able to add a coupon code for the current date
+    => 064827 - Product Details Page>> Notice Undefined offset error appears on the product details page
+    => 064432 - Suggestion: Admin: Disabled records should be shown greyed out
+    => 064823 - The UI of the option name field is not correct on the seller options listing
+    => 064209 - iOS web: Applied filters values are not showing under filter by section
+    => 064838 - Suggestion: To add Yes/No text instead of the 0/1 in the 'Is seller' field on the advertiser reports listing
+    => 064835 - The currency symbol appears with the total promotions count on advertiser dashboard.
+    => 064863 - Double entries of discount coupon appears for the single order when payment method is COD.
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
@@ -869,19 +882,7 @@ UAT points:
     => Order cancellation Page – details related to the cancellation (May be under drawer or) , Order Status niche lelo → taaki Order ka status directly ptaa chll jaaye
     => Amount to be replaced with (Strike out option for the Withdrawn amount) under the Withdrawal Request section, Addition of one more column like Before Withdrawal and After Withdrawal, Balance section renaming, In queue refund request ki info v aani chahiye, Real time balance to be shown…. (Aliegnment of the )
     => Manage Funds withdrawal requests - label Subtitle , Consideration over the Export option to be introduced under the Withdrawal Request Section (CSV download option) which is currently not placed into the system
-    ----------------------------TV-9.4.0.20220406-----------------------
-    => 063377 - Seller UI: Messages' count is still showing after reading all the messages at the seller's end and buyer's end.
-    => 063631 - Seller UI: Spacing issue on seller registration page.
-    => 063632 - Advertiser: Double background images are showing while registering as an advertiser at the front-end and getting a UI issue while editing the content block of the advertiser at the admin's end.
-    => 063813 - Seller: Shop Inventory >> Add product: UI is distorted.
-    => 064034 - Web iOS: Admin: Comment popup is not opened when the user clicks on the 'view comment' icon under subscription order section.
-    => 064828 - The admin is not able to add a coupon code for the current date
-    => 064827 - Product Details Page>> Notice Undefined offset error appears on the product details page
-    => 064432 - Suggestion: Admin: Disabled records should be shown greyed out
-    => 064823 - The UI of the option name field is not correct on the seller options listing
-    => 064209 - iOS web: Applied filters values are not showing under filter by section
-    => 064838 - Suggestion: To add Yes/No text instead of the 0/1 in the 'Is seller' field on the advertiser reports listing
-    => 064835 - The currency symbol appears with the total promotions count on advertiser dashboard.
+    ----------------------------TV-9.4.0.20220406-----------------------    
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
