@@ -44,6 +44,7 @@ class QuestionBanks extends MyAppModel
     {
         $srch = static::getSearchObject($langId);
         $srch->addMultipleFields(array('qbank_id', 'qbank_name'));
+        $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
     }
 }

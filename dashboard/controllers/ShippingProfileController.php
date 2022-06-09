@@ -222,6 +222,7 @@ class ShippingProfileController extends SellerBaseController
         }
         $zSrch = ShippingProfileZone::getSearchObject();
         $zSrch->addCondition("shipprozone_shipprofile_id", "IN", $profileIds);
+        $zSrch->doNotCalculateRecords();
         $zRs = $zSrch->getResultSet();
         $zonesData = FatApp::getDb()->fetchAll($zRs);
         $zones = array();

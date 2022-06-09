@@ -689,8 +689,8 @@ class Statistics extends MyAppModel
             $srch->setPageSize($pageSize);
         }
 
-        $rs = $srch->getResultSet();
-        return $this->db->fetchAll($rs);
+        $srch->doNotCalculateRecords();
+        return $this->db->fetchAll($srch->getResultSet());
     }
 
     public function getAddedToCartCount()

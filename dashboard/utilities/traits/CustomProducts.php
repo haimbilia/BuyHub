@@ -510,6 +510,7 @@ trait CustomProducts
         }
 
         $srch->setPageSize($pagesize);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
 
@@ -540,7 +541,7 @@ trait CustomProducts
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('scompany_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
-
+        $srch->doNotCalculateRecords();
         $srch->setPageSize($pagesize);
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
@@ -574,6 +575,7 @@ trait CustomProducts
         }
 
         $srch->setPageSize($pagesize);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
 
@@ -708,7 +710,7 @@ trait CustomProducts
             $cnd = $srch->addCondition('tag_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('tag_name', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $options = $db->fetchAll($rs, 'tag_id');
@@ -1150,6 +1152,7 @@ trait CustomProducts
         }
         $srch->setPageSize(FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
         $srch->addMultipleFields(array('DISTINCT(prodspec_group)'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $prodSpecGroup = FatApp::getDb()->fetchAll($rs);
         $json = array();

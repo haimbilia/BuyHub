@@ -34,7 +34,7 @@ class FatMailer extends FatModel
      * @param string $template
      * @param int $langId
      */
-    public function __construct(int $langId, string $template)
+    public function __construct(int $langId = 0, string $template = '')
     {
         $this->langId = $langId;
         $this->template = $template;
