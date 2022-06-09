@@ -848,6 +848,9 @@ Updates/Fixes :
     => 064820 - The shipping profile does not appears on the product setup page on the admin end.
     => 064824 - Suggestion: To show the filters on the category page at the front end.
     => 064505 - The refund calculations appear wrong on the seller's end.
+    => 064840 - Admin (Cancellation requests)>> The order cancellation reason selected by the buyer does not appear in the extra info popup on the admin end. 
+    => 064855 - Suggestion: To add the order number column in the transaction reports listing. 
+    => 064861 - The error occurs when the user seller clicks on the product missing info icon on the shop inventory page.
     
 UAT points:
 
