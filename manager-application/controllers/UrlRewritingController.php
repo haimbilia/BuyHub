@@ -307,11 +307,12 @@ class UrlRewritingController extends ListingBaseController
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
-            'urlrewrite_original' => Labels::getLabel('LBL_Original', $this->siteLangId),
-            'language_code' => Labels::getLabel('LBL_Language', $this->siteLangId),
-            'urlrewrite_custom' => Labels::getLabel('LBL_Custom', $this->siteLangId),
+            'urlrewrite_original' => Labels::getLabel('LBL_ORIGINAL', $this->siteLangId),
+            'url_type' => Labels::getLabel('LBL_TYPE', $this->siteLangId),
+            'language_code' => Labels::getLabel('LBL_LANGUAGE', $this->siteLangId),
+            'urlrewrite_custom' => Labels::getLabel('LBL_CUSTOM', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('urlRewritingTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -324,6 +325,7 @@ class UrlRewritingController extends ListingBaseController
             'select_all',
             /*  'listSerial', */
             'urlrewrite_original',
+            'url_type',
             'language_code',
             'urlrewrite_custom',
             'action',
@@ -332,7 +334,7 @@ class UrlRewritingController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, Common::excludeKeysForSort());
+        return array_diff($fields, Common::excludeKeysForSort(),['url_type']);
     }
 
     public function getBreadcrumbNodes($action)

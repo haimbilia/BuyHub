@@ -4,7 +4,7 @@ if (!isset($tbody)) {
     $printData = true;
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
-
+$urlTypeArr = UrlRewrite::getTypeArray($siteLangId);
 $serialNo = ($page - 1) * $pageSize + 1;
 foreach ($arrListing as $sn => $row) {
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
@@ -32,6 +32,19 @@ foreach ($arrListing as $sn => $row) {
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
+                break;            
+            case 'url_type':
+                $str = '';
+                foreach ($urlTypeArr as $type => $val) {
+                    if (strpos($row['urlrewrite_original'], $type) !== false) {
+                        $str =  $val ;
+                    }
+                }
+                $td->appendElement('plaintext', $tdAttr, $str, true);
+                break;
+            case 'urlrewrite_custom':
+                $url = '<a href="' . CONF_WEBROOT_FRONT_URL . $row[$key] . '" target="_blank">' . $row[$key] . '</a>';
+                $td->appendElement('plaintext', $tdAttr, $url, true);
                 break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
@@ -41,7 +54,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();
