@@ -851,6 +851,7 @@ Updates/Fixes :
     => 064840 - Admin (Cancellation requests)>> The order cancellation reason selected by the buyer does not appear in the extra info popup on the admin end. 
     => 064855 - Suggestion: To add the order number column in the transaction reports listing. 
     => 064861 - The error occurs when the user seller clicks on the product missing info icon on the shop inventory page.
+    => 064860 - UI issue on the request withdrawal popup on the affiliate end. 
     
 UAT points:
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
