@@ -850,6 +850,7 @@ Updates/Fixes :
     => 064505 - The refund calculations appear wrong on the seller's end.
     
 UAT points:
+
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
     => Admin dashboard > drop-down for today, this week should not display when the API keys are not configured 
     => Admin dashboard? Top search keywords > No records found message should be displayed
@@ -866,7 +867,9 @@ UAT points:
     => Order cancellation Page – details related to the cancellation (May be under drawer or) , Order Status niche lelo → taaki Order ka status directly ptaa chll jaaye
     => Amount to be replaced with (Strike out option for the Withdrawn amount) under the Withdrawal Request section, Addition of one more column like Before Withdrawal and After Withdrawal, Balance section renaming, In queue refund request ki info v aani chahiye, Real time balance to be shown…. (Aliegnment of the )
     => Manage Funds withdrawal requests - label Subtitle , Consideration over the Export option to be introduced under the Withdrawal Request Section (CSV download option) which is currently not placed into the system
+
     ----------------------------TV-9.4.0.20220406-----------------------
+
     => 063377 - Seller UI: Messages' count is still showing after reading all the messages at the seller's end and buyer's end.
     => 063631 - Seller UI: Spacing issue on seller registration page.
     => 063632 - Advertiser: Double background images are showing while registering as an advertiser at the front-end and getting a UI issue while editing the content block of the advertiser at the admin's end.
@@ -881,6 +884,7 @@ UAT points:
     => 064835 - The currency symbol appears with the total promotions count on advertiser dashboard.
 
 Known Issues and Problems :
+
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
     => 062190 - Admin UI: "Mark as default" font is not correct and the 'default' tag is showing with the plugin even after inactive and disabling the default status on the "Tax Services, and Shipping Services" pages while accessing the 'Getting Started' section.
@@ -891,6 +895,7 @@ Following is a list of known errors that don’t have a workaround. These issues
         => System does not support Zero decimal currency while checking out with stripe
 
 Installation steps:
+
  	• Download the files and configured with your development/production environment.
  	• You can get all the files mentioned in .gitignore file from git-ignored-files directory.
  	• Renamed -.htaccess file to .htaccess from {document root} and {document root}/public directory
@@ -899,6 +904,7 @@ Installation steps:
 	• Update basic configuration as per your system requirements under {document root}/conf directory.
 
 Notes:
+
     Procedures : 
         Execute "{siteurl}/admin/admin-users/create-procedures" is mandatory.
         
