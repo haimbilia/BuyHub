@@ -865,6 +865,7 @@ Updates/Fixes :
     => 064835 - The currency symbol appears with the total promotions count on advertiser dashboard.
     => 064863 - Double entries of discount coupon appears for the single order when payment method is COD.
     => 064860 - UI issue on the request withdrawal popup on the affiliate end. 
+    => 064853 - Buyer Dashboard >> The credit stats appear wrong on the buyer dashboard.
     
 UAT points:
 
