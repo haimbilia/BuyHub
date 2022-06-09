@@ -67,19 +67,10 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
         </div>
     </div>
 <?php } ?>
-<?php if (in_array($controllerName, ['Supplier', 'GuestAffiliate', 'GuestAdvertiser']) && in_array($action, ['index', 'account'])) { ?>
-    <div class="offcanvas offcanvas-start offcanvas-seller-nav" tabindex="-1" id="offcanvas-seller-nav">
-        <div class="offcanvas-header">
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body p-0">
-            <ul class="seller-nav">
-                <?php
-                $this->includeTemplate('_partial/headerTopNavigation.php', ['liClass' => 'seller-nav-item', 'aClass' => 'seller-nav-link']); ?>
-            </ul>
-        </div>
-    </div>
-<?php } ?>
+
+<?php if (in_array($controllerName, ['Supplier', 'GuestAffiliate', 'GuestAdvertiser']) && in_array($action, ['index', 'account'])) {
+    $this->includeTemplate('_partial/footer-part/mobile-header-top-navigation.php', ['liClass' => 'seller-nav-item', 'aClass' => 'seller-nav-link']);
+} ?>
 
 <?php if ('Blog' == $controllerName) {
     $this->includeTemplate('_partial/footer-part/blog-search-form.php', ['siteLangId' => $siteLangId]);
