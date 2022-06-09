@@ -1,39 +1,38 @@
 Multivendor - Released Version : RV-9.3.1
     => IOS/Android Buyer APP version : 2.0.1
     => System API version : 2.3
-
-New Feature :     
-    => 82892 : Easypost Shipping API Integration
-    => Shopify sync module for SV seller
-    => 85399 : QNB payment gateway 
-    => 80928 : Mollie payment gateway 
-    => MSG-1390138 : Payfast payment gateway 
-    => 85369 : Aramex Shipping API 
-    => 72808 : EasyEcom Marketplace Channel API
-    => 86472 : YoCo Payment gateway
-    => 88040 : ShipRocket Shipping API Integration
-    => 88449 : ShipEngine Shipping API Integration
-    => Admin shipped products listing page
-    => task-84719 Preview module for digital files
-    => task-85619 Adding files when digital order is delivered
-    => 88083 : System Log Listing Page 
-  
+    
+New Feature :
+    => 82892 : Easypost Shipping API Integration.
+    => Shopify sync module for SV seller.
+    => 85399 : QNB payment gateway.
+    => 80928 : Mollie payment gateway.
+    => MSG-1390138 : Payfast payment gateway.
+    => 85369 : Aramex Shipping API.
+    => 72808 : EasyEcom Marketplace Channel API.
+    => 86472 : YoCo Payment gateway.
+    => 88040 : ShipRocket Shipping API Integration.
+    => 88449 : ShipEngine Shipping API Integration.
+    => Admin shipped products listing page.
+    => task-84719 Preview module for digital files.
+    => task-85619 Adding files when digital order is delivered.
+    => 88083 : System Log Listing Page.
+    
 Enhancements :
-   => At shop level  pickup interval option given
-   => Tracking order with Google Analytics ecommerce 
+   => At shop level  pickup interval option given.
+   => Tracking order with Google Analytics ecommerce.
    => W3c validator.
-   => Performance optimization
-   => Upgrades in GEO location module to configure default location.  
-   => Price surge based on special price. 
+   => Performance optimization.
+   => Upgrades in GEO location module to configure default location.
+   => Price surge based on special price.
    => Admin Reports.
-   => Map listing for products & shops 
-   => Withdrawal Requests
-   => Order Cancellation Requests 
-   => Manage Alert text
-   => Manage Product Reviews
+   => Map listing for products & shops.
+   => Withdrawal Requests.
+   => Order Cancellation Requests.
+   => Manage Alert text.
+   => Manage Product Reviews.
    => Multilingual Sitemap and canonical url update.
    => Add product screen
-
 
 Updates/Fixes : 
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
@@ -119,6 +118,7 @@ Updates/Fixes :
     => 055154	digital items> files linked with specific language are listing all on front end in preview
     => 055135	when digital catalog is added by admin and files are attached by admin and then seller should be allowed to see the name of file only not download
     => 055155	when admin adds catalog with digital links then on seller end links (preview and main) both are listing
+        
 ====================TV-9.3.1.20210703==========================
 
     => 055215 - when only language is enabled in system then in header> language drop down is coming with single value
