@@ -86,7 +86,7 @@ class CustomRouter
                 $rs = $srch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
 
-                if (!$row && FatApp::getConfig('CONF_ENABLE_301', FatUtility::VAR_INT, 0) && !FatUtility::isAjaxCall()) {
+                if (!$row && FatApp::getConfig('CONF_ENABLE_301', FatUtility::VAR_INT, 1) && !FatUtility::isAjaxCall()) {
                     $srch = UrlRewrite::getSearchObject();
                     $srch->doNotCalculateRecords();
                     $srch->addMultipleFields(array('urlrewrite_custom', 'urlrewrite_original'));

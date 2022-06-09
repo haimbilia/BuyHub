@@ -289,4 +289,9 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
         fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'deleteBadgeRequest', [badgeReqId]), '', function (t) { searchRecords(document.frmRecordSearch) });
     }
 
+    badgesInstructions = function (type) {
+        fcom.ajax(fcom.makeUrl(controller, 'badgesInstructions', [type]), '', function (t) {
+            $.ykmodal(t);
+        });
+    };
 })();

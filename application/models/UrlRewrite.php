@@ -19,7 +19,7 @@ class UrlRewrite extends MyAppModel
 
     public static function remove($originalUrl)
     {
-        if (FatApp::getDb()->deleteRecords(static::DB_TBL, array( 'smt' => 'urlrewrite_original = ?', 'vals' => array($originalUrl)))) {
+        if (FatApp::getDb()->deleteRecords(static::DB_TBL, array('smt' => 'urlrewrite_original = ?', 'vals' => array($originalUrl)))) {
             return true;
         }
         return false;
@@ -28,8 +28,8 @@ class UrlRewrite extends MyAppModel
     public static function update($originalUrl, $customUrl)
     {
         $seoUrlKeyword = array(
-        'urlrewrite_original' => $originalUrl,
-        'urlrewrite_custom' => $customUrl
+            'urlrewrite_original' => $originalUrl,
+            'urlrewrite_custom' => $customUrl
         );
         if (FatApp::getDb()->insertFromArray(static::DB_TBL, $seoUrlKeyword, false, array(), array('urlrewrite_custom' => $customUrl))) {
             return true;
@@ -96,10 +96,38 @@ class UrlRewrite extends MyAppModel
 
         return $slug;
     }
-    
+
     public static function isCustomUrlUnique($customUrl)
     {
         return 1 > count(static::getDataByCustomUrl($customUrl));
     }
 
+    public static function getTypeArray($langId)
+    {
+        $urlRewriteOrgAssoc = CacheHelper::get('urlRewriteOrgAssoc' .  $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($urlRewriteOrgAssoc) {
+            return json_decode($urlRewriteOrgAssoc, true);
+        }
+
+        $arr = [
+            Shop::SHOP_VIEW_ORGINAL_URL => Labels::getLabel('FRM_SHOP_URLS', $langId),
+            Shop::SHOP_REVIEWS_ORGINAL_URL => Labels::getLabel('FRM_SHOP_REVIEW_URLS', $langId),
+            Shop::SHOP_POLICY_ORGINAL_URL => Labels::getLabel('FRM_SHOP_POLICY_URLS', $langId),
+            Shop::SHOP_SEND_MESSAGE_ORGINAL_URL => Labels::getLabel('FRM_SHOP_MESSAGE_URLS', $langId),
+            Shop::SHOP_TOP_PRODUCTS_ORGINAL_URL => Labels::getLabel('FRM_SHOP_TOP_PRODUCTS_URLS', $langId),
+            Shop::SHOP_COLLECTION_ORGINAL_URL => Labels::getLabel('FRM_SHOP_COLLECTION_URLS', $langId),
+            Brand::REWRITE_URL_PREFIX => Labels::getLabel('FRM_BRANDS_URLS', $langId),
+            BlogPost::REWRITE_URL_PREFIX => Labels::getLabel('FRM_BLOG_POST_URLS', $langId),
+            BlogPostCategory::REWRITE_URL_PREFIX => Labels::getLabel('FRM_BLOG_CATEGORY_URLS', $langId),
+            ContentPage::REWRITE_URL_PREFIX => Labels::getLabel('FRM_CMS_PAGES_URLS', $langId),
+            Extrapage::REWRITE_URL_PREFIX => Labels::getLabel('FRM_EXTRA_PAGES_URLS', $langId),
+            ProductCategory::REWRITE_URL_PREFIX => Labels::getLabel('FRM_CATEGORIES_URLS', $langId),
+            Product::PRODUCT_VIEW_ORGINAL_URL => Labels::getLabel('FRM_PRODUCT_URLS', $langId),
+            Product::PRODUCT_REVIEWS_ORGINAL_URL => Labels::getLabel('FRM_PRODUCT_REVIEWS_URLS', $langId),
+            Product::PRODUCT_MORE_SELLERS_ORGINAL_URL => Labels::getLabel('FRM_MORE_SELLERS_URLS', $langId),
+        ];
+
+        CacheHelper::create('urlRewriteOrgAssoc' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
 }

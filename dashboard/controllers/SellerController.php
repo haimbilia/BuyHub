@@ -5052,11 +5052,10 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
 
-        $splPrice = FatApp::getPostedData('splprice_price', FatUtility::VAR_FLOAT, 0);
-        $selprodPrice = SellerProduct::getAttributesById($post['splprice_selprod_id'], 'selprod_price');
+        /* $selprodPrice = SellerProduct::getAttributesById($post['splprice_selprod_id'], 'selprod_price');
         if ($selprodPrice < $splPrice) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_SPECIAL_PRICE_MUST_BE_LESS_THAN_EQUAL_TO_CURRENT_PRICE', $this->siteLangId));
-        }
+        } */
 
         $splPriceId = $this->updateSelProdSplPrice($post, true);
         if (!$splPriceId) {
@@ -5198,7 +5197,6 @@ class SellerController extends SellerBaseController
         $value = FatApp::getPostedData('value');
         $selProdId = FatApp::getPostedData('selProdId', FatUtility::VAR_INT, 0);
 
-        /* Can add greater than selling price. */
         /* $selprodPrice = SellerProduct::getAttributesById($selProdId, 'selprod_price');
         if ($selprodPrice < $value && 'splprice_price' == $attribute) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_SPECIAL_PRICE_MUST_BE_LESS_THAN_EQUAL_TO_ORIGNAL_PRICE', $this->siteLangId));

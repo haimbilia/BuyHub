@@ -20,8 +20,14 @@ foreach ($sellers as $key => $sellerDetail) {
         <div class="sold-price"><?php echo CommonHelper::displayMoneyFormat($sellerDetail['theprice']); ?></div>
         <div class="sold-by">
             <span class="sold-by-txt"><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?></span>
-            <a class="sold-by-name" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($sellerDetail['shop_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>"><?php echo $sellerDetail['shop_name']; ?></a>
+            <a class="sold-by-name" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($sellerDetail['shop_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
+                <?php echo $sellerDetail['shop_name']; ?>
+            </a>
         </div>
+        <?php
+        $badgesArr = Badge::getShopBadges($siteLangId, [$sellerDetail['shop_id']]);
+        $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+        ?>
         <div class="shop-wrap">
             <div class="product-ratings">
                 <svg class="svg" width="14" height="14">
@@ -41,11 +47,6 @@ foreach ($sellers as $key => $sellerDetail) {
                     <?php echo Labels::getLabel('LBL_REVIEWS', $siteLangId); ?>
                 </a>
             </div>
-            <!-- Shop Badge  -->
-            <?php
-            $badgesArr = Badge::getShopBadges($siteLangId, [$sellerDetail['shop_id']]);
-            $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
-            ?>
         </div>
         <?php if (false === $isActive) { ?>
             <button class="btn btn-outline-black btn-sm btnAddToCart--js" data-id='<?php echo $sellerDetail['selprod_id']; ?>' data-min-qty="<?php echo $sellerDetail['selprod_min_order_qty']; ?>" type="button"><?php echo Labels::getLabel('BTN_ADD_TO_CART', $siteLangId); ?></button>

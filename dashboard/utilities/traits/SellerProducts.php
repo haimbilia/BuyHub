@@ -2725,9 +2725,13 @@ trait SellerProducts
         }
 
         $selprod_id = FatUtility::int($data['voldiscount_selprod_id']);
-
         if (1 > $selprod_id) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+        }
+
+        $qty = FatApp::getPostedData('voldiscount_min_qty', FatUtility::VAR_INT, 0);
+        if (2 > $qty) {
+            FatUtility::dieJsonError(Labels::getLabel('ERR_MINIMUM_QUANTITY_SHOULD_BE_GREATER_THAN_1', $this->siteLangId));
         }
 
         $volDiscountId = $this->updateSelProdVolDiscount($selprod_id, 0, $data['voldiscount_min_qty'], $data['voldiscount_percentage']);
@@ -2752,7 +2756,6 @@ trait SellerProducts
     public function updateVolumeDiscountColValue()
     {
         $this->userPrivilege->canEditVolumeDiscount(UserAuthentication::getLoggedUserId());
-        $userId = $this->userParentId;
         $volDiscountId = FatApp::getPostedData('voldiscount_id', FatUtility::VAR_INT, 0);
         if (1 > $volDiscountId) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
@@ -2762,13 +2765,17 @@ trait SellerProducts
         if (!in_array($attribute, $columns)) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
+        
+        $value = FatApp::getPostedData('value');
+        if ('voldiscount_min_qty' == $attribute && 2 > $value) {
+            FatUtility::dieJsonError(Labels::getLabel('ERR_MINIMUM_QUANTITY_SHOULD_BE_GREATER_THAN_1', $this->siteLangId));
+        }
 
         $otherColumns = array_values(array_diff($columns, [$attribute]));
         $otherColumnsValue = SellerProductVolumeDiscount::getAttributesById($volDiscountId, $otherColumns);
         if (empty($otherColumnsValue)) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
-        $value = FatApp::getPostedData('value');
         $selProdId = FatApp::getPostedData('selProdId', FatUtility::VAR_INT, 0);
 
         $dataToUpdate = array(
