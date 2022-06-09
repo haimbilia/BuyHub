@@ -367,7 +367,7 @@ class PatchUpdateController extends ListingBaseController
                 'tbl_order_products', 'tbl_order_products_lang', 'tbl_order_product_charges', 'tbl_order_product_charges_lang', 'tbl_order_product_digital_download_links',
                 'tbl_order_product_shipping', 'tbl_order_product_shipping_lang', 'tbl_order_product_to_shipping_users', 'tbl_order_return_requests', 'tbl_order_return_request_messages',
                 'tbl_order_seller_subscriptions', 'tbl_order_seller_subscriptions_lang', 'tbl_order_user_address', 'tbl_user_reward_points', 'tbl_user_reward_point_breakup',
-                'tbl_rewards_on_purchase', 'tbl_user_transactions', 'tbl_coupons_history', 'tbl_coupons_hold', 'tbl_user_cart', 'tbl_order_product_settings', 'tbl_order_product_shipment',
+                'tbl_rewards_on_purchase', 'tbl_coupons_history', 'tbl_coupons_hold', 'tbl_user_cart', 'tbl_order_product_settings', 'tbl_order_product_shipment',
                 'tbl_order_prod_charges_logs','tbl_order_prod_charges_logs_lang','tbl_orders_to_plugin_order','tbl_order_product_shipment_pickup','tbl_order_product_plugin_specifics','tbl_order_product_responses','tbl_user_withdrawal_requests',
                 'tbl_user_withdrawal_requests_specifics','tbl_seller_product_reviews','tbl_seller_product_reviews_abuse','tbl_seller_product_reviews_helpful','tbl_seller_product_rating');
             FatApp::getDb()->query('UPDATE `tbl_seller_products` SET `selprod_sold_count` = 0 WHERE 1');
