@@ -356,6 +356,8 @@ class PatchUpdateController extends ListingBaseController
 
     public function truncateTables($type = 'orders')
     {
+        die('You need to comment this line before execution.');
+
         if (1 != $this->admin_id || false == CONF_DEVELOPMENT_MODE) {
             die('Invlaid Access! You are not authorized.');
         }
