@@ -2045,7 +2045,9 @@ class ProductsController extends MyAppController
 
     public function interRelatedProducts(int $selprodId)
     {
-        $this->set('product', $this->getProductDetail($selprodId));
+        $prodData = $this->getProductDetail($selprodId);
+        // CommonHelper::printArray($prodData);
+        $this->set('product', $prodData);
 
         /* Related Products */
         $product = $this->getProductDetail($selprodId);
@@ -2058,7 +2060,7 @@ class ProductsController extends MyAppController
         ];
 
         $this->set('relatedProductsRibbons', $relatedProductsRibbons);
-        $this->set('relatedProductsRs', !empty($relatedProductsRs) ? $relatedProductsRs : array());
+        $this->set('relatedProductsRs', !empty($relatedProductsRs) ? $relatedProductsRs : []);
         $this->set('relatedProductsHtml', $this->_template->render(false, false, 'products/related-products.php', true, false));
         /* ----------------- */
 
@@ -2066,6 +2068,13 @@ class ProductsController extends MyAppController
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
         $recommendedProducts = (array) $this->getRecommendedProducts($selprodId, $this->siteLangId, $loggedUserId);
         $recommendedProducts = (0 < count(array_filter($recommendedProducts)) ? array_filter($recommendedProducts) : []);
+        if (0 < $extraRecCount = (5 - count($recommendedProducts))) {
+            $srch = Product::getListingObj(['category' => $prodData['prodcat_id']], $this->siteLangId);
+            $srch->setPageSize($extraRecCount);
+            $srch->doNotCalculateRecords();
+            $products = FatApp::getDb()->fetchAll($srch->getResultSet());
+            $recommendedProducts = array_merge($recommendedProducts, $products);
+        }
 
         $recSelProdIdsArr = array_column($recommendedProducts, 'selprod_id');
         $recommendedProductsRibbons = [

@@ -1,7 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-<!-- Header Search Form -->
-<?php
 $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
 
 <div class="zeynep">
@@ -11,11 +9,10 @@ $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
 <div class="zeynep-overlay"></div>
 
 <?php if (!in_array($controllerName, ['Cart', 'Checkout'])) { ?>
-    <!-- offcanvas-cart -->
     <?php $this->includeTemplate('_partial/cart-summary.php', ['showHeaderButton' => false]); ?>
 <?php } ?>
 
-<!-- offcanvas-filters -->
+
 <div class="offcanvas offcanvas-end offcanvas-filters" tabindex="-1" id="filters-right">
     <div class="offcanvas-header">
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -24,16 +21,11 @@ $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
     </div>
 </div>
 
-<?php
-if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) {
-?>
-    <!-- offcanvas-account -->
-<?php
+<?php if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) {
     $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]);
 }
-?>
-<?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-    <!-- offcanvas-gps-location -->
+
+if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
     <div class="offcanvas offcanvas-bottom offcanvas-gps-location" tabindex="-1" id="offcanvas-gps-location">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"><?php echo Labels::getLabel('LBL_CHANGE_LOCATION', $siteLangId); ?></h5>
@@ -76,7 +68,6 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
     </div>
 <?php } ?>
 <?php if (in_array($controllerName, ['Supplier', 'GuestAffiliate', 'GuestAdvertiser']) && in_array($action, ['index', 'account'])) { ?>
-    <!-- offcanvas-seller-nav -->
     <div class="offcanvas offcanvas-start offcanvas-seller-nav" tabindex="-1" id="offcanvas-seller-nav">
         <div class="offcanvas-header">
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -91,9 +82,6 @@ if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogge
 <?php } ?>
 
 <?php if ('Blog' == $controllerName) {
-    /* Blog Search Form */
     $this->includeTemplate('_partial/footer-part/blog-search-form.php', ['siteLangId' => $siteLangId]);
-    
-    /* Blog Mobile Menu */
     $this->includeTemplate('_partial/footer-part/blog-mobile-menu.php', ['siteLangId' => $siteLangId]);
 } ?>

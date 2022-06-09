@@ -25,7 +25,6 @@ if ($relatedProductsRs) { ?>
                         $selProdRibbons[] = $tRightRibbons[$rProduct['selprod_id']];
                     }
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>
-                    <!--product tile-->
                     <div class="item">
                         <div class="products">                            
                             <div class="products-body">
