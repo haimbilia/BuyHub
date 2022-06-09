@@ -1945,12 +1945,12 @@ class Orders extends MyAppModel
 
         // If current order status is not completed but new status is completed then commence completing the order
         if (!in_array($childOrderInfo['op_status_id'], (array) $this->getVendorOrderPaymentCreditedStatuses()) && in_array($opStatusId, (array) $this->getVendorOrderPaymentCreditedStatuses()) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID || in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))) {
-            /* If shipped by admin credit to shipping user as COD order payment deposited by them[*/
+            /* If shipped by admin credit to shipping user as COD order payment deposited by them[*/            
+            $amt = CommonHelper::orderProductAmount($childOrderInfo);
             if (!CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
                 $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = Labels::getLabel('LBL_CASH_DEPOSITED_FOR_COD_ORDER', $langId) . ' ' . $formattedInvoiceNumber;
-                $amt = CommonHelper::orderProductAmount($childOrderInfo);
-
+               
                 $txnDataArr = array(
                     'utxn_user_id' => $childOrderInfo['optsu_user_id'],
                     'utxn_comments' => $comments,
@@ -1965,6 +1965,15 @@ class Orders extends MyAppModel
             }
             /*]*/
 
+            /* add payment in tbl_order_payments in case of cod and paystore order*/
+            if (in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
+                !$db->updateFromArray(
+                    Orders::DB_TBL_ORDER_PAYMENTS,
+                    array('opayment_txn_status' => Orders::ORDER_PAYMENT_PAID),
+                    array('smt' => 'opayment_order_id = ? and opayment_txn_status = ? and opayment_method = ?', 'vals' => array($childOrderInfo["op_order_id"], 0, $childOrderInfo['plugin_code']))
+                );
+            }
+            /*]*/
 
             /* Start Order Payment to Vendor [ */
             $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];

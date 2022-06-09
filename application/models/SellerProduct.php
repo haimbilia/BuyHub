@@ -1515,9 +1515,14 @@ class SellerProduct extends MyAppModel
 
         if ($selProd) {
             if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+                $validationArr['subscription']['valid']  = false;
+                $validationArr['subscription']['currentStatus']  = 0;
+
                 $currentActivePlan = OrderSubscription::getUserCurrentActivePlanDetails($langId, $selProd['selprod_user_id'], array(OrderSubscription::DB_TBL_PREFIX . 'till_date', OrderSubscription::DB_TBL_PREFIX . 'price', OrderSubscription::DB_TBL_PREFIX . 'type'));
-                $validationArr['subscription']['valid'] = FatDate::diff(date("Y-m-d"), $currentActivePlan[OrderSubscription::DB_TBL_PREFIX . 'till_date']) > 0;
-                $validationArr['subscription']['currentStatus'] = $validationArr['subscription']['valid'] ? 1 : 0;
+                if($currentActivePlan){
+                    $validationArr['subscription']['valid'] = FatDate::diff(date("Y-m-d"), $currentActivePlan[OrderSubscription::DB_TBL_PREFIX . 'till_date']) > 0;
+                    $validationArr['subscription']['currentStatus'] = $validationArr['subscription']['valid'] ? 1 : 0;
+                }                
             }
             $product = Product::getAttributesById($selProd['selprod_product_id'], ['product_approved', 'product_active', 'product_deleted', 'product_brand_id']);
             if ($product) {

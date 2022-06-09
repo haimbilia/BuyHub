@@ -30,6 +30,11 @@ class OrderPayment extends Orders
         return $this->attributes['order_number'];
     }
 
+    public function getPaymentGatewayCode()
+    {       
+        return $this->attributes['plugin_code'];
+    }
+
     public function getOrderPrimaryinfo()
     {
         $arrOrder = array();
@@ -271,10 +276,13 @@ class OrderPayment extends Orders
             $this->error = $db->getError();
             return false;
         }
-
-        $request = 'PayAtStore';
+     
         $orderPaymentObj = new OrderPayment($orderId, $langId);
+        $request = $orderPaymentObj->getPaymentGatewayCode();
         $orderPaymentObj->addOrderPaymentComments($request);
+
+        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();       
+        $orderPaymentObj->addOrderPayment($request, 'S-' . time(), $paymentAmount, Labels::getLabel("LBL_RECEIVED_PAYMENT", $langId), Labels::getLabel('LBL_PAYMENT_FROM_USER_PAY_AT_STORE_ORDER', $langId), false, 0, Orders::ORDER_PAYMENT_PENDING);
 
         $paymentOrderId = $this->paymentOrderId;
         $orderDetails = $this->getOrderById($paymentOrderId);
@@ -307,9 +315,13 @@ class OrderPayment extends Orders
             return false;
         }
 
-        $request = 'CashOnDelivery';
+        
         $orderPaymentObj = new OrderPayment($orderId, $langId);
-        $orderPaymentObj->addOrderPaymentComments($request);
+        $request = $orderPaymentObj->getPaymentGatewayCode();
+        $orderPaymentObj->addOrderPaymentComments($request);        
+
+        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();       
+        $orderPaymentObj->addOrderPayment($request, 'C-' . time(), $paymentAmount, Labels::getLabel("LBL_RECEIVED_PAYMENT", $langId), Labels::getLabel('LBL_PAYMENT_FROM_USER_COD_ORDER', $langId), false, 0, Orders::ORDER_PAYMENT_PENDING);
 
         $paymentOrderId = $this->paymentOrderId;
         $orderDetails = $this->getOrderById($paymentOrderId);
