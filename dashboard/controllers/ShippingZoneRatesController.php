@@ -174,6 +174,7 @@ class ShippingZoneRatesController extends SellerBaseController
         );
         $srch->addMultipleFields(['tsr.*']);
         $srch->addCondition('srate.shiprate_id', '=', $rateId);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $rates = FatApp::getDb()->fetchAll($rs);
         if (is_array($rates) && !empty($rates)) {

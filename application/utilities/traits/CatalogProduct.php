@@ -190,6 +190,7 @@ trait CatalogProduct
                 $srch = Option::getSearchObject(0);
                 $srch->addMultipleFields(['option_id', 'option_is_separate_images']);
                 $srch->doNotLimitRecords();
+                $srch->doNotCalculateRecords();
                 $srch->addCondition(Option::tblFld('id'), 'IN', $post['options']);
                 $rs = $srch->getResultSet();
 
@@ -211,6 +212,7 @@ trait CatalogProduct
                 if (0 < $recordId) {
                     $srch = new SearchBase(Product::DB_PRODUCT_TO_OPTION);
                     $srch->doNotLimitRecords();
+                    $srch->doNotCalculateRecords();
                     $srch->addCondition(Product::DB_PRODUCT_TO_OPTION_PREFIX . 'product_id', '=', $recordId);
                     $srch->addFld('prodoption_option_id');
                     $oldOptions = FatApp::getDb()->fetchAll($srch->getResultSet());

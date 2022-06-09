@@ -18,10 +18,9 @@ class MyHelper extends FatModel
         $langs = Self::getLanguages();
         $array = array();
         $srch = new SearchBase($lang_table);
-        $srch->addCondition($condition_field, '=', $condition_id);
-        $rs = $srch->getResultSet();
-
-        $record = FatApp::getDb()->fetchAll($rs);
+        $srch->addCondition($condition_field, '=', $condition_id); 
+        $srch->doNotCalculateRecords();      
+        $record = FatApp::getDb()->fetchAll($srch->getResultSet());
         foreach ($langs as $lang) {
             foreach ($record as $rec) {
                 if ($rec[$condition_lang_field] == $lang['language_id']) {

@@ -1,5 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
-<!-- offcanvas-mobile-menu -->
 <div class="offcanvas offcanvas-start offcanvas-mobile-menu" tabindex="-1" id="blog-menu">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title"><?php echo Labels::getLabel('LBL_BLOG_POST_CATEGORIES'); ?> </h5>

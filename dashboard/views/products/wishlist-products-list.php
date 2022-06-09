@@ -26,7 +26,6 @@ $vtype = $postedData['vtype'] ?? false;
         ?>
 
                 <div class="items">
-                    <!--product tile-->
                     <div class="products">
                         <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $product,  'siteLangId' => $siteLangId], false); ?>
                         <?php if ($product['in_stock'] == 0 || 0 < $isOutOfMinOrderQty) { ?>
@@ -74,7 +73,6 @@ $vtype = $postedData['vtype'] ?? false;
                         </div>
                     </div>
                 </div>
-                <!--/product tile-->
             <?php } ?>
     </div> <?php
             $searchFunction = 'goToProductListingSearchPage';
