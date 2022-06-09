@@ -1,8 +1,10 @@
 Multivendor - Released Version : RV-9.3.1
+
     => IOS/Android Buyer APP version : 2.0.1
     => System API version : 2.3
     
 New Feature :
+
     => 82892 : Easypost Shipping API Integration.
     => Shopify sync module for SV seller.
     => 85399 : QNB payment gateway.
@@ -19,6 +21,7 @@ New Feature :
     => 88083 : System Log Listing Page.
     
 Enhancements :
+
    => At shop level  pickup interval option given.
    => Tracking order with Google Analytics ecommerce.
    => W3c validator.
@@ -35,6 +38,7 @@ Enhancements :
    => Add product screen
 
 Updates/Fixes : 
+
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
     => 052463 - Setup shipping of other product not working with EasyPost
     => 053622 - Load all font family variants
@@ -118,7 +122,7 @@ Updates/Fixes :
     => 055154	digital items> files linked with specific language are listing all on front end in preview
     => 055135	when digital catalog is added by admin and files are attached by admin and then seller should be allowed to see the name of file only not download
     => 055155	when admin adds catalog with digital links then on seller end links (preview and main) both are listing
-        
+
 ====================TV-9.3.1.20210703==========================
 
     => 055215 - when only language is enabled in system then in header> language drop down is coming with single value
