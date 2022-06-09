@@ -403,7 +403,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $srch->joinOrderCancelReasons();
         $srch->joinOrderProducts();
         $srch->joinOrderSellerUser();
-        $srch->addMultipleFields(['ocreason_title', 'ocrequest_message', 'seller.user_name as seller_name', 'seller_cred.credential_username', 'seller_cred.credential_email', 'op_shop_id', 'op_shop_name']);
+        $srch->addMultipleFields(['IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'seller.user_name as seller_name', 'seller_cred.credential_username', 'seller_cred.credential_email', 'op_shop_id', 'op_shop_name']);
         $srch->addCondition('ocrequest_id', '=', $ocrequestId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
