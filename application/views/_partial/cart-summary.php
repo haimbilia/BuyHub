@@ -33,8 +33,8 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                                     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
                                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
                                     $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['shop_id']));
-                                    $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_EXTRA_SMALL, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                                    $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBP" . ImageDimension::VIEW_EXTRA_SMALL, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
+                                    $imageUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                    $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBP" . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
                                     $isDisabled = (!$product['in_stock']) ? 'disabled' : '';
                                     $productType = ($product['is_digital_product']) ? 'digital_product_tab-js' : 'physical_product_tab-js'; ?>
 

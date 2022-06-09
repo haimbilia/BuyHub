@@ -269,12 +269,12 @@ class Labels extends MyAppModel
 
     public static function isAPCUcacheAvailable()
     {
-        return $cacheAvailable = (extension_loaded('apcu') && ini_get('apcu.enabled'));
+        return (extension_loaded('apcu') && ini_get('apcu.enabled'));
     }
 
     public static function getAPCUcacheKey($key, $langId)
     {
-        return $cacheKey = $_SERVER['SERVER_NAME'] . '_' . $key . '_' . $langId;
+        return $_SERVER['SERVER_NAME'] . '_' . $key . '_' . $langId;
     }
 
     public static function updateDataToFile($langId, $langCode = '', $type = Labels::TYPE_WEB, $updateForceFully = false, $key = '')
