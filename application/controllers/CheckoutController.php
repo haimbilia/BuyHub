@@ -1259,6 +1259,8 @@ class CheckoutController extends MyAppController
                     $op_product_weight_unit_name = ($productInfo['product_weight_unit']) ? $weightUnitsArr[$productInfo['product_weight_unit']] : '';
 
                     $op_product_tax_options = array();
+
+                   
                     foreach ($productTaxOption as $taxStroId => $taxStroName) {
                         $label = Labels::getLabel('MSG_TAX', $lang_id);
                         if (array_key_exists('name', $taxStroName) && $taxStroName['name'] != '') {
@@ -1268,12 +1270,12 @@ class CheckoutController extends MyAppController
                         $op_product_tax_options[$label]['value'] = $taxStroName['value'];
                         $op_product_tax_options[$label]['percentageValue'] = $taxStroName['percentageValue'];
                         $op_product_tax_options[$label]['inPercentage'] = $taxStroName['inPercentage'];
-
+                        $langLabel = $label;
                         if (isset($taxStroName['taxstr_id']) && $taxStroName['taxstr_id'] != '') {
-                            $langData =  TaxStructure::getAttributesByLangId($lang_id, $taxStroName['taxstr_id'], array(), 1);
-                            $langLabel = (isset($langData['taxstr_name']) && $langData['taxstr_name'] != '') ? $langData['taxstr_name'] : $label;
-                        } else {
-                            $langLabel = $label;
+                            $langData =  TaxStructure::getAttributesByLangId($lang_id, $taxStroName['taxstr_id'], array('taxstr_name','taxstr_is_combined','taxstr_identifier'), 1);                                                        
+                            if($langData && 1 == $langData['taxstr_is_combined']){
+                                $langLabel = isset($langData['taxstr_name']) && !empty($langData['taxstr_name']) ? $langData['taxstr_name'] : $langData['taxstr_identifier'];
+                            }                           
                         }
 
                         $productTaxChargesData[$taxStroId]['langData'][$lang_id] = array(

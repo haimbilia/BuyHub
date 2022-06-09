@@ -18,7 +18,7 @@
             <tbody>
                 <?php
                 $k = 1;
-                $totalTax = 0;         
+                $totalTax = 0;                   
                 foreach ($opsShippingDetail as $op) {
                     $taxCost = CommonHelper::orderProductAmount($op, 'TAX');
                     $totalTax += $taxCost;
@@ -63,12 +63,15 @@
                             </div>
                         </td>
                         <td>
-                            <?php echo CommonHelper::displayMoneyFormat($taxCost, true, true); ?>
-                            <?php  
-                                echo "<br/>";
+                            <?php 
+                                if(1 < count($op['taxOptions'])){
+                                    echo CommonHelper::displayMoneyFormat($taxCost, true, true);
+                                    echo "<br/>";
+                                }                            
+                               
                                 $strCount = 1;                             
                                 foreach($op['taxOptions'] as $taxStr){ 
-                                    echo $taxStr['name'] ." - " .$taxStr['value'];
+                                    echo $taxStr['name'] ." - " .CommonHelper::displayMoneyFormat($taxStr['value'], true, true);
                                     if($strCount != count($op['taxOptions'])){
                                         echo "<br/>";
                                     }
