@@ -43,8 +43,10 @@ $(document).ready(function () {
         if (actionType == inventoryUpdate) {
             location.href = fcom.makeUrl('seller', 'exportInventory');
         } else {
+            $.ykmodal(fcom.getLoader());
             fcom.displayProcessing();
             fcom.ajax(fcom.makeUrl('ImportExport', 'exportForm', [actionType]), '', function (t) {
+                fcom.removeLoader();
                 fcom.closeProcessing();
                 $.ykmodal(t, true);
             });
