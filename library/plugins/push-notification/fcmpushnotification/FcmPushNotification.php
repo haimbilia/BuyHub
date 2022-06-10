@@ -20,23 +20,6 @@ class FcmPushNotification extends PushNotificationBase
     {
         $this->langId = $langId;
     }
-        
-    /**
-     * formatOutput
-     *
-     * @param  int $status
-     * @param  string $msg
-     * @param  array $data
-     * @return array
-     */
-    private function formatOutput(int $status, string $msg, array $data = [])
-    {
-        return [
-            'status' => $status,
-            'msg' => $msg,
-            'data' => $data,
-        ];        
-    }
     
     /**
      * setDeviceTokens
