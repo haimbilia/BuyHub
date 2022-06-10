@@ -53,6 +53,7 @@ class AbandonedCart extends MyAppModel
             $srch->addCondition(static::DB_TBL_PREFIX . 'selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
             $srch->addOrder(static::DB_TBL_PREFIX . 'added_on', 'DESC');
             $srch->addMultipleFields(array(static::DB_TBL_PREFIX . 'email_count', static::DB_TBL_PREFIX . 'discount_notification'));
+            $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $record = FatApp::getDb()->fetch($rs);
@@ -187,6 +188,7 @@ class AbandonedCart extends MyAppModel
         $srch->joinSellerProducts($this->commonLangId);
         $srch->addCondition(static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $srch->addMultipleFields(array('abandonedcart_action', 'user.user_id', 'user.user_name', 'user_cred.credential_email', 'selprod_id', 'selprod_product_id', 'selprod_title', 'selprod_price'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $abandonedData = FatApp::getDb()->fetch($rs);
 
@@ -210,12 +212,12 @@ class AbandonedCart extends MyAppModel
             $tpl = "abandoned_cart_deleted_discount_notification";
         }
         $sendEmail = false;
-        if(!empty($abandonedData['credential_email'])){
+        if (!empty($abandonedData['credential_email'])) {
             $sendEmail = (new FatMailer($this->commonLangId, $tpl))
-            ->setTo($abandonedData['credential_email'])
-            ->setVariables($arrReplacements)
-            ->send();
-        }        
+                ->setTo($abandonedData['credential_email'])
+                ->setVariables($arrReplacements)
+                ->send();
+        }
 
         if (false === $sendEmail) {
             $this->error = Labels::getLabel('ERR_Email_Not_Sent', $this->commonLangId);
@@ -297,13 +299,13 @@ class AbandonedCart extends MyAppModel
         $langId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
 
         $sendEmail = false;
-        if(!empty($userEmail)){
+        if (!empty($userEmail)) {
             $sendEmail = (new FatMailer($langId, $tpl))
-            ->setTo($userEmail)
-            ->setVariables($arrReplacements)
-            ->send();
+                ->setTo($userEmail)
+                ->setVariables($arrReplacements)
+                ->send();
         }
-        
+
         if (false === $sendEmail) {
             return false;
         }
@@ -335,6 +337,7 @@ class AbandonedCart extends MyAppModel
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->addCondition('product_id', '=', 'mysql_func_' . $productId, 'AND', true);
         $prodSrch->addFld('product_id');
+        $prodSrch->doNotCalculateRecords();
         $productRs = $prodSrch->getResultSet();
         return FatApp::getDb()->fetch($productRs);
     }

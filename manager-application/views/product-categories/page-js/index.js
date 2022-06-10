@@ -29,7 +29,7 @@
 	};
 
 	goToProducts = function (prodCatId) {
-		redirectToProduct(0, { prodcat_id: prodCatId });
+		redirectToProductList(0, { prodcat_id: prodCatId });
 	};
 
 	updateStatus = function (e, obj, recordId, status) {

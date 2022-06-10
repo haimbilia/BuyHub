@@ -1676,6 +1676,7 @@ class Cart extends FatModel
             $srch = DiscountCoupons::getSearchObject(0, false, false);
             $srch->addCondition('coupon_code', '=', $couponCode);
             $srch->setPageSize(1);
+            $srch->doNotCalculateRecords();
             $srch->addMultipleFields(array('coupon_id'));
             $rs = $srch->getResultSet();
             $couponRow = FatApp::getDb()->fetch($rs);

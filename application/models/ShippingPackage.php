@@ -23,6 +23,7 @@ class ShippingPackage extends MyAppModel
         $srch = self::getSearchObject();
         $srch->addCondition('shippack_name', '=', trim($packageName));
         $srch->addFld('shippack_id');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row)) {

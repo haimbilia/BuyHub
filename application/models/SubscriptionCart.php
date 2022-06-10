@@ -33,6 +33,7 @@ class SubscriptionCart extends FatModel
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', $this->scart_user_id);
         $srch->addCondition('usercart_type', '=', 'mysql_func_' . Cart::TYPE_SUBSCRIPTION, 'AND', true);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         if ($row = FatApp::getDb()->fetch($rs)) {
             $this->SYSTEM_ARR['subscription_cart'] = json_decode($row["usercart_details"], true);
@@ -72,6 +73,7 @@ class SubscriptionCart extends FatModel
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', UserAuthentication::getLoggedUserId());
         $srch->addCondition('usercart_type', '=', 'mysql_func_' . Cart::TYPE_SUBSCRIPTION, 'AND', true);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         if ($row = FatApp::getDb()->fetch($rs)) {
             return $row["usercart_details"];
@@ -470,6 +472,7 @@ class SubscriptionCart extends FatModel
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', session_id());
         $srch->addCondition('usercart_type', '=', 'mysql_func_' . Cart::TYPE_SUBSCRIPTION, 'AND', true);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         if (!$row = FatApp::getDb()->fetch($rs)) {

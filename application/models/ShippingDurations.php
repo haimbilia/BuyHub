@@ -82,6 +82,7 @@ class ShippingDurations extends MyAppModel
         $srch = self::getSearchObject();
         $srch->addCondition('sd.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $id, 'AND', true);
         $srch->addFld('sd.' . static::DB_TBL_PREFIX . 'id');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row[static::DB_TBL_PREFIX . 'id'] == $id) {

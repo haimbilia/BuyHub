@@ -34,7 +34,7 @@ class ShopReport extends MyAppModel
         if (0 < $userId) {
             $srch->addCondition('sreport_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         }
-        $srch = $srch->getResultSet();
-        return FatApp::getDb()->fetch($srch);
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 }

@@ -488,7 +488,7 @@ class ProductsController extends MyAppController
     }
 
     public function view($selprod_id = 0)
-    {
+    { 
         $selprod_id = FatUtility::int($selprod_id);
         if (1 > $selprod_id) {
             if (true === MOBILE_APP_API_CALL) {

@@ -44,6 +44,7 @@ class UpcCode extends MyAppModel
     {
         $srch = self::getSearchObject();
         $srch->addCondition(self::DB_TBL_PREFIX . 'code', '=', $code);
+        $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
