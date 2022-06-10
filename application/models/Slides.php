@@ -118,4 +118,18 @@ class Slides extends MyAppModel
         $where = array('smt' => 'slide_id = ?', 'vals' => array($slide_id));
         FatApp::getDb()->updateFromArray(static::DB_TBL, array('slide_img_updated_on' => date('Y-m-d  H:i:s')), $where);
     }
+
+    public function getNextMaxOrder()
+    {
+        $srch = new SearchBase(static::DB_TBL);
+        $srch->addFld("MAX(" . static::DB_TBL_PREFIX . "display_order) as max_order");        
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $rs = $srch->getResultSet();
+        $record = FatApp::getDb()->fetch($rs);
+        if (!empty($record)) {
+            return $record['max_order'] + 1;
+        }
+        return 1;
+    }
 }
