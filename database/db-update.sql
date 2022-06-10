@@ -1915,3 +1915,8 @@ INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`
 ('seller_badge_request_status_change', 1, 'Seller - Badge request Change Status', 'Hello {user_full_name},\r\nYour request for approving {badge_name} has been {new_request_status}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller Shop\", \"variable\":\"{user_full_name}\"},{\"title\":\"Badge Name\", \"variable\":\"{badge_name}\"},{\"title\":\"New Request Status\", \"variable\":\"{new_request_status}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1);
 
 update `tbl_option_values` set optionvalue_color_code = concat("#",LOWER(optionvalue_color_code)) where optionvalue_color_code!='';
+update  `tbl_language_labels` set label_type=1 WHERE `label_key` LIKE 'LBL_Functional_Cookies_Information'; 
+update  `tbl_language_labels` set label_type=1 WHERE `label_key` LIKE 'LBL_I_AGREE_TO_THE_TERMS_CONDITIONS_AND_PRIVACY_POLICY'; 
+update  `tbl_language_labels` set label_type=1 WHERE `label_key` LIKE 'LBL_What_is_a_cookie_Information';
+update  `tbl_language_labels` set label_type=1 WHERE `label_key` LIKE 'LBL_STATISTICAL_ANALYSIS_COOKIES_INFORMATION';
+update  `tbl_language_labels` set label_type=1 WHERE `label_key` LIKE 'LBL_PERSONALISE_COOKIES_INFORMATION';

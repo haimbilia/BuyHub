@@ -175,6 +175,7 @@ class Labels extends MyAppModel
 
             $srch = static::getSearchObject($langId);
             $srch->addCondition(static::DB_TBL_PREFIX . 'key', '=', $key);
+            $srch->addCondition(static::DB_TBL_PREFIX . 'type', '=', $type);
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
 
