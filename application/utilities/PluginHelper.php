@@ -32,7 +32,7 @@ trait PluginHelper
         $this->langId = 0 < $this->langId ? $this->langId : CommonHelper::getLangId();
         $this->pluginSetting = new PluginSetting(0, $this->keyName, $this->recordId);
     }
-    
+
     private function setFormObj()
     {
         $this->frmObj = $this->getForm();
@@ -113,7 +113,7 @@ trait PluginHelper
 
         return true;
     }
-    
+
     /**
      * includePlugin
      *
@@ -134,7 +134,7 @@ trait PluginHelper
             $error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
             return false;
         }
-        
+
         if (true === $checkActive && 1 > Plugin::isActive($keyName)) {
             $str =  Labels::getLabel('MSG_{NAME}_IS_NOT_ACTIVE', $langId);
             $error = CommonHelper::replaceStringData($str, ['{NAME}' => $keyName]);
@@ -194,7 +194,7 @@ trait PluginHelper
         $reflect  = new ReflectionClass($keyName);
         return $reflect->newInstanceArgs($args);
     }
-        
+
     /**
      * callKingPin
      *
@@ -241,7 +241,7 @@ trait PluginHelper
         return $reflect->newInstanceArgs($args);
     }
 
-     /** updateSettings
+    /** updateSettings
      *
      * @param  int $pluginId
      * @param  array $data
@@ -266,7 +266,7 @@ trait PluginHelper
     {
         $this->recordId = $recordId;
     }
-    
+
     /**
      * getRecordId
      *

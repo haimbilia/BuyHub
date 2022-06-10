@@ -5,11 +5,11 @@ class FixerCurrencyConverterSettingsController extends CurrencyApiSettingsContro
     public static function getConfigurationKeys()
     {
         return [
-                'access_key' => [
-                    'type' => PluginSetting::TYPE_STRING,
-                    'required' => true,
-                    'label' => "Access Key",
-                ]
-            ];
+            'access_key' => [
+                'type' => PluginSetting::TYPE_STRING,
+                'required' => true,
+                'label' => "Access Key",
+            ]
+        ];
     }
 }

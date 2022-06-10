@@ -1,6 +1,7 @@
 $(document).ready(function () {
     bindSortable();
 });
+
 $(document).ajaxComplete(function () {
     bindSortable();
 });
@@ -44,9 +45,9 @@ $(document).ajaxComplete(function () {
             }
             fcom.removeLoader();
             setTabActive(type);
-            if($('.pluginTypesJs').length){
+            if ($('.pluginTypesJs').length) {
                 window.history.pushState('', '', fcom.makeUrl('plugins', 'index', [type]));
-            }            
+            }
             $(dv).html(res.listingHtml);
             fixTableColumnWidth();
         }, { fOutMode: 'json' });
