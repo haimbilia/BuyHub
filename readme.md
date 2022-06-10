@@ -869,6 +869,7 @@ Updates/Fixes :
     => 064839 - Seller Dashboard >> Multiple issues related to stats on the seller dashboard.
     => 064865 - Suggestion: To show the current active subscription highlighted on My subscription page
     => 064868 - The admin is redirected to the add product page when clicks on the product inventory count that appears with any category on the category listing page.
+    => 064872 - The color code do not linked with the color option added by the seller.
     
 UAT points:
 

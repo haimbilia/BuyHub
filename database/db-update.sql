@@ -1913,3 +1913,5 @@ INSERT IGNORE INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_nam
 
 INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES
 ('seller_badge_request_status_change', 1, 'Seller - Badge request Change Status', 'Hello {user_full_name},\r\nYour request for approving {badge_name} has been {new_request_status}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller Shop\", \"variable\":\"{user_full_name}\"},{\"title\":\"Badge Name\", \"variable\":\"{badge_name}\"},{\"title\":\"New Request Status\", \"variable\":\"{new_request_status}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1);
+
+update `tbl_option_values` set optionvalue_color_code = concat("#",LOWER(optionvalue_color_code)) where optionvalue_color_code!='';
