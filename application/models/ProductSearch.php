@@ -1243,20 +1243,7 @@ class ProductSearch extends SearchBase
             $this->addCondition('ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
         }
     }
-
-    /* public function joinSellerProductOptionsWithSelProdCode($langId = 0){
-    $langId = FatUtility::int( $langId );
-    if ($this->langId && 1 > $langId) {
-            $langId = $this->langId;
-        }
-    $this->joinTable( OptionValue::DB_TBL, 'LEFT OUTER JOIN', "selprod_code LIKE CONCAT('%_', ov.optionvalue_id)" , 'ov' );
-    $this->joinTable( Option::DB_TBL, 'INNER JOIN', 'spo.option_id = ov.optionvalue_option_id', 'spo' );
-    if( $langId ){
-    $this->joinTable( OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'ov_lang.optionvaluelang_optionvalue_id = ov.optionvalue_id AND ov_lang.optionvaluelang_lang_id = '.$langId, 'ov_lang' );
-    $this->joinTable( Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'spo.option_id = spo_lang.optionlang_option_id AND spo_lang.optionlang_lang_id = '.$langId, 'spo_lang' );
-    }
-    } */
-
+    
     public function joinSellerProductSpecifics()
     {
         $this->joinTable(SellerProductSpecifics::DB_TBL, 'LEFT JOIN', 'sps.sps_selprod_id = selprod_id', 'sps');

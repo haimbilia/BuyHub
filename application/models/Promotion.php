@@ -119,6 +119,7 @@ class Promotion extends MyAppModel
                 $srch = Banner::getBannerLocationSrchObj();
                 $srch->addCondition('blocation_id', '=', $blocation_id);
                 $srch->addFld('blocation_promotion_cost');
+                $srch->doNotCalculateRecords();
                 $rs = $srch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
                 if ($row && array_key_exists('blocation_promotion_cost', $row)) {
@@ -138,7 +139,7 @@ class Promotion extends MyAppModel
         $srch = new SearchBase(Promotion::DB_TBL_CHARGES, 'tpc');
         $srch->addCondition('tpc.' . Promotion::DB_TBL_CHARGES_PREFIX . 'promotion_id', '=', $promotionId);
         $srch->addOrder('tpc.' . Promotion::DB_TBL_CHARGES_PREFIX . 'id', 'desc');
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row == false) {
@@ -160,6 +161,7 @@ class Promotion extends MyAppModel
             $srch->addCondition('promotion_approved', '=', applicationConstants::YES);
             $srch->addCondition('promotion_deleted', '=', applicationConstants::NO);
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $result = FatApp::getDb()->fetch($rs);
         $totChargedAmount = $result['totChargedAmount'];
@@ -235,7 +237,7 @@ class Promotion extends MyAppModel
         $srch->addCondition(PROMOTION::DB_TBL_CLICKS_PREFIX . 'datetime', '>=', date('Y-m-d H:i:s', strtotime("-" . FatApp::getConfig('CONF_PPC_CLICK_COUNT_TIME_INTERVAL') . " Minute")));
         $srch->addCondition(PROMOTION::DB_TBL_CLICKS_PREFIX . 'ip', '=', $ip);
         $srch->addCondition(PROMOTION::DB_TBL_CLICKS_PREFIX . 'session_id', '=', $session);
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row == false) {
@@ -283,14 +285,14 @@ class Promotion extends MyAppModel
                 "MAX(picharge_datetime) as end_click_date",    "count(picharge_id) as total_clicks", )
             );
             $prChargeSummary->doNotCalculateRecords();
-            $prChargeSummary->addGroupBy('pclick_promotion_id');
+            $prChargeSummary->addGroupBy('pclick_promotion_id');            
             $rs = $prChargeSummary->getResultSet();
             $promotionClicks = FatApp::getDb()->fetch($rs);
 
 
             if ($promotionClicks) {
                 // Get User Wallet Balance
-                $userId = $pVal['promotion_user_id'];
+                // $userId = $pVal['promotion_user_id'];
                 /* $txnObj = new Transactions();
                 $accountSummary = $txnObj->getTransactionSummary($userId); */
                 //$balance = $accountSummary['total_earned'] - $accountSummary['total_used'];

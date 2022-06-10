@@ -250,11 +250,10 @@ class Tax extends MyAppModel
             $srch->addOrder(TaxRule::DB_RATES_TBL_PREFIX . 'user_id', 'DESC');
             $srch->addOrder('displayOrder', 'ASC');
         }
-
+        $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         //echo $srch->getQuery().PHP_EOL.PHP_EOL; 
-        $row = FatApp::getDb()->fetch($srch->getResultSet());
-        return (array) $row;
+        return (array) FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     /**

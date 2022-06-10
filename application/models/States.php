@@ -133,7 +133,7 @@ class States extends MyAppModel
                 $srch->addFld($attr);
             }
         }
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
@@ -158,9 +158,8 @@ class States extends MyAppModel
         $srch = static::getSearchObject();
         $srch->addCondition('state_code', '=', strtoupper($stateCode));
         $srch->addCondition('state_country_id', '=', 'mysql_func_' . $countryId, 'AND', true);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        return $row;
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public static function getStateAttrByCountryIdAndName(int $countryId, string $stateName, int $langId, string $attr): string
@@ -177,7 +176,7 @@ class States extends MyAppModel
 
         $srch = static::getSearchObject(true, $langId);
         $srch->addCondition('state_name', '=', $stateName);
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetch($rs);
     }

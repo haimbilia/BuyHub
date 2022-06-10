@@ -345,6 +345,7 @@ class User extends MyAppModel
         $userObj = new User($userId);
         $srch = $userObj->getUserSupplierRequestsObj();
         $srch->addFld(array('usuprequest_attempts', 'usuprequest_id'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $supplierRequest = FatApp::getDb()->fetch($rs);
         if ($supplierRequest) {
@@ -577,7 +578,7 @@ class User extends MyAppModel
         if ($joinUserCredentials) {
             $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
         }
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
 
@@ -801,6 +802,7 @@ class User extends MyAppModel
 
         /* Delete Seller's Return Address [ */
         $srch = $this->getUserSearchObj(array('user_is_supplier', 'user_registered_initially_for'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         $userData = $db->fetch($rs, 'user_id');
@@ -1548,6 +1550,7 @@ class User extends MyAppModel
         }
         $srch = static::getSearchObject(true);
         $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
         unset($record['credential_password']);
@@ -1635,7 +1638,7 @@ class User extends MyAppModel
         $emvSrch->addCondition(static::DB_TBL_UEMV_PREFIX . 'token', '=', $code, 'AND');
 
         $emvSrch->addFld(array(static::DB_TBL_UEMV_PREFIX . 'user_id', static::DB_TBL_UEMV_PREFIX . 'email'));
-
+        $emvSrch->doNotCalculateRecords();
         $rs = $emvSrch->getResultSet();
         if ($row = FatApp::getDb()->fetch($rs)) {
             $this->deleteEmailVerificationToken($userId);
@@ -1670,7 +1673,7 @@ class User extends MyAppModel
             static::DB_TBL_UPV_PREFIX . 'otp'
         ];
         $emvSrch->addMultipleFields($attr);
-
+        $emvSrch->doNotCalculateRecords();
         $rs = $emvSrch->getResultSet();
         return FatApp::getDb()->fetch($rs);
     }
@@ -2199,6 +2202,7 @@ class User extends MyAppModel
         $userObj = new User($userId);
         $srch = $userObj->getUserSupplierRequestsObj();
         $srch->addFld(array('usuprequest_attempts', 'usuprequest_id', 'usuprequest_status'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $supplierRequest = FatApp::getDb()->fetch($rs);
         if (is_array($supplierRequest) && $supplierRequest['usuprequest_status'] == User::SUPPLIER_REQUEST_APPROVED) {
@@ -2314,6 +2318,7 @@ class User extends MyAppModel
         $srch = new SearchBase(UserAuthentication::DB_TBL_USER_AUTH, 'uat');
         $srch->addFld('uauth_user_id');
         $srch->addCondition('uauth_fcm_id', '=', $fcmToken);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         return isset($row['uauth_user_id']) ? $row['uauth_user_id'] : '';
@@ -2586,6 +2591,7 @@ class User extends MyAppModel
         $srch = $this->getUserSearchObj(array('user_id', 'credential_email', 'credential_username', 'credential_verified', 'user_deleted'));
         $condition = $srch->addCondition('credential_username', '=', $userName);
         $condition->attachCondition('credential_email', '=', $userEmail, 'OR');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetch($rs);
     }
@@ -2595,6 +2601,7 @@ class User extends MyAppModel
         $srch = $this->getUserSearchObj(['user_id', 'user_phone_dcode', 'user_phone', 'credential_username', 'credential_verified', 'user_deleted']);
         $condition = $srch->addCondition('credential_username', '=', $userName);
         $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $userPhone, 'OR', true);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetch($rs);
     }
@@ -2686,7 +2693,7 @@ class User extends MyAppModel
         $srch->addCondition('credential_email', '=', $email);
         $cnd = $srch->addCondition('usermeta_key', '=', strtolower($keyName) . '_account_id', 'OR');
         $cnd->attachCondition('usermeta_value', '=', $socialAccountId, 'AND');
-
+        $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
 
@@ -2989,7 +2996,7 @@ class User extends MyAppModel
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $langId, 's_l');
         $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'verified', '=', applicationConstants::YES);
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
 
