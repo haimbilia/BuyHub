@@ -10,7 +10,7 @@ if (!empty($reviews)) {
 
 $productView = $productView ?? false;
 ?>
-<section class="section section--reviews">
+<section class="section border-top section--reviews">
     <div class="container" id="itemRatings">
         <div class="row justify-content-center">
             <div class="col-lg-10">

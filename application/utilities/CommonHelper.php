@@ -310,7 +310,7 @@ class CommonHelper extends FatUtility
             trigger_error('Order Product Array should not be empty', E_USER_ERROR);
         }
 
-        $shippingAmount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount'] : 0;
+        
         $cartTotal = $opArr['op_qty'] * $opArr['op_unit_price'];
 
         switch (strtoupper($amountType)) {
@@ -356,6 +356,10 @@ class CommonHelper extends FatUtility
                 $amount += $opArr['op_rounding_off'];
                 break;
             case 'SHIPPING':
+                $shippingAmount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount'] : 0;
+                if ($userType == User::USER_TYPE_SELLER && !CommonHelper::canAvailShippingChargesBySeller($opArr['op_selprod_user_id'], $opArr['opshipping_by_seller_user_id'])) {
+                    $shippingAmount = 0;
+                }                
                 $amount = $shippingAmount;
                 break;
             case 'SHIPPING_API':
