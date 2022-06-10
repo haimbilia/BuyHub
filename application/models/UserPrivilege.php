@@ -280,6 +280,8 @@ class UserPrivilege
         $user = new User($sellerId);
         $srch = $user->getUserSearchObj();
         $srch->addCondition('credential_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $userData = FatApp::getDb()->fetch($rs);
         if (empty($userData)) {
@@ -289,7 +291,8 @@ class UserPrivilege
         $srch = UserPermission::getSearchObject();
         $srch->addCondition('userperm_user_id', '=', 'mysql_func_' . $sellerId, 'AND', true);
         $srch->addCondition('userperm_section_id', '=', 'mysql_func_' . $secId, 'AND', true);
-
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
         $srch->addFld('userperm_value');
         $rs = $srch->getResultSet();
 

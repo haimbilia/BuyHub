@@ -1,7 +1,7 @@
 <?php
 
 class Plugin extends PluginCommon
-{   
+{
     public const FLD_TYPE_TEXTBOX = 'addTextBox';
     public const FLD_TYPE_PASSWORD = 'addPasswordField';
     public const FLD_TYPE_DATE = 'addDateField';
@@ -71,6 +71,7 @@ class Plugin extends PluginCommon
         $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'type', '=', $type);
         $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
         $srch->doNotCalculateRecords();
+        $srch->addFld(static::DB_TBL_PREFIX . 'id');
         $srch->setPageSize(1);
         $row = FatApp::getDb()->fetch($srch->getResultSet());
         return !empty($row);
@@ -103,7 +104,7 @@ class Plugin extends PluginCommon
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
-        
+
         $db = FatApp::getDb();
         $row = (array) $db->fetch($rs);
         if (empty($row)) {
@@ -374,7 +375,7 @@ class Plugin extends PluginCommon
 
         if (in_array($typeId, self::getKingpinTypeArr())) {
             $kingPin = (self::INACTIVE == $status) ? self::INACTIVE : $id;
-            
+
             $assignValues = [
                 'conf_name' => 'CONF_DEFAULT_PLUGIN_' . $typeId,
                 'conf_val' => $kingPin

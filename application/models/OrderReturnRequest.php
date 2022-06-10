@@ -173,7 +173,6 @@ class OrderReturnRequest extends MyAppModel
         $srch->joinOrders();
         $srch->addOrderProductCharges();
         $srch->doNotCalculateRecords();
-        $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('orrequest_id', '=', $orrequest_id);
         $srch->addMultipleFields(array('orrequest_id', 'orrequest_op_id', 'orrequest_qty', 'orrequest_type', 'op_commission_percentage',

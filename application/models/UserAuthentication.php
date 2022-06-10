@@ -109,6 +109,7 @@ class UserAuthentication extends FatModel
         $srch->addCondition('attempt_ip', '=', $ip)->attachCondition('attempt_username', '=', $username);
         $srch->addCondition('attempt_time', '>=', date('Y-m-d H:i:s', strtotime("-5 minutes")));
         $srch->addFld('COUNT(*) AS total');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = $db->fetch($rs);
 
@@ -195,6 +196,7 @@ class UserAuthentication extends FatModel
         $db = FatApp::getDb();
         $srch = User::getSearchObject(true, 0, false);
         $srch->addCondition('credential_email', '=', $useremail);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = $db->fetch($rs);
         if (!empty($row)) {
@@ -279,6 +281,7 @@ class UserAuthentication extends FatModel
 
         $srch = User::getSearchObject(true, 0, false);
         $srch->addCondition('credential_email', '=', $useremail);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         if (!$row = $db->fetch($rs)) {
             $this->logFailedAttempt($ip, $useremail);
@@ -313,6 +316,7 @@ class UserAuthentication extends FatModel
             $userSrch = User::getSearchObject(true, 0, false);
             $condition = $userSrch->addCondition('credential_username', '=', $username);
             $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $username, 'OR', true);
+            $userSrch->doNotCalculateRecords();
             $userRs = $userSrch->getResultSet();
             // echo $userSrch->getQuery();
             if ($row = $db->fetch($userRs)) {
@@ -328,6 +332,7 @@ class UserAuthentication extends FatModel
         $condition = $srch->addCondition('credential_username', '=', $username);
         $condition->attachCondition('credential_email', '=', $username, 'OR');
         $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $username, 'OR', true);
+        $srch->doNotCalculateRecords();
 
         if (true === $this->loginWithOtp && !empty($password)) {
             $loginPhone = CommonHelper::replaceStringData($username, [$this->loginDcode => ValidateElement::formatDialCode($this->loginDcode)]);
@@ -451,6 +456,7 @@ class UserAuthentication extends FatModel
                 $parentUser = new User($rowUser['user_parent']);
                 $parentSrch = $parentUser->getUserSearchObj();
                 $parentSrch->addCondition('credential_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+                $parentSrch->doNotCalculateRecords();
                 $rs = $parentSrch->getResultSet();
                 $parentData = FatApp::getDb()->fetch($rs);
                 if (false == $parentData || null == $parentData) {
@@ -775,7 +781,7 @@ class UserAuthentication extends FatModel
         $db = FatApp::getDb();
         $srch = $this->validateUserObj($phoneNumber, $isActive, $isVerfied, $addDeletedCheck, true);
         $srch->addCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $phoneNumber, 'AND', true);
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         if (!$row = $db->fetch($rs, User::tblFld('id'))) {
             $this->error = Labels::getLabel('ERR_INVALID_PHONE_NUMBER', $this->commonLangId);
@@ -791,6 +797,7 @@ class UserAuthentication extends FatModel
         $srch = $this->validateUserObj($user, $isActive, $isVerfied, $addDeletedCheck);
         $cnd = $srch->addCondition(User::DB_TBL_CRED_PREFIX . 'username', '=', $user);
         $cnd->attachCondition(User::DB_TBL_CRED_PREFIX . 'email', '=', $user, 'OR');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         if (!$row = $db->fetch($rs, User::tblFld('id'))) {
             $this->error = Labels::getLabel('ERR_INVALID_USERNAME', $this->commonLangId);
@@ -1013,6 +1020,7 @@ class UserAuthentication extends FatModel
         $srchPluginSettings->addCondition('pluginsetting_value', '=', $authToken);
         $srchPluginSettings->addMultipleFields(['plugin_code']);
         $srchPluginSettings->setPageSize(1);
+        $srchPluginSettings->doNotCalculateRecords();
         $rs = $srchPluginSettings->getResultSet();
         $plugin =  FatApp::getDb()->fetch($rs);
         return empty($plugin) ? false : true;

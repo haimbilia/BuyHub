@@ -85,7 +85,7 @@ class AdsBatch extends MyAppModel
         $srch = new SearchBase(static::DB_TBL_BATCH_PRODS, 'abp');
         $srch->doNotCalculateRecords();
         $srch->addCondition(self::DB_TBL_BATCH_PRODS_PREFIX . 'adsbatch_id', '=', $adsBatchId);
-        $srch->addCondition(self::DB_TBL_BATCH_PRODS_PREFIX . 'selprod_id', '=', $selProdId);
+        $srch->addCondition(self::DB_TBL_BATCH_PRODS_PREFIX . 'selprod_id', '=', $selProdId);        
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         if (!$rs) {

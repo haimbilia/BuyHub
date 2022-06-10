@@ -110,8 +110,8 @@ class Shop extends MyAppModel
                 $srch->addFld($attr);
             }
         }
-        $rs = $srch->getResultSet();
-        $row = $db->fetch($rs);
+        $srch->doNotCalculateRecords();
+        $row = $db->fetch($srch->getResultSet());
         if (!is_array($row)) {
             return false;
         }
@@ -210,9 +210,8 @@ class Shop extends MyAppModel
                 $srch->addFld($attr);
             }
         }
-
-        $rs = $srch->getResultSet();
-        $row = $db->fetch($rs);
+        $srch->doNotCalculateRecords();
+        $row = $db->fetch($srch->getResultSet());
         if (!is_array($row)) {
             return false;
         }

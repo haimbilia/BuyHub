@@ -67,6 +67,7 @@ class TrackingCourierCodeRelation extends MyAppModel
 
         $srch = static::getSearchObject();
         $srch->addCondition('tccr_shipapi_courier_code', '=', $shipCourierCode);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         if (NULL === $data = FatApp::getDb()->fetch($rs)) {
             return [];

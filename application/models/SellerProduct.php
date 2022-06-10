@@ -568,9 +568,8 @@ class SellerProduct extends MyAppModel
         $srch->joinTable(static::DB_TBL, 'INNER JOIN', 'prodSp.splprice_selprod_id = slrPrd.selprod_id', 'slrPrd');
         $srch->addCondition('splprice_id', '=', 'mysql_func_' . $splprice_id, 'AND', true);
         $srch->addMultipleFields(array('prodSp.*', 'slrPrd.selprod_id', 'slrPrd.selprod_user_id'));
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        return $db->fetch($rs);
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public function deleteSellerProductSpecialPrice($splprice_id, $splprice_selprod_id, $userId = 0)
@@ -1224,6 +1223,7 @@ class SellerProduct extends MyAppModel
         $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition('selprod_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
         $srch->addFld('selprod_id');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
         if (!empty($record)) {
@@ -1241,6 +1241,7 @@ class SellerProduct extends MyAppModel
         $srch->addCondition('psbs_user_id', '=', 'mysql_func_' . $loggedUserId, 'AND', true);
         $srch->addCondition('product_id', '=', 'mysql_func_' . $productId, 'AND', true);
         $srch->addFld('psbs_user_id');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetch($rs);
     }
@@ -1262,6 +1263,7 @@ class SellerProduct extends MyAppModel
         $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_id', '=', 'mysql_func_' . $pluginId, 'AND', true);
         $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_selprod_id', '=', 'mysql_func_' . $pluginSelProdId, 'AND', true);
         $srch->addFld('spps_selprod_id');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
         if (!$records) {
@@ -1519,10 +1521,10 @@ class SellerProduct extends MyAppModel
                 $validationArr['subscription']['currentStatus']  = 0;
 
                 $currentActivePlan = OrderSubscription::getUserCurrentActivePlanDetails($langId, $selProd['selprod_user_id'], array(OrderSubscription::DB_TBL_PREFIX . 'till_date', OrderSubscription::DB_TBL_PREFIX . 'price', OrderSubscription::DB_TBL_PREFIX . 'type'));
-                if($currentActivePlan){
+                if ($currentActivePlan) {
                     $validationArr['subscription']['valid'] = FatDate::diff(date("Y-m-d"), $currentActivePlan[OrderSubscription::DB_TBL_PREFIX . 'till_date']) > 0;
                     $validationArr['subscription']['currentStatus'] = $validationArr['subscription']['valid'] ? 1 : 0;
-                }                
+                }
             }
             $product = Product::getAttributesById($selProd['selprod_product_id'], ['product_approved', 'product_active', 'product_deleted', 'product_brand_id']);
             if ($product) {

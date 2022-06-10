@@ -56,6 +56,7 @@ class Thread extends MyAppModel
                 $srch->addFld($attr);
             }
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = $db->fetch($rs);
         if (!is_array($row)) {
@@ -124,7 +125,7 @@ class Thread extends MyAppModel
 
         $parentAndThierChildIds = User::getParentAndTheirChildIds($userId);
 
-        $cnd = $srch->addCondition('ttm.message_to', 'in', $parentAndThierChildIds);
+        $srch->addCondition('ttm.message_to', 'in', $parentAndThierChildIds);
         /* $cnd->attachCondition('ttm.message_to','=',$userId,'OR'); */
 
         $srch->addMultipleFields(array("count(ttm.message_id) as UnreadMessageCount"));

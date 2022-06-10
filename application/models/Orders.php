@@ -2655,6 +2655,7 @@ class Orders extends MyAppModel
     {
         $srch = new  OrderSearch($langId);
         $srch->addCondition('order_id', '=', $orderId);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
 
@@ -2876,6 +2877,7 @@ class Orders extends MyAppModel
         $srch->addCondition(static::DB_ORDER_TO_PLUGIN_ORDER_PREFIX . 'plugin_id', '=', $pluginId);
         $srch->addCondition(static::DB_ORDER_TO_PLUGIN_ORDER_PREFIX . 'plugin_order_id', '=', $pluginOrderId);
         $srch->addFld('opo_order_id');
+        $srch->doNotCalculateRecords();
         $records = FatApp::getDb()->fetch($srch->getResultSet());
         return !empty($records) ? $records['opo_order_id'] : 0;
     }
