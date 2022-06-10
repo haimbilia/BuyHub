@@ -867,6 +867,8 @@ Updates/Fixes :
     => 064860 - UI issue on the request withdrawal popup on the affiliate end. 
     => 064853 - Buyer Dashboard >> The credit stats appear wrong on the buyer dashboard.
     => 064839 - Seller Dashboard >> Multiple issues related to stats on the seller dashboard.
+    => 064865 - Suggestion: To show the current active subscription highlighted on My subscription page
+    => 064868 - The admin is redirected to the add product page when clicks on the product inventory count that appears with any category on the category listing page.
     
 UAT points:
 
@@ -888,20 +890,6 @@ UAT points:
     => Manage Funds withdrawal requests - label Subtitle , Consideration over the Export option to be introduced under the Withdrawal Request Section (CSV download option) which is currently not placed into the system
 
     ----------------------------TV-9.4.0.20220406-----------------------
-
-    => 063377 - Seller UI: Messages' count is still showing after reading all the messages at the seller's end and buyer's end.
-    => 063631 - Seller UI: Spacing issue on seller registration page.
-    => 063632 - Advertiser: Double background images are showing while registering as an advertiser at the front-end and getting a UI issue while editing the content block of the advertiser at the admin's end.
-    => 063813 - Seller: Shop Inventory >> Add product: UI is distorted.
-    => 064034 - Web iOS: Admin: Comment popup is not opened when the user clicks on the 'view comment' icon under subscription order section.
-    => 064828 - The admin is not able to add a coupon code for the current date
-    => 064827 - Product Details Page>> Notice Undefined offset error appears on the product details page
-    => 064432 - Suggestion: Admin: Disabled records should be shown greyed out
-    => 064823 - The UI of the option name field is not correct on the seller options listing
-    => 064209 - iOS web: Applied filters values are not showing under filter by section
-    => 064838 - Suggestion: To add Yes/No text instead of the 0/1 in the 'Is seller' field on the advertiser reports listing
-    => 064835 - The currency symbol appears with the total promotions count on advertiser dashboard.
-    ----------------------------TV-9.4.0.20220406-----------------------    
 
 Known Issues and Problems :
 

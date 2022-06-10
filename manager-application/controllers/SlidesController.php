@@ -78,10 +78,7 @@ class SlidesController extends ListingBaseController
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        // $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
-        // if (!array_key_exists($sortBy, $fields)) {
-        //     $sortBy = current($allowedKeysForSorting);
-        // }
+        
         $sortBy = Slides::DB_TBL_PREFIX . 'display_order';
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
@@ -109,7 +106,7 @@ class SlidesController extends ListingBaseController
         $records =  FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
+        $this->set('recordCount', count($records));
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
@@ -206,6 +203,10 @@ class SlidesController extends ListingBaseController
         unset($post['slide_id'], $post['slide_title']);
 
         $slideObj = new Slides($recordId);
+        if(1 > $recordId){
+            $post['slide_display_order'] = $slideObj->getNextMaxOrder();
+        }
+
         $slideObj->assignValues($post);
 
         if (!$slideObj->save()) {
@@ -568,7 +569,7 @@ class SlidesController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            //'dragdrop',
+            'dragdrop',
             'select_all',
             /*  'listSerial', */
             'slide_media',
@@ -619,6 +620,6 @@ class SlidesController extends ListingBaseController
      */
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop', 'slide_media'], Common::excludeKeysForSort());
+        return [];
     }
 }

@@ -893,7 +893,7 @@ class PromotionsController extends ListingBaseController
         $shopReqObj = new FormFieldRequirement('promotion_shop', Labels::getLabel('FRM_SHOP', $this->siteLangId));
         $shopReqObj->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId), 'promotion_shop_cpc', FatApp::getConfig('CONF_CPC_SHOP', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
+        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId) ."[".$this->siteDefaultCurrencyCode."]" , 'promotion_shop_cpc', FatApp::getConfig('CONF_CPC_SHOP', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
         /*]*/
 
         /* Product [ */
@@ -924,7 +924,7 @@ class PromotionsController extends ListingBaseController
         $urlSlideReqObj = new FormFieldRequirement('slide_url', Labels::getLabel('FRM_URL', $this->siteLangId));
         $urlSlideReqObj->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId), 'promotion_slides_cpc', FatApp::getConfig('CONF_CPC_SLIDES', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
+        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId) ."[".$this->siteDefaultCurrencyCode."]", 'promotion_slides_cpc', FatApp::getConfig('CONF_CPC_SLIDES', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
 
         $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_BANNER, 'eq', 'banner_url', $urlReqObj);
         $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_SHOP, 'eq', 'banner_url', $urlUnReqObj);
