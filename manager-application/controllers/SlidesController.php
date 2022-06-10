@@ -620,6 +620,6 @@ class SlidesController extends ListingBaseController
      */
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop', 'slide_media'], Common::excludeKeysForSort());
+        return [];
     }
 }
