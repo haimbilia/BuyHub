@@ -11,7 +11,7 @@ class Stats extends MyAppModel
     public static function getSalesStatsObj($startDate = false, $endDate = false, $alias = 'stats', $type = self::COMPLETED_SALES)
     {
         $srch = new SearchBase(Orders::DB_TBL_ORDER_PRODUCTS, $alias);
-        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', $alias . '.op_order_id = ' . $alias . 'temp.order_number', $alias . 'temp');
+        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', $alias . '.op_order_id = ' . $alias . 'temp.order_id', $alias . 'temp');
         $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', $alias . 'temp.order_pmethod_id = ' . $alias . 'pm.plugin_id', $alias . 'pm');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();

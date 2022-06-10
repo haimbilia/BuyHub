@@ -107,11 +107,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 <div class="stats-number">
                                                     <ul>
                                                         <li>
-                                                            <span class="total"><?php echo Labels::getLabel('LBL_Total', $siteLangId); ?></span>
+                                                            <span class="total"><?php echo Labels::getLabel('LBL_AVAILABLE_BALANCE', $siteLangId); ?></span>
                                                             <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($userBalance); ?></span>
                                                         </li>
                                                         <li>
-                                                            <span class="total"><?php echo Labels::getLabel('LBL_Credits_earned_today', $siteLangId); ?></span>
+                                                            <span class="total"><?php echo Labels::getLabel('LBL_CREDITED_TODAY', $siteLangId); ?></span>
                                                             <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($txnsSummary['total_earned']); ?></span>
                                                         </li>
                                                     </ul>

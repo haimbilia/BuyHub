@@ -146,7 +146,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                     <tbody>
                         <?php
                         foreach ($arr as $childOrder) {
-                            $shippingCost = CommonHelper::orderProductAmount($childOrder, 'SHIPPING');
+                            $shippingCost = CommonHelper::orderProductAmount($childOrder, 'SHIPPING', false, ($isSellerDashboardView ? User::USER_TYPE_SELLER : User::USER_TYPE_BUYER));
                             $volumeDiscount = CommonHelper::orderProductAmount($childOrder, 'VOLUME_DISCOUNT');
                             $rewardPoint = CommonHelper::orderProductAmount($childOrder, 'REWARDPOINT');
                             $discount = CommonHelper::orderProductAmount($childOrder, 'DISCOUNT');
@@ -189,7 +189,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                             </li>
                                             <?php if (0 < $shippingCost) { ?>
                                                 <li class="list-popover-item">
-                                                    <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_COST:'); ?></span>
+                                                    <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING:'); ?></span>
                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($shippingCost, true, false, true, false, true); ?></span>
                                                 </li>
                                             <?php } ?>
