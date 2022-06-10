@@ -868,6 +868,7 @@ Updates/Fixes :
     => 064853 - Buyer Dashboard >> The credit stats appear wrong on the buyer dashboard.
     => 064839 - Seller Dashboard >> Multiple issues related to stats on the seller dashboard.
     => 064865 - Suggestion: To show the current active subscription highlighted on My subscription page
+    => 064868 - The admin is redirected to the add product page when clicks on the product inventory count that appears with any category on the category listing page.
     
 UAT points:
 
