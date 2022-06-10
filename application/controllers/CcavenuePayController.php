@@ -87,7 +87,7 @@ class CcavenuePayController extends PaymentController
         $iframe_url .= '/transaction/transaction.do?command=initiateTransaction&encRequest=' . $encrypted_data . '&access_code=' . $access_code;
         FatApp::redirectUser($iframe_url);
     }
-    
+
     public function callback()
     {
         $post = FatApp::getPostedData();
@@ -111,6 +111,10 @@ class CcavenuePayController extends PaymentController
                 $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $tracking_id, $paymentGatewayCharge, Labels::getLabel("MSG_Received_Payment", $this->siteLangId), json_encode($post));
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
             } else {
+                if (isset($response['status_message']) || isset($response['failure_message'])) {
+                    $message = isset($response['failure_message']) && !empty($response['failure_message']) ? $response['failure_message'] : $response['status_message'];
+                    Message::addErrorMessage($message);
+                }
                 SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);
                 $orderPaymentObj->addOrderPaymentComments($rcvdString);
                 FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
