@@ -11,13 +11,13 @@ class CurrencyConverter extends CurrencyConverterBase
 {
     public const KEY_NAME = __CLASS__;
     private const PRODUCTION_URL = 'https://free.currconv.com/api/v7/';
-    
+
     public $requiredKeys = ['api_key'];
 
     private $actionUri = '';
     private $response = '';
     private $toCurrencies = [];
-    
+
     /**
      * __construct
      *
@@ -31,7 +31,7 @@ class CurrencyConverter extends CurrencyConverterBase
             $this->langId = CommonHelper::getLangId();
         }
     }
-    
+
     /**
      * init
      *
@@ -46,10 +46,10 @@ class CurrencyConverter extends CurrencyConverterBase
         if (false === $this->loadBaseCurrency()) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     /**
      * getAction
      *
@@ -71,7 +71,7 @@ class CurrencyConverter extends CurrencyConverterBase
         $this->actionUri = self::PRODUCTION_URL . $action;
         return true;
     }
-    
+
     /**
      * bindApiKey
      *
@@ -102,7 +102,22 @@ class CurrencyConverter extends CurrencyConverterBase
      */
     private function getResponse(): object
     {
-        return $this->response;
+        return (object)$this->response;
+    }
+
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        $this->systemCurrencyCode = 'USD';
+        $resp = $this->getRates(['INR']);
+        return (0 < $resp['status']);
     }
 
     /**
@@ -123,7 +138,7 @@ class CurrencyConverter extends CurrencyConverterBase
         $curl = new Curl();
         $curl->setOpt(CURLOPT_RETURNTRANSFER, true);
         $curl->get($this->getActionUri());
-        
+
         if ($curl->error) {
             $this->error = $curl->errorCode . ' : ' . $curl->errorMessage;
             $this->error .= !empty($curl->getResponse()->error) ? $curl->getResponse()->error : '';
@@ -133,7 +148,7 @@ class CurrencyConverter extends CurrencyConverterBase
         $this->response = $curl->getResponse();
         return true;
     }
-    
+
     /**
      * getRates
      *

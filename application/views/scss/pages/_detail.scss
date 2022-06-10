@@ -185,8 +185,15 @@ $sharing-height: 50px;
         border-radius: 0;
         background-color: transparent;
         color: $brand-color;
-        &.active {
-            @include bg-brand;
+        .svg {
+            fill: #888;
+        }
+        &.active,
+        &:hover {
+            // @include bg-brand;
+            .svg {
+                fill: $brand-color;
+            }
         }
     }
     .via-social-sharing {
