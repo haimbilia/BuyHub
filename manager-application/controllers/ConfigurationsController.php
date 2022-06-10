@@ -1077,8 +1077,8 @@ class ConfigurationsController extends ListingBaseController
                 break;
 
             case Configurations::FORM_REWARD_POINTS:
-                $fld = $frm->addIntegerField(Labels::getLabel("FRM_REWARD_POINTS_IN", $langId) . '[' . $this->siteDefaultCurrencyCode . ']', 'CONF_REWARD_POINT');
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_HOW_MANY_REWARDS_POINTS_EQUAL_TO", $langId) . "[" . $this->siteDefaultCurrencyCode . "]</span>";
+                $fld = $frm->addIntegerField(Labels::getLabel("FRM_REWARD_POINTS", $langId), 'CONF_REWARD_POINT');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_HOW_MANY_REWARDS_POINTS_EQUAL_TO", $langId) . " 1 " . $this->siteDefaultCurrencyCode . "</span>";
                 $fld = $frm->addIntegerField(Labels::getLabel("FRM_MINIMUM_REWARD_POINT_REQUIRED_TO_USE", $langId), 'CONF_MIN_REWARD_POINT');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_MINIMUN_REWARD_POINTS_REQUIRED_USER_TO_AVAIL_DISCOUNT_DURING_CHECKOUT", $langId) . " .</span>";
 
