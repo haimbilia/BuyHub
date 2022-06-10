@@ -50,7 +50,13 @@
                         $txt .= $orderStatuses[$order['ossubs_status_id']];
                     }
 
-                    $td->appendElement('plaintext', array(), $txt, true);
+                    $bannerClass = applicationConstants::CLASS_WARNING;                  
+                    if($order['ossubs_status_id'] == OrderSubscription::ACTIVE_SUBSCRIPTION){
+                        $bannerClass = applicationConstants::CLASS_SUCCESS;
+                    }elseif($order['ossubs_status_id'] == OrderSubscription::CANCELLED_SUBSCRIPTION){
+                        $bannerClass = applicationConstants::CLASS_DANGER;
+                    }                  
+                    $td->appendElement('span', array('class' => 'badge badge-inline ' . $bannerClass), $txt, true);
                     break;
                 case 'total':
                     $txt = CommonHelper::displayMoneyFormat(CommonHelper::orderSubscriptionAmount($order));
