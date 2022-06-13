@@ -840,4 +840,17 @@ class ShipRocket extends ShippingServicesBase
         }
         return false;
     }
+
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        return $this->init();        
+    }
 }

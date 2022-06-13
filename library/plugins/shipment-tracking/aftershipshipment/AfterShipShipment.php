@@ -67,7 +67,7 @@ class AfterShipShipment extends ShipmentTrackingBase
     /**
      * getTrackingCouriers
      *
-     * @return void
+     * @return bool
      */
     public function getTrackingCouriers(): bool
     {
@@ -159,16 +159,7 @@ class AfterShipShipment extends ShipmentTrackingBase
     {
         $keys['plugin_active'] = Plugin::ACTIVE;
         $this->settings = $keys;
-        try {
-            if(!$this->getTrackingCouriers()){                
-                SystemLog::system($this->error, self::KEY_NAME);
-                return false;
-            }           
-        } catch (Exception $e) {
-            SystemLog::system($e->getMessage(), self::KEY_NAME);
-            return false;
-        }
-        return true;
+        return $this->getTrackingCouriers();        
     }
 
 }
