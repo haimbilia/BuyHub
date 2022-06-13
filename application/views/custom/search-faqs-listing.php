@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="col-lg-6 faqSectionJs">
+<div class="col-lg-6 faqSectionJs position-relative">
     <?php if (!empty($result)) {
         $catsHtml = '';
         $catsResult = [];

@@ -856,4 +856,22 @@ class Shopify extends DataMigrationBase
         return $this->nextLink;
     }
 
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        try {
+            $this->fetchSellers(['page' => 1, 'limit' => 1]);
+        } catch (Exception $e) {
+            SystemLog::system($e->getMessage(), self::KEY_NAME);
+            return false;
+        }
+    }
+
 }

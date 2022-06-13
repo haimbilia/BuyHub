@@ -149,4 +149,26 @@ class AfterShipShipment extends ShipmentTrackingBase
         return ['ShipStationShipping'];
     }
 
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        try {
+            if(!$this->getTrackingCouriers()){                
+                SystemLog::system($this->error, self::KEY_NAME);
+                return false;
+            }           
+        } catch (Exception $e) {
+            SystemLog::system($e->getMessage(), self::KEY_NAME);
+            return false;
+        }
+        return true;
+    }
+
 }
