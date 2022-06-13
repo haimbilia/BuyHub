@@ -203,7 +203,7 @@ class Importexport extends ImportexportCommon
             static::SELLER_PROD_SEO => Labels::getLabel('LBL_SEO_DATA', $langId),
             static::SELLER_PROD_SPECIAL_PRICE => Labels::getLabel('LBL_SPECIAL_PRICE', $langId),
             static::SELLER_PROD_VOLUME_DISCOUNT => Labels::getLabel('LBL_VOLUME_DISCOUNT', $langId),
-            static::SELLER_PROD_BUY_TOGTHER => Labels::getLabel('LBL_BUY_TOGTHER', $langId),
+            static::SELLER_PROD_BUY_TOGTHER => Labels::getLabel('LBL_BUY_TOGETHER', $langId),
             static::SELLER_PROD_RELATED_PRODUCT => Labels::getLabel('LBL_RELATED_PRODUCTS', $langId),
             //static::SELLER_PROD_POLICY => Labels::getLabel('LBL_SELLER_PRODUCT_POLICY', $langId),
         );
