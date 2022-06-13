@@ -49,7 +49,7 @@ class ShipStationShipping extends ShippingServicesBase
     {
         return $this->validateSettings($this->langId);
     }
-    
+
     /**
      * canGenerateLabelSeparately
      *
@@ -59,7 +59,7 @@ class ShipStationShipping extends ShippingServicesBase
     {
         return true;
     }
-        
+
     /**
      * getCarriers
      *
@@ -72,7 +72,7 @@ class ShipStationShipping extends ShippingServicesBase
         }
         return $this->getResponse();
     }
-    
+
     /**
      * 
      * @return array
@@ -94,7 +94,7 @@ class ShipStationShipping extends ShippingServicesBase
         }
         return $output;
     }
-    
+
     /**
      * getRates
      *
@@ -121,7 +121,7 @@ class ShipStationShipping extends ShippingServicesBase
             'weight' => $this->getWeight(),
             'dimensions' => $this->getDimensions()
         ];
-        
+
         if (false === $this->doRequest(self::REQUEST_SHIPPING_RATES, $pkgDetail)) {
             return [];
         }
@@ -143,12 +143,12 @@ class ShipStationShipping extends ShippingServicesBase
 
         $orderTimestamp = strtotime($orderDetail['order_date_added']);
         $orderDate = date('Y-m-d', $orderTimestamp) . 'T' . date('H:i:s', $orderTimestamp) . '.0000000';
-       
+
         $orderInvoiceNumber = 0;
 
         $shippingTotal = CommonHelper::orderProductAmount($orderDetail, 'SHIPPING');
         $taxCharged = CommonHelper::orderProductAmount($orderDetail, 'TAX');
-        
+
         $orderInvoiceNumber = $orderDetail['op_invoice_number'];
 
         $orderObj = new Orders($orderDetail['order_id']);
@@ -204,7 +204,7 @@ class ShipStationShipping extends ShippingServicesBase
         $this->order['items'] = [$this->getItem()];
         return $this->doRequest(self::REQUEST_CREATE_ORDER, $this->order); //Return bool
     }
-    
+
     /**
      * bindLabel - This function should be called after addOrder
      *
@@ -227,7 +227,7 @@ class ShipStationShipping extends ShippingServicesBase
         $disposition = (true === $preview ? 'inline' : 'attachment');
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
         $filename = empty($ext) ? trim($filename) . '.pdf' : $filename;
-        
+
         header("Pragma: public");
         header("Expires: 0");
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -398,6 +398,22 @@ class ShipStationShipping extends ShippingServicesBase
     public function proceedToShipment(array $requestParam): bool
     {
         return $this->doRequest(self::REQUEST_MARK_AS_SHIPPED, $requestParam);
+    }
+
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        if (false == $this->getCarriers() && '401 Unauthorized' == $this->error) {
+            return false;
+        }
+        return true;
     }
 
     /**
