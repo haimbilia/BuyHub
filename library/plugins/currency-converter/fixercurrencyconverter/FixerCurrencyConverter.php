@@ -128,6 +128,9 @@ class FixerCurrencyConverter extends CurrencyConverterBase
         $this->settings = $keys;
         $this->systemCurrencyCode = 'EUR';
         $resp = $this->getRates(['USD']);
+        if ((1 > $resp['status'])) {
+            $this->error = $resp['msg'];
+        }
         return (0 < $resp['status']);
     }
 

@@ -117,6 +117,9 @@ class CurrencyConverter extends CurrencyConverterBase
         $this->settings = $keys;
         $this->systemCurrencyCode = 'USD';
         $resp = $this->getRates(['INR']);
+        if ((1 > $resp['status'])) {
+            $this->error = $resp['msg'];
+        }
         return (0 < $resp['status']);
     }
 
