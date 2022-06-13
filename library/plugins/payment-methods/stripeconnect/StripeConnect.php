@@ -139,7 +139,7 @@ class StripeConnect extends PaymentMethodBase
         $this->payoutScheduleMonthly = isset($this->settings['payouts_schedule_monthly_anchor']) ? $this->settings['payouts_schedule_monthly_anchor'] : '';
         return true;
     }
-    
+
     /**
      * isMandatoryForSeller : Check if stripe connect configuration is mandatory for seller.
      *
@@ -1086,6 +1086,7 @@ class StripeConnect extends PaymentMethodBase
     public function loadAllAccounts(array $requestParam = ['limit' => 10]): bool
     {
         $this->resp = $this->doRequest(self::REQUEST_ALL_CONNECT_ACCOUNTS, $requestParam);
+        // CommonHelper::printArray($this->resp, true);
         if (false === $this->resp) {
             return false;
         }
@@ -1285,7 +1286,7 @@ class StripeConnect extends PaymentMethodBase
         }
         return true;
     }
-    
+
     public function fetchCards(): bool
     {
         if (false === $this->loadSavedCards()) {
@@ -1431,6 +1432,23 @@ class StripeConnect extends PaymentMethodBase
 
         $this->resp = $this->doRequest(self::REQUEST_CREATE_COUPON, $requestParam);
         return (false !==  $this->resp);
+    }
+
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        $this->liveMode = (Plugin::ENV_PRODUCTION == $keys['env']) ? "live_" : '';
+        if (false === $this->init() || false === $this->loadAllAccounts(['limit' => 1])) {
+            return false;
+        }
+        return true;
     }
 
     /**
