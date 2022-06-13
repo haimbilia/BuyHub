@@ -62,11 +62,11 @@ $(document).on("search", "#faqQuestionJs", function (e) {
 		if ('' != $('#faqQuestionJs').val()) {
 			data = 'question=' + $('#faqQuestionJs').val();
 		}
-		$(dv).prepend(fcom.getLoader());
+		$('.faqSectionJs').prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Custom', 'searchFaqs', [page, catId]), data, function (ans) {
 			fcom.closeProcessing();
 
-			$(dv).find('.loader-yk').remove();
+			$('.faqSectionJs').find('.loader-yk').remove();
 			$(dv).html(ans.html);
 			highlightSearchedString();
 			window.recordCount = ans.recordCount;
