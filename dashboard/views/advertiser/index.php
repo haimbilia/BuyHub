@@ -112,42 +112,40 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             <table class="table table-justified">
                                 <thead>
                                     <tr class="">
-                                        <th colspan="2"><?php echo Labels::getLabel('LBL_Promotions', $siteLangId); ?></th>
-                                        <th><?php echo Labels::getLabel('LBL_Type', $siteLangId); ?></th>
-                                        <th><?php echo Labels::getLabel('LBL_CPC', $siteLangId); ?></th>
+                                        <th><?php echo Labels::getLabel('LBL_Promotions', $siteLangId); ?></th>
                                         <th><?php echo Labels::getLabel('LBL_Budget', $siteLangId); ?></th>
-                                        <th><?php echo Labels::getLabel('LBL_Clicks', $siteLangId); ?></th>
+                                        <th><?php echo Labels::getLabel('LBL_CPC', $siteLangId); ?></th>
                                         <th><?php echo Labels::getLabel('LBL_Duration', $siteLangId); ?></th>
-                                        <th><?php echo Labels::getLabel('LBL_Approved', $siteLangId); ?></th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php if (count($activePromotions) > 0) {
-                                        $arrYesNo = applicationConstants::getYesNoArr($siteLangId);
                                         foreach ($activePromotions as $promotionId => $row) {
-                                            $duraionStr = Labels::getLabel('LBL_Start_Date', $siteLangId) . ' : ' . FatDate::format($row['promotion_start_date']) . '<br>';
-                                            $duraionStr .= Labels::getLabel('LBL_End_Date', $siteLangId) . ' : ' . FatDate::format($row['promotion_end_date']); ?>
+                                            $duraionStr = '<span class="form-text">' . Labels::getLabel('LBL_Start_Date', $siteLangId) . ' : </span>' . FatDate::format($row['promotion_start_date']) . '<br>';
+                                            $duraionStr .= '<span class="form-text">' . Labels::getLabel('LBL_End_Date', $siteLangId) . ' : </span>' . FatDate::format($row['promotion_end_date']); ?>
                                             <tr>
-                                                <td colspan="2">
-                                                    <?php echo $row['promotion_name']; ?>
-                                                </td>
-                                                <td><?php echo $typeArr[$row['promotion_type']]; ?>
-                                                </td>
                                                 <td>
-                                                    <?php echo CommonHelper::displayMoneyFormat($row['promotion_cpc']); ?>
+                                                    <div class="item">
+                                                        <div class="item__description">
+                                                            <div class="item__title"><?php echo $row['promotion_name']; ?></div>
+                                                            <div class="item__brand form-text"><?php echo Labels::getLabel('LBL_Type', $siteLangId); ?> : <?php echo $typeArr[$row['promotion_type']]; ?></div>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <?php echo CommonHelper::displayMoneyFormat($row['promotion_budget']); ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo FatUtility::int($row['clicks']); ?>
+                                                    <div class="item">
+                                                        <div class="item__description">
+                                                            <div class="item__brand form-text"><?php echo Labels::getLabel('LBL_CPC', $siteLangId); ?> : <?php echo CommonHelper::displayMoneyFormat($row['promotion_cpc']); ?></div>
+                                                            <div class="item__title"><?php echo Labels::getLabel('LBL_TOTAL_CLICKS', $siteLangId); ?> : <?php echo FatUtility::int($row['clicks']); ?></div>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <?php echo $duraionStr; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $arrYesNo[$row['promotion_approved']]; ?>
                                                 </td>
                                                 <td>
                                                     <ul class="actions">
