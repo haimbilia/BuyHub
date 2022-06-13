@@ -191,13 +191,13 @@ trait CatalogProduct
                 $srch->addMultipleFields(['option_id', 'option_is_separate_images']);
                 $srch->doNotLimitRecords();
                 $srch->doNotCalculateRecords();
-                $srch->addCondition(Option::tblFld('id'), 'IN', $post['options']);
-                $rs = $srch->getResultSet();
+                $srch->addCondition(Option::tblFld('id'), 'IN', $post['options']);               
+                $records =  FatApp::getDb()->fetchAll($srch->getResultSet());
 
-                if ($srch->recordCount() != count($post['options'])) {
+                if (count($records) != count($post['options'])) {
                     LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_OPTION_ID', $langId), true);
                 }
-                $records =  FatApp::getDb()->fetchAll($rs);
+                
                 $opImageCount = 0;
                 foreach ($records as $records) {
                     if ($records['option_is_separate_images'] == 1) {

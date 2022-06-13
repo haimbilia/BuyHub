@@ -1272,16 +1272,19 @@ class Product extends MyAppModel
 
         $srch = new SearchBase(static::DB_PRODUCT_TO_OPTION);
         $srch->addCondition(static::DB_PRODUCT_TO_OPTION_PREFIX . 'product_id', '=', $productId);
+        /*
         $srch->joinTable(OptionValue::DB_TBL, 'LEFT JOIN', 'prodoption_option_id = opval.optionvalue_option_id', 'opval');
         $srch->addFld('count(DISTINCT optionvalue_id) as count');
         $srch->addGroupBy('prodoption_option_id');
+        */
+        $srch->addFld('prodoption_optionvalue_ids');
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->doNotLimitRecords();       
         $rs = $srch->getResultSet();
         $totalOptionCombination = 1;
 
-        while ($row = FatApp::getDb()->fetch($rs)) {
-            $totalOptionCombination *= $row['count'];
+        while ($row = FatApp::getDb()->fetch($rs)) {              
+            $totalOptionCombination *= count(explode(",", $row['prodoption_optionvalue_ids']));
         }
 
         return ($totalOptionCombination - $alreadyAddedOptions) > 0 ? true : false;
