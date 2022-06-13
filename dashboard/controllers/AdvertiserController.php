@@ -41,13 +41,12 @@ class AdvertiserController extends AdvertiserBaseController
         /* Active Promotions [ */
         $activePSrch = $this->getPromotionsSearch(true);
         $rs = $activePSrch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs, 'promotion_id');
+        $activePromotions = FatApp::getDb()->fetchAll($rs, 'promotion_id');
         /* ] */
 
         /* Total Promotions [ */
         $totalPSrch = $this->getPromotionsSearch();
-        $rs = $totalPSrch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs, 'promotion_id');
+        $totalPSrch->getResultSet();
         /* ] */
 
         $txnObj = new Transactions();
@@ -60,7 +59,7 @@ class AdvertiserController extends AdvertiserBaseController
         $this->set('transactions', $transactions);
         $this->set('txnStatusArr', Transactions::getStatusArr($this->siteLangId));
         $this->set('txnStatusClassArr', Transactions::getStatusClassArr());
-        $this->set('activePromotions', $records);
+        $this->set('activePromotions', $activePromotions);
         $this->set('totPromotions', $totalPSrch->recordCount());
         $this->set('totActivePromotions', $activePSrch->recordCount());
         $this->set('lowBalWarning', $lowBalWarning);
@@ -100,11 +99,9 @@ class AdvertiserController extends AdvertiserBaseController
         ));
 
         if ($active) {
-            $pSrch->setDefinedCriteria();
             $pSrch->addCondition('promotion_end_date', '>', date("Y-m-d"));
             $pSrch->addCondition('promotion_approved', '=', applicationConstants::YES);
-        } else {
-            // $pSrch->addCondition('promotion_deleted', '=', applicationConstants::NO);
+            $pSrch->addCondition('promotion_active', '=', applicationConstants::YES);
         }
 
         $pSrch->setPageSize(applicationConstants::DASHBOARD_PAGE_SIZE);

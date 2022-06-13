@@ -112,8 +112,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             <table class="table table-justified">
                                 <thead>
                                     <tr class="">
-                                        <th colspan="2">
-                                            <?php echo Labels::getLabel('LBL_Promotions', $siteLangId); ?></th>
+                                        <th colspan="2"><?php echo Labels::getLabel('LBL_Promotions', $siteLangId); ?></th>
                                         <th><?php echo Labels::getLabel('LBL_Type', $siteLangId); ?></th>
                                         <th><?php echo Labels::getLabel('LBL_CPC', $siteLangId); ?></th>
                                         <th><?php echo Labels::getLabel('LBL_Budget', $siteLangId); ?></th>
@@ -152,10 +151,14 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 </td>
                                                 <td>
                                                     <ul class="actions">
-                                                        <li><a title="<?php echo Labels::getLabel('LBL_Analytics', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('advertiser', 'analytics', array($row['promotion_id'])); ?>"><svg class="svg" width="18" height="18">
+                                                        <li>
+                                                            <a title="<?php echo Labels::getLabel('LBL_Analytics', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('advertiser', 'analytics', array($row['promotion_id'])); ?>">
+                                                                <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
                                                                     </use>
-                                                                </svg></a></li>
+                                                                </svg>
+                                                            </a>
+                                                        </li>
                                                     </ul>
                                                 </td>
                                             </tr>
