@@ -66,7 +66,11 @@ class PluginSettingController extends ListingBaseController
 
         $plugin = PluginHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId, false);
         if (false === $plugin->validateKeys($post)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_GIVEN_KEYS_ARE_NOT_VALID.'));
+            if (empty($error)) {
+                $error = $plugin->getError();
+            }
+            $error = !empty($error) ? $error : Labels::getLabel('LBL_GIVEN_KEYS_ARE_NOT_VALID.');
+            FatUtility::dieJsonError($error);
         }
 
         $pluginSetting = new PluginSetting($post["plugin_id"]);
