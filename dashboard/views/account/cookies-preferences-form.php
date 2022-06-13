@@ -26,7 +26,7 @@ HtmlHelper::configureSwitchForCheckbox($fld);
         <div class="col-lg-7">
             <?php
             $data = [
-                'headingLabel' => Labels::getLabel('LBL_COOKIE_PREPERENCES', $siteLangId),
+                'headingLabel' => Labels::getLabel('LBL_COOKIE_PREFERENCES', $siteLangId),
                 'siteLangId' => $siteLangId,
             ];
 
