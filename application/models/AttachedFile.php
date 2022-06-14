@@ -146,6 +146,7 @@ class AttachedFile extends MyAppModel
         return $arr = array(
             static::FILETYPE_PRODCAT_IMAGE => Labels::getLabel('LBL_PRODUCT_CATEGORY_IMAGE', $langId),
             static::FILETYPE_CATEGORY_ICON => Labels::getLabel('LBL_CATEGORY_ICON', $langId),
+            static::FILETYPE_CATEGORY_THUMB => Labels::getLabel('LBL_CATEGORY_THUMB', $langId),
             static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_CATEGORY_IMAGE', $langId),
             static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_CATEGORY_BANNER', $langId),
             static::FILETYPE_CATEGORY_BANNER_SELLER => Labels::getLabel('LBL_CATEGORY_BANNER_SELLER', $langId),
@@ -1326,6 +1327,7 @@ class AttachedFile extends MyAppModel
                 $recordObj = new Collections($recordId);
                 break;
             case self::FILETYPE_CATEGORY_ICON:
+            case self::FILETYPE_CATEGORY_THUMB:
             case self::FILETYPE_CATEGORY_BANNER:
             case self::FILETYPE_CATEGORY_IMAGE:
             case self::FILETYPE_PRODCAT_IMAGE:

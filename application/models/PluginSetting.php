@@ -17,6 +17,7 @@ class PluginSetting
     public const TYPE_BOOL = 4;
     public const TYPE_SELECT = 5;
     public const TYPE_HTML = 6;
+    public const TYPE_ENVIRONMENT = 7;
 
     public function __construct($id, $pluginKey = '', $recordId = 0)
     {
@@ -173,6 +174,10 @@ class PluginSetting
                     $yesNo = array_reverse(applicationConstants::getYesNoArr($langId));
                     $fld = $frm->addSelectBox($label, $fieldName, $yesNo, '', array(), '');
                     break;
+                case static::TYPE_ENVIRONMENT:
+                    $envoirment = Plugin::getEnvArr($langId);
+                    $fld = $frm->addSelectBox($label, $fieldName, $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
+                    break;
                 case static::TYPE_SELECT:
                     $options = $attributes['options'] ?? [];
                     $selectedValue = $attributes['selectedValue'] ?? '';
@@ -189,7 +194,7 @@ class PluginSetting
                     $fld = $frm->addTextBox($label, $fieldName);
                     break;
             }
-            
+
             if (isset($attributes['required']) && true == $attributes['required']) {
                 $fld->requirements()->setRequired(true);
             }

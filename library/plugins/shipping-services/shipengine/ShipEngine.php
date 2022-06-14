@@ -25,6 +25,7 @@ class ShipEngine extends ShippingServicesBase
     private $fromAddress = [];
     private $weight = 0;
     private $orderDetail = [];
+    private $isAuthorized = true;
 
     public $requiredKeys = ['api_key'];
 
@@ -195,7 +196,7 @@ class ShipEngine extends ShippingServicesBase
             'CountryCode' => $countryCode
         ];
     }
-    
+
     /**
      * convertToInch
      *
@@ -333,7 +334,7 @@ class ShipEngine extends ShippingServicesBase
 
         $orderObj = new Orders($this->orderDetail['order_id']);
         $addresses = $orderObj->getOrderAddresses($this->orderDetail['order_id']);
-        $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : [];               
+        $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : [];
 
         $serviceCode = explode('|', $this->orderDetail['opshipping_service_code']);
 
@@ -376,7 +377,7 @@ class ShipEngine extends ShippingServicesBase
             ]
         ];
 
-        for ($i = 1; $i <= $this->orderDetail['op_qty']; $i++) { 
+        for ($i = 1; $i <= $this->orderDetail['op_qty']; $i++) {
             $requestParam["shipment"]["packages"][] = [
                 "weight" => [
                     "value" => $this->orderDetail['op_product_weight'],
@@ -497,6 +498,22 @@ class ShipEngine extends ShippingServicesBase
     }
 
     /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        if (false === $this->init() || (empty($this->getCarriers(1)) && false === $this->isAuthorized)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * doRequest
      *
      * @param  int $requestType
@@ -509,6 +526,7 @@ class ShipEngine extends ShippingServicesBase
             $curl = new Curl();
             $curl->setHeader('API-Key', $this->apiKey);
             $curl->setHeader('Content-Type', 'application/json');
+            $curl->setOpt(CURLOPT_RETURNTRANSFER, true);
             switch ($requestType) {
                 case self::REQUEST_GET_CARRIERS:
                     $curl->get($this->getApiUrl() . 'carriers');
@@ -522,6 +540,12 @@ class ShipEngine extends ShippingServicesBase
                 case self::REQUEST_TRACKING:
                     $curl->get($this->getApiUrl() . 'labels/' . $requestParam . '/track');
                     break;
+            }
+
+            if ($curl->isHttpError() && 401 == $curl->getHttpStatusCode()) {
+                $this->isAuthorized = false;
+                $this->error = Labels::getLabel('ERR_NOT_AUTHORIZED.');
+                return false;
             }
 
             if ($curl->error) {

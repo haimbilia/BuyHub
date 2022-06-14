@@ -6,9 +6,9 @@ class ShipStationShippingSettingsController extends ShippingServicesSettingsCont
     {
         return [
             'environment' => [
-                'type' => PluginSetting::TYPE_BOOL,
+                'type' => PluginSetting::TYPE_ENVIRONMENT,
                 'required' => true,
-                'label' => "Production Mode",
+                'label' => "Envoirment",
             ],
             'api_key' => [
                 'type' => PluginSetting::TYPE_STRING,
