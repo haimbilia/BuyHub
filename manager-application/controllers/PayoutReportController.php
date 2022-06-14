@@ -68,7 +68,7 @@ class PayoutReportController extends ListingBaseController
         $srch->joinOrders();
         $srch->joinPaymentMethod();
         $srch->joinOtherCharges(true);
-        $srch->joinOrderProductDicountCharges();
+        $srch->joinOrderProductDicountCharges(false);
         $srch->joinOrderProductRewardCharges();
         $srch->setPaymentStatusCondition();
         $srch->setCompletedOrdersCondition();
@@ -76,7 +76,7 @@ class PayoutReportController extends ListingBaseController
         $srch->setGroupBy('orderDate');
         $srch->setDateCondition($fromDate, $toDate);
         $srch->setOrderBy($sortBy, $sortOrder);
-        $srch->addMultipleFields(['DATE(o.order_date_added) as orderDate', 'SUM(IFNULL(ABS(opDiscountCharges), 0)) as discountTotal', 'sum(IFNULL(ABS(op_affiliate_commission_charged),0)) as affiliateCommissionCharged', 'SUM(IFNULL(ABS(opRewardDis.opcharge_amount), 0)) as rewardDiscount']);
+        $srch->addMultipleFields(['DATE(o.order_date_added) as orderDate','(SUM(IFNULL(ABS(opDis.opcharge_amount),0))) as couponDiscount', 'SUM(IFNULL(ABS(opDiscountCharges), 0)) as discountTotal', 'sum(IFNULL(ABS(op_affiliate_commission_charged),0)) as affiliateCommissionCharged', 'SUM(IFNULL(ABS(opRewardDis.opcharge_amount), 0)) as rewardDiscount']);
         $srch->addFld('(SUM(IFNULL(ABS(opDiscountCharges), 0)) + sum(IFNULL(op_affiliate_commission_charged,0))) as totalAmount');
 
         if ($type == 'export') {
