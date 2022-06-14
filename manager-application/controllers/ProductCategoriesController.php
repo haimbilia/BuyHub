@@ -582,7 +582,7 @@ class ProductCategoriesController extends ListingBaseController
 
         /* Sub-Categories have products[ */
         if (true === $prodCateObj->haveProducts(false)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Products_are_associated_with_its_category/sub-categories_so_we_are_not_able_to_delete_this_category', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PRODUCTS_ARE_ASSOCIATED_WITH_ITS_CATEGORY/SUB-CATEGORIES_SO_WE_ARE_NOT_ABLE_TO_DELETE_THIS_CATEGORY', $this->siteLangId), true);
         }
         /* ] */
 

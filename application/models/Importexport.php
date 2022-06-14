@@ -82,7 +82,7 @@ class Importexport extends ImportexportCommon
                 $arr[static::TYPE_TAX_CATEGORY] = Labels::getLabel('NAV_TAX_CATEGORIES', $langId);
                 if (!$sellerDashboard) {
                     $arr[static::TYPE_USERS] = Labels::getLabel('NAV_USERS', $langId);
-                    $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('NAV_LANGUAGE_LABELS', $langId);                   
+                    $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('NAV_LANGUAGE_LABELS', $langId);
                 } else {
                     $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('NAV_MY_PRODUCTS', $langId);
                 }
@@ -267,7 +267,7 @@ class Importexport extends ImportexportCommon
                 $j++;
             }
         );
-        
+
         if (!$this->isValidColumns($headingRow, $coloumArr)) {
             FatUtility::dieJsonError(Labels::getLabel("ERR_INVALID_COLOUM_CSV_FILE", $langId));
         }
@@ -316,7 +316,7 @@ class Importexport extends ImportexportCommon
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportProductOptions($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
-                    /*    
+                        /*    
                     case Importexport::PRODUCT_TAG:
                         $sheetName = Labels::getLabel('LBL_MARKETPLACE_PRODUCT_TAGS', $langId) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
@@ -351,13 +351,13 @@ class Importexport extends ImportexportCommon
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportProductOptions($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
-                    /*    
+                        /*    
                     case Importexport::PRODUCT_TAG:
                         $sheetName = Labels::getLabel('LBL_SELLER_PRODUCT_TAGS', $langId) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
                         $this->exportProductTags($langId, $offset, $noOfRows, $minId, $maxId, $userId);
                         break;
-                    */    
+                    */
                     case Importexport::PRODUCT_SPECIFICATION:
                         $sheetName = ((0 < $userId) ? Labels::getLabel('LBL_MY_PRODUCT_SPECIFICATIONS', $langId) : Labels::getLabel('LBL_SELLER_PRODUCT_SPECIFICATIONS', $langId)) . $sheetName;
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
@@ -571,13 +571,13 @@ class Importexport extends ImportexportCommon
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId, true);
                         $this->importProductOptions($csvFilePointer, $post, $langId, $userId);
                         break;
-                    /*    
+                        /*    
                     case Importexport::PRODUCT_TAG:
                         $sheetName = Labels::getLabel('LBL_PRODUCT_TAGS_ERROR', $langId);
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId, true);
                         $this->importProductTags($csvFilePointer, $post, $langId, $userId);
                         break;
-                    */    
+                    */
                     case Importexport::PRODUCT_SPECIFICATION:
                         $sheetName = Labels::getLabel('LBL_PRODUCT_SPECIFICATIONS_ERROR', $langId);
                         $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId, true);
@@ -896,6 +896,24 @@ class Importexport extends ImportexportCommon
                     }
                 }
 
+                $prodCateObj = new ProductCategory($categoryId);
+                $childCats = $prodCateObj->getChildrens();
+                if (1 < count($childCats)) {
+                    $errInSheet = true;
+                    $errMsg = Labels::getLabel("ERR_PLEASE_REMOVE_CHILD_CATEGORIES_FIRST.", $langId);
+                    CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
+                    continue;
+                }
+
+                /* Sub-Categories have products[ */
+                if (true === $prodCateObj->haveProducts(false)) {
+                    $errInSheet = true;
+                    $errMsg = Labels::getLabel("ERR_PRODUCTS_ARE_ASSOCIATED_WITH_ITS_CATEGORY/SUB-CATEGORIES_SO_WE_ARE_NOT_ABLE_TO_DELETE_THIS_CATEGORY.", $langId);
+                    CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
+                    continue;
+                }
+                /* ] */
+
                 if (!$this->isDefaultSheetData($langId)) {
                     unset($prodCatDataArr['prodcat_parent']);
                     unset($prodCatDataArr['prodcat_identifier']);
@@ -969,7 +987,7 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES); 
+        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
         $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
 
         FatUtility::dieJsonSuccess($success);
@@ -2062,7 +2080,7 @@ class Importexport extends ImportexportCommon
 
                     if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && 0 < $userId && Product::getActiveCount($userId, $productId) >= $userProdUploadLimit[$userId]) {
                         $errMsg = Labels::getLabel("ERR_YOU_HAVE_CROSSED_YOUR_PACKAGE_LIMIT.", $langId);
-                        CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), $errMsg));
+                        CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
                         continue;
                     }
                     $where = array('smt' => 'product_id = ?', 'vals' => array($productId));
@@ -2094,7 +2112,7 @@ class Importexport extends ImportexportCommon
 
                         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && 0 < $userId && Product::getActiveCount($userId) >= $userProdUploadLimit[$userId]) {
                             $errMsg = Labels::getLabel("ERR_YOU_HAVE_CROSSED_YOUR_PACKAGE_LIMIT.", $langId);
-                            CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), $errMsg));
+                            CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
                             continue;
                         }
 
@@ -5765,8 +5783,8 @@ class Importexport extends ImportexportCommon
             $success['msg'] = Labels::getLabel('ERR_ERROR!_PLEASE_CHECK_ERROR_LOG_SHEET.', $langId);
             FatUtility::dieJsonError($success);
         }
-        
-        CacheHelper::clear(CacheHelper::TYPE_ZONE);        
+
+        CacheHelper::clear(CacheHelper::TYPE_ZONE);
         $success['msg'] = Labels::getLabel('MSG_DATA_IMPORTED/UPDATED_SUCCESSFULLY.', $langId);
 
         FatUtility::dieJsonSuccess($success);
