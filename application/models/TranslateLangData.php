@@ -107,6 +107,11 @@ class TranslateLangData
                         $value = preg_replace('/""(.*?)""/', '"$1"', $value);
                     }
                 }
+            } else {
+                foreach ($dataToupdate as &$value) {
+                    $value = htmlspecialchars_decode($value);
+                    $value = preg_replace('/""(.*?)""/', '"$1"', $value);
+                }
             }
 
             $translatedDataToUpdate[$langArr[$lang]] = array_merge($langRecordData, $dataToupdate);
@@ -166,6 +171,7 @@ class TranslateLangData
                     $value = preg_replace('/""(.*?)""/', '"$1"', $value);
                 }
             }
+            
             $translatedDataToUpdate[$langArr[$lang]] = array_merge($langRecordData, $dataToupdate);
         }
         return $translatedDataToUpdate;
