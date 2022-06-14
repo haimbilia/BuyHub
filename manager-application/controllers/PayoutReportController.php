@@ -77,7 +77,7 @@ class PayoutReportController extends ListingBaseController
         $srch->setDateCondition($fromDate, $toDate);
         $srch->setOrderBy($sortBy, $sortOrder);
         $srch->addMultipleFields(['DATE(o.order_date_added) as orderDate', 'SUM(IFNULL(ABS(opDiscountCharges), 0)) as discountTotal', 'sum(IFNULL(ABS(op_affiliate_commission_charged),0)) as affiliateCommissionCharged', 'SUM(IFNULL(ABS(opRewardDis.opcharge_amount), 0)) as rewardDiscount']);
-        $srch->addFld('(SUM(IFNULL(ABS(opDiscountCharges), 0)) + sum(IFNULL(op_affiliate_commission_charged,0)) + (SUM(IFNULL(ABS(opRewardDis.opcharge_amount), 0))) ) as totalAmount');
+        $srch->addFld('(SUM(IFNULL(ABS(opDiscountCharges), 0)) + sum(IFNULL(op_affiliate_commission_charged,0))) as totalAmount');
 
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
@@ -101,6 +101,7 @@ class PayoutReportController extends ListingBaseController
                         case 'rewardDiscount':
                         case 'affiliateCommissionCharged':
                         case 'discountTotal':
+                        case 'couponDiscount':
                         case 'totalAmount':
                             $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
@@ -162,8 +163,9 @@ class PayoutReportController extends ListingBaseController
             $arr = [
                 'orderDate' => Labels::getLabel('LBL_DATE', $this->siteLangId),
                 'rewardDiscount' => Labels::getLabel('LBL_REWARD_DISCOUNT', $this->siteLangId),
+                'couponDiscount' => Labels::getLabel('LBL_COUPON_DISCOUNTS', $this->siteLangId),
+                'discountTotal' => Labels::getLabel('LBL_TOTAL_DISCOUNTS', $this->siteLangId),
                 'affiliateCommissionCharged' => Labels::getLabel('LBL_AFFILIATE_COMMISION', $this->siteLangId),
-                'discountTotal' => Labels::getLabel('LBL_COUPON_DISCOUNT', $this->siteLangId),
                 'totalAmount' => Labels::getLabel('LBL_TOTAL_AMOUNT', $this->siteLangId),
             ];
             FatCache::set('payoutReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
@@ -176,6 +178,6 @@ class PayoutReportController extends ListingBaseController
 
     protected function getDefaultColumns(): array
     {
-        return ['orderDate', 'rewardDiscount', 'affiliateCommissionCharged', 'discountTotal', 'totalAmount'];
+        return ['orderDate', 'rewardDiscount', 'affiliateCommissionCharged', 'couponDiscount', 'discountTotal', 'totalAmount'];
     }
 }
