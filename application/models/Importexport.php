@@ -4935,6 +4935,7 @@ class Importexport extends ImportexportCommon
                         }
                     }
                     if (true === $invalid) {
+                        $errorInRow = true;
                         $errMsg = str_replace('{column-name}', $columnTitle, Labels::getLabel("MSG_INVALID_{column-name}.", $langId));
                         CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), $errMsg));
                     } else {
@@ -5113,6 +5114,7 @@ class Importexport extends ImportexportCommon
                     }
 
                     if (true === $invalid) {
+                        $errorInRow = true;
                         $errMsg = str_replace('{column-name}', $columnTitle, Labels::getLabel("ERR_INVALID_{column-name}.", $langId));
                         CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), $errMsg));
                     } else {

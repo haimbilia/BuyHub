@@ -874,6 +874,7 @@ Updates/Fixes :
     => 064899 - The products added by the seller also appear when the admin exports the master products to an excel sheet.
     => 064894 - The category thumb media field is missing in the exported media file of the categories.
     => 064893 - The categories which has some products associated with it also get deleted when the admin changes the deleted status of the category to YES in the import CSV sheet.
+    => 064892 - A success message appears when the admin imports the options value CSV with invalid details
     
 UAT points:
 
