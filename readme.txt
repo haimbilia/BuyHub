@@ -873,6 +873,7 @@ Updates/Fixes :
     => 064873 - Error occurs in the price setup field on the inventory setup page on the seller end.
     => 064899 - The products added by the seller also appear when the admin exports the master products to an excel sheet.
     => 064894 - The category thumb media field is missing in the exported media file of the categories.
+    => 064893 - The categories which has some products associated with it also get deleted when the admin changes the deleted status of the category to YES in the import CSV sheet.
     
 UAT points:
 
