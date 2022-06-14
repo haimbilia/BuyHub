@@ -84,7 +84,6 @@ class TranslateLangData
             $this->error = $response['error']['message'];
             return false;
         }
-
         $convertedLangsData = $this->formatTranslatedData($response, count($langArr));
 
         $translatedDataToUpdate = [];
@@ -97,14 +96,15 @@ class TranslateLangData
                     $this->langTablePrimaryFields['langIdCol'] => $langArr[$lang],
                 ];
             }
-            
+
             if (0 < count($this->ignoreVariables)) {
                 $replacements = preg_filter('/$/', '</span>', preg_filter('/^/', "<span translate='no'>", $this->ignoreVariables));
                 $replacements = array_combine($this->ignoreVariables, $replacements);
                 foreach ($dataToupdate as &$value) {
                     foreach ($replacements as $key => $val) {
                         $value = str_replace($val, $key, $value);
-                        $value = preg_replace('/<qt(?:\s[^>]*)?>([^<]+)<\/qt>/i', '"\1"', $value);
+                        $value = htmlspecialchars_decode($value);
+                        $value = preg_replace('/""(.*?)""/', '"$1"', $value);
                     }
                 }
             }
@@ -136,14 +136,12 @@ class TranslateLangData
             $this->error = $this->translateObj->getError();
             return false;
         }
-
         if (!empty($response['error'])) {
             $this->error = $response['error']['message'];
             return false;
         }
 
         $convertedLangsData = $this->formatTranslatedData($response, count($langArr));
-
         $translatedDataToUpdate = [];
         foreach ($convertedLangsData as $lang => $langData) {
             $lang = strtolower($lang);
@@ -152,15 +150,20 @@ class TranslateLangData
                 $this->langTablePrimaryFields['langIdCol'] => $langArr[$lang],
             ];
             $dataToupdate = array_combine(array_keys($recordData), $langData);
-
             if (0 < count($this->ignoreVariables)) {
                 $replacements = preg_filter('/$/', '</span>', preg_filter('/^/', "<span translate='no'>", $this->ignoreVariables));
                 $replacements = array_combine($this->ignoreVariables, $replacements);
                 foreach ($dataToupdate as &$value) {
                     foreach ($replacements as $key => $val) {
                         $value = str_replace($val, $key, $value);
-                        $value = preg_replace('/<qt(?:\s[^>]*)?>([^<]+)<\/qt>/i', '"\1"', $value);
+                        $value = htmlspecialchars_decode($value);
+                        $value = preg_replace('/""(.*?)""/', '"$1"', $value);
                     }
+                }
+            } else {
+                foreach ($dataToupdate as &$value) {
+                    $value = htmlspecialchars_decode($value);
+                    $value = preg_replace('/""(.*?)""/', '"$1"', $value);
                 }
             }
             $translatedDataToUpdate[$langArr[$lang]] = array_merge($langRecordData, $dataToupdate);
@@ -174,7 +177,7 @@ class TranslateLangData
         if (false === $data || empty($data) || 1 > count($data)) {
             return false;
         }
-        
+
         foreach ($data as $translatedData) {
             if (!FatApp::getDB()->insertFromArray($this->tbl, $translatedData, false, array(), $translatedData)) {
                 $this->error = Labels::getLabel('ERR_UNABLE_TO_UPDATE_DATA', CommonHelper::getLangId());
@@ -192,7 +195,8 @@ class TranslateLangData
                 $this->ignoreVariables = array_unique(array_merge($this->ignoreVariables, (array)current($matches)));
                 $replacements = preg_filter('/$/', '</span>', preg_filter('/^/', "<span translate='no'>", $this->ignoreVariables));
                 $replacements = array_combine($this->ignoreVariables, $replacements);
-                $value = preg_replace('/"([^"]+)"/', '"<qt>\1</qt>"', $value);
+                $value = str_ireplace("'",  "&apos;", $value);
+                $value = str_ireplace('"',  "&quot;", $value);
                 foreach ($replacements as $key => $val) {
                     $value = str_replace($key, $val, $value);
                 }
