@@ -242,9 +242,6 @@ class Importexport extends ImportexportCommon
     {
         $encoding = mb_detect_encoding($colValue, "auto");
         return mb_convert_encoding($colValue, 'utf-8', $encoding);
-        /* $colValue = html_entity_decode($colValue, ENT_QUOTES, 'utf-8')
-        return mb_convert_encoding($colValue, 'UTF-16LE', 'UTF-8'); */
-        //html_entity_decode($colValue, ENT_QUOTES, 'utf-8');
     }
 
     private function validateCSVHeaders($csvFilePointer, &$coloumArr, $langId)
@@ -779,7 +776,7 @@ class Importexport extends ImportexportCommon
     {
         $srch = ProductCategory::getSearchObject(false, false, false);
         $srch->addOrder('m.prodcat_active', 'DESC');
-        $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'prodcat_id = afile_record_id and ( afile_type = ' . AttachedFile::FILETYPE_CATEGORY_ICON . ' or afile_type = ' . AttachedFile::FILETYPE_CATEGORY_BANNER . ')');
+        $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'prodcat_id = afile_record_id and ( afile_type = ' . AttachedFile::FILETYPE_CATEGORY_ICON . ' or afile_type = ' . AttachedFile::FILETYPE_CATEGORY_BANNER . ' or afile_type = ' . AttachedFile::FILETYPE_CATEGORY_THUMB . ')');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(array('prodcat_id', 'prodcat_identifier', 'afile_record_id', 'afile_record_subid', 'afile_type', 'afile_lang_id', 'afile_screen', 'afile_physical_path', 'afile_name', 'afile_display_order'));
@@ -2111,7 +2108,6 @@ class Importexport extends ImportexportCommon
                         }
 
                         $newRecord = true;
-                        // echo $this->db->getError();
                         $productId = $this->db->getInsertId();
 
                         if ($sellerId) {
