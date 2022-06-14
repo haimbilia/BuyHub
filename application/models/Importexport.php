@@ -1543,7 +1543,7 @@ class Importexport extends ImportexportCommon
 
         switch ($this->actionType) {
             case self::ACTION_ADMIN_PRODUCTS:
-                $srch->addCondition('tp.product_added_by_admin_id', '>', 0);
+                $srch->addCondition('tp.product_seller_id', '=', 0);
                 break;
             case self::ACTION_SELLER_PRODUCTS:
                 if ($userId) {
