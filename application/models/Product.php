@@ -654,6 +654,7 @@ class Product extends MyAppModel
         $srch->addCondition(static::DB_PRODUCT_TO_OPTION_PREFIX . 'product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
         $srch->addCondition(static::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id', '=', 'mysql_func_' . $optionId, 'AND', true);
         $srch->joinTable(Option::DB_TBL, 'INNER JOIN', Option::DB_TBL_PREFIX . 'id = ' . static::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id');
+        $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
@@ -1271,16 +1272,19 @@ class Product extends MyAppModel
 
         $srch = new SearchBase(static::DB_PRODUCT_TO_OPTION);
         $srch->addCondition(static::DB_PRODUCT_TO_OPTION_PREFIX . 'product_id', '=', $productId);
+        /*
         $srch->joinTable(OptionValue::DB_TBL, 'LEFT JOIN', 'prodoption_option_id = opval.optionvalue_option_id', 'opval');
         $srch->addFld('count(DISTINCT optionvalue_id) as count');
         $srch->addGroupBy('prodoption_option_id');
+        */
+        $srch->addFld('prodoption_optionvalue_ids');
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->doNotLimitRecords();       
         $rs = $srch->getResultSet();
         $totalOptionCombination = 1;
 
-        while ($row = FatApp::getDb()->fetch($rs)) {
-            $totalOptionCombination *= $row['count'];
+        while ($row = FatApp::getDb()->fetch($rs)) {              
+            $totalOptionCombination *= count(explode(",", $row['prodoption_optionvalue_ids']));
         }
 
         return ($totalOptionCombination - $alreadyAddedOptions) > 0 ? true : false;
@@ -1888,6 +1892,7 @@ END,   special_price_found ) as special_price_found'
     {
         $srch = static::getSearchObject();
         $srch->addFld('COUNT(' . static::DB_TBL_PREFIX . 'id) as total_products');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetch($rs);
     }
@@ -2118,6 +2123,7 @@ END,   special_price_found ) as special_price_found'
         }
         $srch = new SearchBase(ProductSpecifics::DB_TBL);
         $srch->addCondition(ProductSpecifics::DB_TBL_PREFIX . 'product_id', '=', $productId);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetch($rs);
     }
@@ -2165,6 +2171,7 @@ END,   special_price_found ) as special_price_found'
         $srch->addCondition(static::DB_PRODUCT_TO_PLUGIN_PRODUCT_PREFIX . 'plugin_id', '=', $pluginId);
         $srch->addCondition(static::DB_PRODUCT_TO_PLUGIN_PRODUCT_PREFIX . 'plugin_product_id', '=', $pluginProdId);
         $srch->addFld('ptpp_product_id');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
         if (!$records) {

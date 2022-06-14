@@ -78,6 +78,7 @@ class Tag extends MyAppModel
         $srch = static::getSearchObject();
         $srch->addCondition('t.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $id, 'AND', true);
         $srch->addFld('t.' . static::DB_TBL_PREFIX . 'id');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row[static::DB_TBL_PREFIX . 'id'] == $id) {

@@ -66,6 +66,7 @@ class ShippingProfile extends MyAppModel
         //$cnd->attachCondition('shipprofile_identifier', '=', trim($profileName));
         $srch->addCondition('shipprofile_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->addFld('shipprofile_id');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row)) {
@@ -151,6 +152,7 @@ class ShippingProfile extends MyAppModel
         $srSrch = ShippingRate::getSearchObject(CommonHelper::getLangId());
         $srSrch->addCondition('shiprate_condition_type', '=',  'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srSrch->addCondition('shiprate_shipprozone_id', '=',  'mysql_func_' . $shipProZoneId, 'AND', true);
+        $srSrch->doNotCalculateRecords();
         $rs = $srSrch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row)) {
@@ -186,6 +188,7 @@ class ShippingProfile extends MyAppModel
         if (0 < $shippingProfileId) {
             $srch->addCondition('shipprofile_id', '=',  'mysql_func_' . $shippingProfileId, 'AND', true);
         }
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 

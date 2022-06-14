@@ -120,7 +120,7 @@ class Transactions extends MyAppModel
         }
 
         $srch->addCondition('utxn.utxn_withdrawal_id', '=', 'mysql_func_' . $withdrawalId, 'AND', true);
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 

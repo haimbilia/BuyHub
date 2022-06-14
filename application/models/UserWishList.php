@@ -143,6 +143,7 @@ class UserWishList extends MyAppModel
         $srch->addCondition('uwlist_type', '=', 'mysql_func_' . $type, 'AND', true);
         $srch->addMultipleFields(array('uwlist_id'));
         $srch->setPageSize(1);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
@@ -211,7 +212,7 @@ class UserWishList extends MyAppModel
         return $totalWishlistItems['totalWishlistItems'] = $srch->recordCount();
     }
 
-    public static function savedForLaterItems(int $loggedUserId, int $langId= 0): array
+    public static function savedForLaterItems(int $loggedUserId, int $langId = 0): array
     {
         $langId = 1 > $langId ? CommonHelper::getLangId() : $langId;
         /* Save For Later Products Listing [ */

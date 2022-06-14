@@ -67,7 +67,7 @@ class AfterShipShipment extends ShipmentTrackingBase
     /**
      * getTrackingCouriers
      *
-     * @return void
+     * @return bool
      */
     public function getTrackingCouriers(): bool
     {
@@ -147,6 +147,19 @@ class AfterShipShipment extends ShipmentTrackingBase
     public function getTrackablePluginKeys()
     {
         return ['ShipStationShipping'];
+    }
+
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        return $this->getTrackingCouriers();        
     }
 
 }

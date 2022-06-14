@@ -379,6 +379,7 @@ class ProductCategory extends MyAppModel
                 $srch->addCondition('prodcat_id', '=', $catId);
                 $srch->setPageSize(1);
                 $srch->addMultipleFields(array('prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(prodcat_code,1,6) AS prodrootcat_code',  'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'prodcat_code', 'prodcat_ordercode'));
+                $srch->doNotCalculateRecords();
                 $rs = $srch->getResultSet();
                 $data = FatApp::getDb()->fetch($rs);
                 $categoriesArr[$catId] = $data;
@@ -428,6 +429,7 @@ class ProductCategory extends MyAppModel
         }
 
         $srch->addMultipleFields(array('prodcat_id', 'prodcat_identifier', 'prodcat_parent'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         while ($categories = FatApp::getDb()->fetch($rs)) {
             $category_tree_array[] = $categories;
@@ -461,6 +463,7 @@ class ProductCategory extends MyAppModel
         $srch = new SearchBase(static::DB_TBL_LANG);
         $srch->addCondition('prodcatlang_prodcat_id', '=', $prodcat_id);
         $srch->addCondition('prodcatlang_lang_id', '=', $lang_id);
+        $srch->doNotCalculateRecords();
         $row = FatApp::getDb()->fetch($srch->getResultSet());
         if (!empty($row)) {
             return true;
@@ -479,6 +482,7 @@ class ProductCategory extends MyAppModel
         }
         $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition('m.prodCat_id', '=', 'mysql_func_' . FatUtility::int($prodCat_id), 'AND', true);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
         $name = $name_suffix;
@@ -885,6 +889,7 @@ class ProductCategory extends MyAppModel
         $srch = static::getSearchObject(false, 0, false);
         $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition('m.prodcat_id', '=', $prodcat_id);
+        $srch->doNotCalculateRecords();
         $srch->addFld('m.prodcat_id');
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -900,6 +905,7 @@ class ProductCategory extends MyAppModel
         $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition('m.prodcat_id', '=', $prodcat_id);
         $srch->addFld('m.prodcat_id,m.prodcat_active');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row) && $row['prodcat_id'] == $prodcat_id) {
@@ -923,6 +929,7 @@ class ProductCategory extends MyAppModel
         $srch->addCondition('m.prodcat_identifier', '=', $identifier);
 
         $srch->addFld('m.prodcat_id');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         $row = FatApp::getDb()->fetch($rs);
@@ -940,6 +947,7 @@ class ProductCategory extends MyAppModel
         $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition('m.prodcat_id', '=', $catId);
         $srch->addFld('COALESCE(prodcat_name,prodcat_identifier) as prodcat_name');
+        $srch->doNotCalculateRecords();
         $row = FatApp::getDb()->fetch($srch->getResultSet());
         return $row['prodcat_name'] ?? '';
     }
@@ -956,6 +964,7 @@ class ProductCategory extends MyAppModel
                 $prodCatSrch = new ProductCategorySearch($siteLangId);
                 $prodCatSrch->addMultipleFields(array('prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(prodcat_code,1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'prodcat_code as prodcat_code'));
                 $prodCatSrch->addCondition('prodcat_id', '=', 'mysql_func_' . $catId, 'AND', true);
+                $prodCatSrch->doNotCalculateRecords();
                 $rs = $prodCatSrch->getResultSet();
                 $rows = FatApp::getDb()->fetch($rs);
                 foreach ($rows as $key => $val) {
@@ -965,6 +974,7 @@ class ProductCategory extends MyAppModel
                 $prodCatSrch = new ProductCategorySearch($siteLangId);
                 $prodCatSrch->addFld('COALESCE(prodcat_name,prodcat_identifier ) as prodcat_name');
                 $prodCatSrch->addCondition('prodcat_id', '=', 'mysql_func_' . $catId, 'AND', true);
+                $prodCatSrch->doNotCalculateRecords();
                 $rs = $prodCatSrch->getResultSet();
                 $rows = FatApp::getDb()->fetch($rs);
 
@@ -994,6 +1004,7 @@ class ProductCategory extends MyAppModel
                 $prodCatSrch = new ProductCategorySearch($siteLangId);
                 $prodCatSrch->addMultipleFields($attr);
                 $prodCatSrch->addCondition('prodcat_id', '=', 'mysql_func_' . FatUtility::int($prodCats[0]), 'AND', true);
+                $prodCatSrch->doNotCalculateRecords();
                 $rs = $prodCatSrch->getResultSet();
                 $rows = FatApp::getDb()->fetch($rs);
                 foreach ($rows as $key => $val) {
@@ -1004,6 +1015,7 @@ class ProductCategory extends MyAppModel
                 $prodCatSrch = new ProductCategorySearch($siteLangId);
                 $prodCatSrch->addFld('COALESCE(prodcat_name,prodcat_identifier ) as prodcat_name');
                 $prodCatSrch->addCondition('prodcat_id', '=', 'mysql_func_' . FatUtility::int($prodCats[0]), 'AND', true);
+                $prodCatSrch->doNotCalculateRecords();
                 $rs = $prodCatSrch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
 
@@ -1339,6 +1351,7 @@ class ProductCategory extends MyAppModel
     {
         $srch = $this->categoryObj($includeProductCount, $includeSubCategoriesCount);
         $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
+        $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
@@ -1357,6 +1370,7 @@ class ProductCategory extends MyAppModel
         $srch->addCondition(static::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition(static::DB_TBL_PREFIX . 'parent', '=', 'mysql_func_' . $prodCatId, 'AND', true);
         $srch->addMultipleFields(array('COUNT(' . static::DB_TBL_PREFIX . 'id) as subcategory_count'));
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
         return $record['subcategory_count'];

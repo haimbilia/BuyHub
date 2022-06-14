@@ -834,10 +834,26 @@ class ShipRocket extends ShippingServicesBase
         } catch (Exception $e) {
             SystemLog::plugin(json_encode($requestParam), $e->getMessage(), self::KEY_NAME);
             $this->error = $e->getMessage();
+            if ($requestType == self::REQUEST_AUTH_LOGIN && $e->getCode() == 400) {
+                $this->error = 'INVALID KEYS';
+            }
         } catch (Error $e) {
             SystemLog::plugin(json_encode($requestParam), $e->getMessage(), self::KEY_NAME);
             $this->error = $e->getMessage();
         }
         return false;
+    }
+
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;   
+        return $this->init();        
     }
 }

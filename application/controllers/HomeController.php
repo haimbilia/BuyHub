@@ -1519,6 +1519,7 @@ class HomeController extends MyAppController
             'country_id' => $defultCountryId,
             'country_code' => Countries::getAttributesById($defultCountryId, 'country_code') ?? '',
         ];
+        $data['siteLangId'] = $this->siteLangId;
 
         $this->set('data', $data);
         $this->_template->render();

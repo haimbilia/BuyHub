@@ -16,6 +16,8 @@ class PluginSetting
     public const TYPE_FLOAT = 3;
     public const TYPE_BOOL = 4;
     public const TYPE_SELECT = 5;
+    public const TYPE_HTML = 6;
+    public const TYPE_ENVIRONMENT = 7;
 
     public function __construct($id, $pluginKey = '', $recordId = 0)
     {
@@ -155,8 +157,11 @@ class PluginSetting
         $frm->addHiddenField('', 'plugin_id');
 
         foreach ($requirements as $fieldName => $attributes) {
-            $label = 'FRM_' . str_replace(' ', '_', strtoupper($attributes['label']));
-            $label = Labels::getLabel($label, $langId);
+            $label = '';
+            if (isset($attributes['label'])) {
+                $label = 'FRM_' . str_replace(' ', '_', strtoupper($attributes['label']));
+                $label = Labels::getLabel($label, $langId);
+            }
 
             switch ($attributes['type']) {
                 case static::TYPE_INT:
@@ -169,17 +174,28 @@ class PluginSetting
                     $yesNo = array_reverse(applicationConstants::getYesNoArr($langId));
                     $fld = $frm->addSelectBox($label, $fieldName, $yesNo, '', array(), '');
                     break;
+                case static::TYPE_ENVIRONMENT:
+                    $envoirment = Plugin::getEnvArr($langId);
+                    $fld = $frm->addSelectBox($label, $fieldName, $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
+                    break;
                 case static::TYPE_SELECT:
                     $options = $attributes['options'] ?? [];
                     $selectedValue = $attributes['selectedValue'] ?? '';
                     $selectCaption = $attributes['selectCaption'] ?? Labels::getLabel('LBL_SELECT', $langId);
                     $fld = $frm->addSelectBox($label, $fieldName, $options, $selectedValue, array(), $selectCaption);
                     break;
+                case static::TYPE_HTML:
+                    $html = $attributes['html'] ?? '';
+                    if (!empty($html)) {
+                        $frm->addHtml('', $fieldName, $html);
+                    }
+                    break;
                 default:
                     $fld = $frm->addTextBox($label, $fieldName);
                     break;
             }
-            if (true == $attributes['required']) {
+
+            if (isset($attributes['required']) && true == $attributes['required']) {
                 $fld->requirements()->setRequired(true);
             }
         }

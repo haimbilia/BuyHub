@@ -106,7 +106,7 @@ class ShippingMethods extends MyAppModel
                 $srch->addFld($attr);
             }
         }
-
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = $db->fetch($rs);
 

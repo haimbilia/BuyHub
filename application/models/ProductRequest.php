@@ -193,6 +193,7 @@ class ProductRequest extends MyAppModel
                                     ShippingCompanies::DB_TBL_LANG_PREFIX . 'scompany_id')
                 );
                 $shipCompSrch->addCondition(ShippingCompanies::DB_TBL_PREFIX . 'id', '=', $val['company_id']);
+                $shipCompSrch->doNotCalculateRecords();
                 $rs = $shipCompSrch->getResultSet();
                 $shippingCompData = FatApp::getDb()->fetch($rs);
                 if (is_array($shippingCompData)) {
@@ -209,6 +210,7 @@ class ProductRequest extends MyAppModel
                                     ShippingDurations::DB_TBL_PREFIX . 'days_or_weeks')
                 );
                 $shipDurationSrch->addCondition(ShippingDurations::DB_TBL_PREFIX . 'id', '=', $val['processing_time_id']);
+                $shipDurationSrch->doNotCalculateRecords();
                 $rs = $shipDurationSrch->getResultSet();
                 $durationArr = FatApp::getDb()->fetch($rs);
                 if (is_array($durationArr)) {

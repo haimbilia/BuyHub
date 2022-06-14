@@ -17,6 +17,7 @@ class EasyPost extends ShippingServicesBase
     private const REQUEST_REFUND_SHIPMENT = 8;
 
     private $resp;
+    private $eCode = '';
     private $toAddress;
     private $fromAddress;
     private $parcel;
@@ -86,7 +87,7 @@ class EasyPost extends ShippingServicesBase
     {
         return $this->resp;
     }
-    
+
     /**
      * canGenerateLabelFromShipment
      *
@@ -711,6 +712,23 @@ class EasyPost extends ShippingServicesBase
     }
 
     /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        $this->getCarriers();
+        if (!empty($this->eCode) && 'APIKEY.INACTIVE' == $this->eCode) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * doRequest
      *
      * @param  int $requestType
@@ -755,6 +773,9 @@ class EasyPost extends ShippingServicesBase
             if (!empty($e->param)) {
                 $error = Labels::getLabel('MSG_INVALID_PARAM:_{PARAM}', $this->langId);
                 $msg .= "\n" . CommonHelper::replaceStringData($error, ['{PARAM}' => $e->param]);
+            }
+            if (isset($e->ecode)) {
+                $this->eCode = $e->ecode;
             }
             $this->error = $msg;
         } catch (Error $e) {

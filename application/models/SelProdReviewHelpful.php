@@ -20,6 +20,7 @@ class SelProdReviewHelpful extends MyAppModel
         $srch->addMultipleFields(
             array('sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful')
         );
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         if ($row = $db->fetch($rs)) {

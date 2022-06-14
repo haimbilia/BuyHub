@@ -398,4 +398,20 @@ class AvalaraTax extends TaxBase
 
         return $formatedTax;
     }
+
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;  
+        if(!$this->init()){
+            return false;
+        }
+        return $this->client->ping()->authenticated;        
+    }
 }

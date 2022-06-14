@@ -57,7 +57,22 @@ class PluginSettingController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($this->frmObj->getValidationErrors()), true);
         }
-        $post = array_map('trim', $post);        
+        $post = array_map('trim', $post);
+
+        $keyName = FatApp::getPostedData('keyName', FatUtility::VAR_STRING, '');
+        if (empty($keyName)) {
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_KEY_NAME'));
+        }
+
+        $plugin = PluginHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId, false);
+        if (false === $plugin->validateKeys($post)) {
+            if (empty($error)) {
+                $error = $plugin->getError();
+            }
+            $error = !empty($error) ? $error : Labels::getLabel('LBL_GIVEN_KEYS_ARE_NOT_VALID.');
+            FatUtility::dieJsonError($error);
+        }
+
         $pluginSetting = new PluginSetting($post["plugin_id"]);
         if (!$pluginSetting->save($post)) {
             LibHelper::exitWithError($pluginSetting->getError(), true);
@@ -78,7 +93,7 @@ class PluginSettingController extends ListingBaseController
             }
             $frm = $class::form($this->siteLangId);
         }
-        
+
         if ((empty($requirements) || !is_array($requirements)) && !isset($frm)) {
             return false;
         }
@@ -128,7 +143,7 @@ class PluginSettingController extends ListingBaseController
             }
 
             /* Sanbox Key Field */
-            $fieldFn = ('password'== strtolower($colName)) ? 'addPasswordField' : 'addTextBox';
+            $fieldFn = ('password' == strtolower($colName)) ? 'addPasswordField' : 'addTextBox';
             $fld = $frm->$fieldFn($colLabel, $colName);
             $fld->htmlAfterField = $htmlAfterField;
 
@@ -153,10 +168,10 @@ class PluginSettingController extends ListingBaseController
 
             $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_SANDBOX, 'eq', $colName, $fld);
             $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_PRODUCTION, 'eq', $colName, $reqFld);
-            /* Live Key Fields */            
+            /* Live Key Fields */
         }
 
-        if (is_array($nonEnvFields) && !empty(array_filter($nonEnvFields))){
+        if (is_array($nonEnvFields) && !empty(array_filter($nonEnvFields))) {
             foreach ($nonEnvFields as $colName => $colLabel) {
                 $htmlAfterField = "";
                 if (is_array($colLabel)) {
@@ -169,5 +184,4 @@ class PluginSettingController extends ListingBaseController
         }
         return $frm;
     }
-
 }

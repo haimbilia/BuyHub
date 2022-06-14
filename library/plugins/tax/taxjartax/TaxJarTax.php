@@ -1,5 +1,7 @@
 <?php
 
+use Google\Service\DataCatalog\Resource\Catalog;
+
 class TaxJarTax extends TaxBase
 {
     public const KEY_NAME = __CLASS__;
@@ -450,5 +452,26 @@ class TaxJarTax extends TaxBase
             static::TAX_RATE_GST => 'gst',
             static::TAX_RATE_SPECIAL => 'special_tax_rate',
         );
+    }
+
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        try {
+            if (!$this->init()) {
+                return false;
+            }
+            $this->client->categories();
+        } catch (\Exception $e) {
+            return false;
+        }
+        return  true;
     }
 }

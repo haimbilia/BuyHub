@@ -11,13 +11,13 @@ class FixerCurrencyConverter extends CurrencyConverterBase
 {
     public const KEY_NAME = __CLASS__;
     private const PRODUCTION_URL = 'http://data.fixer.io/api/';
-    
+
     public $requiredKeys = ['access_key'];
 
     private $actionUri = '';
     private $response = '';
     private $toCurrencies = [];
-    
+
     /**
      * __construct
      *
@@ -31,7 +31,7 @@ class FixerCurrencyConverter extends CurrencyConverterBase
             $this->langId = CommonHelper::getLangId();
         }
     }
-    
+
     /**
      * init
      *
@@ -46,10 +46,10 @@ class FixerCurrencyConverter extends CurrencyConverterBase
         if (false === $this->loadBaseCurrency()) {
             return false;
         }
-        
+
         return true;
     }
-            
+
     /**
      * initiateUri
      *
@@ -71,7 +71,7 @@ class FixerCurrencyConverter extends CurrencyConverterBase
     {
         return $this->actionUri;
     }
-    
+
     /**
      * bindAccessKey
      *
@@ -93,7 +93,7 @@ class FixerCurrencyConverter extends CurrencyConverterBase
         $this->actionUri = $this->getActionUri() . '&base=' . $this->getBaseCurrencyCode();
         return true;
     }
-    
+
     /**
      * bindQueryString
      *
@@ -113,9 +113,26 @@ class FixerCurrencyConverter extends CurrencyConverterBase
      */
     private function getResponse(): object
     {
-        return $this->response;
+        return (object)$this->response;
     }
 
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        $this->systemCurrencyCode = 'EUR';
+        $resp = $this->getRates(['USD']);
+        if ((1 > $resp['status'])) {
+            $this->error = $resp['msg'];
+        }
+        return (0 < $resp['status']);
+    }
 
     /**
      * convert
@@ -142,7 +159,7 @@ class FixerCurrencyConverter extends CurrencyConverterBase
         $this->response = $curl->getResponse();
         return true;
     }
-    
+
     /**
      * getRates
      *
@@ -174,8 +191,8 @@ class FixerCurrencyConverter extends CurrencyConverterBase
 
         if (!empty($data->error)) {
             $status = Plugin::RETURN_FALSE;
-            $msg = Labels::getLabel("MSG_ERROR_CODE_{error-code}_:_{message}", $this->langId);
-            $msg = CommonHelper::replaceStringData($msg, ['{error-code}' => $data->error->code, '{message}' => $data->error->type]);
+            $msg = Labels::getLabel("MSG_ERROR_CODE_{ERROR-CODE}_:_{MESSAGE}", $this->langId);
+            $msg = CommonHelper::replaceStringData($msg, ['{ERROR-CODE}' => $data->error->code, '{MESSAGE}' => $data->error->type]);
         }
 
         return [

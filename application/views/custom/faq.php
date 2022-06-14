@@ -19,7 +19,7 @@
     <section class="section bg-white">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-6 faqSectionJs">
+                <div class="col-lg-6 faqSectionJs position-relative ">
                     <?php if ($recordCount > 0) { ?>
                         <div class="faq-filters mb-4" id="categoryPanel"></div>
                     <?php } ?>

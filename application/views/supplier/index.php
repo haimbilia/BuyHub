@@ -73,7 +73,7 @@ if (!empty($slogan)) {
                             </div>
                         </div>
                         <div class="faqsearch">
-                            <form name="frmSearchFaqs" class="form" action="javascript:void(0);">
+                            <form name="frmSearchFaqs" method="post" onsubmit="searchFaqsListing(this); return(false);" class="form" action="javascript:void(0);">
                                 <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId);?>" class="faq-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
                             </form>
                         </div>
@@ -85,7 +85,7 @@ if (!empty($slogan)) {
         <section class="section">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-md-8">
+                    <div class="col-md-6 faqSectionJs position-relative">
                         <?php if ($faqCount > 0) { ?>
                             <div class="faq-filters mb-4" id="categoryPanel"></div>
                         <?php } ?>
@@ -112,5 +112,8 @@ if (!empty($slogan)) {
 
 
 </div>
+<script> 
+        var faqsSearchStringLength = '<?php echo Faq::FAQS_SEARCH_STRING_LENGTH; ?>';
+</script>
 <!-- End Document
 ================================================== -->

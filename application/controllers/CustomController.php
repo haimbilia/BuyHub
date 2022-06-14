@@ -258,7 +258,7 @@ class CustomController extends MyAppController
         FatUtility::dieJsonSuccess($json);
     }
 
-    public function searchFaqsListing()
+    public function searchFaqsListing($type = FaqCategory::FAQ_PAGE)
     {
         $question = FatApp::getPostedData('question', FatUtility::VAR_STRING, '');
         if (empty($question)) {
@@ -270,7 +270,7 @@ class CustomController extends MyAppController
         $srch->joinTable('tbl_faqs_lang', 'LEFT OUTER JOIN', 'faqlang_faq_id = faq_id');
         $srch->addCondition('faqlang_lang_id', '=', $this->siteLangId);
         $srch->addCondition('faqcat_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('faqcat_type', '=', FaqCategory::FAQ_PAGE);
+        $srch->addCondition('faqcat_type', '=', $type);
 
         $cnd = $srch->addCondition('faq_identifier', 'like', "%$question%");
         $cnd->attachCondition('faq_title', 'LIKE', '%' . $question . '%', 'OR');
@@ -284,8 +284,10 @@ class CustomController extends MyAppController
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
         $result = FatApp::getDb()->fetchAll($srch->getResultSet());
+      
         $this->set('result', $result);
-        $this->set('page', 'faq');
+        $this->set('page', $type == FaqCategory::SELLER_PAGE ? 'seller':'faq');
+        $this->set('type', $type);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }

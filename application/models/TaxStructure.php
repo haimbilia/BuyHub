@@ -442,6 +442,7 @@ class TaxStructure extends MyAppModel
         $srch = self::getSearchObject();
         $srch->addCondition('taxstr_is_combined', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addFld('taxstr_id');
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (empty($row)) {
