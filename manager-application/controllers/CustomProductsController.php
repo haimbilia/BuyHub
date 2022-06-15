@@ -333,6 +333,7 @@ class CustomProductsController extends ListingBaseController
         $this->set("langId", $langId);
         $this->set("recordId", $recordId);
         $this->set('productOptions', $productOptions);
+        $this->set('hasInventory', Product::hasInventory($recordId));
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('tourStep', SiteTourHelper::getStepIndex());
         if (FatUtility::isAjaxCall()) {
