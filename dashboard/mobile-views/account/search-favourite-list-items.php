@@ -8,8 +8,8 @@ foreach ($products as $key => &$product) {
 
     $product['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND);
     $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
-    $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
-    $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], false, false, false);
+    $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price']);
+    $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice']);
     $product['ribbons'] = $selProdRibbons;
 }
 

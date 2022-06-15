@@ -753,7 +753,7 @@ class EmailHandler extends FatModel
 
             $arrReplacements = array(
                 '{user_full_name}' => trim($userInfo['user_name']),
-                '{order_invoice_number}' => $orderInfo['order_id'],
+                '{order_invoice_number}' => $orderInfo['order_number'],
                 //'{reference_number}' => $orderInfo['order_id'],
                 //'{company_name}' => $orderInfo['order_company_name'],
                 '{order_date}' => FatDate::format($orderInfo["order_date_added"], true),
@@ -791,7 +791,7 @@ class EmailHandler extends FatModel
             $notificationObj = new Notifications();
             $notificationDataArr = array(
                 'unotification_user_id' => $orderInfo["order_user_id"],
-                'unotification_body' => CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_ORDER_{ORDERID}_HAVE_BEEN_PLACE', $langId), array('{ORDERID}' => $orderInfo['order_id'])),
+                'unotification_body' => CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_ORDER_{ORDERID}_HAVE_BEEN_PLACE', $langId), array('{ORDERID}' => $orderInfo['order_number'])),
                 'unotification_type' => 'BUYER_ORDER',
                 'unotification_data' => json_encode(array('orderId' => $orderInfo['order_id'])),
             );
@@ -820,7 +820,7 @@ class EmailHandler extends FatModel
             trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED', $this->commonLangId), E_USER_ERROR);
         }
         $orderObj = new Orders();
-        $OrderInfo = $orderObj->getOrderById($orderId, $langId);
+        $orderInfo = $orderObj->getOrderById($orderId, $langId);
         $childOrderInfo = $orderObj->getOrderProductsByOpId($opId, $langId);
 
         $opChargesLog = new OrderProductChargeLog($opId);
@@ -829,17 +829,17 @@ class EmailHandler extends FatModel
 
         //CommonHelper::printArray($childOrderInfo, true);
         if ($childOrderInfo) {
-            $userObj = new User($OrderInfo["order_user_id"]);
+            $userObj = new User($orderInfo["order_user_id"]);
             $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_phone_dcode', 'user_phone'), true, false);
             $tpl = new FatTemplate('', '');
-            $tpl->set('orderInfo', $OrderInfo);
+            $tpl->set('orderInfo', $orderInfo);
             $tpl->set('orderProducts', $childOrderInfo);
             $tpl->set('siteLangId', $langId);
             $orderItemsTableFormatHtml = $tpl->render(false, false, '_partial/emails/child-order-detail-email.php', true);
             $vars = array(
                 '{user_full_name}' => trim($userInfo['user_name']),
                 '{order_items_table_format}' => $orderItemsTableFormatHtml,
-                '{order_id}' => $orderId,
+                '{order_id}' => $orderInfo['order_number'],
             );
             if (!empty($userInfo['credential_email'])) {
                 $sendEmail = (new FatMailer($langId, 'customer_digital_order_email'))
@@ -868,7 +868,7 @@ class EmailHandler extends FatModel
         if ($orderDetail) {
             $arrReplacements = array(
                 '{user_full_name}' => trim($userInfo['user_name']),
-                '{invoice_number}' => $orderDetail['order_id'],
+                '{invoice_number}' => $orderDetail['order_number'],
                 '{new_order_status}' => $payementStatusArr[$orderDetail['order_payment_status']],
             );
 
@@ -923,7 +923,7 @@ class EmailHandler extends FatModel
         if ($orderDetail) {
             $arrReplacements = array(
                 '{user_full_name}' => trim($userInfo['user_name']),
-                '{invoice_number}' => $orderDetail['order_id'],
+                '{invoice_number}' => $orderDetail['order_number'],
                 '{order_payment_method}' => (isset($orderDetail['plugin_name']) && !empty($orderDetail['plugin_name'])) ? $orderDetail['plugin_name'] : $orderDetail['plugin_identifier'],
             );
 
@@ -961,7 +961,7 @@ class EmailHandler extends FatModel
         if ($orderDetail) {
             $arrReplacements = array(
                 '{user_full_name}' => trim($userInfo['user_name']),
-                '{invoice_number}' => $orderDetail['order_id'],
+                '{invoice_number}' => $orderDetail['order_number'],
                 '{order_payment_method}' => !empty($orderDetail['plugin_name']) ? $orderDetail['plugin_name'] : $orderDetail['plugin_identifier'],
             );
 
@@ -1094,7 +1094,7 @@ class EmailHandler extends FatModel
                     '{order_items_table_format}' => $orderItemsTableFormatHtml,
                     '{order_shipping_information}' => '',
                     '{order_user_email}' => $userInfo['credential_email'],
-                    '{order_id}' => $orderId,
+                    '{order_id}' => $orderDetail['order_number'],
                 );
 
                 if (!empty($paymentType) && in_array(strtolower($paymentType), ['cashondelivery', 'payatstore'])) {
@@ -1128,7 +1128,7 @@ class EmailHandler extends FatModel
                 }
                 $notiArrReplacements = array(
                     '{PRODUCT}' => $val["op_product_name"],
-                    '{ORDERID}' => $orderDetail['order_id']
+                    '{ORDERID}' => $orderDetail['order_number']
                 );
 
                 $appNotification = CommonHelper::replaceStringData(Labels::getLabel('INV_{PRODUCT}_ORDER_{ORDERID}_HAS_BEEN_PLACED', $langId), $notiArrReplacements);
@@ -2682,7 +2682,7 @@ class EmailHandler extends FatModel
 
             $arrReplacements = array(
                 '{user_full_name}' => trim($userInfo['user_name']),
-                '{invoice_number}' => $orderDetail['order_id'],
+                '{invoice_number}' => $orderDetail['order_number'],
                 '{order_products_table_format}' => $orderItemsTableFormatHtml,
                 '{new_order_status}' => $payementStatusArr[$orderDetail['order_payment_status']],
             );
@@ -2734,7 +2734,7 @@ class EmailHandler extends FatModel
 
             $arrReplacements = array(
                 '{user_full_name}' => trim($userInfo['user_name']),
-                '{invoice_number}' => $orderDetail['order_id'],
+                '{invoice_number}' => $orderDetail['order_number'],
                 '{order_products_table_format}' => $orderItemsTableFormatHtml,
                 '{new_order_status}' => $payementStatusArr[$orderDetail['order_payment_status']],
             );
@@ -3181,7 +3181,7 @@ class EmailHandler extends FatModel
         $tpl = 'ADMIN_ORDER_PAYMENT_TRANSFERRED_TO_BANK';
         $vars = array(
             '{USER_NAME}' => $d['user_name'],
-            '{ORDER_ID}' => $d['order_id'],
+            '{ORDER_ID}' => $d['order_number'],
             '{PAYMENT_METHOD}' => $d['payment_method'],
             '{TRANSACTION_ID}' => $d['transaction_id'],
             '{AMOUNT}' => $d['amount'],
@@ -3196,7 +3196,7 @@ class EmailHandler extends FatModel
 
         /* Send Success Notification To Buyer With Bank Transfer Order Placed.  */
         $msg = Labels::getLabel('MSG_ORDER_#{ORDER-ID}_PLACED_USING_BANK_TRANFER_PAYMENT_METHOD', $langId);
-        $msg = CommonHelper::replaceStringData($msg, ['{ORDER-ID}' => $d['order_id']]);
+        $msg = CommonHelper::replaceStringData($msg, ['{ORDER-ID}' => $d['order_number']]);
         $notificationObj = new Notifications();
         $notificationDataArr = array(
             'unotification_user_id' => $d["order_user_id"],

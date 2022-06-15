@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    if($('.settings-inner').length){
+    if ($('.settings-inner').length) {
         $('.settings-inner').scrollTop($('.settings-inner li.is-active').offset().top - $('.settings-inner').offset().top);
     }
     $(document).on("click", "#testMail-js", function () {
@@ -36,7 +36,7 @@ $(document).ready(function () {
             inputElement.attr('data-min_height', 85)
         }
     });
-    $(document).on('change', 'input[name="CONF_DEFAULT_GEO_LOCATION"]', function () {     
+    $(document).on('change', 'input[name="CONF_DEFAULT_GEO_LOCATION"]', function () {
         if ($(this).prop("checked")) {
             $('select[name="CONF_GEO_DEFAULT_COUNTRY"]').prop('disabled', false); // enable
             $('select[name="CONF_GEO_DEFAULT_STATE"]').prop('disabled', false); // enable
@@ -112,8 +112,8 @@ $(document).ready(function () {
 
     popupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            if(!validateFileUpload(inputBtn.files[0])){
-                return;    
+            if (!validateFileUpload(inputBtn.files[0])) {
+                return;
             }
             loadCropperSkeleton();
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
@@ -215,6 +215,10 @@ $(document).ready(function () {
             getForm(document.frmConfiguration.form_type.value, document.frmConfiguration.lang_id.value);
         });
     };
+    
+    editDropZoneImages = function (obj) {
+        $(obj).closest(".dropzoneContainerJs").find(".dropzoneInputJs").click();
+    }
 
 })();
 
@@ -288,7 +292,7 @@ updateVerificationFile = function (inputBtn, fileType) {
                 }
                 fcom.displaySuccessMessage(ans.msg);
                 getForm(document.frmConfiguration.form_type.value);
-                
+
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 if (xhr.responseText) {
