@@ -1580,9 +1580,9 @@ class ConfigurationsController extends ListingBaseController
                     ['onChange' => 'popupImage(this)', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_ADMIN_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    '',
+                    'editDropZoneImages(this)',
                     $imageArr,
-                    'mt-3'
+                    'mt-3 dropzoneContainerJs'
                 ));
 
                 $fld = $frm->addHtml('', 'spacer', '<div class="separator separator-dashed my-5"></div>');
@@ -1609,9 +1609,9 @@ class ConfigurationsController extends ListingBaseController
                     ['onChange' => 'popupImage(this)', 'data-frm' => 'frmShopLogo', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_DESKTOP_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    '',
+                    'editDropZoneImages(this)',
                     $imageArr,
-                    'mt-3'
+                    'mt-3 dropzoneContainerJs'
                 ));
                 $fld =  $frm->addHtml('', 'spacer1', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -1636,9 +1636,9 @@ class ConfigurationsController extends ListingBaseController
                     ['onChange' => 'popupImage(this)', 'data-min_width' => 16, 'data-min_height' => 16, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_WEBSITE_FAVICON", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    '',
+                    'editDropZoneImages(this)',
                     $imageArr,
-                    'mt-3'
+                    'mt-3 dropzoneContainerJs'
                 ));
                 $fld = $frm->addHtml('', 'spacer2', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -1664,9 +1664,9 @@ class ConfigurationsController extends ListingBaseController
                     ['onChange' => 'popupImage(this)', 'data-min_width' => 160, 'data-min_height' => 240, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_SOCIAL_FEED_IMAGE", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    '',
+                    'editDropZoneImages(this)',
                     $imageArr,
-                    'mt-3'
+                    'mt-3 dropzoneContainerJs'
                 ));
                 $fld = $frm->addHtml('', 'spacer3', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -1691,9 +1691,9 @@ class ConfigurationsController extends ListingBaseController
                     ['onChange' => 'popupImage(this)', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_PAYMENT_PAGE_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    '',
+                    'editDropZoneImages(this)',
                     $imageArr,
-                    'mt-3'
+                    'mt-3 dropzoneContainerJs'
                 ));
                 $fld = $frm->addHtml('', 'spacer4', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -1720,9 +1720,9 @@ class ConfigurationsController extends ListingBaseController
                     ['onChange' => 'popupImage(this)', 'data-min_width' => 168, 'data-min_height' => 37, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_WATERMARK_IMAGE", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    '',
+                    'editDropZoneImages(this)',
                     $imageArr,
-                    'mt-3'
+                    'mt-3 dropzoneContainerJs'
                 ));
                 $fld = $frm->addHtml('', 'spacer5', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -1748,9 +1748,9 @@ class ConfigurationsController extends ListingBaseController
                     ['onChange' => 'popupImage(this)',  'data-min_width' => 152, 'data-min_height' => 152, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_MOBILE_APPS_SHORTCUT_ICON", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    '',
+                    'editDropZoneImages(this)',
                     $imageArr,
-                    'mt-3'
+                    'mt-3 dropzoneContainerJs'
                 ));
 
                 $fld = $frm->addHtml('', 'spacer6', '<div class="separator separator-dashed my-5"></div>');
@@ -1777,9 +1777,9 @@ class ConfigurationsController extends ListingBaseController
                     ['onChange' => 'popupImage(this)',  'data-min_width' => 168, 'data-min_height' => 37, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_MOBILE_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    '',
+                    'editDropZoneImages(this)',
                     $imageArr,
-                    'mt-3'
+                    'mt-3 dropzoneContainerJs'
                 ));
                 $fld = $frm->addHtml('', 'spacer7', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -1805,9 +1805,9 @@ class ConfigurationsController extends ListingBaseController
                     ['onChange' => 'popupImage(this)', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_INVOICE_LOGO", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    '',
+                    'editDropZoneImages(this)',
                     $imageArr,
-                    'mt-3'
+                    'mt-3 dropzoneContainerJs'
                 ));
 
                 $fld = $frm->addHtml('', 'spacer8', '<div class="separator separator-dashed my-5"></div>');
@@ -1835,9 +1835,9 @@ class ConfigurationsController extends ListingBaseController
                     ['onChange' => 'popupImage(this)',  'data-min_width' => 120, 'data-min_height' => 120, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_FIRST_PURCHASE_DISCOUNT_IMAGE", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    '',
+                    'editDropZoneImages(this)',
                     $imageArr,
-                    'mt-3'
+                    'mt-3 dropzoneContainerJs'
                 ));
                 $fld = $frm->addHtml('', 'spacer9', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -1875,9 +1875,9 @@ class ConfigurationsController extends ListingBaseController
                     ['onChange' => 'popupImage(this)',  'data-min_width' => 150, 'data-min_height' => 150, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_META_IMAGE", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    '',
+                    'editDropZoneImages(this)',
                     $imageArr,
-                    'mt-3'
+                    'mt-3 dropzoneContainerJs'
                 ));
                 $fld->attachField($fld1);
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
