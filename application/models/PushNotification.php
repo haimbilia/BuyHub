@@ -306,8 +306,8 @@ class PushNotification extends MyAppModel
                     $dtokens = (array) $dtokens;
                     $notificationObj->setDeviceTokens($dtokens);
                     $response = $notificationObj->notify($notificationDetail['pnotification_title'], $notificationDetail['pnotification_description'], $os, $data);
-                    if (false === $response) {
-                        $error = $notificationObj->getError();
+                    if (0 === $response['status']) {
+                        $error = $response['msg'];
                     }
                 }
             } catch (\Error $e) {
