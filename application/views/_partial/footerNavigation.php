@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (!empty($footer_navigation)) { ?>
     <?php foreach ($footer_navigation as $nav) { ?>
-        <div class="col-lg-4 mb-3 mb-md-0">
+        <div class="col-lg-4 col-md-4 mb-3 mb-md-0">
             <div class="footer-group">
                 <h5 class="footer-group-head js-footer-group-head dropdown-toggle-custom">
                     <?php echo $nav['parent']; ?> <i class="dropdown-toggle-custom-arrow"></i>

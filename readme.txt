@@ -878,11 +878,17 @@ Updates/Fixes :
     => 064854 - The coupon discount value appears wrong in the payout reports
     => 064914 - Suggestion: To add the edit button to update any logo in the business logo section
     => 064909 - Notice appears in the variants and options section when admin tries to edit the product details in the master product request
+    => 064937 -	permissions issue for sub admin 
+    => 064936 - Permission issue for sub-admin user
     => 064928 - Sub-admin shipping and pickup module won't disapear permission if permission restricted.
     => 064920 - Sub-admin didn't logout if permission revoke.
     => 064927 - Go to top button on the payment success page also appears in the invoice print
     => 064925 - No option available to add the billing address if the user close the add billing address popup once without selecting any address.
     => 064919 - The site logo image in the footer of the homepage is not clearly visible
+    => 064901 - The seller is not able to update the postal code on the shop setup page.
+    => 064905 - Error message appears when the buyer tries to switch to the seller account from the top of the dashboard. 
+    => 064907 - Validation message do not get disappeared even if the user has selected the valid file type
+    => 064908 - Watermark image added in the admin end is not visible on the products in the front end.
 
 UAT points:
 

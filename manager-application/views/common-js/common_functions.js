@@ -314,7 +314,7 @@ redirectToProduct = function (id, extraData = {}) {
     if (0 < id) {
         extraData['product_id'] = id;
     }
-    redirectFn(fcom.makeUrl('Products','form',[id]));
+    window.open(fcom.makeUrl('Products','form',[id]), "_blank");   
 };
 
 redirectToProductList = function (id, extraData = {}) {

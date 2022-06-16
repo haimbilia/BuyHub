@@ -14,7 +14,9 @@ $(function () {
         }
         return false;
     });
-
+    $(document).ready(function () {
+        $('.navchild').removeClass('is-focus');
+    });
 
     /* for mobile navigation */
     $('.link__mobilenav').click(function () {

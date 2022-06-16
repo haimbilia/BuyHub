@@ -237,11 +237,11 @@
 
 .rated-by {
     margin-bottom: 2rem;
-    display: grid;
-    grid-gap: 1rem;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    display: flex;
+    gap: 1.8rem;
+    flex-flow: row wrap;
+
     @include media-breakpoint-up(lg) {
-        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     }
     &-item {
         //border-radius: $radius-common;
@@ -249,14 +249,15 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        flex: 1;
+        // flex: 1;
         //justify-content: space-between;
-        padding: 5px 0;
+        padding: 0;
         font-size: 0.8rem;
         color: $txt-gray;
+        border-#{$end-direction}: $border;
 
         &:last-child {
-            margin-#{$end-direction}: 0;
+            border: 0;
         }
     }
     .product-ratings {

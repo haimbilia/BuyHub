@@ -652,7 +652,6 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
 
 function getSelectedCountry() {
     var country = document.getElementById('shop_country_code');
-    console.log(country[0].selectedOptions[0].innerText);
     return country[0].selectedOptions[0].innerText;
 }
 
@@ -696,9 +695,8 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
         var sel = document.getElementById('shop_state');
         var state = sel.options[sel.selectedIndex].text;
 
-        address = document.getElementById('postal_code').value;
-        address = country + ' ' + state + ' ' + address;
-        geocodeAddress(geocoder, map, infowindow, { 'address': address });
+        var postalCode = document.getElementById('postal_code').value; 
+        geocodeAddress(geocoder, map, infowindow, { 'address': `${state} ${postalCode}, ${country}` });
     });
 
     document.getElementById('shop_state').addEventListener('change', function () {
@@ -706,11 +704,9 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
         var country = sel.options[sel.selectedIndex].text;
 
         var sel = document.getElementById('shop_state');
-        var state = sel.options[sel.selectedIndex].text;
+        var state = sel.options[sel.selectedIndex].text;      
 
-        address = country + ' ' + state;
-
-        geocodeAddress(geocoder, map, infowindow, { 'address': address });
+        geocodeAddress(geocoder, map, infowindow, { 'address': `${state}, ${country}` });
     });
 
     document.getElementById('shop_country_code').addEventListener('change', function () {
@@ -738,7 +734,7 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
                 map: resultsMap,
                 position: results[0].geometry.location,
                 draggable: true
-            });
+            });      
             geocodeSetData(results);
             google.maps.event.addListener(marker, 'dragend', function () {
                 geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
@@ -786,7 +782,7 @@ function geocodeSetData(results) {
         $('#shop_country_code option').each(function () {
             if (this.text == data.country) {
                 $('#shop_country_code').val(this.value);
-                var state = 0;
+                var state = $('#shop_state').val();
                 $('#shop_state option').each(function () {
                     if (this.value == data.state_code || this.text == data.state || this.text == data.locality) {
                         return state = this.value;

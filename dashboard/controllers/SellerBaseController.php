@@ -20,8 +20,10 @@ class SellerBaseController extends LoggedUserController
                 LibHelper::exitWithError($msg, false, true);
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'configureEmail', [], CONF_WEBROOT_FRONTEND));
             }
-
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), false, true);
+            if(!FatApp::getConfig('CONF_BUYER_CAN_SEE_SELLER_TAB', FatUtility::VAR_INT, 0)){
+                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), false, true);
+            }
+            
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
         }
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'S';

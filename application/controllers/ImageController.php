@@ -137,18 +137,18 @@ class ImageController extends FatController
             }
         }
 
-        if ($file_row == false) {
-            //echo 'sds'; die("here");
+        if ($file_row == false) { 
             $file_row = $objectName::getAttachment($fileType, $recordId, -1, $lang_id);
         }
 
         $image_name = ((isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) && !empty($file_row['afile_physical_path'])) ? $objectName::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
         $image_name = $objectName::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_PRODUCTS, $sizeType);
+        $apply_watermark  = $imageDimensions['width'] > 400 || $imageDimensions['width'] > 400;
         if ($sizeType) {
-            $objectName::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
+            $objectName::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark);
         } else {
-            $objectName::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'], $default_image);
+            $objectName::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'], $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark);
         }
     }
 
