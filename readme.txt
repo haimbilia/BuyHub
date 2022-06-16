@@ -875,7 +875,16 @@ Updates/Fixes :
     => 064894 - The category thumb media field is missing in the exported media file of the categories.
     => 064893 - The categories which has some products associated with it also get deleted when the admin changes the deleted status of the category to YES in the import CSV sheet.
     => 064892 - A success message appears when the admin imports the options value CSV with invalid details
-    
+    => 064854 - The coupon discount value appears wrong in the payout reports
+    => 064914 - Suggestion: To add the edit button to update any logo in the business logo section
+    => 064909 - Notice appears in the variants and options section when admin tries to edit the product details in the master product request
+    => 064937 -	permissions issue for sub admin 
+    => 064936 - Permission issue for sub-admin user
+    => 064928 - Sub-admin shipping and pickup module won't disapear permission if permission restricted.
+    => 064920 - Sub-admin didn't logout if permission revoke.
+    => 064927 - Go to top button on the payment success page also appears in the invoice print
+    => 064925 - No option available to add the billing address if the user close the add billing address popup once without selecting any address.
+
 UAT points:
 
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

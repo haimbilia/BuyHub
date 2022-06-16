@@ -244,8 +244,7 @@ $("document").ready(function () {
         } else {
             var shipping_address_id = addr_id;
         }
-        var isShippingSameAsBilling = 1;
-        var data = "shipping_address_id=" + shipping_address_id + "&billing_address_id=" + shipping_address_id + "&isShippingSameAsBilling=" + isShippingSameAsBilling;
+        var data = "shipping_address_id=" + shipping_address_id + "&billing_address_id=" + shipping_address_id + "&isShippingSameAsBilling=1";
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "setUpAddressSelection"),
@@ -638,17 +637,10 @@ $("document").ready(function () {
             }
         );
     };
-
-    billingAddress = function (ele) {
-        if ($(ele).prop("checked") == false) {
-            loadAddressDiv(1);
-        }
-    };
-
+    
     setUpBillingAddressSelection = function () {
         var billing_address_id = $('input[name="shipping_address_id"]:checked').val();
-        var isShippingSameAsBilling = 0;
-        var data = "billing_address_id=" + billing_address_id + "&isShippingSameAsBilling=" + isShippingSameAsBilling;
+        var data = "billing_address_id=" + billing_address_id + "&isShippingSameAsBilling=0";
         fcom.updateWithAjax(
             fcom.makeUrl("Checkout", "setUpBillingAddressSelection"), data,
             function (t) {

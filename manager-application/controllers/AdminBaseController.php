@@ -29,8 +29,18 @@ class AdminBaseController extends FatController
             FatApp::redirectUser(UrlHelper::generateUrl('AdminGuest', 'loginForm'));
         }
 
-        $this->objPrivilege = AdminPrivilege::getInstance();
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
+
+        $permissionUpdatedOn = Admin::getAttributesById($this->admin_id, 'admin_admperm_updated_on');
+        if ($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_admperm_updated_on'] != $permissionUpdatedOn) {
+            AdminAuthentication::clearLoggedAdminLoginCookie();
+            session_destroy();
+            LibHelper::exitWithError(Labels::getLabel('ERR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('AdminGuest', 'loginForm'));
+        }
+
+        $this->objPrivilege = AdminPrivilege::getInstance();
+
 
         $this->setCommonValues();
         $this->_template->addCss([CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css']);

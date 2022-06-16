@@ -1,10 +1,10 @@
 <?php
 $adminSidebar = $_COOKIE['adminSidebar'] ?? 0;
-$adminSidebar = (in_array(FatApp::getController(), ['ProductsController','CustomProductsController']) && FatApp::getAction() == 'form') ? 0 : $adminSidebar;
+$adminSidebar = (in_array(FatApp::getController(), ['ProductsController', 'CustomProductsController']) && FatApp::getAction() == 'form') ? 0 : $adminSidebar;
 ?>
 <sidebar class="sidebar sidebar-hoverable" id="sidebar" data-close-on-click-outside="sidebar">
     <div class="sidebar-logo">
-        <button class="sidebar-toggle sidebarOpenerBtnJs <?php if (0 < $adminSidebar) { ?>active<?php } ?>" type="button" title="<?php echo 0 < $adminSidebar ? Labels::getLabel('LBL_CLICK_TO_HIDE', $siteLangId) : Labels::getLabel('LBL_CLICK_TO_EXPAND', $siteLangId) ;?>">
+        <button class="sidebar-toggle sidebarOpenerBtnJs <?php if (0 < $adminSidebar) { ?>active<?php } ?>" type="button" title="<?php echo 0 < $adminSidebar ? Labels::getLabel('LBL_CLICK_TO_HIDE', $siteLangId) : Labels::getLabel('LBL_CLICK_TO_EXPAND', $siteLangId); ?>">
             <span class="sidebar-toggle-icon"><span class="toggle-line"></span></span>
         </button>
         <a href="<?php echo UrlHelper::generateUrl(); ?>" class="logo">
@@ -19,19 +19,21 @@ $adminSidebar = (in_array(FatApp::getController(), ['ProductsController','Custom
     <div class="sidebar-menu sidebarMenuJs" id="sidebar-menu">
         <?php require CONF_THEME_PATH . '_partial/navigation/nav-links.php'; ?>
     </div>
-    <div class="sidebar-foot">
-        <ul class="menu">
-            <li class="menu-item dropdownJs">
-                <button class="menu-section menuLinkJs" data-selector='["Settings"]' onclick="redirectFn('<?php echo UrlHelper::generateUrl('Settings'); ?>')" type="button">
-                    <span class="menu-icon">
-                        <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-system-settings">
-                            </use>
-                        </svg>
-                    </span>
-                    <span class="menu-title"><?php echo Labels::getLabel('NAV_SETTINGS', $siteLangId); ?></span>
-                </button>
-            </li>
-        </ul>
-    </div>
+    <?php if ($objPrivilege->canViewSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+        <div class="sidebar-foot">
+            <ul class="menu">
+                <li class="menu-item dropdownJs">
+                    <button class="menu-section menuLinkJs" data-selector='["Settings"]' onclick="redirectFn('<?php echo UrlHelper::generateUrl('Settings'); ?>')" type="button">
+                        <span class="menu-icon">
+                            <svg class="svg" width="24" height="24">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-system-settings">
+                                </use>
+                            </svg>
+                        </span>
+                        <span class="menu-title"><?php echo Labels::getLabel('NAV_SETTINGS', $siteLangId); ?></span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    <?php } ?>
 </sidebar>

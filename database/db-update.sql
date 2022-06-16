@@ -1920,3 +1920,5 @@ update  `tbl_language_labels` set label_type=1 WHERE `label_key` LIKE 'LBL_I_AGR
 update  `tbl_language_labels` set label_type=1 WHERE `label_key` LIKE 'LBL_What_is_a_cookie_Information';
 update  `tbl_language_labels` set label_type=1 WHERE `label_key` LIKE 'LBL_STATISTICAL_ANALYSIS_COOKIES_INFORMATION';
 update  `tbl_language_labels` set label_type=1 WHERE `label_key` LIKE 'LBL_PERSONALISE_COOKIES_INFORMATION';
+
+ALTER TABLE `tbl_admin` ADD `admin_admperm_updated_on` DATETIME NOT NULL AFTER `admin_email_notification`;

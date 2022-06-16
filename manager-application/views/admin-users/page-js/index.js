@@ -13,6 +13,7 @@
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updatePassword'), data, function (t) {
             fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
+            $.ykmodal.close();
         });
     }
 })();

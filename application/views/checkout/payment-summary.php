@@ -23,10 +23,8 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
         <?php if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $shippingAddressId == $billingAddressId) { ?>
             <div class="step_section">
                 <div class="step_head">
-                    <label class="checkbox">
-                        <input onclick="billingAddress(this);" type="checkbox" checked='checked' name="isShippingSameAsBilling" value="1">
-                        <?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?>
-                    </label>
+                    <p><?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?></p>
+                    <button class="btn btn-underline" type="button" onClick="loadAddressDiv(1);"><?php echo Labels::getLabel('LBL_CHANGE_ADDRESS_?') ?></button>
                 </div>
             </div>
         <?php } else { ?>
@@ -189,7 +187,9 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                                             function confirmOrder(frm) {
                                                 var data = fcom.frmData(frm);
                                                 var action = $(frm).attr('action');
-                                                $(frm.btn_submit).attr({'disabled': 'disabled'});
+                                                $(frm.btn_submit).attr({
+                                                    'disabled': 'disabled'
+                                                });
                                                 fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(ans) {
                                                     fcom.removeLoader();
                                                     $(location).attr("href", action);

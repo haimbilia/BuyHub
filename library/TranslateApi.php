@@ -57,8 +57,7 @@ class TranslateApi
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
         curl_close($ch);
-
-        $result = str_replace('\"', '', htmlspecialchars_decode($result));
+        
         return json_decode($result, true);
     }
 
