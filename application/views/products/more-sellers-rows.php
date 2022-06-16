@@ -27,6 +27,7 @@ foreach ($sellers as $key => $sellerDetail) {
         <?php
         $badgesArr = Badge::getShopBadges($siteLangId, [$sellerDetail['shop_id']]);
         $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+        if($shopTotalReviews > 0){
         ?>
         <div class="shop-wrap">
             <div class="product-ratings">
@@ -48,7 +49,7 @@ foreach ($sellers as $key => $sellerDetail) {
                 </a>
             </div>
         </div>
-        <?php if (false === $isActive) { ?>
+        <?php } if (false === $isActive) { ?>
             <button class="btn btn-outline-black btn-sm btnAddToCart--js" data-id='<?php echo $sellerDetail['selprod_id']; ?>' data-min-qty="<?php echo $sellerDetail['selprod_min_order_qty']; ?>" type="button"><?php echo Labels::getLabel('BTN_ADD_TO_CART', $siteLangId); ?></button>
         <?php } ?>
     </li>
