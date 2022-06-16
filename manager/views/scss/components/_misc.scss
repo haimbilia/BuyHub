@@ -2031,6 +2031,7 @@ mark,
     display: flex;
     align-items: center;
     flex: 1;
+    gap: 10px;
     .copy-input {
         //max-width: 248px;
         width: 100%;
@@ -2041,7 +2042,7 @@ mark,
         border-radius: $radius4;
         padding: 0;
         color: $txt-gray;
-        margin-#{$end-direction}: 10px;
+        // margin-#{$end-direction}: 10px;
         &:focus {
             outline: none;
         }

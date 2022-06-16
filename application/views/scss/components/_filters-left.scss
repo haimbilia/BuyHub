@@ -1,8 +1,8 @@
 .filter-left {
     display: grid;
     grid-template-columns: 280px 1fr;
-    grid-gap: 100px;
-    @include media-breakpoint-down(md) {
+    grid-gap: 6rem;
+    @include media-breakpoint-down(lg) {
         display: block;
     }
     .collection-sidebar {
@@ -13,7 +13,7 @@
         // border-radius: $radius4;
         //padding: 1.5rem;
         display: block;
-        @include media-breakpoint-down(md) {
+        @include media-breakpoint-down(lg) {
             border-radius: 0;
             position: fixed;
             top: 0;
