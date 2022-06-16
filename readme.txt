@@ -884,6 +884,7 @@ Updates/Fixes :
     => 064920 - Sub-admin didn't logout if permission revoke.
     => 064927 - Go to top button on the payment success page also appears in the invoice print
     => 064925 - No option available to add the billing address if the user close the add billing address popup once without selecting any address.
+    => 064919 - The site logo image in the footer of the homepage is not clearly visible
     => 064901 - The seller is not able to update the postal code on the shop setup page.
     => 064905 - Error message appears when the buyer tries to switch to the seller account from the top of the dashboard. 
     => 064907 - Validation message do not get disappeared even if the user has selected the valid file type
