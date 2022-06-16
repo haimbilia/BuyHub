@@ -882,6 +882,7 @@ Updates/Fixes :
     => 064920 - Sub-admin didn't logout if permission revoke.
     => 064927 - Go to top button on the payment success page also appears in the invoice print
     => 064925 - No option available to add the billing address if the user close the add billing address popup once without selecting any address.
+    => 064919 - The site logo image in the footer of the homepage is not clearly visible
 
 UAT points:
 
