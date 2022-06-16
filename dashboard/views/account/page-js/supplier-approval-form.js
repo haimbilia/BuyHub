@@ -49,6 +49,7 @@ $(document).on('click','.fileType-Js',function(){
 						if(ans.status == true){
 							$('#input-sformfield'+fieldId).removeClass('text-danger');
 							$('#input-sformfield'+fieldId).addClass('badge-success');
+							$('#input-sformfield'+fieldId).siblings('.errorlist').remove();
 						}else{
 							$('#input-sformfield'+fieldId).removeClass('badge-success');
 							$('#input-sformfield'+fieldId).addClass('text-danger');

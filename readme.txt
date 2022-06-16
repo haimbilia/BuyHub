@@ -880,6 +880,7 @@ Updates/Fixes :
     => 064909 - Notice appears in the variants and options section when admin tries to edit the product details in the master product request
     => 064901 - The seller is not able to update the postal code on the shop setup page.
     => 064905 - Error message appears when the buyer tries to switch to the seller account from the top of the dashboard. 
+    => 064907 - Validation message do not get disappeared even if the user has selected the valid file type
 
 UAT points:
 
