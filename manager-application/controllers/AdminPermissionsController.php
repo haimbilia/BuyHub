@@ -271,6 +271,10 @@ class AdminPermissionsController extends ListingBaseController
                 LibHelper::exitWithError($obj->getError(), true);
             }
         }
+
+        $obj = new AdminUsers($recordId);
+        $obj->assignValues(['admin_admperm_updated_on' => date('Y-m-d H:i:s')]);
+        $obj->save();
     }
 
     protected function getFormColumns(): array
