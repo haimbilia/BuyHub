@@ -212,6 +212,9 @@ class AdminPrivilege
 
                 static::SECTION_SHIPPING_APIS => Labels::getLabel('NAV_SHIPPING_API_METHODS', $langId),
                 static::SECTION_SHIPPING_DURATIONS => Labels::getLabel('NAV_SHIPPING_DURATIONS', $langId),
+                static::SECTION_SHIPPING_PACKAGES => Labels::getLabel('NAV_SHIPPING_PACKAGES', $langId),
+                static::SECTION_SHIPPING_MANAGEMENT => Labels::getLabel('NAV_SHIPPING_MANAGEMENT', $langId),
+                static::SECTION_SHIPPED_PRODUCTS_LISTING => Labels::getLabel('NAV_SHIPPING_PRODUCTS_LISTING', $langId),
                 /* static::SECTION_MANUAL_SHIPPING_API => Labels::getLabel('NAV_MANUAL_SHIPPING_API',$langId), */
 
                 static::SECTION_GENERAL_SETTINGS => Labels::getLabel('NAV_GENERAL_SETTINGS', $langId),
