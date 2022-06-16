@@ -2371,6 +2371,11 @@ class Importexport extends ImportexportCommon
                         }
 
                         $productId = $colValue;
+
+                        if (Product::hasInventory($productId)) {
+                            $errorInRow = true;
+                            CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), Labels::getLabel("ERR_INVENTORY_ALREADY_ADDED_FOR_THESE_OPTIONS.", $langId)));
+                        }
                     }
 
                     if (in_array($columnKey, array('option_id', 'option_identifier'))) {

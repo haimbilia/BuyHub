@@ -23,6 +23,7 @@ foreach ($arrListing as $sn => $row) {
             case 'affiliateCommissionCharged':
             case 'discountTotal':
             case 'totalAmount':
+            case 'couponDiscount':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
 

@@ -1060,7 +1060,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getAllProductsIdentifiers($byId = true, $productIdOrIdentifier = false)
@@ -1086,7 +1086,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getAllUserArr($byId = true, $userIdOrUsername = false)
@@ -1113,7 +1113,7 @@ class ImportexportCommon extends FatModel
         }
 
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getTaxCategoryArr($byId = true, $taxCatIdOrIdentifier = false)
@@ -1139,7 +1139,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getTaxCategoryByProductId($productId)
@@ -1177,7 +1177,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getShippingPackageArr($byId = true, $taxCatIdOrIdentifier = false)
@@ -1203,7 +1203,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getShippingProfileArr($byId = true, $taxCatIdOrIdentifier = false, $userId = 0)
@@ -1275,7 +1275,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getCountriesAssocArr($byId = true, $countryIdOrCode = false)
@@ -1301,7 +1301,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getProductCategoriesByProductId($productId, $byId = true)
@@ -1345,7 +1345,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getAllOptionValues($optionId, $byId = true, $optionValueIdOrIdentifier = false)
@@ -1372,7 +1372,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getAllTags($byId = true, $tagIdOrIdentifier = false)
@@ -1397,7 +1397,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getAllShippingCompany($byId = true, $scompanyIdOrIdentifier = false)
@@ -1422,7 +1422,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getAllShippingDurations($byId = true, $durationIdOrIdentifier = false)
@@ -1447,7 +1447,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getAllPrivacyPoints($byId = true, $policyPointIdOrIdentifier = false)
@@ -1472,7 +1472,7 @@ class ImportexportCommon extends FatModel
             }
         }
         $rs = $srch->getResultSet();
-        return $row = $this->db->fetchAllAssoc($rs);
+        return $this->db->fetchAllAssoc($rs);
     }
 
     public function getProductIdByTempId($tempId, $userId = 0)
