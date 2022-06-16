@@ -111,7 +111,7 @@ class AdminPrivilege
     public const SECTION_PUSH_NOTIFICATION = 104;
     public const SECTION_PRODUCT_ADVERTISEMENT = 105;
     public const SECTION_IMPORT_EXPORT = 106;
-    public const SECTION_APP_THEME_SETTINGS = 107;
+    // public const SECTION_APP_THEME_SETTINGS = 107;
     public const SECTION_PATCH_UPDATE = 109;
     public const SECTION_SMS_TEMPLATE = 108;
     public const SECTION_SHIPPING_PACKAGES = 109;
@@ -212,6 +212,9 @@ class AdminPrivilege
 
                 static::SECTION_SHIPPING_APIS => Labels::getLabel('NAV_SHIPPING_API_METHODS', $langId),
                 static::SECTION_SHIPPING_DURATIONS => Labels::getLabel('NAV_SHIPPING_DURATIONS', $langId),
+                static::SECTION_SHIPPING_PACKAGES => Labels::getLabel('NAV_SHIPPING_PACKAGES', $langId),
+                static::SECTION_SHIPPING_MANAGEMENT => Labels::getLabel('NAV_SHIPPING_MANAGEMENT', $langId),
+                static::SECTION_SHIPPED_PRODUCTS_LISTING => Labels::getLabel('NAV_SHIPPING_PRODUCTS_LISTING', $langId),
                 /* static::SECTION_MANUAL_SHIPPING_API => Labels::getLabel('NAV_MANUAL_SHIPPING_API',$langId), */
 
                 static::SECTION_GENERAL_SETTINGS => Labels::getLabel('NAV_GENERAL_SETTINGS', $langId),
@@ -277,7 +280,7 @@ class AdminPrivilege
                 static::SECTION_PUSH_NOTIFICATION => Labels::getLabel('NAV_PUSH_NOTIFICATION', $langId),
                 static::SECTION_PRODUCT_ADVERTISEMENT => Labels::getLabel('NAV_PRODUCT_ADVERTISEMENT', $langId),
                 static::SECTION_PLUGINS => Labels::getLabel('NAV_PLUGINS', $langId),
-                static::SECTION_APP_THEME_SETTINGS => Labels::getLabel('NAV_APP_THEME_SETTINGS', $langId),
+                // static::SECTION_APP_THEME_SETTINGS => Labels::getLabel('NAV_APP_THEME_SETTINGS', $langId),
                 static::SECTION_ABANDONED_CART => Labels::getLabel('NAV_ABANDONED_CART', $langId),
                 static::SECTION_IMPORT_EXPORT => Labels::getLabel('NAV_IMPORT_EXPORT', $langId),
                 static::SECTION_SMS_TEMPLATE => Labels::getLabel('NAV_SMS_TEMPLATE', $langId),
@@ -1526,7 +1529,7 @@ class AdminPrivilege
         return $this->checkPermission($adminId, static::SECTION_PRODUCT_ADVERTISEMENT, static::PRIVILEGE_WRITE, $returnResult);
     }
 
-    public function canViewAppThemeSettings($adminId = 0, $returnResult = false)
+   /*  public function canViewAppThemeSettings($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_APP_THEME_SETTINGS, static::PRIVILEGE_READ, $returnResult);
     }
@@ -1534,7 +1537,7 @@ class AdminPrivilege
     public function canEditAppThemeSettings($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_APP_THEME_SETTINGS, static::PRIVILEGE_WRITE, $returnResult);
-    }
+    } */
 
     public function canViewImportExport($adminId = 0, $returnResult = false)
     {

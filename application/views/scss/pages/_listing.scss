@@ -197,16 +197,13 @@
     padding: 0;
     background: $secondary-color;
     color: $secondary-color-inverse;
-
     cursor: pointer;
-
     .svg {
         width: 1rem;
         height: 1rem;
         margin: 0;
     }
-
-    @include media-breakpoint-up(md) {
+    @include media-breakpoint-up(lg) {
         display: none;
     }
 }

@@ -79,6 +79,16 @@
         padding-#{$end-direction}: 0;
     }
 
+    &-fixed {
+        position: relative;
+        th {
+            background-color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+    }
+
     &-justified {
         thead {
             th:last-child {

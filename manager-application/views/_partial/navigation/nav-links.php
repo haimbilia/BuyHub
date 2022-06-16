@@ -217,7 +217,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                     <?php } ?>
                     <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('products','approvalPending'); ?>">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('products', 'approvalPending'); ?>">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1302,6 +1302,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             </div>
         </li>
     <?php } ?>
+
     <?php
     if (
         $objPrivilege->canViewImportExport(AdminAuthentication::getLoggedAdminId(), true)
@@ -1344,105 +1345,109 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
         $objPrivilege->canViewShippingPackages(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true) ||
+        $objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true) ||
         $objPrivilege->canViewTrackingRelationCode(AdminAuthentication::getLoggedAdminId(), true)
     ) {
     ?>
+        <li class="menu-item dropdownJs">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_SHIPPING" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
+                <span class="menu-icon">
+                    <svg class="svg" width="24" height="24">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-shipping-pickup">
+                        </use>
+                    </svg>
+                </span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?></span>
+                <?php if (!$quickSearch) { ?>
+                    <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
+                <?php } ?>
+            </button>
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_SHIPPING" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
+                <ul class="nav nav-level">
+                    <?php if ($objPrivilege->canViewShippingCompanyUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ShippingCompanyUsers"]' href="<?php echo UrlHelper::generateUrl('ShippingCompanyUsers'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPING_COMPANY_USERS', $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+
+                    <?php if ($objPrivilege->canViewShippingPackages(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs" data-selector='["ShippingPackages"]' href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPING_PACKAGES', $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+
+                    <?php if ($objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs" data-selector='["ShippingProfile"]' href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPING_PROFILE', $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+
+                    <?php if ($objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["PickupAddresses"]' href="<?php echo UrlHelper::generateUrl('PickupAddresses'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PICKUP_ADDRESSES', $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+
+                    <?php if ($objPrivilege->canViewShippedProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ShippedProducts"]' href="<?php echo UrlHelper::generateUrl('ShippedProducts'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPED_PRODUCTS', $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+
+                    <?php if ($objPrivilege->canViewTrackingRelationCode(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["TrackingCodeRelation"]' href="<?php echo UrlHelper::generateUrl('TrackingCodeRelation'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TRACKING_CODE_RELATION', $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </li>
     <?php } ?>
-    <li class="menu-item dropdownJs">
-        <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_SHIPPING" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
-            <span class="menu-icon">
-                <svg class="svg" width="24" height="24">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-shipping-pickup">
-                    </use>
-                </svg>
-            </span>
-            <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?></span>
-            <?php if (!$quickSearch) { ?>
-                <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
-            <?php } ?>
-        </button>
-        <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_SHIPPING" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
-            <ul class="nav nav-level">
-                <?php if ($objPrivilege->canViewShippingCompanyUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                    <li class="nav_item navItemJs">
-                        <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ShippingCompanyUsers"]' href="<?php echo UrlHelper::generateUrl('ShippingCompanyUsers'); ?>">
-                            <span class="nav_icon">
-                                <svg class="svg" width="24" height="24">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                    </use>
-                                </svg>
-                            </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPING_COMPANY_USERS', $siteLangId); ?></span>
-                        </a>
-                    </li>
-                <?php } ?>
 
-                <?php if ($objPrivilege->canViewShippingPackages(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) { ?>
-                    <li class="nav_item navItemJs">
-                        <a class="nav_link navLinkJs" data-selector='["ShippingPackages"]' href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>">
-                            <span class="nav_icon">
-                                <svg class="svg" width="24" height="24">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                    </use>
-                                </svg>
-                            </span>
-                            <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPING_PACKAGES', $siteLangId); ?></span>
-                        </a>
-                    </li>
-                <?php } ?>
-
-                <?php if ($objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                    <li class="nav_item navItemJs">
-                        <a class="nav_link navLinkJs" data-selector='["ShippingProfile"]' href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>">
-                            <span class="nav_icon">
-                                <svg class="svg" width="24" height="24">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                    </use>
-                                </svg>
-                            </span>
-                            <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPING_PROFILE', $siteLangId); ?></span>
-                        </a>
-                    </li>
-                <?php } ?>
-
-                <?php if ($objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                    <li class="nav_item navItemJs">
-                        <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["PickupAddresses"]' href="<?php echo UrlHelper::generateUrl('PickupAddresses'); ?>">
-                            <span class="nav_icon">
-                                <svg class="svg" width="24" height="24">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                    </use>
-                                </svg>
-                            </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_PICKUP_ADDRESSES', $siteLangId); ?></span>
-                        </a>
-                    </li>
-                <?php } ?>
-                <?php if ($objPrivilege->canViewShippedProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                    <li class="nav_item navItemJs">
-                        <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["ShippedProducts"]' href="<?php echo UrlHelper::generateUrl('ShippedProducts'); ?>">
-                            <span class="nav_icon">
-                                <svg class="svg" width="24" height="24">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                    </use>
-                                </svg>
-                            </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_SHIPPED_PRODUCTS', $siteLangId); ?></span>
-                        </a>
-                    </li>
-                <?php } ?>
-                <?php if ($objPrivilege->canViewTrackingRelationCode(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                    <li class="nav_item navItemJs">
-                        <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["TrackingCodeRelation"]' href="<?php echo UrlHelper::generateUrl('TrackingCodeRelation'); ?>">
-                            <span class="nav_icon">
-                                <svg class="svg" width="24" height="24">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                    </use>
-                                </svg>
-                            </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TRACKING_CODE_RELATION', $siteLangId); ?></span>
-                        </a>
-                    </li>
-                <?php } ?>
-            </ul>
-        </div>
-    </li>
     <?php
     if (
         $objPrivilege->canViewSitemap(AdminAuthentication::getLoggedAdminId(), true) ||

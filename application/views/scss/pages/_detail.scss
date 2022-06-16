@@ -355,12 +355,18 @@ $sharing-height: 50px;
     }
 }
 .specification-group {
-    margin: 21.5rem;
+    margin: 2rem 0;
     h6 {
         text-decoration: underline;
         text-transform: uppercase;
         margin-bottom: 1rem;
         font-weight: 600;
+    }
+    .label {
+        color: $txt-gray;
+    }
+    & + & {
+        margin: 3rem 0;
     }
 }
 
@@ -962,6 +968,7 @@ $sharing-height: 50px;
     display: flex;
     align-items: center;
     flex: 1;
+    gap: 10px;
     .copy-input {
         //max-width: 248px;
         width: 100%;
@@ -972,7 +979,7 @@ $sharing-height: 50px;
         border-radius: $radius-common;
         padding: 0;
         color: $txt-gray;
-        margin-#{$end-direction}: 10px;
+        // margin-#{$end-direction}: 10px;
         &:focus {
             outline: none;
         }

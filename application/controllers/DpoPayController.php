@@ -88,7 +88,7 @@ class DpoPayController extends PaymentController
         }
         $this->_template->render(true, false);
     }
-    
+
     /**
      * paymentFailedAndRedirect
      *
@@ -102,7 +102,7 @@ class DpoPayController extends PaymentController
         $log = [
             'msg' => $msg,
             'response' => $response,
-        ];    
+        ];
         SystemLog::transaction(json_encode($log), self::KEY_NAME . "-" . $orderId);
         $this->orderPaymentObj->addOrderPaymentComments($msg);
         Message::addErrorMessage($msg);
