@@ -888,6 +888,7 @@ Updates/Fixes :
     => 064905 - Error message appears when the buyer tries to switch to the seller account from the top of the dashboard. 
     => 064907 - Validation message do not get disappeared even if the user has selected the valid file type
     => 064908 - Watermark image added in the admin end is not visible on the products in the front end.
+    => 064910 - Only success message appears but the specification does not get linked to the product when the admin imports any product specification.
 
 UAT points:
 
