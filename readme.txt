@@ -879,6 +879,7 @@ Updates/Fixes :
     => 064914 - Suggestion: To add the edit button to update any logo in the business logo section
     => 064909 - Notice appears in the variants and options section when admin tries to edit the product details in the master product request
     => 064901 - The seller is not able to update the postal code on the shop setup page.
+    => 064905 - Error message appears when the buyer tries to switch to the seller account from the top of the dashboard. 
 
 UAT points:
 
