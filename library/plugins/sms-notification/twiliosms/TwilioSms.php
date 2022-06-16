@@ -76,4 +76,24 @@ class TwilioSms extends SmsNotificationBase
         }
         return SmsArchive::updateStatus($this->langId, $data['MessageSid'], $data['MessageStatus'], $data);
     }
+
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        try {
+            $twilio = new Client($this->settings['account_sid'], $this->settings['auth_token']);
+            $twilio->messages
+                ->read([], 1);
+        } catch (RestException $e) {           
+            return false;
+        }
+        return  true;
+    }
 }

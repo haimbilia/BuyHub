@@ -89,11 +89,31 @@ class FcmPushNotification extends PushNotificationBase
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-        $response = curl_exec($ch);
-        curl_close($ch);
-
+        $response = curl_exec($ch);  
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); 
+        curl_close($ch);    
+                 
+        if($httpCode === 401){
+            return $this->formatOutput(Plugin::RETURN_FALSE, Labels::getLabel('ERR_INVALID_KEYS', $this->langId), []);
+        } 
+      
         $result = json_decode($response, true);
         $msg = Labels::getLabel('MSG_SUCCESS', $this->langId);
         return $this->formatOutput(Plugin::RETURN_TRUE, $msg, $result);
+    }
+
+    /**
+     * validateKeys
+     *
+     * @param  array $keys
+     * @return bool
+     */
+    public function validateKeys(array $keys): bool
+    {
+        $keys['plugin_active'] = Plugin::ACTIVE;
+        $this->settings = $keys;
+        $this->setDeviceTokens(['ABC']);
+
+        return ($this->notify('test', 'test', User::DEVICE_OS_ANDROID))['status'] === 1;
     }
 }
