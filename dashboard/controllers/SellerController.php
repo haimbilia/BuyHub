@@ -3651,14 +3651,15 @@ class SellerController extends SellerBaseController
         $sellerPluginObj = new SellerPlugin(0, $shopUserId);
         if ($pluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_active') || $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'pu_active')) {
             $fld = $frm->addCheckBox(
-                Labels::getLabel("FRM_USE_MANUAL_SHIPPING_RATES._INSTEAD_OF_THIRD_PARTY.", $this->siteLangId),
+                Labels::getLabel("FRM_USE_MANUAL_SHIPPING_RATES_INSTEAD_OF_THIRD_PARTY.", $this->siteLangId),
                 'shop_use_manual_shipping_rates',
                 1,
                 array(),
                 false,
                 0
             );
-            $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_SELLER_SHIPPING.", $this->siteLangId) . "</span>";
+            HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_SELLER_SHIPPING.", $this->siteLangId));
+            $fld->developerTags['noCaptionTag'] = false;
         }
         $fld = $frm->addTextarea(Labels::getLabel("FRM_GOVERNMENT_INFORMATION_ON_INVOICES", $this->siteLangId), 'shop_invoice_codes');
         $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_INFORMATION_MANDATED_BY_THE_GOVERNMENT_ON_INVOICES.", $this->siteLangId) . "</span>";

@@ -1,10 +1,8 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
+HtmlHelper::formatFormFields($shopFrm, 4);
 $shopFrm->setFormTagAttribute('onsubmit', 'setupShop(this); return(false);');
 $shopFrm->setFormTagAttribute('class', 'form form--horizontal');
-
-$shopFrm->developerTags['colClassPrefix'] = 'col-lg-4 col-md-';
-$shopFrm->developerTags['fld_default_col'] = 4;
 
 $countryFld = $shopFrm->getField('shop_country_code');
 $countryFld->setFieldTagAttribute('id', 'shop_country_code');
@@ -34,8 +32,10 @@ $fld = $shopFrm->getField('shop_pickup_interval');
 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_SHOP_PICKUP_INTERVAL_INFO', $siteLangId) . ' </span>';
 
 $btnSubmit = $shopFrm->getField('btn_submit');
-/* $btnSubmit->developerTags['noCaptionTag'] = true; */
 $btnSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide");
+
+$fld = $shopFrm->getField('shop_invoice_codes');
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
 ?>
 <div class="card-body ">
     <?php echo $shopFrm->getFormHtml(); ?> 
