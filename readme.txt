@@ -881,6 +881,7 @@ Updates/Fixes :
     => 064901 - The seller is not able to update the postal code on the shop setup page.
     => 064905 - Error message appears when the buyer tries to switch to the seller account from the top of the dashboard. 
     => 064907 - Validation message do not get disappeared even if the user has selected the valid file type
+    => 064908 - Watermark image added in the admin end is not visible on the products in the front end.
 
 UAT points:
 
