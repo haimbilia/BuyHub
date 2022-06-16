@@ -880,6 +880,10 @@ Updates/Fixes :
     => 064909 - Notice appears in the variants and options section when admin tries to edit the product details in the master product request
     => 064937 -	permissions issue for sub admin 
     => 064936 - Permission issue for sub-admin user
+    => 064928 - Sub-admin shipping and pickup module won't disapear permission if permission restricted.
+    => 064920 - Sub-admin didn't logout if permission revoke.
+    => 064927 - Go to top button on the payment success page also appears in the invoice print
+    => 064925 - No option available to add the billing address if the user close the add billing address popup once without selecting any address.
 
 UAT points:
 
