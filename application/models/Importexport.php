@@ -2703,6 +2703,9 @@ class Importexport extends ImportexportCommon
                             if ($userId) {
                                 $productId = $colValue = $this->getCheckAndSetProductIdByTempId($colValue, $userId);
                             }
+                            if(1 > $productId){
+                                $invalid = true; 
+                            }
                             break;
                         case 'prodspeclang_lang_id':
                             $languageId = $colValue;

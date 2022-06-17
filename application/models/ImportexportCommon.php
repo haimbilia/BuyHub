@@ -1075,18 +1075,17 @@ class ImportexportCommon extends FatModel
         }
 
         if ($byId) {
-            $srch->addMultipleFields(array('product_id', 'product_identifier'));
+            $srch->addMultipleFields(array('product_id', 'trim(product_identifier)'));
             if ($productIdOrIdentifier) {
                 $srch->addCondition('product_id', '=', $productIdOrIdentifier);
             }
         } else {
-            $srch->addMultipleFields(array('product_identifier', 'product_id'));
+            $srch->addMultipleFields(array('trim(product_identifier)', 'product_id'));
             if ($productIdOrIdentifier) {
                 $srch->addCondition('product_identifier', '=', $productIdOrIdentifier);
             }
-        }
-        $rs = $srch->getResultSet();
-        return $this->db->fetchAllAssoc($rs);
+        }       
+        return $this->db->fetchAllAssoc($srch->getResultSet());
     }
 
     public function getAllUserArr($byId = true, $userIdOrUsername = false)
