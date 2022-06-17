@@ -890,7 +890,8 @@ Updates/Fixes :
     => 064907 - Validation message do not get disappeared even if the user has selected the valid file type
     => 064908 - Watermark image added in the admin end is not visible on the products in the front end.
     => 064910 - Only success message appears but the specification does not get linked to the product when the admin imports any product specification.
-
+    => 064884 - The upload file popup does not get opened by clicking on the image icon.
+    
 UAT points:
 
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
