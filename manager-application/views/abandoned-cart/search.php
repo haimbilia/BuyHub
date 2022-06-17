@@ -49,12 +49,13 @@ foreach ($arrListing as $sn => $row) {
                                             </use>
                                         </svg>',
                     ];
-                    $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
-                    $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 }
 
                 if ($row['abandonedcart_action'] == AbandonedCart::ACTION_PURCHASED) {
                     $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row['abandonedcart_amount']));
+                } else {
+                    $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
+                    $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 }
                 break;
             default:

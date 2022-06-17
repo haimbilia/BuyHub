@@ -1,6 +1,5 @@
 $(document).ready(function () {
 	select2('searchFrmUserIdJs', fcom.makeUrl('Users', 'autoComplete'), { user_is_buyer: 1, credential_active: 1 });
-
 	select2('searchFrmSellerProductJs', fcom.makeUrl('SellerProducts', 'autoComplete'));
 });
 
@@ -12,7 +11,6 @@ $(document).ready(function () {
 	discountNotification = function (abandonedcart_id, user_id, product_id) {
 		fcom.updateWithAjax(fcom.makeUrl('AbandonedCart', "validateProductForNotification", [product_id]), '', function (t) {
 			fcom.closeProcessing();
-			$.ykmodal(fcom.getLoader());
 			var data = 'includeTabs=0&onClear=discountNotification(' + abandonedcart_id + ', ' + user_id + ', ' + product_id + ')';
 			fcom.updateWithAjax(fcom.makeUrl('DiscountCoupons', "form"), data, function (t) {
 				fcom.closeProcessing();

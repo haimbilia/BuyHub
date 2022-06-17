@@ -86,10 +86,7 @@ foreach ($arrListing as $sn => $row) {
                         $data['otherButtons'][] = $requestData;
                     }
                 }
-                $actionItems = Labels::getLabel('LBL_N/A', $siteLangId);
-                if (2 < count($data)) {
-                    $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
-                }
+                $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
             default:

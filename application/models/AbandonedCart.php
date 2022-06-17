@@ -82,9 +82,9 @@ class AbandonedCart extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-            static::ACTION_ADDED => Labels::getLabel('LBL_In_Cart', $langId),
-            static::ACTION_DELETED => Labels::getLabel('LBL_Removed_From_Cart', $langId),
-            static::ACTION_PURCHASED => Labels::getLabel('LBL_Cart_Recoverd', $langId)
+            static::ACTION_ADDED => Labels::getLabel('LBL_IN_CART', $langId),
+            static::ACTION_DELETED => Labels::getLabel('LBL_REMOVED_FROM_CART', $langId),
+            static::ACTION_PURCHASED => Labels::getLabel('LBL_CART_RECOVERD', $langId)
         );
     }
 
