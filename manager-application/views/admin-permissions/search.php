@@ -30,6 +30,10 @@ foreach ($arrListing as $moduleId => $moduleName) {
                         if (in_array($moduleId, AdminPrivilege::getWriteOnlyPermissionModulesArr()) && $key == AdminPrivilege::PRIVILEGE_READ) {
                             continue;
                         }
+                        
+                        if (in_array($moduleId, AdminPrivilege::getReadOnlyPermissionModulesArr()) && $key == AdminPrivilege::PRIVILEGE_WRITE) {
+                            continue;
+                        }
 
                         $checked = '';
                         if (isset($userData[$moduleId]) && !empty($userData[$moduleId]) && $userData[$moduleId]['admperm_value'] == $key) {                           

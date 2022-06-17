@@ -113,6 +113,8 @@ if (isset($dropdownButtons) && is_array($dropdownButtons)) {
     $actionItems = true;
 }
 
-if (true == $actionItems) {
-    echo $ul->getHtml();
+if (false == $actionItems) {
+    $ul->appendElement('li', [], Labels::getLabel('LBL_N/A'));
 }
+
+echo $ul->getHtml();

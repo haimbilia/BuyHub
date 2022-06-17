@@ -121,7 +121,9 @@ class AbandonedCartController extends ListingBaseController {
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditAbandonedCart($this->admin_id, true));
+        
+        /* Discount notification action button is used. */
+        $this->set('canEdit', $this->objPrivilege->canViewDiscountCoupons($this->admin_id, true));
     }
 
     public function getSearchForm(array $fields = []) {
@@ -189,7 +191,7 @@ class AbandonedCartController extends ListingBaseController {
             'abandonedcart_added_on' => Labels::getLabel('LBL_DATE', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-
+        
         CacheHelper::create('abandonedCartFormTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }

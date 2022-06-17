@@ -226,11 +226,16 @@ select2 = function (
                         keyword: params.term, // search term
                         page: params.page,
                         fIsAjax: 1,
+                        fOutMode: 'json'
                     },
                     ("function" == typeof postdata ? postdata(ele) : postdata)
                 );
             },
             processResults: function (data, params) {
+                if (1 > data.status) {
+                    fcom.displayErrorMessage(data.msg);
+                }
+                console.log('hi');
                 params.page = params.page || 1;
                 data.pageCount = data.pageCount || 1;
                 if ("function" == typeof processResultsCallback) {

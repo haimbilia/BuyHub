@@ -99,7 +99,6 @@ class AbandonedCartProductsController extends ListingBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditAbandonedCart($this->admin_id, true));
         $this->set('actionArr', AbandonedCart::getActionArr($this->siteLangId));
     }
 

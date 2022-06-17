@@ -7,8 +7,10 @@ class HomeController extends ListingBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->objPrivilege->canViewAdminDashboard($this->admin_id);
         $this->defaultStatsInterval = Statistics::BY_THIS_MONTH;
+        if ('index' != $action) {
+            $this->objPrivilege->canViewAdminDashboard($this->admin_id);
+        }
     }
 
     public function index()
@@ -17,6 +19,13 @@ class HomeController extends ListingBaseController
         $accountId = false;
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        if (false == $this->objPrivilege->canViewAdminDashboard($this->admin_id, true)) {
+            $this->set('pageTitle', $pageTitle);
+            $this->set('canViewAdminDashboard', false);
+            $this->_template->render();
+            return;
+        }
 
         $statsObj = new Statistics();
         $analyticArr = array(
@@ -170,6 +179,7 @@ class HomeController extends ListingBaseController
         $this->set('orderSalesStats', $dashboardInfo['orderSalesStats'][$this->defaultStatsInterval]);
         $this->set('shopsSignupStats', $dashboardInfo['shopsSignupStats'][$this->defaultStatsInterval]);
         $this->set('userSignupStats', $dashboardInfo['userSignupStats'][$this->defaultStatsInterval]);
+        $this->set('canViewAdminDashboard', $this->objPrivilege->canViewAdminDashboard($this->admin_id, true));
         $this->_template->render();
     }
 

@@ -331,6 +331,13 @@ class AdminPrivilege
             static::SECTION_UPLOAD_BULK_IMAGES,
         );
     }
+    
+    public static function getReadOnlyPermissionModulesArr(): array
+    {
+        return array(
+            static::SECTION_ABANDONED_CART,
+        );
+    }
 
     public static function getAdminPermissionLevel(int $adminId, int $sectionId = 0)
     {
@@ -431,7 +438,7 @@ class AdminPrivilege
             return $this->returnFalseOrDie($returnResult);
         }
 
-        return (true);
+        return true;
     }
 
     private function returnFalseOrDie($returnResult, $msg = '')
@@ -1514,10 +1521,10 @@ class AdminPrivilege
         return $this->checkPermission($adminId, static::SECTION_ABANDONED_CART, static::PRIVILEGE_READ, $returnResult);
     }
 
-    public function canEditAbandonedCart($adminId = 0, $returnResult = false)
+    /* public function canEditAbandonedCart($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_ABANDONED_CART, static::PRIVILEGE_WRITE, $returnResult);
-    }
+    } */
 
     public function canViewAdvertisements($adminId = 0, $returnResult = false)
     {
