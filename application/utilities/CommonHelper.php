@@ -387,6 +387,17 @@ class CommonHelper extends FatUtility
                     $amount = 0;
                 }
                 break;
+            case 'TAXABLE_AMOUNT':               
+                $amount = $cartTotal + self::orderProductAmount($opArr, 'VOLUME_DISCOUNT');
+                $tax = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_TAX]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_TAX]['opcharge_amount'] : 0;
+                if ($tax <= 0) {
+                    $amount = 0;
+                } elseif (($userType == User::USER_TYPE_SELLER && $opArr['op_tax_collected_by_seller'] == 0)) {
+                    $amount = 0;
+                }elseif($opArr['op_tax_after_discount']){          
+                    $amount += self::orderProductAmount($opArr, 'DISCOUNT');
+                }
+                break;    
             case 'VOLUME_DISCOUNT':
                 $amount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT]['opcharge_amount'] : 0;
                 break;
