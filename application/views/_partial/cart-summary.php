@@ -66,7 +66,7 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                                                         <a class="title" title="<?php echo $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
                                                         <div class="products-price">
                                                             <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?></span>
-                                                            <?php if ($product['selprod_price'] > $product['theprice']) { ?>
+                                                            <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
                                                                 <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'])); ?></del>
                                                                 <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
                                                             <?php } ?>

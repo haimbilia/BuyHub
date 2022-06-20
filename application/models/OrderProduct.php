@@ -110,7 +110,9 @@ class OrderProduct extends MyAppModel
             'opsetting_op_id' => $this->mainTableRecordId,
             'op_tax_collected_by_seller' => FatApp::getConfig('CONF_TAX_COLLECTED_BY_SELLER', FatUtility::VAR_INT, 0),
             'op_commission_include_tax' => FatApp::getConfig('CONF_COMMISSION_INCLUDING_TAX', FatUtility::VAR_INT, 0),
-            'op_commission_include_shipping' => FatApp::getConfig('CONF_COMMISSION_INCLUDING_SHIPPING', FatUtility::VAR_INT, 0)
+            'op_commission_include_shipping' => FatApp::getConfig('CONF_COMMISSION_INCLUDING_SHIPPING', FatUtility::VAR_INT, 0),
+            'op_tax_after_discount' => FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0),
+            'op_product_inclusive_tax' => FatApp::getConfig('CONF_PRODUCT_INCLUSIVE_TAX', FatUtility::VAR_INT, 0),
         );
 
         if (FatApp::getDb()->insertFromArray(static::DB_TBL_SETTINGS, $data, false, array(), $data)) {

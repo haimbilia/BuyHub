@@ -893,6 +893,7 @@ Updates/Fixes :
     => 064884 - The upload file popup does not get opened by clicking on the image icon.
     => 064982 - When admin use "mark as buyer " functionality for affiliate user.
     => 064981 - Mark as buyer Warning popup message is not correct
+    => 064957 - The seller gets directed to the catalog page after adding the inventory from marketplace products.
     
 UAT points:
 

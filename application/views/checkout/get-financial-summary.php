@@ -11,7 +11,7 @@
         </li>
         <?php if ($cartSummary['cartVolumeDiscount']) { ?>
             <li class="cart-summary-item">
-                <span class="label"><?php echo Labels::getLabel('LBL_Loyalty/Volume_Discount', $siteLangId); ?>
+                <span class="label"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?>
                 </span>
                 <span class="value">-<?php echo CommonHelper::displayMoneyFormat($cartSummary['cartVolumeDiscount'], true, false, true, false, true); ?></span>
             </li>
