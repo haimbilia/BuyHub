@@ -891,7 +891,10 @@ Updates/Fixes :
     => 064908 - Watermark image added in the admin end is not visible on the products in the front end.
     => 064910 - Only success message appears but the specification does not get linked to the product when the admin imports any product specification.
     => 064884 - The upload file popup does not get opened by clicking on the image icon.
+    => 064982 - When admin use "mark as buyer " functionality for affiliate user.
+    => 064981 - Mark as buyer Warning popup message is not correct
     => 064957 - The seller gets directed to the catalog page after adding the inventory from marketplace products.
+    => 064940 - Plugins edit permissions not working.
     
 UAT points:
 

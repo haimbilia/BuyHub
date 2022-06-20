@@ -157,7 +157,7 @@ class PluginsController extends ListingBaseController
         if (Plugin::TYPE_CURRENCY_CONVERTER == $type) {
             $currency = new Currency();
             $currencyConverter = $currency->getCurrencyConverterApi();
-            if ($currencyConverter) {
+            if ($currencyConverter && $this->objPrivilege->canEditPlugins($this->admin_id, true)) {
                 $otherButtons = [
                     [
                         'attr' => [
@@ -192,7 +192,7 @@ class PluginsController extends ListingBaseController
         $this->set("type", $type);
         $this->set("pluginTypes", $pluginTypes);
         $this->set("otherPluginTypes", $otherPluginTypes);
-        $this->set('canEdit', $this->objPrivilege->canEditCommissionSettings($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditPlugins($this->admin_id, true));
     }
 
     public function form()
