@@ -73,7 +73,7 @@ $(document).ready(function () {
     };
 
     markSellerAsBuyer = function (userId) {
-        if (!confirm(langLbl.confirmSellerAsBuyer)) {
+        if (!confirm(langLbl.confirmAsBuyer)) {
             return;
         }
         var userId = parseInt(userId);

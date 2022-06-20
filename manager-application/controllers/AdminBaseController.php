@@ -184,7 +184,7 @@ class AdminBaseController extends FatController
                     'invalidUploadFileType' => Labels::getLabel('MSG_INVALID_FILE_TYPE._ONLY_{FILE-TYPE}_FILE_CAN_BE_UPLOADED', $this->siteLangId),
                     'clickToCopy' => Labels::getLabel('LBL_CLICK_TO_COPY', $this->siteLangId),
                     'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
-                    'confirmSellerAsBuyer' => Labels::getLabel('LBL_DO_YOU_WANT_TO_MAKE_SELLER_AS_BUYER', $this->siteLangId),
+                    'confirmAsBuyer' => Labels::getLabel('LBL_DO_YOU_WANT_TO_MAKE_THIS_USER_AS_BUYER.?', $this->siteLangId),
                     'maxLengthValidator' => CommonHelper::replaceStringData(Labels::getLabel('FRM_USED_{charsTyped}_of_{charsTotal}_CHAR', $this->siteLangId), ["{charsTyped}" => "%charsTyped%", "{charsTotal}" => "%charsTotal%"]), /* Used By Maxlength bootstrap validator. */
                     'unread' => Labels::getLabel('LBL_UNREAD', $this->siteLangId),
                     'notANumber' => Labels::getLabel('ERR_NOT_A_NUMBER', $this->siteLangId),
