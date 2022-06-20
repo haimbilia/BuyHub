@@ -78,7 +78,7 @@ foreach ($arrListing as $sn => $row) {
                         $fn = 'redirectToTrackingCodeRelation()';
                     }
                 }
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['plugin_id'] . ', ' . ((int) !$row[$key]) . ', \''. $fn . '\')' : 'return false;';
+                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['plugin_id'] . ', ' . ((int) !$row[$key]) . ', \'' . $fn . '\')' : 'return false;';
                 if (!empty($otherPluginTypes) && $canEdit) {
                     if (empty($msg)) {
                         $msg = Labels::getLabel("MSG_TURNING_ON_{PLUGIN-TYPE}_WILL_TURN_OFF_{OTHER-PLUGIN-TYPE}_PLUGINS._DO_YOU_WANT_TO_CONTINUE_?", $siteLangId);
@@ -156,10 +156,16 @@ $frm->addHiddenField('', 'status'); ?>
             'statusButtons' => (1 < count($arrListing) && $canEdit && !$isKingPinType),
             'otherButtons' => $otherButtons ?? [],
         ];
-       
-        if($pluginType == Plugin::TYPE_TAX_SERVICES ){
+
+        if ($data['statusButtons'] && ($pluginType == Plugin::TYPE_SPLIT_PAYMENT_METHOD || $pluginType == Plugin::TYPE_REGULAR_PAYMENT_METHOD) && !empty($otherPluginTypes)) {
+            $msg = Labels::getLabel("MSG_TURNING_ON_{PLUGIN-TYPE}_WILL_TURN_OFF_{OTHER-PLUGIN-TYPE}_PLUGINS._DO_YOU_WANT_TO_CONTINUE_?", $siteLangId);
+            $msg = CommonHelper::replaceStringData($msg, ['{PLUGIN-TYPE}' => $pluginTypes[$row['plugin_type']], '{OTHER-PLUGIN-TYPE}' => $otherPluginTypes]);
+            $data['msg'] = $msg;
+        } 
+        
+        if ($pluginType == Plugin::TYPE_TAX_SERVICES) {
             $plugin = new Plugin();
-            if($plugin->getDefaultPluginData(Plugin::TYPE_TAX_SERVICES, 'plugin_id')){
+            if ($plugin->getDefaultPluginData(Plugin::TYPE_TAX_SERVICES, 'plugin_id')) {
                 $data['otherButtons'] = [
                     [
                         'attr' => [
@@ -175,9 +181,9 @@ $frm->addHiddenField('', 'status'); ?>
                                     </svg><span>' . Labels::getLabel('BTN_SYNC', $siteLangId) . '</span>',
                     ]
                 ];
-            } 
+            }
         }
-        
+
         $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
         ?>
     </div>

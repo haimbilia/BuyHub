@@ -75,7 +75,10 @@ $(document).ajaxComplete(function () {
 
     changeStatusEitherPluginTypes = function (obj, status, msg) {
         msg = (0 < status) ? msg : langLbl.confirmUpdateStatus;
-        if (!confirm(msg)) { return; }
+        if (!confirm(msg)) {
+            $(obj).prop('checked', false);
+            return;
+        }
         $(listingTableJs).prepend(fcom.getLoader());
 
         var pluginId = parseInt(obj.id);

@@ -465,16 +465,17 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         });
     };
 
-    toggleBulkStatues = function (status, msg = "") {
+    toggleBulkStatues = function (status, confirmMsg = "") {
         var element = "form.actionButtonsJs";
         if (1 > $(element).length) {
             fcom.displayErrorMessage(langLbl.actionButtonsClass);
             return false;
         }
-        /* msg = "" == msg ? langLbl.confirmUpdateStatus : msg;
-        if (!confirm(msg)) {
+
+        if ('' != confirmMsg && !confirm(confirmMsg)) {
             return false;
-        } */
+        }
+        
         $(element).attr("action", fcom.makeUrl(controllerName, "toggleBulkStatuses"));
         $(element + " input[name='status']").val(status);
         $(element).submit();
