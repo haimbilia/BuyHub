@@ -1682,6 +1682,11 @@ class AdminPrivilege
         return $this->checkPermission($adminId, static::SECTION_SETTINGS, static::PRIVILEGE_READ, $returnResult);
     }
 
+    public function canEditSettings($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SETTINGS, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
     public function canViewPagesLanguageData($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_PAGES_LANGUAGE_DATA, static::PRIVILEGE_READ, $returnResult);

@@ -5,23 +5,23 @@
         <?php
         $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
         <div class="card">
-            <div class="card-head">
-                <div class="card-head-label">
-
-                </div>
-                <div class="card-toolbar">
-                    <div class="maintenance-mode">
-                        <label class="switch switch-sm switch-icon">
-                            <?php
-                            $status = FatApp::getConfig('CONF_MAINTENANCE', FatUtility::VAR_INT, 0);
-                            $checked = applicationConstants::ON == $status ? 'checked' : '';
-                            ?>
-                            <input type="checkbox" name="CONF_MAINTENANCE" data-old-status="<?php echo $status; ?>" value="<?php echo $status; ?>" onclick="updateMaintenanceModeStatus(event, this, <?php echo ((int) !$status); ?>,<?php echo $siteLangId; ?>)" <?php echo $checked; ?>>
-                            <span class="input-helper"></span><?php echo Labels::getLabel('FRM_MAINTENANCE_MODE', $siteLangId); ?>
-                        </label>
+            <?php if ($canEdit) { ?>
+                <div class="card-head">
+                    <div class="card-head-label"></div>
+                    <div class="card-toolbar">
+                        <div class="maintenance-mode">
+                            <label class="switch switch-sm switch-icon">
+                                <?php
+                                $status = FatApp::getConfig('CONF_MAINTENANCE', FatUtility::VAR_INT, 0);
+                                $checked = applicationConstants::ON == $status ? 'checked' : '';
+                                ?>
+                                <input type="checkbox" name="CONF_MAINTENANCE" data-old-status="<?php echo $status; ?>" value="<?php echo $status; ?>" onclick="updateMaintenanceModeStatus(event, this, <?php echo ((int) !$status); ?>,<?php echo $siteLangId; ?>)" <?php echo $checked; ?>>
+                                <span class="input-helper"></span><?php echo Labels::getLabel('FRM_MAINTENANCE_MODE', $siteLangId); ?>
+                            </label>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php } ?>
             <div class="card-body">
                 <?php if (
                     $objPrivilege->canViewGeneralSettings(AdminAuthentication::getLoggedAdminId(), true) ||
@@ -42,7 +42,7 @@
                     $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewSmsTemplate(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewEmailTemplates(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSocialPlatforms(AdminAuthentication::getLoggedAdminId(), true)                    
+                    $objPrivilege->canViewSocialPlatforms(AdminAuthentication::getLoggedAdminId(), true)
 
                 ) { ?>
                     <div class="setting-search">
@@ -353,7 +353,7 @@
                                     <span><?php echo Labels::getLabel('MSG_LIST_OF_EMAIL_NOTIFICATIONS', $siteLangId); ?></span>
                                 </div>
                             </a>
-                        <?php } ?>         
+                        <?php } ?>
                         <?php if ($objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <a class="setting" href="<?php echo UrlHelper::generateUrl('sellerApprovalForm'); ?>">
                                 <div class="setting__icon">

@@ -894,6 +894,7 @@ Updates/Fixes :
     => 064982 - When admin use "mark as buyer " functionality for affiliate user.
     => 064981 - Mark as buyer Warning popup message is not correct
     => 064957 - The seller gets directed to the catalog page after adding the inventory from marketplace products.
+    => 064940 - Plugins edit permissions not working.
     
 UAT points:
 

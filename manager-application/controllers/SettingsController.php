@@ -18,6 +18,7 @@ class SettingsController extends ListingBaseController
 
         $this->set('pageData', $pageData);
         $this->set('objPrivilege', $this->objPrivilege);
+        $this->set('canEdit', $this->objPrivilege->canEditSettings($this->admin_id, true));
         $this->_template->render();
     }
 
