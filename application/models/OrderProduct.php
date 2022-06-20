@@ -103,6 +103,7 @@ class OrderProduct extends MyAppModel
     public function setupSettings()
     {
         if ($this->mainTableRecordId < 1) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST_ID');
             return false;
         }
 
@@ -118,6 +119,7 @@ class OrderProduct extends MyAppModel
         if (FatApp::getDb()->insertFromArray(static::DB_TBL_SETTINGS, $data, false, array(), $data)) {
             return true;
         }
+        $this->error = FatApp::getDb()->getError();
         return false;
     }
 
