@@ -280,7 +280,7 @@ class PluginsController extends ListingBaseController
         if ($recordId > 0) {
             $languages = Language::getAllNames();
             foreach ($languages as $langId => $langName) {
-                if (!$row = Plugin::getAttributesByLangId($langId, $recordId)) {
+                if (!Plugin::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }

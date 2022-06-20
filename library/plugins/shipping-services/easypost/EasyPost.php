@@ -15,6 +15,8 @@ class EasyPost extends ShippingServicesBase
     private const REQUEST_CREATE_ORDER = 6;
     private const REQUEST_RETRIEVE_ORDER = 7;
     private const REQUEST_REFUND_SHIPMENT = 8;
+    private const REQUEST_CARRIER_TYPES = 9;
+    
 
     private $resp;
     private $eCode = '';
@@ -128,6 +130,25 @@ class EasyPost extends ShippingServicesBase
         return array_map(function ($records) {
             return $records + ['code' => $records['readable']];
         }, $records);
+    }
+
+
+    /**
+     * getCarrierTypes
+     *   
+     * @return array
+     */
+    public function getCarrierTypes(): array
+    {
+        if (Plugin::INACTIVE == $this->settings['plugin_active']) {
+            return [];
+        }
+
+        if (false === $this->doRequest(self::REQUEST_CARRIER_TYPES)) {
+            return [];
+        }
+
+        return (array) $this->getResponse();
     }
 
     /**
@@ -720,8 +741,8 @@ class EasyPost extends ShippingServicesBase
     public function validateKeys(array $keys): bool
     {
         $keys['plugin_active'] = Plugin::ACTIVE;
-        $this->settings = $keys;
-        $this->getCarriers();
+        $this->settings = $keys;           
+        $this->getCarrierTypes();
         if (!empty($this->eCode) && 'APIKEY.INACTIVE' == $this->eCode) {
             return false;
         }
@@ -745,6 +766,9 @@ class EasyPost extends ShippingServicesBase
                 case self::REQUEST_CARRIER_LIST:
                     $this->resp = \EasyPost\CarrierAccount::all(null, $this->settings['live_api_key']);
                     break;
+                case self::REQUEST_CARRIER_TYPES:                  
+                    $this->resp = \EasyPost\CarrierAccount::types(null, $this->settings['api_key']);
+                    break;    
                 case self::REQUEST_CREATE_ADDRESS:
                     $this->resp = \EasyPost\Address::create_and_verify($requestParam, $this->apiKey);
                     break;
