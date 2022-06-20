@@ -157,10 +157,9 @@ if ($orderDetail['op_shipping_duration_name'] != '') {
     $item .= $orderDetail['op_shipping_durations'] . '-' . $orderDetail['op_shipping_duration_name'];
 }
 
-
-
 $tax = CommonHelper::orderProductAmount($orderDetail, 'TAX');
 $col6 = ($orderDetail['op_tax_collected_by_seller']) && $tax > 0 ;
+$taxableAmount = CommonHelper::orderProductAmount($orderDetail, 'TAXABLE_AMOUNT',false, User::USER_TYPE_SELLER);
 ?>
 <table width="100%" border="0" cellpadding="10" cellspacing="0" class="tbl-border">
     <tbody>
@@ -271,29 +270,33 @@ $col6 = ($orderDetail['op_tax_collected_by_seller']) && $tax > 0 ;
                             <td style="padding:10px; ;text-align: right;background-color: #ddd;"><strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'CART_TOTAL'), true, false, true, false, true); ?></strong></td>
                         </tr>
                         <tr>
-                            <td style="padding:15px 15px;font-size:14px;text-align: left;font-weight:700; vertical-align: top;" colspan="<?php echo ($col6) ? '2' : '1'; ?>" rowspan="5"></td>
+                            <td style="padding:15px 15px;font-size:14px;text-align: left;font-weight:700; vertical-align: top;" colspan="<?php echo ($col6) ? '2' : '1'; ?>" rowspan="10"></td>
                             <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('Lbl_Cart_Total', $siteLangId) ?></td>
                             <td style="padding:10px; ;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'cart_total'), true, false, true, false, true); ?></td>
                         </tr>
-                        <?php if ($shippedBySeller && $orderDetail['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && 0 < CommonHelper::orderProductAmount($orderDetail, 'shipping')) { ?>
-                            <tr>
-                                <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_SHIPPING_CHARGES', $siteLangId) ?></td>
-                                <td style="padding:10px; ;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'shipping'), true, false, true, false, true); ?></td>
-                            </tr>
-                        <?php } ?>
-                        <?php if ($col6) { ?>
-                            <tr>
-                                <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Total_Tax', $siteLangId) ?></td>
-                                <td style="padding:10px; ;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($tax, true, false, true, false, true); ?></td>
-                            </tr>
-                        <?php } ?>
                         <?php $volumeDiscount = CommonHelper::orderProductAmount($orderDetail, 'VOLUME_DISCOUNT');
                         if ($volumeDiscount != 0) { ?>
                             <tr>
                                 <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId) ?></td>
                                 <td style="padding:10px; ;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></td>
                             </tr>
+                        <?php } ?>                      
+                        <?php if ($col6) { ?>
+                            <tr>
+                                <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_TAXABLE_AMOUNT', $siteLangId) ?></td>
+                                <td style="padding:10px; ;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($taxableAmount, true, false, true, false, true); ?></td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Total_Tax', $siteLangId) ?></td>
+                                <td style="padding:10px; ;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($tax, true, false, true, false, true); ?></td>
+                            </tr>
                         <?php } ?>
+                        <?php if ($shippedBySeller && $orderDetail['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && 0 < CommonHelper::orderProductAmount($orderDetail, 'shipping')) { ?>
+                            <tr>
+                                <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_SHIPPING_CHARGES', $siteLangId) ?></td>
+                                <td style="padding:10px; ;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'shipping'), true, false, true, false, true); ?></td>
+                            </tr>
+                        <?php } ?>                   
                         <?php if (array_key_exists('order_rounding_off', $orderDetail) && 0 != $orderDetail['order_rounding_off']) { ?>
                             <tr>
                                 <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo (0 < $orderDetail['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?></td>
