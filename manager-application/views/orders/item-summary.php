@@ -36,7 +36,8 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                     $volumeDiscount = CommonHelper::orderProductAmount($op, 'VOLUME_DISCOUNT');
                     $rewardPoint = CommonHelper::orderProductAmount($op, 'REWARDPOINT');
                     $discount = CommonHelper::orderProductAmount($op, 'DISCOUNT');
-                    $tax = CommonHelper::orderProductAmount($op, 'TAX');                   
+                    $tax = CommonHelper::orderProductAmount($op, 'TAX');
+                    $taxableAmount = CommonHelper::orderProductAmount($op, 'TAXABLE_AMOUNT');
                     $total = (CommonHelper::orderProductAmount($op, 'cart_total') + $shippingCost) + $volumeDiscount;
 
                     $op['order_id'] = $order['order_id'];
@@ -100,7 +101,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
             </td>
 
             <td>
-                <span class="d-inline-block link-dotted" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#price-<?php echo $op['op_id']; ?>">
+                <span class="d-inline-block link-dotted" tabindex="0" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover focus" data-popover-html="#price-<?php echo $op['op_id']; ?>">
                     <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($op, 'NETAMOUNT'), true, true, true, false, true); ?>
                 </span>
                 <div class="hidden" id="price-<?php echo $op['op_id']; ?>">
@@ -113,34 +114,56 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             <span class="lable"><?php echo Labels::getLabel('LBL_QUANTITY:'); ?> </span>
                             <span class="value"><?php echo $op['op_qty']; ?></span>
                         </li>
-                        <?php if (0 < $shippingCost) { ?>
-                            <li class="list-popover-item">
-                                <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_COST:'); ?></span>
-                                <span class="value"><?php echo $shippingCost; ?></span>
-                            </li>
-                        <?php } ?>
-                        <?php if (0 < $tax) { ?>
-                            <li class="list-popover-item">
-                                <span class="lable"><?php echo Labels::getLabel('LBL_TAX:'); ?></span>
-                                <span class="value"><?php echo $tax; ?></span>
-                            </li>
-                        <?php } ?>
                         <?php if (!empty($volumeDiscount)) { ?>
                             <li class="list-popover-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT:'); ?></span>
                                 <span class="value"><?php echo $volumeDiscount; ?></span>
                             </li>
-                        <?php } ?>
-                        <?php if (!empty($discount)) { ?>
+                        <?php }
+                        if ($op['op_tax_after_discount']) {
+                            if (!empty($discount)) { ?>
+                                <li class="list-popover-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_DISCOUNT:'); ?></span>
+                                    <span class="value"><?php echo $discount; ?></span>
+                                </li>
+                            <?php } ?>
+                            <?php if (!empty($rewardPoint)) { ?>
+                                <li class="list-popover-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT:'); ?></span>
+                                    <span class="value"><?php echo $rewardPoint; ?></span>
+                                </li>
+                            <?php }
+                        }
+                        if (0 < $tax) { ?>
                             <li class="list-popover-item">
-                                <span class="lable"><?php echo Labels::getLabel('LBL_DISCOUNT:'); ?></span>
-                                <span class="value"><?php echo $discount; ?></span>
+                                <span class="lable"><?php echo Labels::getLabel('LBL_TAXABLE_AMOUNT:'); ?></span>
+                                <span class="value"><?php echo $taxableAmount; ?></span>
+                            </li>
+                            <li class="list-popover-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_TAX:'); ?></span>
+                                <span class="value"><?php echo $tax; ?></span>
                             </li>
                         <?php } ?>
-                        <?php if (!empty($rewardPoint)) { ?>
+                        <?php
+                        if (!$op['op_tax_after_discount']) {
+                            if (!empty($discount)) { ?>
+                                <li class="list-popover-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_DISCOUNT:'); ?></span>
+                                    <span class="value"><?php echo $discount; ?></span>
+                                </li>
+                            <?php } ?>
+                            <?php if (!empty($rewardPoint)) { ?>
+                                <li class="list-popover-item">
+                                    <span class="lable"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT:'); ?></span>
+                                    <span class="value"><?php echo $rewardPoint; ?></span>
+                                </li>
+                        <?php }
+                        } ?>
+
+                        <?php if (0 < $shippingCost) { ?>
                             <li class="list-popover-item">
-                                <span class="lable"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT:'); ?></span>
-                                <span class="value"><?php echo $rewardPoint; ?></span>
+                                <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_COST:'); ?></span>
+                                <span class="value"><?php echo $shippingCost; ?></span>
                             </li>
                         <?php } ?>
                     </ul>

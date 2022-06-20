@@ -171,6 +171,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
             $totalSavings = ($childOrder['op_special_price'] * $childOrder["op_qty"]) + $couponDiscount + $volumeDiscount;
 
             $tax = CommonHelper::orderProductAmount($childOrder, 'TAX');
+            $taxableAmount = CommonHelper::orderProductAmount($childOrder, 'TAXABLE_AMOUNT');
 
             $col6 = ($childOrder['op_tax_collected_by_seller']) && $tax > 0;
         ?>
@@ -291,39 +292,61 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                 <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('Lbl_Cart_Total', $siteLangId) ?></td>
                                 <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'cart_total'), true, false, true, false, true); ?></td>
                             </tr>
-
-                            <?php if ($childOrder['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && $childOrder['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && 0 < CommonHelper::orderProductAmount($childOrder, 'shipping')) {  ?>
+                            <?php
+                            if ($volumeDiscount != 0) { ?>
                                 <tr>
-                                    <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId) ?></td>
-                                    <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'shipping'), true, false, true, false, true); ?></td>
+                                    <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId) ?></td>
+                                    <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo '-' . CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></td>
                                 </tr>
-                            <?php } ?>
-                            <?php if ($tax > 0) { ?>
+                            <?php }     
+                            if($childOrder['op_tax_after_discount']){
+                                $rewardPointDiscount = CommonHelper::orderProductAmount($childOrder, 'REWARDPOINT');
+                                if ($rewardPointDiscount != 0) { ?>
+                                    <tr>
+                                        <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId) ?></td>
+                                        <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($rewardPointDiscount, true, false, true, false, true); ?></td>
+                                    </tr>
+                                <?php }
+                                if ($couponDiscount != 0) { ?>
+                                    <tr>
+                                        <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Discount', $siteLangId) ?></td>
+                                        <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo '-' . CommonHelper::displayMoneyFormat($couponDiscount, true, false, true, false, true); ?></td>
+                                    </tr>
+                                <?php
+                                }
+                            }                     
+                            if ($tax > 0) { ?>
+                                <tr>
+                                    <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_TAXABLE_AMOUNT', $siteLangId) ?></td>
+                                    <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($taxableAmount, true, false, true, false, true); ?></td>
+                                </tr>
                                 <tr>
                                     <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId) ?></td>
                                     <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($tax, true, false, true, false, true); ?></td>
                                 </tr>
                             <?php }
-                            $rewardPointDiscount = CommonHelper::orderProductAmount($childOrder, 'REWARDPOINT');
-                            if ($rewardPointDiscount != 0) { ?>
+                            if(!$childOrder['op_tax_after_discount']){
+                                $rewardPointDiscount = CommonHelper::orderProductAmount($childOrder, 'REWARDPOINT');
+                                if ($rewardPointDiscount != 0) { ?>
+                                    <tr>
+                                        <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId) ?></td>
+                                        <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($rewardPointDiscount, true, false, true, false, true); ?></td>
+                                    </tr>
+                                <?php }
+                                if ($couponDiscount != 0) { ?>
+                                    <tr>
+                                        <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Discount', $siteLangId) ?></td>
+                                        <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo '-' . CommonHelper::displayMoneyFormat($couponDiscount, true, false, true, false, true); ?></td>
+                                    </tr>
+                                <?php
+                                }
+                            }
+                            if ($childOrder['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && $childOrder['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && 0 < CommonHelper::orderProductAmount($childOrder, 'shipping')) {  ?>
                                 <tr>
-                                    <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId) ?></td>
-                                    <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($rewardPointDiscount, true, false, true, false, true); ?></td>
+                                    <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId) ?></td>
+                                    <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'shipping'), true, false, true, false, true); ?></td>
                                 </tr>
-                            <?php }
-                            if ($couponDiscount != 0) { ?>
-                                <tr>
-                                    <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Discount', $siteLangId) ?></td>
-                                    <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo '-' . CommonHelper::displayMoneyFormat($couponDiscount, true, false, true, false, true); ?></td>
-                                </tr>
-                            <?php }
-                            if ($volumeDiscount != 0) { ?>
-                                <tr>
-                                    <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_VOLUME/LOYALTY_DISCOUNT', $siteLangId) ?></td>
-                                    <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo '-' . CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></td>
-                                </tr>
-                            <?php } ?>
-                            <?php                            
+                            <?php }                             
                             if (array_key_exists('order_rounding_off', $orderDetail) && 0 != $orderDetail['order_rounding_off']) { ?>
                                 <tr>
                                     <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo (0 < $orderDetail['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?>

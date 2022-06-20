@@ -175,7 +175,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                 </td>
                                 <td><?php echo $childOrder['op_qty']; ?></td>
                                 <td>
-                                    <span class="d-inline-block link-dotted" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#price-<?php echo $childOrder['op_id']; ?>">
+                                    <span class="d-inline-block link-dotted" tabindex="0" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover focus" data-popover-html="#price-<?php echo $childOrder['op_id']; ?>">
                                         <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'NETAMOUNT', false, ($isSellerDashboardView ? User::USER_TYPE_SELLER : User::USER_TYPE_BUYER)), true, false, true, false, true); ?>
                                     </span>
                                     <div class="hidden" id="price-<?php echo $childOrder['op_id']; ?>">
@@ -183,20 +183,14 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                             <li class="list-popover-item">
                                                 <span class="lable"><?php echo Labels::getLabel('LBL_UNIT_PRICE:'); ?> </span>
                                                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?> (* <?php echo $childOrder['op_qty']; ?>)</span>
-                                            </li>
-                                            <!-- <li class="list-popover-item">
-                                                <span class="lable"><?php echo Labels::getLabel('LBL_QUANTITY:'); ?> </span>
-                                                <span class="value"><?php echo $childOrder['op_qty']; ?></span>
-                                            </li> -->
-                                            <?php if (false === $isSellerDashboardView) { ?>
-                                                <?php if (!empty($volumeDiscount)) { ?>
-                                                    <li class="list-popover-item">
-                                                        <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT:'); ?></span>
-                                                        <span class="value"><?php echo CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></span>
-                                                    </li>
-                                                <?php }
-                                            } ?>   
-                                            <?php if (false === $isSellerDashboardView && $childOrder['op_tax_after_discount']) { ?>                                         
+                                            </li> 
+                                            <?php if (!empty($volumeDiscount)) { ?>
+                                                <li class="list-popover-item">
+                                                    <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT:'); ?></span>
+                                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></span>
+                                                </li>
+                                            <?php }
+                                            if (false === $isSellerDashboardView && $childOrder['op_tax_after_discount']) { ?>                                         
                                                 <?php if (!empty($discount)) { ?>
                                                     <li class="list-popover-item">
                                                         <span class="lable"><?php echo Labels::getLabel('LBL_DISCOUNT:'); ?></span>

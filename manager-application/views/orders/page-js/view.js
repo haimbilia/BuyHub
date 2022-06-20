@@ -45,7 +45,7 @@ $(document).on('change', '.downloadTypeJs', function () {
         });
     };
     viewPaymemntGatewayResponse = function (data) {
-        $.ykmodal('<div class="form-edit-body">' + data + "</div>", true);
+        $.ykmodal('<div class="form-edit-body">' + data + "</div>", true,'modal-lg');
     };
 
     getOpCharges = function (orderId, chargeType) {

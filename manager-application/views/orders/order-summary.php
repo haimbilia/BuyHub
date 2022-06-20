@@ -29,6 +29,7 @@ foreach ($order['products'] as $op) {
             $taxOptionsTotal[$key]['title'] = CommonHelper::displayTaxPercantage($val);
         }
     }
+    $op_tax_after_discount = $op['op_tax_after_discount'];
 }
 $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $order['order_volume_discount_total'];
 ?>
@@ -69,26 +70,55 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                         </span>
                     </span>
                 </li>
-                <?php if (0 < $shippingCharges) { ?>
-                    <li>
+                <?php
+                $volDiscount = (0 < $opSellerId) ? abs($volDiscount) : $order['order_volume_discount_total'];
+                if (0 < $volDiscount) { ?>
+                    <li class="discounted">
                         <span class="label">
                             <?php
                             if (1 == count($order['products'])) {
-                                echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId);
+                                echo Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId);
                             } else { ?>
-                                <a class="link-dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>)">
-                                    <?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId); ?>
+                                <a class="link-dotted" href="javascript:void(0)" onclick="loadOpVolDiscount('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT; ?>)">
+                                    <?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId);  ?>
                                 </a>
                             <?php } ?>
                         </span>
                         <span class="value">
-                            <span class="currency-value" dir="ltr">
-                                <?php echo CommonHelper::displayMoneyFormat($shippingCharges, true, false, true, false, true); ?>
-                            </span>
+                            <?php echo '-' . CommonHelper::displayMoneyFormat($volDiscount, true, false, true, false, true); ?>
                         </span>
                     </li>
-                <?php } ?>
-                <?php if (empty($taxOptionsTotal)) {
+                <?php }                 
+                if($op_tax_after_discount){
+                    $discount = (0 < $opSellerId) ? abs($discount) : $order['order_discount_total'];
+                    if (0 < $discount) { ?>
+                        <li class="discounted">
+                            <span class="label"><?php echo Labels::getLabel('LBL_Discount', $siteLangId) ?></span>
+                            <span class="value">
+                                <?php echo '-' . CommonHelper::displayMoneyFormat($discount, true, false, true, false, true); ?>
+                            </span>
+                        </li>
+                    <?php } 
+                    $rewards = (0 < $opSellerId) ? abs($rewards) : $order['order_reward_point_value'];
+                    if (0 < $rewards) { ?>
+                        <li class="discounted">
+                            <span class="label">
+                                <?php
+                                if (1 == count($order['products'])) {
+                                    echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId);
+                                } else { ?>
+                                    <a class="link-dotted" href="javascript:void(0)" onclick="loadOpRewards('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT; ?>)">
+                                        <?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId); ?>
+                                    </a>
+                                <?php } ?>
+                            </span>
+                            <span class="value">
+                                <?php echo '-' . CommonHelper::displayMoneyFormat($rewards, true, false, true, false, true); ?>
+                            </span>
+                        </li>
+                    <?php }
+                }                 
+                if (empty($taxOptionsTotal)) {
                     if (0 < $totalTax) { ?>
                         <li>
                             <span class="label">
@@ -134,6 +164,8 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                 <?php }
                 } ?>              
                 <?php
+
+                if(!$op_tax_after_discount){
                 $discount = (0 < $opSellerId) ? abs($discount) : $order['order_discount_total'];
                 if (0 < $discount) { ?>
                     <li class="discounted">
@@ -142,27 +174,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                             <?php echo '-' . CommonHelper::displayMoneyFormat($discount, true, false, true, false, true); ?>
                         </span>
                     </li>
-                <?php } ?>
-                <?php
-                $volDiscount = (0 < $opSellerId) ? abs($volDiscount) : $order['order_volume_discount_total'];
-                if (0 < $volDiscount) { ?>
-                    <li class="discounted">
-                        <span class="label">
-                            <?php
-                            if (1 == count($order['products'])) {
-                                echo Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId);
-                            } else { ?>
-                                <a class="link-dotted" href="javascript:void(0)" onclick="loadOpVolDiscount('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT; ?>)">
-                                    <?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId);  ?>
-                                </a>
-                            <?php } ?>
-                        </span>
-                        <span class="value">
-                            <?php echo '-' . CommonHelper::displayMoneyFormat($volDiscount, true, false, true, false, true); ?>
-                        </span>
-                    </li>
-                <?php } ?>
-                <?php
+                <?php } 
                 $rewards = (0 < $opSellerId) ? abs($rewards) : $order['order_reward_point_value'];
                 if (0 < $rewards) { ?>
                     <li class="discounted">
@@ -178,6 +190,32 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                         </span>
                         <span class="value">
                             <?php echo '-' . CommonHelper::displayMoneyFormat($rewards, true, false, true, false, true); ?>
+                        </span>
+                    </li>
+                <?php }
+            } ?>
+
+
+
+
+
+
+                <?php if (0 < $shippingCharges) { ?>
+                    <li>
+                        <span class="label">
+                            <?php
+                            if (1 == count($order['products'])) {
+                                echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId);
+                            } else { ?>
+                                <a class="link-dotted" href="javascript:void(0)" onclick="loadOpShippingCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_SHIPPING; ?>)">
+                                    <?php echo Labels::getLabel('LBL_Shipping_Charges', $siteLangId); ?>
+                                </a>
+                            <?php } ?>
+                        </span>
+                        <span class="value">
+                            <span class="currency-value" dir="ltr">
+                                <?php echo CommonHelper::displayMoneyFormat($shippingCharges, true, false, true, false, true); ?>
+                            </span>
                         </span>
                     </li>
                 <?php } ?>
