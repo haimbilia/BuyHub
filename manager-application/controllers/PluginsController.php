@@ -488,6 +488,17 @@ class PluginsController extends ListingBaseController
             }
             Plugin::updateStatus($pluginType, $status, $recordId, $error);
         }
+
+        if (Plugin::ACTIVE == $status) {
+            $groupType = Plugin::getGroupType($pluginType);
+            $eitherPluginTypes = array_values(array_diff($groupType, [$pluginType]));
+            foreach ($eitherPluginTypes as $pluginType) {
+                if (false == Plugin::updateStatus($pluginType, Plugin::INACTIVE, null, $error)) {
+                    LibHelper::exitWithError($error, true);
+                }
+            }
+        }
+
         $msg = !empty($error) ? $error : Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId);
         $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');

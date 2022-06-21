@@ -426,7 +426,7 @@ $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants:
         $frm->addCheckBox(Labels::getLabel('FRM_PRODUCT_FEATURED', $this->siteLangId), 'product_featured', 1, array(), false, 0);
 
         $fld = $frm->addFloatField(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE', $langId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'product_min_selling_price', '');
-        $fld->requirements()->setPositive();
+        $fld->requirements()->setRange('0.01', '99999999.99');
 
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_WARRANTY', $this->siteLangId), 'product_warranty');
         $fld->requirements()->setInt();
@@ -648,9 +648,9 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
         $costPrice->requirements()->setPositive();
 
         $fld = $frm->addFloatField(Labels::getLabel('FRM_SELLING_PRICE', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'selprod_price');
-        $fld->requirements()->setPositive();
+        $fld->requirements()->setRange('0.01', '99999999.99');
         if (isset($productData['product_min_selling_price'])) {
-            $fld->requirements()->setRange($productData['product_min_selling_price'], 9999999999);
+            $fld->requirements()->setRange($productData['product_min_selling_price'], 99999999.99);
         }
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_AVAILABLE_QUANTITY', $this->siteLangId), 'selprod_stock');

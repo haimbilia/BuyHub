@@ -18,7 +18,7 @@ $(document).ready(function () {
         currEle.addClass('is-active');
         $('.threadJs').prepend(fcom.getLoader());
         let searchkeyword = $(obj).data('searchkeyword');
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewThread", [threadId]), {searchkeyword}, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewThread", [threadId]), { searchkeyword }, function (t) {
             fcom.closeProcessing();
             $('.userJs').remove();
             $('.threadJs').replaceWith(t.html);
@@ -35,9 +35,27 @@ $(document).ready(function () {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "search"), data, function (res) {
             fcom.closeProcessing();
             fcom.removeLoader();
+            
+            $('.loadMorePaginationJs').remove();
             $(dv).replaceWith(res.listingHtml);
             // $('[data-thread-id=' + $('.threadJs').data('threadId') + ']').addClass('is-active');            
             $('li.listItemJs').first().addClass('is-active').trigger('click');
+            resetPaginationSection();
         });
     };
+
+    resetPaginationSection = function () {
+        if (1 < $(".loadMorePaginationJs").length && 0 < $("ul.listingRecordJs .loadMorePaginationJs").length) {
+            let newSection = $("ul.listingRecordJs .loadMorePaginationJs");
+            let newSectionHtml = newSection.prop('outerHTML');
+            newSection.remove();
+            console.log($(".loadMorePaginationJs").length);
+            if (1 == $(".loadMorePaginationJs").length) {
+                console.log(newSectionHtml);
+                $(".loadMorePaginationJs").replaceWith(newSectionHtml);
+            } else {
+                $(newSectionHtml).insertAfter("ul.listingRecordJs .loadMorePaginationJs");
+            }
+        }
+    }
 })();

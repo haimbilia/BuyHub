@@ -436,6 +436,7 @@ class Orders extends MyAppModel
                 $orderProduct = new OrderProduct($op_id);
                 if (!$orderProduct->setupSettings()) {
                     $db->rollbackTransaction();
+                    $this->error = $orderProduct->getError();
                     return false;
                 }
                 /*]*/

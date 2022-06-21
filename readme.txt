@@ -895,7 +895,8 @@ Updates/Fixes :
     => 064981 - Mark as buyer Warning popup message is not correct
     => 064957 - The seller gets directed to the catalog page after adding the inventory from marketplace products.
     => 064940 - Plugins edit permissions not working.
-    => 065012 - The fetch shipping rates button should appears when the shipping plugin is on from the admin side and the manual shipping rates of seller is applicable.
+    => 064996 - The payment page does not get displayed when the buyer clicks on the 'Continue' button after selecting the shipping method on the checkout page
+    => => 065012 - The fetch shipping rates button should appears when the shipping plugin is on from the admin side and the manual shipping rates of seller is applicable.
     
 UAT points:
 

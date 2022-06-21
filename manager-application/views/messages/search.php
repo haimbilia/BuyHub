@@ -8,7 +8,7 @@ if (1 == $page) {
 if (!empty($arrListing)) {
     foreach ($arrListing as $sn => $row) {
         $isActive = $sn === $activeIndex ? ' is-active' : '';
-        $attr = ['class' => 'message__list-item' . $isActive . ' listItemJs', 'data-thread-id' => $row['thread_id'], 'onclick' => 'viewThread(this)','data-searchkeyword'=> $searchkeyword];
+        $attr = ['class' => 'message__list-item' . $isActive . ' listItemJs', 'data-thread-id' => $row['thread_id'], 'onclick' => 'viewThread(this)', 'data-searchkeyword' => $searchkeyword];
         if (1 == $page) {
             $li = $ul->appendElement('li', $attr);
         } else {
@@ -40,7 +40,7 @@ if (!empty($arrListing)) {
         $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageDimension::VIEW_THUMB);
         $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, ImageDimension::VIEW_THUMB, 1], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
-        $img = '<img data-aspect-ratio = "'.$imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'].'" src="' . $userImageUrl . '" alt="' . $fromUserName . '">';
+        $img = '<img data-aspect-ratio = "' . $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'] . '" src="' . $userImageUrl . '" alt="' . $fromUserName . '">';
         $media = $msgFrom->appendElement('div', ['class' => 'message-media']);
         $media->appendElement('plaintext', [], $img, true);
 
@@ -57,7 +57,7 @@ if (!empty($arrListing)) {
 
         $uploadedTime = AttachedFile::setTimeParam($toUserUpdatedOn);
         $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$toUserId, ImageDimension::VIEW_THUMB, 1], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-        $img = '<img  data-aspect-ratio = "'.$imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'].'" src="' . $userImageUrl . '" alt="' . $toUserName . '">';
+        $img = '<img  data-aspect-ratio = "' . $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio'] . '" src="' . $userImageUrl . '" alt="' . $toUserName . '">';
         $media = $msgTo->appendElement('div', ['class' => 'message-media']);
         $div = $media->appendElement('div', ['class' => 'user user-sm user-circle']);
         $div->appendElement('plaintext', [], $img, true);
@@ -80,3 +80,13 @@ if (!empty($arrListing)) {
 if (1 == $page) {
     echo $ul->getHtml();
 }
+
+$lastRecord = current(array_reverse($arrListing));
+$data = [
+    'siteLangId' => $siteLangId,
+    'postedData' => $postedData,
+    'page' => $page,
+    'pageCount' => $pageCount,
+    'callbackFn' => 'resetPaginationSection',
+];
+$this->includeTemplate('_partial/load-more-pagination.php', $data);

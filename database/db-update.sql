@@ -1923,3 +1923,5 @@ update  `tbl_language_labels` set label_type=1 WHERE `label_key` LIKE 'LBL_PERSO
 
 ALTER TABLE `tbl_admin` ADD `admin_admperm_updated_on` DATETIME NOT NULL AFTER `admin_email_notification`;
 ALTER TABLE `tbl_order_product_settings`  ADD `op_tax_after_discount` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `op_tax_collected_by_seller`,  ADD `op_product_inclusive_tax` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `op_tax_after_discount`;
+
+ALTER TABLE `tbl_products` CHANGE `product_min_selling_price` `product_min_selling_price` DECIMAL(10,2) NOT NULL;

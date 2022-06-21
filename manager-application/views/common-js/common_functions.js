@@ -206,10 +206,10 @@ select2 = function (
         return false;
     }
 
-    var obj = ele.closest('form').length ? ele.closest('form') : null;    
+    var obj = ele.closest('form').length ? ele.closest('form') : null;
 
     ele.select2({
-        dropdownParent: ele.data('dropdownparent-id') ? $('#'+ ele.data('dropdownparent-id')) : obj,
+        dropdownParent: ele.data('dropdownparent-id') ? $('#' + ele.data('dropdownparent-id')) : obj,
         closeOnSelect: ele.data("closeOnSelect") || true,
         data: data,
         /*dir: layoutDirection,*/
@@ -235,7 +235,6 @@ select2 = function (
                 if (1 > data.status) {
                     fcom.displayErrorMessage(data.msg);
                 }
-                console.log('hi');
                 params.page = params.page || 1;
                 data.pageCount = data.pageCount || 1;
                 if ("function" == typeof processResultsCallback) {
@@ -319,13 +318,13 @@ redirectToProduct = function (id, extraData = {}) {
     if (0 < id) {
         extraData['product_id'] = id;
     }
-    window.open(fcom.makeUrl('Products','form',[id]), "_blank");   
+    window.open(fcom.makeUrl('Products', 'form', [id]), "_blank");
 };
 
 redirectToProductList = function (id, extraData = {}) {
     if (0 < id) {
         extraData['product_id'] = id;
-    }   
+    }
     redirectfunc(fcom.makeUrl('Products'), extraData, 0, true);
 };
 
