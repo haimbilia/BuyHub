@@ -190,7 +190,7 @@ $(document).ready(function () {
         });
     };
     shippingRatesForm = function (opId) {        
-        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
             $.ykmodal(res);
             fcom.removeLoader();
         });
