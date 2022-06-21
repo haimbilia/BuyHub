@@ -189,10 +189,12 @@ $(document).ready(function () {
             setTimeout(function () { window.location.href = fcom.makeUrl('Seller', 'viewOrder', [opId]) }, 300);
         });
     };
-    shippingRatesForm = function (opId) {        
-        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
+    shippingRatesForm = function (opId) {   
+        fcom.displayProcessing();     
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
             $.ykmodal(res);
             fcom.removeLoader();
+            $.ykmsg.close();
         });
     }
     setUpShippingRate = function (frm) {

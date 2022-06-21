@@ -640,7 +640,7 @@ class Cart extends FatModel
                         $commissionCostValue = $commissionCostValue + ($tax / $quantity);
                     }
 
-                    if (FatApp::getConfig('CONF_COMMISSION_INCLUDING_SHIPPING', FatUtility::VAR_INT, 0) && $shippingCost && $this->products[$key]['psbs_user_id'] > 0) {
+                    if (FatApp::getConfig('CONF_COMMISSION_INCLUDING_SHIPPING', FatUtility::VAR_INT, 0) && $shippingCost) {
                         $commissionCostValue = $commissionCostValue + ($shippingCost / $quantity);
                     }
 

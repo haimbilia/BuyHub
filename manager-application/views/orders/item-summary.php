@@ -263,7 +263,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                         //$allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
 
                         if (
-                            1 < $op['opshipping_rate_id'] &&
+                            0 < $op['opshipping_rate_id'] &&
                             (empty($op['opshipping_plugin_id']) ||
                                 ($shippingApiObj->getKey('plugin_id') != $op['opshipping_plugin_id'] &&
                                     empty($op['opr_response'])

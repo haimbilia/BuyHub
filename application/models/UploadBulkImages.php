@@ -28,7 +28,7 @@ class UploadBulkImages extends FatModel
         }
 
         $srch->addMultipleFields(
-            array('afile_physical_path', 'afile_name', 'afile_record_id', 'credential_username', 'credential_email', 'afile_id as listSerial')
+            array('afile_id', 'afile_physical_path', 'afile_name', 'afile_record_id', 'credential_username', 'credential_email', 'afile_id as listSerial')
         );
 
         if (true === $addOrder) {

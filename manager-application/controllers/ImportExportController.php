@@ -901,16 +901,16 @@ class ImportExportController extends ListingBaseController
 
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'afile_id');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'afile_id';
         }
 
         if ('user' == $sortBy) {
             $sortBy = 'credential_username';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
@@ -920,9 +920,7 @@ class ImportExportController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $searchForm = $this->getSearchForm($fields);
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
@@ -962,7 +960,7 @@ class ImportExportController extends ListingBaseController
         $msg = Labels::getLabel('MSG_YOUR_UPLOADED_FILES_PATH_WILL_BE:_{PATH}', $this->siteLangId);
         $msg = CommonHelper::replaceStringData($msg, ['{PATH}' => '<br><b>' . $filePath . '</b>']);
 
-        $msg = Labels::getLabel('MSG_Uploaded_Successfully.', $this->siteLangId) . ' ' . $msg;
+        $msg = Labels::getLabel('MSG_UPLOADED_SUCCESSFULLY.', $this->siteLangId) . ' ' . $msg;
         $json = [
             "msg" => $msg,
             "path" => base64_encode($path . $savedFile)

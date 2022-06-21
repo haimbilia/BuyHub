@@ -46,7 +46,8 @@ trait CatalogProduct
             $fld->requirements()->setRequired();
         }
         $fld = $frm->addFloatField(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE', $langId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'product_min_selling_price', '');
-        $fld->requirements()->setPositive();
+        $fld->requirements()->setRange('0.01', '99999999.99');
+
         if ($productType != Product::PRODUCT_TYPE_DIGITAL) {
             $fld = $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_WARRANTY', $langId), 'product_warranty');
             $fld->requirements()->setInt();
