@@ -283,12 +283,10 @@ class HtmlHelper
     public static function getDropZoneHtml($url, $headerClass = '', $callbackfn = '')
     {
         $str =  '<div class="dropzone ' . $headerClass . '">
-                    <div class="upload_cover" onclick="$(this).parent().click();">
-                        
+                    <div class="upload_cover" onclick="$(this).parent().click();">                        
                             <div class="file-upload">
                                 <img src="' . CONF_WEBROOT_URL . 'images/upload/upload_img.png">
                             </div>
-                        
                     </div>
                 </div>
                 <script>

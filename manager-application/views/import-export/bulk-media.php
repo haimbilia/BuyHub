@@ -2,7 +2,7 @@
 
 <div class="card-body">
     <?php echo HtmlHelper::getDropZoneHtml(FatUtility::generateUrl('ImportExport', 'upload')); ?>
-
+    <p class="form-text text-muted"><?php echo Labels::getLabel('LBL_ONLY_ZIP_FILES_ARE_ALLOWED.'); ?></p>
     <?php echo $frmSearch->getFormHtml(); ?>
     <div class="table-responsive table-scrollable js-scrollable listingTableJs">
         <?php

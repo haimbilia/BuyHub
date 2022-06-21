@@ -35,7 +35,10 @@ $(document).on({
                 return false;
             }
             this.removeFile(file);
-
+            let result = isJson(res);
+            if (false != result) {
+                res = result;
+            }
             fcom.displaySuccessMessage(res.msg);
             if (typeof uploadSuccessCallback === "function") {
                 uploadSuccessCallback(res);
