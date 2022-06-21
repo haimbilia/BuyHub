@@ -19,8 +19,7 @@ class ShippingServicesController extends SellerBaseController
 
     public function shippingRatesForm(int $opId)
     {
-        $frm = $this->getShippingRatesForm($opId);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->langId));
+        $frm = $this->getShippingRatesForm($opId);       
         $frm->fill(['op_id' => $opId]);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
