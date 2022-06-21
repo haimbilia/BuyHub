@@ -128,7 +128,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         searchRecords(frm);
     };
 
-    loadMore = function () {
+    loadMore = function (callback = '') {
         if (false === checkControllerName()) {
             return false;
         }
@@ -166,6 +166,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
             if (page == frm.pageCount.value) {
                 $(".loadMorePaginationJs").remove();
+            }
+
+            if ("" != callback) {
+                window[callback]();
             }
         });
     };
@@ -475,7 +479,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if ('' != confirmMsg && !confirm(confirmMsg)) {
             return false;
         }
-        
+
         $(element).attr("action", fcom.makeUrl(controllerName, "toggleBulkStatuses"));
         $(element + " input[name='status']").val(status);
         $(element).submit();
