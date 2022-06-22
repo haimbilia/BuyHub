@@ -175,12 +175,22 @@ $(document).on('change', '.downloadTypeJs', function () {
 
     /* ShipStation */
     generateLabel = function (opId) {
-        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {
+            if (1 > t.status) {
+                fcom.displayErrorMessage(t.msg);
+                if ('openShipUser' in t && t.openShipUser == 1) {
+                    setTimeout(function () {
+                        getShippingUsersForm(t.orderId, t.opId);
+                    }, 1000);
+                }
+                return; 
+            }
             fcom.displaySuccessMessage(t.msg);
             setTimeout(function () {
                 location.reload();
             }, 300);
-        });
+        },{ fOutMode: 'json' });
     }
     /* ShipStation */
 

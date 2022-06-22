@@ -50,7 +50,7 @@ trait SellerProducts
         $this->set('adminCatalogs', $adminCatalogs);
         $this->set('statusButtons', true);
         $this->set('deleteButton', true);
-        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_SELPROD_NAME', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->_template->addJs(['js/select2.js']);
         $this->_template->addCss(['css/select2.min.css']);
         $this->_template->render(true, true);
