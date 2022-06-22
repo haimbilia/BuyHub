@@ -124,7 +124,7 @@ You will require the following server specifications for setting up the Yokart s
 
 10. **Create Procedure**
 
-    Login to admin dashboard and Open url https://yourdomain.com/admin/procedures to create procedures
+    Login to admin dashboard and Open url https://yourdomain.com/admin/admin-users/createProcedures to create procedures
 
 11. **Custom Configuration**
 
