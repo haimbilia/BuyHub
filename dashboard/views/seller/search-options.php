@@ -1,7 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
     'listserial' => '#',
-    'option_identifier' => Labels::getLabel('LBL_Option_Name', $siteLangId)
+    'option_name' => Labels::getLabel('LBL_Option_Name', $siteLangId),
+    'option_identifier' => Labels::getLabel('LBL_OPTION_IDENTIFIER', $siteLangId)
 );
 if ($canEdit) {
     $arr_flds = array_merge($arr_flds, array('action' => ''));
@@ -44,10 +45,13 @@ foreach ($arrListing as $sn => $row) {
             case 'listserial':
                 $td->appendElement('plaintext', array(), $sr_no);
                 break;
-            case 'option_identifier':
+            case 'option_identifier':              
+                $td->appendElement('plaintext', array(), $row['option_identifier'], true);
+                break;
+            case 'option_name':
                 $optionName = (!empty($row['option_name'])) ? $row['option_name'] : $row['option_identifier'];;
                 $td->appendElement('plaintext', array(), $optionName, true);
-                break;
+                break;    
             case 'action':
                 $ul = $td->appendElement("ul", array("class" => "actions"));
                 $li = $ul->appendElement("li");
