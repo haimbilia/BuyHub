@@ -790,6 +790,7 @@ class Cart extends FatModel
             }
 
             if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && $this->includeTax == true) {
+
                 $tax = new Tax();
                 $tax->setFromCountryId($shipFromCountryId);
                 $tax->setFromStateId($shipFromStateId);
@@ -807,6 +808,7 @@ class Cart extends FatModel
                     }
                 }
             }
+            
             /* update/fetch/apply theprice, according to volume discount module[ */
             $sellerProductRows[$key]['volume_discount'] = 0;
             $sellerProductRows[$key]['volume_discount_percentage'] = 0;
@@ -851,15 +853,18 @@ class Cart extends FatModel
             $totalPrice = $sellerProductRows[$key]['theprice'] * $quantity;
             $taxableProdPrice = $sellerProductRows[$key]['theprice'] - $sellerProductRows[$key]['volume_discount'];
             $discountedPrice = 0;
+
             if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
+                /* $taxableProdPrice = $sellerProductRow['theprice'] - $sellerProductRows[$key]['volume_discount'];  */
                 if (!empty($this->discounts) && isset($this->discounts['discountedSelProdIds'][$sellerProductRow['selprod_id']])) {
                     $discountedPrice = $this->discounts['discountedSelProdIds'][$sellerProductRow['selprod_id']];
-                    $taxableProdPrice = ($sellerProductRow['theprice'] - $sellerProductRows[$key]['volume_discount']) - $discountedPrice;
+                    $taxableProdPrice = $taxableProdPrice - $discountedPrice;
                 }
             }
+
             $taxObj = new Tax();
             $taxData = $taxObj->calculateTaxRates($sellerProductRow['product_id'], $taxableProdPrice, $sellerProductRow['selprod_user_id'], $siteLangId, $quantity, $extraData);
-            // CommonHelper::printArray($taxData);
+            //  CommonHelper::printArray($taxData);
             if (false == $taxData['status'] && $taxData['msg'] != '') {
                 //$this->error = $taxData['msg'];
             }
@@ -880,7 +885,7 @@ class Cart extends FatModel
                 if ($originalTotalPrice != $thePriceincludingTax && 0 < $taxableProdPrice && 0 < $taxData['rate']) {
                     $roundingOff = round($originalTotalPrice - $thePriceincludingTax, 2);
                 }
-                
+
                 /* if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && 0 < $discountedPrice) {
                     $roundingOff = (0.1 < $roundingOff) ? 0 : $roundingOff;
                 } */
@@ -1305,11 +1310,11 @@ class Cart extends FatModel
                     //$cartTotalNonBatch += $product['total'];
                     $cartTotal += !empty($product['total']) ? $product['total'] : 0;
                 }
-
+                //CommonHelper::printArray($product);
                 $cartVolumeDiscount += $product['volume_discount_total'];
 
-
                 $taxableProdPrice = $product['theprice'] - $product['volume_discount'];
+
                 if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0)) {
                     if (isset($cartDiscounts['discountedSelProdIds']) && array_key_exists($product['selprod_id'], $cartDiscounts['discountedSelProdIds'])) {
                         $taxableProdPrice = $taxableProdPrice - ($cartDiscounts['discountedSelProdIds'][$product['selprod_id']]) / $product['quantity'];
@@ -1360,7 +1365,7 @@ class Cart extends FatModel
                     $tax = $taxData['tax'];
                     $cartTaxTotal += $tax;
                 }
-
+                // echo $cartTaxTotal;
                 $originalShipping += $product['shipping_cost'];
                 $totalSiteCommission += $product['commission'];
                 $shippingTotal += $product['shipping_cost'];
