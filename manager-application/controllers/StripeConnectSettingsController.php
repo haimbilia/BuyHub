@@ -23,13 +23,15 @@ class StripeConnectSettingsController extends PaymentMethodSettingsController
             false,
             0
         );
-        HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_SELLER_WON'T_BE_ABLE_TO_MOVE_ON_OTHER_PAGES_UNTIL_STRIPE_CONNECT__IS_NOT_CONFIGURED.", $langId));
+        HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_SELLER_WON'T_BE_ABLE_TO_MOVE_ON_OTHER_PAGES_UNTIL_STRIPE_CONNECT_IS_NOT_CONFIGURED.", $langId));
+
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_APPLY_PAYOUT_SETTINGS_TO_CONNECTED_ACCOUNTS', $langId), 'update_previous_connected_accounts', 1, array(), false, 0);
+        HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_SELECTING_THIS_FEATURE_WILL_UPDATE_PAYOUT_SETTINGS_FOR_ALL_PREVIOUS_CONNECTED_ACCOUNTS.", $langId));
 
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_PAYOUT_INTERVAL', $langId), 'payouts_schedule_interval', $obj->getPayoutInterval(), '', ['class' => $keyName . 'PayoutInterval--js'], '');
         $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_STRIPE_CONNECT_PAYOUT_INTERVAL_DESC', $langId) . '</small>';
 
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_PAYOUT_DELAY_DAYS', $langId), 'payouts_schedule_delay_days', '', ['class' => $keyName . 'PayoutDelayDays--js', 'disabled' => 'disabled']);
-        $fld->requirements()->setPositive();
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_PAYOUT_DELAY_DAYS', $langId), 'payouts_schedule_delay_days', '', ['class' => $keyName . 'PayoutDelayDays--js']);
         $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_STRIPE_CONNECT_PAYOUT_DELAY_DAYS_DESC', $langId) . '</small>';
 
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_PAYOUT_ON_DAY_OF_THE_WEEK', $langId), 'payouts_schedule_weekly_anchor', TimeSlot::getDaysArr($langId), '', ['class' => $keyName . 'PayoutWeekly--js', 'disabled' => 'disabled']);
