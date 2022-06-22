@@ -41,7 +41,11 @@ $fld->developerTags['col'] = 12;
                     <div class="row">
                         <div class="col-md-7">
                             <?php echo $contactFrm->getFormTag(); ?>
-                            <?php echo $contactFrm->getFieldHTML('g-recaptcha-response'); ?>
+                            <?php
+                            if (null != $contactFrm->getField('g-recaptcha-response')) {
+                                echo $contactFrm->getFieldHTML('g-recaptcha-response');
+                            }
+                            ?>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">

@@ -1,7 +1,6 @@
 <?php
 class SellerProductsController extends ListingBaseController
 {
-
     use ProductsDigitalDownloads;
 
     protected string $modelClass = 'SellerProduct';

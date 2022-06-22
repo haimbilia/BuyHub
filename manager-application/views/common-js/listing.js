@@ -79,6 +79,7 @@ $(document).on("click", ".resetModalFormJs", function (e) {
     }
 
     var onClear = $(".modalFormJs").data("onclear");
+    console.log(onClear);
     if ('undefined' != typeof onClear) {
         eval(onClear);
     } else if (0 < $("." + $.ykmodal.element + " .navTabsJs .nav-link").length) {
