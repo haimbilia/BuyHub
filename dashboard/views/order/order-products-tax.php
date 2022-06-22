@@ -63,8 +63,8 @@
                 <tfoot>
                     <tr>
                         <td></td>
-                        <td><?php echo Labels::getLabel('LBL_TOTAL_TAX', $siteLangId); ?></td>
-                        <td><?php echo CommonHelper::displayMoneyFormat($totalTax, true, true); ?></td>
+                        <td class='text-right'><strong><?php echo Labels::getLabel('LBL_TOTAL_TAX', $siteLangId); ?></strong></td>
+                        <td class='text-right'><strong><?php echo CommonHelper::displayMoneyFormat($totalTax, true, true); ?></strong></td>
                     </tr>
                 </tfoot>
             </table>

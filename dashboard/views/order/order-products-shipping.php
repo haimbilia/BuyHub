@@ -69,8 +69,8 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <td><?php echo Labels::getLabel('LBL_TOTAL_SHIPPING', $siteLangId); ?></td>
-                        <td><?php echo CommonHelper::displayMoneyFormat($totalShipping, true, true); ?></td>
+                        <td class='text-right'><strong><?php echo Labels::getLabel('LBL_TOTAL_SHIPPING', $siteLangId); ?></strong></td>
+                        <td class='text-right'><strong><?php echo CommonHelper::displayMoneyFormat($totalShipping, true, true); ?></strong></td>
                     </tr>
                 </tfoot>
             </table>
