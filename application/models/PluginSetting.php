@@ -198,6 +198,10 @@ class PluginSetting
             if (isset($attributes['required']) && true == $attributes['required']) {
                 $fld->requirements()->setRequired(true);
             }
+
+            if (isset($attributes['htmlAfterField']) && !empty($attributes['htmlAfterField'])) {
+                $fld->htmlAfterField = $attributes['htmlAfterField'];
+            }
         }
         return $frm;
     }
