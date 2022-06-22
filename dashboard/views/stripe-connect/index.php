@@ -94,15 +94,34 @@ $accountId = !empty($accountId) && true === $isSubUser ? substr($accountId, 0, 5
             </script>
         <?php } elseif (!empty($accountId) && !empty($stripeUserData) &&  true === $userAccountIsValid) { ?>
             <div class="row justify-content-center">
-                <div class="col-md-4">
+                <div class="col-md-8">
                     <ul class="stripe-stats">
                         <li>
                             <div class="stats">
-                                <p>
-                                    <b><?php echo Labels::getLabel('MSG_PAYOUTS', $siteLangId); ?> : </b>
-                                    <?php echo ucwords($stripeUserData['settings']['payouts']['schedule']['interval']); ?>
-                                </p>
-                                <div class="divider"></div>
+                                <span class="title"><?php echo Labels::getLabel('MSG_PAYOUT_DETAIL', $siteLangId); ?></span>
+                                <?php if (isset($stripeUserData['settings']['payouts']['schedule'])) {
+                                    $schedule = $stripeUserData['settings']['payouts']['schedule'];
+                                    $isMonthly = false;
+                                    foreach ($schedule as $payoutKey => $payoutValue) {
+                                        if ('monthly' == strtolower($payoutValue)) {
+                                            $isMonthly = true;
+                                        }
+
+                                        $payoutValue = ucwords($payoutValue);
+                                        if (true === $isMonthly && 'monthly_anchor' == strtolower($payoutKey)) {
+                                            $payoutValue = $payoutValue . 'th';
+                                        }
+                                ?>
+                                        <p>
+                                            <b><?php echo ucwords(str_replace('_', ' ', $payoutKey)); ?> : </b>
+                                            <?php echo $payoutValue; ?>
+                                        </p>
+                                    <?php } ?>
+                                <?php } ?>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="stats">
                                 <span class="title"><?php echo Labels::getLabel('MSG_BANK_DETAIL', $siteLangId); ?></span>
                                 <?php foreach ($stripeUserData['external_accounts']['data'] as $index => $bank) { ?>
                                     <p>

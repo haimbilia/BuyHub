@@ -57,13 +57,15 @@ trait StripeConnectFunctions
     /**
      * update - Update Account Data
      *
-     * @param array $requestParam
+     * @param  array $requestParam
+     * @param  string $acctId
      * @return object
      */
-    private function update(array $requestParam): object
+    private function update(array $requestParam, string $acctId = ''): object
     {
+        $acctId = !empty($acctId) ? $acctId : $this->getAccountId();
         return $this->stripe->accounts->update(
-            $this->getAccountId(),
+            $acctId,
             $requestParam
         );
     }
