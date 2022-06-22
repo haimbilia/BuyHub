@@ -901,6 +901,7 @@ Updates/Fixes :
     => 065012 - The fetch shipping rates button should appears when the shipping plugin is on from the admin side and the manual shipping rates of seller is applicable.
     => 065007 - The admin commission is not applicable on the shipping charges if the shipping plugin is on.
     => 065028 - Error occurs as 'Already Shipped' when the admin tries to change the order status from In Process to shipped
+    => 065029 - Spelling mistake in search field's placeholder .
      
 UAT points:
 
