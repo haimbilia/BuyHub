@@ -902,7 +902,7 @@ Updates/Fixes :
     => 065007 - The admin commission is not applicable on the shipping charges if the shipping plugin is on.
     => 065028 - Error occurs as 'Already Shipped' when the admin tries to change the order status from In Process to shipped
     => 065029 - Spelling mistake in search field's placeholder .
-     
+    => 065030 - Error occur as 'Return case not allowed' when the seller tries to cancel any order. 
 UAT points:
 
     => Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
