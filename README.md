@@ -74,9 +74,9 @@ You will require the following server specifications for setting up the Yokart s
 
 4. **Install Dependencies**
 
-    Never use composer update, It may break your application. It will update versions of packages to be installed and may not be compatible with your system.
+    It will update versions of packages to be installed with your system.
 
-		composer install
+		composer update
 
 5. **Import Database**
 
