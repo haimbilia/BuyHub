@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'conf-common.php';
 
-define('CONF_APPLICATION_PATH', CONF_INSTALLATION_PATH . 'admin-application/');
+define('CONF_APPLICATION_PATH', CONF_INSTALLATION_PATH . 'admin/');
 define('CONF_THEME_PATH', CONF_APPLICATION_PATH . 'views/');
 define('CONF_MAIN_CSS_DIR_PATH', 'css');
 define('CONF_FRONT_END_APPLICATION_PATH', CONF_INSTALLATION_PATH . CONF_FRONT_END_APPLICATION_DIR);

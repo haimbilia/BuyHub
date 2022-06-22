@@ -17,11 +17,20 @@ trait ShippingServices
      */
     public function generateLabel(int $opId)
     {
-        $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id', 'opshipping_plugin_id']);
+        $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id', 'opshipping_plugin_id','plugin_code','op.op_order_id','optsu_user_id','op_status_id']);
         if (empty($orderData) || 1 > $orderData['opshipping_plugin_id']) {
             LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_ORDER", $this->langId));
         }
 
+        if ((in_array(strtolower($orderData['plugin_code']), ['cashondelivery', 'payatstore']) ||  in_array($orderData['op_status_id'], (new Orders())->getAdminAllowedUpdateShippingUser())) && !CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id']) && !$orderData['optsu_user_id']) {
+            LibHelper::dieJsonError([
+                'msg' =>  Labels::getLabel('ERR_PLEASE_ASSIGN_SHIPPING_USER', $this->langId),
+                'status' => 0,
+                'openShipUser' => 1,
+                'opId' => $opId,
+                'orderId' => $orderData['op_order_id']
+            ], true);
+        }
         $this->validateShippingService($orderData);
 
         if (false === $this->shippingService->addOrder($opId)) {
@@ -220,7 +229,7 @@ trait ShippingServices
             LibHelper::dieJsonError($msg);
         }
 
-        if (in_array(strtolower($data['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($data['op_selprod_user_id'], $data['opshipping_by_seller_user_id']) && !$data['optsu_user_id']) {       
+        if ((in_array(strtolower($data['plugin_code']), ['cashondelivery', 'payatstore']) || in_array($data['op_status_id'], (new Orders())->getAdminAllowedUpdateShippingUser())) && !CommonHelper::canAvailShippingChargesBySeller($data['op_selprod_user_id'], $data['opshipping_by_seller_user_id']) && !$data['optsu_user_id']) {       
             LibHelper::dieJsonError([
                'msg' =>  Labels::getLabel('ERR_PLEASE_ASSIGN_SHIPPING_USER', $this->langId),
                'status' => 0,

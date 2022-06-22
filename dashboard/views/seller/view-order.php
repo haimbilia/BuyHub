@@ -26,9 +26,8 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
 <div class="content-wrapper content-space">
     <?php if (!$print) {
         $orderObj = new Orders();
-        $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses();
-        $processingStatuses = array_diff($processingStatuses, [FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")]);
-        $canCancelOrder = in_array($orderDetail['orderstatus_id'], $processingStatuses);
+        $notAllowedCancelStatuses = $orderObj->getNotAllowedOrderCancellationStatuses();        
+        $canCancelOrder = !in_array($orderDetail['orderstatus_id'], $notAllowedCancelStatuses);
 
         $data = [
             'headingLabel' => Labels::getLabel('LBL_View_Sale_Order', $siteLangId),

@@ -2256,8 +2256,9 @@ class Orders extends MyAppModel
             (array) FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS", FatUtility::VAR_INT, 0),
             (array) FatApp::getConfig("CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS", FatUtility::VAR_INT, 0),
             (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0),
+            (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0),
             (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS", FatUtility::VAR_INT, 0),
-            unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"))
+            //unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"))
         );
         return $cancellationStatuses;
     }

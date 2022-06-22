@@ -21,8 +21,7 @@
     }
     $sr_no = 0;
     $orderObj = new Orders();
-    $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses();
-    $processingStatuses = array_diff($processingStatuses, [FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")]);
+    $notAllowedCancelStatuses = $orderObj->getNotAllowedOrderCancellationStatuses();    
     foreach ($orders as $sn => $order) {
         $sr_no++;
         $tr = $tbl->appendElement('tr', array('class' => ''));
@@ -87,9 +86,9 @@
                         </svg>
                     </i>',
                         true
-                    );
+                    );               
 
-                    if (in_array($order['orderstatus_id'], $processingStatuses) && $canEdit) {
+                    if (!in_array($order['orderstatus_id'], $notAllowedCancelStatuses) && $canEdit) {
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
