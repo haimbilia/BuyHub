@@ -256,16 +256,17 @@ class RewardsController extends ListingBaseController
             'urp_comments' => Labels::getLabel('LBL_REWARD_POINT_DEDUCTED_BY_ADMIN', $this->siteLangId), 
             'urp_date_added' => date('Y-m-d H:i:s')                 
         );
+
+        $userRewardsObj = new UserRewards();
+        $userRewardsObj->assignValues($rewarPointArr);
         
-        if(!$db->insertFromArray(UserRewards::DB_TBL, $rewarPointArr)){          
+        if(!$userRewardsObj->save()){          
             $db->rollbackTransaction();
             LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_REVERT_REWARD_POINTS', $this->siteLangId));
         }
-
         $db->commitTransaction();
-        
         $emailObj = new EmailHandler();
-        $emailObj->sendRewardPointsNotification($this->siteLangId, $recordId);
+        $emailObj->sendRewardPointsNotification($this->siteLangId, $userRewardsObj->getMainTableRecordId());
         
         $this->set('msg', Labels::getLabel('MSG_REWARD_POINT_REVERTED_SUCCESFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
