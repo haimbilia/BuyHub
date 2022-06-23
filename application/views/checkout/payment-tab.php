@@ -25,7 +25,7 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
     <div class="otp-block otpBlock-js">
         <div class="otp-block__head">
             <h6><?php echo Labels::getLabel('LBL_PLEASE_ENTER_THE_VERIFICATION_CODE_TO_CONFIRM_YOUR_ORDER', $siteLangId); ?></h6>
-            <p>
+            <p class="d-none" id="codCodeSentOnInfo">
                 <?php
                 $msg = Labels::getLabel('LBL_VERIFICATION_CODE_SENT_TO_{EMAIL}', $siteLangId);
                 if (true == $canSendSms) {

@@ -958,6 +958,7 @@ TV-9.4.0.20220406
     - #065007 - The admin commission is not applicable on the shipping charges if the shipping plugin is on.
     - #065026 - Option name not coming same on frontend and backend .
     - #064985 - sent to email address when we credit or debit reward points from admin .
+    - #065038 - it show that otp veriication email has been sent on screen before we click on get otp
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

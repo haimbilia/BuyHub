@@ -690,6 +690,7 @@ $("document").ready(function () {
                 return false;
             }
             $(".otpVal-js").val("");
+            $('#codCodeSentOnInfo').removeClass('d-none');
             if ("" != frm) {
                 $(frm).attr("onsubmit", "validateOtp(this); return(false);");
                 $('input[name="btn_submit"]', frm).val(langLbl.proceed);
