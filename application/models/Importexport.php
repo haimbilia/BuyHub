@@ -3610,6 +3610,7 @@ class Importexport extends ImportexportCommon
                         $srch->joinTable(Product::DB_PRODUCT_TO_OPTION, 'LEFT JOIN', 'product_id = prodoption_product_id', 'tpo');
                         $srch->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'product_id = selprod_product_id', 'sp');
                         $srch->addCondition('selprod_product_id', '=', $productId);
+                        $srch->addCondition('selprod_user_id', '=', $userId);
                         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
                         $srch->addMultipleFields(array('selprod_product_id', 'selprod_id', 'prodoption_option_id'));
                         $rs = $srch->getResultSet();

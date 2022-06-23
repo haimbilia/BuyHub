@@ -42,7 +42,7 @@ $minFld->setWrapperAttribute('class', 'condition-field--js ' . $extraClass);
 $maxFld = $frm->getField('shiprate_max_val');
 $maxFld->setWrapperAttribute('class', 'condition-field--js ' . $extraClass); ?>
 <div class="modal-header">
-    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Manage_Rates', $siteLangId); ?></h5>
+    <h5 class="modal-title"><?php echo Labels::getLabel('LBL_SHIPPING_RATES_SETUP', $siteLangId); ?></h5>
 </div>
 <div class="modal-body form-edit">
     <div class="form-edit-head">

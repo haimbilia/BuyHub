@@ -61,7 +61,7 @@ class ShippingProfileProductsController extends ListingBaseController
         $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
         $srch->addCondition(Product::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
 
-        $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as product_name' ));
+        $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as product_name'));
 
         if (0 < $shipProfileId) {
             $srch->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN', 'p.product_id = sppro.shippro_product_id and sppro.shippro_user_id = ' . applicationConstants::NO, 'sppro');
@@ -153,14 +153,13 @@ class ShippingProfileProductsController extends ListingBaseController
         $profileId = FatUtility::int($profileId);
         $frm = new Form('frmProfileProducts');
         $frm->addHiddenField('', 'shippro_shipprofile_id', $profileId)->requirement->setRequired(true);
-
+        $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_NAME', $this->siteLangId), 'shippro_product_id', [])->requirement->setRequired(true);
         $htm = '<div class="alert alert-solid-brand " role="alert">
                     <div class="alert-icon"><i class="flaticon-warning"></i>
                     </div>
                     <div class="alert-text text-xs">' . Labels::getLabel("LBL_Product_will_automatically_remove_from_other_profile", $this->siteLangId) . '</div>
                 </div>';
         $frm->addHtml('', 'shippro_products_text', $htm);
-        $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_NAME', $this->siteLangId), 'shippro_product_id', [])->requirement->setRequired(true);
         return $frm;
     }
 

@@ -92,7 +92,7 @@ $(document).ready(function () {
     profileProductForm = function (profileId) {
         fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'form', [profileId]), '', function (t) {
             fcom.closeProcessing();
-            $.ykmodal(t.html, true, '');
+            $.ykmodal(t.html, true, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
     };
