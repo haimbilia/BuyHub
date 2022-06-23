@@ -207,6 +207,12 @@ class ConfigurationsController extends ListingBaseController
             }
         }
 
+        if(isset($post['CONF_PRODUCT_INCLUSIVE_TAX']) && 1 == $post['CONF_PRODUCT_INCLUSIVE_TAX']){
+            $post['CONF_TAX_AFTER_DISOCUNT'] = 0;
+        }elseif(!isset($post['CONF_PRODUCT_INCLUSIVE_TAX']) && 1 == FatApp::getConfig('CONF_PRODUCT_INCLUSIVE_TAX', FatUtility::VAR_INT, 0)){   
+            $post['CONF_TAX_AFTER_DISOCUNT'] = 0;
+        }
+
         if (!$record->update($post)) {
             LibHelper::exitWithError($record->getError(), true);
         }
@@ -551,7 +557,7 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_PRODUCT_PRICES_WILL_BE_INCLUSIVE_OF_TAX", $langId), 'CONF_PRODUCT_INCLUSIVE_TAX', 1, array(), false, 0);
-                HtmlHelper::configureSwitchForCheckbox($fld);
+                HtmlHelper::configureSwitchForCheckbox($fld,Labels::getLabel('FRM_ENABLING_THIS,_TAX_AFTER_DISCOUNT_FEATURE_WILL_BE_DEACTIVED', $langId));
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_TAX_CODE_FOR_CATEGORIES", $langId), 'CONF_TAX_CATEGORIES_CODE', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_THIS_WILL_ENABLE_TAX_CATEGORIES_CODE", $langId));
@@ -782,6 +788,9 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_seller_will_be_able_to_collect_tax.", $langId));
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_TAX_AFTER_DISCOUNTS", $langId), 'CONF_TAX_AFTER_DISOCUNT', 1, array(), false, 0);
+                if(FatApp::getConfig('CONF_PRODUCT_INCLUSIVE_TAX', FatUtility::VAR_INT, 0)){
+                    $fld->setFieldTagAttribute('disabled', 'disabled');
+                }
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_tax_will_be_applicable_after_discounts", $langId));
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_RETURN_SHIPPING_CHARGES_TO_CUSTOMER", $langId), 'CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', 1, array(), false, 0);

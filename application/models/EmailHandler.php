@@ -1318,8 +1318,7 @@ class EmailHandler extends FatModel
         $langId = FatUtility::int($langId);
         $txn = new Transactions($txnId);
 
-        $txnDetail = $txn->getAttributesWithUserInfo(0, array('utxn_credit', 'utxn_debit', 'utxn_comments', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email', 'utxn_user_id'));
-        $statusArr = Transactions::getStatusArr($langId);
+        $txnDetail = $txn->getAttributesWithUserInfo(0, array('utxn_credit', 'utxn_debit', 'utxn_comments', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email', 'utxn_user_id'));       
 
         $txnAmount = $txnDetail["utxn_credit"] > 0 ? $txnDetail["utxn_credit"] : $txnDetail["utxn_debit"];
         $arrReplacements = array(
@@ -1331,7 +1330,7 @@ class EmailHandler extends FatModel
         );
 
         if (!empty($txnDetail["credential_email"])) {
-            $sendEmail = (new FatMailer($langId, 'account_credited_debited'))
+            (new FatMailer($langId, 'account_credited_debited'))
                 ->setTo($txnDetail["credential_email"])
                 ->setVariables($arrReplacements)
                 ->send();
@@ -2445,10 +2444,11 @@ class EmailHandler extends FatModel
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
-
+        /*
         if (1 > abs($row['urp_points'])) {
             return true;
         }
+        */
 
         $arrReplacements = array(
             '{user_name}' => trim($row["user_name"]),
@@ -2458,7 +2458,12 @@ class EmailHandler extends FatModel
             '{reward_point_balance}' => UserRewardBreakup::rewardPointBalance($row["urp_user_id"]),
         );
 
-        $this->sendMailToAdminAndAdditionalEmails("reward_points_credited_debited", $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
+        if (!empty($row["credential_email"])) {
+            (new FatMailer($langId, 'reward_points_credited_debited'))
+                ->setTo($row["credential_email"])
+                ->setVariables($arrReplacements)
+                ->send();
+        }        
         $phone = !empty($row['user_phone']) ? ValidateElement::formatDialCode($row['user_phone_dcode']) . $row['user_phone'] : '';
         $this->sendSms("reward_points_credited_debited", $phone, $arrReplacements, $langId);
         $notiArrReplacements = array(

@@ -20,11 +20,11 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'option_identifier':
-                if ($row['option_name'] != '') {
-                    $td->appendElement('plaintext', $tdAttr, $row['option_name'], true);
+            case 'option_name':
+                if ($row['option_name'] != $row['option_identifier']) {
+                    $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                     $td->appendElement('br', $tdAttr);
-                    $td->appendElement('plaintext', $tdAttr, '(' . $row[$key] . ')', true);
+                    $td->appendElement('plaintext', $tdAttr, '(' . $row['option_identifier'] . ')', true);
                 } else {
                     $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 }

@@ -164,7 +164,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                     }
                                     echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?>
                                         <?php
-                                        if ($childOrder['op_selprod_price'] > $childOrder['op_unit_price']) { ?>
+                                        if (0 < $childOrder['op_special_price'] && $childOrder['op_selprod_price'] > $childOrder['op_unit_price']) { ?>
                                         </strong>
                                         <br />
                                         <del>
