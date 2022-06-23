@@ -60,8 +60,7 @@ class PickupAddressesController extends ListingBaseController
         $srch = new AddressSearch($this->siteLangId);
         $srch->joinCountry();
         $srch->joinState();
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        
         $srch->addMultipleFields(array('addr.*', 'state_code', 'country_code', 'country_code_alpha3', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'));
         $srch->addCondition('country_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('state_active', '=', applicationConstants::ACTIVE);
@@ -75,16 +74,14 @@ class PickupAddressesController extends ListingBaseController
             $condition->attachCondition('addr_city', 'like', '%' . $post['keyword'] . '%', 'OR');
             $condition->attachCondition('addr_zip', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -230,7 +227,7 @@ class PickupAddressesController extends ListingBaseController
         $frm = new Form('frmAddress');
         $frm->addHiddenField('', 'addr_id', $addressId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getAllNames(), $langId, array(), '');
-        $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LABEL', $langId), 'addr_title');
+        $frm->addRequiredField(Labels::getLabel('FRM_ADDRESS_LABEL', $langId), 'addr_title');
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'addr_name');
         $frm->addRequiredField(Labels::getLabel('FRM_ADDRESS_LINE1', $langId), 'addr_address1');
         $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LINE2', $langId), 'addr_address2');
