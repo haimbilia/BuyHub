@@ -5643,7 +5643,7 @@ class SellerController extends SellerBaseController
             $frm->addHiddenField('', 'lang_id', array_key_first($languages));
         }
 
-        $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LABEL', $langId), 'addr_title');
+        $frm->addRequiredField(Labels::getLabel('FRM_ADDRESS_LABEL', $langId), 'addr_title');
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'addr_name');
         $frm->addRequiredField(Labels::getLabel('FRM_ADDRESS_LINE1', $langId), 'addr_address1');
         $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LINE2', $langId), 'addr_address2');

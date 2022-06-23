@@ -956,6 +956,7 @@ TV-9.4.0.20220406
     - #065012 - The fetch shipping rates button should appears when the shipping plugin is on from the admin side and the manual shipping rates of seller is applicable.
     - #065012 - The fetch shipping rates button should appears when the shipping plugin is on from the admin side and the manual shipping rates of seller is applicable.
     - #065007 - The admin commission is not applicable on the shipping charges if the shipping plugin is on.
+    - #065049 - Multiple issues on the 'Pickup addresses' setup page    
     - #065026 - Option name not coming same on frontend and backend .
     - #064985 - sent to email address when we credit or debit reward points from admin .
     - #065038 - it show that otp veriication email has been sent on screen before we click on get otp
