@@ -78,6 +78,13 @@ class PluginSettingController extends ListingBaseController
             LibHelper::exitWithError($pluginSetting->getError(), true);
         }
 
+        $updatePayoutSettings = FatApp::getPostedData('update_previous_connected_accounts', FatUtility::VAR_INT, 0);
+        if (0 < $updatePayoutSettings && StripeConnect::KEY_NAME == $keyName) {
+            if (false === $plugin->updatePayoutSettings()) {
+                LibHelper::exitWithError($plugin->getError(), true);
+            }
+        }
+
         $this->set('msg', Labels::getLabel('MSG_CONFIGURATION_KEYS_SAVED_SUCCESSFULLY.!!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }

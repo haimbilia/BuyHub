@@ -68,6 +68,7 @@ class StripeConnect extends PaymentMethodBase
     public const REQUEST_CREATE_ACCOUNT_LINKS = 29;
     public const REQUEST_CREATE_COUPON = 30;
     public const REQUEST_CREATE_ACCOUNT_TOKEN = 31;
+    public const REQUEST_UPDATE_ALL_ACCOUNTS = 32;
 
     public const PAYMENT_RESPONSE_INTENT_TYPE_SUCCESS = 'payment_intent.succeeded';
 
@@ -385,9 +386,10 @@ class StripeConnect extends PaymentMethodBase
             ]
         ];
 
-        if ('daily' == $this->payoutScheduleInterval) {
-            $settings['payouts']['schedule']['delay_days'] = empty($this->payoutScheduleDelayDays) ? 'minimum' : $this->payoutScheduleDelayDays;
-        }
+        $dDays = (empty($this->payoutScheduleDelayDays) || 2 > $this->payoutScheduleDelayDays ? 'minimum' : $this->payoutScheduleDelayDays);
+        $dDays = 31 < $dDays ? 31 : $dDays;
+
+        $settings['payouts']['schedule']['delay_days'] = $dDays;
 
         if ('weekly' == $this->payoutScheduleInterval && !empty($this->payoutScheduleWeekly)) {
             $settings['payouts']['schedule']['weekly_anchor'] = strtolower($this->payoutScheduleWeekly);
@@ -441,6 +443,54 @@ class StripeConnect extends PaymentMethodBase
         $this->stripeAccountId = $this->resp->id;
         $this->updateUserMeta('stripe_account_type', 'custom');
         return $this->updateUserMeta('stripe_account_id', $this->resp->id);
+    }
+
+    /**
+     * updatePayoutSettings
+     *
+     * @return bool
+     */
+    public function updatePayoutSettings(): bool
+    {
+        /* This is just to handle errors with Try Catch. */
+        return $this->updateAllAccounts();
+    }
+
+    /**
+     * updateAccount
+     *
+     * @return bool
+     */
+    private function updateAllAccounts(): bool
+    {
+        $accountIds = $this->getAllConnectAccountIds();
+        $error = '';
+        foreach ($accountIds as $acct) {
+            if (false === $this->update(['settings' => $this->getPayoutSettingsArr()], $acct['usermeta_value'])) {
+                $error .= !empty($error) ? '\n' . $this->error : $this->error;
+            }
+        }
+
+        if (!empty($error)) {
+            $this->error = $error;
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * getAllConnectAccountIds
+     *
+     * @return array
+     */
+    private function getAllConnectAccountIds(): array
+    {
+        $srch = new SearchBase(User::DB_TBL_META, 't_um');
+        $srch->addMultipleFields(['usermeta_value']);
+        $srch->addCondition('t_um.' . User::DB_TBL_META_PREFIX . 'key', '=', 'stripe_account_id');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     /**
@@ -1469,6 +1519,9 @@ class StripeConnect extends PaymentMethodBase
                     break;
                 case self::REQUEST_UPDATE_ACCOUNT:
                     return $this->updateAccount($requestParam);
+                    break;
+                case self::REQUEST_UPDATE_ALL_ACCOUNTS:
+                    return $this->updateAllAccounts();
                     break;
                 case self::REQUEST_PERSON_TOKEN:
                     return $this->getPersonToken();
