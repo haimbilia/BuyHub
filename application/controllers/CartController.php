@@ -618,19 +618,12 @@ class CartController extends MyAppController
         $post = FatApp::getPostedData();
         if (empty($post)) {
             $message = Labels::getLabel('LBL_Invalid_Request', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
+            LibHelper::exitWithError($message, true, true);    
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
         if (empty($post['key'])) {
             $message = Labels::getLabel('ERR_INVALID_PRODUCT', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($message);
         }
         $key = $post['key'];
         if (true === MOBILE_APP_API_CALL) {
@@ -638,23 +631,14 @@ class CartController extends MyAppController
         }
         $quantity = isset($post['quantity']) ? FatUtility::int($post['quantity']) : 1;
         $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id'], Cart::PAGE_TYPE_CART);
-        if (!$cartObj->update($key, $quantity)) {
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($cartObj->getError());
-            }
-            Message::addErrorMessage($cartObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+        if (!$cartObj->update($key, $quantity)) {         
+            LibHelper::exitWithError($cartObj->getError());
         }
         $cartObj->removeUsedRewardPoints();
         $cartObj->removeProductShippingMethod();
 
-        if (!empty($cartObj->getWarning())) {
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($cartObj->getWarning());
-            }
-            Message::addInfo($cartObj->getWarning());
-            FatUtility::dieWithError(Message::getHtml());
-            /* $this->set( 'msg', $cartObj->getWarning() ); */
+        if (!empty($cartObj->getWarning())) {            
+            LibHelper::exitWithError($cartObj->getWarning());
         } else {
             $this->set('msg', Labels::getLabel("MSG_CART_UPDATED_SUCCESSFULLY", $this->siteLangId));
         }

@@ -960,6 +960,7 @@ TV-9.4.0.20220406
     - #065026 - Option name not coming same on frontend and backend .
     - #064985 - sent to email address when we credit or debit reward points from admin .
     - #065038 - it show that otp veriication email has been sent on screen before we click on get otp
+    - #065039 - The quantity decrease button should be disabled on the shipment page if the selected quantity is same as the minimum purchase quantity.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
