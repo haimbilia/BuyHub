@@ -1925,3 +1925,7 @@ ALTER TABLE `tbl_admin` ADD `admin_admperm_updated_on` DATETIME NOT NULL AFTER `
 ALTER TABLE `tbl_order_product_settings`  ADD `op_tax_after_discount` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `op_tax_collected_by_seller`,  ADD `op_product_inclusive_tax` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `op_tax_after_discount`;
 
 ALTER TABLE `tbl_products` CHANGE `product_min_selling_price` `product_min_selling_price` DECIMAL(10,2) NOT NULL;
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ("FRM_ENABLING_THIS,_TAX_AFTER_DISCOUNT_FEATURE_WILL_BE_DEACTIVED", "1", "Enabling this, Tax After Discount feature will be deactived.", "1")
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
