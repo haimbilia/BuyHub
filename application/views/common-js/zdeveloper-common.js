@@ -1410,6 +1410,9 @@ $(function () {
             section = $("#cartList");
         }
         section.prepend(fcom.getLoader());
+        cart.addCallBackFn = function(results){
+            loadShippingSummaryDiv();
+        }
         cart.update(key, page, fulfillmentType);
     });
 
