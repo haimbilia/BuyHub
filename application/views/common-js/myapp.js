@@ -70,7 +70,11 @@ var cart = {
         isAjaxRunning = true;
 
         var data = 'key=' + key + '&quantity=' + $("input[name='qty_" + key + "']").val();
-        fcom.updateWithAjax(fcom.makeUrl('Cart', 'update'), data, function (ans) {
+        fcom.ajax(fcom.makeUrl('Cart', 'update'), data, function (ans) {
+            if(!ans.status){
+                listCartProducts()
+                return;
+            }
             fcom.removeLoader();
             isAjaxRunning = false;
             if (ans.status) {
@@ -86,6 +90,8 @@ var cart = {
                     listCartProducts();
                 }
             }
+        },{
+            fOutMode: 'json'
         });
     },
 
