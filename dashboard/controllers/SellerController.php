@@ -4491,13 +4491,13 @@ class SellerController extends SellerBaseController
 
             $fulfillmentType = -1;
             if ($productData['sellerProduct'] > 0 || $shipBySeller) {
-                $sellerId = ($shipBySeller > 0) ? UserAuthentication::getLoggedUserId() : $productData['product_seller_id'];
+                $sellerId = ($shipBySeller > 0) ? $this->userParentId : $productData['product_seller_id'];
                 $fulfillmentType = Shop::getAttributesByUserId($sellerId, 'shop_fulfillment_type');
             } else {
                 $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
             }
 
-            $shopDetails = Shop::getAttributesByUserId(UserAuthentication::getLoggedUserId(), null, false);
+            $shopDetails = Shop::getAttributesByUserId($this->userParentId, null, false);
             $address = new Address(0, $this->siteLangId);
             $addresses = $address->getData(Address::TYPE_SHOP_PICKUP, $shopDetails['shop_id']);
 
