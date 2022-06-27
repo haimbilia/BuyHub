@@ -13,7 +13,7 @@ $phnFld->changeCaption($label);
 $fldSubmit = $frm->getField('btn_submit');
 $fldSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 $fldSubmit->developerTags['noCaptionTag'] = true;
-$fldSubmit->htmlAfterField = '<br/><span class="form-text text-muted">' . Labels::getLabel('MSG_YOUR_PHONE_NUMBER_WILL_NOT_CHANGE_UNTIL_YOU_VERIFY_YOUR_NEW_NUMBER', $siteLangId) . '</span>';
+$fldSubmit->htmlAfterField = '<br/><span class="form-text text-muted">' . Labels::getLabel('MSG_YOUR_PHONE_NUMBER_WILL_NOT_CHANGE_UNTIL_YOU_VERIFY_YOUR_NUMBER', $siteLangId) . '</span>';
 
 echo $frm->getFormHtml();
 
