@@ -23,7 +23,7 @@ $fulfillmentType = $cartObj->getCartCheckoutType();
                 <ul class="checkout-progress">
                     <?php 
                     if ('walletpay' == strtolower($controllerName) && 'recharge' == $action) { ?>
-                        <li id="step1" class="checkout-progress-step checkoutNav-js payment-js">
+                        <li id="step1" class="checkout-progress-step  payment-js">
                             <?php echo Labels::getLabel('LBL_PAYMENT', $siteLangId); ?>
                         </li>
                     <?php } else { ?>
@@ -32,7 +32,7 @@ $fulfillmentType = $cartObj->getCartCheckoutType();
                                 <?php echo Labels::getLabel('LBL_CART', $siteLangId); ?>
                             </a>
                         </li>
-                        <li id="step2" class="checkout-progress-step checkoutNav-js shipping-js" onclick="loadShippingSummaryDiv(1);">
+                        <li id="step2" class="checkout-progress-step checkoutNav-js shipping-js">
                             <?php
                             if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $cartObj->hasPhysicalProduct()) {
                                 echo Labels::getLabel('LBL_Shipping', $siteLangId);

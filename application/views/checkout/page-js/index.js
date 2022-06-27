@@ -518,16 +518,22 @@ $("document").ready(function () {
         loadShippingSummaryDiv();
     };
 
-    setCheckoutFlow = function (type) {
+    setCheckoutFlow = function (type) {      
         var obj = $(".checkout-progress");
         obj.find(".checkoutNav-js").removeClass("is-complete");
         obj.find(".checkoutNav-js").removeClass("is-active");
         obj.find(".checkoutNav-js").removeClass("pending");
+        if(obj.find(".shipping-js")){
+            obj.find(".shipping-js").attr("onclick","loadShippingSummaryDiv(1)");       
+        }
         switch (type) {
             case "BILLING":
                 obj.find(".billing-js").addClass("is-active");
                 obj.find(".shipping-js").addClass("pending");
                 obj.find(".payment-js").addClass("pending");
+                if(obj.find(".shipping-js")){
+                    obj.find(".shipping-js").removeAttr("onclick");   
+                }                
                 obj.find(".order-complete-js").addClass("pending");
                 break;
             case "SHIPPING":
