@@ -963,6 +963,7 @@ TV-9.4.0.20220406
     - #065039 - The quantity decrease button should be disabled on the shipment page if the selected quantity is same as the minimum purchase quantity.
     - #065096 - Sellers Dashboard - When we click on any date from the table to view all the sales made on that date, a page display error. 
     - #065044 - The tax category of the tax plugin bounded with the product does not get removed even if the admin disable the tax plugin.
+    - #065094 - 'Invalid account' error occurs when the user tries to forget the password using the phone number.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

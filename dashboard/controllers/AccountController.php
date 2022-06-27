@@ -3461,13 +3461,13 @@ class AccountController extends LoggedUserController
 
     private function sendOtp(int $userId, string $dialCode, int $phone)
     {
-        $userObj = new User($userId);
-        $dialCode = ValidateElement::formatDialCode(trim($dialCode));
+        $userObj = new User($userId);       
         $otp = $userObj->prepareUserPhoneOtp($dialCode, $phone);
         if (false == $otp) {
             LibHelper::dieJsonError($userObj->getError());
         }
 
+        $dialCode = ValidateElement::formatDialCode(trim($dialCode));
         $userData = $userObj->getUserInfo('user_name', false, false);
         $obj = clone $userObj;
         if (false === $obj->sendOtp($dialCode . $phone, $userData['user_name'], $otp, $this->siteLangId)) {
