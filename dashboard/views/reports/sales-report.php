@@ -1,6 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $dateFrm = $frmSearch->getField('date_from');
+if (null != $dateFrm) {
 $dateFrm->setFieldTagAttribute('class', 'field--calender');
+}
 
 $dateTo = $frmSearch->getField('date_to');
 if (null != $dateTo) {
