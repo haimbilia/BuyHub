@@ -962,6 +962,8 @@ TV-9.4.0.20220406
     - #065038 - it show that otp veriication email has been sent on screen before we click on get otp
     - #065039 - The quantity decrease button should be disabled on the shipment page if the selected quantity is same as the minimum purchase quantity.
     - #065096 - Sellers Dashboard - When we click on any date from the table to view all the sales made on that date, a page display error. 
+    - #064967 - Unappropriate Data used to appear in "profit by products" on seller end
+    - #065098 - Multiple issues on the advertiser end
     - #065044 - The tax category of the tax plugin bounded with the product does not get removed even if the admin disable the tax plugin.
     - #065094 - 'Invalid account' error occurs when the user tries to forget the password using the phone number.
 ## UAT points:
