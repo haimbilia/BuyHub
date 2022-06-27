@@ -122,45 +122,34 @@ class PatchUpdateController extends ListingBaseController
             LibHelper::exitWithError($taxPluginObj->getError(), true);
         }
 
-        $codesArr = $taxPluginObj->getCodes(null, null, null, array(), false);
-        if (is_array($codesArr) && array_key_exists('status', $codesArr) && false === $codesArr['status']) {
+        $codesArr = $taxPluginObj->getCodes(null, null, null, array(), true);
+        if (array_key_exists('status', $codesArr) && false === $codesArr['status']) {
             LibHelper::exitWithError($codesArr['msg'], true);
         }
 
         $db = FatApp::getDb();
-        $parentArr = [];
-        if ($pluginKey == 'AvalaraTax') {
-            $codesArr = $codesArr->value;
-        }
+        $parentArr = [];   
+        $parentId = 0;
+        $categories = $codesArr['data'] ;
 
-        foreach ($codesArr as $code) {
-            $parentId = 0;
-            if (isset($code->parentTaxCode) && $code->parentTaxCode != '') {
-                if (array_key_exists($code->parentTaxCode, $parentArr)) {
-                    $parentId = $parentArr[$code->parentTaxCode];
+        foreach ($categories as $category) {
+            if (isset($category['parentTaxCode']) &&  $category['parentTaxCode'] != '') {
+                if (array_key_exists($category['parentTaxCode'], $parentArr)) {
+                    $parentId = $parentArr[$category['parentTaxCode']];
                 } else {
-                    $taxRow = Tax::getAttributesByCode($code->parentTaxCode, ['taxcat_id'], $pluginId);
+                    $taxRow = Tax::getAttributesByCode($category['parentTaxCode'], ['taxcat_id'], $pluginId);
                     if ($taxRow) {
                         $parentId = $taxRow['taxcat_id'];
                     }
-                    $parentArr[$code->parentTaxCode] = $parentId;
+                    $parentArr[$category['parentTaxCode']] = $parentId;
                 }
             }
-
-            $identifier = '';
-            $taxCode = '';
-
-            if ($pluginKey == 'TaxJarTax') {
-                $identifier = ($code->name != '') ? $code->name : $code->product_tax_code;
-                $taxCode = $code->product_tax_code;
-            } elseif ($pluginKey == 'AvalaraTax') {
-                $identifier = ($code->description != '') ? $code->description : $code->taxCode;
-                $taxCode = $code->taxCode;
-            }
+           
+            $identifier = ($category['name'] != '') ? $category['name'] : $category['taxCode'];
 
             $arr = [
                 'taxcat_identifier' => $identifier,
-                'taxcat_code' => $taxCode,
+                'taxcat_code' => $category['taxCode'],
                 'taxcat_parent' => $parentId,
                 'taxcat_plugin_id' => $pluginId,
                 'taxcat_active' => applicationConstants::ACTIVE,
@@ -174,7 +163,7 @@ class PatchUpdateController extends ListingBaseController
             $data = array(
                 'taxcatlang_taxcat_id' => $taxCatId,
                 'taxcatlang_lang_id' => $this->siteLangId,
-                'taxcat_name' => ($code->description != '') ? $code->description : $code->taxCode,
+                'taxcat_name' => $identifier,
             );
 
             $taxObj = new Tax($taxCatId);
