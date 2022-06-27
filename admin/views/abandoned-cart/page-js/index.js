@@ -7,6 +7,7 @@ $(document).ready(function () {
 (function () {
 	var abandonedcartId = 0;
 	var userId = 0;
+	var productId = 0;
 
 	discountNotification = function (abandonedcart_id, user_id, product_id) {
 		fcom.updateWithAjax(fcom.makeUrl('AbandonedCart', "validateProductForNotification", [product_id]), '', function (t) {
@@ -14,14 +15,16 @@ $(document).ready(function () {
 			var data = 'includeTabs=0&onClear=discountNotification(' + abandonedcart_id + ', ' + user_id + ', ' + product_id + ')';
 			fcom.updateWithAjax(fcom.makeUrl('DiscountCoupons', "form"), data, function (t) {
 				fcom.closeProcessing();
-				/* Overwritten with Discount Coupons. */
-				controllerName = 'AbandonedCart';
-
 				$.ykmodal(t.html);
 				fcom.removeLoader();
+				$('#couponType').val(PRODUCT_DISCOUNT).parents('.form-group').parent().hide();
+				/* Overwritten with Discount Coupons. */
+				controllerName = 'AbandonedCart';		
+				
 			});
 			abandonedcartId = abandonedcart_id;
 			userId = user_id;
+			productId = product_id;
 		});
 	};
 
@@ -31,22 +34,30 @@ $(document).ready(function () {
 
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('DiscountCoupons', 'setup'), data, function (t) {
-			/* Overwritten with Discount Coupons. */
-			controllerName = 'AbandonedCart';
-
+		
 			fcom.removeLoader();
 			fcom.displaySuccessMessage(t.msg);
 			$.ykmodal.close();
 			reloadList();
 
 			updateCouponUser(t.recordId, userId);
+			updateCouponProduct(t.recordId, productId);
 			sendDiscountNotification(abandonedcartId, t.recordId);
+			/* Overwritten with Discount Coupons. */
+			controllerName = 'AbandonedCart';
 			return;
 		});
 	};
 
 	updateCouponUser = function (couponId, userId) {
 		var data = 'linkType=users&id=' + userId + '&recordId=' + couponId;
+		fcom.ajax(fcom.makeUrl('DiscountCoupons', 'bindItem'), data, function (t) {
+			/* Overwritten with Discount Coupons. */
+			controllerName = 'AbandonedCart';
+		});
+	};
+	updateCouponProduct = function (couponId, productId) {
+		var data = 'linkType=products&id=' + userId + '&recordId=' + couponId;
 		fcom.ajax(fcom.makeUrl('DiscountCoupons', 'bindItem'), data, function (t) {
 			/* Overwritten with Discount Coupons. */
 			controllerName = 'AbandonedCart';

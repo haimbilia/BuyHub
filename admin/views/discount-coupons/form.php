@@ -12,6 +12,7 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('coupon_type');
 $fld->addFieldTagAttribute('onChange', 'callCouponTypePopulate(this.value); ');
+$fld->addFieldTagAttribute('id', 'couponType');
 
 $fld = $frm->getField('coupon_discount_in_percent');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
