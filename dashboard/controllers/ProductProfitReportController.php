@@ -62,6 +62,7 @@ class ProductProfitReportController extends SellerBaseController
         // $opSrch->setOrderBy($sortBy, $sortOrder);
         $opSrch->setDateCondition($fromDate, $toDate);
         $opSrch->removeFld(['product_name', 'category_name']);
+        $opSrch->addCondition('op.op_selprod_user_id', '=', $this->userParentId);
 
         $srch = new ProductSearch($this->siteLangId, '', '', false, false, false);
         $srch->joinBrands($this->siteLangId, false, true);
@@ -79,7 +80,7 @@ class ProductProfitReportController extends SellerBaseController
                 $srch->addOrder($sortBy, $sortOrder);
                 break;
         }
-
+        
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
