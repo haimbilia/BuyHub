@@ -739,7 +739,7 @@ class UserAuthentication extends FatModel
         return $row;
     }
 
-    public function validateUserObj($user, $isActive = true, $isVerfied = true, $addDeletedCheck = true, $isPhone = false)
+    public function validateUserObj($isActive = true, $isVerfied = true, $addDeletedCheck = true)
     {
         $srch = new SearchBase(User::DB_TBL);
         $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', User::tblFld('id') . '=' . User::DB_TBL_CRED_PREFIX . 'user_id');
@@ -779,7 +779,7 @@ class UserAuthentication extends FatModel
     public function getUserByPhone($phoneNumber, $isActive = true, $isVerfied = true, $addDeletedCheck = true)
     {
         $db = FatApp::getDb();
-        $srch = $this->validateUserObj($phoneNumber, $isActive, $isVerfied, $addDeletedCheck, true);
+        $srch = $this->validateUserObj($isActive, $isVerfied, $addDeletedCheck);
         $srch->addCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $phoneNumber, 'AND', true);
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
@@ -794,7 +794,7 @@ class UserAuthentication extends FatModel
     public function getUserByEmailOrUserName($user, $isActive = true, $isVerfied = true, $addDeletedCheck = true)
     {
         $db = FatApp::getDb();
-        $srch = $this->validateUserObj($user, $isActive, $isVerfied, $addDeletedCheck);
+        $srch = $this->validateUserObj($isActive, $isVerfied, $addDeletedCheck);
         $cnd = $srch->addCondition(User::DB_TBL_CRED_PREFIX . 'username', '=', $user);
         $cnd->attachCondition(User::DB_TBL_CRED_PREFIX . 'email', '=', $user, 'OR');
         $srch->doNotCalculateRecords();

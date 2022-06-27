@@ -170,6 +170,7 @@ class AvalaraTax extends TaxBase
             foreach ($codesArr->value as $code) {
                 $formatedCodesArr[$code->id] = array(
                     'taxCode' => $code->taxCode,
+                    'name' => $code->description,
                     'description' => $code->description,
                     'parentTaxCode' => $code->parentTaxCode ?? null,
                 );
@@ -177,7 +178,7 @@ class AvalaraTax extends TaxBase
         }
         return [
             'status' => true,
-            'data' => $formatedCodesArr
+            'data' => $formatedCodesArr,
         ];
     }
 

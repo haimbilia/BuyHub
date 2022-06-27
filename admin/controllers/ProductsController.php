@@ -297,13 +297,14 @@ class ProductsController extends ListingBaseController
                 }
             }
 
-            if (Tax::getActivatedServiceId()) {
+            $taxPluginId = Tax::getActivatedServiceId();
+            if (0 < $taxPluginId) {
                 $taxCatMultiFields = ['concat(IFNULL(taxcat_name,taxcat_identifier)', '" (",taxcat_code,")") as taxcat_name', 'taxcat_id'];
             } else {
                 $taxCatMultiFields = ['IFNULL(taxcat_name,taxcat_identifier) as taxcat_name', 'taxcat_id'];
             }
 
-            $taxData = Tax::getTaxCatByProductId($recordId, $productData['product_seller_id'], $langId, $taxCatMultiFields);
+            $taxData = Tax::getTaxCatByProductId($recordId, $productData['product_seller_id'], $langId, $taxCatMultiFields, $taxPluginId);
             if (false != $taxData) {
                 $productData['ptt_taxcat_id'] = $taxData[Tax::tblFld('id')];
                 $fld = $frm->getField('ptt_taxcat_id');
