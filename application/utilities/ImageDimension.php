@@ -80,6 +80,7 @@ class ImageDimension extends FatUtility
     public const VIEW_HOME_PAGE_BANNER_MIDDLE_LAYOUT = "MIDDLELAYOUT";
     public const VIEW_HOME_PAGE_BANNER_BOTTOM_LAYOUT = "BOTTOMLAYOUT";
     public const VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT = "PRODUCTLAYOUT";
+    public const VIEW_PROD_PROMOTIONAL_BANNER = "PRODUCTBANNER";
     public const VIEW_CROPED = "CROPED";
 
     public static function getData(int $type, $sizeType = '', $aspectRatioType = 1): array
@@ -763,6 +764,7 @@ class ImageDimension extends FatUtility
             self::VIEW_HOME_PAGE_BANNER_MIDDLE_LAYOUT => [self::WIDTH => 600, self::HEIGHT => 338],
             self::VIEW_HOME_PAGE_BANNER_BOTTOM_LAYOUT => [self::WIDTH => 600, self::HEIGHT => 198],
             self::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT => [self::WIDTH => 600, self::HEIGHT => 198],
+            self::VIEW_PROD_PROMOTIONAL_BANNER => [self::WIDTH => 743, self::HEIGHT => 223],
             self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 50],
             self::VIEW_MINI_THUMB => [self::WIDTH => 52, self::HEIGHT => 42]
         ];

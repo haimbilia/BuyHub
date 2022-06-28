@@ -97,8 +97,7 @@ class BannerLocation extends MyAppModel
         $bsrch->addMultipleFields(array('banner_id', 'banner_blocation_id', 'banner_type', 'promotion_name', 'banner_record_id', 'banner_url', 'banner_target', 'banner_title', 'promotion_id', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'banner_updated_on'));
         $bsrch->doNotCalculateRecords();
         $bsrch->joinAttachedFile();
-        $bsrch->addCondition('banner_blocation_id', '=', $bannerLocation['blocation_id']);
-
+        $bsrch->addCondition('banner_blocation_id', '=', $bannerLocation['blocation_id']);        
         $srch = new SearchBase('(' . $bsrch->getQuery() . ') as t');
         $srch->doNotCalculateRecords();
         $srch->addDirectCondition(

@@ -8,20 +8,20 @@
                     $desktop_url = '';
                     $tablet_url = '';
                     $mobile_url = '';
-                    $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId, false, applicationConstants::SCREEN_DESKTOP);
-                    if(0 > $image['afile_id']){
-                        continue; 
-                    }  
+                    $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId, true, applicationConstants::SCREEN_DESKTOP);
+                    if (0 > $image['afile_id']) {
+                        continue;
+                    }
+                    $uploadedTime = AttachedFile::setTimeParam($val['banner_updated_on']);
+                    $desktopUrl = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, ImageDimension::VIEW_PROD_PROMOTIONAL_BANNER)) . $uploadedTime;
+                ?>
 
-                    $desktopUrl = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, ImageDimension::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT));
-                    ?>                   
-                    
                     <div class="poster">
                         <a href="<?php echo UrlHelper::generateUrl('Banner', 'url', array($val['banner_id'])); ?>" target="<?php echo $val['banner_target']; ?>" title="<?php echo $val['banner_title']; ?>">
-                          <?php
+                            <?php
                             $pictureAttr = [
                                 'siteLangId' => $siteLangId,
-                                'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, 'WEBP'.ImageDimension::VIEW_HOME_PAGE_BANNER_PRODUCT_LAYOUT))],
+                                'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, 'WEBP' . ImageDimension::VIEW_PROD_PROMOTIONAL_BANNER)) . $uploadedTime],
                                 'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => $desktopUrl],
                                 'imageUrl' => $desktopUrl,
                                 'alt' => !empty($val['banner_title']) ? $val['banner_title'] : $val['promotion_name'],
