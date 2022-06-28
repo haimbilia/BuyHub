@@ -973,6 +973,7 @@ TV-9.4.0.20220406
     - #065065 - when user click on count in report section , it redirects the user to wrong page . 
     - #065067 - 'use manual shipping rates instead of third party' settings appears on the manage shop page on the seller end even if the 'Shipped by admin only' setting and shipping plugin is both on.
     - #065070 - Order details does not appears on the payment success page in case of the guest checkout.
+    - #065072 - Tax category rule button appears on the tax category listing page when the tax plugin is on.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
