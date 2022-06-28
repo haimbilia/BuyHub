@@ -488,7 +488,7 @@ class ProductsController extends MyAppController
     }
 
     public function view($selprod_id = 0)
-    { 
+    {
         $selprod_id = FatUtility::int($selprod_id);
         if (1 > $selprod_id) {
             if (true === MOBILE_APP_API_CALL) {
@@ -646,7 +646,7 @@ class ProductsController extends MyAppController
             // $shippingRates = Product::getProductShippingRates($product['product_id'], $this->siteLangId, 0, $product['selprod_user_id']);
             // $shippingDetails = Product::getProductShippingDetails($product['product_id'], $this->siteLangId, $product['selprod_user_id']);
         } else {
-            if ($product['product_cod_enabled']) {
+            if ($product['product_cod_enabled'] && FatApp::getConfig('CONF_COD_MIN_WALLET_BALANCE', FatUtility::VAR_FLOAT, -1) > -1) {
                 $codEnabled = true;
             }
             // $shippingRates = Product::getProductShippingRates($product['product_id'], $this->siteLangId, 0, 0);
