@@ -969,6 +969,7 @@ TV-9.4.0.20220406
     - #065048 - Notice appears on the checkout page when user clicks on the shipping tab without adding any address.
     - #065116 - Issue with the calculations of order calculations.
     - #065101 - The admin is able to update the wrong values in the maximum and minimum cod order total field
+    - #065104 - The 'Minimum wallet balance' setting in the checkout settings is not working.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

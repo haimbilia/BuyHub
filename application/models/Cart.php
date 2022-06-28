@@ -556,7 +556,7 @@ class Cart extends FatModel
                             $codEnabled = false;
                         }
                     } else {
-                        if ($sellerProductRow['product_cod_enabled']) {
+                        if ($sellerProductRow['product_cod_enabled'] && FatApp::getConfig('CONF_COD_MIN_WALLET_BALANCE', FatUtility::VAR_FLOAT, -1) > -1) {
                             $codEnabled = true;
                         }
                     }
@@ -808,7 +808,7 @@ class Cart extends FatModel
                     }
                 }
             }
-            
+
             /* update/fetch/apply theprice, according to volume discount module[ */
             $sellerProductRows[$key]['volume_discount'] = 0;
             $sellerProductRows[$key]['volume_discount_percentage'] = 0;
