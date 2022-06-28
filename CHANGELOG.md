@@ -968,7 +968,7 @@ TV-9.4.0.20220406
     - #065094 - 'Invalid account' error occurs when the user tries to forget the password using the phone number.
     - #065048 - Notice appears on the checkout page when user clicks on the shipping tab without adding any address.
     - #065054 - Preview label button icon is missing on the order details page on the admin end.
-    
+    - #065056 - Fatal error occurs when the admin clicks on the view order icon on the order listing page.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

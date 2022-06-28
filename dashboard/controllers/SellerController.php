@@ -434,7 +434,7 @@ class SellerController extends SellerBaseController
                 $shippingApiObj->getSettings();
             }
             if (!empty($orderDetail["opship_orderid"]) && method_exists($shippingApiObj, 'loadOrder')) {
-                if (null != $shippingApiObj && false === $shippingApiObj->loadOrder($orderDetail["opship_orderid"])) {
+                if (NULL != $shippingApiObj && null != $shippingApiObj && false === $shippingApiObj->loadOrder($orderDetail["opship_orderid"])) {
                     Message::addErrorMessage($shippingApiObj->getError());
                     FatApp::redirectUser(UrlHelper::generateUrl("SellerOrders"));
                 }
