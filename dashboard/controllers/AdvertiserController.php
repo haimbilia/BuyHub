@@ -1329,8 +1329,8 @@ class AdvertiserController extends AdvertiserBaseController
             'collections.collection_id = blocation_collection_id',
             'collections'
         );
-        $srch->addFld('ifnull(collections.collection_deleted,0) as deleted');
-        $srch->addFld('ifnull(collections.collection_active,1) as active');
+        $srch->addFld('COALESCE(collections.collection_deleted,0) as deleted');
+        $srch->addFld('COALESCE(collections.collection_active,1) as active');
         $srch->addHaving('deleted', '=', applicationConstants::NO);
         $srch->addHaving('active', '=', applicationConstants::ACTIVE);
         $rs = $srch->getResultSet();
