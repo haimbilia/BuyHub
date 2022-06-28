@@ -22,8 +22,17 @@ foreach ($arrListing as $sn => $row) {
             case 'sreport_added_on':
                 $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key], true), true);
                 break;
-            case 'sreport_message':
-                $td->appendElement('plaintext', array(), nl2br($row[$key]), true);
+            case 'sreport_message':                
+                $body = $row[$key];
+                if (strlen($body) > 25) {
+                    $htm = strlen($body) > 25 ? substr($body, 0, 25) . "..." : $body;
+                    $td->appendElement('plaintext', $tdAttr, '<div class="txt-description">' . $htm . ' <button class="btn btn-view" data-bs-toggle="tooltip" data-placement="top"  data-bs-original-title="' . Labels::getLabel('LBL_VIEW_MORE', $siteLangId) . '" onclick="getComment(' . $row['sreport_id'] . ')"><svg class="svg" width="10" height="10"><use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#more">
+                    </use></svg> </button></div><span class="hide" id="commentId-'.$row['sreport_id'].'">'.nl2br($row[$key]).'</span>', true);
+                } else {
+                    $td->appendElement('plaintext', $tdAttr, $body, true);
+                }
+                break;
+                $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionComments($row[$key]), true);
                 break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);

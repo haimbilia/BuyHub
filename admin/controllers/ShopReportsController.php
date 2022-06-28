@@ -26,7 +26,7 @@ class ShopReportsController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);       
         $this->set("frmSearch", $frmSearch);
         $this->getListingData();
-
+        $this->_template->addJs(array('shop-reports/page-js/index.js'));
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_SHOP_NAME', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -82,6 +82,11 @@ class ShopReportsController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);     
         if (0 < $recordId) {
             $srch->addCondition('sreport_id', '=', $recordId);
+        }
+
+        $shopId = FatApp::getPostedData('shop_id',FatUtility::VAR_INT,0);
+        if (0 < $shopId) {
+            $srch->addCondition('sreport_shop_id', '=', $shopId);
         } 
 
         if (!empty($post['keyword'])) {
@@ -109,6 +114,14 @@ class ShopReportsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);        
     } 
+
+    public function getComment()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $this->set('comment', ShopReport::getAttributesById($recordId, 'sreport_message'));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
 
     protected function getFormColumns(): array
     {

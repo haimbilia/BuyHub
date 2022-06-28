@@ -339,7 +339,7 @@ redirectToShopReport = function (id, extraData = {}) {
     if (0 < id) {
         extraData['shop_id'] = id;
     }
-    redirectfunc(fcom.makeUrl('ShopsReport'), extraData, 0, true);
+    redirectfunc(fcom.makeUrl('ShopReports'), extraData, 0, true);
 };
 
 redirectToProductReviews = function (id, extraData = {}) {
