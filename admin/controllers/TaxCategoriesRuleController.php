@@ -29,6 +29,10 @@ class TaxCategoriesRuleController extends ListingBaseController
 
     public function index($ruleId = 0)
     {
+        if (0 < Tax::getActivatedServiceId()) {
+            LibHelper::exitWithError($this->str_invalid_request, false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('TaxCategories'));
+        }
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields, $ruleId);
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
@@ -69,7 +73,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         }
 
         $frm->addHiddenField('', 'taxrule_taxcat_id', $parentId);
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -121,12 +125,12 @@ class TaxCategoriesRuleController extends ListingBaseController
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'trr_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxrule_taxcat_id','taxcat_name','taxcat_identifier'));
+        $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'trr_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxrule_taxcat_id', 'taxcat_name', 'taxcat_identifier'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);  
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $srch->addOrder($sortBy, $sortOrder);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -203,19 +207,19 @@ class TaxCategoriesRuleController extends ListingBaseController
         $taxRuleObj = new TaxRule($ruleId);
 
         $oldTaxStrId = 0;
-        if(0 < $ruleId){
+        if (0 < $ruleId) {
             $oldTaxStrId =  $taxRuleObj::getAttributesById($ruleId, 'taxrule_taxstr_id');
         }
 
 
         $this->validateStateCountry($post);
-       
+
         unset($post['taxrule_id']);
         $taxRuleObj->assignValues($post);
         if (!$taxRuleObj->save()) {
             LibHelper::exitWithError($taxRuleObj->getError(), true);
         }
-        
+
 
         if (!$taxRuleObj->addUpdateRate($post['trr_rate'])) {
             LibHelper::exitWithError($taxRuleObj->getError(), true);
@@ -226,20 +230,20 @@ class TaxCategoriesRuleController extends ListingBaseController
         if (!$taxRuleObj->addUpdateLocationData($ruleId, $post)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_Update_Location_Data', $this->siteLangId), true);
         }
-      
+
         /* ] */
-    
+
         /** [ deleting all combined rates and rule rate of sellers if rule taxstr_id changed */
-        if(0 < $ruleId){  
-            if(0 < $oldTaxStrId){ 
-                 if($oldTaxStrId != $post['taxrule_taxstr_id']){ 
+        if (0 < $ruleId) {
+            if (0 < $oldTaxStrId) {
+                if ($oldTaxStrId != $post['taxrule_taxstr_id']) {
                     if (!FatApp::getDb()->deleteRecords(
                         TaxRule::DB_RATES_TBL,
                         array(
-                            'smt' => TaxRule::DB_RATES_TBL_PREFIX . 'taxrule_id = ? and '. TaxRule::DB_RATES_TBL_PREFIX . 'user_id != ?',
+                            'smt' => TaxRule::DB_RATES_TBL_PREFIX . 'taxrule_id = ? and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id != ?',
                             'vals' => array($ruleId, 0)
                         )
-                    )) {                       
+                    )) {
                         LibHelper::exitWithError(FatApp::getDb()->getError(), true);
                     }
 
@@ -252,7 +256,7 @@ class TaxCategoriesRuleController extends ListingBaseController
                     )) {
                         LibHelper::exitWithError(FatApp::getDb()->getError(), true);
                     }
-                 }
+                }
             }
         }
 
@@ -280,7 +284,7 @@ class TaxCategoriesRuleController extends ListingBaseController
             if ($post['taxrule_id'] != $location['taxruleloc_taxrule_id']) {
                 $combination[] = $location['taxruleloc_from_country_id'] . "-" . $location['taxruleloc_from_state_id'] . "-" . $location['taxruleloc_to_country_id'] . "-" . $location['taxruleloc_to_state_id'] . "-" . $location['taxruleloc_type'];
             }
-        }       
+        }
         foreach ($post['taxruleloc_from_state_id'] as $fromState) {
             if (count($post['taxruleloc_from_state_id']) > 1 && $fromState == -1) {
                 continue;
@@ -288,9 +292,9 @@ class TaxCategoriesRuleController extends ListingBaseController
             foreach ($post['taxruleloc_to_state_id'] as $toState) {
                 if (count($post['taxruleloc_to_state_id']) > 1 && $toState == -1) {
                     continue;
-                }                
+                }
                 $key = $post['taxruleloc_from_country_id'] . "-" . $fromState . "-" . $post['taxruleloc_to_country_id'] . "-" . $toState . "-" . $post['taxruleloc_type'];
-                       
+
                 if (in_array($key, $combination)) {
                     LibHelper::exitWithError(Labels::getLabel('ERR_COMBINATION_OF_COUNTRY_STATE_AND_STATE_TYPE_ALREADY_EXIST_IN_CATEGORY', $this->siteLangId), true);
                 }
@@ -351,7 +355,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_RULE_NAME', $this->siteLangId), 'taxrule_name');
         $fld = $frm->addFloatField(Labels::getLabel('FRM_TAX_RATE(%)', $this->siteLangId), 'trr_rate', '');
         $fld->requirements()->setPositive();
-        $fld->requirements()->setRange(0,100);
+        $fld->requirements()->setRange(0, 100);
 
         /* ] */
 
@@ -428,7 +432,7 @@ class TaxCategoriesRuleController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['trr_rate', 'taxstr_name','taxcat_identifier'], Common::excludeKeysForSort());
+        return array_diff($fields, ['trr_rate', 'taxstr_name', 'taxcat_identifier'], Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)

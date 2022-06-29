@@ -32,7 +32,7 @@ if (isset($client_secret)) {
                 } else {
                     if (result.paymentIntent.status === 'succeeded') {
 
-                        var data = 'order_id=<?php echo $order_id ?>&payment_intent_id=<?php echo $payment_intent_id ?>&is_ajax_request=yes';
+                        var data = 'order_id=<?php echo $order_id ?>&payment_intent_id=<?php echo $payment_intent_id ?>&is_ajax_request=yes&fIsAjax=1';
 
                         $.ajax({
                             type: "POST",

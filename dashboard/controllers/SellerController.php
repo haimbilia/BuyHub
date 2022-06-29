@@ -434,7 +434,7 @@ class SellerController extends SellerBaseController
                 $shippingApiObj->getSettings();
             }
             if (!empty($orderDetail["opship_orderid"]) && method_exists($shippingApiObj, 'loadOrder')) {
-                if (null != $shippingApiObj && false === $shippingApiObj->loadOrder($orderDetail["opship_orderid"])) {
+                if (NULL != $shippingApiObj && null != $shippingApiObj && false === $shippingApiObj->loadOrder($orderDetail["opship_orderid"])) {
                     Message::addErrorMessage($shippingApiObj->getError());
                     FatApp::redirectUser(UrlHelper::generateUrl("SellerOrders"));
                 }
@@ -3649,7 +3649,7 @@ class SellerController extends SellerBaseController
         
         $pluginObj = new Plugin();
         $sellerPluginObj = new SellerPlugin(0, $shopUserId);
-        if ($pluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_active') || $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'pu_active')) {
+        if (0 === FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && ($pluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_active') || $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'pu_active'))) {
             $fld = $frm->addCheckBox(
                 Labels::getLabel("FRM_USE_MANUAL_SHIPPING_RATES_INSTEAD_OF_THIRD_PARTY.", $this->siteLangId),
                 'shop_use_manual_shipping_rates',
