@@ -127,7 +127,10 @@ class CcavenuePayController extends PaymentController
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $paymentGatewayCharge = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
-
+        if (empty($orderInfo['customer_email'])) {
+            Message::addErrorMessage(Labels::getLabel('LBL_PLEASE_UPDATE_YOUR_EMAIL_ADDRESS', $this->siteLangId));
+            FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
+        }
         $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'iframe', array($orderId));
 
         $frm = new Form('frm-ccavenue', array('id' => 'frm-ccavenue', 'action' => $actionUrl, 'class' => "form form--normal"));
@@ -136,6 +139,25 @@ class CcavenuePayController extends PaymentController
         if (false === $processRequest) {
             $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM', $this->siteLangId));
         } else {
+            if ($orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
+                $addr = new Address();
+                $addrData = $addr->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId(), applicationConstants::YES);
+                $addrData = !empty($addrData) ? current($addrData) : [];
+                if (empty($addrData)) {
+                    Message::addErrorMessage(Labels::getLabel('LBL_PLEASE_ADD_ADDRESS_TO_PROCEED_FURTHER', $this->siteLangId));
+                    FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
+                }
+
+                $orderInfo["customer_billing_name"] = $addrData['addr_name'];
+                $orderInfo["customer_billing_address_1"] = $addrData['addr_address1'];
+                $orderInfo["customer_billing_address_2"] = $addrData['addr_address2'];
+                $orderInfo["customer_billing_city"] = $addrData['addr_city'];
+                $orderInfo["customer_billing_state"] = $addrData['state_name'];
+                $orderInfo["customer_billing_postcode"] = $addrData['addr_zip'];
+                $orderInfo['customer_billing_country'] = $addrData['country_name'];
+                $orderInfo['customer_billing_phone'] = $addrData['addr_phone'];
+            }
+
             $frm->addHiddenField('', 'tid', "", array("id" => "tid"));
             $frm->addHiddenField('', 'merchant_id', $this->settings["merchant_id"]);
             $frm->addHiddenField('', 'order_id', $orderInfo['invoice']);

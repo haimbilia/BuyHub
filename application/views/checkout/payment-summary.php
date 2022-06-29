@@ -4,7 +4,7 @@ $rewardsCurrAmtCanBeUsed = 0;
 if ($rewardPointBalance > 0) {
     $cartTotal = $cartSummary['cartTotal'] ?? 0;
     $cartDiscounts = $cartSummary['cartDiscounts']["coupon_discount_total"] ?? 0;
-    $rewardsAmtCanBeUsed = min(min($rewardPointBalance, CommonHelper::convertCurrencyToRewardPoint($cartTotal - $cartDiscounts)), FatApp::getConfig('CONF_MAX_REWARD_POINT', FatUtility::VAR_INT, 0));
+    $rewardsAmtCanBeUsed = min(min($rewardPointBalance, CommonHelper::convertCurrencyToRewardPoint($cartTotal - $cartSummary['cartVolumeDiscount'] - $cartDiscounts)), FatApp::getConfig('CONF_MAX_REWARD_POINT', FatUtility::VAR_INT, 0));
     $rewardsCurrAmtCanBeUsed = CommonHelper::convertRewardPointToCurrency($rewardsAmtCanBeUsed);
     $inCurrency = CommonHelper::displayMoneyFormat($rewardsCurrAmtCanBeUsed);
 }

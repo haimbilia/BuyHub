@@ -967,6 +967,9 @@ TV-9.4.0.20220406
     - #065044 - The tax category of the tax plugin bounded with the product does not get removed even if the admin disable the tax plugin.
     - #065094 - 'Invalid account' error occurs when the user tries to forget the password using the phone number.
     - #065048 - Notice appears on the checkout page when user clicks on the shipping tab without adding any address.
+    - #065116 - Issue with the calculations of order calculations.
+    - #065101 - The admin is able to update the wrong values in the maximum and minimum cod order total field
+    - #065104 - The 'Minimum wallet balance' setting in the checkout settings is not working.
     - #065054 - Preview label button icon is missing on the order details page on the admin end.
     - #065056 - Fatal error occurs when the admin clicks on the view order icon on the order listing page.
     - #065064 - when user click on reviews count , it shows wrong information .
