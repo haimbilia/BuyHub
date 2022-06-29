@@ -161,7 +161,10 @@ class BannersController extends ListingBaseController
         $frm->addHiddenField('', 'banner_type');
 
         $frm->addTextBox(Labels::getLabel('FRM_BANNER_TITLE', $this->siteLangId), 'banner_title')->requirements()->setRequired(true);
-        $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'banner_url')->requirements()->setRequired(true);
+        $urlFld = $frm->addTextBox(Labels::getLabel('FRM_URL', $this->siteLangId), 'banner_url');
+        $urlFld->requirements()->setRegularExpressionToValidate(ValidateElement::URL_REGEX);
+        $urlFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_THIS_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));
+        $urlFld->requirements()->setRequired();
         $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_OPEN_IN', $this->siteLangId), 'banner_target', $linkTargetsArr, '', array(), '');
        
