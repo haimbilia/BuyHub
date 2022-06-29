@@ -141,7 +141,7 @@ class CcavenuePayController extends PaymentController
         } else {
             if ($orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
                 $addr = new Address();
-                $addrData = $addr->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId(), applicationConstants::YES);
+                $addrData = $addr->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId(true), applicationConstants::YES);
                 $addrData = !empty($addrData) ? current($addrData) : [];
                 if (empty($addrData)) {
                     Message::addErrorMessage(Labels::getLabel('LBL_PLEASE_ADD_ADDRESS_TO_PROCEED_FURTHER', $this->siteLangId));
