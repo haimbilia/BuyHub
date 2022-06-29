@@ -556,9 +556,9 @@ class Cart extends FatModel
                             $codEnabled = false;
                         }
                     } else {
-                        if ($sellerProductRow['product_cod_enabled'] && FatApp::getConfig('CONF_COD_MIN_WALLET_BALANCE', FatUtility::VAR_FLOAT, -1) > -1) {
+                        if ($sellerProductRow['product_cod_enabled']) {
                             $codEnabled = true;
-                        }
+                        }                        
                     }
                     $is_cod_enabled = $codEnabled;
                     /* ]*/
