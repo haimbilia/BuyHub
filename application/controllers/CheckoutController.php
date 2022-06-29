@@ -135,7 +135,7 @@ class CheckoutController extends MyAppController
                             $availableStock = $product['selprod_stock'] - $tempHoldStock;
                             $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
                             $isOutOfMinOrderQty = ((int)($product['selprod_min_order_qty'] > ($availableStock + $userTempHoldStock)));
-                          
+
                             if ($availableStock < ($product['quantity'] - $userTempHoldStock) || 0 < $isOutOfMinOrderQty) {
                                 $key = false;
                                 $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
@@ -1260,7 +1260,7 @@ class CheckoutController extends MyAppController
 
                     $op_product_tax_options = array();
 
-                   
+
                     foreach ($productTaxOption as $taxStroId => $taxStroName) {
                         $label = Labels::getLabel('MSG_TAX', $lang_id);
                         if (array_key_exists('name', $taxStroName) && $taxStroName['name'] != '') {
@@ -1272,10 +1272,10 @@ class CheckoutController extends MyAppController
                         $op_product_tax_options[$label]['inPercentage'] = $taxStroName['inPercentage'];
                         $langLabel = $label;
                         if (isset($taxStroName['taxstr_id']) && $taxStroName['taxstr_id'] != '') {
-                            $langData =  TaxStructure::getAttributesByLangId($lang_id, $taxStroName['taxstr_id'], array('taxstr_name','taxstr_is_combined','taxstr_identifier'), 1);                                                        
-                            if($langData && 1 == $langData['taxstr_is_combined']){
+                            $langData =  TaxStructure::getAttributesByLangId($lang_id, $taxStroName['taxstr_id'], array('taxstr_name', 'taxstr_is_combined', 'taxstr_identifier'), 1);
+                            if ($langData && 1 == $langData['taxstr_is_combined']) {
                                 $langLabel = isset($langData['taxstr_name']) && !empty($langData['taxstr_name']) ? $langData['taxstr_name'] : $langData['taxstr_identifier'];
-                            }                           
+                            }
                         }
 
                         $productTaxChargesData[$taxStroId]['langData'][$lang_id] = array(
@@ -1559,6 +1559,11 @@ class CheckoutController extends MyAppController
             $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
             $user_id = UserAuthentication::getLoggedUserId();
             $userWalletBalance = User::getUserBalance($user_id, true);
+
+            if (!$cartSummary['isCodEnabled']) {
+                $str = Labels::getLabel('ERR_SORRY_{COD}_IS_NOT_AVAILABLE_ON_THIS_ORDER.', $this->siteLangId);
+                LibHelper::exitWithError($str);
+            }
 
             if (!$cartSummary['isCodValidForNetAmt']) {
                 $str = Labels::getLabel('ERR_SORRY_{COD}_IS_NOT_AVAILABLE_ON_THIS_ORDER.', $this->siteLangId) . ' <br/>' . Labels::getLabel('ERR_{COD}_IS_AVAILABLE_ON_PAYABLE_AMOUNT_BETWEEN_{MIN}_AND_{MAX}', $this->siteLangId);
