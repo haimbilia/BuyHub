@@ -5,10 +5,8 @@ $catCode = $row['prodcat_code'];
     <div>
         <div class="sorting-bar ">
             <div class="sorting-title">
-                <span class="clickable">
-                    <?php echo $row['prodcat_name']; ?>
-                </span>
-                <a href="javascript:void(0);" onclick="goToProducts(<?php echo $row['prodcat_id']; ?>)" class="count badge badge-success clickable" title="<?php echo  Labels::getLabel('LBL_Category_Products', $siteLangId); ?>"><?php echo CommonHelper::displayBadgeCount($row['category_products']); ?></a>
+            <a href="javascript:void(0);" class="link-dotted clickable" onclick="goToProducts(<?php echo $row['prodcat_id']; ?>)"><?php echo $row['prodcat_name']; ?></a>
+                <span class="count badge badge-success " title="<?php echo  Labels::getLabel('LBL_Category_Products', $siteLangId); ?>"><?php echo CommonHelper::displayBadgeCount($row['category_products']); ?></span>
             </div>
             <div class="clickable">
                 <div class="sorting-actions clickable">
