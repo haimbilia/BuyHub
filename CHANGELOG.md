@@ -970,6 +970,14 @@ TV-9.4.0.20220406
     - #065116 - Issue with the calculations of order calculations.
     - #065101 - The admin is able to update the wrong values in the maximum and minimum cod order total field
     - #065104 - The 'Minimum wallet balance' setting in the checkout settings is not working.
+    - #065054 - Preview label button icon is missing on the order details page on the admin end.
+    - #065056 - Fatal error occurs when the admin clicks on the view order icon on the order listing page.
+    - #065064 - when user click on reviews count , it shows wrong information .
+    - #065065 - when user click on count in report section , it redirects the user to wrong page . 
+    - #065067 - 'use manual shipping rates instead of third party' settings appears on the manage shop page on the seller end even if the 'Shipped by admin only' setting and shipping plugin is both on.
+    - #065070 - Order details does not appears on the payment success page in case of the guest checkout.
+    - #065072 - Tax category rule button appears on the tax category listing page when the tax plugin is on.
+    - #065076 - Inconsistency issue in the tax section on order details page at admin and buyer / seller end.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

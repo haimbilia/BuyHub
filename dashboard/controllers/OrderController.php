@@ -51,9 +51,11 @@ class OrderController extends LoggedUserController
         foreach ($opsShippingDetail as &$op) {
             $charges = $oObj->getOrderProductChargesArr($op['op_id']);
             $op['charges'] = $charges;
-            $opChargesLog = new OrderProductChargeLog($op['op_id']);
-            $taxOptions = $opChargesLog->getData($this->siteLangId);
-            $op['taxOptions'] = $taxOptions;
+            if($chargeType == OrderProduct::CHARGE_TYPE_TAX){
+                $opChargesLog = new OrderProductChargeLog($op['op_id']);
+                $taxOptions = $opChargesLog->getData($this->siteLangId);
+                $op['taxOptions'] = $taxOptions;
+            }            
         }
 
         $this->set('opsShippingDetail', $opsShippingDetail);

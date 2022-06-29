@@ -50,20 +50,23 @@ foreach ($arrListing as $sn => $row) {
                     $data['editButton'] = [];
                     $data['deleteButton'] = [];
                 }
-                $data['otherButtons'] = [
-                    [
-                        'attr' => [
-                            'href' => UrlHelper::generateUrl('taxCategoriesRule', 'index', [$row['taxcat_id']]),
-                            'title' => Labels::getLabel('LBL_Tax_Categories_Rule', $siteLangId)
-                        ],
-                        'label' => '<i class="icn">
-                                        <svg class="svg" width="18" height="18">
-                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#tax-rule">
-                                            </use>
-                                        </svg>
-                                    </i>'
-                    ]
-                ];
+                if(!$isTaxPluginActive){
+                    $data['otherButtons'] = [
+                        [
+                            'attr' => [
+                                'href' => UrlHelper::generateUrl('taxCategoriesRule', 'index', [$row['taxcat_id']]),
+                                'title' => Labels::getLabel('LBL_Tax_Categories_Rule', $siteLangId)
+                            ],
+                            'label' => '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#tax-rule">
+                                                </use>
+                                            </svg>
+                                        </i>'
+                        ]
+                    ];
+                }
+                
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;

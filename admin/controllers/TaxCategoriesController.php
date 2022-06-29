@@ -112,6 +112,8 @@ class TaxCategoriesController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditTax($this->admin_id, true));
+        $this->set('isTaxPluginActive', 0 < Tax::getActivatedServiceId());
+        
     }
 
     public function form()
