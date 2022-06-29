@@ -2194,7 +2194,7 @@ class BuyerController extends BuyerBaseController
                 LibHelper::dieJsonError($message);
             }
 
-            if (getimagesize($uploadedFile) === false && mime_content_type($uploadedFile) != 'application/zip') {
+            if (!in_array(mime_content_type($uploadedFile), applicationConstants::allowedMimeTypes()) || (getimagesize($uploadedFile) === false && mime_content_type($uploadedFile) != 'application/zip')  ) {
                 $message = Labels::getLabel('ERR_ONLY_IMAGE_EXTENSIONS_AND_ZIP_IS_ALLOWED', $this->siteLangId);
                 LibHelper::dieJsonError($message);
             }
