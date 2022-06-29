@@ -980,6 +980,9 @@ TV-9.4.0.20220406
     - #065076 - Inconsistency issue in the tax section on order details page at admin and buyer / seller end.
     - #065123 - Infinite loader appears when the user clicks on the login button without adding any details in the email and password field.
     - #065125 - Add to wishlist option used to appear in case when option "Add products to wishlist or favorite?" is changes to favourite
+    - #065077 - Category counts are not proper .
+    - #065082 - During product creation , while adding media for the product , Product brand setup form used to occur automatically .
+    - #065099 - The banners on the product details page are not properly aligned.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

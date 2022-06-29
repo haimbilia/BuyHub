@@ -431,14 +431,14 @@ var advanceMedia = false; /* open via advance media*/
         loadCropper(inputBtn, true);
     }
 
-    loadCropper = function (inputBtn, isAdvanceMedia = false) {
+    loadCropper = function (inputBtn, isAdvanceMedia = false) {     
         advanceMedia = isAdvanceMedia;
-
         if (inputBtn.files && inputBtn.files[0]) {
             if (!validateFileUpload(inputBtn.files[0])) {
                 return;
             }
-            loadCropperSkeleton();
+
+            loadCropperSkeleton(isAdvanceMedia);
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
             fcom.ajax(fcom.makeUrl('Products', "imgCropper"), "", function (t) {
                 t = $.parseJSON(t);
@@ -486,7 +486,7 @@ var advanceMedia = false; /* open via advance media*/
             contentType: false,
             processData: false,
             beforeSend: function () {
-                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+               $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
             },
             success: function (ans) {
                 $.ykmsg.close();
@@ -494,14 +494,12 @@ var advanceMedia = false; /* open via advance media*/
                     fcom.displayErrorMessage(ans.msg);
                     return;
                 }
-                $("#modalBoxJs").modal("hide");
-                if (advanceMedia == true) {
-                    $.ykmodal.show();
+                $("#modalBoxJs").modal("hide");           
+                if (advanceMedia == true) {                   
                     productImages(ans.record_id, ans.file_type, ans.option_id, ans.lang_id);
                 }
 
                 fcom.removeLoader();
-
                 fcom.displaySuccessMessage(ans.msg);
                 if (ans.isDefaultLayout) {
                     productDefaultImages();
@@ -672,12 +670,12 @@ var advanceMedia = false; /* open via advance media*/
         });
     };
 
-    loadCropperSkeleton = function () {
-        $("#modalBoxJs").remove();
-        $("body").append(fcom.getModalBody());
-        $("#modalBoxJs").modal("show");
-        $.ykmodal.close();
-    };
+    // loadCropperSkeleton = function () {
+    //     $("#modalBoxJs").remove();
+    //     $("body").append(fcom.getModalBody());
+    //     $("#modalBoxJs").modal("show");
+    //     $.ykmodal.close();
+    // };
 
 })();
 

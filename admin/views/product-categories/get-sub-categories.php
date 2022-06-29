@@ -7,10 +7,10 @@ if (count($childCategories) > 0) { ?>
             <div>
                 <div class="sorting-bar">
                     <div class="sorting-title">
-                        <span class="clickable" onclick="displaySubCategories(this);"><?php echo $row['prodcat_name']; ?></span>
-                        <a href="javascript:void(0);" onclick="goToProducts(<?php echo $row['prodcat_id']; ?>)" class="count badge badge-success clickable" title="<?php echo  Labels::getLabel('LBL_Category_Products', $siteLangId); ?>">
+                    <a href="javascript:void(0);" class="link-dotted clickable" onclick="goToProducts(<?php echo $row['prodcat_id']; ?>)"><?php echo $row['prodcat_name']; ?></a>
+                        <span class="count badge badge-success" title="<?php echo  Labels::getLabel('LBL_Category_Products', $siteLangId); ?>">
                             <?php echo CommonHelper::displayBadgeCount($row['category_products']); ?>
-                        </a>
+                        </span>
                     </div>
                     <div class="sorting-actions">
                         <?php

@@ -9,6 +9,9 @@ $(document).on('change', '#imageLanguageJs', function (e) {
 });
 
 (function () {
+    reloadList = function () {
+        searchRecords(document.frmRecordSearch);
+    };
     addNewBanner = function (bannerLocationId) {
         fcom.resetEditorInstance();
         $(".selectAllJs, .selectItemJs").prop("checked", false)

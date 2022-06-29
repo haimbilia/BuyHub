@@ -46,8 +46,7 @@ foreach ($arrListing as $sn=>$row){
 			case 'notification':
 				$div = $td->appendElement('div', array('class' => 'd-flex'));
 				$url = UrlHelper::generateUrl($labelArr[$row['notification_label_key']][1]);
-				$onclick = 'redirectfunc("' . $url  . '",{recordId:' . $row['notification_record_id'] . '},'.$row['notification_id'].')';
-				$div->appendElement('div', array('class' => 'notifications__summary'), '<a href="javascript:void(0)" onclick="'.$onclick.'" >' . $labelArr[$row['notification_label_key']][0] . '</a>', true);
+				$div->appendElement('div', array('class' => 'notifications__summary'), '<a href="javascript:void(0)" onclick="redirectfunc(\''.$url.'\',{recordId:'.$row['notification_record_id'].'})" >' . $labelArr[$row['notification_label_key']][0] . '</a>', true);
 				
 			break;
 			case 'notification_added_on':
