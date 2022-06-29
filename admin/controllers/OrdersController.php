@@ -85,7 +85,7 @@ class OrdersController extends ListingBaseController
             if (!empty($opVal["opship_orderid"])) {
                 $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($opVal['op_selprod_user_id'], $opVal['opshipping_by_seller_user_id']);
                 $shippingApiObj = $shippingObj->getShippingApiObj(($shippingHanldedBySeller ? $opVal['opshipping_by_seller_user_id'] : 0)) ?? NULL;
-                if (NULL != $shippingApiObj && false === $shippingApiObj->loadOrder($opVal["opship_orderid"])) {
+                if ($shippingApiObj &&false === $shippingApiObj->loadOrder($opVal["opship_orderid"])) {
                     LibHelper::exitWithError($shippingApiObj->getError(), true);
                 }
                 $this->order['products'][$opId]['thirdPartyorderInfo'] = $shippingApiObj ? $shippingApiObj->getResponse() : [];
@@ -974,8 +974,13 @@ class OrdersController extends ListingBaseController
         foreach ($opsShippingDetail as &$op) {
             $charges = $oObj->getOrderProductChargesArr($op['op_id']);
             $op['charges'] = $charges;
+            if($chargeType ==  OrderProduct::CHARGE_TYPE_TAX){               
+                $opChargesLog = new OrderProductChargeLog($op['op_id']);               
+                $op['taxOptions'] = $opChargesLog->getData($this->siteLangId);
+            }           
         }
 
+       
         $this->set('opsShippingDetail', $opsShippingDetail);
         switch ($chargeType) {
             case OrderProduct::CHARGE_TYPE_SHIPPING:

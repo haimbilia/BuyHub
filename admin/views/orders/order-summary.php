@@ -117,54 +117,21 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                             </span>
                         </li>
                     <?php }
-                }                 
-                if (empty($taxOptionsTotal)) {
-                    if (0 < $totalTax) { ?>
-                        <li>
-                            <span class="label">
-                                <?php
-                                if (1 == count($order['products'])) {
-                                    echo Labels::getLabel('LBL_Tax_Charges', $siteLangId);
-                                } else { ?>
-                                    <a class="link-dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
-                                        <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
-                                    </a>
-                                <?php } ?>
+                } 
+                if (0 < $totalTax) { ?>
+                    <li>
+                        <span class="label">                         
+                        <a class="link-dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
+                             <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
+                         </a>
+                        </span>
+                        <span class="value">
+                            <span class="currency-value" dir="ltr">
+                                <?php echo CommonHelper::displayMoneyFormat($totalTax, true, false, true, false, true); ?>
                             </span>
-                            <span class="value">
-                                <span class="currency-value" dir="ltr">
-                                    <?php echo CommonHelper::displayMoneyFormat($totalTax, true, false, true, false, true); ?>
-                                </span>
-                            </span>
-                        </li>
-                    <?php }
-                } else {
-                    foreach ($taxOptionsTotal as $key => $val) { 
-                        if (0 > $val['value']) {
-                            continue;
-                        }
-                        ?>
-                        <li>
-                            <span class="label">
-                                <?php
-                                if (1 == count($order['products'])) {
-                                    echo $val['title'];
-                                } else { ?>
-                                    <a class="link-dotted" href="javascript:void(0)" onclick="loadOpTaxCharges('<?php echo $order['order_id']; ?>', <?php echo OrderProduct::CHARGE_TYPE_TAX; ?>)">
-                                        <?php echo $val['title']; ?>
-                                    </a>
-                                <?php } ?>
-                            </span>
-                            <span class="value">
-                                <span class="currency-value" dir="ltr">
-                                    <?php echo CommonHelper::displayMoneyFormat($val['value'], true, false, true, false, true); ?>
-                                </span>
-                            </span>
-                        </li>
+                        </span>
+                    </li>
                 <?php }
-                } ?>              
-                <?php
-
                 if(!$op_tax_after_discount){
                 $discount = (0 < $opSellerId) ? abs($discount) : $order['order_discount_total'];
                 if (0 < $discount) { ?>

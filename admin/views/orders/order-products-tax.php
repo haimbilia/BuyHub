@@ -16,7 +16,7 @@
             </thead>
             <tbody>
                 <?php
-                $totalTax = 0;
+                $totalTax = 0;               
                 foreach ($opsShippingDetail as $op) {
                     $taxCost = CommonHelper::orderProductAmount($op, 'TAX');
                     $totalTax += $taxCost;
@@ -26,14 +26,28 @@
                             <?php $this->includeTemplate('_partial/product/order-product-info-card.php', ['order' => $op, 'siteLangId' => $siteLangId, 'horizontalAlignOptions' => 'list-options--horizontal'], false); ?>
                         </td>
                         <td>
-                            <?php echo CommonHelper::displayMoneyFormat($taxCost, true, true); ?>
+                            <?php         
+                            if (1 < count($op['taxOptions'])) {
+                                echo CommonHelper::displayMoneyFormat($taxCost, true, true); 
+                                echo "<br/>";
+                            }
+                            $strCount = 1;
+                            foreach ($op['taxOptions'] as $taxStr) {
+                                echo $taxStr['name'] . " - " . CommonHelper::displayMoneyFormat($taxStr['value'], true, true);
+                                if ($strCount != count($op['taxOptions'])) {
+                                    echo "<br/>";
+                                }
+                                $strCount++;
+                            }                           
+                            
+                            ?>
                         </td>
                     </tr>
                 <?php } ?>
             </tbody>
             <tfoot>
                 <tr>
-                    <th class='text-right'> <strong><?php echo Labels::getLabel('LBL_TOTAL_TAX', $siteLangId); ?></strong></th>
+                    <th class='align-right'> <strong><?php echo Labels::getLabel('LBL_TOTAL_TAX', $siteLangId); ?></strong></th>
                     <th class='text-right'><strong><?php echo CommonHelper::displayMoneyFormat($totalTax, true, true); ?></strong></th>
                 </tr>
             </tfoot>
