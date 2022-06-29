@@ -89,14 +89,10 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     var minHeightBaneerEle = $('#<?php echo $frm->getFormTagAttribute('id'); ?> input[name=min_height]');
 
     $(minWidthBaneerEle).val('<?php echo $locationDimensions['blocation_banner_width']; ?>');
-    $(minHeightBaneerEle).val('<?php echo $locationDimensions['blocation_banner_height']; ?>; ?>');
-  
-
-
-        let slideScreen = $(this).val();
-        let recordId = $(this).closest("form").find('input[name="banner_id"]').val();
-        let bannerLocationId = $(this).closest("form").find('input[name="blocation_id"]').val();
-        let langId = $("#imageLanguageJs").val();
+    $(minHeightBaneerEle).val('<?php echo $locationDimensions['blocation_banner_height']; ?>');
+        var slideScreen = $(this).val();
+        var recordId = $(this).closest("form").find('input[name="banner_id"]').val();
+        var bannerLocationId = $(this).closest("form").find('input[name="blocation_id"]').val();
+        var langId = $("#imageLanguageJs").val();
         loadImages(bannerLocationId, recordId, 'logo', slideScreen, langId);
-
 </script>

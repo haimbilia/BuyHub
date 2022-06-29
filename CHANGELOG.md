@@ -980,6 +980,7 @@ TV-9.4.0.20220406
     - #065076 - Inconsistency issue in the tax section on order details page at admin and buyer / seller end.
     - #065077 - Category counts are not proper .
     - #065082 - During product creation , while adding media for the product , Product brand setup form used to occur automatically .
+    - #065099 - The banners on the product details page are not properly aligned.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
