@@ -979,6 +979,7 @@ TV-9.4.0.20220406
     - #065072 - Tax category rule button appears on the tax category listing page when the tax plugin is on.
     - #065076 - Inconsistency issue in the tax section on order details page at admin and buyer / seller end.
     - #065077 - Category counts are not proper .
+    - #065082 - During product creation , while adding media for the product , Product brand setup form used to occur automatically .
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
