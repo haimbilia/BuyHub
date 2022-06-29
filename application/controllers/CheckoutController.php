@@ -1562,6 +1562,7 @@ class CheckoutController extends MyAppController
 
             if (!$cartSummary['isCodEnabled']) {
                 $str = Labels::getLabel('ERR_SORRY_{COD}_IS_NOT_AVAILABLE_ON_THIS_ORDER.', $this->siteLangId);
+                $str = str_replace('{cod}', $paymentMethod['plugin_name'], $str);
                 LibHelper::exitWithError($str);
             }
 
