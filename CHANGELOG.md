@@ -979,6 +979,7 @@ TV-9.4.0.20220406
     - #065072 - Tax category rule button appears on the tax category listing page when the tax plugin is on.
     - #065076 - Inconsistency issue in the tax section on order details page at admin and buyer / seller end.
     - #065123 - Infinite loader appears when the user clicks on the login button without adding any details in the email and password field.
+    - #065125 - Add to wishlist option used to appear in case when option "Add products to wishlist or favorite?" is changes to favourite
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
