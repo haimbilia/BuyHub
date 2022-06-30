@@ -50,7 +50,9 @@
                                 <div class="separator separator-dashed my-3"></div>
                             <?php } ?>
                         <?php } ?>
-                        <?php require_once(CONF_THEME_PATH . 'orders/payment-history.php'); ?>
+                        <div class="card-table paymentListJs">
+                            <?php require_once(CONF_THEME_PATH . 'orders/payment-history.php'); ?>
+                        </div>
                     </div>
                 <?php } ?>
             </div>

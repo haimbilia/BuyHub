@@ -68,6 +68,7 @@ $headerHtmlContent = $headerHtmlContent ?? '';
 
     <script language="javascript">
         var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
+
         <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
             getStatesByCountryCode($("#geo_country_code").val(),
                 '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code',

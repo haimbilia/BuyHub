@@ -64,10 +64,10 @@ class OrdersController extends ListingBaseController
                 'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
                 'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'ts.state_code', 'tc.country_code', 'op_rounding_off',
                 'op_shop_owner_phone_dcode', 'op_selprod_price', 'op_special_price', 'opshipping_by_seller_user_id', 'selprod_product_id', 'orderstatus_color_class', 'op_product_type', 'order_payment_status', 'plugin_code', 'opshipping_fulfillment_type', 'orderstatus_id', 'IFNULL(optosu.optsu_user_id, 0) as optsu_user_id', 'op_product_length',
-                'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_commission_charged', 'op_commission_percentage', 'op_refund_commission','op_tax_after_discount'
+                'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_commission_charged', 'op_commission_percentage', 'op_refund_commission', 'op_tax_after_discount'
             )
         );
-        
+
         $this->order['products'] = FatApp::getDb()->fetchAll($opSrch->getResultSet(), 'op_id');
         $orderObj = new Orders($this->order['order_id']);
 
@@ -85,7 +85,7 @@ class OrdersController extends ListingBaseController
             if (!empty($opVal["opship_orderid"])) {
                 $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($opVal['op_selprod_user_id'], $opVal['opshipping_by_seller_user_id']);
                 $shippingApiObj = $shippingObj->getShippingApiObj(($shippingHanldedBySeller ? $opVal['opshipping_by_seller_user_id'] : 0)) ?? NULL;
-                if ($shippingApiObj &&false === $shippingApiObj->loadOrder($opVal["opship_orderid"])) {
+                if ($shippingApiObj && false === $shippingApiObj->loadOrder($opVal["opship_orderid"])) {
                     LibHelper::exitWithError($shippingApiObj->getError(), true);
                 }
                 $this->order['products'][$opId]['thirdPartyorderInfo'] = $shippingApiObj ? $shippingApiObj->getResponse() : [];
@@ -111,6 +111,17 @@ class OrdersController extends ListingBaseController
         $this->set("canEditSellerOrders", $this->objPrivilege->canEditSellerOrders($this->admin_id, true));
 
         $this->set("allowedShippingUserStatuses", $orderObj->getAdminAllowedUpdateShippingUser());
+    }
+
+    public function getPayments($orderId)
+    {
+        $orderObj = new Orders($orderId);
+        $order['payments'] = $orderObj->getOrderPayments(array("order_id" => $orderId));
+        $this->set('order', $order);
+        $jsonData = [
+            'html' => $this->_template->render(false, false, 'orders/payment-history.php', true),
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function getOrderParticulars($orderId)
@@ -309,7 +320,7 @@ class OrdersController extends ListingBaseController
         //$isDigital = isset($orderData['op_product_type']) && $orderData['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL ? OrderStatus::FOR_DIGITAL_ONLY : OrderStatus::FOR_NON_DIGITAL;
         //$orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingOrderStatus, $orderData['op_status_id'], $isDigital);
         $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingOrderStatus, $orderData['op_status_id']);
-              
+
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'op_status_id', $orderStatusArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirements()->setRequired();
 
@@ -670,7 +681,7 @@ class OrdersController extends ListingBaseController
         $pdf->SetFont('dejavusans');
 
         $templatePath = "orders/view-buyer-order-invoice.php";
-        $html = $template->render(false, false, $templatePath, true, true);        
+        $html = $template->render(false, false, $templatePath, true, true);
         $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->lastPage();
 
@@ -831,8 +842,8 @@ class OrdersController extends ListingBaseController
             $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $orderDetail['op_product_type'], true);
         } else {
             $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $orderDetail['op_product_type']);
-        }      
-        
+        }
+
         $frm = $this->getOrderCommentsForm($orderDetail, $processingStatuses);
         if (1 == $shippedByPlugin) {
             $fld = $frm->getField('op_status_id');
@@ -974,13 +985,13 @@ class OrdersController extends ListingBaseController
         foreach ($opsShippingDetail as &$op) {
             $charges = $oObj->getOrderProductChargesArr($op['op_id']);
             $op['charges'] = $charges;
-            if($chargeType ==  OrderProduct::CHARGE_TYPE_TAX){               
-                $opChargesLog = new OrderProductChargeLog($op['op_id']);               
+            if ($chargeType ==  OrderProduct::CHARGE_TYPE_TAX) {
+                $opChargesLog = new OrderProductChargeLog($op['op_id']);
                 $op['taxOptions'] = $opChargesLog->getData($this->siteLangId);
-            }           
+            }
         }
 
-       
+
         $this->set('opsShippingDetail', $opsShippingDetail);
         switch ($chargeType) {
             case OrderProduct::CHARGE_TYPE_SHIPPING:
