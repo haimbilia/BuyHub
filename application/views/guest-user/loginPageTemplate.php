@@ -22,13 +22,15 @@ $fldSubmit->addFieldTagAttribute('class', 'btn btn-secondary btn-block');
 $signInWithPhone = $signInWithPhone ?? 0;
 ?>
 <div class="card-sign">
-    <?php /*<div class="card-sign_head">
+    <div class="card-sign_head">
         <h2 class="title">
             <?php echo Labels::getLabel('LBL_SIGN_IN_TO_YOUR_YOKART_ACCOUNT', $siteLangId); ?>
         </h2>
-    </div> <?php */ ?>
+    </div>
     <div class="card-sign_body">
-        <?php if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
+        <?php
+        $display = '';
+        if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
             <div class="socialSigninJs">
                 <ul class="buttons-list">
                     <?php foreach ($socialLoginApis as $plugin) { ?>
@@ -50,14 +52,20 @@ $signInWithPhone = $signInWithPhone ?? 0;
                     </li>
                 </ul>
             </div>
-        <?php } ?>
-        <div class="localSigninJs" style="display: none;">
+        <?php
+            $display = 'style="display: none;"';
+        } ?>
+        <div class="localSigninJs" <?php echo $display; ?>>
             <?php if (0 < $signInWithPhone) {
                 include('login-with-phone.php');
             } else {
                 include('login-with-email.php');
             } ?>
-            <a href="javascript:void(0);" onclick="hideSignInForm()" class="link-underline"><?php echo Labels::getLabel('LBL_BACK_TO_LISTING'); ?></a>
+            <?php if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
+                <div class="text-center">
+                    <a href="javascript:void(0);" onclick="hideSignInForm()" class="link-underline"><?php echo Labels::getLabel('LBL_BACK_TO_LISTING'); ?></a>
+                </div>
+            <?php } ?>
             <?php echo $loginFrm->getExternalJS(); ?>
         </div>
     </div>
