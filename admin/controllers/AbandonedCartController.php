@@ -35,8 +35,8 @@ class AbandonedCartController extends ListingBaseController {
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->getListingData();
 
-        $this->_template->addJs(array('js/select2.js', 'abandoned-cart/page-js/index.js'));
-        $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->addJs(array('js/select2.js', 'abandoned-cart/page-js/index.js','js/cropper.js', 'js/cropper-main.js'));
+        $this->_template->addCss(array('css/select2.min.css','css/cropper.css'));
         $this->_template->render(true, true, null, false, false);
     }
 
@@ -155,10 +155,10 @@ class AbandonedCartController extends ListingBaseController {
         }
 
         $abandonedCart = new AbandonedCart($abandonedcartId);
+        $abandonedCart->updateDiscountNotification();
         if (!$abandonedCart->sendDiscountEmail($couponId)) {
             LibHelper::exitWithError($abandonedCart->getError(), true);
-        }
-        $abandonedCart->updateDiscountNotification();
+        }        
         $this->set('msg', Labels::getLabel('MSG_Email_Sent_Successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }

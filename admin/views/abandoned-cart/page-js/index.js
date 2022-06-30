@@ -8,19 +8,48 @@ $(document).ready(function () {
 	var abandonedcartId = 0;
 	var userId = 0;
 	var productId = 0;
+	var dv = ".listingRecordJs";
+    var paginationDv = ".listingPaginationJs";
+    var listingTableJs = ".listingTableJs";
+
+	searchRecords = function (frm) {
+        
+        setColumnsData(frm);
+        var data = "";
+        if (frm) {
+            data = fcom.frmData(frm);
+        }
+        $(listingTableJs).prepend(fcom.getLoader());
+
+        fcom.ajax(fcom.makeUrl('AbandonedCart', "search"), data, function (res) {
+            if (0 == res.status) {
+                fcom.displayErrorMessage(res.msg);
+                return;
+            }
+            if (res.headSection) {
+                $('.tableHeadJs').replaceWith(res.headSection);
+            }
+            $(dv).replaceWith(res.listingHtml);
+            $(paginationDv).replaceWith(res.paginationHtml);
+            fcom.removeLoader();
+            $(".selectAllJs").prop("checked", false);
+            if (0 < $(".listingRecordJs .noRecordFoundJs").length) {
+                $(".selectAllJs").prop("disabled", "disabled");
+            } else {
+                $(".selectAllJs").removeAttr("disabled");
+            }
+        }, { fOutMode: 'json' });
+    };
 
 	discountNotification = function (abandonedcart_id, user_id, product_id) {
 		fcom.updateWithAjax(fcom.makeUrl('AbandonedCart', "validateProductForNotification", [product_id]), '', function (t) {
 			fcom.closeProcessing();
-			var data = 'includeTabs=0&onClear=discountNotification(' + abandonedcart_id + ', ' + user_id + ', ' + product_id + ')';
+			var data = 'onClear=discountNotification(' + abandonedcart_id + ', ' + user_id + ', ' + product_id + ')';
 			fcom.updateWithAjax(fcom.makeUrl('DiscountCoupons', "form"), data, function (t) {
 				fcom.closeProcessing();
 				$.ykmodal(t.html);
 				fcom.removeLoader();
-				$('#couponType').val(PRODUCT_DISCOUNT).parents('.form-group').parent().hide();
-				/* Overwritten with Discount Coupons. */
-				controllerName = 'AbandonedCart';		
-				
+				$('#couponType').val(PRODUCT_DISCOUNT).parents('.form-group').parent().hide();								
 			});
 			abandonedcartId = abandonedcart_id;
 			userId = user_id;
@@ -37,14 +66,15 @@ $(document).ready(function () {
 		
 			fcom.removeLoader();
 			fcom.displaySuccessMessage(t.msg);
-			$.ykmodal.close();
-			reloadList();
-
 			updateCouponUser(t.recordId, userId);
 			updateCouponProduct(t.recordId, productId);
 			sendDiscountNotification(abandonedcartId, t.recordId);
-			/* Overwritten with Discount Coupons. */
-			controllerName = 'AbandonedCart';
+			if (t.langId > 0) {
+                editLangData(t.recordId, t.langId);
+            } else if ("openMediaForm" in t) {
+                mediaForm(t.recordId);
+            }
+			reloadList();
 			return;
 		});
 	};
@@ -52,23 +82,18 @@ $(document).ready(function () {
 	updateCouponUser = function (couponId, userId) {
 		var data = 'linkType=users&id=' + userId + '&recordId=' + couponId;
 		fcom.ajax(fcom.makeUrl('DiscountCoupons', 'bindItem'), data, function (t) {
-			/* Overwritten with Discount Coupons. */
-			controllerName = 'AbandonedCart';
+			
 		});
 	};
 	updateCouponProduct = function (couponId, productId) {
 		var data = 'linkType=products&id=' + userId + '&recordId=' + couponId;
-		fcom.ajax(fcom.makeUrl('DiscountCoupons', 'bindItem'), data, function (t) {
-			/* Overwritten with Discount Coupons. */
-			controllerName = 'AbandonedCart';
+		fcom.ajax(fcom.makeUrl('DiscountCoupons', 'bindItem'), data, function (t) {		
 		});
 	};
 
 	sendDiscountNotification = function (abandonedcartId, couponId) {
 		var data = 'abandonedcartId=' + abandonedcartId + '&couponId=' + couponId;
-		fcom.updateWithAjax(fcom.makeUrl('AbandonedCart', 'discountNotification'), data, function (t) {
-			fcom.displaySuccessMessage(t.msg);
-			reloadList();
+		fcom.ajax(fcom.makeUrl('AbandonedCart', 'discountNotification'), data, function (t) {			
 		});
 	};
 
@@ -94,5 +119,22 @@ $(document).ready(function () {
 			$("#couponValidforDivJs").show();
 		}
 	};
+	loadImages = function (recordId, lang_id) {
+        fcom.updateWithAjax(fcom.makeUrl('DiscountCoupons', 'images', [recordId, lang_id]), '', function (t) {
+            fcom.closeProcessing();
+            fcom.removeLoader();
+            var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
+            if (0 < uploadedContentEle.length) {
+                uploadedContentEle.remove();
+            }
+
+            if ('' != t.html) {
+                $(".dropzoneContainerJs").append(t.html);
+                $(".dropzoneUploadJs").hide();
+            } else {
+                $(".dropzoneUploadJs").show();
+            }
+        });
+    };
 })();
 
