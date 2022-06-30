@@ -991,6 +991,7 @@ TV-9.4.0.20220406
     - #065121 - The COD order transaction does not get approved automatically even if the admin marked the order delivered
     - #065024 - when user click on Dropdown icon in add brand field during product creation
     - #065113 - Notice Undefined index appears on the top of the order cancellation page on the admin end.
+    - #065034 - product type (new) or (used) is not coming on product detail page .
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
