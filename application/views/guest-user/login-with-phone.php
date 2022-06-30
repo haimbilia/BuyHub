@@ -28,14 +28,7 @@ echo $loginFrm->getFormTag(); ?>
     <?php } ?>
     <?php echo $loginFrm->getFieldHtml('loginWithOtp'); ?>
 </div>
-<div class="row">
-    <div class="col">
-        <div class="form-group">
-            <button type="button" class="link-underline" data-form="frmLogin" onclick="signInWithPhone(this, 0)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_USE_EMAIL_INSTEAD_?', $siteLangId); ?>">
-                <?php echo Labels::getLabel('LBL_EMAIL_?', $siteLangId); ?>
-            </button>
-        </div>
-    </div>
+<div class="row">    
     <div class="col-auto" style="display: none;">
         <button type="button" class="link-underline resendOtp-js disabled" href="javascript:void(0);" onclick="getLoginOtp(this);"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></button>
     </div>

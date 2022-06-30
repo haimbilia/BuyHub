@@ -20,6 +20,7 @@ $fldSubmit = $loginFrm->getField('btn_submit');
 $fldSubmit->addFieldTagAttribute('class', 'btn btn-secondary btn-block');
 
 $signInWithPhone = $signInWithPhone ?? 0;
+$signInWithEmail = $signInWithEmail ?? 0;
 $canSendSms = $canSendSms ?? false;
 ?>
 <div class="card-sign">
@@ -31,8 +32,12 @@ $canSendSms = $canSendSms ?? false;
     <div class="card-sign_body">
         <?php
         $display = '';
-        if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
-            <div class="socialSigninJs">
+        $fnc =  (0 < $signInWithPhone) ? 'signInWithPhone(this, 0);' : 'showSignInForm()';
+
+        if (((!empty($socialLoginApis) && 0 < count($socialLoginApis)) || 0 < $canSendSms)) {
+            $socialDisplay = (0 < $signInWithPhone || 0 < $signInWithEmail) ? 'style="display: none;"' : '';
+        ?>
+            <div class="socialSigninJs" <?php echo $socialDisplay; ?>>
                 <ul class="buttons-list">
                     <?php foreach ($socialLoginApis as $plugin) { ?>
                         <li class="buttons-list-item">
@@ -42,29 +47,29 @@ $canSendSms = $canSendSms ?? false;
                                 <?php echo $plugin['plugin_name']; ?>
                             </a>
                         </li>
+                    <?php }
+                    if (0 < $canSendSms) { ?>
+                        <li class="buttons-list-item">
+                            <a class="buttons-list-link" href="javascript:void(0);" onclick="signInWithPhone(this, 1);">
+                                <span class="buttons-list-icon">
+                                    <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/phone.svg">
+                                </span><?php echo  Labels::getLabel('LBL_SIGN_IN_WITH_PHONE'); ?>
+                            </a>
+                        </li>
                     <?php } ?>
+
                     <li class="buttons-list-item">
-                        <a class="buttons-list-link" href="javascript:void(0);" onclick="showSignInForm();">
+                        <a class="buttons-list-link" href="javascript:void(0);" onclick="<?php echo $fnc; ?>;">
                             <span class="buttons-list-icon">
                                 <img class="svg" width="30" height="30" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/email.svg">
                             </span>
                             <?php echo Labels::getLabel('LBL_SIGN_IN_WITH_EMAIL'); ?>
                         </a>
                     </li>
-                    <?php if (0 < $canSendSms) { ?>
-                        <li class="buttons-list-item">
-                            <a class="buttons-list-link" href="javascript:void(0);" onclick="signInWithPhone(this, 0);">
-                                <span class="buttons-list-icon">
-                                    <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/phone.svg">
-                                </span>
-                                <?php echo Labels::getLabel('LBL_SIGN_IN_WITH_PHONE'); ?>
-                            </a>
-                        </li>
-                    <?php } ?>
                 </ul>
             </div>
         <?php
-            $display = 'style="display: none;"';
+            $display = (0 < $signInWithPhone || 0 < $signInWithEmail) ? '' : 'style="display: none;"';
         } ?>
         <div class="localSigninJs" <?php echo $display; ?>>
             <?php if (0 < $signInWithPhone) {
@@ -72,7 +77,7 @@ $canSendSms = $canSendSms ?? false;
             } else {
                 include('login-with-email.php');
             } ?>
-            <?php if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
+            <?php if (((!empty($socialLoginApis) && 0 < count($socialLoginApis)) || 0 < $canSendSms)) { ?>
                 <div class="text-center">
                     <a href="javascript:void(0);" onclick="hideSignInForm()" class="link-underline"><?php echo Labels::getLabel('LBL_ALL_SIGN_IN_OPTIONS'); ?></a>
                 </div>
