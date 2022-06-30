@@ -22,11 +22,11 @@ $fldSubmit->addFieldTagAttribute('class', 'btn btn-secondary btn-block');
 $signInWithPhone = $signInWithPhone ?? 0;
 ?>
 <div class="card-sign">
-    <div class="card-sign_head">
+    <?php /*<div class="card-sign_head">
         <h2 class="title">
             <?php echo Labels::getLabel('LBL_SIGN_IN_TO_YOUR_YOKART_ACCOUNT', $siteLangId); ?>
         </h2>
-    </div>
+    </div> <?php */ ?>
     <div class="card-sign_body">
         <?php if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
             <div class="socialSigninJs">

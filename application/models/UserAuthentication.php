@@ -364,7 +364,7 @@ class UserAuthentication extends FatModel
         $rs = $srch->getResultSet();
 
         if (!$row = $db->fetch($rs)) {
-            $this->error = Labels::getLabel('ERR_INVALID_USERNAME', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_USER_NAME_OR_PASSWORD', $this->commonLangId);
             if ($withPhone) {
                 $this->error = Labels::getLabel('ERR_INVALID_OTP', $this->commonLangId);
             }
@@ -391,13 +391,13 @@ class UserAuthentication extends FatModel
                 if (true == $encryptPassword) {
                     if (false == password_verify($password, $row['credential_password'])) {
                         $this->logFailedAttempt($ip, $username);
-                        $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
+                        $this->error = Labels::getLabel('ERR_INVALID_USER_NAME_OR_PASSWORD', $this->commonLangId);
                         return false;
                     }
                 } else {
                     if ($password !== $row['credential_password']) {
                         $this->logFailedAttempt($ip, $username);
-                        $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
+                        $this->error = Labels::getLabel('ERR_INVALID_USER_NAME_OR_PASSWORD', $this->commonLangId);
                         return false;
                     }
                 }

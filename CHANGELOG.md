@@ -983,6 +983,10 @@ TV-9.4.0.20220406
     - #065077 - Category counts are not proper .
     - #065082 - During product creation , while adding media for the product , Product brand setup form used to occur automatically .
     - #065099 - The banners on the product details page are not properly aligned.
+    - #065112 - sent Discount count functionality for abandoned cart not working properly . 
+    - #065157 - Suggestion: To change the validation label on the sign-in page on admin and front end.
+    - #065121 - The COD order transaction does not get approved automatically even if the admin marked the order delivered.
+    - #065117 - The refund summary appears wrong on the return request page on the seller's end in case of a partial refund
     - #065138 - When user selects discount type as flat. Max discount field should got hidden.
     - #065121 - The COD order transaction does not get approved automatically even if the admin marked the order delivered
     - #065024 - when user click on Dropdown icon in add brand field during product creation
