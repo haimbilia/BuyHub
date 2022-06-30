@@ -114,7 +114,7 @@ if (null != $btn) {
                         <h4><?php echo Labels::getLabel('LBL_REFUND_SUMMARY', $siteLangId); ?></h4>
                         <?php
                         $returnDataArr = CommonHelper::getOrderProductRefundAmtArr($request);
-                        $totalAmount = round($returnDataArr['op_cart_amount'] + $returnDataArr['op_refund_tax'] + $returnDataArr['op_refund_shipping'] + $request['op_rounding_off'], 2);
+                        $totalAmount = round($returnDataArr['op_prod_price'] + $returnDataArr['op_refund_tax'] + $returnDataArr['op_refund_shipping'] + $request['op_rounding_off'], 2);
                         ?>
                         <div class="cart-summary">
                             <ul>
@@ -132,7 +132,7 @@ if (null != $btn) {
                                 </li>
                                 <li>
                                     <span class="lable"><?php echo Labels::getLabel('LBL_Product_Price', $siteLangId); ?></span>
-                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($returnDataArr['op_cart_amount'], true, false); ?></span>
+                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($returnDataArr['op_prod_price'], true, false); ?></span>
                                 </li>
                                 <li>
                                     <span class="lable"><?php echo Labels::getLabel('LBL_Tax', $siteLangId); ?></span>
