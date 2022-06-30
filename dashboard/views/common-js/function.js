@@ -844,8 +844,7 @@ select2 = function (
         return false;
     }
 
-    var obj = ele.closest('form').length ? ele.closest('form') : null;
-
+    var obj = ele.closest('.modal').length ? ele.closest('form') : null;
     ele.select2({
         dropdownParent: obj,
         closeOnSelect: ele.data("closeOnSelect") || true,
