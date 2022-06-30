@@ -983,6 +983,7 @@ TV-9.4.0.20220406
     - #065077 - Category counts are not proper .
     - #065082 - During product creation , while adding media for the product , Product brand setup form used to occur automatically .
     - #065099 - The banners on the product details page are not properly aligned.
+    - #065121 - The COD order transaction does not get approved automatically even if the admin marked the order delivered
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
