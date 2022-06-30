@@ -3877,6 +3877,8 @@ class SellerController extends SellerBaseController
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'tracking_number', $trackingUnReqObj);
 
             $trackUrlFld = $frm->addTextBox(Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId), 'opship_tracking_url');
+            $trackUrlFld->requirements()->setRegularExpressionToValidate(ValidateElement::URL_REGEX);
+            $trackUrlFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_TRACKING_URL_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));            
             $trackUrlFld->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_ENTER_THE_URL_TO_TRACK_THE_SHIPMENT.', $this->siteLangId) . '</span>';
 
             $trackingUrlUnReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId));

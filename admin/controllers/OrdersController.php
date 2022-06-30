@@ -358,12 +358,15 @@ class OrdersController extends ListingBaseController
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'tracking_number', $trackingUnReqObj);
 
             $frm->addTextBox(Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId), 'opship_tracking_url');
+           
 
             $trackingUrlUnReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId));
             $trackingUrlUnReqObj->setRequired(false);
 
             $trackingurlReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId));
             $trackingurlReqObj->setRequired(true);
+            $trackingurlReqObj->setRegularExpressionToValidate(ValidateElement::URL_REGEX);
+            $trackingurlReqObj->setCustomErrorMessage(Labels::getLabel('FRM_TRACKING_URL_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));            
 
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'opship_tracking_url', $trackingurlReqObj);
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'opship_tracking_url', $trackingUrlUnReqObj);
