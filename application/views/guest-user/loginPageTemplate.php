@@ -49,8 +49,9 @@ $signInWithPhone = $signInWithPhone ?? 0;
                         <a class="buttons-list-link" href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>">
                             <span class="buttons-list-icon btn-<?php echo $plugin['plugin_code']; ?>"> <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
                             </span>
-                            Sign in with Facebook
-
+                            <?php echo $plugin['plugin_name'];
+                            /* $str = Labels::getLabel('BTN_SIGN_IN_WITH_{PLATFORM}');
+                            echo $str = CommonHelper::replaceStringData($str, ['{PLATFORM}' => $plugin['plugin_name']]); */ ?>
                         </a>
                     </li>
                 <?php } ?>
