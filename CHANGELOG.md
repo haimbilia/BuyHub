@@ -985,6 +985,7 @@ TV-9.4.0.20220406
     - #065099 - The banners on the product details page are not properly aligned.
     - #065138 - When user selects discount type as flat. Max discount field should got hidden.
     - #065121 - The COD order transaction does not get approved automatically even if the admin marked the order delivered
+    - #065024 - when user click on Dropdown icon in add brand field during product creation
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
