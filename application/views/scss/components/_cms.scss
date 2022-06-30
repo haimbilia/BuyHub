@@ -1,7 +1,7 @@
 .section {
-    padding: 3.75rem 0;
+    padding: calc(1rem + 4vw) 0;
     @include media-breakpoint-down(sm) {
-        padding: 2.5rem 0;
+        padding: calc(1rem + 3vw) 0;
     }
     &-head {
         width: 100%;

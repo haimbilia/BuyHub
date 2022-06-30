@@ -42,18 +42,20 @@ $signInWithPhone = $signInWithPhone ?? 0;
                     <?php echo Labels::getLabel('LBL_OR_CONTINUE_WITH', $siteLangId); ?>
                 </span>
             </div>
-            <div class="buttons-list">
-                <ul>
-                    <?php foreach ($socialLoginApis as $plugin) { ?>
-                        <li>
-                            <a href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>" class="btn btn-social btn-<?php echo $plugin['plugin_code']; ?>">
-                                <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
 
-                            </a>
-                        </li>
-                    <?php } ?>
-                </ul>
-            </div>
+            <ul class="buttons-list">
+                <?php foreach ($socialLoginApis as $plugin) { ?>
+                    <li class="buttons-list-item">
+                        <a class="buttons-list-link" href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>">
+                            <span class="buttons-list-icon btn-<?php echo $plugin['plugin_code']; ?>"> <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+                            </span>
+                            Sign in with Facebook
+
+                        </a>
+                    </li>
+                <?php } ?>
+            </ul>
+
         <?php } ?>
     </div>
     <div class="card-sign_foot">

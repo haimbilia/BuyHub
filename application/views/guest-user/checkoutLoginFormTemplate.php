@@ -56,20 +56,23 @@ $onSubmitFunctionName = isset($onSubmitFunctionName) ? $onSubmitFunctionName : '
         <div class="row justify-content-center">
             <div class="col-lg-12 ">
                 <div class=""><span class="or"><?php echo Labels::getLabel('LBL_Or', $siteLangId); ?></span></div>
-                <div class="buttons-list buttons-list-checkout">
-                    <ul>
-                        <?php
-                        if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) {
-                            foreach ($socialLoginApis as $plugin) { ?>
-                                <li>
-                                    <a href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>" class="btn btn-social btn-<?php echo $plugin['plugin_code']; ?>">
+
+                <ul class="buttons-list buttons-list-checkout">
+                    <?php
+                    if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) {
+                        foreach ($socialLoginApis as $plugin) { ?>
+                            <li class="buttons-list-item">
+                                <a class="buttons-list-link" href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>">
+                                    <span class="buttons-list-icon btn-social btn-<?php echo $plugin['plugin_code']; ?>">
                                         <img class="svg" width="20" height="20" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
-                                    </a>
-                                </li>
-                        <?php }
-                        } ?>
-                    </ul>
-                </div>
+                                    </span>
+                                    Sign in with Facebook
+                                </a>
+                            </li>
+                    <?php }
+                    } ?>
+                </ul>
+
             </div>
         </div>
         <div class="gap"></div>
@@ -83,7 +86,7 @@ $onSubmitFunctionName = isset($onSubmitFunctionName) ? $onSubmitFunctionName : '
 
 <script>
     /*Tabs*/
-    $(function () {
+    $(function() {
         $(".tabs-content-js").hide();
         $(".tabs--flat-js li:first").addClass("is-active").show();
         $(".tabs-content-js:first").show();

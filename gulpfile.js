@@ -41,7 +41,7 @@ function manager() {
         .pipe(autoprefixer())
         .pipe(sourcemaps.write("."))
         .pipe(dest("./manager/views/css"))
-        .pipe(dest("./manager-application/views/css"));
+        .pipe(dest("./admin/views/css"));
 }
 
 function dashboard() {
