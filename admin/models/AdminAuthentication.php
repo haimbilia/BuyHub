@@ -46,7 +46,7 @@ class AdminAuthentication extends FatModel
 
         if (!$row = $db->fetch($rs)) {
             $objUserAuthentication->logFailedAttempt($ip, $username);
-            $this->error = Labels::getLabel('ERR_Invalid_Username', $this->siteLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_USER_NAME_OR_PASSWORD', $this->siteLangId);
             return false;
         }
 
@@ -64,7 +64,7 @@ class AdminAuthentication extends FatModel
         }
         if (false == password_verify($password, $row['admin_password'])) {
             $objUserAuthentication->logFailedAttempt($ip, $username);
-            $this->error = Labels::getLabel('ERR_Invalid_Password', $this->siteLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_USER_NAME_OR_PASSWORD', $this->siteLangId);
             return false;
         }
         // if (!empty($row['admin_password'])) {            
