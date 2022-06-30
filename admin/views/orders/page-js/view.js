@@ -45,7 +45,7 @@ $(document).on('change', '.downloadTypeJs', function () {
         });
     };
     viewPaymemntGatewayResponse = function (data) {
-        $.ykmodal('<div class="form-edit-body">' + data + "</div>", true,'modal-lg');
+        $.ykmodal('<div class="form-edit-body">' + data + "</div>", true, 'modal-lg');
     };
 
     getOpCharges = function (orderId, chargeType) {
@@ -128,16 +128,28 @@ $(document).on('change', '.downloadTypeJs', function () {
         });
     };
 
+    getPayments = function (orderId) {
+        fcom.ajax(fcom.makeUrl('Orders', 'getPayments', [orderId]), [], function (ans) {
+            fcom.closeProcessing();
+            fcom.removeLoader();
+            console.log(ans);
+            if (0 < ans.status) {
+                $('.paymentListJs').html(ans.html);
+            }
+            $('.paymentListJs').html(ans.html);
+        }, { fOutMode: 'json' });
+    };
+
     updateStatus = function (frm) {
         if (!$(frm).validate()) return;
         var op_id = $(frm.op_id).val();
         var data = fcom.frmData(frm);
         var orderStatusId = $(frm.op_status_id).val();
-        var oldStatus = $(frm.op_status_id).data('oldValue');
+        /* var oldStatus = $(frm.op_status_id).data('oldValue');
         if (oldStatus == orderStatusId) {
             fcom.displayErrorMessage(langLbl.alreadySelected);
             return;
-        }
+        } */
 
         if (0 < $(".shippingUserJs").length && '' == $(".shippingUserJs").val()) {
             fcom.displayErrorMessage(langLbl.shippingUser);
@@ -159,6 +171,7 @@ $(document).on('change', '.downloadTypeJs', function () {
                 fcom.removeLoader();
                 $("#allSellerJs").trigger('change');
                 getOrderCommentForm(frm.order_id.value, frm.op_id.value);
+                getPayments(frm.order_id.value);
             });
         }
     };
@@ -184,13 +197,13 @@ $(document).on('change', '.downloadTypeJs', function () {
                         getShippingUsersForm(t.orderId, t.opId);
                     }, 1000);
                 }
-                return; 
+                return;
             }
             fcom.displaySuccessMessage(t.msg);
             setTimeout(function () {
                 location.reload();
             }, 300);
-        },{ fOutMode: 'json' });
+        }, { fOutMode: 'json' });
     }
     /* ShipStation */
 

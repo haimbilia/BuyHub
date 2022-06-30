@@ -1428,7 +1428,7 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForRadio($fld);
 
                 $percentageFlatArr = applicationConstants::getPercentageFlatArr($langId);
-                $disType = $frm->addSelectBox(Labels::getLabel("FRM_DISCOUNT_IN", $langId), 'CONF_FIRST_TIME_BUYER_COUPON_IN_PERCENT', $percentageFlatArr, '', array(), '');
+                $frm->addSelectBox(Labels::getLabel("FRM_DISCOUNT_IN", $langId), 'CONF_FIRST_TIME_BUYER_COUPON_IN_PERCENT', $percentageFlatArr, '', array('class' => 'discountInJs'), '');
 
                 $fld =  $frm->addTextBox(Labels::getLabel("FRM_DISCOUNT_VALUE", $langId), 'CONF_FIRST_TIME_BUYER_COUPON_DISCOUNT_VALUE');
                 $fld->requirements()->setPositive();
@@ -1437,13 +1437,12 @@ class ConfigurationsController extends ListingBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_MINIMUM_ORDER_VALUE_ON_WHICH_THE_COUPON_CAN_BE_APPLIED.", $langId) . "</span>";
                 $fld->requirements()->setPositive();
 
-
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_MAX_DISCOUNT_VALUE", $langId), 'CONF_FIRST_TIME_BUYER_COUPON_MAX_DISCOUNT_VALUE');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_MAX_DISCOUNT_VALUE_USER_CAN_GET_BY_USING_THIS_COUPON.", $langId) . "</span>";
+                $fld->setWrapperAttribute('class', 'maxDisValJs');
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_DISCOUNT_COUPON_VALIDITY", $langId), 'CONF_FIRST_TIME_BUYER_COUPON_VALIDITY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_COUPON_VALIDITY_IN_DAYS_FROM_THE_DATE_OF_CREDIT", $langId) . "</span>";
-
                 break;
             case Configurations::FORM_SUBSCRIPTION:
                 $fld = $frm->addRadioButtons(

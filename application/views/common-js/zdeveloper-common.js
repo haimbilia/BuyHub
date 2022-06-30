@@ -725,6 +725,7 @@ function defaultSetUpLogin(frm, v) {
     }
     v.validate();
     if (!v.isValid()) {
+        fcom.removeLoader();
         return false;
     }
     fcom.ajax(
@@ -1410,7 +1411,7 @@ $(function () {
             section = $("#cartList");
         }
         section.prepend(fcom.getLoader());
-        cart.addCallBackFn = function(results){
+        cart.addCallBackFn = function (results) {
             loadShippingSummaryDiv();
         }
         cart.update(key, page, fulfillmentType);

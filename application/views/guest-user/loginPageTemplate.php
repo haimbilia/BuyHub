@@ -22,39 +22,39 @@ $fldSubmit->addFieldTagAttribute('class', 'btn btn-secondary btn-block');
 $signInWithPhone = $signInWithPhone ?? 0;
 ?>
 <div class="card-sign">
-    <div class="card-sign_head">
+    <?php /*<div class="card-sign_head">
         <h2 class="title">
             <?php echo Labels::getLabel('LBL_SIGN_IN_TO_YOUR_YOKART_ACCOUNT', $siteLangId); ?>
         </h2>
-    </div>
+    </div> <?php */ ?>
     <div class="card-sign_body">
-        <?php if (0 < $signInWithPhone) {
+        <?php
+        if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
+            <ul class="buttons-list">
+                <?php foreach ($socialLoginApis as $plugin) { ?>
+                    <li class="buttons-list-item">
+                        <a class="buttons-list-link" href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>">
+                            <span class="buttons-list-icon btn-<?php echo $plugin['plugin_code']; ?>"> <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+                            </span>
+                            <?php echo $plugin['plugin_name']; ?>
+                        </a>
+                    </li>
+                <?php } ?>
+            </ul>
+            <div class="or">
+                <span>
+                    <?php echo Labels::getLabel('LBL_SIGN_IN_WITH_YOUR_YOKART_ACCOUNT', $siteLangId); ?>
+                </span>
+            </div>
+        <?php }
+        if (0 < $signInWithPhone) {
             include('login-with-phone.php');
         } else {
             include('login-with-email.php');
         }
 
         echo $loginFrm->getExternalJS();
-
-        if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
-            <div class="or">
-                <span>
-                    <?php echo Labels::getLabel('LBL_OR_CONTINUE_WITH', $siteLangId); ?>
-                </span>
-            </div>
-            <div class="buttons-list">
-                <ul>
-                    <?php foreach ($socialLoginApis as $plugin) { ?>
-                        <li>
-                            <a href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>" class="btn btn-social btn-<?php echo $plugin['plugin_code']; ?>">
-                                <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
-
-                            </a>
-                        </li>
-                    <?php } ?>
-                </ul>
-            </div>
-        <?php } ?>
+        ?>
     </div>
     <div class="card-sign_foot">
         <h6><?php echo Labels::getLabel('DON’T_HAVE_AN_ACCOUNT?', $siteLangId); ?></h6>

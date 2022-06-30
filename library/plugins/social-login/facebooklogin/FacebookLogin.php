@@ -47,7 +47,7 @@ class FacebookLogin extends SocialMediaAuthBase
             [
             'app_id' => $this->settings['app_id'],
             'app_secret' => $this->settings['app_secret'],
-            'default_graph_version' => 'v3.2',
+            'default_graph_version' => 'v14.0',
             ]
         );
         $this->helper = $this->fbAuthObj->getRedirectLoginHelper();

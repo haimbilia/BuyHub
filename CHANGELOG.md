@@ -978,11 +978,18 @@ TV-9.4.0.20220406
     - #065070 - Order details does not appears on the payment success page in case of the guest checkout.
     - #065072 - Tax category rule button appears on the tax category listing page when the tax plugin is on.
     - #065076 - Inconsistency issue in the tax section on order details page at admin and buyer / seller end.
+    - #065123 - Infinite loader appears when the user clicks on the login button without adding any details in the email and password field.
+    - #065125 - Add to wishlist option used to appear in case when option "Add products to wishlist or favorite?" is changes to favourite
     - #065077 - Category counts are not proper .
     - #065082 - During product creation , while adding media for the product , Product brand setup form used to occur automatically .
     - #065099 - The banners on the product details page are not properly aligned.
     - #065112 - sent Discount count functionality for abandoned cart not working properly . 
     - #065157 - Suggestion: To change the validation label on the sign-in page on admin and front end.
+    - #065121 - The COD order transaction does not get approved automatically even if the admin marked the order delivered.
+    - #065117 - The refund summary appears wrong on the return request page on the seller's end in case of a partial refund
+    - #065138 - When user selects discount type as flat. Max discount field should got hidden.
+    - #065121 - The COD order transaction does not get approved automatically even if the admin marked the order delivered
+    - #065024 - when user click on Dropdown icon in add brand field during product creation
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

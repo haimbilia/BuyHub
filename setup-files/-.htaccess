@@ -21,7 +21,8 @@ RewriteRule ^dashboard/cache/(.*)$ /cache/$1 [L]
 FileETag None
 
 <IfModule mod_rewrite.c>
-    Options +FollowSymlinks
+    #Options +FollowSymlinks
+    Options SymLinksifOwnerMatch
     Options -Multiviews
     RewriteEngine on
 	#satisfy any

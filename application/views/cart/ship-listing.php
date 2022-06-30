@@ -195,8 +195,8 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 <li class="cart-action-item">
                                     <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
                                         if (empty($product['ufp_id'])) {  ?>
-                                            <button class="btn btn-link" onClick="addToFavourite( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?> );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
-                                                <?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>
+                                            <button class="btn btn-link" onClick="addToFavourite( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?> );" title="<?php echo Labels::getLabel('LBL_MOVE_TO_FAVOURITE', $siteLangId); ?>">
+                                                <?php echo Labels::getLabel('LBL_MOVE_TO_FAVOURITE', $siteLangId); ?>
                                             </button>
                                         <?php } else { ?>
                                             <button class="btn btn-link" title="<?php echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId); ?>">
