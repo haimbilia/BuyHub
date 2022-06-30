@@ -75,7 +75,7 @@
     &-item {
         flex: 1;
         width: 100%;
-        max-width: 250px;
+        max-width: 270px;
     }
     &-link {
         font-weight: 600;
@@ -89,12 +89,12 @@
     }
     &-icon {
         padding: 0;
-        flex: 0 0 40px;
-        max-width: 40px;
+        flex: 0 0 30px;
+        max-width: 30px;
         margin: 0;
         //background: rgba(0, 0, 0, 0.1);
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -104,8 +104,8 @@
     img,
     .svg {
         margin: 0 auto;
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
     }
 
     .btn-fb,

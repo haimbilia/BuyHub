@@ -56,7 +56,6 @@
                 background-color: #fff;
                 z-index: 998;
                 transition: all 0.3s ease-in-out 0s;
-
                 box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
             }
         }
@@ -74,11 +73,12 @@
             .subnav-inner {
                 // transform: translateY(0);
                 // visibility: visible;
-                height: 70vh;
+                // height: 70vh;
+                height: 60vh;
+                max-height: 520px;
                 opacity: 1;
                 visibility: visible;
                 transform: translate(0, 0);
-
                 .categories-cols {
                     transform: translateY(0);
                     opacity: 1;
@@ -116,7 +116,6 @@
                 color: $brand-color;
             }
         }
-    
     }
 
     .more {
@@ -124,6 +123,13 @@
             width: 24px;
             height: 17px;
         }
+    }
+
+    .categories-container {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 2.5rem 0;
+        display: flex;
     }
 }
 
@@ -164,44 +170,39 @@
 }
 
 .categories-block {
-    display: flex;
-    padding: 2.5rem 0;
-    max-width: 1320px;
-    margin: auto;
+    // display: flex;
+    flex: 1;
+    margin: 0 auto;
+    columns: 4 auto;
     @include media-breakpoint-down(lg) {
         padding: 0.5rem 0;
     }
     .categories-cols {
-        display: flex;
-        flex-direction: column;
+        // display: flex;
+        // flex-direction: column;
+        display: inline-block;
+        vertical-align: top;
         padding-#{$end-direction}: 1rem;
+        margin-bottom: 1rem;
         min-width: 250px;
-
         transition-delay: 0.4s;
         transform: translateY(30px);
         opacity: 0;
         visibility: hidden;
         transition: all 0.4s ease-in-out 0s;
-        &-media {
-            margin-#{$start-direction}: auto;
-            max-width: 300px;
-            padding: 0;
-        }
-
+        // border-bottom: $border;
         .categories-list {
             list-style: none;
             margin: 0;
             &-item {
                 display: flex;
             }
-
             &-link {
                 font-weight: $font-weight-light;
                 color: $txt-body;
                 text-transform: none;
                 padding: 7px 0;
                 position: relative;
-
                 &:after {
                     transition: all 0.5s ease;
                     position: absolute;
@@ -221,7 +222,7 @@
                 }
             }
             &-head {
-                color: $txt-body;
+                color: $brand-color;
                 font-weight: 600;
             }
         }
@@ -374,6 +375,9 @@
     text-align: center;
     color: $brand-color;
     font-weight: 600;
+    margin-#{$start-direction}: auto;
+    max-width: 300px;
+    padding: 0;
     figcaption {
         padding: 0.5rem 0;
         text-decoration: underline;
