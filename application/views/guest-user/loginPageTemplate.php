@@ -20,6 +20,7 @@ $fldSubmit = $loginFrm->getField('btn_submit');
 $fldSubmit->addFieldTagAttribute('class', 'btn btn-secondary btn-block');
 
 $signInWithPhone = $signInWithPhone ?? 0;
+$canSendSms = $canSendSms ?? false;
 ?>
 <div class="card-sign">
     <div class="card-sign_head">
@@ -38,7 +39,7 @@ $signInWithPhone = $signInWithPhone ?? 0;
                             <a class="buttons-list-link" href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>">
                                 <span class="buttons-list-icon"> <img class="svg" width="30" height="30" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
                                 </span>
-                                <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_SIGN_IN_WITH_{PLUGIN-NAME}'), ['{PLUGIN-NAME}' => $plugin['plugin_name']]); ?>
+                                <?php echo $plugin['plugin_name']; ?>
                             </a>
                         </li>
                     <?php } ?>
@@ -50,6 +51,16 @@ $signInWithPhone = $signInWithPhone ?? 0;
                             <?php echo Labels::getLabel('LBL_SIGN_IN_WITH_EMAIL'); ?>
                         </a>
                     </li>
+                    <?php if (0 < $canSendSms) { ?>
+                        <li class="buttons-list-item">
+                            <a class="buttons-list-link" href="javascript:void(0);" onclick="signInWithPhone(this, 0);">
+                                <span class="buttons-list-icon">
+                                    <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/phone.svg">
+                                </span>
+                                <?php echo Labels::getLabel('LBL_SIGN_IN_WITH_PHONE'); ?>
+                            </a>
+                        </li>
+                    <?php } ?>
                 </ul>
             </div>
         <?php
@@ -63,7 +74,7 @@ $signInWithPhone = $signInWithPhone ?? 0;
             } ?>
             <?php if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
                 <div class="text-center">
-                    <a href="javascript:void(0);" onclick="hideSignInForm()" class="link-underline"><?php echo Labels::getLabel('LBL_BACK_TO_LISTING'); ?></a>
+                    <a href="javascript:void(0);" onclick="hideSignInForm()" class="link-underline"><?php echo Labels::getLabel('LBL_ALL_SIGN_IN_OPTIONS'); ?></a>
                 </div>
             <?php } ?>
             <?php echo $loginFrm->getExternalJS(); ?>
