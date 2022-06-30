@@ -23,7 +23,7 @@
 
 .poster-layout-2 {
     display: grid;
-    grid-gap: 1%;
+    grid-gap: 10px;
     grid-template-columns: 1fr 1fr;
     @include media-breakpoint-down(sm) {
         //display: block;
