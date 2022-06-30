@@ -632,7 +632,7 @@ class CheckoutController extends MyAppController
                         $shipProducts[$selProdId]['cost']  = $shippingRates[$prodIdCobination][$rateId]['cost'] - $shippingAmount[$prodIdCobination];
                     } else {
                         $amt = (($product['quantity'] * $product['theprice']) * $shippingRates[$prodIdCobination][$rateId]['cost']) / $totalAmount;
-                        $shipProducts[$selProdId]['cost'] =  number_format($amt, 2);
+                        $shipProducts[$selProdId]['cost'] =  round($amt, 2);
                         $shippingAmount[$prodIdCobination] = $shippingAmount[$prodIdCobination] + $shipProducts[$selProdId]['cost'];
                     }
                     $shipProducts[$selProdId]['info'] = $shippingRates[$prodIdCobination][$rateId];
