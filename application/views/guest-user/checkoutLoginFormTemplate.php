@@ -64,7 +64,7 @@ $onSubmitFunctionName = isset($onSubmitFunctionName) ? $onSubmitFunctionName : '
                             <li class="buttons-list-item">
                                 <a class="buttons-list-link" href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>">
                                     <span class="buttons-list-icon btn-social btn-<?php echo $plugin['plugin_code']; ?>">
-                                        <img class="svg" width="20" height="20" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+                                        <img class="svg" width="30" height="30" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
                                     </span>
                                     Sign in with Facebook
                                 </a>
