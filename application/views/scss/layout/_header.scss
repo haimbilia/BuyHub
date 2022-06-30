@@ -1,5 +1,4 @@
 $header-height: 122px;
-
 .header {
     position: sticky;
     z-index: $zindex-fixed;
@@ -138,7 +137,6 @@ $header-height: 122px;
         }
     }
 }
-
 .quick-nav {
     display: flex;
     align-items: center;
@@ -211,7 +209,6 @@ $header-height: 122px;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
 }
-
 .button-cart {
     position: relative;
     .cart-qty {
@@ -231,7 +228,6 @@ $header-height: 122px;
         justify-content: center;
     }
 }
-
 .dropdown.is-active .dropdown__target {
     pointer-events: auto;
 }

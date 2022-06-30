@@ -30,8 +30,8 @@ $txt-secondary: $secondary-color;
 $txt-black: rgba(0, 0, 0, 1);
 $txt-body: rgba(0, 0, 0, 0.87);
 $txt-gray: rgba(0, 0, 0, 0.67);
-
 $text-muted: #888888 !default;
+
 //Font weight
 $font-weight-light: 400;
 
@@ -43,6 +43,7 @@ $border-light: solid 1px lighten($border-color, 5);
 $border-transparent: solid 1px transparent;
 //outline
 $outline: solid 1px $border-color;
+
 //backgrounds colors
 $bg-white: #fff;
 $bg-white-inverse: $txt-body;
@@ -75,7 +76,7 @@ $shadow10: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 $shadow11: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 
 //radius
-$radius-common: 1px;
+
 $radius4: 4px;
 $radius3: 3px;
 $radius2: 2px;
