@@ -1,5 +1,6 @@
 .switch {
     display: inline-flex;
+    gap: 6px;
     align-items: center;
     font-size: 0.85rem;
     cursor: pointer;
@@ -192,7 +193,7 @@
                         width: 40px;
                         min-width: 40px;
                         border-radius: 12px;
-                        margin-#{$start-direction}: 10px;
+                        //margin-#{$start-direction}: 10px;
                         &:before {
                             width: 38px;
                             border-radius: 12px;
