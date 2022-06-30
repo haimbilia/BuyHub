@@ -54,7 +54,7 @@
                     <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
                 </div>
             </div>
-        <?php } else { ?>            
+        <?php } else { ?>
             <?php require_once(CONF_THEME_PATH . 'getting-started/top-nav.php'); ?>
             <div class="onboarding">
                 <?php require_once(CONF_THEME_PATH . 'getting-started/left-nav.php'); ?>
@@ -72,4 +72,5 @@
     var NO = <?php echo applicationConstants::NO; ?>;
     var FORM_MEDIA = <?php echo Configurations::FORM_MEDIA; ?>;
     var MESSAGE_AUTOCLOSE_TIME = <?php echo Configurations::MESSAGE_AUTOCLOSE_TIME; ?>;
+    var FLAT = <?php echo applicationConstants::FLAT; ?>
 </script>
