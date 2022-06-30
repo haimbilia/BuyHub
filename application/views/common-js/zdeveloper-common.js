@@ -54,6 +54,17 @@ $(document).on("keyup", "input.otpVal-js", function (e) {
         element.focus();
     }
 });
+
+showSignInForm = function () {
+    $('.socialSigninJs').hide();
+    $('.localSigninJs').fadeIn();
+}
+
+hideSignInForm = function () {
+    $('.localSigninJs').hide();
+    $('.socialSigninJs').fadeIn();
+}
+
 installJsColor = function () {
     if (0 < $(".jscolor").length) {
         $(".jscolor").each(function () {

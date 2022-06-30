@@ -28,35 +28,38 @@ $signInWithPhone = $signInWithPhone ?? 0;
         </h2>
     </div>
     <div class="card-sign_body">
-        <?php if (0 < $signInWithPhone) {
-            include('login-with-phone.php');
-        } else {
-            include('login-with-email.php');
-        }
-
-        echo $loginFrm->getExternalJS();
-
-        if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
-            <div class="or">
-                <span>
-                    <?php echo Labels::getLabel('LBL_OR_CONTINUE_WITH', $siteLangId); ?>
-                </span>
-            </div>
-
-            <ul class="buttons-list">
-                <?php foreach ($socialLoginApis as $plugin) { ?>
+        <?php if (!empty($socialLoginApis) && 0 < count($socialLoginApis)) { ?>
+            <div class="socialSigninJs">
+                <ul class="buttons-list">
+                    <?php foreach ($socialLoginApis as $plugin) { ?>
+                        <li class="buttons-list-item">
+                            <a class="buttons-list-link" href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>">
+                                <span class="buttons-list-icon"> <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+                                </span>
+                                <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_SIGN_IN_WITH_{PLUGIN-NAME}'), ['{PLUGIN-NAME}' => $plugin['plugin_name']]); ?>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <li class="buttons-list-item">
-                        <a class="buttons-list-link" href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>">
-                            <span class="buttons-list-icon btn-<?php echo $plugin['plugin_code']; ?>"> <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+                        <a class="buttons-list-link" href="javascript:void(0);" onclick="showSignInForm();">
+                            <span class="buttons-list-icon">
+                                <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/email.svg">
                             </span>
-                            Sign in with Facebook
-
+                            <?php echo Labels::getLabel('LBL_SIGN_IN_WITH_EMAIL'); ?>
                         </a>
                     </li>
-                <?php } ?>
-            </ul>
-
+                </ul>
+            </div>
         <?php } ?>
+        <div class="localSigninJs" style="display: none;">
+            <?php if (0 < $signInWithPhone) {
+                include('login-with-phone.php');
+            } else {
+                include('login-with-email.php');
+            } ?>
+            <a href="javascript:void(0);" onclick="hideSignInForm()" class="link-underline"><?php echo Labels::getLabel('LBL_BACK_TO_LISTING'); ?></a>
+            <?php echo $loginFrm->getExternalJS(); ?>
+        </div>
     </div>
     <div class="card-sign_foot">
         <h6><?php echo Labels::getLabel('DON’T_HAVE_AN_ACCOUNT?', $siteLangId); ?></h6>
