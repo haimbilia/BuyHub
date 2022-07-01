@@ -10,7 +10,8 @@
         display: flex;
         flex-direction: column;
         text-align: center;
-
+        max-width: 220px;
+        margin: 0 auto;
         &-icon {
             width: 30px;
             margin: 1.5rem auto;

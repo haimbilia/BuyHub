@@ -54,6 +54,17 @@ $(document).on("keyup", "input.otpVal-js", function (e) {
         element.focus();
     }
 });
+
+showSignInForm = function () {
+    $('.socialSigninJs').hide();
+    $('.localSigninJs').fadeIn();
+}
+
+hideSignInForm = function () {
+    $('.localSigninJs').hide();
+    $('.socialSigninJs').fadeIn();
+}
+
 installJsColor = function () {
     if (0 < $(".jscolor").length) {
         $(".jscolor").each(function () {
@@ -1098,6 +1109,10 @@ $(function () {
         $(obj).attr("onclick", "signInWithPhone(this, " + !flag + ")").text(objLbl).attr('title', title);
 
         var data = 'signInWithPhone=' + parseInt(flag);
+        if (parseInt(flag) == 0) {
+            var data = 'signInWithEmail=1';
+        }
+
         var popup = $(formElement).closest('.' + $.ykmodal.element);
         if (0 < popup.length) {
             $.ykmodal(fcom.getLoader(), true);

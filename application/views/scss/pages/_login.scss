@@ -75,11 +75,11 @@
     &-item {
         flex: 1;
         width: 100%;
-        max-width: 270px;
+        max-width: 280px;
     }
     &-link {
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         border-radius: 3px;
         border: $border-black;
         padding: 0.5rem 1rem;
@@ -104,8 +104,8 @@
     img,
     .svg {
         margin: 0 auto;
-        width: 18px;
-        height: 18px;
+        width: 30px;
+        height: 30px;
     }
 
     .btn-fb,

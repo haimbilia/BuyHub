@@ -7,6 +7,7 @@ if (0 < $signinpopup) { ?>
             <?php
             $loginData['signInWithPhone'] = $signInWithPhone;
             $loginData['signinpopup'] = $signinpopup;
+            $loginData['signInWithEmail'] = $signInWithEmail;
             $this->includeTemplate('guest-user/loginPageTemplate.php', $loginData, false);
             ?>
         </div>
@@ -27,6 +28,7 @@ if (0 < $signinpopup) { ?>
             <div class="form-sign-body">
                 <?php
                 $loginData['signInWithPhone'] = $signInWithPhone;
+                $loginData['signInWithEmail'] = $signInWithEmail;
                 $this->includeTemplate('guest-user/loginPageTemplate.php', $loginData, false);
                 ?>
             </div>

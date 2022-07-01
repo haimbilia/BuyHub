@@ -19,6 +19,7 @@ class GuestUserController extends MyAppController
 
         $socialLoginApis = Plugin::getDataByType(Plugin::TYPE_SOCIAL_LOGIN, $this->siteLangId);
         $canSendSms = SmsArchive::canSendSms(SmsTemplate::LOGIN);
+        $signInWithEmail = FatApp::getPostedData('signInWithEmail', FatUtility::VAR_INT, 0);
         $signInWithPhone = FatApp::getPostedData('signInWithPhone', FatUtility::VAR_INT, 0);
         if (0 < $signInWithPhone) {
             $signInWithPhone = (int) $canSendSms;
@@ -35,6 +36,7 @@ class GuestUserController extends MyAppController
         );
 
         $this->set('signInWithPhone', $signInWithPhone);
+        $this->set('signInWithEmail', $signInWithEmail);
         $this->set('signinpopup', FatApp::getPostedData('signinpopup', FatUtility::VAR_INT, 0));
         $this->set('loginData', $loginFrmData);
         $this->set('exculdeMainHeaderDiv', true);
