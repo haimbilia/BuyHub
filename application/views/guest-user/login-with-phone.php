@@ -28,14 +28,12 @@ echo $loginFrm->getFormTag(); ?>
     <?php } ?>
     <?php echo $loginFrm->getFieldHtml('loginWithOtp'); ?>
 </div>
-<div class="row">    
+<div class="row m-2">
     <div class="col-auto" style="display: none;">
         <button type="button" class="link-underline resendOtp-js disabled" href="javascript:void(0);" onclick="getLoginOtp(this);"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></button>
     </div>
-</div>
-<div class="row justify-content-between">
-    <div class="col" style="display: none;">
-        <p class="otp-seconds countdownFld--js">
+    <div class="col text-right" style="display: none;">
+        <p class="form-text text-muted otp-seconds countdownFld--js">
             <?php
             $msg = Labels::getLabel('LBL_PLEASE_WAIT_{SECONDS}_SECONDS_TO_RESEND', $siteLangId);
             $replace = [
