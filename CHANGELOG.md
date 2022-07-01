@@ -995,6 +995,7 @@ TV-9.4.0.20220406
     - #065120 - The order details page gets distorted when the buyer clicks on the tracking URL on the order details page.
     - #065154 - NO email sent to seller about feedback/review regarding his shop or product .
     - #065179 - Multiple transactions appear for the COD transaction on the order details page on the admin end.
+    - #065180 - When the seller/admin made changes in the multiple specifications of the product then some changes do not reflect on the product setup page and front end as well.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
