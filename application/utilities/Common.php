@@ -62,9 +62,9 @@ class Common
         $wislistPSrchObj->addSubscriptionValidCondition();
         $wislistPSrchObj->joinWishLists();
         $wislistPSrchObj->doNotLimitRecords();
-        $wislistPSrchObj->addCondition('uwlist_user_id', '=', $loggedUserId);
-        $wislistPSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $wislistPSrchObj->addCondition('selprod_active', '=', applicationConstants::YES);
+        $wislistPSrchObj->addCondition('uwlist_user_id', '=', 'mysql_func_' . $loggedUserId, 'AND', true);
+        $wislistPSrchObj->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $wislistPSrchObj->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $wislistPSrchObj->addGroupBy('uwlp_selprod_id');
         $wislistPSrchObj->addMultipleFields(array('uwlp_uwlist_id'));
         $rs = $wislistPSrchObj->getResultSet();
@@ -179,10 +179,10 @@ class Common
         $brandSrch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'sp.selprod_product_id = p.product_id', 'sp');
         $brandSrch->doNotCalculateRecords();
         $brandSrch->addMultipleFields(array('brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'SUM(IFNULL(selprod_sold_count, 0)) as totSoldQty'));
-        $brandSrch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);
-        $brandSrch->addCondition('brand_active', '=', applicationConstants::YES);
+        $brandSrch->addCondition('brand_status', '=', 'mysql_func_' . Brand::BRAND_REQUEST_APPROVED, 'AND', true);
+        $brandSrch->addCondition('brand_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $brandSrch->addGroupBy('brand_id');
-        $brandSrch->addHaving('totSoldQty', '>', 0);
+        $brandSrch->addHaving('totSoldQty', '>', 'mysql_func_0', 'AND', true);
         $brandSrch->addOrder('totSoldQty', 'DESC');
         $brandSrch->addOrder('brand_name');
         $brandSrch->setPageSize(25);
@@ -202,10 +202,10 @@ class Common
         $catSrch->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN', 'sp.selprod_product_id = ptc.ptc_product_id', 'sp');
         $catSrch->doNotCalculateRecords();
         $catSrch->addMultipleFields(array('c.prodcat_id', 'IFNULL(c_l.prodcat_name, c.prodcat_identifier) as prodcat_name', 'SUM(IFNULL(selprod_sold_count, 0)) as totSoldQty'));
-        $catSrch->addCondition('prodcat_active', '=', applicationConstants::YES);
-        $catSrch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+        $catSrch->addCondition('prodcat_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+        $catSrch->addCondition('prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $catSrch->addGroupBy('prodcat_id');
-        $catSrch->addHaving('totSoldQty', '>', 0);
+        $catSrch->addHaving('totSoldQty', '>', 'mysql_func_0', 'AND', true);
         $catSrch->addOrder('totSoldQty', 'DESC');
         $catSrch->addOrder('prodcat_name');
         $catSrch->setPageSize(25);
@@ -280,7 +280,7 @@ class Common
         $srch->joinMessagePostedFromUser();
         $srch->joinMessagePostedToUser();
         $srch->addMultipleFields(array('tth.*', 'ttm.message_id', 'ttm.message_text', 'ttm.message_date', 'ttm.message_is_unread'));
-        $srch->addCondition('ttm.message_deleted', '=', 0);
+        $srch->addCondition('ttm.message_deleted', '=', 'mysql_func_0', 'AND', true);
         //$cnd = $srch->addCondition('ttm.message_from','=',$userId);
         $srch->addCondition('ttm.message_to', '=', $userId);
         $srch->addOrder('message_id', 'DESC');
@@ -299,7 +299,7 @@ class Common
         $srch = SocialPlatform::getSearchObject($siteLangId);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('splatform_user_id', '=', 0);
+        $srch->addCondition('splatform_user_id', '=', 'mysql_func_0', 'AND', true);
         $rs = $srch->getResultSet();
         $rows = FatApp::getDb()->fetchAll($rs);
 
