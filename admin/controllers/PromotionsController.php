@@ -605,7 +605,7 @@ class PromotionsController extends ListingBaseController
         );
         $srch->joinSlides();
         $srch->addCondition('promotion_id', '=', $recordId);
-        $srch->addMultipleFields(array('promotion_id', 'promotion_type', 'banner_id', 'blocation_banner_width', 'blocation_banner_height', 'slide_id','collection_layout_type'));
+        $srch->addMultipleFields(array('promotion_id', 'promotion_type', 'banner_id', 'blocation_banner_width', 'blocation_banner_height', 'slide_id', 'collection_layout_type'));
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -641,7 +641,7 @@ class PromotionsController extends ListingBaseController
         }
         $mediaFrm->fill(['file_type' => $fileType]);
 
-        $silesScreenDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_SLIDE);       
+        $silesScreenDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_SLIDE);
 
         $this->set('bannerWidth', $bannerWidth);
         $this->set('bannerHeight', $bannerHeight);
@@ -704,7 +704,7 @@ class PromotionsController extends ListingBaseController
                 break;
         }
 
-        if (!false == $imgDetail) {            
+        if (!false == $imgDetail) {
             $image = AttachedFile::getAttachment($attachedFileType, $promotionRecordId, 0, $lang_id, (count($languages) > 1) ? false : true, $screen);
             $this->set('image', $image);
         }
@@ -893,7 +893,7 @@ class PromotionsController extends ListingBaseController
         $shopReqObj = new FormFieldRequirement('promotion_shop', Labels::getLabel('FRM_SHOP', $this->siteLangId));
         $shopReqObj->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId) ."[".$this->siteDefaultCurrencyCode."]" , 'promotion_shop_cpc', FatApp::getConfig('CONF_CPC_SHOP', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
+        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId) . "[" . $this->siteDefaultCurrencyCode . "]", 'promotion_shop_cpc', FatApp::getConfig('CONF_CPC_SHOP', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
         /*]*/
 
         /* Product [ */
@@ -904,7 +904,7 @@ class PromotionsController extends ListingBaseController
         $prodReqObj = new FormFieldRequirement('promotion_product', Labels::getLabel('FRM_PRODUCT', $this->siteLangId));
         $prodReqObj->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId).'[' . $this->siteDefaultCurrencyCode . ']', 'promotion_product_cpc', FatApp::getConfig('CONF_CPC_PRODUCT', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
+        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId) . '[' . $this->siteDefaultCurrencyCode . ']', 'promotion_product_cpc', FatApp::getConfig('CONF_CPC_PRODUCT', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
         /* ]*/
 
         /* Banner Url [*/
@@ -924,7 +924,7 @@ class PromotionsController extends ListingBaseController
         $urlSlideReqObj = new FormFieldRequirement('slide_url', Labels::getLabel('FRM_URL', $this->siteLangId));
         $urlSlideReqObj->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId) ."[".$this->siteDefaultCurrencyCode."]", 'promotion_slides_cpc', FatApp::getConfig('CONF_CPC_SLIDES', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
+        $frm->addTextBox(Labels::getLabel('FRM_CPC', $this->siteLangId) . "[" . $this->siteDefaultCurrencyCode . "]", 'promotion_slides_cpc', FatApp::getConfig('CONF_CPC_SLIDES', FatUtility::VAR_FLOAT, 0), array('readonly' => true));
 
         $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_BANNER, 'eq', 'banner_url', $urlReqObj);
         $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_SHOP, 'eq', 'banner_url', $urlUnReqObj);
@@ -947,7 +947,23 @@ class PromotionsController extends ListingBaseController
         $pTypeFld->requirements()->addOnChangerequirementUpdate(Promotion::TYPE_SLIDES, 'eq', 'slide_url', $urlSlideReqObj);
 
         $srch = BannerLocation::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('blocation_id', 'blocation_promotion_cost', 'ifnull(blocation_name,blocation_identifier) as blocation_name'));
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array(
+            'blocation_id',
+            'blocation_promotion_cost',
+            'ifnull(blocation_name,blocation_identifier) as blocation_name'
+        ));
+        $srch->joinTable(
+            Collections::DB_TBL,
+            'LEFT JOIN',
+            'collections.collection_id = blocation_collection_id',
+            'collections'
+        );
+        $srch->addFld('if(blocation_collection_id > 0,collection_deleted,0 ) as deleted');
+        $srch->addFld('if(blocation_collection_id > 0,collection_active,1 ) as active');
+        $srch->addHaving('deleted', '=', applicationConstants::NO);
+        $srch->addHaving('active', '=', applicationConstants::ACTIVE);
+
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs, 'blocation_id');
         $locationArr = array();
@@ -958,7 +974,7 @@ class PromotionsController extends ListingBaseController
         }
         $frm->addSelectBox(Labels::getLabel('FRM_LAYOUT_TYPE', $this->siteLangId), 'banner_blocation_id', $locationArr, '', array(), '');
 
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_BUDGET', $this->siteLangId).'[' . $this->siteDefaultCurrencyCode . ']', 'promotion_budget');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_BUDGET', $this->siteLangId) . '[' . $this->siteDefaultCurrencyCode . ']', 'promotion_budget');
         $fld->requirements()->setRequired();
         $fld->requirements()->setFloatPositive(true);
 
@@ -1002,12 +1018,12 @@ class PromotionsController extends ListingBaseController
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        if($layoutType == Collections::TYPE_BANNER_LAYOUT2){
-            $frm->addHiddenField('', 'banner_screen',applicationConstants::SCREEN_DESKTOP);
-        }else{
+        if ($layoutType == Collections::TYPE_BANNER_LAYOUT2) {
+            $frm->addHiddenField('', 'banner_screen', applicationConstants::SCREEN_DESKTOP);
+        } else {
             $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
             $frm->addSelectBox(Labels::getLabel("FRM_Display_For", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
-        }  
+        }
 
 
         $frm->addHtml('', 'banner_image', '');
