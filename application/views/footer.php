@@ -18,10 +18,7 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
 
     <div class="engagespot-btn" id="engagespotUI">
     </div>
-<?php }
-if ($controllerName == 'Home' && $action == 'index') {
-    $this->includeTemplate('_partial/footerTrustBanners.php');
-} ?>
+<?php } ?>
 
 
 <?php if (FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 0)) { ?>
