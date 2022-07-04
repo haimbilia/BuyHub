@@ -994,6 +994,7 @@ TV-9.4.0.20220406
     - #065034 - product type (new) or (used) is not coming on product detail page .
     - #065120 - The order details page gets distorted when the buyer clicks on the tracking URL on the order details page.
     - #065195 - Undefined Offset notice appears in the currency section on the footer of the homepage
+    - #065202 - Error message appears as 'Record already exists' when the admin tries
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
