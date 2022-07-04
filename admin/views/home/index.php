@@ -191,7 +191,7 @@ if (false === $canViewAdminDashboard) {
                                 </select>
                             </div>
                         </div>
-                        <div class="card-body" id="totalSalesJs"><?php require_once('total-sales.php'); ?></div>
+                        <div class="card-body" id="totalSalesJs"><?php /* require_once('total-sales.php'); */ ?></div>
 
                     </div>
                     <div class="card">
