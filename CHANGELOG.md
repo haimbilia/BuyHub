@@ -993,7 +993,7 @@ TV-9.4.0.20220406
     - #065113 - Notice Undefined index appears on the top of the order cancellation page on the admin end.
     - #065034 - product type (new) or (used) is not coming on product detail page .
     - #065120 - The order details page gets distorted when the buyer clicks on the tracking URL on the order details page.
-    - 065195 - Undefined Offset notice appears in the currency section on the footer of the homepage
+    - #065195 - Undefined Offset notice appears in the currency section on the footer of the homepage
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
