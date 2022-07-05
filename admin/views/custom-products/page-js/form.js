@@ -134,8 +134,8 @@
 
         $('#specificationsListSeprJs').removeClass('hide');
 
-        let rowCount = appendEle.find('tr').length;
-
+        let rowCount = appendEle.find('tbody tr.editRowJs').length ? appendEle.find("tbody tr").index($(".editRowJs")) : appendEle.find('tbody tr').length;
+        
         let html = '<tr data-id="' + prodSpecId + '">';
         html += '<td class="nameJs text-break">' + label + '<input type="hidden" name="specifications[' + rowCount + '][name]" value="' + label + '"  data-fatreq="{&quot;required&quot;:false}"/> </td>';
         html += '<td class="valueJs text-break">' + value + '<input type="hidden" name="specifications[' + rowCount + '][value]" value="' + value + '" data-fatreq="{&quot;required&quot;:false}" /> </td>';

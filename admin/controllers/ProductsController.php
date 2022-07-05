@@ -943,6 +943,11 @@ class ProductsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
+        $productId = ProdSpecification::getAttributesById($prodSpecId,'prodspec_product_id');
+        if (1 > $productId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
         $prodSpec = new ProdSpecification($prodSpecId);
         if (!$prodSpec->deleteRecord(true)) {
             LibHelper::exitWithError($prodSpec->getError(), true);

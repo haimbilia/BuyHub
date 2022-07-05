@@ -141,7 +141,7 @@ class SellerApprovalFormController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_CAPTION', $this->siteLangId), 'sformfield_caption');
         $frm->addSelectBox(Labels::getLabel('FRM_REQUIRED', $this->siteLangId), 'sformfield_required', applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_FIELD_TYPE', $this->siteLangId), 'sformfield_type', User::getFieldTypes($this->siteLangId), -1, array(), '');
-
+        $frm->addTextarea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'sformfield_comment');
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -162,6 +162,7 @@ class SellerApprovalFormController extends ListingBaseController
                 'COALESCE(sformfield_caption, sformfield_identifier) as sformfield_caption',
                 'sformfield_required',
                 'sformfield_type',
+                'sformfield_comment'
             ];
             $data = SupplierFormFields::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, $attr, applicationConstants::JOIN_RIGHT);
             if ($data === false) {
@@ -191,13 +192,23 @@ class SellerApprovalFormController extends ListingBaseController
 
         $recordId = FatUtility::int($post['sformfield_id']);
 
-        $srch = SupplierFormFields::getSearchObject();
+        if(1 > $recordId){
+            $srch = SupplierFormFields::getSearchObject();
+            $srch->doNotCalculateRecords(); 
         $srch->doNotCalculateRecords(); 
+            $srch->doNotCalculateRecords(); 
+            $srch->addFld('MAX(sformfield_display_order) as last_display_order'); 
         $srch->addFld('MAX(sformfield_display_order) as last_display_order'); 
+            $srch->addFld('MAX(sformfield_display_order) as last_display_order'); 
+            $srch->setPageSize(1); 
         $srch->setPageSize(1); 
+            $srch->setPageSize(1); 
+            $maxOrder = (array)FatApp::getDb()->fetch($srch->getResultSet());     
         $maxOrder = (array)FatApp::getDb()->fetch($srch->getResultSet());     
-        $maxOrder = ((int)current($maxOrder)) + 1;
-        $post['sformfield_display_order'] = $maxOrder;
+            $maxOrder = (array)FatApp::getDb()->fetch($srch->getResultSet());     
+            $maxOrder = ((int)current($maxOrder)) + 1;
+            $post['sformfield_display_order'] = $maxOrder;
+        }
 
         $recordObj = new SupplierFormFields($recordId);
         $post['sformfield_identifier'] = $post['sformfield_caption'];
@@ -214,8 +225,9 @@ class SellerApprovalFormController extends ListingBaseController
         $this->setLangData(
             $recordObj,
             [
-                $recordObj::tblFld('caption') => $post[$recordObj::tblFld('caption')]
-            ]
+                $recordObj::tblFld('caption') => $post[$recordObj::tblFld('caption')],
+                $recordObj::tblFld('comment') => $post[$recordObj::tblFld('comment')]
+            ],            
         );
 
         $this->_template->render(false, false, 'json-success.php');
