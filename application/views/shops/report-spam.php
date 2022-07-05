@@ -1,5 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
 $frm->setFormTagAttribute('class', 'form');
 $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
@@ -9,7 +8,9 @@ $frm->setFormTagAttribute('onSubmit', 'setUpShopSpam(this); return false;');
 $btnFld = $frm->getField('btn_submit');
 if (null != $btnFld) {
     $btnFld->addFieldTagAttribute('class', 'btn btn-brand');
-}
+} 
+
+$userParentId = $userParentId ?? 0;
 ?>
 
 <div id="body" class="body template-<?php echo $template_id; ?>">

@@ -40,16 +40,15 @@
                     </div>
                 <?php } ?>
             </div>
-
-            <div class="section-foot">
-                <?php if (isset($collection['totBlogs']) && $collection['totBlogs'] > Collections::LIMIT_BLOG_LAYOUT1) { ?>
+            <?php if (isset($collection['totBlogs']) && $collection['totBlogs'] > Collections::LIMIT_BLOG_LAYOUT1) { ?>
+                <div class="section-foot">
                     <div class="section-action">
                         <a class="link-underline" href="<?php echo UrlHelper::generateUrl('blog'); ?>">
                             <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
                         </a>
                     </div>
-                <?php } ?>
-            </div>
+                </div>
+            <?php } ?>
         </div>
     </section>
 <?php } ?>

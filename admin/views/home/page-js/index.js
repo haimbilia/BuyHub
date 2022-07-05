@@ -241,6 +241,7 @@ $(document).ready(function () {
 
 $(function () {
 	callChart('monthlysalesJs', $SalesChartKey, $SalesChartVal, $position);
+	totalSales(30);
 	topCountries('yearly');
 	latestOrders();
 	topReferers('yearly');
