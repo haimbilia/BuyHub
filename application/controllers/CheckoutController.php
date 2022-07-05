@@ -134,16 +134,18 @@ class CheckoutController extends MyAppController
                             $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
                             $availableStock = $product['selprod_stock'] - $tempHoldStock;
                             $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
-                            $isOutOfMinOrderQty = ((int)($product['selprod_min_order_qty'] > ($availableStock + $userTempHoldStock)));
+                            $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
+                            if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
+                                $key = false;                               
+                                $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId);
+                            } elseif ($product['selprod_min_order_qty'] > ($availableStock + $userTempHoldStock)) {
+                                $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_MIN_PURCHASE_QUANTITY_IS_HIGHER_THAN_AVAILABLE_STOCK_LIMIT._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
+                            } elseif ($product['selprod_min_order_qty'] > $userTempHoldStock) {
+                                $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_PURCHASE_QUANTITY_IS_LESS_THAN_MIN_PURCHASE_QUANTITY._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
+                            }
 
-                            if ($availableStock < ($product['quantity'] - $userTempHoldStock) || 0 < $isOutOfMinOrderQty) {
-                                $key = false;
-                                $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
-                                $msg = Labels::getLabel('ERR_{PRODUCT-NAME}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId);
-                                if (0 < $isOutOfMinOrderQty) {
-                                    $msg = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_MIN_PURCHASE_QUANTITY_IS_HIGHER_THAN_AVAILABLE_STOCK_LIMIT._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
-                                }
-                                $this->errMessage = CommonHelper::replaceStringData($msg, ['{PRODUCT-NAME}' => $productName]);
+                            if (!empty($this->errMessage)) {                              
+                                $this->errMessage = CommonHelper::replaceStringData($this->errMessage, ['{PRODUCT-NAME}' => htmlentities($productName, ENT_QUOTES)]);
                                 if (true === $addErrorMessage) {
                                     Message::addErrorMessage($this->errMessage);
                                 }
