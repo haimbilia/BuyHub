@@ -275,7 +275,7 @@ class ProductCategory extends MyAppModel
         $srch->addCondition('prodcat_status', '=', 'mysql_func_' . self::REQUEST_APPROVED, 'AND', true);
         $srch->addCondition('prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addCondition('prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-
+       
         $rs = $srch->getResultSet();
         $categoriesArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
         if (true == $parseTree) {
