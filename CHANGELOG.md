@@ -1000,6 +1000,7 @@ TV-9.4.0.20220406
     - #065180 - When the seller/admin made changes in the multiple specifications of the product then some changes do not reflect on the product setup page and front end as well.
     - #065176 - Undefined Index Notice appears on the seller registration page. 
     - #065190 - The comments field is missing in the general tab on the 'Seller approval form setup' popup.
+    - 065189 - UI issue on the 'User Details' popup on the seller approval request page
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
