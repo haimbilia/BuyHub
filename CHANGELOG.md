@@ -997,6 +997,7 @@ TV-9.4.0.20220406
     - #065179 - Multiple transactions appear for the COD transaction on the order details page on the admin end.
     - #065180 - When the seller/admin made changes in the multiple specifications of the product then some changes do not reflect on the product setup page and front end as well.
     - #065176 - Undefined Index Notice appears on the seller registration page. 
+    - #065190 - The comments field is missing in the general tab on the 'Seller approval form setup' popup.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
