@@ -1003,6 +1003,7 @@ TV-9.4.0.20220406
     - #065174 - The buyer is able to place an order of the product with a quantity less than the minimum purchase quantity.
     - #065081 - When user request a brand , option to add banner image is not coming .
     - #065242 - it used to show error at the place of content block , when we disble a content block .
+    - #065245 - It shows error when user tries to edit an inactive collection .
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
