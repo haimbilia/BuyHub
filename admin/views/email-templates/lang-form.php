@@ -24,7 +24,7 @@ if (!isset($fld->htmlAfterField) || empty($fld->htmlAfterField)) {
 }
 
 $fld = $langFrm->getField('test_email');
-$fld->value = '<button type="button" class="btn btn-outline-brand btn-test" onclick="sendTestEmail()">
+$fld->value = '<button type="button" class="btn btn-outline-brand btn-test btn-icon" onclick="sendTestEmail()">
 <svg class="svg btn-icon-start" width="18" height="18">
     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#send-email"> 
 </use>

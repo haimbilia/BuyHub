@@ -1006,6 +1006,7 @@ TV-9.4.0.20220406
     - #065081 - When user request a brand , option to add banner image is not coming .
     - #065242 - it used to show error at the place of content block , when we disble a content block .
     - #065245 - It shows error when user tries to edit an inactive collection .
+    - #065185 - The spacing issue between the content and icons of the social platform on the footer of the page.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
