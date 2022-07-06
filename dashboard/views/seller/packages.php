@@ -5,7 +5,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     <div class="content-body">
         <div class="">
             <div class="">
-                <?php if(!empty($pageData)){?>
+                <?php if (!empty($pageData)) { ?>
                     <div class="section-head section-head-center my-4">
                         <div class="section-heading">
                             <?php echo html_entity_decode($pageData['epage_content']); ?>
@@ -85,7 +85,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         } else {
                                             $buyPlanText = Labels::getLabel('LBL_Buy_Plan', $siteLangId);
                                         } ?>
-                                        <button type="button" data-id="<?php echo $package[SellerPackages::DB_TBL_PREFIX . 'id']; ?>" class="btn btn-brand btn-wide buySubscription--js "><?php echo $buyPlanText; ?>
+                                        <button class="btn btn-brand btn-block buySubscription--js " type="button" data-id="<?php echo $package[SellerPackages::DB_TBL_PREFIX . 'id']; ?>"><?php echo $buyPlanText; ?>
                                         </button>
                                     </div>
                                 <?php } ?>
