@@ -288,20 +288,6 @@ $sharing-height: 50px;
             border-bottom: none;
         }
     }
-    .out-of-stock-txt {
-        border-radius: $radius3;
-        width: auto;
-        height: auto;
-        opacity: 0.5;
-        top: 0;
-        bottom: 0;
-        border-radius: 0;
-        transform: none;
-        cursor: not-allowed;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
 
     .title {
         font-size: 0.875rem;
