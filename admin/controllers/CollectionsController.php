@@ -482,7 +482,7 @@ class CollectionsController extends ListingBaseController
         $collectionType = FatUtility::int($collectionType);
 
         $data = Collections::getAttributesById($recordId);
-        if (false != $data && ($data['collection_active'] != applicationConstants::ACTIVE || $data['collection_deleted'] == applicationConstants::YES)) {
+        if (false != $data && ($data['collection_deleted'] == applicationConstants::YES)) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
