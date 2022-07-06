@@ -36,7 +36,7 @@ if (0 < $recordId) {
             if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
                 $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
                 $langFld->htmlAfterField = '<div class="input-group-append">
-                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(' . $langId . ',1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
+                                                            <a href="javascript:void(0);"  class="btn xxx" onclick="langForm(' . $langId . ',1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#icon-translate">
                                                                     </use>
