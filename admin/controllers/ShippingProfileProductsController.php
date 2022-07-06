@@ -154,12 +154,12 @@ class ShippingProfileProductsController extends ListingBaseController
         $frm = new Form('frmProfileProducts');
         $frm->addHiddenField('', 'shippro_shipprofile_id', $profileId)->requirement->setRequired(true);
         $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_NAME', $this->siteLangId), 'shippro_product_id', [])->requirement->setRequired(true);
-        $htm = '<div class="alert alert-solid-brand " role="alert">
+        $htm = '<div class="alert alert-solid-brand mt-5" role="alert">
                     <div class="alert-icon"><i class="flaticon-warning"></i>
                     </div>
                     <div class="alert-text text-xs">' . Labels::getLabel("LBL_Product_will_automatically_remove_from_other_profile", $this->siteLangId) . '</div>
                 </div>';
-        $frm->addHtml('', 'shippro_products_text', $htm);
+        $frm->addHtml('', 'shippro_products_text', $htm);    
         return $frm;
     }
 
