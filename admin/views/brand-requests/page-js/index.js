@@ -25,7 +25,7 @@
         if (!confirm(langLbl.confirmDelete)) {
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('BrandRequests', 'removeBrandMedia', [brandId, fileType, afileId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('BrandRequests', 'removeMedia', [brandId, fileType, afileId]), '', function (t) {
             fcom.displaySuccessMessage(t.msg);
             brandImages(brandId, fileType, slide_screen, langId);
             reloadList();

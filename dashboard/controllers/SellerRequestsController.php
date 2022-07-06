@@ -657,27 +657,72 @@ class SellerRequestsController extends SellerBaseController
         $this->_template->render(false, false);
     }
 
-    public function brandMediaForm($brand_id = 0, $langId = 0)
+    public function brandMediaForm($recordId = 0, $langId = 0, $slide_screen = 0)
     {
-        $brand_id = FatUtility::int($brand_id);
-        if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brand_id)) {
+        $recordId = FatUtility::int($recordId);
+        if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $recordId)) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $brandMediaFrm = $this->getMediaForm($brand_id, $langId);
-        $brandImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $langId, false);
+        $logoFrm = $this->getBrandLogoForm($recordId, $langId);
+        $bannerFrm = $this->getBrandBannerForm($recordId);
+        $data['lang_id'] = $langId;
+        $data['ratio_type'] = AttachedFile::RATIO_TYPE_SQUARE;
+        if (0 < $recordId) {
+            $brandLogo = current(AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, false));
+            if (is_array($brandLogo) && count($brandLogo) && 0 < $brandLogo['afile_aspect_ratio']) {
+                $data['ratio_type'] = $brandLogo['afile_aspect_ratio'];
+            }
+        }
+        $data['ratio_type'] = ($data['ratio_type'] == 0) ? AttachedFile::RATIO_TYPE_SQUARE : $data['ratio_type'];
+        $logoFrm->fill($data);
+        $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
+       
+        $brandImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, false);
         $bannerTypeArr = applicationConstants::getAllLanguages();
 
+        $getBrandRequestDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_BRAND_IMAGE);
+        $getBrandRequestLogoSquare = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE);
+        $getBrandRequestLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_RECTANGULAR);
+       
+        $this->set('getBrandRequestLogoSquare', $getBrandRequestLogoSquare);
+        $this->set('getBrandRequestLogoRactangle', $getBrandRequestLogoRactangle);
+        $this->set('getBrandRequestDimensions', $getBrandRequestDimensions);
+        $this->set('ratio_type', $data['ratio_type']);
+       
         $this->set('languages', Language::getAllNames());
-        $this->set('brandReqId', $brand_id);
-        $this->set('brandReqMediaFrm', $brandMediaFrm);
+        $this->set('brandReqId', $recordId);
+        $this->set('logoFrm', $logoFrm);
+        $this->set('bannerFrm', $bannerFrm);
         $this->set('image', $brandImage);
         $this->set('bannerTypeArr', $bannerTypeArr);
         $this->_template->render(false, false);
     }
 
-    public function uploadBrandLogo()
+    public function getBrandBannerForm($brandId)
+    {
+        $frm = new Form('frmBrandImage');
+        $languagesAssocArr = Language::getAllNames();
+        $frm->addHiddenField('', 'brand_id', $brandId);
+        $frm->addHTML('', 'heading', '');
+        if (count($languagesAssocArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_UNIVERSAL', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
+        } else {
+            $lang_id = array_key_first($languagesAssocArr);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
+        }
+        $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
+        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BRAND_IMAGE);
+        $frm->addHiddenField('', 'min_width');
+        $frm->addHiddenField('', 'min_height');
+        $frm->addHTML('', 'banner', '');
+        return $frm;
+    }
+
+
+    public function uploadBrandMedia()
     {
         $brand_id = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, 0);
 
@@ -700,21 +745,23 @@ class SellerRequestsController extends SellerBaseController
             FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));
         }
 
+        $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
+        $slide_screen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
         $aspectRatio = FatApp::getPostedData('ratio_type', FatUtility::VAR_INT, 0);
 
-        $fileHandlerObj = new AttachedFile();
-        $fileHandlerObj->deleteFile($fileHandlerObj::FILETYPE_BRAND_LOGO, $brand_id, 0, 0, $lang_id);
+        $fileHandlerObj = new AttachedFile();      
+        $fileHandlerObj->deleteFile($file_type, $brand_id, 0, 0, $lang_id, $slide_screen);
 
         if (!$fileHandlerObj->saveAttachment(
             $_FILES['cropped_image']['tmp_name'],
-            $fileHandlerObj::FILETYPE_BRAND_LOGO,
+            $file_type,
             $brand_id,
             0,
             $_FILES['cropped_image']['name'],
             -1,
-            $unique_record = false,
+            false,
             $lang_id,
-            0,
+            $slide_screen,
             $aspectRatio
         )) {
             FatUtility::dieJsonError($fileHandlerObj->getError());
@@ -726,30 +773,74 @@ class SellerRequestsController extends SellerBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function getMediaForm($brand_id, $langId)
+    public function getBrandLogoForm($brand_id, $langId)
     {
         $frm = new Form('frmBrandMedia');
         $languagesAssocArr = Language::getAllNames();
         $frm->addHiddenField('', 'brand_id', $brand_id);
         if (count($languagesAssocArr) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'brand_lang_id', array(0 => Labels::getLabel('FRM_UNIVERSAL', $this->siteLangId)) + $languagesAssocArr, $langId, array(), '');
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_UNIVERSAL', $this->siteLangId)) + $languagesAssocArr, $langId, array(), '');
         } else {
             $lang_id = array_key_first($languagesAssocArr);
-            $frm->addHiddenField('', 'brand_lang_id', $lang_id);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
         }
+        $frm->addHTML('', 'heading', '');
 
         $ratioArr = AttachedFile::getRatioTypeArray($this->siteLangId);
         $frm->addRadioButtons(Labels::getLabel('FRM_RATIO', $this->siteLangId), 'ratio_type', $ratioArr, AttachedFile::RATIO_TYPE_SQUARE);
         $frm->addHtml('', 'logo', '');
+        $frm->addHiddenField('', 'min_width');
+        $frm->addHiddenField('', 'min_height');
+        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BRAND_LOGO);
         return $frm;
     }
 
-    public function removeBrandLogo($brand_id = 0, $lang_id = 0)
+    public function brandImages($brand_id, $file_type, $lang_id = 0, $slide_screen = 0)
+    {
+        $languages = Language::getAllNames();
+        $slide_screen = FatUtility::int($slide_screen);
+        $brand_id = FatUtility::int($brand_id);
+        if (count($languages) > 1) {
+            $lang_id = FatUtility::int($lang_id);
+        } else {
+            $lang_id = array_key_first($languages);
+        }
+        if ($file_type == 'logo') {
+            $brandLogo = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true);
+
+            $aspectRatioType = $brandLogo['afile_aspect_ratio'];
+            $aspectRatioType = ($aspectRatioType > 0) ? $aspectRatioType : 1;
+            $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_THUMB, $aspectRatioType);
+            $this->set('aspectRatioType', $aspectRatioType);
+            $this->set('image', $brandLogo);
+            $this->set('imageFunction', 'brandReal');
+            $this->set('imageBrandDimensions', $imageBrandDimensions);
+        } else {
+            $imageBrandDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_IMAGE, ImageDimension::VIEW_THUMB);
+            $brandImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_IMAGE, $brand_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
+            $this->set('image', $brandImage);
+            $this->set('imageFunction', 'brandImage');
+            $this->set('imageBrandDimensions', $imageBrandDimensions);
+        }
+
+        $this->set('file_type', $file_type);
+        $this->set('brand_id', $brand_id);
+        $this->set('canEdit', $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true));       
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }    
+
+    public function removeBrandMedia($brand_id, $imageType = 'logo', $afileId = 0)
     {
         $brand_id = FatUtility::int($brand_id);
-        $lang_id = FatUtility::int($lang_id);
+      
         if (!$brand_id) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
+        }
+        if ($imageType == 'logo') {
+            $fileType = AttachedFile::FILETYPE_BRAND_LOGO;
+        } elseif ($imageType == 'image') {
+            $fileType = AttachedFile::FILETYPE_BRAND_IMAGE;
         }
 
         if (!UserPrivilege::canSellerUpdateBrandRequest(UserAuthentication::getLoggedUserId(), $brand_id)) {
@@ -757,7 +848,7 @@ class SellerRequestsController extends SellerBaseController
         }
 
         $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, 0, $lang_id)) {
+        if (!$fileHandlerObj->deleteFile($fileType, $brand_id, $afileId)) {
             FatUtility::dieJsonError($fileHandlerObj->getError());
         }
 

@@ -477,6 +477,27 @@ class BrandRequestsController extends ListingBaseController
         return $frm;
     }
 
+    public function removeMedia($brand_id, $imageType = '', $afileId = 0)
+    {
+        $brand_id = FatUtility::int($brand_id);
+        if (!$brand_id) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        if ($imageType == 'logo') {
+            $fileType = AttachedFile::FILETYPE_BRAND_LOGO;
+        } elseif ($imageType == 'image') {
+            $fileType = AttachedFile::FILETYPE_BRAND_IMAGE;
+        }
+        $fileHandlerObj = new AttachedFile();
+        if (!$fileHandlerObj->deleteFile($fileType, $brand_id, $afileId)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+        }
+
+        $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
     public function updateApprovalStatus()
     {
         $this->checkEditPrivilege();

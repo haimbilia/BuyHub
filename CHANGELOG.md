@@ -1001,6 +1001,7 @@ TV-9.4.0.20220406
     - #065176 - Undefined Index Notice appears on the seller registration page. 
     - #065190 - The comments field is missing in the general tab on the 'Seller approval form setup' popup.
     - #065174 - The buyer is able to place an order of the product with a quantity less than the minimum purchase quantity.
+    - #065081 - When user request a brand , option to add banner image is not coming .
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

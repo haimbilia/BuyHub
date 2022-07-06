@@ -52,6 +52,7 @@ $(function () {
 });
 
 $(window).on('load', function () {
+
     /* Product Gallery */
     $("#detail .main-img-slider").slick({
         rtl: ('rtl' == langLbl.layoutDirection),
