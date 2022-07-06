@@ -270,8 +270,8 @@ class Navigation
                 'IFNULL( nlink_caption, nlink_identifier ) as nlink_caption', 'nlink_type', 'nlink_cpage_id', 'nlink_category_id', 'IFNULL( prodcat_active, ' . applicationConstants::ACTIVE . ' ) as filtered_prodcat_active', 'IFNULL(prodcat_deleted, ' . applicationConstants::NO . ') as filtered_prodcat_deleted', 'IFNULL( cpage_deleted, ' . applicationConstants::NO . ' ) as filtered_cpage_deleted', 'nlink_target', 'nlink_url', 'nlink_login_protected'
             ));
             $srch->addDirectCondition("((nlink_type = " . NavigationLinks::NAVLINK_TYPE_CATEGORY_PAGE . " AND nlink_category_id > 0 $catWithProductConditoon ) OR (nlink_type = " . NavigationLinks::NAVLINK_TYPE_CMS . " AND nlink_cpage_id > 0 ) OR  ( nlink_type = " . NavigationLinks::NAVLINK_TYPE_EXTERNAL_PAGE . " ))");
-            $srch->addHaving('filtered_prodcat_active', '=', applicationConstants::ACTIVE);
-            $srch->addHaving('filtered_prodcat_deleted', '=', applicationConstants::NO);            
+            $srch->addHaving('filtered_prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+            $srch->addHaving('filtered_prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
             $srch->doNotLimitRecords();
         } else {
             $srch->addDirectCondition("((nlink_type != " . NavigationLinks::NAVLINK_TYPE_CATEGORY_PAGE . "  ) OR (nlink_type = " . NavigationLinks::NAVLINK_TYPE_CMS . " AND nlink_cpage_id > 0 ) OR  ( nlink_type = " . NavigationLinks::NAVLINK_TYPE_EXTERNAL_PAGE . " ))");
@@ -289,24 +289,24 @@ class Navigation
         $srch->addOrder('nlink_display_order');
 
         $srch->addCondition('nav_type', '=', $type);
-        $srch->addCondition('nlink_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('nav_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('nlink_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('nav_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
 
-        $srch->addHaving('filtered_cpage_deleted', '=', applicationConstants::NO);
+        $srch->addHaving('filtered_cpage_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
         $isUserLogged = UserAuthentication::isUserLogged();
         if ($isUserLogged) {
-            $cnd = $srch->addCondition('nlink_login_protected', '=', NavigationLinks::NAVLINK_LOGIN_BOTH);
-            $cnd->attachCondition('nlink_login_protected', '=', NavigationLinks::NAVLINK_LOGIN_YES, 'OR');
+            $cnd = $srch->addCondition('nlink_login_protected', '=', 'mysql_func_' . NavigationLinks::NAVLINK_LOGIN_BOTH, 'AND', true);
+            $cnd->attachCondition('nlink_login_protected', '=', 'mysql_func_' . NavigationLinks::NAVLINK_LOGIN_YES, 'OR', true);
         }
         if (!$isUserLogged) {
-            $cnd = $srch->addCondition('nlink_login_protected', '=', NavigationLinks::NAVLINK_LOGIN_BOTH);
-            $cnd->attachCondition('nlink_login_protected', '=', NavigationLinks::NAVLINK_LOGIN_NO, 'OR');
+            $cnd = $srch->addCondition('nlink_login_protected', '=', 'mysql_func_' . NavigationLinks::NAVLINK_LOGIN_BOTH, 'AND', true);
+            $cnd->attachCondition('nlink_login_protected', '=', 'mysql_func_' . NavigationLinks::NAVLINK_LOGIN_NO, 'OR', true);
         }
         $srch->addGroupBy('nav_id');
         $srch->addGroupBy('nlink_id');
-        
-        $rs = $srch->getResultSet();
+
+        $rs = $srch->getResultSet();       
         $rows = FatApp::getDb()->fetchAll($rs);
 
 

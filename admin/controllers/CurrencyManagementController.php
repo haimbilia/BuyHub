@@ -257,7 +257,7 @@ class CurrencyManagementController extends ListingBaseController
 
         $data = Currency::getAttributesById($recordId, array('currency_id', 'currency_active'));
 
-        if ($data == false) {
+        if ($data == false || $recordId == FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 0)) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
@@ -280,7 +280,7 @@ class CurrencyManagementController extends ListingBaseController
         }
 
         foreach ($recordIdsArr as $recordId) {
-            if (1 > $recordId) {
+            if (1 > $recordId || $recordId == FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 0)) {
                 continue;
             }
 

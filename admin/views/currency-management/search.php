@@ -41,6 +41,9 @@ foreach ($arrListing as $sn => $row) {
             case 'currency_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['currency_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 $statusClass = ($canEdit) ? '' : 'disabled';
+                if ($row['currency_id'] == FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 0)) {
+                    $statusClass = 'disabled';
+                }
                 $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
 
                 $htm = '<span class="switch switch-sm switch-icon">
@@ -74,7 +77,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 
 if ($printData) {

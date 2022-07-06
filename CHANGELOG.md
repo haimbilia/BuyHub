@@ -990,6 +990,20 @@ TV-9.4.0.20220406
     - #065138 - When user selects discount type as flat. Max discount field should got hidden.
     - #065121 - The COD order transaction does not get approved automatically even if the admin marked the order delivered
     - #065024 - when user click on Dropdown icon in add brand field during product creation
+    - #065113 - Notice Undefined index appears on the top of the order cancellation page on the admin end.
+    - #065034 - product type (new) or (used) is not coming on product detail page .
+    - #065120 - The order details page gets distorted when the buyer clicks on the tracking URL on the order details page.
+    - #065195 - Undefined Offset notice appears in the currency section on the footer of the homepage
+    - #065202 - Error message appears as 'Record already exists' when the admin tries
+    - #065154 - NO email sent to seller about feedback/review regarding his shop or product .
+    - #065179 - Multiple transactions appear for the COD transaction on the order details page on the admin end.
+    - #065180 - When the seller/admin made changes in the multiple specifications of the product then some changes do not reflect on the product setup page and front end as well.
+    - #065176 - Undefined Index Notice appears on the seller registration page. 
+    - #065190 - The comments field is missing in the general tab on the 'Seller approval form setup' popup.
+    - #065174 - The buyer is able to place an order of the product with a quantity less than the minimum purchase quantity.
+    - #065081 - When user request a brand , option to add banner image is not coming .
+    - #065242 - it used to show error at the place of content block , when we disble a content block .
+    - #065245 - It shows error when user tries to edit an inactive collection .
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

@@ -1936,3 +1936,4 @@ UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_template
 UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'forgot_password';
 UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'password_changed_successfully';
 UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'user_admin_password_changed_successfully';
+UPDATE `tbl_affiliate_commission_settings` SET `afcommsetting_is_mandatory` = '1' WHERE `tbl_affiliate_commission_settings`.`afcommsetting_id` = 1;

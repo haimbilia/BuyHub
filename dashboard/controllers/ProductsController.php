@@ -684,6 +684,27 @@ class ProductsController extends SellerBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
+    public function deleteProdSpec()
+    {       
+        $this->checkEditPrivilege(); 
+        $prodSpecId = FatApp::getPostedData('prodSpecId', FatUtility::VAR_INT, 0);
+        if ($prodSpecId < 1 ) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $productId = ProdSpecification::getAttributesById($prodSpecId,'prodspec_product_id');
+        if (1 > $productId ||   $this->userParentId != Product::getAttributesById($productId, 'product_seller_id')) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $prodSpec = new ProdSpecification($prodSpecId);
+        if (!$prodSpec->deleteRecord(true)) {
+            LibHelper::exitWithError($prodSpec->getError(), true);
+        }
+        $this->set('msg', $this->str_delete_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
     private function getForm($langId, $productType = 0, $recordId = 0)
     {
         $frm = $this->getCatalogForm($langId, $productType, $recordId);

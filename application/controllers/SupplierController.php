@@ -717,7 +717,7 @@ class SupplierController extends MyAppController
                 $fld->requirements()->setRequired();
             }
             if ($field['sformfield_comment']) {
-                $fld->htmlAfterField = '<p class="note">' . $field['sformfield_comment'] . '</p>';
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . $field['sformfield_comment'] . '</span>';
             }
         }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));

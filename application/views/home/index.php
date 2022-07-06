@@ -9,8 +9,10 @@
     <?php if (isset($slides) && count($slides)) {
         $this->includeTemplate('_partial/homePageSlides.php', array('slides' => $slides, 'siteLangId' => $siteLangId), false);
     }
-    
+
     foreach ($collectionTemplates as $collection) {
         echo FatUtility::decodeHtmlEntities($collection['html']);
-    } ?>
+    }
+    $this->includeTemplate('_partial/footerTrustBanners.php');
+    ?>
 </div>

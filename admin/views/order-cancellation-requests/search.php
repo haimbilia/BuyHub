@@ -64,10 +64,10 @@ foreach ($arrListing as $sn => $row) {
                 if (Orders::ORDER_PAYMENT_CANCELLED == $row["order_payment_status"]) {
                     $orderStatus = Labels::getLabel('LBL_CANCELLED', $siteLangId);
                 } else {
-                    $paymentMethodCode = Plugin::getAttributesById($row['order_pmethod_id'], 'plugin_code');
-                    if (in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
-                        if ($orderStatus != $row['plugin_name']) {
-                            $orderStatus .= " - " . $row['plugin_name'];
+                    $pluginData = Plugin::getAttributesByLangId($siteLangId, $row['order_pmethod_id'], ['plugin_name', 'plugin_code'],true);
+                    if (in_array(strtolower($pluginData['plugin_code']), ['cashondelivery', 'payatstore'])) {                                              
+                        if ($orderStatus != $pluginData['plugin_name']) {
+                            $orderStatus .= " - " . $pluginData['plugin_name'];
                         }
                     }
                 }

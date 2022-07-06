@@ -1217,9 +1217,9 @@ class Orders extends MyAppModel
             $srch->addMultipleFields(array('op_product_name', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_shipping_duration_name', 'op_product_tax_options'));
         }
 
-        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'torp.op_order_id = tor.order_number', 'tor');
+        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'torp.op_order_id = tor.order_id', 'tor');
         if ($langId > 0) {
-            $srch->joinTable(Orders::DB_TBL_LANG, 'LEFT OUTER JOIN', 'tor_l.orderlang_order_id = tor.order_number and tor_l.orderlang_lang_id = ' . $langId, 'tor_l');
+            $srch->joinTable(Orders::DB_TBL_LANG, 'LEFT OUTER JOIN', 'tor_l.orderlang_order_id = tor.order_id and tor_l.orderlang_lang_id = ' . $langId, 'tor_l');
             $srch->addMultipleFields(array('order_shippingapi_name'));
         }
 

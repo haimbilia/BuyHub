@@ -6,7 +6,7 @@ if (!isset($tbody)) {
 }
 
 $serialNo = ($page - 1) * $pageSize + 1;
-foreach ($arrListing as $sn => $row) {  
+foreach ($arrListing as $sn => $row) {
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
 
@@ -16,7 +16,13 @@ foreach ($arrListing as $sn => $row) {
         switch ($key) {
             case 'select_all':
                 if (1 > $row['afcommsetting_is_mandatory']) {
-                    $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="afcommsetting_ids[]" value=' . $row['afcommsetting_id'] . '><i class="input-helper"></i></label>', true);
+                    $disabled = '';
+                    $disabledCls = '';
+                    if (0 == $row['afcommsetting_prodcat_id'] && 0 == $row['afcommsetting_user_id']) {
+                        $disabledCls = 'disabled';
+                        $disabled = 'disabled="disabled"';
+                    }
+                    $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs ' . $disabledCls . '" type="checkbox" ' . $disabled . ' name="afcommsetting_ids[]" value=' . $row['afcommsetting_id'] . '><i class="input-helper"></i></label>', true);
                 }
                 break;
             case 'listSerial':
@@ -42,6 +48,14 @@ foreach ($arrListing as $sn => $row) {
 
                     if ($row['afcommsetting_is_mandatory'] != 1) {
                         $data['deleteButton'] = [];
+                    }
+
+                    if (0 == $row['afcommsetting_prodcat_id'] && 0 == $row['afcommsetting_user_id']) {
+                        $data['deleteButton'] =  [
+                            'class' => 'disabled',
+                            'title' => Labels::getLabel('ERR_NOT_AUTHORIZED', $siteLangId),
+                            'onclick' => 'javascript:void(0);',
+                        ];
                     }
 
                     $data['otherButtons'] = [
@@ -70,7 +84,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

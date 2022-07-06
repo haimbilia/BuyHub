@@ -153,7 +153,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_symbol_left'])) {
             return self::$_currencyData['currency_symbol_left'];
         }
-        return self::$_currencyData['currency_symbol_left'] = Currency::getAttributesById(self::$_lang_id, 'currency_symbol_left');
+        return self::$_currencyData['currency_symbol_left'] = Currency::getAttributesById(self::$_currency_id, 'currency_symbol_left');
     }
 
     public static function getCurrencySymbolRight()
@@ -161,7 +161,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_symbol_right'])) {
             return self::$_currencyData['currency_symbol_right'];
         }
-        return self::$_currencyData['currency_symbol_right'] = Currency::getAttributesById(self::$_lang_id, 'currency_symbol_right');
+        return self::$_currencyData['currency_symbol_right'] = Currency::getAttributesById(self::$_currency_id, 'currency_symbol_right');
     }
 
     public static function getCurrencyCode()
@@ -169,7 +169,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_code'])) {
             return self::$_currencyData['currency_code'];
         }
-        return self::$_currencyData['currency_code'] = Currency::getAttributesById(self::$_lang_id, 'currency_code');
+        return self::$_currencyData['currency_code'] = Currency::getAttributesById(self::$_currency_id, 'currency_code');
     }
 
     public static function getCurrencyValue()
@@ -177,7 +177,7 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_value'])) {
             return self::$_currencyData['currency_value'];
         }
-        return self::$_currencyData['currency_value'] = Currency::getAttributesById(self::$_lang_id, 'currency_value');
+        return self::$_currencyData['currency_value'] = Currency::getAttributesById(self::$_currency_id, 'currency_value');
     }
 
     public static function userAgent()

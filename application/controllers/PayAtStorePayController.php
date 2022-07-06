@@ -49,9 +49,12 @@ class PayAtStorePayController extends MyAppController
                 LibHelper::exitWithError($msg, FatUtility::isAjaxCall(), true);
                 FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'ViewOrder', array($orderInfo['id'])));
             }
+            if($opDetail['op_status_id'] == FatApp::getConfig('CONF_PAY_AT_STORE_ORDER_STATUS', FatUtility::VAR_INT, 0)){
+                LibHelper::exitWithError(Labels::getLabel('ERR_ORDER_ALREADY_PLACED', $this->siteLangId), FatUtility::isAjaxCall(), true);
+            }
         }
         /* ] */
-
+        $this->paymentInitiated($orderId);
         $orderPaymentObj->confirmPayPickup($orderId, $this->siteLangId);
         foreach ($childOrderDetail as $opID => $opDetail) {
             if ($opDetail['op_is_batch']) {
@@ -73,5 +76,16 @@ class PayAtStorePayController extends MyAppController
             FatUtility::dieJsonSuccess($json);
         }
         FatApp::redirectUser($successUrl);
+    }
+    /**
+     * paymentInitiated : Order Id is not being used for now. 
+     *
+     * @param  int $orderId
+     * @return void
+     */
+    protected function paymentInitiated($orderId)
+    {
+        unset($_SESSION['shopping_cart']["order_id"]);
+        unset($_SESSION['subscription_shopping_cart']["order_id"]);
     }
 }
