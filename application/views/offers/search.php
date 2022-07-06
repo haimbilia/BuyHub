@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (!empty($arrListing) && is_array($arrListing)) {
     foreach ($arrListing as $sn => $row) {
-        $discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value']);
+        $discountValue = ($row['coupon_discount_in_percent'] == applicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value']);
 
         $title = ($row['coupon_title'] == '') ? $row['coupon_identifier'] : $row['coupon_title'];
         $uploadedTime = AttachedFile::setTimeParam($row['coupon_updated_on']);

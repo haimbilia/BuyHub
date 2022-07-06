@@ -2504,7 +2504,7 @@ class EmailHandler extends FatModel
                 continue;
             }
 
-            $discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value'], true, true);
+            $discountValue = ($row['coupon_discount_in_percent'] == applicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value'], true, true);
             $arrReplacements = array(
                 '{user_name}' => trim($row["user_name"]),
                 '{coupon_code}' => $row['coupon_code'],
