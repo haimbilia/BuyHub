@@ -286,7 +286,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
                 fcom.removeLoader();
                 $("#modalBoxJs").modal("hide");
                 if (ans.status == true) {                  
-                    $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").val(langId).change();
+                    $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] [name='lang_id']").val(langId).change();
                     fcom.displaySuccessMessage(ans.msg);
                 }
             },
