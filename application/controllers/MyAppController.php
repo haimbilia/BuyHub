@@ -396,7 +396,7 @@ class MyAppController extends FatController
             for ($i = 0; $i < User::OTP_LENGTH; $i++) {
                 $frm->addTextBox('', 'upv_otp[' . $i . ']', '', $attr);
             }
-            $frm->addHiddenField('', 'loginWithOtp', 0);
+            $frm->addHiddenField('', 'loginWithOtp', 1);
         }
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_LOGIN', $siteLangId));

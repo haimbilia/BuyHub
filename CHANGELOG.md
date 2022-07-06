@@ -1004,6 +1004,7 @@ TV-9.4.0.20220406
     - #065081 - When user request a brand , option to add banner image is not coming .
     - #065242 - it used to show error at the place of content block , when we disble a content block .
     - #065245 - It shows error when user tries to edit an inactive collection .
+    - #065192 - The error occurs when the user is trying to log in with the phone number.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

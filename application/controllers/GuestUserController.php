@@ -159,6 +159,11 @@ class GuestUserController extends MyAppController
                 }
                 $password = implode("", $post['upv_otp']);
             }
+            
+            if(empty($password)){
+                $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('ERR_OTP_REQUIRED', $this->siteLangId));
+                LibHelper::dieJsonResponse($resp);
+            }
         }
 
         $withPhone = empty($dialCode) ? false : true;
