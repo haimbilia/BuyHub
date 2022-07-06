@@ -5,12 +5,14 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     <div class="content-body">
         <div class="">
             <div class="">
-                <div class="section-head section-head-center my-4">
-                    <div class="section-heading">
-                        <?php echo html_entity_decode($pageData['epage_content']); ?>
+                <?php if(!empty($pageData)){?>
+                    <div class="section-head section-head-center my-4">
+                        <div class="section-heading">
+                            <?php echo html_entity_decode($pageData['epage_content']); ?>
+                        </div>
                     </div>
-                </div>
                 <?php
+                }
                 if (1 > $currentActivePlanId && $parentUserId != UserAuthentication::getLoggedUserId()) {
                     echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_PARENT_MERCHANT_MUST_NEED_TO_BUY_A_VALID_SUBSCRIPTION.', $siteLangId));
                 }
