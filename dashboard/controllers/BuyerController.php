@@ -31,6 +31,7 @@ class BuyerController extends BuyerBaseController
 
         $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->joinSellerProducts();
+        $srch->joinOrderProductSpecifics();
         $srch->joinShippingCharges();
         $srch->joinSellerProductGroup();
         $srch->addCountsOfOrderedProducts();
@@ -43,7 +44,10 @@ class BuyerController extends BuyerBaseController
         $srch->setPageSize(applicationConstants::DASHBOARD_PAGE_SIZE);
 
         $srch->addMultipleFields(
-            array('order_number', 'order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_product_type', 'op_status_id', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_other_charges', 'op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off')
+            array(
+                'order_number', 'order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_product_type', 'op_status_id', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_other_charges', 'op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off','op_selprod_return_age','op_selprod_cancellation_age'
+            )
         );
         $rs = $srch->getResultSet();
         $orders = FatApp::getDb()->fetchAll($rs);
@@ -626,9 +630,7 @@ class BuyerController extends BuyerBaseController
 
         $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->addCountsOfOrderedProducts();
-        $srch->joinShippingCharges();
-        $srch->joinShopSpecifics();
-        $srch->joinSellerProductSpecifics();
+        $srch->joinShippingCharges();     
         $srch->joinOrderProductSpecifics();
         $srch->joinTable('(' . $qryOtherCharges . ')', 'LEFT OUTER JOIN', 'op.op_id = opcc.opcharge_op_id', 'opcc');
         $srch->joinTable(
@@ -696,14 +698,13 @@ class BuyerController extends BuyerBaseController
                 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_status_id', 'op_product_type',
                 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class',
                 'order_pmethod_id', 'order_status', 'plugin_name', 'IFNULL(orrequest_id, 0) as return_request',
-                'IFNULL(ocrequest_id, 0) as cancel_request', 'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age',
-                'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age', 'order_payment_status',
+                'IFNULL(ocrequest_id, 0) as cancel_request', 'op_selprod_return_age',
+                'op_selprod_cancellation_age', 'order_payment_status',
                 'order_deleted', 'plugin_code', 'opshipping_fulfillment_type', 'op_rounding_off', 'selprod_product_id', 'orderstatus_id'
             )
         );
-
-        $rs = $srch->getResultSet();
-        $orders = FatApp::getDb()->fetchAll($rs);
+      
+        $orders = FatApp::getDb()->fetchAll($srch->getResultSet());
         $oObj = new Orders();
         foreach ($orders as &$order) {
             $charges = $oObj->getOrderProductChargesArr($order['op_id'], MOBILE_APP_API_CALL);
@@ -1103,12 +1104,12 @@ class BuyerController extends BuyerBaseController
 
         $user_id = UserAuthentication::getLoggedUserId();
         $srch = new OrderProductSearch($this->siteLangId, true);
+        $srch->joinOrderProductSpecifics();
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS")));
         $srch->addCondition('order_user_id', '=', $user_id);
         $srch->addCondition('op_id', '=', $op_id);
         $srch->addOrder("op_id", "DESC");
-        $rs = $srch->getResultSet();
-        $opDetail = FatApp::getDb()->fetch($rs);
+        $opDetail = FatApp::getDb()->fetch($srch->getResultSet());
         if (!$opDetail || CommonHelper::isMultidimArray($opDetail)) {
             $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
@@ -1116,6 +1117,14 @@ class BuyerController extends BuyerBaseController
             }
             Message::addErrorMessage($message);
             FatUtility::dieWithError(Message::getHtml());
+        }
+
+        $datediff = time() - strtotime($opDetail['order_date_added']);
+        $daysSpent = $datediff / (60 * 60 * 24); 
+      
+        if($opDetail['op_selprod_cancellation_age'] <= $daysSpent){
+            $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
+            LibHelper::dieJsonError($message);
         }
 
         if ($opDetail["op_product_type"] == Product::PRODUCT_TYPE_DIGITAL) {
@@ -2165,15 +2174,23 @@ class BuyerController extends BuyerBaseController
         $user_id = UserAuthentication::getLoggedUserId();
         $srch = new OrderProductSearch($this->siteLangId, true);
         $srch->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT, 'cvd');
+        $srch->joinOrderProductSpecifics();            
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS")));
         $srch->addCondition('order_user_id', '=', $user_id);
         $srch->addCondition('op_id', '=', $op_id);
         $srch->addOrder("op_id", "DESC");
-        $srch->addMultipleFields(array('order_language_id', 'op_status_id', 'op_id', 'op_qty', 'op_product_type', 'op_unit_price', 'opcharge_amount'));
-        $rs = $srch->getResultSet();
-        $opDetail = FatApp::getDb()->fetch($rs);
+        $srch->addMultipleFields(array('order_language_id', 'op_status_id', 'op_id', 'op_qty', 'op_product_type', 'op_unit_price', 'opcharge_amount','order_date_added','op_selprod_return_age'));
+        $opDetail = FatApp::getDb()->fetch($srch->getResultSet());
 
         if (!$opDetail || CommonHelper::isMultidimArray($opDetail)) {
+            $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
+            LibHelper::dieJsonError($message);
+        }       
+        
+        $datediff = time() - strtotime($opDetail['order_date_added']);
+        $daysSpent = $datediff / (60 * 60 * 24);     
+
+        if($opDetail['op_selprod_return_age'] <= $daysSpent){
             $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
             LibHelper::dieJsonError($message);
         }

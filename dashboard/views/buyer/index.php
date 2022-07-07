@@ -146,6 +146,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
                                     <?php if (count($orders) > 0) {
                                         $canCancelOrder = true;
                                         $canReturnRefund = true;
+                                       
                                         foreach ($orders as $orderId => $row) {
                                             $orderDetailUrl = UrlHelper::generateUrl('Buyer', 'viewOrder', array($row['order_id'], $row['op_id']));
                                             if ($row['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
@@ -153,7 +154,14 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
                                                 $canReturnRefund = (in_array($row["op_status_id"], (array)Orders::getBuyerAllowedOrderReturnStatuses(true)));
                                             } else {
                                                 $canCancelOrder = (in_array($row["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses()));
+                                                                                                
                                                 $canReturnRefund = (in_array($row["op_status_id"], (array)Orders::getBuyerAllowedOrderReturnStatuses()));
+                                                $datediff = time() - strtotime($row['order_date_added']);
+                                                $daysSpent = $datediff / (60 * 60 * 24);
+                                                $returnAge = $row['op_selprod_return_age'];  
+                                                $canReturnRefund =  $canReturnRefund && $returnAge > $daysSpent;
+                                                $canCancelOrder = $canCancelOrder && $row['op_selprod_cancellation_age'] > $daysSpent;
+                                            
                                             }
                                             $isValidForReview = false;
                                             if (in_array($row["op_status_id"], SelProdReview::getBuyerAllowedOrderReviewStatuses())) {

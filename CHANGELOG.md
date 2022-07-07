@@ -1006,6 +1006,7 @@ TV-9.4.0.20220406
     - #065245 - It shows error when user tries to edit an inactive collection .
     - #065192 - The error occurs when the user is trying to log in with the phone number.
     - #065254 - Issue while state selection .
+    - #065262 - buyer is able to request for refund when order return age is 0 on the seller end . 
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
