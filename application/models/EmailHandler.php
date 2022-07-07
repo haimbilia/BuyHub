@@ -21,8 +21,8 @@ class EmailHandler extends FatModel
         if (empty($phone) || empty($tpl) || empty($arrReplacements)) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
             return false;
-        }
-        $phone = 0 < strpos($phone, '+') ? $phone : '+' . $phone;
+        }     
+        $phone = false !== strpos($phone, '+') ? $phone : '+' . $phone;
 
         $smsArchive = new SmsArchive();
         $smsArchive->toPhone($phone);
