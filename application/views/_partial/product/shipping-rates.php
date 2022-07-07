@@ -6,26 +6,22 @@
             <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]); ?>
         </li>
     <?php } ?>
-
-    <?php if ((!empty($product['shop_return_age']) || !empty($product['selprod_return_age'])) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) { ?>
-        <?php
-        $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);
-        $returnAge = !empty($product['selprod_return_age']) ? $product['selprod_return_age'] : $product['shop_return_age'];
-        $returnAge = !empty($returnAge) ? $returnAge : 0;
+    
+    <?php
+    $returnAge = '' != $product['selprod_return_age'] ? $product['selprod_return_age'] : $product['shop_return_age'];
+    if (!empty($product['shop_return_age']) && 0 < $returnAge) {      
+        $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);       
         ?>
         <li title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>">
             <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>
         </li>
-    <?php } ?>
-
-    <?php if ((!empty($product['shop_cancellation_age']) || !empty($product['selprod_cancellation_age'])) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) { ?>
-        <?php
+    <?php }
+    $cancellationAge = '' != $product['selprod_cancellation_age'] ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
+    if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type'] && 0 <  $cancellationAge) {
         $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_CANCELLATION_POLICY', $siteLangId);
-        $cancellationAge = !empty($product['selprod_cancellation_age']) ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
-        $cancellationAge = !empty($cancellationAge) ? $cancellationAge : 0;
-        ?>
+    ?>
         <li title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]); ?>">
-            <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>
+            <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]); ?>
         </li>
     <?php } ?>
 
