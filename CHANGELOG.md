@@ -1007,6 +1007,7 @@ TV-9.4.0.20220406
     - #065192 - The error occurs when the user is trying to log in with the phone number.
     - #065254 - Issue while state selection .
     - #065262 - buyer is able to request for refund when order return age is 0 on the seller end . 
+    - #065031 - UI issue on the order return requests listing page. 
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
