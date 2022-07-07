@@ -1323,7 +1323,7 @@ class AccountController extends LoggedUserController
             'user_new_email' => $post['new_email']
         );
 
-        if (!$this->userEmailVerifications($userObj, $arr)) {
+        if (!$this->userEmailVerifications($userObj, $arr, true)) {
             $message = Labels::getLabel('MSG_ERROR_IN_SENDING_VERFICATION_EMAIL', $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
