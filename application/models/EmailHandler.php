@@ -2315,7 +2315,7 @@ class EmailHandler extends FatModel
                 '{new_order_status}' => $statuesArr[$orderProduct["op_status_id"]],
                 '{invoice_number}' => $orderProduct["op_invoice_number"],
                 '{order_items_table_format}' => $orderItemsTableFormatHtml,
-                '{review_page_url}' => UrlHelper::generateFullUrl('Buyer', 'orderFeedback', array($orderProduct['op_id']), CONF_WEBROOT_FRONT_URL),
+                '{review_page_url}' => UrlHelper::generateFullUrl('Buyer', 'orderFeedback', array($orderProduct['op_id']), CONF_WEBROOT_DASHBOARD),
             );
 
             if (!empty($userInfo["credential_email"])) {

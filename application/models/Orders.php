@@ -1,4 +1,7 @@
 <?php
+
+use Stripe\Order;
+
 class Orders extends MyAppModel
 {
     public const DB_TBL = 'tbl_orders';
@@ -2736,7 +2739,7 @@ class Orders extends MyAppModel
         return true;
     }
 
-    public function changeOrderStatus()
+    public static function changeOrderStatus()
     {
         $completedOrderStatus = FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS", FatUtility::VAR_INT, 0);
         $deliveredOrderStatus = FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS", FatUtility::VAR_INT, 0);
@@ -2766,8 +2769,9 @@ class Orders extends MyAppModel
         $ordersDetail = FatApp::getDb()->fetchAll($rs, 'op_id');
         $comment = Labels::getLabel("MSG_AUTOMATICALLY_MARKED_AS_COMPLETED_BY_SYSTEM.", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
 
+        $order = new Orders();
         foreach ($ordersDetail as $data) {
-            $this->addChildProductOrderHistory($data['op_id'], $data["order_language_id"], $completedOrderStatus, $comment, 1);
+            $order->addChildProductOrderHistory($data['op_id'], $data["order_language_id"], $completedOrderStatus, $comment, 1);
         }
         return true;
     }
