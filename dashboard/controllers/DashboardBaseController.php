@@ -612,7 +612,7 @@ class DashboardBaseController extends FatController
                 'user_phone' => $data['user_phone'],
                 'link' => $link,
                 'user_new_email' => $data['user_new_email'],
-                'user_email' => $data['user_email'],
+                'user_email' => $data['user_new_email'],
             );
             if (!$email->sendChangeEmailRequestNotification($this->siteLangId, $dataArr)) {
                 return false;
