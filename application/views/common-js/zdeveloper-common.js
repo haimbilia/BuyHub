@@ -715,8 +715,18 @@ function codeLatLng(lat, lng, callback) {
 
 function defaultSetUpLogin(frm, v) {
     var formClass = "";
+
+    if ($('.submitBtn--js').css('display') == 'none') {
+        $('.getOtpBtnBlock--js button').trigger('click');
+        return;
+    }
+
     if ($(frm).hasClass("loginpopup--js")) {
         formClass = "form.loginpopup--js ";
+    }
+
+    if ($('#car').css('display') == 'none') {
+        alert('Car 2 is hidden');
     }
 
     $(".loginFormJs").prepend(fcom.getLoader());
