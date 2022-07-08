@@ -1585,8 +1585,7 @@ class Importexport extends ImportexportCommon
         if (isset($minId) && isset($maxId)) {
             $srch->addCondition('product_id', '>=', $minId);
             $srch->addCondition('product_id', '<=', $maxId);
-        }
-        echo $srch->getQuery(); exit;
+        }       
         $rs = $srch->getResultSet();
 
         $sheetData = array();
