@@ -12,6 +12,11 @@ if (true == $primaryOrder) {
     } else {
         $canCancelOrder = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses()));
         $canReturnRefund = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderReturnStatuses()));
+        $datediff = time() - strtotime($childOrderDetail['order_date_added']);
+        $daysSpent = $datediff / (60 * 60 * 24);
+        $returnAge = $childOrderDetail['op_selprod_return_age'];  
+        $canReturnRefund =  $canReturnRefund && $returnAge > $daysSpent;
+        $canCancelOrder = $canCancelOrder && $childOrderDetail['op_selprod_cancellation_age'] > $daysSpent;
     }
 
     if (in_array($childOrderDetail["op_status_id"], SelProdReview::getBuyerAllowedOrderReviewStatuses())) {

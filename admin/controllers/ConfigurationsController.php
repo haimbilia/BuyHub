@@ -909,9 +909,11 @@ class ConfigurationsController extends ListingBaseController
                 );
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_THE_DEFAULT_CHILD_ORDER_STATUS_WHEN_AN_ORDER_IS_MARKED_COMPLETED.", $langId) . "</span>";
 
+                /*
                 $returnAge = FatApp::getConfig("CONF_DEFAULT_RETURN_AGE", FatUtility::VAR_INT, 7);
                 $fld = $frm->addIntegerField(Labels::getLabel("FRM_DEFAULT_RETURN_AGE_[Days]", $langId), 'CONF_DEFAULT_RETURN_AGE', $returnAge);
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_IT_WILL_CONSIDERED_IF_NO_RETURN_AGE_IS_DEFINED_IN_SHOP_OR_SELLER_PRODUCT.", $langId) . "</span>";
+                */
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_SELLER_ORDER_STATUSES", $langId), 'CONF_VENDOR_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];

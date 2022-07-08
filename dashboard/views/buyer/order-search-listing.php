@@ -80,13 +80,10 @@
                 case 'action':
                     $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
 
-                    $opCancelUrl = UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($order['op_id']));
-                    $now = time(); // or your date as well
-                    $orderDate = strtotime($order['order_date_added']);
-                    $datediff = $now - $orderDate;
-                    $daysSpent = round($datediff / (60 * 60 * 24));
-                    $returnAge = !empty($order['return_age']) ? $order['return_age'] : FatApp::getConfig("CONF_DEFAULT_RETURN_AGE", FatUtility::VAR_INT, 7);
-
+                    $opCancelUrl = UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($order['op_id']));                          
+                    $datediff = time() - strtotime($order['order_date_added']);
+                    $daysSpent = $datediff / (60 * 60 * 24);
+                    $returnAge = $order['op_selprod_return_age'];           
                     $li = $ul->appendElement("li");
                     $li->appendElement(
                         'a',
@@ -102,7 +99,7 @@
                         true
                     );
 
-                    if ($canCancelOrder && false === OrderCancelRequest::getCancelRequestById($order['op_id']) && $order['cancellation_age'] >= $daysSpent) {
+                    if ($canCancelOrder && false === OrderCancelRequest::getCancelRequestById($order['op_id']) && $order['op_selprod_cancellation_age'] > $daysSpent) {
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
@@ -137,7 +134,7 @@
                         );
                     }
 
-                    if ($canReturnRefund && ($order['return_request'] == 0 && $order['cancel_request'] == 0) && $returnAge >= $daysSpent) {
+                    if ($canReturnRefund && ($order['return_request'] == 0 && $order['cancel_request'] == 0) && $returnAge > $daysSpent) {
                         $opRefundRequestUrl = UrlHelper::generateUrl('Buyer', 'orderReturnRequest', array($order['op_id']));
                         $li = $ul->appendElement("li");
                         $li->appendElement(

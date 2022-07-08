@@ -693,7 +693,7 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
         var country = sel.options[sel.selectedIndex].text;
 
         var sel = document.getElementById('shop_state');
-        var state = sel.options[sel.selectedIndex].text;
+        var state = sel.selectedIndex > 0 ? sel.options[sel.selectedIndex].text  : '';
 
         var postalCode = document.getElementById('postal_code').value; 
         geocodeAddress(geocoder, map, infowindow, { 'address': `${state} ${postalCode}, ${country}` });
@@ -704,9 +704,9 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
         var country = sel.options[sel.selectedIndex].text;
 
         var sel = document.getElementById('shop_state');
-        var state = sel.options[sel.selectedIndex].text;      
-
-        geocodeAddress(geocoder, map, infowindow, { 'address': `${state}, ${country}` });
+        var state = sel.selectedIndex > 0 ? sel.options[sel.selectedIndex].text + ',' : '';
+        console.log(`${state} ${country}`);
+        geocodeAddress(geocoder, map, infowindow, { 'address': `${state} ${country}` });
     });
 
     document.getElementById('shop_country_code').addEventListener('change', function () {
@@ -734,7 +734,8 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
                 map: resultsMap,
                 position: results[0].geometry.location,
                 draggable: true
-            });      
+            });     
+            console.log(results); 
             geocodeSetData(results);
             google.maps.event.addListener(marker, 'dragend', function () {
                 geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
@@ -779,19 +780,20 @@ function geocodeSetData(results) {
         }
         $('#postal_code').val(data.postal_code);
 
-        $('#shop_country_code option').each(function () {
-            if (this.text == data.country) {
-                $('#shop_country_code').val(this.value);
-                var state = $('#shop_state').val();
-                $('#shop_state option').each(function () {
-                    if (this.value == data.state_code || this.text == data.state || this.text == data.locality) {
-                        return state = this.value;
+        console.log(data.country_code);
+
+        if($('#shop_country_code').find("option[value='"+data.country_code+"']").length){
+            var state = $('#shop_state').val() != '' ? $('#shop_state').val() : 0;           
+            if(undefined != data.state_code){
+                $('#shop_state option').each(function () {                     
+                    if ($(this).val() == data.state_code || this.text == data.state || this.text == data.locality) {
+                        state = $(this).val();                      
+                        return false; 
                     }
                 });
-                getStatesByCountryCode(this.value, state, '#shop_state', 'state_code');
-                return false;
             }
-        });
+            getStatesByCountryCode(data.country_code, state, '#shop_state', 'state_code');
+        }       
     }
 }
 

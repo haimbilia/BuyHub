@@ -21,8 +21,8 @@ class EmailHandler extends FatModel
         if (empty($phone) || empty($tpl) || empty($arrReplacements)) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
             return false;
-        }
-        $phone = 0 < strpos($phone, '+') ? $phone : '+' . $phone;
+        }     
+        $phone = false !== strpos($phone, '+') ? $phone : '+' . $phone;
 
         $smsArchive = new SmsArchive();
         $smsArchive->toPhone($phone);
@@ -2315,7 +2315,7 @@ class EmailHandler extends FatModel
                 '{new_order_status}' => $statuesArr[$orderProduct["op_status_id"]],
                 '{invoice_number}' => $orderProduct["op_invoice_number"],
                 '{order_items_table_format}' => $orderItemsTableFormatHtml,
-                '{review_page_url}' => UrlHelper::generateFullUrl('Buyer', 'orderFeedback', array($orderProduct['op_id']), CONF_WEBROOT_FRONT_URL),
+                '{review_page_url}' => UrlHelper::generateFullUrl('Buyer', 'orderFeedback', array($orderProduct['op_id']), CONF_WEBROOT_DASHBOARD),
             );
 
             if (!empty($userInfo["credential_email"])) {
@@ -2504,7 +2504,7 @@ class EmailHandler extends FatModel
                 continue;
             }
 
-            $discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value'], true, true);
+            $discountValue = ($row['coupon_discount_in_percent'] == applicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value'], true, true);
             $arrReplacements = array(
                 '{user_name}' => trim($row["user_name"]),
                 '{coupon_code}' => $row['coupon_code'],

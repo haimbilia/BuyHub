@@ -1006,7 +1006,13 @@ TV-9.4.0.20220406
     - #065081 - When user request a brand , option to add banner image is not coming .
     - #065242 - it used to show error at the place of content block , when we disble a content block .
     - #065245 - It shows error when user tries to edit an inactive collection .
-    - #065185 - The spacing issue between the content and icons of the social platform on the footer of the page.
+    - #065185 - The spacing issue between the content and icons of the social platform on the footer of the page.   
+    - #065192 - The error occurs when the user is trying to log in with the phone number.
+    - #065254 - Issue while state selection .
+    - #065262 - buyer is able to request for refund when order return age is 0 on the seller end . 
+    - #065031 - UI issue on the order return requests listing page. 
+    - #065270 - The verification link is missing in the verification email received for the email change request.
+    - #065277 - The deleted product counts also appear in the product count on the category listing page.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

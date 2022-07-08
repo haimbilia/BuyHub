@@ -14,8 +14,8 @@ foreach ($arrListing as $sn => $row) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
-            case 'orrequest_id':
-                $td->appendElement('plaintext', $tdAttr, $row['orrequest_reference']);
+            case 'orrequest_reference':
+                $td->appendElement('plaintext', $tdAttr, '<span class="text-nowrap">'.$row['orrequest_reference'].'</span>', true);
                 break;
             case 'buyer_detail':
                 $href = "javascript:void(0)";

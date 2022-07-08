@@ -332,14 +332,13 @@ class UserAuthentication extends FatModel
         $condition = $srch->addCondition('credential_username', '=', $username);
         $condition->attachCondition('credential_email', '=', $username, 'OR');
         $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $username, 'OR', true);
-        $srch->doNotCalculateRecords();
-
-        if (true === $this->loginWithOtp && !empty($password)) {
+        $srch->doNotCalculateRecords();     
+        if (true === $this->loginWithOtp) {
             $loginPhone = CommonHelper::replaceStringData($username, [$this->loginDcode => ValidateElement::formatDialCode($this->loginDcode)]);
             $srch->joinTable(User::DB_TBL_USER_PHONE_VER, 'INNER JOIN', 'upv_user_id = user_id', 'upv');
             $srch->addCondition('mysql_func_CONCAT(upv_phone_dcode, upv_phone)', '=', $loginPhone, 'AND', true);
-            $srch->addCondition('upv_otp', '=', $password);
-        }
+            $srch->addCondition('upv_otp', '=', $password);           
+        }  
 
         if (0 < $userType) {
             switch ($userType) {
