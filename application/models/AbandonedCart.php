@@ -244,10 +244,10 @@ class AbandonedCart extends MyAppModel
         $srch->addActionCondition(static::ACTION_ADDED);
         $srch->addCondition(static::DB_TBL_PREFIX . 'email_count', '<', 'mysql_func_' . static::MAX_EMAIL_COUNT, 'AND', true);
         $srch->addCondition(static::DB_TBL_PREFIX . 'discount_notification', '=', 'mysql_func_0', 'AND', true);
-        $srch->addMultipleFields(array(static::DB_TBL_PREFIX . 'id', 'user_id', 'user_name', 'credential_email', 'selprod_id', 'selprod_product_id', 'selprod_title', 'selprod_price'));
+        $srch->addMultipleFields(array(static::DB_TBL_PREFIX . 'id', 'user_id', 'user_name', 'credential_email', 'selprod_id', 'selprod_product_id', 'selprod_title', 'COALESCE(splprice_price, selprod_price) as selprod_price'));
         $srch->addOrder(static::DB_TBL_PREFIX . 'user_id');
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->doNotLimitRecords();      
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
