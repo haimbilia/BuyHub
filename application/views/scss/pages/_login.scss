@@ -86,6 +86,10 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        &:hover {
+            color: $brand-color;
+            border-color: currentColor;
+        }
     }
     &-icon {
         padding: 0;

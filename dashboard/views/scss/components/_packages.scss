@@ -69,11 +69,6 @@
                 }
             }
         }
-        h3 {
-            padding: 10px;
-            font-size: 1rem;
-            margin: 0;
-        }
 
         .price-list {
             margin: 0 auto;
@@ -91,7 +86,17 @@
         }
     }
     &-foot {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
         padding-top: 2rem;
+
+        p {
+            padding: 0;
+            font-size: 0.8rem;
+
+            margin: 0;
+        }
     }
 
     .name {

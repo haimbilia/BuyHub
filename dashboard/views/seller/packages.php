@@ -5,7 +5,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     <div class="content-body">
         <div class="">
             <div class="">
-                <?php if(!empty($pageData)){?>
+                <?php if (!empty($pageData)) { ?>
                     <div class="section-head section-head-center my-4">
                         <div class="section-heading">
                             <?php echo html_entity_decode($pageData['epage_content']); ?>
@@ -60,33 +60,32 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             </li>
                                         </ul>
                                     </div>
-                                    <h3>
-                                        <?php
-                                        echo CommonHelper::replaceStringData(Labels::getLabel('LBL_SELECT_YOUR_{PACKAGE-NAME}_PRICE', $siteLangId), ['{PACKAGE-NAME}' => $package['spackage_name']]);
-                                        ?>
-                                    </h3>
-                                    <?php $disabled = ($parentUserId != UserAuthentication::getLoggedUserId()) ? 'disabled=disabled' : ''; ?>
-                                    <select name="packages" class="form-select packagesJS" <?php echo $disabled; ?>>
-                                        <option value="" disabled="disabled" <?php echo (empty($selectedClass) ? 'selected=selected' : ''); ?>>
-                                            <?php echo Labels::getLabel('LBL_SELECT_PRICE', $siteLangId); ?>
-                                        </option>
-                                        <?php foreach ($package['plans'] as $plan) {
-                                            $isActive = ($currentActivePlanId == $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']) ? 'selected=selected' : '';
-                                        ?>
-                                            <option value="<?php echo $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']; ?>" <?php echo $isActive; ?>>
-                                                <?php echo SellerPackagePlans::getPlanPriceWithPeriod($plan, $plan[SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?>
-                                            </option>
-                                        <?php } ?>
-                                    </select>
                                 </div>
                                 <?php if ($parentUserId == UserAuthentication::getLoggedUserId()) { ?>
                                     <div class="packages-box-foot">
+                                        <p>
+                                            <?php
+                                            echo CommonHelper::replaceStringData(Labels::getLabel('LBL_SELECT_YOUR_{PACKAGE-NAME}_PRICE', $siteLangId), ['{PACKAGE-NAME}' => $package['spackage_name']]);
+                                            ?>
+                                        </p>
+                                        <?php $disabled = ($parentUserId != UserAuthentication::getLoggedUserId()) ? 'disabled=disabled' : ''; ?>
+                                        <select name="packages" class="form-select packagesJS" <?php echo $disabled; ?>>
+
+                                            <?php foreach ($package['plans'] as $plan) {
+                                                $isActive = ($currentActivePlanId == $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']) ? 'selected=selected' : '';
+                                            ?>
+                                                <option value="<?php echo $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']; ?>" <?php echo $isActive; ?>>
+                                                    <?php echo SellerPackagePlans::getPlanPriceWithPeriod($plan, $plan[SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+
                                         <?php if ($currentActivePlanId) {
                                             $buyPlanText = Labels::getLabel('LBL_Change_Plan', $siteLangId);
                                         } else {
                                             $buyPlanText = Labels::getLabel('LBL_Buy_Plan', $siteLangId);
                                         } ?>
-                                        <button type="button" data-id="<?php echo $package[SellerPackages::DB_TBL_PREFIX . 'id']; ?>" class="btn btn-brand btn-wide buySubscription--js "><?php echo $buyPlanText; ?>
+                                        <button class="btn btn-brand btn-block buySubscription--js " type="button" data-id="<?php echo $package[SellerPackages::DB_TBL_PREFIX . 'id']; ?>"><?php echo $buyPlanText; ?>
                                         </button>
                                     </div>
                                 <?php } ?>

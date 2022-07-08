@@ -1411,7 +1411,8 @@ input.sp-input {
 
 .product-tag {
     &.scroll-y {
-        max-height: 100px;
+        overflow-y: auto;
+        max-height: 200px;
     }
 }
 

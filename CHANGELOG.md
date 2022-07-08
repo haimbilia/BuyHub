@@ -1000,10 +1000,13 @@ TV-9.4.0.20220406
     - #065180 - When the seller/admin made changes in the multiple specifications of the product then some changes do not reflect on the product setup page and front end as well.
     - #065176 - Undefined Index Notice appears on the seller registration page. 
     - #065190 - The comments field is missing in the general tab on the 'Seller approval form setup' popup.
+    - 065189 - UI issue on the 'User Details' popup on the seller approval request page
+    - #064043 - Seller: Alignment is not correct under Subscription packages section
     - #065174 - The buyer is able to place an order of the product with a quantity less than the minimum purchase quantity.
     - #065081 - When user request a brand , option to add banner image is not coming .
     - #065242 - it used to show error at the place of content block , when we disble a content block .
     - #065245 - It shows error when user tries to edit an inactive collection .
+    - #065185 - The spacing issue between the content and icons of the social platform on the footer of the page.   
     - #065192 - The error occurs when the user is trying to log in with the phone number.
     - #065254 - Issue while state selection .
     - #065262 - buyer is able to request for refund when order return age is 0 on the seller end . 

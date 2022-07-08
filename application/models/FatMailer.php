@@ -404,12 +404,12 @@ class FatMailer extends FatModel
             if (!empty($img) && 0 < $img['afile_id']) {
                 $uploadedTime = AttachedFile::setTimeParam($img['afile_updated_at']);
                 $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'SocialPlatform', array($row['splatform_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-            } elseif ($row['splatform_icon_class'] != '') {
-                $imgSrc = UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'images/' . $row['splatform_icon_class'] . '.png';
-            }
-            $social_media_icons .= '<a style="display: inline-block; margin: 0 4px"" href="' . $url . '" ' . $target_blank . ' title="' . $title . '" >
+                $social_media_icons .= '<a style="display: inline-block; margin: 0 4px"" href="' . $url . '" ' . $target_blank . ' title="' . $title . '" >
                     <img alt="' . $title . '" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_SOCIAL_PLATFORM, ImageDimension::VIEW_NORMAL) . ' style="margin:1px auto 0; display:block;" src = "' . $imgSrc . '"/>
                 </a>';
+            } /* elseif ($row['splatform_icon_class'] != '') {
+                $imgSrc = UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'images/' . $row['splatform_icon_class'] . '.png';
+            } */
         }
 
 

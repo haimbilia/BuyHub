@@ -66,10 +66,13 @@ $input-color: #474747;
             cursor: not-allowed;
         }
     }
-    .main[dir="rtl"] & {
+    .content-wrapper[dir="rtl"] & {
         padding-#{$start-direction}: 35px;
+        padding-#{$end-direction}: 0.75rem;
     }
     [dir="rtl"] & {
+        padding-#{$start-direction}: 35px;
+        padding-#{$end-direction}: 0.75rem;
         background-position: calc(0% - -12px) center;
     }
 }
@@ -425,7 +428,7 @@ form.custom-form {
         }
     }
     .input-group-append {
-        min-width: 90px;
+        // min-width: 90px;
     }
 }
 

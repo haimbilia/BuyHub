@@ -760,8 +760,9 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
+        reloadProductListing(document.frmProductSearch, page);
+        $('html, body').animate({ scrollTop: $("#productsList").offset().top }, 'slow');
 
-        reloadProductListing(document.frmProductSearch, page)
         /*
         removePaginationFromLink(page);
         var frm = document.frmProductSearchPaging;
