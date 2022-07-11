@@ -2445,6 +2445,7 @@ class Importexport extends ImportexportCommon
                     if (true === $invalid) {
                         $errMsg = str_replace('{column-name}', $columnTitle, Labels::getLabel("ERR_INVALID_{column-name}.", $langId));
                         CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), $errMsg));
+                        $errorInRow = true;                    
                     } else {
                         $optionsArr[$columnKey] = $colValue;
                     }
