@@ -64,9 +64,9 @@ if (true === $displayShippingUserForm) {
         'attr' => [
             'href' => 'javascript:void(0);',
             'onclick' => "getShippingUsersForm(" . $op['order_id'] . ", " . $op['op_id'] . ");",
-            'title' => Labels::getLabel('LBL_SHIPPING_USER', $siteLangId)
+            'title' => Labels::getLabel('LBL_DELIVERY_AGENT', $siteLangId)
         ],
-        'label' => Labels::getLabel('LBL_SHIPPING_USER', $siteLangId),
+        'label' => Labels::getLabel('LBL_DELIVERY_AGENT', $siteLangId),
         'isActive' => false
     ];
 

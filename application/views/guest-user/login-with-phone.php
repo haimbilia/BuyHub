@@ -53,7 +53,7 @@ echo $loginFrm->getFormTag(); ?>
     </div>
     <div class="col-md-12 getOtpBtnBlock--js">
         <div class="form-group">
-            <button type="button" onclick="getLoginOtp(this);" class="btn btn-secondary btn-block">
+            <button type="button" onclick="getLoginOtp(this);" class="btn btn-secondary btn-block getOtpBtn-js">
                 <?php echo Labels::getLabel('LBL_GET_OTP', $siteLangId); ?>
             </button>
         </div>
