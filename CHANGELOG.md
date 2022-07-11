@@ -1015,6 +1015,7 @@ TV-9.4.0.20220406
     - #065277 - The deleted product counts also appear in the product count on the category listing page.
     - #065280 - An error occurs when the admin tries to export the Master products. 
     - #065317 - The notice appears on the order cancellations requests page on the admin end.
+    - #065318 - Multiple issues in the subscription package on the seller end.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

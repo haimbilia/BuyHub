@@ -91,7 +91,7 @@
                         true
                     );
 
-                    if ($canEdit && !$order['user_autorenew_subscription'] && date("Y-m-d") >= $order['ossubs_till_date'] && $order['ossubs_status_id'] == FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') && $order['ossubs_type'] == SellerPackages::PAID_TYPE) {
+                    if ($canEdit && date("Y-m-d") >= $order['ossubs_till_date'] && $order['ossubs_status_id'] == FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') && $order['ossubs_type'] == SellerPackages::PAID_TYPE) {
                         $li = $ul->appendElement("li");
                         $li->appendElement('a', array('href' => UrlHelper::generateUrl('SubscriptionCheckout', 'renewSubscriptionOrder', array($order['ossubs_id'])), 'class' => '', 'title' => Labels::getLabel('LBL_Renew_Subscription', $siteLangId)), '<i class="fa fa-history"></i>', true);
                     }
