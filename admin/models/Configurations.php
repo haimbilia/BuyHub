@@ -199,7 +199,7 @@ class Configurations extends FatModel
         $arr = [
             Configurations::FORM_COMMISSION => [
                 'link' => UrlHelper::generateUrl('Commission'),
-                'title' => Labels::getLabel('FRM_SITE_COMMISSION_SETTINGS'),
+                'title' => Labels::getLabel('FRM_MANAGE_COMMISSION'),
             ]
         ];
         

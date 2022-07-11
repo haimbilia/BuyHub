@@ -22,6 +22,12 @@ class CommissionController extends ListingBaseController
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
         $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['headerHtmlContent'] = '<a href="'.UrlHelper::generateUrl('configurations','index', [Configurations::FORM_COMMISSION]).'" class="btn btn-icon btn-outline-gray ms-2" title="" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="'.Labels::getLabel('FRM_WEBSITE_COMMISSION_SETTINGS', $this->siteLangId).'">
+            <svg class="svg btn-icon-start" width="18" height="18">
+                <use xlink:href="'.CONF_WEBROOT_URL.'images/retina/sprite-actions.svg#gear">
+                </use>
+            </svg>                                
+        </a>';  
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -33,7 +39,7 @@ class CommissionController extends ListingBaseController
 
         $this->_template->addJs(['js/select2.js', 'commission/page-js/index.js']);
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render(true, true, '_partial/listing/index.php');
+        $this->_template->render(true, true, '_partial/listing/index.php', false, false);
     }
 
     public function search()
