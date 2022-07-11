@@ -2255,7 +2255,7 @@ class Importexport extends ImportexportCommon
         $srch = Product::getSearchObject();
         $srch->joinTable(Product::DB_PRODUCT_TO_OPTION, 'INNER JOIN', Product::DB_TBL_PREFIX . 'id = ' . Product::DB_PRODUCT_TO_OPTION_PREFIX . 'product_id');
         $srch->joinTable(Option::DB_TBL, 'INNER JOIN', Option::DB_TBL_PREFIX . 'id = ' . Product::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id');
-        $srch->addMultipleFields(array('option_id', 'option_identifier', 'product_id', 'product_identifier'));
+        $srch->addMultipleFields(array('option_id', 'option_identifier', 'product_id', 'product_identifier', 'prodoption_optionvalue_ids'));
         $srch->doNotCalculateRecords();
         switch ($this->actionType) {
             case self::ACTION_ADMIN_PRODUCTS:
@@ -2292,14 +2292,36 @@ class Importexport extends ImportexportCommon
 
         $sheetData = array();
         /* Sheet Heading Row [ */
-        $headingsArr = $this->getProductOptionColoumArr($langId);
+        $headingsArr = $this->getProductOptionColoumArr($langId);  
         CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
-
-        while ($row = $this->db->fetch($rs)) {
+        $optionValuesArr = []; 
+        while ($row = $this->db->fetch($rs)) {    
             $sheetData = array();
             foreach ($headingsArr as $columnKey => $heading) {
                 $colValue = array_key_exists($columnKey, $row) ? $row[$columnKey] : '';
+                if ($columnKey == 'option_value_ids') {
+                    $colValue = $row['prodoption_optionvalue_ids'];
+                }elseif ($columnKey == 'option_values_identifiers') {
+                    if(!empty($row['prodoption_optionvalue_ids'])){
+                        $colValue = $row['prodoption_optionvalue_ids'];
+                        $colValueArr = explode(",",$colValue);                       
+                        if(!array_key_exists($row['option_id'], $optionValuesArr)){
+                            $opvalArr = $this->getAllOptionValues($row['option_id'], true);
+                            $optionValuesArr[$row['option_id']] = $opvalArr;
+                        }else{
+                            $opvalArr = $optionValuesArr[$row['option_id']];
+                        }
+                        foreach($opvalArr as $opValId =>  $opValIdIden){
+                            if(!in_array($opValId,$colValueArr)){
+                                unset($opvalArr[$opValId]);
+                            }
+                        }
+                        $colValue = implode(",",$opvalArr);
+                    }                    
+                } else {
+                    $colValue = array_key_exists($columnKey, $row) ? $row[$columnKey] : '';
+                } 
                 $sheetData[] = $this->parseContentForExport($colValue);
             }
             CommonHelper::writeExportDataToCSV($this->CSVfileObj, $sheetData);
@@ -2313,6 +2335,7 @@ class Importexport extends ImportexportCommon
         $rowIndex = 1;
         $prodIndetifierArr = array();
         $optionIdentifierArr = array();
+        $optionValuesArr = array();
         $prodArr = array();
 
         $coloumArr = $this->getProductOptionColoumArr($langId);
@@ -2337,28 +2360,59 @@ class Importexport extends ImportexportCommon
                     $err = array($rowIndex, ($colIndex + 1), $errMsg);
                     CommonHelper::writeToCSVFile($this->CSVfileObj, $err);
                 } else {
-                    if (in_array($columnKey, array('product_identifier', 'option_identifier'))) {
-                        $colValue = mb_strtolower($colValue);
-                        if ('product_identifier' == $columnKey) {
-                            if (!array_key_exists($colValue, $prodIndetifierArr)) {
-                                $res = $this->array_change_key_case_unicode($this->getAllProductsIdentifiers(false, $colValue), CASE_LOWER);
-                                if (!$res) {
-                                    $invalid = true;
-                                } else {
-                                    $prodIndetifierArr = $prodIndetifierArr + $res;
-                                }
+                    $colValue = mb_strtolower($colValue);
+                    if ('product_identifier' == $columnKey) {
+                        if (!array_key_exists($colValue, $prodIndetifierArr)) {
+                            $res = $this->array_change_key_case_unicode($this->getAllProductsIdentifiers(false, $colValue), CASE_LOWER);
+                            if (!$res) {
+                                $invalid = true;
+                            } else {
+                                $prodIndetifierArr = $prodIndetifierArr + $res;
                             }
-                            $colValue = array_key_exists($colValue, $prodIndetifierArr) ? $prodIndetifierArr[$colValue] : 0;
-                        } else {
-                            if (!array_key_exists($colValue, $optionIdentifierArr)) {
-                                $res = $this->array_change_key_case_unicode($this->getAllOptions(false, $colValue), CASE_LOWER);
-                                if (!$res) {
-                                    $invalid = true;
-                                } else {
-                                    $optionIdentifierArr = $optionIdentifierArr + $res;
-                                }
-                            }
+                        }
+                        $colValue = array_key_exists($colValue, $prodIndetifierArr) ? $prodIndetifierArr[$colValue] : 0;
+                    } elseif ('option_identifier' == $columnKey || 'option_id' == $columnKey) {
+                        if (!array_key_exists($colValue, $optionIdentifierArr)) {
+                            $res = $this->array_change_key_case_unicode($this->getAllOptions(false, $colValue), CASE_LOWER);                                 
+                            if (!$res) {                          
+                                $invalid = true;
+                            } else {
+                                $optionId = current($res);
+                                $optionValuesArr[$optionId] = $this->array_change_key_case_unicode($this->getAllOptionValues($optionId, false), CASE_LOWER);
+                                $optionIdentifierArr = $optionIdentifierArr + $res;
+                            }                            
+                        }
+                        if ('option_identifier' == $columnKey) {
                             $colValue = array_key_exists($colValue, $optionIdentifierArr) ? $optionIdentifierArr[$colValue] : 0;
+                        }
+                    } elseif ('option_value_ids' == $columnKey && isset($optionsArr['prodoption_option_id'])) {
+                        if (!empty($optionsArr['prodoption_option_id'])  && empty($colValue)) {
+                            $invalid = true;
+                        } else {
+                            $colValueArr = explode(",", $colValue);
+                        }
+                        foreach ($colValueArr as $colVal) {
+                            if (!in_array($colVal, $optionValuesArr[$optionsArr['prodoption_option_id']])) {
+                                $invalid = true;
+                                break;
+                            }
+                        }
+                    } elseif ('option_values_identifiers' == $columnKey && isset($optionsArr['prodoption_option_id'])) {                        
+                        if (isset($optionValuesArr[$optionsArr['prodoption_option_id']]) && !empty($optionValuesArr[$optionsArr['prodoption_option_id']])  && empty($colValue)) {
+                            $invalid = true;
+                        } elseif (!empty($colValue)) {
+                            $colValueArr = explode(",", $colValue);                          
+                            $optionValues = [];
+                            foreach ($colValueArr as $colVal) {
+                                if (!array_key_exists($colVal, $optionValuesArr[$optionsArr['prodoption_option_id']])) {
+                                    $invalid = true;
+                                    break;
+                                }
+                                $optionValues[] = $optionValuesArr[$optionsArr['prodoption_option_id']][$colVal];
+                            }
+                            $colValue =  implode(",", $optionValues);
+                        }else{
+                            $colValue = '';
                         }
                     }
 
@@ -2370,15 +2424,22 @@ class Importexport extends ImportexportCommon
                         }
 
                         $productId = $colValue;
-
-                        if (Product::hasInventory($productId)) {
-                            $errorInRow = true;
-                            CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), Labels::getLabel("ERR_INVENTORY_ALREADY_ADDED_FOR_THESE_OPTIONS.", $langId)));
+                        if (1 > $productId) {
+                            $invalid = true;
+                        } else {
+                            if (Product::hasInventory($productId)) {
+                                $errorInRow = true;
+                                CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), Labels::getLabel("ERR_INVENTORY_ALREADY_ADDED_FOR_THESE_OPTIONS.", $langId)));
+                            }
                         }
                     }
 
                     if (in_array($columnKey, array('option_id', 'option_identifier'))) {
                         $columnKey = 'prodoption_option_id';
+                    }
+
+                    if (in_array($columnKey, array('option_value_ids', 'option_values_identifiers'))) {
+                        $columnKey = 'prodoption_optionvalue_ids';
                     }
 
                     if (true === $invalid) {

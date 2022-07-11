@@ -446,6 +446,12 @@ class ImportexportCommon extends FatModel
             $arr['option_identifier'] = Labels::getLabel('LBL_OPTION_IDENTIFIER', $langId);
         }
 
+        if ($this->settings['CONF_OPTION_VALUE_ID']) {
+            $arr['option_value_ids'] = Labels::getLabel('LBL_OPTION_VALUE_Ids', $langId);
+        } else {
+            $arr['option_values_identifiers'] = Labels::getLabel('LBL_OPTION_VALUE_IDENTIFIERS', $langId);
+        }   
+
         return $arr;
     }
 
