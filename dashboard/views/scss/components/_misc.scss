@@ -176,10 +176,12 @@ mark,
 .hidden {
     display: none !important;
 }
-
 .no-after {
     &:after {
-        content: normal;
+        content: normal !important;
+    }
+    &:before {
+        content: normal !important;
     }
 }
 
@@ -400,9 +402,10 @@ mark,
 }
 
 .icn-eye {
+    font-size: 12px;
     position: absolute;
-    #{$end-direction}: 5px;
-    top: 12px;
+    #{$end-direction}: 1rem;
+    top: 16px;
     color: $txt-gray;
 }
 

@@ -106,7 +106,7 @@ $frm->developerTags['fld_default_col'] = 12; */
     <div class="col-md-12">
         <div class="form-group">
             <div class="caption-wraper">
-              
+
             </div>
             <div class="field-wraper">
                 <div class="field_cover">

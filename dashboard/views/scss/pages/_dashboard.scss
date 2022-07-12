@@ -1838,10 +1838,10 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 }
 
 .feedback-block {
-    background-color: $bg-gray;
-    border-radius: 4px;
+    //background-color: $bg-gray;
+    //border-radius: 4px;
     padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    //margin-bottom: 1.5rem;
     .card-title {
         margin-bottom: 1rem;
     }
@@ -1904,9 +1904,6 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 }
 
 //
-.no-after::after {
-    content: normal;
-}
 
 .custom-drag-drop {
     display: inline-block;

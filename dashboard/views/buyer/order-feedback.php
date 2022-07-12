@@ -19,7 +19,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             $this->includeTemplate('_partial/header/content-header.php', $data); ?>
             <div class="content-body">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body p-0">
                         <?php echo $frm->getFormTag(); ?>
                         <div class="order-feedback-section">
                             <div class="feedback-block">
@@ -27,7 +27,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     <?php echo Labels::getLabel('LBL_PRODUCT_FEEDBACK', $siteLangId); ?></h5>
                                 <div class="feedback-block_content">
                                     <div class="product-profile mb-3">
-                                        <div class="product-profile__pic product-profile-free-size">
+                                        <div class="product-profile__pic ">
                                             <?php
                                             $prodTitle =  (!empty($opDetail['op_selprod_title']) ? $opDetail['op_selprod_title'] : $opDetail['op_product_name']);
 
@@ -103,7 +103,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="divider"></div>
                             <?php if (!empty($shopRatingTypesArr) || !empty($deliveryRatingTypesArr)) { ?>
 
                                 <?php if (!empty($shopRatingTypesArr)) { ?>
@@ -138,9 +138,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         </div>
                                     </div>
                                     <!--shop-rating-wrap-->
+                                    <div class="divider"></div>
                                 <?php }
+
                                 if (!empty($deliveryRatingTypesArr)) { ?>
-                                    <div class="feedback-block mt-5">
+                                    <div class="feedback-block">
                                         <h5 class="card-title ">
                                             <?php echo Labels::getLabel('LBL_DELIVERY_FEEDBACK', $siteLangId); ?></h5>
                                         <div class="feedback-block_content">
@@ -160,12 +162,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     </div>
                                     <!--Delivery-rating-wrap-->
                                 <?php } ?>
-
                             <?php } ?>
-
-                        </div>
-                        <div class="row justify-content-center mt-4">
-                            <div class="col-md-12">
+                            <div class="feedback-block">
                                 <div class="form-group">
                                     <?php
                                     $fld = $frm->getField('agree');
@@ -178,11 +176,13 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 echo $frm->getFieldHtml('referrer');
                                 echo $frm->getFieldHtml('btn_submit');
                                 ?>
+
                             </div>
                         </div>
                         </form>
                         <?php echo $frm->getExternalJS(); ?>
                     </div>
+
                 </div>
 
             </div>

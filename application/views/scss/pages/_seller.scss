@@ -164,14 +164,15 @@
 
 .seller-register-form {
     margin: 3.125rem 0;
-    padding: 3rem;
+    padding: 2rem;
     background: rgba(255, 255, 255, 0.95);
     color: $txt-body;
     width: 100%;
     border-radius: $radius4;
     position: relative;
     h2 {
-        margin-bottom: 2rem;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
     }
 }
 
@@ -308,7 +309,7 @@
         overflow-x: auto;
         li {
             font-size: 0.85em;
-            color: $txt-body;
+            color: $txt-gray;
             margin-#{$end-direction}: 1rem;
             &:first-child {
                 margin-#{$start-direction}: 0;
@@ -335,6 +336,7 @@
             &.is--active {
                 a {
                     color: $brand-color;
+                    font-weight: 600;
                     &:after {
                         width: 100%;
                     }
