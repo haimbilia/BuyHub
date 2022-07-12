@@ -5,7 +5,9 @@ $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
 $frm->developerTags['fld_default_col'] = 12;
 
 $btn = $frm->getField('btn_submit');
-$btn->addFieldTagAttribute("class", "btn btn-brand");
+$btn->addFieldTagAttribute("class", "btn btn-brand btn-wide");
+$btn->developerTags['noCaptionTag'] = true;
+
 ?>
 
 <h2><?php echo Labels::getLabel('LBL_Advertise_With_Us', $siteLangId); ?></h2>
@@ -81,8 +83,7 @@ $btn->addFieldTagAttribute("class", "btn btn-brand");
 </div>
 <div class="row">
     <div class="col-md-6">
-        <div class="form-group">
-            <div class="caption-wraper"><label class="form-label"></label></div>
+        <div class="form-group">           
             <div class="field-wraper">
                 <div class="field_cover">
                     <?php echo $frm->getFieldHTML('user_id'); ?>

@@ -1937,3 +1937,6 @@ UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_template
 UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'password_changed_successfully';
 UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'user_admin_password_changed_successfully';
 UPDATE `tbl_affiliate_commission_settings` SET `afcommsetting_is_mandatory` = '1' WHERE `tbl_affiliate_commission_settings`.`afcommsetting_id` = 1;
+
+UPDATE `tbl_extra_pages_lang` SET `epage_content` = '\r\n<p>Need Help In Getting Pan/vat?<br />\r\n	<a href=\"\" class=\"\">Click Here</a> To Contact Our Partners Near Your Location</p>' WHERE `tbl_extra_pages_lang`.`epagelang_epage_id` = 24 AND `tbl_extra_pages_lang`.`epagelang_lang_id` = 1;
+UPDATE `tbl_extra_pages_lang` SET `epage_content` = '\r\n<p>بحاجة إلى مساعدة في الحصول على عموم / ضريبة القيمة المضافة؟<br />\r\n	<a href=\"\" class=\"\">انقر هنا</a> للاتصال بشركائنا بالقرب من موقعك</p>' WHERE `tbl_extra_pages_lang`.`epagelang_epage_id` = 24 AND `tbl_extra_pages_lang`.`epagelang_lang_id` = 2;

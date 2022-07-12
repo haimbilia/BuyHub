@@ -309,7 +309,7 @@ class ProductsController extends ListingBaseController
                 $productData['ptt_taxcat_id'] = $taxData[Tax::tblFld('id')];
                 $fld = $frm->getField('ptt_taxcat_id');
                 $fld->options = [$productData['ptt_taxcat_id'] => $taxData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
-            }
+            }           
 
             $prodShippingDetails = Product::getProductShippingDetails($recordId, $langId, $productData['product_seller_id']);
 
@@ -323,9 +323,13 @@ class ProductsController extends ListingBaseController
             }
 
             /* [ GET ATTACHED PROFILE ID */
+            $profileUser = $productData['product_seller_id'];
+            if(FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)){
+                $profileUser = 0;
+            }
             $profSrch = ShippingProfileProduct::getSearchObject();
             $profSrch->addCondition('shippro_product_id', '=', $recordId);
-            $profSrch->addCondition('shippro_user_id', '=', $productData['product_seller_id']);
+            $profSrch->addCondition('shippro_user_id', '=', $profileUser);
             $profSrch->doNotCalculateRecords();
             $profSrch->setPageSize(1);
             $profileData = FatApp::getDb()->fetch($profSrch->getResultSet());
@@ -498,7 +502,7 @@ class ProductsController extends ListingBaseController
             $shipProProdData = array(
                 'shippro_shipprofile_id' => !empty($post['shipping_profile']) ? $post['shipping_profile'] : ShippingProfile::getDefaultProfileId($post['product_seller_id']),
                 'shippro_product_id' => $recordId,
-                'shippro_user_id' => $post['product_seller_id'],
+                'shippro_user_id' => FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) ? 0 : $post['product_seller_id'],
             );
             $spObj = new ShippingProfileProduct();
             if (!$spObj->addProduct($shipProProdData)) {

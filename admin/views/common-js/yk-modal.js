@@ -157,7 +157,10 @@
 
 
     /* Submit Form on Enter Key Press. For sidebar forms. */
-    $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {       
+    $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {   
+        if (1 >= $(this).find(':input:not([type=hidden]),select,textarea').length) {
+            return;
+        }
         e.stopImmediatePropagation();      
         if (e.keyCode === 13 && !$(e.target).is('textarea') && (false === displayInPopup)) {
             $('.' + $.ykmodal.element + " .submitBtnJs").click();

@@ -637,12 +637,8 @@ class Product extends MyAppModel
         $srch->addCondition(static::DB_TBL_PRODUCT_SHIPPING_PREFIX . 'product_id', '=', 'mysql_func_' . $productId, 'AND', true);
         $srch->addCondition(static::DB_TBL_PRODUCT_SHIPPING_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $row = $db->fetch($rs);
-        return $row;
+        $srch->setPageSize(1);           
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public static function getOption($product_id, $optionId)

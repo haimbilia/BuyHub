@@ -29,12 +29,12 @@ class DataMigration
         $this->langId = (0 < $langId ? $langId : CommonHelper::getLangId());
     }
 
-    public function sync()
+    public static function sync()
     {
-        if ($response = $this->adminSideSync() !== false) {
+        if ($response = (new self)->adminSideSync() !== false) {
             return $response;
         }
-        if ($response = $this->sellerSideSync() !== false) {
+        if ($response = (new self)->sellerSideSync() !== false) {
             return $response;
         }
     }

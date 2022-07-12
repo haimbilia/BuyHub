@@ -2,6 +2,7 @@
 
 $btn = $sellerFrm->getField('btn_submit');
 $btn->setFieldTagAttribute('class', "btn btn-brand btn-wide");
+$btn->developerTags['noCaptionTag'] = true;
 
 $bgImageUrl = '';
 $pageContent = '';

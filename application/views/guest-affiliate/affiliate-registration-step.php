@@ -6,7 +6,7 @@ $registerForm->developerTags['fld_default_col'] = 12;
 
 if (!$affiliate_register_step_number) {
     $btnSubmitFld = $registerForm->getField('btn_submit');
-    $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand');
+    $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
     $btnSubmitFld->developerTags['noCaptionTag'] = true;
 }
 
@@ -33,9 +33,9 @@ switch ($affiliate_register_step_number) {
             $registerForm->removeField($registerForm->getField('agree'));
         }
 
-        $termsFldHtml = '<div class="form-group"><div class="field-wraper"><div class="field_cover"><label><span class="checkbox">' . $termsFld;
+        $termsFldHtml = '<div class="form-group"><label class="checkbox">' . $termsFld;
 
-        $termsFldHtml .= '' . $termsAndConditionsLink . '</span></label></div></div></div>';
+        $termsFldHtml .= '' . $termsAndConditionsLink . '</label></div>';
 
         $agree_fld_html_div = $registerForm->getField('agree_fld_html_div');
         if (null != $agree_fld_html_div) {
@@ -174,6 +174,6 @@ switch ($affiliate_register_step_number) {
 $btnSubmitFld = $registerForm->getField('btn_submit');
 if (null != $btnSubmitFld) {
     $btnSubmitFld->developerTags['noCaptionTag'] = true;
-    $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand');
+    $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
 }
 echo $registerForm->getFormHtml(); ?>
