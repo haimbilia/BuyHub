@@ -69,23 +69,8 @@ foreach ($op['taxOptions'] as $key => $val) {
                         <?php echo implode(', ', $pickupAddress); ?>
                     </span>
                 </li>
-            <?php } ?>
-
+            <?php } ?>            
             <li class="list-stats-item list-stats-item-full">
-                <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_LABEL', $siteLangId); ?>:</span>
-                <span class="value">
-                    <?php echo CommonHelper::displayNotApplicable($siteLangId, $op["opshipping_label"]); ?>
-                </span>
-            </li>
-            <?php if (!empty($op["opshipping_service_code"])) { ?>
-                <li class="list-stats-item list-stats-item-full">
-                    <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_SERVICES', $siteLangId); ?>:</span>
-                    <span class="value">
-                        <?php echo CommonHelper::displayNotApplicable($siteLangId, $op["opshipping_service_code"]); ?>
-                    </span>
-                </li>
-            <?php } ?>
-            <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_STATUS', $siteLangId); ?>:</span>
                 <span class="value">
                     <?php
@@ -194,6 +179,20 @@ foreach ($op['taxOptions'] as $key => $val) {
                 <span class="lable"><?php echo Labels::getLabel('LBL_TOTAL', $siteLangId); ?>:</span>
                 <span class="value" <?php echo CommonHelper::displayMoneyFormat($total, true, true, true, false, true); ?></span>
             </li>
+            <li class="list-stats-item list-stats-item-full">
+                <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_LABEL', $siteLangId); ?>:</span>
+                <span class="value">
+                    <?php echo CommonHelper::displayNotApplicable($siteLangId, $op["opshipping_label"]); ?>
+                </span>
+            </li>
+            <?php if (!empty($op["opshipping_service_code"])) { ?>
+                <li class="list-stats-item list-stats-item-full">
+                    <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_SERVICES', $siteLangId); ?>:</span>
+                    <span class="value">
+                        <?php echo CommonHelper::displayNotApplicable($siteLangId, $op["opshipping_service_code"]); ?>
+                    </span>
+                </li>
+            <?php } ?>
 
             <?php if (isset($op['op_product_dimension_unit']) && isset($unitTypeArray[$op['op_product_dimension_unit']])) {
                 $unitType = $unitTypeArray[$op['op_product_dimension_unit']];
