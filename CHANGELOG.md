@@ -1017,6 +1017,7 @@ TV-9.4.0.20220406
     - #065317 - The notice appears on the order cancellations requests page on the admin end.
     - #065318 - Multiple issues in the subscription package on the seller end.
     - #065316 - Double entries appear in the commission history popup for any change on the commission setup page.
+    - #065307 - The error occurs as 'Product not available for shipping on the checkout page for the seller added product when the admin shipping plugin is on.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
