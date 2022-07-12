@@ -63,8 +63,8 @@ class PushNotificationsController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NOTIFICATION_TITLE', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'push-notifications/page-js/index.js']);
-        $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css']);
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'push-notifications/page-js/index.js','js/jquery.datetimepicker.js']);
+        $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css','css/jquery.datetimepicker.css']);
 
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -267,7 +267,7 @@ class PushNotificationsController extends ListingBaseController
         $userAuthType = $frm->addSelectBox(Labels::getLabel('FRM_USER_AUTH_TYPE', $langId), 'pnotification_user_auth_type', User::getUserAuthTypeArr($langId), '', [], Labels::getLabel('FRM_SELECT', $langId));
         $userAuthType->requirements()->setRequired(true);
 
-        $dateFld = $frm->addDateTimeField(Labels::getLabel('FRM_SCHEDULE_DATE', $langId), 'pnotification_notified_on', date('Y-m-d H:00'), ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
+        $dateFld = $frm->addDateTimeField(Labels::getLabel('FRM_SCHEDULE_DATE', $langId), 'pnotification_notified_on', date('Y-m-d H:00'), ['readonly' => 'readonly', 'class' => 'small']);
         $dateFld->requirements()->setRequired(true);
 
         $deviceType = $frm->addSelectBox(Labels::getLabel('FRM_DEVICE_TYPE', $langId), 'pnotification_device_os', User::getDeviceTypeArr($langId), '', [], Labels::getLabel('LBL_Select', $langId));
