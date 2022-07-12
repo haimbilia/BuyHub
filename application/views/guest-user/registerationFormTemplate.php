@@ -23,13 +23,13 @@ $registerFrm->developerTags['fld_default_col'] = 12;
 
 echo $registerFrm->getFormTag();
 ?>
-<div class="row">
-    <div class="col-lg-12">
+<div class="row gx-2">
+    <div class="col-lg-6">
         <div class="form-group">
             <?php echo $registerFrm->getFieldHtml('user_name'); ?>
         </div>
     </div>
-    <div class="col-lg-12">
+    <div class="col-lg-6">
         <div class="form-group">
             <?php echo $registerFrm->getFieldHtml('user_username'); ?>
         </div>
@@ -37,34 +37,31 @@ echo $registerFrm->getFormTag();
     </div>
 </div>
 <?php if (isset($signUpWithPhone) && 0 < $signUpWithPhone) { ?>
-    <div class="row">
+    <div class="row gx-2">
         <div class="col-lg-12">
             <div class="form-group">
-
                 <?php
                 echo $registerFrm->getFieldHtml('user_phone');
                 echo $registerFrm->getFieldHtml('user_phone_dcode');
                 ?>
-
             </div>
         </div>
     </div>
 <?php } else { ?>
-    <div class="row">
+    <div class="row gx-2">
         <div class="col-lg-12">
             <div class="form-group">
                 <?php echo $registerFrm->getFieldHtml('user_email'); ?></div>
-
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12">
+    <div class="row gx-2">
+        <div class="col-lg-6">
             <div class="form-group">
                 <?php echo $registerFrm->getFieldHtml('user_password'); ?>
                 <span class="text-muted form-text"><?php echo sprintf(Labels::getLabel('LBL_EXAMPLE_PASSWORD', $siteLangId), 'User@123') ?></span>
             </div>
         </div>
-        <div class="col-lg-12">
+        <div class="col-lg-6">
             <div class="form-group">
                 <?php echo $registerFrm->getFieldHtml('password1'); ?>
             </div>
@@ -72,7 +69,7 @@ echo $registerFrm->getFormTag();
         </div>
     </div>
 <?php } ?>
-<div class="row">
+<div class="row gx-2">
     <div class="col-lg-12">
         <div class="form-group">
             <label class="checkbox checkbox-flex py-2">
@@ -108,7 +105,7 @@ echo $registerFrm->getFormTag();
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row gx-2">
     <div class="col-lg-12">
         <div class="form-group">
             <?php echo $registerFrm->getFieldHTML('user_id'), $registerFrm->getFieldHTML('btn_submit'); ?>

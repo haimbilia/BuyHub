@@ -27,13 +27,13 @@ if (!empty($slogan)) {
                         <?php if (isset($slogan['epage_label'])) { ?>
                             <h3><?php echo $slogan['epage_label']; ?></h3>
                         <?php } ?>
-                        
+
                         <p><?php echo $pageContent; ?></p>
                     </div>
                 </div>
                 <div class="seller-register-form">
                     <h2><?php echo Labels::getLabel('L_Register_Today', $siteLangId); ?></h2>
-                    <?php $sellerFrm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
+                    <?php $sellerFrm->developerTags['colClassPrefix'] = 'col-lg-12';
                     $sellerFrm->developerTags['fld_default_col'] = 12;
                     echo $sellerFrm->getFormHtml(); ?>
 
@@ -75,7 +75,7 @@ if (!empty($slogan)) {
                         </div>
                         <div class="faqsearch">
                             <form name="frmSearchFaqs" method="post" onsubmit="searchFaqsListing(this); return(false);" class="form" action="javascript:void(0);">
-                                <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId);?>" class="faq-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
+                                <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>" class="faq-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
                             </form>
                         </div>
                     </div>
@@ -113,8 +113,8 @@ if (!empty($slogan)) {
 
 
 </div>
-<script> 
-        var faqsSearchStringLength = '<?php echo Faq::FAQS_SEARCH_STRING_LENGTH; ?>';
+<script>
+    var faqsSearchStringLength = '<?php echo Faq::FAQS_SEARCH_STRING_LENGTH; ?>';
 </script>
 <!-- End Document
 ================================================== -->

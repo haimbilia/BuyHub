@@ -26,7 +26,7 @@ if (!$userActiveTab) {
 }
 
 if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
-    <div class="dropdown my-account">
+    <div class="my-account dropstart">
         <button class="my-account-btn dropdown-toggle no-after" data-bs-toggle="dropdown" type="button" id="my-account-target" aria-expanded="false">
             <img class="my-account-avatar" src="<?php echo $profilePicUrl; ?>" alt="<?php echo $userName; ?>">
         </button>
@@ -130,7 +130,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
                         <?php echo Labels::getLabel("NAV_UPDATE_CREDENTIALS", $siteLangId); ?>
                         <i class="icon icon-arrow-right"></i>
                     </a>
-                </li>               
+                </li>
             </ul>
         </div>
         <div class="offcanvas-foot">

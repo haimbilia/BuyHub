@@ -192,7 +192,10 @@ mark,
 
 .no-after {
     &:after {
-        content: normal;
+        content: normal !important;
+    }
+    &:before {
+        content: normal !important;
     }
 }
 

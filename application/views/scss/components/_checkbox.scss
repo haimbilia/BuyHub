@@ -1,35 +1,3 @@
-@-webkit-keyframes click-wave {
-    0% {
-        height: 20px;
-        width: 20px;
-        opacity: 0.35;
-        position: relative;
-    }
-    100% {
-        height: 40px;
-        width: 40px;
-        margin-#{$start-direction}: -18px;
-        margin-top: -18px;
-        opacity: 0;
-    }
-}
-
-@keyframes click-wave {
-    0% {
-        height: 20px;
-        width: 20px;
-        opacity: 0.35;
-        position: relative;
-    }
-    100% {
-        height: 40px;
-        width: 40px;
-        margin-#{$start-direction}: -18px;
-        margin-top: -18px;
-        opacity: 0;
-    }
-}
-
 .checkbox,
 .radio {
     margin: 0;
@@ -37,15 +5,18 @@
     font-weight: 400;
     line-height: 1rem;
     cursor: pointer;
-
+    display: flex;
+    gap: 5px;
     &.brand {
         display: flex;
     }
     &-flex {
         display: flex !important;
-        a {
-            text-decoration: underline;
-        }
+    }
+
+    a {
+        color: $brand-color;
+        text-decoration: underline;
     }
 }
 $checkbox-size: 20px;
@@ -73,6 +44,13 @@ $checkbox-size: 20px;
     position: relative;
     z-index: 1;
     vertical-align: middle;
+    &:hover {
+        border-color: darken($border-color, 30);
+    }
+    &[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
 }
 
 .checkbox input:checked,
@@ -103,7 +81,6 @@ $checkbox-size: 20px;
 
 .checkbox input:checked::after,
 .radio input:checked::after {
-    //animation: click-wave 0.65s;
     background: #000;
     color: #fff;
     content: "";

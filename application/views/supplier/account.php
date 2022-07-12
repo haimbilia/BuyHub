@@ -6,7 +6,7 @@
     <div class="hero-banner" style="<?php echo $bgImageUrl; ?>">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-xl-6 col-xs-12">
+                <div class="col-xl-6">
                     <div class="seller-register-form" id="regFrmBlock"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
                 </div>
             </div>

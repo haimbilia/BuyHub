@@ -197,15 +197,15 @@
     background-image: linear-gradient(currentColor, currentColor);
     background-position: 50% 100%;
     background-repeat: no-repeat;
-    background-size: 0% 2px;
+
     background-color: transparent;
     transition: background-size 0.3s;
     text-decoration: none;
-    background-size: 100% 2px;
+    background-size: 100% 1px;
     border: none;
     &:hover {
         text-decoration: none;
-        background-size: 95% 2px;
+        background-size: 95% 1px;
     }
     &-black {
         color: $black;
