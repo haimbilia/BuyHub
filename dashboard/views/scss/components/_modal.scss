@@ -20,13 +20,18 @@
     &-title {
         font-size: 1.2rem;
         color: $txt-body;
+        display: flex;
+        flex-direction: column;
+        small {
+            font-size: 0.8rem;
+        }
     }
     &-footer {
-        justify-content: inherit;
+        // justify-content: inherit;
     }
     &.fixed-right {
         padding-#{$end-direction}: 0 !important;
-        
+
         &.fade .modal-dialog-vertical {
             transform: translateX(100% * $transform-direction);
         }

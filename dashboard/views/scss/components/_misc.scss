@@ -776,37 +776,44 @@ mark,
 .user-type {
     display: flex;
     align-items: center;
-    border: $border;
-    border-radius: $radius4;
+
     li {
-        display: block;
         flex: 0 0 50%;
         max-width: 50%;
         margin: 0;
         padding: 0;
-        border-#{$end-direction}: $border;
+        &:first-child {
+            .user-type-link {
+                border-top-left-radius: 0.25rem;
+                border-bottom-left-radius: 0.25rem;
+            }
+        }
         &:last-child {
-            border-#{$end-direction}: none;
+            .user-type-link {
+                border-top-right-radius: 0.25rem;
+                border-bottom-right-radius: 0.25rem;
+            }
         }
     }
     &-link {
         background-color: transparent;
-        border: none;
-        display: block;
+        border: $border;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
         width: 100%;
-        text-align: center;
+        color: $txt-gray;
         line-height: 1.5;
         font-size: 1rem;
-        color: inherit;
         position: relative;
         padding: 12px 1rem;
     }
-    .svg {
-        margin-#{$end-direction}: 5px;
-    }
+
     .is-active {
         .user-type-link {
-            color: $brand-color;
+            @include bg-brand;
+            border-color: $brand-color;
         }
     }
 }
