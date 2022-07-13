@@ -592,7 +592,7 @@ class Cronjob extends FatModel
         $srch->addCondition('ossubs_till_date', '!=', '0000-00-00');
         $srch->addCondition('ossubs_type', '=', 'mysql_func_' . SellerPackages::PAID_TYPE, 'AND', true);
         $srch->addCondition('user_autorenew_subscription', '=', 1);
-        $srch->addMultipleFields(array('order_user_id', 'order_language_id', 'order_language_code', 'order_currency_id', 'order_id', 'order_number', 'ossubs_id', 'spackage_type', 'spplan_price', 'spackage_images_per_product', 'spackage_products_allowed', 'spackage_inventory_allowed', 'ossubs_plan_id', 'spplan_interval', 'spplan_frequency', 'spackage_commission_rate'));
+        $srch->addMultipleFields(array('order_user_id', 'order_language_id', 'order_language_code', 'order_currency_id', 'order_id', 'order_number', 'ossubs_id', 'spackage_type', 'spplan_price', 'spackage_images_per_product', 'spackage_products_allowed', 'spackage_inventory_allowed', 'ossubs_plan_id', 'spplan_interval', 'spplan_frequency', 'spackage_commission_rate','ossubs_price'));
 
         /* $srch->addGroupBy('order_user_id');  */
         $srch->addOrder('ossubs_id', 'desc');
@@ -603,6 +603,7 @@ class Cronjob extends FatModel
         if (empty($activeSusbscriptions)) {
             return;
         }
+       
         foreach ($activeSusbscriptions as $activeSub) {
             $userId = $activeSub['order_user_id'];
             $userBalance = User::getUserBalance($userId);
