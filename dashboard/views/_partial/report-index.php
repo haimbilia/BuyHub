@@ -6,7 +6,7 @@ if (!empty($fields)) {
                         <svg class="svg btn-icon-start" width="18" height="18">
                         <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#columns">
                         </use>
-                    </svg>'.Labels::getLabel('LBL_COLUMNS', $siteLangId).'
+                    </svg>' . Labels::getLabel('LBL_COLUMNS', $siteLangId) . '
                         </button>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y" aria-labelledby="dropdownMenuButton">
                                 <ul class="list-drag-drop" id="sortable">';
