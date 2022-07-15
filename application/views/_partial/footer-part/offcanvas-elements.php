@@ -84,7 +84,7 @@ if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == Naviga
                                         }
 
                                         if (count($link['children']) > 5) { ?>
-                                            <li class="seemore"><a href="<?php echo $subCatUrl; ?>"><?php echo Labels::getLabel('LBL_View_All', $siteLangId); ?></a></li>
+                                            <li class="seemore"><a href="<?php echo $navUrl; ?>"><?php echo Labels::getLabel('LBL_View_All', $siteLangId); ?></a></li>
                                         <?php }   ?>
                                     </ul>
                                 <?php  } ?>
