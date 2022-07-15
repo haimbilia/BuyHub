@@ -31,8 +31,16 @@
 ?>
     <?php if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
         <!-- Start Navigation Bar -->
+
         <div class="navigation-wrapper">
             <ul class="navigation">
+                <li>
+                    <button class="hamburger-categories" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-hamburger" aria-controls="offcanvas-hamburger">
+                        <svg class="svg" width="16" height="16">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#hamburger-menu">
+                            </use>
+                        </svg> All Categories</button>
+                </li>
                 <?php
                 if (count($headerNavigation)) {
                     foreach ($headerNavigation as $nav) {

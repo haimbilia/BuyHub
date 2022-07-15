@@ -12,6 +12,68 @@ $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
     <?php $this->includeTemplate('_partial/cart-summary.php', ['showHeaderButton' => false]); ?>
 <?php } ?>
 
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-hamburger" aria-labelledby="offcanvas-hamburger-Label">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvas-hamburger-Label">All Categories</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <div class="menu">
+            <nav id="stack-menu">
+                <ul>
+                    <li>
+                        <a href="#">Fugiat</a>
+                        <ul>
+                            <li><a href="#">Perferendis</a></li>
+                            <li>
+                                <a href="#">Recusandae</a>
+                                <ul>
+                                    <li><a href="#">Vel</a></li>
+                                    <li><a href="#">Cumque</a></li>
+                                    <li><a href="#">Facere</a></li>
+                                    <li><a href="#">Enim</a></li>
+                                    <li><a href="#">Nihil</a></li>
+                                    <ul>
+                                        <li><a href="#">Quidem</a></li>
+                                        <li><a href="#">Temporibus</a></li>
+                                        <li><a href="#">Fugit</a></li>
+                                        <li><a href="#">Dolore</a></li>
+                                    </ul>
+                                </ul>
+                            </li>
+                            <li><a href="#">Vitae</a></li>
+                            <li><a href="#">Ipsum</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">Lorem</a>
+                        <ul>
+                            <li><a href="#">Similique</a></li>
+                            <li><a href="#">Distinctio</a></li>
+                            <li><a href="#">Porro</a></li>
+                            <li><a href="#">Illum</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Perspiciatis</a></li>
+                    <li>
+                        <a href="#">Doloremque</a>
+                        <ul>
+                            <li><a href="#">Quod</a></li>
+                            <li><a href="#">Provident</a></li>
+                            <li><a href="#">Cumque</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $("#stack-menu").stackMenu()
+    });
+</script>
 
 <div class="offcanvas offcanvas-end offcanvas-filters" tabindex="-1" id="filters-right">
     <div class="offcanvas-header">
