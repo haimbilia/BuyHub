@@ -3318,7 +3318,7 @@ class AccountController extends LoggedUserController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_YOU_HAVE_ALRADY_SUBMITTED_THE_REQUEST', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOU_HAVE_ALRADY_SUBMITTED_THE_REQUEST', $this->siteLangId));
         }
 
         $assignValues = array(
@@ -3330,9 +3330,13 @@ class AccountController extends LoggedUserController
         $userReqObj = new UserGdprRequest();
         $userReqObj->assignValues($assignValues);
         if (!$userReqObj->save()) {
-            FatUtility::dieJsonError($userReqObj->getError());
+            LibHelper::exitWithError($userReqObj->getError());
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Request_sent_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_Request_sent_successfully', $this->siteLangId));       
+        if (true === MOBILE_APP_API_CALL) {
+            $this->_template->render();
+        }
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     private function getRequestDataForm()
@@ -3382,7 +3386,7 @@ class AccountController extends LoggedUserController
         $frm = $this->getRequestDataForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+            LibHelper::exitWithError(current($frm->getValidationErrors()));
         }
 
         $srch = new UserGdprRequestSearch();
@@ -3393,7 +3397,7 @@ class AccountController extends LoggedUserController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_YOU_HAVE_ALRADY_SUBMITTED_THE_DATA_REQUEST', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOU_HAVE_ALRADY_SUBMITTED_THE_DATA_REQUEST', $this->siteLangId));
         }
 
         $assignValues = array(
@@ -3406,16 +3410,19 @@ class AccountController extends LoggedUserController
         $userReqObj = new UserGdprRequest();
         $userReqObj->assignValues($assignValues);
         if (!$userReqObj->save()) {
-            FatUtility::dieJsonError($userReqObj->getError());
+            LibHelper::exitWithError($userReqObj->getError());
         }
 
         $post['user_id'] = $this->userId;
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->sendDataRequestNotification($post, $this->siteLangId)) {
-            FatUtility::dieJsonError(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId));
         }
 
         $this->set('msg', Labels::getLabel('MSG_REQUEST_SENT_SUCCESSFULLY', $this->siteLangId));
+        if (true === MOBILE_APP_API_CALL) {
+            $this->_template->render();
+        }
         $this->_template->render(false, false, 'json-success.php');
     }
 
