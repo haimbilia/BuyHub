@@ -180,12 +180,14 @@ class UrlRewritingController extends ListingBaseController
                 'urlrewrite_lang_id' => $langId,
                 'urlrewrite_custom' => CommonHelper::seoUrl($url)
             ];
-            $record = new UrlRewrite($urlrewriteId);
-            $record->assignValues($data);
 
-            if (!$record->save()) {
+            FatApp::getDb()->insertFromArray(UrlRewrite::DB_TBL, $data, false, [], $data);
+            /* $record = new UrlRewrite($urlrewriteId);
+            $record->assignValues($data); */
+
+            /* if (!$record->save()) {
                 LibHelper::exitWithError($record->getError(), true);
-            }
+            } */
         }
 
         $this->set('msg', $this->str_setup_successful);
@@ -334,7 +336,7 @@ class UrlRewritingController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, Common::excludeKeysForSort(),['url_type']);
+        return array_diff($fields, Common::excludeKeysForSort(), ['url_type']);
     }
 
     public function getBreadcrumbNodes($action)
