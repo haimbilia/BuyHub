@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
-<?php if ($headerNavigation || $headerCategories) {
+<?php if ($headerNavigation) {
     $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
 
     if (count($headerNavigation)) {
@@ -34,14 +34,16 @@
 
         <div class="navigation-wrapper">
             <ul class="navigation">
-                <li>
-                    <button class="hamburger-categories" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-hamburger" aria-controls="offcanvas-hamburger">
-                        <svg class="svg" width="16" height="16">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#hamburger-menu">
-                            </use>
-                        </svg> All Categories</button>
-                </li>
-                <?php
+                <?php if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == Navigations::LAYOUT_MEGA_MENU) { ?>
+                    <li>
+                        <button class="hamburger-categories" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-hamburger" aria-controls="offcanvas-hamburger">
+                            <svg class="svg" width="16" height="16">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#hamburger-menu">
+                                </use>
+                            </svg><?php echo Labels::getLabel('NAV_ALL_CATEGORIES', $siteLangId); ?></button>
+                    </li>
+                    <?php
+                }
                 if (count($headerNavigation)) {
                     foreach ($headerNavigation as $nav) {
                         if ($nav['pages']) {
@@ -61,7 +63,7 @@
                                     $navchild = 'navchild';
                                     $target = '_self';
                                 }
-                ?> <li class="navigation-item <?php echo $navchild; ?>">
+                    ?> <li class="navigation-item <?php echo $navchild; ?>">
                                     <a class="navigation-link" target="<?php echo $target; ?>" data-org-url="<?php echo $OrgnavUrl; ?>" href="<?php echo $href; ?>"><?php echo $link['nlink_caption']; ?></a>
                                     <?php if (isset($link['children']) && count($link['children']) > 0) { ?>
                                         <span class="link__mobilenav"></span>
