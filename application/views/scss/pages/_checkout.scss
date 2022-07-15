@@ -162,7 +162,7 @@
 .review-block {
     margin-bottom: 2rem;
     font-size: 1rem;
-    border-radius: $radius-common;
+    border-radius: $common-radius;
     border: $border;
     color: $txt-gray;
 
@@ -1128,7 +1128,7 @@
 //old wallet
 .wallet-balance {
     border: $border;
-    border-radius: $radius-common;
+    border-radius: $common-radius;
     padding: 1.5rem;
     margin-top: 0;
     /*background-color: $bg-gray;*/

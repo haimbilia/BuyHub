@@ -531,7 +531,7 @@ mark,
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 0;
+
         &-prev span {
             display: inline-block;
             border-#{$end-direction}: 1px solid black;

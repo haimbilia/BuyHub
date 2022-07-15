@@ -624,14 +624,14 @@
             font-size: 12px;
             vertical-align: top;
             height: 2rem;
-            border-radius: $radius-common;
+            border-radius: $common-radius;
         }
         .input-group-text {
             font-size: 0.8rem;
             font-weight: 500;
             background: $bg-white;
             padding: 0 0.5rem;
-            border-radius: $radius-common;
+            border-radius: $common-radius;
             height: 100%;
         }
     }

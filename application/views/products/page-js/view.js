@@ -94,13 +94,14 @@ $(window).on('load', function () {
     /* Thumbnail/alternates slider for product page */
     $(".thumb-nav").slick({
         rtl: ('rtl' == langLbl.layoutDirection),
-        slidesToShow: 4,
+        slidesToShow: 5,
         slidesToScroll: 1,
         infinite: true,
-        centerPadding: "0px",
+        centerMode: true,
+        centerPadding: '0px',
         asNavFor: ".main-img-slider",
         dots: false,
-        centerMode: false,
+        arrows: false,
         draggable: true,
         speed: 200,
         focusOnSelect: true,
@@ -110,8 +111,17 @@ $(window).on('load', function () {
         nextArrow: '<button class="btn btn-next"><span></span> </button>',
         responsive: [
             {
+                breakpoint: 1600,
+                settings: {
+                    slidesToShow: 4,
+                    slidesToScroll: 1,
+                }
+            },
+
+            {
                 breakpoint: 1024,
                 settings: {
+                    slidesToScroll: 1,
                     settings: 'unslick'
                 }
             },
