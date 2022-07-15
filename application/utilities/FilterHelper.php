@@ -286,7 +286,7 @@ class FilterHelper extends FatUtility
 
     public static function getOptions($langId, $categoryId, $prodSrchObj)
     {
-        if (false == ProductCategory::isLastChildCategory($categoryId)) {
+        if (false == ProductCategory::isLastChildCategory($categoryId) && !FatApp::getConfig('CONF_DISPLAY_OPTION_FILTER', FatUtility::VAR_INT, 0)) {
             return [];
         }
 

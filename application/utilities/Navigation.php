@@ -46,7 +46,7 @@ class Navigation
             $headerTopNavigation = self::getNavigation(Navigations::NAVTYPE_TOP_HEADER);
             CacheHelper::create('headerTopNavigations_' . $siteLangId, serialize($headerTopNavigation), CacheHelper::TYPE_NAVIGATION);
         }
-        $headerCategories = [];
+        /* $headerCategories = [];
         if ($layout == Navigations::LAYOUT_MEGA_MENU) {
             $headerCategories = CacheHelper::get('headerCategories_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
             if ($headerCategories) {
@@ -56,7 +56,7 @@ class Navigation
                 CacheHelper::create('headerCategories_' . $siteLangId, serialize($headerCategories), CacheHelper::TYPE_NAVIGATION);
             }
         }
-        $template->set('headerCategories', $headerCategories);
+        $template->set('headerCategories', $headerCategories); */
         $template->set('top_header_navigation', $headerTopNavigation);
         $template->set('isUserLogged', $isUserLogged);
         $template->set('headerNavigation', $headerNavigation);

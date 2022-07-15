@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="col-lg-6 faqSectionJs position-relative">
+<div class="col-lg-7 faqSectionJs position-relative">
     <?php if (!empty($result)) {
         $catsHtml = '';
         $catsResult = [];
@@ -13,7 +13,7 @@
             $quesHtml .= '<li class="faq-list-item">
                             <button class="faq-list-link faqHeading" type="button" data-cat-id="' . $faqCat['faqcat_id'] . '" data-bs-toggle="collapse" data-bs-target="#faqCollapse' . $faqCat['faq_id'] . '" data-bs-target="' . $faqCat['faq_id'] . '" data-id="' . $faqCat['faq_id'] . '">' . $faqCat['faq_title'] . '
                             </button>
-                            <div class="collapse faqText" id="faqCollapse' . $faqCat['faq_id'] . '">
+                            <div class="collapse" id="faqCollapse' . $faqCat['faq_id'] . '">
                                 <p class="faq_data">' . $faqCat['faq_content'] . '</p>
                             </div>
                         </li>';
