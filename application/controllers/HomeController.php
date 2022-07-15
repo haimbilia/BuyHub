@@ -1520,7 +1520,7 @@ class HomeController extends MyAppController
             'country_code' => Countries::getAttributesById($defultCountryId, 'country_code') ?? '',
         ];
         $data['siteLangId'] = $this->siteLangId;
-        $data['newsletterEnabled'] = FatApp::getConfig('CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION', FatUtility::VAR_INT, 1);
+        $data['newsletterEnabled'] = FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 1);
 
         $this->set('data', $data);
         $this->_template->render();

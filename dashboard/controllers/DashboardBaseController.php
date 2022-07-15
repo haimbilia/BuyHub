@@ -568,7 +568,7 @@ class DashboardBaseController extends FatController
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
-    }
+    }    
 
     protected function getOtpForm()
     {
@@ -737,10 +737,10 @@ class DashboardBaseController extends FatController
 
     protected function getPhoneNumberForm()
     {
-        $frm = new Form('phoneNumberFrm');
+        $frm = new Form('phoneNumberFrm'.rand(1,1000));
         $frm->addHiddenField('', 'user_phone_dcode');
         $frm->addRequiredField(Labels::getLabel('FRM_PHONE_NUMBER', $this->siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('FRM_PHONE_NUMBER', $this->siteLangId)));
-
+        $frm->addHiddenField('', 'use_for'); 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_GET_OTP', $this->siteLangId));
         return $frm;
     }
@@ -776,7 +776,7 @@ class DashboardBaseController extends FatController
         if (false == $resp) {
             LibHelper::dieJsonError($obj->getError());
         }
-
+        $this->set('otp', $otp);
         $this->set('msg', Labels::getLabel('MSG_OTP_MATCHED.', $this->siteLangId));
 
         if (0 < $recoverPwd && true === MOBILE_APP_API_CALL) {

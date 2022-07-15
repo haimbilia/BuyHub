@@ -1,6 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('class', 'form');
-$frm->setFormTagAttribute('id', 'changePhoneForm_' . $updatePhnFrm);
+$frm->setFormTagAttribute('id', 'changePhoneForm_' . $updatePhnFrm."_".rand(0,100));
+$frm->setValidatorJsObjectName($frm->getFormTagAttribute('id'));
+
 $frm->developerTags['colClassPrefix'] = 'col-xl-12 col-lg-12 col-md-';
 $frm->developerTags['fld_default_col'] = 12;
 $frm->setFormTagAttribute('autocomplete', 'off');

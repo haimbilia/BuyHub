@@ -1,9 +1,3 @@
-$(document).ready(function () {
-    changePasswordForm();
-    changeEmailForm();
-    changePhoneNumberForm();
-});
-
 (function () {
     var runningAjaxReq = false;
     var passdv = '#changePassFrmBlock';
@@ -33,6 +27,15 @@ $(document).ready(function () {
             $(emaildv).html(t);
         });
     };
+    changeEmailUsingPhoneForm1 = function () {        
+        $(emaildv).prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('Account', 'changeEmailUsingPhoneForm1'), '', function (t) {
+            fcom.removeLoader();
+            t = $.parseJSON(t);
+            $(emaildv).html(t.html);
+            stylePhoneNumberFld();
+        });
+    };
 
     updatePassword = function (frm) {
         if (!$(frm).validate()) { return; }
@@ -49,6 +52,13 @@ $(document).ready(function () {
             changeEmailForm();
         });
     };
+    updateEmailPasswordUsingPhone = function (frm) {
+        if (!$(frm).validate()) { return; }
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl('Account', 'updateEmailPasswordUsingPhone'), data, function (t) {
+            changeEmailUsingPhoneForm1();
+        });
+    };
 
     changePhoneNumberForm = function () {
         $(phoneNumberdv).prepend(fcom.getLoader());
@@ -60,12 +70,17 @@ $(document).ready(function () {
         });
     };
 
-    getOtp = function (frm, updateToDbFrm = 0) {
-        if (!$(frm).validate()) { return; }
+    /*getOtp = function (frm, updateToDbFrm = 0) { */
+    getOtp = function (frm) {  
+        console.log(frm);  
+       // if (!$(frm).validate()) { return; }
+
+       
         var data = fcom.frmData(frm);
         $(frm.btn_submit).attr('disabled', 'disabled');
         fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('Account', 'getOtp', [updateToDbFrm]), data, function (t) {
+        
+        fcom.ajax(fcom.makeUrl('Account', 'getOtp'), data, function (t) {
             $.ykmsg.close();
             t = $.parseJSON(t);
             if (1 > t.status) {
@@ -73,31 +88,23 @@ $(document).ready(function () {
                 $(frm.btn_submit).removeAttr('disabled');
                 return false;
             }
+         
+            var lastFormElement = "#" + frm.id;
+            $(lastFormElement).after(t.html);         
 
-            var lastFormElement = phoneNumberdv + ' form:last';
-            var resendOtpElement = lastFormElement + " .resendOtp-js";
+            var resendOtpElement = "#"+ $(t.html).attr('id');          
+           
             $(lastFormElement + ' [name="btn_submit"]').closest("div.row").remove();
-            var phoneNumber = $(lastFormElement + " input[name='user_phone']").val();
-            var dialCode = $(lastFormElement + " input[name='user_phone_dcode']").val();
-
-            if (0 < updateToDbFrm) {
+            if (OTP_FOR_NEW_PHONE_NO == frm.use_for.value) {
                 $(lastFormElement + " input[name='user_phone']").attr('readonly', 'readonly');
             }
-
-            $(lastFormElement).after(t.html);
+          
             $(".otpForm-js .form-side").removeClass('form-side');
             $('.formTitle-js').remove();
-
-            var resendFunction = 'resendOtp()';
-            if (0 < updateToDbFrm) {
-                $(phoneNumberdv + " form:last").attr('onsubmit', 'return validateOtp(this, 0);');
-
-                var resendOtpElement = lastFormElement + " .resendOtp-js";
-                resendFunction = 'resendOtp("' + phoneNumber + '", "' + dialCode + '")';
-            }
-            $(resendOtpElement).removeAttr('onclick').attr('onclick', resendFunction);
-            $(lastFormElement + " .countdownFld--js, " + lastFormElement + " .resendOtp-js").parent().removeClass("d-none");
-            $(lastFormElement + ".otpFieldBlock--js," + lastFormElement + " .countdownFld--js").removeClass("d-none");
+     
+            console.log(resendOtpElement + " .countdownFld--js, " + resendOtpElement + " .resendOtp-js");
+            $(resendOtpElement + " .countdownFld--js, " + resendOtpElement + " .resendOtp-js").parent().removeClass("d-none");
+            $(resendOtpElement + ".otpFieldBlock--js," + resendOtpElement + " .countdownFld--js").removeClass("d-none");
             startOtpInterval();
         });
         return false;
@@ -119,12 +126,12 @@ $(document).ready(function () {
         return false;
     };
 
-    validateOtp = function (frm, updateToDbFrm = 1) {
+    validateOtp = function (frm, updateToDbFrmType = 0) {
         if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         $(frm.btn_submit).attr('disabled', 'disabled');
         fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('Account', 'validateOtp', [updateToDbFrm]), data, function (t) {
+        fcom.ajax(fcom.makeUrl('Account', 'validateOtp', [updateToDbFrmType]), data, function (t) {
             t = $.parseJSON(t);
             if (1 > t.status) {
                 fcom.displayErrorMessage(t.msg);
@@ -132,10 +139,14 @@ $(document).ready(function () {
                 $(frm.btn_submit).removeAttr('disabled');
                 return false;
             } else if ('undefined' != typeof t.html) {
-                $.ykmsg.close();
-                $(phoneNumberdv + " .otpForm-js").remove();
-                var lastFormElement = phoneNumberdv + ' form:last';
-                $(lastFormElement).after(t.html);
+                $.ykmsg.close();               
+                if(updateToDbFrmType == OTP_FOR_EMAIL){                 
+                    $(emaildv).html(t.html);
+                }else{
+                    $(phoneNumberdv + " .otpForm-js").remove();
+                    var lastFormElement = phoneNumberdv + ' form:last';
+                    $(lastFormElement).after(t.html);                    
+                } 
                 stylePhoneNumberFld();
             } else {
                 fcom.displaySuccessMessage(t.msg);

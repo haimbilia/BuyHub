@@ -6,8 +6,8 @@ $userId = $userIdFld->value;
 $frm->setFormTagAttribute('class', 'form form-otp otpForm-js');
 $frm->developerTags['fld_default_col'] = 2;
 $frm->setFormTagAttribute('name', 'frmGuestLoginOtp');
-$frm->setFormTagAttribute('id', 'frmGuestLoginOtp');
-$frm->setFormTagAttribute('onsubmit', 'return validateOtp(this);');
+$frm->setFormTagAttribute('id', 'frmGuestLoginOtp'.$useFor.rand(0,100));
+$frm->setFormTagAttribute('onsubmit', 'return validateOtp(this,'.$useFor.');');
 
 $btnFld = $frm->getField('btn_submit');
 $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
@@ -48,7 +48,9 @@ echo $frm->getFormTag(); ?>
             </p>
         </div>
         <div class="col-auto d-none">
-            <a class="link resendOtp-js disabled" href="javascript:void(0);" onclick="resendOtp(<?php echo $userId; ?>, <?php echo applicationConstants::YES; ?>)"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></a>
+            <a class="link resendOtp-js disabled" href="javascript:void(0);" onclick="<?php echo $useFor == User::OTP_FOR_NEW_PHONE_NO ? 'resendOtp('.$phoneNumber.',\''.$dialCode.'\')' :'resendOtp()';?>">
+                <?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?>
+            </a>
         </div>
     </div>
     <div class="row">
