@@ -140,7 +140,7 @@
             background-color: transparent;
             border: $border-black;
             padding: 10px;
-            border-radius: 0;
+            border-radius: $common-radius;
             min-width: 50px;
             text-align: center;
         }
@@ -182,7 +182,7 @@ $sharing-height: 50px;
         min-width: 120px;
         height: $sharing-height;
         border: $border;
-        border-radius: 0;
+        border-radius: $common-radius;
         background-color: transparent;
         color: $brand-color;
         .svg {
@@ -202,7 +202,7 @@ $sharing-height: 50px;
         justify-content: center;
         //grid-gap: 10px;
         border: $border;
-        border-radius: 0;
+        border-radius: $common-radius;
         background-color: transparent;
         height: $sharing-height;
         &-item {
@@ -520,7 +520,7 @@ $sharing-height: 50px;
 
 .reviews-lisitng {
     border: $border;
-    border-radius: $radius-common;
+    border-radius: $common-radius;
     > ul {
         > li {
             border-bottom: $border;
@@ -537,7 +537,7 @@ $sharing-height: 50px;
 
 .reviews-list {
     background: #fff;
-    border-radius: $radius-common;
+    border-radius: $common-radius;
     border: $border;
     .profile-avatar {
         border: none;
@@ -570,7 +570,7 @@ $sharing-height: 50px;
 }
 
 .shop-profile {
-    border-radius: $radius-common;
+    border-radius: $common-radius;
     border: $border;
 }
 
@@ -962,7 +962,7 @@ $sharing-height: 50px;
         background-color: $bg-white;
         font-size: 0.8rem;
         border: none;
-        border-radius: $radius-common;
+        border-radius: $common-radius;
         padding: 0;
         color: $txt-gray;
         // margin-#{$end-direction}: 10px;

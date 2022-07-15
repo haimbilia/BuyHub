@@ -2423,7 +2423,8 @@ $header-height: 65px;
     @include media-breakpoint-up(lg) {
         position: sticky;
         top: 0;
-        z-index: $zindex-fixed;
+        z-index: $zindex-sticky;
+        z-index: 1021;
     }
     //height: $header-height;
     background-color: #fff;
