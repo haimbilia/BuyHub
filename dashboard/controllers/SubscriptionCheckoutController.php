@@ -613,14 +613,12 @@ class SubscriptionCheckoutController extends LoggedUserController
         $srch->addCondition('order_user_id', '=', $this->userParentId);
         $srch->addCondition('ossubs_till_date', '<=', $endDate);
         $srch->addCondition('ossubs_till_date', '!=', '0000-00-00');
-        $srch->addCondition('user_autorenew_subscription', '!=', 1);
+        //$srch->addCondition('user_autorenew_subscription', '!=', 1);
         $srch->addMultipleFields(array('order_user_id', 'order_id', 'order_number', 'ossubs_id', 'ossubs_type', 'ossubs_price', 'ossubs_images_allowed', 'ossubs_products_allowed', 'ossubs_inventory_allowed', 'ossubs_plan_id', 'ossubs_interval', 'ossubs_frequency', 'ossubs_commission'));  
         $srch->addOrder('ossubs_id', 'desc');
         $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-
-        $rs = $srch->getResultSet();
-        $activeSub = FatApp::getDb()->fetch($rs, 'ossubs_id');
+        $srch->setPageSize(1);     
+        $activeSub = FatApp::getDb()->fetch($srch->getResultSet(), 'ossubs_id');
 
         if (empty($activeSub) && count($activeSub) == 0) {
             Message::addErrorMessage(Labels::getLabel("ERR_Subscription_is_not_active", $this->siteLangId));

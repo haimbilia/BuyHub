@@ -7,9 +7,9 @@ $txnStatusArr = $statusArr;
 foreach ($arrListing as $key => &$value) {
     $value['utxn_statusLabel'] = $txnStatusArr[$value['utxn_status']];
     $value['utxn_id'] = Transactions::formatTransactionNumber($value['utxn_id']);
-    $value['balance'] = CommonHelper::displayMoneyFormat($value['balance'], false, false, false);
-    $value['utxn_credit'] = CommonHelper::displayMoneyFormat($value['utxn_credit'], false, false, false);
-    $value['utxn_debit'] = CommonHelper::displayMoneyFormat($value['utxn_debit'], false, false, false);
+    $value['balance'] = CommonHelper::displayMoneyFormat($value['balance']);
+    $value['utxn_credit'] = CommonHelper::displayMoneyFormat($value['utxn_credit']);
+    $value['utxn_debit'] = CommonHelper::displayMoneyFormat($value['utxn_debit']);
 }
 
 $data = array(
@@ -17,10 +17,10 @@ $data = array(
     'page' => $page,
     'pageCount' => $pageCount,
     'recordCount' => $recordCount,
-    'userWalletBalance' => CommonHelper::displayMoneyFormat($userWalletBalance, false, false, false),
-    'userTotalWalletBalance' => CommonHelper::displayMoneyFormat($userTotalWalletBalance, false, false, false),
+    'userWalletBalance' => CommonHelper::displayMoneyFormat($userWalletBalance),
+    'userTotalWalletBalance' => CommonHelper::displayMoneyFormat($userTotalWalletBalance),
     'promotionWalletToBeCharged' => $promotionWalletToBeCharged,
-    'withdrawlRequestAmount' => CommonHelper::displayMoneyFormat($withdrawlRequestAmount, false, false, false),
+    'withdrawlRequestAmount' => CommonHelper::displayMoneyFormat($withdrawlRequestAmount),
     'txnStatusArr' => $txnStatusArr,
 );
 

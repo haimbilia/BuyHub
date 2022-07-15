@@ -12,63 +12,92 @@ $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
     <?php $this->includeTemplate('_partial/cart-summary.php', ['showHeaderButton' => false]); ?>
 <?php } ?>
 
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-hamburger" aria-labelledby="offcanvas-hamburger-Label">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvas-hamburger-Label">All Categories</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body p-0">
-        <div class="menu">
-            <nav id="stack-menu">
-                <ul>
-                    <li>
-                        <a href="#">Fugiat</a>
-                        <ul>
-                            <li><a href="#">Perferendis</a></li>
-                            <li>
-                                <a href="#">Recusandae</a>
-                                <ul>
-                                    <li><a href="#">Vel</a></li>
-                                    <li><a href="#">Cumque</a></li>
-                                    <li><a href="#">Facere</a></li>
-                                    <li><a href="#">Enim</a></li>
-                                    <li><a href="#">Nihil</a></li>
-                                    <ul>
-                                        <li><a href="#">Quidem</a></li>
-                                        <li><a href="#">Temporibus</a></li>
-                                        <li><a href="#">Fugit</a></li>
-                                        <li><a href="#">Dolore</a></li>
-                                    </ul>
-                                </ul>
-                            </li>
-                            <li><a href="#">Vitae</a></li>
-                            <li><a href="#">Ipsum</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">Lorem</a>
-                        <ul>
-                            <li><a href="#">Similique</a></li>
-                            <li><a href="#">Distinctio</a></li>
-                            <li><a href="#">Porro</a></li>
-                            <li><a href="#">Illum</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">Perspiciatis</a></li>
-                    <li>
-                        <a href="#">Doloremque</a>
-                        <ul>
-                            <li><a href="#">Quod</a></li>
-                            <li><a href="#">Provident</a></li>
-                            <li><a href="#">Cumque</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+<?php
+if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == Navigations::LAYOUT_MEGA_MENU) {
+    $headerCategories = CacheHelper::get('headerCategories_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+    if ($headerCategories) {
+        $headerCategories = unserialize($headerCategories);
+    } else {
+        $headerCategories = ProductCategory::getArray($siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE);
+        CacheHelper::create('headerCategories_' . $siteLangId, serialize($headerCategories), CacheHelper::TYPE_NAVIGATION);
+    }
 
-    </div>
-</div>
+    if (0 < count($headerCategories)) { ?>
+        <div class="offcanvas offcanvas-start offcanvas-categories-menu" tabindex="-1" id="offcanvas-hamburger" aria-labelledby="offcanvas-hamburger-Label">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvas-hamburger-Label"><?php echo Labels::getLabel('NAV_ALL_CATEGORIES', $siteLangId); ?></h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body p-0">
+                <nav id="stack-menu">
+                    <ul>
+                        <?php
+                        $count = 0;
+                        $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
+                        foreach ($headerCategories as $link) {
+                            $count++;
+                            if ($count > 9) {
+                                break;
+                            }
+
+                            $navUrl = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']));
+                            $OrgnavUrl = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']), '', null, false, $getOrgUrl);
+
+                            $href = $navUrl;
+                            $navchild = '';
+                            $class = '';
+                        ?>
+                            <li data-test="d">
+                                <a href="<?php echo $href; ?>"><?php echo $link['prodcat_name']; ?></a>
+                                <?php if (isset($link['children']) && count($link['children']) > 0) { ?>
+                                    <ul>
+                                        <?php $subyChild = 0;
+                                        foreach ($link['children'] as $children) {
+                                            $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
+                                            $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
+                                        ?>
+                                            <li data-test="d">
+                                                <a href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
+                                                <?php if (isset($children['children']) && count($children['children']) > 0) { ?>
+                                                    <ul>
+                                                        <?php $subChild = 0;
+                                                        foreach ($children['children'] as $childCat) {
+                                                            $catUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']));
+                                                            $catOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
+                                                        ?>
+                                                            <li><a href="<?php echo $catUrl; ?>"><?php echo $childCat['prodcat_name']; ?></a></li>
+                                                            <?php
+                                                            if ($subChild++ == 4) {
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (count($children['children']) > 5) { ?>
+                                                            <li class="seemore"><a href="<?php echo $subCatUrl; ?>"><?php echo Labels::getLabel('LBL_View_All', $siteLangId); ?></a></li>
+                                                        <?php }   ?>
+                                                    </ul>
+                                                <?php } ?>
+                                            </li>
+                                            <?php
+                                            if ($subyChild++ == 7) {
+                                                break;
+                                            }
+                                        }
+
+                                        if (count($link['children']) > 6) { ?>
+                                            <li class="seemore"><a href="<?php echo $navUrl; ?>"><?php echo Labels::getLabel('LBL_View_All', $siteLangId); ?></a></li>
+                                        <?php }   ?>
+                                    </ul>
+                                <?php  } ?>
+                            </li>
+                        <?php } ?>
+                        <li class="seemore"><a href="<?php echo UrlHelper::generateUrl('Category'); ?>"><?php echo Labels::getLabel('LBL_View_All', $siteLangId); ?></a></li>
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+<?php }
+} ?>
 <script>
     $(document).ready(function() {
         $("#stack-menu").stackMenu()

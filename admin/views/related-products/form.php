@@ -10,6 +10,7 @@ $fld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_SELECT_PRODUCT',
 
 $fld = $frm->getField('products_related[]');
 $fld->addFieldTagAttribute('id', 'relatedProductsJs');
+$fld->addFieldTagAttribute('data-allow-clear', '0');
 $fld->addFieldTagAttribute('disabled', 'disabled');
 $fld->addFieldTagAttribute('multiple', 'multiple');
 $fld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_RELATED_PRODUCTS', $siteLangId));

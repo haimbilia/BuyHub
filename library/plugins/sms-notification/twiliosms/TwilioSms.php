@@ -22,7 +22,7 @@ class TwilioSms extends SmsNotificationBase
     }
     
     public function send($to, $body)
-    {
+    {    
         if (false == $this->validateSettings($this->langId)) {
             return [
                 'status' => false,

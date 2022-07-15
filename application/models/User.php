@@ -95,6 +95,13 @@ class User extends MyAppModel
     public const GOOGLE_LOGIN = 2;
     public const APPLE_LOGIN = 3;
 
+
+    // OTP Validate types
+    public const OTP_FOR_OLD_PHONE_NO = 1;
+    public const OTP_FOR_NEW_PHONE_NO = 2;
+    public const OTP_FOR_EMAIL = 3;
+
+
     public const USER_INFO_ATTR = [
         'user_id',
         'user_name',
@@ -1791,7 +1798,7 @@ class User extends MyAppModel
             $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
             return false;
         }
-
+        $phone = false !== strpos($phone, '+') ? $phone : '+' . $phone;
         $replacements = [
             '{OTP}' => $otp,
             '{USER_NAME}' => $user_name

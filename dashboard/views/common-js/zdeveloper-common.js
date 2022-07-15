@@ -944,7 +944,7 @@ $(document).ready(function () {
         this.value = this.value.replace(/\s/g, "");
     });
     $(document).on("submit", "form", function () {
-        moveErrorAfterIti();
+       moveErrorAfterIti();
     });
     $(document).on(
         "keyup",
@@ -957,7 +957,9 @@ $(document).ready(function () {
 
 function moveErrorAfterIti() {
     if (0 < $(".iti .errorlist").length) {
-        $(".iti .errorlist").detach().insertAfter(".iti");
+        $('.iti').each(function() {          
+            $(this).find('.errorlist').detach().insertAfter($(this).closest('.iti'));          
+        });
     }
 }
 
