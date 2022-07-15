@@ -71,11 +71,8 @@
     };
 
     /*getOtp = function (frm, updateToDbFrm = 0) { */
-    getOtp = function (frm) {  
-        console.log(frm);  
-       // if (!$(frm).validate()) { return; }
-
-       
+    getOtp = function (frm) {       
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         $(frm.btn_submit).attr('disabled', 'disabled');
         fcom.displayProcessing();
@@ -100,9 +97,8 @@
             }
           
             $(".otpForm-js .form-side").removeClass('form-side');
-            $('.formTitle-js').remove();
-     
-            console.log(resendOtpElement + " .countdownFld--js, " + resendOtpElement + " .resendOtp-js");
+            $('.formTitle-js').remove();     
+          
             $(resendOtpElement + " .countdownFld--js, " + resendOtpElement + " .resendOtp-js").parent().removeClass("d-none");
             $(resendOtpElement + ".otpFieldBlock--js," + resendOtpElement + " .countdownFld--js").removeClass("d-none");
             startOtpInterval();

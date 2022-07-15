@@ -1293,6 +1293,11 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
 
+        $userAuthObj = new UserAuthentication();
+        if($userAuthObj->getUserByEmail($post['new_email'],false,false)){
+            LibHelper::dieJsonError(Labels::getLabel('ERR_EMAIL_ALREADY_EXIST', $this->siteLangId));
+        }
+
         $userObj = new User($this->userId);
         $srch = $userObj->getUserSearchObj(array('user_id', 'credential_password', 'credential_email', 'user_name', 'user_phone_dcode', 'user_phone'));
         $rs = $srch->getResultSet();
@@ -1348,11 +1353,15 @@ class AccountController extends LoggedUserController
             }
             FatUtility::dieJsonError($message);
         }   
+        $userAuthObj = new UserAuthentication();        
+        if($userAuthObj->getUserByEmail($post['new_email'],false,false)){
+            LibHelper::dieJsonError(Labels::getLabel('ERR_EMAIL_ALREADY_EXIST', $this->siteLangId));
+        }
 
         $userObj = new User($this->userId);      
         if (!$userObj->verifyUserPhoneOtp($post['otp'], false, false)) {          
             LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-        }
+        }        
 
         $srch = $userObj->getUserSearchObj(array('user_id', 'credential_password', 'credential_email', 'user_name', 'user_phone_dcode', 'user_phone'));
         $data = FatApp::getDb()->fetch($srch->getResultSet(), 'user_id');
@@ -3556,9 +3565,6 @@ class AccountController extends LoggedUserController
 
     public function getOtp()
     {
-
-        // echo 111;
-        // die();
         $frm = $this->getPhoneNumberForm();
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -3612,7 +3618,7 @@ class AccountController extends LoggedUserController
     public function validateOtp($openFrmType = 0)
     {
         $updateToDb = (User::OTP_FOR_NEW_PHONE_NO == $openFrmType ? 1 : 0);
-       // $this->validateOtpApi($updateToDb, false);
+        $this->validateOtpApi($updateToDb, false);
 
         if (User::OTP_FOR_OLD_PHONE_NO == $openFrmType) {
             $this->changePhoneForm(1);
@@ -3941,6 +3947,8 @@ class AccountController extends LoggedUserController
 
         $pwd = $frm->addPasswordField(Labels::getLabel('FRM_NEW_PASSWORD', $this->siteLangId), 'new_password');
         $pwd->requirements()->setRequired();
+        $pwd->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
+        $pwd->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_ATLEAST_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
         $fld = $frm->addHiddenField('', 'otp');
         $fld->requirements()->setRequired();
 
