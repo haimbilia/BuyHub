@@ -1943,3 +1943,10 @@ UPDATE `tbl_extra_pages_lang` SET `epage_content` = '\r\n<p>بحاجة إلى م
 
 DELETE FROM `tbl_cron_schedules` WHERE `tbl_cron_schedules`.`cron_id` = 17;
 DELETE FROM `tbl_cron_schedules` WHERE `tbl_cron_schedules`.`cron_id` = 12;
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('app_account_delete', '1', 'Delete My Account', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('app_agree_Privacy', '1', 'To Read The Policies Of Gdpr', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('app_request_my_data', '1', 'Request My Data', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('app_request_info', '1', 'Request System Owner To Get Your Account Information', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('app_want_to_deleteAccount', '1', 'Do you want to delete account?', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('app_request_data', '1', 'Request Data', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
