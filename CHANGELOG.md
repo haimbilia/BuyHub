@@ -1020,6 +1020,7 @@ TV-9.4.0.20220406
     - #065307 - The error occurs as 'Product not available for shipping on the checkout page for the seller added product when the admin shipping plugin is on.
     - #065273 - UI issue on the order details popup on the order details page on the admin end.
     - #65366 - The placeholder text appears as an option in the listing on the bind product popup on the buyer-together products page
+    - #065376 - The image attributes added by the admin are not visible on the front end.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
