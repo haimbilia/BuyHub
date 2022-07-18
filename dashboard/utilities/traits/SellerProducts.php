@@ -271,13 +271,12 @@ trait SellerProducts
             $urlSrch->addCondition('urlrewrite_original', '=', 'products/view/' . $selprod_id);
             $rs = $urlSrch->getResultSet();
             $urlRow = FatApp::getDb()->fetch($rs);
-
+            $sellerProductRow['selprod_url_keyword'] = '';
             if ($urlRow) {
                 $data['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
+                $customUrl = explode("/", $urlRow['urlrewrite_custom']);
+                $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
             }
-
-            $customUrl = explode("/", $urlRow['urlrewrite_custom']);
-            $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
         } else {
             $sellerProductRow['selprod_available_from'] = date('Y-m-d');
             $sellerProductRow['selprod_cod_enabled'] = $productRow['product_cod_enabled'];
@@ -574,7 +573,7 @@ trait SellerProducts
 
 
 
-        /* Update seller product language data[ */        
+        /* Update seller product language data[ */
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
             if (!empty($post['selprod_title' . $langId])) {
@@ -2767,7 +2766,7 @@ trait SellerProducts
         if (!in_array($attribute, $columns)) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
-        
+
         $value = FatApp::getPostedData('value');
         if ('voldiscount_min_qty' == $attribute && 2 > $value) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_MINIMUM_QUANTITY_SHOULD_BE_GREATER_THAN_1', $this->siteLangId));
@@ -3287,7 +3286,7 @@ trait SellerProducts
     public function productMissingInfo()
     {
         $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
-        
+
         $selProdId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (1 > $selProdId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
@@ -3302,6 +3301,4 @@ trait SellerProducts
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
-
-    
 }
