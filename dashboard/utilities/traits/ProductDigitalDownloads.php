@@ -758,10 +758,12 @@ trait ProductDigitalDownloads
 
         if (Product::CATALOG_TYPE_REQUEST == $reference['pddr_type']) {
             $userId = ProductRequest::getAttributesById($reference['pddr_record_id'], 'preq_user_id');
+        }if (Product::CATALOG_TYPE_INVENTORY == $reference['pddr_type']) {
+            $userId = SellerProduct::getAttributesById($reference['pddr_record_id'], 'selprod_user_id');
         } else {
             $userId = Product::getAttributesById($reference['pddr_record_id'], 'product_seller_id');
         }
-
+        
         $ddpObj = new DigitalDownloadPrivilages();
         $canDo = $ddpObj->canEdit(
             $reference['pddr_record_id'],
@@ -771,7 +773,7 @@ trait ProductDigitalDownloads
             $validateAllowedWithInventory
         );
 
-        if (false == $canDo) {
+        if (false == $canDo) { 
             LibHelper::exitWithError($ddpObj->getError(), true);
         }
 

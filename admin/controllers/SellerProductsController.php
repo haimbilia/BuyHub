@@ -227,11 +227,13 @@ class SellerProductsController extends ListingBaseController
         $urlSrch->setPageSize(1);
         $rs = $urlSrch->getResultSet();
         $urlRow = FatApp::getDb()->fetch($rs);
+
+        $sellerProductRow['selprod_url_keyword'] = '';
         if ($urlRow) {
             $data['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
+            $customUrl = explode("/", $urlRow['urlrewrite_custom']);
+            $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
         }
-        $customUrl = explode("/", $urlRow['urlrewrite_custom']);
-        $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
 
         $user_shop_name = User::getUserShopName($sellerProductRow['selprod_user_id'], $this->siteLangId);
         $sellerProductRow['selprod_user_shop_name'] = $user_shop_name['user_name'] . ' - ' . $user_shop_name['shop_name'];

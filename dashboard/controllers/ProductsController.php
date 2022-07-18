@@ -148,7 +148,7 @@ class ProductsController extends SellerBaseController
                 $countryData = Countries::getAttributesByLangId($langId, $prodShippingDetails['ps_from_country_id'], [Countries::tblFld('name'), Countries::tblFld('code')], applicationConstants::JOIN_RIGHT, applicationConstants::YES);
                 if (false != $countryData) {
                     $fld = $frm->getField('ps_from_country_id');
-                    $fld->options = [$prodShippingDetails['ps_from_country_id'] => $countryData[Countries::tblFld('name')] ?? $countryData[Tax::tblFld('code')]];
+                    $fld->options = [$prodShippingDetails['ps_from_country_id'] => $countryData[Countries::tblFld('name')] ?? $countryData[Countries::tblFld('code')]];
                 }
             }
 

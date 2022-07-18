@@ -414,14 +414,7 @@ class PatchUpdateController extends ListingBaseController
                 'tbl_seller_products_to_plugin_selprod','tbl_orders_to_plugin_order','tbl_plugin_to_user','tbl_product_digital_data_relation','tbl_product_digital_links','tbl_badges',
                 'tbl_badges_lang','tbl_badge_link_conditions','tbl_badge_links','tbl_badge_requests','tbl_order_product_shipment_pickup','tbl_system_logs','tbl_order_product_plugin_specifics',
                 'tbl_order_product_responses'
-                );
-
-            FatApp::getDb()->query("INSERT INTO `tbl_meta_tags`(`meta_controller`, `meta_action`, `meta_record_id`, `meta_subrecord_id`, `meta_default`, `meta_advanced`) VALUES 
-            ('', '', 0, 0, 1, 0),
-            ('Brands', 'index', 0, 0, 1, 0),
-            ('Shops', 'index', 0, 0, 1, 0),
-            ('Blog', 'index', 0, 0, 1, 0),
-            ('Products', 'index', 0, 0, 1, 0)");
+                );           
             FatApp::getDb()->query("DELETE FROM `tbl_attached_files` WHERE `afile_type` in (1,2,3,4,5,7,8,9,10,11,12,13,14,22,23,24,25,26,27,28,29,30,32,33,41,42,43,48,50,52,53)");
 
             /*
@@ -438,6 +431,15 @@ class PatchUpdateController extends ListingBaseController
                 echo 'Error in: ' . $table . ' <br>';
             }
         }
+
+        if($type == 'all'){
+            FatApp::getDb()->query("INSERT INTO `tbl_meta_tags`(`meta_controller`, `meta_action`, `meta_record_id`, `meta_subrecord_id`, `meta_default`, `meta_advanced`) VALUES 
+            ('', '', 0, 0, 1, 0),
+            ('Brands', 'index', 0, 0, 1, 0),
+            ('Shops', 'index', 0, 0, 1, 0),
+            ('Blog', 'index', 0, 0, 1, 0),
+            ('Products', 'index', 0, 0, 1, 0)");
+        }       
     }
 
     public function changeCustomUrl1()

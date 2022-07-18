@@ -85,6 +85,18 @@ class ImageAttributesController extends ListingBaseController
                     $cnd->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%');
                 }
                 break;
+            case AttachedFile::FILETYPE_BRAND_LOGO:
+            case AttachedFile::FILETYPE_BRAND_IMAGE:    
+                $srch->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'brand_id = afile_record_id', 'b');
+                $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'b.brand_id = b_l.brandlang_brand_id AND b_l.brandlang_lang_id = ' . $this->siteLangId, 'b_l');
+                $srch->addMultipleFields(
+                    array('brand_id as record_id', 'IFNULL(brand_name, brand_identifier) as record_name', 'afile_type')
+                );
+                if (isset($post['keyword']) && '' != $post['keyword']) {
+                    $cnd = $srch->addCondition('brand_name', 'like', '%' . $post['keyword'] . '%');
+                    $cnd->attachCondition('brand_identifier', 'like', '%' . $post['keyword'] . '%');
+                }               
+                break;
             case AttachedFile::FILETYPE_CATEGORY_BANNER:
                 $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'prodcat_id = afile_record_id', 'pc');
                 $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'pc.prodcat_id = pc_l.prodcatlang_prodcat_id AND pc_l.prodcatlang_lang_id = ' . $this->siteLangId, 'pc_l');
