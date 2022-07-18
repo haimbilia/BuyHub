@@ -101,7 +101,7 @@
                                                                 </ul>
                                                             </div>
                                                         <?php
-                                                            if ($subyChild++ == 3) {
+                                                            if ($subyChild++ == 8) {
                                                                 break;
                                                             }
                                                         } ?>

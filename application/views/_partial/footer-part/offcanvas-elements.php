@@ -47,7 +47,7 @@ if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == Naviga
                             $navchild = '';
                             $class = '';
                         ?>
-                            <li data-test="d">
+                            <li>
                                 <a href="<?php echo $href; ?>"><?php echo $link['prodcat_name']; ?></a>
                                 <?php if (isset($link['children']) && count($link['children']) > 0) { ?>
                                     <ul>
@@ -56,7 +56,7 @@ if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == Naviga
                                             $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
                                             $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
                                         ?>
-                                            <li data-test="d">
+                                            <li>
                                                 <a href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
                                                 <?php if (isset($children['children']) && count($children['children']) > 0) { ?>
                                                     <ul>
