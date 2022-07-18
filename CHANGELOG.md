@@ -1024,6 +1024,7 @@ TV-9.4.0.20220406
     - #065398 - Error message appears as 'Invalid access' after user login on the dashboard.
     - #065386 -	The notice appears on the inventory setup page.
     - #065417 - Multiple issues on the downloads tab in the inventory setup page for digital products.
+    - #065376 - The image attributes added by the admin are not visible on the front end.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

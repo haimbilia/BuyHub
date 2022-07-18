@@ -1712,7 +1712,7 @@ class User extends MyAppModel
                     'user_phone',
                     'credential_password'
                 ];
-                $userInfo = $this->getUserInfo($attr);
+                $userInfo = $this->getUserInfo($attr, false, false);
                 $this->loginWithOtp = true;
                 $this->doLogin($userInfo['user_phone_dcode'] . $userInfo['user_phone'], $userInfo['credential_password']);
             }
