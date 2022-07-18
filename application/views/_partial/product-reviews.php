@@ -116,6 +116,11 @@ $productView = $productView ?? false;
                                 <!-- Comments Section -->
                             </div>
                         </div>
+                    <?php } else { ?>
+                        <div class="no-reviews">
+                            <h6><?php echo Labels::getLabel('MSG_BE_THE_FIRST_ONE_TO_WRITE_A_REVIEW!', $siteLangId); ?></h6>
+                            <img src="<?php echo CONF_WEBROOT_URL . 'images/retina/no-reviews.svg' ?>">
+                        </div>
                     <?php } ?>
                 </div>
             </div>
