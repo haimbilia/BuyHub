@@ -33,12 +33,12 @@ class LoggedUserController extends DashboardBaseController
         );
         
         $isLoginByAdmin = (isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && !empty($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]));
-        if (true === $invalidAccess && false === $isLoginByAdmin) {
+        if (true === $invalidAccess && false === $isLoginByAdmin) { 
             LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS', CommonHelper::getLangId()), false, true, ['displayLoginForm' => 1]);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
         }
 
-        if (0 < $this->userInfo['user_parent']) {
+        if (0 < $this->userInfo['user_parent']) { 
             $user = new User($this->userInfo['user_parent']);
             $parentUserInfo = $user->getUserInfo(array(), true, true);
             if (false == $parentUserInfo || $parentUserInfo['credential_active'] != applicationConstants::ACTIVE) {

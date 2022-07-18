@@ -20,10 +20,10 @@ class SellerBaseController extends LoggedUserController
                 LibHelper::exitWithError($msg, false, true);
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'configureEmail', [], CONF_WEBROOT_FRONTEND));
             }
-            if(!FatApp::getConfig('CONF_BUYER_CAN_SEE_SELLER_TAB', FatUtility::VAR_INT, 0)){
-                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), false, true);
+            if (!FatApp::getConfig('CONF_BUYER_CAN_SEE_SELLER_TAB', FatUtility::VAR_INT, 0)) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_DASHBOARD_ACCESS', $this->siteLangId), false, true);
             }
-            
+
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'supplierApprovalForm'));
         }
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'S';
@@ -32,9 +32,9 @@ class SellerBaseController extends LoggedUserController
         $isStripeConnectLogin = (get_called_class() == 'StripeConnectController' && in_array($action, ['login', 'callback']));
         $stripeConnectObj = PluginHelper::callPlugin('StripeConnect', [$this->siteLangId]);
         if (false !== $stripeConnectObj) {
-            if (0 < $stripeConnectObj->isMandatoryForSeller() &&
-                (
-                    false === $stripeConnectObj->init($this->userParentId, true) ||
+            if (
+                0 < $stripeConnectObj->isMandatoryForSeller() &&
+                (false === $stripeConnectObj->init($this->userParentId, true) ||
                     false === $stripeConnectObj->userAccountIsValid()
                 ) &&
                 !$isStripeConnectLogin &&
