@@ -1022,6 +1022,7 @@ TV-9.4.0.20220406
     - #65366 - The placeholder text appears as an option in the listing on the bind product popup on the buyer-together products page
     - #065376 - The image attributes added by the admin are not visible on the front end.
     - #065394 - The default meta tags are missing on the default meta tag listing page.
+    - #065431 - The buyer registered with a phone number redirected to the email configuration page when trying to access the seller dashboard.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

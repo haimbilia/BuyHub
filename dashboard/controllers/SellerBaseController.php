@@ -18,7 +18,7 @@ class SellerBaseController extends LoggedUserController
             if (empty($userEmail)) {
                 $msg = Labels::getLabel('ERR_CONFIGURE_YOUR_EMAIL_FIRST', $this->siteLangId);
                 LibHelper::exitWithError($msg, false, true);
-                FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'configureEmail', [], CONF_WEBROOT_FRONTEND));
+                FatApp::redirectUser(UrlHelper::generateUrl('account', 'changeEmailPassword', [], CONF_WEBROOT_DASHBOARD));
             }
             if(!FatApp::getConfig('CONF_BUYER_CAN_SEE_SELLER_TAB', FatUtility::VAR_INT, 0)){
                 LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), false, true);

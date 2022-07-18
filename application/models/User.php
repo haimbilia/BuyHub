@@ -1713,8 +1713,13 @@ class User extends MyAppModel
                     'credential_password'
                 ];
                 $userInfo = $this->getUserInfo($attr, false, false);
+                $userAuthObj = new UserAuthentication();               
+                $userAuthObj->setLoginWithOtp($userInfo['user_phone_dcode'],$userInfo['user_phone']);
+                $userAuthObj->login($userInfo['user_phone_dcode'].$userInfo['user_phone'], $otp, $_SERVER['REMOTE_ADDR'],false);              
+                /*
                 $this->loginWithOtp = true;
-                $this->doLogin($userInfo['user_phone_dcode'] . $userInfo['user_phone'], $userInfo['credential_password']);
+                $this->doLogin($userInfo['user_phone_dcode'] . $userInfo['user_phone'], $otp);
+                */
             }
             return (true == $returnRow) ? $row : true;
         } else {
