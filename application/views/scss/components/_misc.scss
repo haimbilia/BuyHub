@@ -531,7 +531,6 @@ mark,
         display: flex;
         align-items: center;
         justify-content: center;
-
         &-prev span {
             display: inline-block;
             border-#{$end-direction}: 1px solid black;
@@ -551,8 +550,16 @@ mark,
             transform: rotate(-45deg * $transform-direction);
             margin-#{$start-direction}: -7px;
         }
+
+        &:hover {
+            border-color: $brand-color;
+            span {
+                border-color: $brand-color;
+            }
+        }
     }
-} //phone code
+}
+//phone code
 .iti {
     width: 100%;
     height: $input-height;

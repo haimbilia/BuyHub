@@ -63,10 +63,12 @@ $onSubmitFunctionName = isset($onSubmitFunctionName) ? $onSubmitFunctionName : '
                         foreach ($socialLoginApis as $plugin) { ?>
                             <li class="buttons-list-item">
                                 <a class="buttons-list-link" href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>">
-                                    <span class="buttons-list-icon btn-social btn-<?php echo $plugin['plugin_code']; ?>">
-                                        <img class="svg" width="30" height="30" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+                                    <span class="buttons-list-wrap">
+                                        <span class="buttons-list-icon btn-social btn-<?php echo $plugin['plugin_code']; ?>">
+                                            <img class="svg" width="30" height="30" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+                                        </span>
+                                        <?php echo  Labels::getLabel('LBL_Sign_in_with_Facebook'); ?>
                                     </span>
-                                    Sign in with Facebook
                                 </a>
                             </li>
                     <?php }

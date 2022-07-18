@@ -42,28 +42,32 @@ $canSendSms = $canSendSms ?? false;
                     <?php foreach ($socialLoginApis as $plugin) { ?>
                         <li class="buttons-list-item">
                             <a class="buttons-list-link" href="<?php echo UrlHelper::generateUrl($plugin['plugin_code']); ?>">
-                                <span class="buttons-list-icon"> <img class="svg" width="30" height="30" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+                                <span class="buttons-list-wrap"> <span class="buttons-list-icon">
+                                        <img class="svg" width="30" height="30" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/<?php echo $plugin['plugin_code']; ?>.svg">
+                                    </span>
+                                    <?php echo $plugin['plugin_name']; ?>
                                 </span>
-                                <?php echo $plugin['plugin_name']; ?>
                             </a>
                         </li>
                     <?php }
                     if (0 < $canSendSms) { ?>
                         <li class="buttons-list-item">
                             <a class="buttons-list-link" href="javascript:void(0);" onclick="signInWithPhone(this, 1);">
-                                <span class="buttons-list-icon">
-                                    <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/phone.svg">
-                                </span><?php echo  Labels::getLabel('LBL_SIGN_IN_WITH_PHONE'); ?>
+                                <span class="buttons-list-wrap"> <span class="buttons-list-icon">
+                                        <img class="svg" width="20" height="20" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/phone.svg">
+                                    </span><?php echo  Labels::getLabel('LBL_SIGN_IN_WITH_PHONE'); ?>
+                                </span>
                             </a>
                         </li>
                     <?php } ?>
 
                     <li class="buttons-list-item">
                         <a class="buttons-list-link" href="javascript:void(0);" onclick="<?php echo $fnc; ?>;">
-                            <span class="buttons-list-icon">
-                                <img class="svg" width="30" height="30" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/email.svg">
+                            <span class="buttons-list-wrap"> <span class="buttons-list-icon">
+                                    <img class="svg" width="30" height="30" alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/social-icons/email.svg">
+                                </span>
+                                <?php echo Labels::getLabel('LBL_SIGN_IN_WITH_EMAIL'); ?>
                             </span>
-                            <?php echo Labels::getLabel('LBL_SIGN_IN_WITH_EMAIL'); ?>
                         </a>
                     </li>
                 </ul>
