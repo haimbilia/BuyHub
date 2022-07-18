@@ -55,7 +55,7 @@ class DigitalDownloadPrivilages extends FatModel
                 /* Seller Inventroy*/
                 $this->getSellerProduct($recordId, false);
 
-                if (!is_array($this->sellerProduct) || 1 > count($this->sellerProduct)) {
+                if (!is_array($this->sellerProduct) || 1 > count($this->sellerProduct)) { 
                     $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
                     return false;
                 }
@@ -65,7 +65,7 @@ class DigitalDownloadPrivilages extends FatModel
             }
 
             $this->getProduct($recordId);
-            if (!is_array($this->product) || 1 > count($this->product)) {
+            if (!is_array($this->product) || 1 > count($this->product)) { 
                 $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
                 return false;
             }
