@@ -166,7 +166,7 @@ class ShippingZoneRatesController extends ListingBaseController
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $key => $langName) {
-            if (!$row = ShippingRate::getAttributesByLangId($key, $rateId)) {
+            if (!ShippingRate::getAttributesByLangId($key, $rateId)) {
                 $newTabLangId = $key;
                 break;
             }

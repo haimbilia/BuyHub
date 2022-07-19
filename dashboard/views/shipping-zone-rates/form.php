@@ -5,7 +5,7 @@ $frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('data-onclear', "addEditShipRates(" . $zoneId . ", " . $rateId . ")");
 $frm->setFormTagAttribute('onsubmit', 'setupRate(this); return(false);');
 
-$nameFld = $frm->getField('shiprate_identifier');
+$nameFld = $frm->getField('shiprate_name');
 $nameFld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Customers_will_see_this_at_checkout.", $siteLangId) . "</span>";
 
 $costFld = $frm->getField('shiprate_cost');
@@ -13,6 +13,9 @@ $extraClass = 'd-none';
 if (!empty($rateData) && $rateData['shiprate_condition_type'] > 0) {
     $extraClass = '';
 }
+
+$languages = $languages ?? [];
+unset($languages[CommonHelper::getDefaultFormLangId()]);
 
 $fld = $frm->getField('add_condition');
 $fld->value = '<a href="javascript:void(0)" class="btn btn-icon btn-outline-brand add-condition--js" onclick="modifyRateFields(1)" title="' . Labels::getLabel("LBL_ADD_CONDITION", $siteLangId) . '" data-bs-toggle="tooltip" data-placement="top">
@@ -45,14 +48,16 @@ $maxFld->setWrapperAttribute('class', 'condition-field--js ' . $extraClass); ?>
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_SHIPPING_RATES_SETUP', $siteLangId); ?></h5>
 </div>
 <div class="modal-body form-edit">
-    <div class="form-edit-head">
-        <nav class="nav nav-tabs navTabsJs">
-            <a class="nav-link active" href="javascript:void(0)" onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
-            <a class="nav-link <?php echo (0 == $rateId) ? 'fat-inactive' : ''; ?>" href="javascript:void(0);" <?php echo (0 < $rateId) ? "onclick='editRateLangForm(" . $zoneId . "," . $rateId . ", " . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>
-            </a>
-        </nav>
-    </div>
+    <?php if(count($languages)){ ?>
+        <div class="form-edit-head">
+            <nav class="nav nav-tabs navTabsJs">
+                <a class="nav-link active" href="javascript:void(0)" onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
+                <a class="nav-link <?php echo (0 == $rateId) ? 'fat-inactive' : ''; ?>" href="javascript:void(0);" <?php echo (0 < $rateId) ? "onclick='editRateLangForm(" . $zoneId . "," . $rateId . ", " . array_key_first($languages) . ");'" : ""; ?>>
+                    <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>
+                </a>
+            </nav>
+        </div>
+    <?php } ?>
     <div class="form-edit-body loaderContainerJs" id="selectedTabContentJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>

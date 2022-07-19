@@ -63,10 +63,14 @@ class ShippingProfileProductsController extends SellerBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function removeProduct($productId) {
+    public function removeProduct($productId)
+    {      
         $this->userPrivilege->canEditShippingProfiles(UserAuthentication::getLoggedUserId());
-        $userId = UserAuthentication::getLoggedUserId();
-        $defaultProfileId = ShippingProfile::getDefaultProfileId($userId);
+        $prodSellerId = Product::getAttributesById($productId, 'product_seller_id');
+        if ($prodSellerId != $this->userParentId) {
+            FatUtility::dieWithError($this->str_invalid_request);
+        }
+        $defaultProfileId = ShippingProfile::getDefaultProfileId($this->userParentId);
         /* [ REMOVE PRODUCT FROM CURRENT PROFILE AND ADD TO DEFAULT PROFILE */
         $data = array(
             'shippro_user_id' => $this->userParentId,

@@ -225,12 +225,14 @@ $(document).ready(function () {
                 submitBtn.removeAttr('disabled');
             }
         }, 3000);
-    };
+    }; 
 
-    editRateLangForm = function (zoneId, rateId, langId) {
-        $("#selectedTabContentJs").prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId]), '', function (t) {
-            $("#selectedTabContentJs").html(t);
+    editRateLangForm = function (zoneId, rateId, langId ,autoFillLangData = 0) {
+
+        fcom.ajax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId,autoFillLangData]), '', function (t) {
+           
+            fcom.closeProcessing();
+            $.ykmodal(t);
             fcom.removeLoader();
         });
     };

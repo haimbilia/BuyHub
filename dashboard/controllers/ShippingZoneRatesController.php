@@ -1,6 +1,7 @@
 <?php
 class ShippingZoneRatesController extends SellerBaseController
 {
+    use RecordOperations;
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,9 +13,15 @@ class ShippingZoneRatesController extends SellerBaseController
         $data = array();
         $frm = $this->getForm($zoneId, $rateId);
         if (0 < $rateId) {
-            $data = ShippingRate::getAttributesById($rateId);
+            $data = ShippingRate::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $rateId, [
+                'COALESCE(shiprate_name, shiprate_identifier) shiprate_name',
+                'shiprate_condition_type',
+                'shiprate_cost',
+                'shiprate_min_val',
+                'shiprate_max_val',
+            ], applicationConstants::JOIN_RIGHT);
             if (empty($data)) {
-                FatUtility::dieWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $data['is_condition'] = 0;
             if ($data['shiprate_condition_type'] > 0) {
@@ -22,6 +29,7 @@ class ShippingZoneRatesController extends SellerBaseController
             }
             $frm->fill($data);
         }
+       
         $this->set('languages', Language::getAllNames());
         $this->set('zoneId', $zoneId);
         $this->set('rateId', $rateId);
@@ -53,6 +61,7 @@ class ShippingZoneRatesController extends SellerBaseController
         }
 
         unset($post['shiprate_id']);
+        $post['shiprate_identifier'] = $post['shiprate_name'];
 
         $srObj = new ShippingRate($rateId);
         $srObj->assignValues($post);
@@ -61,30 +70,17 @@ class ShippingZoneRatesController extends SellerBaseController
             FatUtility::dieJsonError($srObj->getError());
         }
         $rateId = $srObj->getMainTableRecordId();
-        $newTabLangId = 0;
-        if ($rateId > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = ShippingRate::getAttributesByLangId($langId, $rateId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        } else {
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
+        $this->setLangData($srObj, [$srObj::tblFld('name') => $post[$srObj::tblFld('name')]]);
 
         $shipProfileId = ShippingProfileZone::getAttributesById($post['shiprate_shipprozone_id'], 'shipprozone_shipprofile_id');
         ShippingProfile::setDefaultRates($post['shiprate_shipprozone_id'], $shipProfileId);
-
-        $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
+       
         $this->set('zoneId', $post['shiprate_shipprozone_id']);
-        $this->set('rateId', $rateId);
-        $this->set('langId', $newTabLangId);
+        $this->set('rateId', $rateId);   
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($zoneId = 0, $rateId = 0, $langId = 0)
+    public function langForm($zoneId = 0, $rateId = 0, $langId = 0,$autoFillLangData = 0)
     {
         $zoneId = FatUtility::int($zoneId);
         $rateId = FatUtility::int($rateId);
@@ -95,11 +91,20 @@ class ShippingZoneRatesController extends SellerBaseController
         }
 
         $langFrm = $this->getLangForm($zoneId, $rateId, $langId);
-        $langData = ShippingRate::getAttributesByLangId($langId, $rateId);
+        if (0 < $autoFillLangData) {
+            $updateLangDataobj = new TranslateLangData(ShippingRate::DB_TBL_LANG);
+            $translatedData = $updateLangDataobj->getTranslatedData($rateId, $langId, CommonHelper::getDefaultFormLangId());
+            if (false === $translatedData) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+            $langData = current($translatedData);
+        } else {
+            $langData = ShippingRate::getAttributesByLangId($langId, $rateId, NULL, true);
+        }
         if ($langData) {
             $langFrm->fill($langData);
         }
-
+        
         $this->set('languages', Language::getAllNames());
         $this->set('zoneId', $zoneId);
         $this->set('rateId', $rateId);
@@ -220,8 +225,8 @@ class ShippingZoneRatesController extends SellerBaseController
         $frm->addHiddenField('', 'shiprate_shipprozone_id', $zoneId);
         $frm->addHiddenField('', 'shiprate_id', $rateId);
         $cndFld = $frm->addHiddenField('', 'is_condition', 0);
-        $frm->addRequiredField(Labels::getLabel('FRM_RATE_IDENTIFIER', $this->siteLangId), 'shiprate_identifier');
-
+        //$frm->addRequiredField(Labels::getLabel('FRM_RATE_IDENTIFIER', $this->siteLangId), 'shiprate_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_RATE_NAME', $this->siteLangId), 'shiprate_name');
         $frm->addFloatField(Labels::getLabel('FRM_COST', $this->siteLangId), 'shiprate_cost');
         $frm->addHtml('', 'add_condition', '');
 
@@ -271,21 +276,10 @@ class ShippingZoneRatesController extends SellerBaseController
         $langId = 0 < $langId ? $langId : $this->siteLangId;
         $frm = new Form('frmRateLang');
         $frm->addHiddenField('', 'zone_id', $zoneId);
-        $frm->addHiddenField('', 'rate_id', $rateId);
-        $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getAllNames(), $langId, array(), '');
-        } else {
-            $langId = array_key_first($languages);
-            $frm->addHiddenField('', 'lang_id', $langId);
-        }
-        $frm->addRequiredField(Labels::getLabel('FRM_RATE_NAME', $langId), 'shiprate_name');
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        $frm->addHiddenField('', 'rate_id', $rateId);      
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
 
-        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
+        $frm->addRequiredField(Labels::getLabel('FRM_RATE_NAME', $langId), 'shiprate_name');
         return $frm;
     }
 }
