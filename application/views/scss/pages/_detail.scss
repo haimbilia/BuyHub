@@ -218,7 +218,8 @@ $sharing-height: 50px;
 //side-blocks
 .side-blocks {
     border: $border;
-    border-radius: 2px;
+    border-radius: $common-radius;
+
     margin-top: 2rem;
 
     .h5 {
@@ -981,4 +982,12 @@ $sharing-height: 50px;
         width: 100%;
         height: auto;
     }
+}
+
+.no-reviews {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem 0;
 }

@@ -5,7 +5,7 @@ $dropzone-height: 160px;
     text-align: center;
     cursor: pointer;
     border: 1px dashed $border-color;
-    border-radius: $radius-common;
+    border-radius: $common-radius;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -211,7 +211,7 @@ $dropzone-height: 160px;
 
     &-item {
         border: $border;
-        border-radius: $radius-common;
+        border-radius: $common-radius;
         display: flex !important;
         align-items: center;
         padding: 0.8rem;

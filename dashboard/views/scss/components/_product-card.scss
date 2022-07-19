@@ -550,8 +550,10 @@
     max-width: 350px;
     width: max-content;
     display: flex;
+    flex-grow: 1;
     align-items: flex-start;
     gap: 1.5rem;
+    position: relative;
     &__pic {
         flex: 0 0 50px;
         max-width: 50px;
@@ -647,6 +649,10 @@
     &__price_off {
         color: $primary-color;
     }
+    .btn-close {
+        position: absolute;
+        #{$end-direction}: 0;
+    }
 }
 
 .actions {
@@ -689,7 +695,7 @@
                 height: 100%;
                 width: 100%;
                 // border-radius: $radius4;
-                border-radius: $radius-common;
+                border-radius: $common-radius;
                 position: absolute;
                 //z-index: -1;
                 left: 0px;
