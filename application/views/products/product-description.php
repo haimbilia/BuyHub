@@ -25,11 +25,11 @@
     <!-- Option block -->
 
     <?php if (!empty($optionRows)) { ?>
-        <?php $selectedOptionsArr = $product['selectedOptionValues'];
+        <?php $selectedOptionsArr = $product['selectedOptionValues'] ?? [];
         $count = 0;
         foreach ($optionRows as $key => $option) {
-            $selectedOptionValue = $option['values'][$selectedOptionsArr[$key]]['optionvalue_name'];
-            $selectedOptionColor = $option['values'][$selectedOptionsArr[$key]]['optionvalue_color_code'];
+            $selectedOptionValue = $option['values'][$selectedOptionsArr[$key]]['optionvalue_name'] ?? [];
+            $selectedOptionColor = $option['values'][$selectedOptionsArr[$key]]['optionvalue_color_code'] ?? [];
             if ($option['option_is_color'] && !empty($selectedOptionColor)) {
                 $selectedOptionColor = ("#" == $selectedOptionColor[0] ? $selectedOptionColor : "#" . $selectedOptionColor);
             }

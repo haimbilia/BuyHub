@@ -66,6 +66,11 @@ switch ($affiliate_register_step_number) {
         break;
 
     case UserAuthentication::AFFILIATE_REG_STEP3:
+        $fld = $registerForm->getField('uextra_payment_method');
+        $fld->setOptionListTagAttribute('class', 'links-inline');
+        $fld->developerTags['rdLabelAttributes'] = ['class' => 'radio'];
+        $fld->developerTags['rdHtmlAfterRadio'] = '<i class="input-helper"></i>';
+
         $checkPayeeNameFld = $registerForm->getField('uextra_cheque_payee_name');
         $checkPayeeNameFld->setWrapperAttribute('class', 'cheque_payment_method_fld');
 
