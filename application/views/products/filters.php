@@ -255,7 +255,7 @@ if (isset($prodcat_code)) {
                                                                                                                                                                                                                     echo "checked='true'";
                                                                                                                                                                                                                 } ?>>
                                 <?php if ($optionRow['option_is_color']  == 1) { ?>
-                                    <span class="color-dot" style="background-color: <?php echo "#" . $optionRow['optionvalue_color_code']; ?>;">
+                                    <span class="color-dot" style="background-color: <?php echo $optionRow['optionvalue_color_code']; ?>;">
                                     </span>
                                 <?php  }  ?>
                                 <?php echo ($optionRow['optionvalue_name']) ? $optionRow['optionvalue_name'] : $optionRow['optionvalue_identifier']; ?>

@@ -11,6 +11,7 @@ RewriteRule ^favicon.ico image/favicon/1 [NC,L]
 RewriteRule ^home/index$ / [L,R=301]
 RewriteRule ^home$ / [L,R=301]
 RewriteRule ^dashboard/cache/(.*)$ /cache/$1 [L]
+RewriteRule ^app-api/(.*)/dashboard/(.*)$ /dashboard/app-api/$1/$2 [L]
 
 <IfModule mod_headers.c>
 	Header unset ETag

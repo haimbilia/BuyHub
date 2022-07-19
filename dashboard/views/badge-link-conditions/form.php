@@ -51,11 +51,21 @@ if (Badge::TYPE_BADGE == $badgeType) {
         <div class="card">
             <div class="card-body">
                 <div class="row justify-content-between">
-                    <div class="col-lg-3 badgeImageSection--js">
-                        <div class=" badge-image" data-ratio="1:1">
-                            <?php echo $imageHtml; ?>
-                            <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/defaults/product_default_image.jpg">
-                        </div>
+                    <div class="col-lg-4 badgeImageSection--js">
+                        <?php if (Badge::TYPE_BADGE == $badgeType) { ?>
+                            <div class=" badge-image" data-ratio="1:1">
+                                <?php echo $imageHtml; ?>
+                                <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/defaults/product_default_image.jpg">
+                            </div>
+                        <?php } else { ?>
+                            <div class=" badge-image" data-ratio="1:1">
+                                <div class="products">
+                                    <div class="products-body"><?php echo $imageHtml; ?>
+                                        <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/defaults/product_default_image.jpg">
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
                     </div>
                     <div class="col-lg-8">
                         <?php echo $frm->getFormTag();

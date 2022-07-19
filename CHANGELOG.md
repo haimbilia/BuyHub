@@ -1028,6 +1028,9 @@ TV-9.4.0.20220406
     - #065394 - The default meta tags are missing on the default meta tag listing page.
     - #065431 - The buyer registered with a phone number redirected to the email configuration page when trying to access the seller dashboard.
     - #065485 - On shipping rate setup at seller end rate name should come insted of identifier 
+    - #065490 - The default content is not added for some of the content blocks.
+    - #065488 - No option to add media for the ribbon
+    - #065489 - Checkboxes are not properly aligned with the text in the Payment Method field on the affiliate registration pag
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
