@@ -17,6 +17,12 @@ $btn-line-height: $btn-height;
     font-weight: $btn-font-weight;
     line-height: $btn-line-height;
     white-space: nowrap;
+    &:hover {
+        text-decoration: none !important;
+    }
+    &:focus {
+        outline: none !important;
+    }
     &-brand {
         @include bg-brand;
         border-color: $brand-color;
@@ -81,7 +87,7 @@ $btn-line-height: $btn-height;
         border-color: #000;
         color: $txt-body;
         &:hover {
-            color: $txt-body;
+            @include bg-black;
         }
     }
     &-outline-gray {
@@ -144,9 +150,6 @@ $btn-line-height: $btn-height;
                 transform: translateX(0.25rem);
             }
         }
-    }
-    &:focus {
-        outline: none !important;
     }
 
     .icn {
