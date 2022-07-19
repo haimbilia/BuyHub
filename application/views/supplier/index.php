@@ -83,7 +83,7 @@ if (!empty($slogan)) {
             </div>
         </section>
 
-        <section class="section">
+        <section class="section pt-0">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-6 faqSectionJs position-relative">
