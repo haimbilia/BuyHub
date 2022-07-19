@@ -67,7 +67,7 @@ switch ($affiliate_register_step_number) {
 
     case UserAuthentication::AFFILIATE_REG_STEP3:
         $fld = $registerForm->getField('uextra_payment_method');
-        $fld->setOptionListTagAttribute('class', 'list-radio');
+        $fld->setOptionListTagAttribute('class', 'links-inline');
         $fld->developerTags['rdLabelAttributes'] = ['class' => 'radio'];
         $fld->developerTags['rdHtmlAfterRadio'] = '<i class="input-helper"></i>';
 

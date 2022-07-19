@@ -373,7 +373,7 @@ class GuestAffiliateController extends MyAppController
             case UserAuthentication::AFFILIATE_REG_STEP3:
                 $frm->addTextBox(Labels::getLabel('FRM_TAX_ID', $siteLangId), 'uextra_tax_id');
 
-                $frm->addRadioButtons(Labels::getLabel('FRM_PAYMENT_METHOD', $siteLangId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($siteLangId), User::AFFILIATE_PAYMENT_METHOD_CHEQUE, array('class' => 'links-inline'));
+                $frm->addRadioButtons(Labels::getLabel('FRM_PAYMENT_METHOD', $siteLangId), 'uextra_payment_method', User::getAffiliatePaymentMethodArr($siteLangId), User::AFFILIATE_PAYMENT_METHOD_CHEQUE);
                 
 
                 $frm->addTextBox(Labels::getLabel('FRM_CHEQUE_PAYEE_NAME', $siteLangId), 'uextra_cheque_payee_name');
