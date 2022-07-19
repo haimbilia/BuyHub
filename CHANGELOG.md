@@ -1030,6 +1030,7 @@ TV-9.4.0.20220406
     - #065485 - On shipping rate setup at seller end rate name should come insted of identifier 
     - #065407 - The seller is able to set the value of the 'Max Download TIme' and validity fields as zero while adding the inventory for the digital products.
     - #065429 - Multiple issues on the Phone number verification popup. 
+    - #065486 - 404 page appears when the user tries to log in. 
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

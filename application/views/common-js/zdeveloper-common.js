@@ -775,12 +775,7 @@ sendResetPasswordLink = function (user) {
         fcom.makeUrl("GuestUser", "sendResetPasswordLink", [user]),
         "",
         function (ans) {
-            if (ans.status == 1) {
-                fcom.displaySuccessMessage(ans.msg);
-                location.href = ans.redirectUrl;
-                return;
-            }
-            fcom.displayErrorMessage(ans.msg);
+            fcom.displaySuccessMessage(ans.msg);  
         }
     );
 };
