@@ -215,7 +215,7 @@ class DigitalDownloadPrivilages extends FatModel
         $rs = $srch->getResultSet();
         $this->sellerProduct = FatApp::getDb()->fetch($rs);
 
-        if (false === $this->sellerProduct) {
+        if (false == $this->sellerProduct) {
             $this->sellerProduct = [];
         }
 
