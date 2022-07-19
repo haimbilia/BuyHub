@@ -1033,6 +1033,7 @@ TV-9.4.0.20220406
     - #065489 - Checkboxes are not properly aligned with the text in the Payment Method field on the affiliate registration pag
     - #065494 - Spacing issue between the heading and the content on the seller registration page.
     - #065484 - A warning message appears on the top of the order details page
+    - #065482 - The order cancels reason listing appears blank if no data is added in the language data field
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
