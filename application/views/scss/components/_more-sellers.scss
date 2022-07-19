@@ -1,9 +1,11 @@
 .more-sellers {
     border: $border;
+    border-radius: $common-radius;
     //border-radius: 2px;
     margin-top: 2rem;
     &-item {
         border-bottom: $border;
+
         padding: 1.5rem 1.5rem;
         &.is-active {
             background-color: $bg-gray;

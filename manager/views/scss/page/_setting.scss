@@ -11,7 +11,7 @@
     grid-gap: 0.5rem;
     .setting {
         border: $border-transparent;
-        border-radius: $radius-common;
+        border-radius: $common-radius;
         padding: 1.5rem;
         display: flex;
         align-items: flex-start;
@@ -125,7 +125,7 @@
     &-item {
         border: $border;
         list-style: none;
-        border-radius: $radius-common;
+        border-radius: $common-radius;
         .switch {
             margin-bottom: 0;
             padding: 1rem;
@@ -136,7 +136,7 @@
 .setting-widget {
     border: $border;
     list-style: none;
-    border-radius: $radius-common;
+    border-radius: $common-radius;
     min-height: 100%;
     cursor: pointer;
     display: flex;
@@ -172,7 +172,7 @@
 .setting-block {
     border: $border;
     list-style: none;
-    border-radius: $radius-common;
+    border-radius: $common-radius;
     min-height: 100%;
     cursor: pointer;
     display: flex;

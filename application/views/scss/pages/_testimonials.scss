@@ -177,7 +177,6 @@
             color: #3b566e;
             margin-top: 20px;
             padding-#{$start-direction}: 100px;
-            letter-spacing: 0.69px;
             margin-bottom: 5px;
             position: relative;
             z-index: 3;
@@ -187,7 +186,7 @@
             font-weight: 400;
             font-size: 14px;
             color: #6f8ba4;
-            letter-spacing: 0.6px;
+
             padding-#{$start-direction}: 100px;
             padding-#{$end-direction}: 25px;
             position: relative;
@@ -203,8 +202,6 @@
                 margin-top: 1rem;
                 font-weight: 400;
                 font-size: 0.85rem;
-                letter-spacing: 0.6px;
-                line-height: 26px;
                 position: relative;
                 z-index: 3;
                 max-height: 250px;

@@ -89,7 +89,7 @@ $input-border-focus: #000;
 .form {
     .form-group,
     .field-set {
-        margin-bottom: 1.8rem;
+        margin-bottom: 1.3rem;
         &.form-group {
             position: relative;
         }
@@ -101,7 +101,7 @@ $input-border-focus: #000;
         font-size: 0.8rem;
         color: $txt-body;
         margin: 0;
-        margin-bottom: 5px;
+        margin-bottom: 8px;
         /*for alignment issue where no content in form lebal - form button and input alignment */
         display: inline-block;
         cursor: default;

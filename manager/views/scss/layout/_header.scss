@@ -1,13 +1,13 @@
 $prefix: "yk-";
 .body {
     flex: 1;
-}    
+}
 
 .wrapper {
     transition: padding 0.5s ease-in-out;
     display: flex;
     flex-direction: column;
-    flex: 1; 
+    flex: 1;
 }
 
 .page--fluid {
@@ -809,7 +809,7 @@ $mykart: "mykart";
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: $radius-common;
+            border-radius: $common-radius;
             position: relative;
             &::before {
                 background: lighten($brand-color, 55);
@@ -822,7 +822,7 @@ $mykart: "mykart";
                 opacity: 0;
                 transition: all 0.2s cubic-bezier(0.2, 0.91, 0.85, 0.96) 0s;
                 outline: 0;
-                &:focus-within{
+                &:focus-within {
                     outline: none;
                 }
             }

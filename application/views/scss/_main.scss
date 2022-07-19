@@ -122,25 +122,26 @@
 @import "vendors/tagify";
 @import "vendors/intlTelInput.min";
 @import "vendors/nouislider.min";
+
 //
+
+@import "pages/index";
+@import "pages/collections";
+@import "pages/login";
+@import "pages/listing";
+@import "pages/detail";
+@import "pages/cart";
+@import "pages/checkout";
 @import "pages/offline";
 @import "pages/blog";
-@import "pages/cart";
 //@import "pages/category";
-@import "pages/checkout";
 @import "pages/contact";
-@import "pages/detail";
 @import "pages/faq";
-@import "pages/index";
-@import "pages/listing";
-@import "pages/login";
-@import "pages/payment";
-@import "pages/order-completed";
-@import "pages/collections";
-//@import 'pages/responsive';
 @import "pages/seller";
 @import "pages/shop";
 @import "pages/testimonials";
 @import "pages/sitemap";
+@import "pages/payment";
+@import "pages/order-completed";
 @import "pages/rtl";
 //

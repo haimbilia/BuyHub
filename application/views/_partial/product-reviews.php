@@ -51,7 +51,7 @@ $productView = $productView ?? false;
                             <?php } else { ?>
                                 <div class="rating-block m-0">
                                     <div class="review-cta">
-                                        <button class="btn btn-brand btn-block" type="button" onclick="rateAndReviewProduct(<?php echo $product_id; ?>)">
+                                        <button class="btn btn-brand btn-wide" type="button" onclick="rateAndReviewProduct(<?php echo $product_id; ?>)">
                                             <?php echo Labels::getLabel('LBL_WRITE_A_REVIEW', $siteLangId); ?>
                                         </button>
                                     </div>
@@ -119,7 +119,7 @@ $productView = $productView ?? false;
                     <?php } else { ?>
                         <div class="no-reviews">
                             <h6><?php echo Labels::getLabel('MSG_BE_THE_FIRST_ONE_TO_WRITE_A_REVIEW!', $siteLangId); ?></h6>
-                            <img src="<?php echo CONF_WEBROOT_URL . 'images/retina/no-reviews.svg' ?>">
+                            <img width="320" src="<?php echo CONF_WEBROOT_URL . 'images/retina/no-reviews.svg' ?>">
                         </div>
                     <?php } ?>
                 </div>

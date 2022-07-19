@@ -201,9 +201,8 @@ mark,
 
 .list-inline {
     display: flex;
-    li {
-        margin-#{$end-direction}: 10px;
-    }
+    align-items: center;
+    gap: 10px;
 }
 
 .focused-div {
