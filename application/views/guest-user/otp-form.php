@@ -13,12 +13,14 @@ $frm->setFormTagAttribute('class', 'form form-login form-otp otpForm-js');
 $frm->developerTags['fld_default_col'] = 2;
 $frm->setFormTagAttribute('name', 'frmGuestLoginOtp');
 $frm->setFormTagAttribute('id', 'frmGuestLoginOtp');
-$frm->setFormTagAttribute('onsubmit', 'return validateOtp(this);');
+if(!$frm->getFormTagAttribute('onsubmit')){
+    $frm->setFormTagAttribute('onsubmit', 'return validateRegOtp(this);');
+}
 
 $btnFld = $frm->getField('btn_submit');
 $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
 ?>
-<a class="form-sign-logo" href="<?php echo $logoUrl; ?>">
+<a class="form-sign-logo" id="logoOtp" href="<?php echo $logoUrl; ?>">
     <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
 </a>
 <div class="form-sign-body">

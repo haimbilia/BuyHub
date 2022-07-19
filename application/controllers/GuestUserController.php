@@ -547,15 +547,22 @@ class GuestUserController extends MyAppController
 
     public function validateOtp($recoverPwd = 0, $forgotPw = false)
     {
-        $this->validateOtpApi(0, (!$forgotPw));
+        $this->validateOtpApi(0, (!$forgotPw && FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1)));
         $userId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
         if (0 < $recoverPwd) {
             $obj = new UserAuthentication();
             $record = $obj->getUserResetPwdToken($userId);
             $token = $record['uprr_token'];
             $redirectUrl = UrlHelper::generateFullUrl('GuestUser', 'resetPassword', array($userId, $token));
-        } else {
-            $redirectUrl = isset($_SESSION['referer_page_url']) ? $_SESSION['referer_page_url'] : UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
+        } else {            
+            if (isset($_SESSION['referer_page_url'])) {
+                $redirectUrl =  $_SESSION['referer_page_url'];
+            } elseif (FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1)) { 
+                $this->set('msg', Labels::getLabel("MSG_LOGIN_SUCCESSFULLY", $this->siteLangId));
+                $redirectUrl =  UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
+            } else {
+                $redirectUrl =  UrlHelper::generateUrl('GuestUser', 'registrationSuccess', [1], CONF_WEBROOT_FRONTEND);
+            }
         }
         unset($_SESSION[UserAuthentication::TEMP_SESSION_ELEMENT_NAME]);
         $this->set('redirectUrl', $redirectUrl);
@@ -724,16 +731,16 @@ class GuestUserController extends MyAppController
         FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
     }
 
-    public function registrationSuccess()
+    public function registrationSuccess($viaOtp = 0)
     {
-        if (FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
-            $this->set('registrationMsg', Labels::getLabel("MSG_SUCCESS_USER_SIGNUP_EMAIL_VERIFICATION_PENDING", $this->siteLangId));
-        } elseif (FatApp::getConfig('CONF_ADMIN_APPROVAL_REGISTRATION', FatUtility::VAR_INT, 1)) {
-            $this->set('registrationMsg', Labels::getLabel("MSG_SUCCESS_USER_SIGNUP_ADMIN_APPROVAL_PENDING", $this->siteLangId));
-        } else {
-            $this->set('registrationMsg', Labels::getLabel("MSG_REGISTERED_SUCCESSFULLY", $this->siteLangId));
+        $this->set('registrationMsg', Labels::getLabel("MSG_REGISTERED_SUCCESSFULLY", $this->siteLangId));
+        if(1 > $viaOtp){
+            if (FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
+                $this->set('registrationMsg', Labels::getLabel("MSG_SUCCESS_USER_SIGNUP_EMAIL_VERIFICATION_PENDING", $this->siteLangId));
+            } elseif (FatApp::getConfig('CONF_ADMIN_APPROVAL_REGISTRATION', FatUtility::VAR_INT, 1)) {
+                $this->set('registrationMsg', Labels::getLabel("MSG_SUCCESS_USER_SIGNUP_ADMIN_APPROVAL_PENDING", $this->siteLangId));
+            }
         }
-
         $this->_template->render();
     }
 
@@ -935,7 +942,7 @@ class GuestUserController extends MyAppController
                 $frm = $this->getOtpForm();
                 $frm->fill(['user_id' => $row['user_id']]);
                 $this->set('frm', $frm);
-                $json['html'] = $this->_template->render(false, false, 'guest-user/otp-form.php', true, false);
+                $json['html'] = $this->_template->render(false, false, 'guest-user/forgot-otp-form.php', true, false);
                 FatUtility::dieJsonSuccess($json);
             }
             $this->_template->render(false, false, 'json-success.php');

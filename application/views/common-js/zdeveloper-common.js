@@ -140,6 +140,8 @@ loginPopupOtp = function (userId, getOtpOnly = 0) {
             $.ykmsg.close();
             var parent = "";
             fcom.updateFaceboxContent(t.html);
+            $(".contentBody--js .modal-header").addClass('border-0');
+            $('#logoOtp').hide();
             if (0 < $(".loginpopup--js").length) {
                 var parent = ".loginpopup--js";
             }
@@ -1175,6 +1177,25 @@ $(function () {
             $(formClass + " .countdownFld--js, " + formClass + " .resendOtp-js").parent().show();
             $(formClass + ".otpFieldBlock--js," + formClass + " .countdownFld--js").show();
             startOtpInterval(formClass);
+        });
+        return false;
+    };
+
+    validateRegOtp = function (frm) {
+        if (!$(frm).validate()) return;
+        var data = fcom.frmData(frm);
+        $('#sign-up').prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('GuestUser', 'validateOtp'), data, function (t) {
+            fcom.removeLoader();
+            t = $.parseJSON(t);
+            if (1 == t.status) {
+                fcom.displaySuccessMessage(t.msg);  
+                setTimeout(location.href = t.redirectUrl, 2000);
+                return;
+            } else {
+                fcom.displayErrorMessage(t.msg);
+                invalidOtpField();
+            }
         });
         return false;
     };

@@ -817,7 +817,7 @@ class MyAppController extends FatController
         if (false == $resp) {
             LibHelper::dieJsonError($obj->getError());
         }
-        $this->set('msg', Labels::getLabel('MSG_OTP_MATCHED.', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_OTP_MATCHED_SUCCESSFULLY.', $this->siteLangId));
 
         if (0 < $recoverPwd && true === MOBILE_APP_API_CALL) {
             $obj = new UserAuthentication();
