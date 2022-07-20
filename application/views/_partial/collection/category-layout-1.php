@@ -2,7 +2,7 @@
 if (isset($collection['categories']) && count($collection['categories'])) { ?>
     <section class="section">
         <div class="container">
-            <div class="section-head">
+            <div class="section-head category-product">
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
                 <div class="section-action">
                     <ul class="nav nav-tabs" role="tablist">

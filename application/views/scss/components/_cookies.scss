@@ -48,6 +48,7 @@
     .cookies-actions {
         display: flex;
         gap: 1rem;
+        flex-flow: row wrap;
         //flex-direction: column;
         .btn {
             //border-radius: 6px;
