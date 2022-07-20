@@ -339,7 +339,7 @@ class GuestUserController extends MyAppController
 
         if (UserAuthentication::saveLoginToken($values)) {
             $cookieName = UserAuthentication::YOKARTUSER_COOKIE_NAME;
-            $cookres = setcookie($cookieName, $token, $expiry, CONF_WEBROOT_URL);
+            setcookie($cookieName, $token, $expiry, CONF_WEBROOT_URL);
             return true;
         }
         return false;

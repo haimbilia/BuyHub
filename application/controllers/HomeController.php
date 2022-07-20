@@ -413,6 +413,36 @@ class HomeController extends MyAppController
         $this->_template->render(false, false, 'json-success.php');
     }
 
+   /*  public function setAppData()
+    {
+        if (false === MOBILE_APP_API_CALL) {
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+        }
+        $values = [];
+
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+        if (0 < $langId) {
+            $languages = Language::getAllNames();
+            if (array_key_exists($langId, $languages)) {
+                $values['uauth_lang_id'] = $langId;
+            }
+        }
+
+        $currencyId = FatApp::getPostedData('currencyId', FatUtility::VAR_INT, FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1));
+        if (0 < $currencyId) {
+            $currencies = Currency::getCurrencyAssoc($this->siteLangId);
+            if (array_key_exists($currencyId, $currencies)) {
+                $values['uauth_currency_id'] = $currencyId;
+            }
+        }
+
+        $where = array('smt' => 'uauth_token = ?', 'vals' => [$this->appToken]);
+        if (FatApp::getDb()->updateFromArray(UserAuthentication::DB_TBL_USER_AUTH, $values, $where)) {
+            LibHelper::dieJsonSuccess(Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
+        }
+        LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+    } */
+
 
     /**
      * currencies : Used for APPs
