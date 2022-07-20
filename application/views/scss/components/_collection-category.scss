@@ -8,8 +8,10 @@
     }
     .category {
         display: flex;
-        flex-flow: row wrap;
         background-color: $bg-gray;
+        @include media-breakpoint-up(xl) {
+            flex-flow: row wrap;
+        }
         &:nth-child(even) {
             flex-direction: row-reverse;
         }
@@ -32,7 +34,10 @@
         }
         &-body {
             flex: 1;
-            padding: 3rem 5rem;
+            padding: 2rem;
+            @include media-breakpoint-up(lg) {
+                padding: 3rem 5rem;
+            }
         }
 
         &-list {

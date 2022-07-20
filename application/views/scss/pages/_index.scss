@@ -63,6 +63,7 @@
         #{$end-direction}: calc(50% - 38vw);
     }
     .slick-dots {
+        bottom: 20px;
         @include media-breakpoint-up(lg) {
             padding: 0.5rem 1rem;
             position: absolute;
