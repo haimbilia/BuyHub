@@ -1035,6 +1035,7 @@ TV-9.4.0.20220406
     - #065484 - A warning message appears on the top of the order details page
     - #065482 - The order cancels reason listing appears blank if no data is added in the language data field.
     - #065453 - image preview is not proper .
+    - #065402 - The content under the dd preview field is not properly aligned on the Digital links setup popup on the seller end
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

@@ -10,12 +10,13 @@ $arr_flds = array(
 
 if (!$canDo) {
     unset($arr_flds['action']);
+    $arr_flds['#'] = '';
 }
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
-    $tdAttr = ('action' == $key) ? ['class' => 'align-right', 'width' => '20%'] : ['width' => '40%'];
+    $tdAttr = ('action' == $key || '#' == $key) ? ['class' => 'align-right', 'width' => '20%'] : ['width' => '40%'];
     $e = $th->appendElement('th', $tdAttr, $val);
 }
 
