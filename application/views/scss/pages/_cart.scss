@@ -1,11 +1,10 @@
 .cart-page {
     display: grid;
-    grid-gap: 6rem;
-    grid-template-columns: 2fr 1fr;
+    grid-gap: 2rem;
     padding: 3rem 0;
-    @include media-breakpoint-down(md) {
-        display: block;
-        padding: 0;
+    @include media-breakpoint-up(xl) {
+        grid-template-columns: 2fr 1fr;
+        grid-gap: 6rem;
     }
     &-head {
         display: flex;
@@ -15,7 +14,7 @@
         padding-bottom: 1rem;
         margin-top: 1rem;
         border-bottom: $border-black;
-        @include media-breakpoint-up(lg) {
+        @include media-breakpoint-up(md) {
             margin-top: 0;
             flex-direction: row;
         }
@@ -29,7 +28,7 @@
             grid-gap: 2rem;
             grid-template-columns: 1fr 1fr;
             margin-top: 1rem;
-            @include media-breakpoint-up(lg) {
+            @include media-breakpoint-up(md) {
                 margin: 0;
                 margin-#{$start-direction}: auto;
             }

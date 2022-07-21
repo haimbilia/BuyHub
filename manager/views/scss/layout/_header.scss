@@ -547,11 +547,11 @@ $head: "head";
             vertical-align: middle;
             text-align: center;
             padding: 3.3rem 0.75rem;
-            -webkit-transition: all 0.3s;
+
             transition: all 0.3s;
             &:hover {
                 text-decoration: none;
-                -webkit-transition: all 0.3s;
+
                 transition: all 0.3s;
             }
             .grid-nav__icon {

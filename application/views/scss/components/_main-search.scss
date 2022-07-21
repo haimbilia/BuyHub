@@ -109,9 +109,12 @@
     font-size: 0.8rem;
     padding: 0;
     display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
     border-radius: $radius4;
+    text-align: #{$start-direction};
     @include media-breakpoint-down(lg) {
-        flex-direction: column;
+        //flex-direction: column;
     }
     .suggestions-title {
         text-transform: uppercase;
