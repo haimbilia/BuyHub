@@ -305,13 +305,13 @@ class HomeController extends MyAppController
         $productSrchObj->validateAndJoinDeliveryLocation(false);
         // $productSrchObj->joinProductRating();
 
-        if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+        /*  if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $productSrchObj->joinFavouriteProducts($loggedUserId);
             $productSrchObj->addFld('IFNULL(ufp_id, 0) as ufp_id');
         } else {
             $productSrchObj->joinUserWishListProducts($loggedUserId);
             $productSrchObj->addFld('IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        }
+        } */
 
         $productSrchObj->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $productSrchObj->addMultipleFields(array('product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on', 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'shop_id', 'selprod_min_order_qty'));
@@ -413,7 +413,7 @@ class HomeController extends MyAppController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-   /*  public function setAppData()
+    /*  public function setAppData()
     {
         if (false === MOBILE_APP_API_CALL) {
             LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
@@ -711,8 +711,8 @@ class HomeController extends MyAppController
                     //$productSrchTempObj->addCondition('selprod_id', 'IN', array_keys($productIds));
                     $productSrchTempObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
                     //$productSrchTempObj->addOrder('theprice', $orderBy);
-                    $productSrchTempObj->joinSellers();
-                    $productSrchTempObj->joinSellerSubscription($langId);
+                   /*  $productSrchTempObj->joinSellers();
+                    $productSrchTempObj->joinSellerSubscription($langId); */
                     $productSrchTempObj->addGroupBy('selprod_id');
                     $productSrchTempObj->addOrder('ctr.ctr_display_order', 'ASC');
                     $productSrchTempObj->setPageSize($collection['collection_primary_records']);
