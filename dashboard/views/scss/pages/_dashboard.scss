@@ -567,9 +567,8 @@
         padding-left: $content-space;
         padding-right: $content-space;
         padding-top: 1rem;
-
         //min-height: calc(100vh - 100px);
-        @include media-breakpoint-down(lg) {
+        @include media-breakpoint-down(xl) {
             padding: 2rem;
         }
         @include media-breakpoint-down(sm) {

@@ -58,8 +58,7 @@
 .box--tabled .box__cell:last-child {
     vertical-align: top;
     width: 45%;
-    -webkit-padding-end: 0;
-    -moz-padding-end: 0;
+
     padding-#{$end-direction}: 0;
 }
 

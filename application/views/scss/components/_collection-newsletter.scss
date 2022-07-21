@@ -30,7 +30,6 @@
     &-form {
         display: flex;
         align-items: center;
-
         border-bottom: solid 2px #000;
         &-input {
             flex: 1;
@@ -49,6 +48,7 @@
             height: 2.5rem;
             width: 2.5rem;
             background: transparent;
+            color: #000;
             border: none;
         }
     }
