@@ -711,7 +711,7 @@ class HomeController extends MyAppController
                     //$productSrchTempObj->addCondition('selprod_id', 'IN', array_keys($productIds));
                     $productSrchTempObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
                     //$productSrchTempObj->addOrder('theprice', $orderBy);
-                   /*  $productSrchTempObj->joinSellers();
+                    /*  $productSrchTempObj->joinSellers();
                     $productSrchTempObj->joinSellerSubscription($langId); */
                     $productSrchTempObj->addGroupBy('selprod_id');
                     $productSrchTempObj->addOrder('ctr.ctr_display_order', 'ASC');
