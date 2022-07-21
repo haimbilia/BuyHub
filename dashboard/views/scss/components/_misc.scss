@@ -284,7 +284,7 @@ mark,
     color: $txt-body;
     font-size: 0.85em;
     line-height: 1.2;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     padding: 0.8rem;
 }
 
@@ -302,7 +302,7 @@ mark,
     overflow: hidden;
     overflow-y: auto;
     box-shadow: 0 0 35px 10px rgba(0, 0, 0, 0.1);
-    border-radius: $radius4;
+    border-radius: $common-radius;
     font-weight: 400;
     font-size: 0.8rem !important;
     border: $border;
@@ -1000,7 +1000,7 @@ mark,
         position: relative;
         margin-bottom: 2rem;
         padding: 0;
-        //border-radius: $radius4;
+        //border-radius: $common-radius;
         //border: $border;
         //box-shadow: 0px 0px 3px #bababa;
         &:before {
@@ -1373,7 +1373,7 @@ mark,
         background-color: $bg-white;
         font-size: 0.8rem;
         border: none;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         //padding: 0;
         color: $txt-gray;
         margin-#{$end-direction}: 10px;

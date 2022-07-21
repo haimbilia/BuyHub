@@ -119,14 +119,15 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
                                     $keywordStr = '<span title="' . $keyword . '" class="search-results">"' . $short_keyword . '"</span>';
                                 }
                                 echo $pageTitle; ?> <?php echo $keywordStr; ?>
-                            </h1>
-                            <span class="total-products">
-                                <?php echo isset($scollection_name) && !empty($scollection_name) ? $scollection_name : ''; ?>
-                                <span class="hide_on_no_product">
-                                    <span id="total_records"><?php echo $recordCount; ?></span>
-                                    <?php echo Labels::getLabel('LBL_ITEM(S)', $siteLangId); ?>
+                                <span class="total-products">
+                                    <?php echo isset($scollection_name) && !empty($scollection_name) ? $scollection_name : ''; ?>
+                                    <span class="hide_on_no_product">
+                                        <span id="total_records"><?php echo $recordCount; ?></span>
+                                        <?php echo Labels::getLabel('LBL_ITEM(S)', $siteLangId); ?>
+                                    </span>
                                 </span>
-                            </span>
+                            </h1>
+
 
                         </div>
                     <?php } ?>

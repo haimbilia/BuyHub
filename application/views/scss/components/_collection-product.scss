@@ -22,8 +22,9 @@
         justify-content: center;
         flex: 1;
         max-width: 300px;
-        border-radius: $radius4;
+
         border: $border;
+        border-radius: $common-radius;
         background-color: $bg-gray;
         position: relative;
         overflow: hidden;
@@ -60,7 +61,7 @@
     }
     .product-wrapper {
         flex: 1;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         @include media-breakpoint-down(md) {
             overflow-x: auto;
         }

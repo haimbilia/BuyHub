@@ -50,8 +50,8 @@
         padding: 1rem;
         margin: 0.5rem 0;
         cursor: pointer;
-        border-radius: $radius4;
         border: $border;
+        border-radius: $common-radius;
         &:after {
             width: 20px;
             height: 20px;

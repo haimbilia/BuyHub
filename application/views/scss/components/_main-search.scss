@@ -111,7 +111,7 @@
     display: flex;
     flex-direction: row;
     gap: 1.5rem;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     text-align: #{$start-direction};
     @include media-breakpoint-down(lg) {
         //flex-direction: column;

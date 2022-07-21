@@ -151,6 +151,9 @@ $btn-line-height: $btn-height;
             }
         }
     }
+    &-underline {
+        text-decoration: underline;
+    }
 
     .icn {
         svg {
@@ -265,7 +268,6 @@ a.link-arrow {
     background-image: linear-gradient(currentColor, currentColor);
     background-position: 50% 100%;
     background-repeat: no-repeat;
-
     background-color: transparent;
     transition: background-size 0.3s;
     text-decoration: none;

@@ -348,14 +348,14 @@
 .new__txt:before {
     background: -webkit-gradient(linear, left top, right top, from(#6d47d9), to(#f73859));
     background: linear-gradient(90deg, #6d47d9, #f73859);
-    border-radius: $radius4;
+    border-radius: $common-radius;
     z-index: 1;
 }
 
 .new__txt:after {
     background: inherit;
     margin: 2px;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     z-index: 2;
 }
 

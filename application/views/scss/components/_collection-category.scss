@@ -72,7 +72,7 @@
     .category {
         font-size: 0.8rem;
         background: $bg-white;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         color: $txt-body;
         display: flex;
         flex-direction: column;
@@ -174,27 +174,23 @@
         flex-wrap: wrap;
         color: $txt-body;
         @include media-breakpoint-down(md) {
-            & {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-            }
+            flex-wrap: nowrap;
+            overflow-x: auto;
         }
         li {
             flex: 0 0 25%;
             max-width: 25%;
             padding: 5px;
             @include media-breakpoint-down(md) {
-                & {
-                    flex: auto;
-                    max-width: inherit;
-                }
+                flex: auto;
+                max-width: inherit;
             }
             &:first-child {
             }
             a {
                 background: #fff;
                 border: $border;
-                border-radius: $radius3;
+                border-radius: $common-radius;
                 color: inherit;
                 display: flex;
                 align-items: center;
@@ -212,9 +208,7 @@
                 .caption {
                     padding: 0.5rem;
                     @include media-breakpoint-down(md) {
-                        & {
-                            white-space: nowrap;
-                        }
+                        white-space: nowrap;
                     }
                 }
             }
@@ -240,18 +234,14 @@
         display: flex;
         flex-wrap: wrap;
         @include media-breakpoint-down(md) {
-            & {
-                flex-direction: column;
-            }
+            flex-direction: column;
         }
         li {
             flex: 0 0 25%;
             max-width: 25%;
             @include media-breakpoint-down(md) {
-                & {
-                    flex: auto;
-                    max-width: none;
-                }
+                flex: auto;
+                max-width: none;
             }
             a {
                 padding: 0.5rem 0;

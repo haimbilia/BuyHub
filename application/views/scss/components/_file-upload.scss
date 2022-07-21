@@ -4,8 +4,9 @@
     align-items: center;
     color: $txt-gray;
     border: $border;
+    border-radius: $common-radius;
     padding: 0.45rem 1rem;
-    border-radius: 0.25rem;
+
     //margin: .875rem 0;
     font-size: 0.8rem;
     &:hover {
@@ -52,7 +53,7 @@
         //width: 100px;
         //height: 80px;
         border: $border;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         padding: 5px;
         position: relative;
         background: #fff;

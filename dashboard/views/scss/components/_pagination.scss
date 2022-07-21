@@ -1,7 +1,7 @@
 .pagination {
     display: flex;
     background: $bg-white;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     overflow: hidden;
     margin: 1rem 0;
     &.pagination--center {
@@ -22,7 +22,7 @@
             color: $txt-body;
             border: none;
             border: $border;
-            border-radius: $radius4;
+            border-radius: $common-radius;
             position: relative;
             overflow: hidden;
             margin: 0 3px;

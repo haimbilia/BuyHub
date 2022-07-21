@@ -8,7 +8,7 @@
     font-family: inherit;
     font-size: 0.9em;
     font-weight: normal;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     cursor: pointer;
     padding-#{$start-direction}: 10px;
     padding-#{$end-direction}: 35px;
@@ -61,7 +61,7 @@
         opacity: 0;
         top: 100%;
         z-index: 2;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         li {
             &:hover {
                 a {
@@ -79,14 +79,12 @@
                 font-weight: 400;
                 padding: 10px;
                 line-height: 1.2;
-                
-                
+
                 display: flex;
-                
-                
+
                 align-items: center;
                 text-decoration: none;
-                
+
                 transition: all 0.2s linear;
             }
         }
@@ -113,7 +111,7 @@
         border-radius: 50%;
         display: inline-block;
         margin-#{$end-direction}: 5px;
-        -webkit-box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.30);
-        box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.30);
+        -webkit-box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.3);
     }
 }

@@ -8,7 +8,7 @@
     font-family: inherit;
     font-size: 0.9em;
     font-weight: normal;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     cursor: pointer;
     padding-#{$start-direction}: 10px;
     padding-#{$end-direction}: 35px;
@@ -61,7 +61,7 @@
         opacity: 0;
         top: 100%;
         z-index: 2;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         li {
             &:hover {
                 a {

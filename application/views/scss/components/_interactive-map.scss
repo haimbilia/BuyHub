@@ -18,7 +18,7 @@
     &-photo {
         margin-#{$end-direction}: 1rem;
         border: $border;
-        border-radius: 2px;
+        border-radius: $common-radius;
         display: block;
         img {
             max-width: 100px;

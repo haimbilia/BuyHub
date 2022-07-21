@@ -107,7 +107,8 @@
         color: $txt-gray;
         display: flex;
         justify-content: space-between;
-        align-items: center;
+
+        gap: 1.5rem;
         margin-bottom: 1rem;
     }
 
@@ -165,7 +166,6 @@
     border-radius: $common-radius;
     border: $border;
     color: $txt-gray;
-
     &-item {
         position: relative;
         padding: 2rem;
@@ -268,7 +268,7 @@
 
 .shipping-section {
     border: $border;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     margin-bottom: 1rem;
 
     .shipping-option {
@@ -415,6 +415,7 @@
 
 .payment-area {
     border: $border;
+    border-radius: $common-radius;
     .payments-nav {
         display: flex;
         flex-direction: column;
@@ -489,7 +490,7 @@
 
 .rewards {
     background-color: $bg-gray;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     border: $border;
     padding: 1.5rem;
     margin: 0;
@@ -506,7 +507,7 @@
             li {
                 height: 100%;
                 text-align: center;
-                border-radius: $radius4;
+                border-radius: $common-radius;
                 padding: 1rem;
                 border: $border;
                 background-color: $bg-white;
@@ -533,7 +534,7 @@
 
 .earn-points {
     background: $bg-gray;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     padding: 0.7rem;
     text-align: center;
 
@@ -554,7 +555,7 @@
     &-item {
         position: relative;
         border: $border;
-
+        border-radius: $common-radius;
         //border-radius: 4px;
         //margin-bottom: 1.5rem;
         &.is-active {
@@ -751,7 +752,7 @@
             max-width: 49%;
             flex: 49%;
             margin-bottom: 1rem;
-            border-radius: $radius4;
+            border-radius: $common-radius;
 
             @include media-breakpoint-down(md) {
                 & {

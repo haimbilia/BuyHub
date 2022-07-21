@@ -345,13 +345,14 @@ hr.dotted {
     color: $txt-gray;
     &_trigger {
         border: $border;
+        border-radius: $common-radius;
         //border: none;
         display: flex;
         justify-content: space-between;
         // background: $bg-gray;
         background: none;
         color: $brand-color;
-        border-radius: $radius4;
+
         padding: 0.5rem;
         padding-#{$end-direction}: 2rem;
         flex: 1;
@@ -444,7 +445,7 @@ hr.dotted {
     border: dashed 1px $success-color;
     background-color: lighten($success-color, 50);
     padding: 1rem;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     display: flex;
     align-items: center;
     justify-content: space-between;
