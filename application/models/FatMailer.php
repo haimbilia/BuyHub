@@ -424,7 +424,7 @@ class FatMailer extends FatModel
             '{current_date}' => date('M d, Y'),
             '{social_media_icons}' => $social_media_icons,
             '{contact_us_url}' => UrlHelper::generateFullUrl('custom', 'contactUs', array(), CONF_WEBROOT_FRONT_URL),
-            '{CONTACT-EMAIL}' => FatApp::getConfig('CONF_CONTACT_EMAIL' . $langId, FatUtility::VAR_STRING, ''),
+            '{CONTACT-EMAIL}' => FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, ''),
             '{SITE-PHONE}' => ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode', FatUtility::VAR_STRING, '')) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_STRING, ''),
         );
     }

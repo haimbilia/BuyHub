@@ -48,7 +48,7 @@ class EmailHandler extends FatModel
         }
         $onlySuperAdmin = FatUtility::int($onlySuperAdmin);
         if (0 < $onlySuperAdmin) {
-            return $sendEmail = (new FatMailer($langId, $tpl))
+            return (new FatMailer($langId, $tpl))
                 ->setTo(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'))
                 ->setVariables($arrReplacements)
                 ->send();
