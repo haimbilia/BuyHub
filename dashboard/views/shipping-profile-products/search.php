@@ -7,17 +7,15 @@ if (!empty($productsData)) { ?>
                 <div class="product-profile">
                     <figure class="product-profile__pic">
                         <a href="javascript:void(0)">
-                            <img src="<?php echo  UrlHelper::generateUrl("Image","product",array($row['product_id'], ImageDimension::VIEW_SMALL, 0, 0, 1),CONF_WEBROOT_FRONTEND); ?>" alt="" width="50">
+                            <img src="<?php echo  UrlHelper::generateUrl("Image", "product", array($row['product_id'], ImageDimension::VIEW_SMALL, 0, 0, 1), CONF_WEBROOT_FRONTEND); ?>" alt="" width="50">
                         </a>
                     </figure>
                     <div class="product-profile__description">
                         <div class="product-profile__title">
                             <?php echo $row['product_name'] ?>
-                        </div>                        
+                        </div>
                     </div>
-                    <?php if (isset($profileData['shipprofile_default']) && $profileData['shipprofile_default'] != 1) { ?>
-                        <button type="button" title="<?php echo Labels::getLabel('LBL_Remove_Product_from_profile', $siteLangId); ?>" onclick="removeProductFromProfile('<?php echo $row['product_id']; ?>')" class="btn-close"></button>
-                    <?php } ?>                    
+
                 </div>
                 <?php if ($canEdit && isset($profileData['shipprofile_default']) && $profileData['shipprofile_default'] != 1) { ?>
                     <a class="close-layer close-layer-sm" href="javascript:void(0)" onclick="removeProductFromProfile(<?php echo $row['product_id']; ?>)" title="<?php echo Labels::getLabel('LBL_Remove_Product_from_profile', $siteLangId); ?>"></a>

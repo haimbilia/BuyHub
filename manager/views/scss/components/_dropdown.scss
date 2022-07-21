@@ -53,7 +53,7 @@
     background-color: $bg-white;
     background-clip: padding-box;
     border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: $radius-common;
+    border-radius: $common-radius;
     &-left {
         right: auto;
         left: 0;
@@ -254,7 +254,7 @@
 
 .dropdown-menu {
     border: 0 !important;
-    border-radius: $radius-common;
+    border-radius: $common-radius;
     margin: 0;
     border-radius: 0;
     min-width: 14rem;

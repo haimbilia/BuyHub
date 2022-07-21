@@ -1028,11 +1028,23 @@ TV-9.4.0.20220406
     - #065394 - The default meta tags are missing on the default meta tag listing page.
     - #065431 - The buyer registered with a phone number redirected to the email configuration page when trying to access the seller dashboard.
     - #065485 - On shipping rate setup at seller end rate name should come insted of identifier 
-    - #065407 - The seller is able to set the value of the 'Max Download TIme' and validity fields as zero while adding the inventory for the digital products.
+    - #065490 - The default content is not added for some of the content blocks.
+    - #065488 - No option to add media for the ribbon
+    - #065489 - Checkboxes are not properly aligned with the text in the Payment Method field on the affiliate registration pag
+    - #065494 - Spacing issue between the heading and the content on the seller registration page.
+    - #065484 - A warning message appears on the top of the order details page
+    - #065482 - The order cancels reason listing appears blank if no data is added in the language data field.
+    - #065453 - image preview is not proper .
+    - #065402 - The content under the dd preview field is not properly aligned on the Digital links setup popup on the seller end
+    -#065407 - The seller is able to set the value of the 'Max Download TIme' and validity fields as zero while adding the inventory for the digital products.
     - #065429 - Multiple issues on the Phone number verification popup. 
     - #065486 - 404 page appears when the user tries to log in. 
     - #065484 - A warning message appears on the top of the order details page. 
     - #065436 - UI issues on the reset password page.
+```sh 
+TV-9.4.0.20220719
+```
+    
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

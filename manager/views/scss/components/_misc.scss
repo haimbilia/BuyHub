@@ -2001,7 +2001,7 @@ mark,
     white-space: nowrap;
     padding: 4px;
     border: solid 1px transparent;
-    border-radius: $radius-common;
+    border-radius: $common-radius;
     background-color: $bg-gray;
     cursor: text;
     &:hover,
@@ -2150,7 +2150,7 @@ mark,
     padding: 1rem 0;
     flex-wrap: wrap;
     .actions {
-        border-radius: $radius-common;
+        border-radius: $common-radius;
         border: $border;
         gap: 6px;
         li {
@@ -2207,7 +2207,7 @@ mark,
         font-size: 0.8rem;
         padding: 1rem;
         background-color: $bg-gray;
-        border-radius: $radius-common;
+        border-radius: $common-radius;
     }
 }
 
@@ -2263,7 +2263,7 @@ mark,
     }
     &-head {
         // background: lighten($brand-color, 50);
-        // border-radius: $radius-common;
+        // border-radius: $common-radius;
         // padding: 10px;
         cursor: pointer;
         // border-bottom: $border;
@@ -2338,7 +2338,7 @@ mark,
         font-weight: 500;
         position: relative;
         //border: $border;
-        border-radius: $radius-common;
+        border-radius: $common-radius;
         &-arrow {
             display: block;
             width: 1rem;
@@ -2350,7 +2350,7 @@ mark,
     .list-states {
         background: $bg-gray;
         //padding: 1.5rem;
-        border-radius: $radius-common;
+        border-radius: $common-radius;
         padding-#{$start-direction}: 2rem;
         list-style: none;
         &-item {
@@ -2642,7 +2642,7 @@ $header-height: 65px;
 
 .palette {
     // background-color: $bg-gray;
-    // border-radius: $radius-common;
+    // border-radius: $common-radius;
     // padding: 10px 0;
     // padding-bottom: 0;
 }
@@ -3153,7 +3153,7 @@ $header-height: 65px;
     .select2-dropdown {
         //padding: 1rem;
         border: $border !important;
-        border-radius: $radius-common !important;
+        border-radius: $common-radius !important;
     }
     .select2-search--dropdown {
         margin: 1rem;

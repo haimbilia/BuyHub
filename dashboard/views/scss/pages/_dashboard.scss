@@ -1655,6 +1655,7 @@ input.sp-input {
         border: $border;
         border-radius: $radius2;
         padding: 0.5rem;
+        padding-#{$end-direction}: 2rem;
         .item__pic {
             border: none;
         }

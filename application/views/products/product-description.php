@@ -3,7 +3,7 @@
 <div class="product-description">
     <?php include(CONF_THEME_PATH . 'products/product-info.php'); ?>
 
-    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $product['prod_rating'] > 0 ) { ?>
+    <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $product['prod_rating'] > 0) { ?>
         <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
         <div class="product-ratings">
             <svg class="svg" width="14" height="14">
@@ -25,11 +25,16 @@
     <!-- Option block -->
 
     <?php if (!empty($optionRows)) { ?>
-        <?php $selectedOptionsArr = $product['selectedOptionValues'];
+        <?php $selectedOptionsArr = $product['selectedOptionValues'] ?? [];
         $count = 0;
         foreach ($optionRows as $key => $option) {
-            $selectedOptionValue = $option['values'][$selectedOptionsArr[$key]]['optionvalue_name'];
-            $selectedOptionColor = $option['values'][$selectedOptionsArr[$key]]['optionvalue_color_code'];
+            $selectedOptionValue = [];
+            $selectedOptionColor = [];
+            if (array_key_exists($key, $selectedOptionsArr)) {
+                $selectedOptionValue = $option['values'][$selectedOptionsArr[$key]]['optionvalue_name'] ?? [];
+                $selectedOptionColor = $option['values'][$selectedOptionsArr[$key]]['optionvalue_color_code'] ?? [];
+            }
+
             if ($option['option_is_color'] && !empty($selectedOptionColor)) {
                 $selectedOptionColor = ("#" == $selectedOptionColor[0] ? $selectedOptionColor : "#" . $selectedOptionColor);
             }
@@ -202,7 +207,7 @@
                     }
 
                 ?>
-                    <li class="list-addons-item addon--js <?php echo $cancelClass; ?> <?php echo ($usproduct['selprod_stock'] <= 0) ? 'out-of-stock' : ''; ?>" >
+                    <li class="list-addons-item addon--js <?php echo $cancelClass; ?> <?php echo ($usproduct['selprod_stock'] <= 0) ? 'out-of-stock' : ''; ?>">
                         <div class="product-profile">
                             <figure class="product-profile__pic">
                                 <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>">

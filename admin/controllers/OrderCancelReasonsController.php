@@ -92,20 +92,20 @@ class OrderCancelReasonsController extends ListingBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $srch = OrderCancelReason::getSearchObject($this->siteLangId); 
+        $srch = OrderCancelReason::getSearchObject($this->siteLangId);
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $cond = $srch->addCondition('ocreason_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('ocreason_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        
-        $srch->addMultipleFields(array('ocreason.*', 'ocreason_l.ocreason_title')); 
-        $srch->addOrder($sortBy, $sortOrder); 
+
+        $srch->addMultipleFields(array('ocreason.ocreason_identifier', 'ocreason.ocreason_id', 'COALESCE(ocreason_l.ocreason_title, ocreason.ocreason_identifier) as ocreason_title'));
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
-        $this->set("arrListing", $db->fetchAll($srch->getResultSet())); 
-        $this->set('postedData', $post); 
+        $srch->setPageSize($pageSize);
+        $this->set("arrListing", $db->fetchAll($srch->getResultSet()));
+        $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -251,7 +251,7 @@ class OrderCancelReasonsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'ocreason_title' => Labels::getLabel('LBL_REASON_TITLE', $this->siteLangId),
             'action' =>  Labels::getLabel('LBL_ACTION', $this->siteLangId),
         ];

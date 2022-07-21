@@ -332,13 +332,13 @@ class UserAuthentication extends FatModel
         $condition = $srch->addCondition('credential_username', '=', $username);
         $condition->attachCondition('credential_email', '=', $username, 'OR');
         $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $username, 'OR', true);
-        $srch->doNotCalculateRecords();     
+        $srch->doNotCalculateRecords();
         if (true === $this->loginWithOtp) {
             $loginPhone = CommonHelper::replaceStringData($username, [$this->loginDcode => ValidateElement::formatDialCode($this->loginDcode)]);
             $srch->joinTable(User::DB_TBL_USER_PHONE_VER, 'INNER JOIN', 'upv_user_id = user_id', 'upv');
             $srch->addCondition('mysql_func_CONCAT(upv_phone_dcode, upv_phone)', '=', $loginPhone, 'AND', true);
-            $srch->addCondition('upv_otp', '=', $password);           
-        }  
+            $srch->addCondition('upv_otp', '=', $password);
+        }
 
         if (0 < $userType) {
             switch ($userType) {
@@ -509,7 +509,7 @@ class UserAuthentication extends FatModel
             'user_is_guest' => isset($data['user_is_guest']) ? $data['user_is_guest'] : false,
             'user_phone' => (isset($data['user_phone']) ? ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'] : ''),
         );
-        
+
         return true;
     }
 
@@ -944,7 +944,7 @@ class UserAuthentication extends FatModel
 
         return false;
     }
-    
+
     public static function subscriptionCheckLogin($redirect = true, $redirectUrl = '')
     {
         if (static::isUserLogged() && User::canViewSupplierTab()) {
@@ -1023,5 +1023,37 @@ class UserAuthentication extends FatModel
         $rs = $srchPluginSettings->getResultSet();
         $plugin =  FatApp::getDb()->fetch($rs);
         return empty($plugin) ? false : true;
+    }
+
+    public static function getAttributesByToken($token, $attr = null)
+    {
+        $token = FatUtility::convertToType($token, FatUtility::VAR_STRING);
+        $db = FatApp::getDb();
+
+        $srch = new SearchBase(static::DB_TBL_USER_AUTH);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $srch->addCondition('uauth_token', '=', $token);
+
+        if (null != $attr) {
+            if (is_array($attr)) {
+                $srch->addMultipleFields($attr);
+            } elseif (is_string($attr)) {
+                $srch->addFld($attr);
+            }
+        }
+
+        $rs = $srch->getResultSet();
+        $row = $db->fetch($rs);
+
+        if (!is_array($row)) {
+            return false;
+        }
+
+        if (is_string($attr)) {
+            return $row[$attr];
+        }
+
+        return $row;
     }
 }

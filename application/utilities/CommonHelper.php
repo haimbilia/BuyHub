@@ -44,6 +44,13 @@ class CommonHelper extends FatUtility
         $langKey = (!$isAdmin) ? 'CONF_DEFAULT_SITE_LANG' : 'CONF_ADMIN_DEFAULT_LANG';
         self::$_lang_id = FatApp::getConfig($langKey, FatUtility::VAR_INT, 1);
 
+        $queryStringData = FatApp::getQueryStringData();
+        if (array_key_exists('appuser', $queryStringData) && $queryStringData['appuser'] == 1) {
+            self::setAppUser();
+            self::$_currency_id = $queryStringData['currency_id'] ?? self::$_currency_id;
+            setcookie('defaultSiteCurrency', self::$_currency_id, time() + 3600 * 24 * 10, CONF_WEBROOT_URL);
+        }
+
         if (true === MOBILE_APP_API_CALL) {
             if (!empty($_SERVER['HTTP_X_LANGUAGE_ID'])) {
                 self::$_lang_id = FatUtility::int($_SERVER['HTTP_X_LANGUAGE_ID']);
@@ -73,7 +80,6 @@ class CommonHelper extends FatUtility
             }
             return;
         }
-
 
         if (isset($_COOKIE['defaultSiteLang'])) {
             $languages = Language::getAllNames();
@@ -105,6 +111,17 @@ class CommonHelper extends FatUtility
     public static function getLangId(): int
     {
         if (1 > self::$_lang_id) {
+            $queryStringData = FatApp::getQueryStringData();
+            if (array_key_exists('appuser', $queryStringData) && $queryStringData['appuser'] == 1) {
+                $langId = $queryStringData['lang_id'] ?? 0;
+                if (0 < $langId) {
+                    $languages = Language::getAllNames();
+                    if (array_key_exists($langId, $languages)) {
+                        return $langId;
+                    }
+                }
+            }
+
             return FatUtility::int(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         }
         return self::$_lang_id;
@@ -310,7 +327,7 @@ class CommonHelper extends FatUtility
             trigger_error('Order Product Array should not be empty', E_USER_ERROR);
         }
 
-        
+
         $cartTotal = $opArr['op_qty'] * $opArr['op_unit_price'];
 
         switch (strtoupper($amountType)) {
@@ -359,7 +376,7 @@ class CommonHelper extends FatUtility
                 $shippingAmount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount'] : 0;
                 if ($userType == User::USER_TYPE_SELLER && !CommonHelper::canAvailShippingChargesBySeller($opArr['op_selprod_user_id'], $opArr['opshipping_by_seller_user_id'])) {
                     $shippingAmount = 0;
-                }                
+                }
                 $amount = $shippingAmount;
                 break;
             case 'SHIPPING_API':
@@ -387,17 +404,17 @@ class CommonHelper extends FatUtility
                     $amount = 0;
                 }
                 break;
-            case 'TAXABLE_AMOUNT':               
+            case 'TAXABLE_AMOUNT':
                 $amount = $cartTotal + self::orderProductAmount($opArr, 'VOLUME_DISCOUNT');
                 $tax = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_TAX]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_TAX]['opcharge_amount'] : 0;
                 if ($tax <= 0) {
                     $amount = 0;
                 } elseif (($userType == User::USER_TYPE_SELLER && $opArr['op_tax_collected_by_seller'] == 0)) {
                     $amount = 0;
-                }elseif($opArr['op_tax_after_discount']){          
+                } elseif ($opArr['op_tax_after_discount']) {
                     $amount += self::orderProductAmount($opArr, 'DISCOUNT');
                 }
-                break;    
+                break;
             case 'VOLUME_DISCOUNT':
                 $amount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT]['opcharge_amount'] : 0;
                 break;
@@ -486,14 +503,13 @@ class CommonHelper extends FatUtility
         if ($requestRow['op_qty'] == $requestRow['orrequest_qty']) {
             $op_refund_amount = $totalPaidAmtBuyer;
             $op_refund_amount += $requestRow["op_rounding_off"];
-           // $deductedRewardAmount = $rewardAmountUsed;          
+            // $deductedRewardAmount = $rewardAmountUsed;          
         } else {
             //$deductedRewardAmount = $rewardAmountPerQty * $requestRow['orrequest_qty'];
             $op_refund_amount = $cartAmount - ($rewardAmountPerQty * $requestRow['orrequest_qty']) + $taxToRefund - $deductVolumeDiscountFromRefund - $deductCouponDiscountFromRefund;
             if (0 > $requestRow["op_rounding_off"]) {
                 $op_refund_amount += $requestRow["op_rounding_off"];
             }
-            
         }
 
         $op_refund_shipping = 0;
