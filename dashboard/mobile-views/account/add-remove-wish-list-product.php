@@ -6,5 +6,5 @@ $data = array(
 );
 
 if (0 < $removeFromCart) {
-    require_once(CONF_THEME_PATH . 'cart/price-detail.php');
+    require_once(CONF_FRONT_END_THEME_PATH . 'cart/price-detail.php');
 }

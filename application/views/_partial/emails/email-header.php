@@ -40,8 +40,7 @@
             }
 
             @media screen and (max-width: 530px) {}
-        </style>
-        {MEDIA_SCREEN_CSS}
+        </style>  
     </head>
 
     <body style="margin: 0; padding: 0; word-spacing: normal">
@@ -58,12 +57,29 @@
                 background-position: top left, right center, bottom left;
             "
         >
+        <tbody>
+
+        <tr>
+                <td style="padding: 40px"></td>
+            </tr>
             <tr>
                 <td>
-                    <div style="width: 600px; margin: 40px auto">
-                        <div class="header" id="header" style="max-width: 200px; margin: 40px auto">
-                            {Company_Logo}
-                        </div>
-                        <div class="body" id="body" style="margin-bottom: 40px; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)"> <!-- closing tag in Footer file -->
-                           
+                    <table width="600px" cellspacing="0" cellpadding="0"
+                        style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+                        <thead id="header">
+                            <tr>
+                                <td>
+                                    <table width="100%" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td style="text-align: center; padding-top: 60px">
+                                            {Company_Logo}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
                         <!-- Header End -->             

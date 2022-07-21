@@ -1,51 +1,76 @@
 <?php if (!isset($defaultContent) || $defaultContent === false) { ?>
 
-    </div><!-- Part of Header file please don't remove -->
-    <div class="footer" id="footer">
-        <?php
-        if (!isset($defaultContent) || $defaultContent === false) {
-            echo FatApp::getConfig('CONF_EMAIL_TEMPLATE_FOOTER_HTML' . $langId, FatUtility::VAR_STRING, '');
-        }
-        ?>
-    </div>
-    </div>
     </td>
     </tr>
+    </tbody>
+    </table>
+    </td>
+    </tr>
+    <tr>
+        <td style="padding-top: 30px">
+            <?php
+            if (!isset($defaultContent) || $defaultContent === false) {
+                echo FatApp::getConfig('CONF_EMAIL_TEMPLATE_FOOTER_HTML' . $langId, FatUtility::VAR_STRING, '');
+            }
+            ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding: 40px"></td>
+    </tr>
+    </tbody>
+    </table>
+    </body>
+
+<?php  } else { ?>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    </td>
+    </tr>
+    <tr>
+        <td style="padding-top: 30px">
+            <table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed">
+                <tr>
+                    <td style="text-align: center">
+                        <p style="
+                                        font-family: 'Poppins', sans-serif;
+                                        font-size: 14px;
+                                        letter-spacing: -0.2px;
+                                        display: block;
+                                        box-sizing: border-box;
+                                        font-weight: 400;
+                                        color: #212529;
+                                        line-height: 26px;
+                                        margin: 0 0 20px 0;
+                                    ">
+                            Contact {website_name} at<br />
+                            <a href="mailto:{CONTACT-EMAIL}" style="color: #f13925; text-decoration: none">
+                                {CONTACT-EMAIL}
+                            </a>
+                            or call at
+                            <a href="tel:{SITE-PHONE}" style="color: #f13925; text-decoration: none">
+                                {SITE-PHONE}
+                            </a>
+                        </p>
+                        <h5 style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: -0.2px; line-height: 24px; display: block; margin: 0 0 15px 0; color: #212529">
+                            Get In Touch
+                        </h5>
+                        {social_media_icons}
+                        <span style="display: block; width: 100%; font-size: 12px; padding: 10px 0; color: #212529">
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding: 40px"></td>
+    </tr>
+    </tbody>
     </table>
     </body>
 
     </html>
-<?php  } else { ?>
-
-    <table align="center" cellpadding="0" cellspacing="0" style="width:100%; margin:auto;">
-        <tbody>
-            <tr>
-                <td style="background:#fff;vertical-align:top;text-align: center;">
-                    <table cellpadding="0" cellspacing="0" style="width: 100%;">
-                        <tbody>
-                            <tr>
-                                <td style="color:#999;padding:30px 30px;"> Get in touch if you have any questions regarding our Services.<br />
-                                    Feel free to contact us 24/7. We are here to help.<br />
-                                    <br />
-                                    All the best,<br />
-                                    The {website_name} Team<br />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 30px 30px;background:rgba(0,0,0,0.04); text-align: center;">
-                    <h4 style="font-size:20px; color:#000;margin: 0;">Need more help?</h4> <a href="{contact_us_url}" style="color:#ff3a59;">We are here, ready to talk</a> <br />
-                    <br />
-                    {social_media_icons}
-                </td>
-            </tr>
-            <tr>
-                <td style="padding:0; text-align: center; font-size:13px; color:#999;vertical-align:top; line-height:20px;padding: 10px;"> {website_name} Inc.
-                </td>
-            </tr>
-        </tbody>
-    </table>
 <?php } ?>

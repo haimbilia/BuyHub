@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $productsArr = $availableProductsArr;
-$productsCount = $pickUpProductsCount;
+$productsCount = $fulfilmentType == Shipping::FULFILMENT_PICKUP ? $pickUpProductsCount : $shipProductsCount; 
 
 $cartSummary['orderNetAmount'] = CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount'], false, false, false);
 
