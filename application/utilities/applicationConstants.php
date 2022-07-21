@@ -519,10 +519,10 @@ class applicationConstants
             'repeat-x' => Labels::getLabel('LBL_REPEAT_X', $langId),
             'repeat-y' => Labels::getLabel('LBL_REPEAT_Y', $langId),
             'no-repeat' => Labels::getLabel('LBL_NO_REPEAT', $langId),
-            'initial' => Labels::getLabel('LBL_INITIAL', $langId),
+            /*  'initial' => Labels::getLabel('LBL_INITIAL', $langId),
             'inherit' => Labels::getLabel('LBL_INHERIT', $langId),
             'space' => Labels::getLabel('LBL_SPACE', $langId),
-            'round' => Labels::getLabel('LBL_ROUND', $langId),
+            'round' => Labels::getLabel('LBL_ROUND', $langId), */
         );
     }
 
@@ -530,11 +530,11 @@ class applicationConstants
     {
         return array(
             'auto' => Labels::getLabel('LBL_AUTO', $langId),
-            'length' => Labels::getLabel('LBL_LENGTH', $langId),
+            /*  'length' => Labels::getLabel('LBL_LENGTH', $langId), */
             'cover' => Labels::getLabel('LBL_COVER', $langId),
             'contain' => Labels::getLabel('LBL_CONTAIN', $langId),
-            'initial' => Labels::getLabel('LBL_INITIAL', $langId),
-            'inherit' => Labels::getLabel('LBL_INHERIT', $langId),
+            /* 'initial' => Labels::getLabel('LBL_INITIAL', $langId),
+            'inherit' => Labels::getLabel('LBL_INHERIT', $langId), */
         );
     }
 }

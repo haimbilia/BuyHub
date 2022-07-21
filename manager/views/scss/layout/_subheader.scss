@@ -75,12 +75,11 @@
             .subheader__breadcrumbs-home {
                 padding: 0px 0.65rem 0px 0px;
                 transition: all 0.3s;
-                >i {
+                > i {
                     font-size: 1rem;
                     color: #c5cbe7;
                 }
-                &:hover>i {
-                    -webkit-transition: all 0.3s;
+                &:hover > i {
                     transition: all 0.3s;
                     color: $brand-color;
                 }
@@ -90,7 +89,7 @@
                 font-size: 1rem;
                 font-weight: 500;
                 color: #959cb6;
-                -webkit-transition: all 0.3s;
+
                 transition: all 0.3s;
             }
             .subheader__breadcrumbs-separator {
@@ -409,12 +408,12 @@
         }
         .subheader__breadcrumbs {
             .subheader__breadcrumbs-home {
-                >i {
+                > i {
                     color: rgba(255, 255, 255, 0.6);
                 }
                 &:hover,
                 &.subheader__breadcrumbs-home--active {
-                    >i {
+                    > i {
                         color: #fff;
                     }
                 }

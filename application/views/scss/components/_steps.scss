@@ -40,7 +40,7 @@
 
 .steps li:before {
     content: "\f05e";
-    font-family: 'Font Awesome 5 Free';
+    font-family: "Font Awesome 5 Free";
     font-size: 1.2em;
     margin: 0 5px 0 0;
 }
@@ -62,7 +62,5 @@
 }
 
 .steps li:last-child {
-    -webkit-padding-end: 0;
-    -moz-padding-end: 0;
     padding-#{$end-direction}: 0;
 }

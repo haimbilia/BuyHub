@@ -1,7 +1,7 @@
 .mobile-actions {
     font-size: 0.8rem;
     display: none;
-    @include media-breakpoint-down(lg) {
+    @include media-breakpoint-down(xl) {
         background-color: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(3px);
         box-shadow: 0 -10px 30px 0 rgba(111, 111, 111, 0.1);

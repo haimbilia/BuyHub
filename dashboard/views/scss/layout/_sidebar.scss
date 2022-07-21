@@ -13,7 +13,7 @@ $sidebar-width: 280px;
     // background-color: $bg-white;
     // box-shadow: $shadow-theme;
     //border-#{$end-direction}: $border;
-    @include media-breakpoint-down(lg) {
+    @include media-breakpoint-down(xl) {
         transform: translateX(-100% * $transform-direction);
         position: fixed;
         z-index: 1022;

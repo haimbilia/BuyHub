@@ -4,7 +4,6 @@
     margin: 0px;
 }
 
-
 /* List */
 
 .ml-ul {
@@ -21,21 +20,11 @@
     font-size: 13px;
     font-family: sans-serif;
     cursor: pointer;
-    /* Non selectable */
-    -webkit-user-select: none;
-    /* Chrome/Safari */
-    -moz-user-select: none;
-    /* Firefox */
-    -ms-user-select: none;
-    /* IE10+ */
-    /* Rules below not implemented in browsers yet */
-    -o-user-select: none;
+
     user-select: none;
 }
 
-
 /* List input item */
-
 
 /* .ml-input-container .ml-input-filter {
 	width: 100%;
@@ -50,7 +39,6 @@
 	border-radius: $radius4;
 } */
 
-
 /* List item */
 
 .ml-li {
@@ -64,7 +52,7 @@
 }
 
 .ml-disabled-element-li {
-    background-color: #E4E8EA;
+    background-color: #e4e8ea;
 }
 
 .ml-disabled-element-li label {

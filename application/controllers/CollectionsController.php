@@ -97,13 +97,13 @@ class CollectionsController extends MyAppController
 
         $productSrchObj->doNotCalculateRecords();
 
-        if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+       /*  if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $productSrchObj->joinFavouriteProducts($loggedUserId);
             $productSrchObj->addFld('IFNULL(ufp_id, 0) as ufp_id');
         } else {
             $productSrchObj->joinUserWishListProducts($loggedUserId);
             $productSrchObj->addFld('IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        }
+        } */
 
         $productSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $productSrchObj->addMultipleFields(

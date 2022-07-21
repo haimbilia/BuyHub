@@ -7,10 +7,14 @@
     grid-gap: 1rem;
     white-space: nowrap;
     margin-bottom: 2rem;
-
     @include media-breakpoint-up(lg) {
         grid-gap: 2rem;
         margin: 0;
+    }
+    @include media-breakpoint-down(sm) {
+        overflow: hidden;
+        overflow-x: auto;
+        width: fill-available;
     }
     &-center {
         margin: 0 auto;
