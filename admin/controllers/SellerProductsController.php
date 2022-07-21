@@ -279,6 +279,15 @@ class SellerProductsController extends ListingBaseController
 
         $selProdId = Fatutility::int($post['selprod_id']);
 
+        $productRow = Product::getAttributesById($productId, array('product_type'));
+        if ($productRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $post['selprod_max_download_times'] == 0) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_DOWNLOAD_TIMES_MUST_BE_-1_OR_GREATER_THAN_ZERO', $this->siteLangId), true);
+        }
+
+        if ($productRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $post['selprod_download_validity_in_days'] == 0) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_DOWNLOAD_VALIDITY_MUST_BE_-1_OR_GREATER_THAN_ZERO', $this->siteLangId), true);
+        }
+
         $selprod_stock = Fatutility::int($post['selprod_stock']);
         $selprod_min_order_qty = Fatutility::int($post['selprod_min_order_qty']);
         $selprod_threshold_stock_level = Fatutility::int($post['selprod_threshold_stock_level']);

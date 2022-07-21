@@ -249,7 +249,6 @@
         pointer-events: none;
         content: "";
         transition: 0.3s ease-in-out all;
-        -webkit-transition: 0.3s ease-in-out all;
     }
     .navs_toggle.is-focus:after {
         opacity: 1;
@@ -259,14 +258,11 @@
     body.toggled_left .common_overlay {
         opacity: 1;
         visibility: visible;
-
         transform: translateY(0%);
-
         transition: opacity 0.5s, transform 0.5s;
     }
     body.toggled_left .navigation-wrapper {
         opacity: 1;
-
         transform: translate(0px, 0px);
     }
     .navigation-wrapper {

@@ -31,7 +31,6 @@
 ?>
     <?php if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
         <!-- Start Navigation Bar -->
-
         <div class="navigation-wrapper">
             <ul class="navigation">
                 <?php if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == Navigations::LAYOUT_MEGA_MENU) { ?>
