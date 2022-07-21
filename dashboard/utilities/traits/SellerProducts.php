@@ -466,13 +466,23 @@ trait SellerProducts
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
-        $productRow = Product::getAttributesById($selprod_product_id, array('product_id', 'product_active', 'product_seller_id', 'product_added_by_admin_id'));
+        $productRow = Product::getAttributesById($selprod_product_id, array('product_id', 'product_active', 'product_seller_id', 'product_added_by_admin_id', 'product_type'));
         if (!$productRow) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
         if (($productRow['product_seller_id'] != $this->userParentId) && $productRow['product_added_by_admin_id'] == 0) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        if ($productRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $post['selprod_max_download_times'] == 0) {
+            Message::addErrorMessage(Labels::getLabel('ERR_DOWNLOAD_TIMES_MUST_BE_-1_OR_GREATER_THAN_ZERO', $this->siteLangId));
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        if ($productRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $post['selprod_download_validity_in_days'] == 0) {
+            Message::addErrorMessage(Labels::getLabel('ERR_DOWNLOAD_VALIDITY_MUST_BE_-1_OR_GREATER_THAN_ZERO', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
 

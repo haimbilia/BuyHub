@@ -16,7 +16,7 @@ class Extrapage extends MyAppModel
     public const SELLER_PAGE_BLOCK2 = 17;
     public const SELLER_PAGE_BLOCK3 = 25;
     public const SELLER_BANNER_SLOGAN = 18;
-    public const RESET_PAGE_RIGHT_BLOCK = 19;
+    //public const RESET_PAGE_RIGHT_BLOCK = 19;
     public const SUBSCRIPTION_PAGE_BLOCK = 20;
     public const ADVERTISER_BANNER_SLOGAN = 21;
     public const AFFILIATE_BANNER_SLOGAN = 22;
@@ -96,7 +96,7 @@ class Extrapage extends MyAppModel
             static::CONTACT_US_CONTENT_BLOCK => Labels::getLabel('LBL_CONTACT_US_CONTENT_BLOCK', $langId),
             static::LOGIN_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_LOGIN_PAGE_RIGHT_BLOCK', $langId),
             static::REGISTRATION_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_REGISTRATION_PAGE_RIGHT_BLOCK', $langId),
-            static::RESET_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_RESET_PAGE_RIGHT_BLOCK', $langId),
+            //static::RESET_PAGE_RIGHT_BLOCK => Labels::getLabel('LBL_RESET_PAGE_RIGHT_BLOCK', $langId),
             static::SELLER_PAGE_BLOCK1 => Labels::getLabel('LBL_SELLER_PAGE_BLOCK1', $langId),
             static::SELLER_PAGE_BLOCK2 => Labels::getLabel('LBL_SELLER_PAGE_BLOCK2', $langId),
             static::SELLER_PAGE_BLOCK3 => Labels::getLabel('LBL_SELLER_PAGE_BLOCK3', $langId),

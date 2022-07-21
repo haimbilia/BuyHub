@@ -1036,6 +1036,11 @@ TV-9.4.0.20220406
     - #065482 - The order cancels reason listing appears blank if no data is added in the language data field.
     - #065453 - image preview is not proper .
     - #065402 - The content under the dd preview field is not properly aligned on the Digital links setup popup on the seller end
+    -#065407 - The seller is able to set the value of the 'Max Download TIme' and validity fields as zero while adding the inventory for the digital products.
+    - #065429 - Multiple issues on the Phone number verification popup. 
+    - #065486 - 404 page appears when the user tries to log in. 
+    - #065484 - A warning message appears on the top of the order details page. 
+    - #065436 - UI issues on the reset password page.
 ```sh 
 TV-9.4.0.20220719
 ```

@@ -1973,3 +1973,5 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_LATER', '1', 'Later', '1') ON DUPLICATE KEY UPDATE label_type = 2;
 INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_ERROR_SAVING_FILE', '1', 'Error downloading file', '1') ON DUPLICATE KEY UPDATE label_type = 2;
 INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_ERROR_DOWNLOADING_FILE', '1', 'Error downloading file', '1') ON DUPLICATE KEY UPDATE label_type = 2;
+
+DELETE FROM `tbl_extra_pages` WHERE epage_type = 19;
