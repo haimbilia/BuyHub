@@ -1032,6 +1032,7 @@ TV-9.4.0.20220406
     - #065429 - Multiple issues on the Phone number verification popup. 
     - #065486 - 404 page appears when the user tries to log in. 
     - #065484 - A warning message appears on the top of the order details page. 
+    - #065436 - UI issues on the reset password page.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

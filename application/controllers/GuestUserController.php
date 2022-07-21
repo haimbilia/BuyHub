@@ -1014,11 +1014,14 @@ class GuestUserController extends MyAppController
         $this->set('user_password', $user['credential_password']);
         $this->set('credential_username', $user['credential_username']);
         $frm = $this->getResetPwdForm($userId, trim($token));
+        /*
         $obj = new Extrapage();
         $pageData = $obj->getContentByPageType(Extrapage::RESET_PAGE_RIGHT_BLOCK, $this->siteLangId);
         $this->set('pageData', $pageData);
+        */
         $this->set('frm', $frm);
-        $this->_template->render();
+        $this->set('exculdeMainHeaderDiv', true);
+        $this->_template->render(true, false);
     }
 
     public function resetPasswordSetup()
