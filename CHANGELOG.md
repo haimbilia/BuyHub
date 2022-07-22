@@ -1048,6 +1048,7 @@ TV-9.4.0.20220719
     - #065574 - The parse error occurs when the admin tries to edit any category banner image attribute.
     - #065599 - User is unable to sort product listing 
     - #065598 - The admin is not able to bind the Child categories of sub-child categories to the product categories collection for the homepage.
+    - #065597 - Random brand names appear on the top of the brand listing page
     
 ## UAT points:
 
