@@ -35,6 +35,14 @@ class AddressesController extends LoggedUserController
         $post['addr_state_id'] = $addr_state_id;
 
         $addr_id = FatApp::getPostedData('addr_id', FatUtility::VAR_INT, 0);
+        if (0 < $addr_id) {
+            $addrUserId = Address::getAttributesById($addr_id, 'addr_record_id');
+            if ($this->userId != $addrUserId) {
+                $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
+                Message::addErrorMessage($message);
+                FatUtility::dieWithError(Message::getHtml());
+            }
+        }
         unset($post['addr_id']);
 
         $post['addr_phone_dcode'] = FatApp::getPostedData('addr_phone_dcode', FatUtility::VAR_STRING, '');
