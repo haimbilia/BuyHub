@@ -53,6 +53,10 @@ foreach ($childArr as &$childOrder) {
     } else {
         $canCancelOrder = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses())) ? 1 : 0;
         $canReturnRefund = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderReturnStatuses())) ? 1 : 0;
+        $daysSpent = $datediff / (60 * 60 * 24);
+        $returnAge = $childOrderDetail['op_selprod_return_age'];  
+        $canReturnRefund =  $canReturnRefund && $returnAge > $daysSpent;
+        $canCancelOrder = $canCancelOrder && $childOrderDetail['op_selprod_cancellation_age'] > $daysSpent;
     }
 
     $childOrder['canCancelOrder'] = ($canCancelOrder && false === OrderCancelRequest::getCancelRequestById($childOrder['op_id']) ? 1 : 0);

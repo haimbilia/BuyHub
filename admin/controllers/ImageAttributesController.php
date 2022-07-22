@@ -86,7 +86,7 @@ class ImageAttributesController extends ListingBaseController
                 }
                 break;
             case AttachedFile::FILETYPE_BRAND_LOGO:
-            case AttachedFile::FILETYPE_BRAND_IMAGE:    
+            case AttachedFile::FILETYPE_BRAND_IMAGE:
                 $srch->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'brand_id = afile_record_id', 'b');
                 $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'b.brand_id = b_l.brandlang_brand_id AND b_l.brandlang_lang_id = ' . $this->siteLangId, 'b_l');
                 $srch->addMultipleFields(
@@ -95,7 +95,7 @@ class ImageAttributesController extends ListingBaseController
                 if (isset($post['keyword']) && '' != $post['keyword']) {
                     $cnd = $srch->addCondition('brand_name', 'like', '%' . $post['keyword'] . '%');
                     $cnd->attachCondition('brand_identifier', 'like', '%' . $post['keyword'] . '%');
-                }               
+                }
                 break;
             case AttachedFile::FILETYPE_CATEGORY_BANNER:
                 $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'prodcat_id = afile_record_id', 'pc');
@@ -133,12 +133,12 @@ class ImageAttributesController extends ListingBaseController
         }
 
         $srch->addGroupBy('record_id');
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
-        $srch->doNotCalculateRecords(); 
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords();
         $srch->addOrder($sortBy, $sortOrder);
         $srch->addHaving('record_id', 'is not', 'mysql_func_NULL', 'AND', true);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);  
+        $srch->setPageSize($pageSize);
         $this->set("arrListing",  FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('moduleType', (isset($post['select_module'])) ? $post['select_module'] : AttachedFile::FILETYPE_PRODUCT_IMAGE);
         $this->set('postedData', $post);
@@ -176,7 +176,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
-                $title = $records['prodcat_name'];
+                $title = ($records) ? $records['prodcat_name'] : '';
                 break;
             case AttachedFile::FILETYPE_BLOG_POST_IMAGE:
                 $srch = BlogPost::getSearchObject($this->siteLangId);
@@ -200,7 +200,7 @@ class ImageAttributesController extends ListingBaseController
                 $title = ($records) ? $records['brand_name'] : '';
                 break;
         }
-        $languages = Language::getAllNames(); 
+        $languages = Language::getAllNames();
         if (count($languages) <= 1) {
             $langId = array_key_first($languages);
         }
@@ -261,19 +261,19 @@ class ImageAttributesController extends ListingBaseController
         if (!$recordId || !$moduleType) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        $languages = Language::getAllNames(); 
+        $languages = Language::getAllNames();
         if (count($languages) <= 1) {
             $langId = array_key_first($languages);
         }
-        
+
         $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, (count($languages) <= 1) ? true : false, 0, 0, true);
-        
+
         $frm = $this->getForm($recordId, $moduleType, $langId, $images, $optionId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-            
+
 
         $db = FatApp::getDb();
         foreach ($images as $afileId => $afileData) {
@@ -295,12 +295,12 @@ class ImageAttributesController extends ListingBaseController
 
         $attachedFile = new AttachedFile();
         $attachementArr = $attachedFile->getImgAttrTypeArray($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE,[],'');
+        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE, [], '');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'record_name');
         }
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

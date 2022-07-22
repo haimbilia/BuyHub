@@ -105,7 +105,7 @@ if ($optionIdFld !== null) {
                         } ?>
                         <tr>
                             <td>
-                                <img class="border" width="<?php echo $imageDimensions[ImageDimension::WIDTH]; ?>" height="<?php echo $imageDimensions[ImageDimension::HEIGHT]; ?>" data-aspect-ratio="<?php echo $imageDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl($imageUrl . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
+                                <img class="border" data-aspect-ratio="<?php echo $imageDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo UrlHelper::getCachedUrl($imageUrl . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                             </td>
                             <td><?php echo $frm->getFieldHtml('image_title' . $afileId); ?></td>
                             <td><?php echo $frm->getFieldHtml('image_alt' . $afileId); ?></td>

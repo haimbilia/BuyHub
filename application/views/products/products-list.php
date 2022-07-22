@@ -88,20 +88,20 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
             $pagingArr = array('pageCount' => $pageCount, 'page' => $postedData['page'], 'recordCount' => $recordCount, 'callBackJsFunc' => $searchFunction);
     ?>
 
-    <?php if (1 < $pageCount) { ?>
-        <div class="collection-pager">
-            <?php
-                $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
-                if (!isset($removePageSize)) { ?>
-                <select name="pageSizeSelect" id="pageSizeSelect" class="custom-select sorting-select">
-                    <?php foreach ($pageSizeArr as $key => $val) { ?>
-                        <option value="<?php echo $key; ?>" <?php echo ($key == $pageSize) ? 'selected' : ''; ?>><?php echo $val; ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            <?php } ?>
-        </div>
-    <?php } ?>
+    <?php /* if (1 < $pageCount) {  */ ?>
+    <div class="collection-pager">
+        <?php
+            $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+            if (!isset($removePageSize)) { ?>
+            <select name="pageSizeSelect" id="pageSizeSelect" class="custom-select sorting-select">
+                <?php foreach ($pageSizeArr as $key => $val) { ?>
+                    <option value="<?php echo $key; ?>" <?php echo ($key == $pageSize) ? 'selected' : ''; ?>><?php echo $val; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        <?php } ?>
+    </div>
+    <?php /* } */ ?>
 <?php } else { ?>
 </div> <?php
             $arr['recordDisplayCount'] = $recordCount;

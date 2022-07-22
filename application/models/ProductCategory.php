@@ -547,14 +547,15 @@ class ProductCategory extends MyAppModel
             $srch->addOrder('m.prodcat_identifier', 'asc');
         }
         $srch->doNotCalculateRecords();
+        $srch->setPageSize($limit);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
         $return = array();
         foreach ($records as $row) {
-            if (count($return) >= $limit) {
+           /*  if (count($return) >= $limit) {
                 break;
-            }
+            } */
             if ($row['prodcat_parent'] > 0) {
                 $return[$row['prodcat_id']] = $this->getParentTreeStructure($row['prodcat_id'], 0, '', $langId);
             } else {
