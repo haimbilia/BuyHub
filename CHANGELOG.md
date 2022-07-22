@@ -1046,6 +1046,7 @@ TV-9.4.0.20220719
 ```
     - #065554 - Shows fatal error when user clicks on blog post or view all icon 
     - #065574 - The parse error occurs when the admin tries to edit any category banner image attribute.
+    - #065599 - User is unable to sort product listing 
     
 ## UAT points:
 
