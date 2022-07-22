@@ -20,6 +20,9 @@
         grid-gap: 8rem;
         grid-template-columns: minmax(auto, 24%) 1fr;
     }
+    &-end {
+        position: relative;
+    }
 }
 
 .average-rating {
