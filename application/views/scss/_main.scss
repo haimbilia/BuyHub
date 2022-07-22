@@ -16,38 +16,32 @@
 @import "components/main-search";
 @import "components/carousels";
 @import "components/accordion";
-@import "components/tagify";
+//@import "components/tagify";
 @import "components/auto-complete";
 @import "components/avtar";
 @import "components/back-to-top";
 @import "components/breadcrumbs";
 @import "components/browser_ie";
+@import "components/form";
+@import "components/checkbox";
 @import "components/button";
 @import "components/side-cart";
 @import "components/catalog-popup";
-@import "components/checkbox";
+
 @import "components/cms";
 @import "components/cookies";
 @import "components/data-not-found";
 @import "components/dropdown";
-@import "components/fetured-slider";
-@import "components/form";
-@import "components/graph";
 @import "components/hamburger";
-@import "components/heart";
 @import "components/label";
 @import "components/loader";
-@import "components/login-wrapper";
-//@import "components/magnific-popup";
-@import "components/media";
-@import "components/message";
+//@import "components/media";
+//@import "components/message";
 @import "components/modal";
 @import "components/toaster";
 @import "components/offcanvas";
 @import "components/multi-list";
 @import "components/pagination";
-@import "components/panel";
-@import "components/preview";
 @import "components/product-card";
 @import "components/pro-info";
 @import "components/scroll-hint";
@@ -56,8 +50,8 @@
 @import "components/star-rating";
 @import "components/ratings";
 @import "components/steps";
-@import "components/sticky-head-demo";
-@import "components/system-messages";
+//@import "components/sticky-head-demo";
+
 @import "components/table";
 @import "components/tabs";
 @import "components/wrap-drop";
@@ -73,11 +67,7 @@
 @import "components/quantity-input";
 @import "components/filter-directory";
 @import "components/filters-left";
-@import "components/filters-top";
-@import "components/shop-info";
-@import "components/saved-cards";
 @import "components/no-data";
-@import "components/timeline";
 @import "components/review-media";
 @import "components/badges";
 @import "components/scrollbar";
@@ -102,11 +92,12 @@
 @import "components/ion.rangeSlider.skinHTML5";
 @import "components/jquery.datetimepicker";
 @import "components/jquery-ui-timepicker-addon";
+// @import "components/collection-faq";
 @import "components/product-gallery-slider";
 @import "components/alert";
 @import "components/misc";
+@import "components/system-messages";
 
-// @import "components/collection-faq";
 //
 @import "vendors/animate";
 @import "vendors/fontawesome";

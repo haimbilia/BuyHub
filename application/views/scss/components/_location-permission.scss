@@ -117,7 +117,7 @@
     &_body {
         .default {
             border: $border;
-            border-radius: $radius4;
+            border-radius: $common-radius;
             padding: 1rem;
             padding-#{$end-direction}: 3rem;
             display: inline-flex;

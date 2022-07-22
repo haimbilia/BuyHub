@@ -3,7 +3,7 @@
     grid-gap: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     > li {
-        border-radius: $radius4;
+        border-radius: $common-radius;
         border: $border;
         background: #fff;
         padding: 1rem;

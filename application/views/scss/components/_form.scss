@@ -47,6 +47,7 @@ $input-border-focus: #000;
 
 @mixin select {
     @include input;
+    border-radius: $input-border-radius;
     padding-#{$end-direction}: 35px;
     background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzA2cHgiIGhlaWdodD0iMzA2cHgiIHZpZXdCb3g9IjAgMCAzMDYgMzA2IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMDYgMzA2OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQoJPGc+DQoJCTxnIGlkPSJleHBhbmQtbW9yZSI+DQoJCQk8cG9seWdvbiBwb2ludHM9IjI3MC4zLDU4LjY1IDE1MywxNzUuOTUgMzUuNyw1OC42NSAwLDk0LjM1IDE1MywyNDcuMzUgMzA2LDk0LjM1IiAvPg0KCQk8L2c+DQoJPC9nPg0KDQo8L3N2Zz4NCg==");
     background-size: 10px;
@@ -263,7 +264,18 @@ $input-border-focus: #000;
 }
 
 .custom-select {
-    @extend select;
+    @extend input;
+    border: $input-border-style $input-border-width $input-border-color;
+    background-color: transparent;
+    color: $input-color;
+    height: $input-height;
+    width: 100%;
+    //width: fill-available;
+    padding: $input-padding;
+    font-size: $input-font-size;
+    line-height: $input-line-height;
+    // border-radius: 4px;
+    border-radius: $input-border-radius;
     appearance: none;
     padding-#{$start-direction}: 1rem;
     padding-#{$end-direction}: 35px;

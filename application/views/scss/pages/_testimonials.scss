@@ -150,7 +150,7 @@
     display: block;
     position: relative;
     height: 100%;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.22);
     background-color: $bg-white;
     .user {
@@ -162,7 +162,7 @@
         #{$start-direction}: 25px;
         z-index: 3;
         transition: all 0.3s ease 0s;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         overflow: hidden;
         box-shadow: 0 -5px 15px 0 rgba(0, 0, 0, 0.22);
         img {

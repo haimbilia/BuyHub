@@ -9,7 +9,7 @@
     //box-shadow: $card-shadow;
     box-shadow: $shadow-theme;
     padding: 1rem 0;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     #{$start-direction}: 0;
     text-align: #{$start-direction};
     &-anim {

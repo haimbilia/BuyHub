@@ -352,7 +352,7 @@
     }
     .dropdown {
         .dropdown-target {
-            border-radius: $radius4;
+            border-radius: $common-radius;
             z-index: 10;
             #{$start-direction}: 0;
             top: 110%;
@@ -784,7 +784,7 @@
     background: $secondary-color;
     color: $secondary-color-inverse;
     padding: 5px 0 5px 10px;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     > a {
         display: block;
         position: relative;
@@ -961,7 +961,7 @@
     margin: 10px 0 10px;
     border: 1px dashed rgba(0, 0, 0, 0.2);
     padding: 1rem;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     height: 100%;
     transition: all 0.2s linear;
     &:hover {
@@ -971,7 +971,7 @@
         height: 100%;
         background: rgba(0, 0, 0, 0.04);
         padding: 10px;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         position: relative;
         display: flex;
         align-items: center;
@@ -1054,7 +1054,7 @@
 
 .preview {
     background: #f5f5f5;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     padding: 20px;
     margin-bottom: 1rem;
     .avtar--large {
@@ -1124,8 +1124,8 @@
 }
 .wishlists {
     width: 100%;
-    border-radius: $radius4;
     border: $border;
+    border-radius: $common-radius;
     margin: 0 0 20px;
     position: relative;
     padding: 0;
@@ -1157,7 +1157,7 @@
             li {
                 aspect-ratio: 1/1;
                 border: $border;
-                border-radius: $radius4;
+                border-radius: $common-radius;
                 // padding: 0.5rem;
                 img {
                     width: 100%;
@@ -1225,7 +1225,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         padding: 15px 0;
         background: #fff;
         border-bottom: $border;
@@ -1301,7 +1301,7 @@
     position: relative;
     .box-border {
         border: $border;
-        border-radius: $radius4;
+        border-radius: $common-radius;
     }
     .slick-arrow {
         position: absolute;
@@ -1378,8 +1378,8 @@ input.sp-input {
 
 .address-block {
     border: $border;
+    border-radius: $common-radius;
     padding: 1rem;
-    border-radius: $radius4;
     display: block;
     height: 100%;
     .radio {
@@ -1462,8 +1462,8 @@ input.sp-input {
     grid-gap: 10px;
     .stats {
         color: $txt-gray;
-        border-radius: $radius4;
         border: $border;
+        border-radius: $common-radius;
         padding: 1rem;
         margin: 0;
         height: 100%;
@@ -1480,7 +1480,7 @@ input.sp-input {
 .accordion {
     .dropdown-toggle {
         background: $bg-gray;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         padding: 1rem;
     }
 }
@@ -1490,7 +1490,7 @@ input.sp-input {
     grid-gap: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     li {
-        border-radius: $radius4;
+        border-radius: $common-radius;
         border: $border;
         padding: 1.5rem;
         display: flex;
@@ -1514,7 +1514,7 @@ input.sp-input {
     > li {
         height: 100%;
         border: $border;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         padding: 1rem;
     }
 }
@@ -1525,7 +1525,7 @@ input.sp-input {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     > li {
         border: $border;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         display: flex;
         flex-direction: column;
         &.add-new {
@@ -1838,14 +1838,14 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
     }
     &_content {
         //background: lighten($bg-gray, $amount: 3);
-        //border-radius: $radius4;
+        //border-radius: $common-radius;
         //border: solid 1px lighten($border-color, $amount: 3);
         //box-shadow: $shadow1;
         //padding: 1.5rem;
     }
     .rating-listing {
         //border: $border;
-        //border-radius: $radius4;
+        //border-radius: $common-radius;
         //padding: 10px;
         //background: $bg-white;
         .rating {
@@ -1883,7 +1883,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
     gap: 1.5rem;
     &__img {
         border: $border;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         padding: 0.25rem;
         background: $bg-white;
         max-width: 150px;

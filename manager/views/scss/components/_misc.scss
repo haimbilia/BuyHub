@@ -2039,7 +2039,7 @@ mark,
         background-color: $bg-white;
         font-size: 0.8rem;
         border: none;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         padding: 0;
         color: $txt-gray;
         // margin-#{$end-direction}: 10px;
@@ -2150,8 +2150,8 @@ mark,
     padding: 1rem 0;
     flex-wrap: wrap;
     .actions {
-        border-radius: $common-radius;
         border: $border;
+        border-radius: $common-radius;
         gap: 6px;
         li {
             .actions-link {

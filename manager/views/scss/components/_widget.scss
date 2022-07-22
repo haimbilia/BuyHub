@@ -1304,8 +1304,8 @@ $widget: "widget";
     }
     &--solid {
         border: $border;
+        border-radius: $common-radius;
         padding: 1rem;
-        border-radius: 4px;
     }
 }
 

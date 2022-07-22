@@ -46,7 +46,7 @@
         margin: 0;
         margin-#{$start-direction}: auto;
         .modal-content {
-            border-radius: 0px;
+            border-radius: $common-radius;
             height: inherit;
             overflow-y: auto;
             .modal-header {

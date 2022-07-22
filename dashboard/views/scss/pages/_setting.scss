@@ -121,8 +121,9 @@
     grid-gap: 1rem;
     &-item {
         border: $border;
-        list-style: none;
         border-radius: $common-radius;
+        list-style: none;
+
         .switch {
             margin-bottom: 0;
             padding: 1rem;
@@ -132,8 +133,9 @@
 
 .setting-widget {
     border: $border;
-    list-style: none;
     border-radius: $common-radius;
+    list-style: none;
+
     min-height: 100%;
     cursor: pointer;
     display: flex;
@@ -168,8 +170,9 @@
 
 .setting-block {
     border: $border;
-    list-style: none;
     border-radius: $common-radius;
+    list-style: none;
+
     min-height: 100%;
     cursor: pointer;
     display: flex;

@@ -160,6 +160,7 @@
 .cart-total {
     padding: 2rem;
     border: $border-black;
+    border-radius: $common-radius;
     position: relative;
     &-head {
         padding-bottom: 1rem;
@@ -345,7 +346,7 @@
     &__name {
         color: $brand-color;
         border: dashed 2px $brand-color;
-        border-radius: $radius4;
+        border-radius: $common-radius;
         padding: 0.5rem 1rem;
         font-weight: 500;
         display: inline-block;
@@ -373,7 +374,7 @@
     align-items: center;
     padding: 1rem;
     background: $bg-gray;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     font-size: 0.85rem;
     .svg {
         width: 20px;
@@ -398,7 +399,7 @@
 
 .coupon-offers {
     border: $border;
-    border-radius: $radius4;
+    border-radius: $common-radius;
     li {
         border-bottom: solid 1px lighten($border-color, 05);
         display: flex;

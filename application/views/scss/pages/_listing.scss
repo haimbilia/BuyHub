@@ -31,6 +31,9 @@
         .h1 {
             font-size: 1.8rem;
             margin: 0;
+            .search-results {
+                font-weight: 600;
+            }
         }
         .total-products {
             font-size: 0.85rem;
@@ -39,17 +42,8 @@
     }
 
     .sorting-select {
-        color: $black;
-        border: $btn-border;
-        //border-radius: $btn-radius;
-        border-radius: 0;
-        font-size: $btn-font-size;
         border-color: $black;
-        height: $btn-height;
-        // padding: $btn-padding;
-        // padding-#{$start-direction}: 1rem;
-        line-height: $btn-line-height;
-
+        color: $black;
         @include media-breakpoint-down(lg) {
             width: 100%;
         }
@@ -65,7 +59,6 @@
     @include media-breakpoint-up(lg) {
     }
     .btn {
-        border-radius: 0;
         @include media-breakpoint-down(md) {
             width: 100%;
         }
@@ -259,7 +252,7 @@
     background: $brand-color;
     color: $brand-color-inverse;
     margin: 0 0 0 3px;
-    border-radius: $radius4;
+    border-radius: $common-radius;
 
     transition: width 250ms;
 }
@@ -562,7 +555,7 @@
             height: 100%;
             object-fit: cover;
             //@include img-absolute;
-            border-radius: $radius4;
+            border-radius: $common-radius;
             //opacity: 0.2;
         }
     }
