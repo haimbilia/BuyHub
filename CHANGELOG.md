@@ -1052,6 +1052,7 @@ TV-9.4.0.20220719
     - #065172 - Suggestion: To show the pickup slots on the order details page on the admin, seller, and buyer end
     - #065600 - The validation message in the SEO URL field on the category setup popup does not get disappeared even if the user added the valid details to it.
     - #065631 - Two view more icons are displaying.
+    - #065586 - Newsletter form is not getting submitted.
     
 ## UAT points:
 
