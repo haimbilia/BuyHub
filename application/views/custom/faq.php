@@ -16,7 +16,7 @@
             </div>
         </div>
     </section>
-    <section class="section bg-white pt-0">
+    <section class="section bg-white">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-7 faqSectionJs position-relative ">

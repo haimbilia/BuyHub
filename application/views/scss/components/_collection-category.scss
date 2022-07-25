@@ -1,8 +1,7 @@
 .category-layout-3 {
     display: grid;
-
     grid-gap: 1px;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(312px, 1fr));
     @include media-breakpoint-up(xl) {
         grid-gap: 3rem;
         grid-template-columns: repeat(auto-fill, minmax(490px, 1fr));
@@ -62,9 +61,10 @@
 }
 .category-layout-2 {
     display: grid;
-    grid-gap: 1px;
-    grid-template-columns: repeat(2, 1fr);
-    @include media-breakpoint-up(lg) {
+    grid-gap: 1rem;
+    grid-auto-flow: column;
+    overflow-x: scroll;
+    @include media-breakpoint-up(xl) {
         grid-gap: 3rem;
         grid-template-columns: repeat(4, 1fr);
     }
@@ -76,6 +76,7 @@
         color: $txt-body;
         display: flex;
         flex-direction: column;
+        min-width: 200px;
 
         &-head {
             aspect-ratio: 4/1;
