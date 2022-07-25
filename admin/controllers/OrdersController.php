@@ -98,6 +98,11 @@ class OrdersController extends ListingBaseController
             $this->order['shippingAddress'] = $addresses[Orders::SHIPPING_ADDRESS_TYPE] ?? [];
         }
 
+        $pickUpAddress = $orderObj->getOrderAddresses($this->order['order_id'], $opId);
+        if (!empty($addresses)) {
+            $this->order['pickupAddress'] = (!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])) ? $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE] : array();
+        }
+
         $this->order['comments'] = $orderObj->getOrderComments($this->siteLangId, array("order_id" => $this->order['order_id']));
         $this->order['payments'] = $orderObj->getOrderPayments(array("order_id" => $this->order['order_id']));
 
@@ -358,7 +363,7 @@ class OrdersController extends ListingBaseController
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'tracking_number', $trackingUnReqObj);
 
             $frm->addTextBox(Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId), 'opship_tracking_url');
-           
+
 
             $trackingUrlUnReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId));
             $trackingUrlUnReqObj->setRequired(false);
@@ -366,7 +371,7 @@ class OrdersController extends ListingBaseController
             $trackingurlReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId));
             $trackingurlReqObj->setRequired(true);
             $trackingurlReqObj->setRegularExpressionToValidate(ValidateElement::URL_REGEX);
-            $trackingurlReqObj->setCustomErrorMessage(Labels::getLabel('FRM_TRACKING_URL_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));            
+            $trackingurlReqObj->setCustomErrorMessage(Labels::getLabel('FRM_TRACKING_URL_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));
 
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'opship_tracking_url', $trackingurlReqObj);
             $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'opship_tracking_url', $trackingUrlUnReqObj);
