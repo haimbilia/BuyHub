@@ -548,7 +548,8 @@
 
 .product-profile {
     max-width: 350px;
-    width: max-content;
+    // width: max-content;
+    width: auto;
     display: flex;
     flex-grow: 1;
     align-items: flex-start;
