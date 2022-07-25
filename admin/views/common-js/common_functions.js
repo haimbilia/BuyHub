@@ -170,7 +170,7 @@ Slugify = function (str, str_val_id, is_slugify) {
         .replace(/^-+/, "") /*  Trim - from start of text */
         .replace(/-+$/, "");
     if ($("#" + is_slugify).val() == 0) {
-        $("#" + str_val_id).val(str);
+        $("#" + str_val_id).val(str).keyup();
     }
 };
 

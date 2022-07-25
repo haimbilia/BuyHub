@@ -1050,6 +1050,7 @@ TV-9.4.0.20220719
     - #065598 - The admin is not able to bind the Child categories of sub-child categories to the product categories collection for the homepage.
     - #065603 - The preferred dimension value is wrong in the media upload section for the banner field in the brand setup popup.
     - #065172 - Suggestion: To show the pickup slots on the order details page on the admin, seller, and buyer end
+    - #065600 - The validation message in the SEO URL field on the category setup popup does not get disappeared even if the user added the valid details to it.
     
 ## UAT points:
 
