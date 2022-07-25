@@ -1,5 +1,15 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$prodImage = UrlHelper::generateFullUrl('image', 'product', array($data['selprod_product_id'], ImageDimension::VIEW_THUMB, $data['selprod_id'], 0, $langId),CONF_WEBROOT_FRONTEND);
-$str = '<tr><td style="padding-right: 25px;"><img style="border: solid 1px #ececec; padding: 10px; border-radius: $radius4;" src="'.$prodImage.'" '.HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB).'></td><td style="text-align:left;"><span style="font-size: 20px; font-weight:normal; color:#999999;">'.$data['selprod_title'].'</span><span style="font-size: 14px; font-weight: bold; color:#000000; display: block; padding: 20px 0;">'.CommonHelper::displayMoneyFormat($data['selprod_price']).'</span></td></tr>'; 
-echo  $str;
-            
+$prodImage = UrlHelper::generateFullUrl('image', 'product', array($data['selprod_product_id'], ImageDimension::VIEW_MINI, $data['selprod_id'], 0, $langId), CONF_WEBROOT_FRONTEND);
+?>
+<tr>
+    <td style="vertical-align: middle; width: 70px; padding: 15px 0; border-bottom: 1px solid #e2e2e2">
+        <a href="javascript:void(0);" style="width: 50px; height: 50px; background: #ffffff; display: block; border: 1px solid rgba(112, 112, 112, 0.2)">
+        <img src="<?php echo $prodImage; ?>"  <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB);?> alt="product-image" /></a>
+    </td>
+    <td style="vertical-align: middle; padding: 15px 0; border-bottom: 1px solid #e2e2e2">
+        <a href="javascript:void(0);" style="color: #212529; font-size: 14px; line-height: 24px; letter-spacing: -0.2px; text-decoration: none"><?php $data['selprod_title'];?> X <?php echo $data['abandonedcart_qty'];?></a>
+    </td>
+    <td style="font-size: 14px;line-height: 24px;letter-spacing: -0.2px;color: #212529;text-align: right;vertical-align: middle;padding: 15px 0;border-bottom: 1px solid #e2e2e2;">
+        <?php echo CommonHelper::displayMoneyFormat($data['selprod_price']);?>
+    </td>
+</tr>
