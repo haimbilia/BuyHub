@@ -117,11 +117,11 @@ class CommonHelper extends FatUtility
                 if (0 < $langId) {
                     $languages = Language::getAllNames();
                     if (array_key_exists($langId, $languages)) {
+                        setcookie('defaultSiteLang', $langId, time() + 3600 * 24 * 10, CONF_WEBROOT_URL);
                         return $langId;
                     }
                 }
             }
-
             return FatUtility::int(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         }
         return self::$_lang_id;

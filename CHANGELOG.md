@@ -1044,6 +1044,14 @@ TV-9.4.0.20220406
 ```sh 
 TV-9.4.0.20220719
 ```
+    - #065554 - Shows fatal error when user clicks on blog post or view all icon 
+    - #065574 - The parse error occurs when the admin tries to edit any category banner image attribute.
+    - #065599 - User is unable to sort product listing 
+    - #065598 - The admin is not able to bind the Child categories of sub-child categories to the product categories collection for the homepage.
+    - #065603 - The preferred dimension value is wrong in the media upload section for the banner field in the brand setup popup.
+    - #065172 - Suggestion: To show the pickup slots on the order details page on the admin, seller, and buyer end
+    - #065600 - The validation message in the SEO URL field on the category setup popup does not get disappeared even if the user added the valid details to it.
+    - #065631 - Two view more icons are displaying.
     
 ## UAT points:
 

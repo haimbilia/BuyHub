@@ -98,24 +98,21 @@
 .collection-pager {
     background-color: $bg-gray;
     display: flex;
-    flex-direction: column;
+    gap: 1rem;
+    flex-flow: row wrap;
     flex: 1;
     padding: 1rem;
     margin-top: 4rem;
     @include media-breakpoint-up(lg) {
-        flex-direction: row;
     }
     .pagination {
         margin: 0;
-        margin-bottom: 1rem;
-        @include media-breakpoint-up(lg) {
-            margin: 0;
-        }
     }
     .sorting-select {
         max-width: 120px;
+        margin-#{$start-direction}: auto;
         @include media-breakpoint-up(lg) {
-            margin-#{$start-direction}: auto;
+            // margin-#{$start-direction}: auto;
         }
     }
 }

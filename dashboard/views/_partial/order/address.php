@@ -48,5 +48,14 @@
                 <span class="value"><?php echo ValidateElement::formatDialCode($address['oua_phone_dcode']) . $address['oua_phone']; ?></span>
             </li>
         <?php } ?>
+        <?php
+        $pickupFromTime = $childOrderDetail['opshipping_time_slot_from'] ?? '';
+        $pickupToTime = $childOrderDetail['opshipping_time_slot_to'] ?? '';
+        if (!empty($pickupFromTime) && '00:00:00' != $pickupFromTime && !empty($pickupToTime) && '00:00:00' != $pickupToTime) { ?>
+            <li class="list-stats-item">
+                <span class="label"><?php echo Labels::getLabel('LBL_PICKUP_TIME', $siteLangId); ?> </span>
+                <span class="value"><?php echo date('H:i', strtotime($pickupFromTime)) . ' - ' . date('H:i', strtotime($pickupToTime)); ?></span>
+            </li>
+        <?php } ?>
     </ul>
 </div>

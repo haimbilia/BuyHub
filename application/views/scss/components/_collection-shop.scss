@@ -1,7 +1,11 @@
 .shop-layout-1 {
     display: grid;
-    grid-gap: 1px;
-    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+
+    @include media-breakpoint-down(lg) {
+        grid-auto-flow: column;
+        overflow-x: auto;
+    }
 
     @include media-breakpoint-up(lg) {
         grid-gap: 3rem;
@@ -9,6 +13,7 @@
     }
 
     .shop {
+        min-width: 200px;
         text-align: center;
         background: $gray-light;
         position: relative;
@@ -23,6 +28,9 @@
         animation: slideRight 600ms ease both;
         border: solid 1px transparent;
         padding: 2rem 0;
+        @include media-breakpoint-up(lg) {
+            min-width: none;
+        }
         &:hover {
             background: none;
             border-color: $brand-color;
@@ -33,6 +41,7 @@
             flex: 1;
         }
         &-foot {
+            padding-top: 1.5rem;
             text-align: center;
             .products__rating {
                 justify-content: center;
@@ -77,9 +86,11 @@
 
 .shop-layout-2 {
     display: flex;
-    overflow-x: auto;
-    flex-flow: row;
     gap: 1rem;
+    @include media-breakpoint-down(lg) {
+        overflow-x: auto;
+        flex-flow: row;
+    }
 
     @include media-breakpoint-up(lg) {
         display: grid;
