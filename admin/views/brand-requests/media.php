@@ -85,9 +85,7 @@ $formTitle = Labels::getLabel('LBL_PRODUCT_BRAND_REQUEST_SETUP', $siteLangId); ?
 
     var selectedRatioType = <?php echo $ratio_type; ?>;
 
-    if (selectedRatioType == ratioTypeSquare) {
-
-
+    if (selectedRatioType == ratioTypeSquare) {        
         $(minWidthLogoEle).val('<?php echo $getBrandRequestLogoSquare['width']; ?>');
         $(minHeightLogoEle).val('<?php echo $getBrandRequestLogoSquare['height']; ?>');
         $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBrandRequestLogoSquare['width']; ?> x <?php echo $getBrandRequestLogoSquare['height']; ?>'));
@@ -137,4 +135,5 @@ $formTitle = Labels::getLabel('LBL_PRODUCT_BRAND_REQUEST_SETUP', $siteLangId); ?
             $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBrandRequestLogoRactangle['width']; ?> x <?php echo $getBrandRequestLogoRactangle['height']; ?>'));
         }
     });
+    $('#slideScreenJs').trigger('change');
 </script>

@@ -143,4 +143,6 @@ $formTitle = Labels::getLabel('LBL_BRAND_SETUP', $siteLangId); ?>
             $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $getBrandRequestLogoRactangle['width']; ?> x <?php echo $getBrandRequestLogoRactangle['height']; ?>'));
         }
     });
+
+    $('#slideScreenJs').trigger('change');
 </script>
