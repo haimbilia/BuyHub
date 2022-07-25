@@ -163,7 +163,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     </div>
 </div>
 <script>
-    var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;   
+    var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var canRequestCustomProduct = <?php echo FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0); ?>;
     $(document).ready(function() {
         if (canRequestCustomProduct) {
