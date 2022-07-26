@@ -27,15 +27,16 @@
 }
 .mega-search {
     display: flex;
+    gap: 2rem;
     width: 100%;
     height: 100%;
     margin: 0 auto;
     padding: 3rem 2rem;
     position: relative;
     flex-flow: row wrap;
-    @include media-breakpoint-down(lg) {
+    @include media-breakpoint-down(sm) {
         text-align: center;
-        gap: 2rem;
+
         justify-content: center;
         flex-direction: column;
     }
@@ -106,6 +107,8 @@
 }
 
 .search-suggestions {
+    max-height: 280px;
+    overflow: auto;
     font-size: 0.8rem;
     padding: 0;
     display: flex;
