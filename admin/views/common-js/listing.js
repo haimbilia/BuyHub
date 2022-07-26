@@ -65,14 +65,15 @@ $(document).on("search", "input[type='search']", function () {
 });
 /* Reset result on clear(cross) icon on keyword search field. */
 
-$(document).on("click", ".advSrchToggleJs", function () {
+$(document).on("click", ".advSrchToggleJs", function (e) {
     var elm = $('.advSrchBtnJs').find('.submitBtnJs');
-    if (elm.prop("disabled")) {
-        elm.attr("disabled", false);
-    } else {
+    if ($(this).attr("aria-expanded") == 'true') {
         elm.attr("disabled", true);
+    } else {
+        elm.attr("disabled", false);
     }
 });
+
 $(document).on("click", ".resetModalFormJs", function (e) {
     if ($.ykmodal.isSideBarView()) {
         $.ykmodal(fcom.getLoader());
