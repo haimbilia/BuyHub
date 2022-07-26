@@ -648,13 +648,7 @@ class UserAuthentication extends FatModel
     {
         if ($ip == '') {
             $ip = CommonHelper::getClientIp();
-        }
-
-        $token = empty($token) ? CommonHelper::getAppToken() : $token;
-
-        if ($token != '' && static::doAppLogin($token)) {
-            return true;
-        }
+        }        
 
         if (
             isset($_SESSION[static::SESSION_ELEMENT_NAME])
@@ -663,6 +657,12 @@ class UserAuthentication extends FatModel
             && is_numeric($_SESSION[static::SESSION_ELEMENT_NAME]['user_id'])
             && 0 < $_SESSION[static::SESSION_ELEMENT_NAME]['user_id']
         ) {
+            return true;
+        }
+
+        $token = empty($token) ? CommonHelper::getAppToken() : $token;
+
+        if ($token != '' && static::doAppLogin($token)) {
             return true;
         }
 
