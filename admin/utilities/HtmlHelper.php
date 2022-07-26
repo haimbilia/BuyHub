@@ -639,9 +639,9 @@ class HtmlHelper
                 </div>';
     }
 
-    public static function addStatusBtnHtml(bool $canEdit, int $recordId, int $status, bool $disabled = false, string $title = '',string $callback = '')
+    public static function addStatusBtnHtml(bool $canEdit, int $recordId, int $status, bool $disabled = false, string $title = '', string $callback = '')
     {
-        $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $recordId . ', ' . ((int) !$status) . ',\'' . $callback. '\')' : 'return false;';
+        $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $recordId . ', ' . ((int) !$status) . ',\'' . $callback . '\')' : 'return false;';
         $statusClass = ($canEdit) ? '' : 'disabled';
         $disabled = ($disabled) ? 'disabled' : '';
         $checked = applicationConstants::ACTIVE == $status ? 'checked' : '';
