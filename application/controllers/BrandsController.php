@@ -9,7 +9,7 @@ class BrandsController extends MyAppController
 
     public function index()
     {
-        $brandSrch = Brand::getListingObj($this->siteLangId, array('brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'), true);
+        $brandSrch = Brand::getListingObj($this->siteLangId, array('brand_id', 'IFNULL(TRIM(brand_name), TRIM(brand_identifier)) as brand_name'), true);
         $brandSrch->doNotCalculateRecords();
         $brandSrch->doNotLimitRecords();
         $brandSrch->addOrder('brand_name', 'asc');

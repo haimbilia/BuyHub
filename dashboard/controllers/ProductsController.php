@@ -209,7 +209,7 @@ class ProductsController extends SellerBaseController
         $this->set("langId", $langId);
         $this->set("recordId", $recordId);
         $this->set('hasInventory', Product::hasInventory($recordId));
-        
+
         $this->set('productOptions', $productOptions);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         if (FatUtility::isAjaxCall()) {
@@ -685,14 +685,14 @@ class ProductsController extends SellerBaseController
     }
 
     public function deleteProdSpec()
-    {       
-        $this->checkEditPrivilege(); 
+    {
+        $this->checkEditPrivilege();
         $prodSpecId = FatApp::getPostedData('prodSpecId', FatUtility::VAR_INT, 0);
-        if ($prodSpecId < 1 ) {
+        if ($prodSpecId < 1) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $productId = ProdSpecification::getAttributesById($prodSpecId,'prodspec_product_id');
+        $productId = ProdSpecification::getAttributesById($prodSpecId, 'prodspec_product_id');
         if (1 > $productId ||   $this->userParentId != Product::getAttributesById($productId, 'product_seller_id')) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }

@@ -1,21 +1,25 @@
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="row justify-content-center">
     <div class="col-lg-7">
         <div class="descriptions" id="accordionExample">
-            <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+            <?php
             $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]);
             ?>
             <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type'] && (0 < count($product['preview_attachments']) || 0 < count($product['preview_links']))) { ?>
                 <?php $this->includeTemplate('_partial/product/dd-preview-list.php', array('siteLangId' => $siteLangId, 'product' => $product), false); ?>
             <?php } ?>
             <?php
+            $firstIsVisible = false;
             if (count($productSpecifications) > 0) {
                 $prodSpeciByGroup = array();
                 foreach ($productSpecifications as $productSpecification) {
                     $prodSpeciByGroup[$productSpecification['prodspec_group']][] = $productSpecification;
                 }
+                $firstIsVisible = true;
             ?>
                 <div class="descriptions-item">
                     <h2 class="descriptions-head" data-bs-toggle="collapse" data-bs-target="#specification" aria-expanded="true"><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?>
+                        <?php ?>
                         <svg class="svg plus" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
@@ -49,13 +53,13 @@
             <?php } ?>
             <?php if (trim($product['product_description']) != '') { ?>
                 <div class="descriptions-item">
-                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?>
+                    <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?>
                         <svg class="svg plus" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
                         </svg>
                     </h2>
-                    <div id="description" class="collapse" data-bs-parent="#accordionExample">
+                    <div id="description" class="collapse <?php echo (false === $firstIsVisible ? 'show' : ''); ?>" data-bs-parent="#accordionExample">
                         <div class="descriptions-data">
                             <div class="cms">
                                 <p><?php echo CommonHelper::renderHtml($product['product_description']); ?></p>
@@ -63,35 +67,37 @@
                         </div>
                     </div>
                 </div>
-            <?php } ?>
+            <?php $firstIsVisible = true;
+            } ?>
             <?php if ($youtube_embed_code) { ?>
                 <div class="descriptions-item">
-                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#video" aria-expanded="true"><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?>
+                    <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#video" aria-expanded="true"><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?>
                         <svg class="svg plus" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
                         </svg>
                     </h2>
                     <?php if ($youtube_embed_code != "") { ?>
-                        <div id="video" class="collapse" data-bs-parent="#accordionExample">
+                        <div id="video" class="collapse <?php echo (false === $firstIsVisible ? 'show' : ''); ?>" data-bs-parent="#accordionExample">
                             <div class="descriptions-data">
                                 <div class="mb-4 video-wrapper">
                                     <iframe width="100%" height="315" src="//www.youtube.com/embed/<?php echo $youtube_embed_code ?>" allowfullscreen></iframe>
                                 </div>
                             </div>
                         </div>
-                    <?php } ?>
+                    <?php $firstIsVisible = true;
+                    } ?>
                 </div>
             <?php } ?>
             <?php if ($shop['shop_payment_policy'] != '' || !empty($shop["shop_delivery_policy"] != "") || !empty($shop["shop_delivery_policy"] != "")) { ?>
                 <div class="descriptions-item">
-                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#policies" aria-expanded="true"><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?>
+                    <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#policies" aria-expanded="true"><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?>
                         <svg class="svg plus" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
                         </svg>
                     </h2>
-                    <div id="policies" class="collapse" data-bs-parent="#accordionExample">
+                    <div id="policies" class="collapse <?php echo (false === $firstIsVisible ? 'show' : ''); ?>" data-bs-parent="#accordionExample">
                         <div class="descriptions-data">
                             <div class="cms">
                                 <?php if ($shop['shop_payment_policy'] != '') { ?>
@@ -112,16 +118,17 @@
                         </div>
                     </div>
                 </div>
-            <?php } ?>
+            <?php $firstIsVisible = true;
+            } ?>
             <?php if (!empty($product['selprodComments'])) { ?>
                 <div class="descriptions-item">
-                    <h2 class="descriptions-head collapsed" data-bs-toggle="collapse" data-bs-target="#extra_comments" aria-expanded="true"><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?>
+                    <h2 class="descriptions-head <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#extra_comments" aria-expanded="true"><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?>
                         <svg class="svg plus" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
                         </svg>
                     </h2>
-                    <div id="extra_comments" class="collapse" data-bs-parent="#accordionExample">
+                    <div id="extra_comments" class="collapse <?php echo (false === $firstIsVisible ? 'show' : ''); ?>" data-bs-parent="#accordionExample">
                         <div class="descriptions-data">
                             <div class="cms">
                                 <p>

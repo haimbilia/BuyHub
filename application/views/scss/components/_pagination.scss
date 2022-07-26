@@ -13,16 +13,16 @@
     }
     li {
         a {
-            width: 40px;
-            line-height: 40px;
+            width: 3rem;
+            line-height: 3rem;
             text-align: center;
-            height: 40px;
+            height: 3rem;
             display: block;
-            font-size: 0.8rem;
+            font-size: 1rem;
             color: $txt-body;
             border: none;
             border: $border;
-            border-radius: 1px;
+            border-radius: $common-radius;
             position: relative;
             overflow: hidden;
             margin: 0 3px;

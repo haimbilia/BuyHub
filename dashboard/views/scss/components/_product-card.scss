@@ -355,6 +355,7 @@
         color: $txt-gray;
     }
     &-off {
+        white-space: nowrap;
         font-weight: 300;
         color: $success-color;
     }
@@ -579,6 +580,7 @@
 
     &__description {
         font-size: 0.8rem;
+        min-width: min-content;
 
         p {
             margin: 3px 0;

@@ -31,7 +31,7 @@
 						}else{
 							$str = substr(strtolower($brands['brand_name']), 0, 1);
 						} */
-                                $str = substr(strtolower($brands['brand_name']), 0, 1);
+                                $str = substr(strtolower(trim($brands['brand_name'])), 0, 1);
 
                                 if (is_numeric($str)) {
                                     $str = '0-9';

@@ -5,6 +5,8 @@ class PageLanguageData extends MyAppModel
     public const DB_TBL = 'tbl_pages_language_data';
     public const DB_TBL_PREFIX = 'plang_';
 
+    public const WARNING_MSG_LENGTH = 255; /* Db column length. */
+
     public function __construct($plangKey = '')
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'key', $plangKey);

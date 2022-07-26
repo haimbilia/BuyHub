@@ -602,7 +602,7 @@
         &-title {
             h2 {
                 color: $txt-body;
-                font-size: 1.7rem;
+                font-size: 1.3rem;
                 font-weight: 500;
                 display: inline-flex;
                 align-items: center;
@@ -618,6 +618,7 @@
             padding: 0;
             //margin-#{$end-direction}: 10px;
             width: 40px;
+            flex-shrink: 0;
             height: 40px;
             display: flex;
             align-items: center;
@@ -1523,6 +1524,9 @@ input.sp-input {
     display: grid;
     grid-gap: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    @include media-breakpoint-down(sm) {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
     > li {
         border: $border;
         border-radius: $common-radius;
@@ -1563,7 +1567,7 @@ input.sp-input {
         .radio {
             position: absolute;
             top: 1rem;
-            #{$end-direction}: 1rem;
+            #{$start-direction}: 1rem;
         }
     }
 
@@ -1606,6 +1610,7 @@ input.sp-input {
     color: $txt-gray;
     line-height: 1.5;
     margin-bottom: 1rem;
+    padding-#{$start-direction}: 32px;
     h5 {
         margin-bottom: 10px;
         font-weight: 500;

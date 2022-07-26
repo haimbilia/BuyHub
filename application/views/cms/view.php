@@ -3,14 +3,14 @@
     <?php if ($cPage['cpage_layout'] == Contentpage::CONTENT_PAGE_LAYOUT1_TYPE) { ?>
         <div class="page-banner" style="background-repeat: no-repeat;background-position: center;background-image:url(<?php echo UrlHelper::generateFileUrl('image', 'cpageBackgroundImage', array($cPage['cpage_id'], $siteLangId, '', 0, false), CONF_WEBROOT_URL); ?>);">
             <div class="container">
-                <div class="banner-txt">
+                <div class="page-banner-txt">
                     <h1><?php echo $cPage['cpage_image_title']; ?></h1>
-                    <h4><?php echo $cPage['cpage_image_content']; ?></h4>
+                    <p><?php echo $cPage['cpage_image_content']; ?></p>
                 </div>
             </div>
         </div>
         <?php if ($blockData) { ?>
-            <div class="cms">
+            <div class="about-us">
                 <?php if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_1]) && $blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_1]['cpblocklang_text']) { ?>
                     <section class="section">
                         <div class="container">
@@ -21,7 +21,7 @@
                 }
                 if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_2]) && $blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_2]['cpblocklang_text']) {
                 ?>
-                    <section class="section bg-gray">
+                    <section class="section">
                         <div class="container">
                             <?php echo FatUtility::decodeHtmlEntities($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_2]['cpblocklang_text']); ?>
                         </div>
@@ -30,7 +30,7 @@
                 }
                 if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_3]) && $blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_3]['cpblocklang_text']) {
                 ?>
-                    <section class="section bg-brand-light">
+                    <section class="section">
                         <div class="container">
                             <?php echo FatUtility::decodeHtmlEntities($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_3]['cpblocklang_text']); ?>
                         </div>
@@ -39,7 +39,7 @@
                 }
                 if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_4]) && $blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_4]['cpblocklang_text']) {
                 ?>
-                    <section class="section">
+                    <section class="section  bg-gray">
                         <div class="container">
                             <?php echo FatUtility::decodeHtmlEntities($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_4]['cpblocklang_text']); ?>
                         </div>
@@ -55,8 +55,6 @@
                     </section>
                 <?php } ?>
             </div>
-
-
         <?php
         }
 
