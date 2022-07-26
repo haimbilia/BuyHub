@@ -37,6 +37,7 @@ $btn-line-height: $btn-height;
         color: $brand-color;
         &:hover {
             color: currentColor;
+            @include bg-brand;
         }
     }
 
