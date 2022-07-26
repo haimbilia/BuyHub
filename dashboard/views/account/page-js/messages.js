@@ -42,11 +42,14 @@ $(document).ready(function () {
 		currEle.addClass('is-active');
 		$('.threadJs').prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Account', "viewThread", [threadId]), '', function (t) {
-			fcom.removeLoader();
 			$('.userJs').remove();
 			$('.threadJs').replaceWith(t.html);
 			$('.msg-count').html(t.todayUnreadMessageCount);
-			$('.messages').scrollTop($('.messages')[0].scrollHeight);
+			$('.messageBoxJs').focus();
+			setTimeout(() => {
+				document.querySelector('.messageBoxJs').scrollIntoView();
+				fcom.removeLoader();
+			}, 500);
 
 		}, { fOutMode: 'json' });
 	};

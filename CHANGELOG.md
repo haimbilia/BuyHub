@@ -1054,6 +1054,7 @@ TV-9.4.0.20220719
     - #065631 - Two view more icons are displaying.
     - #065586 - Newsletter form is not getting submitted.
     - #065641 - No validation message appears for the warning message field in the "Page language data update" popup.
+    - #065640 - When user click on chat profiles . nothing seems to happend.
     
 ## UAT points:
 
