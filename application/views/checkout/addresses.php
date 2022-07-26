@@ -14,7 +14,7 @@
     <div class="form-edit-body loaderContainerJs">
         <form class="form">
             <div class="row">
-                <div class="col-md12">
+                <div class="col-md-12">
                     <ul class="list-addresses">
                         <?php if ($addresses) { ?>
                             <?php foreach ($addresses as $address) {
