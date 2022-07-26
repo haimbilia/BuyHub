@@ -18,6 +18,9 @@ $(document).ready(function () {
                 });
 
                 fontFamilyElement.autocomplete({
+                    'classes': {
+                        "ui-autocomplete": "custom-ui-autocomplete"
+                    },
                     'source': fonts,
                     'minLength': 0,
                     'scroll': true,
