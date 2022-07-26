@@ -25,6 +25,9 @@ if (!empty($repVarArr)) {
 } else {
     $fld->setfieldTagAttribute('class', "d-none");
 }
+
+$fld = $langFrm->getField('plang_warring_msg');
+$fld->addFieldTagAttribute('maxlength', PageLanguageData::WARNING_MSG_LENGTH);
 ?>
 <div class="modal-header">
     <h5 class="modal-title">

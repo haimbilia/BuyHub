@@ -590,6 +590,7 @@ form.custom-form {
     }
     .btn[disabled="disabled"] {
         background-color: #999;
+        border-color: transparent;
         cursor: not-allowed;
     }
 }

@@ -147,8 +147,8 @@
                                         </div>
                                     </td>
                                     <td><?php echo $requestRequestStatusArr[$request['orrequest_status']]; ?></td>
-                                    <td><?php 
-                                        $returnDataArr = CommonHelper::getOrderProductRefundAmtArr($request);                                    
+                                    <td><?php
+                                        $returnDataArr = CommonHelper::getOrderProductRefundAmtArr($request);
                                         echo CommonHelper::displayMoneyFormat($returnDataArr['op_refund_amount'], true, false); ?>
                                     </td>
                                     <?php if (isset($attachedFile) && !empty($attachedFile)) { ?>
