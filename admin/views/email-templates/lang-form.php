@@ -31,11 +31,14 @@ $fld->value = '<button type="button" class="btn btn-outline-brand btn-test btn-i
 </svg>' . Labels::getLabel('LBL_SEND_TEST_EMAIL', $lang_id) . '</button>';
 
 $fld = $langFrm->getField('etpl_replacements');
-$repVarArr = array_filter(explode("<br>", $fld->value));
+$repVarArr = array_filter(explode("<br>", trim($fld->value)));
 $repVarArr = is_array($repVarArr) ? $repVarArr : [];
 
 $repVarHtml = '<ul class="click-to-copy">';
 foreach ($repVarArr as $rVar) {
+    if(empty($rVar)){
+        continue;
+    }
     $placeholder =  trim(substr($rVar, 0, (strpos($rVar, "}") + 1)));
     $repVarHtml .= '<li title="' . Labels::getLabel('LBL_CLICK_TO_COPY', $lang_id) . '" onclick="copyText(this, true);" data-title="' . $placeholder . '" data-bs-toggle="tooltip" data-placement="top">
         <div class="text">' . $rVar . '</div>

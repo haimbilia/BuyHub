@@ -244,7 +244,7 @@ class AbandonedCart extends MyAppModel
         $srch->addActionCondition(static::ACTION_ADDED);
         $srch->addCondition(static::DB_TBL_PREFIX . 'email_count', '<', 'mysql_func_' . static::MAX_EMAIL_COUNT, 'AND', true);
         $srch->addCondition(static::DB_TBL_PREFIX . 'discount_notification', '=', 'mysql_func_0', 'AND', true);
-        $srch->addMultipleFields(array(static::DB_TBL_PREFIX . 'id', 'user_id', 'user_name', 'credential_email', 'selprod_id', 'selprod_product_id', 'selprod_title', 'COALESCE(splprice_price, selprod_price) as selprod_price'));
+        $srch->addMultipleFields(array(static::DB_TBL_PREFIX . 'id', 'user_id', 'user_name', 'credential_email', 'selprod_id', 'selprod_product_id', 'selprod_title', 'COALESCE(splprice_price, selprod_price) as selprod_price','abandonedcart_qty'));
         $srch->addOrder(static::DB_TBL_PREFIX . 'user_id');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();      
@@ -252,7 +252,7 @@ class AbandonedCart extends MyAppModel
         $records = FatApp::getDb()->fetchAll($rs);
 
         $prevUserId = 0;
-        $productHtml = "";
+        $productHtml = '<table width="100%" cellspacing="0" cellpadding="0" style="background: #f6f6f6; padding: 10px 20px; border-radius: 4px">';
         $abandonedCartIds = array();
         foreach ($records as $key => $data) {
             $product = static::validateProductForNotification($data['selprod_product_id']);
@@ -263,11 +263,12 @@ class AbandonedCart extends MyAppModel
             if ($prevUserId == 0 || $prevUserId == $data['user_id']) {
                 $prevUserId = $data['user_id'];
             } else {
+                $productHtml .='</table>';
                 if (self::sendReminderEmail($records[$key - 1]['user_id'], $records[$key - 1]['user_name'], $records[$key - 1]['credential_email'], $productHtml)) {
                     self::updateReminderCount($abandonedCartIds);
                 }
                 $prevUserId = $data['user_id'];
-                $productHtml = "";
+                $productHtml = '<table width="100%" cellspacing="0" cellpadding="0" style="background: #f6f6f6; padding: 10px 20px; border-radius: 4px">';
                 $abandonedCartIds = array();
             }
 
@@ -275,9 +276,9 @@ class AbandonedCart extends MyAppModel
             $tpl = new FatTemplate('', '');
             $tpl->set('data', $data);
             $tpl->set('langId', $langId);
-            $productHtml .= $tpl->render(false, false, '_partial/abandoned-cart-product-html.php', true);
-
+            $productHtml .= $tpl->render(false, false, '_partial/abandoned-cart-product-html.php', true);            
             if (($key + 1) == count($records)) {
+                $productHtml .='</table>';
                 if (self::sendReminderEmail($data['user_id'], $data['user_name'], $data['credential_email'], $productHtml)) {
                     self::updateReminderCount($abandonedCartIds);
                 }
