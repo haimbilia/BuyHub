@@ -26,6 +26,8 @@ if ($canEdit && $displayForm && !$print) { ?>
         if (null != $manualFld) {
             $manualFld->setFieldTagAttribute('class', 'manualShippingJs fieldsVisibility-js');
             $manualFld->developerTags['col'] = 4;
+            HtmlHelper::configureSwitchForCheckbox($manualFld);
+            $manualFld->developerTags['noCaptionTag'] = false;
 
             $fld = $frm->getField('tracking_number');
             $fld->developerTags['col'] = 4;

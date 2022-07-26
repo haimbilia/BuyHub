@@ -338,8 +338,8 @@ class EmailHandler extends FatModel
         $tpl = 'admin_new_user_creation_email';
 
         $vars = array(
-            '{name}' => $d['user_name'],
-            '{user_email}' => $d['user_name'],
+            '{username}' => $d['user_name'],
+            '{user_email}' => $d['user_email'],
             '{reset_url}' => $d['link'],
             '{days}' => $d['days'],
             '{account_type}' => $d['account_type'],

@@ -32,7 +32,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     <?php echo Labels::getLabel('LBL_INVITE_YOUR_FRIENDS', $siteLangId); ?>
                                 </h2>
                                 <p>
-                                    <?php echo Labels::getLabel('LBL_INVITE_YOUR_FRIENDS_TO_JOIN_TRIBE_AND_EARN_ONCE_THEY_SIGNUP.', $siteLangId); ?>
+                                    <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_INVITE_YOUR_FRIENDS_TO_JOIN_{WEBSITE-NAME}_AND_EARN_ONCE_THEY_SIGNUP.', $siteLangId),["{WEBSITE-NAME}" => FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)]); ?>
                                 </p>
                             </div>
                             <div class="invite-by-email">

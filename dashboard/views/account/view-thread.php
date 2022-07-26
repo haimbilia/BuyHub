@@ -110,7 +110,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                     $msgFld = $frm->getField('message_text');
                     $msgFld->developerTags['noCaptionTag'] = true;
                     $msgFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_COMMENTS', $siteLangId));
-                    $msgFld->setFieldTagAttribute('class', 'message-textarea'); ?>
+                    $msgFld->setFieldTagAttribute('class', 'message-textarea messageBoxJs'); ?>
 
                     <?php echo $frm->getFormTag(); ?>
                     <?php echo $frm->getFieldHtml('message_thread_id'); ?>
