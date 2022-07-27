@@ -191,8 +191,8 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                                                     'disabled': 'disabled'
                                                 });
                                                 fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(ans) {
-                                                    fcom.removeLoader();
                                                     $(location).attr("href", action);
+                                                    fcom.removeLoader();
                                                 });
                                             }
                                         </script>

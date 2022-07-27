@@ -58,16 +58,16 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
                 break;
             case 'order_payment_status':
-                $cls = 'label-info';
+                $cls = applicationConstants::CLASS_INFO;
                 switch ($row[$key]) {
                     case Orders::ORDER_PAYMENT_PENDING:
-                        $cls = 'label-info';
+                        $cls = applicationConstants::CLASS_INFO;
                         break;
                     case Orders::ORDER_PAYMENT_PAID:
-                        $cls = 'label-success';
+                        $cls = applicationConstants::CLASS_SUCCESS;
                         break;
                     case Orders::ORDER_PAYMENT_CANCELLED:
-                        $cls = 'label-danger';
+                        $cls = applicationConstants::CLASS_DANGER;
                         break;
                 }
                 if (Orders::ORDER_PAYMENT_CANCELLED == $row["order_payment_status"]) {
