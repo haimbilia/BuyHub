@@ -22,7 +22,7 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
 
 
 <?php if (FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 0)) { ?>
-    <section class="section bg-newsletter" style="background-image:url(<?php echo CONF_WEBROOT_URL; ?>images/bg/bg-newsletter.png) ;">
+    <section class="section bg-newsletter no-print" style="background-image:url(<?php echo CONF_WEBROOT_URL; ?>images/bg/bg-newsletter.png) ;">
         <?php
         $this->includeTemplate('_partial/footerNewsLetterForm.php'); ?>
     </section>

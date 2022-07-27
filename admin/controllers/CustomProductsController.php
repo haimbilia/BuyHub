@@ -1541,4 +1541,12 @@ class CustomProductsController extends ListingBaseController
         }
         return $nodes;
     }
+
+    public function getComments()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $this->set('description', ProductRequest::getAttributesById($recordId, 'preq_comment'));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
 }

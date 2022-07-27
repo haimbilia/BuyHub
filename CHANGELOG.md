@@ -1057,6 +1057,13 @@ TV-9.4.0.20220719
     - #065641 - No validation message appears for the warning message field in the "Page language data update" popup.
     - #065640 - When user click on chat profiles . nothing seems to happend.
     - #065620 - Scroller does not appear in the Font-Family drop-down listing.
+    - #065680 - Refund icon update on buyer order listing.
+    - #065661 - Update show more and show less comments in credits listing buyer.
+    - #065660 - Remove newsletter content from order success page in print section.
+    - #065659 - Update offer listing with current date.
+    - #065638 - Show comments for cancelled requested product in admin and seller end.
+    - #065529 - Update seller approval request information headings.
+    - #065472 - Multiple image issue for selecting one by one resolved.
     - #065470 - The Update order status field gets disappeared from the order details page when the admin approved the COD request.
     - #065468 - no validation in Badge setup form 
     - #065698 - The admin is able to add the discount coupon with more than 100% value.
