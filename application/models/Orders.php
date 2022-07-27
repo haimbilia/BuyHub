@@ -1044,14 +1044,14 @@ class Orders extends MyAppModel
         }
         $srch->addCondition('order_id', '=', $order_id);
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public static function getOrderByOrderNo($order_no, $langId = 0)
     {
         if (empty($order_no)) {
-            trigger_error(Labels::getLabel('ERR_ORDER_NO_IS_NOT_PASSED', $this->commonLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel('ERR_ORDER_NO_IS_NOT_PASSED', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $srch = static::getSearchObject($langId);
         $srch->joinTable(Plugin::DB_TBL, 'LEFT JOIN', 'order_pmethod_id = plugin_id');
@@ -1073,7 +1073,7 @@ class Orders extends MyAppModel
             $srch->addCondition('oua_op_id', '=', $opId);
         }
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
         return FatApp::getDb()->fetchAll($srch->getResultSet(), 'oua_type');
     }
 
@@ -2981,11 +2981,12 @@ class Orders extends MyAppModel
         } else {
             $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $opRow['op_product_type']);
         }
+
         if ($opRow["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
         } else {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
-        }
+        }       
         $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS", FatUtility::VAR_INT, 0));
         return (in_array($opRow['op_status_id'], $processingStatuses) && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED);
     }

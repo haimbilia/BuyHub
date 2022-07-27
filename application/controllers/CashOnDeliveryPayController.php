@@ -48,9 +48,9 @@ class CashOnDeliveryPayController extends MyAppController
                 LibHelper::exitWithError($msg, FatUtility::isAjaxCall(), true);
                 FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'ViewOrder', array($orderInfo['id'])));
             }
-            if($opDetail['op_status_id'] == FatApp::getConfig('CONF_COD_ORDER_STATUS', FatUtility::VAR_INT, 0)){
+           /*  if($opDetail['op_status_id'] == FatApp::getConfig('CONF_COD_ORDER_STATUS', FatUtility::VAR_INT, 0)){
                 LibHelper::exitWithError(Labels::getLabel('ERR_ORDER_ALREADY_PLACED', $this->siteLangId), FatUtility::isAjaxCall(), true);
-            }           
+            }     */       
         }
         /* ] */
         $this->paymentInitiated($orderId);

@@ -35,7 +35,7 @@
                 <?php
                 $paymentFormCond = (!$order["order_payment_status"] && $canEdit && 'CashOnDelivery' != $order['plugin_code']);
                 $paymentHistory = (!empty($order['payments']));
-                if (!$order['order_deleted'] && ($paymentFormCond || $paymentHistory)) { ?>
+                if (!$order['order_deleted'] && ($paymentFormCond || $paymentHistory) && $order['plugin_code'] != 'CashOnDelivery') { ?>
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
