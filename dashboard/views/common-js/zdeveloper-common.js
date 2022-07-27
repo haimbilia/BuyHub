@@ -1407,7 +1407,7 @@ $(document).on("change", ".multipleImgs--js", function() {
         return false;
     }
     var galleryElement = ".multipleImgsGallery--js";
-    $(galleryElement).html("");
+
     imagesPreview(this, galleryElement);
 });
 

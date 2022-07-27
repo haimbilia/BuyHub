@@ -1063,6 +1063,8 @@ TV-9.4.0.20220719
     - #065659 - Update offer listing with current date.
     - #065638 - Show comments for cancelled requested product in admin and seller end.
     - #065529 - Update seller approval request information headings.
+    - #065472 - Multiple image issue for selecting one by one resolved.
+    
     
     
     

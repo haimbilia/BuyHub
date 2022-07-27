@@ -1910,7 +1910,7 @@ function DataURIToBlob(dataURI) {
         type: mimeString,
     });
 }
-$(document).on("change", ".multipleImgs--js", function() {
+/*$(document).on("change", ".multipleImgs--js", function() {
     if ($(this)[0].files.length > 8) {
         fcom.displayErrorMessage(langLbl.uploadImageLimit);
         $(this).val("");
@@ -1920,9 +1920,9 @@ $(document).on("change", ".multipleImgs--js", function() {
         return false;
     }
     var galleryElement = ".multipleImgsGallery--js";
-    $(galleryElement).html("");
+
     imagesPreview(this, galleryElement);
-});
+}); */
 $(document).on("click", ".fileRemove--js", function() {
     $(this).closest("li").remove();
 });
