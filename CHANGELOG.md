@@ -1062,6 +1062,7 @@ TV-9.4.0.20220719
     - #065660 - Remove newsletter content from order success page in print section.
     - #065659 - Update offer listing with current date.
     - #065638 - Show comments for cancelled requested product in admin and seller end.
+    - #065529 - Update seller approval request information headings.
     
     
     
