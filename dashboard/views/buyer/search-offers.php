@@ -19,7 +19,7 @@
                         </div>
                         <span class="coupon__tag">
                             <?php
-                            if (strtotime($row['coupon_end_date']) <= strtotime(date('Y-m-d'))) {
+                            if (strtotime($row['coupon_end_date']) < strtotime(date('Y-m-d'))) {
                                 echo Labels::getLabel('LBL_EXPIRED', $siteLangId);
                             } else {
                                 echo $row['coupon_code'];

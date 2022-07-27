@@ -1060,6 +1060,7 @@ TV-9.4.0.20220719
     - #065680 - Refund icon update on buyer order listing.
     - #065661 - Update show more and show less comments in credits listing buyer.
     - #065660 - Remove newsletter content from order success page in print section.
+    - #065659 - update offer listing with current date.
     
     
 ## UAT points:
