@@ -149,6 +149,7 @@ class RatingTypesController extends ListingBaseController
         $recordId = FatApp::getPostedData('ratingtype_id', FatUtility::VAR_INT, 0);
 
         $post['ratingtype_type'] = RatingType::TYPE_OTHER;
+        $restrictTypes = [];
         if (0 < $recordId) {
             $ratingType = RatingType::getAttributesById($recordId, 'ratingtype_type');
             $restrictTypes = [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY];
