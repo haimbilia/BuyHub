@@ -145,7 +145,7 @@
                             ),
                             '<svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#refund">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#order-return">
                             </use>
                         </svg>',
                             true
