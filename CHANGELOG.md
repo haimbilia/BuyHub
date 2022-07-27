@@ -1058,6 +1058,7 @@ TV-9.4.0.20220719
     - #065640 - When user click on chat profiles . nothing seems to happend.
     - #065620 - Scroller does not appear in the Font-Family drop-down listing.
     - #065470 - The Update order status field gets disappeared from the order details page when the admin approved the COD request.
+    - #065468 - no validation in Badge setup form 
     
 ## UAT points:
 

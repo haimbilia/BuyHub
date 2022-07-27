@@ -502,7 +502,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
 
         if (Badge::COND_MANUAL == $recordCondition && BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType) {
-            if (empty($records) || '[]' == $records) {
+            if (empty($records) || (empty(current($records)))) {
                 FatUtility::dieJsonError(Labels::getLabel('ERR_LINK_TO_IS_MANDATORY', $this->siteLangId));
             }
         }
