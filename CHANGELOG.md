@@ -1058,6 +1058,7 @@ TV-9.4.0.20220719
     - #065640 - When user click on chat profiles . nothing seems to happend.
     - #065620 - Scroller does not appear in the Font-Family drop-down listing.
     - #065680 - Refund icon update on buyer order listing.
+    - #065661 - Update show more and show less comments in credits listing buyer.
     
 ## UAT points:
 

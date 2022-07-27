@@ -1,5 +1,5 @@
-$(window).on("load", function () {
-    setTimeout(function () {
+$(window).on("load", function() {
+    setTimeout(function() {
         $("body").addClass("loaded");
         stylePhoneNumberFld(".phone-js");
     }, 1000);
@@ -13,12 +13,12 @@ $(window).on("load", function () {
     }
 
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     });
 });
 
-$(window).scroll(function () {
+$(window).scroll(function() {
     body_height = $("body").position();
     scroll_position = $(window).scrollTop();
 
@@ -29,8 +29,8 @@ $(window).scroll(function () {
 
 });
 
-$(document).ready(function () {
-    $(document).on("click", ".selectItem--js", function () {
+$(document).ready(function() {
+    $(document).on("click", ".selectItem--js", function() {
         if ($(this).prop("checked") == false) {
             $(".selectAll-js").prop("checked", false);
             $(this).closest("tr").removeClass("selected-row");
@@ -45,7 +45,7 @@ $(document).ready(function () {
 
     $('[data-bs-toggle="popover"]').popover({
         html: true,
-        content: function () {
+        content: function() {
             var content = $(this).attr("data-popover-html");
             if ('undefined' != typeof content) {
                 return $(content).html();
@@ -69,7 +69,7 @@ $(document).ready(function () {
      ) {
          $("[data-simplebar]").attr("data-simplebar-direction", "rtl");
      } */
-    $(document).on("keyup", "input.otpVal-js", function (e) {
+    $(document).on("keyup", "input.otpVal-js", function(e) {
         if ("" != $(this).val()) {
             $(this).removeClass("is-invalid");
         }
@@ -85,9 +85,9 @@ $(document).ready(function () {
         }
     });
 });
-installJsColor = function () {
+installJsColor = function() {
     if (0 < $(".jscolor").length) {
-        $(".jscolor").each(function () {
+        $(".jscolor").each(function() {
             $(this).attr("data-jscolor", "{}");
         });
         jscolor.install();
@@ -95,7 +95,7 @@ installJsColor = function () {
 };
 installJsColor();
 
-bindMaxLengthValidator = function () {
+bindMaxLengthValidator = function() {
     $('[maxlength]').maxlength({
         alwaysShow: true,
         threshold: 10,
@@ -107,19 +107,19 @@ bindMaxLengthValidator = function () {
 }
 
 bindMaxLengthValidator();
-invalidOtpField = function () {
+invalidOtpField = function() {
     $("input.otpVal-js")
         .val("")
         .addClass("is-invalid")
         .attr("onkeyup", "checkEmpty($(this))");
 };
-checkEmpty = function (element) {
+checkEmpty = function(element) {
     if ("" == element.val()) {
         element.addClass("is-invalid");
     }
 };
 
-copyText = function (obj, applyToolTipInfo = true) {
+copyText = function(obj, applyToolTipInfo = true) {
     var title = $(obj).data("title");
     if (!navigator.clipboard) {
         console.warn('clipboard API only works on localhost and https');
@@ -136,14 +136,14 @@ copyText = function (obj, applyToolTipInfo = true) {
     }
 };
 
-tooltipCopyHelper = function (obj, title) {
+tooltipCopyHelper = function(obj, title) {
     $(obj)
         .tooltip("hide")
         .attr("data-original-title", langLbl.copied + ": " + title)
         .tooltip("update")
         .tooltip("show");
 
-    $(obj).mouseout(function () {
+    $(obj).mouseout(function() {
         $(obj)
             .tooltip("hide")
             .attr("data-original-title", langLbl.clickToCopy)
@@ -153,7 +153,7 @@ tooltipCopyHelper = function (obj, title) {
 };
 
 var otpIntervalObj;
-startOtpInterval = function (parent = "", callback = "", params = []) {
+startOtpInterval = function(parent = "", callback = "", params = []) {
     if ("undefined" != typeof otpIntervalObj) {
         clearInterval(otpIntervalObj);
     }
@@ -166,7 +166,7 @@ startOtpInterval = function (parent = "", callback = "", params = []) {
     var resendOtpEle = $(parent + ".resendOtp-js");
     var onclickFn = resendOtpEle.attr("onclick");
     resendOtpEle.removeAttr("onclick");
-    otpIntervalObj = setInterval(function () {
+    otpIntervalObj = setInterval(function() {
         counter--;
         if (counter === 0) {
             clearInterval(otpIntervalObj);
@@ -195,7 +195,7 @@ function showFormActionsBtns() {
     } else {
         $(".formActionBtn-js").removeClass("disabled");
     }
-    var validateActionButtons = setInterval(function () {
+    var validateActionButtons = setInterval(function() {
         if (1 > $(".selectItem--js:checked").length) {
             $(".formActionBtn-js").addClass("disabled");
             clearInterval(validateActionButtons);
@@ -207,7 +207,7 @@ function showFormActionsBtns() {
 }
 
 function selectAll(obj) {
-    $(".selectItem--js").each(function () {
+    $(".selectItem--js").each(function() {
         if (obj.prop("checked") == false) {
             $(this).prop("checked", false).closest("tr").removeClass("selected-row");
         } else {
@@ -224,7 +224,7 @@ function formAction(frm, callback) {
     }
     fcom.displayProcessing();
     data = fcom.frmData(frm);
-    fcom.updateWithAjax(frm.action, data, function (resp) {
+    fcom.updateWithAjax(frm.action, data, function(resp) {
         callback();
     });
 }
@@ -240,12 +240,11 @@ function getCountryStates(countryId, stateId, dv) {
     fcom.ajax(
         fcom.makeUrl(
             "GuestUser",
-            "getStates",
-            [countryId, stateId],
+            "getStates", [countryId, stateId],
             siteConstants.webrootfront
         ),
         "",
-        function (res) {
+        function(res) {
             $(dv).empty();
             $(dv).append(res);
         }
@@ -261,18 +260,17 @@ function getStatesByCountryCode(
     fcom.ajax(
         fcom.makeUrl(
             "GuestUser",
-            "getStatesByCountryCode",
-            [countryCode, stateCode, idCol],
+            "getStatesByCountryCode", [countryCode, stateCode, idCol],
             siteConstants.webrootfront
         ),
         "",
-        function (res) {
+        function(res) {
             $(dv).empty();
             $(dv).append(res).change();
         }
     );
 }
-viewWishList = function (selprod_id, dv, event, excludeWishList = 0) {
+viewWishList = function(selprod_id, dv, event, excludeWishList = 0) {
     event.stopPropagation();
     if ($(dv).next().hasClass("is-item-active")) {
         $(dv).next().toggleClass("open-menu");
@@ -287,9 +285,9 @@ viewWishList = function (selprod_id, dv, event, excludeWishList = 0) {
     fcom.ajax(
         fcom.makeUrl("Account", "viewWishList", [selprod_id, excludeWishList]),
         "",
-        function (ans) {
+        function(ans) {
             $.ykmodal(ans);
-            $("input[name=uwlist_title]").bind("focus", function (e) {
+            $("input[name=uwlist_title]").bind("focus", function(e) {
                 e.stopPropagation();
             });
             activeFavList = selprod_id;
@@ -297,7 +295,7 @@ viewWishList = function (selprod_id, dv, event, excludeWishList = 0) {
     );
     return false;
 };
-toggleShopFavorite = function (shop_id) {
+toggleShopFavorite = function(shop_id) {
     if (isUserLogged() == 0) {
         loginPopUpBox();
         return false;
@@ -306,7 +304,7 @@ toggleShopFavorite = function (shop_id) {
     fcom.updateWithAjax(
         fcom.makeUrl("Account", "toggleShopFavorite"),
         data,
-        function (ans) {
+        function(ans) {
             if (ans.status) {
                 if (ans.action == "A") {
                     $("#shop_" + shop_id).addClass("is-active");
@@ -319,21 +317,21 @@ toggleShopFavorite = function (shop_id) {
         }
     );
 };
-setupWishList = function (frm, event) {
+setupWishList = function(frm, event) {
     if (!$(frm).validate()) return false;
     var data = fcom.frmData(frm);
     var selprod_id = $(frm).find('input[name="selprod_id"]').val();
     fcom.updateWithAjax(
         fcom.makeUrl("Account", "setupWishList"),
         data,
-        function (ans) {
+        function(ans) {
             if (ans.status) {
                 fcom.ajax(
                     fcom.makeUrl("Account", "viewWishList", [selprod_id]),
                     "",
-                    function (ans) {
+                    function(ans) {
                         $(".collection-ui-popup").html(ans);
-                        $("input[name=uwlist_title]").bind("focus", function (e) {
+                        $("input[name=uwlist_title]").bind("focus", function(e) {
                             e.stopPropagation();
                         });
                     }
@@ -348,7 +346,7 @@ setupWishList = function (frm, event) {
     );
 };
 
-addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
+addRemoveWishListProduct = function(selprod_id, wish_list_id, event) {
     event.stopPropagation();
     if (isUserLogged() == 0) {
         loginPopUpBox();
@@ -369,12 +367,11 @@ addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
     fcom.updateWithAjax(
         fcom.makeUrl(
             "Account",
-            action,
-            [selprod_id, wish_list_id],
+            action, [selprod_id, wish_list_id],
             siteConstants.webroot_dashboard
         ),
         alternateData,
-        function (ans) {
+        function(ans) {
             if (ans.status == 1) {
                 $(document).trigger("close.facebox");
                 $(dv + " .is-active").removeClass("is-active");
@@ -443,8 +440,7 @@ function getSlickSliderSettings(
         autoplay: autoInfinitePlay,
         adaptiveHeight: adaptiveHeight,
         arrows: true,
-        responsive: [
-            {
+        responsive: [{
                 breakpoint: 1199,
                 settings: {
                     slidesToShow: slidesToShowForDiffResolution[1199],
@@ -489,11 +485,10 @@ function getSlickSliderSettings(
 function codeLatLng(lat, lng, callback) {
     initialize();
     var latlng = new google.maps.LatLng(lat, lng);
-    geocoder.geocode(
-        {
+    geocoder.geocode({
             latLng: latlng,
         },
-        function (results, status) {
+        function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 if (results[1]) {
                     var lat = results[0]["geometry"]["location"].lat();
@@ -551,7 +546,7 @@ function defaultSetUpLogin(frm, v) {
 
     $(".loginFormJs").prepend(fcom.getLoader());
     if (0 < $(formClass + ".loginWithOtp--js").length && 0 < $(formClass + ".loginWithOtp--js").val()) {
-        $(formClass + "input.otpVal-js").each(function () {
+        $(formClass + "input.otpVal-js").each(function() {
             if ("undefined" == typeof $(this).val() || "" == $(this).val()) {
                 $(formClass + '.pwdField--js input[name="password"]').attr(
                     "data-fatreq",
@@ -571,7 +566,7 @@ function defaultSetUpLogin(frm, v) {
     fcom.ajax(
         fcom.makeUrl("GuestUser", "login", [], siteConstants.webrootfront),
         fcom.frmData(frm),
-        function (t) {
+        function(t) {
             fcom.removeLoader();
             var ans = JSON.parse(t);
             if (ans.status == 1) {
@@ -585,39 +580,37 @@ function defaultSetUpLogin(frm, v) {
     return false;
 }
 
-(function ($) {
+(function($) {
     var screenHeight = $(window).height() - 100;
-    window.onresize = function (event) {
+    window.onresize = function(event) {
         var screenHeight = $(window).height() - 100;
     };
     $.extend(fcom, {
         processingCounter: 0,
         processingClass: 'processingJs',
-        getLoader: function (addAsNew) {
+        getLoader: function(addAsNew) {
             if (typeof addAsNew === 'undefined') {
                 $(document.body).css({ cursor: "wait" });
                 $(".loaderJs").remove();
             }
             return '<div class="processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
-        scrollToTop: function (obj) {
+        scrollToTop: function(obj) {
             if (typeof obj == undefined || obj == null) {
-                $("html, body").animate(
-                    {
+                $("html, body").animate({
                         scrollTop: $("html, body").offset().top - 100,
                     },
                     "slow"
                 );
             } else {
-                $("html, body").animate(
-                    {
+                $("html, body").animate({
                         scrollTop: $(obj).offset().top - 100,
                     },
                     "slow"
                 );
             }
         },
-        resetEditorInstance: function () {
+        resetEditorInstance: function() {
             if (extendEditorJs == true) {
                 var editors = oUtil.arrEditor;
                 for (x in editors) {
@@ -626,15 +619,15 @@ function defaultSetUpLogin(frm, v) {
                 oUtil.arrEditor = [];
             }
         },
-        resetEditorWidth: function (width = "100%") {
+        resetEditorWidth: function(width = "100%") {
             if (typeof oUtil != "undefined") {
-                oUtil.arrEditor.forEach(function (input) {
+                oUtil.arrEditor.forEach(function(input) {
                     var oEdit1 = eval(input);
                     $("#idArea" + oEdit1.oName).attr("width", width);
                 });
             }
         },
-        setEditorLayout: function (lang_id) {
+        setEditorLayout: function(lang_id) {
             if (extendEditorJs == true) {
                 var editors = oUtil.arrEditor;
                 layout = langLbl["language" + lang_id];
@@ -647,11 +640,11 @@ function defaultSetUpLogin(frm, v) {
             }
         },
 
-        displayProcessing: function () {
+        displayProcessing: function() {
             fcom.processingCounter++;
             $.ykmsg.info(langLbl.processing, -1, fcom.processingClass + " " + fcom.processingClass + '-' + fcom.processingCounter);
         },
-        closeProcessing: function (counter) {
+        closeProcessing: function(counter) {
             var cls = fcom.processingClass;
             if (typeof counter !== "undefined") {
                 cls += '-' + counter
@@ -660,35 +653,35 @@ function defaultSetUpLogin(frm, v) {
             // $.ykmsg.close();
         },
 
-        displaySuccessMessage: function (msg) {
+        displaySuccessMessage: function(msg) {
             $.ykmsg.close();
             $.ykmsg.success(msg);
         },
 
-        displayErrorMessage: function (msg) {
+        displayErrorMessage: function(msg) {
             $.ykmsg.close();
             $.ykmsg.error(msg);
         },
 
-        getModalBody: function () {
+        getModalBody: function() {
             return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
         },
-        removeLoader: function (cls) {
+        removeLoader: function(cls) {
             $(document.body).css({ cursor: "default" });
             $(".loaderJs").remove();
             $(".submitBtnJs").removeClass("loading");
         },
-        getRowSpinner: function () {
+        getRowSpinner: function() {
             return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
         },
 
     });
 
-    $.fn.serialize_without_blank = function () {
+    $.fn.serialize_without_blank = function() {
         var $form = this,
             result,
             $disabled = $([]);
-        $form.find(":input").each(function () {
+        $form.find(":input").each(function() {
             var $this = $(this);
             if ($.trim($this.val()) === "" && !$this.is(":disabled")) {
                 $disabled.add($this);
@@ -700,13 +693,13 @@ function defaultSetUpLogin(frm, v) {
         return result;
     };
 })(jQuery);
-$(document).ready(function () {
-    addCatalogPopup = function () {
-        fcom.ajax(fcom.makeUrl("Seller", "addCatalogPopup"), "", function (t) {
+$(document).ready(function() {
+    addCatalogPopup = function() {
+        fcom.ajax(fcom.makeUrl("Seller", "addCatalogPopup"), "", function(t) {
             $.ykmodal(t);
         });
     };
-    markAsFavorite = function (selProdId) {
+    markAsFavorite = function(selProdId) {
         if (isUserLogged() == 0) {
             loginPopUpBox();
             return false;
@@ -715,7 +708,7 @@ $(document).ready(function () {
         fcom.ajax(
             fcom.makeUrl("Account", "markAsFavorite", [selProdId]),
             "",
-            function (ans) {
+            function(ans) {
                 if (ans.status) {
                     $("[data-id=" + selProdId + "]").addClass("is-active");
                     $("[data-id=" + selProdId + "]").attr(
@@ -730,7 +723,7 @@ $(document).ready(function () {
             }, { fOutMode: 'json' }
         );
     };
-    removeFromFavorite = function (selProdId, callbackFunction = false) {
+    removeFromFavorite = function(selProdId, callbackFunction = false) {
         if (isUserLogged() == 0) {
             loginPopUpBox();
             return false;
@@ -739,7 +732,7 @@ $(document).ready(function () {
         fcom.ajax(
             fcom.makeUrl("Account", "removeFromFavorite", [selProdId]),
             "",
-            function (ans) {
+            function(ans) {
                 if (ans.status) {
                     $("[data-id=" + selProdId + "]").removeClass("is-active");
                     $("[data-id=" + selProdId + "]").attr(
@@ -758,7 +751,7 @@ $(document).ready(function () {
         }
     };
 
-    signInWithPhone = function (obj, flag) {
+    signInWithPhone = function(obj, flag) {
         var form = $(obj).data("form");
         var formElement = "undefined" != typeof form ? 'form[name="' + form + '"]' : "form";
         var title = 0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
@@ -773,7 +766,7 @@ $(document).ready(function () {
         } else {
             $(".loginFormJs").prepend(fcom.getLoader());
         }
-        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm', [], siteConstants.webrootfront), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm', [], siteConstants.webrootfront), data, function(t) {
             if (0 < popup.length) {
                 $.ykmodal(t.html, true);
             } else {
@@ -784,7 +777,7 @@ $(document).ready(function () {
         });
     };
 
-    getLoginOtp = function (obj) {
+    getLoginOtp = function(obj) {
         var formClass = "";
         if ($(obj).closest("form").hasClass("loginpopup--js")) {
             formClass = "form.loginpopup--js ";
@@ -800,7 +793,7 @@ $(document).ready(function () {
         $(".loginFormJs").prepend(fcom.getLoader());
         fcom.displayProcessing();
         var data = "username=" + $(formClass + 'input[name="username"]').val() + "&username_dcode=" + $(formClass + 'input[name="username_dcode"]').val();
-        fcom.ajax(fcom.makeUrl("GuestUser", "getLoginOtp", [], siteConstants.webrootfront), data, function (t) {
+        fcom.ajax(fcom.makeUrl("GuestUser", "getLoginOtp", [], siteConstants.webrootfront), data, function(t) {
             fcom.removeLoader();
             t = $.parseJSON(t);
             if (1 > t.status) {
@@ -820,16 +813,16 @@ $(document).ready(function () {
         return false;
     };
 
-    openSignInForm = function () {
+    openSignInForm = function() {
         fcom.displayProcessing();
         $.ykmodal(fcom.getLoader(), true);
-        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm', [], siteConstants.webrootfront), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm', [], siteConstants.webrootfront), '', function(t) {
             $.ykmodal(t.html, true);
             fcom.removeLoader();
         });
     };
 
-    autofillLangData = function (autoFillBtn, frm) {
+    autofillLangData = function(autoFillBtn, frm) {
         var actionUrl = autoFillBtn.data("action");
         var defaultLangField = $("input.defaultLang", frm);
         if (1 > defaultLangField.length) {
@@ -838,7 +831,7 @@ $(document).ready(function () {
         }
         var proceed = true;
         var stringToTranslate = "";
-        defaultLangField.each(function (index) {
+        defaultLangField.each(function(index) {
             if ("" != $(this).val()) {
                 if (0 < index) {
                     stringToTranslate += "&";
@@ -853,10 +846,10 @@ $(document).ready(function () {
         });
         if (true == proceed) {
             fcom.displayProcessing();
-            fcom.ajax(actionUrl, stringToTranslate, function (t) {
+            fcom.ajax(actionUrl, stringToTranslate, function(t) {
                 var res = $.parseJSON(t);
-                $.each(res, function (langId, values) {
-                    $.each(values, function (selector, value) {
+                $.each(res, function(langId, values) {
+                    $.each(values, function(selector, value) {
                         $("input.langField_" + langId + "[name='" + selector + "']").val(
                             value
                         );
@@ -865,7 +858,7 @@ $(document).ready(function () {
             });
         }
     };
-    redirectfunc = function (url, orderStatus) {
+    redirectfunc = function(url, orderStatus) {
         var input =
             '<input type="hidden" name="status" value="' + orderStatus + '">';
         $('<form action="' + url + '" method="POST">' + input + "</form>")
@@ -873,28 +866,27 @@ $(document).ready(function () {
             .submit();
     };
 
-    $(".cc-cookie-accept-js").click(function () {
+    $(".cc-cookie-accept-js").click(function() {
         var data = {
             statistical_cookies: 1,
             personalise_cookies: 1,
         };
         updateUserCookies(data);
     });
-    $(".cookie-preferences-js").click(function () {
+    $(".cookie-preferences-js").click(function() {
         fcom.ajax(
             fcom.makeUrl(
                 "Custom",
-                "cookiePreferencesData",
-                [],
+                "cookiePreferencesData", [],
                 siteConstants.webrootfront
             ),
             "",
-            function (t) {
+            function(t) {
                 $.ykmodal(t);
             }
         );
     });
-    setUserCookiePreferences = function () {
+    setUserCookiePreferences = function() {
         var statisticalCookies = 0;
         if ($("input[name='statistical_cookies']").prop("checked") == true) {
             statisticalCookies = 1;
@@ -909,16 +901,15 @@ $(document).ready(function () {
         };
         updateUserCookies(data);
     };
-    updateUserCookies = function (data) {
+    updateUserCookies = function(data) {
         fcom.ajax(
             fcom.makeUrl(
                 "Custom",
-                "updateUserCookies",
-                [],
+                "updateUserCookies", [],
                 siteConstants.webrootfront
             ),
             data,
-            function (rsp) {
+            function(rsp) {
                 var ans = $.parseJSON(rsp);
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
@@ -930,26 +921,26 @@ $(document).ready(function () {
             }
         );
     };
-    $(document).on("click", ".setactive-js li", function () {
+    $(document).on("click", ".setactive-js li", function() {
         $(this).closest(".setactive-js").find("li").removeClass("is-active");
         $(this).addClass("is-active");
     });
-    $(document).on("keydown", "input[name=user_username]", function (e) {
+    $(document).on("keydown", "input[name=user_username]", function(e) {
         if (e.which === 32) {
             return false;
         }
         this.value = this.value.replace(/\s/g, "");
     });
-    $(document).on("change", "input[name=user_username]", function (e) {
+    $(document).on("change", "input[name=user_username]", function(e) {
         this.value = this.value.replace(/\s/g, "");
     });
-    $(document).on("submit", "form", function () {
-       moveErrorAfterIti();
+    $(document).on("submit", "form", function() {
+        moveErrorAfterIti();
     });
     $(document).on(
         "keyup",
         "form .iti input[data-intl-tel-input-id]",
-        function () {
+        function() {
             moveErrorAfterIti();
         }
     );
@@ -957,8 +948,8 @@ $(document).ready(function () {
 
 function moveErrorAfterIti() {
     if (0 < $(".iti .errorlist").length) {
-        $('.iti').each(function() {          
-            $(this).find('.errorlist').detach().insertAfter($(this).closest('.iti'));          
+        $('.iti').each(function() {
+            $(this).find('.errorlist').detach().insertAfter($(this).closest('.iti'));
         });
     }
 }
@@ -968,13 +959,12 @@ function isUserLogged() {
     $.ajax({
         url: fcom.makeUrl(
             "GuestUser",
-            "checkAjaxUserLoggedIn",
-            [],
+            "checkAjaxUserLoggedIn", [],
             siteConstants.webrootfront
         ),
         async: false,
         dataType: "json",
-    }).done(function (ans) {
+    }).done(function(ans) {
         isUserLogged = parseInt(ans.isUserLogged);
     });
     return isUserLogged;
@@ -1007,12 +997,11 @@ function setSiteDefaultCurrency(currencyId) {
     fcom.ajax(
         fcom.makeUrl(
             "Home",
-            "setCurrency",
-            [currencyId],
+            "setCurrency", [currencyId],
             siteConstants.webrootfront
         ),
         "",
-        function (res) {
+        function(res) {
             document.location.reload();
         }
     );
@@ -1022,12 +1011,11 @@ function quickDetail(selprod_id) {
     fcom.ajax(
         fcom.makeUrl(
             "Products",
-            "productQuickDetail",
-            [selprod_id],
+            "productQuickDetail", [selprod_id],
             siteConstants.webrootfront
         ),
         "",
-        function (t) {
+        function(t) {
             $.ykmodal(t);
         }
     );
@@ -1036,7 +1024,7 @@ function quickDetail(selprod_id) {
 function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = false) {
     var inputList = document.querySelectorAll(element);
     var country = "" == langLbl.defaultCountryCode || "undefined" == typeof langLbl.defaultCountryCode ? "in" : langLbl.defaultCountryCode;
-    inputList.forEach(function (input) {
+    inputList.forEach(function(input) {
         var form = input.closest("form");
         if (true == destroy) {
             $(input, form).removeAttr("style");
@@ -1088,7 +1076,7 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
                 $(input, form).val(phoneNumber);
             }
 
-            input.addEventListener("countrychange", function (e) {
+            input.addEventListener("countrychange", function(e) {
                 if (typeof iti.getSelectedCountryData().dialCode !== "undefined") {
                     var dialCode = "+" + iti.getSelectedCountryData().dialCode;
                     var dialCodeWithPhone =
@@ -1116,7 +1104,7 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
                     $(input, form).attr("data-before", dialCode);
                 }
             });
-            input.addEventListener("keyup", function (e) {
+            input.addEventListener("keyup", function(e) {
                 if (true === hasOnlyFlag && "+" != input.value.charAt(0)) {
                     input.value = "+" + input.value;
                 }
@@ -1127,12 +1115,12 @@ function stylePhoneNumberFld(element = "input[name='user_phone']", destroy = fal
 
 function getCountryIso2CodeFromDialCode(dialCode) {
     var countriesData = window.intlTelInputGlobals.getCountryData();
-    var countryData = countriesData.filter(function (country) {
+    var countryData = countriesData.filter(function(country) {
         return country.dialCode == dialCode;
     });
     return countryData[0].iso2;
 }
-$(document).on("click", ".readMore", function () {
+$(document).on("click", ".readMore", function() {
     var $this = $(this);
     var $moreText = $this.siblings(".moreText");
     var $lessText = $this.siblings(".lessText");
@@ -1143,33 +1131,34 @@ $(document).on("click", ".readMore", function () {
     } else {
         $lessText.hide();
         $moreText.fadeIn();
+        $moreText.removeClass('hidden');
         $this.text($linkLessText);
     }
     $this.toggleClass("expanded");
 });
-$(document).on("click", "#btn-demo", function () {
+$(document).on("click", "#btn-demo", function() {
     fcom.ajax(
         fcom.makeUrl("Custom", "requestDemo", [], siteConstants.webrootfront),
         "",
-        function (t) {
+        function(t) {
             $.ykmodal(t);
         }
     );
 });
-$(document).ready(function () {
+$(document).ready(function() {
     if ($(window).width() < 1025) {
         $("html").removeClass("sticky-demo-header");
         $("div.demo-header").hide();
     }
 });
-$(document).ready(function () {
+$(document).ready(function() {
     new ScrollHint(".js-scrollable", {
         i18n: {
             scrollable: langLbl.scrollable,
         },
     });
 });
-$(document).ajaxComplete(function () {
+$(document).ajaxComplete(function() {
     stylePhoneNumberFld(".phone-js");
     new ScrollHint(".js-scrollable:not(.scroll-hint)", {
         i18n: {
@@ -1191,11 +1180,11 @@ $(document).ajaxComplete(function () {
         } else {
             $("html").removeClass("pop-on");
         }
-        $("#facebox .close.close--white").on("click", function () {
+        $("#facebox .close.close--white").on("click", function() {
             $("html").removeClass("pop-on");
         });
     }
-    $("body").click(function () {
+    $("body").click(function() {
         if ($("html").hasClass("pop-on")) {
             $("html").removeClass("pop-on");
         }
@@ -1205,10 +1194,10 @@ $(document).ajaxComplete(function () {
     /* Bind Max Length validator. */
     bindMaxLengthValidator();
 });
-$(document).ready(function () {
+$(document).ready(function() {
     $("body")
         .find("*[data-trigger]")
-        .click(function () {
+        .click(function() {
             var targetElmId = $(this).data("trigger");
             var elmToggleClass = targetElmId + "--on";
             if ($("body").hasClass(elmToggleClass)) {
@@ -1219,11 +1208,11 @@ $(document).ready(function () {
         });
     $("body")
         .find("*[data-bs-target-close]")
-        .click(function () {
+        .click(function() {
             var targetElmId = $(this).data("target-close");
             $("body").toggleClass(targetElmId + "--on");
         });
-    $("body").mouseup(function (event) {
+    $("body").mouseup(function(event) {
         if (
             $(event.target).data("trigger") != "" &&
             typeof $(event.target).data("trigger") !== typeof undefined
@@ -1233,7 +1222,7 @@ $(document).ready(function () {
         }
         $("body")
             .find("*[data-close-on-click-outside]")
-            .each(function (idx, elm) {
+            .each(function(idx, elm) {
                 var slctr = $(elm);
                 if (!slctr.is(event.target) && !$.contains(slctr[0], event.target)) {
                     $("body").removeClass(slctr.data("close-on-click-outside") + "--on");
@@ -1265,24 +1254,24 @@ function bytesToSize(bytes) {
 }
 $(".form-floating")
     .find("input, textarea, select")
-    .each(function () {
+    .each(function() {
         if ($(this).val() != "") {
             $(this).addClass("filled");
         } else {
             $(this).removeClass("filled");
         }
     });
-$(".dropdown-menu").on("click", function (e) {
+$(".dropdown-menu").on("click", function(e) {
     e.stopPropagation();
 });
-$(document).on("click", ".v-tabs--js ul li", function (e) {
+$(document).on("click", ".v-tabs--js ul li", function(e) {
     e.preventDefault();
     $(".v-tabs--js .is-active").removeClass("is-active");
     var target = $("a.v-tab--js", this).attr("href");
     $(this).addClass("is-active");
     $(target).addClass("is-active");
 });
-var imagesPreview = function (input, placeToInsertImagePreview) {
+var imagesPreview = function(input, placeToInsertImagePreview) {
     if (input.files) {
         if (1 > $(placeToInsertImagePreview + " ul").length) {
             $(placeToInsertImagePreview).html('<ul class="uploaded-media-list"></ul>');
@@ -1292,15 +1281,15 @@ var imagesPreview = function (input, placeToInsertImagePreview) {
         for (i = 0; i < filesAmount; i++) {
             let selectedFile = input.files[i];
             var reader = new FileReader();
-            reader.onload = function (event) {
+            reader.onload = function(event) {
                 var htm =
                     '<li class="uploaded-media-item"><div class="uploaded-file"><span class="uploaded-file__thumb"></span><button class="file-remove fileRemove--js" data-filefld="' + fileFldName + '"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></button></div></li>';
                 $(placeToInsertImagePreview + " ul").append(htm);
                 $(
-                    $.parseHTML(
-                        '<img class="imgToUpload--js" title="' + selectedFile.name + '">'
+                        $.parseHTML(
+                            '<img class="imgToUpload--js" title="' + selectedFile.name + '">'
+                        )
                     )
-                )
                     .attr("src", event.target.result)
                     .appendTo(
                         placeToInsertImagePreview +
@@ -1315,9 +1304,9 @@ var imagesPreview = function (input, placeToInsertImagePreview) {
 function DataURIToBlob(dataURI) {
     const splitDataURI = dataURI.split(",");
     const byteString =
-        splitDataURI[0].indexOf("base64") >= 0
-            ? atob(splitDataURI[1])
-            : decodeURI(splitDataURI[1]);
+        splitDataURI[0].indexOf("base64") >= 0 ?
+        atob(splitDataURI[1]) :
+        decodeURI(splitDataURI[1]);
     const mimeString = splitDataURI[0].split(":")[1].split(";")[0];
     const ia = new Uint8Array(byteString.length);
     for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
@@ -1326,7 +1315,7 @@ function DataURIToBlob(dataURI) {
     });
 }
 
-resetQuickSearchResults = function () {
+resetQuickSearchResults = function() {
     var ul = '.quickMenujs';
     var li = ul + ' li.navItemJs';
     var searchResult = li + ' .navLinkJs';
@@ -1338,7 +1327,7 @@ resetQuickSearchResults = function () {
     $('.noResultsFoundJs').hide();
 };
 
-quickMenuItemSearch = function (ele, event) {
+quickMenuItemSearch = function(ele, event) {
     event.stopPropagation();
     var ul = '.quickMenujs';
     $(ul + " mark").contents().unwrap();
@@ -1350,10 +1339,10 @@ quickMenuItemSearch = function (ele, event) {
     var li = ul + ' li.navItemJs';
     var searchResult = li + ' .navLinkJs';
     $(noResults + ', ' + searchResult).hide();
-    $(li).each(function () {
+    $(li).each(function() {
         var liObj = this;
         $(liObj).hide();
-        $(".navLinkJs", liObj).each(function () {
+        $(".navLinkJs", liObj).each(function() {
             var resultObj = $(this);
             var textEle = resultObj.find('.navTextJs');
             var orignalText = textEle.text();
@@ -1387,7 +1376,7 @@ quickMenuItemSearch = function (ele, event) {
         });
     });
 
-    $(ul + ' li.dropdownJs').each(function () {
+    $(ul + ' li.dropdownJs').each(function() {
         var liObj = this;
         $(liObj).show();
         if (1 > $('.navItemJs:visible', liObj).length) {
@@ -1395,7 +1384,7 @@ quickMenuItemSearch = function (ele, event) {
         }
     });
 
-    $(ul + ' li.hasNestedChildJs').each(function () {
+    $(ul + ' li.hasNestedChildJs').each(function() {
         var liObj = this;
         $(liObj).show();
         if (1 > $('.navItemJs:visible', liObj).length) {
@@ -1408,7 +1397,7 @@ quickMenuItemSearch = function (ele, event) {
     }
 };
 
-$(document).on("change", ".multipleImgs--js", function () {
+$(document).on("change", ".multipleImgs--js", function() {
     if ($(this)[0].files.length > 8) {
         fcom.displayErrorMessage(langLbl.uploadImageLimit);
         $(this).val("");
@@ -1422,17 +1411,17 @@ $(document).on("change", ".multipleImgs--js", function () {
     imagesPreview(this, galleryElement);
 });
 
-$(document).on("click", ".fileRemove--js", function () {
+$(document).on("click", ".fileRemove--js", function() {
     $(this).closest("li").remove();
 });
 
-$(document).on("search", "#quickSearchJs", function () {
+$(document).on("search", "#quickSearchJs", function() {
     if ("" == $(this).val()) {
         resetQuickSearchResults();
     }
 });
 
-$(document).on("keyup", "#quickSearchJs", function (e) {
+$(document).on("keyup", "#quickSearchJs", function(e) {
     if ("" == $(this).val()) {
         resetQuickSearchResults();
         return;
@@ -1441,13 +1430,13 @@ $(document).on("keyup", "#quickSearchJs", function (e) {
     quickMenuItemSearch($(this), e);
 });
 
-$(document).on("shown.bs.modal", "#search-main", function () {
+$(document).on("shown.bs.modal", "#search-main", function() {
     if (0 < $("#quickSearchJs").length) {
         $("#quickSearchJs").focus();
     }
 });
 
-$(window).keydown(function (e) {
+$(window).keydown(function(e) {
     if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
         if (0 == $.cookie("quickSearchCtrlJs") || "undefined" == typeof $.cookie("quickSearchCtrlJs")) {
             $("#search-main").modal("show");
@@ -1456,7 +1445,7 @@ $(window).keydown(function (e) {
     }
 });
 
-$(document).on("click", "#quickSearchCtrlJs", function () {
+$(document).on("click", "#quickSearchCtrlJs", function() {
     if ($(this).is(":checked")) {
         $.cookie("quickSearchCtrlJs", 1, { expires: 30, path: siteConstants.rooturl });
         $("#search-main").modal("hide");
@@ -1497,4 +1486,3 @@ function getImageTemplate(fileName, src) {
                 </div>
             </li>`;
 }
-
