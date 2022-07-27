@@ -149,7 +149,7 @@ class DiscountCouponsController extends ListingBaseController
 
         $isExpired = false;
         if (0 < $recordId) {
-            $data = DiscountCoupons::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*','COALESCE(coupon_title, coupon_identifier) as coupon_title'], applicationConstants::JOIN_RIGHT);
+            $data = DiscountCoupons::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*', 'COALESCE(coupon_title, coupon_identifier) as coupon_title'], applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -191,11 +191,16 @@ class DiscountCouponsController extends ListingBaseController
         $endDate = FatApp::getPostedData('coupon_end_date', FatUtility::VAR_STRING);
 
         if (!empty($endDate) && time() > strtotime($endDate . '23:59:59')) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_COUPON_EXPIRED!!_DATE_TO_MUST_BE_GREATER_THAN_CURRENT_DATE.'), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_COUPON_EXPIRED!!_DATE_TO_MUST_BE_GREATER_THAN_CURRENT_DATE.'), true);
         }
 
+        if (strtotime($endDate) < strtotime($startDate)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_END_DATE_TO_MUST_BE_GREATER_THAN_START_DATE'), true);
+        }
+
+
         $post['coupon_start_date'] = !empty($startDate) ? $startDate : date('Y-m-d');
-        $post['coupon_end_date'] = !empty($endDate) ? $endDate : date('Y-m-d',strtotime('+60 year'));
+        $post['coupon_end_date'] = !empty($endDate) ? $endDate : date('Y-m-d', strtotime('+60 year'));
         $record = new DiscountCoupons($recordId);
         $post['coupon_identifier'] = $post['coupon_title'];
         $record->assignValues($post);
@@ -312,7 +317,7 @@ class DiscountCouponsController extends ListingBaseController
         $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'coupon_start_date', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'coupon_end_date', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $fld->requirements()->setCompareWith('coupon_start_date', 'ge', Labels::getLabel('FRM_DATE_TO', $this->siteLangId));
-        
+
         $percentageFlatArr = applicationConstants::getPercentageFlatArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_DISCOUNT_IN', $this->siteLangId), 'coupon_discount_in_percent', $percentageFlatArr, '', array(), '');
 
@@ -323,7 +328,7 @@ class DiscountCouponsController extends ListingBaseController
         $frm->addIntegerField(Labels::getLabel('FRM_USES_PER_COUPON', $this->siteLangId), 'coupon_uses_count', 1);
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_USES_PER_CUSTOMER', $this->siteLangId), 'coupon_uses_coustomer', 1);
         $fld->requirements()->setCompareWith('coupon_uses_count', 'le', '');
-        
+
         $frm->addCheckBox(Labels::getLabel('FRM_COUPON_STATUS', $this->siteLangId), 'coupon_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $flatDiscountVal = new FormFieldRequirement('coupon_discount_value', Labels::getLabel('FRM_DISCOUNT_VALUE', $this->siteLangId));
@@ -331,6 +336,7 @@ class DiscountCouponsController extends ListingBaseController
         $percentDiscountVal = new FormFieldRequirement('coupon_discount_value', Labels::getLabel('FRM_DISCOUNT_VALUE', $this->siteLangId));
         $percentDiscountVal->setRequired(true);
         $percentDiscountVal->setFloatPositive();
+        $percentDiscountVal->setRange('1', '100');
 
         $couponMinOrderValueReqTrue = new FormFieldRequirement('coupon_min_order_value', 'value');
         $couponMinOrderValueReqTrue->setRequired();
@@ -432,7 +438,7 @@ class DiscountCouponsController extends ListingBaseController
 
         $this->_template->addJs(['js/tagify.min.js', 'js/tagify.polyfills.min.js', 'discount-coupons/page-js/index.js']);
         $this->_template->addCss(['css/tagify.min.css']);
-        $this->_template->render(true, true, NULL,false,false);
+        $this->_template->render(true, true, NULL, false, false);
     }
 
     /* Coupon Type Subscription Purchase. */
@@ -808,7 +814,7 @@ class DiscountCouponsController extends ListingBaseController
     {
         return [
             'select_all',
-          /*   'listSerial', */
+            /*   'listSerial', */
             'coupon_title',
             'coupon_code',
             'coupon_type',
