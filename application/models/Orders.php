@@ -1684,7 +1684,7 @@ class Orders extends MyAppModel
                 $db->query("UPDATE tbl_seller_products SET selprod_stock = (selprod_stock - " . (int) $childOrderInfo['op_qty'] . "),selprod_sold_count = (selprod_sold_count + " . (int) $childOrderInfo['op_qty'] . ") WHERE selprod_id = '" . (int) $opSelprodId . "' AND selprod_subtract_stock = '1'");
 
                 $sellProdInfo = SellerProduct::getAttributesById($opSelprodId, array('selprod_stock', 'selprod_subtract_stock', 'selprod_track_inventory', 'selprod_threshold_stock_level'));
-                if (($sellProdInfo["selprod_threshold_stock_level"] >= $sellProdInfo["selprod_stock"]) && ($sellProdInfo["selprod_track_inventory"] == 1)) {
+                if ($sellProdInfo && ($sellProdInfo["selprod_threshold_stock_level"] >= $sellProdInfo["selprod_stock"]) && ($sellProdInfo["selprod_track_inventory"] == 1)) {
                     $emailNotificationObj->sendProductStockAlert($opSelprodId);
                 }
             }
@@ -2986,7 +2986,7 @@ class Orders extends MyAppModel
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
         } else {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
-        }       
+        }
         $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS", FatUtility::VAR_INT, 0));
         return (in_array($opRow['op_status_id'], $processingStatuses) && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED);
     }

@@ -1060,7 +1060,8 @@ TV-9.4.0.20220719
     - #065470 - The Update order status field gets disappeared from the order details page when the admin approved the COD request.
     - #065468 - no validation in Badge setup form 
     - #065698 - The admin is able to add the discount coupon with more than 100% value.
-    - #065704 - Order status is missing in the under status field on the order listing page on the buyer end
+    - #065704 - Order status is missing in the under status field on the order listing page on the buyer end.
+    - #065701 - The notice appears when the seller tries to change the order status
     
 ## UAT points:
 
