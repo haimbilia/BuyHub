@@ -203,7 +203,7 @@ class OrderStatusController extends ListingBaseController
         }
 
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
-
+        CacheHelper::clear(CacheHelper::TYPE_ORDER_STATUS);
         $this->_template->render(false, false, 'json-success.php');
     }
 
