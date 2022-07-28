@@ -1074,6 +1074,7 @@ TV-9.4.0.20220719
     - #065438 - Infinite loader appears when the admin tries to add a new rating type.
     - #065657 - Ribbons set default background color to theme color.
     - #065437 - Resolved issue of added diuplicate shipping company user.
+    - #065415 - Resolved special price issue of greater amount in seller and admin.
     
 ## UAT points:
 
