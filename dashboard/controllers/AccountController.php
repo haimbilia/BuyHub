@@ -52,9 +52,8 @@ class AccountController extends LoggedUserController
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'SupplierApprovalForm', [], CONF_WEBROOT_DASHBOARD));
             //FatUtility::dieJsonError( Message::getHtml() );
         }
-
         $userObj = new User($this->userId);
-        $srch = $userObj->getUserSupplierRequestsObj($requestId);
+        $srch = $userObj->getUserSupplierRequestsObj($requestId, false);
         $srch->addFld('tusr.*');
 
         $rs = $srch->getResultSet();
@@ -95,7 +94,7 @@ class AccountController extends LoggedUserController
         }
 
         $userObj = new User($this->userId);
-        $srch = $userObj->getUserSupplierRequestsObj();
+        $srch = $userObj->getUserSupplierRequestsObj(0, false);
         $srch->addFld(array('usuprequest_attempts', 'usuprequest_id'));
 
         $rs = $srch->getResultSet();

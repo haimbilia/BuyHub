@@ -920,6 +920,7 @@ class SellerRequestsController extends SellerBaseController
             }
             $arr = array(
                 'preq_id' => $row['preq_id'],
+                'preq_comment' => $row['preq_comment'],
                 'product_name' => (!empty($row['product_name'])) ? $row['product_name'] : $row['product_identifier'],
                 'product_min_selling_price' => $row['product_min_selling_price'],
                 'product_model' => (isset($row['product_model'])) ? $row['product_model'] : '',

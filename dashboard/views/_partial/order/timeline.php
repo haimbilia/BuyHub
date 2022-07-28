@@ -3,21 +3,30 @@
 <ul class="timeline">
     <?php
     $orderCancelled = (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']);
+  
+
     $selectUpto = array_search($currentStatus, array_keys($orderProductStatusArr));
+
     if (strtolower($childOrderDetail['plugin_code']) == 'cashondelivery') {
         $selectUpto = array_search($childOrderDetail['orderstatus_id'], array_keys($orderProductStatusArr));
     }
     $index = 0;
+  
+
     foreach ($orderProductStatusArr as $statusId => $statusLabel) {
         $current = $currentStatus == $statusId || $orderCancelled ? 'currently ' : '';
         $highlight = ($index <= $selectUpto || in_array($statusId, $highlightEnabled) || $orderCancelled ? 'enable ' : 'disabled ');
         $orderTimeLineRecords = !empty($orderTimeLine) && isset($orderTimeLine[$statusId]) ? $orderTimeLine[$statusId] : [];
-        $orderStatusClass = $orderCancelled && $index > $selectUpto ? 'shipped' : OrderStatus::getOpStatusClass($statusId);
+       
+
+       /* $orderStatusClass = ($orderCancelled && $index > $selectUpto) ? 'shipped' : OrderStatus::getOpStatusClass($statusId);
         if ('disabled' == trim($highlight)) {
             $orderStatusClass = "";
         }
+  */
+
     ?>
-        <li class="<?php echo $highlight . $current . $orderStatusClass; ?>">
+        <li class="<?php echo $highlight . $current; ?>">
             <?php if (!empty($orderTimeLineRecords)) {
                 foreach (array_reverse($orderTimeLineRecords) as $i => $row) {
                     /* Same Status with no Comment.*/
@@ -29,7 +38,7 @@
                         <div class="timeline_data_head">
                             <time class="timeline_date"><?php echo FatDate::format($row['oshistory_date_added']); ?></time>
                             <?php if (0 == $i) { ?>
-                                <span class="order-status"> <em class="dot"></em>
+                                <span class="order-status <?php echo $orderColorClasses[$statusId]; ?>"> <em class="dot"></em>
                                     <?php echo $statusLabel; ?>
                                 <?php } ?>
                                 </span>

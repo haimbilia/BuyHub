@@ -83,6 +83,20 @@ foreach ($arrListing as $sn => $row) {
                     
                     $data['deleteButton'] = false;
                 }
+                if ($canEdit && $row['preq_status'] == ProductRequest::STATUS_CANCELLED) {
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'getComments(' . $row['preq_id'] . ')',
+                            'title' => Labels::getLabel('MSG_COMMENTS', $siteLangId),
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#eye">
+                                        </use>
+                                    </svg>',
+                    ];
+                }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;

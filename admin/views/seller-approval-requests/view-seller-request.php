@@ -30,36 +30,11 @@
 
                     </li>
                 </ul>
+
                 <div class="separator separator-dashed my-4"></div>
 
                 <h3 class="h3 mb-3"><?php echo Labels::getLabel('LBL_Seller_Information', $siteLangId); ?></h3>
-                <ul class="list-stats list-stats-double">
-                    <li class="list-stats-item">
 
-                        <span class="lable"><?php echo Labels::getLabel('LBL_Reference_Number', $siteLangId); ?></span>
-                        <span class="value"><?php echo $supplierRequest['usuprequest_reference']; ?></span>
-
-                    </li>
-                    <li class="list-stats-item">
-
-                        <span class="lable"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?></span>
-                        <span class="value"><?php echo $reqStatusArr[$supplierRequest['usuprequest_status']]; ?></span>
-
-                    </li>
-                    <?php if (!empty($supplierRequest['usuprequest_comments'])) { ?>
-                        <li class="list-stats-item list-stats-item-full">
-
-                            <span class="lable"><?php echo Labels::getLabel('LBL_Comments/Reason', $siteLangId); ?></span>
-                            <span class="value"><?php echo nl2br($supplierRequest['usuprequest_comments']); ?></span>
-
-                        </li>
-                    <?php } ?>
-                </ul>
-
-                <div class="separator separator-dashed my-4"></div>
-
-
-                <h3 class="h3 mb-3"><?php echo Labels::getLabel('LBL_Additional_Information', $siteLangId); ?></h3>
                 <ul class="list-stats list-stats-double">
                     <?php foreach ($supplierRequest['field_values'] as $val) { ?>
                         <li class="list-stats-item <?php if (strlen($val['sfreqvalue_text']) > 40) { ?> list-stats-item-full<?php } ?>">
@@ -87,6 +62,35 @@
                         </li>
                     <?php } ?>
                 </ul>
+
+
+                <div class="separator separator-dashed my-4"></div>
+
+                <h3 class="h3 mb-3"><?php echo Labels::getLabel('LBL_Additional_Information', $siteLangId); ?></h3>
+                <ul class="list-stats list-stats-double">
+                    <li class="list-stats-item">
+
+                        <span class="lable"><?php echo Labels::getLabel('LBL_Reference_Number', $siteLangId); ?></span>
+                        <span class="value"><?php echo $supplierRequest['usuprequest_reference']; ?></span>
+
+                    </li>
+                    <li class="list-stats-item">
+
+                        <span class="lable"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?></span>
+                        <span class="value"><?php echo $reqStatusArr[$supplierRequest['usuprequest_status']]; ?></span>
+
+                    </li>
+                    <?php if (!empty($supplierRequest['usuprequest_comments'])) { ?>
+                        <li class="list-stats-item list-stats-item-full">
+
+                            <span class="lable"><?php echo Labels::getLabel('LBL_Comments/Reason', $siteLangId); ?></span>
+                            <span class="value"><?php echo nl2br($supplierRequest['usuprequest_comments']); ?></span>
+
+                        </li>
+                    <?php } ?>
+                </ul>
+
+
             </form>
         </div>
     </div>

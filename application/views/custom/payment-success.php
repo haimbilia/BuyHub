@@ -77,7 +77,7 @@ $products = $orderInfo['orderProducts'];
                                 </p>
                             <?php } ?>
                         </div>
-                        <?php if(true === $showOrderDetails){   ?>          
+                        <?php if (true === $showOrderDetails) {   ?>
                             <ul class="completed-detail">
                                 <?php if (!empty($orderInfo['shippingAddress'])) {
                                     $shippingAddress = $orderInfo['shippingAddress']; ?>
@@ -108,7 +108,7 @@ $products = $orderInfo['orderProducts'];
                                             $shippingMethod .= !empty($op['opshipping_label']) ? '<li>' . $op['opshipping_label'] . '</li>' : '';
                                         }
                                     }
-                                    
+
                                     $fulfillmentType = Shipping::FULFILMENT_SHIP;
                                     array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                         if (Product::PRODUCT_TYPE_PHYSICAL == $row['op_product_type']) {
@@ -192,173 +192,173 @@ $products = $orderInfo['orderProducts'];
                             </ul>
                         <?php } ?>
                     </div>
-                    <?php                    
-                    
-                    if(true === $showOrderDetails){ 
-                    if ($orderInfo['order_type'] != Orders::ORDER_WALLET_RECHARGE) { ?>
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                <div class="completed-cart cart-page">
-                                    <div class="cart-page_main">
-                                        <div class="cart-page-head">
-                                            <h2 class="h2">
-                                                <?php echo Labels::getLabel('LBL_ORDER_DETAIL', $siteLangId); ?>
-                                            </h2>
-                                        </div>
+                    <?php
 
-                                        <ul class="list-cart">
-                                            <?php
-                                            $shippingCharges = $subTotal = 0;
-                                            $selProdTotalSpecialPrice = 0;
-                                            if (Orders::ORDER_PRODUCT == $orderInfo['order_type']) {
-                                                foreach ($products as $key => $product) {
-                                                    $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['op_selprod_id']));
-                                                    $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['op_shop_id']));
-                                                    $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_MINI, $product['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-                                                    $productTitle =  ($product['op_selprod_title']) ? $product['op_selprod_title'] : $product['op_product_name'];
-                                                    if (array_key_exists('op_special_price', $product)) {
-                                                        $selProdTotalSpecialPrice += $product['op_special_price'] * $product["op_qty"];
-                                                    }
-                                            ?>
-                                                    <li class="list-cart-item block-cart block-cart-sm">
-                                                        <div class="block-cart-img">
-                                                            <div class="products-img">
-                                                                <a href="<?php echo $productUrl; ?>">
-                                                                    <img src="<?php echo $imageUrl; ?>" alt="<?php echo $product['op_product_name']; ?>" title="<?php echo $product['op_product_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI); ?>>
-                                                                </a>
+                    if (true === $showOrderDetails) {
+                        if ($orderInfo['order_type'] != Orders::ORDER_WALLET_RECHARGE) { ?>
+                            <div class="row justify-content-center">
+                                <div class="col-md-12">
+                                    <div class="completed-cart cart-page">
+                                        <div class="cart-page_main">
+                                            <div class="cart-page-head">
+                                                <h2 class="h2">
+                                                    <?php echo Labels::getLabel('LBL_ORDER_DETAIL', $siteLangId); ?>
+                                                </h2>
+                                            </div>
 
+                                            <ul class="list-cart">
+                                                <?php
+                                                $shippingCharges = $subTotal = 0;
+                                                $selProdTotalSpecialPrice = 0;
+                                                if (Orders::ORDER_PRODUCT == $orderInfo['order_type']) {
+                                                    foreach ($products as $key => $product) {
+                                                        $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['op_selprod_id']));
+                                                        $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['op_shop_id']));
+                                                        $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_MINI, $product['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
+                                                        $productTitle =  ($product['op_selprod_title']) ? $product['op_selprod_title'] : $product['op_product_name'];
+                                                        if (array_key_exists('op_special_price', $product)) {
+                                                            $selProdTotalSpecialPrice += $product['op_special_price'] * $product["op_qty"];
+                                                        }
+                                                ?>
+                                                        <li class="list-cart-item block-cart block-cart-sm">
+                                                            <div class="block-cart-img">
+                                                                <div class="products-img">
+                                                                    <a href="<?php echo $productUrl; ?>">
+                                                                        <img src="<?php echo $imageUrl; ?>" alt="<?php echo $product['op_product_name']; ?>" title="<?php echo $product['op_product_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI); ?>>
+                                                                    </a>
+
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="block-cart-detail">
-                                                            <div class="block-cart-detail-top">
-                                                                <div class="product-profile">
-                                                                    <div class="product-profile-data">
-                                                                        <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
-                                                                        <div class="products-price">
-                                                                            <?php
-                                                                            $subTotal += $txnAmount = ($product["op_unit_price"] * $product["op_qty"]);
-                                                                            echo CommonHelper::displayMoneyFormat($txnAmount);
-                                                                            $shippingCharges += $product['op_actual_shipping_charges'];
-                                                                            ?>
-                                                                        </div>
-                                                                        <div class="options">
-                                                                            <p class=""> <?php echo $product['op_selprod_options']; ?></p>
-                                                                            <span class="product-qty"><?php echo Labels::getLabel("LBL_SOLD_QUANTITY", $siteLangId) .":".$product['op_qty']; ?></span>
+                                                            <div class="block-cart-detail">
+                                                                <div class="block-cart-detail-top">
+                                                                    <div class="product-profile">
+                                                                        <div class="product-profile-data">
+                                                                            <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
+                                                                            <div class="products-price">
+                                                                                <?php
+                                                                                $subTotal += $txnAmount = ($product["op_unit_price"] * $product["op_qty"]);
+                                                                                echo CommonHelper::displayMoneyFormat($txnAmount);
+                                                                                $shippingCharges += $product['op_actual_shipping_charges'];
+                                                                                ?>
+                                                                            </div>
+                                                                            <div class="options">
+                                                                                <p class=""> <?php echo $product['op_selprod_options']; ?></p>
+                                                                                <span class="product-qty"><?php echo Labels::getLabel("LBL_SOLD_QUANTITY", $siteLangId) . ":" . $product['op_qty']; ?></span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
-                                                    </li>
-                                                <?php }
-                                            } else {
-                                                foreach ($products as $subscription) {
-                                                    $subTotal += $subscription['ossubs_price'];
-                                                ?>
-                                                    <li class="list-cart-item"><?php echo Labels::getLabel("LBL_COMMISION_RATE", $siteLangId); ?> <span><?php echo CommonHelper::displayComissionPercentage($subscription['ossubs_commission']); ?>%</span></li>
-                                                    <li class="list-cart-item"><?php echo Labels::getLabel("LBL_ACTIVE_PRODUCTS", $siteLangId); ?> <span><?php echo $subscription['ossubs_products_allowed']; ?></span></li>
-                                                    <li class="list-cart-item"><?php echo Labels::getLabel("LBL_PRODUCT_INVENTORY", $siteLangId); ?> <span><?php echo $subscription['ossubs_inventory_allowed']; ?></span></li>
-                                                    <li class="list-cart-item"><?php echo Labels::getLabel("LBL_IMAGES_PER_PRODUCT", $siteLangId); ?> <span><?php echo $subscription['ossubs_images_allowed']; ?></span></li>
-                                            <?php }
-                                            } ?>
-                                        </ul>
-                                    </div>
-                                    <div class="cart-page_aside">
-                                        <div class="sticky-summary">
-                                            <div class="cart-total">
-                                                <div class="cart-total-head">
-                                                    <h3 class="cart-total-title"><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h3>
-                                                </div>
-                                                <div class="cart-total-body">
-                                                    <ul class="cart-summary">
-                                                        <?php if (0 < $subTotal) { ?>
-                                                            <li class="cart-summary-item">
-                                                                <span class="label">
-                                                                    <?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?>
-                                                                </span>
-                                                                <span class="value">
-                                                                    <?php echo CommonHelper::displayMoneyFormat($subTotal); ?>
-                                                                </span>
-                                                            </li>
-                                                        <?php }
-                                                        if (0 < $orderInfo['order_reward_point_value'] || 0 < $orderInfo['order_discount_total']) {
-                                                            $msg = "LBL_REWARD_POINTS";
-                                                            $totalDiscount = $orderInfo['order_reward_point_value'];
-                                                            if (!empty($orderInfo['order_discount_total']) && 0 < $orderInfo['order_discount_total']) {
-                                                                $msg .= "_&_DISCOUNT";
-                                                                $totalDiscount += $orderInfo['order_discount_total'];
-                                                            }
-                                                        ?>
-                                                            <li class="cart-summary-item">
-                                                                <span class="label"><?php echo Labels::getLabel($msg, $siteLangId); ?></span>
-                                                                <span class="value">- <?php echo CommonHelper::displayMoneyFormat($totalDiscount); ?></span>
-                                                            </li>
-                                                        <?php }
-                                                        if (0 < $orderInfo['order_volume_discount_total']) {
-                                                            $msg = 'LBL_Loyalty/Volume_Discount';
-                                                            $totalDiscount = $orderInfo['order_volume_discount_total'];
-                                                        ?>
-                                                            <li class="cart-summary-item">
-                                                                <span class="label"><?php echo Labels::getLabel($msg, $siteLangId); ?></span>
-                                                                <span class="value">- <?php echo CommonHelper::displayMoneyFormat($totalDiscount); ?></span>
-                                                            </li>
-                                                        <?php }
-                                                        if (0 < $orderInfo['order_tax_charged']) { ?>
-                                                            <li class="cart-summary-item">
-                                                                <span class="label"><?php echo Labels::getLabel('LBL_TAX', $siteLangId); ?></span>
-                                                                <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_tax_charged']); ?></span>
-                                                            </li>
-                                                        <?php } ?>
-                                                        <?php if (0 < $shippingCharges) { ?>
-                                                            <li class="cart-summary-item">
-                                                                <span class="label"><?php echo Labels::getLabel('LBL_SHIPPING_CHARGES', $siteLangId); ?></span>
-                                                                <span class="value"><?php echo CommonHelper::displayMoneyFormat($shippingCharges); ?></span>
-                                                            </li>
-                                                        <?php  } ?>
-                                                        <?php if (array_key_exists('order_rounding_off', $orderInfo) && $orderInfo['order_rounding_off'] != 0) { ?>
-                                                            <li class="cart-summary-item">
-                                                                <span class="label"><?php echo (0 < $orderInfo['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?></span>
-                                                                <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_rounding_off']); ?></span>
-                                                            </li>
-                                                        <?php } ?>
-                                                        <?php
-                                                        if (Orders::ORDER_SUBSCRIPTION == $orderInfo['order_type']) {
-                                                            $adjustedAmount = CommonHelper::orderSubscriptionAmount(current($orderInfo['orderProducts']), 'ADJUSTEDAMOUNT');
-                                                            if (0 != $adjustedAmount) { ?>
-                                                                <li class="cart-summary-item">
-                                                                    <span class="label"><?php echo Labels::getLabel('LBL_ADJUSTED_AMOUNT', $siteLangId); ?></span>
-                                                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($adjustedAmount); ?></span>
-                                                                </li>
-                                                        <?php }
-                                                        } ?>
-                                                        <li class="cart-summary-item highlighted">
-                                                            <span class="label"><?php echo Labels::getLabel('LBL_NET_AMOUNT', $siteLangId); ?></span>
-                                                            <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_net_amount']); ?></span>
                                                         </li>
-                                                        <?php
-                                                        $totalSaving =  $selProdTotalSpecialPrice + $orderInfo['order_discount_total'] + $orderInfo['order_volume_discount_total'];
-                                                        if (0 < $totalSaving) { ?>
-                                                            <li class="cart-summary-item">
-                                                                <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
-                                                                <span class="value text-success"><?php echo CommonHelper::displayMoneyFormat($totalSaving); ?></span>
+                                                    <?php }
+                                                } else {
+                                                    foreach ($products as $subscription) {
+                                                        $subTotal += $subscription['ossubs_price'];
+                                                    ?>
+                                                        <li class="list-cart-item"><?php echo Labels::getLabel("LBL_COMMISION_RATE", $siteLangId); ?> <span><?php echo CommonHelper::displayComissionPercentage($subscription['ossubs_commission']); ?>%</span></li>
+                                                        <li class="list-cart-item"><?php echo Labels::getLabel("LBL_ACTIVE_PRODUCTS", $siteLangId); ?> <span><?php echo $subscription['ossubs_products_allowed']; ?></span></li>
+                                                        <li class="list-cart-item"><?php echo Labels::getLabel("LBL_PRODUCT_INVENTORY", $siteLangId); ?> <span><?php echo $subscription['ossubs_inventory_allowed']; ?></span></li>
+                                                        <li class="list-cart-item"><?php echo Labels::getLabel("LBL_IMAGES_PER_PRODUCT", $siteLangId); ?> <span><?php echo $subscription['ossubs_images_allowed']; ?></span></li>
+                                                <?php }
+                                                } ?>
+                                            </ul>
+                                        </div>
+                                        <div class="cart-page_aside">
+                                            <div class="sticky-summary">
+                                                <div class="cart-total">
+                                                    <div class="cart-total-head">
+                                                        <h3 class="cart-total-title"><?php echo Labels::getLabel('LBL_ORDER_SUMMARY', $siteLangId); ?></h3>
+                                                    </div>
+                                                    <div class="cart-total-body">
+                                                        <ul class="cart-summary">
+                                                            <?php if (0 < $subTotal) { ?>
+                                                                <li class="cart-summary-item">
+                                                                    <span class="label">
+                                                                        <?php echo Labels::getLabel('LBL_Sub_Total', $siteLangId); ?>
+                                                                    </span>
+                                                                    <span class="value">
+                                                                        <?php echo CommonHelper::displayMoneyFormat($subTotal); ?>
+                                                                    </span>
+                                                                </li>
+                                                            <?php }
+                                                            if (0 < $orderInfo['order_reward_point_value'] || 0 < $orderInfo['order_discount_total']) {
+                                                                $msg = "LBL_REWARD_POINTS";
+                                                                $totalDiscount = $orderInfo['order_reward_point_value'];
+                                                                if (!empty($orderInfo['order_discount_total']) && 0 < $orderInfo['order_discount_total']) {
+                                                                    $msg .= "_&_DISCOUNT";
+                                                                    $totalDiscount += $orderInfo['order_discount_total'];
+                                                                }
+                                                            ?>
+                                                                <li class="cart-summary-item">
+                                                                    <span class="label"><?php echo Labels::getLabel($msg, $siteLangId); ?></span>
+                                                                    <span class="value">- <?php echo CommonHelper::displayMoneyFormat($totalDiscount); ?></span>
+                                                                </li>
+                                                            <?php }
+                                                            if (0 < $orderInfo['order_volume_discount_total']) {
+                                                                $msg = 'LBL_Loyalty/Volume_Discount';
+                                                                $totalDiscount = $orderInfo['order_volume_discount_total'];
+                                                            ?>
+                                                                <li class="cart-summary-item">
+                                                                    <span class="label"><?php echo Labels::getLabel($msg, $siteLangId); ?></span>
+                                                                    <span class="value">- <?php echo CommonHelper::displayMoneyFormat($totalDiscount); ?></span>
+                                                                </li>
+                                                            <?php }
+                                                            if (0 < $orderInfo['order_tax_charged']) { ?>
+                                                                <li class="cart-summary-item">
+                                                                    <span class="label"><?php echo Labels::getLabel('LBL_TAX', $siteLangId); ?></span>
+                                                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_tax_charged']); ?></span>
+                                                                </li>
+                                                            <?php } ?>
+                                                            <?php if (0 < $shippingCharges) { ?>
+                                                                <li class="cart-summary-item">
+                                                                    <span class="label"><?php echo Labels::getLabel('LBL_SHIPPING_CHARGES', $siteLangId); ?></span>
+                                                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($shippingCharges); ?></span>
+                                                                </li>
+                                                            <?php  } ?>
+                                                            <?php if (array_key_exists('order_rounding_off', $orderInfo) && $orderInfo['order_rounding_off'] != 0) { ?>
+                                                                <li class="cart-summary-item">
+                                                                    <span class="label"><?php echo (0 < $orderInfo['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?></span>
+                                                                    <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_rounding_off']); ?></span>
+                                                                </li>
+                                                            <?php } ?>
+                                                            <?php
+                                                            if (Orders::ORDER_SUBSCRIPTION == $orderInfo['order_type']) {
+                                                                $adjustedAmount = CommonHelper::orderSubscriptionAmount(current($orderInfo['orderProducts']), 'ADJUSTEDAMOUNT');
+                                                                if (0 != $adjustedAmount) { ?>
+                                                                    <li class="cart-summary-item">
+                                                                        <span class="label"><?php echo Labels::getLabel('LBL_ADJUSTED_AMOUNT', $siteLangId); ?></span>
+                                                                        <span class="value"><?php echo CommonHelper::displayMoneyFormat($adjustedAmount); ?></span>
+                                                                    </li>
+                                                            <?php }
+                                                            } ?>
+                                                            <li class="cart-summary-item highlighted">
+                                                                <span class="label"><?php echo Labels::getLabel('LBL_NET_AMOUNT', $siteLangId); ?></span>
+                                                                <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_net_amount']); ?></span>
                                                             </li>
-                                                        <?php } ?>
+                                                            <?php
+                                                            $totalSaving =  $selProdTotalSpecialPrice + $orderInfo['order_discount_total'] + $orderInfo['order_volume_discount_total'];
+                                                            if (0 < $totalSaving) { ?>
+                                                                <li class="cart-summary-item">
+                                                                    <span class="label"><?php echo Labels::getLabel('LBL_TOTAL_SAVING', $siteLangId); ?></span>
+                                                                    <span class="value text-success"><?php echo CommonHelper::displayMoneyFormat($totalSaving); ?></span>
+                                                                </li>
+                                                            <?php } ?>
 
-                                                    </ul>
+                                                        </ul>
+                                                    </div>
+
+
                                                 </div>
-
-
                                             </div>
                                         </div>
-                                    </div>
 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                     <?php }
                     } ?>
-                   
+
                 </div>
             </div>
         </div>

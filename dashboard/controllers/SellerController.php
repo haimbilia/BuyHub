@@ -575,7 +575,7 @@ class SellerController extends SellerBaseController
             $userId,
             $this->siteLangId
         );
-
+        $orderColorClasses =  OrderStatus::getOrderStatusColorClassArray();
         $this->set('canDownload', $canDownload);
         $this->set('arr', [$orderDetail]);
         $this->set('unitTypeArray', ShippingPackage::getUnitTypes($this->siteLangId));
@@ -598,7 +598,7 @@ class SellerController extends SellerBaseController
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('frm', $frm);
         $this->set('displayForm', (in_array($orderDetail['op_status_id'], $processingStatuses)));
-
+        $this->set('orderColorClasses', $orderColorClasses);
         if ($print) {
             $print = true;
         }

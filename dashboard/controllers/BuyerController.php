@@ -354,7 +354,8 @@ class BuyerController extends BuyerBaseController
 
         $arr = (true == $primaryOrderDisplay) ? [$childOrderDetail] : $childOrderDetail;
         $this->set('arr', $arr);
-
+        $orderColorClasses =  OrderStatus::getOrderStatusColorClassArray();
+       
         $frm = $this->getTransferBankForm($this->siteLangId, $orderId);
         $this->set('frm', $frm);
         $this->set('highlightEnabled', $highlightEnabled);
@@ -372,6 +373,7 @@ class BuyerController extends BuyerBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('shippingApiObj', $shippingApiObj);
+        $this->set('orderColorClasses', $orderColorClasses);
 
         $urlParts = array($orderId, $opId);
         $this->set('urlParts', $urlParts);

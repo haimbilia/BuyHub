@@ -1,14 +1,14 @@
 .product-profile {
     display: flex;
-    flex-wrap: wrap;
     flex: 1;
     gap: 1.5rem;
-    /*max-width: 300px;*/
     min-width: 0;
-    // @include media-breakpoint-down(md) {
-    //     max-width: 80%;
-    //     margin-bottom: 1rem;
-    // }
+    // max-width: 350px;
+    width: auto;
+    flex-grow: 1;
+    align-items: flex-start;
+    position: relative;
+
     &-thumbnail {
         position: relative;
         margin-#{$end-direction}: 15px;
@@ -48,5 +48,106 @@
     &-btn {
         margin-top: 5px;
         font-size: 0.8rem;
+    }
+
+    &__pic {
+        flex: 0 0 50px;
+        max-width: 50px;
+        border: $border;
+        border-radius: $common-radius;
+        margin: 0;
+        //margin-#{$end-direction}: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        &-seller {
+            flex: 0 0 100px;
+            max-width: 100px;
+            padding: 16px;
+        }
+    }
+    &-free-size {
+        flex: auto;
+        max-width: none;
+    }
+
+    &__description {
+        font-size: 0.8rem;
+        min-width: min-content;
+
+        p {
+            margin: 3px 0;
+        }
+    }
+    &__title {
+        color: $txt-body;
+        margin: 0 0 4px 0;
+        font-weight: 600;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        word-break: break-word;
+        hyphens: auto;
+        // white-space: nowrap;
+        // overflow: hidden;
+        // text-overflow: ellipsis;
+        a {
+            opacity: 1;
+            color: inherit;
+            font-weight: inherit;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &__sub_title {
+        display: block;
+        opacity: 0.8;
+    }
+    &__brand {
+    }
+    &__location {
+        margin-bottom: 5px;
+        .svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
+    &__category {
+        opacity: 0.8;
+    }
+    &__specification {
+        color: lighten($txt-body, 20%);
+    }
+    &__sold_by {
+    }
+    &__shipping {
+    }
+    &__sold_by {
+    }
+    &__shipping {
+    }
+    &__date {
+        display: block;
+        opacity: 0.6;
+    }
+    &__price {
+        font-weight: 600;
+        &_old {
+            color: $txt-gray;
+            font-weight: 300;
+        }
+        &_off {
+            font-weight: 300;
+        }
+    }
+    &__price_off {
+        color: $primary-color;
+    }
+    .btn-close {
+        position: absolute;
+        #{$end-direction}: 0;
     }
 }

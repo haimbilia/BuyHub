@@ -1,5 +1,5 @@
 <div class="bg-brand-light pt-3 pb-3">
-    <div class="container container--fixed">
+    <div class="container">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 align-center">
                 <div class="width--narrow">
@@ -9,7 +9,7 @@
         </div>
     </div>
 </div>
-<div class="container container--fixed">
+<div class="container">
 
     <div class="panel clearfix">
 

@@ -68,7 +68,7 @@
                                         <span class="link__mobilenav"></span>
                                         <div class="subnav">
                                             <div class="subnav-inner">
-                                                <div class="categories-container">
+                                                <div class="container categories-container">
                                                     <div class="categories-block">
                                                         <?php $subyChild = 0;
                                                         foreach ($link['children'] as $children) {

@@ -6,8 +6,8 @@ if (isset($products) && 0 < count($products)) {
     <ul class="wishlist-toolbars">
         <li title="<?php echo Labels::getLabel('LBL_SELECT_ALL_ITEMS', $siteLangId); ?>" data-bs-toggle="tooltip" data-bs-placement="top">
             <label class="btn btn-outline-gray checkbox checkbox-inline select-all">
-                <input type="checkbox" class="selectAll-js" onclick="selectAll($(this));">
-                <?php echo Labels::getLabel('LBL_SELECT_ALL', $siteLangId); ?>
+                <input class="select-all selectAll-js" type="checkbox" onclick="selectAll($(this));">
+                <span> <?php echo Labels::getLabel('LBL_SELECT_ALL', $siteLangId); ?></span>
             </label>
         </li>
 
@@ -18,7 +18,7 @@ if (isset($products) && 0 < count($products)) {
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#move">
                         </use>
                     </svg>
-                    <span><?php echo Labels::getLabel('LBL_MOVE', $siteLangId); ?></span>
+                    <span class="txt"><?php echo Labels::getLabel('LBL_MOVE', $siteLangId); ?></span>
                 </button>
             </li>
         <?php } ?>
@@ -29,7 +29,7 @@ if (isset($products) && 0 < count($products)) {
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#cart">
                     </use>
                 </svg>
-                <span><?php echo Labels::getLabel('LBL_CART', $siteLangId); ?></span>
+                <span class="txt"><?php echo Labels::getLabel('LBL_CART', $siteLangId); ?></span>
             </button>
         </li>
 
@@ -39,7 +39,7 @@ if (isset($products) && 0 < count($products)) {
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                     </use>
                 </svg>
-                <span><?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?></span></button>
+                <span class="txt"><?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?></span></button>
         </li>
 
         <?php if (true == $isWishList) { ?>
@@ -49,7 +49,7 @@ if (isset($products) && 0 < count($products)) {
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                         </use>
                     </svg>
-                    <span><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></span></button>
+                    <span class="txt"><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></span></button>
             </li>
         <?php } ?>
     </ul>

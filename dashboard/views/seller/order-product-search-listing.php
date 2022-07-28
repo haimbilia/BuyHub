@@ -64,7 +64,7 @@
                         if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") != $order['orderstatus_id'] && in_array(strtolower($order['plugin_code']), ['cashondelivery', 'payatstore'])) {
                             $txt .= ' (' . $order['plugin_name']  . ')';
                         }
-                        $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'label-info';
+                        $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'badge-info';
                     }
                     $td->appendElement('span', array('class' => 'badge badge-inline ' . $labelClass), $txt . '<br>', true);
                     break;

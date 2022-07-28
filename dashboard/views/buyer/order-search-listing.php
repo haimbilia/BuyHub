@@ -71,8 +71,8 @@
                                 $orderStatus .= " - " . $order['plugin_name'];
                             }
                         }
-
-                        $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'label-info';
+                        
+                        $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'badge-info';
                     }
 
                     $td->appendElement('span', array('class' => 'badge badge-inline ' . $labelClass), $orderStatus . '<br>', true);
@@ -145,7 +145,7 @@
                             ),
                             '<svg class="svg" width="18" height="18">
                             <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#refund">
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#order-return">
                             </use>
                         </svg>',
                             true

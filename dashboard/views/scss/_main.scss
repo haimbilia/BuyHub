@@ -61,7 +61,7 @@
 @import "components/pagination";
 // @import 'components/panel';
 // @import 'components/preview';
-@import "components/product-card";
+
 // @import 'components/pro-info';
 @import "components/scroll-hint";
 @import "components/slider";
@@ -97,8 +97,9 @@
 @import "components/packages";
 @import "components/dropzone";
 @import "components/misc";
+@import "../../../application/views/scss/components/product-card";
 @import "../../../application/views/scss/components/cart-summary";
-//@import "../../../application/views/scss/components/product-profile";
+@import "../../../application/views/scss/components/product-profile";
 
 //vendors
 // @import 'vendors/animate';

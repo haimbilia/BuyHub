@@ -252,52 +252,54 @@
 .product-listing {
     display: grid;
     grid-gap: 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
 
-    //grid-gap: 0;
-    &[data-view="2"] {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    &[data-view="3"] {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    &[data-view="4"] {
-        grid-template-columns: repeat(4, 1fr);
-    }
-    &[data-view="5"] {
-        grid-template-columns: repeat(5, 1fr);
-    }
-    &[data-view="6"] {
-        grid-template-columns: repeat(6, 1fr);
-    }
-    @include media-breakpoint-down(md) {
+    @include media-breakpoint-up(xl) {
+        &[data-view="2"] {
+            grid-template-columns: repeat(2, 1fr);
+        }
         &[data-view="3"] {
             grid-template-columns: repeat(3, 1fr);
         }
         &[data-view="4"] {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
         }
         &[data-view="5"] {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(5, 1fr);
         }
         &[data-view="6"] {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(6, 1fr);
         }
     }
-    @include media-breakpoint-down(sm) {
-        grid-gap: 1px;
-        &[data-view="3"] {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        &[data-view="4"] {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        &[data-view="5"] {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        &[data-view="6"] {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
+    // @include media-breakpoint-down(md) {
+    //     &[data-view="3"] {
+    //         grid-template-columns: repeat(3, 1fr);
+    //     }
+    //     &[data-view="4"] {
+    //         grid-template-columns: repeat(3, 1fr);
+    //     }
+    //     &[data-view="5"] {
+    //         grid-template-columns: repeat(3, 1fr);
+    //     }
+    //     &[data-view="6"] {
+    //         grid-template-columns: repeat(3, 1fr);
+    //     }
+    // }
+    // @include media-breakpoint-down(sm) {
+    //     grid-gap: 1px;
+    //     &[data-view="3"] {
+    //         grid-template-columns: repeat(2, 1fr);
+    //     }
+    //     &[data-view="4"] {
+    //         grid-template-columns: repeat(2, 1fr);
+    //     }
+    //     &[data-view="5"] {
+    //         grid-template-columns: repeat(2, 1fr);
+    //     }
+    //     &[data-view="6"] {
+    //         grid-template-columns: repeat(2, 1fr);
+    //     }
+    // }
     @include media-breakpoint-down(sm) {
         grid-gap: 1px;
         .products {

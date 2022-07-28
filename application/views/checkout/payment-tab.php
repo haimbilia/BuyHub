@@ -118,11 +118,9 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
         var getExternalLibraryUrl = $(frm).data('external');
         fcom.displayProcessing();
         fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(res) {
-            fcom.removeLoader();
-            fcom.displaySuccessMessage(res.msg);
-            
             if ('undefined' != typeof getExternalLibraryUrl) {
-                fcom.ajax(getExternalLibraryUrl, '', function(t) {
+                fcom.displayProcessing();
+                fcom.ajax(getExternalLibraryUrl, '', function(t) {                   
                     var json = $.parseJSON(t);
                     if (1 > json.status) {
                         $("." + paymentMethodBlockJs + " form input[type='submit']").val(langLbl.confirmPayment);
@@ -137,10 +135,13 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
                     } else {
                         loadChargeForm(action);
                     }
+                    fcom.removeLoader();
                 });
             } else {
                 loadChargeForm(action);
             }
+            fcom.removeLoader();
+            fcom.displaySuccessMessage(res.msg);
         });
     }
 
