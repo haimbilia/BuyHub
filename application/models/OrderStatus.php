@@ -123,6 +123,32 @@ class OrderStatus extends MyAppModel
         }
     }
 
+    public static function getOrderStatusColorClassArray(): array
+    {
+
+        $tblHeadingCols = CacheHelper::get('getOrderStatusColorClassArray', CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols, true);
+        }
+
+        $srch =  self::getSearchObject();
+        $srch->addMultipleFields(array('orderstatus_id', 'orderstatus_color_class'));
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $rs = $srch->getResultSet();
+        if (!$rs) {
+            return array();
+        }
+        $arr = FatApp::getDb()->fetchAllAssoc($rs, 'orderstatus_id');
+        $colorClasses  = applicationConstants::getClassArr();
+        foreach ($arr as $statusId => $colorcode) {
+            if($colorcode !== NULL)
+            $arr[$statusId] = $colorClasses[$colorcode];
+        }
+
+        CacheHelper::create('getOrderStatusColorClassArray', json_encode($arr), CacheHelper::TYPE_ORDER_STATUS);
+        return $arr;
+    }
     /**
      * getDefaultOrderStausMsg
      *
