@@ -2,6 +2,7 @@
 
 class Navigation
 {
+    private static $navigationData = [];
     public static function headerTopNavigation($template)
     {
         $siteLangId = CommonHelper::getLangId();
@@ -11,7 +12,10 @@ class Navigation
         if ($headerTopNavigation) {
             $headerTopNavigation = unserialize($headerTopNavigation);
         } else {
-            $headerTopNavigation = self::getNavigation(Navigations::NAVTYPE_TOP_HEADER);
+            if (!array_key_exists(Navigations::NAVTYPE_TOP_HEADER, self::$navigationData)) {
+                self::$navigationData[Navigations::NAVTYPE_TOP_HEADER] = self::getNavigation(Navigations::NAVTYPE_TOP_HEADER);
+            }
+            $headerTopNavigation = self::$navigationData[Navigations::NAVTYPE_TOP_HEADER];
             CacheHelper::create('headerTopNavigation_' . $siteLangId, serialize($headerTopNavigation), CacheHelper::TYPE_NAVIGATION);
         }
         $template->set('top_header_navigation', $headerTopNavigation);
@@ -43,7 +47,10 @@ class Navigation
         if ($headerTopNavigation) {
             $headerTopNavigation = unserialize($headerTopNavigation);
         } else {
-            $headerTopNavigation = self::getNavigation(Navigations::NAVTYPE_TOP_HEADER);
+            if (!array_key_exists(Navigations::NAVTYPE_TOP_HEADER, self::$navigationData)) {
+                self::$navigationData[Navigations::NAVTYPE_TOP_HEADER] = self::getNavigation(Navigations::NAVTYPE_TOP_HEADER);
+            }
+            $headerTopNavigation = self::$navigationData[Navigations::NAVTYPE_TOP_HEADER];
             CacheHelper::create('headerTopNavigations_' . $siteLangId, serialize($headerTopNavigation), CacheHelper::TYPE_NAVIGATION);
         }
         /* $headerCategories = [];
@@ -306,7 +313,7 @@ class Navigation
         $srch->addGroupBy('nav_id');
         $srch->addGroupBy('nlink_id');
 
-        $rs = $srch->getResultSet();       
+        $rs = $srch->getResultSet();
         $rows = FatApp::getDb()->fetchAll($rs);
 
 
