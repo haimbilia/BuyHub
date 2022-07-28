@@ -19,26 +19,28 @@ class LoggedUserController extends DashboardBaseController
 
         $user = new User($this->userId);
         $this->userInfo = $user->getUserInfo(array(), false, false);
-
+        if (0 < $this->userId && empty($this->userInfo)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS', CommonHelper::getLangId()), false, true, ['displayLoginForm' => 1]);
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
+        }
+        
         $invalidAccess = (
             ($this->userId < 1) ||
             false === $this->userInfo ||
-            (
-                !UserAuthentication::isGuestUserLogged() &&
-                (
-                    $this->userInfo['credential_verified'] == applicationConstants::NO ||
+            (!UserAuthentication::isGuestUserLogged() &&
+                ($this->userInfo['credential_verified'] == applicationConstants::NO ||
                     $this->userInfo['credential_active'] == applicationConstants::NO
                 )
             )
         );
-        
+
         $isLoginByAdmin = (isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && !empty($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]));
-        if (true === $invalidAccess && false === $isLoginByAdmin) { 
+        if (true === $invalidAccess && false === $isLoginByAdmin) {
             LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS', CommonHelper::getLangId()), false, true, ['displayLoginForm' => 1]);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
         }
 
-        if (0 < $this->userInfo['user_parent']) { 
+        if (false === $invalidAccess && 0 < $this->userInfo['user_parent']) {
             $user = new User($this->userInfo['user_parent']);
             $parentUserInfo = $user->getUserInfo(array(), true, true);
             if (false == $parentUserInfo || $parentUserInfo['credential_active'] != applicationConstants::ACTIVE) {
@@ -64,7 +66,6 @@ class LoggedUserController extends DashboardBaseController
                     break;
             }
         }
-
 
         /* These actions are used while configuring Phone from "Configure Email/Phone Page". */
         $allowedActions = ['getotp', 'resendotp', 'validateotp'];
