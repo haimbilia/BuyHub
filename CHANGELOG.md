@@ -1081,6 +1081,7 @@ TV-9.4.0.20220719
     - #065496 - Unable to edit date of ribbons bound with shop type.
     - #065495 - The user is redirected to the email configuration page after the admin approves the user truncate data request and the user is logged in.
     - #065434 - 'Resend OTP' button is missing on the 'Verify your phone number' page
+    - #065308 - it shows an error while admin tries to approve badge request
     
 ## UAT points:
 

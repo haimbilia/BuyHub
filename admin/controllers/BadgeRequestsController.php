@@ -205,7 +205,7 @@ class BadgeRequestsController extends ListingBaseController
         $errMsg = BadgeRequest::REQUEST_PENDING == $status ? 'PENDING' : (BadgeRequest::REQUEST_APPROVED == $status ? 'APPROVED' : 'REJECTED');
         $errMsg = Labels::getLabel('ERR_' . $errMsg, $this->siteLangId);
 
-        if ($requestStatus == $status || $requestStatus == $status || $requestStatus == $status) {
+        if ($requestStatus == $status) {
             $msg = Labels::getLabel('ERR_YOUR_REQUEST_TO_THIS_BADGE_ALREADY_{ERROR}', $this->siteLangId);
             $msg = CommonHelper::replaceStringData($msg, ['{ERROR}' => $errMsg]);
             LibHelper::exitWithError($msg, true);
