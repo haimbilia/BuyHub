@@ -1072,6 +1072,7 @@ TV-9.4.0.20220719
     - #065700 - Nothing used to happend when user clicks on save icon .
     - #065438 - Infinite loader appears when the admin tries to add a new rating type.
     - #065657 - Ribbons set default background color to theme color.
+    - #065507 - The seller is again redirected to the supplier approval form even if the seller already placed a seller approval request.
     
 ## UAT points:
 
