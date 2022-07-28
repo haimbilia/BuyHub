@@ -1071,6 +1071,7 @@ TV-9.4.0.20220719
     - #065701 - The notice appears when the seller tries to change the order status
     - #065700 - Nothing used to happend when user clicks on save icon .
     - #065438 - Infinite loader appears when the admin tries to add a new rating type.
+    - #065657 - Ribbons set default background color to theme color.
     
 ## UAT points:
 
