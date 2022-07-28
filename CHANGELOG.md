@@ -1070,6 +1070,7 @@ TV-9.4.0.20220719
     - #065704 - Order status is missing in the under status field on the order listing page on the buyer end.
     - #065701 - The notice appears when the seller tries to change the order status
     - #065700 - Nothing used to happend when user clicks on save icon .
+    - #065665 - Order status color update on seller and buyer order view.
     
 ## UAT points:
 
