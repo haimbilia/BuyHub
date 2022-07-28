@@ -1191,22 +1191,19 @@ class ProductSearch extends SearchBase
         }
 
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-            /* $srch = new searchBase(Orders::DB_TBL, 'o');
-            $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
-            if ($langId > 0) {
-                $srch->joinTable(OrderSubscription::DB_TBL_LANG, 'LEFT OUTER JOIN', 'oss.ossubs_id = ossl.' . OrderSubscription::DB_TBL_LANG_PREFIX . 'ossubs_id AND ossubslang_lang_id = ' . $langId, 'ossl');
-            }
-            $srch->addCondition('o.order_type', '=', ORDERS::ORDER_SUBSCRIPTION);
-            $srch->addCondition('o.order_payment_status', '=', 1);
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
-            $srch->addGroupBy('o.order_user_id');
-            $srch->addMultipleFields(array('oss.*', 'order_user_id', 'order_id', 'order_type')); */
-            $sSrch = new SearchBase(Orders::DB_TBL, 'o');
+            /* $sSrch = new SearchBase(Orders::DB_TBL, 'o');
             $sSrch->addCondition('o.order_type', '=', 'mysql_func_' . Orders::ORDER_SUBSCRIPTION, 'AND', true);
             $sSrch->addCondition('o.order_payment_status', '=',  'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
             $sSrch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'o_temp.order_date_added > o.order_date_added and o_temp.order_payment_status = 1 and o_temp.order_user_id = o.order_user_id and o_temp.order_type = ' . Orders::ORDER_SUBSCRIPTION, 'o_temp');
             $sSrch->addMultipleFields(['COALESCE(o_temp.order_id, o.order_id) as currentOrderId']);
+            $sSrch->addGroupBy('o.order_id');
+            $sSrch->doNotCalculateRecords();
+            $sSrch->doNotLimitRecords(); */
+
+            $sSrch = new SearchBase(Orders::DB_TBL, 'o');
+            $sSrch->addMultipleFields(['max(o.order_id) as currentOrderId']);
+            $sSrch->addCondition('o.order_type', '=', 'mysql_func_' . Orders::ORDER_SUBSCRIPTION, 'AND', true);
+            $sSrch->addCondition('o.order_payment_status', '=',  'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
             $sSrch->addGroupBy('o.order_id');
             $sSrch->doNotCalculateRecords();
             $sSrch->doNotLimitRecords();
@@ -1243,7 +1240,7 @@ class ProductSearch extends SearchBase
             $this->addCondition('ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
         }
     }
-    
+
     public function joinSellerProductSpecifics()
     {
         $this->joinTable(SellerProductSpecifics::DB_TBL, 'LEFT JOIN', 'sps.sps_selprod_id = selprod_id', 'sps');

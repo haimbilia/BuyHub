@@ -59,5 +59,6 @@ $str .= '<tr>
     <td style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;">
         ' . $pluginKeyName . '</td>
     <td style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;">' . $txt . '</td>            
-    </tr>';
+    </tr></table>';
+
 echo $str;

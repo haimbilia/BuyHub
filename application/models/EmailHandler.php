@@ -1424,7 +1424,7 @@ class EmailHandler extends FatModel
             $phone = ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE');
         } else {
             if (!empty($withdrawalRequestData["user_email"])) {
-                $sendEmail = (new FatMailer($langId, 'withdrawal_request_approved_declined'))
+                (new FatMailer($langId, 'withdrawal_request_approved_declined'))
                     ->setTo($withdrawalRequestData["user_email"])
                     ->setVariables($arrReplacements)
                     ->send();
@@ -1479,17 +1479,12 @@ class EmailHandler extends FatModel
         if ($message == false || empty($message)) {
             return false;
         }
-
-        $url = UrlHelper::generateFullUrl('account', 'viewMessages', array($message['thread_id'], $messageId), CONF_WEBROOT_FRONT_URL);
-
-        $url = '<a href="' . $url . '">' . Labels::getLabel('LBL_CLICK_HERE', $langId) . '</a>';
-
         $arrReplacements = array(
             '{user_full_name}' => $message['message_to_name'],
             '{username}' => $message['message_from_username'],
             '{message_subject}' => $message['thread_subject'] != "" ? $message['thread_subject'] : "-NA-",
             '{message}' => nl2br($message['message_text']),
-            '{click_here}' => $url,
+            '{click_here}' => UrlHelper::generateFullUrl('account', 'viewMessages', array($message['thread_id'], $messageId), CONF_WEBROOT_FRONT_URL),
         );
 
         $sendEmail = (new FatMailer($langId, 'send_message'))
@@ -1765,17 +1760,14 @@ class EmailHandler extends FatModel
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
-
-        $requestDetailUrl = UrlHelper::generateFullUrl('Buyer', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']));
-        $requestDetailUrl = '<a href="' . $requestDetailUrl . '">' . Labels::getLabel('LBL_CLICK_HERE', $langId) . '</a>';
-
+  
         /* Buyer Notification [ */
         $arrReplacements = array(
             '{username}' => FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId),
             '{request_number}' => $msgDetail["orrequest_reference"], /* CommonHelper::formatOrderReturnRequestNumber($msgDetail['orrequest_id']), */
             '{message}' => nl2br($msgDetail["orrmsg_msg"]),
             '{user_full_name}' => $msgDetail["buyer_name"],
-            '{click_here}' => $requestDetailUrl,
+            '{click_here}' => UrlHelper::generateFullUrl('Buyer', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id'])),
             '{prod_title}' => $msgDetail['op_selprod_title'],
         );
 
@@ -1788,7 +1780,7 @@ class EmailHandler extends FatModel
                 $arrReplacements["{username}"] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId);
             }
             if (!empty($msgDetail["buyer_email"])) {
-                $sendEmail = (new FatMailer($langId, 'return_request_message_user'))
+                (new FatMailer($langId, 'return_request_message_user'))
                     ->setTo($msgDetail["buyer_email"])
                     ->setVariables($arrReplacements)
                     ->send();
@@ -1974,7 +1966,7 @@ class EmailHandler extends FatModel
                 $arrReplacements["{username}"] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId);
             }
             if (!empty($msgDetail["credential_email"])) {
-                $sendEmail = (new FatMailer($langId, 'catalog_request_message_user'))
+                (new FatMailer($langId, 'catalog_request_message_user'))
                     ->setTo($msgDetail["credential_email"])
                     ->setVariables($arrReplacements)
                     ->send();
@@ -2522,7 +2514,7 @@ class EmailHandler extends FatModel
         }
     }
 
-    public function sendMailShareEarn($senderId, $receiverEmail, $personalMsg, $langId)
+    public function sendMailShareEarn($senderId, $receiverEmail, $langId)
     {
         if (empty($senderId)) {
             trigger_error(Labels::getLabel('ERR_SENDER_ID_NOT_SPECIFIED.', $this->commonLangId), E_USER_ERROR);
@@ -2537,7 +2529,7 @@ class EmailHandler extends FatModel
         $vars = array(
             '{user_full_name}' => $userInfo['user_name'],
             '{tracking_url}' => CommonHelper::referralTrackingUrl($userInfo['user_referral_code']),
-            '{invitation_message}' => $personalMsg,
+            //'{invitation_message}' => $personalMsg,
         );
         $sendEmail = false;
         if (!empty($receiverEmail)) {
@@ -2950,9 +2942,8 @@ class EmailHandler extends FatModel
         $srch->addMultipleFields(array('uwlp_selprod_id', 'uwlist_id'));
         $srch->addGroupBy('uwlp_selprod_id');
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        $selProdIds = FatApp::getDb()->fetchAllAssoc($rs);
+        $srch->doNotLimitRecords();        
+        $selProdIds = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         $selProdIds = array_keys($selProdIds);
         $prodSrch = new ProductSearch($langId);
         $prodSrch->setDefinedCriteria(0, 0, array(), false);
