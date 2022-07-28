@@ -240,12 +240,12 @@ class ImportExportController extends ListingBaseController
         $post = FatApp::getPostedData();
 
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_CSV_FILE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_CSV_FILE'), true);
         }
 
         $obj = new Importexport();
         if (!$obj->isUploadedFileValidMimes($_FILES['import_file'])) {
-            LibHelper::exitWithError(Labels::getLabel("ERR_NOT_A_VALID_CSV_FILE", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_NOT_A_VALID_CSV_FILE"), true);
         }
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 

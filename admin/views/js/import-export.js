@@ -94,6 +94,7 @@
                     fcom.removeLoader();
                     try {
                         var ans = JSON.parse(t);
+                        console.log(ans);
                         if (ans.status == 1) {
                             fcom.displaySuccessMessage(ans.msg);
                         } else {
@@ -109,7 +110,8 @@
                             }, 1000);
                         } */
                     } catch (exc) {
-                        fcom.displayErrorMessage(t);
+                        var msg = ('undefined' != typeof t.msg ? t.msg : t);
+                        fcom.displayErrorMessage(msg);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
