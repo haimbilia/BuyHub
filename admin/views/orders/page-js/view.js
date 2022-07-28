@@ -44,8 +44,10 @@ $(document).on('change', '.downloadTypeJs', function () {
             }, 2000);
         });
     };
-    viewPaymemntGatewayResponse = function (data) {
-        $.ykmodal('<div class="form-edit-body">' + data + "</div>", true, 'modal-lg');
+    viewPaymemntGatewayResponse = function (orderId) {
+        fcom.ajax(fcom.makeUrl('Orders', 'viewPaymemntGatewayResponse'), 'order_id=' + orderId, function (t) {
+            $.ykmodal(t.html, true, "modal-lg");
+        }, { fOutMode: 'json' });
     };
 
     getOpCharges = function (orderId, chargeType) {

@@ -175,6 +175,7 @@ class OrderPayment extends Orders
                 $emailNotificationData = [
                     'user_name' => $userName,
                     'order_user_id' => $orderInfo['order_user_id'],
+                    'order_number' => $orderInfo['order_number'],
                     'order_id' => $paymentOrderId,
                     'payment_method' => $paymentMethodName,
                     'transaction_id' => $txnId,
@@ -395,10 +396,13 @@ class OrderPayment extends Orders
         return true;
     }
 
-    public function getPaymentGatewayResponse($orderId)
+    public function getPaymentGatewayResponse(): array
     {
-        $orderPaymentInfo = $this->getOrderPayments(['order_id' => $orderId]);
-        $data = current($orderPaymentInfo);
+        $orderPaymentInfo = $this->getOrderPayments(['order_id' => $this->paymentOrderId]);
+        $data = empty($orderPaymentInfo) ? [] : current($orderPaymentInfo);
+        if (empty($data)) {
+            return [];
+        }
         return json_decode($data['opayment_gateway_response'], true);
     }
 }

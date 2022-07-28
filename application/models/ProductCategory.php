@@ -212,8 +212,13 @@ class ProductCategory extends MyAppModel
 
     public static function getArray($langId, $parentId = 0, $sortByName = false, $excludeCatHavingNoProducts = false, $keywords = false, $useCache = false, $parseTree = true)
     {
+        $cacheKey = $langId . '-' . $parentId . '-' . $sortByName . '-' . $excludeCatHavingNoProducts . '-' . $keywords . '-' . $parseTree;
+        global $rootCatArr;
+        if (array_key_exists($cacheKey, $rootCatArr)) {
+            return $rootCatArr[$cacheKey];
+        }
+
         if (true == $useCache) {
-            $cacheKey = $langId . '-' . $parentId . '-' . $sortByName . '-' . $excludeCatHavingNoProducts . '-' . $keywords . '-' . $parseTree;
             $categoryArrCache = CacheHelper::get('categoryArrCache' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
             if ($categoryArrCache) {
                 return unserialize($categoryArrCache);
@@ -275,12 +280,15 @@ class ProductCategory extends MyAppModel
         $srch->addCondition('prodcat_status', '=', 'mysql_func_' . self::REQUEST_APPROVED, 'AND', true);
         $srch->addCondition('prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addCondition('prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-       
+
         $rs = $srch->getResultSet();
         $categoriesArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
         if (true == $parseTree) {
             $categoriesArr = static::parseTree($categoriesArr, $parentId);
         }
+
+        $rootCatArr[$cacheKey] = $categoriesArr;
+
         if (true == $useCache) {
             CacheHelper::create('categoryArrCache' . $cacheKey, serialize($categoriesArr), CacheHelper::TYPE_PRODUCT_CATEGORIES);
         }
@@ -553,7 +561,7 @@ class ProductCategory extends MyAppModel
 
         $return = array();
         foreach ($records as $row) {
-           /*  if (count($return) >= $limit) {
+            /*  if (count($return) >= $limit) {
                 break;
             } */
             if ($row['prodcat_parent'] > 0) {
