@@ -175,6 +175,7 @@ class OrderPayment extends Orders
                 $emailNotificationData = [
                     'user_name' => $userName,
                     'order_user_id' => $orderInfo['order_user_id'],
+                    'order_number' => $orderInfo['order_number'],
                     'order_id' => $paymentOrderId,
                     'payment_method' => $paymentMethodName,
                     'transaction_id' => $txnId,
