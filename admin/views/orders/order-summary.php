@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $transferBank = (isset($order['plugin_code']) && 'TransferBank' == $order['plugin_code']);
 
-$cartTotal = $shippingCharges = $totalTax = $volDiscount = $discount = $rewards = $netAmount = $selProdTotalSpecialPrice = 0;
+$cartTotal = $shippingCharges = $totalTax = $volDiscount = $discount = $rewards = $netAmount = $selProdTotalSpecialPrice = $op_tax_after_discount = 0;
 $taxOptionsTotal = [];
 
 $fulfillmentType = 0;
@@ -29,7 +29,7 @@ foreach ($order['products'] as $op) {
             $taxOptionsTotal[$key]['title'] = CommonHelper::displayTaxPercantage($val);
         }
     }
-    $op_tax_after_discount = $op['op_tax_after_discount'];
+    $op_tax_after_discount = $op['op_tax_after_discount'] ?? 0;
 }
 $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $order['order_volume_discount_total'];
 ?>
