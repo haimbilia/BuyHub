@@ -6,6 +6,7 @@
 
 .newsletter {
     background-color: #fff;
+    border-radius: $common-radius;
     max-width: 500px;
     padding: 2rem;
     @include media-breakpoint-up(lg) {

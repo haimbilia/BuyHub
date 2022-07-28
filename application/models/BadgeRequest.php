@@ -22,12 +22,12 @@ class BadgeRequest extends MyAppModel
     /**
      * __construct
      *
-     * @param  int $ratingTypeId
+     * @param  int $badgeRequestId
      * @return void
      */
-    public function __construct(int $ratingTypeId = 0)
+    public function __construct(int $badgeRequestId = 0)
     {
-        parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $ratingTypeId);
+        parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $badgeRequestId);
         $this->objMainTableRecord->setSensitiveFields([self::DB_TBL_PREFIX . 'id']);
     }
 
@@ -123,6 +123,7 @@ class BadgeRequest extends MyAppModel
         $srch->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blc.blinkcond_id = breq.breq_blinkcond_id', 'blc');
         $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'blc.blinkcond_badge_id =  bdg.badge_id', 'bdg');
         $srch->joinTable(Badge::DB_TBL_LANG, 'LEFT JOIN', 'bdg.badge_id =  bdg_l.badgelang_badge_id AND bdg_l.badgelang_lang_id = ' . $langId, 'bdg_l');
+        $srch->addCondition('breq_id', '=', $this->mainTableRecordId);
         $attrs = self::ATTR + BadgeLinkCondition::ATTR + Badge::ATTR;
         $attrs[] = 'COALESCE(badge_name, badge_identifier) as badge_name';
         $srch->addMultipleFields($attrs);

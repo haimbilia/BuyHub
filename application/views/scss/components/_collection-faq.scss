@@ -48,12 +48,13 @@
         max-width: none;
     }
     &-item {
-        padding: 1rem;
+        padding: 2rem;
         @include media-breakpoint-up(lg) {
             padding: 2rem 3rem;
         }
         margin-bottom: 1rem;
         background: $bg-gray;
+        border-radius: $common-radius;
         h5 {
             font-size: 1.1rem;
             margin: 0;
@@ -74,6 +75,7 @@
         width: 100%;
         font-size: 1.125rem;
         font-weight: 500;
+        color: $txt-body;
         margin: 0;
         padding: 0;
         padding-#{$end-direction}: 2rem;

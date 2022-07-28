@@ -248,8 +248,8 @@ class SpecialPriceController extends ListingBaseController
         $prodSrch->setPageSize(1);
         $rs = $prodSrch->getResultSet();
         $product = FatApp::getDb()->fetch($rs);
+        if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price'] || $post['splprice_price'] > $product['selprod_price']) {
 
-        if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price'] ) {
             $str = Labels::getLabel('ERR_PRICE_MUST_BETWEEN_MIN_SELLING_PRICE_{MINSELLINGPRICE}_AND_SELLING_PRICE_{SELLINGPRICE}', $this->siteLangId);
             $minSellingPrice = CommonHelper::displayMoneyFormat($product['product_min_selling_price'], false, true, true);
             $sellingPrice = CommonHelper::displayMoneyFormat($product['selprod_price'], false, true, true);

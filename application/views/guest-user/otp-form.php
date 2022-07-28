@@ -56,7 +56,7 @@ $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
             </div>
             <div class="row my-3">
                 <div class="col d-none">
-                    <p class="otp-seconds countdownFld--js">
+                    <p class="form-text text-muted otp-seconds countdownFld--js">
                         <?php
                         $msg = Labels::getLabel('LBL_PLEASE_WAIT_{SECONDS}_SECONDS_TO_RESEND', $siteLangId);
                         $replace = [
