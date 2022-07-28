@@ -1070,12 +1070,10 @@ TV-9.4.0.20220719
     - #065704 - Order status is missing in the under status field on the order listing page on the buyer end.
     - #065701 - The notice appears when the seller tries to change the order status
     - #065700 - Nothing used to happend when user clicks on save icon .
-<<<<<<< HEAD
     - #065665 - Order status color update on seller and buyer order view.
-=======
     - #065438 - Infinite loader appears when the admin tries to add a new rating type.
     - #065657 - Ribbons set default background color to theme color.
->>>>>>> b74b1fdc1c558b0a49874ccd60bd4b2f7fa14583
+    - #065437 - Resolved issue of added diuplicate shipping company user.
     
 ## UAT points:
 
