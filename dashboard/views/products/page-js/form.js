@@ -1,18 +1,18 @@
 var advanceMedia = false; /* open via advance media*/
-(function () {
-    getCurrentFrmLangId = function () {
+(function() {
+    getCurrentFrmLangId = function() {
         return $("#addProductfrm [name='lang_id']").val();
     };
 
-    getCurrentFrmRecordId = function () {
+    getCurrentFrmRecordId = function() {
         return $("#addProductfrm [name='record_id']").val();
     };
 
-    getCurrentFrmTempProductId = function () {
+    getCurrentFrmTempProductId = function() {
         return $("#addProductfrm [name='temp_product_id']").val();
     };
 
-    setup = function (frm) {
+    setup = function(frm) {
         if (!$(frm).validate()) {
             $('html,body').stop().animate({
                 scrollTop: $('.error:first').offset().top,
@@ -20,48 +20,48 @@ var advanceMedia = false; /* open via advance media*/
             return;
         }
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function(res) {
             langForm(res.langId, 0, res.recordId);
         });
     };
 
-    langForm = function (langId = 0, autoFillLangData = 0, recordId = 0) {
+    langForm = function(langId = 0, autoFillLangData = 0, recordId = 0) {
         recordId = recordId || getCurrentFrmRecordId();
         langId = langId || $("#addProductfrm [name='lang_id']").val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId]), { langId, autoFillLangData }, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId]), { langId, autoFillLangData }, function(res) {
             fcom.removeLoader();
             $('.mainJs').replaceWith(res.html);
             $.ykmsg.close();
         });
     };
 
-    productType = function (el) {
+    productType = function(el) {
         let recordId = getCurrentFrmRecordId();
         let langId = $("#addProductfrm [name='lang_id']").val();
         let productType = $(el).val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId, productType]), { langId }, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId, productType]), { langId }, function(res) {
             fcom.removeLoader();
             $('.mainJs').replaceWith(res.html);
             $.ykmsg.close();
         });
     };
 
-    addCategory = function () {
+    addCategory = function() {
         fcom.displayProcessing();
-        fcom.updateWithAjax(fcom.makeUrl('ProductCategories', "form"), "", function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('ProductCategories', "form"), "", function(t) {
             $.ykmodal(t.html);
         });
     };
-    addTaxCategory = function () {
+    addTaxCategory = function() {
         fcom.displayProcessing();
-        fcom.updateWithAjax(fcom.makeUrl('TaxCategories', "form"), "", function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('TaxCategories', "form"), "", function(t) {
             $.ykmodal(t.html);
             $.ykmsg.close();
         });
     };
-    addTagData = function (e) {
+    addTagData = function(e) {
         let rt_id = e.detail.data.id;
         if (rt_id == '' || rt_id == undefined) {
             if (1 > canEditTags) {
@@ -72,22 +72,22 @@ var advanceMedia = false; /* open via advance media*/
         }
     };
 
-    removeTagData = function (e) {
+    removeTagData = function(e) {
         var tag_id = e.detail.tag.id;
         var product_id = getCurrentFrmRecordId();
         if (1 > product_id || '' == tag_id) {
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) { });
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function(t) {});
         tagifyProducts();
     };
 
-    getTagsAutoComplete = function (e) {
+    getTagsAutoComplete = function(e) {
 
         let keyword = e.detail.value;
         let langId = getCurrentFrmLangId();
         var list = [];
-        fcom.ajax(fcom.makeUrl('Seller', 'tagsAutoComplete'), { keyword, langId }, function (t) {
+        fcom.ajax(fcom.makeUrl('Seller', 'tagsAutoComplete'), { keyword, langId }, function(t) {
             var ans = $.parseJSON(t);
             for (i = 0; i < ans.length; i++) {
                 list.push({
@@ -100,7 +100,7 @@ var advanceMedia = false; /* open via advance media*/
         });
     };
 
-    tagifyProducts = function () {
+    tagifyProducts = function() {
         var element = '#product_tags';
         if ('undefined' !== typeof $(element).attr('disabled')) {
             return;
@@ -113,7 +113,7 @@ var advanceMedia = false; /* open via advance media*/
         }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete).on('focus', getTagsAutoComplete);;
     };
 
-    addSpecification = function () {
+    addSpecification = function() {
         let appendEle = $('#specificationsListJs');
 
         let label = $('#sp_label').val();
@@ -171,11 +171,11 @@ var advanceMedia = false; /* open via advance media*/
         $('#btnAddSpecJs').text($('#btnAddSpecJs').data('addlbl'));
 
     };
-    validateSpeficationForm = function () {
+    validateSpeficationForm = function() {
         let validate = true;
-        $('#specificationsFormJs input').each(function () {
+        $('#specificationsFormJs input').each(function() {
             if ($(this).data('change-event-bind') != 1) {
-                $("input").change(function () {
+                $("input").change(function() {
                     $(this).siblings('ul').remove();
                 });
                 $(this).data('change-event-bind', 1);
@@ -184,7 +184,7 @@ var advanceMedia = false; /* open via advance media*/
             if ($(this).data('required') == 1 && '' == $(this).val()) {
                 let caption = $(this).siblings('label').text().trim();
                 errorlist = $(document.createElement("ul")).addClass('errorlist').append(
-                    $(document.createElement('li')).append($(document.createElement('a')).html(caption + " " + langLbl.isMandatory,).attr({ 'href': 'javascript:void(0);' }))
+                    $(document.createElement('li')).append($(document.createElement('a')).html(caption + " " + langLbl.isMandatory, ).attr({ 'href': 'javascript:void(0);' }))
                 );
                 $(this).after(errorlist);
                 validate = false;
@@ -193,11 +193,11 @@ var advanceMedia = false; /* open via advance media*/
         return validate;
     };
 
-    prodSpecifications = function () {
+    prodSpecifications = function() {
         var recordId = getCurrentFrmRecordId();
         var langId = $("#addProductfrm [name='lang_id']").val();
         fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('Products', 'prodSpecifications'), { recordId, langId }, function (res) {
+        fcom.ajax(fcom.makeUrl('Products', 'prodSpecifications'), { recordId, langId }, function(res) {
             $.ykmsg.close();
             $('#specificationsListJs').html(res.html);
             if ($('#specificationsListJs').find('table tbody tr').length == 0) {
@@ -207,7 +207,7 @@ var advanceMedia = false; /* open via advance media*/
         }, { fOutMode: 'json' });
     };
 
-    editProdSpec = function (el) {
+    editProdSpec = function(el) {
         let trEle = $(el).closest('tr');
         let prodSpecId = parseInt(trEle.data('id'));
         if (prodSpecId == NaN) {
@@ -229,7 +229,7 @@ var advanceMedia = false; /* open via advance media*/
             scrollTop: $('#specifications').offset().top,
         });
     };
-    deleteProdSpec = function (el) {
+    deleteProdSpec = function(el) {
         let prodSpecId = $(el).closest('tr').data('id');
         if (1 > prodSpecId) {
             $(el).closest('tr').remove();
@@ -239,12 +239,12 @@ var advanceMedia = false; /* open via advance media*/
             }
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId }, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId }, function(t) {
             prodSpecifications();
         });
     };
 
-    imageForm = function () {
+    imageForm = function() {
         let recordId = getCurrentFrmRecordId();
         let tempProductId = getCurrentFrmTempProductId();
         if (1 > recordId) {
@@ -254,7 +254,7 @@ var advanceMedia = false; /* open via advance media*/
             }
         }
         $.ykmodal(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('Products', "imageForm", [recordId, tempProductId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', "imageForm", [recordId, tempProductId]), '', function(t) {
             $.ykmodal(t.html);
 
             loadImageOptions();
@@ -264,8 +264,8 @@ var advanceMedia = false; /* open via advance media*/
             $.ykmsg.close();
         });
     };
-    loadImageOptions = function () {
-        $('#addProductfrm .optionsJs').each(function () {
+    loadImageOptions = function() {
+        $('#addProductfrm .optionsJs').each(function() {
             let data = $(this).select2('data');
             if (data.length) {
                 data = data[0];
@@ -276,7 +276,7 @@ var advanceMedia = false; /* open via advance media*/
                     ${forAllOptionsLbl}
                     </option>`);
 
-                    $.each(optionValueData, function (index, opval) {
+                    $.each(optionValueData, function(index, opval) {
                         optionIdEl.append(`<option value="${opval.id}">
                             ${opval.value}
                             </option>`);
@@ -289,7 +289,7 @@ var advanceMedia = false; /* open via advance media*/
         })
     };
 
-    productImagesCallback = function (t) {
+    productImagesCallback = function(t) {
         productImages(t.product_id, t.file_type, t.option_id, t.lang_id)
         if (t.isDefaultLayout) {
             productDefaultImages();
@@ -297,17 +297,17 @@ var advanceMedia = false; /* open via advance media*/
 
     };
 
-    productImages = function (product_id, file_type, option_id = 0, lang_id = 0) {
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'images', [product_id, file_type, option_id, lang_id]), '', function (t) {
+    productImages = function(product_id, file_type, option_id = 0, lang_id = 0) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'images', [product_id, file_type, option_id, lang_id]), '', function(t) {
             $.ykmsg.close();
             $('#productImagesJs').html(t.html);
         });
     };
 
-    deleteImage = function (recordId, image_id, file_type) {
+    deleteImage = function(recordId, image_id, file_type) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) { return false; }
-        fcom.ajax(fcom.makeUrl('Products', 'deleteImage', [recordId, image_id, file_type]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Products', 'deleteImage', [recordId, image_id, file_type]), '', function(t) {
             productImages(recordId, file_type, t.optionId, t.langId);
             if (t.isDefaultLayout) {
                 productDefaultImages();
@@ -315,11 +315,11 @@ var advanceMedia = false; /* open via advance media*/
         }, { fOutMode: 'json' });
     };
 
-    optionValuesChanges = function (e) {
+    optionValuesChanges = function(e) {
         upcType();
     }
 
-    getOptionValues = function (e) {
+    getOptionValues = function(e) {
         let optionId = $(e.detail.tagify.DOM.originalInput).closest('.rowJs').find('.optionsJs').val();
         if (optionId == null) {
             e.detail.tagify.settings.whitelist = [];
@@ -333,9 +333,9 @@ var advanceMedia = false; /* open via advance media*/
             keyword: keyword,
             optionId: optionId,
             langId: getCurrentFrmLangId()
-        }, function (t) {
+        }, function(t) {
             var ans = JSON.parse(t);
-            $(ans['results']).each(function (id, val) {
+            $(ans['results']).each(function(id, val) {
                 list.push({
                     "id": val.id,
                     "value": val.text,
@@ -346,61 +346,61 @@ var advanceMedia = false; /* open via advance media*/
         });
     }
 
-    tagifyOptionValue = function (element) {
+    tagifyOptionValue = function(element) {
         let index = $(element).data('index');
         console.log($(element).attr('disabled'));
         let value = $.parseJSON($(element).val());
         $(element).siblings(".tagify").remove();
         var tagify = new Tagify(document.querySelector(element), {
-            whitelist: value,
-            delimiters: "#",
-            dropdown: {
-                closeOnSelect: false,
-                enabled: 0,
-                classname: "tags-look",
-            },
-            enforceWhitelist: true,
-            skipInvalid: true,
-            hooks: {
-                beforeRemoveTag: function (tags) {
-                    return new Promise((resolve, reject) => {
-                        let recordId = getCurrentFrmRecordId();
-                        if (0 < recordId) {
-                            let optionId = $(element).closest('.rowJs').find('.optionsJs').val()
-                            let optionValueId = tags[0]['data']['id'];
-                            fcom.ajax(fcom.makeUrl('Products', "canDeleteOpValue"), { recordId, optionId, optionValueId }, function (t) {
-                                t = $.parseJSON(t);
-                                if (t.status == 0) {
-                                    fcom.displayErrorMessage(t.msg);
-                                    reject();
-                                } else {
-                                    resolve();
-                                }
-                            });
-                        } else {
-                            resolve();
-                        }
-                    })
-                }
-            },
-        })
+                whitelist: value,
+                delimiters: "#",
+                dropdown: {
+                    closeOnSelect: false,
+                    enabled: 0,
+                    classname: "tags-look",
+                },
+                enforceWhitelist: true,
+                skipInvalid: true,
+                hooks: {
+                    beforeRemoveTag: function(tags) {
+                        return new Promise((resolve, reject) => {
+                            let recordId = getCurrentFrmRecordId();
+                            if (0 < recordId) {
+                                let optionId = $(element).closest('.rowJs').find('.optionsJs').val()
+                                let optionValueId = tags[0]['data']['id'];
+                                fcom.ajax(fcom.makeUrl('Products', "canDeleteOpValue"), { recordId, optionId, optionValueId }, function(t) {
+                                    t = $.parseJSON(t);
+                                    if (t.status == 0) {
+                                        fcom.displayErrorMessage(t.msg);
+                                        reject();
+                                    } else {
+                                        resolve();
+                                    }
+                                });
+                            } else {
+                                resolve();
+                            }
+                        })
+                    }
+                },
+            })
             .on('input', getOptionValues).on('focus', getOptionValues)
             .on('change', optionValuesChanges);
         tagifyObjs[index] = tagify;
     };
 
-    upcType = function () {
+    upcType = function() {
         if (typeof upcTypeTriggerEvent != 'undefined') {
             clearTimeout(upcTypeTriggerEvent);
         }
-        upcTypeTriggerEvent = setTimeout(function () {
+        upcTypeTriggerEvent = setTimeout(function() {
             $('#variantsListJs').prepend(fcom.getLoader());
             let type = $('.upc_type:checked').val();
             let recordId = getCurrentFrmRecordId();
             let langId = getCurrentFrmLangId();
             let productOptions = {};
             if (type == 0) {
-                $('#addProductfrm select.optionsJs').each(function () {
+                $('#addProductfrm select.optionsJs').each(function() {
                     let optionData = $(this).select2('data');
                     if (1 < optionData.length) {
                         return;
@@ -415,23 +415,23 @@ var advanceMedia = false; /* open via advance media*/
 
                     productOptions[optionData.id] = { option_id: optionData.id, option_name: optionData.text, optionValues: {} };
 
-                    $.each(optionValueData, function (index, opval) {
+                    $.each(optionValueData, function(index, opval) {
                         productOptions[optionData.id]['optionValues'][opval.id] = opval.value;
                     });
                 });
             }
-            fcom.ajax(fcom.makeUrl('Products', "upcListing"), { recordId, langId, type, productOptions }, function (t) {
+            fcom.ajax(fcom.makeUrl('Products', "upcListing"), { recordId, langId, type, productOptions }, function(t) {
                 fcom.removeLoader();
                 $('#variantsListJs').html(t.html);
                 $('body').removeClass('isLoading');
             }, { fOutMode: 'json' });
         }, 2000);
     };
-    loadImageCropper = function (inputBtn) {
+    loadImageCropper = function(inputBtn) {
         loadCropper(inputBtn, true);
     }
 
-    loadCropper = function (inputBtn, isAdvanceMedia = false) {     
+    loadCropper = function(inputBtn, isAdvanceMedia = false) {
         advanceMedia = isAdvanceMedia;
         if (inputBtn.files && inputBtn.files[0]) {
             if (!validateFileUpload(inputBtn.files[0])) {
@@ -440,7 +440,7 @@ var advanceMedia = false; /* open via advance media*/
 
             loadCropperSkeleton(isAdvanceMedia);
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
-            fcom.ajax(fcom.makeUrl('Products', "imgCropper"), "", function (t) {
+            fcom.ajax(fcom.makeUrl('Products', "imgCropper"), "", function(t) {
                 t = $.parseJSON(t);
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
@@ -463,17 +463,17 @@ var advanceMedia = false; /* open via advance media*/
                     imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val("");
-                setTimeout(function () { cropImage(file, options, "mediaUpload", inputBtn) }, 100);
+                setTimeout(function() { cropImage(file, options, "mediaUpload", inputBtn) }, 100);
                 return;
             });
         }
     };
 
-    mediaUpload = function (formData) {
+    mediaUpload = function(formData) {
         var frmName = formData.get("frmName");
         var frm = document.forms[frmName];
         var other_data = $('form[name="' + frmName + '"]').serializeArray();
-        $.each(other_data, function (key, input) {
+        $.each(other_data, function(key, input) {
             formData.append(input.name, input.value);
         });
 
@@ -485,17 +485,17 @@ var advanceMedia = false; /* open via advance media*/
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function () {
-               $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+            beforeSend: function() {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
             },
-            success: function (ans) {
+            success: function(ans) {
                 $.ykmsg.close();
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
                     return;
                 }
-                $("#modalBoxJs").modal("hide");           
-                if (advanceMedia == true) {                   
+                $("#modalBoxJs").modal("hide");
+                if (advanceMedia == true) {
                     productImages(ans.record_id, ans.file_type, ans.option_id, ans.lang_id);
                 }
 
@@ -505,7 +505,7 @@ var advanceMedia = false; /* open via advance media*/
                     productDefaultImages();
                 }
             },
-            error: function (xhr, ajaxOptions, thrownError) {
+            error: function(xhr, ajaxOptions, thrownError) {
                 fcom.displayErrorMessage(
                     thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText
                 );
@@ -513,7 +513,7 @@ var advanceMedia = false; /* open via advance media*/
         });
     };
 
-    productDefaultImages = function () {
+    productDefaultImages = function() {
         let recordId = getCurrentFrmRecordId();
         fileType = 0;
         if (1 > recordId) {
@@ -521,17 +521,17 @@ var advanceMedia = false; /* open via advance media*/
             fileType = tempImageType;
         }
         fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('Products', 'images', [recordId, fileType, 0, 0]), { isDefaultLayout: 1 }, function (t) {
+        fcom.ajax(fcom.makeUrl('Products', 'images', [recordId, fileType, 0, 0]), { isDefaultLayout: 1 }, function(t) {
             fcom.closeProcessing();
             $('#productDefaultImagesJs li').not(":first").remove();
             $('#productDefaultImagesJs').append(t.html);
         }, { fOutMode: 'json' });
     };
 
-    digitalDownloadsForm = function (type, callback = '') {
+    digitalDownloadsForm = function(type, callback = '') {
         $.ykmodal(fcom.getLoader(), false, 'modal-dialog-vertical-md');
         let recordId = getCurrentFrmRecordId();
-        fcom.updateWithAjax(fcom.makeUrl('Products', "digitalDownloadForm", [recordId, type]), "", function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', "digitalDownloadForm", [recordId, type]), "", function(t) {
             fcom.removeLoader();
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
             if (typeof callback == 'function') {
@@ -543,15 +543,15 @@ var advanceMedia = false; /* open via advance media*/
         });
     };
 
-    setupDigitalDownload = function (frm) {
+    setupDigitalDownload = function(frm) {
         if (!frm.validate()) { return; }
         var data = new FormData();
         data.append('fIsAjax', 1);
-        frm.find('select,input[type=hidden],input[type=text]').each(function () {
+        frm.find('select,input[type=hidden],input[type=text]').each(function() {
             data.append(this.name, $(this).val());
         });
 
-        frm.find('input[type=file]').each(function (i, v) {
+        frm.find('input[type=file]').each(function(i, v) {
             data.append(v.name, v.files[0]);
         });
         fcom.displayProcessing();
@@ -562,32 +562,32 @@ var advanceMedia = false; /* open via advance media*/
             dataType: "json",
             processData: false,
             contentType: false,
-            success: function (t) {
+            success: function(t) {
                 $.ykmsg.close();
                 if (t.status == 0) {
                     fcom.displayErrorMessage(t.msg);
                     return;
                 }
                 fcom.displaySuccessMessage(t.msg);
-                frm.find('input[type=file],input[type=text]').each(function (i, v) {
+                frm.find('input[type=file],input[type=text]').each(function(i, v) {
                     $(v).val('');
                 });
-                digitalDownloadsForm(t.downloadType, function () {
+                digitalDownloadsForm(t.downloadType, function() {
                     $(".option-comb-id-js").val(t.optionComb);
                     $(".file-language-js").val(t.langId);
                     getDigitalDownloads(t.downloadType, t.recordId, t.langId, t.optionComb);
                 })
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function(jqXHR, textStatus, errorThrown) {
                 alert("Error Occurred.");
             }
         });
     };
 
-    getDigitalDownloads = function (downloadType, recordId, langId = 0, optionCombi = 0) {
+    getDigitalDownloads = function(downloadType, recordId, langId = 0, optionCombi = 0) {
         let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         if (downloadType == 1) {
-            fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
+            fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function(res) {
                 $.ykmsg.close();
                 if (langId == 0 && optionCombi == 0) {
                     $("#digitalLinksDefaultListJs").html(res.html);
@@ -604,7 +604,7 @@ var advanceMedia = false; /* open via advance media*/
                 $("#digitalFrmListJs").html(res.html);
             });
         } else {
-            fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function (res) {
+            fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function(res) {
                 $.ykmsg.close();
                 if (langId == 0 && optionCombi == 0) {
                     $("#digitalFilesDefaultListJs").html(res.html);
@@ -623,8 +623,8 @@ var advanceMedia = false; /* open via advance media*/
         }
     };
 
-    attachDigitalPreviewFile = function (option, langId, refId, subRefId) {
-        digitalDownloadsForm(typeDigitalFile, function () {
+    attachDigitalPreviewFile = function(option, langId, refId, subRefId) {
+        digitalDownloadsForm(typeDigitalFile, function() {
             $(".option-comb-id-js").val(option);
             $(".file-language-js").val(langId);
             $('#digitalDownloadFrm input[name=dd_link_id]').val(refId);
@@ -636,7 +636,7 @@ var advanceMedia = false; /* open via advance media*/
         });
     };
 
-    deleteDigitalFile = function (afileId, prodId, isPreview, fullRow) {
+    deleteDigitalFile = function(afileId, prodId, isPreview, fullRow) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) { return false; }
 
@@ -649,7 +649,7 @@ var advanceMedia = false; /* open via advance media*/
         }
         data += '&frow=' + fullRow;
 
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalFile'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalFile'), data, function(res) {
             $.ykmsg.close();
             let recordId = getCurrentFrmRecordId();
             let langId = $('#digitalFrmLangId').val() || 0;
@@ -658,12 +658,12 @@ var advanceMedia = false; /* open via advance media*/
         });
     };
 
-    deleteDigitallink = function (linkId, refId) {
+    deleteDigitallink = function(linkId, refId) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) {
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalLink', [linkId, refId]), '', function(t) {
             $.ykmsg.close();
             let recordId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalLink, recordId);
@@ -738,7 +738,7 @@ function optionDataCallback(ele) {
     let selectedSiblingOption = [];
     let hasSiblingWithImageOption = 0;
     ele.closest('.rowJs').siblings().find('.optionsJs')
-        .each(function (i) {
+        .each(function(i) {
             let data = $(this).select2('data');
             if (data.length) {
                 data = data[0];
@@ -754,13 +754,13 @@ function optionDataCallback(ele) {
     };
 }
 
-$(document).on('click', '.warrantyTypeJs', function () {
+$(document).on('click', '.warrantyTypeJs', function() {
     let type = $(this).data('type');
     $(this).closest('div').siblings('.warrantyTypeButtonJs').text($(this).text());
     $("#product_warranty_unit").val(type);
 });
 
-$(document).on('change', '#product_fulfillment_type', function () {
+$(document).on('change', '#product_fulfillment_type', function() {
     if ($('#shipping_profile').data('shippingApiActive') == 1) {
         return;
     }
@@ -772,7 +772,7 @@ $(document).on('change', '#product_fulfillment_type', function () {
     }
 });
 
-$(document).on('click', '.optionsAddJs', function (e) {
+$(document).on('click', '.optionsAddJs', function(e) {
     e.stopPropagation();
     let clonedRow = $('#variantCloneJs .rowJs').clone();
     let index = clonedRow.find('.optionValuesJs').data('index');
@@ -798,7 +798,7 @@ $(document).on('click', '.optionsAddJs', function (e) {
     tagifyOptionValue("#" + newOptionValueId);
 });
 
-$(document).on('click', '.optionsDeleteJs', function () {
+$(document).on('click', '.optionsDeleteJs', function() {
     let el = $(this).closest('.rowJs').find('.optionsJs');
     let optionId = el.val();
     if (0 < optionId) {
@@ -813,7 +813,7 @@ $(document).on('click', '.optionsDeleteJs', function () {
     }
 });
 
-$(document).on('change', '#image_option_id', function () {
+$(document).on('change', '#image_option_id', function() {
     let optionId = $(this).val();
     let fileType = $('#image_file_type').val();
     let recordId = $('#image_record_id').val();
@@ -821,7 +821,7 @@ $(document).on('change', '#image_option_id', function () {
     productImages(recordId, fileType, optionId, langId);
 });
 
-$(document).on('change', '#image_lang_id', function () {
+$(document).on('change', '#image_lang_id', function() {
     let langId = $(this).val();
     let fileType = $('#image_file_type').val();
     let recordId = $('#image_record_id').val();
@@ -829,7 +829,7 @@ $(document).on('change', '#image_lang_id', function () {
     productImages(recordId, fileType, optionId, langId);
 });
 
-$(document).on('change', '#digitalFrmLangId', function () {
+$(document).on('change', '#digitalFrmLangId', function() {
     let langId = $(this).val();
     let optionCombi = $('#digitalFrmOptionId').val() || 0;
     let recordId = $('#digitalFrmRecordId').val();
@@ -837,7 +837,7 @@ $(document).on('change', '#digitalFrmLangId', function () {
     getDigitalDownloads(downloadType, recordId, langId, optionCombi);
 });
 
-$(document).on('change', '#digitalFrmOptionId', function () {
+$(document).on('change', '#digitalFrmOptionId', function() {
     let optionCombi = $(this).val();
     let langId = $('#digitalFrmLangId').val();
     let recordId = $('#digitalFrmRecordId').val();
@@ -845,7 +845,7 @@ $(document).on('change', '#digitalFrmOptionId', function () {
     getDigitalDownloads(downloadType, recordId, langId, optionCombi);
 });
 
-$('.stock-nav > ul > li a').click(function (e) {
+$('.stock-nav > ul > li a').click(function(e) {
     $(this).closest('li').siblings().removeClass('is-active');
     $(this).closest('li').addClass('is-active');
 });
@@ -908,4 +908,3 @@ $('.stock-nav > ul > li a').click(function (e) {
     }
 });
 */
-

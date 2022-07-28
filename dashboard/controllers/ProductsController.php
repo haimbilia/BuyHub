@@ -218,7 +218,7 @@ class ProductsController extends SellerBaseController
             return;
         }
         $this->_template->addJs(array('seller-requests/page-js/index.js', 'products/page-js/form.js', 'js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
-        $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css', 'css/tagify.min.css'));
         $this->set("includeEditor", true);
         $this->_template->render(true, true, 'products/formWithNavigation.php');
     }

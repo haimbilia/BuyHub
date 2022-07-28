@@ -6,12 +6,11 @@
 @import "themes/variables";
 
 //layout
-@import "layout/footer";
 @import "layout/sidebar";
+@import "layout/footer";
 @import "layout/offcanvas-menu";
 
 //components
-
 @import "components/demo";
 @import "components/toaster";
 @import "components/searchbar";
@@ -90,7 +89,6 @@
 @import "components/no-data";
 // @import 'components/timeline';
 // @import 'components/review-media';
-
 @import "components/separator";
 @import "components/badges";
 @import "components/scrollbar";
@@ -102,7 +100,6 @@
 @import "../../../application/views/scss/components/product-profile";
 
 //vendors
-// @import 'vendors/animate';
 @import "vendors/fontawesome";
 @import "vendors/chartist";
 @import "vendors/cropper";
@@ -112,9 +109,10 @@
 // @import 'vendors/simplebar';
 @import "vendors/slick";
 // @import 'vendors/xzoom';
-@import "vendors/tagify";
+//@import "vendors/tagify";
 @import "vendors/intlTelInput.min";
 // @import 'vendors/nouislider.min';
+
 //pages
 @import "pages/dashboard";
 @import "pages/add-stock";

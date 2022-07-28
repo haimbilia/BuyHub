@@ -1073,6 +1073,9 @@ TV-9.4.0.20220719
     - #065665 - Order status color update on seller and buyer order view.
     - #065438 - Infinite loader appears when the admin tries to add a new rating type.
     - #065657 - Ribbons set default background color to theme color.
+    - #065437 - Resolved issue of added diuplicate shipping company user.
+    - #065415 - Resolved special price issue of greater amount in seller and admin.
+    - #065702 - Resolved issue of tag listing on input field.
     - #065507 - The seller is again redirected to the supplier approval form even if the seller already placed a seller approval request.
     - #065499 - Payment gateway response data doesn't appears properly.
     - #065496 - Unable to edit date of ribbons bound with shop type.
