@@ -128,6 +128,8 @@ class Navigation
 
         /* Badge requests */
         $badgeRequest = new SearchBase(BadgeRequest::DB_TBL, 'breq');
+        $badgeRequest->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blinkcond_id = breq_blinkcond_id', 'blc');
+        $badgeRequest->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
         $badgeRequest->addMultipleFields(['count(' . BadgeRequest::DB_TBL_PREFIX . 'id) as countOfRec']);
         $badgeRequest->addCondition(BadgeRequest::DB_TBL_PREFIX . 'status', '=', 'mysql_func_' . BadgeRequest::REQUEST_PENDING, 'AND', true);
         $badgeRequest->doNotCalculateRecords();
