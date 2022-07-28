@@ -1632,7 +1632,7 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('MSG_MANAGE_PRODUCT_BASIC_INFORMATIONS', 1, "View and manage your products information including name, type, brand, category etc.", 1)
-ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 
 UPDATE tbl_configurations SET conf_val = 10 WHERE conf_name = 'CONF_ADMIN_PAGESIZE';
