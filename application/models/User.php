@@ -586,13 +586,7 @@ class User extends MyAppModel
             $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
         }
         $srch->doNotCalculateRecords();
-        $rs = $srch->getResultSet();
-        $record = FatApp::getDb()->fetch($rs);
-
-        if (!empty($record)) {
-            return $record;
-        }
-        return false;
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public function getUserSupplierRequestsObj($requestId = 0, $applyActive = true)

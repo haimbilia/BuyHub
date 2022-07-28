@@ -2380,7 +2380,7 @@ class Orders extends MyAppModel
     public function getOrderPayments($criteria = array())
     {
         if (count($criteria) == 0) {
-            return array();
+            return [];
         }
 
         $srch = new SearchBase(static::DB_TBL_ORDER_PAYMENTS, 'opayment');
@@ -2402,11 +2402,7 @@ class Orders extends MyAppModel
         $srch->doNotCalculateRecords(true);
         $srch->addOrder('opayment_id');
 
-        $row = FatApp::getDb()->fetchAll($srch->getResultSet(), 'opayment_id');
-        if ($row == false) {
-            return array();
-        }
-        return $row;
+        return FatApp::getDb()->fetchAll($srch->getResultSet(), 'opayment_id');
     }
 
     public static function getOrderProductDigitalDownloads($op_id, $fileId = 0)

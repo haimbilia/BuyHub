@@ -492,7 +492,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
 
         $recordType = FatApp::getPostedData('blinkcond_record_type', FatUtility::VAR_INT, 0);
-        $records = FatApp::getPostedData('badgelink_record_ids', FatUtility::VAR_STRING, '');
+        $records = FatApp::getPostedData('badgelink_record_ids', FatUtility::VAR_INT, '');
         if (BadgeLinkCondition::RECORD_TYPE_SHOP == $recordType) {
             $shopId = Shop::getAttributesByUserId($sellerId, 'shop_id');
             if (false === $shopId || 1 > $shopId) {
@@ -502,7 +502,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
 
         if (Badge::COND_MANUAL == $recordCondition && BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType) {
-            if (empty($records) || (empty(current($records)))) {
+            if (empty(array_filter($records))) {
                 FatUtility::dieJsonError(Labels::getLabel('ERR_LINK_TO_IS_MANDATORY', $this->siteLangId));
             }
         }
@@ -584,6 +584,9 @@ class BadgeLinkConditionsController extends SellerBaseController
         if (Badge::COND_MANUAL == $recordCondition && !empty($records)) {
             $db = FatApp::getDb();
             foreach ($records as $recordId) {
+                if (empty($recordId)) {
+                    continue;
+                }
                 $linkData = array(
                     'badgelink_blinkcond_id' => $badgeLinkCondId,
                     'badgelink_record_id' => $recordId

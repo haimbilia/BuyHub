@@ -396,10 +396,13 @@ class OrderPayment extends Orders
         return true;
     }
 
-    public function getPaymentGatewayResponse($orderId)
+    public function getPaymentGatewayResponse(): array
     {
-        $orderPaymentInfo = $this->getOrderPayments(['order_id' => $orderId]);
-        $data = current($orderPaymentInfo);
+        $orderPaymentInfo = $this->getOrderPayments(['order_id' => $this->paymentOrderId]);
+        $data = empty($orderPaymentInfo) ? [] : current($orderPaymentInfo);
+        if (empty($data)) {
+            return [];
+        }
         return json_decode($data['opayment_gateway_response'], true);
     }
 }
