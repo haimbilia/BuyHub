@@ -28,15 +28,18 @@
         var data = fcom.frmData(frm);
         fcom.displayProcessing();
         fcom.ajax(frm.action, data, function (t) {
-                if (1 > t.status) {
-                    fcom.displayErrorMessage(t.msg);
-                    googleCaptcha();
-                    return false;
-                }
-                $.ykmsg.close();
-                $('#otpFom').html(t.html);
-                startOtpInterval();
-            }, { fOutMode: 'json' }
+            if (1 > t.status) {
+                fcom.displayErrorMessage(t.msg);
+                googleCaptcha();
+                return false;
+            }
+            $.ykmsg.close();
+            $('#otpFom').html(t.html);
+            $(".countdownFld--js, .resendOtp-js")
+                .parent()
+                .removeClass("d-none");
+            startOtpInterval();
+        }, { fOutMode: 'json' }
         );
         return false;
     };
