@@ -68,7 +68,8 @@
 @import "components/product-profile";
 @import "components/system-messages";
 @import "components/misc";
-//
+
+//vendor
 @import "vendor/particles";
 @import "vendor/line-awesome";
 @import "vendor/fontawesome";
@@ -83,9 +84,9 @@
 @import "vendor/scroll-hint";
 @import "vendor/bootstrap-select";
 @import "vendor/kanban";
-
 @import "vendor/jquery-ui";
-//
+
+//page
 @import "page/login-v1";
 @import "page/login-v2";
 @import "page/login-v3";
