@@ -54,7 +54,7 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                                         $selProdTotalSpecialPrice += $val['op_special_price'] * $val["op_qty"];
 
                                                         $prodOrBatchUrl = 'javascript:void(0)';
-                                                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($val['selprod_product_id'], ImageDimension::VIEW_MINI, $val['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg');
+                                                        $prodOrBatchImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($val['selprod_product_id'], ImageDimension::VIEW_MINI, $val['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
                                                         $productTaxChargedTxt = '';
                                                         if (empty($val['taxOptions'])) {
                                                             $productTaxChargedTxt = CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($val, 'TAX'));
@@ -298,36 +298,42 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                 }
             }
 
-    $str .= '<tr>
-                <td style="background-color: #fff;padding: 20px 25px;">
-                    <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                        <tbody>
-                            <tr>';
-                                if (!empty($shippingAddress)) {
-                                    $str .= '<td style="color:#888888;font-size: 14px;font-weight: 600;vertical-align: top;">
-                                                ' . Labels::getLabel('LBL_Order_Billing_Details', $siteLangId) . '<br/>
-                                                <span style="color:#525252;font-size: 12px;line-height: 1.5;">' 
-                                                . $billingInfo .
-                                                '</span>
-                                            </td>
-                                            <td style="color:#888888;font-size: 14px;font-weight: 600;vertical-align: top;">
-                                                ' . Labels::getLabel('LBL_Order_Shipping_Details', $siteLangId) . '<br/>
-                                                <span style="color:#525252;font-size: 12px;line-height: 1.5;">' 
-                                                . $shippingInfo .
-                                                '</span>
-                                            </td>';
-                                } else {
-                                    $str .= '<td style="color:#888888;font-size: 14px;font-weight: 600;vertical-align: top;">
-                                                ' . Labels::getLabel('LBL_Order_Billing_Details', $siteLangId) . '
-                                            </td>
-                                            <td style="color:#525252;font-size: 12px;line-height: 1.5;">'
-                                            . $billingInfo .
-                                            '</td>';
-                                }
-                            $str .= '</tr> 
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-</table>';
+    $str .= '</table><br/><br/>';
+
+$str.='
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border:1px solid #ddd; border-collapse:collapse;">
+        <tbody>';
+        if (!empty($shippingAddress)) {
+                $str .= '<tr>
+                            <td style="padding:10px;background:#eee;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;" bgcolor="#f0f0f0">
+                                <strong>' . Labels::getLabel('LBL_Order_Billing_Details', $siteLangId) . '</strong>
+                            </td>
+                            <td style="padding:10px;background:#eee;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;" bgcolor="#f0f0f0">
+                                <strong>' . Labels::getLabel('LBL_Order_Shipping_Details', $siteLangId) . '</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="top" style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;">
+                            '. $billingInfo .'
+                            </td>
+                            <td valign="top" style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;">                                               
+                            '. $shippingInfo .'
+                            </td>
+                        </tr>
+                        ';
+        } else {
+        $str .= '<tr>
+                <td style="padding:10px;background:#eee;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;" bgcolor="#f0f0f0">
+                    <strong>' . Labels::getLabel('LBL_Order_Billing_Details', $siteLangId) . '</strong>
+                </td>                                       
+                </tr>
+                <tr>
+                    <td valign="top" style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;">
+                    '. $billingInfo .'
+                    </td>                                      
+                </tr>';
+        }
+            $str .= ' 
+        </tbody>
+    </table>';
 echo $str;

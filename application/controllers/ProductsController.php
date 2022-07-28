@@ -43,10 +43,14 @@ class ProductsController extends MyAppController
 
         if ($validateBrand && array_key_exists('keyword', $get)) {
             $prodSrchObj = new ProductSearch(0);
+
+      
             $prodSrchObj->addMultipleFields(array('brand_id', 'COALESCE(tb_l.brand_name, brand.brand_identifier) as brand_name'));
             $prodSrchObj->joinSellerProducts(0, '', ['doNotJoinSpecialPrice' => true], true);
             $prodSrchObj->joinSellers();
             $prodSrchObj->setGeoAddress();
+
+            die();
             $prodSrchObj->joinShops();
             $prodSrchObj->validateAndJoinDeliveryLocation();
             $prodSrchObj->joinBrands();
@@ -66,6 +70,8 @@ class ProductsController extends MyAppController
                 $get['brand'] = !empty($postBrands) ? array_merge($brands, $postBrands) : $brands;
             }
         }
+
+        die();
         $frm = $this->getProductSearchForm($includeKeywordRelevancy);
 
         $get['join_price'] = 1;
