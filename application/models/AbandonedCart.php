@@ -188,9 +188,8 @@ class AbandonedCart extends MyAppModel
         $srch->joinSellerProducts($this->commonLangId);
         $srch->addCondition(static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $srch->addMultipleFields(array('abandonedcart_action', 'user.user_id', 'user.user_name', 'user_cred.credential_email', 'selprod_id', 'selprod_product_id', 'selprod_title', 'selprod_price'));
-        $srch->doNotCalculateRecords();
-        $rs = $srch->getResultSet();
-        $abandonedData = FatApp::getDb()->fetch($rs);
+        $srch->doNotCalculateRecords();       
+        $abandonedData = FatApp::getDb()->fetch($srch->getResultSet());
 
         $discount = ($couponData['coupon_discount_in_percent'] == applicationConstants::PERCENTAGE) ? $couponData['coupon_discount_value'] . '%' : CommonHelper::displayMoneyFormat($couponData['coupon_discount_value']);
         $arrReplacements = array(

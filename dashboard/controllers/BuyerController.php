@@ -2689,7 +2689,7 @@ class BuyerController extends BuyerBaseController
         }
         $email = array_unique(array_column(json_decode($email, true), 'value'));
         if (count($email) && !empty($email)) {
-            $personalMessage = empty($post['message']) ? "" : "<b>" . Labels::getLabel('Lbl_Personal_Message_From_Sender', $this->siteLangId) . ":</b> " . nl2br($post['message']);
+            //$personalMessage = empty($post['message']) ? "" : "<b>" . Labels::getLabel('Lbl_Personal_Message_From_Sender', $this->siteLangId) . ":</b> " . nl2br($post['message']);
             $emailNotificationObj = new EmailHandler();
             foreach ($email as $email_id) {
                 $email_id = trim($email_id);
@@ -2697,7 +2697,7 @@ class BuyerController extends BuyerBaseController
                     continue;
                 }
                 /* email notification handling[ */
-                if (!$emailNotificationObj->sendMailShareEarn(UserAuthentication::getLoggedUserId(), $email_id, $personalMessage, $this->siteLangId)) {
+                if (!$emailNotificationObj->sendMailShareEarn(UserAuthentication::getLoggedUserId(), $email_id, $this->siteLangId)) {
                     Message::addErrorMessage(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId));
                     CommonHelper::redirectUserReferer();
                 }
