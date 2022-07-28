@@ -1075,6 +1075,7 @@ TV-9.4.0.20220719
     - #065657 - Ribbons set default background color to theme color.
     - #065507 - The seller is again redirected to the supplier approval form even if the seller already placed a seller approval request.
     - #065499 - Payment gateway response data doesn't appears properly.
+    - #065496 - Unable to edit date of ribbons bound with shop type.
     
 ## UAT points:
 

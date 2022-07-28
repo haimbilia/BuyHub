@@ -164,6 +164,9 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
 
     bindRecordsSelect2 = function () {
         var selector = $(formClass + "select#recordIds--js");
+        if (1 > selector.length) {
+            return;
+        }
         selector.select2({
             tags: true,
             closeOnSelect: true,
