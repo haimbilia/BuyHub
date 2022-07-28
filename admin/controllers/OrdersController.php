@@ -1235,4 +1235,14 @@ class OrdersController extends ListingBaseController
         $fileName = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         AttachedFile::downloadAttachment($fileName, $file_row['afile_name']);
     }
+
+    public function viewPaymemntGatewayResponse()
+    {
+        $orderId = FatApp::getPostedData('order_id', FatUtility::VAR_INT, 0);
+        $oPayment = new OrderPayment($orderId);
+        $response = $oPayment->getPaymentGatewayResponse();
+        $this->set('response', $response);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
 }
