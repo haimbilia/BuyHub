@@ -1987,3 +1987,5 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 DELETE FROM `tbl_email_templates` WHERE `tbl_email_templates`.`etpl_code` = 'dummy_template'
+
+ALTER TABLE `tbl_promotions` CHANGE `promotion_budget` `promotion_budget` DECIMAL(12,2) NOT NULL;
