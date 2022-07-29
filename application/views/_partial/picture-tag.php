@@ -3,6 +3,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $webpImageUrl = $webpImageUrl ?? [];
 $jpgImageUrl = $jpgImageUrl ?? [];
+$imgSrcSet = $imgSrcSet ?? [];
 $lazyLoading = $lazyLoading ?? true;
 
 $imageUrl = isset($imageUrl) ? $imageUrl : '';
@@ -33,6 +34,9 @@ $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
     <?php
     $emptyJpgUrlCount = 0;
     $jpgItmesCount =  count($jpgImageUrl);
+
+    $srcSet = '';
+    $sizes = '';
     foreach ($jpgImageUrl as $key => $url) {
         if (empty($url)) {
             $emptyJpgUrlCount++;
@@ -42,12 +46,27 @@ $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
         $mediaArr = ImageDimension::getPictureTagMedia($key);
 
         $media = 'media="(' . $mediaArr['key'] . ':' . $mediaArr['value'] . 'px)"';
+        $sizes .= '(' . $mediaArr['key'] . ':' . $mediaArr['value'] . 'px),';
+        $srcSet .= $url . ' ' . $mediaArr['value'] . 'w,';
+
         if (1 < $emptyJpgUrlCount  || $jpgItmesCount == 1) {
             $media = '';
+            $srcSet = '';
+            $sizes = '';
         }
     ?>
 
         <source srcset="<?php echo $url; ?>" type="image/jpeg" <?php echo $media; ?>>
-    <?php } ?>
-    <img <?php (true == $lazyLoading) ? "loading='lazy'" : ""; ?> <?php !empty($ratio) ? "data-ratio='" . $ratio . "'" : ""; ?> src="<?php echo $imageUrl; ?>" alt="<?php echo $alt; ?>" title="<?php echo $title; ?>">
+    <?php }
+
+    /* $srcSet = '';
+    $sizes = '';
+    if (!empty($imgSrcSet)) {
+        foreach ($imgSrcSet as $imgKey => $imgVal) {
+            $srcSet .= $imgVal . ' ' . $imgKey . 'w,';
+            $mediaArr = ImageDimension::getPictureTagMedia($imgKey);
+            $sizes .= '(' . $mediaArr['key'] . ':' . $mediaArr['value'] . 'px),';
+        }
+    }  */ ?>
+    <img <?php echo (!empty($srcSet)) ? 'srcset="' . rtrim($srcSet, ',') . '"' : ''; ?> <?php echo (!empty($sizes)) ? 'sizes="' . rtrim($sizes, ',') . '"' : ''; ?> <?php (true == $lazyLoading) ? "loading='lazy'" : ""; ?> <?php !empty($ratio) ? "data-ratio='" . $ratio . "'" : ""; ?> src="<?php echo empty($imageUrl) ? $jpgImageUrl[ImageDimension::VIEW_DESKTOP] : $imageUrl; ?>" alt="<?php echo $alt; ?>" title="<?php echo $title; ?>">
 </picture>
