@@ -229,6 +229,13 @@ var advanceMedia = false; /* open via advance media*/
             scrollTop: $('#specifications').offset().top,
         });
     };
+
+    clearProdSpecForm = function () {
+        $('#sp_label, #sp_value, #sp_group').val('');
+        $('#sp_id').val(0);
+        $('#btnAddSpecJs').text($('#btnAddSpecJs').data('addlbl'));
+    };
+
     deleteProdSpec = function(el) {
         let prodSpecId = $(el).closest('tr').data('id');
         if (1 > prodSpecId) {
