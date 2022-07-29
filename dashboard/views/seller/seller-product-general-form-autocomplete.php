@@ -364,6 +364,12 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
             <div class="row">
                 <div class="col-md-12">
                     <div class="js-scrollable table-wrap table-responsive">
+                        <span class="form-text text-muted">
+                            <?php
+                            $errorMsg = Labels::getLabel('MSG_SELLING_PRICE_CANNOT_BE_LESS_THEN_MINIMUM_SELLING_PRICE_{MINIMUM-SELLING-PRICE}.');
+                            echo $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true)]);
+                            ?>
+                        </span>
                         <table id="optionsTable-js" class="table table-justified <?php echo ($selprod_id == 0) ? 'd-none' : ''; ?>">
                             <thead>
                                 <tr>
