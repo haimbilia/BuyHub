@@ -1159,17 +1159,33 @@ class EmailHandler extends FatModel
 
         if ($orderComment && $orderComment["oshistory_customer_notified"]) {
             $msgComments = '';
-
             if ($orderComment['oshistory_comments'] != "") {
-                $msgComments = Labels::getLabel('LBL_COMMENTS_FOR_YOUR_ORDER', $langId) . ":<br/><br/><em>" . $orderComment['oshistory_comments'] . ".</em><br/><br/>";
+                $msgComments = '<br>
+                    <div style="background: #f6f6f6; font-size: 14px; text-align: center; border-radius: 4px; color: #212529; padding: 20px; line-height: 24px">
+                        <h5 style="font-weight: 600; text-transform: uppercase; color: #212529; letter-spacing: -0.2px; margin: 0">'.Labels::getLabel('LBL_COMMENTS_FOR_YOUR_ORDER', $langId).'</h5>
+                        <p style="margin: 0">'.nl2br($orderComment['oshistory_comments']).'</p>
+                    </div>
+                '; 
             }
             $shipmentInformation = '';
             if ($orderComment['oshistory_tracking_number'] != "") {
-                $shipmentInformation = Labels::getLabel('LBL_SHIPMENT_INFORMATION', $langId) . ": " . Labels::getLabel('LBL_TRACKING_NUMBER', $langId) . " " . $orderComment['oshistory_tracking_number'] . " " . Labels::getLabel('LBL_VIA', $langId) . " " . $orderComment["op_shipping_duration_name"];
+                $shipmentInformation = Labels::getLabel('LBL_SHIPMENT_INFORMATION', $langId) . "<br>" . Labels::getLabel('LBL_TRACKING_NUMBER', $langId) . " " . $orderComment['oshistory_tracking_number'] . " " . Labels::getLabel('LBL_VIA', $langId) . " " . $orderComment["op_shipping_duration_name"];
                 if (!empty($orderComment['oshistory_tracking_url'])) {
-                    $shipmentInformation .= ' <a href="' . $orderComment['oshistory_tracking_url'] . '" target="_blank">' . $orderComment['oshistory_tracking_url'] . '</a>';
-                }
-                $shipmentInformation .= "<br>";
+                    $shipmentInformation .= '
+                        <div class="btn-wrapper" style="text-align: center">
+                            <a href="'.$orderComment['oshistory_tracking_url'].'" target="_blank" style="
+                                    border-radius: 4px;
+                                    background-color: #f13925;
+                                    color: #fff;
+                                    font-size: 14px;
+                                    letter-spacing: -0.28px;
+                                    text-decoration: none;
+                                    padding: 9px 20px;
+                                    display: inline-block;
+                                    margin-bottom: 30px;
+                                ">Track Shipment</a>
+                        </div>';                   
+                }                
             }
 
             $charges = $orderObj->getOrderProductChargesArr($orderComment['op_id']);
@@ -1190,8 +1206,8 @@ class EmailHandler extends FatModel
                 '{new_order_status}' => $statuesArr[$orderComment["oshistory_orderstatus_id"]],
                 '{invoice_number}' => $orderComment["op_invoice_number"],
                 '{order_items_table_format}' => $orderItemsTableFormatHtml,
-                '{order_admin_comments}' => nl2br($msgComments),
-                '{shipment_information}' => "<br/><br/>" . $shipmentInformation,
+                '{order_admin_comments}' => $msgComments,
+                '{shipment_information}' => $shipmentInformation,
             );
             if (!empty($orderComment["buyer_email"])) {
                 $sendEmail = (new FatMailer($langId, 'child_order_status_change'))
