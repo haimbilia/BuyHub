@@ -7,7 +7,7 @@ class Navigation
     {
         $siteLangId = CommonHelper::getLangId();
 
-        $headerTopNavigation = CacheHelper::get('headerTopNavigation_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        $headerTopNavigation = CacheHelper::get('headerTopNavigations_' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
 
         if ($headerTopNavigation) {
             $headerTopNavigation = unserialize($headerTopNavigation);
@@ -16,7 +16,7 @@ class Navigation
                 self::$navigationData[Navigations::NAVTYPE_TOP_HEADER] = self::getNavigation(Navigations::NAVTYPE_TOP_HEADER);
             }
             $headerTopNavigation = self::$navigationData[Navigations::NAVTYPE_TOP_HEADER];
-            CacheHelper::create('headerTopNavigation_' . $siteLangId, serialize($headerTopNavigation), CacheHelper::TYPE_NAVIGATION);
+            CacheHelper::create('headerTopNavigations_' . $siteLangId, serialize($headerTopNavigation), CacheHelper::TYPE_NAVIGATION);
         }
         $template->set('top_header_navigation', $headerTopNavigation);
     }
