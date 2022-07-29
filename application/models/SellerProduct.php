@@ -30,6 +30,7 @@ class SellerProduct extends MyAppModel
     public const INVENTORY_RESTRICT_LIMIT = 20;
     public const OPTION_NAME_SEPARATOR = ':';
     public const MULTIPLE_OPTION_SEPARATOR = ' | ';
+    public const MAX_RANGE_OF_AVAILBLE_QTY = 999999999;
 
     public function __construct($id = 0)
     {
