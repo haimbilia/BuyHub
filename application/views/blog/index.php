@@ -7,8 +7,19 @@ if (!empty($postList)) {
                     <div class="post">
                         <div class="post-head">
                             <figure class="post-media">
-                                <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPost['post_id']); ?>
-                                <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><img data-ratio="16:9" src="<?php echo UrlHelper::generateFileUrl('image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_LAYOUT1), CONF_WEBROOT_URL); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $blogPost['post_title']; ?>"></a>
+                                <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>">
+                                    <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPost['post_id']);
+                                    $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
+                                    $pictureAttr = [
+                                        'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, "WEBP" . ImageDimension::VIEW_LAYOUT1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
+                                        'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_LAYOUT1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
+                                        'ratio' => '16:9',
+                                        'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_LAYOUT1)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                        'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title'],
+                                        'siteLangId' => $siteLangId,
+                                    ];
+                                    $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                                    ?></a>
                             </figure>
                         </div>
                         <div class="post-body">
@@ -50,8 +61,19 @@ if (!empty($postList)) { ?>
                     <div class="post">
                         <div class="post-head">
                             <figure class="post-media">
-                                <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPost['post_id']); ?>
-                                <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><img data-ratio="16:9" src="<?php echo UrlHelper::generateUrl('image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_LAYOUT2), CONF_WEBROOT_URL); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $blogPost['post_title']; ?>"></a>
+                                <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>">
+                                    <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPost['post_id']);
+                                    $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
+                                    $pictureAttr = [
+                                        'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, "WEBP" . ImageDimension::VIEW_LAYOUT2)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
+                                        'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_LAYOUT2)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
+                                        'ratio' => '16:9',
+                                        'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_LAYOUT2)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                        'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title'],
+                                        'siteLangId' => $siteLangId,
+                                    ];
+                                    $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                                    ?></a>
                             </figure>
                         </div>
                         <div class="post-body">
@@ -99,9 +121,19 @@ if (!empty($postList)) { ?>
                     <div class="post">
                         <div class="post-head">
                             <figure class="post-media">
-                                <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPost['post_id']); ?>
                                 <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>">
-                                    <img data-ratio="16:9" src="<?php echo UrlHelper::generateUrl('image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_FEATURED), CONF_WEBROOT_URL); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $blogPost['post_title']; ?>"></a>
+                                    <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPost['post_id']);
+                                    $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
+                                    $pictureAttr = [
+                                        'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, "WEBP" . ImageDimension::VIEW_FEATURED), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
+                                        'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_FEATURED), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
+                                        'ratio' => '16:9',
+                                        'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_FEATURED), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                        'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title'],
+                                        'siteLangId' => $siteLangId,
+                                    ];
+                                    $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                                    ?></a>
                             </figure>
                         </div>
                         <div class="post-body">
@@ -133,8 +165,20 @@ if (!empty($postList)) { ?>
                     <div class="post">
                         <div class="post-head">
                             <figure class="post-media">
-                                <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPost['post_id']); ?>
-                                <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><img data-ratio="16:9" src="<?php echo UrlHelper::generateUrl('image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_LAYOUT1), CONF_WEBROOT_URL); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $blogPost['post_title']; ?>"></a>
+                                <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>">
+                                    <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPost['post_id']);
+                                    $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
+                                    $pictureAttr = [
+                                        'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, "WEBP" . ImageDimension::VIEW_LAYOUT1), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
+                                        'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_LAYOUT1), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
+                                        'ratio' => '16:9',
+                                        'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_LAYOUT1), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                        'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title'],
+                                        'siteLangId' => $siteLangId,
+                                    ];
+                                    $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                                    ?>
+                                </a>
                             </figure>
                         </div>
                         <div class="post-body">
@@ -175,9 +219,19 @@ if (!empty($postList)) { ?>
                     <div class="post">
                         <div class="post-head">
                             <figure class="post-media">
-                                <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPost['post_id']); ?>
                                 <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>">
-                                    <img data-ratio="16:9" src="<?php echo UrlHelper::generateUrl('image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_FEATURED), CONF_WEBROOT_URL); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $blogPost['post_title']; ?>"></a>
+                                    <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPost['post_id']);
+                                    $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
+                                    $pictureAttr = [
+                                        'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, "WEBP" . ImageDimension::VIEW_FEATURED), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
+                                        'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_FEATURED), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
+                                        'ratio' => '16:9',
+                                        'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, ImageDimension::VIEW_FEATURED), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                        'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title'],
+                                        'siteLangId' => $siteLangId,
+                                    ];
+                                    $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                                    ?></a>
                             </figure>
                         </div>
                         <div class="post-body">

@@ -11,10 +11,19 @@
                             <div class="post-head">
                                 <div class="post-media">
                                     <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blog['post_id'])); ?>" class="animate-scale">
-                                        <picture>
-                                            <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blog['post_id']); ?>
-                                            <img loading='lazy' data-ratio="16:9" src="<?php echo UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blog['post_id'], $siteLangId, ImageDimension::VIEW_FEATURED)); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blog['post_title']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $blog['post_title']; ?>">
-                                        </picture>
+                                        <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blog['post_id']);
+                                        $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
+                                        $pictureAttr = [
+                                            'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blog['post_id'], $siteLangId, "WEBP" . ImageDimension::VIEW_FEATURED)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
+                                            'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blog['post_id'], $siteLangId, ImageDimension::VIEW_FEATURED)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
+                                            'ratio' => '16:9',
+                                            'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($blog['post_id'], $siteLangId, ImageDimension::VIEW_FEATURED)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                            'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blog['post_title'],
+                                            'siteLangId' => $siteLangId,
+                                        ];
+                                        $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                                        ?>
+
                                     </a>
                                 </div>
                             </div>

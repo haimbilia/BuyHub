@@ -44,13 +44,12 @@ class ProductsController extends MyAppController
         if ($validateBrand && array_key_exists('keyword', $get)) {
             $prodSrchObj = new ProductSearch(0);
 
-      
+
             $prodSrchObj->addMultipleFields(array('brand_id', 'COALESCE(tb_l.brand_name, brand.brand_identifier) as brand_name'));
             $prodSrchObj->joinSellerProducts(0, '', ['doNotJoinSpecialPrice' => true], true);
             $prodSrchObj->joinSellers();
             $prodSrchObj->setGeoAddress();
 
-            die();
             $prodSrchObj->joinShops();
             $prodSrchObj->validateAndJoinDeliveryLocation();
             $prodSrchObj->joinBrands();
@@ -71,7 +70,6 @@ class ProductsController extends MyAppController
             }
         }
 
-        die();
         $frm = $this->getProductSearchForm($includeKeywordRelevancy);
 
         $get['join_price'] = 1;
@@ -486,7 +484,7 @@ class ProductsController extends MyAppController
                 'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name',
                 'shop_id', 'COALESCE(shop_name, shop_identifier) as shop_name', 'COALESCE(sq_sprating.prod_rating,0) prod_rating ', 'COALESCE(sq_sprating.totReviews,0) totReviews',
                 'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age',
-                'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name','selprod_condition'
+                'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'selprod_condition'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -494,7 +492,7 @@ class ProductsController extends MyAppController
     }
 
     public function view($selprod_id = 0)
-    { 
+    {
         $selprod_id = FatUtility::int($selprod_id);
         if (1 > $selprod_id) {
             if (true === MOBILE_APP_API_CALL) {

@@ -11,7 +11,7 @@
 				var minWidth = document.frmRecordImage.banner_min_width.value;
 				var minHeight = document.frmRecordImage.banner_min_height.value;
 				var options = {
-					aspectRatio: aspectRatio,
+					aspectRatio: minWidth/minHeight,
 					data: {
 						width: minWidth,
 						height: minHeight,
@@ -201,9 +201,3 @@ $(document).on('change', '.thumbLanguageJs', function () {
 	categoryImages(prodcat_id, 'thumb', 0, lang_id);
 });
 
-$(document).on('change', '.catPrefDimensionsJs', function () {
-	var slide_screen = $(this).val();
-	var prodcat_id = $("input[name='prodcat_id']").val();
-	var lang_id = $(".catBannerLanguageJs").val();
-	categoryImages(prodcat_id, 'banner', slide_screen, lang_id);
-});
