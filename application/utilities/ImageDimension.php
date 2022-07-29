@@ -246,6 +246,7 @@ class ImageDimension extends FatUtility
             self::VIEW_CLAYOUT2 => [self::WIDTH => 468, self::HEIGHT => 468],
             self::VIEW_CLAYOUT1 => [self::WIDTH => 341, self::HEIGHT => 341],
             self::VIEW_CLAYOUT3 => [self::WIDTH => 300, self::HEIGHT => 300],
+            self::VIEW_MOBILE => [self::WIDTH => 180, self::HEIGHT => 180],
 
             self::VIEW_THUMB => [self::WIDTH => 110, self::HEIGHT => 110],
             self::VIEW_MINI => [self::WIDTH => 50, self::HEIGHT => 50],

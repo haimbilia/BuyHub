@@ -1072,8 +1072,7 @@ class Orders extends MyAppModel
         if ($opId > 0) {
             $srch->addCondition('oua_op_id', '=', $opId);
         }
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
+        $srch->doNotCalculateRecords();       
         return FatApp::getDb()->fetchAll($srch->getResultSet(), 'oua_type');
     }
 

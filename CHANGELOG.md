@@ -1084,6 +1084,7 @@ TV-9.4.0.20220719
     - #065434 - 'Resend OTP' button is missing on the 'Verify your phone number' page
     - #065308 - it shows an error while admin tries to approve badge request
     - #065733 - A blank error message appears if the user uploads the invalid file type in the media section for the brand import
+    - #065762 - Parse error occurs when the admin tries to generate the label for the order.
     
 ## UAT points:
 
