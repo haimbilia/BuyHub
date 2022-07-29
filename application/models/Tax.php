@@ -731,7 +731,7 @@ class Tax extends MyAppModel
         $taxData = array();
         $taxObj = static::getTaxCatObjByProductId($productId, $langId);
         $taxObj->addCondition('ptt_seller_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
-        $taxObj->addCondition('taxcat_plugin_id', '=', $pluginId);       
+             
         if ($fields) {
             $taxObj->addMultipleFields($fields);
         }else{
@@ -739,8 +739,9 @@ class Tax extends MyAppModel
             if (0 < $taxPluginId) {
                 $fields = ['concat(IFNULL(taxcat_name,taxcat_identifier)', '" (",taxcat_code,")") as taxcat_name', 'taxcat_id'];
             } else {
-                $fields = ['IFNULL(taxcat_name,taxcat_identifier) as taxcat_name', 'taxcat_id'];
+                $fields = ['IFNULL(taxcat_name,taxcat_identifier) as taxcat_name', 'taxcat_id'];               
             }
+            $taxObj->addCondition('taxcat_plugin_id', '=', $taxPluginId);  
             $taxObj->addMultipleFields($fields);
         }
 
