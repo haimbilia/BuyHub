@@ -1100,7 +1100,8 @@ TV-9.4.0.20220719
     - #065790 - No success popup when user clicks on save icon.
     - #065767 - 404 page should appear when the user makes any unauthorized change in the URL.
     - #065773 - Preferred Dimensions value appears wrong when the admin opens the email templated setting for the first time. 
-    
+    - #065777 - Multiple issues on the Products listing page.
+
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
