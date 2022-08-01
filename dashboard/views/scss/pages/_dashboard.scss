@@ -1934,10 +1934,9 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
         color: $txt-gray;
         white-space: nowrap;
         text-overflow: ellipsis;
-        display: block;
         flex: 1;
         max-width: 256px;
-        overflow: hidden;
+        //overflow: hidden;
         &.disabled {
             opacity: 0.75;
             pointer-events: none;

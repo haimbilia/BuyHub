@@ -22,7 +22,13 @@
                 <?php if (strlen($addresses['addr_phone']) > 0) {
                     $addrPhone = ValidateElement::formatDialCode($addresses['addr_phone_dcode']) . $addresses['addr_phone'];
                 ?>
-                    <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
+                    <p class="phone-txt">
+                        <svg class="svg" width="20" height="20">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                            </use>
+                        </svg>
+                        <?php echo $addrPhone; ?>
+                    </p>
                 <?php } ?>
             </div>
         </li>
@@ -81,9 +87,22 @@
                                         <?php if (strlen($address['addr_phone']) > 0) {
                                             $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                                         ?>
-                                            <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
+                                            <p class="phone-txt">
+
+                                                <svg class="svg" width="20" height="20">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                                    </use>
+                                                </svg>
+
+                                                <?php echo $addrPhone; ?>
+                                            </p>
                                         <?php } ?>
-                                        <p class="time-txt"><i class="fas fa-calendar-day"></i><?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
+                                        <p class="time-txt">
+                                            <svg class="svg" width="20" height="20">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#calendar-day">
+                                                </use>
+                                            </svg>
+                                            <?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
                                         </p>
                                     <?php } ?>
                                 </div>

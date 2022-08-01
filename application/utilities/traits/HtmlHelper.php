@@ -149,7 +149,7 @@ class HtmlHelper
 
         if (!empty($labelInfoText)) {
             $label->appendElement('i', [
-                'class' => 'fas fa-exclamation-circle',
+                'class' => 'fas fa-exclamation-triangle',
                 'data-bs-toggle' => 'tooltip',
                 'data-original-title' => $labelInfoText,
             ]);

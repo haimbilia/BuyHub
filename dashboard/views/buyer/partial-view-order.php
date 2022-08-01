@@ -66,7 +66,7 @@ if (!empty($digitalDownloads)) { ?>
                                 <?php echo $sr_no; ?>
                             </td>
                             <td>
-                                <?php echo '<div class="text-break">' . $fileName . '</div>'; ?>
+                                <?php echo '<div>' . $fileName . '</div>'; ?>
                             </td>
                             <td>
                                 <?php echo $lang_name; ?>

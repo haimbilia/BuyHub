@@ -2,7 +2,12 @@
 <div class="block-empty m-auto text-center">
     <div id="dvAlert">
         <div class="cards-message">
-            <div class="cards-message-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="cards-message-icon">
+                <svg class="svg" width="20" height="20">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#exclamation-triangle">
+                    </use>
+                </svg>
+            </div>
             <div class="cards-message-text">
                 <?php
                 if (isset($message)) {
