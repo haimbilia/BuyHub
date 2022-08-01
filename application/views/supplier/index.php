@@ -28,7 +28,7 @@ if (!empty($slogan)) {
                             <h3><?php echo $slogan['epage_label']; ?></h3>
                         <?php } ?>
 
-                        <p><?php echo $pageContent; ?></p>
+                        <p><?php echo nl2br($pageContent); ?></p>
                     </div>
                 </div>
                 <div class="seller-register-form">

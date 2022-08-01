@@ -7,11 +7,10 @@ if (null != $btn) {
     $btn->addFieldTagAttribute('class', 'btn btn-brand');
 }
 ?>
-
 <div class="content-wrapper content-space">
     <?php
     $data = [
-        'headingLabel' => Labels::getLabel('LBL_View_Order_Return_Request', $siteLangId) . ': <span class="number">' . $request['orrequest_reference'] . '</span>',
+        'headingLabel' => Labels::getLabel('LBL_View_Order_Return_Request', $siteLangId),
         'siteLangId' => $siteLangId,
         'headingBackButton' => [
             'href' => UrlHelper::generateUrl('Seller', 'orderReturnRequests'),
@@ -43,7 +42,6 @@ if (null != $btn) {
                             <div class="col-md-12">
                                 <ul class="list-stats list-stats-double">
                                     <li class="list-stats-item">
-
                                         <span class="value"><?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $request, 'siteLangId' => $siteLangId], false, true); ?></span>
                                     </li>
                                     <li class="list-stats-item">
@@ -54,7 +52,6 @@ if (null != $btn) {
                                         <span class="label"><?php echo Labels::getLabel('LBL_Order_Id/Invoice_Number', $siteLangId); ?></span>
                                         <span class="value"><?php echo $request['op_invoice_number']; ?></span>
                                     </li>
-
                                     <li class="list-stats-item">
                                         <span class="label"><?php echo Labels::getLabel('LBL_Return_Qty', $siteLangId); ?></span>
                                         <span class="value"><?php echo $request['orrequest_qty']; ?></span>
@@ -92,7 +89,10 @@ if (null != $btn) {
                             $frmMsg->setFormTagAttribute('onSubmit', 'setUpReturnOrderRequestMessage(this); return false;');
                             $frmMsg->setFormTagAttribute('class', 'form');
                             $frmMsg->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
-                            $frmMsg->developerTags['fld_default_col'] = 12; ?>
+                            $frmMsg->developerTags['fld_default_col'] = 12; 
+                            $btn = $frmMsg->getField('btn_submit');
+                            $btn->developerTags['noCaptionTag'] = true;                            
+                            ?>
                             <div class="messages-list">
                                 <ul>
                                     <li>

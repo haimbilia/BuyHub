@@ -68,7 +68,10 @@ $("document").ready(function () {
                 fcom.removeLoader();
                 ans = $.parseJSON(ans);
                 $.ykmsg.close();
+                let toolbar = $(ans.html).find('.card-toolbar').html();          
                 $(dv).replaceWith(ans.html);
+                $(dv).find('.card-toolbar').remove();                     
+                $('#headerToolbar').html(toolbar); 
             }
         );
     };
@@ -82,8 +85,11 @@ $("document").ready(function () {
         fcom.ajax(fcom.makeUrl("Account", "searchWishListItems"), "uwlist_id=" + uwlist_id + "&page=" + page,
             function (ans) {
                 fcom.removeLoader();
-                ans = $.parseJSON(ans);
+                ans = $.parseJSON(ans);    
+                let toolbar = $(ans.html).find('.card-toolbar').html();                    
                 $(dv).replaceWith(ans.html);
+                $(dv).find('.card-toolbar').remove(); 
+                $('#headerToolbar').html(toolbar); 
             }
         );
     };
@@ -123,6 +129,7 @@ $("document").ready(function () {
                 $('.navLinkJs.active').removeClass('active');
                 $('.navLinkJs.favtShopsJs').addClass('active');
                 $(dv).html(res);
+                $('#headerToolbar').html('');     
             }
         );
     };
