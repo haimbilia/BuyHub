@@ -1095,6 +1095,7 @@ TV-9.4.0.20220719
     - #065623 - Ui got distorted on View order return request page .
     - #065672 - content does not appears properly .
     - #065729 - The image description added for any content page is not properly aligned on the front end. 
+    - #065730 - Blank space on the front end if no content is added in any content block in the content page layout 1.
     
 ## UAT points:
 

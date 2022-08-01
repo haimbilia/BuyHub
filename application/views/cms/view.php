@@ -11,7 +11,7 @@
         </div>
         <?php if ($blockData) { ?>
             <div class="about-us">
-                <?php if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_1]) && $blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_1]['cpblocklang_text']) { ?>
+                <?php if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_1]['cpblocklang_text']) && !empty($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_1]['cpblocklang_text'])) { ?>
                     <section class="section">
                         <div class="container">
                             <?php echo FatUtility::decodeHtmlEntities($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_1]['cpblocklang_text']); ?>
@@ -19,7 +19,7 @@
                     </section>
                 <?php
                 }
-                if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_2]) && $blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_2]['cpblocklang_text']) {
+                if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_2]['cpblocklang_text']) && !empty($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_2]['cpblocklang_text'])) {
                 ?>
                     <section class="section">
                         <div class="container">
@@ -28,7 +28,7 @@
                     </section>
                 <?php
                 }
-                if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_3]) && $blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_3]['cpblocklang_text']) {
+                if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_3]['cpblocklang_text']) && !empty($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_3]['cpblocklang_text'])) {
                 ?>
                     <section class="section">
                         <div class="container">
@@ -37,7 +37,7 @@
                     </section>
                 <?php
                 }
-                if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_4]) && $blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_4]['cpblocklang_text']) {
+                if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_4]['cpblocklang_text']) && !empty($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_4]['cpblocklang_text'])) {
                 ?>
                     <section class="section  bg-gray">
                         <div class="container">
@@ -46,7 +46,7 @@
                     </section>
                 <?php
                 }
-                if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_5]) && $blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_5]['cpblocklang_text']) {
+                if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_5]['cpblocklang_text']) && !empty($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_5]['cpblocklang_text'])) {
                 ?>
                     <section class="section">
                         <div class="container">
