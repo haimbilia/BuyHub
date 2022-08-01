@@ -1096,7 +1096,8 @@ TV-9.4.0.20220719
     - #065672 - content does not appears properly .
     - #065729 - The image description added for any content page is not properly aligned on the front end. 
     - #065730 - Blank space on the front end if no content is added in any content block in the content page layout 1.
-    - #065790 - No success popup when user clicks on save icon
+    - #065790 - No success popup when user clicks on save icon.
+    - #065767 - 404 page should appear when the user makes any unauthorized change in the URL
     
 ## UAT points:
 
