@@ -531,8 +531,7 @@ function initMap(lat = 40.72, lng = -73.96, elementId = "map") {
         title: address,
         draggable: true,
     });
-
-    google.maps.event.addListener(marker, "dragend", function () {
+    google.maps.event.addListener(marker, 'dragend', function () {
         geocoder.geocode(
             { latLng: marker.getPosition() },
             function (results, status) {
@@ -592,7 +591,7 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
                 draggable: true,
             });
             geocodeSetData(results);
-            google.maps.event.addListener(marker, "dragend", function () {
+            google.maps.event.addListener(marker, 'dragend', function () {
                 geocoder.geocode(
                     { latLng: marker.getPosition() },
                     function (results, status) {
@@ -621,7 +620,6 @@ function geocodeSetData(results) {
     if (null == document.getElementById("lat") || null == document.getElementById("lng")) {
         return false;
     }
-
     document.getElementById("lat").value = marker.getPosition().lat();
     document.getElementById("lng").value = marker.getPosition().lng();
     if (results[0]) {
