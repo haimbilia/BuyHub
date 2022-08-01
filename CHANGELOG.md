@@ -1090,6 +1090,7 @@ TV-9.4.0.20220719
     - #065763 - it shows deleted products in listing while linking
     - #065752 - Random year value appears for the expiration year for a discount coupon when the admin creates a discount coupon without selecting the start and end date.
     - #065737 - Nothing happens by clicking on the increase and decrease quantity button on the product details page if the available stock and minimum purchase quantity both are the same
+    - #065734 - Admin is not able to add media files to a server in the import/export module.
     
 ## UAT points:
 
