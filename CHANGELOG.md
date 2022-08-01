@@ -1085,6 +1085,7 @@ TV-9.4.0.20220719
     - #065733 - A blank error message appears if the user uploads the invalid file type in the media section for the brand import
     - #065762 - Parse error occurs when the admin tries to generate the label for the order.
     - #065623 - Ui got distorted on View order return request page .
+    - #065672 - content does not appears properly .
     
 ## UAT points:
 

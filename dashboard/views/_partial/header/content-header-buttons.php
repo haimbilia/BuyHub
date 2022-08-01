@@ -4,7 +4,7 @@ $action = $action ?? '';
 $canViewProducts = $canViewProducts ?? true;
 $canEditProducts = $canEditProducts ?? true;
 if ($canEdit) { ?>
-    <div class="content-header-toolbar">
+    <div class="content-header-toolbar" id="headerToolbar">
         <ul>
             <?php if (User::canAddCustomProduct() && $action == 'products') {
                 if ($canEditProducts) { ?>
