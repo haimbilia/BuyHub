@@ -41,8 +41,8 @@ $settingFrm->changeFieldPosition($htmlFld->getFormIndex(), $fld->getFormIndex())
 $settingFrm->removeField($fld);
 
 $fld = $settingFrm->getField('auto_update_other_langs_data');
-if ($fld != null) {    
-    if(!isset($fld->developerTags['colWidthValues'])){
+if ($fld != null) {
+    if (!isset($fld->developerTags['colWidthValues'])) {
         $fld->developerTags['colWidthValues'] = [null, '12', null, null];
     }
     HtmlHelper::configureSwitchForCheckbox($fld);
@@ -83,7 +83,7 @@ $fld->value = '<label class="label">' . Labels::getLabel('LBL_EMAIL_LOGO', $lang
     $imgArr,
     'mt-3 dropzone-custom dropzoneContainerJs'
 );
-$fld->htmlAfterField='<span class="form-text text-muted logoPreferredDimensionsJs"></span>';
+$fld->htmlAfterField = '<span class="form-text text-muted logoPreferredDimensionsJs"></span>';
 
 ?>
 <div id="editor_default_content" style="display:none;">
@@ -100,18 +100,25 @@ $fld->htmlAfterField='<span class="form-text text-muted logoPreferredDimensionsJ
     </div>
     <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
-<script> 
-    var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;  
-    $(document).on('change', '.prefRatio-js', function() {       
-        if ($(this).val() == ratioTypeSquare) {
-            $('input[name=min_width]').val(<?php echo $logoSqDimensions['width'];?>);
-            $('input[name=min_height]').val(<?php echo $logoSqDimensions['height'];?>);
+<script>
+    var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
+
+    function changeRatio(val) {
+        if (val == ratioTypeSquare) {
+            $('input[name=min_width]').val(<?php echo $logoSqDimensions['width']; ?>);
+            $('input[name=min_height]').val(<?php echo $logoSqDimensions['height']; ?>);
             $('.logoPreferredDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $logoSqDimensions['width']; ?> x <?php echo $logoSqDimensions['height']; ?>'));
-        } else {      
-            $('input[name=min_width]').val(<?php echo $logoRecDimensions['width'];?>);
-            $('input[name=min_height]').val(<?php echo $logoRecDimensions['height'];?>);
+        } else {
+            $('input[name=min_width]').val(<?php echo $logoRecDimensions['width']; ?>);
+            $('input[name=min_height]').val(<?php echo $logoRecDimensions['height']; ?>);
             $('.logoPreferredDimensionsJs').html(langLbl.preferredDimensions.replace(/%s/g, '<?php echo $logoRecDimensions['width']; ?> x <?php echo $logoRecDimensions['height']; ?>'));
         }
+    }
+    $(document).on('change', '.prefRatio-js', function() {
+        changeRatio($(this).val());
     });
-    $('.prefRatio-js').trigger('change');
+
+    $(document).ready(function() {
+        changeRatio($('.prefRatio-js').val());
+    });
 </script>

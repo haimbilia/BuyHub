@@ -9,31 +9,46 @@
                 </div>
             </div>
 
+            <div class="category-layout-2 category-layout-listing">
+                <?php foreach ($categoriesArr as $category) {  ?>
+                    <div class="category">
+                        <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $category['prodcat_id']);
+                        $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
+                        ?>
+                        <div class="category-head">
+                            <?php
+                            $pictureAttr = [
+                                'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'WEBP' . ImageDimension::VIEW_MEDIUM, 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
+                                'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, ImageDimension::VIEW_MEDIUM, 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
+                                'ratio' => '4:1',
+                                'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, ImageDimension::VIEW_MEDIUM, 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $category['prodcat_name'],
+                                'title' => (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $category['prodcat_name'],
+                                'siteLangId' => $siteLangId,
+                            ];
 
-            <div class="masonry">
-                <?php foreach ($categoriesArr as $category) { ?>
-                    <div class="masonry-item">
-                        <div class="masonry-content">
-                            <div class="categories-thumb">
-                                <a href="<?php echo UrlHelper::generateUrl('category', 'view', array($category['prodcat_id'])); ?>">
-                                    <div class="aspect-ratio">
-                                        <div class="categories-thumb-bg" style="background-image: url(<?php echo UrlHelper::generateFullFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId)); ?>);">
-                                        </div>
-                                    </div>
-                                    <h6 class="categories-thumb-heading"><?php echo $category['prodcat_name']; ?></h6>
-                                </a>
-                            </div>
-                            <?php if (array_key_exists('children', $category) && 0 < count($category['children'])) { ?>
-                                <ul>
-                                    <?php foreach ($category['children'] as $childCat) { ?>
-                                        <li>
-                                            <a href="<?php echo UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id'])); ?>">
-                                                <?php echo $childCat['prodcat_name']; ?>
-                                            </a>
+                            $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                            ?>
+                        </div>
+
+                        <div class="category-body">
+                            <ul class="category-list">
+                                <li class="category-list-item category-list-head">
+                                    <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($category['prodcat_id'])); ?>">
+                                        <?php echo $category['prodcat_name']; ?>
+                                    </a>
+                                </li>
+                                <?php
+                                if (array_key_exists('children', $category) && 0 < count($category['children'])) {
+                                    foreach ($category['children'] as $subCat) { ?>
+                                        <li class="category-list-item">
+                                            <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($subCat['prodcat_id'])); ?>">
+                                                <?php echo $subCat['prodcat_name']; ?></a>
                                         </li>
-                                    <?php } ?>
-                                </ul>
-                            <?php } ?>
+                                <?php
+                                    }
+                                } ?>
+                            </ul>
                         </div>
                     </div>
                 <?php } ?>
