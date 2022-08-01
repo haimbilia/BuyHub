@@ -5,7 +5,7 @@
             <div class="container">
                 <div class="page-banner-txt">
                     <h1><?php echo $cPage['cpage_image_title']; ?></h1>
-                    <p><?php echo $cPage['cpage_image_content']; ?></p>
+                    <p><?php echo  nl2br($cPage['cpage_image_content']); ?></p>
                 </div>
             </div>
         </div>

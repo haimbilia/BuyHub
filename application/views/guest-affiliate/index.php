@@ -24,7 +24,7 @@ if (!empty($bannerSlogan)) {
                         <?php if (isset($bannerSlogan['epage_label'])) { ?>
                             <h3><?php echo $bannerSlogan['epage_label']; ?></h3>
                         <?php } ?>
-                        <p><?php echo $pageContent; ?></p>
+                        <p><?php echo nl2br($pageContent); ?></p>
                     </div>
                 </div>
                 <div class="seller-register-form">
