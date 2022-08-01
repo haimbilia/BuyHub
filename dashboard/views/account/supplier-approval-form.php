@@ -21,7 +21,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     <div class="content-body">
         <div class="card">
             <div class="card-head">
-                <h5 class="card-title"><?php echo Labels::getLabel('Lbl_Seller_Approval_Form', $siteLangId); ?></h5>
+                <div class="card-head-label">
+                    <h5 class="card-title"><?php echo Labels::getLabel('Lbl_Seller_Approval_Form', $siteLangId); ?></h5>
+                </div>
             </div>
             <div class="card-body ">
                 <?php echo $approvalFrm->getFormHtml(); ?>

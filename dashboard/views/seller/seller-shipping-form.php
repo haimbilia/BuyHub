@@ -1,7 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="box__head">
-    <h4><?php echo $productDetails['product_name']; ?>
-    </h4>
+    <h5>
+        <?php echo $productDetails['product_name']; ?>
+    </h5>
 </div>
 <?php
 $shippingFrm->setFormTagAttribute('class', 'form ');
@@ -29,14 +30,14 @@ if (null != $psFreeFld) {
 $submitFld = $shippingFrm->getField('btn_submit');
 if (null != $submitFld) {
     $submitFld->developerTags['col'] = 2;
-    $submitFld->setWrapperAttribute('class', 'col-6');
+    $submitFld->setWrapperAttribute('class', 'col-lg-4');
     $submitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
 }
 
 $cancelFld = $shippingFrm->getField('btn_cancel');
 $cancelFld->setFieldTagAttribute('onclick', 'searchCatalogProducts(document.frmSearchCatalogProduct)');
 $cancelFld->developerTags['col'] = 2;
-$cancelFld->setWrapperAttribute('class', 'col-6');
+$cancelFld->setWrapperAttribute('class', 'col-lg-4');
 $cancelFld->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block');
 //$submitFld->attachField($cancelFld);
 

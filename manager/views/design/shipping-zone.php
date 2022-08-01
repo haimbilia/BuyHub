@@ -309,39 +309,39 @@
                                                     </th>
                                                     <th class="sorting">#</th>
                                                     <th class=""> Images </th>
-                                                    <th class="sorting" width="30%"> <span> Full Name <i class="icn">
-                                                                <svg class="svg" width="18" height="18">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-down">
-                                                                    </use>
-                                                                </svg>
-                                                            </i></span></th>
-                                                    <th class="sorting"> <span>Stock <i class="icn">
-                                                                <svg class="svg" width="18" height="18">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
-                                                                    </use>
-                                                                </svg>
-                                                            </i> </span></th>
-                                                    <th class="sorting"> <span>User <i class="icn">
-                                                                <svg class="svg" width="18" height="18">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
-                                                                    </use>
-                                                                </svg>
-                                                            </i></span></th>
+                                                    <th class="sorting" width="30%"> <span> Full Name
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-down">
+                                                                </use>
+                                                            </svg>
+                                                        </span></th>
+                                                    <th class="sorting"> <span>Stock
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
+                                                                </use>
+                                                            </svg>
+                                                        </span></th>
+                                                    <th class="sorting"> <span>User
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
+                                                                </use>
+                                                            </svg>
+                                                        </span></th>
 
 
 
-                                                    <th class="sorting"> <span>Status <i class="icn">
-                                                                <svg class="svg" width="18" height="18">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
-                                                                    </use>
-                                                                </svg>
-                                                            </i></span></th>
-                                                    <th class="sorting"> <span> Publish <i class="icn">
-                                                                <svg class="svg" width="18" height="18">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
-                                                                    </use>
-                                                                </svg>
-                                                            </i></span></th>
+                                                    <th class="sorting"> <span>Status
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
+                                                                </use>
+                                                            </svg>
+                                                        </span></th>
+                                                    <th class="sorting"> <span> Publish
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
+                                                                </use>
+                                                            </svg>
+                                                        </span></th>
                                                     <th class="align-right">Action</th>
                                                 </tr>
                                             </thead>

@@ -35,7 +35,9 @@ $cancelBtnFld->developerTags['col'] = 2;
     <div class="content-body">
         <div class="card">
             <div class="card-head">
-                <h5 class="card-title"><?php echo Labels::getLabel('LBL_My_Products_list', $siteLangId); ?></h5>
+                <div class="card-head-label">
+                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_My_Products_list', $siteLangId); ?></h5>
+                </div>
                 <div class="action">
                     <div class="">
                         <a href="javascript:void(0)" onclick="addCatalogPopup()" class="btn btn-brand btn-sm"><?php echo Labels::getLabel('LBL_Add_New_Product', $siteLangId); ?></a>

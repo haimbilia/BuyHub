@@ -33,6 +33,8 @@ $card-bg: #fff;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-flow: row wrap;
+        gap: 1rem;
         padding: $card-space;
         margin-bottom: 0;
         color: $txt-body;
@@ -63,10 +65,12 @@ $card-bg: #fff;
         display: flex;
         align-items: flex-start;
         align-content: flex-start;
+        @include media-breakpoint-down(sm) {
+            overflow-x: auto;
+        }
         @include media-breakpoint-up(md) {
             //align-items: center;
             align-content: flex-end;
-            margin-#{$start-direction}: 2rem;
         }
         .btn {
             border: $border;

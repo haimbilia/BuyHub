@@ -2035,6 +2035,8 @@ trait SellerProducts
         }
 
         $srch->addOrder('product_name');
+        $srch->addCondition('product_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
@@ -2054,7 +2056,6 @@ trait SellerProducts
             $srch->addCondition('selprod_id', 'NOT IN', $excludeRecords);
         }
 
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addMultipleFields(
             array(
                 'selprod_id as id', 'IFNULL(selprod_title, product_name) as product_name', 'product_identifier', 'selprod_price'

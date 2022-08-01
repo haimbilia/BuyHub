@@ -10,7 +10,9 @@
     <div class="content-body">
         <div class="card">
             <div class="card-head">
-                <h5 class="card-title"><?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?></h5>
+                <div class="card-head-label">
+                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?></h5>
+                </div>
                 <div class="btn-group"><a href="<?php echo UrlHelper::generateUrl('Account', 'messages'); ?>" class="btn btn-outline-gray btn-sm"><?php echo Labels::getLabel('LBL_Back_to_messages', $siteLangId); ?></a></div>
             </div>
             <div class="card-table">

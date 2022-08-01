@@ -53,7 +53,7 @@ if (!empty($category['banner'])) {
             <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($mobile_url, ','); ?>" media="(max-width: 767px)">
             <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($tablet_url, ','); ?>" media="(max-width: 1024px)">
             <source data-aspect-ratio="4:1" srcset="<?php echo rtrim($desktop_url, ','); ?>">
-            <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
+            <img data-aspect-ratio="4:1" src="<?php echo rtrim($desktop_url, ','); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
         </picture>
 
         <?php /* if (!empty($category['prodcat_description']) && array_key_exists('prodcat_description', $category)) { ?>
@@ -87,10 +87,10 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
     ?>
         <section class="bg-shop shop-banner">
             <picture>
-                <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
-                <source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>" media="(max-width: 1024px)">
-                <source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
-                <img data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
+                <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($mobile_url, ','); ?>" media="(max-width: 767px)">
+                <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($tablet_url, ','); ?>" media="(max-width: 1024px)">
+                <source data-aspect-ratio="4:1" srcset="<?php echo rtrim($desktop_url, ','); ?>">
+                <img data-aspect-ratio="4:1" srcset="<?php echo rtrim($desktop_url, ','); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
             </picture>
         </section>
     <?php } ?>

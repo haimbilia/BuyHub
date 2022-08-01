@@ -5,7 +5,9 @@
 <div class="card">
     <?php if (count($arrListing) > 0) { ?>
         <div class="card-head">
-            <h5 class="card-title"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?></h5>
+            <div class="card-head-label">
+                <h5 class="card-title"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId); ?></h5>
+            </div>
             <div class="action">
                 <a class="btn btn-brand btn-sm" href="javascript:void(0); " onclick="sellerProductVolumeDiscountForm(<?php echo $selprod_id; ?>, 0);"><?php echo Labels::getLabel('LBL_Add_New_Volume_Discount', $siteLangId) ?></a>
                 <!-- <a class="btn btn-outline-gray btn-sm" href="<?php echo UrlHelper::generateUrl('Seller', 'volumeDiscount', array($selprod_id)); ?>" target="_blank"><?php echo Labels::getLabel('LBL_Manage_Volume_Discount', $siteLangId) ?></a> -->

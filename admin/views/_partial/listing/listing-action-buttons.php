@@ -68,13 +68,13 @@ if (isset($dropdownButtons) && is_array($dropdownButtons)) {
         $div->appendElement(
             'a',
             array('href' => 'javascript:void(0)', 'class' => $cls, 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_EDIT', $siteLangId), "onclick" => $onclick),
-            '<i class="icn">
+            ' 
             <svg class="svg" width="18" height="18">
                 <use
                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
                 </use>
             </svg>
-        </i>' . Labels::getLabel('LBL_EDIT', $siteLangId),
+         ' . Labels::getLabel('LBL_EDIT', $siteLangId),
             true
         );
     }
@@ -99,13 +99,12 @@ if (isset($dropdownButtons) && is_array($dropdownButtons)) {
         $div->appendElement(
             'a',
             array('href' => 'javascript:void(0)', 'class' => $cls, 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => $onclick),
-            '<i class="icn">
-            <svg class="svg" width="18" height="18">
+            '<svg class="svg" width="18" height="18">
                 <use
                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
                 </use>
             </svg>
-        </i>' . Labels::getLabel('LBL_DELETE', $siteLangId),
+         ' . Labels::getLabel('LBL_DELETE', $siteLangId),
             true
         );
     }

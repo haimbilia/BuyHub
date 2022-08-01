@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-head">
+                    <div class="card-head-label">
                         <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Details', $siteLangId); ?></h5>
                         <?php if (!$print) { ?>
                             <div class="">
