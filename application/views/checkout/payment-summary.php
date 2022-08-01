@@ -56,7 +56,13 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                             <?php if (strlen($billingAddressArr['addr_phone']) > 0) {
                                 $addrPhone = ValidateElement::formatDialCode($billingAddressArr['addr_phone_dcode']) . $billingAddressArr['addr_phone'];
                             ?>
-                                <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
+                                <p class="phone-txt">
+                                    <svg class="svg" width="20" height="20">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                        </use>
+                                    </svg>
+                                    <?php echo $addrPhone; ?>
+                                </p>
                             <?php } ?>
                         </div>
                     </div>

@@ -8,13 +8,22 @@ if (isset($htmlContent) && $htmlContent != '') {
 $btnGrp = $div->appendElement('div', array("class" => "btn-group"));
 $msg = isset($msg) ? $msg : '';
 if (isset($statusButtons) && true === $statusButtons) {
-    $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-outline-brand btn-sm formActionBtn-js formActions-css', 'title' => Labels::getLabel('LBL_Publish', $siteLangId), "onclick" => "toggleBulkStatues(1, '" . $msg . "')"), '<i class="fas fa-eye"></i>', true);
+    $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-outline-brand btn-sm formActionBtn-js formActions-css', 'title' => Labels::getLabel('LBL_Publish', $siteLangId), "onclick" => "toggleBulkStatues(1, '" . $msg . "')"), '<svg class="svg" width="20" height="20">
+    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#eye">
+    </use>
+    </svg>', true);
 
-    $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-outline-brand btn-sm formActionBtn-js formActions-css', 'title' => Labels::getLabel('LBL_Unpublish', $siteLangId), "onclick" => "toggleBulkStatues(0, '" . $msg . "')"), '<i class="fas fa-eye-slash"></i>', true);
+    $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-outline-brand btn-sm formActionBtn-js formActions-css', 'title' => Labels::getLabel('LBL_Unpublish', $siteLangId), "onclick" => "toggleBulkStatues(0, '" . $msg . "')"), '<svg class="svg" width="20" height="20">
+    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#eye-slash">
+    </use>
+    </svg>', true);
 }
 
 if (isset($deleteButton) && true === $deleteButton) {
-    $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-outline-brand btn-sm formActionBtn-js formActions-css', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSelected()"), '<i class="fas fa-trash"></i>', true);
+    $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-outline-brand btn-sm formActionBtn-js formActions-css', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSelected()"), '<svg class="svg" width="20" height="20">
+    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#trash">
+    </use>
+    </svg>', true);
 }
 
 if (isset($otherButtons) && is_array($otherButtons)) {

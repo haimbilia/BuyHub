@@ -327,7 +327,7 @@ function addFilter(id, obj) {
     $filter = $(obj).parent().text();
     $filterVal = htmlEncode($(obj).parent().text());
     if (!$('.selectedFiltersJs').find('a').hasClass(id)) {
-        $('.selectedFiltersJs').prepend("<span class='chip'>" + $filterVal + " <a href='javascript:void(0);' data-yk='" + id + "' class='remove " + id + "' " + click + "><i class='fas fa-times'></i></a></span>");
+        $('.selectedFiltersJs').prepend("<span class='chip'>" + $filterVal + " <a href='javascript:void(0);' data-yk='" + id + "' class='remove btn-close text-reset" + id + "' " + click + "></a></span>");
     }
     showSelectedFilters();
 }
@@ -528,7 +528,7 @@ function addPricefilter(reloadPage) {
     }
     $('.price').parent().remove();
     if (!$('.selectedFiltersJs').find('a').hasClass('price')) {
-        $('.selectedFiltersJs').prepend("<span class='chip'> " + currencySymbolLeft + $("input[name=priceFilterMinValue]").val() + currencySymbolRight + ' - ' + currencySymbolLeft + $("input[name=priceFilterMaxValue]").val() + currencySymbolRight + " <a href='javascript:void(0);' data-yk='price' class='remove price' onclick='removePriceFilter(this)'><i class='fas fa-times'></i></a></span>");
+        $('.selectedFiltersJs').prepend("<span class='chip'> " + currencySymbolLeft + $("input[name=priceFilterMinValue]").val() + currencySymbolRight + ' - ' + currencySymbolLeft + $("input[name=priceFilterMaxValue]").val() + currencySymbolRight + " <a href='javascript:void(0);' data-yk='price' class='remove price btn-close text-reset' onclick='removePriceFilter(this)'> </a></span>");
 
     }
     searchArr['price_min_range'] = $("input[name=priceFilterMinValue]").val();
