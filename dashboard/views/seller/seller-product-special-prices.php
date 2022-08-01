@@ -5,8 +5,10 @@
 <div class="card">
     <?php if (count($arrListing) > 0) { ?>
         <div class="card-head">
-            <h5 class="card-title"><?php echo Labels::getLabel('LBL_Special_price', $siteLangId); ?>
-            </h5>
+            <div class="card-head-label">
+                <h5 class="card-title"><?php echo Labels::getLabel('LBL_Special_price', $siteLangId); ?>
+                </h5>
+            </div>
             <div class="action">
                 <a class="btn btn-brand btn-sm" href="javascript:void(0);" onclick='sellerProductSpecialPriceForm(<?php echo $selprod_id; ?>, 0);'>
                     <?php echo Labels::getLabel('LBL_Add_New_Special_Price', $siteLangId); ?>
@@ -17,7 +19,7 @@
             </div>
         </div>
     <?php } ?>
-    <div class="card-body ">
+    <div class="card-body">
         <div class="row">
             <div class="<?php echo (count($arrListing) > 0) ? 'col-md-8' : 'col-md-12'; ?>">
                 <div class="form__subcontent js-scrollable table-wrap">
@@ -61,19 +63,27 @@
                                 case 'action':
                                     $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
                                     $li = $ul->appendElement("li");
-                                    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "sellerProductSpecialPriceForm(" . $selprod_id . ", " . $row['splprice_id'] . ")"), 
-                                    '<svg class="svg" width="18" height="18">
+                                    $li->appendElement(
+                                        'a',
+                                        array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "sellerProductSpecialPriceForm(" . $selprod_id . ", " . $row['splprice_id'] . ")"),
+                                        '<svg class="svg" width="18" height="18">
                                         <use
                                             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
                                         </use>
-                                    </svg>', true);
+                                    </svg>',
+                                        true
+                                    );
                                     $li = $ul->appendElement("li");
-                                    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSellerProductSpecialPrice(" . $row['splprice_id'] . ")"), 
-                                    '<svg class="svg" width="18" height="18">
+                                    $li->appendElement(
+                                        'a',
+                                        array('href' => 'javascript:void(0)', 'class' => '', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteSellerProductSpecialPrice(" . $row['splprice_id'] . ")"),
+                                        '<svg class="svg" width="18" height="18">
                                         <use
                                             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
                                         </use>
-                                    </svg>', true);
+                                    </svg>',
+                                        true
+                                    );
                                     break;
                                 default:
                                     $td->appendElement('plaintext', array(), $row[$key], true);

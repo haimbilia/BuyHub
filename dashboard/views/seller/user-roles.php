@@ -5,7 +5,9 @@
             <div class="col-md-6 mb-4">
                 <div class="card card-full-height">
                     <div class="card-head">
-                        <h5 class="card-title"><?php echo $modulesArr[$key]; ?></h5>
+                        <div class="card-head-label">
+                            <h5 class="card-title"><?php echo $modulesArr[$key]; ?></h5>
+                        </div>
                     </div>
                     <div class="card-table">
                         <div class="js-scrollable table-wrap table-responsive">

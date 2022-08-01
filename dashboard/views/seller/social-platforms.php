@@ -1,32 +1,33 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <div class="card-head border-0 py-4">
-    <h5 class="card-title"><?php echo Labels::getLabel('LBL_SOCIAL_PLATFORMS', $siteLangId); ?></h5>
-    <?php
-    if ($canEdit) {
-        $btnData = [
-            'siteLangId' => $siteLangId,
-            'canEdit' => $canEdit
-        ];
+    <div class="card-head-label">
+        <h5 class="card-title"><?php echo Labels::getLabel('LBL_SOCIAL_PLATFORMS', $siteLangId); ?></h5>
+    </div> <?php
+            if ($canEdit) {
+                $btnData = [
+                    'siteLangId' => $siteLangId,
+                    'canEdit' => $canEdit
+                ];
 
-        if ($canEdit) {
-            $btnData['listTopButtons'] = [
-                [
-                    'attr' => [
-                        'class' => 'btn btn-outline-gray btn-icon btn-add',
-                        'onclick' => 'addForm(0)',
-                        'title' => Labels::getLabel('LBL_ADD_SOCIAL_PLATFORM', $siteLangId)
-                    ],
-                    'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                if ($canEdit) {
+                    $btnData['listTopButtons'] = [
+                        [
+                            'attr' => [
+                                'class' => 'btn btn-outline-gray btn-icon btn-add',
+                                'onclick' => 'addForm(0)',
+                                'title' => Labels::getLabel('LBL_ADD_SOCIAL_PLATFORM', $siteLangId)
+                            ],
+                            'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
                                     </use>
                                 </svg><span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'
-                ],
-            ];
-        }
-        $this->includeTemplate('_partial/listing/action-buttons.php', $btnData);
-    }
-    ?>
+                        ],
+                    ];
+                }
+                $this->includeTemplate('_partial/listing/action-buttons.php', $btnData);
+            }
+            ?>
 </div>
 <div class="card-table">
     <div class="js-scrollable table-wrap table-responsive">
@@ -93,12 +94,16 @@
                     case 'action':
                         $ul = $td->appendElement("ul", array("class" => "actions"));
                         $li = $ul->appendElement("li");
-                        $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addForm(" . $row['splatform_id'] . ")"), 
-                        '<svg class="svg" width="18" height="18">
+                        $li->appendElement(
+                            'a',
+                            array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addForm(" . $row['splatform_id'] . ")"),
+                            '<svg class="svg" width="18" height="18">
                             <use
                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
                             </use>
-                        </svg>', true);
+                        </svg>',
+                            true
+                        );
                         $li = $ul->appendElement("li");
                         $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'button small green', 'title' => Labels::getLabel('LBL_Delete', $siteLangId), "onclick" => "deleteRecord(" . $row['splatform_id'] . ")"), '<svg class="svg" width="18" height="18">
                             <use

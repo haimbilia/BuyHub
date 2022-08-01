@@ -1,19 +1,16 @@
 .listing-tbl {
     overflow-x: auto;
 }
-
 .table-wrap {
     overflow: hidden !important;
     overflow-x: auto !important;
 }
-
 .table {
     font-size: 100%;
     background-color: #fff;
     margin-bottom: 0;
     text-align: inherit;
     //word-break: break-word;
-
     thead {
         th {
             //text-align: #{$start-direction};
@@ -201,7 +198,6 @@
         }
     }
 }
-
 .table-fixed-header {
     table-layout: fixed;
     border-collapse: collapse;
@@ -224,7 +220,6 @@
         table-layout: fixed;
     }
 }
-
 .variants-wrap {
     margin-top: 1rem;
     border: $border;

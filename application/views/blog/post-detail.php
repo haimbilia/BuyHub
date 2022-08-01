@@ -4,12 +4,12 @@
         <div class="blog-detail post-data">
             <div class="blog-detail-left">
                 <a class="btn btn-icon btn-link btn-back" href="<?php echo UrlHelper::generateUrl('Blog'); ?>">
-                    <i class="icn">
-                        <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#arrow-back">
-                            </use>
-                        </svg>
-                    </i>
+
+                    <svg class="svg" width="20" height="20">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#arrow-back">
+                        </use>
+                    </svg>
+
                     <?php echo Labels::getLabel('LBL_BACK_TO_HOME', $siteLangId); ?>
                 </a>
 
@@ -161,32 +161,32 @@
                     <ul class="social-sharing">
                         <li class="social-facebook">
                             <a class="social-link st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Blog', 'postDetail', array($blogPostData['post_id'])) . '/'; ?>">
-                                <i class="icn">
-                                    <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
-                                        </use>
-                                    </svg>
-                                </i>
+
+                                <svg class="svg" width="16" height="16">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
+                                    </use>
+                                </svg>
+
                             </a>
                         </li>
                         <li class="social-twitter">
                             <a class="social-link st-custom-button" data-network="twitter">
-                                <i class="icn">
-                                    <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
-                                        </use>
-                                    </svg>
-                                </i>
+
+                                <svg class="svg" width="16" height="16">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
+                                    </use>
+                                </svg>
+
                             </a>
                         </li>
                         <li class="social-pintrest">
                             <a class="social-link st-custom-button" data-network="pinterest">
-                                <i class="icn">
-                                    <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
-                                        </use>
-                                    </svg>
-                                </i>
+
+                                <svg class="svg" width="16" height="16">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
+                                    </use>
+                                </svg>
+
                             </a>
                         </li>
                         <li class="social-email">

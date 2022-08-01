@@ -2,15 +2,15 @@
 
 if (!empty($images)) {
     foreach ($images as $afile_id => $row) {
-     
+
         $uploadedTime = AttachedFile::setTimeParam($row['afile_updated_at']);
         $imageBannerDimensions = ImageDimension::getBannerData(ImageDimension::VIEW_THUMB, $collection_layout_type);
-        $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($row['afile_record_id'], $collection_layout_type, $row['afile_lang_id'], $row['afile_screen'], ImageDimension::VIEW_THUMB),CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    
-      
+        $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($row['afile_record_id'], $collection_layout_type, $row['afile_lang_id'], $row['afile_screen'], ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+
 ?>
         <div class="dropzone-uploaded dropzoneUploadedJs">
-            <img data-aspect-ratio = "<?php echo $imageBannerDimensions['aspectRatio']; ?>" src="<?php echo $imgUrl; ?>" title="<?php echo $row['afile_name']; ?>" alt="<?php echo $row['afile_name']; ?>">
+            <img data-aspect-ratio="<?php echo $imageBannerDimensions['aspectRatio']; ?>" src="<?php echo $imgUrl; ?>" title="<?php echo $row['afile_name']; ?>" alt="<?php echo $row['afile_name']; ?>">
             <?php if ($canEdit) { ?>
                 <div class="dropzone-uploaded-action">
                     <ul class="actions">

@@ -123,14 +123,14 @@ class AdminPermissionsController extends ListingBaseController
         $postedData = FatApp::getPostedData();
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
 
-        if(empty($post['permission_type'])){
+        if (empty($post['permission_type'])) {
             $post['permission_type'] = -1;
         }
         $post['admin_id'] = $recordId;
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-        $permissionType = FatApp::getPostedData('permission_type', FatUtility::VAR_INT, -1);             
+        $permissionType = FatApp::getPostedData('permission_type', FatUtility::VAR_INT, -1);
 
         $arrListing = AdminPrivilege::getPermissionModulesArr();
         if (!empty($keyword)) {
@@ -154,19 +154,19 @@ class AdminPermissionsController extends ListingBaseController
         $userData = [];
         if ($recordId > 0) {
             $userData = AdminUsers::getUserPermissions($recordId);
-            if(-1 < $permissionType){               
-                foreach($userData as $userPerm){                   
-                    if($userPerm['admperm_value'] != $permissionType){                       
+            if (-1 < $permissionType) {
+                foreach ($userData as $userPerm) {
+                    if ($userPerm['admperm_value'] != $permissionType) {
                         unset($arrListing[$userPerm['admperm_section_id']]);
                     }
                 }
             }
-        } 
+        }
         $this->set("arrListing", $arrListing);
         $this->set("hidePaginationHtml", true);
         $this->set('page', 1);
         $this->set('pageSize', $pageSize);
-        $this->set('recordCount', count($arrListing));        
+        $this->set('recordCount', count($arrListing));
 
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
@@ -190,13 +190,13 @@ class AdminPermissionsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId), 'permission_type', [-1 => Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId)] + AdminPrivilege::getPermissionArr(), -1 ,[], '');
+        $frm->addSelectBox(Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId), 'permission_type', [-1 => Labels::getLabel('FRM_PERMISSION_TYPE', $this->siteLangId)] + AdminPrivilege::getPermissionArr(), -1, [], '');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'module');
         }
 
-        HtmlHelper::addSearchButton($frm);       
+        HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);/*clearBtn*/
         return $frm;
     }
@@ -286,7 +286,7 @@ class AdminPermissionsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId), */
             'module' => Labels::getLabel('LBL_MODULE', $this->siteLangId),
             'action' => Labels::getLabel('LBL_PERMISSIONS', $this->siteLangId),
         ];

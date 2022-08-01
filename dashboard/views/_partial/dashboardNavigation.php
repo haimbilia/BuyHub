@@ -12,7 +12,7 @@
             } else {
                 $this->includeTemplate('_partial/buyerDashboardNavigation.php');
             } ?>
-        </div>        
+        </div>
     </div>
 </sidebar>
 <main id="main-area" class="main">

@@ -116,12 +116,12 @@
                                                     <th class=""> Product </th>
                                                     <th class="sorting" width="50%">
                                                         <span>Related Product
-                                                            <i class="icn">
-                                                                <svg class="svg" width="18" height="18">
-                                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-down">
-                                                                    </use>
-                                                                </svg>
-                                                            </i>
+
+                                                            <svg class="svg" width="18" height="18">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-down">
+                                                                </use>
+                                                            </svg>
+
                                                         </span>
                                                     </th>
                                                 </tr>

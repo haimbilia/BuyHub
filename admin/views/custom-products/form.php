@@ -4,7 +4,7 @@ $frm->setFormTagAttribute('class', 'form');
 $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL;
 $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 ?>
-<main class="main mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="'.$formLayout.'"' : ''; ?>>
+<main class="main mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="' . $formLayout . '"' : ''; ?>>
     <div class="container">
         <?php
         $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false);

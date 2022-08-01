@@ -586,6 +586,9 @@
             align-items: inherit;
         }
         &-toolbar {
+            @include media-breakpoint-down(sm) {
+                overflow-x: auto;
+            }
             @include media-breakpoint-down(lg) {
                 margin-top: 1rem;
             }

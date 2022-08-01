@@ -7,11 +7,10 @@ if (null != $btn) {
     $btn->addFieldTagAttribute('class', 'btn btn-brand');
 }
 ?>
-
 <div class="content-wrapper content-space">
     <?php
     $data = [
-        'headingLabel' => Labels::getLabel('LBL_View_Order_Return_Request', $siteLangId) . ': <span class="number">' . $request['orrequest_reference'] . '</span>',
+        'headingLabel' => Labels::getLabel('LBL_View_Order_Return_Request', $siteLangId),
         'siteLangId' => $siteLangId,
         'headingBackButton' => [
             'href' => UrlHelper::generateUrl('Seller', 'orderReturnRequests'),
@@ -24,8 +23,10 @@ if (null != $btn) {
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-head">
-                        <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Details', $siteLangId); ?></h5>
-                        <?php if ($canEdit) { ?>
+
+                        <div class="card-head-label">
+                            <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Details', $siteLangId); ?></h5>
+                        </div> <?php if ($canEdit) { ?>
                             <div class="btn-group">
                                 <?php if ($canEscalateRequest) { ?>
                                     <a class="btn btn-outline-gray btn-sm" onclick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Account', 'EscalateOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo str_replace("{websitename}", FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId), Labels::getLabel('LBL_Escalate_to_{websitename}', $siteLangId)); ?></a>
@@ -41,7 +42,6 @@ if (null != $btn) {
                             <div class="col-md-12">
                                 <ul class="list-stats list-stats-double">
                                     <li class="list-stats-item">
-
                                         <span class="value"><?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $request, 'siteLangId' => $siteLangId], false, true); ?></span>
                                     </li>
                                     <li class="list-stats-item">
@@ -52,7 +52,6 @@ if (null != $btn) {
                                         <span class="label"><?php echo Labels::getLabel('LBL_Order_Id/Invoice_Number', $siteLangId); ?></span>
                                         <span class="value"><?php echo $request['op_invoice_number']; ?></span>
                                     </li>
-
                                     <li class="list-stats-item">
                                         <span class="label"><?php echo Labels::getLabel('LBL_Return_Qty', $siteLangId); ?></span>
                                         <span class="value"><?php echo $request['orrequest_qty']; ?></span>
@@ -90,7 +89,10 @@ if (null != $btn) {
                             $frmMsg->setFormTagAttribute('onSubmit', 'setUpReturnOrderRequestMessage(this); return false;');
                             $frmMsg->setFormTagAttribute('class', 'form');
                             $frmMsg->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
-                            $frmMsg->developerTags['fld_default_col'] = 12; ?>
+                            $frmMsg->developerTags['fld_default_col'] = 12; 
+                            $btn = $frmMsg->getField('btn_submit');
+                            $btn->developerTags['noCaptionTag'] = true;                            
+                            ?>
                             <div class="messages-list">
                                 <ul>
                                     <li>

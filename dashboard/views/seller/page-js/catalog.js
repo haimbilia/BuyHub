@@ -373,25 +373,25 @@ $(document).on('change', '#digitalFrmLangId,#digitalFrmdownloadType,#digitalFrmO
     }
 
     fileLinkForm = function (recordId) {
-        $.ykmodal(fcom.getLoader(), false, 'modal-dialog-vertical-md');    
+        $.ykmodal(fcom.getLoader(), false, 'modal-dialog-vertical-md');
         fcom.updateWithAjax(fcom.makeUrl('Products', "fileLinkForm", [recordId]), "", function (t) {
             fcom.removeLoader();
-            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');           
+            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
             $.ykmsg.close();
             getDigitalDownloads(0, recordId);
         });
     };
 
     getDigitalDownloads = function (downloadType, recordId, langId = 0, optionCombi = 0) {
-        let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId, showNoRecordFound : 1 };
+        let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId, showNoRecordFound: 1 };
         if (downloadType == 1) {
             fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
-                $.ykmsg.close();               
+                $.ykmsg.close();
                 $("#digitalFrmListJs").html(res.html);
             });
         } else {
             fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function (res) {
-                $.ykmsg.close();               
+                $.ykmsg.close();
                 $("#digitalFrmListJs").html(res.html);
             });
         }

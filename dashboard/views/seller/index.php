@@ -46,7 +46,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             'label' =>  Labels::getLabel('LBL_SHOP_INVENTORY', $siteLangId)
         ];
     }
-    
+
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
         <div class="row">
@@ -55,7 +55,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     $userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true) ||
                     $userPrivilege->canViewCancellationRequests(UserAuthentication::getLoggedUserId(), true) ||
                     $userPrivilege->canViewReturnRequests(UserAuthentication::getLoggedUserId(), true)
-                ) { $redirectToAccount = false; ?>
+                ) {
+                    $redirectToAccount = false; ?>
                     <div class="widget-scroll">
                         <?php if ($userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true)) { ?>
                             <div class="widget widget-stats">
