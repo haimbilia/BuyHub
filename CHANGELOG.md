@@ -1086,6 +1086,7 @@ TV-9.4.0.20220719
     - #065762 - Parse error occurs when the admin tries to generate the label for the order.
     - #065623 - Ui got distorted on View order return request page .
     - #065672 - content does not appears properly .
+    - #065729 - The image description added for any content page is not properly aligned on the front end. 
     
 ## UAT points:
 

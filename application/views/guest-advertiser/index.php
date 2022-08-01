@@ -18,7 +18,7 @@ if (!empty($slogan)) {
             <div class="hero-banner-inner">
                 <div class="seller-slogan">
                     <div class="seller-slogan-txt">
-                        <?php echo $pageContent; ?>
+                        <?php echo nl2br($pageContent); ?>
                     </div>
                 </div>
                 <div class="seller-register-form">
