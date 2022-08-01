@@ -1,12 +1,10 @@
 .js-carousel {
     //display: block;
     grid-auto-flow: column;
-    margin: 0 -0.5rem;
     @include media-breakpoint-up(lg) {
         margin: 0 -1.5rem;
     }
     .item {
-        margin: 0 -0.5rem;
         @include media-breakpoint-up(lg) {
             margin: 0 1.5rem;
         }

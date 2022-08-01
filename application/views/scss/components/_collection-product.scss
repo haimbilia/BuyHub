@@ -166,7 +166,6 @@
             grid-row-end: 3;
             @include media-breakpoint-down(sm) {
                 grid-column-end: 3;
-
                 grid-row-end: 2;
             }
             .products {
@@ -179,7 +178,7 @@
 .product-layout-2 {
     display: grid;
     grid-gap: 1px;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
 
     @include media-breakpoint-up(lg) {
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -217,7 +216,7 @@
                 }
             }
             .products-price {
-                justify-content: inherit;
+                justify-content: center;
             }
         }
     }

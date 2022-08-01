@@ -4,7 +4,7 @@
 <div class="modal-body">
     <div class="loaderContainerJs">
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-12">
                 <?php if ($productImagesArr) { ?>
                     <div class="js-product-gallery product-gallery" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                         <?php foreach ($productImagesArr as $afile_id => $image) {
@@ -13,7 +13,7 @@
                             <?php if (isset($imageGallery) && $imageGallery) { ?>
                                 <a href="<?php echo $mainImgUrl; ?>" class="gallery" rel="gallery">
                                 <?php } ?>
-                                <img src="<?php echo $mainImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM);?>>
+                                <img src="<?php echo $mainImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM); ?>>
                                 <?php if (isset($imageGallery) && $imageGallery) { ?>
                                 </a>
                             <?php } ?>
@@ -21,11 +21,11 @@
                     </div>
                 <?php } else {
                     $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_MEDIUM, 0), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg'); ?>
-                    <div class="item__main"><img src="<?php echo $mainImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM);?>></div>
+                    <div class="item__main"><img src="<?php echo $mainImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM); ?>></div>
                 <?php } ?>
             </div>
-            <div class="col-lg-8">
-                <div class="">
+            <div class="col-lg-12">
+                <div class="mt-4">
                     <ul class="list-stats list-stats-double">
                         <li class="list-stats-item">
                             <span class="lable"><?php echo Labels::getLabel('LBL_Category', $siteLangId); ?>:</span>
@@ -65,7 +65,7 @@
                                             <span class="lable"><?php echo $specification['prodspec_name']; ?>:</span>
                                             <span class="value"><?php echo $specification['prodspec_value']; ?></span>
                                         </li>
-                           
+
                                     <?php $count++;
                                     } ?>
                                 </ul>
