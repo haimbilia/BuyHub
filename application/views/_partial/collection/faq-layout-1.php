@@ -20,7 +20,7 @@
                         if ($count < Collections::LIMIT_FAQ_LAYOUT1) {
                     ?>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link <?php echo 0 == $count ? 'active' : ''; ?>" data-bs-toggle="tab" data-bs-target="#faq<?php echo $faqCatId; ?>" type="button" role="tab" aria-selected="true">
+                                <button class="nav-link <?php echo 0 == $count ? 'active' : ''; ?>" data-bs-toggle="tab" data-bs-target="#faq<?php echo $faqCatId . $collection['collection_id']; ?>" type="button" role="tab" aria-selected="true">
                                     <?php echo $faqCat['faqcat_name']; ?></button>
                             </li>
                         <?php
@@ -34,8 +34,8 @@
                     <?php $x = 0;
                     foreach ($faqCategories as $faqCatId => $faqCat) {
                         $x++; ?>
-                        <div class="tab-pane fade <?php echo 1 == $x ? 'show active' : ''; ?>" id="faq<?php echo $faqCatId; ?>">
-                            <ul class="faq-list" id="faqCollapseParent<?php echo $faqCatId; ?>">
+                        <div class="tab-pane fade <?php echo 1 == $x ? 'show active' : ''; ?>" id="faq<?php echo $faqCatId . $collection['collection_id']; ?>">
+                            <ul class="faq-list" id="faqCollapseParent<?php echo $faqCatId . $collection['collection_id']; ?>">
                                 <?php
                                 $i = 0;
                                 foreach ($faqCat['faqs'] as $faqId => $faq) { ?>
@@ -43,7 +43,7 @@
                                         <button class="faq-list-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse<?php echo $faqId; ?>" aria-expanded="<?php echo ($i == 0 ? 'true' : 'false'); ?>">
                                             <?php echo $faq['faq_title']; ?>
                                         </button>
-                                        <div class="collapse <?php echo ($i == 0 ? 'show' : ''); ?>" id="faqCollapse<?php echo $faqId; ?>" data-parent="#faqCollapseParent<?php echo $faqCatId; ?>">
+                                        <div class="collapse <?php echo ($i == 0 ? 'show' : ''); ?>" id="faqCollapse<?php echo $faqId; ?>" data-parent="#faqCollapseParent<?php echo $faqCatId. $collection['collection_id']; ?>">
                                             <p class="faq_data"><?php echo FatUtility::decodeHtmlEntities($faq['faq_content']); ?></p>
                                         </div>
                                     </li>

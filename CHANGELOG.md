@@ -1091,6 +1091,7 @@ TV-9.4.0.20220719
     - #065752 - Random year value appears for the expiration year for a discount coupon when the admin creates a discount coupon without selecting the start and end date.
     - #065737 - Nothing happens by clicking on the increase and decrease quantity button on the product details page if the available stock and minimum purchase quantity both are the same
     - #065783 - The sort by rating option appears in the sorting filter but the rating of the product is not visible on the listing page.
+    - #065779 - The content under the FAQ does not get changed when the user switches between the faqs
     
 ## UAT points:
 
