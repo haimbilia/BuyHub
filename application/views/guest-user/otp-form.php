@@ -13,7 +13,7 @@ $frm->setFormTagAttribute('class', 'form form-login form-otp otpForm-js');
 $frm->developerTags['fld_default_col'] = 2;
 $frm->setFormTagAttribute('name', 'frmGuestLoginOtp');
 $frm->setFormTagAttribute('id', 'frmGuestLoginOtp');
-if(!$frm->getFormTagAttribute('onsubmit')){
+if (!$frm->getFormTagAttribute('onsubmit')) {
     $frm->setFormTagAttribute('onsubmit', 'return validateRegOtp(this);');
 }
 
@@ -23,7 +23,7 @@ $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
 <a class="form-sign-logo" id="logoOtp" href="<?php echo $logoUrl; ?>">
     <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
 </a>
-<div class="form-sign-body">
+<div class="login-popup">
     <div class="card-sign">
         <div class="card-sign_head">
             <h2 class="title">
@@ -31,7 +31,7 @@ $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
             </h2>
         </div>
         <div class="card-sign_body">
-        <?php echo $frm->getFormTag(); ?>
+            <?php echo $frm->getFormTag(); ?>
             <div class="row">
                 <div class="col-md-12">
                     <div class="otp-row">
@@ -54,30 +54,31 @@ $btnFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
                     </p>
                 </div>
             </div>
-            <div class="row my-3">
-                <div class="col d-none">
-                    <p class="form-text text-muted otp-seconds countdownFld--js">
-                        <?php
-                        $msg = Labels::getLabel('LBL_PLEASE_WAIT_{SECONDS}_SECONDS_TO_RESEND', $siteLangId);
-                        $replace = [
-                            '{SECONDS}' => '<span class="intervaltime intervalTimer-js">' . User::OTP_INTERVAL . '</span>',
-                        ];
-                        echo CommonHelper::replaceStringData($msg, $replace);
-                        ?>
-                    </p>
-                </div>
-                <div class="col-auto d-none">
-                    <a class="link resendOtp-js disabled" href="javascript:void(0);" onClick="resendOtp(<?php echo $userId; ?>, <?php echo applicationConstants::YES; ?>)"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></a>
-                </div>
-            </div>
-            <div class="row">
+
+            <div class="row mt-4">
                 <div class="col">
                     <?php echo $frm->getFieldHtml('btn_submit'); ?>
                 </div>
             </div>
+            <div class="d-none">
+                <p class="form-text text-muted text-center otp-seconds countdownFld--js">
+                    <?php
+                    $msg = Labels::getLabel('LBL_PLEASE_WAIT_{SECONDS}_SECONDS_TO_RESEND', $siteLangId);
+                    $replace = [
+                        '{SECONDS}' => '<span class="intervaltime intervalTimer-js">' . User::OTP_INTERVAL . '</span>',
+                    ];
+                    echo CommonHelper::replaceStringData($msg, $replace);
+                    ?>
+                </p>
+            </div>
             <?php echo $frm->getFieldHtml('user_id'); ?>
             </form>
             <?php echo $frm->getExternalJs(); ?>
+        </div>
+        <div class="card-sign_foot">
+            <div class="more-links d-none">
+                <a class="link-underline resendOtp-js disabled" href="javascript:void(0);" onClick="resendOtp(<?php echo $userId; ?>, <?php echo applicationConstants::YES; ?>)"><?php echo Labels::getLabel('LBL_RESEND_OTP?', $siteLangId); ?></a>
+            </div>
         </div>
     </div>
 </div>

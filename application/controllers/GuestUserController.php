@@ -473,6 +473,9 @@ class GuestUserController extends MyAppController
         $returnUserId = (true == MOBILE_APP_API_CALL && 0 < $signUpWithPhone ? true : false);
         if (!$userId = $userObj->saveUserData($post, false, $returnUserId)) {
             $message = Labels::getLabel($userObj->getError(), $this->siteLangId);
+            if (false !== strpos(strtolower($message), 'duplicate')  && false !== strpos(strtolower($message), 'user_dial_code')) {
+                $message = Labels::getLabel('ERR_PHONE_NUMBER_ALREADY_EXIST', $this->siteLangId);
+            }
             if (0 < $signUpWithPhone) {
                 $row = (array) $userObj->checkUserByPhoneOrUserName($post['user_username'], $dialCode . $phoneNumber);
                 if (0 < count($row)) {
