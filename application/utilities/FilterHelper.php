@@ -184,8 +184,7 @@ class FilterHelper extends FatUtility
         /* if needs to show product counts under brands[ */
         //$brandSrch->addFld('count(selprod_id) as totalProducts');
         /* ] */
-        $brandSrch->doNotCalculateRecords();
-        $brandSrch->doNotLimitRecords();
+        $brandSrch->doNotCalculateRecords();        
         $brandRs = $brandSrch->getResultSet();
         $brands = FatApp::getDb()->fetchAll($brandRs);
 

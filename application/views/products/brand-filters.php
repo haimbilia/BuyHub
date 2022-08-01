@@ -5,6 +5,7 @@ $charArr = array();
 $firstCharacter = '';
 $brandHtml = '';
 $mySelection = array();
+$count = 0;
 foreach ($brandsArr as $brand) {
     if (in_array($brand['brand_id'], $brandsCheckedArr)) {
         $mySelection[$brand['brand_id']] = $brand;
@@ -16,20 +17,21 @@ foreach ($brandsArr as $brand) {
     if (is_numeric($str)) {
         $str = '0-9';
     }
-
+    $closingTag = '';
     if ($str != $firstCharacter) {
-        if (!empty($firstCharacter)) {
-            $brandHtml .= '</ul></li>';
-        }
         $brandHtml .= '<li><ul><li class="filter-directory_list_title ' . $str . '" data-item="' . $str . '" id="' . $str . '">' . $str . '</li>';
         $firstCharacter = $str;
+        $closingTag = '</ul></li>';
     }
+
+
     $charArr[$str] = strtoupper($str);
     $brandHtml .= ' <li class="brandList-js b-' . $str . '" data-caption=' . substr(strtolower($brand['brand_name']), 0, 1) . '>
                 <label class="checkbox brand" ><input name="brands" value="' . $brand['brand_id'] . '" data-id="brand_' . $brand['brand_id'] . '" data-title="' . $brand['brand_name'] . '" type="checkbox" ><span class="lb-txt">' . $brand['brand_name'] . '</span></label>
             </li>';
+    $brandHtml .=    $closingTag;
 }
-$brandHtml .= '</ul></li>';
+
 ?>
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_All_brands', $siteLangId); ?></h5>
