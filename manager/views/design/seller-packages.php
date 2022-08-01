@@ -176,32 +176,32 @@
                                                         <ul class="list-chips">
                                                             <li>
                                                                 <a href="#">
-                                                                    <i class="icn">
-                                                                        <svg class="svg">
-                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
-                                                                            </use>
-                                                                        </svg></i>
+
+                                                                    <svg class="svg">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                                        </use>
+                                                                    </svg>
                                                                     <span>New</span>
                                                                 </a>
                                                             </li>
                                                             <li> <a href="">
-                                                                    <i class="icn">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                                                            </use>
-                                                                        </svg>
-                                                                    </i>
+
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                        </use>
+                                                                    </svg>
+
                                                                     $110.00 / Per 60 Days</a> </li>
-                                                            <li> <a href=""> <i class="icn">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                                                            </use>
-                                                                        </svg></i> $140.00 / Per 90 Days </a></li>
-                                                            <li> <a href=""> <i class="icn">
-                                                                        <svg class="svg" width="18" height="18">
-                                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                                                            </use>
-                                                                        </svg></i> $990.00 / Unlimited </a></li>
+                                                            <li> <a href="">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                        </use>
+                                                                    </svg> $140.00 / Per 90 Days </a></li>
+                                                            <li> <a href="">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                        </use>
+                                                                    </svg> $990.00 / Unlimited </a></li>
                                                         </ul>
                                                     </div>
 

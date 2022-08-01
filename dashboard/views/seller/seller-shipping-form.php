@@ -1,8 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="card-body">
     <div class="box__head">
-        <h4><?php echo $productDetails['product_name']; ?>
-        </h4>
+        <h5>
+            <?php echo $productDetails['product_name']; ?>
+        </h5>
     </div>
     <?php
     $shippingFrm->setFormTagAttribute('class', 'form ');

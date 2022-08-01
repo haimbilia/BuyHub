@@ -1,15 +1,18 @@
 <?php
 
-class AbandonedCartController extends ListingBaseController {
+class AbandonedCartController extends ListingBaseController
+{
 
     protected string $pageKey = 'MANAGE_ABANDONED_CART';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewAbandonedCart();
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
@@ -35,12 +38,13 @@ class AbandonedCartController extends ListingBaseController {
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->getListingData();
 
-        $this->_template->addJs(array('js/select2.js', 'abandoned-cart/page-js/index.js','js/cropper.js', 'js/cropper-main.js'));
-        $this->_template->addCss(array('css/select2.min.css','css/cropper.css'));
+        $this->_template->addJs(array('js/select2.js', 'abandoned-cart/page-js/index.js', 'js/cropper.js', 'js/cropper-main.js'));
+        $this->_template->addCss(array('css/select2.min.css', 'css/cropper.css'));
         $this->_template->render(true, true, null, false, false);
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'abandoned-cart/search.php', true),
@@ -49,7 +53,8 @@ class AbandonedCartController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    private function getListingData()
+    {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -121,12 +126,13 @@ class AbandonedCartController extends ListingBaseController {
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        
+
         /* Discount notification action button is used. */
         $this->set('canEdit', $this->objPrivilege->canViewDiscountCoupons($this->admin_id, true));
     }
 
-    public function getSearchForm(array $fields = []) {
+    public function getSearchForm(array $fields = [])
+    {
         $frm = new Form('frmAbandonedCartSearch');
         $frm->addHiddenField('', 'page', 1);
         if (!empty($fields)) {
@@ -145,9 +151,9 @@ class AbandonedCartController extends ListingBaseController {
         return $frm;
     }
 
- 
+
     public function discountNotification()
-    { 
+    {
         $abandonedcartId = FatApp::getPostedData('abandonedcartId', FatUtility::VAR_INT, 0);
         $couponId = FatApp::getPostedData('couponId', FatUtility::VAR_INT, 0);
         if ($abandonedcartId < 1 || $couponId < 1) {
@@ -158,12 +164,13 @@ class AbandonedCartController extends ListingBaseController {
         $abandonedCart->updateDiscountNotification();
         if (!$abandonedCart->sendDiscountEmail($couponId)) {
             LibHelper::exitWithError($abandonedCart->getError(), true);
-        }        
+        }
         $this->set('msg', Labels::getLabel('MSG_Email_Sent_Successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function validateProductForNotification($productId) {
+    public function validateProductForNotification($productId)
+    {
         $productId = FatUtility::int($productId);
         if ($productId < 1) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
@@ -176,7 +183,8 @@ class AbandonedCartController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function getFormColumns(): array {
+    protected function getFormColumns(): array
+    {
         $tblHeadingCols = CacheHelper::get('abandonedCartFormTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
             return json_decode($tblHeadingCols, true);
@@ -191,12 +199,13 @@ class AbandonedCartController extends ListingBaseController {
             'abandonedcart_added_on' => Labels::getLabel('LBL_DATE', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        
+
         CacheHelper::create('abandonedCartFormTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             /* 'listSerial', */
             'user_name',
@@ -208,8 +217,8 @@ class AbandonedCartController extends ListingBaseController {
         ];
     }
 
-    protected function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, Common::excludeKeysForSort());
     }
-
 }

@@ -36,17 +36,17 @@
 
         $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 
-        foreach ($arrListing as $sn => $row) {
-            $tr = $tbl->appendElement('tr', array('class' => ''));
-            foreach ($arr_flds as $key => $val) {
-                $td = $tr->appendElement('td');
-                switch ($key) {
-                    case 'listserial':
-                        $td->appendElement('plaintext', array(), $sr_no, true);
-                        break;
-                    case 'product_identifier':
-                        $uploadedTime = AttachedFile::setTimeParam($row['product_updated_on']);
-                        $html = '<div class="product-profile">
+    foreach ($arrListing as $sn => $row) {
+        $tr = $tbl->appendElement('tr', array('class' => ''));
+        foreach ($arr_flds as $key => $val) {
+            $td = $tr->appendElement('td');
+            switch ($key) {
+                case 'listserial':
+                    $td->appendElement('plaintext', array(), $sr_no, true);
+                    break;
+                case 'product_identifier':
+                    $uploadedTime = AttachedFile::setTimeParam($row['product_updated_on']);
+                    $html = '<div class="product-profile">
                             <figure class="product-profile__pic"><img ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI) . ' src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($row['product_id'], ImageDimension::VIEW_MINI, 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '" title="' . $row['product_name'] . '" alt="' . $row['product_name'] . '"></figure>
                                 <div class="product-profile__description">
                                     <div class="product-profile__title">' . $row['product_name'] . '</div>
@@ -99,16 +99,16 @@
                                     </use>
                                 </svg>
                             </i>',
-                                    true
-                                );
-                            }
+                                true
+                            );
+                        }
 
-                            if ($available) {
-                                $li = $ul->appendElement("li");
-                                $li->appendElement(
-                                    'a',
-                                    array('href' => 'javascript:void(0)', 'class' => ($canAddToStore) ? 'icn-highlighted' : 'icn-highlighted disabled', 'onclick' => 'checkIfAvailableForInventory(' . $row['product_id'] . ')', 'title' => Labels::getLabel('LBL_Add_To_Store', $siteLangId), true),
-                                    '<i class="icn">
+                        if ($available) {
+                            $li = $ul->appendElement("li");
+                            $li->appendElement(
+                                'a',
+                                array('href' => 'javascript:void(0)', 'class' => ($canAddToStore) ? 'icn-highlighted' : 'icn-highlighted disabled', 'onclick' => 'checkIfAvailableForInventory(' . $row['product_id'] . ')', 'title' => Labels::getLabel('LBL_Add_To_Store', $siteLangId), true),
+                                '<i class="icn">
                                     <svg class="svg" width="18" height="18">
                                         <use
                                             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
@@ -155,8 +155,8 @@
                                 </use>
                             </svg>
                         </i>', true);
-                            }
                         }
+                    }
 
                         $li = $ul->appendElement("li");
                         $li->appendElement(

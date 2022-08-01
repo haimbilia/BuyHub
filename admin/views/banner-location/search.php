@@ -47,7 +47,7 @@ foreach ($arrListing as $sn => $row) {
                     [
                         'attr' => [
                             'href' =>  'javascript:void(0);',
-                            'onclick' => "displayImageInFacebox('" . CONF_WEBROOT_URL . "images/banner_layouts/layout-3.jpg');" ,
+                            'onclick' => "displayImageInFacebox('" . CONF_WEBROOT_URL . "images/banner_layouts/layout-3.jpg');",
                             'title' => Labels::getLabel('LBL_PRODUCT_DETAIL_PAGE_LAYOUT', $siteLangId),
                         ],
                         'label' => '<i class="icn">
@@ -59,7 +59,7 @@ foreach ($arrListing as $sn => $row) {
                     ],
                     [
                         'attr' => [
-                            'href' =>   UrlHelper::generateUrl('Banners', 'list',[$row['blocation_id']]),                            
+                            'href' =>   UrlHelper::generateUrl('Banners', 'list', [$row['blocation_id']]),
                             'title' => Labels::getLabel('LBL_BANNERS', $siteLangId),
                         ],
                         'label' => '<i class="icn">
@@ -81,7 +81,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

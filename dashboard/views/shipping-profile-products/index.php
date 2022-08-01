@@ -21,7 +21,9 @@ $proFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search_Produc
 
 ?>
 <div class="card-head">
-    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Products', $siteLangId); ?></h5>
+    <div class="card-head-label">
+        <h5 class="card-title"><?php echo Labels::getLabel('LBL_Products', $siteLangId); ?></h5>
+    </div>
 </div>
 <div class="card-body">
     <div class="row">

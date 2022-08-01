@@ -183,14 +183,14 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                             <li class="list-popover-item">
                                                 <span class="lable"><?php echo Labels::getLabel('LBL_UNIT_PRICE:'); ?> </span>
                                                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?> (* <?php echo $childOrder['op_qty']; ?>)</span>
-                                            </li> 
+                                            </li>
                                             <?php if (!empty($volumeDiscount)) { ?>
                                                 <li class="list-popover-item">
                                                     <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT:'); ?></span>
                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></span>
                                                 </li>
                                             <?php }
-                                            if (false === $isSellerDashboardView && $childOrder['op_tax_after_discount']) { ?>                                         
+                                            if (false === $isSellerDashboardView && $childOrder['op_tax_after_discount']) { ?>
                                                 <?php if (!empty($discount)) { ?>
                                                     <li class="list-popover-item">
                                                         <span class="lable"><?php echo Labels::getLabel('LBL_DISCOUNT:'); ?></span>
@@ -203,19 +203,19 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                                         <span class="value"><?php echo CommonHelper::displayMoneyFormat($rewardPoint, true, false, true, false, true); ?></span>
                                                     </li>
                                                 <?php } ?>
-                                            <?php } ?>                                        
-                                            <?php if (0 < $tax) { ?>                                                
+                                            <?php } ?>
+                                            <?php if (0 < $tax) { ?>
                                                 <li class="list-popover-item">
                                                     <span class="lable"><?php echo Labels::getLabel('LBL_TAXABLE_AMOUNT:'); ?></span>
                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($taxableAmount, true, false, true, false, true); ?></span>
                                                 </li>
-                                                
+
                                                 <li class="list-popover-item">
                                                     <span class="lable"><?php echo Labels::getLabel('LBL_TAX:'); ?></span>
                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($tax, true, false, true, false, true); ?></span>
                                                 </li>
                                             <?php } ?>
-                                            <?php if (false === $isSellerDashboardView && !$childOrder['op_tax_after_discount']) { ?>                                         
+                                            <?php if (false === $isSellerDashboardView && !$childOrder['op_tax_after_discount']) { ?>
                                                 <?php if (!empty($discount)) { ?>
                                                     <li class="list-popover-item">
                                                         <span class="lable"><?php echo Labels::getLabel('LBL_DISCOUNT:'); ?></span>
@@ -250,7 +250,9 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
     if (true == $primaryOrder) { ?>
         <div class="card">
             <div class="card-head">
-                <h5 class="card-title"><?php echo Labels::getLabel('MSG_ORDER_TIMELINE', $siteLangId); ?></h5>
+                <div class="card-head-label">
+                    <h5 class="card-title"><?php echo Labels::getLabel('MSG_ORDER_TIMELINE', $siteLangId); ?></h5>
+                </div>
             </div>
             <div class="card-body">
                 <div class="timelines-wrap">
