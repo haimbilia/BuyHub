@@ -701,13 +701,17 @@ mark,
 }
 
 //plugin
+
+//google locations
 .pac-container {
     font-family: inherit;
     box-shadow: $shadow1;
     z-index: 1040;
-    border-top: $border !important;
+    border: $border !important;
+    border-radius: 4px;
     .pac-item {
-        padding: 5px 10px;
+        cursor: pointer;
+        padding: 8px 10px;
         border-top: $border !important;
     }
     .pac-icon {
@@ -716,6 +720,11 @@ mark,
         background-repeat: no-repeat;
         background-color: transparent;
         background-position: center;
+    }
+    .pac-logo {
+        &:after {
+            content: normal !important;
+        }
     }
 }
 

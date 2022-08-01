@@ -462,10 +462,8 @@
     white-space: nowrap;
     margin: 0;
     color: $txt-gray;
-    grid-gap: 10px;
-    @include media-breakpoint-down(sm) {
-        flex-wrap: wrap;
-    }
+    gap: 10px;
+
     &-item {
         display: inline-block;
         vertical-align: top;

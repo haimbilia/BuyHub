@@ -2,13 +2,9 @@
     display: flex;
     flex: 1;
     gap: 1.5rem;
-    min-width: 0;
-    // max-width: 350px;
     width: auto;
-    flex-grow: 1;
     align-items: flex-start;
     position: relative;
-
     &-thumbnail {
         position: relative;
         margin-#{$end-direction}: 15px;
@@ -51,8 +47,11 @@
     }
 
     &__pic {
+        background-color: $bg-placeholder;
+        aspect-ratio: 1/1;
         flex: 0 0 50px;
         max-width: 50px;
+        width: 50px;
         border: $border;
         border-radius: $common-radius;
         margin: 0;
@@ -61,6 +60,9 @@
         justify-content: center;
         align-items: center;
         overflow: hidden;
+
+        img {
+        }
         &-seller {
             flex: 0 0 100px;
             max-width: 100px;
@@ -74,8 +76,8 @@
 
     &__description {
         font-size: 0.8rem;
-        min-width: min-content;
-
+        // min-width: min-content;
+        min-width: 150px;
         p {
             margin: 3px 0;
         }

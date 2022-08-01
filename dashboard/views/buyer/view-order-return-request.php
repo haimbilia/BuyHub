@@ -16,7 +16,9 @@
     <div class="content-body">
         <div class="card">
             <div class="card-head">
-                <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Details', $siteLangId); ?></h5>
+                <div class="card-head-label">
+                    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Details', $siteLangId); ?></h5>
+                </div>
                 <?php if (!$print) { ?>
                     <div class="">
                         <iframe src="<?php echo Fatutility::generateUrl('buyer', 'viewOrderReturnRequest', $urlParts) . '/print'; ?>" name="frame" style="display:none"></iframe>

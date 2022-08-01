@@ -103,8 +103,10 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
                 <div class="col-md-12 mb-4">
                     <div class="card">
                         <div class="card-head">
-                            <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shipping_to', $siteLangId); ?>
-                            </h5>
+                            <div class="card-head-label">
+                                <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shipping_to', $siteLangId); ?>
+                                </h5>
+                            </div>
                             <div class="action">
                                 <?php if ($canEdit) { ?>
                                     <a class="btn btn-outline-gray btn-icon " href="javascript:void(0);" onclick="zoneForm(<?php echo $profile_id; ?>, 0)" title="<?php echo Labels::getLabel('LBL_ADD_ZONE', $siteLangId); ?>">

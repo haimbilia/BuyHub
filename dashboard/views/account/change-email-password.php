@@ -38,7 +38,9 @@ $col = (true === $canSendSms) ? '4' : '6';
                 <div class="col-lg-4 col-md-4 mb-3">
                     <div class="card card-full-height">
                         <div class="card-head">
-                            <h5 class="card-title"><?php echo Labels::getLabel('Lbl_UPDATE_PHONE_NUMBER', $siteLangId); ?></h5>
+                            <div class="card-head-label">
+                                <h5 class="card-title"><?php echo Labels::getLabel('Lbl_UPDATE_PHONE_NUMBER', $siteLangId); ?></h5>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div id="changePhoneNumberFrmBlock"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>

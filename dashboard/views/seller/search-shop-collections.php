@@ -1,33 +1,34 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="card-head border-0 py-4">
-    <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shop_Collections', $siteLangId); ?></h5>
-    <?php
-    if ($canEdit) {
-        $btnData = [
-            'statusButtons' => true,
-            'deleteButton' => true,
-            'siteLangId' => $siteLangId,
-            'canEdit' => $canEdit
-        ];
+    <div class="card-head-label">
+        <h5 class="card-title"><?php echo Labels::getLabel('LBL_Shop_Collections', $siteLangId); ?></h5>
+    </div> <?php
+            if ($canEdit) {
+                $btnData = [
+                    'statusButtons' => true,
+                    'deleteButton' => true,
+                    'siteLangId' => $siteLangId,
+                    'canEdit' => $canEdit
+                ];
 
-        if (count($arrListing) > 0) {
-            $btnData['listTopButtons'] = [
-                [
-                    'attr' => [
-                        'class' => 'btn btn-outline-gray btn-icon',
-                        'onclick' => 'getShopCollectionGeneralForm(0)',
-                        'title' => Labels::getLabel('BTN_NEW_RECORD', $siteLangId)
-                    ],
-                    'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                if (count($arrListing) > 0) {
+                    $btnData['listTopButtons'] = [
+                        [
+                            'attr' => [
+                                'class' => 'btn btn-outline-gray btn-icon',
+                                'onclick' => 'getShopCollectionGeneralForm(0)',
+                                'title' => Labels::getLabel('BTN_NEW_RECORD', $siteLangId)
+                            ],
+                            'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
                                     </use>
                                 </svg><span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'
-                ],
-            ];
-        }
-        $this->includeTemplate('_partial/listing/action-buttons.php', $btnData);
-    }
-    ?>
+                        ],
+                    ];
+                }
+                $this->includeTemplate('_partial/listing/action-buttons.php', $btnData);
+            }
+            ?>
 </div>
 <div class="card-table">
     <div class="table-wrap">
