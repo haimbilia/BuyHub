@@ -32,9 +32,13 @@ $fld->setWrapperAttribute('id', 'coupon_max_discount_value_div');
 
 $fld = $frm->getField('coupon_start_date');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld->addFieldTagAttribute('class', 'couponDateJs');
+$fld->htmlAfterField = '<br/><span class=form-text text-muted">' . Labels::getLabel('FRM_CURRENT_DATE_WILL_BE_SELECTED_IF_"DATE_FROM"_NOT_SET.') . ' </span>';
 
 $fld = $frm->getField('coupon_end_date');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld->addFieldTagAttribute('class', 'couponDateJs');
+$fld->htmlAfterField = '<br/><span class=form-text text-muted">' . Labels::getLabel('FRM_DATE_OF_MAXIMUM_YEAR_FROM_CALENDAR_WILL_BE_SELECTED_IF_"DATE_TO"_NOT_SET.') . ' </span>';
 
 $fld = $frm->getField('coupon_uses_count');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -71,5 +75,9 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
         callCouponTypePopulate(<?php echo $coupon_type; ?>);
         callCouponDiscountIn(<?php echo $couponDiscountIn; ?>, <?php echo applicationConstants::PERCENTAGE; ?>, <?php echo applicationConstants::FLAT; ?>);
     });
-    var PERCENTAGE = <?php echo applicationConstants::PERCENTAGE; ?>
+    var PERCENTAGE = <?php echo applicationConstants::PERCENTAGE; ?>;
+    var currentYear = (new Date().getFullYear());
+    $('.couponDateJs').datepicker('option', {
+        yearRange: (currentYear - 5) + ':' + (currentYear + 50)
+    });
 </script>

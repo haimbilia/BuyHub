@@ -198,9 +198,8 @@ class DiscountCouponsController extends ListingBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_END_DATE_TO_MUST_BE_GREATER_THAN_START_DATE'), true);
         }
 
-
         $post['coupon_start_date'] = !empty($startDate) ? $startDate : date('Y-m-d');
-        $post['coupon_end_date'] = !empty($endDate) ? $endDate : date('Y-m-d', strtotime('+60 year'));
+        $post['coupon_end_date'] = !empty($endDate) ? $endDate : date('Y-m-d', strtotime('+50 year'));
         $record = new DiscountCoupons($recordId);
         $post['coupon_identifier'] = $post['coupon_title'];
         $record->assignValues($post);

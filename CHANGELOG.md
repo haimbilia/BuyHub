@@ -1088,6 +1088,7 @@ TV-9.4.0.20220719
     - #065772 - Read and write permission for seller sub user for request module.
     - #065770 - An invalid request error occurs when the user clicks on the tax categories rules module when the tax plugin is on.
     - #065763 - it shows deleted products in listing while linking
+    - #065752 - Random year value appears for the expiration year for a discount coupon when the admin creates a discount coupon without selecting the start and end date.
     
 ## UAT points:
 
