@@ -122,9 +122,6 @@
     - #055154	digital items> files linked with specific language are listing all on front end in preview
     - #055135	when digital catalog is added by admin and files are attached by admin and then seller should be allowed to see the name of file only not download
     - #055155	when admin adds catalog with digital links then on seller end links (preview and main) both are listing
-    - #065750 - The coupon status tag should appear with the end date that it is active or expired
-    - #065772 - Read and write permission for seller sub user for request module.
-    - #065770 - An invalid request error occurs when the user clicks on the tax categories rules module when the tax plugin is on.
 
 ```sh
 TV-9.3.1.20210703
@@ -1087,6 +1084,10 @@ TV-9.4.0.20220719
     - #065308 - it shows an error while admin tries to approve badge request
     - #065733 - A blank error message appears if the user uploads the invalid file type in the media section for the brand import
     - #065762 - Parse error occurs when the admin tries to generate the label for the order.
+    - #065750 - The coupon status tag should appear with the end date that it is active or expired
+    - #065772 - Read and write permission for seller sub user for request module.
+    - #065770 - An invalid request error occurs when the user clicks on the tax categories rules module when the tax plugin is on.
+    - #065763 - it shows deleted products in listing while linking
     
 ## UAT points:
 
