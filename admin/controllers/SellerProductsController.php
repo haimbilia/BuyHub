@@ -108,7 +108,16 @@ class SellerProductsController extends ListingBaseController
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'selprod_user_id = u.user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'u.user_id = uc.credential_user_id', 'uc');
         $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('product_deleted', '=', applicationConstants::NO);
 
+        $active = FatApp::getPostedData('product_active');
+        if ('' != $active) {
+            $srch->addCondition('product_active', '=', $active);
+        }
+        $approval = FatApp::getPostedData('product_approved');
+        if ('' != $approval) {
+            $srch->addCondition('product_approved', '=', $approval);
+        }
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
@@ -402,6 +411,8 @@ class SellerProductsController extends ListingBaseController
         $arrCategories = $prodCatObj->getCategoriesForSelectBox($this->siteLangId);
         $categories = $prodCatObj->makeAssociativeArray($arrCategories);
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'prodcat_id', $categories);
+        $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_APPROVAL', $this->siteLangId), 'product_approved', applicationConstants::getYesNoArr($this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_STATUS', $this->siteLangId), 'product_active', applicationConstants::getActiveInactiveArr($this->siteLangId));
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'selprod_title');

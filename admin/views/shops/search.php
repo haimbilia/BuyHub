@@ -66,7 +66,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'numOfProducts':
                 if ($canViewSellerProducts && 0 < $row[$key]) {
-                    $fn = 'redirectToSellerProduct(0, {"user_id" : ' . $row['shop_user_id'] . '})';
+                    $fn = 'redirectToSellerProduct(0, {"user_id" : ' . $row['shop_user_id'] . ', "product_approved" : 1, "product_active" : 1})';
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class'=>'link-text', 'onclick' => $fn), $row[$key]);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
