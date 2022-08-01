@@ -126,15 +126,9 @@ class ProductsController extends SellerBaseController
                     $fld = $frm->getField('ptc_prodcat_id');
                     $fld->options = [$productData['ptc_prodcat_id'] => $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')]];
                 }
-            }
+            }            
 
-            if (Tax::getActivatedServiceId()) {
-                $taxCatMultiFields = ['concat(IFNULL(taxcat_name,taxcat_identifier)', '" (",taxcat_code,")") as taxcat_name', 'taxcat_id'];
-            } else {
-                $taxCatMultiFields = ['IFNULL(taxcat_name,taxcat_identifier) as taxcat_name', 'taxcat_id'];
-            }
-
-            $taxData = Tax::getTaxCatByProductId($recordId, $productData['product_seller_id'], $langId, $taxCatMultiFields);
+            $taxData = Tax::getTaxCatByProductId($recordId, $productData['product_seller_id'], $langId);
             if (false != $taxData) {
                 $productData['ptt_taxcat_id'] = $taxData[Tax::tblFld('id')];
                 $fld = $frm->getField('ptt_taxcat_id');
@@ -218,7 +212,7 @@ class ProductsController extends SellerBaseController
             return;
         }
         $this->_template->addJs(array('seller-requests/page-js/index.js', 'products/page-js/form.js', 'js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
-        $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->addCss(array('css/select2.min.css', 'css/tagify.min.css'));
         $this->set("includeEditor", true);
         $this->_template->render(true, true, 'products/formWithNavigation.php');
     }

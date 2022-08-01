@@ -135,7 +135,7 @@
         $('#specificationsListSeprJs').removeClass('hide');
 
         let rowCount = appendEle.find('tbody tr.editRowJs').length ? appendEle.find("tbody tr").index($(".editRowJs")) : appendEle.find('tbody tr').length;
-        
+
         let html = '<tr data-id="' + prodSpecId + '">';
         html += '<td class="nameJs text-break">' + label + '<input type="hidden" name="specifications[' + rowCount + '][name]" value="' + label + '"  data-fatreq="{&quot;required&quot;:false}"/> </td>';
         html += '<td class="valueJs text-break">' + value + '<input type="hidden" name="specifications[' + rowCount + '][value]" value="' + value + '" data-fatreq="{&quot;required&quot;:false}" /> </td>';
@@ -233,6 +233,14 @@
             scrollTop: $('#specifications').offset().top - ($('.mainHeaderJs').height() + 50),
         });
     };
+
+    clearProdSpecForm = function () {
+        $('#sp_label, #sp_value, #sp_group').val('');
+        $('#sp_id').val(0);
+        $('#btnAddSpecJs').text($('#btnAddSpecJs').data('addlbl'));
+        $('#specificationsListJs tr.editRowJs').removeClass('editRowJs');
+    };
+    
     deleteProdSpec = function (el) {
         $(el).closest('tr').remove();
         if ($('#specificationsListJs').find('table tbody tr').length == 0) {

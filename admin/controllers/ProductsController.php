@@ -295,16 +295,9 @@ class ProductsController extends ListingBaseController
                     $fld = $frm->getField('ptc_prodcat_id');
                     $fld->options = [$productData['ptc_prodcat_id'] => $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')]];
                 }
-            }
+            }            
 
-            $taxPluginId = Tax::getActivatedServiceId();
-            if (0 < $taxPluginId) {
-                $taxCatMultiFields = ['concat(IFNULL(taxcat_name,taxcat_identifier)', '" (",taxcat_code,")") as taxcat_name', 'taxcat_id'];
-            } else {
-                $taxCatMultiFields = ['IFNULL(taxcat_name,taxcat_identifier) as taxcat_name', 'taxcat_id'];
-            }
-
-            $taxData = Tax::getTaxCatByProductId($recordId, $productData['product_seller_id'], $langId, $taxCatMultiFields, $taxPluginId);
+            $taxData = Tax::getTaxCatByProductId($recordId, $productData['product_seller_id'], $langId);
             if (false != $taxData) {
                 $productData['ptt_taxcat_id'] = $taxData[Tax::tblFld('id')];
                 $fld = $frm->getField('ptt_taxcat_id');

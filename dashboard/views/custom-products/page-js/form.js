@@ -208,6 +208,14 @@ var advanceMedia = false; /* open via advance media*/
             scrollTop: $('#specifications').offset().top,
         });
     };
+    
+    clearProdSpecForm = function () {
+        $('#sp_label, #sp_value, #sp_group').val('');
+        $('#sp_id').val(0);
+        $('#btnAddSpecJs').text($('#btnAddSpecJs').data('addlbl'));
+        $('#specificationsListJs tr.editRowJs').removeClass('editRowJs');
+    };
+    
     deleteProdSpec = function (el) {
         $(el).closest('tr').remove();
         if ($('#specificationsListJs').find('table tbody tr').length == 0) {

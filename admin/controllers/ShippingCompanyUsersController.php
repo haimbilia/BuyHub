@@ -163,6 +163,7 @@ class ShippingCompanyUsersController extends ListingBaseController
         $frm = $this->getUserForm(0, User::USER_TYPE_SHIPPING_COMPANY);
 
         $post = FatApp::getPostedData();
+       
         $post = $frm->getFormDataFromArray($post, ['user_state_id']);
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
@@ -256,7 +257,8 @@ class ShippingCompanyUsersController extends ListingBaseController
         $frm = new Form('frmUser', array('id' => 'frmUser'));
         $frm->addHiddenField('', 'user_id', $user_id);
         $frm->addHiddenField('', 'user_type');
-        $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'credential_username', '');
+        $fld1 = $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'credential_username', '');
+        $fld1->setUnique('tbl_user_credentials', 'credential_username', 'credential_user_id', 'user_id', 'user_id');
         $frm->addRequiredField(Labels::getLabel('FRM_CUSTOMER_NAME', $this->siteLangId), 'user_name');
         
         $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('placeholder' => Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
@@ -266,8 +268,9 @@ class ShippingCompanyUsersController extends ListingBaseController
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
         $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER.', $this->siteLangId));
 
-        $frm->addEmailField(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'credential_email', '');
-
+        $fld2 = $frm->addEmailField(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'credential_email', '');
+        $fld2->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
+        
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));

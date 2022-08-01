@@ -198,9 +198,8 @@ class DiscountCouponsController extends ListingBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_END_DATE_TO_MUST_BE_GREATER_THAN_START_DATE'), true);
         }
 
-
         $post['coupon_start_date'] = !empty($startDate) ? $startDate : date('Y-m-d');
-        $post['coupon_end_date'] = !empty($endDate) ? $endDate : date('Y-m-d', strtotime('+60 year'));
+        $post['coupon_end_date'] = !empty($endDate) ? $endDate : date('Y-m-d', strtotime('+50 year'));
         $record = new DiscountCoupons($recordId);
         $post['coupon_identifier'] = $post['coupon_title'];
         $record->assignValues($post);
@@ -803,6 +802,7 @@ class DiscountCouponsController extends ListingBaseController
             'coupon_discount_value' => Labels::getLabel('LBL_COUPON_DISCOUNT', $this->siteLangId),
             'coupon_start_date' => Labels::getLabel('LBL_AVAILABLE_FROM', $this->siteLangId),
             'coupon_end_date' => Labels::getLabel('LBL_AVAILABLE_TO', $this->siteLangId),
+            'coupon_alive' => Labels::getLabel('LBL_ALIVE', $this->siteLangId),
             'coupon_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -821,6 +821,7 @@ class DiscountCouponsController extends ListingBaseController
             'coupon_discount_value',
             'coupon_start_date',
             'coupon_end_date',
+            'coupon_alive',
             'coupon_active',
             'action',
         ];
@@ -828,7 +829,7 @@ class DiscountCouponsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, Common::excludeKeysForSort());
+        return array_diff($fields, ['coupon_alive'], Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)

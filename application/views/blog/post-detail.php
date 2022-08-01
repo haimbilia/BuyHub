@@ -59,7 +59,18 @@
                                 <?php foreach ($post_images as $post_image) { ?>
                                     <div class="items">
                                         <div class="media-wrapper">
-                                            <img data-ratio="16:9" src="<?php echo FatUtility::generateUrl('image', 'blogPostFront', array($post_image['afile_record_id'], $post_image['afile_lang_id'], ImageDimension::VIEW_NORMAL, 0, $post_image['afile_id']), CONF_WEBROOT_FRONT_URL); ?>" alt="<?php echo $post_image['afile_attribute_alt']; ?>" title="<?php echo $post_image['afile_attribute_title']; ?>">
+                                            <?php
+                                            $uploadedTime = AttachedFile::setTimeParam($post_image['afile_updated_at']);
+                                            $pictureAttr = [
+                                                'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($post_image['afile_record_id'], $post_image['afile_lang_id'], 'WEBP' . ImageDimension::VIEW_NORMAL, 0, $post_image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
+                                                'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($post_image['afile_record_id'], $post_image['afile_lang_id'], ImageDimension::VIEW_NORMAL, 0, $post_image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
+                                                'ratio' => '16:9',
+                                                'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Image', 'blogPostFront', array($post_image['afile_record_id'], $post_image['afile_lang_id'], ImageDimension::VIEW_NORMAL, 0, $post_image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                                'alt' => (!empty($post_image['afile_attribute_alt'])) ? $post_image['afile_attribute_alt'] : $blogPostData['post_title'],
+                                                'siteLangId' => $siteLangId,
+                                            ];
+                                            $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                                            ?>
                                         </div>
                                     </div>
                                 <?php } ?>

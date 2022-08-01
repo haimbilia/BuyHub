@@ -229,6 +229,9 @@
                             <button type="button" id="btnAddSpecJs" class="btn btn-brand btn-wide" onclick="addSpecification()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
                                 <?php echo Labels::getLabel('BTN_ADD', $langId); ?>
                             </button>
+                            <button type="button" id="btnClearSpecJs" class="btn btn-outline-brand btn-wide" onclick="clearProdSpecForm()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
+                                <?php echo Labels::getLabel('BTN_CLEAR', $langId); ?>
+                            </button>
                         </div>
                     </div>
                 </div>

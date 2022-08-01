@@ -10,7 +10,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo, 'id' => $row['coupon_id']]);
-    
+
     $isExpired = ($row['coupon_end_date'] != "0000-00-00" && strtotime($row['coupon_end_date']) < strtotime(date('Y-m-d'))) ? true : false;
     foreach ($fields as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : (('select_all' == $key) ? ['class' => 'col-check'] : []);
@@ -27,11 +27,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
             case 'coupon_code':
-                $code = $row[$key];
-                if ($isExpired) { 
-                    $code .= ' ' . HtmlHelper::getStatusHtml(HtmlHelper::DANGER, Labels::getLabel("LBL_EXPIRED", $siteLangId));
-                }
-                $code = '<div clss="d-flex">' . $code . '</div>';
+                $code = '<div clss="d-flex">' . $row[$key] . '</div>';
                 $td->appendElement('plaintext', $tdAttr, $code, true);
                 break;
             case 'coupon_type':
@@ -50,6 +46,13 @@ foreach ($arrListing as $sn => $row) {
                 $dispDate = HtmlHelper::formatDateTime($row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $dispDate, true);
                 break;
+            case 'coupon_alive':
+                $code = HtmlHelper::getStatusHtml(HtmlHelper::SUCCESS, Labels::getLabel("LBL_ACTIVE", $siteLangId));
+                if ($isExpired) {
+                    $code = HtmlHelper::getStatusHtml(HtmlHelper::DANGER, Labels::getLabel("LBL_EXPIRED", $siteLangId));
+                }
+                $td->appendElement('plaintext', $tdAttr, $code, true);
+                break;
             case 'coupon_active':
                 if ($isExpired) {
                     $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['coupon_id'], $row[$key], true, Labels::getLabel("LBL_EXPIRED", $siteLangId));
@@ -64,7 +67,7 @@ foreach ($arrListing as $sn => $row) {
                     'recordId' => $row['coupon_id']
                 ];
 
-                if ($canEdit) {                 
+                if ($canEdit) {
                     $href = UrlHelper::generateUrl('DiscountCoupons', 'links', [$row['coupon_id']]);
                     $onclick = '';
                     if ($row['coupon_type'] == DiscountCoupons::TYPE_SELLER_PACKAGE) {
@@ -112,7 +115,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

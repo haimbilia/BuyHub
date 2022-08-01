@@ -4550,7 +4550,7 @@ class SellerController extends SellerBaseController
                 }
 
                 $fld = $frm->addIntegerField(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'selprod_stock');
-                $fld->requirements()->setPositive();
+                $fld->requirements()->setRange(1, SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY);
                 $fld_sku = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'selprod_sku');
                 if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
                     $fld_sku->requirements()->setRequired();
@@ -5112,7 +5112,7 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError($message);
         }
 
-        if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price']) {
+        if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price'] || $post['splprice_price'] > $product['selprod_price']) {
             $str = Labels::getLabel('ERR_PRICE_MUST_BETWEEN_MIN_SELLING_PRICE_{MINSELLINGPRICE}_AND_SELLING_PRICE_{SELLINGPRICE}', $this->siteLangId);
             $minSellingPrice = CommonHelper::displayMoneyFormat($product['product_min_selling_price'], false, true, true);
             $sellingPrice = CommonHelper::displayMoneyFormat($product['selprod_price'], false, true, true);
@@ -5120,7 +5120,8 @@ class SellerController extends SellerBaseController
             $message = CommonHelper::replaceStringData($str, array('{MINSELLINGPRICE}' => $minSellingPrice, '{SELLINGPRICE}' => $sellingPrice));
             FatUtility::dieJsonError($message);
         }
-
+ 
+    
         /* Check if same date already exists [ */
         $tblRecord = new TableRecord(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE);
 

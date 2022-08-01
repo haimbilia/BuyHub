@@ -86,17 +86,11 @@ $formTitle = Labels::getLabel('LBL_CATEGORY_SETUP', $siteLangId); ?>
     $('input[name=thumb_min_width]').val('<?php echo $getProdCatthumbDimensions['width']; ?>');
     $('input[name=thumb_min_height]').val('<?php echo $getProdCatthumbDimensions['height']; ?>');
 
-    var getAspectRatioDes = '<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['aspectRatio']; ?>';
-    getAspectRatioDes = getAspectRatioDes.split(":");
-    if (getAspectRatioDes) {
-        var aspectRatioDes = getAspectRatioDes[0] / getAspectRatioDes[1];
-    } else {
-        var aspectRatioDes = 4 / 1;
-    }
+    var minWidthBaneerEle = $('input[name=banner_min_width]');
+    var minHeightBaneerEle = $('input[name=banner_min_height]');
 
-
-    var aspectRatio = 4 / 1;
     $(document).on('change', '.catPrefDimensionsJs', function() {
+  
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
 
@@ -115,5 +109,10 @@ $formTitle = Labels::getLabel('LBL_CATEGORY_SETUP', $siteLangId); ?>
             $(minHeightBaneerEle).val('<?php echo $getProdCatBannerDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
 
         }
+
+        var slide_screen = $(this).val();
+        var prodcat_id = $("input[name='prodcat_id']").val();
+        var lang_id = $(".catBannerLanguageJs").val();
+        categoryImages(prodcat_id, 'banner', slide_screen, lang_id);
     });
 </script>

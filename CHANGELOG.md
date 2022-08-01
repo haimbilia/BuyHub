@@ -1073,10 +1073,23 @@ TV-9.4.0.20220719
     - #065665 - Order status color update on seller and buyer order view.
     - #065438 - Infinite loader appears when the admin tries to add a new rating type.
     - #065657 - Ribbons set default background color to theme color.
+    - #065437 - Resolved issue of added diuplicate shipping company user.
+    - #065415 - Resolved special price issue of greater amount in seller and admin.
+    - #065702 - Resolved issue of tag listing on input field.
     - #065507 - The seller is again redirected to the supplier approval form even if the seller already placed a seller approval request.
     - #065499 - Payment gateway response data doesn't appears properly.
     - #065496 - Unable to edit date of ribbons bound with shop type.
     - #065495 - The user is redirected to the email configuration page after the admin approves the user truncate data request and the user is logged in.
+    - #065434 - 'Resend OTP' button is missing on the 'Verify your phone number' page
+    - #065308 - it shows an error while admin tries to approve badge request
+    - #065733 - A blank error message appears if the user uploads the invalid file type in the media section for the brand import
+    - #065762 - Parse error occurs when the admin tries to generate the label for the order.
+    - #065750 - The coupon status tag should appear with the end date that it is active or expired
+    - #065772 - Read and write permission for seller sub user for request module.
+    - #065770 - An invalid request error occurs when the user clicks on the tax categories rules module when the tax plugin is on.
+    - #065763 - it shows deleted products in listing while linking
+    - #065752 - Random year value appears for the expiration year for a discount coupon when the admin creates a discount coupon without selecting the start and end date.
+    - #065737 - Nothing happens by clicking on the increase and decrease quantity button on the product details page if the available stock and minimum purchase quantity both are the same
     
 ## UAT points:
 

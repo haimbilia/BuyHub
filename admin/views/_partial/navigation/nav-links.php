@@ -882,16 +882,19 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES', $siteLangId); ?></span>
                             </a>
                         </li>
-                        <li class="nav_item navItemJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["TaxCategoriesRule"]' href="<?php echo UrlHelper::generateUrl('TaxCategoriesRule'); ?>">
-                                <span class="nav_icon">
-                                    <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                        </use>
-                                    </svg>
-                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES_RULE', $siteLangId); ?></span>
-                            </a>
-                        </li>
+                        <?php $active = (new Plugin())->getDefaultPluginData(Plugin::TYPE_TAX_SERVICES, 'plugin_active');
+                        if (false === $active) { ?>
+                            <li class="nav_item navItemJs">
+                                <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["TaxCategoriesRule"]' href="<?php echo UrlHelper::generateUrl('TaxCategoriesRule'); ?>">
+                                    <span class="nav_icon">
+                                        <svg class="svg" width="24" height="24">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                            </use>
+                                        </svg>
+                                    </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES_RULE', $siteLangId); ?></span>
+                                </a>
+                            </li>
+                        <?php } ?>
                     <?php } ?>
                 </ul>
             </div>

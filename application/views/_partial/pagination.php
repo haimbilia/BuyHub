@@ -45,10 +45,22 @@ $pagination .=     FatUtility::getPageString(
     ' <li class="pagination-item selected"><a href="javascript:void(0);">xxpagexx</a></li>',
     ' <li class="pagination-item"><a href="javascript:void(0);">...</a></li> ',
     $linksToDisp,
-    ' <li class="pagination-item rewind"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i></a></li>',
-    ' <li class="pagination-item forward"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a></li>',
-    ' <li class="pagination-item prev"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><i class="fa fa-angle-left"></i></a></li>',
-    ' <li class="pagination-item next"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><i class="fa fa-angle-right"></i></a></li>'
+    ' <li class="pagination-item rewind"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#double-arrow-left">
+    </use>
+</svg></a></li>',
+    ' <li class="pagination-item forward"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#double-arrow-right">
+    </use>
+</svg></a></li>',
+    ' <li class="pagination-item prev"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#arrow-left">
+    </use>
+</svg></a></li>',
+    ' <li class="pagination-item next"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#arrow-right">
+    </use>
+</svg></a></li>'
 );
 
 $ul = new HtmlElement(

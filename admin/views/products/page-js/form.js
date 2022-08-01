@@ -249,6 +249,14 @@
             scrollTop: $('#specifications').offset().top - ($('.mainHeaderJs').height() + 50),
         });
     };
+
+    clearProdSpecForm = function () {
+        $('#sp_label, #sp_value, #sp_group').val('');
+        $('#sp_id').val(0);
+        $('#btnAddSpecJs').text($('#btnAddSpecJs').data('addlbl'));
+        $('#specificationsListJs tr.editRowJs').removeClass('editRowJs');
+    };
+
     deleteProdSpec = function (el) {
         let prodSpecId = $(el).closest('tr').data('id');
         if (1 > prodSpecId) {

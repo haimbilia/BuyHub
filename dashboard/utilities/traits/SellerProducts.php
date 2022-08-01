@@ -785,6 +785,9 @@ trait SellerProducts
                     $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{VARIANT}' => $optionValue, '{MINIMUM-SELLING-PRICE}' => $minSellingPrice]);
                     continue;
                 }
+                if (SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY < $post['selprod_stock' . $optionKey]) {
+                    $post['selprod_stock' . $optionKey] = SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY;
+                }
 
                 if (-1 != $prodAllowedLimit && $prodAllowedLimit < $productCount) {
                     $data_to_be_save['selprod_active'] = applicationConstants::INACTIVE;
@@ -798,7 +801,6 @@ trait SellerProducts
                 $productCount++;
             }
         } else {
-
             $optionValue = FatApp::getPostedData('inv_option_id', FatUtility::VAR_STRING, '');
             if (!empty($optionValue) && false === Product::validateProductOptionValue($post['selprod_product_id'], $optionValue)) {
                 FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
@@ -813,6 +815,10 @@ trait SellerProducts
 
             if (!isset($post['selprod_cost' . $optionValue]) || !isset($post['selprod_price' . $optionValue]) || !isset($post['selprod_stock' . $optionValue])) {
                 FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+            }
+
+            if (SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY < $post['selprod_stock' . $optionValue]) {
+                $post['selprod_stock' . $optionValue] = SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY;
             }
 
             if (-1 != $prodAllowedLimit && $prodAllowedLimit < $productCount) {
@@ -2029,6 +2035,8 @@ trait SellerProducts
         }
 
         $srch->addOrder('product_name');
+        $srch->addCondition('product_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
@@ -2048,7 +2056,6 @@ trait SellerProducts
             $srch->addCondition('selprod_id', 'NOT IN', $excludeRecords);
         }
 
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addMultipleFields(
             array(
                 'selprod_id as id', 'IFNULL(selprod_title, product_name) as product_name', 'product_identifier', 'selprod_price'
@@ -2332,7 +2339,10 @@ trait SellerProducts
             $fld->requirements()->setRange($productData['product_min_selling_price'], 9999999999);
             $fld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE_FOR_THIS_PRODUCT_IS', $this->siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productData['product_min_selling_price'], true, true));
         }
-        $frm->addIntegerField(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'selprod_stock');
+        
+        $fld = $frm->addIntegerField(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'selprod_stock');
+        $fld->requirements()->setRange(1, SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY);
+
         $frm->addDateField(Labels::getLabel('FRM_DATE_AVAILABLE', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly'))->requirements()->setRequired();
 
         $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
