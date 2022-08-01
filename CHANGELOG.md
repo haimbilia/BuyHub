@@ -123,7 +123,8 @@
     - #055135	when digital catalog is added by admin and files are attached by admin and then seller should be allowed to see the name of file only not download
     - #055155	when admin adds catalog with digital links then on seller end links (preview and main) both are listing
     - #065750 - The coupon status tag should appear with the end date that it is active or expired
-    - #065772 - Read and write permission for seller sub user for request module
+    - #065772 - Read and write permission for seller sub user for request module.
+    - #065770 - An invalid request error occurs when the user clicks on the tax categories rules module when the tax plugin is on.
 
 ```sh
 TV-9.3.1.20210703
