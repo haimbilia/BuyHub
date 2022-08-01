@@ -803,6 +803,7 @@ class DiscountCouponsController extends ListingBaseController
             'coupon_discount_value' => Labels::getLabel('LBL_COUPON_DISCOUNT', $this->siteLangId),
             'coupon_start_date' => Labels::getLabel('LBL_AVAILABLE_FROM', $this->siteLangId),
             'coupon_end_date' => Labels::getLabel('LBL_AVAILABLE_TO', $this->siteLangId),
+            'coupon_alive' => Labels::getLabel('LBL_ALIVE', $this->siteLangId),
             'coupon_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -821,6 +822,7 @@ class DiscountCouponsController extends ListingBaseController
             'coupon_discount_value',
             'coupon_start_date',
             'coupon_end_date',
+            'coupon_alive',
             'coupon_active',
             'action',
         ];
@@ -828,7 +830,7 @@ class DiscountCouponsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, Common::excludeKeysForSort());
+        return array_diff($fields, ['coupon_alive'], Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)

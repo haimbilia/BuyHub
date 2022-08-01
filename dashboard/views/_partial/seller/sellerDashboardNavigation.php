@@ -10,9 +10,9 @@ $plugin = new Plugin();
     <?php if (
         $userPrivilege->canViewShop(UserAuthentication::getLoggedUserId(), true) ||
         $userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true) ||
-        $userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true) ||
         $userPrivilege->canViewProductOptions(UserAuthentication::getLoggedUserId(), true) ||
-        $userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId(), true)
+        $userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId(), true) || 
+        $userPrivilege->canViewSellerRequests(UserAuthentication::getLoggedUserId(), true)
     ) { ?>
         <li class="dashboard-menu-item dropdownJs">
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-shop" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">

@@ -1084,6 +1084,10 @@ TV-9.4.0.20220719
     - #065308 - it shows an error while admin tries to approve badge request
     - #065733 - A blank error message appears if the user uploads the invalid file type in the media section for the brand import
     - #065762 - Parse error occurs when the admin tries to generate the label for the order.
+    - #065750 - The coupon status tag should appear with the end date that it is active or expired
+    - #065772 - Read and write permission for seller sub user for request module.
+    - #065770 - An invalid request error occurs when the user clicks on the tax categories rules module when the tax plugin is on.
+    - #065763 - it shows deleted products in listing while linking
     
 ## UAT points:
 
