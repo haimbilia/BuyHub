@@ -1090,11 +1090,18 @@ TV-9.4.0.20220719
     - #065763 - it shows deleted products in listing while linking
     - #065752 - Random year value appears for the expiration year for a discount coupon when the admin creates a discount coupon without selecting the start and end date.
     - #065737 - Nothing happens by clicking on the increase and decrease quantity button on the product details page if the available stock and minimum purchase quantity both are the same
+    - #065734 - Admin is not able to add media files to a server in the import/export module.
+    - #065783 - The sort by rating option appears in the sorting filter but the rating of the product is not visible on the listing page.
+    - #065779 - The content under the FAQ does not get changed when the user switches between the faqs
     - #065623 - Ui got distorted on View order return request page .
     - #065672 - content does not appears properly .
     - #065729 - The image description added for any content page is not properly aligned on the front end. 
     - #065730 - Blank space on the front end if no content is added in any content block in the content page layout 1.
-    
+    - #065790 - No success popup when user clicks on save icon.
+    - #065767 - 404 page should appear when the user makes any unauthorized change in the URL.
+    - #065773 - Preferred Dimensions value appears wrong when the admin opens the email templated setting for the first time. 
+    - #065777 - Multiple issues on the Products listing page.
+
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

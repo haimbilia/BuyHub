@@ -8,14 +8,14 @@
                 </div>
                 <div class="section-action">
                     <div class="slider-controls">
-                        <button class="btn btn-prev" type="button" data-href="#product-listing-<?php echo $collection['collection_id'];?>" aria-label="Previous"> <span></span>
+                        <button class="btn btn-prev" type="button" data-href="#product-listing-<?php echo $collection['collection_id']; ?>" aria-label="Previous"> <span></span>
                         </button>
-                        <button class="btn btn-next" type="button" data-href="#product-listing-<?php echo $collection['collection_id'];?>" aria-label="Next"> <span></span>
+                        <button class="btn btn-next" type="button" data-href="#product-listing-<?php echo $collection['collection_id']; ?>" aria-label="Next"> <span></span>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class=" product-layout-1 product-listing js-carousel" id="product-listing-<?php echo $collection['collection_id'];?>" data-slides="4,4,3,2" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class=" product-layout-1 product-listing js-carousel" id="product-listing-<?php echo $collection['collection_id']; ?>" data-slides="4,3,3,2" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tRightRibbons = $collection['tRightRibbons'];
                 foreach ($collection['products'] as $product) {

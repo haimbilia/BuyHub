@@ -204,7 +204,7 @@ $(document).on('change', '#digitalFrmLangId,#digitalFrmdownloadType,#digitalFrmO
 
     catalogInfo = function (product_id) {
         fcom.ajax(fcom.makeUrl('Seller', 'catalogInfo', [product_id]), '', function (t) {
-            $.ykmodal(t, true, 'modal-dialog-vertical-lg');
+            $.ykmodal(t, true);
         });
     }
 

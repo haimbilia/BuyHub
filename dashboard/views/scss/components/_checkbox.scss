@@ -18,7 +18,7 @@
         text-decoration: underline;
     }
 }
-$checkbox-size: 20px;
+$checkbox-size: 16px;
 .checkbox input,
 .radio input {
     appearance: none;
@@ -37,7 +37,7 @@ $checkbox-size: 20px;
     background-color: transparent;
     cursor: pointer;
     display: inline-block;
-    margin-#{$end-direction}: 0.5rem;
+    //margin-#{$end-direction}: 0.5rem;
     padding: 0 !important;
     outline: none;
     position: relative;

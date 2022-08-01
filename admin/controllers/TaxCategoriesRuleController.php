@@ -33,6 +33,13 @@ class TaxCategoriesRuleController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('TaxCategories'));
         }
+
+        $taxruleId = Tax::getAttributesById($ruleId, 'taxcat_id');
+        if (1 > $taxruleId) {
+            LibHelper::exitWithError($this->str_invalid_request, false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('TaxCategories'));
+        }
+
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields, $ruleId);
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
