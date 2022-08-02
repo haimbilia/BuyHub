@@ -38,7 +38,7 @@ class AdminShopSearch extends SearchBase
             'users.user_name',
             'cred.credential_username',
             'shop.shop_updated_on'
-        ]); 
+        ]);
         $this->doNotCalculateRecords();
         $results = Fatapp::getDb()->fetchAll($this->getResultSet());
         if (empty($results)) {
@@ -74,11 +74,16 @@ class AdminShopSearch extends SearchBase
         if (empty($shopUserIds)) {
             return [];
         }
-        $prodSrch = new ProductSearch();
-        $prodSrch->joinSellerProducts();
-        $prodSrch->joinSellers();
-        $prodSrch->addMultipleFields(array('selprod_user_id', 'count(*) as numOfProducts'));
+        $prodSrch = SellerProduct::getSearchObject();
+        $prodSrch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
+        $prodSrch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'selprod_user_id = u.user_id', 'u');
+        $prodSrch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'u.user_id = uc.credential_user_id', 'uc');
+        $prodSrch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $prodSrch->addCondition('product_deleted', '=', applicationConstants::NO);
+        $prodSrch->addCondition('product_active', '=', applicationConstants::ACTIVE);
+        $prodSrch->addCondition('product_approved', '=', applicationConstants::YES);
         $prodSrch->addDirectCondition('( selprod_user_id  IN (' . implode(',', $shopUserIds) . '))');
+        $prodSrch->addMultipleFields(array('selprod_user_id', 'count(*) as numOfProducts'));
         $prodSrch->addGroupby('selprod_user_id');
         $prodSrch->doNotCalculateRecords();
         $prodSrch->doNotLimitRecords();
