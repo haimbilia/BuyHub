@@ -636,8 +636,8 @@ class ConfigurationsController extends ListingBaseController
                 $stateFld->setFieldTagAttribute('id', 'geo_state_code');
 
                 $zipFld = $frm->addTextBox(Labels::getLabel("FRM_POSTAL_CODE", $langId), 'CONF_GEO_DEFAULT_ZIPCODE', '', ['id' => 'geo_postal_code']);
-                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LAT', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72, ['id' => 'lat']));
-                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LNG', FatApp::getConfig('CONF_GEO_DEFAULT_LNG', FatUtility::VAR_INT, -73.96, ['id' => 'lng']));
+                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LAT', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_FLOAT, 40.72), ['id' => 'lat']);
+                $frm->addHiddenField('', 'CONF_GEO_DEFAULT_LNG', FatApp::getConfig('CONF_GEO_DEFAULT_LNG', FatUtility::VAR_FLOAT, -73.96), ['id' => 'lng']);
                 $frm->addHiddenField('', 'CONF_GEO_DEFAULT_ADDR', FatApp::getConfig('CONF_GEO_DEFAULT_ADDR', FatUtility::VAR_STRING, '', ['id' => 'geo_city']));
 
                 if (FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::YES) {

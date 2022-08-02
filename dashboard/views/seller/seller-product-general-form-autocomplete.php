@@ -374,23 +374,22 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                             <thead>
                                 <tr>
                                     <?php if ($selprod_id == 0 || !empty($optionValues)) { ?>
-                                        <th><?php echo Labels::getLabel('LBL_Variant/Option', $siteLangId); ?>
+                                        <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_Variant/Option', $siteLangId); ?>
                                         </th>
                                     <?php } ?>
-                                    <th><?php echo Labels::getLabel('LBL_Cost_Price', $siteLangId); ?>
+                                    <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_Cost_Price', $siteLangId); ?>
                                     </th>
                                     <?php $selPriceTitle = (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_This_price_is_including_the_tax_rates.', $siteLangId) : Labels::getLabel('LBL_This_price_is_excluding_the_tax_rates.', $siteLangId);
                                     $selPriceTitle .= ' ' . Labels::getLabel('LBL_Min_Selling_price', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true);
                                     ?>
-                                    <th><?php echo Labels::getLabel('LBL_Selling_Price', $siteLangId); ?>
+                                    <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_Selling_Price', $siteLangId); ?>
                                         <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo $selPriceTitle; ?>"></i>
                                     </th>
-                                    <th><?php echo Labels::getLabel('LBL_Quantity', $siteLangId); ?>
+                                    <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_Quantity', $siteLangId); ?>
                                     </th>
-                                    <th><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
+                                    <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
                                         <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
                                     </th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>

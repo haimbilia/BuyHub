@@ -2108,7 +2108,6 @@ class SellerController extends SellerBaseController
         if (!empty($callbackKeyName)) {
             $this->set('action', $callbackKeyName);
         }
-
         $this->set('shopFrm', $shopFrm);
         $this->set('stateId', $stateId);
         $this->set('shop_id', $shop_id);
