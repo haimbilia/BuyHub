@@ -683,8 +683,10 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
     }
 
     if (typeof google !== 'object' || typeof google.maps !== 'object') { return; }
-
+  
     var autocomplete = new google.maps.places.Autocomplete(fieldElement, options);
+    window.addEventListener('scroll', () => google.maps.event.trigger(autocomplete, 'resize'));
+
     google.maps.event.addListener(autocomplete, 'place_changed', function () {
         var place = autocomplete.getPlace();
         var lat = place['geometry']['location'].lat();
