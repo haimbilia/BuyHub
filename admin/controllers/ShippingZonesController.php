@@ -144,7 +144,7 @@ class ShippingZonesController extends ListingBaseController {
 
         $spObj = new ShippingProfileZone($shipProZoneId);
         $spObj->assignValues($data);
-        if (!$spObj->save($data)) {
+        if (!$spObj->save()) {
             LibHelper::exitWithError($spObj->getError(), true);
         }
         $shipProZoneId = $spObj->getMainTableRecordId();

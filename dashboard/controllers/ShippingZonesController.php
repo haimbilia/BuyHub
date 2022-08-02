@@ -154,7 +154,7 @@ class ShippingZonesController extends SellerBaseController
 
         $spObj = new ShippingProfileZone($shipProZoneId);
         $spObj->assignValues($data);
-        if (!$spObj->save($data)) {
+        if (!$spObj->save()) {
             FatUtility::dieJsonError($spObj->getError());
         }
         $shipProZoneId = $spObj->getMainTableRecordId();

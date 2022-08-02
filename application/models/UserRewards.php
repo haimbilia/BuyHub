@@ -17,13 +17,15 @@ class UserRewards extends MyAppModel
         return $srch;
     }
 
-    public function save()
+    public function save(bool $updateBreakpoints = true)
     {
         if (!($this->mainTableRecordId > 0)) {
             $this->setFldValue('urp_date_added', date('Y-m-d H:i:s'));
         }
         $output = parent::save();
-        static::getAndSetRewardsPointBreakup($this->getMainTableRecordId());
+        if (true === $updateBreakpoints) {
+            static::getAndSetRewardsPointBreakup($this->getMainTableRecordId());
+        }
         return $output;
     }
 
@@ -34,8 +36,8 @@ class UserRewards extends MyAppModel
         $rewarPointArr = array(
             'urp_user_id' => $userId,
             'urp_points' => '-' . $rewardPointUsed,
-            'urp_used_order_id' => $orderId,           
-            'urp_comments' => Labels::getLabel('LBL_REWARD_POINT_USED_IN_CHECKOUT_WITH_ORDERID', $langId) . $orderNo,            
+            'urp_used_order_id' => $orderId,
+            'urp_comments' => Labels::getLabel('LBL_REWARD_POINT_USED_IN_CHECKOUT_WITH_ORDERID', $langId) . $orderNo,
         );
         $rewardsRecord->assignValues($rewarPointArr);
         if (!$rewardsRecord->save()) {
@@ -63,9 +65,7 @@ class UserRewards extends MyAppModel
         $srch = static::getSearchObject();
         $srch->addCondition('urp.urp_id', '=', 'mysql_func_' . $urpId, 'AND', true);
         $srch->doNotCalculateRecords();
-        $rs = $srch->getResultSet();
-
-        $result = FatApp::getDb()->fetch($rs);
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
 
         if (empty($result)) {
             return;
@@ -101,9 +101,7 @@ class UserRewards extends MyAppModel
             $srch->addOrder('urp_date_expiry', 'asc');
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
-            $rs = $srch->getResultSet();
-
-            $unUsedRewardsPointsArr = FatApp::getDb()->fetchAll($rs);
+            $unUsedRewardsPointsArr = FatApp::getDb()->fetchAll($srch->getResultSet());
             foreach ($unUsedRewardsPointsArr as $val) {
                 if ($userRewardPoints == 0) {
                     break;
@@ -140,7 +138,7 @@ class UserRewards extends MyAppModel
     {
         $srch = new SearchBase(UserRewardBreakup::DB_TBL, 'urb');
         $srch->addCondition('urpbreakup_urp_id', '=', $rewardId);
-        $srch->addCondition('urpbreakup_used', '=', applicationConstants::YES);        
+        $srch->addCondition('urpbreakup_used', '=', applicationConstants::YES);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         return FatApp::getDb()->fetch($srch->getResultSet());

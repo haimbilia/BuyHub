@@ -29,7 +29,7 @@
                     $td->appendElement('plaintext', array(), '<input class="rewardOptions-Js" type="checkbox" name="rewardOptions[]" value="' . $row['urp_id'] . '">', true);
                     break;
                 case 'urp_date_added':
-                    $td->appendElement('plaintext', array(), FatDate::format($row[$key]), true);
+                    $td->appendElement('plaintext', array(), FatDate::format($row[$key], true), true);
                     break;
                 case 'urp_date_expiry':
                     $expiryDate = $row[$key];
