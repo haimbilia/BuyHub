@@ -183,24 +183,6 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                     <strong style=" padding-bottom:10px; "><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?>: <?php echo $childOrder['op_shop_name']; ?></strong>
                     <br>
                     <?php echo Labels::getLabel('LBL_Shop_Address', $siteLangId); ?>: <?php echo $childOrder['shop_city'] . ', ' . $childOrder['shop_state_name'] . ', ' . $childOrder['shop_country_name'] . ' - ' . $childOrder['shop_postalcode']; ?>
-                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
-                        <?php $shopCodes = $childOrder['shop_invoice_codes'];
-                        $codesArr = explode("\n", $shopCodes); ?>
-                        <tbody>
-                            <?php $count = 1; ?>
-                            <tr>
-                                <?php foreach ($codesArr as $code) { ?>
-                                    <td style="<?php echo ($count % 2 == 0) ? 'text-align: right;' : ''; ?> font-weight: 700;"><?php echo $code; ?></td>
-                                <?php
-                                    if ($count % 2 == 0) {
-                                        echo '</tr><tr>';
-                                    }
-                                    $count++;
-                                } ?>
-
-                            </tr>
-                        </tbody>
-                    </table>
                 </td>
             </tr>
             <tr>
@@ -241,24 +223,24 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
             </tr>
             <tr>
                 <td>
-                    <table class="tbl-border" width="100%" border="0" cellpadding="10" cellspacing="0">                       
+                    <table class="tbl-border" width="100%" border="0" cellpadding="10" cellspacing="0">
                         <thead>
-                        <tr>
-                            <th width="<?php echo ($col6) ? '35%' : '55%'; ?>" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Item', $siteLangId); ?></th>
-                            <th width="15%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Price', $siteLangId); ?></th>
-                            <th width="10%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Qty', $siteLangId); ?></th>
-                            <?php if ($col6) { ?>
-                                <th width="15%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; ">
-                                    <?php if (FatApp::getConfig('CONF_TAX_CATEGORIES_CODE', FatUtility::VAR_INT, 1)) {
-                                        echo ($childOrder['op_tax_code'] != '') ? $orderDetail['op_tax_code'] . ' (' . Labels::getLabel('LBL_Tax', $siteLangId) . ')' : Labels::getLabel('LBL_Tax', $siteLangId); ?>
-                                    <?php } else {
-                                        echo Labels::getLabel('LBL_Tax', $siteLangId);
-                                    } ?>
-                                </th>
-                            <?php } ?>
-                            <th width="<?php echo ($col6) ? '25%' : '20%'; ?>" style="padding:10px; ;text-align: right; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Total_Amount', $siteLangId); ?></th>
-                        </tr>
-                        <thead>
+                            <tr>
+                                <th width="<?php echo ($col6) ? '35%' : '55%'; ?>" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Item', $siteLangId); ?></th>
+                                <th width="15%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Price', $siteLangId); ?></th>
+                                <th width="10%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Qty', $siteLangId); ?></th>
+                                <?php if ($col6) { ?>
+                                    <th width="15%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; ">
+                                        <?php if (FatApp::getConfig('CONF_TAX_CATEGORIES_CODE', FatUtility::VAR_INT, 1)) {
+                                            echo ($childOrder['op_tax_code'] != '') ? $orderDetail['op_tax_code'] . ' (' . Labels::getLabel('LBL_Tax', $siteLangId) . ')' : Labels::getLabel('LBL_Tax', $siteLangId); ?>
+                                        <?php } else {
+                                            echo Labels::getLabel('LBL_Tax', $siteLangId);
+                                        } ?>
+                                    </th>
+                                <?php } ?>
+                                <th width="<?php echo ($col6) ? '25%' : '20%'; ?>" style="padding:10px; ;text-align: right; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Total_Amount', $siteLangId); ?></th>
+                            </tr>
+                        </thead>
                         <tbody>
                             <tr>
                                 <td style="padding:10px;text-align: left;"><?php echo $item; ?></td>
@@ -269,7 +251,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                 <?php } ?>
 
                                 <td style="padding:10px; ;text-align: right;"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'CART_TOTAL'), true, false, true, false, true); ?></td>
-                           
+
                             </tr>
 
                             <tr>
@@ -298,8 +280,8 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                     <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId) ?></td>
                                     <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo '-' . CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></td>
                                 </tr>
-                            <?php }     
-                            if($childOrder['op_tax_after_discount']){
+                                <?php }
+                            if ($childOrder['op_tax_after_discount']) {
                                 $rewardPointDiscount = CommonHelper::orderProductAmount($childOrder, 'REWARDPOINT');
                                 if ($rewardPointDiscount != 0) { ?>
                                     <tr>
@@ -314,7 +296,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                     </tr>
                                 <?php
                                 }
-                            }                     
+                            }
                             if ($tax > 0) { ?>
                                 <tr>
                                     <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_TAXABLE_AMOUNT', $siteLangId) ?></td>
@@ -324,8 +306,8 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                     <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId) ?></td>
                                     <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($tax, true, false, true, false, true); ?></td>
                                 </tr>
-                            <?php }
-                            if(!$childOrder['op_tax_after_discount']){
+                                <?php }
+                            if (!$childOrder['op_tax_after_discount']) {
                                 $rewardPointDiscount = CommonHelper::orderProductAmount($childOrder, 'REWARDPOINT');
                                 if ($rewardPointDiscount != 0) { ?>
                                     <tr>
@@ -346,7 +328,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                     <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Delivery_Charges', $siteLangId) ?></td>
                                     <td style="padding:10px;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'shipping'), true, false, true, false, true); ?></td>
                                 </tr>
-                            <?php }                             
+                            <?php }
                             if (array_key_exists('order_rounding_off', $orderDetail) && 0 != $orderDetail['order_rounding_off']) { ?>
                                 <tr>
                                     <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo (0 < $orderDetail['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?>
@@ -421,6 +403,28 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                     </p>
                                 <?php } ?>
                             </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <?php $shopCodes = $childOrder['shop_invoice_codes'];
+                    $codesArr = explode("\n", $shopCodes); ?>
+                    <tbody>
+                        <?php $count = 1; ?>
+                        <tr>
+                            <?php foreach ($codesArr as $code) { ?>
+                                <td style="<?php echo ($count % 2 == 0) ? 'text-align: right;' : ''; ?> font-weight: 700;"><?php echo $code; ?></td>
+                            <?php
+                                if ($count % 2 == 0) {
+                                    echo '</tr><tr>';
+                                }
+                                $count++;
+                            } ?>
+
                         </tr>
                     </tbody>
                 </table>

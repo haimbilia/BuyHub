@@ -36,6 +36,7 @@ $btnSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 
 $fld = $shopFrm->getField('shop_invoice_codes');
 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+$fld->addFieldTagAttribute('maxlength', Shop::GOVT_INFO_LEN);
 ?>
 <div class="card-body ">
     <?php echo $shopFrm->getFormHtml(); ?> 
