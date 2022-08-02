@@ -1,5 +1,30 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
+
+if(UserAuthentication::isUserLogged()){
+    $userActiveTab = false;
+    if (User::canViewSupplierTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S')) {
+        $userActiveTab = true;
+        $dashboardUrl = UrlHelper::generateUrl('Seller', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
+        $dashboardOrgUrl = UrlHelper::generateUrl('Seller', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
+    } elseif (User::canViewBuyerTab()  && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'B')) {
+        $userActiveTab = true;
+        $dashboardUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
+        $dashboardOrgUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
+    } elseif (User::canViewAdvertiserTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'Ad')) {
+        $userActiveTab = true;
+        $dashboardUrl = UrlHelper::generateUrl('Advertiser', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
+        $dashboardOrgUrl = UrlHelper::generateUrl('Advertiser', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
+    } elseif (User::canViewAffiliateTab()  && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'AFFILIATE')) {
+        $userActiveTab = true;
+        $dashboardUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
+        $dashboardOrgUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
+    }
+    if (!$userActiveTab) {
+        $dashboardUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
+        $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
+    } 
+}
 if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
     if (!UserAuthentication::isUserLogged()) {
         if (UserAuthentication::isGuestUserLogged()) { ?>
@@ -45,28 +70,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
             </li> <?php
                 }
             } else {
-                $userActiveTab = false;
-                if (User::canViewSupplierTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S')) {
-                    $userActiveTab = true;
-                    $dashboardUrl = UrlHelper::generateUrl('Seller', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
-                    $dashboardOrgUrl = UrlHelper::generateUrl('Seller', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
-                } elseif (User::canViewBuyerTab()  && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'B')) {
-                    $userActiveTab = true;
-                    $dashboardUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
-                    $dashboardOrgUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
-                } elseif (User::canViewAdvertiserTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'Ad')) {
-                    $userActiveTab = true;
-                    $dashboardUrl = UrlHelper::generateUrl('Advertiser', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
-                    $dashboardOrgUrl = UrlHelper::generateUrl('Advertiser', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
-                } elseif (User::canViewAffiliateTab()  && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'AFFILIATE')) {
-                    $userActiveTab = true;
-                    $dashboardUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
-                    $dashboardOrgUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
-                }
-                if (!$userActiveTab) {
-                    $dashboardUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
-                    $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
-                } ?>
+                ?>
         <li class="quick-nav-item item-desktop">
             <div class="dropdown">
                 <button type="button" class="quick-nav-link button-account dropdown-toggle no-after" data-bs-toggle="dropdown">
@@ -119,7 +123,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
             </div>
             <ul class="account-nav">
                 <li class="account-nav-item">
-                    <a class="account-nav-link"><?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?><i class="icon icon-arrow-right"></i></a>
+                    <a class="account-nav-link" href="<?php echo $dashboardOrgUrl; ?>"><?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?><i class="icon icon-arrow-right"></i></a>
                 </li>
                 <?php
                 $this->includeTemplate('_partial/header/sellerUserArea.php', ['siteLangId' => $siteLangId, 'layoutType' => applicationConstants::SCREEN_MOBILE]);

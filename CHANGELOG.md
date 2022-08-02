@@ -1105,7 +1105,7 @@ TV-9.4.0.20220719
     - #065427 - Multiple UI issues on the Phone number verification popup.    
     - #065694 - The location suggestion listing popup gets scrolled over the field when the user scrolls the page by opening the location field.
     - #065186 - Nothing happens on clicking on the today button on the Date field on the seller activation page. 
-
+    - #065615 - Dashboard button is not clickable .
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
