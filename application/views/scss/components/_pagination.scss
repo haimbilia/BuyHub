@@ -17,7 +17,9 @@
             line-height: 3rem;
             text-align: center;
             height: 3rem;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1rem;
             color: $txt-body;
             border: none;

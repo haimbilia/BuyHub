@@ -17,28 +17,29 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-head-label">
-                        <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Details', $siteLangId); ?></h5>
-                        <?php if (!$print) { ?>
-                            <div class="">
-                                <iframe src="<?php echo Fatutility::generateUrl('buyer', 'viewOrderReturnRequest', $urlParts) . '/print'; ?>" name="frame" style="display:none"></iframe>
-                                <?php if ($canEscalateRequest) { ?>
-                                    <a class="btn btn-brand no-print" onclick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Account', 'escalateOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo str_replace("{websitename}", FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId), Labels::getLabel('LBL_ESCALATE_TO_{WEBSITENAME}', $siteLangId)); ?></a>
-                                <?php } ?>
+                    <div class="card-head">
+                        <div class="card-head-label">
+                            <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Details', $siteLangId); ?></h5>
+                            <?php if (!$print) { ?>
+                                <div class="">
+                                    <iframe src="<?php echo Fatutility::generateUrl('buyer', 'viewOrderReturnRequest', $urlParts) . '/print'; ?>" name="frame" style="display:none"></iframe>
+                                    <?php if ($canEscalateRequest) { ?>
+                                        <a class="btn btn-brand no-print" onclick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Account', 'escalateOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo str_replace("{websitename}", FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId), Labels::getLabel('LBL_ESCALATE_TO_{WEBSITENAME}', $siteLangId)); ?></a>
+                                    <?php } ?>
 
-                                <?php if ($canWithdrawRequest) { ?>
-                                    <a class="btn btn-brand btn-sm no-print" onclick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Buyer', 'WithdrawOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo Labels::getLabel('LBL_WITHDRAW_REQUEST', $siteLangId); ?></a>
-                                <?php } ?>
-                            </div>
-                        <?php } ?>
+                                    <?php if ($canWithdrawRequest) { ?>
+                                        <a class="btn btn-brand btn-sm no-print" onclick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Buyer', 'WithdrawOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo Labels::getLabel('LBL_WITHDRAW_REQUEST', $siteLangId); ?></a>
+                                    <?php } ?>
+                                </div>
+                            <?php } ?>
+                        </div>
                     </div>
                     <div class="card-body ">
                         <div class="row">
                             <div class="col-lg-12">
-                                <ul class="list-stats list-stats-double">
-                                    <li class="list-stats-item">
-                                        <span class="value"><?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $request, 'siteLangId' => $siteLangId], false, true); ?></span>
-                                    </li>
+                                <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $request, 'siteLangId' => $siteLangId], false, true); ?>
+                                <ul class="list-stats list-stats-double mt-4">
+
                                     <li class="list-stats-item">
                                         <span class="label"><?php echo Labels::getLabel('LBL_REQUEST_ID', $siteLangId); ?></span>
                                         <span class="value"><?php echo $request['orrequest_reference']; ?></span>
