@@ -1103,6 +1103,7 @@ TV-9.4.0.20220719
     - #065773 - Preferred Dimensions value appears wrong when the admin opens the email templated setting for the first time. 
     - #065777 - Multiple issues on the Products listing page.
     - #065427 - Multiple UI issues on the Phone number verification popup.    
+    - #065694 - The location suggestion listing popup gets scrolled over the field when the user scrolls the page by opening the location field.
 
 ## UAT points:
 
