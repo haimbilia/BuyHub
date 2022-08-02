@@ -1110,6 +1110,7 @@ TV-9.4.0.20220719
     - #065615 - Dashboard button is not clickable .
     - #065849 - Revert reward button got removed after first revert process.
     - #065847 - Double reward points got cut when we revert the reward points
+    - #065811 - The admin/seller is able to create the shipping profile without selecting any shipping zone
 
 ## UAT points:
 
