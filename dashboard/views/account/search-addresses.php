@@ -38,7 +38,10 @@ if (!empty($addresses)) {
                             <?php echo (strlen($address['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $address['addr_zip'] . '<br>' : ''; ?>
                         </p>
                         <p class="phone-txt">
-                            <i class="fas fa-mobile-alt"></i>
+                            <svg class="svg" width="20" height="20">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                </use>
+                            </svg>
                             <?php
                             $addrPhone = (strlen($address['addr_phone']) > 0) ? $address['addr_phone'] : '';
                             if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $address)) {

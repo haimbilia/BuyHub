@@ -37,7 +37,10 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
                                 <?php echo (strlen($address['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $address['addr_zip'] . '<br>' : ''; ?>
                             </p>
                             <p class="phone-txt">
-                                <i class="fas fa-mobile-alt"></i>
+                                <svg class="svg" width="20" height="20">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                    </use>
+                                </svg>
                                 <?php
                                 if (strlen($address['addr_phone']) > 0) {
                                     $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
