@@ -93,30 +93,35 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
             $postedData['pageRecordCount'] = FilterHelper::encrypt($recordCount);
             echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
             $pagingArr = array('pageCount' => $pageCount, 'page' => $postedData['page'], 'recordCount' => $recordCount, 'callBackJsFunc' => $searchFunction);
-    ?>
-
-    <?php /* if (1 < $pageCount) {  */ ?>
-    <div class="collection-pager">
-        <?php
-            $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
-            if (!isset($removePageSize)) { ?>
-            <select name="pageSizeSelect" id="pageSizeSelect" class="custom-select sorting-select">
-                <?php foreach ($pageSizeArr as $key => $val) { ?>
-                    <option value="<?php echo $key; ?>" <?php echo ($key == $pageSize) ? 'selected' : ''; ?>><?php echo $val; ?>
-                    </option>
+            $itemsPerPage = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
+            if ($itemsPerPage < $recordCount) { ?>
+            <div class="collection-pager">
+                <?php
+                    $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+                    if (!isset($removePageSize)) { ?>
+                    <select name="pageSizeSelect" id="pageSizeSelect" class="custom-select sorting-select">
+                        <?php foreach ($pageSizeArr as $key => $val) { ?>
+                            <option value="<?php echo $key; ?>" <?php echo ($key == $pageSize) ? 'selected' : ''; ?>>
+                                <?php echo $val; ?>
+                            </option>
+                        <?php 
+                        if ($recordCount < $key) {
+                            break;
+                        }
+                    } ?>
+                    </select>
                 <?php } ?>
-            </select>
-        <?php } ?>
-    </div>
-    <?php /* } */ ?>
-<?php } else { ?>
-</div> <?php
+            </div>
+    <?php }
+        } else { ?>
+</div>
+<?php
             $arr['recordDisplayCount'] = $recordCount;
             $arr['pageRecordCount'] = FilterHelper::encrypt($recordCount);
             echo FatUtility::createHiddenFormFromData($arr, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
             $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
             $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
-        ?>
+?>
 <?php }
 ?>
 </div>
