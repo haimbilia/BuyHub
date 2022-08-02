@@ -286,7 +286,7 @@ if (0 < $recordId) {
                             <div class="card-foot">
                                 <div class="row justify-content-end">
                                     <div class="col-auto">
-                                        <button class="btn btn-icon btn-outline-gray btn-sm" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);">
+                                        <button class="btn btn-icon btn-outline-gray btn-sm" type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);">
                                             <svg class="svg btn-icon-start" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                                                 </use>
@@ -316,7 +316,7 @@ if (0 < $recordId) {
                             <div class="card-foot">
                                 <div class="row justify-content-end">
                                     <div class="col-auto">
-                                        <button class="btn btn-icon btn-outline-gray btn-sm" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
+                                        <button class="btn btn-icon btn-outline-gray btn-sm" type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
                                             <svg class="svg btn-icon-start" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                                                 </use>
