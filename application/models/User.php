@@ -1707,9 +1707,9 @@ class User extends MyAppModel
                     'credential_password'
                 ];
                 $userInfo = $this->getUserInfo($attr, false, false);
-                $userAuthObj = new UserAuthentication();               
-                $userAuthObj->setLoginWithOtp($userInfo['user_phone_dcode'],$userInfo['user_phone']);
-                $userAuthObj->login($userInfo['user_phone_dcode'].$userInfo['user_phone'], $otp, $_SERVER['REMOTE_ADDR'],false);              
+                $userAuthObj = new UserAuthentication();
+                $userAuthObj->setLoginWithOtp($userInfo['user_phone_dcode'], $userInfo['user_phone']);
+                $userAuthObj->login($userInfo['user_phone_dcode'] . $userInfo['user_phone'], $otp, $_SERVER['REMOTE_ADDR'], false);
                 /*
                 $this->loginWithOtp = true;
                 $this->doLogin($userInfo['user_phone_dcode'] . $userInfo['user_phone'], $otp);
@@ -3021,9 +3021,9 @@ class User extends MyAppModel
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
 
         if ($userId != $parentId) {
-            $srch->addDirectCondition('(user_id = ' . $userId . ' or user_parent = ' . $userId . ')');
+            $srch->addDirectCondition('(user_id = ' . $userId . ' or user_id = ' . $parentId . ')');
         } else {
-            $srch->addDirectCondition('(user_id = ' . $userId . ' or user_parent = ' . $parentId . ')');
+            $srch->addDirectCondition('(user_id = ' . $userId . ' or user_parent = ' . $userId . ')');
         }
         if (true == $active) {
             $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
