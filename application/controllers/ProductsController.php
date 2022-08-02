@@ -2039,6 +2039,10 @@ class ProductsController extends MyAppController
         $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
         $srch->addCondition(Product::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
         $srch->addCondition(Product::DB_TBL_PREFIX . 'seller_id', '=', UserAuthentication::getLoggedUserId());
+        $excludeRecords = FatApp::getPostedData('excludeRecords', FatUtility::VAR_INT);
+        if (!empty($excludeRecords) && is_array($excludeRecords)) {
+            $srch->addCondition('product_id', 'NOT IN', $excludeRecords);
+        }
 
         $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as name'));
         $srch->doNotCalculateRecords();
