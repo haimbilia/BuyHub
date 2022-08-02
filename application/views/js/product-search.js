@@ -565,8 +565,8 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
     }
 
     if (typeof minPrice == 'undefined' || typeof maxPrice == 'undefined') {
-        minPrice = $("#priceFilterMinValue").data('defaultvalue');
-        maxPrice = $("#priceFilterMaxValue").data('defaultvalue');
+        minPrice = parseFloat($("#priceFilterMinValue").data('defaultvalue'));
+        maxPrice = parseFloat($("#priceFilterMaxValue").data('defaultvalue'));
     }
 
     $('input[name="priceFilterMinValue"]').val(minPrice).trigger('change');
