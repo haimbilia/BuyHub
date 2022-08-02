@@ -45,6 +45,7 @@ class SellerProductsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $frmSearch->fill(FatApp::getPostedData());
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_INVENTORIES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
@@ -405,7 +406,16 @@ class SellerProductsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', [], '', ['placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)]);
+        $userId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
+        $options = [];
+        if (0 < $userId) {
+            $user = new User($userId);
+            $userInfo = $user->getUserInfo();
+            $options = [
+                $userId => $userInfo['user_name'] . ' (' . $userInfo['credential_username'] . ')'
+            ];
+        }
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', $options, $userId, ['placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)]);
 
         $prodCatObj = new ProductCategory();
         $arrCategories = $prodCatObj->getCategoriesForSelectBox($this->siteLangId);
