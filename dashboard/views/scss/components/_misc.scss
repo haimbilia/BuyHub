@@ -927,7 +927,8 @@ mark,
         border-top: $border;
         position: sticky;
         bottom: 0;
-        z-index: 3;
+        // z-index: 3;
+        z-index: 1;
         background-color: $bg-white;
         padding: 1.5rem 1.5rem;
     }

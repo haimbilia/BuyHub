@@ -38,7 +38,7 @@
     border-top: $border;
     border-bottom: $border;
     border-color: lighten($border-color, 0.4);
-    @include media-breakpoint-up(md) {
+    @include media-breakpoint-up(lg) {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
     }
@@ -46,7 +46,6 @@
         order: 2;
         position: relative;
         aspect-ratio: 4/3;
-
         .canvas-map {
             position: absolute;
             top: 0;
@@ -75,11 +74,12 @@
         }
     }
     &-list {
+        padding: 3rem;
         @include media-breakpoint-up(lg) {
-            padding: 3rem;
-            max-height: 574px;
+            //max-height: 574px;
             overflow: hidden;
             overflow-y: auto;
+            aspect-ratio: 4/3;
         }
     }
 }
@@ -244,13 +244,10 @@
 
 .map-drag-input-wrapper {
     label {
-        font-size: 0.8rem;
         background: rgba(255, 255, 255, 0.9);
-        padding: 0 1rem;
+        padding: 10px;
         border-radius: 4px;
-        height: 40px;
         box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
-        line-height: 40px;
     }
 }
 
