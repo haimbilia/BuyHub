@@ -116,7 +116,6 @@ class AdminShopSearch extends SearchBase
             $this->addOrder($conditions['sortBy'], $conditions['sortOrder']);
         }
 
-
         if (isset($conditions['page']) && !empty($conditions['page'])) {
             $this->setPageNumber(FatUtility::int($conditions['page']));
         }
@@ -124,7 +123,6 @@ class AdminShopSearch extends SearchBase
         if (isset($conditions['pageSize']) && !empty($conditions['pageSize'])) {
             $this->setPageSize($conditions['pageSize']);
         }
-
 
         if (!empty($conditions['keyword'])) {
             $cond = $this->addCondition('shop.shop_identifier', 'like', '%' . $conditions['keyword'] . '%', 'AND');

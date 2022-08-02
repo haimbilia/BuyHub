@@ -30,8 +30,9 @@ class Shop extends MyAppModel
     public const SHOP_COLLECTION_ORGINAL_URL = 'shops/collection/';
 
     public const USE_SHOP_POLICY = 1;
-
     public const SHOP_PRODUCTS_COUNT_AT_HOMEPAGE = 2;
+
+    public const GOVT_INFO_LEN = 255;
 
     private $userId = 0;
     private $langId = 0;
