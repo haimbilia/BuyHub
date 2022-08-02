@@ -603,7 +603,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
     }
 
     if (typeof google !== 'object' || typeof google.maps !== 'object') { return; }
-    
+
     var autocomplete = new google.maps.places.Autocomplete(fieldElement, options);
     google.maps.event.addListener(autocomplete, 'place_changed', function () {
         var place = autocomplete.getPlace();
@@ -668,7 +668,7 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     if (1 > $("#" + elementId).length) {
         return;
     }
-    
+
     if (typeof google !== 'object' || typeof google.maps !== 'object') { return; }
 
     map = new google.maps.Map(document.getElementById(elementId), {
@@ -678,24 +678,31 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     geocoder = new google.maps.Geocoder;
     infowindow = new google.maps.InfoWindow;
 
-    geocodeAddress(geocoder, map, infowindow, { 'location': latlng });
-
-    /* var sel = document.getElementById('shop_country_code');
-    var country = sel.options[sel.selectedIndex].text;
-    
-    address = document.getElementById('postal_code').value;
-    address = country + ' ' + address;
-	
-    geocodeAddress(geocoder, map, infowindow, { 'address': address }); */
+    marker = new google.maps.Marker({
+        position: latlng,
+        map: map,
+        title: address,
+        draggable: true,
+    });
+    google.maps.event.addListener(marker, 'dragend', function () {
+        geocoder.geocode(
+            { latLng: marker.getPosition() },
+            function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    geocodeSetData(results);
+                }
+            }
+        );
+    });
 
     document.getElementById('postal_code').addEventListener('blur', function () {
         var sel = document.getElementById('shop_country_code');
         var country = sel.options[sel.selectedIndex].text;
 
         var sel = document.getElementById('shop_state');
-        var state = sel.selectedIndex > 0 ? sel.options[sel.selectedIndex].text  : '';
+        var state = sel.selectedIndex > 0 ? sel.options[sel.selectedIndex].text : '';
 
-        var postalCode = document.getElementById('postal_code').value; 
+        var postalCode = document.getElementById('postal_code').value;
         geocodeAddress(geocoder, map, infowindow, { 'address': `${state} ${postalCode}, ${country}` });
     });
 
@@ -705,7 +712,6 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
 
         var sel = document.getElementById('shop_state');
         var state = sel.selectedIndex > 0 ? sel.options[sel.selectedIndex].text + ',' : '';
-        console.log(`${state} ${country}`);
         geocodeAddress(geocoder, map, infowindow, { 'address': `${state} ${country}` });
     });
 
@@ -714,13 +720,6 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
         var country = sel.options[sel.selectedIndex].text;
         geocodeAddress(geocoder, map, infowindow, { 'address': country });
     });
-
-    /* for (i = 0; i < document.getElementsByClassName('addressSelection-js').length; i++) {
-        document.getElementsByClassName('addressSelection-js')[i].addEventListener("change", function(e) {
-            address = e.target.options[e.target.selectedIndex].text;
-            geocodeAddress(geocoder, map, infowindow, {'address': address});
-            });
-    } */
 }
 
 function geocodeAddress(geocoder, resultsMap, infowindow, address) {
@@ -734,8 +733,7 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
                 map: resultsMap,
                 position: results[0].geometry.location,
                 draggable: true
-            });     
-            console.log(results); 
+            });
             geocodeSetData(results);
             google.maps.event.addListener(marker, 'dragend', function () {
                 geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
@@ -745,12 +743,17 @@ function geocodeAddress(geocoder, resultsMap, infowindow, address) {
                 });
             });
         } else {
-            console.log('Geocode was not successful for the following reason: ' + status);
+            fcom.displayErrorMessage(
+                "Geocode was not successful for the following reason: " + status
+            );
         }
     });
 }
 
 function geocodeSetData(results) {
+    if (null == document.getElementById("lat") || null == document.getElementById("lng")) {
+        return false;
+    }
     document.getElementById('lat').value = marker.getPosition().lat();
     document.getElementById('lng').value = marker.getPosition().lng();
     if (results[0]) {
@@ -758,8 +761,6 @@ function geocodeSetData(results) {
         infowindow.open(map, marker);
         var address_components = results[0].address_components;
         var data = {};
-        /* data['lat'] = pos.lat();
-        data['lng'] = pos.lng(); */
         data['formatted_address'] = results[0].formatted_address;
         if (0 < address_components.length) {
             var addressComponents = address_components;
@@ -780,20 +781,18 @@ function geocodeSetData(results) {
         }
         $('#postal_code').val(data.postal_code);
 
-        console.log(data.country_code);
-
-        if($('#shop_country_code').find("option[value='"+data.country_code+"']").length){
-            var state = $('#shop_state').val() != '' ? $('#shop_state').val() : 0;           
-            if(undefined != data.state_code){
-                $('#shop_state option').each(function () {                     
+        if ($('#shop_country_code').find("option[value='" + data.country_code + "']").length) {
+            var state = $('#shop_state').val() != '' ? $('#shop_state').val() : 0;
+            if (undefined != data.state_code) {
+                $('#shop_state option').each(function () {
                     if ($(this).val() == data.state_code || this.text == data.state || this.text == data.locality) {
-                        state = $(this).val();                      
-                        return false; 
+                        state = $(this).val();
+                        return false;
                     }
                 });
             }
             getStatesByCountryCode(data.country_code, state, '#shop_state', 'state_code');
-        }       
+        }
     }
 }
 
