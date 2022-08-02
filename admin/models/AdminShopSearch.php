@@ -2,7 +2,6 @@
 
 class AdminShopSearch extends SearchBase
 {
-
     private $langId;
 
     public function __construct(int $langId = 0)
