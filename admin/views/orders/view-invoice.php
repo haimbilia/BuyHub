@@ -158,8 +158,8 @@ if ($orderDetail['op_shipping_duration_name'] != '') {
 }
 
 $tax = CommonHelper::orderProductAmount($orderDetail, 'TAX');
-$col6 = ($orderDetail['op_tax_collected_by_seller']) && $tax > 0 ;
-$taxableAmount = CommonHelper::orderProductAmount($orderDetail, 'TAXABLE_AMOUNT',false, User::USER_TYPE_SELLER);
+$col6 = ($orderDetail['op_tax_collected_by_seller']) && $tax > 0;
+$taxableAmount = CommonHelper::orderProductAmount($orderDetail, 'TAXABLE_AMOUNT', false, User::USER_TYPE_SELLER);
 ?>
 <table width="100%" border="0" cellpadding="10" cellspacing="0" class="tbl-border">
     <tbody>
@@ -173,24 +173,6 @@ $taxableAmount = CommonHelper::orderProductAmount($orderDetail, 'TAXABLE_AMOUNT'
                 <strong style=" padding-bottom:10px; "><?php echo Labels::getLabel('LBL_Sold_By', $siteLangId); ?>: <?php echo $orderDetail['op_shop_name']; ?></strong>
                 <br>
                 <?php echo Labels::getLabel('LBL_Shop_Address', $siteLangId); ?>: <?php echo $orderDetail['shop_city'] . ', ' . $orderDetail['shop_state_name'] . ', ' . $orderDetail['shop_country_name'] . ' - ' . $orderDetail['shop_postalcode']; ?>
-                <table width="100%" border="0" cellpadding="0" cellspacing="0">
-                    <?php $shopCodes = $orderDetail['shop_invoice_codes'];
-                    $codesArr = explode("\n", $shopCodes); ?>
-                    <tbody>
-                        <?php $count = 1; ?>
-                        <tr>
-                            <?php foreach ($codesArr as $code) { ?>
-                                <td style="<?php echo ($count % 2 == 0) ? 'text-align: right;' : ''; ?> font-weight: 700;"><?php echo $code; ?></td>
-                            <?php
-                                if ($count % 2 == 0) {
-                                    echo '</tr><tr>';
-                                }
-                                $count++;
-                            } ?>
-
-                        </tr>
-                    </tbody>
-                </table>
             </td>
         </tr>
         <tr>
@@ -213,7 +195,6 @@ $taxableAmount = CommonHelper::orderProductAmount($orderDetail, 'TAXABLE_AMOUNT'
         </tr>
         <tr>
             <td style="border-top: solid 1px #000;">
-
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
@@ -280,7 +261,7 @@ $taxableAmount = CommonHelper::orderProductAmount($orderDetail, 'TAXABLE_AMOUNT'
                                 <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_Volume_Discount', $siteLangId) ?></td>
                                 <td style="padding:10px; ;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></td>
                             </tr>
-                        <?php } ?>                      
+                        <?php } ?>
                         <?php if ($col6) { ?>
                             <tr>
                                 <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_TAXABLE_AMOUNT', $siteLangId) ?></td>
@@ -296,7 +277,7 @@ $taxableAmount = CommonHelper::orderProductAmount($orderDetail, 'TAXABLE_AMOUNT'
                                 <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_SHIPPING_CHARGES', $siteLangId) ?></td>
                                 <td style="padding:10px; ;text-align: right;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="1"><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'shipping'), true, false, true, false, true); ?></td>
                             </tr>
-                        <?php } ?>                   
+                        <?php } ?>
                         <?php if (array_key_exists('order_rounding_off', $orderDetail) && 0 != $orderDetail['order_rounding_off']) { ?>
                             <tr>
                                 <td style="padding:10px; ;text-align: left;border-top:1px solid #ddd;border-left:1px solid #ddd;" colspan="2"><?php echo (0 < $orderDetail['order_rounding_off']) ? Labels::getLabel('LBL_Rounding_Up', $siteLangId) : Labels::getLabel('LBL_Rounding_Down', $siteLangId); ?></td>
@@ -365,6 +346,28 @@ $taxableAmount = CommonHelper::orderProductAmount($orderDetail, 'TAXABLE_AMOUNT'
                                     </p>
                                 <?php } ?>
                             </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <?php $shopCodes = $orderDetail['shop_invoice_codes'];
+                    $codesArr = explode("\n", $shopCodes); ?>
+                    <tbody>
+                        <?php $count = 1; ?>
+                        <tr>
+                            <?php foreach ($codesArr as $code) { ?>
+                                <td style="<?php echo ($count % 2 == 0) ? 'text-align: right;' : ''; ?> font-weight: 700;"><?php echo $code; ?></td>
+                            <?php
+                                if ($count % 2 == 0) {
+                                    echo '</tr><tr>';
+                                }
+                                $count++;
+                            } ?>
+
                         </tr>
                     </tbody>
                 </table>
