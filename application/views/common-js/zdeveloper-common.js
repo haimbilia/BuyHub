@@ -489,7 +489,7 @@ function submitSiteSearch(frm, page) {
             urlString +
             setQueryParamSeperator(urlString) +
             "keyword-" +
-            encodeURIComponent(keyword.replace(protomatch, "").replace(/\//g, "-")) +
+            encodeURIComponent(keyword.replace(protomatch, "")/* .replace(/\//g, "-") */) +
             "&pagesize-" +
             page;
     }
