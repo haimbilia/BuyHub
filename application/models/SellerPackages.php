@@ -9,9 +9,6 @@ class SellerPackages extends MyAppModel
     public const FREE_TYPE = 1;
     public const PAID_TYPE = 2;
 
-    public const TYPE_FREQUENCY = 1;
-    public const TYPE_UNLIMITED = 2;
-
     public const CLASS_ONE = '';
     public const CLASS_TWO = 'two';
     public const CLASS_THREE = 'three';

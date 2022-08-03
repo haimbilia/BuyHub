@@ -3954,7 +3954,7 @@ class SellerController extends SellerBaseController
         $includeFreeSubscription = OrderSubscription::canUserBuyFreeSubscription($this->siteLangId, $this->userParentId);
         $packagesArr = SellerPackages::getSellerVisiblePackages($this->siteLangId, $includeFreeSubscription);
 
-        $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($this->siteLangId, $this->userParentId, array(OrderSubscription::DB_TBL_PREFIX . 'plan_id'));
+        $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($this->siteLangId, $this->userParentId, array('spp.*', 'ossubs_plan_id'));
         $currentActivePlanId = is_array($currentPlanData) && isset($currentPlanData[OrderSubscription::DB_TBL_PREFIX . 'plan_id']) ? $currentPlanData[OrderSubscription::DB_TBL_PREFIX . 'plan_id'] : 0;
 
         foreach ($packagesArr as $key => $package) {
@@ -3966,6 +3966,7 @@ class SellerController extends SellerBaseController
         $this->set('pageData', $pageData);
 
         $this->set('includeFreeSubscription', $includeFreeSubscription);
+        $this->set('currentPlanData', $currentPlanData);
         $this->set('currentActivePlanId', $currentActivePlanId);
         $this->set('packagesArr', $packagesArr);
         $this->set('parentUserId', $this->userParentId);

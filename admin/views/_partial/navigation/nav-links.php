@@ -844,6 +844,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     if (
         $objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)
     ) {
+        $active = (new Plugin())->getDefaultPluginData(Plugin::TYPE_TAX_SERVICES, 'plugin_active');
     ?>
         <li class="menu-item dropdownJs">
             <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_TAX" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
@@ -861,17 +862,18 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_TAX" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
                 <ul class="nav nav-level">
                     <?php if ($objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                        <li class="nav_item navItemJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["TaxStructure"]' href="<?php echo UrlHelper::generateUrl('TaxStructure'); ?>">
-                                <span class="nav_icon">
-                                    <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                        </use>
-                                    </svg>
-                                </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TAX_STRUCTURE', $siteLangId); ?></span>
-                            </a>
-                        </li>
-
+                        <?php if (false === $active) { ?>
+                            <li class="nav_item navItemJs">
+                                <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["TaxStructure"]' href="<?php echo UrlHelper::generateUrl('TaxStructure'); ?>">
+                                    <span class="nav_icon">
+                                        <svg class="svg" width="24" height="24">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                            </use>
+                                        </svg>
+                                    </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TAX_STRUCTURE', $siteLangId); ?></span>
+                                </a>
+                            </li>
+                        <?php } ?>
                         <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["TaxCategories"]' href="<?php echo UrlHelper::generateUrl('TaxCategories'); ?>">
                                 <span class="nav_icon">
@@ -882,8 +884,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                                 </span> <span class="nav_text navTextJs"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES', $siteLangId); ?></span>
                             </a>
                         </li>
-                        <?php $active = (new Plugin())->getDefaultPluginData(Plugin::TYPE_TAX_SERVICES, 'plugin_active');
-                        if (false === $active) { ?>
+                        <?php if (false === $active) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["TaxCategoriesRule"]' href="<?php echo UrlHelper::generateUrl('TaxCategoriesRule'); ?>">
                                     <span class="nav_icon">
