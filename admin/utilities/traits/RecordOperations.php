@@ -279,7 +279,18 @@ trait RecordOperations
             $this->addSortingElements($frm, 'user_id', applicationConstants::SORT_DESC);
         }
 
-        $frm->addSelectBox(Labels::getLabel('FRM_NAME_OR_EMAIL', $this->siteLangId), 'user_id', []);
+
+        $userId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
+        $options = [];
+        if (0 < $userId) {
+            $user = new User($userId);
+            $userInfo = $user->getUserInfo(null, false, false);
+            $options = [
+                $userId => $userInfo['user_name'] . ' (' . $userInfo['credential_username'] . ')'
+            ];
+        }
+
+        $frm->addSelectBox(Labels::getLabel('FRM_NAME_OR_EMAIL', $this->siteLangId), 'user_id', $options, $userId);
 
         $arr_options = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getActiveInactiveArr($this->siteLangId);
         $arr_options1 = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId);

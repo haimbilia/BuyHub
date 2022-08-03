@@ -45,7 +45,17 @@ class SellerProductsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $frmSearch->fill(FatApp::getPostedData());
+
+        $post = FatApp::getPostedData();
+        $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
+        if (0 < $selProdId) {
+            $product = SellerProduct::getSelProdDataById($selProdId, true, ['selprod_title', 'product_name', 'product_identifier']);
+            $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $product['product_identifier'];
+            $post['keyword'] = $productTitle;
+        }
+
+        $frmSearch->fill($post);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_INVENTORIES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 

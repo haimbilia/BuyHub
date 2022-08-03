@@ -327,7 +327,7 @@ function addFilter(id, obj) {
     $filter = $(obj).parent().text();
     $filterVal = htmlEncode($(obj).parent().text());
     if (!$('.selectedFiltersJs').find('a').hasClass(id)) {
-        $('.selectedFiltersJs').prepend("<span class='chip'>" + $filterVal + " <a href='javascript:void(0);' data-yk='" + id + "' class='remove btn-close text-reset" + id + "' " + click + "></a></span>");
+        $('.selectedFiltersJs').prepend("<span class='chip'>" + $filterVal + " <a href='javascript:void(0);' data-yk='" + id + "' class='remove btn-close text-reset " + id + "' " + click + "></a></span>");
     }
     showSelectedFilters();
 }
@@ -458,7 +458,7 @@ function getSearchQueryUrl(includeBaseUrl) {
     if (keyword != '') {
         delete searchArr['keyword'];
         /* keyword = encodeURIComponent(keyword);		 */
-        url = url + setQueryParamSeperator(url) + 'keyword' + valueSeperator + keyword.replace(/_/g, '-');
+        url = url + setQueryParamSeperator(url) + 'keyword' + valueSeperator + keyword/* .replace(/_/g, '-') */;
     }
 
     var category = parseInt($("input[id=searched_category]").val());

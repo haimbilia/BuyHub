@@ -27,21 +27,23 @@ class TaxCategoriesRuleController extends ListingBaseController
         }
     }
 
-    public function index($ruleId = 0)
+    public function index(int $taxCatId = 0)
     {
         if (0 < Tax::getActivatedServiceId()) {
             LibHelper::exitWithError($this->str_invalid_request, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('TaxCategories'));
         }
 
-        $taxruleId = Tax::getAttributesById($ruleId, 'taxcat_id');
-        if (1 > $taxruleId) {
-            LibHelper::exitWithError($this->str_invalid_request, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('TaxCategories'));
+        if (0 < $taxCatId) {
+            $taxCatId = Tax::getAttributesById($taxCatId, 'taxcat_id');
+            if (false === $taxCatId) {
+                LibHelper::exitWithError($this->str_invalid_request, false, true);
+                FatApp::redirectUser(UrlHelper::generateUrl('TaxCategories'));
+            }
         }
 
         $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields, $ruleId);
+        $frmSearch = $this->getSearchForm($fields, $taxCatId);
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $this->setModel();
         $this->set('pageData', $pageData);
@@ -49,28 +51,27 @@ class TaxCategoriesRuleController extends ListingBaseController
         $this->set('canEdit', $this->objPrivilege->canEditTax($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
         $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
-            'newRecordBtn' => (($ruleId) > 0 ? true : false),
-            'newRecordParent' => (($ruleId) > 0 ? $ruleId : 0),
+            'newRecordBtn' => (($taxCatId) > 0 ? true : false),
+            'newRecordParent' => (($taxCatId) > 0 ? $taxCatId : 0),
             'newRecordBtnAttrs' => [
                 'attr' => [
-                    'onclick' => 'addNew(' . $ruleId . ')',
+                    'onclick' => 'addNew(' . $taxCatId . ')',
                 ]
             ]
         ]);
         $this->set('actionItemsData', $actionItemsData);
-        $this->getListingData($ruleId);
+        $this->getListingData($taxCatId);
         $this->_template->addCss(['css/select2.min.css']);
         $this->_template->addJs([
             'js/select2.js',
             'tax-categories-rule/page-js/index.js'
         ]);
-        $this->set('postedData', ['taxrule_taxcat_id' => $ruleId]);
-        $this->set('recordId', $ruleId);
+        $this->set('postedData', ['taxrule_taxcat_id' => $taxCatId]);
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_RULE_NAME', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function getSearchForm($fields = [], $parentId = 0)
+    public function getSearchForm($fields = [], $taxCatId = 0)
     {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
@@ -79,7 +80,7 @@ class TaxCategoriesRuleController extends ListingBaseController
             $this->addSortingElements($frm, 'taxrule_name');
         }
 
-        $frm->addHiddenField('', 'taxrule_taxcat_id', $parentId);
+        $frm->addHiddenField('', 'taxrule_taxcat_id', $taxCatId);
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -150,7 +151,7 @@ class TaxCategoriesRuleController extends ListingBaseController
     {
         $this->objPrivilege->canEditTax();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $parantId = FatApp::getPostedData('parantId', FatUtility::VAR_INT, 0);
+        $taxCatId = FatApp::getPostedData('taxCatId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {
             $taxObj = new TaxRule($recordId);
@@ -161,8 +162,8 @@ class TaxCategoriesRuleController extends ListingBaseController
             $frm->fill($data);
             $ruleLocations = $taxObj->getLocations($data['taxrule_taxcat_id']);
         }
-        if (0 < $parantId) {
-            $frm->fill(['taxrule_taxcat_id' => $parantId]);
+        if (0 < $taxCatId) {
+            $frm->fill(['taxrule_taxcat_id' => $taxCatId]);
         }
         $this->set('languages', []);
         $this->set('includeTabs', false);
@@ -446,15 +447,24 @@ class TaxCategoriesRuleController extends ListingBaseController
     {
         $parentData = PageLanguageData::getAttributesByKey('MANAGE_TAX_CATEGORIES', $this->siteLangId);
         $parentTitle = $parentData['plang_title'] ?? Labels::getLabel('NAV_TAX_CATEGORIES', $this->siteLangId);
-
         switch ($action) {
             case 'index':
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-                $this->nodes = [
-                    ['title' => $parentTitle, 'href' => UrlHelper::generateUrl('TaxCategories')],
-                    ['title' => $pageTitle]
-                ];
+                $taxCatId = current(FatApp::getParameters());
+                if (0 < $taxCatId) {
+                    $taxCat = Tax::getAttributesByLangId($this->siteLangId, $taxCatId, ['COALESCE(taxcat_name, taxcat_identifier) as taxcat_name'], applicationConstants::JOIN_LEFT);
+                    $this->nodes = [
+                        ['title' => $parentTitle, 'href' => UrlHelper::generateUrl('TaxCategories')],
+                        ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('TaxCategoriesRule')],
+                        ['title' => $taxCat['taxcat_name']]
+                    ];
+                } else {
+                    $this->nodes = [
+                        ['title' => $parentTitle, 'href' => UrlHelper::generateUrl('TaxCategories')],
+                        ['title' => $pageTitle]
+                    ];
+                }
                 break;
             default:
                 parent::getBreadcrumbNodes($action);

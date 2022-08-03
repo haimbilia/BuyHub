@@ -12,7 +12,7 @@
         });
     };
 
-    addNew = function (recordId, displayInPopup = false, dialogClass = '') {
+    addNew = function (taxCatId, displayInPopup = false, dialogClass = '') {
         if (false === checkControllerName()) {
             return false;
         }
@@ -21,7 +21,7 @@
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
-        var data = "parantId=" + recordId;
+        var data = "taxCatId=" + taxCatId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
             fcom.closeProcessing();
             $.ykmodal(t.html, displayInPopup, dialogClass);
@@ -50,12 +50,13 @@ function checkStatesDefault(element, stateIds, field) {
         fcom.closeProcessing();
         fcom.removeLoader();
         $(field).empty();
-        var firstChild = '<option value = "-1" >All</option>';
+        var firstChild = '<option value="-1" selected>All</option>';
         $(field).append(firstChild);
         $(field).append(res.html);
         $(field).find("option[value='']").remove();
         if ($(field).attr('id') != 'taxruleloc_from_state_id') {
-            $(field).find("option[value='-1']").hide();
+            $(field).find("option[value='-1']").hide().removeAttr('selected');
+            $(field).find("option:not([value='-1']):first").attr('selected', 'selected');
         }
         if ($.isArray(stateIds)) {
             setTimeout(function () {
