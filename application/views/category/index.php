@@ -9,7 +9,7 @@
                 </div>
             </div>
 
-            <div class="category-layout-2 category-layout-listing">
+            <div class="category-layout-2 category-layout-page">
                 <?php foreach ($categoriesArr as $category) {  ?>
                     <div class="category">
                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $category['prodcat_id']);

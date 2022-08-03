@@ -580,18 +580,15 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex-flow: row wrap;
         margin-bottom: 1.5rem;
-        @include media-breakpoint-down(lg) {
-            flex-direction: column;
-            align-items: inherit;
-        }
+        gap: 1.5rem;
+
         &-toolbar {
             @include media-breakpoint-down(sm) {
                 overflow-x: auto;
             }
-            @include media-breakpoint-down(lg) {
-                margin-top: 1rem;
-            }
+
             > ul {
                 display: flex;
                 grid-gap: 5px;

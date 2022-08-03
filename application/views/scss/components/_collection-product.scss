@@ -237,7 +237,7 @@
         &-body {
             flex: 0 0 50%;
             @include media-breakpoint-up(lg) {
-                flex: 1;
+                //flex: 1;
             }
         }
         &-foot {
@@ -257,6 +257,10 @@
         .products-img {
             margin: 0;
             //border: $border;
+
+            img {
+                border: none;
+            }
         }
     }
     .grid {
@@ -266,6 +270,10 @@
             grid-column-end: 3;
             grid-row-start: 1;
             grid-row-end: 3;
+
+            .products-body {
+                flex: 1;
+            }
             .products-foot {
                 @include media-breakpoint-up(lg) {
                     max-width: 234px;
