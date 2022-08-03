@@ -2405,7 +2405,6 @@ class BuyerController extends BuyerBaseController
             $srch->setPageNumber($page);
             $srch->setPageSize($pagesize);
         }
-        $srch->addOrder('urp.urp_date_added', 'DESC');
         $srch->addOrder('urp.urp_id', 'DESC');
         $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('postedData', $post);

@@ -15,7 +15,7 @@ foreach ($arrListing as $sn => $row) {
         switch ($key) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
-                break;                
+                break;
             case 'user_name':
                 $href = "javascript:void(0)";
                 $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
@@ -28,8 +28,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'urp_date_added':
-                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
-            break;         
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key], true), true);
+                break;
             case 'urp_date_expiry':
                 $td->appendElement('plaintext', $tdAttr, ($row[$key] != '0000-00-00'  ? HtmlHelper::formatDateTime($row[$key]) : Labels::getLabel("LBL_NA", $siteLangId)), true);
                 break;
@@ -49,10 +49,9 @@ foreach ($arrListing as $sn => $row) {
                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#comment">
                                     </use>
                                 </svg>',
-                ];                 
-                
+                ];
 
-                if ($canEdit &&  strtotime('now') < strtotime($row['urp_date_expiry']) && !UserRewards::isRewardPointUsed($row['urp_id'])) {                
+                if ($canEdit && 0 < $row['urp_points'] && (0 == $row['urp_date_expiry'] ||  strtotime('now') < strtotime($row['urp_date_expiry'])) && !UserRewards::isRewardPointUsed($row['urp_id'])) {
                     $data['otherButtons'][] = [
                         'attr' => [
                             'href' => 'javascript:void(0);',
@@ -63,7 +62,7 @@ foreach ($arrListing as $sn => $row) {
                                         <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#counterclockwise">
                                         </use>
                                     </svg>',
-                    ]; 
+                    ];
                 }
 
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
@@ -77,7 +76,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();
@@ -85,5 +84,5 @@ if ($printData) {
 ?>
 
 <script>
-    var confirmRewardRevertLbl = '<?php echo Labels::getLabel('LBL_DO_YOU_WANT_TO_REVERSE', $siteLangId);?>';
+    var confirmRewardRevertLbl = '<?php echo Labels::getLabel('LBL_DO_YOU_WANT_TO_REVERSE', $siteLangId); ?>';
 </script>

@@ -126,7 +126,7 @@ class ShippingProfile extends MyAppModel
             );
             $shippingProfileZone = new ShippingProfileZone();
             $shippingProfileZone->assignValues($data);
-            if (!$shippingProfileZone->save($data)) {
+            if (!$shippingProfileZone->save()) {
                 Message::addErrorMessage($shippingProfileZone->getError());
             }
             $shipProZoneId = $shippingProfileZone->getMainTableRecordId();

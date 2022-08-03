@@ -1104,10 +1104,14 @@ TV-9.4.0.20220719
     - #065777 - Multiple issues on the Products listing page.
     - #065427 - Multiple UI issues on the Phone number verification popup.
     - #065715 - The 'Government notice' added by the seller for the order invoice is not properly aligned on the order invoice.  
-     - #065427 - Multiple UI issues on the Phone number verification popup.    
+    - #065427 - Multiple UI issues on the Phone number verification popup.    
     - #065694 - The location suggestion listing popup gets scrolled over the field when the user scrolls the page by opening the location field.
     - #065186 - Nothing happens on clicking on the today button on the Date field on the seller activation page. 
     - #065615 - Dashboard button is not clickable .
+    - #065849 - Revert reward button got removed after first revert process.
+    - #065847 - Double reward points got cut when we revert the reward points
+    - #065811 - The admin/seller is able to create the shipping profile without selecting any shipping zone
+    - #065838 - The wrong error message gets displayed when the admin tries to add a new shipping zone without adding the zone name in the zone name field
 
 ## UAT points:
 
