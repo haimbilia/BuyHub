@@ -107,9 +107,8 @@
     }
     .sorting-select {
         max-width: 120px;
-        margin-#{$start-direction}: auto;
         @include media-breakpoint-up(lg) {
-            // margin-#{$start-direction}: auto;
+            margin-#{$start-direction}: auto;
         }
     }
 }
