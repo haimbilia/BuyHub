@@ -1,6 +1,5 @@
 (function () {
-    var dv = "#listing";
-
+    var dv = "#listing";  
     reloadList = function () {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), '', function (res) {
             fcom.removeLoader();
