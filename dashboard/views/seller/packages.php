@@ -36,7 +36,13 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         <span><?php echo $package['spackage_text']; ?></span>
                                     </div>
                                     <div class="valid">
-                                        <?php echo SellerPackagePlans::getCheapPlanPriceWithPeriod($package['cheapPlan'], $package['cheapPlan'][SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?>
+                                        <?php
+                                        if (in_array($currentActivePlanId, $planIds)) {
+                                            echo SellerPackagePlans::getCheapPlanPriceWithPeriod($currentPlanData, $currentPlanData[SellerPackagePlans::DB_TBL_PREFIX . 'price']);
+                                        } else {
+                                            echo SellerPackagePlans::getCheapPlanPriceWithPeriod($package['cheapPlan'], $package['cheapPlan'][SellerPackagePlans::DB_TBL_PREFIX . 'price']);
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                                 <div class="packages-box-body">

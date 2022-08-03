@@ -11,8 +11,6 @@ class SellerPackagePlans extends MyAppModel
     public const SUBSCRIPTION_PERIOD_YEAR = 'Y';
     public const SUBSCRIPTION_PERIOD_UNLIMITED = 'U';
 
-
-
     private $db;
 
     public function __construct($id = 0)
@@ -150,14 +148,7 @@ class SellerPackagePlans extends MyAppModel
         $srch->addCondition('spp.spplan_active', '=', applicationConstants::YES);
         $srch->setPageSize(1);
         $srch->doNotCalculateRecords(true);
-
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if ($row == false) {
-            return array();
-        } else {
-            return $row;
-        }
+        return (array) FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public static function getSubscriptionPlanDataByPlanId($spplan_id = 0, $siteLangId = 0)
@@ -177,12 +168,6 @@ class SellerPackagePlans extends MyAppModel
         $srch->setPageSize(1);
         $srch->doNotCalculateRecords(true);
 
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if ($row == false) {
-            return array();
-        } else {
-            return $row;
-        }
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 }

@@ -1117,6 +1117,7 @@ TV-9.4.0.20220719
     - #065747 - The disclaimer is not added in the media upload section for the preferred dimension or file size.
     - #060593 - Admin UI: Suggestion to auto-select the ALL option for the "to state" and from state" if REST OF THE WORLD option is selected in the "from country" and "to country" field while adding the tax rules
     - #065876 - Suggestion: To remove the tab collapse icon from the product details page if there is only one detail tab is present
+    - #065365 - Subscription Price should got update when user selects a different price from the dropdown
 
 ## UAT points:
 
