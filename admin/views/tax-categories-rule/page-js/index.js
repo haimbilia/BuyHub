@@ -12,7 +12,7 @@
         });
     };
 
-    addNew = function (recordId, displayInPopup = false, dialogClass = '') {
+    addNew = function (taxCatId, displayInPopup = false, dialogClass = '') {
         if (false === checkControllerName()) {
             return false;
         }
@@ -21,7 +21,7 @@
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
-        var data = "parantId=" + recordId;
+        var data = "taxCatId=" + taxCatId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
             fcom.closeProcessing();
             $.ykmodal(t.html, displayInPopup, dialogClass);

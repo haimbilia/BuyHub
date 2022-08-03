@@ -8,13 +8,20 @@ class ShopReportsController extends ListingBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->objPrivilege->canViewShopReports();       
-    } 
-    
+        $this->objPrivilege->canViewShopReports();
+    }
+
     public function index()
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
+        $shopId = FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);
+        if (0 < $shopId) {
+            $shop = Shop::getAttributesByLangId($this->siteLangId, $shopId, ['COALESCE(shop_name, shop_identifier) as shop_name'], applicationConstants::JOIN_LEFT);
+            $frmSearch->fill(['keyword' => $shop['shop_name']]);
+        }
+
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
@@ -23,7 +30,7 @@ class ShopReportsController extends ListingBaseController
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('actionItemsData', $actionItemsData);       
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->getListingData();
         $this->_template->addJs(array('shop-reports/page-js/index.js'));
@@ -77,43 +84,43 @@ class ShopReportsController extends ListingBaseController
         $srch->joinTable('tbl_shops', 'INNER JOIN', 's.shop_id = sreport.sreport_shop_id', 's');
         $srch->joinTable('tbl_shops_lang', 'INNER JOIN', 'sl.shoplang_shop_id = s.shop_id AND sl.shoplang_lang_id = ' . $this->siteLangId, 'sl');
         $srch->joinTable('(' . $result_report_reasons . ')', 'LEFT OUTER JOIN', 'reportreason.reportreason_id = sreport.sreport_reportreason_id', 'reportreason');
-  
 
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);     
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
         if (0 < $recordId) {
             $srch->addCondition('sreport_id', '=', $recordId);
         }
 
-        $shopId = FatApp::getPostedData('shop_id',FatUtility::VAR_INT,0);
+        $shopId = FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);
         if (0 < $shopId) {
             $srch->addCondition('sreport_shop_id', '=', $shopId);
-        } 
+        }
 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('s.shop_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
-            $cond->attachCondition('sl.shop_name', 'like', '%' . $post['keyword'] . '%', 'OR');         
+            $cond->attachCondition('sl.shop_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-        
+
         $srch->addMultipleFields(array('sreport.*', 'COALESCE(shop_name, shop_identifier) as shop_name', 'u.user_name', 'reportreason.reportreason_title'));
 
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
 
-      
+
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
+        $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arrListing", $records); 
+        $this->set("arrListing", $records);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set('allowedKeysForSorting', $allowedKeysForSorting);        
-    } 
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+    }
 
     public function getComment()
     {
@@ -130,8 +137,8 @@ class ShopReportsController extends ListingBaseController
             return json_decode($tblHeadingCols, true);
         }
 
-        $arr = [        
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+        $arr = [
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'shop_name' => Labels::getLabel('LBL_SHOP', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_REPORTED_BY', $this->siteLangId),
             'reportreason_title' => Labels::getLabel('LBL_REPORT_REASON', $this->siteLangId),
@@ -144,7 +151,7 @@ class ShopReportsController extends ListingBaseController
 
     protected function getDefaultColumns(): array
     {
-        return [         
+        return [
             /* 'listSerial', */
             'shop_name',
             'user_name',
@@ -158,5 +165,4 @@ class ShopReportsController extends ListingBaseController
     {
         return array_diff($fields, [], Common::excludeKeysForSort());
     }
-
 }

@@ -143,8 +143,7 @@ class TaxRule extends MyAppModel
         $srch->addCondition('taxrule_taxcat_id', '=', 'mysql_func_' . $taxCatId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $res = $srch->getResultSet();
-        return FatApp::getDb()->fetchAll($res);
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     /**
