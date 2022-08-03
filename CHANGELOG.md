@@ -1110,6 +1110,7 @@ TV-9.4.0.20220719
     - #065615 - Dashboard button is not clickable .
     - #064779 - UI is not correct under Product form section for digital links/attachments.   
     - #065804 - Content is not proper for send reset password email . 
+    - #065747 - The disclaimer is not added in the media upload section for the preferred dimension or file size.
 
 ## UAT points:
 

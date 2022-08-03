@@ -180,7 +180,8 @@
                             <strong> <?php echo Labels::getLabel('LBL_UPLOAD_IMAGES(S)', $langId); ?></strong>
                             <span class="text-muted form-text"><?php echo Labels::getLabel('MSG_PNG,JPEG_ACCEPTED', $langId); ?></span></button></li>
                 </ul>
-                <div class="form-text text-muted pt-2"><?php echo Labels::getLabel('MSG_PAY_ATTENTION_TO_THE_PICTURE_QUALITY', $langId); ?></div>
+                
+                <div class="form-text text-muted pt-2"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $imgFrm->getField('min_width')->value . ' x ' . $imgFrm->getField('min_height')->value); ?></div>
             </div>
         </div>
     </div>
