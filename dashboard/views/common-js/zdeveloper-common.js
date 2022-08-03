@@ -1398,16 +1398,13 @@ quickMenuItemSearch = function(ele, event) {
 };
 
 $(document).on("change", ".multipleImgs--js", function() {
-    if ($(this)[0].files.length > 8) {
+ var galleryElement = ".multipleImgsGallery--js";
+    let totalFiles = $(this)[0].files.length + $(galleryElement).find('li').length;
+    if (totalFiles > 8) {
         fcom.displayErrorMessage(langLbl.uploadImageLimit);
-        $(this).val("");
-        if (0 < $(".fileRemove--js").length) {
-            $(".fileRemove--js").click();
-        }
+        $(this).val("");        
         return false;
-    }
-    var galleryElement = ".multipleImgsGallery--js";
-
+    }  
     imagesPreview(this, galleryElement);
 });
 

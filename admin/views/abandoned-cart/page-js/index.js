@@ -53,7 +53,7 @@ $(document).ready(function () {
 			});
 			abandonedcartId = abandonedcart_id;
 			userId = user_id;
-			productId = product_id;
+			productId = product_id;			
 		});
 	};
 
@@ -86,7 +86,7 @@ $(document).ready(function () {
 		});
 	};
 	updateCouponProduct = function (couponId, productId) {
-		var data = 'linkType=products&id=' + userId + '&recordId=' + couponId;
+		var data = 'linkType=products&id=' + productId + '&recordId=' + couponId;
 		fcom.ajax(fcom.makeUrl('DiscountCoupons', 'bindItem'), data, function (t) {		
 		});
 	};

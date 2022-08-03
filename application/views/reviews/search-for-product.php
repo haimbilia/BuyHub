@@ -6,26 +6,18 @@ if ($reviewsList) { ?>
             if (!empty($images)) { ?>
                 <h6 class="mb-4"> <?php echo Labels::getLabel('LBL_REVIEWS_WITH_IMAGES'); ?></h6>
                 <div class="review-images featherLightGalleryJs">
-                    <?php
-                    $i = 0;
+                    <?php                  
                     foreach ($images as $image) {
                         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                         $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_MINI_THUMB, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_LARGE, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $jsFunc = (5 == $i) ? 'loadMoreImages(this, event);  return false;' : '';
-                        $extraClass = (5 < $i) ? 'moreMediaJs d-none' : '';
+                        $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_LARGE, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');                     
                     ?>
-                        <div class="image <?php echo $extraClass; ?>" onclick="<?php echo $jsFunc; ?>">
+                        <div class="image">
                             <a class="thumbnail" href="<?php echo $largeImgUrl; ?>" data-featherlight="image">
-                                <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
-                                <?php if (5 == $i) { ?>
-                                    <span class="txt-over moreMediaCountJs"> +<?php echo count($images); ?></span>
-                                <?php } ?>
+                                <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">                             
                             </a>
                         </div>
-
-                    <?php
-                        $i++;
+                    <?php                       
                     } ?>
                 </div>
             <?php } ?>
@@ -102,7 +94,7 @@ if ($reviewsList) { ?>
             </div>
         <?php } ?>
 
-        <?php if ($productView) { ?>
+        <?php if ($productView && count($reviewsList) > 1) { ?>
             <a class="btn link-underline" href="<?php echo UrlHelper::generateUrl('Reviews', 'Product', array($selprod_id)); ?>">
                 <?php echo Labels::getLabel('LBL_ALL', $siteLangId) . ' ' . count($reviewsList) . ' ' . Labels::getLabel('LBL_REVIEWS', $siteLangId); ?>
             </a>

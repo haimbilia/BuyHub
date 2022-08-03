@@ -51,7 +51,7 @@ $(document).on('change', ".inputDateJs", function () {
                     value = oldValue;
                     updatedValue = formattedValue;
                 } else {
-                    updatedValue = ans.data.value;
+                    updatedValue = ans.data.value.toFixed(2);
                 }
                 obj.attr('data-value', value);
                 obj.attr('data-formated-value', updatedValue);
