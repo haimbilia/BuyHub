@@ -9,11 +9,10 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        //flex-direction: column;
-        flex-wrap: wrap;
+        flex-flow: row wrap;
+        gap: 1.5rem;
         overflow: auto;
         @include media-breakpoint-up(lg) {
-            flex-direction: row;
             margin-bottom: 2.5rem;
         }
         &-center {

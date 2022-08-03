@@ -18,7 +18,6 @@ if (!empty($orderPickUpData)) {
                             $toTime = date('H:i', strtotime($address["opshipping_time_slot_to"]));
                             ?>
                             <p class="time-txt">
-
                                 <svg class="svg" width="20" height="20">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#calendar-day">
                                     </use>

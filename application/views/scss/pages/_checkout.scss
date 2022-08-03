@@ -291,7 +291,6 @@
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
-
         @include media-breakpoint-down(md) {
             flex-direction: column;
         }
@@ -310,9 +309,8 @@
 
             li {
                 margin-bottom: 1rem;
-                border-radius: 0;
+                border-radius: $common-radius;
                 border: $border;
-
                 .radio {
                     padding: 20px;
                     display: flex;
@@ -380,13 +378,12 @@
                     display: block;
                     background: $bg-white;
                     border: $border;
-                    border-radius: 0;
+                    border-radius: $common-radius;
                     position: relative;
                     cursor: pointer;
                     font-size: 12px;
                     text-align: center;
                     transition: all 0.2s ease;
-
                     .time {
                         padding: 0.5rem 0.7rem;
                         display: block;
@@ -403,10 +400,9 @@
     .ui-datepicker {
         min-width: auto;
         border: $border !important;
+        border-radius: $common-radius !important;
         box-shadow: none;
-        border-radius: 0 !important;
         font-size: 0.8rem;
-
         td .ui-state-default {
             padding: 5px;
         }
@@ -1016,8 +1012,7 @@
     font-weight: 500;
     font-size: 0.85rem;
     margin-top: 8px;
-
-    i {
+    .svg {
         margin-#{$end-direction}: 5px;
     }
 }

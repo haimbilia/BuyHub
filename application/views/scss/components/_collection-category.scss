@@ -1,63 +1,3 @@
-.category-layout-3 {
-    display: grid;
-    grid-gap: 1px;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    @include media-breakpoint-up(xl) {
-        grid-gap: 3rem;
-        grid-template-columns: repeat(auto-fill, minmax(490px, 1fr));
-    }
-    .category {
-        display: flex;
-        background-color: $bg-gray;
-        @include media-breakpoint-up(xl) {
-            flex-flow: row wrap;
-        }
-        &:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-        &-head {
-            flex: 0 0 40%;
-            max-width: 40%;
-            aspect-ratio: 1/1;
-            display: flex;
-            @include media-breakpoint-down(sm) {
-                // flex: 1;
-                flex: 0 0 50%;
-                max-width: 50%;
-                gap: 1px;
-            }
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-        }
-        &-body {
-            flex: 1;
-            padding: 2rem;
-            @include media-breakpoint-up(lg) {
-                padding: 3rem 5rem;
-            }
-        }
-
-        &-list {
-            font-size: 0.8rem;
-            &-item {
-                margin: 0.2rem 0;
-
-                a {
-                    text-decoration: underline;
-                    padding: 0.8rem 0;
-                }
-            }
-            &-head {
-                font-weight: 500;
-                font-size: 1rem;
-                margin-bottom: 1rem;
-            }
-        }
-    }
-}
 .category-layout-2 {
     display: grid;
     grid-gap: 1rem;
@@ -122,22 +62,23 @@
                 #{$end-direction}: 0;
                 top: 0;
                 transition: all 0.5s linear;
-                -webkit-transform: scale3d(1, 1, 1);
+
                 transform: scale3d(1, 1, 1);
             }
         }
         .cat-tittle {
-            color: #000;
+            color: $txt-body;
             font-weight: 600;
             font-size: 1em;
             padding: 0 1.5rem;
+            text-decoration: none;
         }
         .cat-list {
             padding: 0 1.5rem;
             li {
                 display: block;
                 margin: 10px 0;
-                color: #515050;
+                color: $txt-gray;
                 font-size: 0.9em;
             }
         }
@@ -146,6 +87,79 @@
                 color: $brand-color;
             }
         }
+    }
+}
+
+.category-layout-3 {
+    display: grid;
+    grid-gap: 1px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    @include media-breakpoint-up(xl) {
+        grid-gap: 3rem;
+        grid-template-columns: repeat(auto-fill, minmax(490px, 1fr));
+    }
+    .category {
+        display: flex;
+        background-color: $bg-gray;
+        @include media-breakpoint-up(xl) {
+            flex-flow: row wrap;
+        }
+        &:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        &-head {
+            flex: 0 0 40%;
+            max-width: 40%;
+            aspect-ratio: 1/1;
+            display: flex;
+            @include media-breakpoint-down(sm) {
+                // flex: 1;
+                flex: 0 0 50%;
+                max-width: 50%;
+                gap: 1px;
+            }
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+        &-body {
+            flex: 1;
+            padding: 2rem;
+            @include media-breakpoint-up(lg) {
+                padding: 3rem 5rem;
+            }
+        }
+
+        &-list {
+            font-size: 0.8rem;
+            &-item {
+                margin: 0.2rem 0;
+
+                a {
+                    text-decoration: underline;
+                    padding: 0.8rem 0;
+                }
+            }
+            &-head {
+                font-weight: 500;
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+        }
+    }
+}
+
+.category-layout-page {
+    grid-template-columns: repeat(1, 1fr);
+    overflow: visible;
+    grid-auto-flow: row;
+    @include media-breakpoint-up(md) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @include media-breakpoint-up(lg) {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -313,29 +327,4 @@
         padding-bottom: 0;
         margin: 0;
     }
-}
-
-.masonry {
-    display: grid;
-    grid-gap: 2.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    grid-auto-rows: 0;
-    &-item {
-        background-color: $bg-gray;
-        border-radius: 5px;
-        overflow: hidden;
-        font-size: 0.8rem;
-        ul {
-            padding: 0 1rem;
-            li {
-                margin: 0.5rem 0;
-                display: block;
-            }
-        }
-    }
-}
-
-.masonry-item,
-.masonry-item img {
-    position: relative;
 }

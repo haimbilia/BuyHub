@@ -45,7 +45,7 @@ if (!empty($excludeLocations)) {
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group mb-4 zone-main-field--js">
-                        <input type="text" placeholder="<?php echo Labels::getLabel("LBL_Zone_Name", $siteLangId); ?>" name="shipzone_name" class="form-control shipzone_name" value="<?php echo (!empty($zone_data)) ? $zone_data['shipzone_name'] : ''; ?>" required>
+                        <input type="text" placeholder="<?php echo Labels::getLabel("LBL_ZONE_NAME*", $siteLangId); ?>" name="shipzone_name" class="form-control shipzone_name" value="<?php echo (!empty($zone_data)) ? $zone_data['shipzone_name'] : ''; ?>" required="required" data-field-caption="<?php echo Labels::getLabel("LBL_Zone_Name", $siteLangId); ?>" data-fatreq="{'required':true}">
                         <span class="form-text text-muted"><?php echo Labels::getLabel("LBL_Customers_will_not_see_this.", $siteLangId); ?></span>
                     </div>
                 </div>
@@ -109,7 +109,7 @@ if (!empty($excludeLocations)) {
                                                     <li class="list-states-item filter-country--js">
                                                         <div class="list-zones-head">
                                                             <label class="checkbox country--js <?php echo $disabled; ?>" data-countryid="<?php echo $countryId; ?>" data-statecount="<?php echo $statesCount; ?>">
-                                                                <input type="checkbox" name="c_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>" class="checkbox_country_<?php echo $countryId; ?>" <?php echo $checked; ?>  <?php echo $disabled; ?> title="<?php echo $alreadyAddedMsg; ?>">
+                                                                <input type="checkbox" name="c_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>" class="checkbox_country_<?php echo $countryId; ?>" <?php echo $checked; ?> <?php echo $disabled; ?> title="<?php echo $alreadyAddedMsg; ?>">
                                                                 <?php echo $country['country_name']; ?>
                                                             </label>
                                                             <?php if ($statesCount > 0) { ?>
@@ -170,6 +170,13 @@ if (!empty($excludeLocations)) {
                 </div>
             </div>
         </form>
+        <script>
+            shippingZoneFrm_validator_formatting = {
+                "errordisplay": 3,
+                "summaryElementId": ""
+            };
+            shippingZoneFrm_validator = $("#shippingZoneFrm").validation(shippingZoneFrm_validator_formatting);
+        </script>
     </div>
     <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

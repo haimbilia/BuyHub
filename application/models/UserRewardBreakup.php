@@ -23,7 +23,6 @@ class UserRewardBreakup extends MyAppModel
             return 0;
         }
         $db = FatApp::getDb();
-        $totalBalance = 0;
 
         $srch = new UserRewardSearch();
         $srch->joinUserRewardBreakup();
@@ -34,11 +33,8 @@ class UserRewardBreakup extends MyAppModel
         $srch->addMultipleFields(array('sum(urpbreakup_points) as balance'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        $row = $db->fetch($rs);
-        if ($row != false) {
-            $totalBalance = $totalBalance + FatUtility::int($row['balance']);
-        }
+        $row = $db->fetch($srch->getResultSet());
+        $totalBalance = FatUtility::int($row['balance']);
 
         $srch = new OrderProductSearch();
         $srch->joinorders();
@@ -50,7 +46,6 @@ class UserRewardBreakup extends MyAppModel
         $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
         $srch->addCondition('op.op_status_id', '=', FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"));
         $date = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' - 2 hours'));
-        //$srch->addDirectCondition('DATE(o.order_date_added) = DATE(NOW())');
         $srch->addCondition('o.order_date_added', '>=', $date);
         $srch->addMultipleFields(array('order_reward_point_used'));
         if ($orderId != '') {

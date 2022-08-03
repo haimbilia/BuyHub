@@ -64,8 +64,8 @@ class RewardsController extends ListingBaseController
             $sortBy = 'urp_date_added';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
-      
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
+
         $userId = FatApp::getPostedData('urp_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
 
@@ -84,15 +84,15 @@ class RewardsController extends ListingBaseController
             $srch->addCondition('urp.urp_user_id', '=', $userId);
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        $srch->doNotCalculateRecords();       
-        
+        $srch->doNotCalculateRecords();
+
         $srch->addMultipleFields(['urp.*', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email']);
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);   
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));  
+        $srch->setPageSize($pageSize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr); 
+        $this->set('postedData', $paginationArr);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -108,7 +108,7 @@ class RewardsController extends ListingBaseController
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'urp_user_id', []);
-        $frm->addHiddenField('', 'total_record_count'); 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }
@@ -166,7 +166,7 @@ class RewardsController extends ListingBaseController
 
         $post['urp_user_id'] = $userId;
         $obj->assignValues($post);
-        if (!$obj->save($post)) {
+        if (!$obj->save()) {
             LibHelper::exitWithError($obj->getError(), true);
         }
 
@@ -229,22 +229,21 @@ class RewardsController extends ListingBaseController
         if ($recordId < 1) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-
-        $rewardData = UserRewards::getAttributesById($recordId, ['urp_date_expiry','urp_points','urp_user_id']);
-
-        if(false === $rewardData || strtotime('now') > strtotime($rewardData['urp_date_expiry'])){
+        
+        $rewardData = UserRewards::getAttributesById($recordId, ['urp_date_expiry', 'urp_points', 'urp_user_id']);
+        if (false === $rewardData || (0 != $rewardData['urp_date_expiry'] && strtotime('now') > strtotime($rewardData['urp_date_expiry']))) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        if(UserRewards::isRewardPointUsed($recordId)){
+        if (UserRewards::isRewardPointUsed($recordId)) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }  
-        
+        }
+
         $db = FatApp::getDb();
         $db->startTransaction();
         $updateValues = array('urpbreakup_used' => 1, 'urpbreakup_used_date' => date('Y-m-d H:i:s'));
         $whr = array('smt' => 'urpbreakup_urp_id = ?', 'vals' => array($recordId));
-        if(!$db->updateFromArray(UserRewardBreakup::DB_TBL, $updateValues, $whr)){
+        if (!$db->updateFromArray(UserRewardBreakup::DB_TBL, $updateValues, $whr)) {
             $db->rollbackTransaction();
             LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_REVERT_REWARD_POINTS', $this->siteLangId));
         }
@@ -252,22 +251,22 @@ class RewardsController extends ListingBaseController
         $rewarPointArr = array(
             'urp_user_id' => $rewardData['urp_user_id'],
             'urp_points' => '-' . $rewardData['urp_points'],
-            'urp_used_order_id' => 0,           
-            'urp_comments' => Labels::getLabel('LBL_REWARD_POINT_DEDUCTED_BY_ADMIN', $this->siteLangId), 
-            'urp_date_added' => date('Y-m-d H:i:s')                 
+            'urp_used_order_id' => 0,
+            'urp_comments' => Labels::getLabel('LBL_REWARD_POINT_DEDUCTED_BY_ADMIN', $this->siteLangId),
+            'urp_date_added' => date('Y-m-d H:i:s')
         );
 
         $userRewardsObj = new UserRewards();
         $userRewardsObj->assignValues($rewarPointArr);
-        
-        if(!$userRewardsObj->save()){          
+
+        if (!$userRewardsObj->save(false)) {
             $db->rollbackTransaction();
             LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_REVERT_REWARD_POINTS', $this->siteLangId));
         }
         $db->commitTransaction();
         $emailObj = new EmailHandler();
-        $emailObj->sendRewardPointsNotification($this->siteLangId, $userRewardsObj->getMainTableRecordId());
-        
+        $emailObj->sendRewardPointsNotification($this->siteLangId, $recordId);
+
         $this->set('msg', Labels::getLabel('MSG_REWARD_POINT_REVERTED_SUCCESFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
