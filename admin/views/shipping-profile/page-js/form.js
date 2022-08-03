@@ -157,6 +157,7 @@ $(document).ready(function () {
 
 
     setupZone = function (frm) {
+        if (!$(frm).validate()) return;
         if ($('input[name="rest_of_the_world"]:checked').length < 1 && $('input[name="shiploc_zone_ids[]"]:checked').length < 1 && $('input[name="c_id[]"]:checked').length < 1 && $('input[name="s_id[]"]:checked').length < 1) {
             fcom.displayErrorMessage(langLbl.minimumOneLocationRequired);
             return;

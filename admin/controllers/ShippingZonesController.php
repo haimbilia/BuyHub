@@ -1,16 +1,19 @@
 <?php
 
-class ShippingZonesController extends ListingBaseController {
+class ShippingZonesController extends ListingBaseController
+{
 
     protected $modelClass = 'ShippingProfileZone';
     protected $pageKey = 'MANAGE_SHIPPING_ZONES';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewShippingManagement();
     }
 
-    public function search($profileId) {
+    public function search($profileId)
+    {
         $srch = ShippingProfileZone::getSearchObject();
         $srch->addCondition("shipprozone_shipprofile_id", "=", $profileId);
         $srch->doNotCalculateRecords();
@@ -36,7 +39,8 @@ class ShippingZonesController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function autoCompleteZone() {
+    public function autoCompleteZone()
+    {
         $post = FatApp::getPostedData();
         $srch = ShippingZone::getSearchObject();
         $srch->addOrder('shipzone_name');
@@ -60,7 +64,8 @@ class ShippingZonesController extends ListingBaseController {
         die(json_encode($json));
     }
 
-    public function searchStates($countryId, $zoneId, $shipZoneId, $profileId, $selected = 0) {
+    public function searchStates($countryId, $zoneId, $shipZoneId, $profileId, $selected = 0)
+    {
         $stateObj = new States();
         $states = $stateObj->getStatesByCountryId($countryId, $this->siteLangId, true);
         $zoneLocations = $this->getLocations($shipZoneId);
@@ -77,7 +82,8 @@ class ShippingZonesController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function form($profileId, $zoneId = 0) {
+    public function form($profileId, $zoneId = 0)
+    {
         $this->objPrivilege->canEditShippingManagement();
         $profileId = FatUtility::int($profileId);
         $zoneId = FatUtility::int($zoneId);
@@ -108,8 +114,9 @@ class ShippingZonesController extends ListingBaseController {
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
-     
-    public function setup() {
+
+    public function setup()
+    {
         $this->objPrivilege->canEditShippingManagement();
         $post = FatApp::getPostedData();
         if (empty($post)) {
@@ -117,7 +124,7 @@ class ShippingZonesController extends ListingBaseController {
         }
 
         if (isset($post['shipzone_name']) && empty(trim($post['shipzone_name']))) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('LBL_ZONE_NAME_IS_MANDATORY.', $this->siteLangId), true);
         }
 
         $shipZoneId = (isset($post['shipzone_id'])) ? $post['shipzone_id'] : 0;
@@ -130,7 +137,11 @@ class ShippingZonesController extends ListingBaseController {
         $sObj = new ShippingZone($shipZoneId);
         $sObj->assignValues($post);
         if (!$sObj->save()) {
-            LibHelper::exitWithError($sObj->getError(), true);
+            $msg = $sObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_RECORD_ALREADY_EXISTS_WITH_THIS_SELECTED_CONTINENT', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $shipZoneId = $sObj->getMainTableRecordId();
 
@@ -165,7 +176,8 @@ class ShippingZonesController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteZone($shipprozoneId) {
+    public function deleteZone($shipprozoneId)
+    {
         $this->objPrivilege->canEditShippingManagement();
         $shipprozoneId = FatUtility::int($shipprozoneId);
         $shippingProfData = ShippingProfileZone::getAttributesById($shipprozoneId);
@@ -199,7 +211,8 @@ class ShippingZonesController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function getLocations($zoneIds, $isAjax = false) {
+    public function getLocations($zoneIds, $isAjax = false)
+    {
         if (empty($zoneIds)) {
             return [];
         }
@@ -228,7 +241,8 @@ class ShippingZonesController extends ListingBaseController {
         return !empty($zoneLocationData) ? $zoneLocationData : $zoneLocations;
     }
 
-    private function checkForLocations($profileId, $shipZoneId, $data) {
+    private function checkForLocations($profileId, $shipZoneId, $data)
+    {
         $excludeLocations = Zone::getExcludeLocations($data['shipzone_profile_id'], $shipZoneId);
         if (!empty($excludeLocations)) {
             $isRestOfWorld = (isset($data['rest_of_the_world'])) ? $data['rest_of_the_world'] : 0;
@@ -262,7 +276,8 @@ class ShippingZonesController extends ListingBaseController {
         return true;
     }
 
-    private function eligibleForUpdateLocations($zoneId, $data) {
+    private function eligibleForUpdateLocations($zoneId, $data)
+    {
         $profileId = $data['shipzone_profile_id'];
         /* [ check if zone if also attached to another profile */
         $srch = ShippingProfileZone::getSearchObject();
@@ -314,7 +329,8 @@ class ShippingZonesController extends ListingBaseController {
         return true;
     }
 
-    private function getLocationsToCompare($zoneId) {
+    private function getLocationsToCompare($zoneId)
+    {
         $locSrch = new SearchBase(ShippingZone::DB_SHIP_LOC_TBL, 'szone');
         $locSrch->addCondition('shiploc_shipzone_id', '=', $zoneId);
 
@@ -355,7 +371,8 @@ class ShippingZonesController extends ListingBaseController {
         return array('countries' => $countriesList, 'states' => $statesList, 'isRestOfWorld' => $isRestOfWorld);
     }
 
-    private function getRates($zoneIds) {
+    private function getRates($zoneIds)
+    {
         if (empty($zoneIds)) {
             return array();
         }
@@ -377,7 +394,8 @@ class ShippingZonesController extends ListingBaseController {
         return $shipRatesData;
     }
 
-    private function setupLocations($data, $shipZoneId) {
+    private function setupLocations($data, $shipZoneId)
+    {
         $sZoneObj = new ShippingZone();
         if (!$sZoneObj->deleteLocations($shipZoneId)) {
             return false;
@@ -438,5 +456,4 @@ class ShippingZonesController extends ListingBaseController {
         }
         return true;
     }
-
 }

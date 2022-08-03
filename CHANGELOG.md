@@ -1111,6 +1111,7 @@ TV-9.4.0.20220719
     - #065849 - Revert reward button got removed after first revert process.
     - #065847 - Double reward points got cut when we revert the reward points
     - #065811 - The admin/seller is able to create the shipping profile without selecting any shipping zone
+    - #065838 - The wrong error message gets displayed when the admin tries to add a new shipping zone without adding the zone name in the zone name field
 
 ## UAT points:
 
