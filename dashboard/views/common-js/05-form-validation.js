@@ -385,7 +385,7 @@
                 if (this.settings.errordisplay != 0 && this.settings.errordisplay != 1) {
                     obj.field.unbind("keyup");
                     obj.attach("keyup");
-                }
+                }               
                 switch (this.settings.errordisplay) {
                     case 1:
                         $('#' + this.settings.summaryElementId).append(errorlist.empty());
@@ -402,6 +402,8 @@
                     case 3:
                         if (field.attr('type') && field.attr('type').toLowerCase() === 'checkbox'  || field.parent().hasClass('input-group')) {
                             field.parent().after(errorlist.empty());
+                        }else if(field.siblings('.br-widget').length){
+                            field.parent().append(errorlist.empty());
                         }
                         else {
                             field.after(errorlist.empty());

@@ -1116,7 +1116,7 @@ TV-9.4.0.20220719
     - #065804 - Content is not proper for send reset password email . 
     - #065747 - The disclaimer is not added in the media upload section for the preferred dimension or file size.
     - #065112 - sent Discount count functionality for abandoned cart not working properly . 
-    
+    - #065836 - Multiple issues on the Submit Feedback form and reviews section on the product details page. 
 
 ## UAT points:
 
