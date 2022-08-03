@@ -570,7 +570,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
                 delay: 250,
                 method: 'post',
                 data: function (params) {
-                    return { keyword: params.term };
+                    return { keyword: params.term ,excludeRecords:  ($("input[name='record_ids']").val() != '' ? JSON.parse($("input[name='record_ids']").val()) : {})    };
                 },
                 processResults: function (data, params) {
                     return { results: getRecordData(data) };

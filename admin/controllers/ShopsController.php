@@ -33,10 +33,19 @@ class ShopsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         $this->setModel([0, 0, 0]);
+
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+        $shopId = FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);
+        if (0 < $shopId) {
+            $shop = Shop::getAttributesByLangId($this->siteLangId, $shopId, ['COALESCE(shop_name, shop_identifier) as shop_name'], applicationConstants::JOIN_LEFT);
+            $frmSearch->fill(['keyword' => $shop['shop_name']]);
+        }
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('canEdit', $this->objPrivilege->canEditShops($this->admin_id, true));
-        $this->set("frmSearch", $this->getSearchForm($this->getFormColumns()));
+        $this->set("frmSearch", $frmSearch);
         $this->set('canViewShopReports', $this->objPrivilege->canViewShopReports(0, true));
         $this->set('canViewSellerProducts', $this->objPrivilege->canViewSellerProducts(0, true));
         $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($this->getFormColumns(), $this->modelObj), [
@@ -234,7 +243,7 @@ class ShopsController extends ListingBaseController
         $getShopDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_SHOP_BANNER);
         $getShopLogoSquare = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE);
         $getShopLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_RECTANGULAR);
-       
+
         $this->set('getShopDimensions', $getShopDimensions);
         $this->set('getShopLogoSquare', $getShopLogoSquare);
         $this->set('getShopLogoRactangle', $getShopLogoRactangle);

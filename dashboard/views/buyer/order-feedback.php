@@ -144,18 +144,22 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 if (!empty($deliveryRatingTypesArr)) { ?>
                                     <div class="feedback-block">
                                         <h5 class="card-title ">
-                                            <?php echo Labels::getLabel('LBL_DELIVERY_FEEDBACK', $siteLangId); ?></h5>
+                                            <?php echo Labels::getLabel('LBL_DELIVERY_FEEDBACK', $siteLangId); ?>
+                                        </h5>
                                         <div class="feedback-block_content">
                                             <div class="shop-rating-wrap">
                                                 <div class="rating-listing">
+
+                                                <div class="rating-listing rating-listing-column">
                                                     <?php foreach ($deliveryRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
-                                                        <div class="rating rating-f pb-0">
-                                                            <?php
+                                                        <div class="rating rating-f pb-0">                                                        
+                                                            <?php                                                            
                                                             $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
                                                             $fld->setFieldTagAttribute('class', 'd-none star-rating');
                                                             echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
                                                         </div>
                                                     <?php } ?>
+                                                </div>
                                                 </div>
                                             </div>
                                         </div>

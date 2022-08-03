@@ -154,7 +154,7 @@ class EmailHandler extends FatModel
         $sendEmail  = false;
         if (!empty($d['user_email'])) {
             $sendEmail = (new FatMailer($langId, $tpl))
-                ->setTo($d['user_new_email'])
+                ->setTo($d['user_email'])
                 ->setVariables($vars)
                 ->send();
         } else {

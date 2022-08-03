@@ -65,7 +65,17 @@ class ProductReviewsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('FRM_REVIEW_FOR', $this->siteLangId), 'reviewed_for_id', []);
+        $reviewedForId = FatApp::getPostedData('reviewed_for_id', FatUtility::VAR_INT, 0);
+        $options = [];
+        if (0 < $reviewedForId) {
+            $user = new User($reviewedForId);
+            $userInfo = $user->getUserInfo();
+            $options = [
+                $reviewedForId => $userInfo['user_name'] . ' (' . $userInfo['credential_username'] . ')'
+            ];
+        }
+
+        $frm->addSelectBox(Labels::getLabel('FRM_REVIEW_FOR', $this->siteLangId), 'reviewed_for_id', $options, $reviewedForId);
         $statusArr = SelProdReview::getReviewStatusArr($this->siteLangId);
         $reqLbl = Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId);
         $frm->addSelectBox($reqLbl, 'spreview_status', $statusArr, '', [], Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId));
@@ -201,7 +211,7 @@ class ProductReviewsController extends ListingBaseController
         $frm = $this->getForm($recordId);
         $srch = new SelProdReviewSearch($this->siteLangId);
         $srch->joinUser();
-        $srch->joinProducts();       
+        $srch->joinProducts();
         $srch->addMultipleFields(array('IFNULL(product_name,product_identifier) as product_name', 'uc.credential_username as reviewed_by', 'spreview_id', 'spreview_posted_on', 'spreview_status', 'spreview_title', 'spreview_description'));
         $srch->addOrder('spreview_posted_on', 'DESC');
         $srch->addCondition('spreview_id', '=', $recordId);

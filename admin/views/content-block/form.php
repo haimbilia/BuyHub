@@ -73,6 +73,7 @@ if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId)
             </div>';
 
     $fld->value = $htm;
+    $fld->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $frm->getField('min_width')->value . ' x ' . $frm->getField('min_height')->value) . '</span>';
 }
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>

@@ -1015,14 +1015,8 @@ class GuestUserController extends MyAppController
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $this->set('user_password', $user['credential_password']);
-        $this->set('credential_username', $user['credential_username']);
-        $frm = $this->getResetPwdForm($userId, trim($token));
-        /*
-        $obj = new Extrapage();
-        $pageData = $obj->getContentByPageType(Extrapage::RESET_PAGE_RIGHT_BLOCK, $this->siteLangId);
-        $this->set('pageData', $pageData);
-        */
-        $this->set('frm', $frm);
+        $this->set('credential_username', $user['credential_username']);      
+        $this->set('frm', $this->getResetPwdForm($userId, trim($token)));
         $this->set('exculdeMainHeaderDiv', true);
         $this->_template->render(true, false);
     }
@@ -1162,6 +1156,11 @@ class GuestUserController extends MyAppController
         $userId = UserAuthentication::getLoggedUserId();
         $userObj = new User($userId);
         $userInfo = $userObj->getUserInfo(array(), true, false);
+        if(!empty($userInfo['credential_email']) || !empty($userInfo['user_phone'])){
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('', '', [], CONF_WEBROOT_DASHBOARD));
+        }
+
         $phoneNumber = isset($userInfo['user_phone']) ? $userInfo['user_phone'] : '';
         $canSendSms = (!empty($phoneNumber) && SmsArchive::canSendSms(SmsTemplate::LOGIN));
         $this->set('userInfo', $userInfo);

@@ -46,6 +46,8 @@ $imagFld->value = "<span id='imageListingJs'>". HtmlHelper::getfileInputHtml(
     'mt-3 dropzone-custom dropzoneContainerJs'
 )."</span>";
 
+$imagFld->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $imageFrm->getField('min_width')->value . ' x ' . $imageFrm->getField('min_height')->value) . '</span>';
+
 $otherButtons = [
     [
         'attr' => [

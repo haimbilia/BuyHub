@@ -1112,6 +1112,13 @@ TV-9.4.0.20220719
     - #065847 - Double reward points got cut when we revert the reward points
     - #065811 - The admin/seller is able to create the shipping profile without selecting any shipping zone
     - #065838 - The wrong error message gets displayed when the admin tries to add a new shipping zone without adding the zone name in the zone name field
+    - #064779 - UI is not correct under Product form section for digital links/attachments.   
+    - #065804 - Content is not proper for send reset password email . 
+    - #065747 - The disclaimer is not added in the media upload section for the preferred dimension or file size.
+    - #060593 - Admin UI: Suggestion to auto-select the ALL option for the "to state" and from state" if REST OF THE WORLD option is selected in the "from country" and "to country" field while adding the tax rules
+    - #065876 - Suggestion: To remove the tab collapse icon from the product details page if there is only one detail tab is present
+    - #065112 - sent Discount count functionality for abandoned cart not working properly . 
+    - #065836 - Multiple issues on the Submit Feedback form and reviews section on the product details page.
 
 ## UAT points:
 

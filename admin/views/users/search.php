@@ -98,20 +98,22 @@ foreach ($arrListing as $sn => $row) {
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_LOGIN_TO_USER_PROFILE', $siteLangId),
                         ]
-                    ];                                      
-                    $data['dropdownButtons']['otherButtons'][] = [
-                        'attr' => [
-                            'href' => 'javascript:void(0)',
-                            'onclick' => 'sendSetPasswordEmail(' . $row['user_id'] . ')',
-                        ],
-                        'label' => '<i class="icn">
-                                        <svg class="svg" width="18" height="18">
-                                            <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password-email">
-                                            </use>
-                                        </svg>
-                                    </i>' . Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $siteLangId),
-                    ];                    
+                    ];
+                    if (0 ==  $row['credential_verified'] && empty($row['credential_verified'])  && empty($row['credential_verified'])) {
+                        $data['dropdownButtons']['otherButtons'][] = [
+                            'attr' => [
+                                'href' => 'javascript:void(0)',
+                                'onclick' => 'sendSetPasswordEmail(' . $row['user_id'] . ')',
+                            ],
+                            'label' => '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password-email">
+                                                </use>
+                                            </svg>
+                                        </i>' . Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $siteLangId),
+                        ];
+                    }                   
 
                     if (!$row['user_is_buyer']) {
                         $data['dropdownButtons']['otherButtons'][] = [

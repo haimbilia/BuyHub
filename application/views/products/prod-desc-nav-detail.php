@@ -17,10 +17,10 @@
                 }
                 $firstIsVisible = true;
             ?>
-                <div class="descriptions-item">
+                <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head" data-bs-toggle="collapse" data-bs-target="#specification" aria-expanded="true"><?php echo Labels::getLabel('LBL_Specifications', $siteLangId); ?>
                         <?php ?>
-                        <svg class="svg plus" width="16" height="16">
+                        <svg class="svg plus toggleAccordianJs" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
                         </svg>
@@ -52,9 +52,9 @@
                 </div>
             <?php } ?>
             <?php if (trim($product['product_description']) != '') { ?>
-                <div class="descriptions-item">
+                <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?>
-                        <svg class="svg plus" width="16" height="16">
+                        <svg class="svg plus toggleAccordianJs" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
                         </svg>
@@ -70,9 +70,9 @@
             <?php $firstIsVisible = true;
             } ?>
             <?php if ($youtube_embed_code) { ?>
-                <div class="descriptions-item">
+                <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#video" aria-expanded="true"><?php echo Labels::getLabel('LBL_Video', $siteLangId); ?>
-                        <svg class="svg plus" width="16" height="16">
+                        <svg class="svg plus toggleAccordianJs" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
                         </svg>
@@ -90,9 +90,9 @@
                 </div>
             <?php } ?>
             <?php if ($shop['shop_payment_policy'] != '' || !empty($shop["shop_delivery_policy"] != "") || !empty($shop["shop_delivery_policy"] != "")) { ?>
-                <div class="descriptions-item">
+                <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#policies" aria-expanded="true"><?php echo Labels::getLabel('LBL_Shop_Policies', $siteLangId); ?>
-                        <svg class="svg plus" width="16" height="16">
+                        <svg class="svg plus toggleAccordianJs" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
                         </svg>
@@ -121,9 +121,9 @@
             <?php $firstIsVisible = true;
             } ?>
             <?php if (!empty($product['selprodComments'])) { ?>
-                <div class="descriptions-item">
+                <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#extra_comments" aria-expanded="true"><?php echo Labels::getLabel('LBL_Extra_comments', $siteLangId); ?>
-                        <svg class="svg plus" width="16" height="16">
+                        <svg class="svg plus toggleAccordianJs" width="16" height="16">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                             </use>
                         </svg>
@@ -142,3 +142,10 @@
         </div>
     </div>
 </div>
+<script>
+    $(function() {
+        if (1 >= $('.accordianSectionJs').length) {
+            $('.toggleAccordianJs').remove();
+        }
+    });
+</script>

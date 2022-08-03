@@ -235,7 +235,40 @@ $(document).ready(function () {
         $(obj).closest(".dropzoneContainerJs").find(".dropzoneInputJs").click();
     }
 
+    searhSettings = function (e) {
+        var value = e.val().toLowerCase();
+        $(".confTypesJs li").each(function () {
+            if ($(this).find('h6').text().toLowerCase().search(value) > -1 || $(this).find('span').text()
+                .toLowerCase().search(value) > -1) {
+                $(this).show();
+                $('.confTypesJs').show();
+            } else {
+                $(this).hide();
+                $('.confTypesJs').show();
+            }
+
+            $('.noRecordFoundJs').parent().hide();
+            if (1 > $('.confTypesJs .settings-inner-link:visible').length) {
+                $('.noRecordFoundJs').parent().show();
+            }
+        });
+    };
+
 })();
+
+$(document).on("search", "#navSearch", function (e) {
+    searhSettings($(this));
+});
+
+$(document).on("keyup", "#navSearch", function (e) {
+    searhSettings($(this));
+});
+
+$(document).on("search", "input[name='search']", function () {
+    if ("" == $(this).val()) {
+        searhSettings($(this));
+    }
+});
 
 
 form = function (form_type) {

@@ -112,6 +112,8 @@ foreach ($records as $sn => $row) {
                         </svg>' . Labels::getLabel('LBL_Add', $siteLangId),
                             true
                         );
+                    }else{
+                        $dvElem->appendElement('p', [], Labels::getLabel('LBL_NA', $siteLangId), true);
                     }
                 }
                 break;
