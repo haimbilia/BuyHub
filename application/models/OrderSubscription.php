@@ -167,14 +167,17 @@ class OrderSubscription extends MyAppModel
             return 0;
         }
         $planDetails = SellerPackagePlans::getAttributesById($currentPlanDetails[OrderSubscription::DB_TBL_PREFIX . 'plan_id']);
-
-        $activePlanInterval = $planDetails[SellerPackagePlans::DB_TBL_PREFIX . 'interval'];
+        // $activePlanInterval = $planDetails[SellerPackagePlans::DB_TBL_PREFIX . 'interval'];
         $activePlanFrequency = $planDetails[SellerPackagePlans::DB_TBL_PREFIX . 'frequency'];
+        if (SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED == $activePlanFrequency) {
+            return 0;
+        }
 
         $pendingDaysForCurrentPlan = FatDate::diff(date("Y-m-d"), $currentPlanDetails[OrderSubscription::DB_TBL_PREFIX . 'till_date']) - 1;
         if ($pendingDaysForCurrentPlan < 0) {
             $pendingDaysForCurrentPlan = 0;
         }
+        
         $totalPlanDays = FatDate::diff($currentPlanDetails[OrderSubscription::DB_TBL_PREFIX . 'from_date'], $currentPlanDetails[OrderSubscription::DB_TBL_PREFIX . 'till_date']);
         $perDayPrice = $currentPlanDetails[OrderSubscription::DB_TBL_PREFIX . 'price'] / $totalPlanDays;
         $adjustableAmount = $perDayPrice * $pendingDaysForCurrentPlan;
