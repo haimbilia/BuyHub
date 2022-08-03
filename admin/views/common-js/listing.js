@@ -191,8 +191,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     };
 
     searchRecords = function (frm) {
-        var arr = ['ThemeColor', 'Configuratisons'];
-        if (false === checkControllerName() || arr.indexOf(controllerName) < 0) {
+        var arr = ['ThemeColor', 'Configurations'];
+        if (false === checkControllerName() || arr.indexOf(controllerName) > -1) {
             return false;
         }
 
