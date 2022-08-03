@@ -1120,6 +1120,7 @@ TV-9.4.0.20220719
     - #065365 - Subscription Price should got update when user selects a different price from the dropdown
     - #065112 - sent Discount count functionality for abandoned cart not working properly . 
     - #065836 - Multiple issues on the Submit Feedback form and reviews section on the product details page.
+    - #065897 - The tax structure submodule should not be visible under the tax module when the tax plugin is on
 
 ## UAT points:
 

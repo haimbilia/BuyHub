@@ -14,6 +14,11 @@ class TaxStructureController extends ListingBaseController
 
     public function index()
     {
+        $active = (new Plugin())->getDefaultPluginData(Plugin::TYPE_TAX_SERVICES, 'plugin_active');
+        if (false != $active) {
+            FatApp::redirectUser(UrlHelper::generateUrl('TaxCategories'));
+        }
+
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $this->setModel();
