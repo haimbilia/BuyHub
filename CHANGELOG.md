@@ -1109,6 +1109,7 @@ TV-9.4.0.20220719
     - #065186 - Nothing happens on clicking on the today button on the Date field on the seller activation page. 
     - #065615 - Dashboard button is not clickable .
     - #064779 - UI is not correct under Product form section for digital links/attachments.   
+    - #065804 - Content is not proper for send reset password email . 
 
 ## UAT points:
 
