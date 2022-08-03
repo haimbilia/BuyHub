@@ -1015,14 +1015,8 @@ class GuestUserController extends MyAppController
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $this->set('user_password', $user['credential_password']);
-        $this->set('credential_username', $user['credential_username']);
-        $frm = $this->getResetPwdForm($userId, trim($token));
-        /*
-        $obj = new Extrapage();
-        $pageData = $obj->getContentByPageType(Extrapage::RESET_PAGE_RIGHT_BLOCK, $this->siteLangId);
-        $this->set('pageData', $pageData);
-        */
-        $this->set('frm', $frm);
+        $this->set('credential_username', $user['credential_username']);      
+        $this->set('frm', $this->getResetPwdForm($userId, trim($token)));
         $this->set('exculdeMainHeaderDiv', true);
         $this->_template->render(true, false);
     }

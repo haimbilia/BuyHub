@@ -3482,6 +3482,10 @@ class SellerController extends SellerBaseController
             $srch->addCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%');
             //$cnd->attachCondition('option_identifier', 'LIKE', '%'. $post['keyword'] . '%', 'OR');
         }
+        $excludeRecords = FatApp::getPostedData('excludeRecords', FatUtility::VAR_INT);
+        if (!empty($excludeRecords) && is_array($excludeRecords)) {
+            $srch->addCondition('selprod_id', 'NOT IN', $excludeRecords);
+        }
 
         $rs = $srch->getResultSet();
         $products = $db->fetchAll($rs, 'selprod_id');

@@ -22,6 +22,7 @@ $otherButtons = [
 ]; 
 
 if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
+    
     $fld = $langFrm->getField('cpage_bg_image');
     $fld->value = '<span id="imageListingJs"></span>';
     $imgArr = [];
@@ -59,6 +60,8 @@ if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
         $imgArr,
         'mt-3 dropzone-custom dropzoneContainerJs'
     );
+
+   $fld->htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $imageContPageDimensions['width'] . ' x ' . $imageContPageDimensions['height']) . '</span>';
 
 }
 

@@ -3,20 +3,25 @@ if (!$showNoRecordFound && empty($attachments)) {
     return;
 }
 $arr_flds = array(
+    'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
     'mainfile' => Labels::getLabel('LBL_DD_FILE', $siteLangId),
     'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),
     'action'  =>  Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId)
 );
 
-if (!$canDo) {
-    unset($arr_flds['action']);
-    $arr_flds['#'] = '';
+if ($canDo) {
+    unset($arr_flds['listSerial']);
+}else{
+    unset($arr_flds['action']);  
 }
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table '. (isset($arr_flds['action']) ? 'table-justified': '')));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
-    $tdAttr = ('action' == $key || '#' == $key) ? ['class' => 'align-right', 'width' => '20%'] : ['width' => '40%'];
+    $tdAttr = ('action' == $key || 'listSerial' == $key) ? ['width' => '20%'] : ['width' => '40%'];
+    if('action' == $key){
+        $tdAttr['class'] =  'align-right';
+    }
     $e = $th->appendElement('th', $tdAttr, $val);
 }
 
