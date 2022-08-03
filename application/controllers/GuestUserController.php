@@ -1156,6 +1156,11 @@ class GuestUserController extends MyAppController
         $userId = UserAuthentication::getLoggedUserId();
         $userObj = new User($userId);
         $userInfo = $userObj->getUserInfo(array(), true, false);
+        if(!empty($userInfo['credential_email']) || !empty($userInfo['user_phone'])){
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('', '', [], CONF_WEBROOT_DASHBOARD));
+        }
+
         $phoneNumber = isset($userInfo['user_phone']) ? $userInfo['user_phone'] : '';
         $canSendSms = (!empty($phoneNumber) && SmsArchive::canSendSms(SmsTemplate::LOGIN));
         $this->set('userInfo', $userInfo);

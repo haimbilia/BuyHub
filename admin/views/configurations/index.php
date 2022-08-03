@@ -25,6 +25,9 @@
                             </div>
                         </div>
                         <div class="card-body p-0">
+                            <form class="form form-nav-search">
+                                <input type="search" id="navSearch" class="form-control omni-search" name="search" value="" placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>">
+                            </form>
                             <div class="settings-inner">
                                 <ul class="confTypesJs">
                                     <?php foreach ($tabs as $formType => $tabName) {
@@ -46,6 +49,9 @@
                                         </li>
                                     <?php } ?>
                                 </ul>
+                            </div>
+                            <div style="display: none;">
+                                <?php $this->includeTemplate('_partial/no-record-found.php'); ?>
                             </div>
                         </div>
                     </div>

@@ -632,14 +632,6 @@ class MyAppController extends FatController
         $link = UrlHelper::generateFullUrl('GuestUser', 'changeEmailVerification', array('verify' => $verificationCode));
 
         $email = new EmailHandler();
-        $dataArr = array(
-            'user_name' => $data['user_name'],
-            'link' => $link,
-            'user_new_email' => $data['user_email'],
-            'user_phone_dcode' => ValidateElement::formatDialCode($data['user_phone_dcode']),
-            'user_phone' => $data['user_phone'],
-        );
-
         if (!$configureEmail) {
             $dataArr = array(
                 'user_name' => $data['user_name'],
@@ -653,6 +645,14 @@ class MyAppController extends FatController
                 return false;
             }
         }
+
+        $dataArr = array(
+            'user_name' => $data['user_name'],
+            'link' => $link,
+            'user_email' => $data['user_email'],
+            'user_phone_dcode' => ValidateElement::formatDialCode($data['user_phone_dcode']),
+            'user_phone' => $data['user_phone'],
+        );
 
         if (!$email->sendEmailVerificationLink($this->siteLangId, $dataArr)) {
             return false;
