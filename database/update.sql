@@ -2084,3 +2084,5 @@ INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `et
 ON DUPLICATE KEY UPDATE etpl_body=VALUES(etpl_body),etpl_replacements=VALUES(etpl_replacements);
 
 ALTER TABLE `tbl_user_reward_points` CHANGE `urp_date_added` `urp_date_added` DATETIME NOT NULL;
+
+DELETE FROM `tbl_email_templates` WHERE etpl_code = 'admin_notification_abusive_review_posted';
