@@ -10,6 +10,7 @@ $actionItemsData = $actionItemsData + [
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
+                    <?php require_once(CONF_THEME_PATH . $actionItemsData['searchFrmTemplate']); ?>
                     <div class="card-body">
                         <?php include('search.php'); ?>
                     </div>

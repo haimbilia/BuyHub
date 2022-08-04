@@ -1,7 +1,6 @@
 (function () {
-	var dv = "#listing";
+	var catListing = ".listingRecordJs";
 	
-
 	deleteRecord = function (recordId) {
 		if (false === checkControllerName()) {
 			return false;
@@ -73,7 +72,18 @@
 			}
 		);
 	};
-	
+
+	searchRecords = function (frm) {
+		$(catListing).prepend(fcom.getLoader());
+
+		var data = fcom.frmData(frm);
+		fcom.updateWithAjax(fcom.makeUrl('productCategories', "search"), data, function (res) {
+			fcom.closeProcessing();
+			$(catListing).replaceWith(res.html);
+			listAccordian();
+		});
+	};
+
 	displaySubCategories = function (obj, catId = 0, data, callable = '') {
 		$(obj).removeClass('clickable');
 		if (catId > 0) {
@@ -94,7 +104,7 @@
 		}
 
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'getSubCategories'), 'prodCatId=' + prodCatId, function (res) {
-            fcom.closeProcessing();
+			fcom.closeProcessing();
 			if ($("#" + prodCatId).children('ul.append-ul').length) {
 				$("#" + prodCatId).children('ul.append-ul').append(res.html);
 			} else {
@@ -143,11 +153,11 @@
 	updateCatOrder = function (data) {
 		$("#sorting-categories").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'updateOrder'), data, function (t) {
-            fcom.displaySuccessMessage(t.msg);
+			fcom.displaySuccessMessage(t.msg);
 			fcom.removeLoader();
 		});
 	}
-	
+
 	translateData = function (item) {
 		var autoTranslate = $("input[name='auto_update_other_langs_data']:checked").length;
 		var defaultLang = $(item).attr('defaultLang');
@@ -159,10 +169,73 @@
 		}
 		var data = "catName=" + catName + "&toLangId=" + toLangId;
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'translatedCategoryData'), data, function (t) {
-            fcom.closeProcessing();
+			fcom.closeProcessing();
 			$("input[name='prodcat_name[" + toLangId + "]']").val(t.prodCatName);
 		});
 	}
-	
+
+	listAccordian = function () {
+		var optionsPlus = {
+			insertZone: 0,
+			insertZonePlus: true,
+			placeholderCss: {
+				'background-color': '#e5f5ff',
+			},
+			hintCss: {
+				'background-color': '#6dc5ff'
+			},
+			baseCss: {
+				'list-style-type': 'none',
+			},
+			listsClass: "sorting-categories",
+			onDragStart: function (e, cEl) {
+				var catId = $(cEl).attr('id');
+				$("#" + catId).children().children().children('.sorting-title').css('margin-left', '25px');
+				$("#" + catId).children('ul').css('list-style-type', 'none');
+			},
+			complete: function (cEl) {
+				var catId = $(cEl).attr('id');
+				$("#" + catId).children().children().children('.sorting-title').css('margin-left', '0px');
+			},
+			onChange: function (cEl) {
+				var catId = $(cEl).attr('id');
+				var parentCatId = $(cEl).parent('ul').parent('li').attr('id');
+				var catOrder = [];
+				$($(cEl).parent().children()).each(function (i) {
+					catOrder[i + 1] = $(this).attr('id');
+				});
+				var data = "catId=" + catId + "&parentCatId=" + parentCatId + "&catOrder=" + JSON.stringify(
+					catOrder);
+
+				if (typeof parentCatId != 'undefined') {
+					displaySubCategories(cEl, parentCatId, data);
+					$(cEl).parents('li').each(function () {
+						var rootCat = $(this).attr('id');
+						$("#" + rootCat).children('div').children('.sortableListsOpener').remove();
+						$("#" + rootCat).removeClass('sortableListsClosed').addClass(
+							'sortableListsOpen');
+						$("#" + rootCat).children('div').append(
+							'<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon" onclick="hideItems(this)"></i></span>'
+						);
+					});
+					$("#" + catId).parent('ul').addClass('append-ul');
+				} else {
+					fcom.displayProcessing();
+					updateCatOrder(data);
+				}
+			},
+			opener: {
+				active: false,
+				as: 'html', // if as is not set plugin uses background image
+				close: '<i class="fa fa-minus clickable sort-icon" onclick="hideItems(this)"></i>',
+				open: '<i class="fa fa-plus c3 clickable sort-icon" onclick="displaySubCategories(this)"></i>',
+				openerCss: {}
+			},
+			ignoreClass: 'clickable'
+		};
+
+		$('#sorting-categories').sortableLists(optionsPlus);
+	}
+
 })();
 

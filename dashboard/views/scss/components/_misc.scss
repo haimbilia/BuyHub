@@ -596,10 +596,9 @@ mark,
 
 //phone code
 .iti {
-    width: 100%;
-    height: $input-height;
+    //width: 100%;
+    //height: $input-height;
     font-size: 0.8rem;
-
     &__selected-flag {
         background-color: $input-bg;
         border-radius: $input-border-radius;
