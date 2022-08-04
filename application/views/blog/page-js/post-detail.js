@@ -1,5 +1,5 @@
 $(document).on('click', '.blogPageBurgerIconJs', function () {
-    $(".blogOverlayJs, .menuNavJs").addClass('open');
+    // $(".blogOverlayJs, .menuNavJs").addClass('open');
 });
 
 $(document).on('click', '.blogOverlayJs', function () {
