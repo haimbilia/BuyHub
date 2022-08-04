@@ -2,7 +2,7 @@
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $commonHeadData = array(
-    'siteLangId' => $siteLangId,    
+    'siteLangId' => $siteLangId,
     'controllerName' => $controllerName,
     'action' => $action,
     'jsVariables' => $jsVariables,
@@ -58,7 +58,7 @@ $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, 
                                     </button>
                                 </div>
                             </li>
-                            <li class="quick-nav-item item-desktop">
+                            <li class="quick-nav-item">
                                 <div class="dropdown">
                                     <button type="button" class="quick-nav-link button-account sign-in sign-in-popup-js">
                                         <svg class="svg" width="20" height="20">
