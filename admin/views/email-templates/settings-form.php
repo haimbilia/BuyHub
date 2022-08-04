@@ -14,9 +14,6 @@ $ratioFld->addFieldTagAttribute('class', 'prefRatio-js');
 $ratioFld = HtmlHelper::configureRadioAsButton($settingFrm, 'CONF_EMAIL_TEMPLATE_LOGO_RATIO');
 $ratioFld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-$fld = $settingFrm->getField('CONF_EMAIL_TEMPLATE_COLOR_CODE' . $lang_id);
-$fld->overrideFldType('color');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $langFld = $settingFrm->getField('lang_id');
 if (null != $langFld) {

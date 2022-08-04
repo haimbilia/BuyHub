@@ -247,13 +247,11 @@ class FatMailer extends FatModel
             $mail->addAttachment($attachment['path'], $attachment['name']);
         }
         $mail->msgHTML($body);
-        $mail->Subject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+        //$mail->Subject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+        $mail->Subject = $subject;
         try {
             $mail->send();
-        } catch (phpmailerException $e) {
-            $this->error = $e->errorMessage(); //Pretty error messages from PHPMailer
-            return false;
-        } catch (Exception $e) {
+        }catch (Exception $e) {
             $this->error = $mail->ErrorInfo;
             return false;
         }

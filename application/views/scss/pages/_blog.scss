@@ -335,7 +335,15 @@ $blog-header-height: 58px;
         color: $brand-color;
         font-size: 1rem;
         &:after {
+            transition: all 0.5s ease-out;
+            padding-#{$start-direction}: 4px;
             content: "\2192";
+        }
+        &:hover {
+            text-decoration: none;
+            &:after {
+                padding-#{$start-direction}: 8px;
+            }
         }
     }
 }
