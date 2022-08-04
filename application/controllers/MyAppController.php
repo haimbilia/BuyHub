@@ -907,6 +907,29 @@ class MyAppController extends FatController
         FatApp::redirectUser(UrlHelper::generateUrl('maintenance'));
     }
 
+    public function getRecordsCount(object $recordCountSrch, $isGroupSearch = false, $removeFlds = [])
+    {
+        $recordCountSrch->doNotLimitRecords();
+        if ($isGroupSearch == false) {
+            if (!empty($removeFlds)) {
+                $recordCountSrch->removeFld($removeFlds);
+            }
+            $recordCountSrch->addFld('count(*) as totalRecords');
+            $recordCountSrch->doNotCalculateRecords();
+            $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
+            $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
+        } else {
+            if (!empty($removeFlds)) {
+                $recordCountSrch->removeFld($removeFlds);
+            }
+
+            $recordCountSrch->getResultSet();
+            $defaultRecordCount = $recordCountSrch->recordCount();
+        }
+
+        return $defaultRecordCount;
+    }
+
     public function setRecordCount(object $recordCountSrch, int $pageSize, int $page, &$post, $isGroupSearch = false, $removeFlds = [])
     {
         if ($pageSize < 1) {
