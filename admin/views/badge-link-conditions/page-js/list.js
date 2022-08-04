@@ -12,7 +12,7 @@ $(document).ready(function () {
         }).on('select2:open', function(e) {   
 			$('#searchFormConditionTypeJs').data("select2").$dropdown.addClass("custom-select2 custom-select2-single"); 
 		})
-		.data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-single");
+		.data("select2").$container.addClass("custom-select2 custom-select2-single");
     }
 });
 

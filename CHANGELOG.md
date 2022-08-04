@@ -1122,6 +1122,7 @@ TV-9.4.0.20220719
     - #065836 - Multiple issues on the Submit Feedback form and reviews section on the product details page.
     - #065897 - The tax structure submodule should not be visible under the tax module when the tax plugin is on
     - #060654 - Admin UI: Suggestion to give a "search" field for the category module
+    - #065917 - advance search icon is on wrong side
     - #065921 - The subject of the emails received is not correct for any email. 
 
 ## UAT points:
