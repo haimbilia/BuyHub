@@ -1,6 +1,9 @@
 .detail-page {
     .breadcrumb {
-        margin: 2rem 0;
+        margin: 1rem 0;
+        @include media-breakpoint-up(lg) {
+            margin: 2rem 0;
+        }
     }
 }
 
@@ -14,8 +17,11 @@
 
 .product-detail-gallery {
     position: relative;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
     min-width: 0;
+    @include media-breakpoint-up(lg) {
+        margin-bottom: 4rem;
+    }
 
     .product-gallery {
         position: sticky;

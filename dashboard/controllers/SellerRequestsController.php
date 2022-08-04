@@ -283,7 +283,7 @@ class SellerRequestsController extends SellerBaseController
         if (!$email->sendCategoryRequestAdminNotification($this->siteLangId, $categoryData)) {
             FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
-
+        $msg = $this->str_setup_successful;
         if ($approvalRequired) {
             $msg = Labels::getLabel("MSG_CATEGORY_REQUEST_SUBMITTED_SUCCESSFULLY", $this->siteLangId);
         }
