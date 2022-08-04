@@ -324,9 +324,11 @@ class DiscountCouponsController extends ListingBaseController
         $frm->addFloatField(Labels::getLabel('FRM_MIN_ORDER_VALUE', $this->siteLangId), 'coupon_min_order_value')->requirements()->setFloatPositive();
         $frm->addFloatField(Labels::getLabel('FRM_MAX_DISCOUNT_VALUE', $this->siteLangId), 'coupon_max_discount_value');
 
-        $frm->addIntegerField(Labels::getLabel('FRM_USES_PER_COUPON', $this->siteLangId), 'coupon_uses_count', 1);
+        $fld = $frm->addIntegerField(Labels::getLabel('FRM_USES_PER_COUPON', $this->siteLangId), 'coupon_uses_count', 1);
+        $fld->requirements()->setRange('1', '10000');
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_USES_PER_CUSTOMER', $this->siteLangId), 'coupon_uses_coustomer', 1);
         $fld->requirements()->setCompareWith('coupon_uses_count', 'le', '');
+        $fld->requirements()->setRange('1', '10000');
 
         $frm->addCheckBox(Labels::getLabel('FRM_COUPON_STATUS', $this->siteLangId), 'coupon_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
