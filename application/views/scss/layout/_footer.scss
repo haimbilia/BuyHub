@@ -40,12 +40,14 @@
     }
 
     .btn-language {
+        .dropdown-toggle-custom-arrow {
+            transform: none;
+        }
         @include media-breakpoint-down(sm) {
             display: block;
             width: 100%;
         }
         .svg {
-            margin-#{$end-direction}: 5px;
             width: 14px;
             height: 14px;
         }
