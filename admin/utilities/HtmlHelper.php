@@ -719,4 +719,11 @@ class HtmlHelper
         $dimensions = ImageDimension::getData($dimensionType, $sizeType);
         return ' data-aspect-ratio="' . $dimensions[$sizeType]['aspectRatio'] . '"  width="' . $dimensions[ImageDimension::WIDTH] . '" hieght="' . $dimensions[ImageDimension::HEIGHT] . '"';
     }
+
+    public static function getHtml($tplPath = '', $data = '')
+    {
+        $template = new FatTemplate('', '');
+        $template->set('data', $data);
+        return $template->render(false, false, $tplPath, true);
+    }
 }

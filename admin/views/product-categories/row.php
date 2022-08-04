@@ -1,12 +1,20 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $catCode = $row['prodcat_code'];
+$childrenHtml = $childrenHtml ?? '';
+$keyword = $keyword ?? '';
 ?>
-<li id="<?php echo $row['prodcat_id']; ?>" data-parent-cat-code="<?php echo $catCode; ?>" class="liJs sortableListsClosed <?php if ($row['subcategory_count'] == 0) { ?>no-children<?php } ?>">
+<li id="<?php echo $row['prodcat_id']; ?>" data-parent-cat-code="<?php echo $catCode; ?>" class="liJs <?php echo $allOpen ? 'sortableListsOpen' : 'sortableListsClosed';?> <?php if (isset($row['subcategory_count']) && $row['subcategory_count'] == 0) { ?>no-children<?php } ?>">
     <div>
         <div class="sorting-bar ">
             <div class="sorting-title">
-            <a href="javascript:void(0);" class="link-dotted clickable" onclick="goToProducts(<?php echo $row['prodcat_id']; ?>)"><?php echo $row['prodcat_name']; ?></a>
-                <span class="count badge badge-success " title="<?php echo  Labels::getLabel('LBL_Category_Products', $siteLangId); ?>"><?php echo CommonHelper::displayBadgeCount($row['category_products']); ?></span>
+                <a href="javascript:void(0);" class="link-dotted clickable" onclick="goToProducts(<?php echo $row['prodcat_id']; ?>)">
+                    <?php
+                    echo !empty($keyword) ? str_replace($keyword, '<mark>' . $keyword . '</mark>', $row['prodcat_name']) : $row['prodcat_name'];
+                    ?>
+                </a>
+                <?php if (isset($row['category_products'])) { ?>
+                    <span class="count badge badge-success " title="<?php echo  Labels::getLabel('LBL_Category_Products', $siteLangId); ?>"><?php echo CommonHelper::displayBadgeCount($row['category_products']); ?></span>
+                <?php } ?>
             </div>
             <div class="clickable">
                 <div class="sorting-actions clickable">
@@ -37,8 +45,19 @@ $catCode = $row['prodcat_code'];
                 </div>
             </div>
         </div>
-        <?php if ($row['subcategory_count'] > 0) { ?>
-            <span class="sortableListsOpener clickable"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['prodcat_id']; ?>-js" onclick="displaySubCategories(this)"></i></span>
+        <?php if (isset($row['subcategory_count']) && $row['subcategory_count'] > 0) { ?>
+            <span class="sortableListsOpener clickable">
+                <i class="fa fa-plus clickable sort-icon cat<?php echo $row['prodcat_id']; ?>-js" onclick="displaySubCategories(this)"></i>
+            </span>
+        <?php } ?>
+
+        <?php if ($allOpen && !empty($childrenHtml)) { ?>
+            <span class="sortableListsOpener clickable">
+                <i class="fa fa-minus clickable sort-icon cat<?php echo $row['prodcat_id']; ?>-js" onclick="hideItems(this)"></i>
+            </span>
         <?php } ?>
     </div>
+    <?php if (!empty($childrenHtml)) {
+        echo $childrenHtml;
+    } ?>
 </li>

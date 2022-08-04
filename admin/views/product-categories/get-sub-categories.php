@@ -1,7 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (count($childCategories) > 0) { ?>
-    <?php foreach ($childCategories as $sn => $row) { 
-        
+    <?php foreach ($childCategories as $sn => $row) {
         $catCode = $row['prodcat_code']; ?>
         <li id="<?php echo $row['prodcat_id']; ?>" data-parent-cat-code="<?php echo $catCode; ?>" class="liJs sortableListsClosed child-category <?php if ($row['subcategory_count'] == 0) { ?>no-children<?php } ?>">
             <div>
