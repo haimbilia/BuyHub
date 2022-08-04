@@ -40,10 +40,10 @@ class ProductCategoriesController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_CATEGORIES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $actionItemsData = [
-            'newRecordBtn' => true
-        ];
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems([], $this->modelObj);
         $this->set('actionItemsData', $actionItemsData);
+        $this->set('frmSearch', $this->getCatSearchForm());
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -52,10 +52,41 @@ class ProductCategoriesController extends ListingBaseController
         $records = (array) $prodCat->getCategories(true, true);
         $this->set("arrListing", $records);
 
-        $this->_template->addJs(array('js/select2.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js','product-categories/page-js/add-media.js', 'product-categories/page-js/saveCategoryRecord.js'));
+        $this->_template->addJs(array('js/select2.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js', 'product-categories/page-js/add-media.js', 'product-categories/page-js/saveCategoryRecord.js'));
         $this->_template->addCss(array('css/select2.min.css', 'css/cropper.css', 'css/tagify.min.css'));
 
         $this->_template->render();
+    }
+
+    private function getCatSearchForm()
+    {
+        $frm = new Form('frmRecordSearch');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+        HtmlHelper::addSearchButton($frm);
+        return $frm;
+    }
+
+    public function search()
+    {
+        $this->checkEditPrivilege(true);
+
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        if (!empty($keyword)) {
+            $prodCatSrchObj = new ProductCategorySearch($this->siteLangId, false, false, false, true, true, -1);
+            $records = ProductCategory::getTreeArr($this->siteLangId, 0, false, $prodCatSrchObj, false, $keyword);
+            // CommonHelper::printArray($records);
+            $this->set("allOpen", true);
+            $this->set("searchRequest", true);
+        } else {
+            $prodCat = new ProductCategory();
+            $records = (array) $prodCat->getCategories(true, true);
+        }
+        $this->set("keyword", $keyword);
+        $this->set("arrListing", $records);
+        $this->set("siteLangId", $this->siteLangId);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getSubCategories()
@@ -183,8 +214,8 @@ class ProductCategoriesController extends ListingBaseController
         }
 
         $getProdCatBannerDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_CATEGORY_BANNER);
-        $getProdCatLogoDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON,ImageDimension::VIEW_DEFAULT);
-        $getProdCatthumbDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_THUMB,ImageDimension::VIEW_DEFAULT);
+        $getProdCatLogoDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON, ImageDimension::VIEW_DEFAULT);
+        $getProdCatthumbDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_THUMB, ImageDimension::VIEW_DEFAULT);
 
         $this->set('getProdCatBannerDimensions', $getProdCatBannerDimensions);
         $this->set('getProdCatLogoDimensions', $getProdCatLogoDimensions);
@@ -312,8 +343,8 @@ class ProductCategoriesController extends ListingBaseController
         $recordId = FatUtility::int($post['prodcat_id']);
 
         $oldParentCatId = NULL;
-        if(0 < $recordId){
-            $prodCatData = ProductCategory::getAttributesById($recordId, ['prodcat_parent','prodcat_deleted']);
+        if (0 < $recordId) {
+            $prodCatData = ProductCategory::getAttributesById($recordId, ['prodcat_parent', 'prodcat_deleted']);
             if (false === $prodCatData || 0 < $prodCatData['prodcat_deleted']) {
                 LibHelper::exitWithError($this->str_invalid_request_id, true);
             }
@@ -407,13 +438,11 @@ class ProductCategoriesController extends ListingBaseController
             $this->set('imageFunction', ImageDimension::VIEW_ICON);
             $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON, ImageDimension::VIEW_THUMB);
             $this->set('imageDimensions', $imageDimensions);
-
-
         } elseif (strtolower($imageType) == 'banner') {
             $catBanner = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $prodcat_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
             $this->set('image', $catBanner);
             $this->set('imageFunction', 'banner');
-           
+
             $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_BANNER, ImageDimension::VIEW_THUMB);
             $this->set('imageDimensions', $imageDimensions);
         } elseif (strtolower($imageType) == strtolower(ImageDimension::VIEW_THUMB)) {
@@ -428,7 +457,6 @@ class ProductCategoriesController extends ListingBaseController
         $this->set('canEdit', $canEdit);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
-
     }
 
     public function setUpCatImages()
@@ -590,7 +618,11 @@ class ProductCategoriesController extends ListingBaseController
             [
                 ProductCategory::tblFld('deleted') => 1,
                 ProductCategory::tblFld('identifier') => 'mysql_func_CONCAT(' . ProductCategory::tblFld('identifier') . ',"{deleted}",' . ProductCategory::tblFld('id') . ')'
-            ], false, '', '', true 
+            ],
+            false,
+            '',
+            '',
+            true
         );
         if (!$prodCateObj->save()) {
             LibHelper::exitWithError($prodCateObj->getError(), true);

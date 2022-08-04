@@ -80,7 +80,6 @@ class AdminBaseController extends FatController
         $languages = Language::getAllNames(false);
         $jsVariables = [];
         if (!FatUtility::isAjaxCall()) {
-
             $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
             $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
 
