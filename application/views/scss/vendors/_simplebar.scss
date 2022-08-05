@@ -20,7 +20,7 @@
     width: inherit;
     height: inherit;
     max-width: inherit;
-    max-height: inherit
+    max-height: inherit;
 }
 
 .simplebar-mask {
@@ -130,14 +130,14 @@
 }
 
 [data-simplebar].simplebar-dragging .simplebar-track {
-    pointer-events: all
+    pointer-events: all;
 }
 
 .simplebar-scrollbar {
     position: absolute;
     right: 2px;
     width: 7px;
-    min-height: 10px
+    min-height: 10px;
 }
 
 .simplebar-scrollbar:before {
@@ -148,12 +148,12 @@
     left: 0;
     right: 0;
     opacity: 0;
-    -webkit-transition: opacity .2s linear;
-    transition: opacity .2s linear;
+    -webkit-transition: opacity 0.2s linear;
+    transition: opacity 0.2s linear;
 }
 
 .simplebar-track .simplebar-scrollbar.simplebar-visible:before {
-    opacity: .5;
+    opacity: 0.5;
     -webkit-transition: opacity 0s linear;
     transition: opacity 0s linear;
 }
@@ -189,7 +189,7 @@
     width: auto;
 }
 
-[data-simplebar-direction=rtl] .simplebar-track.simplebar-vertical {
+[data-simplebar-direction="rtl"] .simplebar-track.simplebar-vertical {
     right: auto;
     left: 0;
 }

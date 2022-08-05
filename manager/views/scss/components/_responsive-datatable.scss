@@ -234,7 +234,7 @@ table.dataTable {
                 left: 50%;
                 width: 12px;
                 height: 12px;
-                -webkit-box-sizing: border-box;
+
                 box-sizing: border-box;
             }
             &:before {
@@ -244,7 +244,7 @@ table.dataTable {
                 left: 50%;
                 width: 12px;
                 height: 12px;
-                -webkit-box-sizing: border-box;
+
                 box-sizing: border-box;
                 content: " ";
                 margin-top: -6px;
@@ -262,7 +262,7 @@ table.dataTable {
                 left: 50%;
                 width: 12px;
                 height: 12px;
-                -webkit-box-sizing: border-box;
+
                 box-sizing: border-box;
             }
             &:before {
@@ -272,7 +272,7 @@ table.dataTable {
                 left: 50%;
                 width: 12px;
                 height: 12px;
-                -webkit-box-sizing: border-box;
+
                 box-sizing: border-box;
                 content: " ";
                 margin-top: -6px;
@@ -699,7 +699,7 @@ div.dt-buttons {
             width: 16px;
             height: 16px;
             margin: -8px 0 0 -8px;
-            -webkit-box-sizing: border-box;
+
             box-sizing: border-box;
             display: block;
             content: " ";
@@ -723,7 +723,7 @@ div.dt-buttons {
             width: 16px;
             height: 16px;
             margin: -8px 0 0 -8px;
-            -webkit-box-sizing: border-box;
+
             box-sizing: border-box;
             display: block;
             content: " ";
@@ -747,7 +747,7 @@ div.dt-buttons {
             width: 16px;
             height: 16px;
             margin: -8px 0 0 -8px;
-            -webkit-box-sizing: border-box;
+
             box-sizing: border-box;
             display: block;
             content: " ";
@@ -769,7 +769,7 @@ div.dt-autofill-handle {
     height: 8px;
     width: 8px;
     z-index: 102;
-    -webkit-box-sizing: border-box;
+
     box-sizing: border-box;
     border: 1px solid #0275d8;
     background: #0275d8;
@@ -814,7 +814,7 @@ div.dt-autofill-list {
     box-shadow: 0 0 5px #555;
     border: 2px solid #444;
     z-index: 11;
-    -webkit-box-sizing: border-box;
+
     box-sizing: border-box;
     padding: 1.5em 2em;
     ul {
@@ -1219,7 +1219,7 @@ table.dataTable.dtr-column {
 
 div.dtr-modal {
     position: fixed;
-    -webkit-box-sizing: border-box;
+
     box-sizing: border-box;
     top: 0;
     #{$start-direction}: 0;

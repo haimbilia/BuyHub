@@ -884,11 +884,7 @@ class CartController extends MyAppController
 
     public function clear()
     {
-        $loggedUserId = UserAuthentication::getLoggedUserId(true);
-        if (1 > $loggedUserId) {
-            $loggedUserId = session_id();
-        }
-        $cartObj = new Cart($loggedUserId, $this->siteLangId, $this->app_user['temp_user_id']);
+        $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
         $cartObj->clear(true);
         $cartObj->updateUserCart();
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));

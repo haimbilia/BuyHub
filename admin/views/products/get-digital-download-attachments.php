@@ -11,7 +11,7 @@ if (0 == $product['product_seller_id']) {
     $arr_flds['action'] = Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId);
 }
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
     $tdAttr = ('action' == $key) ? ['class' => 'align-right','width'=>'20%'] : ['width'=> '40%'];
@@ -27,8 +27,8 @@ foreach ($attachments as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {          
             case 'mainfile':
-                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
-                $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                $dvElem = $td->appendElement('div', array('class' => 'actions-downloads'));
+                $dvElem->appendElement('div', array('class' => 'file-name'), $row[$key], true);
                 if (0 < $row['afile_id']) {
                     if (0 == $product['product_seller_id']) {
                         $ul = new HtmlElement("ul", array("class" => "actions"));     
@@ -68,7 +68,7 @@ foreach ($attachments as $sn => $row) {
                 }
                 break;
             case 'preview':
-                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));               
+                $dvElem = $td->appendElement('div', array('class' => 'actions-downloads'));              
                 $ul = new HtmlElement("ul", array("class" => "actions"));                
                 if (0 < $row['prev_afile_id']) {
                     $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
@@ -158,5 +158,7 @@ if (empty($attachments)) {
 }
 ?>
 <div class="col-md-12">
+    <div class="js-scrollable table-wrap table-responsive">
     <?php echo $tbl->getHtml(); ?>
+    </div>
 </div>

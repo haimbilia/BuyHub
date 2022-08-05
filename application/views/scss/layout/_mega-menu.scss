@@ -232,7 +232,7 @@
     }
 }
 
-@include media-breakpoint-down(xl) {
+@include media-breakpoint-down(lg) {
     .navs_toggle {
         display: inline-block;
     }

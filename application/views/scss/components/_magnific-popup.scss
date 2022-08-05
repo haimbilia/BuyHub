@@ -30,12 +30,12 @@
     #{$start-direction}: 0;
     top: 0;
     padding: 0 8px;
-    -webkit-box-sizing: border-box;
+
     box-sizing: border-box;
 }
 
 .mfp-container:before {
-    content: '';
+    content: "";
     display: inline-block;
     height: 100%;
     vertical-align: middle;
@@ -84,7 +84,6 @@
 .mfp-arrow,
 .mfp-preloader,
 .mfp-counter {
-    
     user-select: none;
 }
 
@@ -130,12 +129,12 @@ button.mfp-arrow {
     cursor: pointer;
     background: transparent;
     border: 0;
-    
+
     display: block;
     outline: none;
     padding: 0;
     z-index: 1046;
-    -webkit-box-shadow: none;
+
     box-shadow: none;
 }
 
@@ -217,7 +216,7 @@ button::-moz-focus-inner {
 .mfp-arrow:after,
 .mfp-arrow .mfp-b,
 .mfp-arrow .mfp-a {
-    content: '';
+    content: "";
     display: block;
     width: 0;
     height: 0;
@@ -314,7 +313,7 @@ img.mfp-img {
     height: auto;
     display: block;
     line-height: 0;
-    -webkit-box-sizing: border-box;
+
     box-sizing: border-box;
     padding: 40px 0 40px;
     margin: 0 auto;
@@ -326,7 +325,7 @@ img.mfp-img {
 }
 
 .mfp-figure:after {
-    content: '';
+    content: "";
     position: absolute;
     #{$start-direction}: 0;
     top: 40px;
@@ -373,9 +372,7 @@ img.mfp-img {
     cursor: pointer;
 }
 
-@media screen and (max-width: 800px) and (orientation: landscape),
-screen and (max-height: 300px) {
-
+@media screen and (max-width: 800px) and (orientation: landscape), screen and (max-height: 300px) {
     /**
        * Remove all paddings around the image on small screen
        */
@@ -409,7 +406,7 @@ screen and (max-height: 300px) {
         top: auto;
         padding: 3px 5px;
         position: fixed;
-        -webkit-box-sizing: border-box;
+
         box-sizing: border-box;
     }
 

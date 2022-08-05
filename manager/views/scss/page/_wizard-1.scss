@@ -1,4 +1,4 @@
-$wizard:'wizard';
+$wizard: "wizard";
 .#{$wizard}-v1 {
     flex-direction: column;
     & &__nav {
@@ -40,7 +40,6 @@ $wizard:'wizard';
                     }
                 }
                 .#{$wizard}-v1__nav-body {
-                    -webkit-box-flex: 1;
                     -ms-flex: 1;
                     flex: 1;
                     display: flex;

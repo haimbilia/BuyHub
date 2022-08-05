@@ -628,7 +628,7 @@ class MetaTagsController extends ListingBaseController
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
-            if (!$row = MetaTag::getAttributesByLangId($langId, $metaId)) {
+            if (!MetaTag::getAttributesByLangId($langId, $metaId)) {
                 $newTabLangId = $langId;
                 break;
             }
