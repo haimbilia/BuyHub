@@ -93,7 +93,13 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) { ?>
                             }
                             ?>
                             <div class="input-group-append">
-                                <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                                <?php 
+                                    echo $frmSearch->getFieldHtml('btn_submit');
+                                    
+                                    if (null != $frmSearch->getField('btn_clear')) {
+                                        echo $frmSearch->getFieldHtml('btn_clear');
+                                    }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -172,7 +178,6 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) { ?>
                         </div>
                     </div>
                 <?php } ?>
-
             </div>
         </div>
         <?php require_once(CONF_THEME_PATH . '_partial/listing/action-buttons.php'); ?>

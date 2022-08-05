@@ -614,10 +614,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         } else {
             $frm->addSelectBox(Labels::getLabel('FRM_CONDITION', $this->siteLangId), 'blinkcond_condition_type', BadgeLinkCondition::getConditionTypesArr($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT_CONDITION', $this->siteLangId));
         }
-
-        if (Badge::TYPE_RIBBON == $badgeType) {
-            $frm->addSelectBox(Labels::getLabel('FRM_POSITION', $this->siteLangId), 'blinkcond_position', Badge::getRibbonPostionArr($this->siteLangId));
-        }
+        
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-clear');
         return $frm;
