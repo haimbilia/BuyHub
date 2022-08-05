@@ -447,7 +447,9 @@ $blog-header-height: 58px;
     }
     &-right {
         padding-top: 4rem;
+
         @include media-breakpoint-up(lg) {
+            padding-bottom: 4rem;
             padding-#{$start-direction}: 4rem;
             border-#{$start-direction}: $border;
         }

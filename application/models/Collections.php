@@ -179,7 +179,7 @@ class Collections extends MyAppModel
         }
         return [
             self::FOR_WEB => Labels::getLabel('LBL_WEB', $langId),
-            self::FOR_APP => Labels::getLabel('LBL_APP', $langId),            
+            self::FOR_APP => Labels::getLabel('LBL_APP', $langId),
         ];
     }
     /**
@@ -580,14 +580,28 @@ class Collections extends MyAppModel
         $srch->addCondition(static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'collection_id', '=', $collection_id);
         $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', SellerProduct::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id', 'sp');
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', SellerProduct::DB_TBL_PREFIX . 'product_id = ' . Product::DB_TBL_PREFIX . 'id');
+        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT JOIN', SellerProduct::DB_TBL_PREFIX . 'product_id = ' . Product::DB_TBL_LANG_PREFIX . 'product_id');
 
         $srch->joinTable(SellerProduct::DB_TBL . '_lang', 'LEFT JOIN', 'lang.selprodlang_selprod_id = ' . SellerProduct::DB_TBL_PREFIX . 'id AND selprodlang_lang_id = ' . $lang_id, 'lang');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = sp.selprod_user_id', 'tuc');
-        $srch->addMultipleFields(array('selprod_id as id', 'CONCAT(COALESCE(selprod_title, product_identifier), " | ", credential_username) as text'));
+        $srch->addMultipleFields(array('selprod_id', 'COALESCE(selprod_title, product_name, product_identifier) as product_name', 'credential_username'));
         $srch->addOrder('ctr_display_order', 'ASC');
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
-        return (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+        $products = (array) FatApp::getDb()->fetchAll($srch->getResultSet());
+        $data = [];
+        if (!empty($products)) {
+            foreach ($products as $product) {
+                $options = SellerProduct::getSellerProductOptions($product['selprod_id'], true, CommonHelper::getLangId());
+                $variantsStr = '';
+                $userName = isset($product["credential_username"]) ? " | " . $product["credential_username"] : '';
+                array_walk($options, function ($item, $key) use (&$variantsStr) {
+                    $variantsStr .= ' | ' . $item['option_name'] . ' : ' . $item['optionvalue_name'];
+                });
+                $data[$product['selprod_id']] = strip_tags(html_entity_decode($product['product_name'], ENT_QUOTES, 'UTF-8')) . $variantsStr . $userName;
+            }
+        }
+        return $data;
     }
 
 
