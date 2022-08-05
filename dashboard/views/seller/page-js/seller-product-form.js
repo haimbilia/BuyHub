@@ -448,8 +448,7 @@ $(document).on('click', '.tabs_002', function () {
 		});
 	}
 
-	attachDigitalPreviewFile = function (option, langId, refId, subRefId) {
-		/* $(".option-comb-id-js").val(option); */
+	attachDigitalPreviewFile = function (option, langId, refId, subRefId) {		
 		$(".file-language-js").val(langId);
 		$('#frmDownload input[name=dd_link_id]').val(refId);
 		$('#frmDownload input[name=dd_link_ref_id]').val(subRefId);
@@ -459,8 +458,9 @@ $(document).on('click', '.tabs_002', function () {
 		$('#frmDownload input[name=is_preview]').val(1);
 		$('#frmDownload input[name=ref_file_id]').val(subRefId);
 
-		// $("#attachement_upload_btn").attr('onclick', 'saveDigitalPreviewFile(); return false;');
 		$("#attachement_upload_btn").attr('onclick', 'saveDownloadFiles(); return false;');
+		fcom.displayInfoMessage(lblAddFileInfo);	
+
 	}
 
 	saveDigitalPreviewFile = function () {
