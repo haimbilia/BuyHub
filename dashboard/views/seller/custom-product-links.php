@@ -5,7 +5,7 @@
 <div class="card">
     <div class="card-body">
         <div class="tabs__content">
-            <div class="row row">
+            <div class="row">
                 <div class="col-md-12">
                     <?php $frmLinks->setFormTagAttribute('class', 'form form--horizontal');
                     $frmLinks->setFormTagAttribute('onsubmit', 'setupProductLinks(this); return(false);');

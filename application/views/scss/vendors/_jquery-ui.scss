@@ -211,7 +211,7 @@
 
 .ui-button-icon-only {
     width: 2em;
-    -webkit-box-sizing: border-box;
+
     box-sizing: border-box;
     text-indent: -9999px;
     white-space: nowrap;
@@ -285,7 +285,6 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-controlgroup-vertical .ui-controlgroup-item {
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 
