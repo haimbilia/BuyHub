@@ -31,10 +31,10 @@
                 a {
                     &:hover {
                         // // background-color: $brand-color;
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
+                        // color:  lighten($brand-color, 55%);
+                        @include bg-brand();
+                        // color:  lighten($brand-color, 55%);
+                        @include bg-brand();
                         color: #fff;
                         [data-theme="dark"] & {
                             background: $bg-black;
@@ -62,15 +62,15 @@
             color: currentColor;
             font-weight: 500;
             font-size: 0.9rem;
-            transition: all .3s ease-out;
+            transition: all 0.3s ease-out;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
     }
-    >ul {
-        >li {
-            >a {
+    > ul {
+        > li {
+            > a {
                 color: #fff;
                 border-radius: 4px;
                 &:hover {
@@ -79,13 +79,13 @@
             }
         }
     }
-    >ul {
-        >li {
+    > ul {
+        > li {
             &:hover {
-                >ul {
-                    >li {
+                > ul {
+                    > li {
                         &:hover {
-                            >ul {
+                            > ul {
                                 opacity: 1;
                                 visibility: visible;
                                 top: 0;
@@ -95,8 +95,8 @@
                 }
             }
         }
-        >li.drop-left {
-            >ul {
+        > li.drop-left {
+            > ul {
                 #{$end-direction}: 0;
             }
         }
@@ -133,7 +133,7 @@
     &.dark {
         background: rgba(0, 0, 0, 1);
         a {
-            color: #FFF;
+            color: #fff;
         }
         ul {
             ul {
@@ -142,7 +142,7 @@
         }
         li {
             a {
-                color: #FFF;
+                color: #fff;
             }
         }
     }
@@ -154,9 +154,9 @@
         z-index: 9999;
     }
     li.has-sub {
-        >a {
+        > a {
             &:after {
-                content: '';
+                content: "";
                 margin-#{$start-direction}: 10px;
                 border-#{$start-direction}: 6px solid transparent;
                 border-#{$end-direction}: 6px solid transparent;
@@ -167,7 +167,7 @@
     }
     li {
         li.has-sub {
-            >a {
+            > a {
                 &:after {
                     margin-#{$start-direction}: 10px;
                     float: right;
@@ -182,7 +182,7 @@
     }
     li.drop-left {
         li.has-sub {
-            >a {
+            > a {
                 &:after {
                     float: left;
                     margin-#{$end-direction}: 10px;
@@ -240,7 +240,6 @@
     }
     a.dd-toggle {
         .icon-plus {
-            -webkit-box-sizing: border-box;
             box-sizing: border-box;
             -webkit-transition: -webkit-transform 0.3s;
             transition: -webkit-transform 0.3s;
@@ -252,7 +251,7 @@
             vertical-align: middle;
             display: inline-block;
             &:before {
-                content: '';
+                content: "";
                 display: block;
                 width: 12px;
                 height: 0px;
@@ -263,7 +262,7 @@
                 transition: width 0.3s;
             }
             &:after {
-                content: '';
+                content: "";
                 display: block;
                 width: 12px;
                 height: 0px;
@@ -274,7 +273,7 @@
         }
     }
     li.open {
-        >a.dd-toggle {
+        > a.dd-toggle {
             .icon-plus {
                 transform: rotate(135deg);
             }
@@ -295,10 +294,10 @@
         margin: 1rem;
         &:hover {
             // // background-color: $brand-color;
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
+            // color:  lighten($brand-color, 55%);
+            @include bg-brand();
+            // color:  lighten($brand-color, 55%);
+            @include bg-brand();
             &:before {
                 border-color: #fff;
             }
@@ -307,7 +306,7 @@
             }
         }
         &:before {
-            content: '';
+            content: "";
             display: block;
             width: 12px;
             height: 0px;
@@ -317,7 +316,7 @@
             transform: rotate(45deg);
         }
         &:after {
-            content: '';
+            content: "";
             display: block;
             width: 12px;
             height: 0px;
@@ -361,7 +360,7 @@
     }
     &.hide-arrows {
         li.has-sub {
-            >a {
+            > a {
                 &:after {
                     display: none;
                 }
@@ -369,7 +368,7 @@
         }
         li {
             li.has-sub {
-                >a {
+                > a {
                     &:after {
                         display: none;
                     }
@@ -378,7 +377,7 @@
         }
         li.drop-left {
             li.has-sub {
-                >a {
+                > a {
                     &:after {
                         display: none;
                     }
@@ -406,13 +405,13 @@
             }
         }
         .third {
-            border-#{$start-direction}: 1px solid rgba(0, 0, 0, .15);
+            border-#{$start-direction}: 1px solid rgba(0, 0, 0, 0.15);
             &:first-child {
                 border-#{$start-direction}: 0;
             }
         }
         .half {
-            border-#{$start-direction}: 1px solid rgba(0, 0, 0, .15);
+            border-#{$start-direction}: 1px solid rgba(0, 0, 0, 0.15);
             &:first-child {
                 border-#{$start-direction}: 0;
             }
@@ -426,10 +425,10 @@
         }
         &.left {
             .third {
-                border-bottom: 1px solid rgba(0, 0, 0, .15);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.15);
             }
             .half {
-                border-bottom: 1px solid rgba(0, 0, 0, .15);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.15);
             }
             .menu-toggle {
                 border-bottom: 0;
@@ -437,10 +436,10 @@
         }
         &.right {
             .third {
-                border-bottom: 1px solid rgba(0, 0, 0, .15);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.15);
             }
             .half {
-                border-bottom: 1px solid rgba(0, 0, 0, .15);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.15);
             }
             .menu-toggle {
                 border-bottom: 0;
@@ -451,29 +450,29 @@
         a.dd-toggle {
             .icon-plus {
                 &:before {
-                    border-color: #FFF;
+                    border-color: #fff;
                 }
                 &:after {
-                    border-color: #FFF;
+                    border-color: #fff;
                 }
             }
         }
         .icon-close {
             &:before {
-                border-color: #FFF;
+                border-color: #fff;
             }
             &:after {
-                border-color: #FFF;
+                border-color: #fff;
             }
         }
         .third {
-            border-#{$start-direction}: 1px solid rgba(255, 255, 255, .15);
+            border-#{$start-direction}: 1px solid rgba(255, 255, 255, 0.15);
             &:first-child {
                 border-#{$start-direction}: 0;
             }
         }
         .half {
-            border-#{$start-direction}: 1px solid rgba(255, 255, 255, .15);
+            border-#{$start-direction}: 1px solid rgba(255, 255, 255, 0.15);
             &:first-child {
                 border-#{$start-direction}: 0;
             }
@@ -481,16 +480,16 @@
         .menu-toggle {
             span.bars {
                 span {
-                    background: #FFF;
+                    background: #fff;
                 }
             }
         }
         &.left {
             .third {
-                border-bottom: 1px solid rgba(255, 255, 255, .15);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             }
             .half {
-                border-bottom: 1px solid rgba(255, 255, 255, .15);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             }
             .menu-toggle {
                 border-bottom: 0;
@@ -498,10 +497,10 @@
         }
         &.right {
             .third {
-                border-bottom: 1px solid rgba(255, 255, 255, .15);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             }
             .half {
-                border-bottom: 1px solid rgba(255, 255, 255, .15);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             }
             .menu-toggle {
                 border-bottom: 0;
@@ -511,9 +510,9 @@
     &.mobile {
         position: static;
         width: auto;
-        >ul {
-            >li {
-                >a.dd-toggle {
+        > ul {
+            > li {
+                > a.dd-toggle {
                     padding: 0;
                 }
             }
@@ -539,14 +538,14 @@
                 }
             }
         }
-        >ul {
-            >li {
+        > ul {
+            > li {
                 display: block;
-                >a {
+                > a {
                     color: $txt-gray;
                 }
             }
-            border-top: 1px solid rgba(255, 255, 255, .15);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
         }
         li.drop-left {
             ul {
@@ -555,7 +554,7 @@
                 }
             }
             li.has-sub {
-                >a {
+                > a {
                     &:after {
                         display: none;
                     }
@@ -564,7 +563,7 @@
         }
         li {
             a {
-                border-bottom: 1px solid rgba(0, 0, 0, .05);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
                 padding: 1rem;
             }
             a.dd-toggle {
@@ -573,7 +572,7 @@
                 border: 0;
             }
             li.has-sub {
-                >a {
+                > a {
                     &:after {
                         display: none;
                     }
@@ -596,7 +595,7 @@
             display: inline-block;
         }
         li.call-btn-mobile {
-            border-#{$end-direction}: 1px solid rgba(255, 255, 255, .1);
+            border-#{$end-direction}: 1px solid rgba(255, 255, 255, 0.1);
             box-sizing: border-box;
             display: inline-block;
             width: 50%;
@@ -624,7 +623,7 @@
             text-align: left;
         }
         li.has-sub {
-            >a {
+            > a {
                 &:after {
                     display: none;
                 }
@@ -635,34 +634,34 @@
         }
         &.active {
             padding-bottom: 0;
-            >ul {
+            > ul {
                 display: block;
             }
         }
         &.light {
             li {
                 a {
-                    border-bottom: 1px solid rgba(0, 0, 0, .15);
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
                 }
                 a.dd-toggle {
                     border: 0;
                 }
             }
-            >ul {
-                border-top: 1px solid rgba(0, 0, 0, .15);
+            > ul {
+                border-top: 1px solid rgba(0, 0, 0, 0.15);
             }
             ul {
                 background: rgba(255, 255, 255, 1);
             }
             li.call-btn-mobile {
-                border-#{$end-direction}: 1px solid rgba(0, 0, 0, .1);
+                border-#{$end-direction}: 1px solid rgba(0, 0, 0, 0.1);
             }
         }
         &.dark {
             ul {
                 background: rgba(0, 0, 0, 1);
                 ul {
-                    background: rgba(255, 255, 255, .08);
+                    background: rgba(255, 255, 255, 0.08);
                 }
             }
         }
@@ -674,7 +673,7 @@
             z-index: 9999;
         }
         &.right {
-            >ul {
+            > ul {
                 position: fixed;
                 top: 0;
                 bottom: 0;
@@ -718,7 +717,7 @@
             }
         }
         &.left {
-            >ul {
+            > ul {
                 position: fixed;
                 top: 0;
                 bottom: 0;
@@ -791,10 +790,10 @@
                 }
             }
         }
-        >ul {
-            >li.mega {
+        > ul {
+            > li.mega {
                 position: inherit;
-                >ul {
+                > ul {
                     width: 100%;
                     li.has-sub {
                         ul {
@@ -803,11 +802,11 @@
                             left: auto;
                         }
                     }
-                    >li {
+                    > li {
                         padding-bottom: 15px;
-                        -webkit-box-sizing: border-box;
+
                         box-sizing: border-box;
-                        >a {
+                        > a {
                             color: yellow;
                         }
                     }

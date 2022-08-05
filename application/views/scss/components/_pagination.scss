@@ -57,7 +57,7 @@
                     position: absolute;
                     #{$start-direction}: calc(50% - 3px);
                     top: calc(50% - 6px);
-                    -webkit-transform: rotate(45deg);
+
                     transform: rotate(45deg);
                 }
             }
@@ -72,7 +72,7 @@
                     position: absolute;
                     #{$start-direction}: calc(50% - 8px);
                     top: calc(50% - 6px);
-                    -webkit-transform: rotate(45deg);
+
                     transform: rotate(45deg);
                 }
             }
