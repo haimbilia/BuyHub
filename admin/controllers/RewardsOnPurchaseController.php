@@ -244,7 +244,7 @@ class RewardsOnPurchaseController extends ListingBaseController
     {
         $frm = new Form('frmRewardsOnPurchase');
         $frm->addHiddenField('', 'rop_id', $recordId);
-        $fld = $frm->addFloatField(Labels::getLabel('FRM_PURCHASE_UPTO', $this->siteLangId), 'rop_purchase_upto');
+        $fld = $frm->addFloatField(Labels::getLabel('FRM_MINIMUM_PURCHASE_AMOUNT', $this->siteLangId), 'rop_purchase_upto');
         $fld->requirements()->setFloatPositive();
         $fld = $frm->addFloatField(Labels::getLabel('FRM_REWARD_POINT', $this->siteLangId), 'rop_reward_point');
         $fld->requirements()->setFloatPositive();
