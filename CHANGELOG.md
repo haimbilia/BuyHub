@@ -1124,6 +1124,7 @@ TV-9.4.0.20220719
     - #060654 - Admin UI: Suggestion to give a "search" field for the category module
     - #065917 - advance search icon is on wrong side
     - #065921 - The subject of the emails received is not correct for any email. 
+    - #065418 - UX issue on the downloads section on the digital product inventory setup page. 
 
 ## UAT points:
 

@@ -2072,6 +2072,33 @@ mark,
     }
 }
 
+.actions-downloads {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    // padding: 10px;
+    cursor: pointer;
+    &:hover {
+        // background-color: $bg-gray;
+        .actions {
+            display: block;
+        }
+    }
+
+    .file-name {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px;
+    }
+    .actions {
+        display: none;
+        position: absolute;
+        #{$end-direction}: 1rem;
+    }
+}
+
 .form-section {
     &-head {
         margin-top: 1.8rem;

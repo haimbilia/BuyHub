@@ -652,7 +652,10 @@ function defaultSetUpLogin(frm, v) {
             $("." + cls).remove();
             // $.ykmsg.close();
         },
-
+        displayInfoMessage: function(msg) {
+            $.ykmsg.close();
+            $.ykmsg.info(msg);
+        },
         displaySuccessMessage: function(msg) {
             $.ykmsg.close();
             $.ykmsg.success(msg);

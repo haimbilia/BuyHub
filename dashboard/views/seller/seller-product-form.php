@@ -48,4 +48,5 @@
     $(document).ready(function() {
         sellerProductForm(product_id, selprod_id);
     });
+    var lblAddFileInfo = '<?php echo Labels::getLabel('LBL_PLEASE_ADD_FILE_IN_ABOVE_FORM', $siteLangId); ?>';
 </script>

@@ -160,14 +160,14 @@ $checkbox-size: 16px;
     position: absolute;
     #{$start-direction}: 4px;
     top: 3px;
-    -webkit-transition: all ease 0.3s;
+
     transition: all ease 0.3s;
 }
 
 .switch-button.is--active:after {
     #{$start-direction}: auto;
     #{$end-direction}: 4px;
-    -webkit-transition: all ease 0.3s;
+
     transition: all ease 0.3s;
 }
 

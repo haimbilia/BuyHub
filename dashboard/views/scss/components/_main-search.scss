@@ -212,7 +212,7 @@
     color: #fff;
     font-size: 0;
     font-weight: 300;
-    -webkit-transition: all ease 0.3s;
+
     transition: all ease 0.3s;
 }
 
@@ -328,7 +328,6 @@
                 flex: 1;
             }
             &__arrow {
-                -webkit-transform: rotate(-45deg);
                 -ms-transform: rotate(-45deg);
                 transform: rotate(-45deg);
                 cursor: pointer;
