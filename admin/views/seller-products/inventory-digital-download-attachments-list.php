@@ -6,7 +6,7 @@ $fields = array(
     //'afile_lang_id' => Labels::getLabel('LBL_DDLanguage', $siteLangId),
 );
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($fields as $val) {
     $e = $th->appendElement('th', array(), $val);
@@ -25,14 +25,13 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', array(), $serialNo, true);
                 break;
-            case 'mainfile':
-                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
-                $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);               
-                //$dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
+            case 'mainfile': 
+                $dvElem = $td->appendElement('div', array('class' => 'actions-downloads'));
+                $dvElem->appendElement('div', array('class' => 'file-name'), $row[$key], true);
                 break;
             case 'preview':
-                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
-                $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                $dvElem = $td->appendElement('div', array('class' => 'actions-downloads')); 
+                $dvElem->appendElement('div', array('class' => 'file-name'), $row[$key], true);
                 if (0 < $row['prev_afile_id']) {
                     $dvElem->appendElement(
                         "a",
@@ -74,5 +73,7 @@ foreach ($arrListing as $sn => $row) {
 include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');  
 ?>
 <div class="col-md-12">
-    <?php echo $tbl->getHtml(); ?>
+    <div class="js-scrollable table-wrap table-responsive">
+        <?php echo $tbl->getHtml(); ?>
+    </div>
 </div>
