@@ -511,7 +511,7 @@ class CollectionsController extends ListingBaseController
         switch ($collectionType) {
             case Collections::COLLECTION_TYPE_PRODUCT:
                 $selectedRecords = (array) Collections::getSellProds($recordId, $this->siteLangId);
-                $frm->addSelectBox(Labels::getLabel('FRM_PRODUCTS', $this->siteLangId), 'collection_records[]', $selectedRecords, array_keys($selectedRecords));
+                $frm->addSelectBox(Labels::getLabel('FRM_SELLER_PRODUCTS', $this->siteLangId), 'collection_records[]', $selectedRecords, array_keys($selectedRecords));
                 break;
             case Collections::COLLECTION_TYPE_CATEGORY:
                 $selectedRecords = (array) Collections::getCategories($recordId, $this->siteLangId);
