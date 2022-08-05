@@ -769,7 +769,7 @@ class ImageController extends FatController
 
     public function blogPost($postId, $langId = 0, $sizeType = '', $subRecordId = 0, $afile_id = 0, $displayUniversalImage = true)
     {
-        $default_image = 'post_default_image.jpg';
+        $default_image = 'blog_deafult_image.jpg';
 
         $langId = FatUtility::int($langId);
         $afile_id = FatUtility::int($afile_id);
