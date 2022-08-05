@@ -768,7 +768,7 @@ class HomeController extends MyAppController
                     $productCatSrchTempObj->addCondition('prodcat_deleted', '=', applicationConstants::NO);
                     $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
 
-                    $recordCount = $this->getRecordsCount($productCatSrchTempObj);
+                    $recordCount = $this->getRecordsCount($productCatSrchTempObj, true);
                     if (empty($recordCount)) {
                         continue 2;
                     }
@@ -956,7 +956,7 @@ class HomeController extends MyAppController
                         $shopObj->setPageSize($collection['collection_primary_records']);
                     }
 
-                    $recordCount = $this->getRecordsCount($shopObj);
+                    $recordCount = $this->getRecordsCount($shopObj, true);
                     if (empty($recordCount)) {
                         continue 2;
                     }
@@ -1015,7 +1015,7 @@ class HomeController extends MyAppController
                         $brandSearchTempObj->setPageSize($collection['collection_primary_records']);
                     }
 
-                    $recordCount = $this->getRecordsCount($brandSearchTempObj);
+                    $recordCount = $this->getRecordsCount($brandSearchTempObj, true);
                     if (empty($recordCount)) {
                         continue 2;
                     }
