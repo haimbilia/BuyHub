@@ -11,11 +11,6 @@ $(document).on('keyup', '.discountValueJs', function () {
     }
 });
 
-$(document).ready(function () {
-    bindTagify();
-});
-
-
 (function () {
     var couponHistoryId = 0;
 
@@ -123,7 +118,9 @@ $(document).ready(function () {
             return false;
         }
         var data = 'linkType=' + linkType + "&id=" + itemId + '&recordId=' + recordId;
-        fcom.ajax(fcom.makeUrl(controllerName, "bindItem"), data, function (t) { });
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "bindItem"), data, function (t) {
+            fcom.displaySuccessMessage(t.msg);
+        });
     }
 
     removeItem = function (tag) {
@@ -135,7 +132,7 @@ $(document).ready(function () {
         }
 
         var data = 'linkType=' + linkType + "&id=" + itemId + '&recordId=' + recordId;
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeItem'), data, function (t) { 
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeItem'), data, function (t) {
             fcom.displaySuccessMessage(t.msg);
         });
     }
@@ -217,3 +214,7 @@ $(document).ready(function () {
         });
     };
 })();
+
+$(document).ready(function () {
+    bindTagify();
+});

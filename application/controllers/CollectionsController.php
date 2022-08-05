@@ -18,8 +18,7 @@ class CollectionsController extends MyAppController
         $collectionSrch->doNotCalculateRecords();
         $collectionSrch->setPageSize(1);
         $collectionSrch->addCondition('collection_id', '=', $collection_id);
-        $collectionSrchRs = $collectionSrch->getResultSet();
-        $collectionArr = FatApp::getDb()->fetch($collectionSrchRs);
+        $collectionArr = FatApp::getDb()->fetch($collectionSrch->getResultSet());
         $this->set('collection', $collectionArr);
 
         $this->set('searchForm', $searchForm);
@@ -62,8 +61,7 @@ class CollectionsController extends MyAppController
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
 
-        $rs = $srch->getResultSet();
-        $collection = $db->fetch($rs);
+        $collection = $db->fetch($srch->getResultSet());
 
         $collectionObj = new CollectionSearch();
         $collectionObj->joinCollectionRecords();
@@ -141,6 +139,7 @@ class CollectionsController extends MyAppController
                     if ($collection['collection_criteria'] == Collections::COLLECTION_CRITERIA_PRICE_HIGH_TO_LOW) {
                         $orderBy = 'DESC';
                     }
+
                     $productSrchTempObj = clone $productSrchObj;
                     $productSrchTempObj->addCondition('selprod_id', 'IN', array_keys($productIds));
                     $productSrchTempObj->addOrder('in_stock', 'DESC');
@@ -150,10 +149,8 @@ class CollectionsController extends MyAppController
                     $productSrchTempObj->addSubscriptionValidCondition();
                     $productSrchTempObj->addGroupBy('selprod_id');
 
-                    $rs = $productSrchTempObj->getResultSet();
                     $collections[$collection['collection_layout_type']][$collection['collection_id']] = $collection;
-
-                    $collections = $db->fetchAll($rs);
+                    $collections = $db->fetchAll($productSrchTempObj->getResultSet());
                     $selProdIdsArr = array_column($collections, 'selprod_id');
                     $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
                     /* ] */
