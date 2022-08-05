@@ -20,7 +20,14 @@
                         }
                     ?>
                         <li>
-                            <?php echo '<div class="clipboard"><input class="copy-input" value="' . $link['pdl_preview_link'] . '" id="copypreview_' . $link['pdl_id'] . '" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_' . $link['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copypreview_' . $link['pdl_id'] . '\')"><i class="far fa-copy"></i></button><br />'; ?>
+                            <?php echo '<div class="clipboard"><input class="copy-input" value="' . $link['pdl_preview_link'] . '" id="copypreview_' . $link['pdl_id'] . '" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_' . $link['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copypreview_' . $link['pdl_id'] . '\')">
+                                            <span class="icon">                                           
+                                                <svg class="svg">
+                                                    <use xlink:href="'.CONF_WEBROOT_FRONTEND.'images/retina/sprite.svg#copy-to-all">
+                                                    </use>
+                                                </svg>                                           
+                                            </span>
+                                        </button><br/>'; ?>
                         </li>
                     <?php } ?>
                 </ul>
