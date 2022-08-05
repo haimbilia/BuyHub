@@ -1128,6 +1128,7 @@ TV-9.4.0.20220719
     - #065974 - Clear cart option is not working for guest user . 
     - #066007 - Extra options used to appear in search field
     - #066004 - Ribbon preview is not proper in sample image .
+    - #065989 - The new rating type gets created even if the user clicks on the cancel button in the 'Add new rating type' popup
 
 ## UAT points:
 
