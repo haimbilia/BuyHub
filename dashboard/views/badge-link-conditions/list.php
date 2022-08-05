@@ -46,11 +46,6 @@ if (!empty($frmSearch)) {
         $fld->developerTags['noCaptionTag'] = true;
     }
 
-    $fld = $frmSearch->getField('blinkcond_position');
-    if (null != $fld) {
-        $fld->developerTags['noCaptionTag'] = true;
-    }
-
     $fld = $frmSearch->getField('btn_clear');
     if (null != $fld) {
         $fld->setFieldTagAttribute('class', 'btn btn-outline-gray btn-block');

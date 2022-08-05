@@ -152,7 +152,7 @@ $(document).ready(function () {
         $('.country--js input[type="checkbox"]:checked').each(function () {
             var countryId = $(this).closest('.country--js').data('countryid');
             if ($('.country_' + countryId + ' .state--js').length == $('.country_' + countryId + ' .state--js:not(:disabled)').length) {
-                $('.country_' + countryId + ' .state--js').prop('disabled', true);
+                // $('.country_' + countryId + ' .state--js').prop('disabled', true);
             } else {
                 $(this).prop('checked', false);
             }

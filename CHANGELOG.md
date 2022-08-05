@@ -1126,6 +1126,10 @@ TV-9.4.0.20220719
     - #065921 - The subject of the emails received is not correct for any email. 
     - #065418 - UX issue on the downloads section on the digital product inventory setup page.
     - #065974 - Clear cart option is not working for guest user . 
+    - #066007 - Extra options used to appear in search field
+    - #066004 - Ribbon preview is not proper in sample image .
+    - #065989 - The new rating type gets created even if the user clicks on the cancel button in the 'Add new rating type' popup
+    - #065978 - The content in the 'Digital Files listing' on the inventory setup page is not properly aligned.
 
 ## UAT points:
 

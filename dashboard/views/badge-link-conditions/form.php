@@ -58,8 +58,9 @@ if (Badge::TYPE_BADGE == $badgeType) {
                             </div>
                         <?php } else { ?>
                             <div class="products">
-                                <div class="products-body"><?php echo $imageHtml; ?>
-                                    <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/defaults/product_default_image.jpg">
+                                <div class="products-body"> <?php echo $imageHtml; ?>
+                                    <div class="products-img"> <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/defaults/product_default_image.jpg">
+                                    </div>
                                 </div>
                             </div>
 

@@ -2,7 +2,6 @@
 
 trait SellerUsers
 {
-
     protected function getUserSearchForm()
     {
         $frm = new Form('frmSearch');

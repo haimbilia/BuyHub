@@ -75,10 +75,11 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                 if (1 > canEditRating) {
                     fcom.displayErrorMessage(ratingEditErr);
                     e.detail.tag.remove();
-                    return;
+                    return false;
                 }
                 if (!confirm(addNewRatingType)) {
-                    return;
+                    e.detail.tag.remove();
+                    return false;
                 }
             }
         }
