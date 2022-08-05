@@ -1129,6 +1129,7 @@ TV-9.4.0.20220719
     - #066007 - Extra options used to appear in search field
     - #066004 - Ribbon preview is not proper in sample image .
     - #065989 - The new rating type gets created even if the user clicks on the cancel button in the 'Add new rating type' popup
+    - #065978 - The content in the 'Digital Files listing' on the inventory setup page is not properly aligned.
 
 ## UAT points:
 
