@@ -33,17 +33,28 @@ if ($showAddToFavorite) {
                             </label>
                         </li>
                         <li>
-                            <a onClick="addToCart( $(this), event , <?php echo $isWishList; ?>);" href="javascript:void(0)" class="" title="<?php echo Labels::getLabel('LBL_Move_to_cart', $siteLangId); ?>" data-id='<?php echo $product['selprod_id']; ?>'><i class="fa fa-shopping-cart"></i></a>
+                            <a onClick="addToCart( $(this), event , <?php echo $isWishList; ?>);" href="javascript:void(0)" class="" title="<?php echo Labels::getLabel('LBL_Move_to_cart', $siteLangId); ?>" data-id='<?php echo $product['selprod_id']; ?>'>
+                                <svg class="svg" width="18" height="18">
+                                    <use xlink:href=" <?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#shopping-cart">
+                                    </use>
+                                </svg>
+                            </a>
                         </li>
                     <?php } ?>
                     <li>
                         <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::YES) { ?>
                             <a title='<?php echo Labels::getLabel('LBL_Move_to_trash', $siteLangId); ?>' onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event);" href="javascript:void(0)" class="">
-                                <i class="fa fa-trash"></i>
+                                <svg class="svg" width="20" height="20">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete">
+                                    </use>
+                                </svg>
                             </a>
                         <?php } else { ?>
                             <a title='<?php echo Labels::getLabel('LBL_Move_to_trash', $siteLangId); ?>' href="javascript:void(0)" onclick="removeFromFavorite(<?php echo $product['selprod_id']; ?>, 'searchFavouriteListItems');" data-id="<?php echo $product['selprod_id']; ?>">
-                                <i class="fa fa-trash"></i>
+                                <svg class="svg" width="20" height="20">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete">
+                                    </use>
+                                </svg>
                             </a>
                         <?php } ?>
                     </li>
@@ -144,7 +155,12 @@ if ($showAddToFavorite) {
                             <h6><?php echo Labels::getLabel('MSG_OR_COPY_LINK', $siteLangId); ?></h6>
                             <div class="clipboard">
                                 <span class="clipboard_url clipboardTextJs"><?php echo UrlHelper::generateFullUrl('products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONT_URL) ?></span>
-                                <a class="clipboard_btn  clipboardTextJs" href="javascript:void(0);" onclick="copyText($(this))" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>"><i class="far fa-copy"></i></a>
+                                <a class="clipboard_btn  clipboardTextJs" href="javascript:void(0);" onclick="copyText($(this))" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
+                                    <svg class="svg" width="18" height="18">
+                                        <use xlink:href="' <?php echo  CONF_WEBROOT_FRONTEND; ?>'images/retina/sprite.svg#copy-to-all">
+                                        </use>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
                     </div>

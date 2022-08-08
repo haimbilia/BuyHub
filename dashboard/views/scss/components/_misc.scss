@@ -1736,3 +1736,9 @@ mark,
         }
     }
 }
+.badges-wrap {
+    z-index: 1;
+    position: absolute;
+    #{$end-direction}: 0.25rem;
+    top: 0.25rem;
+}

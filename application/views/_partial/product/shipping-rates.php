@@ -6,12 +6,12 @@
             <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]); ?>
         </li>
     <?php } ?>
-    
+
     <?php
     $returnAge = '' != $product['selprod_return_age'] ? $product['selprod_return_age'] : $product['shop_return_age'];
-    if (!empty($product['shop_return_age']) && 0 < $returnAge) {      
-        $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);       
-        ?>
+    if (!empty($product['shop_return_age']) && 0 < $returnAge) {
+        $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);
+    ?>
         <li title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>">
             <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>
         </li>

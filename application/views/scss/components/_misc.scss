@@ -27,6 +27,14 @@ html {
         max-width: 1536px;
     }
 }
+
+@media print {
+    .pagebreak {
+        clear: both;
+        page-break-after: always;
+    }
+}
+
 .container-fluid {
     max-width: none;
 }
