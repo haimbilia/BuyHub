@@ -1134,7 +1134,8 @@ TV-9.4.0.20220719
     - #066018 - Nothing happens on clicking on the back icon on the order details page on the buyer end
     - #066019 - User didn't got the idea that subscription offer is for which plan
     - #066034 - The payment status appears as pending even if the order is marked as completed.
-    - #065992 - A fatal error occurs when the user tries to increase the product quantity on the cart page. 
+    - #065992 - A fatal error occurs when the user tries to increase the product quantity on the cart page.
+    - #065947 - Buyer is not able to download all the digital files attached with any order.
 
 ## UAT points:
 

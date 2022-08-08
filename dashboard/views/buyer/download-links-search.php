@@ -70,11 +70,12 @@ if (null != $fld) {
             $td = $tr->appendElement('td');
             switch ($key) {
                 case 'linksCount':
-                    if ($row['downloadable']) {
+                    /* if ($row['downloadable']) {
                         $fileName = '<a href="javascript:void(0);" onclick="showLinks(' . $row['op_id'] . ');">' . $row[$key] . '</a>';
                     } else {
                         $fileName = $row[$key];
-                    }
+                    } */
+                    $fileName = $row[$key];
                     $td->appendElement('div', ['class' => "text-break"], $fileName, true);
                     break;
                 case 'opddl_downloadable_link':
