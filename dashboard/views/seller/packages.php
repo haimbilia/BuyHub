@@ -101,11 +101,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         }
                     }      ?>
                 </ul>
-
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        var currentActivePlanId = <?php echo ($currentActivePlanId) ? $currentActivePlanId : 0; ?>
-    </script>
+<script>
+    var currentActivePlanId = <?php echo ($currentActivePlanId) ? $currentActivePlanId : 0; ?>
+</script>
