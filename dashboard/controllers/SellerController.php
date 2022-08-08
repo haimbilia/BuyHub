@@ -411,7 +411,7 @@ class SellerController extends SellerBaseController
             array(
                 'ops.*', 'order_id', 'order_number', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_order_id', 'orderstatus_id', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'op_is_batch', 'op_selprod_id', 'selprod_product_id', 'pm.plugin_code', 'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone',
                 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_product_type',
-                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off', 'ops_plugin.plugin_code as opshipping_plugin_code', 'op_selprod_cancellation_age as cancellation_age', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_special_price', 'op_selprod_price','op_tax_after_discount'
+                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off', 'ops_plugin.plugin_code as opshipping_plugin_code', 'op_selprod_cancellation_age as cancellation_age', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_special_price', 'op_selprod_price', 'op_tax_after_discount'
             )
         );
         $srch->addCondition('op_selprod_user_id', '=', $userId);
@@ -3652,7 +3652,7 @@ class SellerController extends SellerBaseController
 
         $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId, $fulfillmentType);
         $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $this->siteLangId), 'shop_fulfillment_type', $fulFillmentArr, applicationConstants::NO);
-        
+
         $pluginObj = new Plugin();
         $sellerPluginObj = new SellerPlugin(0, $shopUserId);
         if (0 === FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && ($pluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_active') || $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'pu_active'))) {
@@ -3884,7 +3884,7 @@ class SellerController extends SellerBaseController
 
             $trackUrlFld = $frm->addTextBox(Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId), 'opship_tracking_url');
             $trackUrlFld->requirements()->setRegularExpressionToValidate(ValidateElement::URL_REGEX);
-            $trackUrlFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_TRACKING_URL_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));            
+            $trackUrlFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_TRACKING_URL_MUST_BE_AN_ABSOLUTE_URL', $this->siteLangId));
             $trackUrlFld->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_ENTER_THE_URL_TO_TRACK_THE_SHIPMENT.', $this->siteLangId) . '</span>';
 
             $trackingUrlUnReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('FRM_TRACKING_URL', $this->siteLangId));
@@ -4932,6 +4932,18 @@ class SellerController extends SellerBaseController
         $offers = DiscountCoupons::getUserCoupons($this->userParentId, $this->siteLangId, DiscountCoupons::TYPE_SELLER_PACKAGE);
 
         if ($offers) {
+            $couponIds = array_column($offers, 'coupon_id');
+            $plans = DiscountCoupons::getCouponPlansByCouponIds($couponIds, $this->siteLangId);
+            foreach ($offers as &$coupon) {
+                if (!empty($plans)) {
+                    foreach ($plans as $plan) {
+                        if ($plan['ctplan_coupon_id'] == $coupon['coupon_id']) {
+                            $coupon['plans'][$plan['spackage_id']]['plan_name'] = empty($plan['spackage_name']) ? $plan['spackage_identifier'] : $plan['spackage_name'];
+                            $coupon['plans'][$plan['spackage_id']]['plans'][] = $plan;
+                        }
+                    }
+                }
+            }
             $this->set('offers', $offers);
         } else {
             $this->set('noRecordsHtml', $this->_template->render(false, false, '_partial/no-record-found.php', true));
@@ -5124,8 +5136,8 @@ class SellerController extends SellerBaseController
             $message = CommonHelper::replaceStringData($str, array('{MINSELLINGPRICE}' => $minSellingPrice, '{SELLINGPRICE}' => $sellingPrice));
             FatUtility::dieJsonError($message);
         }
- 
-    
+
+
         /* Check if same date already exists [ */
         $tblRecord = new TableRecord(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE);
 

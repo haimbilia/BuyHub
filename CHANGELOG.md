@@ -1132,6 +1132,7 @@ TV-9.4.0.20220719
     - #065978 - The content in the 'Digital Files listing' on the inventory setup page is not properly aligned.
     - #066035 - The content on the invoice page appears distorted.
     - #066018 - Nothing happens on clicking on the back icon on the order details page on the buyer end
+    - #066019 - User didn't got the idea that subscription offer is for which plan
 
 ## UAT points:
 

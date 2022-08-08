@@ -14,7 +14,8 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'order_number':
-                $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('Orders', 'view', array($row['order_id']))), $row[$key], true);
+                $ctrl = (Orders::ORDER_SUBSCRIPTION == $row['order_type'] ? 'SubscriptionOrders' : 'Orders');
+                $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl($ctrl, 'view', array($row['order_id']))), $row[$key], true);
                 break;
             case 'couponhistory_amount':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key]));

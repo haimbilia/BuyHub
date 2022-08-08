@@ -58,7 +58,7 @@ class DiscountCouponsReportController extends ListingBaseController
             $sortBy = 'couponhistory_added_on';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
         $srchFrm = $this->getSearchForm($fields);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
@@ -72,7 +72,7 @@ class DiscountCouponsReportController extends ListingBaseController
         $srch->joinTable(DiscountCoupons::DB_TBL, 'LEFT OUTER JOIN', 'coupon_id = couponhistory_coupon_id');
         $srch->joinTable(Credential::DB_TBL, 'LEFT OUTER JOIN', 'credential_user_id = user_id');
         $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'couponhistory_order_id = order_id');
-        $srch->addMultipleFields(array('coupon_code', 'couponhistory_id', 'couponhistory_coupon_id', 'order_number', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username', 'order_id'));
+        $srch->addMultipleFields(array('coupon_code', 'couponhistory_id', 'couponhistory_coupon_id', 'order_number', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username', 'order_id', 'order_type'));
 
         $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         if (!empty($date_from)) {
@@ -89,7 +89,7 @@ class DiscountCouponsReportController extends ListingBaseController
         }
 
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
-            $sortOrder = applicationConstants::SORT_ASC;
+            $sortOrder = applicationConstants::SORT_DESC;
         }
 
         switch ($sortBy) {
