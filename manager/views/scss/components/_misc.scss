@@ -2073,11 +2073,13 @@ mark,
 }
 
 .actions-downloads {
-    display: flex;
+    position: relative;
+    display: inline-flex;
     gap: 10px;
     align-items: center;
+    padding-#{$end-direction}: 80px;
     // padding: 10px;
-    cursor: pointer;
+    // cursor: pointer;
     &:hover {
         // background-color: $bg-gray;
         .actions {
@@ -2095,7 +2097,7 @@ mark,
     .actions {
         display: none;
         position: absolute;
-        #{$end-direction}: 1rem;
+        #{$end-direction}: 0;
     }
 }
 

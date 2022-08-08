@@ -728,6 +728,28 @@
             }
         }
     }
+
+    &-justified {
+        thead {
+            th:first-child {
+                padding-#{$start-direction}: 0;
+            }
+            th:last-child {
+                padding-#{$end-direction}: 0;
+                text-align: #{$end-direction};
+            }
+        }
+        tr {
+            td:first-child {
+                padding-#{$start-direction}: 0;
+            }
+            td:last-child {
+                padding-#{$end-direction}: 0;
+                text-align: #{$end-direction};
+                //padding-#{$end-direction}: 0;
+            }
+        }
+    }
 }
 
 .data-length {

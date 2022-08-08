@@ -2,9 +2,9 @@
 if (1 > count($attachments)) {
     return;
 }
-$arr_flds = array(   
+$arr_flds = array(
     'mainfile' => Labels::getLabel('LBL_DD_FILE', $siteLangId),
-    'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),  
+    'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),
 );
 
 if (0 == $product['product_seller_id']) {
@@ -14,7 +14,7 @@ if (0 == $product['product_seller_id']) {
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
-    $tdAttr = ('action' == $key) ? ['class' => 'align-right','width'=>'20%'] : ['width'=> '40%'];
+    $tdAttr = ('action' == $key) ? ['class' => 'align-right', 'width' => '20%'] : ['width' => '40%'];
     $e = $th->appendElement('th', $tdAttr, $val);
 }
 
@@ -25,17 +25,17 @@ foreach ($attachments as $sn => $row) {
     foreach ($arr_flds as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
-        switch ($key) {          
+        switch ($key) {
             case 'mainfile':
                 $dvElem = $td->appendElement('div', array('class' => 'actions-downloads'));
                 $dvElem->appendElement('div', array('class' => 'file-name'), $row[$key], true);
                 if (0 < $row['afile_id']) {
                     if (0 == $product['product_seller_id']) {
-                        $ul = new HtmlElement("ul", array("class" => "actions"));     
-                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
+                        $ul = new HtmlElement("ul", array("class" => "actions"));
+                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
                         $li->appendElement(
                             "a",
-                            array(                                
+                            array(
                                 'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
                                 'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
                                 'target' => '_blank'
@@ -47,10 +47,10 @@ foreach ($attachments as $sn => $row) {
                             </svg>',
                             true
                         );
-                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
+                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
                         $li->appendElement(
                             "a",
-                            array(                              
+                            array(
                                 'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
                                 'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
                             ),
@@ -68,10 +68,10 @@ foreach ($attachments as $sn => $row) {
                 }
                 break;
             case 'preview':
-                $dvElem = $td->appendElement('div', array('class' => 'actions-downloads'));              
-                $ul = new HtmlElement("ul", array("class" => "actions"));                
+                $dvElem = $td->appendElement('div', array('class' => 'actions-downloads'));
+                $ul = new HtmlElement("ul", array("class" => "actions"));
                 if (0 < $row['prev_afile_id']) {
-                    $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                    $dvElem->appendElement('div', array('class' => 'file-name'), $row[$key], true);
                     $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
                     $li->appendElement(
                         'a',
@@ -104,7 +104,7 @@ foreach ($attachments as $sn => $row) {
                         );
                     }
                 } else {
-                    $dvElem->appendElement('div', array('class' => 'text-break'),  Labels::getLabel('LBL_NA', $siteLangId), true);
+                    $dvElem->appendElement('div', array('class' => 'file-name'),  Labels::getLabel('LBL_NA', $siteLangId), true);
                     $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
                     $li->appendElement(
                         "a",
@@ -123,7 +123,7 @@ foreach ($attachments as $sn => $row) {
                     );
                 }
                 $dvElem->appendElement('plaintext', $tdAttr, $ul->getHtml(), true);
-                break; 
+                break;
             case 'action':
                 if ((1 < $row['afile_id'] || 1 < $row['prev_afile_id']) && 0 == $product['product_seller_id']) {
                     $fileId = $row['afile_id'];
@@ -159,6 +159,6 @@ if (empty($attachments)) {
 ?>
 <div class="col-md-12">
     <div class="js-scrollable table-wrap table-responsive">
-    <?php echo $tbl->getHtml(); ?>
+        <?php echo $tbl->getHtml(); ?>
     </div>
 </div>
