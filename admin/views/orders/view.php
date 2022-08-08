@@ -32,10 +32,10 @@
                     </div>
                     <?php require_once(CONF_THEME_PATH . 'orders/item-summary.php'); ?>
                 </div>
-                <?php
-                $paymentFormCond = (!$order["order_payment_status"] && $canEdit && 'CashOnDelivery' != $order['plugin_code']);
+                <?php 
+                $paymentFormCond = (!$order["order_payment_status"] && $canEdit &&  !in_array($order['plugin_code'],['CashOnDelivery','PayAtStore']));
                 $paymentHistory = (!empty($order['payments']));
-                if (!$order['order_deleted'] && ($paymentFormCond || $paymentHistory) && $order['plugin_code'] != 'CashOnDelivery') { ?>
+                if (!$order['order_deleted'] && ($paymentFormCond || $paymentHistory) && !in_array($order['plugin_code'],['CashOnDelivery','PayAtStore'])) { ?>
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">

@@ -192,10 +192,9 @@ $products = $orderInfo['orderProducts'];
                             </ul>
                         <?php } ?>
                     </div>
-                    <?php
-
-                    if (true === $showOrderDetails) {
+                    <?php if (true === $showOrderDetails) {
                         if ($orderInfo['order_type'] != Orders::ORDER_WALLET_RECHARGE) { ?>
+                            <div class="pagebreak"> </div>
                             <div class="row justify-content-center">
                                 <div class="col-md-12">
                                     <div class="completed-cart cart-page">

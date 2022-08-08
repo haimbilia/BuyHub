@@ -324,7 +324,7 @@ class Cronjob extends FatModel
         $srch->addCondition('o.order_id', '=', $orderId);
         $cnd = $srch->addCondition('o.order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
         $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
-        $cnd->attachCondition('plugin_code', '=', 'payatshop');
+        $cnd->attachCondition('plugin_code', '=', 'payatstore');
         $srch->addCondition('op.op_status_id', 'not in', unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -340,7 +340,7 @@ class Cronjob extends FatModel
         $srch->joinOrderPaymentMethod();
         $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
         $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
-        $cnd->attachCondition('plugin_code', '=', 'payatshop');
+        $cnd->attachCondition('plugin_code', '=', '');
         $srch->addCondition('order_id', '=', $orderId);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
