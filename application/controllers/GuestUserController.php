@@ -159,8 +159,8 @@ class GuestUserController extends MyAppController
                 }
                 $password = implode("", $post['upv_otp']);
             }
-            
-            if(empty($password)){
+
+            if (empty($password)) {
                 $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('ERR_OTP_REQUIRED', $this->siteLangId));
                 LibHelper::dieJsonResponse($resp);
             }
@@ -557,10 +557,10 @@ class GuestUserController extends MyAppController
             $record = $obj->getUserResetPwdToken($userId);
             $token = $record['uprr_token'];
             $redirectUrl = UrlHelper::generateFullUrl('GuestUser', 'resetPassword', array($userId, $token));
-        } else {            
+        } else {
             if (isset($_SESSION['referer_page_url'])) {
                 $redirectUrl =  $_SESSION['referer_page_url'];
-            } elseif (FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1)) { 
+            } elseif (FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
                 $this->set('msg', Labels::getLabel("MSG_LOGIN_SUCCESSFULLY", $this->siteLangId));
                 $redirectUrl =  UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
             } else {
@@ -737,7 +737,7 @@ class GuestUserController extends MyAppController
     public function registrationSuccess($viaOtp = 0)
     {
         $this->set('registrationMsg', Labels::getLabel("MSG_REGISTERED_SUCCESSFULLY", $this->siteLangId));
-        if(1 > $viaOtp){
+        if (1 > $viaOtp) {
             if (FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
                 $this->set('registrationMsg', Labels::getLabel("MSG_SUCCESS_USER_SIGNUP_EMAIL_VERIFICATION_PENDING", $this->siteLangId));
             } elseif (FatApp::getConfig('CONF_ADMIN_APPROVAL_REGISTRATION', FatUtility::VAR_INT, 1)) {
@@ -749,6 +749,16 @@ class GuestUserController extends MyAppController
 
     public function forgotPasswordForm($withPhone = 0, $includeHeaderAndFooter = 1)
     {
+        if (UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_ALREADY_LOGGED_IN', $this->siteLangId), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('home'));
+        }
+
+        if (UserAuthentication::isUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_ALREADY_LOGGED_IN', $this->siteLangId), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
+        }
+        
         $frm = $this->getForgotForm($withPhone);
         $frm->addSecurityToken();
 
@@ -1015,7 +1025,7 @@ class GuestUserController extends MyAppController
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
         $this->set('user_password', $user['credential_password']);
-        $this->set('credential_username', $user['credential_username']);      
+        $this->set('credential_username', $user['credential_username']);
         $this->set('frm', $this->getResetPwdForm($userId, trim($token)));
         $this->set('exculdeMainHeaderDiv', true);
         $this->_template->render(true, false);
@@ -1156,7 +1166,7 @@ class GuestUserController extends MyAppController
         $userId = UserAuthentication::getLoggedUserId();
         $userObj = new User($userId);
         $userInfo = $userObj->getUserInfo(array(), true, false);
-        if(!empty($userInfo['credential_email']) || !empty($userInfo['user_phone'])){
+        if (!empty($userInfo['credential_email']) || !empty($userInfo['user_phone'])) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('', '', [], CONF_WEBROOT_DASHBOARD));
         }
