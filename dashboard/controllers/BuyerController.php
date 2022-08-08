@@ -2678,6 +2678,7 @@ class BuyerController extends BuyerBaseController
         $this->set('sharingFrm', $this->getFriendsSharingForm($this->siteLangId));
 
         $this->_template->addJs(['js/slick.min.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js']);
+        $this->_template->addCss(['css/tagify.min.css']);  
         $this->_template->render(true, true);
     }
 

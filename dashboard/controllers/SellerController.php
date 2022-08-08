@@ -1147,14 +1147,13 @@ class SellerController extends SellerBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
         }
 
-        $this->_template->addJs('js/tagify.min.js');
-        $this->_template->addJs('js/tagify.polyfills.min.js');
-
         $frmSearch = $this->getTagsProdSrchForm();
         $frmSearch->fill(['lang_id' => $this->siteLangId]);
         $this->set("frmSearch", $frmSearch);
         $this->set("languages", Language::getAllNames());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));       
+        $this->_template->addJs(['js/tagify.min.js','js/tagify.polyfills.min.js']);
+        $this->_template->addCss(['css/tagify.min.css']);        
         $this->_template->render(true, true);
     }
 
