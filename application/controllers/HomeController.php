@@ -713,7 +713,7 @@ class HomeController extends MyAppController
                     $productSrchTempObj->addGroupBy('selprod_id');
                     $productSrchTempObj->setPageSize($collection['collection_primary_records']);
 
-                    $recordCount = $this->getRecordsCount($productSrchTempObj, true);
+                    $recordCount = $this->getRecordsCount(clone $productSrchTempObj, true);
                     if (empty($recordCount)) {
                         continue 2;
                     }
@@ -768,7 +768,7 @@ class HomeController extends MyAppController
                     $productCatSrchTempObj->addCondition('prodcat_deleted', '=', applicationConstants::NO);
                     $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
 
-                    $recordCount = $this->getRecordsCount($productCatSrchTempObj, true);
+                    $recordCount = $this->getRecordsCount(clone $productCatSrchTempObj);
                     if (empty($recordCount)) {
                         continue 2;
                     }
@@ -832,7 +832,7 @@ class HomeController extends MyAppController
                             $productShopSrchTempObj->addGroupBy('selprod_product_id');
                             $productShopSrchTempObj->setPageSize(Collections::LIMIT_CATEGORY_LAYOUT1_PRODUCT);
 
-                            $recordCount = $this->getRecordsCount($productShopSrchTempObj, true);
+                            $recordCount = $this->getRecordsCount(clone $productShopSrchTempObj, true);
                             if (empty($recordCount)) {
                                 continue;
                             }
@@ -889,7 +889,7 @@ class HomeController extends MyAppController
                             $productShopSrchTempObj->addGroupBy('selprod_product_id');
                             $productShopSrchTempObj->setPageSize(7);
 
-                            $recordCount = $this->getRecordsCount($productShopSrchTempObj, true);
+                            $recordCount = $this->getRecordsCount(clone $productShopSrchTempObj, true);
                             if (empty($recordCount)) {
                                 continue;
                             }
@@ -956,7 +956,7 @@ class HomeController extends MyAppController
                         $shopObj->setPageSize($collection['collection_primary_records']);
                     }
 
-                    $recordCount = $this->getRecordsCount($shopObj, true);
+                    $recordCount = $this->getRecordsCount(clone $shopObj);
                     if (empty($recordCount)) {
                         continue 2;
                     }
@@ -1015,7 +1015,7 @@ class HomeController extends MyAppController
                         $brandSearchTempObj->setPageSize($collection['collection_primary_records']);
                     }
 
-                    $recordCount = $this->getRecordsCount($brandSearchTempObj, true);
+                    $recordCount = $this->getRecordsCount(clone $brandSearchTempObj);
                     if (empty($recordCount)) {
                         continue 2;
                     }
@@ -1073,7 +1073,7 @@ class HomeController extends MyAppController
                         $blogSearchTempObj->setPageSize($collection['collection_primary_records']);
                     }
                     $blogSearchTempObj->addGroupBy('post_id');
-                    $recordCount = $this->getRecordsCount($blogSearchTempObj, true);
+                    $recordCount = $this->getRecordsCount(clone $blogSearchTempObj, true);
                     if (empty($recordCount)) {
                         continue 2;
                     }
@@ -1121,7 +1121,7 @@ class HomeController extends MyAppController
                     //$faqSearchTempObj->addCondition('faq_id', 'IN', array_keys($faqIds));
                     $faqSearchTempObj->addGroupBy('faq_id');
 
-                    $recordCount = $this->getRecordsCount($faqSearchTempObj, true);
+                    $recordCount = $this->getRecordsCount(clone $faqSearchTempObj, true);
                     if (empty($recordCount)) {
                         continue 2;
                     }
@@ -1190,7 +1190,7 @@ class HomeController extends MyAppController
                     $testimonialSrchObj->addGroupBy('testimonial_id');
                     $testimonialSrchObj->setPageSize(Collections::LIMIT_TESTIMONIAL_LAYOUT1);
 
-                    $recordCount = $this->getRecordsCount($testimonialSrchObj, true);
+                    $recordCount = $this->getRecordsCount(clone $testimonialSrchObj, true);
                     if (empty($recordCount)) {
                         continue 2;
                     }
