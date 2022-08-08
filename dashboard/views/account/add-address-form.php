@@ -19,6 +19,10 @@ $stateFld->setFieldTagAttribute('id', 'addr_state_id');
 
 $langFld = $addressFrm->getField('lang_id');
 $langFld->setFieldTagAttribute('onChange', "addAddressForm(" . $addr_id . ", this.value);");
+
+$addrLabelFld = $addressFrm->getField('addr_title');
+$addrLabelFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.G:_MY_HOME_ADDRESS'));
+$addrLabelFld->setFieldTagAttribute('maxlength', Address::ADDRESS_TITLE_LENGTH);
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
