@@ -50,7 +50,10 @@ if (!empty($allShops)) {
         $postedData['recordDisplayCount'] = $recordCount;
         echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSearchShopsPaging', 'id' => 'frmSearchShopsPaging'));
         $pagingArr = array('pageCount' => $pageCount, 'page' => $postedData['page'], 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToShopSearchPage');
-        $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+        $itemsPerPage = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+        if ($itemsPerPage < $recordCount) {
+            $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+        }
         ?>
     </div>
 <?php
