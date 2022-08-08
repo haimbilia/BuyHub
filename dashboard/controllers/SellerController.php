@@ -806,13 +806,13 @@ class SellerController extends SellerBaseController
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS")));
         $srch->addCondition('op_selprod_user_id', '=', $loggedUserId);
         $srch->addCondition('op_id', '=', $op_id);
-        $srch->addMultipleFields(['op.*', 'pm.*', 'opshipping_by_seller_user_id', 'ocrequest_status', 'opshipping_fulfillment_type', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code', 'opship_tracking_number', 'orderstatus_id', 'opshipping_carrier_code']);
-        $rs = $srch->getResultSet();
-
-        $orderDetail = FatApp::getDb()->fetch($rs);
+        $srch->addMultipleFields(['op.*', 'pm.*', 'opshipping_by_seller_user_id', 'ocrequest_status', 'opshipping_fulfillment_type', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code', 'opship_tracking_number', 'orderstatus_id', 'opshipping_carrier_code','order_payment_status','order_id']);
+      
+        $orderDetail = FatApp::getDb()->fetch($srch->getResultSet());
         if (empty($orderDetail)) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
+      
         $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']);
 
         $activatedTrackPlugin = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING, ['plugin_id', 'plugin_code']);
@@ -925,9 +925,9 @@ class SellerController extends SellerBaseController
         } else {
             FatUtility::dieJsonError(Labels::getLabel('M_ERROR_INVALID_REQUEST', $this->siteLangId));
         }
-
-
-        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatshop']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
+        
+        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
+           
             $orderProducts = new OrderProductSearch($this->siteLangId, true, true);
             $orderProducts->joinPaymentMethod();
             $orderProducts->addMultipleFields(['op_status_id']);
