@@ -6,7 +6,7 @@
             </h2>
         </div>
     </div>
-    <div class="bg-gray p-4 mb-4">
+    <div class="prev-files mb-5">
         <?php
         if (0 < count($product['preview_links']) || 0 < count($product['preview_attachments'])) {
             if (0 < count($product['preview_links'])) { ?>
@@ -22,8 +22,8 @@
                         <li>
                             <?php echo '<div class="clipboard"><input class="copy-input" value="' . $link['pdl_preview_link'] . '" id="copypreview_' . $link['pdl_id'] . '" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_' . $link['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copypreview_' . $link['pdl_id'] . '\')">
                                             <span class="icon">                                           
-                                                <svg class="svg">
-                                                    <use xlink:href="'.CONF_WEBROOT_FRONTEND.'images/retina/sprite.svg#copy-to-all">
+                                                <svg class="svg" width="18" height="18">
+                                                    <use xlink:href="' . CONF_WEBROOT_FRONTEND . 'images/retina/sprite.svg#copy-to-all">
                                                     </use>
                                                 </svg>                                           
                                             </span>
@@ -51,7 +51,10 @@
                                         </a>
                                     <?php } ?>
                                     <a class="btn btn-light btn-sm download--preview" target="_blank" href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>" title="<?php echo $attachment['preview']; ?>">
-                                        <i class="fa fa-download icon"></i>
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="' <?php echo  CONF_WEBROOT_FRONTEND; ?>'images/retina/sprite.svg#download">
+                                            </use>
+                                        </svg>
                                     </a>
                                 </div>
                             </li>

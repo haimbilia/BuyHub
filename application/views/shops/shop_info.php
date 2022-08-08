@@ -24,8 +24,8 @@
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
                         </svg>
                         <span class="rate">
-                            <?php echo round($shopRating, 1), ' ', Labels::getLabel('Lbl_Out_of', $siteLangId), ' ', '5';?>                            
-                            - <a class="link-black-underline" href="<?php echo UrlHelper::generateUrl('Reviews', 'shop', array($shop['shop_id'])); ?>"><?php echo $shopTotalReviews, ' ', Labels::getLabel('Lbl_Reviews', $siteLangId); ?></a>                          
+                            <?php echo round($shopRating, 1), ' ', Labels::getLabel('Lbl_Out_of', $siteLangId), ' ', '5'; ?>
+                            - <a class="link-black-underline" href="<?php echo UrlHelper::generateUrl('Reviews', 'shop', array($shop['shop_id'])); ?>"><?php echo $shopTotalReviews, ' ', Labels::getLabel('Lbl_Reviews', $siteLangId); ?></a>
                         </span>
                     </div>
                 <?php } ?>
@@ -130,7 +130,8 @@
                                 <i class="icn">
                                     <svg class="svg" width="20" height="20">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"></use>
-                                    </svg></i>
+                                    </svg>
+                                </i>
                             </a>
                         </li>
                         <li class="social-email">
@@ -148,7 +149,11 @@
                     <div class="clipboard">
                         <span class="clipboard_url clipboardTextJs"><?php echo UrlHelper::generateFullUrl('shops', 'view', array($shop['shop_id']), CONF_WEBROOT_FRONT_URL); ?></span>
                         <a class="clipboard_btn" href="javascript:void(0);" onclick="copyText($(this))" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
-                            <i class="far fa-copy"></i></a>
+                            <svg class="svg" width="18" height="18">
+                                <use xlink:href="' <?php echo  CONF_WEBROOT_FRONTEND; ?>'images/retina/sprite.svg#copy-to-all">
+                                </use>
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </div>

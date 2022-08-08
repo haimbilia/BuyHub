@@ -14,7 +14,7 @@ if (true == $primaryOrder) {
         $canReturnRefund = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderReturnStatuses()));
         $datediff = time() - strtotime($childOrderDetail['order_date_added']);
         $daysSpent = $datediff / (60 * 60 * 24);
-        $returnAge = $childOrderDetail['op_selprod_return_age'];  
+        $returnAge = $childOrderDetail['op_selprod_return_age'];
         $canReturnRefund =  $canReturnRefund && $returnAge > $daysSpent;
         $canCancelOrder = $canCancelOrder && $childOrderDetail['op_selprod_cancellation_age'] > $daysSpent;
     }
@@ -56,7 +56,9 @@ if (!$print) {
         $data = [
             'headingLabel' => Labels::getLabel('LBL_Order_Details', $siteLangId),
             'siteLangId' => $siteLangId,
-            'headingBackButton' => true
+            'headingBackButton' => [
+                'href' => UrlHelper::generateUrl('Buyer', 'Orders'),
+            ]
         ];
 
         if (true == $primaryOrder && !$print) {
@@ -99,14 +101,14 @@ if (!$print) {
     <div class="content-body">
         <div class="row">
             <?php $this->includeTemplate('_partial/order/left-side-block.php', $this->variables + ['isSellerDashboardView' => false], false);
-            $data = $this->variables + [            
+            $data = $this->variables + [
                 'canViewShippingCharges' => true,
-                'canViewTaxCharges' => true,  
+                'canViewTaxCharges' => true,
                 'isSellerDashboardView' => false
             ];
             $this->includeTemplate('_partial/order/right-side-block.php', $data, false); ?>
         </div>
-        
+
     </div>
 </div>
 
@@ -130,7 +132,7 @@ if (!$print) {
             if (ans.status == 0) {
                 fcom.displayErrorMessage(ans.msg);
                 return false;
-            }       
+            }
             location.reload();
             return true;
         });
