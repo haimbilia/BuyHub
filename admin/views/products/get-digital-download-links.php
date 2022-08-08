@@ -1,6 +1,6 @@
 <?php
 
-if(1 > count($links)){
+if (1 > count($links)) {
     return;
 }
 $arr_flds = [];
@@ -17,7 +17,7 @@ if (0 == $product['product_seller_id']) {
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
-    $tdAttr = ('action' == $key) ? ['class' => 'align-right','width'=>'20%'] : ['width'=> '40%'];
+    $tdAttr = ('action' == $key) ? ['class' => 'align-right', 'width' => '20%'] : ['width' => '40%'];
     $e = $th->appendElement('th', array(), $val);
 }
 
@@ -28,7 +28,7 @@ foreach ($links as $sn => $row) {
 
     foreach ($arr_flds as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
-        $td = $tr->appendElement('td', $tdAttr);       
+        $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo, true);
@@ -51,15 +51,15 @@ foreach ($links as $sn => $row) {
                 break;
             case 'pdl_download_link':
                 if ('' != $row['pdl_download_link'] && 0 == $product['product_seller_id']) {
-                    $td->appendElement('div', array("class"=>"clipboard"), '<input  name ="copy" class="form-control copy-input" title="'.$row[$key].'" value="'.$row[$key].'" readonly> <button type="button" data-title="'.$row[$key].'" class="btn btn-light btn-sm copy-btn"  onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class" => "clipboard"), '<input  name ="copy" class="form-control copy-input" title="' . $row[$key] . '" value="' . $row[$key] . '" readonly> <button type="button" data-title="' . $row[$key] . '" class="btn btn-light btn-sm copy-btn"  onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', $tdAttr, Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
-                
+
                 break;
             case 'pdl_preview_link':
                 if ('' != $row['pdl_preview_link']) {
-                    $td->appendElement('div', array("class"=>"clipboard"), '<input name ="copy" class="form-control copy-input" title="'.$row[$key].'" value="'.$row[$key].'"  readonly> <button type="button" data-title="'.$row[$key].'" class="btn btn-light btn-sm copy-btn" onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class" => "clipboard"), '<input name ="copy" class="form-control copy-input" title="' . $row[$key] . '" value="' . $row[$key] . '"  readonly> <button type="button" data-title="' . $row[$key] . '" class="btn btn-light btn-sm copy-btn" onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', $tdAttr, Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
@@ -72,11 +72,10 @@ foreach ($links as $sn => $row) {
                     ];
                     $data['deleteButton'] = [
                         'onclick' => 'deleteDigitallink(' . $row['pdl_id'] . ',' . $row['pdl_record_id'] . ')'
-                    ];                  
+                    ];
 
                     $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                     $td->appendElement('plaintext', $tdAttr, $actionItems, true);
-                    
                 }
 
                 break;
