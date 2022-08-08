@@ -11,8 +11,9 @@ if(null != $fld){
 }
 
 $fld = $frm->getField('afcommsetting_prodcat_id');
-$fld->setfieldTagAttribute('id', "afcommsetting_prodcat_id");
-
+if(null != $fld){
+    $fld->setfieldTagAttribute('id', "afcommsetting_prodcat_id");
+}
 
 ?>
 <div class="modal-header">
