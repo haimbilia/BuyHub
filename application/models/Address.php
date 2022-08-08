@@ -12,6 +12,8 @@ class Address extends MyAppModel
 
     public const ADDRESS_TYPE_BILLING = 1;
     public const ADDRESS_TYPE_SHIPPING = 2;
+    
+    public const ADDRESS_TITLE_LENGTH = 20;
 
     private const GOOGLE_GEOCODE_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
     private $langId;
