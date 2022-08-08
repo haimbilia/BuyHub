@@ -137,6 +137,7 @@ $input-color: #474747;
             background-repeat: no-repeat;
             background-position: calc(13px) center;
             -webkit-appearance: search-cancel-button;
+
             .form[dir="rtl"] & {
                 padding-#{$end-direction}: 40px;
                 text-align: #{$end-direction};
