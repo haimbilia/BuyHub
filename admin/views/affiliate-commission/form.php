@@ -6,7 +6,9 @@ $frm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
 $fld = $frm->getField('afcommsetting_user_id');
-$fld->setfieldTagAttribute('id', "afcommsetting_user_id");
+if(null != $fld){
+    $fld->setfieldTagAttribute('id', "afcommsetting_user_id");
+}
 
 $fld = $frm->getField('afcommsetting_prodcat_id');
 $fld->setfieldTagAttribute('id', "afcommsetting_prodcat_id");
