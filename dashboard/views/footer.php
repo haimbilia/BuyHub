@@ -38,7 +38,7 @@ if (!$userActiveTab) {
     </div>
     <ul class="mobile-actions">
         <li class="mobile-actions-item" role="none">
-            <a class="mobile-actions-link" href="<?php echo $dashboardOrgUrl; ?>">
+            <a class="mobile-actions-link" href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>">
                 <svg class="svg" width="24" height="24">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#home">
                     </use>
