@@ -217,6 +217,8 @@ class SpecialPriceController extends ListingBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_SOMETHING_WENT_WRONG._PLEASE_TRY_AGAIN.', $this->siteLangId), true);
         }
 
+        Product::updateMinPrices(SellerProduct::getAttributesById($selProdId,'selprod_product_id'));
+
         if ('splprice_price' == $attribute) {
             $value = CommonHelper::displayMoneyFormat($value, true, true);
         }
