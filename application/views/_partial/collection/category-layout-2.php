@@ -4,11 +4,6 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
         <div class="container">
             <div class="section-head section-head-center">
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
-
-                <?php if ($collection['totCategories'] > Collections::LIMIT_CATEGORY_LAYOUT2) { ?>
-                    <div class="section-action"> <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a>
-                    </div>
-                <?php }  ?>
             </div>
 
             <div class="category-layout-2">
@@ -56,7 +51,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                     </div>
                 <?php } ?>
             </div>
-            <?php if (count($collection['categories']) > 4) { ?>
+            <?php if (count($collection['categories']) > Collections::LIMIT_CATEGORY_LAYOUT2) { ?>
                 <div class="section-foot">
                     <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline">
                         <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>

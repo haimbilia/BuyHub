@@ -945,7 +945,6 @@ $sharing-height: 50px;
         padding: 0;
         list-style: none;
         margin: 0.5rem 0;
-        padding: 1rem;
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
@@ -970,7 +969,7 @@ $sharing-height: 50px;
         font-size: 0.8rem;
         border: none;
         border-radius: $common-radius;
-        padding: 0;
+        padding: 8px;
         color: $txt-gray;
         // margin-#{$end-direction}: 10px;
         &:focus {

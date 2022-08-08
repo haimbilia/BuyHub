@@ -207,7 +207,10 @@
                             <?php echo UrlHelper::generateFullUrl('Blog', 'postDetail', array($blogPostData['post_id'])); ?>
                         </span>
                         <a class="clipboard_btn" href="javascript:void(0);" onclick="copyText($(this))" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
-                            <i class="far fa-copy"></i>
+                            <svg class="svg" width="18" height="18">
+                                <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#copy-to-all">
+                                </use>
+                            </svg>
                         </a>
                     </div>
                 </div>

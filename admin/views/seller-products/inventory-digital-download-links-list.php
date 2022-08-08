@@ -5,7 +5,7 @@ $fields = array(
    // 'pdl_lang_id' => Labels::getLabel('LBL_Link_language', $siteLangId)
 );
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($fields as $val) {
     $e = $th->appendElement('th', array(), $val);
