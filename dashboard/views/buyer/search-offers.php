@@ -37,6 +37,30 @@
                             <?php } ?>
                             <br> <?php echo Labels::getLabel('LBL_EXPIRES_ON', $siteLangId); ?>: <?php echo FatDate::format($row['coupon_end_date']); ?>
                         </p>
+
+                        <?php if (isset($row['plans']) && !empty($row['plans'])) { ?>
+                            <span class="d-inline-block link-dotted" tabindex="0" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="hover focus" data-popover-html="#linkedRecords<?php echo $row['coupon_id'];?>">
+                                <?php echo Labels::getLabel('LBL_LINKED_RECORDS'); ?>
+                            </span>
+                            <div class="hidden" id="linkedRecords<?php echo $row['coupon_id']; ?>">
+                                <?php
+                                $i = 0;
+                                foreach ($row['plans'] as  $plans) {
+                                    if (0 < $i) {
+                                        echo '<hr>';
+                                    }
+                                ?>
+                                    <p><strong><?php echo $plans['plan_name']; ?></strong></p>
+                                    <ul class="list-popover">
+                                        <?php foreach ($plans['plans'] as $plan) { ?>
+                                            <li class="list-popover-item">
+                                                <?php echo SellerPackagePlans::getPlanPriceWithPeriod($plan, $plan[SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                <?php $i++; } ?>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
             </li>

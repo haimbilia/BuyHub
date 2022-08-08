@@ -64,7 +64,8 @@
             <div class="card-table">
                 <?php
                 $adjustedAmount = CommonHelper::orderSubscriptionAmount($orderDetail, 'ADJUSTEDAMOUNT');
-                $discount = CommonHelper::displayMoneyFormat(CommonHelper::orderSubscriptionAmount($orderDetail, 'DISCOUNT'));
+                $discountVal = CommonHelper::orderSubscriptionAmount($orderDetail, 'DISCOUNT');
+                $discount = CommonHelper::displayMoneyFormat($discountVal);
                 ?>
                 <div class="js-scrollable table-wrap">
                     <table class="table">
@@ -75,7 +76,7 @@
                                 <?php if ($adjustedAmount != 0) { ?>
                                     <th><?php echo Labels::getLabel('LBL_ADJUSTED_AMOUNT', $siteLangId); ?></th>
                                 <?php } ?>
-                                <?php if (0 != $discount) { ?>
+                                <?php if (0 < abs($discountVal)) { ?>
                                     <th><?php echo Labels::getLabel('LBL_DISCOUNT', $siteLangId); ?></th>
                                 <?php } ?>
                                 <th><?php echo Labels::getLabel('LBL_PAID_AMOUNT', $siteLangId); ?></th>
@@ -88,8 +89,8 @@
                                 <?php if ($adjustedAmount != 0) { ?>
                                     <td><?php echo CommonHelper::displayMoneyFormat($adjustedAmount); ?></td>
                                 <?php } ?>
-                                <?php if (0 != $discount) { ?>
-                                    <td><?php echo CommonHelper::displayMoneyFormat($discount); ?></td>
+                                <?php if (0 < abs($discountVal)) { ?>
+                                    <td><?php echo $discount; ?></td>
                                 <?php } ?>
                                 <td><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderSubscriptionAmount($orderDetail, 'NETAMOUNT')); ?></td>
                             </tr>
