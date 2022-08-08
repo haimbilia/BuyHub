@@ -36,7 +36,6 @@
     flex-flow: row wrap;
     @include media-breakpoint-down(sm) {
         text-align: center;
-
         justify-content: center;
         flex-direction: column;
     }
@@ -69,6 +68,19 @@
         height: 40px;
         width: 100%;
         margin-bottom: 2rem;
+        -webkit-appearance: search-cancel-button;
+        &::-webkit-search-cancel-button {
+            -webkit-appearance: none;
+            height: 1.25em;
+            width: 1.25em;
+            border-radius: 50em;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z'/%3E%3C/svg%3E")
+                no-repeat 50% 50%;
+            background-size: contain;
+            &:hover {
+                cursor: pointer;
+            }
+        }
         [dir="rtl"] & {
             padding-#{$end-direction}: 40px;
             background-position: calc(-15px) center;

@@ -1133,6 +1133,7 @@ TV-9.4.0.20220719
     - #066035 - The content on the invoice page appears distorted.
     - #066018 - Nothing happens on clicking on the back icon on the order details page on the buyer end
     - #066019 - User didn't got the idea that subscription offer is for which plan
+    - #066034 - The payment status appears as pending even if the order is marked as completed.
 
 ## UAT points:
 

@@ -381,8 +381,7 @@ if (isset($prodcat_code)) {
 
                                     var updateRange = function() {
                                         rangeSlider.noUiSlider.set([from, to]);
-                                        updateValues();
-                                        addPricefilter();
+                                        updateValues();                                        
                                     };
 
                                     $from.on("change", function() {
