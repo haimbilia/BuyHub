@@ -70,9 +70,9 @@ if (false == $canDo) {
             <div class="col-md-4">
                 <div class="form-group">
                     <label class="form-label">
-                        <?php 
-                            $fld = $downloadFrm->getField('lang_id');
-                            echo $fld->getCaption();
+                        <?php
+                        $fld = $downloadFrm->getField('lang_id');
+                        echo $fld->getCaption();
                         ?>
                     </label>
                     <?php echo $downloadFrm->getFieldHtml('lang_id'); ?>
@@ -86,9 +86,9 @@ if (false == $canDo) {
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="form-label">
-                                <?php 
-                                    $fld = $downloadFrm->getField('attach_with_existing_orders');
-                                    echo $fld->getCaption();
+                                <?php
+                                $fld = $downloadFrm->getField('attach_with_existing_orders');
+                                echo $fld->getCaption();
                                 ?>
                             </label>
                             <?php echo $downloadFrm->getFieldHtml('attach_with_existing_orders'); ?>
@@ -100,8 +100,8 @@ if (false == $canDo) {
 
                         <label class="form-label">
                             <?php
-                                $fld = $downloadFrm->getField('product_downloadable_link');
-                                echo $fld->getCaption();
+                            $fld = $downloadFrm->getField('product_downloadable_link');
+                            echo $fld->getCaption();
                             ?>
                         </label>
                         <?php echo $downloadFrm->getFieldHtml('product_downloadable_link'); ?>
@@ -110,10 +110,10 @@ if (false == $canDo) {
                 <div class="col-md-4 attach-links-js">
                     <div class="form-group">
                         <label class="form-label">
-                        <?php
+                            <?php
                             $fld = $downloadFrm->getField('product_preview_link');
                             echo $fld->getCaption();
-                        ?>
+                            ?>
                         </label>
                         <?php echo $downloadFrm->getFieldHtml('product_preview_link'); ?>
                     </div>
@@ -121,8 +121,8 @@ if (false == $canDo) {
                 <div class="col-md-4 text-left attach-links-js">
                     <div class="form-group">
                         <label class="form-label"></label>
-                        <?php 
-                            echo $downloadFrm->getFieldHtml('attachment_link_btn');
+                        <?php
+                        echo $downloadFrm->getFieldHtml('attachment_link_btn');
                         ?>
                     </div>
                 </div>
@@ -152,17 +152,18 @@ if (false == $canDo) {
                     <div class="form-group">
                         <label class="form-label"></label>
                         <?php
-                            echo $downloadFrm->getFieldHtml('attachement_upload_btn');
+                        echo $downloadFrm->getFieldHtml('attachement_upload_btn');
                         ?>
                     </div>
                 </div>
-            <?php } else { ?>
-                <?php echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_YOU_CAN_NOT_ATTACH_FILES_WITH_INVENTORY.', $siteLangId)); ?>
-                <div class="attach-links-js p-0">
-                    <?php HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_YOU_CAN_NOT_ADD_LINKS_WITH_INVENTORY.', $siteLangId)); ?>
-                </div>
             <?php } ?>
         </div>
+        <?php if (!$canDo) { ?>
+            <?php echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_YOU_CAN_NOT_ATTACH_FILES_WITH_INVENTORY.', $siteLangId)); ?>
+            <div class="attach-links-js p-0">
+                <?php HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_YOU_CAN_NOT_ADD_LINKS_WITH_INVENTORY.', $siteLangId)); ?>
+            </div>
+        <?php } ?>
         <?php
         echo $downloadFrm->getFieldHtml('record_id');
         echo $downloadFrm->getFieldHtml('dd_link_id');
@@ -172,42 +173,42 @@ if (false == $canDo) {
         ?>
         </form>
         <?php echo $downloadFrm->getExternalJS(); ?>
-    </div>   
-<script>
-    var DIGITAL_DOWNLOAD_FILE = <?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>;
-    var DIGITAL_DOWNLOAD_LINK = <?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>;
-    $("select[name='download_type']").change(function() {
-        if ($(this).val() == DIGITAL_DOWNLOAD_FILE) {
-            $(".attach-links-js").hide();
-            $(".attach-files-js").show();
-            $(".filesList").show();
-        } else {
-            $(".attach-files-js").hide();
-            $(".filesList").hide();
-            $(".attach-links-js").show();
-        }
-    });
-    $("select[name='product_attachements_with_inventory']").change(function() {
-        if ($(this).val() == <?php echo applicationConstants::YES; ?>) {
-            $(".others_frm_elem").hide();
-        } else {
-            $(".others_frm_elem").show();
-        }
-    });
-
-    $(document).ready(function() {
-        $("select[name='download_type']").trigger('change');
-
-        $("select[name='option_comb_id']").on('change', function() {
-            getDigitalDownloads();
+    </div>
+    <script>
+        var DIGITAL_DOWNLOAD_FILE = <?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>;
+        var DIGITAL_DOWNLOAD_LINK = <?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>;
+        $("select[name='download_type']").change(function() {
+            if ($(this).val() == DIGITAL_DOWNLOAD_FILE) {
+                $(".attach-links-js").hide();
+                $(".attach-files-js").show();
+                $(".filesList").show();
+            } else {
+                $(".attach-files-js").hide();
+                $(".filesList").hide();
+                $(".attach-links-js").show();
+            }
+        });
+        $("select[name='product_attachements_with_inventory']").change(function() {
+            if ($(this).val() == <?php echo applicationConstants::YES; ?>) {
+                $(".others_frm_elem").hide();
+            } else {
+                $(".others_frm_elem").show();
+            }
         });
 
-        $("select[name='download_type']").on('change', function() {
-            getDigitalDownloads();
-        });
+        $(document).ready(function() {
+            $("select[name='download_type']").trigger('change');
 
-        $("select[name='lang_id']").on('change', function() {
-            getDigitalDownloads();
+            $("select[name='option_comb_id']").on('change', function() {
+                getDigitalDownloads();
+            });
+
+            $("select[name='download_type']").on('change', function() {
+                getDigitalDownloads();
+            });
+
+            $("select[name='lang_id']").on('change', function() {
+                getDigitalDownloads();
+            });
         });
-    });
-</script>
+    </script>

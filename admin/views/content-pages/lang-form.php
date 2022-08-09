@@ -26,9 +26,9 @@ if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
     $fld = $langFrm->getField('cpage_bg_image');
     $fld->value = '<span id="imageListingJs"></span>';
     $imgArr = [];
+    $imageContPageDimensions = ImageDimension::getData(ImageDimension::TYPE_CPAGE_BG, ImageDimension::VIEW_DEFAULT);
     if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
-        $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-        $imageContPageDimensions = ImageDimension::getData(ImageDimension::TYPE_CPAGE_BG, ImageDimension::VIEW_DEFAULT);       
+        $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);               
         $imgArr = [
             'url' => UrlHelper::getCachedUrl(
                 UrlHelper::generateFileUrl(

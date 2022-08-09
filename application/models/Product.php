@@ -1091,7 +1091,7 @@ class Product extends MyAppModel
         }
 
         if ($userId > 0) {
-            $srch->addCondition('pshold_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
+            $srch->addCondition('pshold_user_id', '=', $userId, 'AND');
         }
         $srch->addMultipleFields(array('sum(pshold_selprod_stock) as stockHold'));
         $srch->setPageNumber(1);

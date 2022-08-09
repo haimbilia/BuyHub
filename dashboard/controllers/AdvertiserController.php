@@ -866,7 +866,7 @@ class AdvertiserController extends AdvertiserBaseController
             'blocation_banner_width',
             'blocation_banner_height',
             'slide_id',
-            'collection_layout_type'
+            'collection_layout_type',      
         ));
         $promotionDetails = FatApp::getDb()->fetch($srch->getResultSet());
         if (empty($promotionDetails)) {
@@ -1421,7 +1421,7 @@ class AdvertiserController extends AdvertiserBaseController
         $bannerTypeArr = applicationConstants::getAllLanguages();
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
 
-        if ($layoutType == Collections::TYPE_BANNER_LAYOUT2) {
+        if ($layoutType == Collections::TYPE_BANNER_LAYOUT2 || empty($layoutType)) {
             $frm->addHiddenField('', 'banner_screen', applicationConstants::SCREEN_DESKTOP);
         } else {
             $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);

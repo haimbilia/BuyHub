@@ -116,6 +116,6 @@ $fld->htmlAfterField = '<span class="form-text text-muted logoPreferredDimension
     });
 
     $(document).ready(function() {
-        changeRatio($('.prefRatio-js').val());
+        changeRatio($('.prefRatio-js:checked').val());
     });
 </script>

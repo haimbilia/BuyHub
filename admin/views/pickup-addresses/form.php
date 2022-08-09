@@ -11,7 +11,9 @@ $langFld = $frm->getField('lang_id');
 $langFld->setFieldTagAttribute('onChange', "editRecord(" . $addressId . ", this.value);");
 
 $addrLabelFld = $frm->getField('addr_title');
-$addrLabelFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.g:_My_Office_Address', $langId));
+$addrLabelFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.G:_MY_OFFICE_ADDRESS', $langId));
+$addrLabelFld->setFieldTagAttribute('maxlength', Address::ADDRESS_TITLE_LENGTH);
+
 
 $countryFld = $frm->getField('addr_country_id');
 $countryFld->setFieldTagAttribute('id', 'addr_country_id');

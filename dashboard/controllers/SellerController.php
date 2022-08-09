@@ -5239,6 +5239,9 @@ class SellerController extends SellerBaseController
         if ('splprice_price' == $attribute) {
             $value = CommonHelper::displayMoneyFormat($value, true, true);
         }
+
+        Product::updateMinPrices(SellerProduct::getAttributesById($selProdId, 'selprod_product_id'));
+
         $json = array(
             'status' => true,
             'msg' => $this->str_update_record,
