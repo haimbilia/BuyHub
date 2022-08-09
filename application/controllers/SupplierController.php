@@ -679,7 +679,7 @@ class SupplierController extends MyAppController
                         $field['sformfield_caption'],
                         'button[' . $field['sformfield_id'] . ']',
                         Labels::getLabel('FRM_UPLOAD_FILE', $this->siteLangId),
-                        array('class' => 'fileType-Js btn-sm', 'id' => 'button-upload' . $field['sformfield_id'], 'data-field_id' => $field['sformfield_id'])
+                        array('class' => 'fileType-Js btn btn-outline-brand btn-block btn-upload', 'id' => 'button-upload' . $field['sformfield_id'], 'data-field_id' => $field['sformfield_id'])
                     );
                     $fld1->htmlAfterField = '<span id="input-sformfield' . $field['sformfield_id'] . '"></span>';
                     if ($field['sformfield_required'] == 1) {
