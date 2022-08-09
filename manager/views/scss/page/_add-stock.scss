@@ -7,9 +7,11 @@
     &-column {
         &-head {
             display: flex;
+            gap: 1.5rem;
             // align-items: center;
             justify-content: space-between;
             margin-bottom: 1.5rem;
+            flex-flow: row wrap;
             .h2 {
                 font-size: 1.5rem;
                 color: $txt-body;

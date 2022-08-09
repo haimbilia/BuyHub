@@ -21,6 +21,9 @@ html {
     @include media-breakpoint-down(sm) {
         font-size: 13px;
     }
+    &[dir="rtl"] {
+        overflow-x: hidden;
+    }
 }
 
 body,
@@ -1889,13 +1892,13 @@ mark,
     box-shadow: 0 0 0 2px rgba(211, 212, 213, 0.8);
     position: fixed;
     z-index: 9;
-    #{$end-direction}: 0;
+    #{$end-direction}: -20px;
     top: 50%;
-    transform: rotate(90deg);
-    transform-origin: right top;
+    transform: rotate(90deg * $transform-direction);
+    transform-origin: center;
     padding: calc(0.55rem + 1px) calc(1.25rem + 1px);
-    border-top-left-radius: 0 !important;
-    border-top-right-radius: 0 !important;
+    border-top-#{$start-direction}-radius: 0 !important;
+    border-top-#{$end-direction}-radius: 0 !important;
 }
 
 .help-data {
