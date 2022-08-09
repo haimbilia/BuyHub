@@ -1450,7 +1450,7 @@ class AdvertiserController extends AdvertiserBaseController
         }
         $frm->addSelectBox(Labels::getLabel('FRM_PROMOTION_STATUS'), 'active_promotion', array(
             '-1' => Labels::getLabel('FRM_ALL', $langId),
-            '1' => Labels::getLabel('FRM_ACTIVE_PROMOTIONS', $langId)
+            '1' => Labels::getLabel('FRM_RUNNING_/_SCHEDULED', $langId)
         ), '', array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_TYPE'), 'type', array(
             '-1' => Labels::getLabel('FRM_ALL_TYPE', $langId)
