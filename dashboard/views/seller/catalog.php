@@ -7,8 +7,9 @@ $keywordPlaceholder = Labels::getLabel('LBL_Search_by_keyword/EAN/ISBN/UPC_code'
 <div class="content-wrapper content-space">
     <?php
     $title = ($type == 1) ? Labels::getLabel('LBL_Seller_Products', $siteLangId) : Labels::getLabel('LBL_Marketplace_Products', $siteLangId);
+      
     $data = [
-        'headingLabel' => $title . '<i class="fa fa-question-circle" onclick="productInstructions(' . Extrapage::MARKETPLACE_PRODUCT_INSTRUCTIONS . ')"></i>',
+        'headingLabel' => $title .(Extrapage::isActive(Extrapage::MARKETPLACE_PRODUCT_INSTRUCTIONS) ? '<i class="fa fa-question-circle" onclick="productInstructions(' . Extrapage::MARKETPLACE_PRODUCT_INSTRUCTIONS . ')"></i>':''),
         'siteLangId' => $siteLangId,
         'controllerName' => $controllerName,
         'action' => $action,
