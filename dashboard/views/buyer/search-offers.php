@@ -1,7 +1,7 @@
 <?php if (empty($offers)) {
     echo FatUtility::decodeHtmlEntities($noRecordsHtml);
 } else { ?>
-    <ul class="list-group list-coupons">
+    <ul class="list-coupons">
         <?php
         foreach ($offers as $row) {
             $discountValue = ($row['coupon_discount_in_percent'] == applicationConstants::PERCENTAGE) ? $row['coupon_discount_value'] . ' %' : CommonHelper::displayMoneyFormat($row['coupon_discount_value']);
@@ -11,7 +11,7 @@
             $imageCouponDimensions = ImageDimension::getData(ImageDimension::TYPE_COUPON, ImageDimension::VIEW_NORMAL);
 
         ?>
-            <li class="list-group-item ">
+            <li class="list-coupons-item">
                 <div class="coupon">
                     <div class="coupon__code-img">
                         <div class="coupon__img">
@@ -24,7 +24,8 @@
                             } else {
                                 echo $row['coupon_code'];
                             }
-                            ?></span>
+                            ?>
+                        </span>
                     </div>
                     <div class="coupon__detail">
                         <h6><?php echo $discountValue; ?> <?php echo Labels::getLabel('LBL_OFF', $siteLangId); ?> <span class="coupon__uses-left"><?php echo ($row['coupon_title'] == '') ? $row['coupon_identifier'] : $row['coupon_title']; ?></span></h6>
@@ -39,7 +40,7 @@
                         </p>
 
                         <?php if (isset($row['plans']) && !empty($row['plans'])) { ?>
-                            <span class="d-inline-block link-dotted" tabindex="0" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="hover focus" data-popover-html="#linkedRecords<?php echo $row['coupon_id'];?>">
+                            <span class="d-inline-block link-dotted" tabindex="0" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="hover focus" data-popover-html="#linkedRecords<?php echo $row['coupon_id']; ?>">
                                 <?php echo Labels::getLabel('LBL_LINKED_RECORDS'); ?>
                             </span>
                             <div class="hidden" id="linkedRecords<?php echo $row['coupon_id']; ?>">
@@ -58,7 +59,8 @@
                                             </li>
                                         <?php } ?>
                                     </ul>
-                                <?php $i++; } ?>
+                                <?php $i++;
+                                } ?>
                             </div>
                         <?php } ?>
                     </div>

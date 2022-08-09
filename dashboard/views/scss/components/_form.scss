@@ -412,18 +412,21 @@ form.custom-form {
     flex-wrap: wrap;
     align-items: stretch;
     width: 100%;
-    input {
+    input,
+    .form-control {
         position: relative;
         flex: 1 1 auto;
         width: 1% !important;
         margin-bottom: 0;
+        border-top-#{$end-direction}-radius: $input-border-radius !important;
+        border-bottom-#{$end-direction}-radius: $input-border-radius !important;
         &:not(:first-child) {
-            border-top-#{$start-direction}-radius: 0;
-            border-bottom-#{$start-direction}-radius: 0;
+            //border-top-#{$start-direction}-radius:0;
+            //border-bottom-#{$start-direction}-radius: 0;
         }
         &:not(:last-child) {
-            border-top-#{$end-direction}-radius: 0;
-            border-bottom-#{$end-direction}-radius: 0;
+            //border-top-#{$end-direction}-radius: 0;
+            //border-bottom-#{$end-direction}-radius: 0;
         }
     }
     &--lg {

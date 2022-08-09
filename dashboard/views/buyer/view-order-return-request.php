@@ -38,8 +38,8 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $request, 'siteLangId' => $siteLangId], false, true); ?>
+                                <div class="divider"></div>
                                 <ul class="list-stats list-stats-double mt-4">
-
                                     <li class="list-stats-item">
                                         <span class="label"><?php echo Labels::getLabel('LBL_REQUEST_ID', $siteLangId); ?></span>
                                         <span class="value"><?php echo $request['orrequest_reference']; ?></span>
@@ -78,7 +78,7 @@
                         <?php if (!$print) { ?>
                             <div class="mt-5 no-print">
                                 <?php echo $returnRequestMsgsSrchForm->getFormHtml(); ?>
-                                <h5><?php echo Labels::getLabel('LBL_Return_Request_Messages', $siteLangId); ?> </h5>
+                                <h6><?php echo Labels::getLabel('LBL_Return_Request_Messages', $siteLangId); ?> </h6>
                                 <div id="loadMoreBtnDiv"></div>
                                 <ul class="messages-list" id="messagesList"></ul>
                                 <?php if ($request && ($request['orrequest_status'] != OrderReturnRequest::RETURN_REQUEST_STATUS_REFUNDED && $request['orrequest_status'] != OrderReturnRequest::RETURN_REQUEST_STATUS_WITHDRAWN)) {

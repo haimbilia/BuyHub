@@ -46,7 +46,7 @@ class BuyerController extends BuyerBaseController
         $srch->addMultipleFields(
             array(
                 'order_number', 'order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_product_type', 'op_status_id', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_other_charges', 'op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
-                'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off','op_selprod_return_age','op_selprod_cancellation_age'
+                'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off', 'op_selprod_return_age', 'op_selprod_cancellation_age'
             )
         );
         $rs = $srch->getResultSet();
@@ -114,7 +114,7 @@ class BuyerController extends BuyerBaseController
         /* Cancellation Request Listing [] */
         $canSrch = $this->orderCancellationRequestObj();
         $canSrch->setPageSize(applicationConstants::DASHBOARD_PAGE_SIZE);
-        $canSrch->addOrder('ocrequest_id','DESC');
+        $canSrch->addOrder('ocrequest_id', 'DESC');
         $cancellationRequests = FatApp::getDb()->fetchAll($canSrch->getResultSet());
         $this->set('cancellationRequests', $cancellationRequests);
         /* ] */
@@ -355,7 +355,7 @@ class BuyerController extends BuyerBaseController
         $arr = (true == $primaryOrderDisplay) ? [$childOrderDetail] : $childOrderDetail;
         $this->set('arr', $arr);
         $orderColorClasses =  OrderStatus::getOrderStatusColorClassArray();
-       
+
         $frm = $this->getTransferBankForm($this->siteLangId, $orderId);
         $this->set('frm', $frm);
         $this->set('highlightEnabled', $highlightEnabled);
@@ -632,7 +632,7 @@ class BuyerController extends BuyerBaseController
 
         $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->addCountsOfOrderedProducts();
-        $srch->joinShippingCharges();     
+        $srch->joinShippingCharges();
         $srch->joinOrderProductSpecifics();
         $srch->joinTable('(' . $qryOtherCharges . ')', 'LEFT OUTER JOIN', 'op.op_id = opcc.opcharge_op_id', 'opcc');
         $srch->joinTable(
@@ -705,7 +705,7 @@ class BuyerController extends BuyerBaseController
                 'order_deleted', 'plugin_code', 'opshipping_fulfillment_type', 'op_rounding_off', 'selprod_product_id', 'orderstatus_id'
             )
         );
-      
+
         $orders = FatApp::getDb()->fetchAll($srch->getResultSet());
         $oObj = new Orders();
         foreach ($orders as &$order) {
@@ -1122,9 +1122,9 @@ class BuyerController extends BuyerBaseController
         }
 
         $datediff = time() - strtotime($opDetail['order_date_added']);
-        $daysSpent = $datediff / (60 * 60 * 24); 
-      
-        if($opDetail['op_selprod_cancellation_age'] <= $daysSpent){
+        $daysSpent = $datediff / (60 * 60 * 24);
+
+        if ($opDetail['op_selprod_cancellation_age'] <= $daysSpent) {
             $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
@@ -1414,7 +1414,7 @@ class BuyerController extends BuyerBaseController
                 'op_unit_price', 'op_selprod_user_id', 'IFNULL(orreason_title, orreason_identifier) as orreason_title',
                 'op_shop_id', 'op_shop_name', 'op_shop_owner_name', 'order_tax_charged', 'op_other_charges', 'op_refund_amount', 'op_commission_percentage',
                 'op_affiliate_commission_percentage', 'op_commission_include_tax', 'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges',
-                'op_rounding_off', 'op_selprod_id', 'selprod_product_id', 'opshipping_by_seller_user_id','op_tax_after_discount'
+                'op_rounding_off', 'op_selprod_id', 'selprod_product_id', 'opshipping_by_seller_user_id', 'op_tax_after_discount'
             )
         );
         $rs = $srch->getResultSet();
@@ -2176,23 +2176,23 @@ class BuyerController extends BuyerBaseController
         $user_id = UserAuthentication::getLoggedUserId();
         $srch = new OrderProductSearch($this->siteLangId, true);
         $srch->joinOrderProductCharges(OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT, 'cvd');
-        $srch->joinOrderProductSpecifics();            
+        $srch->joinOrderProductSpecifics();
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_BUYER_ORDER_STATUS")));
         $srch->addCondition('order_user_id', '=', $user_id);
         $srch->addCondition('op_id', '=', $op_id);
         $srch->addOrder("op_id", "DESC");
-        $srch->addMultipleFields(array('order_language_id', 'op_status_id', 'op_id', 'op_qty', 'op_product_type', 'op_unit_price', 'opcharge_amount','order_date_added','op_selprod_return_age'));
+        $srch->addMultipleFields(array('order_language_id', 'op_status_id', 'op_id', 'op_qty', 'op_product_type', 'op_unit_price', 'opcharge_amount', 'order_date_added', 'op_selprod_return_age'));
         $opDetail = FatApp::getDb()->fetch($srch->getResultSet());
 
         if (!$opDetail || CommonHelper::isMultidimArray($opDetail)) {
             $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
             LibHelper::dieJsonError($message);
-        }       
-        
-        $datediff = time() - strtotime($opDetail['order_date_added']);
-        $daysSpent = $datediff / (60 * 60 * 24);     
+        }
 
-        if($opDetail['op_selprod_return_age'] <= $daysSpent){
+        $datediff = time() - strtotime($opDetail['order_date_added']);
+        $daysSpent = $datediff / (60 * 60 * 24);
+
+        if ($opDetail['op_selprod_return_age'] <= $daysSpent) {
             $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
@@ -2213,7 +2213,7 @@ class BuyerController extends BuyerBaseController
                 LibHelper::dieJsonError($message);
             }
 
-            if (!in_array(mime_content_type($uploadedFile), applicationConstants::allowedMimeTypes()) || (getimagesize($uploadedFile) === false && mime_content_type($uploadedFile) != 'application/zip')  ) {
+            if (!in_array(mime_content_type($uploadedFile), applicationConstants::allowedMimeTypes()) || (getimagesize($uploadedFile) === false && mime_content_type($uploadedFile) != 'application/zip')) {
                 $message = Labels::getLabel('ERR_ONLY_IMAGE_EXTENSIONS_AND_ZIP_IS_ALLOWED', $this->siteLangId);
                 LibHelper::dieJsonError($message);
             }
@@ -2678,7 +2678,7 @@ class BuyerController extends BuyerBaseController
         $this->set('sharingFrm', $this->getFriendsSharingForm($this->siteLangId));
 
         $this->_template->addJs(['js/slick.min.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js']);
-        $this->_template->addCss(['css/tagify.min.css']);  
+        $this->_template->addCss(['css/tagify.min.css']);
         $this->_template->render(true, true);
     }
 

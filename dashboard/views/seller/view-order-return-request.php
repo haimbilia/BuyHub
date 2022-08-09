@@ -23,7 +23,6 @@ if (null != $btn) {
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-head">
-
                         <div class="card-head-label">
                             <h5 class="card-title"><?php echo Labels::getLabel('LBL_Request_Details', $siteLangId); ?></h5>
                         </div> <?php if ($canEdit) { ?>
@@ -37,13 +36,11 @@ if (null != $btn) {
                             </div>
                         <?php } ?>
                     </div>
-                    <div class="card-body ">
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-md-12">
-                                <ul class="list-stats list-stats-double">
-                                    <li class="list-stats-item">
-                                        <span class="value"><?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $request, 'siteLangId' => $siteLangId], false, true); ?></span>
-                                    </li>
+                            <div class="col-md-12"> <?php echo $this->includeTemplate('_partial/product/product-info-html.php', ['order' => $request, 'siteLangId' => $siteLangId], false, true); ?>
+                                <div class="divider"></div>
+                                <ul class="list-stats list-stats-double mt-4">
                                     <li class="list-stats-item">
                                         <span class="label"><?php echo Labels::getLabel('LBL_REQUEST_ID', $siteLangId); ?></span>
                                         <span class="value"><?php echo $request['orrequest_reference']; ?></span>
@@ -81,7 +78,9 @@ if (null != $btn) {
                         </div>
                         <?php echo ($canEdit) ? $returnRequestMsgsForm->getFormHtml() : ''; ?>
                         <div class="mt-5 messageListBlock--js">
-                            <h5><?php echo Labels::getLabel('LBL_Return_Request_Messages', $siteLangId); ?> </h5>
+                            <h6>
+                                <?php echo Labels::getLabel('LBL_Return_Request_Messages', $siteLangId); ?>
+                            </h6>
                             <div id="loadMoreBtnDiv"></div>
                             <ul class="messages-list" id="messagesList"></ul>
                         </div>
@@ -89,10 +88,10 @@ if (null != $btn) {
                             $frmMsg->setFormTagAttribute('onSubmit', 'setUpReturnOrderRequestMessage(this); return false;');
                             $frmMsg->setFormTagAttribute('class', 'form');
                             $frmMsg->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
-                            $frmMsg->developerTags['fld_default_col'] = 12; 
+                            $frmMsg->developerTags['fld_default_col'] = 12;
                             $btn = $frmMsg->getField('btn_submit');
-                            $btn->developerTags['noCaptionTag'] = true;                            
-                            ?>
+                            $btn->developerTags['noCaptionTag'] = true;
+                        ?>
                             <div class="messages-list">
                                 <ul>
                                     <li>
