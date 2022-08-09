@@ -1137,6 +1137,7 @@ TV-9.4.0.20220719
     - #065992 - A fatal error occurs when the user tries to increase the product quantity on the cart page.
     - #065947 - Buyer is not able to download all the digital files attached with any order.
     - #066066 - Special price not appearing on product listing page .
+    - #065983 - The download icons are not visible on the 'Prev files' section on the digital products details page. 
 
 ## UAT points:
 

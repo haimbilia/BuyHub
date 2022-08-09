@@ -33,7 +33,7 @@
                 </ul>
             <?php }
             if (0 < count($product['preview_attachments'])) { ?>
-                <div class="prod-attached-files"><?php echo Labels::getLabel('LBL_Attachments', $siteLangId); ?></div>
+                <div class="prod-attached-files h6"><?php echo Labels::getLabel('LBL_Attachments', $siteLangId); ?></div>
                 <ul class="list-files">
                     <?php foreach ($product['preview_attachments'] as $keys => $attachment) {
                         if (0 < strlen($attachment['preview'])) {
@@ -52,7 +52,7 @@
                                     <?php } ?>
                                     <a class="btn btn-light btn-sm download--preview" target="_blank" href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>" title="<?php echo $attachment['preview']; ?>">
                                         <svg class="svg" width="18" height="18">
-                                            <use xlink:href="' <?php echo  CONF_WEBROOT_FRONTEND; ?>'images/retina/sprite.svg#download">
+                                            <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#icon-download">
                                             </use>
                                         </svg>
                                     </a>
