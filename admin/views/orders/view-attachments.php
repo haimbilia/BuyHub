@@ -51,7 +51,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                                 } ?>
                                 <tr>
                                     <td><?php echo $sr_no; ?></td>
-                                    <td><?php echo $fileName ; ?></td>
+                                    <td><?php echo $fileName; ?></td>
                                     <td><?php echo $lang_name; ?></td>
                                     <td><?php echo $downloadableCount; ?></td>
                                     <td><?php echo $row['afile_downloaded_times']; ?></td>

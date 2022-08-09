@@ -25,12 +25,12 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', array(), $serialNo, true);
                 break;
-            case 'mainfile': 
+            case 'mainfile':
                 $dvElem = $td->appendElement('div', array('class' => 'actions-downloads'));
                 $dvElem->appendElement('div', array('class' => 'file-name'), $row[$key], true);
                 break;
             case 'preview':
-                $dvElem = $td->appendElement('div', array('class' => 'actions-downloads')); 
+                $dvElem = $td->appendElement('div', array('class' => 'actions-downloads'));
                 $dvElem->appendElement('div', array('class' => 'file-name'), $row[$key], true);
                 if (0 < $row['prev_afile_id']) {
                     $dvElem->appendElement(
@@ -43,7 +43,7 @@ foreach ($arrListing as $sn => $row) {
                         ),
                         '<i class="fa fa-download  icon"></i>',
                         true
-                    );              
+                    );
                 } else {
                     $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
@@ -62,7 +62,7 @@ foreach ($arrListing as $sn => $row) {
                     $lang_name = $languages[$row['afile_lang_id']];
                 }
                 $td->appendElement('plaintext', array(), $lang_name, true);
-                break;  
+                break;
             default:
                 $td->appendElement('plaintext', array(), $row[$key], true);
                 break;
@@ -70,7 +70,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');  
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 ?>
 <div class="col-md-12">
     <div class="js-scrollable table-wrap table-responsive">
