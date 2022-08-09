@@ -58,7 +58,7 @@
         <?php echo Labels::getLabel('LBL_Go_To_Homepage', $siteLangId); ?>
     </a>
     <?php if ($EmptyCartItems) { ?>
-        <ul class="links-inline mt-4">
+        <ul class="links-inline links-inline-center mt-4">
             <?php
             $counter = 1;
             foreach ($EmptyCartItems as $item) {

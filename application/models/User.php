@@ -780,6 +780,55 @@ class User extends MyAppModel
             $this->error = $db->getError();
             return false;
         }
+
+        $userData = $this->getProfileData();
+        $newEmail = '';
+        if(!empty($userData['user_email'])){           
+            $newEmail = 'xxxxxxx--' .$this->mainTableRecordId. substr($userData['user_email'], strpos($userData['user_email'], "@"));
+        }
+
+        $data = array(
+            'credential_username' => 'xxxxxxx'."--".$this->mainTableRecordId,
+            'credential_email' => $newEmail, 
+        );
+
+        if (!$db->updateFromArray(static::DB_TBL_CRED, $data, array('smt' => 'credential_user_id = ? ', 'vals' => array($this->mainTableRecordId)))) {
+            $this->error = $db->getError();
+            return false;
+        }
+
+        if($shopId = Shop::getAttributesByUserId($this->mainTableRecordId,'shop_id')){
+            $data = array(
+                'shop_identifier' => 'xxxxxx',                
+                'shop_phone' => '',  
+                'shop_lng' => '',
+                'shop_lng' => '',
+            );
+
+            if (!$db->updateFromArray(Shop::DB_TBL, $data, array('smt' => 'shop_id = ? ', 'vals' => array($shopId)))) {
+                $this->error = $db->getError();
+                return false;
+            }
+
+            $data = array(
+                'shop_name' => 'xxxxx',
+                'shop_contact_person' => 'xxxxx', 
+                'shop_description' => '',
+                'shop_address_line_1' => 'xxxxxx',
+                'shop_address_line_2' => 'xxxxxx',
+                'shop_city' => 'xxxxx',          
+                'shop_payment_policy' => '',
+                'shop_delivery_policy' => '',
+                'shop_refund_policy' => '',
+                'shop_additional_info' => '',
+                'shop_seller_info' => '',
+            );
+
+            if (!$db->updateFromArray(Shop::DB_TBL_LANG, $data, array('smt' => 'shoplang_shop_id = ? ', 'vals' => array($shopId)))) {
+                $this->error = $db->getError();
+                return false;
+            }           
+        }
         /* ] */
 
         /* Delete User's Profile Image [ */

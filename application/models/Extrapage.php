@@ -145,6 +145,23 @@ class Extrapage extends MyAppModel
         return FatApp::getDb()->fetch($rs);
     }
 
+    public static function isActive($pageType)
+    {
+        // use to stop multiple query on dashboard
+        if (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['isContentActive'][$pageType])) {
+            return $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['isContentActive'][$pageType];
+        }
+        $srch = self::getSearchObject();
+        $srch->addCondition('ep.epage_type', '=', $pageType);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+
+        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['isContentActive'][$pageType] = NULL !== $row;
+
+        return NULL !== $row;
+    }
+
     public static function getContentBlockArrWithBg($langId)
     {
         $langId = FatUtility::int($langId);

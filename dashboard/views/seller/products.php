@@ -5,7 +5,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     <?php
     $title = Labels::getLabel('LBL_MY_INVENTORY', $siteLangId);
     $data = [
-        'headingLabel' => $title . '<i class="fa fa-question-circle" onclick="productInstructions(' .  Extrapage::SELLER_INVENTORY_INSTRUCTIONS . ')"></i>',
+        'headingLabel' => $title .(Extrapage::isActive(Extrapage::SELLER_INVENTORY_INSTRUCTIONS) ? '<i class="fa fa-question-circle" onclick="productInstructions(' .  Extrapage::SELLER_INVENTORY_INSTRUCTIONS . ')"></i>':''),
         'siteLangId' => $siteLangId,
         'controllerName' => $controllerName,
         'action' => $action,

@@ -18,9 +18,9 @@
                 case Extrapage::PRODUCT_REQUEST_INSTRUCTIONS:
                     $pageData = $obj->getContentByPageType(Extrapage::PRODUCT_REQUEST_INSTRUCTIONS, $siteLangId);
                     break;
-            }
+            }           
             if (!empty($pageData)) {
-                echo isset($pageData['epage_content']) && !empty($pageData['epage_content']) ? $pageData['epage_content'] : $pageData['epage_default_content'];
+                echo isset($pageData['epage_content']) && !empty(trim(strip_tags($pageData['epage_content']))) ? $pageData['epage_content'] : $pageData['epage_default_content'];
             } else {
                 $this->includeTemplate('_partial/no-record-found.php', ['message' => Labels::getLabel('LBL_NO_INSTRUCTIONS_FOUND!')], false);
             }

@@ -35,8 +35,8 @@ class TaxCategoriesRuleController extends ListingBaseController
         }
 
         if (0 < $taxCatId) {
-            $taxCatId = Tax::getAttributesById($taxCatId, 'taxcat_id');
-            if (false === $taxCatId) {
+            $isTaxCatDeleted = Tax::getAttributesById($taxCatId, 'taxcat_deleted');
+            if (false === $isTaxCatDeleted || 0 < $isTaxCatDeleted) {
                 LibHelper::exitWithError($this->str_invalid_request, false, true);
                 FatApp::redirectUser(UrlHelper::generateUrl('TaxCategories'));
             }

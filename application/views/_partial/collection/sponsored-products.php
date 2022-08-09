@@ -9,11 +9,15 @@
             </div>
             <div class="product-listing" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
-                $tRightRibbons = $collection['tRightRibbons'];
+                $tRightRibbons = $collection['tRightRibbons'];               
                 foreach ($collection['products'] as $product) {
                     $selProdRibbons = [];
                     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
+                    }
+
+                    if (isset($product['promotion_id']) && $product['promotion_id'] > 0) {
+                        Promotion::updateImpressionData($product['promotion_id']);
                     }
                 ?>
                     <div class="item">
