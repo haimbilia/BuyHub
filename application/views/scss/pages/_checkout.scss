@@ -781,7 +781,6 @@
 .list-shippings {
     margin-bottom: 1.5rem;
     font-size: 0.8125rem;
-
     & + & {
         margin-top: 3.5rem;
     }
@@ -824,7 +823,7 @@
             position: relative;
             display: flex;
             align-items: center;
-            border-bottom: $border;
+            //border-bottom: $border;
             &:after {
                 content: "";
                 background: $secondary-color;
@@ -866,10 +865,8 @@
         .form-control {
             height: 50px;
             border: $border;
-            border-top: 0;
             font-size: inherit;
-            border-radius: 0;
-
+            //border-radius: 0;
             // padding: 0;
             // padding-#{$start-direction}: 10px;
             // padding-#{$end-direction}: 2rem;

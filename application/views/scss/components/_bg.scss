@@ -1,33 +1,23 @@
-/*Bg*/
+/*Backgrounds*/
 
-.bg--primary-color,
 .bg-brand {
-    background: $brand-color;
-    color: $brand-color-inverse;
+    @include bg-brand;
 }
-
-.bg-brand-light {
-    background: $bg-brand-light;
-    color: $brand-color;
+.bg-secondary {
+    @include bg-secondary;
 }
-
-.bg-second {
-    background: $secondary-color;
-    color: $secondary-color-inverse;
+.bg-third {
+    @include bg-third;
 }
-
 .bg-white {
-    background: $bg-white;
+    @include bg-white;
 }
-
+.bg-black {
+    @include bg-black;
+}
 .bg-gray {
-    background: $bg-gray;
+    @include bg-gray;
 }
-
 .bg-gray-dark {
-    background: $bg-gray;
-}
-
-.bg-placeholder {
-    @include placeholder;
+    @include bg-gray-dark;
 }

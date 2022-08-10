@@ -6,14 +6,15 @@
         <li><a href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Confirmation', $siteLangId);?></a></li>
     </ul>
 </div> <?php
+
+    HtmlHelper::formatFormFields($approvalFrm, 6);
     $approvalFrm->setFormTagAttribute('onsubmit', 'setupSupplierApproval(this); return(false);');
     $approvalFrm->setFormTagAttribute('class', 'form form--normal');
-    $approvalFrm->developerTags['colClassPrefix'] = 'col-lg-6 col-md-6 col-sm-';
-    $approvalFrm->developerTags['fld_default_col'] = 6;
     
     $btn = $approvalFrm->getField('btn_submit');
     $btn->developerTags['noCaptionTag'] = true;
     $btn->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
+    $btn->developerTags['colWidthValues'] = [null, '12', null, null];
     echo $approvalFrm->getFormHtml();
 
 if (isset($_SESSION['registered_supplier']['id'])) { ?>

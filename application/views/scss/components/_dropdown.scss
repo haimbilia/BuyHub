@@ -124,7 +124,6 @@
     padding: 1rem 0;
     min-width: 14rem;
     //box-shadow: $card-shadow;
-
     #{$start-direction}: 0;
     text-align: #{$start-direction};
     &-anim {
@@ -136,6 +135,9 @@
     }
     &-item {
         border: none;
+        &.logout {
+            border-top: $border;
+        }
     }
     &-link {
         display: block;

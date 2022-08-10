@@ -1892,10 +1892,10 @@ mark,
     box-shadow: 0 0 0 2px rgba(211, 212, 213, 0.8);
     position: fixed;
     z-index: 9;
-    #{$end-direction}: -20px;
+    #{$end-direction}: 12px;
     top: 50%;
     transform: rotate(90deg * $transform-direction);
-    transform-origin: center;
+    transform-origin: #{$end-direction};
     padding: calc(0.55rem + 1px) calc(1.25rem + 1px);
     border-top-#{$start-direction}-radius: 0 !important;
     border-top-#{$end-direction}-radius: 0 !important;
@@ -3057,7 +3057,7 @@ $header-height: 65px;
         bottom: 0;
         left: 0;
         right: 0;
-        z-index: 99;
+        z-index: $zindex-offcanvas;
         transition: transform 0.3s ease-out;
         transform: translateX(100% * $transform-direction);
     }
