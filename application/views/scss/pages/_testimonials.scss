@@ -113,7 +113,7 @@
         &.slick-prev {
             #{$start-direction}: 0;
             @include media-breakpoint-up(xl) {
-                #{$start-direction}: -150px;
+                #{$start-direction}: -130px;
             }
             &:before {
                 transform: rotate(136deg * $transform-direction);
@@ -123,7 +123,7 @@
         &.slick-next {
             #{$end-direction}: 0;
             @include media-breakpoint-up(xl) {
-                #{$end-direction}: -150px;
+                #{$end-direction}: -130px;
             }
             &:before {
                 margin-left: -7px;
