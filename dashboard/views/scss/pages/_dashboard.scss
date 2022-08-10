@@ -583,15 +583,13 @@
         flex-flow: row wrap;
         margin-bottom: 1.5rem;
         gap: 1.5rem;
-
         &-toolbar {
-            @include media-breakpoint-down(sm) {
-                overflow-x: auto;
-            }
-
             > ul {
                 display: flex;
-                grid-gap: 5px;
+                gap: 5px;
+                @include media-breakpoint-down(sm) {
+                    flex-flow: row wrap;
+                }
                 li {
                     a {
                         //border-color: transparent;

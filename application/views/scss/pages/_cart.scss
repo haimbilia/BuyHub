@@ -400,9 +400,11 @@
 .coupon-offers {
     border: $border;
     border-radius: $common-radius;
-    li {
+    &-item {
         border-bottom: solid 1px lighten($border-color, 05);
         display: flex;
+        flex-flow: row wrap;
+        gap: 1rem;
         align-items: flex-start;
         padding: 1rem;
         font-size: 0.8rem;

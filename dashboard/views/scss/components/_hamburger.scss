@@ -16,7 +16,7 @@ $menuBarGap: 6px;
                 transform: translateY(0px) rotate(45deg);
             }
             &--middle {
-                transform: translateX( $menuBarWidth / 3);
+                transform: translateX($menuBarWidth / 3);
                 opacity: 0;
             }
             &--bottom {
@@ -31,17 +31,18 @@ $menuBarGap: 6px;
     display: block;
     width: $menuBarWidth;
     height: $menuBarHeight;
-    top: ( $validArea - $menuBarHeight) / 2;
+    top: ($validArea - $menuBarHeight) / 2;
     left: 0;
     right: 0;
     margin: auto;
     background-color: currentColor;
-    transition: .2s ease-out;
+    transition: 0.2s ease-out;
     border-radius: $radius2;
     &--top {
         transform: translateY(-$menuBarGap);
     }
-    &--middle {}
+    &--middle {
+    }
     &--bottom {
         transform: translateY($menuBarGap);
     }

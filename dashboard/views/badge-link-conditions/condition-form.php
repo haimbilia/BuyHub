@@ -14,7 +14,7 @@ $data = [
 
 if (!empty($frmSearch)) {
     $frmSearch->setFormTagAttribute('onSubmit', 'searchRecords(this); return(false);');
-    $frmSearch->setFormTagAttribute('class', 'form form--horizontal formSearch--js');
+    $frmSearch->setFormTagAttribute('class', 'form form-search formSearch--js');
     $frmSearch->developerTags['colClassPrefix'] = 'col-md-';
     $frmSearch->developerTags['fld_default_col'] = 6;
 
