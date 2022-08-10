@@ -1586,7 +1586,8 @@ class SellerController extends SellerBaseController
             'product_type',
             'product_active',
             'product_approved',
-            'product_updated_on'
+            'product_updated_on',
+            'product_attachements_with_inventory'
         );
 
         $srch->addMultipleFields($attr);
@@ -4102,13 +4103,6 @@ class SellerController extends SellerBaseController
 
         unset($post['product_id']);
         unset($post['product_shipping']);
-        //$prodObj = new Product($product_id);
-
-        /* $prod = new Product($product_id);
-          if (!$prod->saveProductData($post)) {
-          Message::addErrorMessage($prod->getError());
-          FatUtility::dieWithError(Message::getHtml());
-          } */
 
         /* Save Product Shipping  [ */
         $data_to_be_save = $post;
@@ -4118,13 +4112,6 @@ class SellerController extends SellerBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        /* ] */
-
-        /* Save Prodcut Shipping Details [ */
-        /* if (!$this->addUpdateProductShippingRates($product_id, $productShiping)) {
-          Message::addErrorMessage($taxObj->getError());
-          FatUtility::dieWithError(Message::getHtml());
-          } */
         /* ] */
 
         if (isset($post['shipping_profile']) && $post['shipping_profile'] > 0) {

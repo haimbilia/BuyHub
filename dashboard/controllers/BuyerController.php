@@ -895,10 +895,11 @@ class BuyerController extends BuyerBaseController
             'op_status_id',
             'op_selprod_max_download_times',
             'op_selprod_download_validity_in_days',
-            'opa.*'
         ];
         if (1 > $opId) {
             $attr[] = 'COUNT(op_id) as filesCount';
+        } else {
+            $attr[] = 'opa.*';
         }
 
         $srch->addMultipleFields($attr);
@@ -969,11 +970,13 @@ class BuyerController extends BuyerBaseController
             'op_selprod_id',
             'product_updated_on',
             'selprod_product_id',
-            'op_selprod_download_validity_in_days',
-            'opd.*'
+            'op_selprod_download_validity_in_days'
         ];
+
         if (1 > $opId) {
             $attr[] = 'COUNT(op_id) as linksCount';
+        } else {
+            $attr[] = 'opd.*';
         }
 
         $srch->addMultipleFields($attr);
