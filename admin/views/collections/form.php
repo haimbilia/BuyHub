@@ -7,7 +7,7 @@ $collectionNameFld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('blocation_promotion_cost');
 if (null != $fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
-} else{
+} else {
     $collectionLayoutTypeFld = $frm->getField('collection_layout_type');
     $collectionLayoutTypeFld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
@@ -20,11 +20,13 @@ if (null != $fld) {
 }
 
 $fld = $frm->getField('collection_for_app');
-HtmlHelper::configureSwitchForCheckbox($fld);
-$fld->developerTags['noCaptionTag'] = true;
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
-if (in_array($collection_layout_type, Collections::APP_COLLECTIONS_ONLY)) {
-    $fld->setFieldTagAttribute('disabled', 'disabled');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+    if (in_array($collection_layout_type, Collections::COLLECTIONS_FOR_APP_ONLY)) {
+        $fld->setFieldTagAttribute('disabled', 'disabled');
+    }
 }
 
 $generalTab['attr']['onclick'] = 'collectionForm(' . $collection_type . ', ' . $collection_layout_type . ', ' . $recordId . ');';
@@ -67,4 +69,4 @@ if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA)) {
 
 $includeTabs = ($collection_layout_type != Collections::TYPE_PENDING_REVIEWS1);
 
-require_once(CONF_THEME_PATH . '_partial/listing/form.php'); 
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');
