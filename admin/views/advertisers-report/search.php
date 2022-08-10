@@ -42,7 +42,10 @@ foreach ($arrListing as $sn => $row) {
             case 'totAffilateOrdersRevenue':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
-
+            case 'promotionCharged':
+            case 'activePromotions':
+            case 'promotionsCount':
+                $td->appendElement('plaintext', $tdAttr, FatUtility::int($row[$key], FatUtility::VAR_INT, 0), true);
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;

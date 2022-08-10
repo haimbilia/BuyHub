@@ -1139,6 +1139,7 @@ TV-9.4.0.20220719
     - #066066 - Special price not appearing on product listing page .
     - #065983 - The download icons are not visible on the 'Prev files' section on the digital products details page. 
     - #065994 - Impressions count didn't increased for a product promotion
+    - #066031 - Blank text appears for the fields for which no data is available in the reports. 
 
 ## UAT points:
 
