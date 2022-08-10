@@ -373,7 +373,6 @@ $(document).on('change', '#digitalFrmLangId,#digitalFrmdownloadType,#digitalFrmO
     }
 
     fileLinkForm = function (recordId) {
-        $.ykmodal(fcom.getLoader(), false, 'modal-dialog-vertical-md');
         fcom.updateWithAjax(fcom.makeUrl('Products', "fileLinkForm", [recordId]), "", function (t) {
             fcom.removeLoader();
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md');

@@ -38,7 +38,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
 
                             $data['rates']['data'][] = [
                                 'title' => $shippingcharge['title'],
-                                'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost'], false, false, false),
+                                'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost']),
                                 'id' => $shippingcharge['id'],
                                 'carrier_code' => $shippingcharge['carrier_code'],
                                 'service_code' => $key,
@@ -80,7 +80,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                                 }
                                 $data['rates']['data'][] = [
                                     'title' => $shippingcharge['title'],
-                                    'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost'], false, false, false),
+                                    'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost']),
                                     'id' => $shippingcharge['id'],
                                     'carrier_code' => $shippingcharge['carrier_code'],
                                     'service_code' => $key,
@@ -120,7 +120,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                                 }
                                 $data['rates']['data'][] = [
                                     'title' => $shippingcharge['title'],
-                                    'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost'], false, false, false),
+                                    'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost']),
                                     'id' => $shippingcharge['id'],
                                     'carrier_code' => $shippingcharge['carrier_code'],
                                     'service_code' => $key,

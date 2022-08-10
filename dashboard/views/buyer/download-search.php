@@ -41,7 +41,7 @@ if (null != $fld) {
         'op_invoice_number' => Labels::getLabel('LBL_Invoice', $siteLangId),
         'filesCount' => Labels::getLabel('LBL_FILES_INSIDE', $siteLangId),
         'afile_name' => Labels::getLabel('LBL_FILE_NAME', $siteLangId),
-        'downloadable_count' => Labels::getLabel('LBL_Download_times', $siteLangId),
+        'downloadable_count' => Labels::getLabel('LBL_MAX_DOWNLOAD_TIMES', $siteLangId),
         'afile_downloaded_times' => Labels::getLabel('LBL_Downloaded_Count', $siteLangId),
         'expiry_date' => Labels::getLabel('LBL_Expired_on', $siteLangId),
         'action' => '',
@@ -50,7 +50,7 @@ if (null != $fld) {
     if (0 < $opId) {
         unset($arr_flds['filesCount']);
     } else {
-        unset($arr_flds['afile_name']);
+        unset($arr_flds['afile_name'], $arr_flds['afile_downloaded_times']);
     }
 
     $tbl = new HtmlElement('table', array('class' => 'table'));
@@ -70,12 +70,11 @@ if (null != $fld) {
             $td = $tr->appendElement('td');
             switch ($key) {
                 case 'filesCount':
-                    /* if ($row['downloadable']) {
-                        $fileName = '<a href="javascript:void(0);" onclick="showFiles(' . $row['op_id'] . ');">' . $row[$key] . '</a>';
+                    if ($row['downloadable']) {
+                        $fileName = '<a href="javascript:void(0);" class="link-dotted" onclick="showFiles(' . $row['op_id'] . ');">' . $row[$key] . '</a>';
                     } else {
                         $fileName = $row[$key];
-                    } */
-                    $fileName = $row[$key];
+                    }
                     $td->appendElement('div', ['class' => "text-break"], $fileName, true);
                     break;
                 case 'afile_name':

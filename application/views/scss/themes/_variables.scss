@@ -94,7 +94,6 @@ $star-color: #ff3a59;
     background-color: $brand-color;
     color: $brand-color-inverse;
 }
-
 @mixin bg-secondary {
     background-color: $secondary-color;
     color: $secondary-color-inverse;
@@ -103,10 +102,23 @@ $star-color: #ff3a59;
     background-color: $third-color;
     color: $third-color-inverse;
 }
-
+@mixin bg-white {
+    background-color: #fff;
+    color: #000;
+}
 @mixin bg-black {
     background-color: #000;
     color: #fff;
+}
+
+@mixin bg-gray {
+    background-color: $bg-gray;
+    color: $txt-body;
+}
+
+@mixin bg-gray-dark {
+    background-color: $bg-gray;
+    color: $txt-body;
 }
 
 //Push auto

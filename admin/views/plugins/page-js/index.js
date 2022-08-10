@@ -272,6 +272,7 @@ $(document).on('change', '.StripeConnectPayoutInterval--js', function () {
     var payoutMonthlyEle = '.StripeConnectPayoutMonthDays--js';
     var payoutWeeklyEle = '.StripeConnectPayoutWeekly--js';
     var payoutDaysEle = '.StripeConnectPayoutDelayDays--js';
+    $(payoutDaysEle).removeAttr('disabled');
     if ('manual' == $(this).val() || '' == $(this).val()) {
         $(payoutMonthlyEle + ', ' + payoutWeeklyEle + ', ' + payoutDaysEle).val("").attr('disabled', 'disabled');
     } else if ('daily' == $(this).val()) {

@@ -95,10 +95,14 @@ class Collections extends MyAppModel
         self::COLLECTION_TYPE_REVIEWS,
     ];
 
-    public const APP_COLLECTIONS_ONLY = [
+    public const COLLECTIONS_FOR_APP_ONLY = [
         self::TYPE_BANNER_LAYOUT3,
         self::TYPE_PENDING_REVIEWS1,
         self::TYPE_FAQ_CATEGORY_LAYOUT1
+    ];
+    
+    public const COLLECTIONS_NOT_FOR_APP = [
+        self::TYPE_BRAND_LAYOUT2
     ];
 
     /**

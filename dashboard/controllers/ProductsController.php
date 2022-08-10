@@ -252,6 +252,7 @@ class ProductsController extends SellerBaseController
         }
 
         $post['product_seller_id'] = $this->userParentId;
+        $post['product_added_by_admin_id'] = 0;
 
         if ($isNewProduct) {
             $prodRequireAdminApproval = FatApp::getConfig("CONF_CUSTOM_PRODUCT_REQUIRE_ADMIN_APPROVAL", FatUtility::VAR_INT, 1);

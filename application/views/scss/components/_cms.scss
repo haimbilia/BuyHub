@@ -488,8 +488,10 @@
 .links-inline {
     color: $txt-body;
     display: flex;
-    justify-content: center;
     width: 100%;
+    &-center {
+        justify-content: center;
+    }
     li {
         font-size: 0.875rem;
         padding-bottom: 5px;
