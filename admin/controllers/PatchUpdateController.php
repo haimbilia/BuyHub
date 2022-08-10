@@ -348,7 +348,7 @@ class PatchUpdateController extends ListingBaseController
         die('You need to comment this line before execution.');
 
         if (1 != $this->admin_id || false == CONF_DEVELOPMENT_MODE) {
-            die('Invlaid Access! You are not authorized.');
+            die('Invalid Access! You are not authorized.');
         }
 
         if ($type == 'orders') {
@@ -360,6 +360,8 @@ class PatchUpdateController extends ListingBaseController
                 'tbl_order_prod_charges_logs','tbl_order_prod_charges_logs_lang','tbl_orders_to_plugin_order','tbl_order_product_shipment_pickup','tbl_order_product_plugin_specifics','tbl_order_product_responses','tbl_user_withdrawal_requests',
                 'tbl_user_withdrawal_requests_specifics','tbl_seller_product_reviews','tbl_seller_product_reviews_abuse','tbl_seller_product_reviews_helpful','tbl_seller_product_rating');
             FatApp::getDb()->query('UPDATE `tbl_seller_products` SET `selprod_sold_count` = 0 WHERE 1');
+
+            FatApp::getDb()->query("DELETE FROM `tbl_attached_files` WHERE `afile_type` in (60)");
         } /* else if ($type == 'products') {
             $tables = array('tbl_attribute_group_attributes', 'tbl_attribute_group_attributes_lang', 'tbl_attribute_groups', 'tbl_brands', 'tbl_brands_lang', 'tbl_catalog_request_messages', 'tbl_collection_to_product_categories', 'tbl_collection_to_seller_products', 'tbl_collection_to_shops', 'tbl_content_block_to_category', 'tbl_coupon_to_category', 'tbl_coupon_to_plan', 'tbl_coupon_to_products', 'tbl_content_block_to_category', 'tbl_coupon_to_category', 'tbl_coupon_to_plan', 'tbl_coupon_to_products', 'tbl_coupon_to_seller', 'tbl_extra_attribute_groups', 'tbl_extra_attribute_groups_lang', 'tbl_extra_attributes', 'tbl_extra_attributes_lang',  'tbl_filter_groups', 'tbl_filter_groups_lang', 'tbl_filters', 'tbl_filters_lang',  'tbl_product_category_relations', 'tbl_coupon_to_brands', 'tbl_coupon_to_shops', 'tbl_meta_tags', 'tbl_order_product_settings', 'tbl_seller_products', 'tbl_seller_products_lang', 'tbl_seller_products_temp_ids', 'tbl_seller_product_options', 'tbl_seller_product_policies', 'tbl_seller_product_rating', 'tbl_seller_product_reviews', 'tbl_seller_product_reviews_abuse', 'tbl_seller_product_reviews_helpful', 'tbl_recommendation_activity_browsing', 'tbl_related_products', 'tbl_rewards_on_purchase', 'tbl_search_items', 'tbl_seller_brand_requests', 'tbl_seller_brand_requests_lang', 'tbl_seller_catalog_requests', 'tbl_polling_to_category', 'tbl_polling_to_products', 'tbl_product_categories', 'tbl_product_categories_lang', 'tbl_product_groups', 'tbl_product_groups_lang', 'tbl_product_numeric_attributes', 'tbl_product_product_recommendation', 'tbl_product_shipping_rates', 'tbl_product_special_prices', 'tbl_product_specifications', 'tbl_product_specifications_lang', 'tbl_product_stock_hold', 'tbl_product_text_attributes', 'tbl_product_to_category', 'tbl_product_to_groups', 'tbl_product_to_options', 'tbl_product_to_tags', 'tbl_product_to_tax', 'tbl_product_volume_discount', 'tbl_products', 'tbl_products_browsing_history', 'tbl_products_lang', 'tbl_products_shipped_by_seller', 'tbl_products_shipping', 'tbl_products_temp_ids', 'tbl_collection_to_records','tbl_product_requests','tbl_product_requests_lang''tbl_product_saved_search', 'tbl_product_specifics','tbl_products_to_plugin_product',
             'tbl_seller_products_to_plugin_selprod','tbl_product_digital_data_relation','tbl_product_digital_links');
@@ -415,7 +417,7 @@ class PatchUpdateController extends ListingBaseController
                 'tbl_badges_lang','tbl_badge_link_conditions','tbl_badge_links','tbl_badge_requests','tbl_order_product_shipment_pickup','tbl_system_logs','tbl_order_product_plugin_specifics',
                 'tbl_order_product_responses'
                 );           
-            FatApp::getDb()->query("DELETE FROM `tbl_attached_files` WHERE `afile_type` in (1,2,3,4,5,7,8,9,10,11,12,13,14,22,23,24,25,26,27,28,29,30,32,33,41,42,43,48,50,52,53)");
+            FatApp::getDb()->query("DELETE FROM `tbl_attached_files` WHERE `afile_type` in (1,2,3,4,5,7,8,9,10,11,12,13,14,22,23,24,25,26,27,28,29,30,32,33,41,42,43,48,50,52,53,60)");
 
             /*
             Delete FROM `tbl_navigation_links` where nlink_nav_id != 1
