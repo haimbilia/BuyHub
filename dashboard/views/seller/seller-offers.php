@@ -14,7 +14,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     <div class="content-body">
         <div class="card">
             <div class="card-body">
-                <div id="listing" class="row">
+                <div id="listing">
                     <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
             </div>
         </div>
