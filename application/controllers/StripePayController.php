@@ -81,7 +81,6 @@ class StripePayController extends PaymentController
 
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
-        $payableAmount = $this->formatPayableAmount($paymentAmount);
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (array_key_exists($this->systemCurrencyCode, $this->minChargeAmountCurrencies())) {
