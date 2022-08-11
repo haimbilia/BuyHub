@@ -750,6 +750,19 @@
             }
         }
     }
+
+    &-notification {
+        td {
+            color: #000;
+            font-weight: 600;
+        }
+        .read {
+            td {
+                color: $txt-gray;
+                font-weight: 400;
+            }
+        }
+    }
 }
 
 .data-length {
