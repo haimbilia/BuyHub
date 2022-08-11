@@ -26,7 +26,7 @@ if (false === $canViewAdminDashboard) {
                             </div>
                             <div class="card-head-toolbar">
                                 <div class="dropdown">
-                                    <button type="button" class="btn btn-icon btn-sm dropdown-toggle dropdownBtnJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button type="button" class="btn btn-gray btn-icon dropdown-toggle dropdownBtnJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <?php echo Labels::getLabel('NAV_SALES', $siteLangId); ?>
                                     </button>
                                     <div class="nav nav-tabs navTabsJs dropdown-menu dropdown-menu-right dropdown-menu-anim" role="tablist">
@@ -77,7 +77,7 @@ if (false === $canViewAdminDashboard) {
                                     <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_LATEST_ORDERS', $siteLangId); ?></h3>
                                 </div>
                                 <div class="card-head-toolbar">
-                                    <a class="" target='_new' href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
+                                    <a class="btn btn-gray" target='_new' href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
                                         <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
                                 </div>
                             </div>

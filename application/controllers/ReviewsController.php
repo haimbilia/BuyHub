@@ -1,5 +1,4 @@
 <?php
-
 class ReviewsController extends MyAppController
 {
     public function __construct($action)
@@ -41,10 +40,12 @@ class ReviewsController extends MyAppController
         $this->set('reviews', $reviews);
 
         $canSubmitFeedback = true;
-        $orderProduct = SelProdReview::getProductOrderId($product['product_id'], $loggedUserId);
-        $op_order_id = (!empty($orderProduct) && array_key_exists('op_order_id', $orderProduct)) ? $orderProduct['op_order_id'] : 0;
-        if (!Orders::canSubmitFeedback($loggedUserId, $op_order_id, $selprod_id)) {
-            $canSubmitFeedback = false;
+        if ($loggedUserId) {
+            $orderProduct = SelProdReview::getProductOrderId($product['product_id'], $loggedUserId);
+            $op_order_id = (!empty($orderProduct) && array_key_exists('op_order_id', $orderProduct)) ? $orderProduct['op_order_id'] : 0;
+            if (empty($orderProduct) || (isset($orderProduct['op_order_id']) && !Orders::canSubmitFeedback($loggedUserId, $op_order_id, $selprod_id))) {
+                $canSubmitFeedback = false;
+            }
         }
         $this->set('canSubmitFeedback', $canSubmitFeedback);
         $frmReviewSearch = $this->getProductReviewSearchForm(FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10));
@@ -278,7 +279,7 @@ class ReviewsController extends MyAppController
         $srch->joinSellerProducts($this->siteLangId);
         $srch->joinUser();
         $srch->joinSelProdReviewHelpful();
-        $srch->addMultipleFields(array('selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'spreview_id', 'spreview_seller_user_id', "ROUND(AVG(sprating_rating),2) as shop_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful && ratingtype_type = '.RatingType::TYPE_SHOP.' , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 && ratingtype_type = '.RatingType::TYPE_SHOP.' , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
+        $srch->addMultipleFields(array('selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'spreview_id', 'spreview_seller_user_id', "ROUND(AVG(sprating_rating),2) as shop_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful && ratingtype_type = ' . RatingType::TYPE_SHOP . ' , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 && ratingtype_type = ' . RatingType::TYPE_SHOP . ' , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
         $srch->addGroupBy('spr.spreview_id');
         if (0 < $reviewId) {
             $srch->addCondition('spr.spreview_id', '=', $reviewId);
