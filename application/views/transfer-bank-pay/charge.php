@@ -7,17 +7,20 @@ $frm->developerTags['fld_default_col'] = 12;
 ?>
 <section class="payment-section">
     <div class="payable-amount">
-        <div class="payable-amount__head">
-            <div class="payable-amount--header">
+        <div class="payable-amount-head">
+            <div class="payable-amount-logo">
                 <?php $this->includeTemplate('_partial/paymentPageLogo.php', array('siteLangId' => $siteLangId)); ?>
             </div>
-            <div class="payable-amount--decription">
-                <h2><?php echo CommonHelper::displayMoneyFormat($paymentAmount) ?></h2>
-                <p><?php echo Labels::getLabel('LBL_Total_Payable', $siteLangId); ?></p>
-                <p><?php echo Labels::getLabel('LBL_Order_Invoice', $siteLangId); ?>: <?php echo $orderInfo["invoice"]; ?></p>
+            <div class="payable-amount-total">
+                <p> <span class="label"> <?php echo Labels::getLabel('LBL_Total_Payable', $siteLangId); ?>:</span>
+                    <span class="value"> <?php echo CommonHelper::displayMoneyFormat($paymentAmount) ?> </span>
+                </p>
+                <p> <span class="label"> <?php echo Labels::getLabel('LBL_Order_Invoice', $siteLangId); ?>: </span>
+                    <span class="value"><?php echo $orderInfo["invoice"]; ?></span>
+                </p>
             </div>
         </div>
-        <div class="payable-amount__body payment-from">
+        <div class="payable-amount-body from-payment">
             <ul class="transfer-payment-detail mt-4">
                 <li>
                     <i class="icn">
@@ -110,7 +113,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 $frm->setFormTagAttribute('class', 'form form--payment');
             ?>
                 <?php echo $frm->getFormTag(); ?>
-                <div class="payable-form__body">
+                <div class="payable-form-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -126,7 +129,7 @@ $frm->developerTags['fld_default_col'] = 12;
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <div class="caption-wraper">
                                     <label class="form-label"><?php echo $frm->getField('opayment_gateway_txn_id')->getCaption(); ?></label>
@@ -138,9 +141,7 @@ $frm->developerTags['fld_default_col'] = 12;
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <div class="caption-wraper">
                                     <label class="form-label"><?php echo $frm->getField('opayment_amount')->getCaption(); ?></label>
@@ -153,6 +154,7 @@ $frm->developerTags['fld_default_col'] = 12;
                             </div>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -174,24 +176,24 @@ $frm->developerTags['fld_default_col'] = 12;
                 <?php endif; ?>
                 <div id="ajax_message"></div>
                 </div>
-                <div class="payable-form__footer">
+                <div class="payable-form-footer">
                     <div class="row">
-                        <div class="col-md-6">
-                            <?php
-                            $btn = $frm->getField('btn_submit');
-                            $btn->addFieldTagAttribute('class', 'btn btn-secondary');
-                            $btn->addFieldTagAttribute('data-processing-text', Labels::getLabel('LBL_PLEASE_WAIT..', $siteLangId));
-                            echo $frm->getFieldHtml('btn_submit');
-                            ?>
-                        </div>
-                        <div class="col-md-6 d-md-block d-none">
+                        <div class="col-6">
                             <?php if (FatUtility::isAjaxCall()) { ?>
                                 <a href="javascript:void(0);" onclick="loadPaymentSummary()" class="btn btn-outline-brand">
                                     <?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?>
                                 </a>
                             <?php } else { ?>
-                                <a href="<?php echo $cancelBtnUrl; ?>" class="btn btn-outline-gray"><?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?></a>
+                                <a href="<?php echo $cancelBtnUrl; ?>" class="btn btn-outline-gray btn-block"><?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?></a>
                             <?php } ?>
+                        </div>
+                        <div class="col-6">
+                            <?php
+                            $btn = $frm->getField('btn_submit');
+                            $btn->addFieldTagAttribute('class', 'btn btn-brand btn-block');
+                            $btn->addFieldTagAttribute('data-processing-text', Labels::getLabel('LBL_PLEASE_WAIT..', $siteLangId));
+                            echo $frm->getFieldHtml('btn_submit');
+                            ?>
                         </div>
                     </div>
                 </div>
