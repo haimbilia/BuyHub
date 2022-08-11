@@ -175,6 +175,9 @@ if (empty($attachments)) {
     $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_NO_RECORDS', $siteLangId), true);
 }
 ?>
+
 <div class="col-md-12">
-    <?php echo $tbl->getHtml(); ?>
+    <div class="js-scrollable table-wrap table-responsive">
+        <?php echo $tbl->getHtml(); ?>
+    </div>
 </div>

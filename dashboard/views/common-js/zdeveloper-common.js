@@ -1207,6 +1207,14 @@ $(document).ajaxComplete(function () {
             return $(this).attr("data-bs-content");
         },
     });
+     /* Bind bootstrap tooltip with ajax elements. */
+     $('[data-bs-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    }).on('click', function () {
+        setTimeout(() => {
+            $(this).tooltip('hide');
+        }, 100);
+    });
 });
 $(document).ready(function () {
     $("body")
@@ -1245,6 +1253,14 @@ $(document).ready(function () {
     });
     $("body").tooltip({
         selector: "[data-toggle=tooltip]",
+    });
+     /* Bind bootstrap tooltip with ajax elements. */
+     $('[data-bs-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+    }).on('click', function () {
+        setTimeout(() => {
+            $(this).tooltip('hide');
+        }, 100);
     });
 });
 $(document).on("change", "input[type='file']", fileSizeValidation);

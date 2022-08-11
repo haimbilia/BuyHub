@@ -4,18 +4,18 @@ if (!$showNoRecordFound && empty($links)) {
     return;
 }
 $arr_flds = [
- 'listSerial' =>  Labels::getLabel('LBL_#', $siteLangId),
- 'pdl_download_link' =>  Labels::getLabel('LBL_DOWNLOAD_LINK', $siteLangId),
- 'pdl_preview_link' =>  Labels::getLabel('LBL_PREVIEW_LINK', $siteLangId),
- 'action' =>  Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId),
+    'listSerial' =>  Labels::getLabel('LBL_#', $siteLangId),
+    'pdl_download_link' =>  Labels::getLabel('LBL_DOWNLOAD_LINK', $siteLangId),
+    'pdl_preview_link' =>  Labels::getLabel('LBL_PREVIEW_LINK', $siteLangId),
+    'action' =>  Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId),
 ];
 if ($canDo) {
     unset($arr_flds['listSerial']);
-}else{
-    unset($arr_flds['action'],$arr_flds['pdl_download_link']);  
+} else {
+    unset($arr_flds['action'], $arr_flds['pdl_download_link']);
 }
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table '. (isset($arr_flds['action']) ? 'table-justified': '')));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table ' . (isset($arr_flds['action']) ? 'table-justified' : '')));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
     $tdAttr = ('action' == $key) ? ['class' => 'align-right', 'width' => '20%'] : ['width' => '40%'];
@@ -92,7 +92,15 @@ foreach ($links as $sn => $row) {
         $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
     } else {
-        echo $tbl->getHtml();
-    }
     ?>
+        <div class="js-scrollable table-wrap table-responsive">
+            <?php
+            echo $tbl->getHtml();
+            ?>
+        </div>
+    <?php
+    }
+
+    ?>
+</div>
 </div>
