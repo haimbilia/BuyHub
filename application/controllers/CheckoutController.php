@@ -2054,7 +2054,7 @@ class CheckoutController extends MyAppController
         $products = $this->cartObj->getProducts($this->siteLangId);
         $shippingAddress = $this->cartObj->getCartShippingAddress();
         $userWalletBalance = User::getUserBalance($userId, true);
-
+      
         $fulfillmentType = $this->cartObj->getCartCheckoutType();
         /* Payment Methods[ */
         $splitPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);
