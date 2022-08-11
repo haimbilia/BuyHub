@@ -21,10 +21,9 @@
                 </div>
             </div>
             <div class="card-sign_body">               
-                <?php
-                $newEmailToVerify = 'vsvavs@dummyid.com';
+                <?php              
                 if (!empty($newEmailToVerify)) {
-                    $message = CommonHelper::replaceStringData(Labels::getLabel('LBL_PLEASE_VERIFY_YOUR_EMAIL_ID_SENT_ON_{EMAIL-ID}', $siteLangId), ['{EMAIL-ID}' => $newEmailToVerify]) . " ".'<a href="javascript:void(0)" class="link" onclick="resendVerificationLink(' . "'" . $userInfo['credential_email'] . "'" . ')">' . Labels::getLabel('LBL_RESEND?', $siteLangId) . '</a>';
+                    $message = CommonHelper::replaceStringData(Labels::getLabel('LBL_PLEASE_VERIFY_YOUR_EMAIL_ID_SENT_ON_{EMAIL-ID}', $siteLangId), ['{EMAIL-ID}' => $newEmailToVerify]) . " ".'<a href="javascript:void(0)" class="link" onclick="resendVerificationLink(' . "'" . $newEmailToVerify . "'" . ')">' . Labels::getLabel('LBL_RESEND?', $siteLangId) . '</a>';
                     echo HtmlHelper::getInfoMessageHtml($message);
                 }
                 ?>
