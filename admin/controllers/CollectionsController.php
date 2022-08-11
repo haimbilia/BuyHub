@@ -280,7 +280,7 @@ class CollectionsController extends ListingBaseController
                 return Collections::LIMIT_BLOG_LAYOUT1;
                 break;
         }
-    }  
+    }
 
     public function setup()
     {
@@ -299,7 +299,7 @@ class CollectionsController extends ListingBaseController
         $post['collection_primary_records'] = $this->getLayoutLimit($post['collection_layout_type']);
 
         $collectionForApp = $post['collection_for_app'] ?? 0;
-        $post['collection_for_app'] = in_array($data['collection_layout_type'], Collections::APP_COLLECTIONS_ONLY) ? 1 : $collectionForApp;
+        $post['collection_for_app'] = in_array($data['collection_layout_type'], Collections::COLLECTIONS_FOR_APP_ONLY) ? 1 : $collectionForApp;
         if (1 > $recordId) {
             $maxDisplayOrder = Collections::getMaxDisplayOrder();
             $post['collection_display_order'] = $maxDisplayOrder + 1;
@@ -348,11 +348,13 @@ class CollectionsController extends ListingBaseController
             $frm->addTextBox(Labels::getLabel('FRM_PROMOTION_COST', $this->siteLangId), 'blocation_promotion_cost');
         }
 
-        if (!in_array($layoutType, Collections::APP_COLLECTIONS_ONLY)) {
+        if (!in_array($layoutType, Collections::COLLECTIONS_FOR_APP_ONLY)) {
             $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_WEB", $this->siteLangId), 'collection_for_web', 1, array(), true, 0);
         }
 
-        $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_APP", $this->siteLangId), 'collection_for_app', 1, array(), true, 0);
+        if (!in_array($layoutType, Collections::COLLECTIONS_NOT_FOR_APP)) {
+            $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_APP", $this->siteLangId), 'collection_for_app', 1, array(), true, 0);
+        }
 
         $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -620,8 +622,8 @@ class CollectionsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('displayFooterButtons', false);
         $this->set('activeGentab', false);
-        $this->set('displayMediaOnly', $data['collection_display_media_only']);        
-        $this->set('imageDimension', ImageDimension::getDisplayCollectionImageData(ImageDimension::VIEW_MOBILE));        
+        $this->set('displayMediaOnly', $data['collection_display_media_only']);
+        $this->set('imageDimension', ImageDimension::getDisplayCollectionImageData(ImageDimension::VIEW_MOBILE));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -1132,12 +1134,12 @@ class CollectionsController extends ListingBaseController
 
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $displayFor = (!empty($this->collectionDetails) && $this->collectionDetails['collection_layout_type'] == Collections::TYPE_BANNER_LAYOUT3) ? applicationConstants::SCREEN_MOBILE : '';
-        
-        if($this->collectionDetails['collection_layout_type'] != Collections::TYPE_BANNER_LAYOUT2){
+
+        if ($this->collectionDetails['collection_layout_type'] != Collections::TYPE_BANNER_LAYOUT2) {
             $frm->addSelectBox(Labels::getLabel("FRM_DEVICE", $this->siteLangId), 'banner_screen', $screenArr, $displayFor, array(), '');
-        }else{
+        } else {
             $frm->addHiddenField('', 'banner_screen', applicationConstants::SCREEN_DESKTOP);
-        }        
+        }
         $frm->addHtml('', 'banner', '');
 
         return $frm;
@@ -1325,7 +1327,7 @@ class CollectionsController extends ListingBaseController
         return [
             'dragdrop',
             'select_all',
-            'collection_display_order',           
+            'collection_display_order',
             'collection_name',
             'applicable_for',
             'collection_type',

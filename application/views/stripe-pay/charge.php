@@ -1,5 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 if (isset($stripe)) {
     if (isset($stripe['secret_key']) && isset($stripe['publishable_key'])) {
@@ -16,8 +15,7 @@ if (isset($stripe)) {
         }
     }
 }
-if (isset($client_secret)) {
-    ?>
+if (isset($client_secret)) { ?>
     <script type="text/javascript">
         function loadCardConfirmation() {
             var stripe = Stripe(publishable_key);
@@ -149,7 +147,6 @@ if (isset($client_secret)) {
 <?php } ?>
 <section class="payment-section">
     <div class="payable-amount">
-
         <div class="payable-amount__head">
             <div class="payable-amount--header">
                 <?php $this->includeTemplate('_partial/paymentPageLogo.php', array('siteLangId' => $siteLangId)); ?>
@@ -173,16 +170,13 @@ if (isset($client_secret)) {
                 $fld->addFieldTagAttribute('id', 'cc_owner');
                 $fld = $frm->getField('cc_cvv');
                 $fld->addFieldTagAttribute('id', 'cc_cvv');
-            ?>
-                <?php echo $frm->getFormTag(); ?>
+            
+            echo $frm->getFormTag(); ?>
                 <div class="payable-form__body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-
                                 <label class="form-label"><?php echo Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $siteLangId); ?></label>
-
-
                                 <?php echo $frm->getFieldHtml('cc_number'); ?>
 
                             </div>
@@ -191,10 +185,7 @@ if (isset($client_secret)) {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-
                                 <label class="form-label"><?php echo Labels::getLabel('LBL_CARD_HOLDER_NAME', $siteLangId); ?></label>
-
-
                                 <?php echo $frm->getFieldHtml('cc_owner'); ?>
 
                             </div>
@@ -203,9 +194,7 @@ if (isset($client_secret)) {
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-
                                 <label class="form-label"><?php echo Labels::getLabel('LBL_Expiry_Month', $siteLangId); ?></label>
-
                                 <?php
                                 $fld = $frm->getField('cc_expire_date_month');
                                 $fld->addFieldTagAttribute('id', 'cc_expire_date_month');
@@ -217,9 +206,7 @@ if (isset($client_secret)) {
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-
                                 <label class="form-label"><?php echo Labels::getLabel('LBL_Expiry_year', $siteLangId); ?></label>
-
                                 <?php
                                 $fld = $frm->getField('cc_expire_date_year');
                                 $fld->addFieldTagAttribute('id', 'cc_expire_date_year');
@@ -242,7 +229,6 @@ if (isset($client_secret)) {
                     <?php echo $frm->getExternalJs(); ?>
                     <div id="ajax_message"></div>
                 </div>
-
                 <div class="payable-form__footer">
                     <div class="row">
                         <div class="col-md-6">

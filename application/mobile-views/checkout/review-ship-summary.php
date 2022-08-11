@@ -33,7 +33,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
 
                         $selectedRates = isset($selectedShippingProducts[$product['selprod_id']]) ? $selectedShippingProducts[$product['selprod_id']] : [];
                         if (array_key_exists('mshipapi_cost', $selectedRates)) {
-                            $selectedRates['mshipapi_cost'] = CommonHelper::displayMoneyFormat($selectedRates['mshipapi_cost'], false, false, false);
+                            $selectedRates['mshipapi_cost'] = CommonHelper::displayMoneyFormat($selectedRates['mshipapi_cost']);
                         }
                         
                         $data['rates']['data'][] = (object)$selectedRates;
@@ -59,6 +59,9 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                         $data['products'] = [$product];
                         $data['shipLevel'] = $shipLevel;
                         $selectedRates = isset($selectedShippingProducts[$product['selprod_id']]) ? $selectedShippingProducts[$product['selprod_id']] : (object)[];
+                        if (array_key_exists('mshipapi_cost', $selectedRates)) {
+                            $selectedRates['mshipapi_cost'] = CommonHelper::displayMoneyFormat($selectedRates['mshipapi_cost']);
+                        }
                         $data['rates']['data'] = [$selectedRates];
                         $productItems[$shippedBy]['data'][] = $data;
                     }

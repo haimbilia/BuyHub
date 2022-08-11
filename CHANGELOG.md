@@ -1139,6 +1139,9 @@ TV-9.4.0.20220719
     - #066066 - Special price not appearing on product listing page .
     - #065983 - The download icons are not visible on the 'Prev files' section on the digital products details page. 
     - #065994 - Impressions count didn't increased for a product promotion
+    - #066086 - The digital files added by the admin are visible on the Digital links setup page even if the admin enabled the add attachment at the inventory level settings.
+    - #065950 - The download count does not get increased if the admin / seller attach any file with existing digital product order
+    - #066106 - The product is visible on the front end even if the tax category is not bound with the product
 
 ## UAT points:
 

@@ -1497,8 +1497,8 @@ class SellerProduct extends MyAppModel
             'prodcat_active' => ['title' => Labels::getLabel('LBL_PRODUCT_CATEGORY_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
             'prodcat_deleted' => ['title' => Labels::getLabel('LBL_PRODUCT_CATEGORY_DELETED', $langId), 'currentStatus' => '', 'valid' => false],
             'prodcat_status' => ['title' => Labels::getLabel('LBL_PRODUCT_CATEGORY_STATUS', $langId), 'currentStatus' => '', 'valid' => false],
-            'taxcat_active' => ['title' => Labels::getLabel('LBL_TAX_CATEGORY_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
-            'taxcat_deleted' => ['title' => Labels::getLabel('LBL_TAX_CATEGORY_DELETED', $langId), 'currentStatus' => '', 'valid' => false],
+            'taxcat_active' => ['title' => Labels::getLabel('LBL_TAX_CATEGORY_ACTIVE', $langId), 'currentStatus' => 0, 'valid' => false],
+            'taxcat_deleted' => ['title' => Labels::getLabel('LBL_TAX_CATEGORY_DELETED', $langId), 'currentStatus' => 1, 'valid' => false],
             'brand_active' => ['title' => Labels::getLabel('LBL_BRAND_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false],
             'brand_deleted' => ['title' => Labels::getLabel('LBL_BRAND_DELETED', $langId), 'currentStatus' => '', 'valid' => false],
             'user_deleted' => ['title' => Labels::getLabel('LBL_SELLER_DELETED', $langId), 'currentStatus' => '', 'valid' => false],
@@ -1561,8 +1561,8 @@ class SellerProduct extends MyAppModel
                 $prodToTaxObj->setPageSize(1);
                 $prodToTax = FatApp::getDb()->fetch($prodToTaxObj->getResultSet());
                 if ($prodToTax) {
-                    $tax = Tax::getAttributesById($prodToTax['ptt_taxcat_id'], ['taxcat_active', 'taxcat_deleted']);
-                    if ($tax) {
+                    $tax = Tax::getAttributesById($prodToTax['ptt_taxcat_id'], ['taxcat_active', 'taxcat_deleted', 'taxcat_plugin_id']);
+                    if ($tax && Tax::getActivatedServiceId() == $tax['taxcat_plugin_id']) {
                         $validationArr['taxcat_active']['valid'] = $tax['taxcat_active'] === applicationConstants::YES;
                         $validationArr['taxcat_active']['currentStatus'] = $tax['taxcat_active'];
                         $validationArr['taxcat_deleted']['valid'] = $tax['taxcat_deleted'] === applicationConstants::NO;
