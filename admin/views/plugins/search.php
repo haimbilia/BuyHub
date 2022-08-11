@@ -78,6 +78,7 @@ foreach ($arrListing as $sn => $row) {
                         $fn = 'redirectToTrackingCodeRelation()';
                     }
                 }
+                
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['plugin_id'] . ', ' . ((int) !$row[$key]) . ', \'' . $fn . '\')' : 'return false;';
                 if (!empty($otherPluginTypes) && $canEdit) {
                     if (empty($msg)) {
@@ -85,6 +86,10 @@ foreach ($arrListing as $sn => $row) {
                         $msg = CommonHelper::replaceStringData($msg, ['{PLUGIN-TYPE}' => $pluginTypes[$row['plugin_type']], '{OTHER-PLUGIN-TYPE}' => $otherPluginTypes]);
                     }
                     $statusAct = "changeStatusEitherPluginTypes(this, " . ($row['plugin_active'] > 0 ? 0 : 1) . ", '" . $msg . "')";
+                }
+
+                if ($row['plugin_type'] == Plugin::TYPE_TAX_SERVICES) {
+                    $statusAct = 'alert(\'' . Labels::getLabel('LBL_PLEASE_RE-BIND_THE_PRODUCT_TAX_CATEGORY.') . '\');' . $statusAct;
                 }
 
                 $statusClass = ($canEdit) ? '' : 'disabled';
