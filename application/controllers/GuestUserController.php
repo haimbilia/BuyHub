@@ -1171,10 +1171,10 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
-        $phoneNumber = isset($userInfo['user_phone']) ? $userInfo['user_phone'] : '';
-        $canSendSms = (!empty($phoneNumber) && SmsArchive::canSendSms(SmsTemplate::LOGIN));
+        //$phoneNumber = isset($userInfo['user_phone']) ? $userInfo['user_phone'] : '';
+        //$canSendSms = (empty($phoneNumber) && SmsArchive::canSendSms(SmsTemplate::LOGIN));
         $this->set('userInfo', $userInfo);
-        $this->set('canSendSms', $canSendSms);
+        $this->set('canSendSms', false);
         $this->set('verificationPending', isset($userInfo['credential_verified']) && applicationConstants::NO == $userInfo['credential_verified']);
         $this->_template->render();
     }

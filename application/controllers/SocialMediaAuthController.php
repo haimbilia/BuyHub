@@ -70,11 +70,13 @@ class SocialMediaAuthController extends PluginBaseController
         }
         
         if (empty($userInfo['credential_email']) && empty($userInfo['user_phone'])) {
+            /*
             if (true == SmsArchive::canSendSms()) {
                 $message = Labels::getLabel('ERR_PLEASE_CONFIGURE_YOUR_EMAIL_OR_PHONE', $this->siteLangId);
             } else {
-                $message = Labels::getLabel('ERR_PLEASE_CONFIGURE_YOUR_EMAIL', $this->siteLangId);
-            }
+            */    
+            $message = Labels::getLabel('ERR_PLEASE_CONFIGURE_YOUR_EMAIL', $this->siteLangId);
+            /* } */
             if (true === MOBILE_APP_API_CALL) {
                 LibHelper::dieJsonError($message);
             }
