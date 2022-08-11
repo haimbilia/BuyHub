@@ -1172,14 +1172,11 @@ class GuestUserController extends MyAppController
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('', '', [], CONF_WEBROOT_DASHBOARD));
         }
-
-        //$phoneNumber = isset($userInfo['user_phone']) ? $userInfo['user_phone'] : '';
-        //$canSendSms = (empty($phoneNumber) && SmsArchive::canSendSms(SmsTemplate::LOGIN));
         $this->set('userInfo', $userInfo);
         $this->set('canSendSms', false);
-        $this->set('newEmailToVerify', $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['newEmailToVerify'] ?? '');        
-        $this->set('verificationPending', isset($userInfo['credential_verified']) && applicationConstants::NO == $userInfo['credential_verified']);
-        $this->_template->render();
+        $this->set('newEmailToVerify', $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['newEmailToVerify'] ?? '');
+        $this->set('exculdeMainHeaderDiv', true);
+        $this->_template->render(true, false);
     }
 
     public function changeEmailForm()
