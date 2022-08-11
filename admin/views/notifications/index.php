@@ -29,4 +29,10 @@ $actionItemsData['otherButtons'] = [
     ],
 
 ];
+$tableClass = 'table table-dashed table-notification';
 require_once(CONF_THEME_PATH . '_partial/listing/index.php');
+
+
+
+
+
