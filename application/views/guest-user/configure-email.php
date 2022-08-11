@@ -1,68 +1,43 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div id="body" class="body">
-    <section class="bg-brand-light pt-3 pb-3">
-        <div class="container">
-            <div class="section-head section-head-center mb-0">
-                <div class="section-heading">
-                    <h2 class="mb-0 pageTitle-js">
-                        <?php echo Labels::getLabel('LBL_CONFIGURE_YOUR_DETAILS', $siteLangId); ?></h2>
+
+<div id="body" class="body enter-page forgotPwForm">
+    <div id="otpFom" class="form-sign">
+        <?php
+        $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+        $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+        $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        ?>
+        <a class="form-sign-logo" href="<?php echo UrlHelper::generateFullFileUrl(); ?>">
+            <img src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
+        </a>
+        <div class="form-sign-body">
+            <div class="card-sign">
+                <div class="card-sign_head">
+                    <h1 class="title">
+                        <?php echo Labels::getLabel('LBL_CONFIGURE_YOUR_EMAIL', $siteLangId); ?>
+                    </h1>
+                    <p class="text-muted"><?php echo Labels::getLabel('MSG_YOUR_EMAIL_WILL_NOT_UPDATE_UNTIL_YOU_VERIFY_YOUR_EMAIL_ADDRESS', $siteLangId) ?></p>
+                </div>
+            </div>
+            <div class="card-sign_body">               
+                <?php              
+                if (!empty($newEmailToVerify)) {
+                    $message = CommonHelper::replaceStringData(Labels::getLabel('LBL_PLEASE_VERIFY_YOUR_EMAIL_ID_SENT_ON_{EMAIL-ID}', $siteLangId), ['{EMAIL-ID}' => $newEmailToVerify]);
+                    echo HtmlHelper::getInfoMessageHtml($message);
+                }
+                ?>
+                <div id="changeEmailFrmBlock">
+                    <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
+                </div>
+            </div>
+            <div class="card-sign_foot">
+                <div class="more-links">
+                    <a href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm'); ?>" class="link-underline">
+                        <?php echo Labels::getLabel('LBL_BACK_TO_LOGIN', $siteLangId); ?>
+                    </a>
                 </div>
             </div>
         </div>
-    </section>
-    <section class="section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-9">
-                    <div class="row justify-content-center">
-                        <?php if (true === $verificationPending) { ?>
-                            <div class="col-md-6">
-                                <div class="info">
-                                    <span>
-                                        <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
-                                            </use>
-                                        </svg>
-                                        <?php echo str_replace("{clickhere}", '<a href="javascript:void(0)" class="link" onclick="resendVerificationLink(' . "'" . $userInfo['credential_email'] . "'" . ')">' . Labels::getLabel('LBL_VERIFY?', $siteLangId) . '</a>', Labels::getLabel('MSG_YOUR_EMAIL_VERIFICATION_IS_PENDING._{clickhere}', $siteLangId)); ?>
-                                    </span>
-                                </div>
-                            </div>
-                        <?php } else { ?>
-                            <div class="col-md-6">                                
-                                <?php
-                                    if (!empty($newEmailToVerify)) {
-                                        echo HtmlHelper::getInfoMessageHtml(CommonHelper::replaceStringData(Labels::getLabel('LBL_PLEASE_VERIFY_YOUR_EMAIL_ID_SENT_ON_{EMAIL-ID}', $siteLangId), ['{EMAIL-ID}' => $newEmailToVerify]));
-                                    }                            
-                                ?>
-                                <div class="border rounded p-4 h-100">
-                                    <h6><?php echo Labels::getLabel('LBL_UPDATE_EMAIL', $siteLangId); ?></h6>
-                                    <div id="changeEmailFrmBlock">
-                                        <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
-                                </div>
-                            </div>
-                            <?php
-                            /*
-                            if (true === $canSendSms) { ?>
-                                <div class="col">
-                                    <div class="or-wrap">
-                                        <div class="or or-vertical"><?php echo Labels::getLabel('LBL__OR_', $siteLangId); ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="border rounded p-4 h-100">
-                                        <h6><?php echo Labels::getLabel('LBL_UPDATE_PHONE_NUMBER', $siteLangId); ?></h6>
-                                        <div id="changePhoneFrmBlock">
-                                            <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
-                                    </div>
-                                </div>
-                            <?php } 
-                            */
-                            ?>
-                        <?php } ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
 </div>
