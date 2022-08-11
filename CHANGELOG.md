@@ -1144,6 +1144,7 @@ TV-9.4.0.20220719
     - #066106 - The product is visible on the front end even if the tax category is not bound with the product.
     - #066101 - Nothing happens on clicking on the 'Write A Review' button on the reviews permalink page
     - #066089 - Nothing happens on clicking on the 'Refill stock' button in the email received for the threshold products.
+    - #066100 - UI issue in the tooltip info in the 'Available Quantity field' on the shop inventory page. 
 
 ## UAT points:
 
