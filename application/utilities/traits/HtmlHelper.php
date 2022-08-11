@@ -347,6 +347,14 @@ class HtmlHelper
                 </div>';
     }
 
+    public static function getInfoMessageHtml(string $message): string
+    {
+        return '<div class="alert alert-info" role="alert">
+                    <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                    <div class="alert-text">' . $message . '</div>
+                </div>';
+    }
+
     public static function getErrorMessageHtml(string $message, string $icon = ''): string
     {
         $icon = empty($icon) ? '<svg class="svg" height="18" width="18">

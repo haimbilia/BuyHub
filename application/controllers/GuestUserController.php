@@ -626,6 +626,8 @@ class GuestUserController extends MyAppController
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_CODE', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
+        
+        unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['newEmailToVerify']);
 
         $userdata = $userObj->getUserInfo(array('credential_email', 'credential_password', 'user_name', 'credential_active'), false);
 
@@ -1160,7 +1162,7 @@ class GuestUserController extends MyAppController
     public function configureEmail()
     {
         if (!UserAuthentication::isUserLogged()) {
-            Message::addErrorMessage(Labels::getLabel('ERR_PLEASE_LOGIN_TO_CONFIGURE_EMAIL/_PHONE', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_PLEASE_LOGIN_TO_CONFIGURE_EMAIL', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
         $userId = UserAuthentication::getLoggedUserId();
@@ -1175,6 +1177,7 @@ class GuestUserController extends MyAppController
         //$canSendSms = (empty($phoneNumber) && SmsArchive::canSendSms(SmsTemplate::LOGIN));
         $this->set('userInfo', $userInfo);
         $this->set('canSendSms', false);
+        $this->set('newEmailToVerify', $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['newEmailToVerify'] ?? '');        
         $this->set('verificationPending', isset($userInfo['credential_verified']) && applicationConstants::NO == $userInfo['credential_verified']);
         $this->_template->render();
     }
@@ -1256,6 +1259,8 @@ class GuestUserController extends MyAppController
             $message = Labels::getLabel('ERR_ERROR_IN_SENDING_VERFICATION_EMAIL', $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
+
+        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['newEmailToVerify'] = $arr['user_email'];
 
         $this->set('msg', Labels::getLabel('MSG_UPDATE_EMAIL_REQUEST_SENT_SUCCESSFULLY._YOU_NEED_TO_VERIFY_YOUR_NEW_EMAIL_ADDRESS_BEFORE_ACCESSING_OTHER_MODULES', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {

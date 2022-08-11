@@ -41,7 +41,7 @@ $(function () {
         fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'updateEmail'), data, function (t) {
             fcom.closeProcessing();
 			fcom.removeLoader();
-            changeEmailForm();
+            location.reload();
         });
     };
 

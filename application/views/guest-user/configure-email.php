@@ -28,14 +28,21 @@
                                 </div>
                             </div>
                         <?php } else { ?>
-                            <div class="col-md-5">
+                            <div class="col-md-6">                                
+                                <?php
+                                    if (!empty($newEmailToVerify)) {
+                                        echo HtmlHelper::getInfoMessageHtml(CommonHelper::replaceStringData(Labels::getLabel('LBL_PLEASE_VERIFY_YOUR_EMAIL_ID_SENT_ON_{EMAIL-ID}', $siteLangId), ['{EMAIL-ID}' => $newEmailToVerify]));
+                                    }                            
+                                ?>
                                 <div class="border rounded p-4 h-100">
                                     <h6><?php echo Labels::getLabel('LBL_UPDATE_EMAIL', $siteLangId); ?></h6>
                                     <div id="changeEmailFrmBlock">
                                         <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
                                 </div>
                             </div>
-                            <?php if (true === $canSendSms) { ?>
+                            <?php
+                            /*
+                            if (true === $canSendSms) { ?>
                                 <div class="col">
                                     <div class="or-wrap">
                                         <div class="or or-vertical"><?php echo Labels::getLabel('LBL__OR_', $siteLangId); ?>
@@ -49,7 +56,9 @@
                                             <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?></div>
                                     </div>
                                 </div>
-                            <?php } ?>
+                            <?php } 
+                            */
+                            ?>
                         <?php } ?>
                     </div>
                 </div>

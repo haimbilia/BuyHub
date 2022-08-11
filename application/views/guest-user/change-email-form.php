@@ -11,10 +11,10 @@ $fldSubmit->developerTags['noCaptionTag'] = true;
 $fldSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 
 $str = '';
-if (isset($canSendSms) && true == $canSendSms) {
-    $str = '';
-}
+// if (isset($canSendSms) && true == $canSendSms) {
+//     $str = '';
+// }
 
-$fldSubmit->htmlAfterField = '<p class="form-text text-muted">' . Labels::getLabel('MSG_YOUR_EMAIL_WILL_NOT_CHANGE_UNTIL_YOU_VERIFY_YOUR_NEW_EMAIL_ADDRESS', $siteLangId) . '</p>';
+$fldSubmit->htmlAfterField = '<p class="form-text text-muted">' . Labels::getLabel('MSG_YOUR_EMAIL_WILL_NOT_UPDATE_UNTIL_YOU_VERIFY_YOUR_EMAIL_ADDRESS', $siteLangId) . '</p>';
 
 echo $frm->getFormHtml();
