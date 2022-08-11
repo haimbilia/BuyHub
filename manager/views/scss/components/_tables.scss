@@ -73,6 +73,9 @@
                 //padding-#{$end-direction}: 5px;
             }
         }
+        &:hover {
+            background-color: lighten($bg-gray, 2);
+        }
         &.selected {
             background-color: $bg-gray;
         }
@@ -121,7 +124,6 @@
             }
         }
     }
-
     &-sm {
         th {
             padding: 0.3rem;
@@ -728,7 +730,6 @@
             }
         }
     }
-
     &-justified {
         thead {
             th:first-child {
@@ -750,7 +751,6 @@
             }
         }
     }
-
     &-notification {
         td {
             color: #000;
