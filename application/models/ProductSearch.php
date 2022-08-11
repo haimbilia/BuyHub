@@ -797,7 +797,7 @@ class ProductSearch extends SearchBase
             }
         }
 
-        $this->joinTable(Tax::DB_TBL, $join, 'pt.taxcat_id = ptt.ptt_taxcat_id' . $extraQuery, 'pt');
+        $this->joinTable(Tax::DB_TBL, $join, 'pt.taxcat_id = ptt.ptt_taxcat_id AND pt.taxcat_plugin_id = ' . Tax::getActivatedServiceId() . $extraQuery, 'pt');
 
         if (1 < $langId) {
             $this->joinProductToTaxLang($langId);
