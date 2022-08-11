@@ -2087,3 +2087,5 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_REQUEST_DATA', '1', 'Request Data', '2') ON DUPLICATE KEY UPDATE label_caption = 'Request Data';
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_ALREADY_ADDED_TO_YOUR_WISHLIST', '1', 'Already Added To Your Wishlist.', '2') ON DUPLICATE KEY UPDATE label_caption = 'Already Added To Your Wishlist.';
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_FLAT', '1', 'Flat', '2') ON DUPLICATE KEY UPDATE label_caption = 'Flat';
+
+UPDATE `tbl_collections` SET `collection_for_app`=0 WHERE `collection_layout_type` IN (18,20,21,22);

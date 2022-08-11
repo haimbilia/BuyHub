@@ -22,7 +22,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
             <use
                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#active">
             </use>
-        </svg><span>' . Labels::getLabel('BTN_ACTIVE', $siteLangId) . '</span>',
+        </svg><span>' . Labels::getLabel('BTN_ACTIVATE', $siteLangId) . '</span>',
         true
     );
 
@@ -38,7 +38,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
             <use
                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#in-active">
             </use>
-        </svg><span>' . Labels::getLabel('BTN_IN-ACTIVE', $siteLangId) . '</span>',
+        </svg><span>' . Labels::getLabel('BTN_DEACTIVATE', $siteLangId) . '</span>',
         true
     );
 }
