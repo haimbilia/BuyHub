@@ -27,7 +27,6 @@ $(function () {
 
     /* for mobile navigation */
     $('.link__mobilenav').click(function () {
-
         if ($(this).hasClass('is-focus')) {
             $(this).removeClass('is-focus');
             $(this).siblings('.navigation > li .subnav').slideUp();
@@ -41,7 +40,6 @@ $(function () {
         }
         return;
     });
-
 
     /* for mobile toggle navigation */
     $('.navs_toggle').click(function () {
@@ -66,9 +64,7 @@ $(function () {
         }
     });
 
-
     $('.navigation-wrapper').click(function (e) {
         e.stopPropagation();
-
     });
 });
