@@ -2,7 +2,7 @@
 
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 $arr_flds = array(
-    'listserial' => '#',   
+    'listserial' => '#',
     'plugin_identifier' => Labels::getLabel('LBL_PLUGIN', $siteLangId),
     'pu_active' => Labels::getLabel('LBL_Status', $siteLangId),
 );
@@ -16,8 +16,8 @@ if (0 < count($arrListing)) {
 }
 
 $tbl = new HtmlElement(
-        'table',
-        array('width' => '100%', 'class' => 'table ' . $tableClass, 'id' => 'options')
+    'table',
+    array('width' => '100%', 'class' => 'table ' . $tableClass, 'id' => 'options')
 );
 
 $th = $tbl->appendElement('thead')->appendElement('tr');
@@ -68,19 +68,20 @@ foreach ($arrListing as $sn => $row) {
                 $ul = $td->appendElement("ul", array("class" => "actions"));
                 $li = $ul->appendElement("li");
                 $li->appendElement(
-                        'a',
-                        array(
-                            'href' => 'javascript:void(0)',
-                            'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId),
-                            "onclick" => "editSettingForm('" . $row['plugin_code'] . "')"),
-                            '<i class="icn">
+                    'a',
+                    array(
+                        'href' => 'javascript:void(0)',
+                        'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId),
+                        "onclick" => "editSettingForm('" . $row['plugin_code'] . "')"
+                    ),
+                    '<i class="icn">
                                 <svg class="svg" width="18" height="18">
                                     <use
                                         xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
                                     </use>
                                 </svg>
                             </i>',
-                        true
+                    true
                 );
 
                 break;
@@ -90,10 +91,13 @@ foreach ($arrListing as $sn => $row) {
         }
     }
 }
-echo $tbl->getHtml();
-if (count($arrListing) == 0) {
-    $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
-    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
-}
 ?>
-
+<div class="js-scrollable table-wrap table-responsive">
+    <?php
+    echo $tbl->getHtml();
+    if (count($arrListing) == 0) {
+        $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
+        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
+    }
+    ?>
+</div>

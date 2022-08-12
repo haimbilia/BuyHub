@@ -8,33 +8,33 @@ $arr_flds = array(
 );
 
 $tbl = new HtmlElement('table', array('class' => 'table listingTableJs'));
-$th = $tbl->appendElement('thead',['class'=>'tableHeadJs'])->appendElement('tr');
+$th = $tbl->appendElement('thead', ['class' => 'tableHeadJs'])->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
     if ($key == 'action') {
-        $e = $th->appendElement('th', array('class' => 'align-right','width'=> '10%'), $val);
+        $e = $th->appendElement('th', array('class' => 'align-right', 'width' => '10%'), $val);
     } else {
-        $e = $th->appendElement('th', array('width'=> '30%'), $val);
+        $e = $th->appendElement('th', array('width' => '30%'), $val);
     }
 }
 $tbody = $tbl->appendElement('tbody');
 $count = 0;
 foreach ($productSpecifications as  $specification) {
     $prodSpecId = $specification['prodspec_id'];
-    $tr = $tbody->appendElement('tr',['data-id' => $prodSpecId ]);
-    foreach ($arr_flds as $key => $val) {   
-        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : ['class'=> str_replace(ProdSpecification::DB_TBL_PREFIX,'',$key)."Js text-break"];
+    $tr = $tbody->appendElement('tr', ['data-id' => $prodSpecId]);
+    foreach ($arr_flds as $key => $val) {
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : ['class' => str_replace(ProdSpecification::DB_TBL_PREFIX, '', $key) . "Js text-break"];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'action':
-                $ul = new HtmlElement("ul", array('class' => 'actions'));               
+                $ul = new HtmlElement("ul", array('class' => 'actions'));
                 $li = $ul->appendElement('li');
                 $li->appendElement(
                     'input',
                     [
-                        'name' => 'specifications['.$count.'][id]',
+                        'name' => 'specifications[' . $count . '][id]',
                         'type' => 'hidden',
                         'value' => $specification['prodspec_id'],
-                        'data-fatreq' => json_encode(['required'=> false]),
+                        'data-fatreq' => json_encode(['required' => false]),
                     ]
                 );
                 $li->appendElement(
@@ -75,17 +75,21 @@ foreach ($productSpecifications as  $specification) {
                 $input = new HtmlElement(
                     'input',
                     [
-                        'name' => 'specifications['.$count.']['.str_replace(ProdSpecification::DB_TBL_PREFIX,'',$key).']',
+                        'name' => 'specifications[' . $count . '][' . str_replace(ProdSpecification::DB_TBL_PREFIX, '', $key) . ']',
                         'type' => 'hidden',
                         'value' => $specification[$key],
-                        'data-fatreq' => json_encode(['required'=> false]),
+                        'data-fatreq' => json_encode(['required' => false]),
                     ]
                 );
-                $td->appendElement('plaintext',$tdAttr, $specification[$key].$input->getHtml(), true);
+                $td->appendElement('plaintext', $tdAttr, $specification[$key] . $input->getHtml(), true);
                 break;
         }
     }
     $count++;
 }
-
-echo $tbl->getHtml();
+?>
+<div class="js-scrollable table-wrap table-responsive">
+    <?php
+    echo $tbl->getHtml();
+    ?>
+</div>

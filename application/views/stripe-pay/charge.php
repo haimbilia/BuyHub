@@ -147,17 +147,20 @@ if (isset($client_secret)) { ?>
 <?php } ?>
 <section class="payment-section">
     <div class="payable-amount">
-        <div class="payable-amount__head">
-            <div class="payable-amount--header">
+        <div class="payable-amount-head">
+            <div class="payable-amount-logo">
                 <?php $this->includeTemplate('_partial/paymentPageLogo.php', array('siteLangId' => $siteLangId)); ?>
             </div>
-            <div class="payable-amount--decription">
-                <h2><?php echo CommonHelper::displayMoneyFormat($paymentAmount) ?></h2>
-                <p><?php echo Labels::getLabel('LBL_Total_Payable', $siteLangId); ?></p>
-                <p><?php echo Labels::getLabel('LBL_Order_Invoice', $siteLangId); ?>: <?php echo $orderInfo["invoice"]; ?></p>
+            <div class="payable-amount-total">
+                <p> <span class="label"> <?php echo Labels::getLabel('LBL_Total_Payable', $siteLangId); ?>:</span>
+                    <span class="value"> <?php echo CommonHelper::displayMoneyFormat($paymentAmount) ?> </span>
+                </p>
+                <p> <span class="label"> <?php echo Labels::getLabel('LBL_Order_Invoice', $siteLangId); ?>: </span>
+                    <span class="value"><?php echo $orderInfo["invoice"]; ?></span>
+                </p>
             </div>
         </div>
-        <div class="payable-amount__body payment-from">
+        <div class="payable-amount-body from-payment">
             <?php
             if (!isset($error)) :
                 // $frm->setFormTagAttribute('onsubmit', 'sendPayment(this); return(false);');
@@ -170,9 +173,9 @@ if (isset($client_secret)) { ?>
                 $fld->addFieldTagAttribute('id', 'cc_owner');
                 $fld = $frm->getField('cc_cvv');
                 $fld->addFieldTagAttribute('id', 'cc_cvv');
-            
-            echo $frm->getFormTag(); ?>
-                <div class="payable-form__body">
+
+                echo $frm->getFormTag(); ?>
+                <div class="payable-form-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -192,7 +195,7 @@ if (isset($client_secret)) { ?>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="form-label"><?php echo Labels::getLabel('LBL_Expiry_Month', $siteLangId); ?></label>
                                 <?php
@@ -204,7 +207,7 @@ if (isset($client_secret)) { ?>
 
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="form-label"><?php echo Labels::getLabel('LBL_Expiry_year', $siteLangId); ?></label>
                                 <?php
@@ -216,38 +219,39 @@ if (isset($client_secret)) { ?>
 
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="form-label"><?php echo Labels::getLabel('LBL_CVV_SECURITY_CODE', $siteLangId); ?></label>
                                 <?php echo $frm->getFieldHtml('cc_cvv'); ?>
-
                             </div>
                         </div>
                     </div>
+
                     <?php echo $frm->getExternalJs(); ?>
                     <div id="ajax_message"></div>
                 </div>
-                <div class="payable-form__footer">
+                <div class="payable-form-footer">
                     <div class="row">
-                        <div class="col-md-6">
+
+
+                        <div class="col-6">
+                            <?php if (FatUtility::isAjaxCall()) { ?>
+                                <a href="javascript:void(0);" onclick="loadPaymentSummary()" class="btn btn-outline-brand btn-block">
+                                    <?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?>
+                                </a>
+                            <?php } else { ?>
+                                <a href="<?php echo $cancelBtnUrl; ?>" class="btn btn-outline-gray btn-block"><?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?></a>
+                            <?php } ?>
+                        </div>
+                        <div class="col-6">
                             <?php
                             $btn = $frm->getField('btn_submit');
-                            $btn->addFieldTagAttribute('class', 'btn btn-secondary');
+                            $btn->addFieldTagAttribute('class', 'btn btn-brand btn-block');
                             $btn->addFieldTagAttribute('data-processing-text', Labels::getLabel('LBL_PLEASE_WAIT..', $siteLangId));
                             echo $frm->getFieldHtml('btn_submit');
                             ?>
                         </div>
-                        <div class="col-md-6 d-md-block d-none">
-                            <?php if (FatUtility::isAjaxCall()) { ?>
-                                <a href="javascript:void(0);" onclick="loadPaymentSummary()" class="btn btn-outline-brand">
-                                    <?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?>
-                                </a>
-                            <?php } else { ?>
-                                <a href="<?php echo $cancelBtnUrl; ?>" class="btn btn-outline-gray"><?php echo Labels::getLabel('LBL_Cancel', $siteLangId); ?></a>
-                            <?php } ?>
-                        </div>
+
                     </div>
                 </div>
 

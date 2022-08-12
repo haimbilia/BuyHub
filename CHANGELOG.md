@@ -1143,7 +1143,6 @@ TV-9.4.0.20220719
     - #065950 - The download count does not get increased if the admin / seller attach any file with existing digital product order
     - #066106 - The product is visible on the front end even if the tax category is not bound with the product.
     - #066101 - Nothing happens on clicking on the 'Write A Review' button on the reviews permalink page
-    - #066091 - A blank validation message appears when the user uploads the file with invalid columns in the language label imports.
 
 ## UAT points:
 
