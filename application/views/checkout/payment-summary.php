@@ -210,6 +210,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                                 <ul class="payments-nav" id="payment_methods_tab">
                                     <?php
                                     $showFirstElement = '';
+                                    $i = 0;
                                     foreach ($paymentMethods as $key => $val) {
                                         $pmethodCode = $val['plugin_code'];
                                         if ($cartHasDigitalProduct && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore'])) {
@@ -221,7 +222,11 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                                         if (in_array($pmethodCode, $excludePaymentGatewaysArr[applicationConstants::CHECKOUT_PRODUCT])) {
                                             continue;
                                         }
-                                        $showFirstElement = empty($showFirstElement) && 0 < $cartSummary['orderPaymentGatewayCharges'] ? 'show' : ''; ?>
+
+                                        if (0 == $i && 0 < $cartSummary['orderPaymentGatewayCharges']) {
+                                            $showFirstElement = 'show';
+                                            $i++;
+                                        } ?>
                                         <li class="payments-nav-item">
                                             <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderId, $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>" data-bs-toggle="collapse" data-bs-target="#<?php echo $pmethodCode; ?>-section" aria-expanded="true" aria-controls="<?php echo $pmethodCode; ?>-section">
                                                 <?php echo $pmethodName; ?>
@@ -232,6 +237,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                                             <?php } ?>
                                         </li>
                                     <?php
+                                        $showFirstElement = '';
                                     } ?>
                                 </ul>
                             <?php } ?>
