@@ -22,9 +22,9 @@ $card: "card";
     &-head {
         $selfHead: &;
         display: flex;
-        align-items: center;
-        flex-flow: row wrap;
+        align-items: flex-start;
         //align-items: center;
+        flex-flow: row wrap;
         justify-content: space-between;
         position: relative;
         padding: 20px $card-space;

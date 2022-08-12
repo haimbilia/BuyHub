@@ -44,24 +44,18 @@ body .fc {
 
 .fc-popover .fc-header {
     /* TODO: be more consistent with fc-head/fc-body */
-    display: -webkit-box;
-    display: -ms-flexbox;
+
     display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
+
     flex-direction: row;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
+
     justify-content: space-between;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+
     align-items: center;
     padding: 2px 4px;
 }
 
 .fc-rtl .fc-popover .fc-header {
-    -webkit-box-orient: horizontal;
     -webkit-box-direction: reverse;
     -ms-flex-direction: row-reverse;
     flex-direction: row-reverse;
@@ -869,14 +863,10 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 --------------------------------------------------------------------------------------------------*/
 
 .fc-toolbar {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
+
     justify-content: space-between;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+
     align-items: center;
 }
 

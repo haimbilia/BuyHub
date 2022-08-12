@@ -1,23 +1,13 @@
 .chat .card__head {
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
 
     flex-grow: 1;
 }
 
 .chat .chat__head {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
     flex-direction: row;
-
     flex-grow: 1;
 }
 
@@ -185,14 +175,11 @@
 
 .chat .chat__input .chat__toolbar {
     margin-top: 1rem;
-    display: -webkit-box;
-    display: -ms-flexbox;
+
     display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
+
     justify-content: space-between;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+
     align-items: center;
 }
 
