@@ -138,7 +138,7 @@ class PluginCommon extends MyAppModel
         }
 
         $pluginTypeArr = [
-            self::TYPE_REGULAR_PAYMENT_METHOD => 25,
+            self::TYPE_REGULAR_PAYMENT_METHOD => 4,
         ];
         return array_key_exists($typeId, $pluginTypeArr) ? $pluginTypeArr[$typeId] : 0;
     }
