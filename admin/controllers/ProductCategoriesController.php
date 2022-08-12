@@ -525,6 +525,8 @@ class ProductCategoriesController extends ListingBaseController
             $fileType = AttachedFile::FILETYPE_CATEGORY_ICON;
         } elseif ($imageType == 'banner') {
             $fileType = AttachedFile::FILETYPE_CATEGORY_BANNER;
+        } elseif ($imageType == 'thumb') {
+            $fileType = AttachedFile::FILETYPE_CATEGORY_THUMB;
         }
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->deleteFile($fileType, $recordId, $afileId, 0, $langId, $slide_screen)) {

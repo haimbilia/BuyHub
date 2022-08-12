@@ -1147,6 +1147,7 @@ TV-9.4.0.20220719
     - #066017 - Record not appearing in subscription report by seller
     - #066015 - Mutiple issues in report for SUbscription
     - #066073 - The search field on the categories listing page is not working properly
+    - #066132 - Parse error occurs when the admin tries to delete the category thumb.
 
 ## UAT points:
 
