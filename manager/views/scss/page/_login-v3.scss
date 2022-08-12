@@ -1,4 +1,4 @@
-$login:'login';
+$login: "login";
 .#{$login} {
     display: flex;
     height: 100%;
@@ -124,7 +124,7 @@ $login:'login';
             padding: 4rem 2rem 0;
             text-align: center;
             h3.text-lg-login {
-                font-size: 2rem!important;
+                font-size: 2rem !important;
             }
         }
     }

@@ -1146,6 +1146,7 @@ TV-9.4.0.20220719
     - #066101 - Nothing happens on clicking on the 'Write A Review' button on the reviews permalink page
     - #066017 - Record not appearing in subscription report by seller
     - #066015 - Mutiple issues in report for SUbscription
+    - #066073 - The search field on the categories listing page is not working properly
 
 ## UAT points:
 

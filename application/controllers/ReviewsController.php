@@ -12,8 +12,8 @@ class ReviewsController extends MyAppController
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
         $prodSrch = new ProductSearch($this->siteLangId);
         $prodSrch->setDefinedCriteria();
-        $prodSrch->joinSellerSubscription();
-        $prodSrch->addSubscriptionValidCondition();
+        // $prodSrch->joinSellerSubscription();
+        // $prodSrch->addSubscriptionValidCondition();
         $prodSrch->joinProductToCategory();
         $prodSrch->doNotCalculateRecords();
         $prodSrch->setPageSize(1);
@@ -338,14 +338,6 @@ class ReviewsController extends MyAppController
         $json['html'] = $this->_template->render(false, false, 'reviews/search-for-shop.php', true, false);
         $json['loadMoreBtnHtml'] = $this->_template->render(false, false, 'reviews/load-more-shop-reviews-btn.php', true, false);
         FatUtility::dieJsonSuccess($json);
-    }
-
-    public function productPermalink($selprod_id, $reviewId)
-    {
-        $selprod_id = FatUtility::int($selprod_id);
-        $reviewId = FatUtility::int($reviewId);
-
-        $this->product($selprod_id, $reviewId);
     }
 
     public function shopPermalink($sellerId, $reviewId)

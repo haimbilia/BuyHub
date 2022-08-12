@@ -488,6 +488,7 @@
 .links-inline {
     color: $txt-body;
     display: flex;
+    gap: 10px;
     width: 100%;
     &-center {
         justify-content: center;

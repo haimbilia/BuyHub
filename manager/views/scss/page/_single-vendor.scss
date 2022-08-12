@@ -9,7 +9,6 @@
         margin-bottom: 0;
     }
 }
-
 .icon-svg {
     fill: $txt-gray;
     svg {
@@ -114,15 +113,11 @@
     margin: 0 auto;
     max-width: none;
     .drag-list {
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
-        -webkit-box-align: start;
-        -ms-flex-align: start;
+
         align-items: flex-start;
         margin: 0 -10px;
         .drag-column {
-            -ms-flex: 1;
             flex: 1;
             margin: 0 10px;
             position: relative;
@@ -166,14 +161,10 @@
                 }
             }
             .drag-column-header {
-                display: -webkit-box;
-                display: -ms-flexbox;
                 display: flex;
-                -webkit-box-align: center;
-                -ms-flex-align: center;
+
                 align-items: center;
-                -webkit-box-pack: justify;
-                -ms-flex-pack: justify;
+
                 justify-content: space-between;
                 padding: 0px 25px;
                 min-height: 60px;
@@ -263,7 +254,6 @@
         width: 100%;
         height: 100%;
         padding: 10px;
-
         transform: translateX(100% * $transform-direction);
         opacity: 0;
         transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);

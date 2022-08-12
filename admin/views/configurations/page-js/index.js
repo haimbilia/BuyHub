@@ -61,6 +61,7 @@ $(document).ready(function () {
 (function () {
     var dv = '#frmBlockJs';
     getForm = function (frmType, langId = 0) {
+        var formUrl = fcom.makeUrl('Configurations', 'index', [frmType]) + ('' != tourStepUrl ? '?' + tourStepUrl : '');
         fcom.resetEditorInstance();
         $(dv).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'form', [frmType, langId]), '', function (t) {
@@ -69,7 +70,7 @@ $(document).ready(function () {
             $(dv).replaceWith(t.html);
             setTabActive(frmType);
             showHideMaxDiscountVal();
-            window.history.pushState('', '', fcom.makeUrl('Configurations', 'index', [frmType]));
+            window.history.pushState('', '', formUrl);
         });
     };
 

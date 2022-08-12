@@ -17,10 +17,10 @@
 @import "components/nav";
 @import "components/demo";
 @import "components/navbar";
-@import "components/stellarnav";
+//@import "components/stellarnav";
 @import "components/card";
 @import "components/dropdown";
-@import "components/jquery.smartmenus.bootstrap-4";
+//@import "components/jquery.smartmenus.bootstrap-4";
 @import "components/pagination";
 @import "components/breadcrumb";
 @import "components/forms";
@@ -42,7 +42,6 @@
 @import "components/separator";
 @import "components/tables";
 @import "components/datatable";
-
 @import "components/toaster";
 @import "components/modal";
 @import "components/media";
@@ -53,12 +52,11 @@
 @import "components/infobox";
 @import "components/ribbon";
 @import "components/dropzone";
-@import "components/fullcalendar";
-@import "components/inbox";
-
+//@import "components/fullcalendar";
+//@import "components/inbox";
 @import "components/colorpicker";
 @import "components/list-group";
-@import "components/kanban";
+//@import "components/kanban";
 @import "components/scrollbar";
 @import "components/searchbar";
 @import "components/header-notification";
@@ -73,33 +71,33 @@
 @import "vendor/particles";
 @import "vendor/line-awesome";
 @import "vendor/fontawesome";
-@import "vendor/flaticon";
+//@import "vendor/flaticon";
 @import "vendor/flaticon2";
-@import "vendor/socicons";
+//@import "vendor/socicons";
 @import "vendor/select2/core";
 @import "components/select2";
 @import "vendor/chartist-settings";
 @import "vendor/chartist";
 //@import "vendor/simplebar";
 @import "vendor/scroll-hint";
-@import "vendor/bootstrap-select";
-@import "vendor/kanban";
+//@import "vendor/bootstrap-select";
+//@import "vendor/kanban";
 @import "vendor/jquery-ui";
 
 //page
 @import "page/login-v1";
-@import "page/login-v2";
-@import "page/login-v3";
-@import "page/chat-1";
-@import "page/chat-2";
-@import "page/chat-3";
-@import "page/wizard-1";
-@import "page/wizard-2";
-@import "page/wizard-3";
-@import "page/wizard-4";
-@import "page/invoice-1";
-@import "page/invoice-2";
-@import "page/faq-1";
+// @import "page/login-v2";
+// @import "page/login-v3";
+// @import "page/chat-1";
+// @import "page/chat-2";
+// @import "page/chat-3";
+// @import "page/wizard-1";
+// @import "page/wizard-2";
+// @import "page/wizard-3";
+// @import "page/wizard-4";
+// @import "page/invoice-1";
+// @import "page/invoice-2";
+// @import "page/faq-1";
 @import "page/single-vendor";
 @import "page/maintenance";
 @import "page/setting";
