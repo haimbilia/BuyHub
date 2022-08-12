@@ -22,7 +22,8 @@ $card: "card";
     &-head {
         $selfHead: &;
         display: flex;
-        align-items: flex-start;
+        align-items: center;
+        flex-flow: row wrap;
         //align-items: center;
         justify-content: space-between;
         position: relative;
@@ -71,7 +72,7 @@ $card: "card";
         }
 
         @include media-breakpoint-down(md) {
-            margin-top: 1rem;
+            // margin-top: 1rem;
         }
         .btn-add ~ .actions {
             margin-#{$start-direction}: 2rem;

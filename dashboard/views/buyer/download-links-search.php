@@ -38,19 +38,19 @@ if (null != $fld) {
 
 <div class="js-scrollable table-wrap table-responsive card-table">
     <?php $arr_flds = array(
-        'op_invoice_number'    =>    Labels::getLabel('LBL_Invoice', $siteLangId),
-        'linksCount'    =>    Labels::getLabel('LBL_LINKS_INSIDE', $siteLangId),
-        'opddl_downloadable_link'    =>    Labels::getLabel('LBL_Link', $siteLangId),
-        'downloadable_count'        =>    Labels::getLabel('LBL_Download_times', $siteLangId),
-        'opddl_downloaded_times'        =>    Labels::getLabel('LBL_Downloaded_Count', $siteLangId),
-        'expiry_date'    =>    Labels::getLabel('LBL_Expired_on', $siteLangId),
-        'action'    =>    '',
+        'op_invoice_number' => Labels::getLabel('LBL_Invoice', $siteLangId),
+        'linksCount' => Labels::getLabel('LBL_LINKS_INSIDE', $siteLangId),
+        'opddl_downloadable_link' => Labels::getLabel('LBL_Link', $siteLangId),
+        'downloadable_count' => Labels::getLabel('LBL_Download_times', $siteLangId),
+        'opddl_downloaded_times' => Labels::getLabel('LBL_Downloaded_Count', $siteLangId),
+        'expiry_date' => Labels::getLabel('LBL_Expired_on', $siteLangId),
+        'action' => '',
     );
 
     if (0 < $opId) {
         unset($arr_flds['linksCount'], $arr_flds['action']);
     } else {
-        unset($arr_flds['opddl_downloadable_link']);
+        unset($arr_flds['opddl_downloadable_link'], $arr_flds['opddl_downloaded_times']);
     }
 
     $tbl = new HtmlElement('table', array('class' => 'table'));
@@ -70,12 +70,11 @@ if (null != $fld) {
             $td = $tr->appendElement('td');
             switch ($key) {
                 case 'linksCount':
-                    /* if ($row['downloadable']) {
-                        $fileName = '<a href="javascript:void(0);" onclick="showLinks(' . $row['op_id'] . ');">' . $row[$key] . '</a>';
+                    if ($row['downloadable']) {
+                        $fileName = '<a href="javascript:void(0);" class="link-dotted" onclick="showLinks(' . $row['op_id'] . ');">' . $row[$key] . '</a>';
                     } else {
                         $fileName = $row[$key];
-                    } */
-                    $fileName = $row[$key];
+                    }
                     $td->appendElement('div', ['class' => "text-break"], $fileName, true);
                     break;
                 case 'opddl_downloadable_link':
@@ -91,11 +90,6 @@ if (null != $fld) {
                             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
                         </use>
                     </svg>', true);
-
-                        /* $li = $ul->appendElement("li");
-						$li->appendElement('a', array('href'=> 'javascript:void(0)', 'id'=>'dataLink', 'data-link'=>$row['opddl_downloadable_link'], 'onclick'=>'copyToClipboard(this)',
-						'title'=>Labels::getLabel('LBL_copy_to_clipboard',$siteLangId)),
-						'<i class="fa fa-copy"></i>', true); */
                     }
                     break;
                 case 'downloadable_count':
@@ -150,9 +144,7 @@ $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
                 fcom.displayErrorMessage(ans.msg);
                 return false;
             }
-            /* var dataLink = $(this).attr('data-link');
-            window.location.href= dataLink; */
-            location.reload();
+			searchBuyerDownloadLinks(document.frmSrch);
             return true;
         });
     }

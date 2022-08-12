@@ -17,8 +17,13 @@ if ($records) {
 
         $sr_no--;
     }
-    echo $tbl->getHtml();
-
+    ?>
+    <div class="js-scrollable table-wrap table-responsive">
+        <?php
+        echo $tbl->getHtml();
+        ?>
+    </div>
+    <?php 
     if (BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType) {
         $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'siteLangId' => $siteLangId, 'callBackJsFunc' => 'reloadRecordsList', 'arguments' => $badgeLinkCondId);
         $this->includeTemplate('_partial/pagination.php', $pagingArr, false);

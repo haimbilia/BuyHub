@@ -446,10 +446,17 @@ $("document").ready(function () {
     loadPaymentSummary = function () {
         paymentSummaryAjax = 1;
         $(pageContent).prepend(fcom.getLoader(true));
-        fcom.updateWithAjax(
+        fcom.ajax(
             fcom.makeUrl("Checkout", "PaymentSummary"),
             '',
             function (res) {
+                if (1 > res.status) {
+                    loadShippingSummaryDiv();
+                    loadFinancialSummary();
+                    fcom.displayErrorMessage(res.msg);
+                    return;
+                }
+
                 paymentSummaryAjax = 0;
                 if ('' == res.html) {
                     $('.checkoutPageJs').hide();
@@ -464,7 +471,7 @@ $("document").ready(function () {
                 if (0 == financialSummaryAjax) {
                     fcom.removeLoader();
                 }
-            }
+            }, { 'fOutMode': 'json' }
         );
     };
 
@@ -518,22 +525,22 @@ $("document").ready(function () {
         loadShippingSummaryDiv();
     };
 
-    setCheckoutFlow = function (type) {      
+    setCheckoutFlow = function (type) {
         var obj = $(".checkout-progress");
         obj.find(".checkoutNav-js").removeClass("is-complete");
         obj.find(".checkoutNav-js").removeClass("is-active");
         obj.find(".checkoutNav-js").removeClass("pending");
-        if(obj.find(".shipping-js")){
-            obj.find(".shipping-js").attr("onclick","loadShippingSummaryDiv(1)");       
+        if (obj.find(".shipping-js")) {
+            obj.find(".shipping-js").attr("onclick", "loadShippingSummaryDiv(1)");
         }
         switch (type) {
             case "BILLING":
                 obj.find(".billing-js").addClass("is-active");
                 obj.find(".shipping-js").addClass("pending");
                 obj.find(".payment-js").addClass("pending");
-                if(obj.find(".shipping-js")){
-                    obj.find(".shipping-js").removeAttr("onclick");   
-                }                
+                if (obj.find(".shipping-js")) {
+                    obj.find(".shipping-js").removeAttr("onclick");
+                }
                 obj.find(".order-complete-js").addClass("pending");
                 break;
             case "SHIPPING":
@@ -643,7 +650,7 @@ $("document").ready(function () {
             }
         );
     };
-    
+
     setUpBillingAddressSelection = function () {
         var billing_address_id = $('input[name="shipping_address_id"]:checked').val();
         var data = "billing_address_id=" + billing_address_id + "&isShippingSameAsBilling=0";

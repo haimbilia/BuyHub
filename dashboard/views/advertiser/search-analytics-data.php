@@ -39,6 +39,9 @@ foreach ($arrListing as $sn => $row) {
         }
     }
 }
+?>
+<div class="js-scrollable table-wrap table-responsive">
+    <?php
 echo $tbl->getHtml();
 if (count($arrListing) == 0) {
     $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
@@ -51,3 +54,5 @@ echo FatUtility::createHiddenFormFromData($postedData, array(
 ));
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'promotion_id' => $promotion_id);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+?>
+</div>

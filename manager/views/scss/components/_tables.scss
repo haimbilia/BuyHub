@@ -73,6 +73,9 @@
                 //padding-#{$end-direction}: 5px;
             }
         }
+        &:hover {
+            background-color: lighten($bg-gray, 2);
+        }
         &.selected {
             background-color: $bg-gray;
         }
@@ -121,7 +124,6 @@
             }
         }
     }
-
     &-sm {
         th {
             padding: 0.3rem;
@@ -728,7 +730,6 @@
             }
         }
     }
-
     &-justified {
         thead {
             th:first-child {
@@ -747,6 +748,18 @@
                 padding-#{$end-direction}: 0;
                 text-align: #{$end-direction};
                 //padding-#{$end-direction}: 0;
+            }
+        }
+    }
+    &-notification {
+        td {
+            color: #000;
+            font-weight: 600;
+        }
+        .read {
+            td {
+                color: $txt-gray;
+                font-weight: 400;
             }
         }
     }

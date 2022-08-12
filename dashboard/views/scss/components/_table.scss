@@ -31,15 +31,16 @@
         }
     }
     tr {
+        &:hover,
         &.selected-row {
             background: lighten($bg-gray, 01);
             > td {
-                border-color: transparent;
+                //border-color: transparent;
             }
         }
         &:last-child {
             td {
-                border-bottom: none;
+                //border-bottom: none;
             }
         }
         td {

@@ -189,7 +189,13 @@ foreach ($attachments as $sn => $row) {
         $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
     } else {
+        ?>
+        <div class="js-scrollable table-wrap table-responsive">
+            <?php
         echo $tbl->getHtml();
+        ?>
+        </div>
+        <?php
     }
     ?>
 </div>

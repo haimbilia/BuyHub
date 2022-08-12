@@ -127,10 +127,13 @@ $(document).ready(function () {
                         } else {
                             fcom.displayErrorMessage(ans.msg);
                             $('#fileupload_div').html('');
+                            fcom.removeLoader();
                         }
                     }
                     catch (exc) {
-                        fcom.displayErrorMessage(t);
+                        var msg = ('undefined' == typeof t.msg ? t : t.msg);
+                        fcom.displayErrorMessage(msg);
+                        fcom.removeLoader();
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {

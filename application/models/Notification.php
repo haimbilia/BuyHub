@@ -82,7 +82,7 @@ class Notification extends MyAppModel
         $labelArr = array(
             Notification::NEW_USER_REGISTERATION_NOTIFICATION => array(Labels::getLabel('LBL_USER_REGISTRATION_NOTIFICATION', $langId), 'users'),
             Notification::NEW_SUPPLIER_REGISTERATION_NOTIFICATION => array(Labels::getLabel('LBL_SUPPLIER_REGISTRATION_NOTIFICATION', $langId), 'users'),
-            Notification::GUEST_AFFILIATE_REGISTERATION => array(Labels::getLabel('LBL_GUEST_ADVISER_REGISTRATION_NOTIFICATION', $langId), 'users'),
+            Notification::GUEST_AFFILIATE_REGISTERATION => array(Labels::getLabel('LBL_ADVISER_REGISTRATION_NOTIFICATION', $langId), 'users'),
             Notification::GUEST_ADVISER_REGISTERATION => array(Labels::getLabel('LBL_USER_ORDER_PLACED_NOTIFICATION', $langId), 'orders'),
             Notification::NEW_CATALOG_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_CATALOG_REQUEST_NOTIFICATION', $langId), 'products'),
             Notification::SUPPLIER_APPROVAL => array(Labels::getLabel('LBL_USER_SUPPLIER_APPROVAL_NOTIFICATION', $langId), 'seller-approval-requests'),

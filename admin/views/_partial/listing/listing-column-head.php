@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $tableHeadAttrArr = isset($tableHeadAttrArr) ? $tableHeadAttrArr : [];
 $tableId = isset($tableId) ?  $tableId : '';
+$tableClass = isset($tableClass) ?  $tableClass : 'table table-dashed';
 
 $disableSelectAll = empty($arrListing) ? 'disabled="disabled"' : '';
 
@@ -9,11 +10,11 @@ if (2 > count($arrListing)) {
     $allowedKeysForSorting = [];
 }
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-dashed', 'id' => $tableId));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => $tableClass, 'id' => $tableId));
 $th = $tbl->appendElement('thead', ['class' => 'tableHeadJs'])->appendElement('tr');
 foreach ($fields as $key => $val) {
     $defaultSortingClass = HtmlHelper::getDefaultSortingClass($key, $sortBy, $sortOrder);
-    
+
     $cls = '';
     if (in_array($key, $allowedKeysForSorting)) {
         $cls .= 'headerColumnJs sorting ' . $defaultSortingClass;
@@ -28,7 +29,7 @@ foreach ($fields as $key => $val) {
     if (!empty($tableHeadAttrArr) && array_key_exists($key, $tableHeadAttrArr)) {
         $thWidth = $tableHeadAttrArr[$key]['width'] ?? '';
     }
-    
+
     if (!empty($tableHeadAttrArr) && array_key_exists($key, $tableHeadAttrArr)) {
         $cls .= !empty($cls) ? ' ' : '';
         $cls .= $tableHeadAttrArr[$key]['class'] ?? '';

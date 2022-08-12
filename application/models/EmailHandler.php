@@ -1010,13 +1010,12 @@ class EmailHandler extends FatModel
             return false;
         }
 
-        $url = UrlHelper::generateFullUrl('seller', 'products', array(), CONF_WEBROOT_DASHBOARD);
-        $productAnchor = "<a href='" . $url . "'>" . Labels::getLabel('LBL_CLICK_HERE', $langId) . "</a>";
+        $url = UrlHelper::generateFullUrl('seller', 'products', array(), CONF_WEBROOT_DASHBOARD);       
 
         $arrReplacements = array(
             '{shop_name}' => $productInfo['shop_name'],
             '{prod_title}' => $productInfo["selprod_title"],
-            '{click_here}' => $productAnchor,
+            '{click_here}' => $url,
         );
 
         $receipentsInfo = User::getSubUsersReceipents($productInfo['user_id'], 'canViewProducts');

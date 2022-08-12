@@ -1944,14 +1944,6 @@ UPDATE `tbl_extra_pages_lang` SET `epage_content` = '\r\n<p>بحاجة إلى م
 DELETE FROM `tbl_cron_schedules` WHERE `tbl_cron_schedules`.`cron_id` = 17;
 DELETE FROM `tbl_cron_schedules` WHERE `tbl_cron_schedules`.`cron_id` = 12;
 
-INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_ACCOUNT_DELETE', '1', 'Delete My Account', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
-INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_AGREE_PRIVACY', '1', 'To Read The Policies Of Gdpr', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
-INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_REQUEST_MY_DATA', '1', 'Request My Data', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
-INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_REQUEST_INFO', '1', 'Request System Owner To Get Your Account Information', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
-INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_WANT_TO_DELETEACCOUNT', '1', 'Do you want to delete account?', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
-INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_REQUEST_DATA', '1', 'Request Data', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
-INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_ALREADY_ADDED_TO_YOUR_WISHLIST', '1', 'Already Added To Your Wishlist.', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
-
 INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_UNLIMITED', '1', 'Unlimited', '1') ON DUPLICATE KEY UPDATE label_type = 2;
 INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_SHIPPING_BY_OTHER_METHOD', '1', 'Shipping By Other Method', '1') ON DUPLICATE KEY UPDATE label_type = 2;
 INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_REACHED_DOWNLOAD_LIMIT', '1', 'You have reached download limit', '1') ON DUPLICATE KEY UPDATE label_type = 2;
@@ -2086,3 +2078,14 @@ ON DUPLICATE KEY UPDATE etpl_body=VALUES(etpl_body),etpl_replacements=VALUES(etp
 ALTER TABLE `tbl_user_reward_points` CHANGE `urp_date_added` `urp_date_added` DATETIME NOT NULL;
 
 DELETE FROM `tbl_email_templates` WHERE etpl_code = 'admin_notification_abusive_review_posted';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_ACCOUNT_DELETE', '1', 'Delete My Account', '2') ON DUPLICATE KEY UPDATE label_caption = 'Delete My Account';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_AGREE_PRIVACY', '1', 'To Read The Policies Of Gdpr', '2') ON DUPLICATE KEY UPDATE label_caption = 'To Read The Policies Of Gdpr';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_REQUEST_MY_DATA', '1', 'Request My Data', '2') ON DUPLICATE KEY UPDATE label_caption = 'Request My Data';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_REQUEST_INFO', '1', 'Request System Owner To Get Your Account Information', '2') ON DUPLICATE KEY UPDATE label_caption = 'Request System Owner To Get Your Account Information';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_WANT_TO_DELETEACCOUNT', '1', 'Do you want to delete account?', '2') ON DUPLICATE KEY UPDATE label_caption = 'Do you want to delete account?';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_REQUEST_DATA', '1', 'Request Data', '2') ON DUPLICATE KEY UPDATE label_caption = 'Request Data';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_ALREADY_ADDED_TO_YOUR_WISHLIST', '1', 'Already Added To Your Wishlist.', '2') ON DUPLICATE KEY UPDATE label_caption = 'Already Added To Your Wishlist.';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_FLAT', '1', 'Flat', '2') ON DUPLICATE KEY UPDATE label_caption = 'Flat';
+
+UPDATE `tbl_collections` SET `collection_for_app`=0 WHERE `collection_layout_type` IN (18,20,21,22);

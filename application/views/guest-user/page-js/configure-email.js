@@ -1,6 +1,5 @@
 $(function () {
-    changeEmailForm();
-    configurePhoneForm();
+    changeEmailForm();   
 });
 
 (function () {
@@ -21,6 +20,7 @@ $(function () {
             $(dv).html(fcom.getLoader());
             fcom.ajax(fcom.makeUrl('GuestUser', 'changeEmailForm'), '', function (t) {
                 $(dv).html(t);
+                fcom.removeLoader();              
             });
         }
     };
@@ -41,7 +41,7 @@ $(function () {
         fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'updateEmail'), data, function (t) {
             fcom.closeProcessing();
 			fcom.removeLoader();
-            changeEmailForm();
+            location.reload();
         });
     };
 

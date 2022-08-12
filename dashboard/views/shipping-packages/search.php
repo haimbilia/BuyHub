@@ -43,7 +43,11 @@
             $frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js');
             $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
             echo $frm->getFormTag();
-            echo $tbl->getHtml(); ?>
+            ?>
+            <div class="js-scrollable table-wrap table-responsive">
+            <?php
+                echo $tbl->getHtml(); ?>
+            </div>
             </form>
     </div>
     <?php $postedData['page'] = $page;

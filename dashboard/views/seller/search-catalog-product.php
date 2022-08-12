@@ -119,7 +119,7 @@
                                 );
                             }
 
-                            if (1 > $row['product_seller_id'] && $row['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                            if ($row['product_added_by_admin_id'] && 1 > $row['product_seller_id'] && 1 > $row['product_attachements_with_inventory'] && $row['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
                                 $li = $ul->appendElement("li");
                                 $li->appendElement(
                                     'a',

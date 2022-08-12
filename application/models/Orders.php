@@ -2432,6 +2432,21 @@ class Orders extends MyAppModel
         foreach ($downloads as $key => $row) {
             $digitalDownloads[$key] = $row;
 
+            if (!isset($row['afile_id'])) {
+                $srch = new SearchBase(AttachedFile::DB_TBL);
+                $srch->doNotCalculateRecords();
+                $srch->setPageSize(1);
+                $srch->addCondition('afile_type', '=', 'mysql_func_' . AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, 'AND', true);
+                $srch->addCondition('afile_record_id', '=', $row['op_id']);
+                $srch->addFld('afile_downloaded_times');
+                $srch->addOrder('afile_downloaded_times');
+                $result = FatApp::getDb()->fetch($srch->getResultSet());
+                $row['afile_downloaded_times'] = $row['op_selprod_max_download_times'];
+                if (false != $result) {
+                    $row['afile_downloaded_times'] = $result['afile_downloaded_times'];
+                }
+            }
+
             $dateAvailable = '';
             if ($row['op_selprod_download_validity_in_days'] != '-1') {
                 $dateAvailable = date('Y-m-d', strtotime($row['order_date_added'] . ' + ' . $row['op_selprod_download_validity_in_days'] . ' days'));
@@ -2486,6 +2501,20 @@ class Orders extends MyAppModel
         $digitalDownloads = array();
         foreach ($downloads as $key => $row) {
             $digitalDownloads[$key] = $row;
+
+            if (!isset($row['opddl_link_id'])) {
+                $srch = new SearchBase(OrderProductDigitalLinks::DB_TBL);
+                $srch->doNotCalculateRecords();
+                $srch->setPageSize(1);
+                $srch->addCondition('opddl_op_id', '=', $row['op_id']);
+                $srch->addFld('opddl_downloaded_times');
+                $srch->addOrder('opddl_downloaded_times');
+                $result = FatApp::getDb()->fetch($srch->getResultSet());
+                $row['opddl_downloaded_times'] = $row['op_selprod_max_download_times'];
+                if (false != $result) {
+                    $row['opddl_downloaded_times'] = $result['opddl_downloaded_times'];
+                }
+            }
 
             $dateAvailable = '';
             if ($row['op_selprod_download_validity_in_days'] != '-1') {

@@ -361,11 +361,12 @@ trait ProductDigitalDownloads
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }   
       
-        $productData = Product::getAttributesById($recordId, ['product_type', 'product_seller_id']);
-        if ($productData == false) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
+        $productData = Product::getAttributesById($recordId, ['product_type', 'product_seller_id', 'product_added_by_admin_id', 'product_attachements_with_inventory']);
         if (false == $productData || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        if (0 < $productData['product_added_by_admin_id'] && 0 < $productData['product_attachements_with_inventory']) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
@@ -424,13 +425,13 @@ trait ProductDigitalDownloads
                 LibHelper::exitWithError($this->str_invalid_request_id);
             }           
         } else {
-            $productData = Product::getAttributesById($recordId, ['product_type', 'product_seller_id']);
-            if ($productData == false) {
-                LibHelper::exitWithError($this->str_invalid_request_id, true);
-            }
+            $productData = Product::getAttributesById($recordId, ['product_type', 'product_seller_id', 'product_added_by_admin_id', 'product_attachements_with_inventory']);
             if (false == $productData || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
-            }     
+            }
+            if (0 < $productData['product_added_by_admin_id'] && 0 < $productData['product_attachements_with_inventory']) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
@@ -482,15 +483,16 @@ trait ProductDigitalDownloads
             $productData = $productData + json_decode($productData['preq_content'], true);
             if (!isset($productData['product_type']) || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
                 LibHelper::exitWithError($this->str_invalid_request_id);
-            }            
-        } else {
-            $productData = Product::getAttributesById($recordId, ['product_type', 'product_seller_id']);            
-            if ($productData == false) {
-                LibHelper::exitWithError($this->str_invalid_request_id, true);
             }
+        } else {
+            $productData = Product::getAttributesById($recordId, ['product_type', 'product_seller_id', 'product_attachements_with_inventory', 'product_added_by_admin_id']);
             if (false == $productData || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
-            }          
+            }
+            
+            if (0 < $productData['product_added_by_admin_id'] && 0 < $productData['product_attachements_with_inventory']) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
         }
         
         $canDo = $ddpObj->canEdit($recordId, $catalogType, UserAuthentication::getLoggedUserId(), $this->siteLangId, false);
