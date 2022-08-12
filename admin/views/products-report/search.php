@@ -39,7 +39,7 @@ foreach ($arrListing as $sn => $row) {
                 if ($row['shop_name'] != '') {
                     $name .= '<br/><strong>' . Labels::getLabel('LBL_Sold_By', $siteLangId) . ':  </strong>' . $row['shop_name'];
                 }
-                $name = "<div class='info-wrap'>".$name."</div>";
+                $name = "<div class='info-wrap'>" . $name . "</div>";
                 $td->appendElement('plaintext', $tdAttr, $name, true);
                 break;
 
@@ -73,6 +73,12 @@ foreach ($arrListing as $sn => $row) {
             case 'adminSalesEarnings':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
+            case 'followers':
+            case 'totOrders':
+            case 'totQtys':
+            case 'totRefundedQtys':
+            case 'netSoldQty':
+                $td->appendElement('plaintext', $tdAttr, FatUtility::int($row[$key], FatUtility::VAR_INT, 0), true);
 
                 /* case 'order_date':
                 $td->appendElement('plaintext', $tdAttr, '<a href="'.UrlHelper::generateUrl('SalesReport','index',array($row[$key])).'">'.HtmlHelper::formatDateTime($row[$key]).'</a>',true);
@@ -87,7 +93,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

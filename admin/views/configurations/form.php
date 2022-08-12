@@ -65,7 +65,6 @@ $headerHtmlContent = $headerHtmlContent ?? '';
             </div>
         </div>
     <?php } ?>
-
     <script language="javascript">
         var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
 
@@ -106,5 +105,14 @@ $headerHtmlContent = $headerHtmlContent ?? '';
                 getCountryStates(countryId, '<?php echo $stateData; ?>', '#user_state_id');
             }
         <?php } ?>
+        <?php 
+        $tourStep = UrlHelper::getQueryStringArr(SiteTourHelper::TOUR_STEP);
+        $tourStep = is_array($tourStep) ? array_filter($tourStep) : $tourStep;
+        $tourStepArr = [];
+        if(!empty($tourStep)){
+            $tourStepArr[SiteTourHelper::TOUR_STEP] = $tourStep;
+        }
+        ?>
+        var tourStepUrl = '<?php echo (!empty($tourStepArr)) ? http_build_query($tourStepArr) : ''; ?>'; 
     </script>
 </div>

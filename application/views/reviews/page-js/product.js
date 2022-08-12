@@ -97,6 +97,14 @@ function setupReviewAbuse(frm) {
 		});
 	}
 
+	rateAndReviewProduct = function (product_id) {
+		if (isUserLogged() == 0) {
+			loginPopUpBox();
+			return false;
+		}
+		/* var data = 'product_id=' + product_id; */
+		window.location = fcom.makeUrl('Reviews', 'write', [product_id]);
+	}
 })();
 
 

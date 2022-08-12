@@ -27,6 +27,12 @@ foreach ($arrListing as $sn => $row) {
                     . "  " . $subcriptionPeriodArr[$row['spplan_frequency']];
                 $td->appendElement('plaintext', $tdAttr, $name);
                 break;
+            case 'spackageSold':
+            case 'activeSubscribers':
+            case 'spRenewalPendings':
+            case 'spRenewals':
+            case 'spackageCancelled':
+                $td->appendElement('plaintext', $tdAttr, FatUtility::int($row[$key], FatUtility::VAR_INT, 0), true);
 
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
@@ -36,7 +42,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();
