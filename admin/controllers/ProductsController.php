@@ -187,14 +187,13 @@ class ProductsController extends ListingBaseController
         $srch->addMultipleFields(
             array(
                 'product_id', 'product_identifier', 'product_approved', 'product_active', 'product_seller_id',
-                'product_added_on', 'product_name', 'user_name', 'product_updated_on'
+                'product_added_on', 'COALESCE(product_name, product_identifier) as product_name', 'user_name', 'product_updated_on'
             )
         );
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
-        //echo $srch->getQuery();
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
