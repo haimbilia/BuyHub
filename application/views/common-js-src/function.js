@@ -16,7 +16,7 @@ var Dashboard = function () {
             $("<div class='sidebar-overlay--js'></div>").appendTo("body");
             var visibility = 1;
         } else {
-            $("body").removeClass('sidebar-is-expanded').addClass('sidebar-is-reduced');
+            $("body").removeClass('sidebar-is-expanded').addClass('sidebar-is-reduced'); 
             $("div.sidebar-overlay--js").remove();
             var visibility = 0;
         }
@@ -41,7 +41,7 @@ Dashboard.init();
 
 $(document).on('click', '#showPass', function () {
     var passInput = $("#password");
-    if ('' == passInput.val()) {
+    if ('' == passInput.val()) { 
         return;
     }
 
