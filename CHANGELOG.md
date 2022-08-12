@@ -1145,6 +1145,7 @@ TV-9.4.0.20220719
     - #066106 - The product is visible on the front end even if the tax category is not bound with the product.
     - #066101 - Nothing happens on clicking on the 'Write A Review' button on the reviews permalink page
     - #066073 - The search field on the categories listing page is not working properly
+    - #066132 - Parse error occurs when the admin tries to delete the category thumb.
 
 ## UAT points:
 
