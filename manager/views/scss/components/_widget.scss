@@ -1290,8 +1290,6 @@ $widget: "widget";
         margin: 2rem 0 0.5rem 0;
     }
     #{$self}__action {
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
         justify-content: space-between;
         font-weight: 400;

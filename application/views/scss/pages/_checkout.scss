@@ -906,21 +906,19 @@
 
 .transfer-payment-detail {
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+    gap: 10px;
+    flex-flow: row wrap;
     font-size: 0.8rem;
     color: $txt-gray;
-
     li {
-        max-width: 33%;
-        flex: 0 0 33%;
+        max-width: 30%;
+        flex: 0 0 30%;
         display: flex;
         margin-bottom: 1.5rem;
-
         &.notes {
             max-width: none;
             flex: auto;
-        }
+        } 
     }
 
     .svg {

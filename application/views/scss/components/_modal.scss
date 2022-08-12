@@ -31,12 +31,14 @@
     }
     &.fixed-right {
         padding-#{$end-direction}: 0 !important;
-
         &.fade .modal-dialog-vertical {
             transform: translateX(100% * $transform-direction);
         }
         &.show .modal-dialog-vertical {
             transform: translateX(0 * $transform-direction);
+        }
+        .modal-content {
+            border-radius: 0 !important;
         }
     }
     .modal-dialog-vertical {
