@@ -75,7 +75,6 @@
 
 	searchRecords = function (frm) {
 		$(catListing).prepend(fcom.getLoader());
-
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', "search"), data, function (res) {
 			fcom.closeProcessing();
