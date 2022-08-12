@@ -177,12 +177,12 @@ class SubscriptionSellerReportController extends ListingBaseController
         if (!$spackageSReportsCacheVar) {
             $arr = [
                 'user_name' => Labels::getLabel('LBL_USER_NAME', $this->siteLangId),
-                'ossubs_subscription_name' => Labels::getLabel('LBL_PACKAGE_NAME', $this->siteLangId),
-                'ossubs_from_date' => Labels::getLabel('LBL_ACTIVATION_DATE', $this->siteLangId),
-                'ossubs_till_date' => Labels::getLabel('LBL_EXPIRY_DATE', $this->siteLangId),
-                'spRenewals' => Labels::getLabel('LBL_RENEWED', $this->siteLangId),
-                'spackageCancelled' => Labels::getLabel('LBL_CANCELLATION', $this->siteLangId),
-                'subscriptionCharges' => Labels::getLabel('LBL_PACKAGE_CHARGES', $this->siteLangId)
+                'ossubs_subscription_name' => Labels::getLabel('LBL_Package_Name', $this->siteLangId),
+                'ossubs_from_date' => Labels::getLabel('LBL_Activation_Date', $this->siteLangId),
+                'ossubs_till_date' => Labels::getLabel('LBL_Expiry_Date', $this->siteLangId),
+                'spRenewals' => Labels::getLabel('LBL_Renewed', $this->siteLangId),
+                'spackageCancelled' => Labels::getLabel('LBL_Cancellation', $this->siteLangId),
+                'subscriptionCharges' => Labels::getLabel('LBL_Amount_paid', $this->siteLangId)
             ];
             FatCache::set('spackageSReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
         } else {
