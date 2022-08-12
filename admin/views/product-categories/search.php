@@ -37,11 +37,15 @@ if (0 < $recordId) {
                 include('row.php');
             } ?>
         </ul>
-    <?php
+        <?php
         if ($searchRequest) {
             echo '</div>';
         }
-    }
+    } else { ?>
+        <div class="accordion-categories listingRecordJs">
+            <?php $this->includeTemplate('_partial/no-record-found.php'); ?>
+        </div>
+    <?php }
 } else { ?>
     <div class="accordion-categories listingRecordJs">
         <ul id="sorting-categories" class="sorting-categories categoriesListJs">
