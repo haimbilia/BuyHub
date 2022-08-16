@@ -113,8 +113,7 @@ class CurrencyManagementController extends ListingBaseController
         $srch->addMultipleFields(['curr.*', 'curr_l.*']);
         $srch->addOrder($sortBy, $sortOrder);
 
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $defaultCurrencyId = FatApp::getConfig("CONF_CURRENCY", FatUtility::VAR_INT, 1);
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));

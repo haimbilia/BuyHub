@@ -124,13 +124,6 @@ class OptionValuesController extends ListingBaseController
         $post = $srchFrm->getFormDataFromArray($postedData);
 
         $post['option_id'] = $optionId;
-
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        $page = ($page <= 0) ? 1 : $page;
-
-        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-
-
         $srch = OptionValue::getSearchObject($this->siteLangId, false);
         $srch->addMultipleFields(['ov.*', 'ov_l.optionvalue_name']);
         $srch->addCondition('ov.optionvalue_option_id', '=', $optionId);
@@ -142,16 +135,12 @@ class OptionValuesController extends ListingBaseController
 
         $srch->addOrder($sortBy, $sortOrder);
 
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs);
+        $srch->doNotLimitRecords();
+        $arrListing = $db->fetchAll($srch->getResultSet());
 
         $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
 
@@ -159,6 +148,8 @@ class OptionValuesController extends ListingBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('page', 1);
+        $this->set('hidePaginationHtml', true);
     }
 
     public function getSearchForm($fields = [])
