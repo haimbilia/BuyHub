@@ -5,10 +5,14 @@ $primary: #ff3a59;
 //dynamic theme colors
 $brand-color: var(--brand-color);
 $brand-color-inverse: var(--brand-color-inverse);
+$bg-brand-light: var(--brand-color-alpha);
+
 $primary-color: var(--primary-color);
 $primary-color-inverse: var(--primary-color-inverse);
+
 $secondary-color: #6dcdef;
 $secondary-color-inverse: #ffffff;
+
 $third-color: var(--third-color);
 $third-color-inverse: var(--third-color-inverse);
 //fixed theme colors
@@ -69,6 +73,12 @@ $danger-color: #fd397a;
     background-color: $brand-color;
     color: $brand-color-inverse;
 }
+
+@mixin bg-brand-light {
+    background-color: $bg-brand-light;
+    color: #000;
+}
+
 @mixin bg-secondary {
     background-color: $secondary-color;
     color: $secondary-color-inverse;
