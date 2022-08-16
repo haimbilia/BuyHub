@@ -14,7 +14,8 @@
     @include media-breakpoint-down(sm) {
         overflow: hidden;
         overflow-x: auto;
-        width: fill-available;
+        //width: fill-available;
+        width: stretch;
     }
     &-center {
         margin: 0 auto;

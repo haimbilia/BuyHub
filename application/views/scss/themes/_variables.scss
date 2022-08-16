@@ -14,6 +14,7 @@ $black: rgba(0, 0, 0, 1);
 //dynamic theme colors
 $brand-color: var(--brand-color);
 $brand-color-inverse: var(--brand-color-inverse);
+$bg-brand-light: var(--brand-color-alpha);
 
 $primary-color: var(--primary-color);
 $primary-color-inverse: var(--primary-color-inverse);
@@ -49,7 +50,8 @@ $bg-white: #fff;
 $bg-white-inverse: $txt-body;
 
 $bg-brand: $brand-color;
-$bg-brand-light: rgba(var(--brand-color-alpha), 0.1);
+//$bg-brand-light: rgba(var(--brand-color-alpha), 0.1);
+$bg-brand-light: $bg-brand-light;
 
 $bg-secondary: $secondary-color;
 $bg-secondary-light: rgba(var(--secondary-color-alpha), 0.1);
