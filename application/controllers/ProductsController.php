@@ -177,19 +177,11 @@ class ProductsController extends MyAppController
     }
 
     public function brandFilters()
-    {
-        $db = FatApp::getDb();
+    {        
         $post = FilterHelper::getParamsAssocArr();
 
-        $categoryId = 0;
-        if (array_key_exists('category', $post)) {
-            $categoryId = FatUtility::int($post['category']);
-        }
-
-        $keyword = '';
         $langIdForKeywordSeach = 0;
-        if (array_key_exists('keyword', $post) && !empty($post['keyword'])) {
-            $keyword = $post['keyword'];
+        if (array_key_exists('keyword', $post) && !empty($post['keyword'])) {            
             $langIdForKeywordSeach = $this->siteLangId;
         }
 
