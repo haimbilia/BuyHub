@@ -4,8 +4,8 @@ sass.compiler = require("node-sass");
 const sourcemaps = require("gulp-sourcemaps");
 const autoprefixer = require("gulp-autoprefixer");
 const minify = require("gulp-minify");
-const svgSprite = require("gulp-svg-sprite");
-var concat = require("gulp-concat");
+/* const svgSprite = require("gulp-svg-sprite");
+var concat = require("gulp-concat"); */
 
 // SVG Sprite Config
 const config = {
@@ -54,11 +54,11 @@ function dashboard() {
         .pipe(dest("./dashboard/views/css"));
 }
 
-function svg() {
+/* function svg() {
     return src("./manager/views/images/retina/sprites/*.svg")
         .pipe(svgSprite(config))
         .pipe(dest("./manager/views/images/retina"));
-}
+} */
 
 // Watch minifyjs
 function minifyjs() {
@@ -70,7 +70,7 @@ function minifyjs() {
 
 // Watch files
 function watchFiles() {
-    watch(["./application/views/common-js/*.js"], minifyjs);
+    watch(["./application/views/common-js-src/*.js"], minifyjs);
     watch(["./application/views/scss"], css);
     watch(["./dashboard/views/scss"], dashboard);
     watch(["./manager/views/scss"], manager);
