@@ -1145,6 +1145,7 @@ TV-9.4.0.20220719
     - #066101 - Nothing happens on clicking on the 'Write A Review' button on the reviews permalink page
     - #066089 - Nothing happens on clicking on the 'Refill stock' button in the email received for the threshold products.
     - #066100 - UI issue in the tooltip info in the 'Available Quantity field' on the shop inventory page. 
+    - #066115 - Suggestion: To remove the notifications from the search field which are not in use and those that appear multiple times.
 
 ## UAT points:
 
