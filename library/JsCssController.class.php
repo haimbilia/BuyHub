@@ -5,7 +5,7 @@ class JsCssController
     {
         $headers = FatApp::getApacheRequestHeaders();
         if (isset($headers['If-Modified-Since']) && (strtotime($headers['If-Modified-Since']) == $_GET['sid'])) {
-            header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $_GET['sid']).' GMT', true, 304);
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $_GET['sid']) . ' GMT', true, 304);
             exit;
         }
     }
@@ -18,11 +18,11 @@ class JsCssController
         header("Expires: " . date('r', strtotime("+1 year")));
         $this->checkModifiedHeader();
         if (isset($_GET['sid'])) {
-            header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $_GET['sid']).' GMT', true, 200);
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $_GET['sid']) . ' GMT', true, 200);
         }
 
-        if (! in_array('ob_gzhandler', ob_list_handlers())) {
-            if (substr_count($_SERVER ['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+        if (!in_array('ob_gzhandler', ob_list_handlers())) {
+            if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
                 ob_start("ob_gzhandler");
             } else {
                 ob_start();
@@ -62,7 +62,7 @@ class JsCssController
     public function cssCommon()
     {
 
-    /*	if (empty($_SESSION['preview_theme']) && !isset($_SESSION['preview_theme']) ) {
+        /*	if (empty($_SESSION['preview_theme']) && !isset($_SESSION['preview_theme']) ) {
             $this->checkModifiedHeader();
         }*/
         $this->setHeaders('text/css');
@@ -121,7 +121,7 @@ class JsCssController
 
         echo $str;
     }
-    
+
     public function js()
     {
         $this->setHeaders('application/javascript');
@@ -137,8 +137,8 @@ class JsCssController
                 $str .= file_get_contents(CONF_THEME_PATH . $fl);
             }
         }
-   
-        echo($str);
+
+        echo ($str);
     }
 
     public function jsCommon()
@@ -149,8 +149,6 @@ class JsCssController
             $files = $_GET['f'];
         } else {
             $pth = CONF_THEME_PATH . 'common-js';
-            $dir = opendir($pth);
-            $last_updated = 0;
             $files = '';
             $arrCommonfiles = scandir($pth, SCANDIR_SORT_ASCENDING);
             foreach ($arrCommonfiles as $fl) {
@@ -179,9 +177,9 @@ class JsCssController
                 continue;
             }
             if (file_exists(CONF_THEME_PATH . 'common-js' . DIRECTORY_SEPARATOR . $fl)) {
-                $str .=  '/* */'. file_get_contents(CONF_THEME_PATH . 'common-js' . DIRECTORY_SEPARATOR . $fl);
+                $str .=  '/* */' . file_get_contents(CONF_THEME_PATH . 'common-js' . DIRECTORY_SEPARATOR . $fl);
             }
         }
-        echo($str);
+        echo ($str);
     }
 }
