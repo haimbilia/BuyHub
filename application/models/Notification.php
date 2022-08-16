@@ -54,7 +54,7 @@ class Notification extends MyAppModel
     public const GUEST_ADVISER_REGISTERATION = 4;
     public const SUPPLIER_APPROVAL = 6;
     public const RETURN_REQUEST_STATUS_CHANGE_NOTIFICATION = 13;
-    public const NOTIFICATION_ABUSIVE_WORD = 15;
+    /*public const NOTIFICATION_ABUSIVE_WORD = 15;*/
 
 
 
@@ -85,7 +85,6 @@ class Notification extends MyAppModel
             Notification::GUEST_AFFILIATE_REGISTERATION => array(Labels::getLabel('LBL_ADVISER_REGISTRATION_NOTIFICATION', $langId), 'users'),
             Notification::GUEST_ADVISER_REGISTERATION => array(Labels::getLabel('LBL_USER_ORDER_PLACED_NOTIFICATION', $langId), 'orders'),
             Notification::NEW_CATALOG_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_CATALOG_REQUEST_NOTIFICATION', $langId), 'products'),
-            Notification::SUPPLIER_APPROVAL => array(Labels::getLabel('LBL_USER_SUPPLIER_APPROVAL_NOTIFICATION', $langId), 'seller-approval-requests'),
             Notification::BRAND_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_SELLER_BRAND_REQUEST_NOTIFICATION', $langId), $brandRequestUrl),
             Notification::NEW_ORDER_STATUS_NOTIFICATION => array(Labels::getLabel('LBL_USER_ORDER_STATUS_NOTIFICATION', $langId), 'orders'),
             Notification::ORDER_CANCELLATION_NOTIFICATION => array(Labels::getLabel('LBL_USER_ORDER_CANCELLATION_NOTIFICATION', $langId), 'order-cancellation-requests'),
@@ -93,8 +92,7 @@ class Notification extends MyAppModel
             Notification::ORDER_RETURNED_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_USER_ORDER_RETURN_REQUEST_NOTIFICATION', $langId), 'order-return-requests'),
             Notification::CATALOG_REQUEST_MESSAGE_NOTIFICATION => array(Labels::getLabel('LBL_USER_CATALOG_REQUEST_MESSAGE_NOTIFICATION', $langId), 'custom-products'),
             Notification::RETURN_REQUEST_STATUS_CHANGE_NOTIFICATION => array(Labels::getLabel('LBL_BUYER_RETURN_REQUEST_STATUS_CHANGE_NOTIFICATION', $langId), 'order-return-requests'),
-            Notification::REPORT_SHOP_NOTIFICATION => array(Labels::getLabel('LBL_USER_REPORT_SHOP_NOTIFICATION', $langId), 'shop-reports'),
-            Notification::NOTIFICATION_ABUSIVE_WORD => array(Labels::getLabel('LBL_USER_ABUSIVE_WORD_NOTIFICATION', $langId), ''),
+            Notification::REPORT_SHOP_NOTIFICATION => array(Labels::getLabel('LBL_USER_REPORT_SHOP_NOTIFICATION', $langId), 'shop-reports'),            
             Notification::NEW_SUBSCRIPTION_PURCHASE_NOTIFICATION => array(Labels::getLabel('LBL_user_new_subscription_purchase_notification', $langId), ''),
             Notification::PROMOTION_APPROVAL_NOTIFICATION => array(Labels::getLabel('LBL_USER_PROMOTION_APPROVAL_NOTIFICATION', $langId), 'promotions'),
             Notification::WITHDRAWL_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_USER_WITHDRAWL_REQUEST_NOTIFICATION', $langId), 'withdrawal-requests'),
