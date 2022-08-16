@@ -58,6 +58,15 @@ foreach ($arrListing as $sn => $row) {
             case 'adminSalesEarnings':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
+            case 'rewardsPoints':
+            case 'rewardsPointsEarned':
+            case 'rewardsPointsRedeemed':
+            case 'netSoldQty':
+            case 'totOrders':
+            case 'totRefundedQtys':
+            case 'totQtys':
+            case 'promotionCharged':
+                $td->appendElement('plaintext', $tdAttr, FatUtility::int($row[$key], FatUtility::VAR_INT, 0), true);
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
@@ -66,7 +75,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

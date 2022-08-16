@@ -50,12 +50,12 @@
                         $txt .= $orderStatuses[$order['ossubs_status_id']];
                     }
 
-                    $bannerClass = applicationConstants::CLASS_WARNING;                  
-                    if($order['ossubs_status_id'] == OrderSubscription::ACTIVE_SUBSCRIPTION){
+                    $bannerClass = applicationConstants::CLASS_WARNING;
+                    if ($order['ossubs_status_id'] == OrderSubscription::ACTIVE_SUBSCRIPTION) {
                         $bannerClass = applicationConstants::CLASS_SUCCESS;
-                    }elseif($order['ossubs_status_id'] == OrderSubscription::CANCELLED_SUBSCRIPTION){
+                    } elseif ($order['ossubs_status_id'] == OrderSubscription::CANCELLED_SUBSCRIPTION) {
                         $bannerClass = applicationConstants::CLASS_DANGER;
-                    }                  
+                    }
                     $td->appendElement('span', array('class' => 'badge badge-inline ' . $bannerClass), $txt, true);
                     break;
                 case 'total':
@@ -67,7 +67,7 @@
                     break;
                 case 'ossubs_till_date':
                     if ($order['ossubs_from_date'] == 0 || $order['ossubs_till_date'] == 0) {
-                        $subscritpionValidTill = '';
+                        $subscritpionValidTill = Labels::getLabel('LBL_N/A', $siteLangId);
                     } else {
                         $subscritpionValidTill = FatDate::format($order['ossubs_from_date']) . " - " . FatDate::format($order['ossubs_till_date']);
                     }

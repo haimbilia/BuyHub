@@ -1,29 +1,32 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
 <section class="payment-section">
-    <div class="payable-amount">            
-        <div class="payable-amount__head">
-            <div class="payable-amount--header">              
+    <div class="payable-amount">
+        <div class="payable-amount-head">
+            <div class="payable-amount-logo">
                 <?php $this->includeTemplate('_partial/paymentPageLogo.php', array('siteLangId' => $siteLangId)); ?>
             </div>
-            <div class="payable-amount--decription">
-                <h2><?php echo CommonHelper::displayMoneyFormat($paymentAmount) ?></h2>
-                <p><?php echo Labels::getLabel('LBL_Total_Payable', $siteLangId); ?></p>
-                <p><?php echo Labels::getLabel('LBL_Order_Invoice', $siteLangId); ?>: <?php echo $orderInfo["invoice"]; ?></p>
+            <div class="payable-amount-total">
+                <p> <span class="label"> <?php echo Labels::getLabel('LBL_Total_Payable', $siteLangId); ?>:</span>
+                    <span class="value"> <?php echo CommonHelper::displayMoneyFormat($paymentAmount) ?> </span>
+                </p>
+                <p> <span class="label"> <?php echo Labels::getLabel('LBL_Order_Invoice', $siteLangId); ?>: </span>
+                    <span class="value"><?php echo $orderInfo["invoice"]; ?></span>
+                </p>
             </div>
         </div>
-        <div class="payable-amount__body payment-from">      
-            <div class="payable-form__body" id="paymentFormElement-js">
+        <div class="payable-amount-body from-payment">
+            <div class="payable-form-body" id="paymentFormElement-js">
                 <p id="paymentStatus"></p>
                 <?php
                 if (isset($error))
                     echo '<div class="alert alert--danger"><p>' . $error . '</p></div>';
                 if (isset($success))
-                    echo '<div class="alert alert--success" ><p>'.Labels::getLabel('LBL_Your_payment_has_been_successfully', $siteLangId).'</p></div>';
+                    echo '<div class="alert alert--success" ><p>' . Labels::getLabel('LBL_Your_payment_has_been_successfully', $siteLangId) . '</p></div>';
                 if (strlen($orderId) > 0 && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) echo '<div class="text-center" style="margin-top:40px;" id="AmazonPayButton"></div>';
                 ?>
-            </div>  
+            </div>
             <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
-                    <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
+                <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
             <?php } ?>
         </div>
     </div>

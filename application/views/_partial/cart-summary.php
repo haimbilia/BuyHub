@@ -142,10 +142,10 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                 </div>
             <?php } else { ?>
                 <div class="block-empty m-auto text-center">
-                    <img class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty_cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Record_Found', $siteLangId); ?>" width="80">
-                    <h4>
+                    <img class="block__img" width="100" height="100" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty-cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Record_Found', $siteLangId); ?>" width="80">
+                    <h5>
                         <?php echo Labels::getLabel('LBL_YOUR_SHOPPING_BAG_IS_EMPTY', $siteLangId); ?>
-                    </h4>
+                    </h5>
                     <?php if (isset($saveForLaterProducts) && !empty($saveForLaterProducts)) { ?>
                         <a class="link-underline" href="<?php echo UrlHelper::generateUrl('Cart'); ?>">
                             <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_VIEW_SAVED_FOR_LATER_({ITEMS-COUNT})_ITEMS', $siteLangId), ['{ITEMS-COUNT}' => count($saveForLaterProducts)]); ?>

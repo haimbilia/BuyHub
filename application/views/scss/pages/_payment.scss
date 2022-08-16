@@ -1,0 +1,36 @@
+.payment-section {
+    max-width: 500px;
+    padding: 2rem;
+    margin: 0 auto;
+    .payable-amount {
+        display: flex;
+        flex-direction: column;
+        &-head {
+            display: flex;
+            align-items: center;
+            flex-flow: row wrap;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        &-body {
+            flex: 1;
+        }
+        &-footer {
+        }
+        &-total {
+            .label {
+                font-size: 0.85rem;
+            }
+            .value {
+                font-weight: 600;
+                font-size: 1rem;
+            }
+        }
+    }
+}
+
+.payable-form {
+    &-footer {
+        margin-top: 2rem;
+    }
+}

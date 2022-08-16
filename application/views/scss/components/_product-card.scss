@@ -127,7 +127,7 @@
         margin-bottom: 1rem;
         font-size: 0.85rem;
         font-weight: 600;
-        display: -webkit-box;
+
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
@@ -138,7 +138,7 @@
         //max-width: 200px;
         //min-height: 62px;
         @include media-breakpoint-down(lg) {
-            // display: -webkit-box;
+            //
             // -webkit-line-clamp: 1;
             // -webkit-box-orient: vertical;
             // overflow: hidden;

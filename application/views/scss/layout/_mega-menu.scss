@@ -45,21 +45,20 @@
                 top: 100%;
                 left: 0;
                 right: 0;
-                bottom: 0;
+                //bottom: 0;
                 width: 100%;
                 opacity: 0;
                 transform: translate(0, -1%);
                 visibility: hidden;
-                overflow: auto;
-                height: 0;
                 padding: 0;
                 background-color: #fff;
                 z-index: 998;
                 transition: all 0.3s ease-in-out 0s;
                 box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-                height: 60vh;
-                min-height: 360px;
-                max-height: 520px;
+                overflow: auto;
+                // height: 60vh;
+                // min-height: 360px;
+                // max-height: 520px;
             }
         }
 
@@ -130,8 +129,8 @@
 
     .categories-container {
         margin: 0 auto;
-        padding-top: 2.5rem;
-        padding-bottom: 2.5rem;
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
         display: flex;
     }
 }

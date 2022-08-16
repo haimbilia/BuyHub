@@ -1,8 +1,6 @@
 .iconbox {
     padding: 1.5rem;
     #{&}__body {
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
         -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;
@@ -17,11 +15,9 @@
             }
         }
         .iconbox__desc {
-            display: -webkit-box;
-            display: -ms-flexbox;
             display: flex;
             -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
+
             -ms-flex-direction: column;
             flex-direction: column;
             .iconbox__title {
@@ -45,11 +41,11 @@
         background-color: #f7f8fa;
         overflow: hidden;
         position: relative;
-        >div {
+        > div {
             z-index: 1;
         }
         &:before {
-            content: ' ';
+            content: " ";
             position: absolute;
             top: 0;
             #{$start-direction}: 0;
@@ -59,7 +55,7 @@
             z-index: -1;
         }
         &:after {
-            content: ' ';
+            content: " ";
             width: 1000px;
             height: 1025px;
             position: absolute;
@@ -75,11 +71,11 @@
         background-color: #f7f8fa;
         overflow: hidden;
         position: relative;
-        >div {
+        > div {
             z-index: 1;
         }
         &:before {
-            content: ' ';
+            content: " ";
             position: absolute;
             top: 0;
             #{$start-direction}: 0;
@@ -89,7 +85,7 @@
             z-index: -1;
         }
         &:after {
-            content: ' ';
+            content: " ";
             width: 1000px;
             height: 1025px;
             position: absolute;
@@ -104,11 +100,11 @@
             background-color: #f7f8fa;
             overflow: hidden;
             position: relative;
-            >div {
+            > div {
                 z-index: 1;
             }
             &:before {
-                content: ' ';
+                content: " ";
                 position: absolute;
                 top: 0;
                 #{$start-direction}: 0;
@@ -118,7 +114,7 @@
                 z-index: -1;
             }
             &:after {
-                content: ' ';
+                content: " ";
                 width: 1000px;
                 height: 1025px;
                 position: absolute;
@@ -134,11 +130,11 @@
             background-color: #f7f8fa;
             overflow: hidden;
             position: relative;
-            >div {
+            > div {
                 z-index: 1;
             }
             &:before {
-                content: ' ';
+                content: " ";
                 position: absolute;
                 top: 0;
                 #{$start-direction}: 0;
@@ -148,7 +144,7 @@
                 z-index: -1;
             }
             &:after {
-                content: ' ';
+                content: " ";
                 width: 1000px;
                 height: 1025px;
                 position: absolute;
@@ -164,11 +160,11 @@
             background-color: #f7f8fa;
             overflow: hidden;
             position: relative;
-            >div {
+            > div {
                 z-index: 1;
             }
             &:before {
-                content: ' ';
+                content: " ";
                 position: absolute;
                 top: 0;
                 #{$start-direction}: 0;
@@ -178,7 +174,7 @@
                 z-index: -1;
             }
             &:after {
-                content: ' ';
+                content: " ";
                 width: 1000px;
                 height: 1025px;
                 position: absolute;
@@ -194,11 +190,11 @@
             background-color: #f7f8fa;
             overflow: hidden;
             position: relative;
-            >div {
+            > div {
                 z-index: 1;
             }
             &:before {
-                content: ' ';
+                content: " ";
                 position: absolute;
                 top: 0;
                 #{$start-direction}: 0;
@@ -208,7 +204,7 @@
                 z-index: -1;
             }
             &:after {
-                content: ' ';
+                content: " ";
                 width: 1000px;
                 height: 1025px;
                 position: absolute;

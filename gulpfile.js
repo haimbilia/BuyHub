@@ -5,6 +5,7 @@ const sourcemaps = require("gulp-sourcemaps");
 const autoprefixer = require("gulp-autoprefixer");
 const minify = require("gulp-minify");
 const svgSprite = require("gulp-svg-sprite");
+var concat = require("gulp-concat");
 
 // SVG Sprite Config
 const config = {
@@ -59,12 +60,21 @@ function svg() {
         .pipe(dest("./manager/views/images/retina"));
 }
 
+// Watch minifyjs
+function minifyjs() {
+    return src("./application/views/common-js-src/*.js", { allowEmpty: true })
+        .pipe(minify({ noSource: true }))
+        // .pipe(concat("myapp.js"))
+        .pipe(dest("./application/views/common-js"));
+}
+
 // Watch files
 function watchFiles() {
+    watch(["./application/views/common-js/*.js"], minifyjs);
     watch(["./application/views/scss"], css);
     watch(["./dashboard/views/scss"], dashboard);
     watch(["./manager/views/scss"], manager);
 }
 
-exports.default = series(css, dashboard, manager, svg);
+exports.default = series(minifyjs, css, dashboard, manager);
 exports.watch = watchFiles;

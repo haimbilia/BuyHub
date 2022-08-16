@@ -1139,13 +1139,13 @@ TV-9.4.0.20220719
     - #066066 - Special price not appearing on product listing page .
     - #065983 - The download icons are not visible on the 'Prev files' section on the digital products details page. 
     - #065994 - Impressions count didn't increased for a product promotion
+    - #066031 - Blank text appears for the fields for which no data is available in the reports. 
     - #066086 - The digital files added by the admin are visible on the Digital links setup page even if the admin enabled the add attachment at the inventory level settings.
     - #065950 - The download count does not get increased if the admin / seller attach any file with existing digital product order
     - #066106 - The product is visible on the front end even if the tax category is not bound with the product.
     - #066101 - Nothing happens on clicking on the 'Write A Review' button on the reviews permalink page
     - #066089 - Nothing happens on clicking on the 'Refill stock' button in the email received for the threshold products.
     - #066100 - UI issue in the tooltip info in the 'Available Quantity field' on the shop inventory page. 
-    - #066115 - Suggestion: To remove the notifications from the search field which are not in use and those that appear multiple times.
 
 ## UAT points:
 

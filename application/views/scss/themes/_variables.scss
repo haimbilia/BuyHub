@@ -94,6 +94,12 @@ $star-color: #ff3a59;
     background-color: $brand-color;
     color: $brand-color-inverse;
 }
+
+@mixin bg-brand-light {
+    background-color: $bg-brand-light;
+    color: #000;
+}
+
 @mixin bg-secondary {
     background-color: $secondary-color;
     color: $secondary-color-inverse;

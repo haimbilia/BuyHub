@@ -1089,9 +1089,8 @@ class ImportExportController extends ListingBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_Please_Select_A_CSV_File', $this->siteLangId), true);
         }
         if (!in_array($_FILES['import_file']['type'], CommonHelper::isCsvValidMimes())) {
-            LibHelper::exitWithError(Labels::getLabel("ERR_Not_a_Valid_CSV_File", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_NOT_A_VALID_CSV_FILE", $this->siteLangId), true);
         }
-
         $db = FatApp::getDb();
         /* All Languages[  */
         $langSrch = Language::getSearchObject();

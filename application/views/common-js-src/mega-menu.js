@@ -1,8 +1,15 @@
 $(function () {
+    var isOnDiv = false;
+    $('.navchild').mouseenter(function () { isOnDiv = true; });
+    $('.navchild').mouseleave(function () { isOnDiv = false; });
 
     /* for navigation drop down */
     $('.navchild').hover(function () {
         var el = $("body");
+        if (isOnDiv === true) {
+            $(this).removeClass('is-focus');
+            el.removeClass('nav_show');
+        }
         if ($(window).width() > 1025) {
             if ($(this).hasClass('is-focus')) {
                 $(this).removeClass('is-focus');
@@ -20,7 +27,6 @@ $(function () {
 
     /* for mobile navigation */
     $('.link__mobilenav').click(function () {
-
         if ($(this).hasClass('is-focus')) {
             $(this).removeClass('is-focus');
             $(this).siblings('.navigation > li .subnav').slideUp();
@@ -34,7 +40,6 @@ $(function () {
         }
         return;
     });
-
 
     /* for mobile toggle navigation */
     $('.navs_toggle').click(function () {
@@ -59,9 +64,7 @@ $(function () {
         }
     });
 
-
     $('.navigation-wrapper').click(function (e) {
         e.stopPropagation();
-
     });
 });

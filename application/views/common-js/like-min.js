@@ -1,0 +1,1 @@
+window.onload=function(){var e=document.querySelector(".heart-wrapper-Js");e&&e.addEventListener("click",function(){e.classList.toggle("is-active")},!1)};

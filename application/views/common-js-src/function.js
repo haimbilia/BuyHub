@@ -1,5 +1,3 @@
-
-
 if (getCookie("screenWidth") != screen.width) {
     $.ajax({ url: fcom.makeUrl('Custom', 'updateScreenResolution', [screen.width, screen.height]) });
 }
@@ -18,7 +16,7 @@ var Dashboard = function () {
             $("<div class='sidebar-overlay--js'></div>").appendTo("body");
             var visibility = 1;
         } else {
-            $("body").removeClass('sidebar-is-expanded').addClass('sidebar-is-reduced');
+            $("body").removeClass('sidebar-is-expanded').addClass('sidebar-is-reduced'); 
             $("div.sidebar-overlay--js").remove();
             var visibility = 0;
         }
@@ -43,7 +41,7 @@ Dashboard.init();
 
 $(document).on('click', '#showPass', function () {
     var passInput = $("#password");
-    if ('' == passInput.val()) {
+    if ('' == passInput.val()) { 
         return;
     }
 
@@ -131,10 +129,7 @@ $(document).on('click', '.toggle--search', function () {
 });
 
 $("document").ready(function () {
-
     $('.parents--link').on('click', function () {
-
-
         $(this).parent().toggleClass("is--active");
         $(this).parent().find('.childs').toggleClass("opened");
     });
@@ -151,11 +146,7 @@ $(window).on('load', function () {
 $(function () {
     /*common drop down function  */
     $('.dropdown__trigger-js').each(function () {
-        $(this).on('click', function () {
-            /*if($('html').hasClass('cart-is-active')){
-             $('.cart').removeClass('cart-is-active');
-             $('html').removeClass("cart-is-active");
-            }*/
+        $(this).on('click', function () {            
             if ($('body').hasClass('toggled_left')) {
                 $('.navs_toggle').removeClass("active");
                 $('body').removeClass('toggled_left');
@@ -185,28 +176,6 @@ $(function () {
     $('.collections-ui').on('click', '.collection__container', function (e) {
         e.stopPropagation();
     });
-
-    /* $('.main-search').on('click','.form--search-popup',function(e){
-
-        if(!$(e.target).hasClass('close-layer')){
-            e.stopPropagation();
-        }else{
-            if($('html').hasClass('is--form-visible')){
-                $('html').removeClass('is--form-visible');
-                $('.toggle--search-js').toggleClass("is--active");
-            }
-        }
-    }); */
-
-    /* for fixed header */
-    /*$(window).scroll(function(){
-        body_height = $("#body").position();
-        scroll_position = $(window).scrollTop();
-        if( typeof body_height !== typeof undefined && body_height.top < scroll_position)
-            $("body").addClass("fixed");
-        else
-            $("body").removeClass("fixed");
-    });*/
 
     /* for footer */
     if ($(window).width() < 576) {
@@ -239,12 +208,7 @@ $(function () {
                     .slideDown(300);
             }
         });
-        /* $(document).delegate('.cart > a','click',function(){
-        $('html').toggleClass("cart-is-active");
-        $(this).toggleClass("cart-is-active");
-        }); */
     });
-
 
     /* for cart area */
     $('.cart').on('click', function () {
@@ -252,15 +216,8 @@ $(function () {
             $('.dropdown__trigger-js').parent('.dropdown').removeClass("is-active");
             $("html").removeClass("toggled-user");
         }
-        /* $('html').toggleClass("cart-is-active");
-        $(this).toggleClass("cart-is-active"); */
-        /* return false;  */
     });
     $('html').on('click', function () {
-        /* if($('html').hasClass('cart-is-active')){
-            $('html').removeClass('cart-is-active');
-            $('.cart').toggleClass("cart-is-active");
-        } */
         if ($('.collection__container').hasClass('open-menu')) {
             $('.open-menu').parent().toggleClass('is-active');
             $('.open-menu').toggleClass('open-menu');
@@ -474,56 +431,6 @@ function moveToTargetDiv(target, outer, layout) {
     return false;
 }
 
-function moveToTargetDivssss(target, outer, layout) {
-    var out = $(outer);
-    var tar = $(target);
-    var z = tar.index();
-    var m = out.find('li');
-
-    if (layout == 'ltr') {
-        var q = 0;
-        for (var i = 0; i < z; i++) {
-            q += $(m[i]).outerWidth(true) + 4;
-        }
-    } else {
-        var ulWidth = 0;
-        $(outer + " li").each(function () {
-            ulWidth = ulWidth + $(this).outerWidth(true);
-        });
-
-        var q = 0;
-        for (var i = 0; i <= z; i++) {
-            q += $(m[i]).outerWidth(true);
-        }
-        q = ulWidth - q;
-
-        /* var q = out.last().outerWidth(true);
-        var q = ulWidth;
-        for(var i = z; i > 0; i--){
-            q-= $(m[i]).outerWidth(true);
-        }   */
-    }
-    out.animate({
-        scrollLeft: Math.max(0, q)
-    }, 800);
-    return false;
-}
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
-
 /*Google reCaptcha V3  */
 function googleCaptcha(updateToken = false) {
     updateToken = ('undefined' == typeof updateToken ? false : updateToken);
@@ -683,7 +590,7 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
     }
 
     if (typeof google !== 'object' || typeof google.maps !== 'object') { return; }
-  
+
     var autocomplete = new google.maps.places.Autocomplete(fieldElement, options);
     window.addEventListener('scroll', () => google.maps.event.trigger(autocomplete, 'resize'));
 
@@ -735,7 +642,6 @@ function googleAddressAutocomplete(elementId = 'ga-autoComplete', field = 'forma
 
 function getSelectedCountry() {
     var country = document.getElementById('shop_country_code');
-    console.log(country[0].selectedOptions[0].innerText);
     return country[0].selectedOptions[0].innerText;
 }
 
@@ -760,14 +666,6 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
     infowindow = new google.maps.InfoWindow;
 
     geocodeAddress(geocoder, map, infowindow, { 'location': latlng });
-
-    /* var sel = document.getElementById('shop_country_code');
-    var country = sel.options[sel.selectedIndex].text;
-    
-    address = document.getElementById('postal_code').value;
-    address = country + ' ' + address;
-	
-    geocodeAddress(geocoder, map, infowindow, { 'address': address }); */
 
     document.getElementById('postal_code').addEventListener('blur', function () {
         var sel = document.getElementById('shop_country_code');
@@ -798,13 +696,6 @@ function initMap(lat = 40.72, lng = -73.96, elementId = 'map') {
         var country = sel.options[sel.selectedIndex].text;
         geocodeAddress(geocoder, map, infowindow, { 'address': country });
     });
-
-    /* for (i = 0; i < document.getElementsByClassName('addressSelection-js').length; i++) {
-        document.getElementsByClassName('addressSelection-js')[i].addEventListener("change", function(e) {
-            address = e.target.options[e.target.selectedIndex].text;
-            geocodeAddress(geocoder, map, infowindow, {'address': address});
-            });
-    } */
 }
 
 function geocodeAddress(geocoder, resultsMap, infowindow, address) {
