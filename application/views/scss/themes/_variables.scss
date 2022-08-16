@@ -10,11 +10,11 @@
 $dark-color: #888;
 $blue: var(--brand-color);
 $primary: #ff3a59;
-$black: rgba(0, 0, 0, 1); 
+$black: rgba(0, 0, 0, 1);
 //dynamic theme colors
-$brand-color: var(--brand-color); 
+$brand-color: var(--brand-color);
 $brand-color-inverse: var(--brand-color-inverse);
-$bg-brand-light: var(--brand-color-alpha); 
+$bg-brand-light: rgba(var(--brand-color-alpha), 0.1);
 
 $primary-color: var(--primary-color);
 $primary-color-inverse: var(--primary-color-inverse);
@@ -98,7 +98,7 @@ $star-color: #ff3a59;
 }
 
 @mixin bg-brand-light {
-    background-color: $bg-brand-light;  
+    background-color: $bg-brand-light;
     color: #000;
 }
 
