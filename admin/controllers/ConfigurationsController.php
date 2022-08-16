@@ -1773,6 +1773,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 /* block start */
+                /*
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_MOBILE_LOGO", $langId) . ' </h6>
                       <span class="form-text text-muted">
@@ -1799,7 +1800,7 @@ class ConfigurationsController extends ListingBaseController
                 ));
                 $fld = $frm->addHtml('', 'spacer7', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
+                */
                 /* block start */
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_INVOICE_LOGO", $langId) . ' </h6>
