@@ -1745,9 +1745,9 @@ class ConfigurationsController extends ListingBaseController
 
                 /* block start */
 
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_MOBILE_APPS_SHORTCUT_ICON", $langId) . ' </h6>
+                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_APPLE_TOUCH_ICON", $langId) . ' </h6>
                      <span class="form-text text-muted">
-                         <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_SHORTCUT_ICON_ON_MOBILE_APPS_WHEN_MARKED_AS_SHORTCUT", $langId) . '</span>');
+                         <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_APPLE_TOUCH_ICON_USED_IN_APPLE_DEVICES", $langId) . '</span>');
 
                 $fileType = AttachedFile::FILETYPE_APPLE_TOUCH_ICON;
 
