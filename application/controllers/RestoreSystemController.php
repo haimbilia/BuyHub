@@ -20,9 +20,6 @@ class RestoreSystemController extends MyAppController
             FatUtility::dieJsonError('Auto restore disabled by admin!');
         }
 
-        Message::addMessage('Restored Successfully!');
-        FatUtility::dieJsonSuccess(Message::getHtml());
-
         $assignValues = array('conf_name' => 'CONF_TIMEZONE', 'conf_val' => 'Asia/Kolkata');
         FatApp::getDb()->insertFromArray('tbl_configurations', $assignValues, false, array(), $assignValues);
        
