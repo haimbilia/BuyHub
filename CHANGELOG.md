@@ -1155,7 +1155,8 @@ TV-9.4.0.20220719
     - #065712 - Desktop banner cropper appears while admin tries adding a banner for iPad or mobile for any category
     - #066163 - UI issue in the sponsored products collection on the homepage
     - #066137 - The header mega menu is not visible on the front end if the admin deletes all the cms pages from the header navigation.
-    - #066172 - The category's names do not appear correct
+    - #066172 - The category's names do not appear correct.
+    - #066171 - First name field is non editable in blog contribution form
 
 ## UAT points:
 
