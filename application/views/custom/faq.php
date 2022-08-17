@@ -22,8 +22,10 @@
                 <div class="col-lg-7 faqSectionJs position-relative ">
                     <?php if ($recordCount > 0) { ?>
                         <div class="faq-filters mb-4" id="categoryPanel"></div>
-                    <?php } ?>
-                    <ul class="faq-list" id="listing"></ul>
+                        <ul class="faq-list" id="listing"></ul>
+                    <?php } else {
+                        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
+                    } ?>
                 </div>
             </div>
         </div>
