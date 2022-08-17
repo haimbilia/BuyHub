@@ -12,11 +12,11 @@ $fileFld->developerTags['col'] = 12;
 $btnSubmitFld = $frm->getField('btn_submit');
 $btnSubmitFld->developerTags['noCaptionTag'] = true;
 $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
-$isUserLogged = UserAuthentication::isUserLogged();
+/* $isUserLogged = UserAuthentication::isUserLogged();
 if ($isUserLogged) {
     $nameFld = $frm->getField(BlogContribution::DB_TBL_PREFIX . 'author_first_name');
     $nameFld->setFieldTagAttribute('readonly', 'readonly');
-}
+} */
 ?>
 <div id="body" class="body">
     <section class="section">

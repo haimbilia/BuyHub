@@ -495,14 +495,14 @@ class BlogController extends MyAppController
         }
         $post['bcontributions_added_on'] = date('Y-m-d H:i:s');
         $post['bcontributions_user_id'] = UserAuthentication::getLoggedUserId(true);
-        if ($loggedUserId = UserAuthentication::getLoggedUserId(true)) {
+        /* if ($loggedUserId = UserAuthentication::getLoggedUserId(true)) {
             $userObj = new User($loggedUserId);
             $userInfo = $userObj->getUserInfo();
             $nameArr = explode(' ', $userInfo['user_name']);
             $wordCount = count($nameArr);
             $firstName = ($wordCount > 0) ? $nameArr[0] : $userInfo['user_name'];
             $post['bcontributions_author_first_name'] = $firstName;
-        }
+        } */
 
         if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
             $this->setErrorAndRedirect(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));

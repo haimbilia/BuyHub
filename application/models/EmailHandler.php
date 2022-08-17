@@ -21,7 +21,7 @@ class EmailHandler extends FatModel
         if (empty($phone) || empty($tpl) || empty($arrReplacements)) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
             return false;
-        }     
+        }
         $phone = false !== strpos($phone, '+') ? $phone : '+' . $phone;
 
         $smsArchive = new SmsArchive();
@@ -995,27 +995,21 @@ class EmailHandler extends FatModel
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', Shop::DB_TBL_PREFIX . 'user_id = u.user_id', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $langId, 's_l');
 
-        $srch->addMultipleFields(array('selprod_title', 'selprod_product_id', 'user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email', 'ifnull(shop_name, shop_identifier) as shop_name'));
+        $srch->addMultipleFields(array('selprod_id', 'selprod_title', 'selprod_product_id', 'user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email', 'ifnull(shop_name, shop_identifier) as shop_name'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-
-        if (!$rs) {
-            return false;
-        }
-
-        $productInfo = FatApp::getDb()->fetch($rs);
+        $productInfo = FatApp::getDb()->fetch($srch->getResultSet());
 
         if (empty($productInfo)) {
             return false;
         }
 
-        $url = UrlHelper::generateFullUrl('seller', 'products', array(), CONF_WEBROOT_DASHBOARD);       
+        $url = UrlHelper::generateUrl('seller', 'sellerProductForm', array($productInfo['selprod_product_id'], $productInfo['selprod_id']), CONF_WEBROOT_DASHBOARD);
 
         $arrReplacements = array(
             '{shop_name}' => $productInfo['shop_name'],
             '{prod_title}' => $productInfo["selprod_title"],
-            '{click_here}' => $url,
+            '{click_here}' => '<a href="' . $url . '">' . Labels::getLabel('LBL_CLICK_HERE', $langId) . '</a>',
         );
 
         $receipentsInfo = User::getSubUsersReceipents($productInfo['user_id'], 'canViewProducts');
@@ -1161,10 +1155,10 @@ class EmailHandler extends FatModel
             if ($orderComment['oshistory_comments'] != "") {
                 $msgComments = '<br>
                     <div style="background: #f6f6f6; font-size: 14px; text-align: center; border-radius: 4px; color: #212529; padding: 20px; line-height: 24px">
-                        <h5 style="font-weight: 600; text-transform: uppercase; color: #212529; letter-spacing: -0.2px; margin: 0">'.Labels::getLabel('LBL_COMMENTS_FOR_YOUR_ORDER', $langId).'</h5>
-                        <p style="margin: 0">'.nl2br($orderComment['oshistory_comments']).'</p>
+                        <h5 style="font-weight: 600; text-transform: uppercase; color: #212529; letter-spacing: -0.2px; margin: 0">' . Labels::getLabel('LBL_COMMENTS_FOR_YOUR_ORDER', $langId) . '</h5>
+                        <p style="margin: 0">' . nl2br($orderComment['oshistory_comments']) . '</p>
                     </div>
-                '; 
+                ';
             }
             $shipmentInformation = '';
             if ($orderComment['oshistory_tracking_number'] != "") {
@@ -1172,7 +1166,7 @@ class EmailHandler extends FatModel
                 if (!empty($orderComment['oshistory_tracking_url'])) {
                     $shipmentInformation .= '
                         <div class="btn-wrapper" style="text-align: center">
-                            <a href="'.$orderComment['oshistory_tracking_url'].'" target="_blank" style="
+                            <a href="' . $orderComment['oshistory_tracking_url'] . '" target="_blank" style="
                                     border-radius: 4px;
                                     background-color: #f13925;
                                     color: #fff;
@@ -1183,8 +1177,8 @@ class EmailHandler extends FatModel
                                     display: inline-block;
                                     margin-bottom: 30px;
                                 ">Track Shipment</a>
-                        </div>';                   
-                }                
+                        </div>';
+                }
             }
 
             $charges = $orderObj->getOrderProductChargesArr($orderComment['op_id']);
@@ -1333,7 +1327,7 @@ class EmailHandler extends FatModel
         $langId = FatUtility::int($langId);
         $txn = new Transactions($txnId);
 
-        $txnDetail = $txn->getAttributesWithUserInfo(0, array('utxn_credit', 'utxn_debit', 'utxn_comments', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email', 'utxn_user_id'));       
+        $txnDetail = $txn->getAttributesWithUserInfo(0, array('utxn_credit', 'utxn_debit', 'utxn_comments', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email', 'utxn_user_id'));
 
         $txnAmount = $txnDetail["utxn_credit"] > 0 ? $txnDetail["utxn_credit"] : $txnDetail["utxn_debit"];
         $arrReplacements = array(
@@ -1775,7 +1769,7 @@ class EmailHandler extends FatModel
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
-  
+
         /* Buyer Notification [ */
         $arrReplacements = array(
             '{username}' => FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId),
@@ -2470,7 +2464,7 @@ class EmailHandler extends FatModel
                 ->setTo($row["credential_email"])
                 ->setVariables($arrReplacements)
                 ->send();
-        }        
+        }
         $phone = !empty($row['user_phone']) ? ValidateElement::formatDialCode($row['user_phone_dcode']) . $row['user_phone'] : '';
         $this->sendSms("reward_points_credited_debited", $phone, $arrReplacements, $langId);
         $notiArrReplacements = array(
@@ -2957,7 +2951,7 @@ class EmailHandler extends FatModel
         $srch->addMultipleFields(array('uwlp_selprod_id', 'uwlist_id'));
         $srch->addGroupBy('uwlp_selprod_id');
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();        
+        $srch->doNotLimitRecords();
         $selProdIds = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         $selProdIds = array_keys($selProdIds);
         $prodSrch = new ProductSearch($langId);
