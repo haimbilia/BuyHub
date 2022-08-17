@@ -178,4 +178,29 @@ body {
 .zeynep {
     #{$end-direction}: auto;
     #{$start-direction}: 0;
+
+    .is-mobile {
+        @include media-breakpoint-up(lg) {
+            display: none;
+        }
+    }
+}
+
+.hamburger-categories {
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $txt-body;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.seemore {
+    a {
+        font-weight: 600 !important;
+        color: $brand-color !important;
+        border: none;
+    }
 }
