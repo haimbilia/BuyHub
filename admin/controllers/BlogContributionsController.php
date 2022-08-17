@@ -54,12 +54,12 @@ class BlogContributionsController extends ListingBaseController
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'bcontributions_added_on');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'bcontributions_added_on';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
 
         $srchFrm = $this->getSearchForm($fields);
 
@@ -252,7 +252,7 @@ class BlogContributionsController extends ListingBaseController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'bcontributions_id');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'author_name');
+            $this->addSortingElements($frm, 'bcontributions_added_on', applicationConstants::SORT_DESC);
         }
 
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');

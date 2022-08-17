@@ -5,7 +5,8 @@
 }
 
 .newsletter {
-    background-color: #fff;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
     border-radius: $common-radius;
     max-width: 500px;
     padding: 2rem;
