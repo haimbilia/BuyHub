@@ -54,7 +54,7 @@ class SentEmailsController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING) , applicationConstants::SORT_DESC );
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
 
         $srchFrm = $this->getSearchForm($fields);
 
@@ -67,23 +67,41 @@ class SentEmailsController extends ListingBaseController
 
         $sentEmailObj = new SentEmail();
         $srch = $sentEmailObj->getSearchObject(true);
-        
+
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('earch_subject', 'LIKE', '%' . trim($keyword) . '%');
             $cnd->attachCondition('earch_to_email', 'LIKE', '%' . trim($keyword) . '%');
         }
 
-        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);  
+        $srch->setPageSize($pageSize);
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
-        $this->set('postedData', $post); 
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
+        $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+    }
+
+    protected function getSearchForm(array $fields = [])
+    {
+        $fields = $this->getFormColumns();
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, current($allowedKeysForSorting), applicationConstants::SORT_DESC);
+        }
+        $frm->addHiddenField('', 'total_record_count');
+        HtmlHelper::addSearchButton($frm);
+        return $frm;
     }
 
     public function view()
@@ -129,7 +147,8 @@ class SentEmailsController extends ListingBaseController
         return $arr;
     }
 
-    protected function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, Common::excludeKeysForSort());
     }
 }
