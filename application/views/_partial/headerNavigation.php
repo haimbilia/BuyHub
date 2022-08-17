@@ -1,5 +1,6 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
-<?php if ($headerNavigation) {
+<?php defined('SYSTEM_INIT') or die('Invalid Usage');
+$isMegaMenuEnabled = FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1);
+if ($headerNavigation || $isMegaMenuEnabled) {
     $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
 
     if (count($headerNavigation)) {
@@ -26,14 +27,12 @@
                 $navLinkCount++;
             }
         }
-    }
-
-?>
+    } ?>
     <?php if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
         <!-- Start Navigation Bar -->
         <div class="navigation-wrapper">
             <ul class="navigation">
-                <?php if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == Navigations::LAYOUT_MEGA_MENU) { ?>
+                <?php if ($isMegaMenuEnabled == Navigations::LAYOUT_MEGA_MENU) { ?>
                     <li>
                         <button class="hamburger-categories" type="button" onclick="openMobileMenu();">
                             <svg class="svg" width="16" height="16">
@@ -48,7 +47,6 @@
                         if ($nav['pages']) {
                             $mainNavigation = array_slice($nav['pages'], 0, $navLinkCount);
                             foreach ($mainNavigation as $link) {
-
                                 $catThumb = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $link['nlink_category_id'], 0, $siteLangId, false, 0);
                                 $uploadedTime = AttachedFile::setTimeParam($catThumb['afile_updated_at']);
                                 $navUrl = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id']);
@@ -119,7 +117,7 @@
                                         </div>
                                     <?php } ?>
                                 </li>
-                <?php }
+                        <?php }
                         }
                     }
                 } ?>
@@ -127,6 +125,7 @@
         </div>
         <!-- End Navigation Bar -->
     <?php } ?>
+
     <?php if ($layoutType == applicationConstants::SCREEN_MOBILE) { ?>
         <!-- Start Mobile Navigation Bar -->
         <ul>
@@ -138,7 +137,7 @@
                 $headerCategories = ProductCategory::getArray($siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE);
                 CacheHelper::create('headerCategories_' . $siteLangId, serialize($headerCategories), CacheHelper::TYPE_NAVIGATION);
             }
-            if (count($headerNavigation) && FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) != Navigations::LAYOUT_MEGA_MENU) {
+            if (count($headerNavigation)) {
                 foreach ($headerNavigation as $nav) {
                     if ($nav['pages']) {
                         $mainNavigation = array_slice($nav['pages'], 0, $navLinkCount);
@@ -153,9 +152,8 @@
                             if (0 < count($link['children'])) {
                                 $href = '#';
                                 $target = '_self';
-                            }
-            ?>
-                            <li class="<?php echo (isset($link['children']) && count($link['children']) > 0 ? 'has-submenu' : ''); ?>">
+                            } ?>
+                            <li class="is-mobile <?php echo (isset($link['children']) && count($link['children']) > 0 ? 'has-submenu' : ''); ?>">
                                 <?php if (!isset($link['children']) || 1 > count($link['children'])) { ?>
                                     <a target="<?php echo $target; ?>" href="<?php echo $href; ?>"><?php echo $link['nlink_caption']; ?></a>
                                 <?php } else { ?>
@@ -209,11 +207,12 @@
                                 ?>
 
                             </li>
-                    <?php
-                        }
+                    <?php }
                     }
                 }
-            } else if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == Navigations::LAYOUT_MEGA_MENU && !empty($headerCategories)) {
+            }
+            
+            if ($isMegaMenuEnabled == Navigations::LAYOUT_MEGA_MENU && !empty($headerCategories)) {
                 foreach ($headerCategories as $link) {
                     $href = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']));
                     $OrgnavUrl = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']), '', false);

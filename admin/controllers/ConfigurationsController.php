@@ -1550,10 +1550,10 @@ class ConfigurationsController extends ListingBaseController
                 $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_PPC_COST_PER_CLICK_FOR_SLIDE", $langId) . '</span>';
 
-                $fld = $frm->addTextBox(Labels::getLabel('FRM_PPC_PRODUCTS_COUNT_HOME_PAGE', $langId), 'CONF_PPC_PRODUCTS_HOME_PAGE');
+                $fld = $frm->addSelectBox(Labels::getLabel("FRM_PPC_PRODUCTS_COUNT_HOME_PAGE", $langId), 'CONF_PPC_PRODUCTS_HOME_PAGE', Collections::sponsoredItemsHomePageCount(), '', array(), '');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_HOW_MANY_PPC_PRODUCTS_SHOWN_ON_HOME_PAGE", $langId) . '</span>';
 
-                $fld = $frm->addTextBox(Labels::getLabel('FRM_PPC_SHOPS_COUNT_HOME_PAGE', $langId), 'CONF_PPC_SHOPS_HOME_PAGE');
+                $fld = $frm->addSelectBox(Labels::getLabel("FRM_PPC_SHOPS_COUNT_HOME_PAGE", $langId), 'CONF_PPC_SHOPS_HOME_PAGE', Collections::sponsoredItemsHomePageCount(), '', array(), '');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_HOW_MANY_PPC_SHOPS_SHOWN_ON_HOME_PAGE", $langId) . '</span>';
                 $fld = $frm->addTextBox(Labels::getLabel('FRM_PPC_SLIDES_COUNT_HOME_PAGE', $langId), 'CONF_PPC_SLIDES_HOME_PAGE');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_HOW_MANY_PPC_SLIDES_SHOWN_ON_HOME_PAGE", $langId) . '</span>';

@@ -3,8 +3,7 @@
 $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
 
 <div class="zeynep">
-    <?php
-    $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]); ?>
+    <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]); ?>
 </div>
 <div class="zeynep-overlay"></div>
 

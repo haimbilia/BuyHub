@@ -957,4 +957,13 @@ class Collections extends MyAppModel
         ];
         return $classArr[$layoutId] ?? '';
     }
+
+    public static function sponsoredItemsHomePageCount(): array
+    {
+        return [
+            4 => 4,
+            8 => 8,
+            12 => 12,
+        ];
+    }
 }
