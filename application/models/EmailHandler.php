@@ -1009,7 +1009,7 @@ class EmailHandler extends FatModel
         $arrReplacements = array(
             '{shop_name}' => $productInfo['shop_name'],
             '{prod_title}' => $productInfo["selprod_title"],
-            '{click_here}' => '<a href="' . $url . '">' . Labels::getLabel('LBL_CLICK_HERE', $langId) . '</a>',
+            '{click_here}' => $url,
         );
 
         $receipentsInfo = User::getSubUsersReceipents($productInfo['user_id'], 'canViewProducts');
@@ -1870,60 +1870,6 @@ class EmailHandler extends FatModel
         }
         /* ] */
         return true;
-        /* $p=new Products();
-          $return_request=$p->getReturnRequestMessage($return_request_message);
-          if ( $return_request ){
-          $return_request_id = $return_request["refund_id"];
-          $url = generateAbsoluteUrl('account', 'view_return_request',array($return_request_id),CONF_WEBROOT_URL);
-          $url = '<a href="'.$url.'">'.getLabel('M_click_here').'</a>';
-
-          //Buyer Notification
-          $arr_replacements = array(
-          '{site_domain}' => CONF_SERVER_PATH,
-          '{website_name}' => Settings::getSetting("CONF_WEBSITE_NAME"),
-          '{username}' => Settings::getSetting("CONF_WEBSITE_NAME"),
-          '{request_number}' => format_return_request_number($return_request_id),
-          '{message}' => nl2br($return_request["refmsg_text"]),
-          '{user_full_name}' => $return_request["buyer_name"],
-          '{click_here}' => $url,
-          );
-
-          if ($return_request["refund_user_id"]!=$return_request["refmsg_from"]){
-          $arr_replacements["{user_full_name}"] = $return_request["buyer_name"];
-          if ($return_request['refmsg_from_type']=="U"){
-          $arr_replacements["{username}"] = $return_request["opr_shop_owner_username"];
-          }
-          sendMailTpl($return_request["buyer_email"], "return_request_message_user", $arr_replacements);
-          }
-          //End Buyer Notification
-
-          //Vendor Notification
-          if ($return_request["shop_user_id"]!=$return_request["refmsg_from"]){
-          $arr_replacements["{user_full_name}"] = $return_request["opr_shop_owner_name"];
-          if ($return_request['refmsg_from_type']=="U"){
-          $arr_replacements["{username}"] = $return_request["message_sent_by_username"];
-          }
-          sendMailTpl($return_request["opr_shop_owner_email"], "return_request_message_user", $arr_replacements);
-          }
-          //End Vendor Notification
-
-          if (($return_request["refund_request_status"]==1) && ($return_request['refmsg_from_type']=="U")){
-          $url = generateAbsoluteUrl('returnrequests', 'view_return_request',array($return_request_id),'/manager/');
-          $url='<a href="'.$url.'">'.getLabel('M_click_here').'</a>';
-          $arr_replacements["{user_full_name}"]="Admin";
-          $arr_replacements["{click_here}"]=$url;
-          sendMailTpl(Settings::getSetting("CONF_ADMIN_EMAIL"), "return_request_message_user", $arr_replacements);
-          $emails = explode(',', Settings::getSetting("CONF_ADDITIONAL_ALERT_EMAILS",FatUtility::VAR_STRING,''));
-          foreach ($emails as $email) {
-          if (strlen($email) > 0 && preg_match('/^[^\@]+@.*.[a-z]{2,15}$/i', $email)) {
-          sendMailTpl($email, "return_request_message_user", $langId, $arr_replacements);
-          }
-          }
-          }
-          return true;
-          }else{
-          $this->error = getLabel('M_INVALID_REQUEST');
-          } */
     }
 
     public function sendCatalogRequestMessageNotification($scatrequestmsg_id, $langId)
