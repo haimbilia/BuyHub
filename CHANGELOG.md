@@ -1156,7 +1156,8 @@ TV-9.4.0.20220719
     - #066163 - UI issue in the sponsored products collection on the homepage
     - #066137 - The header mega menu is not visible on the front end if the admin deletes all the cms pages from the header navigation.
     - #066172 - The category's names do not appear correct.
-    - #066171 - First name field is non editable in blog contribution form
+    - #066171 - First name field is non editable in blog contribution form.
+    - #066194 - Threshold email refill icon redirection.
 
 ## UAT points:
 
