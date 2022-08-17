@@ -1879,7 +1879,7 @@ class CommonHelper extends FatUtility
 
     public static function demoUrl()
     {
-        return (strpos($_SERVER['SERVER_NAME'], 'demo.yokart.4livedemo.com') !== false);
+        return (strpos($_SERVER['SERVER_NAME'], 'demo.yo-kart.com') !== false);
     }
 
     public static function jsonEncodeUnicode($data, $convertToType = false)
