@@ -277,6 +277,7 @@ $blog-header-height: 58px;
         position: relative;
         margin: 0;
         padding-bottom: 56.25%;
+        background-color: $bg-placeholder;
         /* 16:9, for an aspect ratio of 1:1 change to this value to 100% */
 
         img {
