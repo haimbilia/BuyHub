@@ -1776,7 +1776,7 @@ class EmailHandler extends FatModel
             '{request_number}' => $msgDetail["orrequest_reference"], /* CommonHelper::formatOrderReturnRequestNumber($msgDetail['orrequest_id']), */
             '{message}' => nl2br($msgDetail["orrmsg_msg"]),
             '{user_full_name}' => $msgDetail["buyer_name"],
-            '{click_here}' => UrlHelper::generateFullUrl('Buyer', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id'])),
+            '{click_here}' => UrlHelper::generateFullUrl('Buyer', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']), CONF_WEBROOT_DASHBOARD),
             '{prod_title}' => $msgDetail['op_selprod_title'],
         );
 
@@ -1807,9 +1807,7 @@ class EmailHandler extends FatModel
             if ($msgDetail['orrmsg_from_admin_id']) {
                 $arrReplacements["{username}"] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId);
             }
-            $requestDetailUrl = UrlHelper::generateFullUrl('Seller', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']));
-            $requestDetailUrl = '<a href="' . $requestDetailUrl . '">' . Labels::getLabel('LBL_CLICK_HERE', $langId) . '</a>';
-            $arrReplacements['{click_here}'] = $requestDetailUrl;
+            $arrReplacements['{click_here}'] = UrlHelper::generateFullUrl('Seller', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']), CONF_WEBROOT_DASHBOARD);
             /* if ($return_request['refmsg_from_type']=="U"){
               $arr_replacements["{username}"] = $return_request["message_sent_by_username"];
               } */
