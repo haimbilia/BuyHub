@@ -24,8 +24,7 @@ class TestimonialsController extends MyAppController
         $srch->addOrder('testimonial_added_on', 'desc');
         $srch->setPageSize($pageSize);
         $srch->setPageNumber($page);
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set('page', $page);
         $this->set('pageCount', $srch->pages());
         $this->set("list", $records);

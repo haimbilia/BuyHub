@@ -1161,6 +1161,7 @@ TV-9.4.0.20220719
     - #066190 - The search field in the FAQs section on the seller registration page is not properly aligned
     - #066189 - Blank spacing appears when there is no faq available on the FAQ's listing page
     - #066150 - Multiple issues in email template for mesage regarding return request
+    - #066152 - Extra blank spacing appears between the testimonials when the user clicks on the load more button
 
 ## UAT points:
 
