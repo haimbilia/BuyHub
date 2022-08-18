@@ -208,6 +208,7 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
 </footer>
 
 <?php if (
+    CommonHelper::botDetected() == false &&
     FatApp::getConfig('CONF_ENABLE_COOKIES', FatUtility::VAR_INT, 1) &&
     !CommonHelper::getUserCookiesEnabled() &&
     FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, '')
@@ -252,7 +253,7 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
     </script>
 <?php } ?>
 <div class="no-print">
-    <?php if (CommonHelper::demoUrl()) { ?>
+    <?php if (CommonHelper::demoUrl() && CommonHelper::botDetected() == false) { ?>
         <!--Start of Tawk.to Script-->
         <script>
             var Tawk_API = Tawk_API || {},
@@ -276,7 +277,7 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
         </script>
         <!--End of Tawk.to Script-->
     <?php
-        if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
+        if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl() && CommonHelper::botDetected() == false) {
             $this->includeTemplate('restore-system/page-content.php');
         }
     } ?>
