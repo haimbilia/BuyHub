@@ -599,6 +599,7 @@ class BlogPostsController extends ListingBaseController
         $postStatusArr = BlogPost::getBlogPostStatusArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_POST_STATUS', $this->siteLangId), 'post_published', $postStatusArr, '', array('class' => 'form-control'), Labels::getLabel('FRM_POST_STATUS', $this->siteLangId));
         $frm->addHiddenField('', 'total_record_count');
+        $frm->addHiddenField('', 'bpcat_id');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

@@ -1162,7 +1162,8 @@ TV-9.4.0.20220719
     - #066189 - Blank spacing appears when there is no faq available on the FAQ's listing page
     - #066150 - Multiple issues in email template for mesage regarding return request
     - #066152 - Extra blank spacing appears between the testimonials when the user clicks on the load more button
-    - #066158 - The testimonials images are not clearly visible
+    - #066158 - The testimonials images are not clearly visible.
+    - #066207 - NO email used to come when a seller request for a brand
 
 ## UAT points:
 

@@ -606,7 +606,6 @@ class EmailHandler extends FatModel
 
         $userObj = new User($data['brand_seller_id']);
         $userInfo = $userObj->getUserInfo(array('user_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
-        $statusArr = Brand::getBrandReqStatusArr($langId);
 
         $vars = array(
             '{user_full_name}' => $userInfo['user_name'],

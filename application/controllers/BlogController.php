@@ -218,7 +218,6 @@ class BlogController extends MyAppController
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $startRecord = ($page - 1) * $pageSize + 1;
         $endRecord = $page * $pageSize;
         $totalRecords = $srch->recordCount();
         if ($totalRecords < $endRecord) {
