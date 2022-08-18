@@ -46,23 +46,19 @@ if (!empty($category['banner'])) {
                 $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $category['prodcat_id'], 0, 0, applicationConstants::SCREEN_DESKTOP);
                 $desktop_url = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'Banner', array($category['prodcat_id'], $siteLangId, ImageDimension::VIEW_DESKTOP, $fileRow['afile_id'], applicationConstants::SCREEN_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . ",";
                 break;
-        } ?>
-    <?php } ?>
-    <section class="bg-shop shop-banner">
-        <picture>
-            <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($mobile_url, ','); ?>" media="(max-width: 767px)">
-            <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($tablet_url, ','); ?>" media="(max-width: 1024px)">
-            <source data-aspect-ratio="4:1" srcset="<?php echo rtrim($desktop_url, ','); ?>">
-            <img data-aspect-ratio="4:1" src="<?php echo rtrim($desktop_url, ','); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
-        </picture>
-
-        <?php /* if (!empty($category['prodcat_description']) && array_key_exists('prodcat_description', $category)) { ?>
-    <div class="page-category__content">
-        <p><?php  echo FatUtility::decodeHtmlEntities($category['prodcat_description']); ?></p>
-    </div>
-    <?php } */ ?>
-    </section>
+        }
+    }
+    if (!empty($catBannerArr)) { ?>
+        <section class="bg-shop shop-banner">
+            <picture>
+                <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($mobile_url, ','); ?>" media="(max-width: 767px)">
+                <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($tablet_url, ','); ?>" media="(max-width: 1024px)">
+                <source data-aspect-ratio="4:1" srcset="<?php echo rtrim($desktop_url, ','); ?>">
+                <img data-aspect-ratio="4:1" src="<?php echo rtrim($desktop_url, ','); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
+            </picture>
+        </section>
     <?php }
+}
 if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
     $brandImgArr = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_IMAGE, $postedData['brand_id'], 0, $siteLangId);
     if (!empty($brandImgArr)) {

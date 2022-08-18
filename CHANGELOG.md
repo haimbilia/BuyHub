@@ -1166,6 +1166,7 @@ TV-9.4.0.20220719
     - #066207 - NO email used to come when a seller request for a brand
     - #066213 - Country phone code appears in the General query section even if the phone number is not added
     - #066227 - No email used to come for discount coupon after first purchase 
+    - #066229 - Social platform icon is not visible on the shop details page (Pinterest Icon missing)
 
 ## UAT points:
 
