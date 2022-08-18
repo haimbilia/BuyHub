@@ -10,7 +10,7 @@ $urlFld->setFieldTagAttribute('id', "urlrewrite_custom");
 $urlFld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value,'" . $baseUrl . "','post')");
 $collectionUrl = "";
 if (0 < $scollection_id) {
-    $collectionUrl = UrlHelper::generateFullUrl('Shops', 'Collection', array($shop_id, $scollection_id));
+    $collectionUrl = UrlHelper::generateFullUrl('Shops', 'Collection', array($shop_id, $scollection_id), CONF_WEBROOT_FRONTEND);
 }
 $urlFld->htmlAfterField = "<small class='form-text text-muted'>" . $collectionUrl . '</small>';
 $IDFld = $colectionForm->getField('scollection_id');
