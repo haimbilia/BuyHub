@@ -1,8 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-if (!empty($list)) {  ?>
-    <div class="row">
-        <?php foreach ($list as $listItem) { ?>
-            <!-- ***** Testimonials Item Start ***** -->
+if (!empty($list)) {
+    if (1 >= $page) { ?>
+        <div class="row testimonialRowJs">
+    <?php }
+
+    foreach ($list as $listItem) { ?>
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="testimonials-item">
                     <div class="user">
@@ -19,8 +21,11 @@ if (!empty($list)) {  ?>
                     </div>
                 </div>
             </div>
-        <?php } ?>
-    </div>
-<?php } else {
+        <?php }
+        
+    if (1 >= $page) { ?>
+        </div>
+<?php }
+} else {
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
 }
