@@ -25,6 +25,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                         $shippingCharges = $shippedByItemArr[$shipLevel]['rates'];
                     }
 
+                    $data['rates']['totalShippingCost'] = 0;
                     $data['rates']['data'] = [];
                     foreach ($productData as $product) {
                         $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', [$product['selprod_id']]);
@@ -33,6 +34,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
 
                         $selectedRates = isset($selectedShippingProducts[$product['selprod_id']]) ? $selectedShippingProducts[$product['selprod_id']] : [];
                         if (array_key_exists('mshipapi_cost', $selectedRates)) {
+                            $data['rates']['totalShippingCost'] += $selectedRates['mshipapi_cost'];
                             $selectedRates['mshipapi_cost'] = CommonHelper::displayMoneyFormat($selectedRates['mshipapi_cost']);
                         }
                         
@@ -40,6 +42,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
 
                         $data['products'][] = $product;
                     }
+                    $data['rates']['totalShippingCost'] = CommonHelper::displayMoneyFormat($data['rates']['totalShippingCost']);
                     $data['shipLevel'] = $shipLevel;
 
                     $productItems[$shippedBy]['data'][] = $data;
@@ -47,6 +50,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                 break;
             case Shipping::LEVEL_PRODUCT:
                 if (isset($items['products']) && !empty($items['products'])) {
+                    $data['rates']['totalShippingCost'] = 0;
                     $data['rates']['data'] = [];
                     foreach ($items['products'] as $selProdid => $product) {
                         if (!isset($productItems[$shippedBy]['title'])) {
@@ -60,11 +64,13 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                         $data['shipLevel'] = $shipLevel;
                         $selectedRates = isset($selectedShippingProducts[$product['selprod_id']]) ? $selectedShippingProducts[$product['selprod_id']] : (object)[];
                         if (array_key_exists('mshipapi_cost', $selectedRates)) {
+                            $data['rates']['totalShippingCost'] += $selectedRates['mshipapi_cost'];
                             $selectedRates['mshipapi_cost'] = CommonHelper::displayMoneyFormat($selectedRates['mshipapi_cost']);
                         }
                         $data['rates']['data'] = [$selectedRates];
                         $productItems[$shippedBy]['data'][] = $data;
                     }
+                    $data['rates']['totalShippingCost'] = CommonHelper::displayMoneyFormat($data['rates']['totalShippingCost']);
                 }
 
                 if (isset($items['digital_products']) && !empty($items['digital_products'])) {
