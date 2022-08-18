@@ -243,7 +243,7 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
 <div class="no-print">
     <?php if (CommonHelper::demoUrl()) { ?>
         <!--Start of Tawk.to Script-->
-        <script>
+        <script defer>
             var Tawk_API = Tawk_API || {},
                 Tawk_LoadStart = new Date();
             (function() {
