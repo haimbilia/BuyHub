@@ -243,7 +243,7 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
 <div class="no-print">
     <?php if (CommonHelper::demoUrl()) { ?>
         <!--Start of Tawk.to Script-->
-        <script defer>
+        <!--<script defer>
             var Tawk_API = Tawk_API || {},
                 Tawk_LoadStart = new Date();
             (function() {
@@ -262,7 +262,7 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
             window.onafterprint = function() {
                 Tawk_API.showWidget();
             };
-        </script>
+        </script>-->
         <!--End of Tawk.to Script-->
     <?php
         if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
