@@ -1,8 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-die('dsds');
 if (!empty($postList)) {
     foreach ($postList as $blogPost) { ?>
-
         <div class="post">
             <div class="post-head">
                 <figure class="post-media">

@@ -10,7 +10,8 @@ if (count($childCategories) > 0) { ?>
                 <div class="sorting-bar">
                     <div class="sorting-title">
                         <span class="clickable" onclick="displaySubCategories(this);"><?php echo $row['bpcategory_name']; ?></span>
-                        <a href="<?php echo commonHelper::generateUrl('BlogPost', 'index', array($row['bpcategory_id'])); ?>" class="count badge badge-success clickable" title="<?php echo  Labels::getLabel('LBL_CATEGORY_BLOGS', $siteLangId); ?>">
+                        <?php $onclick = 0 < $row['countChildBlogPosts'] ? "goToBlog(" . $row['bpcategory_id'] . ")" : 'return false;'; ?>
+                        <a href="javascript:void(0);" onclick="<?php echo $onclick; ?>" class="count badge badge-success clickable" title="<?php echo  Labels::getLabel('LBL_CATEGORY_BLOGS', $siteLangId); ?>">
                             <?php echo CommonHelper::displayBadgeCount($row['countChildBlogPosts']); ?>
                         </a>
                     </div>

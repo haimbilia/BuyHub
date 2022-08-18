@@ -564,7 +564,7 @@ class SellerRequestsController extends SellerBaseController
             FatUtility::dieJsonError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
         }
 
-        if ($brandReqId == 0) {
+        if (empty($post['brand_id'])) {
             $brandReqId = $record->getMainTableRecordId();
             $brandData = Brand::getAttributesById($brandReqId);
             $email = new EmailHandler();

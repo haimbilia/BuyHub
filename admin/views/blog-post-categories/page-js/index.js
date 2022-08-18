@@ -105,7 +105,7 @@
 		}
 
 		fcom.updateWithAjax(fcom.makeUrl('BlogPostCategories', 'getSubCategories'), 'recordId=' + recordId, function (res) {
-            fcom.closeProcessing();
+			fcom.closeProcessing();
 			if ($("#" + recordId).children('ul.append-ul').length) {
 				$("#" + recordId).children('ul.append-ul').append(res.html);
 			} else {
@@ -146,7 +146,7 @@
 	updateCatOrder = function (data) {
 		$("#sorting-categories").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('BlogPostCategories', 'updateOrder'), data, function (t) {
-            fcom.displaySuccessMessage(t.msg);
+			fcom.displaySuccessMessage(t.msg);
 			fcom.removeLoader();
 		});
 	}
@@ -159,8 +159,8 @@
 		$("#" + catId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon" onclick="displaySubCategories(this)"></i></span>');
 	}
 
-	goToBlog = function (prodCatId) {
-		redirectToBlogPosts(0, { prodcat_id: prodCatId });
+	goToBlog = function (bpcatId) {
+		redirectToBlogPosts(0, { bpcat_id: bpcatId });
 	};
 
 	updateStatus = function (e, obj, recordId, status) {
