@@ -1165,6 +1165,7 @@ TV-9.4.0.20220719
     - #066158 - The testimonials images are not clearly visible.
     - #066207 - NO email used to come when a seller request for a brand
     - #066213 - Country phone code appears in the General query section even if the phone number is not added
+    - #066227 - No email used to come for discount coupon after first purchase 
 
 ## UAT points:
 

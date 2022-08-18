@@ -175,8 +175,7 @@ class Cronjob extends FatModel
         $srch->addMultipleFields(array('count(order_id) as paidOrderCount'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
 
         if ($row['paidOrderCount'] > 0) {
             return;
@@ -233,7 +232,6 @@ class Cronjob extends FatModel
                     $attachedFile->addNew(array(), $file_row);
                 }
             }
-
             $emailNotificationObj = new EmailHandler();
             $emailNotificationObj->sendDiscountCouponNotification($couponId, $userId, $orderLangId);
         }
