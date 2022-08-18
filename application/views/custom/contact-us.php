@@ -138,17 +138,21 @@ $fld->developerTags['col'] = 12;
                         </div>
                         <div class="col-md-5">
                             <div class="contact-address">
-                                <div class="contact-address-item">
-                                    <h6><?php echo Labels::getLabel('LBL_General_Inquiry', $siteLangId); ?>
-                                    </h6>
-                                    <p class="">
-                                        <?php
-                                        $dialCode = FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
-                                        echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
-                                        ?>
-                                        <br><?php echo Labels::getLabel('LBL_24_a_day_7_days_week', $siteLangId); ?>
-                                    </p>
-                                </div>
+                                <?php $phone = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
+                                if (!empty($phone)) { ?>
+                                    <div class="contact-address-item">
+                                        <h6><?php echo Labels::getLabel('LBL_General_Inquiry', $siteLangId); ?>
+                                        </h6>
+                                        <p class="">
+                                            <?php
+                                            $dialCode = FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
+                                            echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
+                                            echo '<br>';
+                                            echo Labels::getLabel('LBL_24_A_DAY_7_DAYS_WEEK', $siteLangId);
+                                            ?>
+                                        </p>
+                                    </div>
+                                <?php } ?>
                                 <div class="contact-address-item">
                                     <h6><?php echo Labels::getLabel('LBL_Fax', $siteLangId); ?>
                                     </h6>
@@ -156,7 +160,7 @@ $fld->developerTags['col'] = 12;
                                         <?php
                                         $dialCode = FatApp::getConfig('CONF_SITE_FAX_DCODE', FatUtility::VAR_STRING, '');
                                         echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_FAX', FatUtility::VAR_STRING, ''); ?>
-                                        <br><?php echo Labels::getLabel('LBL_24_a_day_7_days_week', $siteLangId); ?>
+                                        <br><?php echo Labels::getLabel('LBL_24_A_DAY_7_DAYS_WEEK', $siteLangId); ?>
                                     </p>
                                 </div>
                                 <div class="contact-address-item">

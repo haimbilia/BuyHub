@@ -181,13 +181,14 @@ class DiscountCoupons extends MyAppModel
 
         $srch = new SearchBase(static::DB_TBL_COUPON_TO_USER);
         $srch->addCondition('ctu_coupon_id', '=', $coupon_id);
+        $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'ctu_coupon_id = coupon_id', 'cou');
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'user_id = ctu_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'credential_user_id = user_id', 'c');
-        $srch->addMultipleFields(array("user_id", "user_name", "user_phone_dcode", "user_phone", "credential_username"));
+        $srch->addMultipleFields([
+            "user_id", "ctu_user_id", "user_name", "user_phone_dcode", "user_phone", "credential_username", "credential_email", "coupon_discount_in_percent", "coupon_discount_value", "coupon_code", "coupon_end_date"
+        ]);
         $srch->doNotCalculateRecords();
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetchAll($rs, 'user_id');
-        return $row;
+        return FatApp::getDb()->fetchAll($srch->getResultSet(), 'user_id');
     }
 
     public static function getCouponShops($coupon_id, $lang_id = 0)

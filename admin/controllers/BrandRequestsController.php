@@ -143,7 +143,7 @@ class BrandRequestsController extends ListingBaseController
 
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array('b.*', 'u.user_name','user_id','credential_username', 'credential_email', 'ifnull(shop_name, shop_identifier) as shop_name', 'bl.brand_name'));
+        $srch->addMultipleFields(array('b.*', 'u.user_name','user_id','credential_username', 'credential_email', 'ifnull(shop_name, shop_identifier) as shop_name', 'COALESCE(bl.brand_name, b.brand_identifier) as brand_name'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);

@@ -19,6 +19,12 @@ $(function (){
 	faqRightPanel();
 });
 
+$(document).on("search", "#faqQuestionJs", function (e) {
+	if ("" == $(this).val()) {
+		faqRightPanel();
+	}
+});
+
 (function() {
 	var dv = '#listing';
 	var dvCategoryPanel = '#categoryPanel';

@@ -1,11 +1,11 @@
 const { src, dest, watch, series, parallel, task } = require("gulp");
-const sass = require("gulp-sass");
+const sass = require('gulp-sass')(require('sass'));
 sass.compiler = require("node-sass");
 const sourcemaps = require("gulp-sourcemaps");
 const autoprefixer = require("gulp-autoprefixer");
 const minify = require("gulp-minify");
-const svgSprite = require("gulp-svg-sprite");
-var concat = require("gulp-concat");
+/* const svgSprite = require("gulp-svg-sprite");
+var concat = require("gulp-concat"); */
 
 // SVG Sprite Config
 const config = {
@@ -36,12 +36,11 @@ function css() {
 }
 
 function manager() {
-    return src("./manager/views/scss/*.scss")
+    return src("./admin/views/scss/*.scss")
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(sass({ outputStyle: "compressed" }))
         .pipe(autoprefixer())
-        .pipe(sourcemaps.write("."))
-        .pipe(dest("./manager/views/css"))
+        .pipe(sourcemaps.write("."))       
         .pipe(dest("./admin/views/css"));
 }
 
@@ -54,11 +53,11 @@ function dashboard() {
         .pipe(dest("./dashboard/views/css"));
 }
 
-function svg() {
+/* function svg() {
     return src("./manager/views/images/retina/sprites/*.svg")
         .pipe(svgSprite(config))
         .pipe(dest("./manager/views/images/retina"));
-}
+} */
 
 // Watch minifyjs
 function minifyjs() {
@@ -70,10 +69,10 @@ function minifyjs() {
 
 // Watch files
 function watchFiles() {
-    watch(["./application/views/common-js/*.js"], minifyjs);
+    watch(["./application/views/common-js-src/*.js"], minifyjs);
     watch(["./application/views/scss"], css);
     watch(["./dashboard/views/scss"], dashboard);
-    watch(["./manager/views/scss"], manager);
+    watch(["./admin/views/scss"], manager);
 }
 
 exports.default = series(minifyjs, css, dashboard, manager);

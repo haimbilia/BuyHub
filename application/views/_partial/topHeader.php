@@ -120,8 +120,7 @@
         <div class="main-bar no-print">
             <div class="container">
                 <div class="main-bar__inner">
-                    <?php
-                    $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
+                    <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
                     <div class="main-search">
                         <button class="btn-mega-search toggle--search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search">
                             <svg class="svg" width="20" height="20">

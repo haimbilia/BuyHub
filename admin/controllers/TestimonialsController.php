@@ -363,8 +363,8 @@ class TestimonialsController extends ListingBaseController
         $frm->addHiddenField('', 'lang_id', $this->siteLangId);
         $frm->addHTML('', 'testimonial_image', '');
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_TESTIMONIAL_IMAGE);
-        $frm->addHiddenField('', 'min_width', 32);
-        $frm->addHiddenField('', 'min_height', 32);
+        $frm->addHiddenField('', 'min_width', 300);
+        $frm->addHiddenField('', 'min_height', 300);
         return $frm;
     }
 

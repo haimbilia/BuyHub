@@ -610,6 +610,7 @@ class DashboardBaseController extends FatController
             if (!$email->sendChangeEmailRequestNotification($this->siteLangId, $dataArr)) {
                 return false;
             }
+            $data['user_email'] = $data['user_new_email'];
         }
 
         $dataArr = array(

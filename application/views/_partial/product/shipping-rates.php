@@ -1,9 +1,16 @@
 <ul>
     <?php
     if (!empty($product['product_warranty'])) { ?>
-        <?php $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_WARRANTY', $siteLangId); ?>
-        <li title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]); ?>">
-            <?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]); ?>
+        <?php
+        $warrantTypes = Product::getWarrantyUnits($siteLangId);
+        $lbl = Labels::getLabel('LBL_{UNIT}_{UNIT-NAME}_WARRANTY', $siteLangId);
+        $replace = [
+            '{UNIT}' => $product['product_warranty'],
+            '{UNIT-NAME}' => $warrantTypes[$product['product_warranty_unit']]
+        ];
+        ?>
+        <li title="<?php echo CommonHelper::replaceStringData($lbl, $replace); ?>">
+            <?php echo CommonHelper::replaceStringData($lbl, $replace); ?>
         </li>
     <?php } ?>
 

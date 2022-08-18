@@ -5,9 +5,8 @@ if (!isset($tbody)) {
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
 
-$serialNo = ($page - 1) * $pageSize + 1;
-
 foreach ($arrListing as $sn => $row) {
+    $serialNo = $sn + 1;
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo, 'id' => $row['optionvalue_id']]);
 

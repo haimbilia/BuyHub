@@ -27,8 +27,7 @@ $(function () {
 			fcom.closeProcessing();
 			fcom.removeLoader();
 			if (append == 1) {
-				$(dv).find('.loader-yk').remove();
-				$(dv).append(ans.html);
+				$(dv + ' .testimonialRowJs').append(ans.html);
 			} else {
 				$(dv).html(ans.html);
 			}
@@ -46,5 +45,4 @@ $(function () {
 		$(frm.page).val(page);
 		searchTestimonials(frm, 1);
 	};
-
 })();

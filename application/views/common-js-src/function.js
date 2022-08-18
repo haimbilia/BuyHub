@@ -16,7 +16,7 @@ var Dashboard = function () {
             $("<div class='sidebar-overlay--js'></div>").appendTo("body");
             var visibility = 1;
         } else {
-            $("body").removeClass('sidebar-is-expanded').addClass('sidebar-is-reduced'); 
+            $("body").removeClass('sidebar-is-expanded').addClass('sidebar-is-reduced');
             $("div.sidebar-overlay--js").remove();
             var visibility = 0;
         }
@@ -41,7 +41,7 @@ Dashboard.init();
 
 $(document).on('click', '#showPass', function () {
     var passInput = $("#password");
-    if ('' == passInput.val()) { 
+    if ('' == passInput.val()) {
         return;
     }
 
@@ -146,7 +146,7 @@ $(window).on('load', function () {
 $(function () {
     /*common drop down function  */
     $('.dropdown__trigger-js').each(function () {
-        $(this).on('click', function () {            
+        $(this).on('click', function () {
             if ($('body').hasClass('toggled_left')) {
                 $('.navs_toggle').removeClass("active");
                 $('body').removeClass('toggled_left');
@@ -982,32 +982,36 @@ function clearMoreSellerMarkers() {
     });
 }
 
+function openMobileMenu() {
+    $('.zeynep').zeynep().open();
+}
+
 $(function () {
     // init zeynepjs side menu
     var zeynep = $('.zeynep').zeynep({
         opened: function () {
             // log
-            console.log('the side menu opened')
+            // console.log('the side menu opened');
         },
         closed: function () {
             // log
-            console.log('the side menu closed')
+            // console.log('the side menu closed');
         }
     })
 
     // dynamically bind 'closing' event
     zeynep.on('closing', function () {
         // log
-        console.log('this event is dynamically binded')
+        // console.log('this event is dynamically binded');
     })
 
     // handle zeynepjs overlay click
     $('.zeynep-overlay').on('click', function () {
-        zeynep.close()
+        zeynep.close();
     })
 
     // open zeynepjs side menu
     $('.btn-open').on('click', function () {
-        zeynep.open()
+        zeynep.open();
     })
 })

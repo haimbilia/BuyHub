@@ -1,10 +1,10 @@
- <button class="restore-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">
+ <button class="restore-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRestore">
      <svg class="svg" width="32" height="32">
          <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#gear">
          </use>
      </svg>
  </button>
- <div class="offcanvas offcanvas-end offcanvas-restore" tabindex="-1" id="offcanvasRight">
+ <div class="offcanvas offcanvas-end offcanvas-restore" tabindex="-1" id="offcanvasRestore">
      <div class="offcanvas-body">
          <div class="demo">
              <div class="demo-restore">
@@ -79,6 +79,7 @@
                  <div class="demo-action">
                      <a class="btn btn-brand" href="https://www.yo-kart.com/contact-us.html?demo-cta" rel="noopener" target="_blank">Start Your Project</a>
                      <a class="btn btn-outline-brand" href="https://www.yo-kart.com/request-demo.html" rel="noopener"> Request a Demo </a>
+                     <a class="btn btn-underline" href="https://www.yo-kart.com/yokart-marketing-website-feedback.html">Share Your Feedback</a>
                  </div>
              </div>
 
