@@ -13,7 +13,7 @@ class SocialPlatform extends MyAppModel
     public const ICON_CSS_YOUTUBE_CLASS = 'youtube';
     public const ICON_CSS_INSTAGRAM_CLASS = 'instagram';
     public const ICON_CSS_GOOGLE_PLUS_CLASS = 'google';
-    public const ICON_CSS_PINTEREST_CLASS = 'pinterest-p';
+    public const ICON_CSS_PINTEREST_CLASS = 'pinterest';
     public const ICON_CSS_LINKEDIN_CLASS = 'linkedin';
     public const ICON_CSS_OTHER_CLASS = 'other-social-platform';
 
