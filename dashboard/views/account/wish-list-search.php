@@ -78,13 +78,9 @@
                                                 $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
                                                 $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>
                                                 <li class="item <?php echo (!$product['in_stock']) ? 'item--sold' : ''; ?>">
-
-
-                                                    <?php if (!$product['in_stock']) {
-                                                    ?>
+                                                    <?php if (!$product['in_stock']) {?>
                                                         <span class="tag--soldout tag--soldout-small"><?php echo Labels::getLabel('LBL_Sold_Out', $siteLangId); ?></span>
-                                                    <?php
-                                                    } ?>
+                                                    <?php } ?>
                                                     <a href="<?php echo $productUrl; ?>">
                                                         <?php
                                                         $pictureAttr = [
@@ -101,7 +97,6 @@
                                                 </li>
                                             <?php
                                             } ?>
-
                                         </ul>
                                     <?php
                                     } else {
