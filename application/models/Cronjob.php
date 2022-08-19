@@ -841,8 +841,7 @@ class Cronjob extends FatModel
         $srch->addCondition('uwlp_added_on', '<=', 'mysql_func_DATE_SUB( NOW(), INTERVAL ' . $buyerReminderInterval . ' DAY )', 'AND', true);
         $srch->addCondition('uwlp_reminder_date', '<=', 'mysql_func_DATE_SUB( NOW(), INTERVAL ' . $buyerReminderInterval . ' DAY )', 'AND', true);
         $srch->addGroupBy('u.user_id');
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetchAll($rs);
+        $row = FatApp::getDb()->fetchAll($srch->getResultSet());
         if (empty($row)) {
             return;
         }
