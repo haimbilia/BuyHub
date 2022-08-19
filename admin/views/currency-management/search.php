@@ -29,7 +29,7 @@ foreach ($arrListing as $sn => $row) {
             case 'currency_name':
                 $default = HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel('LBL_DEFAULT', $siteLangId));
                 $name = $row[$key];
-                $name .= ($row['currency_code'] == $siteDefaultCurrencyCode ? ' ' . $default : '');
+                $name .= ($row['currency_id'] == FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 0) ? ' ' . $default : '');
                 $td->appendElement('plaintext', $tdAttr, $name, true);
                 break;
             case 'currency_symbol_left':

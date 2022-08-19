@@ -27,6 +27,7 @@
                                 $titleFld = $frm->getField('uwlist_title');
                                 $titleFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Enter_List_Name', $siteLangId));
                                 $titleFld->setFieldTagAttribute('title', Labels::getLabel('LBL_List_Name', $siteLangId));
+                                $titleFld->setFieldTagAttribute('maxlength', 20);
 
                                 $btnSubmitFld = $frm->getField('btn_submit');
                                 $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
@@ -77,13 +78,9 @@
                                                 $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
                                                 $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>
                                                 <li class="item <?php echo (!$product['in_stock']) ? 'item--sold' : ''; ?>">
-
-
-                                                    <?php if (!$product['in_stock']) {
-                                                    ?>
+                                                    <?php if (!$product['in_stock']) {?>
                                                         <span class="tag--soldout tag--soldout-small"><?php echo Labels::getLabel('LBL_Sold_Out', $siteLangId); ?></span>
-                                                    <?php
-                                                    } ?>
+                                                    <?php } ?>
                                                     <a href="<?php echo $productUrl; ?>">
                                                         <?php
                                                         $pictureAttr = [
@@ -100,7 +97,6 @@
                                                 </li>
                                             <?php
                                             } ?>
-
                                         </ul>
                                     <?php
                                     } else {
