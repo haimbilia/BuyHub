@@ -2089,3 +2089,7 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_FLAT', '1', 'Flat', '2') ON DUPLICATE KEY UPDATE label_caption = 'Flat';
 
 UPDATE `tbl_collections` SET `collection_for_app`=0 WHERE `collection_layout_type` IN (18,20,21,22);
+
+INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES
+('seller_brand_request_status_change', 1, 'Brand Request Status Update', 'Hello {shop_name},\r\nYour request for approving {brand_name} has been {new_request_status}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"Brand Name\", \"variable\":\"{brand_name}\"},{\"title\":\"New Request Status\", \"variable\":\"{new_request_status}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1)
+ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
