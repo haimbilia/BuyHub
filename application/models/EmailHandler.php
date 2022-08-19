@@ -1528,14 +1528,14 @@ class EmailHandler extends FatModel
         $ocRequestSrch->doNotLimitRecords();
         $ocRequestSrch->joinOrderProducts();
         $ocRequestSrch->joinOrderSellerUser();
+        $ocRequestSrch->joinOrderBuyerUser();
         //$ocRequestSrch->joinShops();
         $ocRequestSrch->joinOrderCancelReasons($langId);
         $ocRequestSrch->addCondition('ocrequest_id', '=', 'mysql_func_' . $ocrequest_id, 'AND', true);
-        $ocRequestSrch->addMultipleFields(array('op_id', 'op_invoice_number', 'op_shop_owner_name', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone', 'op_shop_owner_email', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'seller.user_id as seller_id'));
+        $ocRequestSrch->addMultipleFields(array('op_id', 'op_invoice_number', 'op_shop_owner_name', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone', 'op_shop_owner_email', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'seller.user_id as seller_id', 'COALESCE(user_name, credential_username) as username'));
         $ocRequestSrch->doNotCalculateRecords();
         $ocRequestSrch->setPageSize(1);
-        $ocRequestRs = $ocRequestSrch->getResultSet();
-        $ocRequestRow = FatApp::getDb()->fetch($ocRequestRs);
+        $ocRequestRow = FatApp::getDb()->fetch($ocRequestSrch->getResultSet());
         if (!$ocRequestRow) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
@@ -1546,6 +1546,7 @@ class EmailHandler extends FatModel
 
         $arrReplacements = array(
             '{user_name}' => $ocRequestRow['op_shop_owner_name'],
+            '{username}' => $ocRequestRow['username'],  /* Buyer User Name. */
             '{invoice_number}' => $sellerOrderAnchor,
             '{cancel_reason}' => $ocRequestRow['ocreason_title'],
             '{cancel_comments}' => nl2br($ocRequestRow['ocrequest_message']),
