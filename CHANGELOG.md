@@ -1168,6 +1168,7 @@ TV-9.4.0.20220719
     - #066227 - No email used to come for discount coupon after first purchase 
     - #066229 - Social platform icon is not visible on the shop details page (Pinterest Icon missing)
     - #065264 - When user got the reminder mail for wishlist and abandoned cart
+    - #066277 - The currency selected by the front-end user is automatically marked as default currency on the admin end
 
 ## UAT points:
 
