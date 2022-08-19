@@ -1569,6 +1569,7 @@ class EmailHandler extends FatModel
         $phoneNumbers = $receipentsInfo['phone'];
         $phoneNumbers[] = ValidateElement::formatDialCode($ocRequestRow["op_shop_owner_phone_dcode"]) . $ocRequestRow["op_shop_owner_phone"];
         foreach ($phoneNumbers as $phone) {
+            $arrReplacements['{invoice_number}'] = $sellerOrderDetailUrl;
             $this->sendSms($tpl, $phone, $arrReplacements, $langId);
         }
 
@@ -1579,6 +1580,8 @@ class EmailHandler extends FatModel
         $arrReplacements["{user_name}"] = Labels::getLabel("LBL_ADMIN", $langId);
 
         $this->sendMailToAdminAndAdditionalEmails($tpl, $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
+        
+        $arrReplacements['{invoice_number}'] = $adminOrderDetailUrl;
         $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
         $appNotification = CommonHelper::replaceStringData(Labels::getLabel('INV_RECEIVED_CANCELLATION_FOR_INVOICE_{invoicenumber}', $langId), array('{invoicenumber}' => $sellerOrderAnchor), true);
