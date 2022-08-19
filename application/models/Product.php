@@ -637,7 +637,7 @@ class Product extends MyAppModel
         $srch->addCondition(static::DB_TBL_PRODUCT_SHIPPING_PREFIX . 'product_id', '=', 'mysql_func_' . $productId, 'AND', true);
         $srch->addCondition(static::DB_TBL_PRODUCT_SHIPPING_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);           
+        $srch->setPageSize(1);
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
@@ -808,7 +808,7 @@ class Product extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', Tag::DB_TBL_PREFIX . 'id = ' . static::DB_PRODUCT_TO_TAG_PREFIX . 'tag_id');
         $srch->addCondition(static::DB_PRODUCT_TO_TAG_PREFIX . 'product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
-        $srch->addCondition(Tag::tblFld('lang_id'), '=', 'mysql_func_' . $lang_id, 'AND', true);        
+        $srch->addCondition(Tag::tblFld('lang_id'), '=', 'mysql_func_' . $lang_id, 'AND', true);
         if (true == $assoc) {
             if (count($attrs)) {
                 $srch->addMultipleFields($attrs);
@@ -860,7 +860,7 @@ class Product extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addOrder('optionvalue_display_order');
         $srch->addOrder('optionvalue_option_id');
-        $srch->addMultipleFields(array('optionvalue_id', 'optionvalue_name'));
+        $srch->addMultipleFields(array('optionvalue_id', 'COALESCE(optionvalue_name, optionvalue_identifier) as optionvalue_name'));
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         return $db->fetchAllAssoc($rs);
@@ -1275,11 +1275,11 @@ class Product extends MyAppModel
         */
         $srch->addFld('prodoption_optionvalue_ids');
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();       
+        $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         $totalOptionCombination = 1;
 
-        while ($row = FatApp::getDb()->fetch($rs)) {              
+        while ($row = FatApp::getDb()->fetch($rs)) {
             $totalOptionCombination *= count(explode(",", $row['prodoption_optionvalue_ids']));
         }
 
@@ -1483,7 +1483,7 @@ class Product extends MyAppModel
         $srch->addSubscriptionValidCondition();
 
         /* to check current product is in wish list or not[ */
-       /*  if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+        /*  if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $srch->joinFavouriteProducts($userId);
             $srch->addFld('IFNULL(ufp_id, 0) as ufp_id');
         } else {
