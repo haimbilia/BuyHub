@@ -30,6 +30,7 @@
 @import "components/cms";
 @import "components/cookies";
 @import "components/data-not-found";
+@import "components/no-data";
 @import "components/dropdown";
 @import "components/hamburger";
 @import "components/label";
@@ -43,14 +44,13 @@
 @import "components/pagination";
 @import "components/product-card";
 @import "components/pro-info";
-@import "components/scroll-hint";
+//@import "components/scroll-hint";
 @import "components/slider";
 @import "components/social-profiles";
 @import "components/star-rating";
 @import "components/ratings";
 @import "components/steps";
 @import "components/sticky-head-demo";
-
 @import "components/table";
 @import "components/tabs";
 @import "components/wrap-drop";
@@ -66,7 +66,6 @@
 @import "components/quantity-input";
 @import "components/filter-directory";
 @import "components/filters-left";
-@import "components/no-data";
 @import "components/review-media";
 @import "components/badges";
 @import "components/scrollbar";
@@ -96,7 +95,6 @@
 @import "components/alert";
 @import "components/misc";
 @import "components/system-messages";
-
 //
 //@import "vendors/animate";
 //@import "vendors/fontawesome";
@@ -113,7 +111,6 @@
 @import "vendors/intlTelInput.min";
 @import "vendors/nouislider.min";
 //
-
 @import "pages/index";
 @import "pages/collections";
 @import "pages/login";
@@ -131,5 +128,4 @@
 @import "pages/testimonials";
 @import "pages/sitemap";
 @import "pages/order-completed";
-
 //

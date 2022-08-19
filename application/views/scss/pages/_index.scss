@@ -101,7 +101,6 @@
         }
     }
 }
-
 .how-works {
     display: grid;
     grid-gap: 1rem;
@@ -137,7 +136,6 @@
         }
     }
 }
-
 //FEATURED SECTION CSS HERE
 @include media-breakpoint-down(sm) {
     .tabs--mobileview {
@@ -157,7 +155,6 @@
         }
     }
 }
-
 .featured-products {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
