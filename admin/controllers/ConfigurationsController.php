@@ -1553,8 +1553,10 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addSelectBox(Labels::getLabel("FRM_PPC_PRODUCTS_COUNT_HOME_PAGE", $langId), 'CONF_PPC_PRODUCTS_HOME_PAGE', Collections::sponsoredItemsHomePageCount(), '', array(), '');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_HOW_MANY_PPC_PRODUCTS_SHOWN_ON_HOME_PAGE", $langId) . '</span>';
 
-                $fld = $frm->addSelectBox(Labels::getLabel("FRM_PPC_SHOPS_COUNT_HOME_PAGE", $langId), 'CONF_PPC_SHOPS_HOME_PAGE', Collections::sponsoredItemsHomePageCount(), '', array(), '');
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_HOW_MANY_PPC_SHOPS_SHOWN_ON_HOME_PAGE", $langId) . '</span>';
+                /* Only 4 sponsored shops will be displayed on home page. */
+                /* $fld = $frm->addTextBox(Labels::getLabel('FRM_PPC_SHOPS_COUNT_HOME_PAGE', $langId), 'CONF_PPC_SHOPS_HOME_PAGE');
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_HOW_MANY_PPC_SHOPS_SHOWN_ON_HOME_PAGE", $langId) . '</span>'; */
+
                 $fld = $frm->addTextBox(Labels::getLabel('FRM_PPC_SLIDES_COUNT_HOME_PAGE', $langId), 'CONF_PPC_SLIDES_HOME_PAGE');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_HOW_MANY_PPC_SLIDES_SHOWN_ON_HOME_PAGE", $langId) . '</span>';
                 $fld = $frm->addTextBox(Labels::getLabel('FRM_PPC_CLICKS_COUNT_TIME_INTERVAL(Minutes)', $langId), 'CONF_PPC_CLICK_COUNT_TIME_INTERVAL');

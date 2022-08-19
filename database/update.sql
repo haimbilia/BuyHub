@@ -2093,3 +2093,7 @@ UPDATE `tbl_collections` SET `collection_for_app`=0 WHERE `collection_layout_typ
 INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES
 ('seller_brand_request_status_change', 1, 'Brand Request Status Update', 'Hello {shop_name},\r\nYour request for approving {brand_name} has been {new_request_status}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"Brand Name\", \"variable\":\"{brand_name}\"},{\"title\":\"New Request Status\", \"variable\":\"{new_request_status}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1)
 ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
+
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES 
+('CONF_PPC_SHOPS_HOME_PAGE', '4', '0')
+ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
