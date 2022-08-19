@@ -158,3 +158,29 @@
     border-radius: 10px;
     padding: 1.5rem;
 }
+
+.contacts {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin: 0 auto;
+    flex-flow: row wrap;
+    //text-align: #{$start-direction};
+    li {
+        text-align: #{$start-direction};
+        position: relative;
+        margin: 10px 0;
+        padding: 0;
+        display: block;
+    }
+}
+
+.cta {
+    text-align: center;
+    padding: 2rem;
+
+    p {
+        font-weight: 600;
+    }
+}

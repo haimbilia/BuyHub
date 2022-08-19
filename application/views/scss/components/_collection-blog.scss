@@ -1,0 +1,122 @@
+.post {
+    height: 100%;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    &-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding-top: 1.5rem;
+    }
+    &-foot {
+        margin-top: 1rem;
+        padding-bottom: 1.5rem;
+    }
+    &-media {
+        position: relative;
+        margin: 0;
+        padding-bottom: 56.25%;
+        background-color: $bg-placeholder;
+        /* 16:9, for an aspect ratio of 1:1 change to this value to 100% */
+
+        img {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        iframe {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &-category {
+        display: flex;
+        //margin-bottom: 1rem;
+        flex-wrap: wrap;
+        &-tag {
+            a {
+                display: block;
+                font-size: 0.8rem;
+                line-height: 1.2;
+                color: $txt-gray;
+                /*text-transform: uppercase;*/
+                padding: 5px 0;
+                margin-bottom: 10px;
+                margin-#{$end-direction}: 10px;
+            }
+        }
+    }
+
+    &-title {
+        line-height: 1.5;
+        font-weight: 600;
+        font-size: 1.3rem;
+        // margin-bottom: 1.5rem;
+        color: $txt-body;
+        flex: 1;
+        a {
+            color: inherit;
+        }
+    }
+
+    &-description {
+        color: $txt-gray;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+    }
+
+    &-link {
+        color: $brand-color;
+        font-size: 1rem;
+        &:after {
+            transition: all 0.5s ease-out;
+            padding-#{$start-direction}: 4px;
+            content: "\2192";
+        }
+        &:hover {
+            text-decoration: none;
+            &:after {
+                padding-#{$start-direction}: 8px;
+            }
+        }
+    }
+}
+.article-inner {
+    .blog_author {
+        font-size: 0.8rem;
+        margin-bottom: 0.8rem;
+        .article__author {
+            color: $txt-body;
+            margin-#{$end-direction}: 10px;
+            font-weight: 600;
+        }
+        .article__date {
+            color: lighten($txt-body, 50%);
+        }
+    }
+    .article-title {
+        margin-bottom: 1rem;
+        line-height: 1.5;
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+    a {
+        color: inherit;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+            color: inherit;
+        }
+    }
+}

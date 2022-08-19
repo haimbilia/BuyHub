@@ -22,7 +22,6 @@
         justify-content: center;
         flex: 1;
         max-width: 300px;
-
         border: $border;
         border-radius: $common-radius;
         background-color: $bg-gray;
@@ -315,6 +314,5 @@
     #{$start-direction}: 50%;
     opacity: 0;
     transform: translate(-50%, -50%);
-
     transition: all 0.3s ease-in-out 0s;
 }

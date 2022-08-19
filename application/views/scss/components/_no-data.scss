@@ -46,3 +46,53 @@
         }
     }
 }
+.block-empty {
+    padding: 2rem 20px;
+    margin: auto;
+    .block__img {
+        display: block;
+        margin: 20px auto 30px !important;
+        /* opacity: 0.4;*/
+    }
+    .error__img {
+        width: 449px;
+        display: block;
+        margin: 20px auto 0;
+    }
+    &-sm {
+    }
+    h3 {
+        font-size: 1.2rem;
+    }
+    h6 {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: $txt-gray;
+    }
+}
+
+.no-product {
+    text-align: center;
+    ul {
+        justify-content: center;
+    }
+}
+
+.not-found {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    img {
+        margin-bottom: 2rem;
+    }
+    h3 {
+        margin-bottom: 1rem;
+    }
+    p {
+        margin-bottom: 1rem;
+    }
+}

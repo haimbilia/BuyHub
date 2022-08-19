@@ -1,14 +1,14 @@
 /*Backgrounds*/
 
-.bg-brand { 
+.bg-brand {
     @include bg-brand;
 }
 .bg-brand-light {
-    @include bg-brand-light;   
+    @include bg-brand-light;
 }
 .bg-secondary {
     @include bg-secondary;
-} 
+}
 .bg-third {
     @include bg-third;
 }
