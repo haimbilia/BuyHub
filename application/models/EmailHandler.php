@@ -1528,11 +1528,12 @@ class EmailHandler extends FatModel
         $ocRequestSrch->doNotLimitRecords();
         $ocRequestSrch->joinOrderProducts();
         $ocRequestSrch->joinOrderSellerUser();
+        $ocRequestSrch->joinOrders($langId);
         $ocRequestSrch->joinOrderBuyerUser();
         //$ocRequestSrch->joinShops();
         $ocRequestSrch->joinOrderCancelReasons($langId);
         $ocRequestSrch->addCondition('ocrequest_id', '=', 'mysql_func_' . $ocrequest_id, 'AND', true);
-        $ocRequestSrch->addMultipleFields(array('op_id', 'op_invoice_number', 'op_shop_owner_name', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone', 'op_shop_owner_email', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'seller.user_id as seller_id', 'COALESCE(user_name, credential_username) as username'));
+        $ocRequestSrch->addMultipleFields(array('order_id', 'op_id', 'op_invoice_number', 'op_shop_owner_name', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone', 'op_shop_owner_email', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'seller.user_id as seller_id', 'COALESCE(buyer.user_name, buyer_cred.credential_username) as username'));
         $ocRequestSrch->doNotCalculateRecords();
         $ocRequestSrch->setPageSize(1);
         $ocRequestRow = FatApp::getDb()->fetch($ocRequestSrch->getResultSet());
@@ -1541,7 +1542,7 @@ class EmailHandler extends FatModel
             return false;
         }
 
-        $sellerOrderDetailUrl = UrlHelper::generateFullUrl('Seller', 'ViewOrder', array($ocRequestRow["op_id"]));
+        $sellerOrderDetailUrl = UrlHelper::generateFullUrl('Seller', 'ViewOrder', array($ocRequestRow["op_id"]), CONF_WEBROOT_DASHBOARD);
         $sellerOrderAnchor = "<a href='" . $sellerOrderDetailUrl . "'>" . $ocRequestRow["op_invoice_number"] . "</a>";
 
         $arrReplacements = array(
@@ -1566,18 +1567,21 @@ class EmailHandler extends FatModel
         $mailerObj->send();
 
         $phoneNumbers = $receipentsInfo['phone'];
-        $phoneNumbers[] = $ocRequestRow["op_shop_owner_phone_dcode"] . $ocRequestRow["op_shop_owner_phone"];
+        $phoneNumbers[] = ValidateElement::formatDialCode($ocRequestRow["op_shop_owner_phone_dcode"]) . $ocRequestRow["op_shop_owner_phone"];
         foreach ($phoneNumbers as $phone) {
+            $arrReplacements['{invoice_number}'] = $sellerOrderDetailUrl;
             $this->sendSms($tpl, $phone, $arrReplacements, $langId);
         }
 
-        $adminOrderDetailUrl = UrlHelper::generateFullUrl('SellerOrders', 'View', array($ocRequestRow["op_id"]), CONF_WEBROOT_BACKEND);
+        $adminOrderDetailUrl = UrlHelper::generateFullUrl('Orders', 'view', array($ocRequestRow["order_id"]));
         $adminOrderAnchor = "<a href='" . $adminOrderDetailUrl . "'>" . $ocRequestRow["op_invoice_number"] . "</a>";
         $arrReplacements['{invoice_number}'] = $adminOrderAnchor;
 
         $arrReplacements["{user_name}"] = Labels::getLabel("LBL_ADMIN", $langId);
 
         $this->sendMailToAdminAndAdditionalEmails($tpl, $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
+        
+        $arrReplacements['{invoice_number}'] = $adminOrderDetailUrl;
         $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
         $appNotification = CommonHelper::replaceStringData(Labels::getLabel('INV_RECEIVED_CANCELLATION_FOR_INVOICE_{invoicenumber}', $langId), array('{invoicenumber}' => $sellerOrderAnchor), true);
