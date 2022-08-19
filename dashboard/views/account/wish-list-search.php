@@ -27,6 +27,7 @@
                                 $titleFld = $frm->getField('uwlist_title');
                                 $titleFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Enter_List_Name', $siteLangId));
                                 $titleFld->setFieldTagAttribute('title', Labels::getLabel('LBL_List_Name', $siteLangId));
+                                $titleFld->setFieldTagAttribute('maxlength', 20);
 
                                 $btnSubmitFld = $frm->getField('btn_submit');
                                 $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-block');
