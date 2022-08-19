@@ -2089,3 +2089,19 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_FLAT', '1', 'Flat', '2') ON DUPLICATE KEY UPDATE label_caption = 'Flat';
 
 UPDATE `tbl_collections` SET `collection_for_app`=0 WHERE `collection_layout_type` IN (18,20,21,22);
+
+INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES
+('seller_brand_request_status_change', 1, 'Brand Request Status Update', 'Hello {shop_name},\r\nYour request for approving {brand_name} has been {new_request_status}\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"Seller Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"Brand Name\", \"variable\":\"{brand_name}\"},{\"title\":\"New Request Status\", \"variable\":\"{new_request_status}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1)
+ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
+
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES 
+('CONF_PPC_SHOPS_HOME_PAGE', '4', '0')
+ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
+
+INSERT IGNORE INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES
+('order_cancellation_notification', 1, 'Order Cancellation Notification - Vendor & Admin', 'Order Cancellation Request Received on {website_name}', '\r\n<table width=\"600px\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)\">\r\n	<tbody>\r\n		<tr>                        \r\n			<td style=\"background:#fff;padding:20px 0 10px; text-align:center;\">                            \r\n				<h4 style=\"font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;\">Request Received</h4>                            \r\n				<h2 style=\"margin:0; font-size:34px; padding:0;\">Order Cancellation</h2></td>                    \r\n		</tr>\r\n		<tr>                        \r\n			<td style=\"background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;\">                            \r\n				<table width=\"100%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">                                \r\n					<tbody>                                    \r\n						<tr>                                        \r\n							<td style=\"padding:20px 0 30px;\"><strong style=\"font-size:18px;color:#333;\">Dear {user_name}</strong><br />\r\n								{username} has submitted the Order Cancellation Request corresponding to Order Invoice Number {invoice_number}.</td>                                    \r\n						</tr>                                    \r\n					</tbody>                            \r\n				</table></td>                    \r\n		</tr>\r\n	</tbody>\r\n</table>', '{user_name} Name of the email receiver<br>
+{username} Buyer Username<br>
+{website_name} Name of the website<br>
+{social_media_icons} <br>
+{contact_us_url} <br>', 1)
+ON DUPLICATE KEY UPDATE etpl_name = VALUES(etpl_name), etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body), etpl_replacements = VALUES(etpl_replacements);

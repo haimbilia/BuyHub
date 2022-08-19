@@ -1528,24 +1528,26 @@ class EmailHandler extends FatModel
         $ocRequestSrch->doNotLimitRecords();
         $ocRequestSrch->joinOrderProducts();
         $ocRequestSrch->joinOrderSellerUser();
+        $ocRequestSrch->joinOrders($langId);
+        $ocRequestSrch->joinOrderBuyerUser();
         //$ocRequestSrch->joinShops();
         $ocRequestSrch->joinOrderCancelReasons($langId);
         $ocRequestSrch->addCondition('ocrequest_id', '=', 'mysql_func_' . $ocrequest_id, 'AND', true);
-        $ocRequestSrch->addMultipleFields(array('op_id', 'op_invoice_number', 'op_shop_owner_name', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone', 'op_shop_owner_email', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'seller.user_id as seller_id'));
+        $ocRequestSrch->addMultipleFields(array('order_id', 'op_id', 'op_invoice_number', 'op_shop_owner_name', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone', 'op_shop_owner_email', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'seller.user_id as seller_id', 'COALESCE(buyer.user_name, buyer_cred.credential_username) as username'));
         $ocRequestSrch->doNotCalculateRecords();
         $ocRequestSrch->setPageSize(1);
-        $ocRequestRs = $ocRequestSrch->getResultSet();
-        $ocRequestRow = FatApp::getDb()->fetch($ocRequestRs);
+        $ocRequestRow = FatApp::getDb()->fetch($ocRequestSrch->getResultSet());
         if (!$ocRequestRow) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
-        $sellerOrderDetailUrl = UrlHelper::generateFullUrl('Seller', 'ViewOrder', array($ocRequestRow["op_id"]));
+        $sellerOrderDetailUrl = UrlHelper::generateFullUrl('Seller', 'ViewOrder', array($ocRequestRow["op_id"]), CONF_WEBROOT_DASHBOARD);
         $sellerOrderAnchor = "<a href='" . $sellerOrderDetailUrl . "'>" . $ocRequestRow["op_invoice_number"] . "</a>";
 
         $arrReplacements = array(
             '{user_name}' => $ocRequestRow['op_shop_owner_name'],
+            '{username}' => $ocRequestRow['username'],  /* Buyer User Name. */
             '{invoice_number}' => $sellerOrderAnchor,
             '{cancel_reason}' => $ocRequestRow['ocreason_title'],
             '{cancel_comments}' => nl2br($ocRequestRow['ocrequest_message']),
@@ -1565,18 +1567,21 @@ class EmailHandler extends FatModel
         $mailerObj->send();
 
         $phoneNumbers = $receipentsInfo['phone'];
-        $phoneNumbers[] = $ocRequestRow["op_shop_owner_phone_dcode"] . $ocRequestRow["op_shop_owner_phone"];
+        $phoneNumbers[] = ValidateElement::formatDialCode($ocRequestRow["op_shop_owner_phone_dcode"]) . $ocRequestRow["op_shop_owner_phone"];
         foreach ($phoneNumbers as $phone) {
+            $arrReplacements['{invoice_number}'] = $sellerOrderDetailUrl;
             $this->sendSms($tpl, $phone, $arrReplacements, $langId);
         }
 
-        $adminOrderDetailUrl = UrlHelper::generateFullUrl('SellerOrders', 'View', array($ocRequestRow["op_id"]), CONF_WEBROOT_BACKEND);
+        $adminOrderDetailUrl = UrlHelper::generateFullUrl('Orders', 'view', array($ocRequestRow["order_id"]));
         $adminOrderAnchor = "<a href='" . $adminOrderDetailUrl . "'>" . $ocRequestRow["op_invoice_number"] . "</a>";
         $arrReplacements['{invoice_number}'] = $adminOrderAnchor;
 
         $arrReplacements["{user_name}"] = Labels::getLabel("LBL_ADMIN", $langId);
 
         $this->sendMailToAdminAndAdditionalEmails($tpl, $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
+        
+        $arrReplacements['{invoice_number}'] = $adminOrderDetailUrl;
         $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
         $appNotification = CommonHelper::replaceStringData(Labels::getLabel('INV_RECEIVED_CANCELLATION_FOR_INVOICE_{invoicenumber}', $langId), array('{invoicenumber}' => $sellerOrderAnchor), true);
@@ -2909,7 +2914,7 @@ class EmailHandler extends FatModel
         $prodSrch->setPageSize(9);
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn',
+                'product_id', 'selprod_product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn',
                 'selprod_id', 'selprod_user_id', 'selprod_condition', 'selprod_price', 'special_price_found', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
                 'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'user_name',
                 'shop_id', 'shop_name',

@@ -286,10 +286,11 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
 </div>
 <?php include(CONF_THEME_PATH . '_partial/footer-part/offcanvas-elements.php'); ?>
 <a class="back-to-top no-print">
-    <svg class="svg">
+    <svg class="svg" width="16" height="16">
         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#up-arrow"></use>
     </svg>
-    <span><?php echo Labels::getLabel('LBL_TOP', $siteLangId); ?></span>
+    <span>
+        <?php echo Labels::getLabel('LBL_TOP', $siteLangId); ?></span>
 </a>
 </body>
 

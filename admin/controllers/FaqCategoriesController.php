@@ -158,19 +158,13 @@ class FaqCategoriesController extends ListingBaseController
         }
 
         $newTabLangId = $this->siteLangId;
-        $recordId = FatUtility::int($post['faqcat_id']);
+        $recordId = FatApp::getPostedData('faqcat_id', FatUtility::VAR_INT, 0);
         $record = new FaqCategory($recordId);
         if ($recordId == 0) {
             $display_order = $record->getMaxOrder();
             $post['faqcat_display_order'] = $display_order;
         }
-        $data = array(
-            'faqcatlang_lang_id' => $newTabLangId,
-            'faqcatlang_faqcat_id' => $recordId,
-            'faqcat_name' => $post['faqcat_name'],
-        );
-        $post['faqcat_identifier'] = $post['faqcat_name'];
-        unset($post['faqcat_id'], $post['faqcat_name']);
+        $record->setFldValue(FaqCategory::DB_TBL_PREFIX . 'identifier', $post['faqcat_name']);
         $record->assignValues($post);
         if (!$record->save()) {
             $msg = $record->getError();
@@ -180,10 +174,10 @@ class FaqCategoriesController extends ListingBaseController
             LibHelper::exitWithError($msg, true);
         }
         $recordId = $record->getMainTableRecordId();
-        $epageObj = new Extrapage($recordId);
-        if (!$record->updateLangData($newTabLangId, $data)) {
-            LibHelper::exitWithError($epageObj->getError(), true);
-        }
+
+        $this->setLangData($record, [
+            $record::tblFld('name') => $post[$record::tblFld('name')],
+        ]);
 
         $newTabLangId = 0;
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
