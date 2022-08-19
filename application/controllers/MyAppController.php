@@ -11,13 +11,8 @@ class MyAppController extends FatController
         $this->checkMaintenance();
         $this->setCommonVariables();
         $this->checkTempTokenLogin();
-        if ($this->_controllerName == 'HomeController') {
-            $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/index-' . CommonHelper::getLayoutDirection() . '.css');
-        } else {
-            $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');
-        }
-
-
+        $mainCss = ($this->_controllerName == 'HomeController') ? 'index' : 'main';
+        $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/' . $mainCss . '-' . CommonHelper::getLayoutDirection() . '.css');
         global $rootCatArr;
         $rootCatArr = [];
     }
