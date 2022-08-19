@@ -27,24 +27,24 @@ $productView = $productView ?? false;
                                 <div class="">
                                     <div class="sort-by" title="<?php echo Labels::getLabel("LBL_SORT_BY", $siteLangId); ?>" data-bs-toggle="tooltip">
                                         <div class="dropdown">
-                                            <button class="dropdown-toggle-custom btn btn-outline-gray btn-dropdown sort-by-btn" type="button" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                                            <button class="dropdown-toggle  no-after dropdown-toggle-custom btn btn-outline-gray btn-dropdown sort-by-btn" type="button" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                                                 <span class="sortByTxtJs"><?php echo Labels::getLabel('LBL_MOST_RECENT', $siteLangId); ?></span>
                                                 <i class="dropdown-toggle-custom-arrow"></i>
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-anim">
-                                                <ul class="drop nav nav-block">
-                                                    <li class="nav__item">
-                                                        <a class="dropdown-item nav__link sortByEleJs active" href="javascript:void(0);" data-sort='most_recent' onclick="getSortedReviews(this);return false;">
-                                                            <?php echo Labels::getLabel('LBL_MOST_RECENT', $siteLangId); ?>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav__item">
-                                                        <a class="dropdown-item nav__link sortByEleJs" href="javascript:void(0);" data-sort='most_helpful' onclick="getSortedReviews(this);return false;">
-                                                            <?php echo Labels::getLabel('LBL_MOST_HELPFUL', $siteLangId); ?>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+
+                                            <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
+                                                <li class="dropdown-menu-item">
+                                                    <a class="dropdown-menu-link sortByEleJs active" href="javascript:void(0);" data-sort='most_recent' onclick="getSortedReviews(this);return false;">
+                                                        <?php echo Labels::getLabel('LBL_MOST_RECENT', $siteLangId); ?>
+                                                    </a>
+                                                </li>
+                                                <li class="dropdown-menu-item">
+                                                    <a class="dropdown-menu-link sortByEleJs" href="javascript:void(0);" data-sort='most_helpful' onclick="getSortedReviews(this);return false;">
+                                                        <?php echo Labels::getLabel('LBL_MOST_HELPFUL', $siteLangId); ?>
+                                                    </a>
+                                                </li>
+                                            </ul>
+
                                         </div>
                                     </div>
                                 </div>
