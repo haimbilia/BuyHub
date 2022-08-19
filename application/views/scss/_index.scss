@@ -1,3 +1,136 @@
+@import "bootstrap/bootstrap";
+@import "bootstrap/variables";
+//
+@import "themes/variables";
+
+//
+@import "layout/header";
+@import "layout/mega-menu";
+@import "layout/offcanvas-menu";
+@import "layout/mobile-menu";
+//@import "layout/stack-menu";
+//@import "layout/mega-nav";
+@import "layout/footer";
+//
+@import "components/demo";
+@import "components/main-search";
+@import "components/carousels";
+@import "components/accordion";
+@import "components/auto-complete";
+@import "components/avtar";
+@import "components/back-to-top";
+@import "components/browser_ie";
+
+@import "components/form";
+@import "components/checkbox";
+@import "components/button";
+@import "components/side-cart";
+//@import "components/catalog-popup";
+@import "components/section";
+//@import "components/cms";
+@import "components/cookies";
+
+@import "components/no-data";
+@import "components/dropdown";
+@import "components/hamburger";
+@import "components/loader";
+@import "components/spinner";
+//@import "components/media";
+//@import "components/message";
+@import "components/modal";
+@import "components/toaster";
+@import "components/offcanvas";
+//@import "components/multi-list";
+//@import "components/pagination";
+@import "components/product-card";
+@import "components/pro-info";
+@import "components/slider";
+@import "components/social-profiles";
+@import "components/star-rating";
+@import "components/ratings";
+//@import "components/steps";
+//@import "components/table";
+@import "components/tabs";
+@import "components/wrap-drop";
+@import "components/cards";
+//@import "components/switch";
+//@import "components/print";
+//@import "components/progress-checkout";
+@import "components/list-group";
+//@import "components/media-more";
+@import "components/bg";
+@import "components/location-permission";
+@import "components/quantity-input";
+//@import "components/filter-directory";
+//@import "components/filters-left";
+@import "components/review-media";
+@import "components/badges";
+@import "components/scrollbar";
+//@import "components/file-upload";
+//@import "components/more-sellers";
+//@import "components/customer-reviews";
+//@import "components/interactive-map";
+//@import "components/share-this";
+@import "components/cart-summary";
+@import "components/list-cart";
+@import "components/product-profile";
+@import "components/collection-product";
+@import "components/collection-shop";
+@import "components/collection-category";
+@import "components/collection-brands";
+@import "components/collection-banner";
+@import "components/collection-faq";
+@import "components/collection-testimonials";
+@import "components/collection-incentives";
+@import "components/collection-newsletter";
+@import "components/collection-blog";
+//@import "components/ion.rangeSlider";
+//@import "components/ion.rangeSlider.skinHTML5";
+//@import "components/jquery.datetimepicker";
+//@import "components/jquery-ui-timepicker-addon";
+// @import "components/collection-faq";
+//@import "components/product-gallery-slider";
+@import "components/alert";
+@import "components/misc";
+@import "components/system-messages";
+//
+//@import "vendors/animate";
+//@import "vendors/fontawesome";
+//@import "vendors/chartist";
+//@import "vendors/cropper";
+//@import 'vendors/facebox';
+@import "vendors/jquery-ui";
+@import "vendors/jquery-ui-timepicker-addon";
+//@import "vendors/simplebar";
+@import "vendors/slick";
+//@import "vendors/xzoom";
+@import "vendors/jquery.fancybox";
+//@import "vendors/tagify";
+//@import "vendors/intlTelInput.min";
+//@import "vendors/nouislider.min";
+
+//
+
+@import "pages/offline";
+// @import "pages/index";
+@import "pages/collections";
+@import "pages/login";
+//@import "pages/listing";
+//@import "pages/detail";
+//@import "pages/cart";
+//@import "pages/checkout";
+
+//@import "pages/blog";
+//@import "pages/payment";
+//@import "pages/contact";
+//@import "pages/faq";
+//@import "pages/seller";
+@import "pages/shop";
+//@import "pages/testimonials";
+//@import "pages/sitemap";
+//@import "pages/order-completed";
+//
+
 .hero-slider {
     position: relative;
     margin: 0 auto;

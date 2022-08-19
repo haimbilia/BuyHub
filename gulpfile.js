@@ -26,6 +26,8 @@ const config = {
     dest: "./",
 };
 
+
+
 function css() {
     return src("./application/views/scss/*.scss")
         .pipe(sourcemaps.init({ loadMaps: true }))
@@ -40,7 +42,7 @@ function manager() {
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(sass({ outputStyle: "compressed" }))
         .pipe(autoprefixer())
-        .pipe(sourcemaps.write("."))       
+        .pipe(sourcemaps.write("."))
         .pipe(dest("./admin/views/css"));
 }
 
