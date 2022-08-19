@@ -1158,6 +1158,15 @@ TV-9.4.0.20220719
     - #066172 - The category's names do not appear correct.
     - #066171 - First name field is non editable in blog contribution form.
     - #066194 - Threshold email refill icon redirection.
+    - #066190 - The search field in the FAQs section on the seller registration page is not properly aligned
+    - #066189 - Blank spacing appears when there is no faq available on the FAQ's listing page
+    - #066150 - Multiple issues in email template for mesage regarding return request
+    - #066152 - Extra blank spacing appears between the testimonials when the user clicks on the load more button
+    - #066158 - The testimonials images are not clearly visible.
+    - #066207 - NO email used to come when a seller request for a brand
+    - #066213 - Country phone code appears in the General query section even if the phone number is not added
+    - #066227 - No email used to come for discount coupon after first purchase 
+    - #066229 - Social platform icon is not visible on the shop details page (Pinterest Icon missing)
 
 ## UAT points:
 

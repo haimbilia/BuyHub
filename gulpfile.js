@@ -36,12 +36,11 @@ function css() {
 }
 
 function manager() {
-    return src("./manager/views/scss/*.scss")
+    return src("./admin/views/scss/*.scss")
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(sass({ outputStyle: "compressed" }))
         .pipe(autoprefixer())
-        .pipe(sourcemaps.write("."))
-        .pipe(dest("./manager/views/css"))
+        .pipe(sourcemaps.write("."))       
         .pipe(dest("./admin/views/css"));
 }
 
@@ -73,7 +72,7 @@ function watchFiles() {
     watch(["./application/views/common-js-src/*.js"], minifyjs);
     watch(["./application/views/scss"], css);
     watch(["./dashboard/views/scss"], dashboard);
-    watch(["./manager/views/scss"], manager);
+    watch(["./admin/views/scss"], manager);
 }
 
 exports.default = series(minifyjs, css, dashboard, manager);
