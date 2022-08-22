@@ -269,9 +269,10 @@
             grid-column-end: 3;
             grid-row-start: 1;
             grid-row-end: 3;
-
             .products-body {
-                flex: 1;
+                @include media-breakpoint-up(lg) {
+                    flex: 1;
+                }
             }
             .products-foot {
                 @include media-breakpoint-up(lg) {
