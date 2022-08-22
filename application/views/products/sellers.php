@@ -9,12 +9,12 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
         <div class="container">
             <div class="grid-layout">
                 <div class="grid-layout-start">
-                    <div class="sticky-top">
+                    <div class="sticky-md-top">
                         <div class="product-card">
                             <div class="product-card-start">
                                 <div class="product-card-img">
                                     <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($product['selprod_id'])); ?>">
-                                        <img <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL);?> alt="" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
+                                        <img <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?> alt="" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                                     </a>
                                 </div>
                             </div>
@@ -47,7 +47,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                             <div class="seller-card">
                                 <div class="seller-card-head">
                                     <a title="<?php echo $moresellers['shop_name']; ?>" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($moresellers['shop_id'])); ?>">
-                                        <img class="seller-logo"  src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($moresellers['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $moresellers['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB);?>>
+                                        <img class="seller-logo" src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($moresellers['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $moresellers['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB); ?>>
                                     </a>
                                 </div>
                                 <div class="seller-card-body">

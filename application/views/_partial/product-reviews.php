@@ -44,7 +44,6 @@ $productView = $productView ?? false;
                                                     </a>
                                                 </li>
                                             </ul>
-
                                         </div>
                                     </div>
                                 </div>
@@ -64,7 +63,7 @@ $productView = $productView ?? false;
                             <div class="rating-layout">
                                 <!-- Rating Section -->
                                 <div class="rating-layout-start">
-                                    <div class="sticky-top">
+                                    <div class="sticky-md-top">
                                         <div class="product-card">
                                             <?php if (false === $productView && !empty($product)) { ?>
                                                 <div class="product-card-start">

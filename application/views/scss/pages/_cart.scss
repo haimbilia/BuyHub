@@ -497,8 +497,12 @@
         }
         &-bottom {
             display: flex;
+            gap: 10px;
+            flex-flow: row wrap;
             .not-available-txt {
-                margin-#{$start-direction}: auto;
+                @include media-breakpoint-up(lg) {
+                    margin-#{$start-direction}: auto;
+                }
             }
         }
         .products-price {
