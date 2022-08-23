@@ -142,7 +142,7 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                 </div>
             <?php } else { ?>
                 <div class="block-empty m-auto text-center">
-                    <img class="block__img" width="100" height="100" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty-cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Record_Found', $siteLangId); ?>" width="80">
+                    <img class="block__img" width="200" height="200" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty-cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Record_Found', $siteLangId); ?>">
                     <h5>
                         <?php echo Labels::getLabel('LBL_YOUR_SHOPPING_BAG_IS_EMPTY', $siteLangId); ?>
                     </h5>
