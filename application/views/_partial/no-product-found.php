@@ -13,7 +13,7 @@ $keywordFld->setFieldTagAttribute('onkeyup', 'animation(this)'); ?>
 <div class="container align-center">
     <div class="no-product">
         <div class="block-empty m-auto text-center">
-            <img class="block__img" width="100" height="100" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty-cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Product_found', $siteLangId); ?>">
+            <img class="block__img" width="200" height="200" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty-cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Product_found', $siteLangId); ?>">
             <h3><?php echo Labels::getLabel('LBL_WE_COULD_NOT_FIND_ANY_MATCHES!', $siteLangId); ?></h3>
             <h6><?php echo Labels::getLabel('LBL_Please_check_if_you_misspelt_something_or_try_searching_again_with_fewer_keywords.', $siteLangId); ?>
             </h6><br>
