@@ -56,7 +56,7 @@ class BlogComment extends MyAppModel
         return array(
             self::COMMENT_STATUS_PENDING => Labels::getLabel('LBL_PENDING', $langId),
             self::COMMENT_STATUS_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
-            self::COMMENT_STATUS_REJECT => Labels::getLabel('LBL_REJECT', $langId)
+            self::COMMENT_STATUS_REJECT => Labels::getLabel('LBL_REJECTED', $langId)
         );
     }
 
