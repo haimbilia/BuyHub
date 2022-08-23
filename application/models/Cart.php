@@ -2111,6 +2111,7 @@ class Cart extends FatModel
 
     public function removeShippedOnlyProducts()
     {
+        $this->invalidateCheckoutType();
         $cartProducts = $this->getProducts($this->cart_lang_id);
         foreach ($cartProducts as $cartKey => $product) {
             if ($product['fulfillment_type'] != Shipping::FULFILMENT_SHIP) {
