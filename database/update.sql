@@ -2180,3 +2180,11 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 ('APP_ALL_SIGN_IN_OPTIONS', 1, 'All sign in options', 2),
 ('APP_YOUR_EMAIL_WILL_NOT_CHANGE_UNTIL_YOU_VERIFY_YOUR_NUMBER', 1, 'Your email will not change until you verify your number', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES
+('seller_custom_catalog_request_status_change', 1, 'Supplier - Custom Catalog Request Status Change', 'Hello {shop_name},\r\nYour catalog approval request for {prod_title} has been {new_request_status}.\r\n\r\n{SITE_NAME} Team', 
+'{shop_name} Shop Name<br>
+{new_request_status} New Request Status (Approved/Declined)<br>
+{social_media_icons} <br>
+{contact_us_url} <br>', 1)
+ON DUPLICATE KEY UPDATE stpl_name = VALUES(stpl_name), stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
