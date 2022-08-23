@@ -1826,7 +1826,7 @@ class User extends MyAppModel
         return true;
     }
 
-    public function userPhoneVerification($data, $langId)
+    public function userPhoneVerification($data, $langId, $tpl = SmsTemplate::LOGIN)
     {
         $phone = !empty($data['user_phone']) ? trim($data['user_phone']) : '';
         $dialCode = !empty($data['user_phone_dcode']) ? ValidateElement::formatDialCode(trim($data['user_phone_dcode'])) : '';
@@ -1836,7 +1836,7 @@ class User extends MyAppModel
         if (false === $otp) {
             return false;
         }
-        return $this->sendOtp($dialCode . $phone, $user_name, $otp, $langId);
+       return $this->sendOtp($dialCode . $phone, $user_name, $otp, $langId, $tpl);
     }
 
     public function sendOtp($phone, $user_name, $otp, $langId, $tpl = SmsTemplate::LOGIN)
@@ -1865,7 +1865,7 @@ class User extends MyAppModel
         return true;
     }
 
-    public function resendOtp()
+    public function resendOtp($tpl = SmsTemplate::LOGIN)
     {
         if ($this->mainTableRecordId < 1) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST_USER_NOT_INITIALIZED', $this->commonLangId);
@@ -1874,7 +1874,7 @@ class User extends MyAppModel
 
         $attr = ['user_name', 'user_phone_dcode', 'user_phone'];
         $userData = $this->getUserInfo($attr, false, false);
-        return $this->userPhoneVerification($userData, $this->commonLangId);
+        return $this->userPhoneVerification($userData, $this->commonLangId, $tpl);
     }
 
     public function guestUserWelcomeEmail($data, $langId)

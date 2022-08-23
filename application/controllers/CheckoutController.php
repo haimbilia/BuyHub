@@ -2277,7 +2277,7 @@ class CheckoutController extends MyAppController
 
         $otp = '';
         if (true == $canSendSms) {
-            if (false == $userObj->resendOtp()) {
+            if (false == $userObj->resendOtp(SmsTemplate::COD_OTP_VERIFICATION)) {
                 FatUtility::dieJsonError($userObj->getError());
             }
             $data = $userObj->getOtpDetail();
