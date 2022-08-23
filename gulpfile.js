@@ -6,6 +6,10 @@ const autoprefixer = require("gulp-autoprefixer");
 const minify = require("gulp-minify");
 /* const svgSprite = require("gulp-svg-sprite");
 var concat = require("gulp-concat"); */
+const applicationPath = './application/views/';
+const adminPath = './admin/views/';
+const dashboardPath = './dashboard/views/';
+const mapPath = '../../../';
 
 // SVG Sprite Config
 const config = {
@@ -29,30 +33,30 @@ const config = {
 
 
 function css() {
-    return src("./application/views/scss/*.scss")
+    return src(applicationPath + "scss/*.scss")
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(sass({ outputStyle: "compressed" }))
         .pipe(autoprefixer())
-        .pipe(sourcemaps.write("."))
-        .pipe(dest("./application/views/css"));
+        // .pipe(sourcemaps.write(mapPath))
+        .pipe(dest(applicationPath + "css"));
 }
 
 function manager() {
-    return src("./admin/views/scss/*.scss")
+    return src(adminPath + "scss/*.scss")
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(sass({ outputStyle: "compressed" }))
         .pipe(autoprefixer())
-        .pipe(sourcemaps.write("."))
-        .pipe(dest("./admin/views/css"));
+        // .pipe(sourcemaps.write("."))
+        .pipe(dest(adminPath + "css"));
 }
 
 function dashboard() {
-    return src("./dashboard/views/scss/*.scss")
+    return src(dashboardPath + "scss/*.scss")
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(sass({ outputStyle: "compressed" }))
         .pipe(autoprefixer())
-        .pipe(sourcemaps.write("."))
-        .pipe(dest("./dashboard/views/css"));
+        // .pipe(sourcemaps.write("."))
+        .pipe(dest(dashboardPath + "css"));
 }
 
 /* function svg() {
@@ -63,18 +67,18 @@ function dashboard() {
 
 // Watch minifyjs
 function minifyjs() {
-    return src("./application/views/common-js-src/*.js", { allowEmpty: true })
+    return src(applicationPath + "common-js-src/*.js", { allowEmpty: true })
         .pipe(minify({ noSource: true }))
         // .pipe(concat("myapp.js"))
-        .pipe(dest("./application/views/common-js"));
+        .pipe(dest(applicationPath + "common-js"));
 }
 
 // Watch files
 function watchFiles() {
-    watch(["./application/views/common-js-src/*.js"], minifyjs);
-    watch(["./application/views/scss"], css);
-    watch(["./dashboard/views/scss"], dashboard);
-    watch(["./admin/views/scss"], manager);
+    watch([applicationPath + "common-js-src/*.js"], minifyjs);
+    watch([applicationPath + "scss"], css);
+    watch([dashboardPath + "scss"], dashboard);
+    watch([adminPath + "scss"], manager);
 }
 
 exports.default = series(minifyjs, css, dashboard, manager);

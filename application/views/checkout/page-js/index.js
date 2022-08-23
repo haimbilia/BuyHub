@@ -671,8 +671,11 @@ $("document").ready(function () {
         var data = fcom.frmData(frm);
         var method = $(frm).data("method");
         var orderId = $(frm).find('input[name="order_id"]').val();
+        fcom.displayProcessing();
+        $(paymentDiv).prepend(fcom.getLoader());
         fcom.ajax(fcom.makeUrl("Checkout", "validateOtp"), data, function (t) {
             fcom.closeProcessing();
+            fcom.removeLoader();
             t = $.parseJSON(t);
             if (1 == t.status) {
                 if ("undefined" != typeof method) {
