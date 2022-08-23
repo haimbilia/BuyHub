@@ -286,9 +286,10 @@ $sharing-height: 50px;
     max-height: 350px;
     overflow-y: auto;
     &-item {
-        padding: 1.5rem 1.5rem;
+        padding: 1rem 1.5rem;
         border-bottom: $border;
         display: flex;
+        gap: 8px;
         justify-content: space-between;
         position: relative;
         &:last-child {
