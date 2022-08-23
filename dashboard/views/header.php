@@ -11,7 +11,7 @@ array_walk($jsVariables, function (&$item1, $key) {
     $item1 = html_entity_decode($item1, ENT_QUOTES, 'UTF-8');
 });
 $commonHeadData = array(
-    'siteLangId' => $siteLangId,    
+    'siteLangId' => $siteLangId,
     'controllerName' => $controllerName,
     'action' => $action,
     'jsVariables' => $jsVariables,
@@ -40,15 +40,15 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo strtolower(CommonHelper::getLangCode()); ?>" data-version="<?php echo CONF_WEB_APP_VERSION; ?>" data-theme="light" dir="<?php echo CommonHelper::getLayoutDirection(); ?>" prefix="og: http://ogp.me/ns#" <?php echo $additionalAttributes; ?> class="<?php echo $htmlClass; ?> <?php if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
-                                                                                                                                                                                                                                                                                                echo "sticky-demo-header";
-                                                                                                                                                                                                                                                                                            } ?>">
+                                                                                                                                                                                                                                                                                                            echo "sticky-demo-header";
+                                                                                                                                                                                                                                                                                                        } ?>">
 
 <head>
     <!-- Yo!Kart -->
     <meta charset="utf-8">
     <meta name="author" content="">
     <!-- Mobile Specific Metas ===================== -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <?php if (CommonHelper::demoUrl() && $controllerName != 'Home') { ?>
         <meta name="robots" content="noindex" />
     <?php } ?>
