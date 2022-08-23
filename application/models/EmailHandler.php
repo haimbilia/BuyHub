@@ -510,7 +510,7 @@ class EmailHandler extends FatModel
             $brandRequestComments = nl2br($data['brand_comments']);
         }
         $userObj = new User($data['brand_seller_id']);
-        $userInfo = $userObj->getSellerData($langId, array('user_id', 'ifnull(shop_name, shop_identifier) as shop_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
+        $userInfo = $userObj->getSellerData($langId, array('user_id', 'COALESCE(shop_name, shop_identifier, user_name, credential_username) as shop_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
         $statusArr = Brand::getBrandReqStatusArr($langId);
 
         $vars = array(
