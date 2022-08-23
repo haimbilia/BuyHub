@@ -22,7 +22,7 @@
         <div class="newsletter">
             <hgroup class="newsletter-head">
                 <h3><?php echo Labels::getLabel('LBL_SUBSCRIBE'); ?></h3>
-                <p><?php echo Labels::getLabel('LBL_NEWSLETTER_FORM_DESCRIPTION'); ?></p>
+                <h6><?php echo Labels::getLabel('LBL_NEWSLETTER_FORM_DESCRIPTION'); ?></h6>
             </hgroup>
 
 
