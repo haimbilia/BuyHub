@@ -7,11 +7,10 @@
 /.htaccess
 /public/.htaccess
 /user-uploads/*
-/admin-application/views/innovas
+/admin/views/innovas
 /application/views/innovas
 /application/controllers/DummyController.php
-/admin-application/controllers/DummyController.php
-/manager-application/controllers/DummyController.php
+/admin/controllers/DummyController.php
 /conf
 /index.php
 /library/core
