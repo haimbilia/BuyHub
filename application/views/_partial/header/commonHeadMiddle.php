@@ -40,7 +40,6 @@ $themeColor = (false === strpos($themeColor, 'rgb') ? 'rgb(' . $themeColor . ')'
 $themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE_RGB', FatUtility::VAR_STRING, "rgb(255,255,255)");
 $themeColorInverse = (false === strpos($themeColorInverse, 'rgb') ? 'rgb(' . $themeColorInverse . ')' : $themeColorInverse);
 
-
 $secondaryColor = FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_RGB', FatUtility::VAR_STRING, "rgb(109,205,239)");
 $secondaryColor = (false === strpos($secondaryColor, 'rgb') ? 'rgb(' . $secondaryColor . ')' : $secondaryColor);
 $secondaryColorInverse = FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_INVERSE_RGB', FatUtility::VAR_STRING, "rgb(255,255,255)");
@@ -79,9 +78,7 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     }
 </style>
 <script>
-    <?php
-
-    $productSearchUrl = CacheHelper::get('productSearchUrl', CONF_DEF_CACHE_TIME, '.txt');
+    <?php $productSearchUrl = CacheHelper::get('productSearchUrl', CONF_DEF_CACHE_TIME, '.txt');
     if (!$productSearchUrl) {
         $productSearchUrl = UrlHelper::generateUrl('products', 'search');
         CacheHelper::create('productSearchUrl', $productSearchUrl, CacheHelper::TYPE_META_TAGS);
