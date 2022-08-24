@@ -2201,4 +2201,4 @@ INSERT IGNORE INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`
 ON DUPLICATE KEY UPDATE stpl_name = VALUES(stpl_name), stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
 
 DELETE FROM `tbl_sms_templates` WHERE `stpl_code` = 'user_signup_verification';
-DELETE FROM `tbl_sms_templates` WHERE `stpl_code` = 'guest_welcome_registration'
+DELETE FROM `tbl_sms_templates` WHERE `stpl_code` = 'guest_welcome_registration';
