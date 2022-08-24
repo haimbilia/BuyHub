@@ -127,7 +127,7 @@ class AdminGuestController extends FatController
         }
 
         $emaiHandObj = new EmailHandler();
-        $emaiHandObj->sendSms('admin_forgot_password', FatApp::getConfig('CONF_SITE_PHONE'), $replacements, $this->siteLangId);
+        $emaiHandObj->sendSms('admin_forgot_password', ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $replacements, $this->siteLangId);
 
         $this->set('msg', Labels::getLabel('MSG_YOUR_PASSWORD_RESET_INSTRUCTIONS_TO_YOUR_EMAIL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php', true, false);
@@ -178,7 +178,7 @@ class AdminGuestController extends FatController
             LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_SEND_EMAIL', $this->siteLangId), true);
         }
         $emaiHandObj = new EmailHandler();
-        $emaiHandObj->sendSms('admin_forgot_password', FatApp::getConfig('CONF_SITE_PHONE'), $replacements, $this->siteLangId);
+        $emaiHandObj->sendSms('admin_forgot_password', ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $replacements, $this->siteLangId);
 
         $this->set('msg', Labels::getLabel('MSG_YOUR_PASSWORD_RESET_INSTRUCTIONS_TO_YOUR_EMAIL', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php', true, false);
@@ -249,14 +249,14 @@ class AdminGuestController extends FatController
             '{login_link}' => UrlHelper::generateFullUrl('adminGuest', 'loginForm', array())
         );
         
-        $sendEmail = (new FatMailer($this->siteLangId, 'user_admin_password_changed_successfully'))
+        (new FatMailer($this->siteLangId, 'user_admin_password_changed_successfully'))
             ->setTo($admin_row['admin_email'])
             ->setVariables($arr_replacements)
             ->send();
 
         if (!empty(FatApp::getConfig('CONF_SITE_PHONE'))) {
             $emaiHandObj = new EmailHandler();
-            $emaiHandObj->sendSms('user_admin_password_changed_successfully', FatApp::getConfig('CONF_SITE_PHONE'), $arr_replacements, $this->siteLangId);
+            $emaiHandObj->sendSms('user_admin_password_changed_successfully', ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arr_replacements, $this->siteLangId);
         }
 
         $this->set('msg', Labels::getLabel('MSG_PASSWORD_CHANGED_SUCCESSFULLY', $this->siteLangId));

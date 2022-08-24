@@ -265,7 +265,7 @@ class RewardsController extends ListingBaseController
         }
         $db->commitTransaction();
         $emailObj = new EmailHandler();
-        $emailObj->sendRewardPointsNotification($this->siteLangId, $recordId);
+        $emailObj->sendRewardPointsNotification($this->siteLangId, $userRewardsObj->getMainTableRecordId());
 
         $this->set('msg', Labels::getLabel('MSG_REWARD_POINT_REVERTED_SUCCESFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');

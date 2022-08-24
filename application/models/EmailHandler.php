@@ -2387,17 +2387,11 @@ class EmailHandler extends FatModel
         $srch->joinUser();
         $srch->addCondition('urp_id', '=', 'mysql_func_' . $urpId, 'AND', true);
         $srch->addMultipleFields(array('urp.*', 'u.user_name', 'u.user_phone_dcode', 'u.user_phone', 'uc.credential_email'));
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
         if (!$row) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
-        /*
-        if (1 > abs($row['urp_points'])) {
-            return true;
-        }
-        */
 
         $arrReplacements = array(
             '{user_name}' => trim($row["user_name"]),
