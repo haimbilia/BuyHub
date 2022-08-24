@@ -224,7 +224,7 @@ trait SellerProducts
             LibHelper::exitWithError(Labels::getLabel('LBL_PLEASE_UPGRADE_YOUR_PACKAGE_TO_ADD_NEW_PRODUCTS', $this->siteLangId), false);
         }
 
-        $productRow = Product::getProductDataById($this->siteLangId, $product_id, array('IFNULL(product_name, product_identifier) as product_name', 'product_active', 'product_seller_id', 'product_added_by_admin_id', 'product_cod_enabled', 'product_type', 'product_approved', 'product_min_selling_price'));
+        $productRow = Product::getProductDataById($this->siteLangId, $product_id, array('IFNULL(product_name, product_identifier) as product_name', 'product_active', 'product_seller_id', 'product_added_by_admin_id', 'product_cod_enabled', 'product_type', 'product_approved', 'product_min_selling_price', 'product_fulfillment_type'));
 
         if (!$productRow) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
@@ -253,7 +253,7 @@ trait SellerProducts
 
         $frmSellerProduct = $this->getSellerProductForm($product_id, $selprod_id, 'SELLER_PRODUCT', $availableOptionsCount);
 
-        $sellerProductRow = [];
+        $sellerProductRow = ['selprod_fulfillment_type' => $productRow['product_fulfillment_type']];
         if ($selprod_id) {
             $sellerProductRow = SellerProduct::getAttributesById($selprod_id, null, true, true);
             if (!$sellerProductRow) {
@@ -2339,7 +2339,7 @@ trait SellerProducts
             $fld->requirements()->setRange($productData['product_min_selling_price'], 9999999999);
             $fld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE_FOR_THIS_PRODUCT_IS', $this->siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productData['product_min_selling_price'], true, true));
         }
-        
+
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'selprod_stock');
         $fld->requirements()->setRange(1, SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY);
 

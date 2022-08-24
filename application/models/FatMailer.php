@@ -251,7 +251,7 @@ class FatMailer extends FatModel
         $mail->Subject = $subject;
         try {
             $mail->send();
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->error = $mail->ErrorInfo;
             return false;
         }
@@ -300,9 +300,10 @@ class FatMailer extends FatModel
     {
         $srch = new SearchBase(self::DB_TBL);
         $srch->addCondition('etpl_code', '=', $this->template);
-        $srch->addCondition('etpl_lang_id', '=', $langId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
+        $srch->addMultipleFields(['etpl_code', 'etpl_lang_id', 'etpl_name', 'etpl_subject', 'etpl_body', 'etpl_replacements', 'etpl_priority', 'etpl_status', 'if(etpl_lang_id = ' . $langId . ', 0, 1) as priority']);
+        $srch->addOrder('priority');
         return (array) FatApp::getDb()->fetch($srch->getResultSet());
     }
 
