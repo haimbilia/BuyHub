@@ -1332,8 +1332,8 @@ class EmailHandler extends FatModel
         $arrReplacements = array(
             '{user_name}' => trim($txnDetail["user_name"]),
             '{txn_id}' => Transactions::formatTransactionNumber($txnId),
-            '{txn_type}' => ($txnDetail["utxn_credit"] > 0) ? Labels::getLabel('LBL_CREDITED', $langId) : Labels::getLabel('LBL_DEBITED', $langId),
-            '{txn_amount}' => CommonHelper::displayMoneyFormat($txnAmount, true, true),
+            '{txn_type}' => ($txnDetail["utxn_credit"] > 0) ? Labels::getLabel('LBL_CREDITED_TO', $langId) : Labels::getLabel('LBL_DEBITED_FROM', $langId),
+            '{txn_amount}' => CommonHelper::displayMoneyFormat($txnAmount),
             '{txn_comments}' => Transactions::formatTransactionComments($txnDetail["utxn_comments"]),
         );
 
