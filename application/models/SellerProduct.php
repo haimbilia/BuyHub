@@ -545,6 +545,7 @@ class SellerProduct extends MyAppModel
         }
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['option_id', 'COALESCE(option_name,option_identifier) as option_name', 'option_identifier', 'optionvalue_id', 'COALESCE(optionvalue_name,optionvalue_identifier) as optionvalue_name', 'optionvalue_color_code', 'option_is_color', 'optionvalue_identifier']);
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs, 'optionvalue_id');
     }
