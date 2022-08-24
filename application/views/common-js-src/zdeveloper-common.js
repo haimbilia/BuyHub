@@ -1910,19 +1910,7 @@ function DataURIToBlob(dataURI) {
         type: mimeString,
     });
 }
-/*$(document).on("change", ".multipleImgs--js", function() {
-    if ($(this)[0].files.length > 8) {
-        fcom.displayErrorMessage(langLbl.uploadImageLimit);
-        $(this).val("");
-        if (0 < $(".fileRemove--js").length) {
-            $(".fileRemove--js").click();
-        }
-        return false;
-    }
-    var galleryElement = ".multipleImgsGallery--js";
 
-    imagesPreview(this, galleryElement);
-}); */
 $(document).on("click", ".fileRemove--js", function() {
     $(this).closest("li").remove();
 });
