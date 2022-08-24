@@ -10,6 +10,7 @@ class OrderSubscription extends MyAppModel
 
     public const ACTIVE_SUBSCRIPTION = 11;
     public const CANCELLED_SUBSCRIPTION = 12;
+    public static $subscriptionId = 0;
 
     public function __construct($id = 0)
     {
@@ -58,6 +59,12 @@ class OrderSubscription extends MyAppModel
         }
         return false;
     }
+
+    public static function setOrderSubscriptionId(int $subscriptionId)
+    {
+        self::$subscriptionId = $subscriptionId;
+    }
+
     public static function getUserCurrentActivePlanDetails($langId = 0, $userId = 0, $flds = array(OrderSubscription::DB_TBL_PREFIX . 'id'))
     {
         $srch = new  OrderSearch($langId);
@@ -69,13 +76,16 @@ class OrderSubscription extends MyAppModel
         $srch->addCondition(Orders::DB_TBL_PREFIX . 'type', '=', 'mysql_func_' . Orders::ORDER_SUBSCRIPTION, 'AND', true);
         $srch->addCondition(Orders::DB_TBL_PREFIX . 'payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
         $srch->addCondition(Orders::DB_TBL_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
-        $srch->addCondition('ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
+        if (0 < self::$subscriptionId) {
+            $srch->addCondition('ossubs_id', '= ', self::$subscriptionId);
+        } else {
+            $srch->addCondition('ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
+        }
         $srch->addMultipleFields($flds);
         $srch->setPageSize(1);
         $srch->doNotCalculateRecords(true);
         $srch->addOrder(Orders::DB_TBL_PREFIX . 'id', 'desc');
-        $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetch($rs);
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public static function getOSSubIdArrByOrderId($orderId)
@@ -192,7 +202,7 @@ class OrderSubscription extends MyAppModel
 
         $srch->joinOrderUser();
         $srch->addCondition('order_payment_status', '=', ORDERS::ORDER_PAYMENT_PAID);
-        $srch->addCondition('ossubs_status_id', 'in', $statusArr);
+        $srch->addCondition('ossubs_status_id', 'IN', $statusArr);
         $srch->addCondition('ossubs_till_date', '=', date('Y-m-d', strtotime('+' . FatApp::getConfig('CONF_BEFORE_EXIPRE_SUBSCRIPTION_REMINDER_EMAIL_DAYS', FatUtility::VAR_INT, 2) . ' days')));
 
         $srch->addCondition('ossubs_till_date', '!=', '0000-00-00');
