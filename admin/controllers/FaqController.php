@@ -137,6 +137,7 @@ class FaqController extends ListingBaseController
         $searchForm = $this->getSearchForm($fields);
         $post = $searchForm->getFormDataFromArray($data);
         $srch = Faq::getSearchObject($this->siteLangId);
+        $srch->addMultipleFields(['f.*', 'COALESCE(f_l.faq_title, f.faq_identifier) as faq_title']);
 
         $faqCatId = FatApp::getPostedData('faqCatId', FatUtility::VAR_INT, 0);
         if ($faqCatId && $faqCatId > 0) {

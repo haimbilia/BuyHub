@@ -103,7 +103,7 @@ class TaxCategoriesController extends ListingBaseController
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addMultipleFields(["t_l.taxcat_name", 't.*']);
+        $srch->addMultipleFields(["COALESCE(t_l.taxcat_name, t.taxcat_identifier) as taxcat_name", 't.*']);
         $srch->addOrder($sortBy, $sortOrder);  
         $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);

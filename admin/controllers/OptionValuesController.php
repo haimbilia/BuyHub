@@ -125,7 +125,7 @@ class OptionValuesController extends ListingBaseController
 
         $post['option_id'] = $optionId;
         $srch = OptionValue::getSearchObject($this->siteLangId, false);
-        $srch->addMultipleFields(['ov.*', 'ov_l.optionvalue_name']);
+        $srch->addMultipleFields(['ov.*', 'COALESCE(ov_l.optionvalue_name, ov.optionvalue_identifier) as optionvalue_name']);
         $srch->addCondition('ov.optionvalue_option_id', '=', $optionId);
 
         if (isset($post['keyword']) && '' != $post['keyword']) {

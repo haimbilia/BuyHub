@@ -1395,10 +1395,7 @@ class Orders extends MyAppModel
             $this->error = Labels::getLabel("ERR_INVALID_ACCESS", $langId);
             return false;
         }
-
-        $db = FatApp::getDb();
-        $emailNotificationObj = new EmailHandler();
-
+  
         $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($langId, $childOrderInfo['order_user_id'], array(OrderSubscription::DB_TBL_PREFIX . 'id'));
         if (false != $currentPlanData) {
             $currentActiveSubscrId = $currentPlanData[OrderSubscription::DB_TBL_PREFIX . 'id'];
@@ -1406,7 +1403,6 @@ class Orders extends MyAppModel
                 $this->cancelCurrentActivePlan($orderId, $currentActiveSubscrId, $childOrderInfo['order_user_id'], $notify);
             }
         }
-
         $planDetails = OrderSubscription::getAttributesById($childOrderInfo['ossubs_id']);
 
         $updateArr = array(
@@ -1415,6 +1411,7 @@ class Orders extends MyAppModel
             OrderSubscription::DB_TBL_PREFIX . 'till_date' => CommonHelper::getValidTillDate($planDetails)
         );
 
+        $db = FatApp::getDb();
         if (!$db->updateFromArray(
             OrderSubscription::DB_TBL,
             $updateArr,
@@ -1451,7 +1448,7 @@ class Orders extends MyAppModel
         $orderInfo = $this->getOrderById($orderId);
         if ($orderInfo['order_renew'] < 1) {
             $emailNotificationObj = new EmailHandler();
-            $emailNotificationObj->sendCancelSubscriptionNotification($userId, $orderInfo['order_language_id']);
+            $emailNotificationObj->sendCancelSubscriptionNotification($userId, $ossubs_id, $orderInfo['order_language_id']);
         }
 
         if (!$db->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_op_id' => $ossubs_id, 'oshistory_order_id' => $orderId, 'oshistory_orderstatus_id' => $opStatusId, 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => (int) $notify, 'oshistory_comments' => Labels::getLabel("LBL_Plan_Canceled", CommonHelper::getLangId())), true)) {
@@ -2946,7 +2943,7 @@ class Orders extends MyAppModel
                     $trackingData = $shippingApiObj->fetchTrackingDetail($order['opship_tracking_number'], $order['op_invoice_number']);
                     if (!empty($trackingData)) {
                         if (in_array(ShippingServicesBase::TRACKING_STATUS_DELIVERED, array_column($trackingData['detail'], 'status'))) {
-                            (new self())->markeredDeliveredOrderProduct($order['op_id'], $order["order_language_id"]);
+                            (new self())->markeredOrderProductDelivered($order['op_id'], $order["order_language_id"]);
                         }
                     }
                     continue;

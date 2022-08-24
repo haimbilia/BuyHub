@@ -289,7 +289,13 @@
                 });
                 $('#shipping_profile').val(shippingProfileId);
             }
-            $('#product_fulfillment_type').trigger('change');
+            $('#product_fulfillment_type').html('');
+            $.each(t.fullfilmentOptions, function (id, name) {
+                $('#product_fulfillment_type').append(`<option value="${id}">
+                        ${name}
+                </option>`);
+            });
+            $('#product_fulfillment_type').val(prodFulfilementType).trigger('change');            
         }, { fOutMode: 'json' });
     };
 

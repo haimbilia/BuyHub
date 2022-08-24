@@ -126,7 +126,7 @@ class ProductsController extends SellerBaseController
                     $fld = $frm->getField('ptc_prodcat_id');
                     $fld->options = [$productData['ptc_prodcat_id'] => $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')]];
                 }
-            }            
+            }
 
             $taxData = Tax::getTaxCatByProductId($recordId, $productData['product_seller_id'], $langId);
             if (false != $taxData) {
@@ -257,6 +257,25 @@ class ProductsController extends SellerBaseController
         if ($isNewProduct) {
             $prodRequireAdminApproval = FatApp::getConfig("CONF_CUSTOM_PRODUCT_REQUIRE_ADMIN_APPROVAL", FatUtility::VAR_INT, 1);
             $post['product_approved'] = ($prodRequireAdminApproval == 1) ? 0 : 1;
+        }
+
+        $fulfillmentType = -1;
+        $shipBySeller = Product::isProductShippedBySeller($recordId, $this->userParentId, $this->userParentId);
+
+        if ($shipBySeller && !FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+            $fulfillmentType = Shop::getAttributesByUserId($this->userParentId, 'shop_fulfillment_type');
+            $shopDetails = Shop::getAttributesByUserId($this->userParentId, null, false);
+            $address = new Address(0, $this->siteLangId);
+            $addresses = $address->getData(Address::TYPE_SHOP_PICKUP, $shopDetails['shop_id']);
+            $fulfillmentType = empty($addresses) ? Shipping::FULFILMENT_SHIP : $fulfillmentType;
+        } else {
+            $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
+        }
+
+        $post['product_fulfillment_type'] = FatApp::getPostedData('product_fulfillment_type', FatUtility::VAR_INT, 0);
+        $fullfilmentOptions = Shipping::getFulFillmentArr($this->siteLangId, $fulfillmentType);
+        if (!array_key_exists($post['product_fulfillment_type'], $fullfilmentOptions)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $prodObj = new Product($recordId);
@@ -716,6 +735,23 @@ class ProductsController extends SellerBaseController
         if (null != $fld) {
             $frm->removeField($fld);
         }
+
+        $fulfillmentType = -1;
+        $shipBySeller = Product::isProductShippedBySeller($recordId, $this->userParentId, $this->userParentId);
+
+        if ($shipBySeller && !FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+            $fulfillmentType = Shop::getAttributesByUserId($this->userParentId, 'shop_fulfillment_type');
+        } else {
+            $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
+        }
+
+        $shopDetails = Shop::getAttributesByUserId($this->userParentId, null, false);
+        $address = new Address(0, $this->siteLangId);
+        $addresses = $address->getData(Address::TYPE_SHOP_PICKUP, $shopDetails['shop_id']);
+        $fulfillmentType = empty($addresses) ? Shipping::FULFILMENT_SHIP : $fulfillmentType;
+
+        $productFulfillmentType = $frm->getField('product_fulfillment_type');
+        $productFulfillmentType->options = Shipping::getFulFillmentArr($this->siteLangId, $fulfillmentType);
 
         return $frm;
     }

@@ -1332,8 +1332,8 @@ class EmailHandler extends FatModel
         $arrReplacements = array(
             '{user_name}' => trim($txnDetail["user_name"]),
             '{txn_id}' => Transactions::formatTransactionNumber($txnId),
-            '{txn_type}' => ($txnDetail["utxn_credit"] > 0) ? Labels::getLabel('LBL_CREDITED', $langId) : Labels::getLabel('LBL_DEBITED', $langId),
-            '{txn_amount}' => CommonHelper::displayMoneyFormat($txnAmount, true, true),
+            '{txn_type}' => ($txnDetail["utxn_credit"] > 0) ? Labels::getLabel('LBL_CREDITED_TO', $langId) : Labels::getLabel('LBL_DEBITED_FROM', $langId),
+            '{txn_amount}' => CommonHelper::displayMoneyFormat($txnAmount),
             '{txn_comments}' => Transactions::formatTransactionComments($txnDetail["utxn_comments"]),
         );
 
@@ -2541,12 +2541,13 @@ class EmailHandler extends FatModel
         return true;
     }
 
-    public function sendCancelSubscriptionNotification($user_id, $langId)
+    public function sendCancelSubscriptionNotification($user_id, $ossubs_id, $langId)
     {
         $tpl = 'cancel_subscription_email';
         $userObj = new User($user_id);
         $userInfo = $userObj->getUserInfo(array('user_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
 
+        OrderSubscription::setOrderSubscriptionId($ossubs_id);
         $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($langId, $user_id, array('ossubs_subscription_name'));
         if (!$currentPlanData) {
             return false;
@@ -2620,8 +2621,7 @@ class EmailHandler extends FatModel
         $srch->addCondition('ossubs_order_id', '=', $orderId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $subsOrderDetail = FatApp::getDb()->fetch($rs);
+        $subsOrderDetail = FatApp::getDb()->fetch($srch->getResultSet());
         if ($orderDetail) {
             $tpl = new FatTemplate('', '');
             $tpl->set('orderDetail', $subsOrderDetail);
@@ -2632,6 +2632,7 @@ class EmailHandler extends FatModel
                 '{user_full_name}' => trim($userInfo['user_name']),
                 '{invoice_number}' => $orderDetail['order_number'],
                 '{order_products_table_format}' => $orderItemsTableFormatHtml,
+                '{amount}' => CommonHelper::displayMoneyFormat($subsOrderDetail['ossubs_price']),
                 '{new_order_status}' => $payementStatusArr[$orderDetail['order_payment_status']],
             );
 

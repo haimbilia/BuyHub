@@ -95,7 +95,7 @@ class CollectionsController extends MyAppController
 
         $productSrchObj->doNotCalculateRecords();
 
-       /*  if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+        /*  if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
             $productSrchObj->joinFavouriteProducts($loggedUserId);
             $productSrchObj->addFld('IFNULL(ufp_id, 0) as ufp_id');
         } else {
@@ -106,7 +106,7 @@ class CollectionsController extends MyAppController
         $productSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $productSrchObj->addMultipleFields(
             array(
-                'product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                'product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
                 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
                 'theprice', 'selprod_price', 'selprod_stock', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'product_updated_on', 'shop_id', 'selprod_min_order_qty'
             )
@@ -344,7 +344,7 @@ class CollectionsController extends MyAppController
                         $this->set('collections', $collections);
                     }
                     break;
-                default:            
+                default:
                     if (true === MOBILE_APP_API_CALL) {
                         FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_COLLECTION', $this->siteLangId));
                     }

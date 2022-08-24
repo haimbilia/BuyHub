@@ -311,7 +311,7 @@ class VolumeDiscountController extends ListingBaseController
         $srch->addOrder('product_name');
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
-            $cnd = $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+            $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
             $cnd->attachCondition('product_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
 
@@ -329,7 +329,7 @@ class VolumeDiscountController extends ListingBaseController
         $srch->addCondition(Product::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
-        $srch->addMultipleFields(array('selprod_id as id', 'IFNULL(selprod_title ,product_name) as product_name', 'product_identifier', 'credential_username', 'selprod_price', 'selprod_stock'));
+        $srch->addMultipleFields(array('selprod_id as id', 'COALESCE(selprod_title ,product_name, product_identifier) as product_name', 'product_identifier', 'credential_username', 'selprod_price', 'selprod_stock'));
 
         $srch->addOrder('selprod_active', 'DESC');
         $srch->setPageNumber($page);

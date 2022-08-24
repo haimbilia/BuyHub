@@ -247,12 +247,14 @@ if (isset($prodcat_code)) {
                     </div>
                     <div class="sidebar-widget_body collapse show" id="option<?php echo $optionRow['option_id']; ?>">
                         <div class="scrollbar-filters scroll scroll-y">
-                            <ul class="list-vertical"><?php
-                                                    }
-                                                    $optionValueId = $optionRow['option_id'] . '_' . $optionRow['optionvalue_id'];
-                                                    //$liData.= "<li>".$optionRow['optionvalue_name']."</li>";
-                                                        ?>
-                            <li><label class="checkbox optionvalue" id="optionvalue_<?php echo $optionRow['optionvalue_id']; ?>"><input name="optionvalues" value="<?php echo $optionValueId; ?>" type="checkbox" <?php if (in_array($optionRow['optionvalue_id'], $optionValueCheckedArr)) {
+                            <ul class="list-vertical">
+                            <?php
+                        }
+                        $optionValueId = $optionRow['option_id'] . '_' . $optionRow['optionvalue_id'];
+                        //$liData.= "<li>".$optionRow['optionvalue_name']."</li>";
+                            ?>
+                            <li>
+                                <label class="checkbox optionvalue" id="optionvalue_<?php echo $optionRow['optionvalue_id']; ?>"><input name="optionvalues" value="<?php echo $optionValueId; ?>" type="checkbox" <?php if (in_array($optionRow['optionvalue_id'], $optionValueCheckedArr)) {
                                                                                                                                                                                                                         echo "checked='true'";
                                                                                                                                                                                                                     } ?>>
                                     <?php if ($optionRow['option_is_color']  == 1) { ?>

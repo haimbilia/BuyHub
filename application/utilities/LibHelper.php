@@ -134,7 +134,7 @@ class LibHelper extends FatUtility
         }
         return array(
             '{SITE_NAME}' => FatApp::getConfig("CONF_WEBSITE_NAME_$langId"),
-            '{SITE_URL}' => UrlHelper::generateFullUrl(),
+            '{SITE_URL}' => UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL),
         );
     }
 
