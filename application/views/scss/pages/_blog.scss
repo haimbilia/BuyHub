@@ -127,7 +127,7 @@ $blog-header-height: 58px;
     position: absolute;
     left: 0;
     right: 0;
-    top: 100%;
+    top: calc(100% + 2px);
     background-color: #fff;
     border-bottom: $border;
     transition: all 0.1s ease-out;
@@ -138,6 +138,26 @@ $blog-header-height: 58px;
         display: grid;
         grid-gap: 1rem;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+
+        li {
+            a {
+                text-rendering: optimizeLegibility;
+                transition: color 0.3s ease-in-out;
+                background-image: linear-gradient(currentColor, currentColor);
+                background-position: 50% 100%;
+                background-repeat: no-repeat;
+                background-size: 0% 2px;
+                transition: background-size 0.3s;
+                font-weight: 600;
+                color: $txt-body;
+                padding: 22px 0;
+                &:hover {
+                    color: $brand-color;
+                    text-decoration: none;
+                    background-size: 100% 2px;
+                }
+            }
+        }
     }
 }
 .offcanvas-blog-nav {
