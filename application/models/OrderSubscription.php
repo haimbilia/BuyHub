@@ -202,7 +202,7 @@ class OrderSubscription extends MyAppModel
 
         $srch->joinOrderUser();
         $srch->addCondition('order_payment_status', '=', ORDERS::ORDER_PAYMENT_PAID);
-        $srch->addCondition('ossubs_status_id', 'in', $statusArr);
+        $srch->addCondition('ossubs_status_id', 'IN', $statusArr);
         $srch->addCondition('ossubs_till_date', '=', date('Y-m-d', strtotime('+' . FatApp::getConfig('CONF_BEFORE_EXIPRE_SUBSCRIPTION_REMINDER_EMAIL_DAYS', FatUtility::VAR_INT, 2) . ' days')));
 
         $srch->addCondition('ossubs_till_date', '!=', '0000-00-00');

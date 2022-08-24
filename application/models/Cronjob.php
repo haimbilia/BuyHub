@@ -556,7 +556,7 @@ class Cronjob extends FatModel
         if (!empty($subscriptionList) && count($subscriptionList) > 0) {
             foreach ($subscriptionList as $subscriber) {
                 $userId = $subscriber['user_id'];
-                $ossubs_id = $subscriber['ossubs_id'];
+                // $ossubs_id = $subscriber['ossubs_id'];
                 $emailObj = new EmailHandler();
                 $emailObj->sendSubscriptionReminderEmail($subscriber['order_language_id'], $subscriber);
                 $assignValues = array('conf_name' => 'CONF_CRON_SUBSCRIPTION_REMINDER_LAST_EXECUTED_USERID', 'conf_val' => $userId);
