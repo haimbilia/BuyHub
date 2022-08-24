@@ -109,7 +109,7 @@ class TestimonialsController extends ListingBaseController
             $condition->attachCondition('testimonial_text', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        $srch->addMultipleFields(array('t.*', 't_l.testimonial_title', 't_l.testimonial_text'));
+        $srch->addMultipleFields(array('t.*', 'COALESCE(t_l.testimonial_title, t.testimonial_identifier) as testimonial_title', 't_l.testimonial_text'));
         $srch->addOrder('testimonial_active', 'desc');
         $srch->addOrder($sortBy, $sortOrder);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
