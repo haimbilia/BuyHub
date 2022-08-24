@@ -147,9 +147,6 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
 
     function loadChargeForm(action) {
         fcom.displayProcessing();
-        setTimeout(() => {
-            $("#payment").prepend(fcom.getLoader());
-        }, 500);
         fcom.ajax(action, '', function(t) {
             fcom.closeProcessing();
             fcom.removeLoader();
