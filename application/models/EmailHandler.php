@@ -278,17 +278,12 @@ class EmailHandler extends FatModel
             '{name}' => $d['user_name'],
             '{contact_us_email}' => FatApp::getConfig('CONF_CONTACT_EMAIL'),
         );
-        $sendEmail = false;
+        
         if (!empty($d['user_email'])) {
-            $sendEmail = (new FatMailer($langId, $tpl))
+            return (new FatMailer($langId, $tpl))
                 ->setTo($d['user_email'])
                 ->setVariables($vars)
                 ->send();
-        }
-
-        $sendSms = $this->sendSms($tpl, ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'], $vars, $langId);
-        if (false === $sendEmail && false === $sendSms) {
-            return false;
         }
         return true;
     }

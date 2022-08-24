@@ -1880,18 +1880,13 @@ class User extends MyAppModel
     public function guestUserWelcomeEmail($data, $langId)
     {
         $link = UrlHelper::generateFullUrl('GuestUser', 'loginForm');
-        $phone = !empty($data['user_phone']) ? $data['user_phone'] : '';
-        $dialCode = !empty($data['user_phone_dcode']) ? ValidateElement::formatDialCode($data['user_phone_dcode']) : '';
         $data = array(
             'user_name' => $data['user_name'],
             'user_email' => $data['user_email'],
-            'user_phone_dcode' => $dialCode,
-            'user_phone' => $phone,
             'link' => $link,
         );
 
         $email = new EmailHandler();
-
         if (!$email->sendWelcomeEmailToGuestUser($langId, $data)) {
             Message::addMessage(Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $langId));
             return false;
