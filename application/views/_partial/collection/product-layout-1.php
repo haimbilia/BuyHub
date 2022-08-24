@@ -15,7 +15,7 @@
                     </div>
                 </div>
             </div>
-            <div class=" product-layout-1 product-listing js-carousel" id="product-listing-<?php echo $collection['collection_id']; ?>" data-slides="4,3,3,2" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class=" product-layout-1 product-listing js-carousel" id="product-listing-<?php echo $collection['collection_id']; ?>" data-slides="4,3,2,2" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tRightRibbons = $collection['tRightRibbons'];
                 foreach ($collection['products'] as $product) {

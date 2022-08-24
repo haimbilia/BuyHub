@@ -12,6 +12,9 @@
 
         &:nth-child(even) {
             flex-direction: row-reverse;
+            @include media-breakpoint-down(sm) {
+                flex-direction: column;
+            }
         }
     }
     .shop-detail-side {
@@ -62,7 +65,7 @@
         flex: 1;
         border-radius: $common-radius;
         @include media-breakpoint-down(md) {
-            overflow-x: auto;
+            //overflow-x: auto;
         }
         .products {
             height: 100%;
