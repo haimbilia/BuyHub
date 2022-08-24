@@ -149,7 +149,7 @@ class CollectionsController extends ListingBaseController
             $srch->addCondition('collection_for_app', '=', applicationConstants::YES);
         }
 
-        $srch->addMultipleFields(array('c.*', 'c_l.collection_name'));
+        $srch->addMultipleFields(array('c.*', 'COALESCE(c_l.collection_name, c.collection_identifier) as collection_name'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);

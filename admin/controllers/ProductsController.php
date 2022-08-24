@@ -244,7 +244,6 @@ class ProductsController extends ListingBaseController
             } else {
                 $productData = $this->modelObj::getAttributesByLangId($langId, $recordId, null, applicationConstants::JOIN_RIGHT);
             }
-
             if (empty($productData)) {
                 LibHelper::exitWithError($this->str_invalid_request_id, false, true);
                 FatApp::redirectUser(UrlHelper::generateUrl('Products'));
@@ -295,14 +294,14 @@ class ProductsController extends ListingBaseController
                     $fld = $frm->getField('ptc_prodcat_id');
                     $fld->options = [$productData['ptc_prodcat_id'] => $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')]];
                 }
-            }            
+            }
 
             $taxData = Tax::getTaxCatByProductId($recordId, $productData['product_seller_id'], $langId);
             if (false != $taxData) {
                 $productData['ptt_taxcat_id'] = $taxData[Tax::tblFld('id')];
                 $fld = $frm->getField('ptt_taxcat_id');
                 $fld->options = [$productData['ptt_taxcat_id'] => $taxData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
-            }           
+            }
 
             $prodShippingDetails = Product::getProductShippingDetails($recordId, $langId, $productData['product_seller_id']);
 
@@ -317,7 +316,7 @@ class ProductsController extends ListingBaseController
 
             /* [ GET ATTACHED PROFILE ID */
             $profileUser = $productData['product_seller_id'];
-            if(FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)){
+            if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
                 $profileUser = 0;
             }
             $profSrch = ShippingProfileProduct::getSearchObject();
@@ -348,6 +347,7 @@ class ProductsController extends ListingBaseController
 
             $this->set("productData", [
                 'product_type' => $productData['product_type'],
+                'product_fulfillment_type' => $productData['product_fulfillment_type'],
                 'product_seller_id' => $productData['product_seller_id'],
                 'product_attachements_with_inventory' => $productData['product_attachements_with_inventory'],
             ]);
@@ -442,6 +442,24 @@ class ProductsController extends ListingBaseController
         if (1 > $recordId) {
             $isNewProduct = true;
             $post['product_approved'] = applicationConstants::YES;
+        }
+
+
+        $fulfillmentType = -1;
+        if ($post['product_seller_id'] && !FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+            $fulfillmentType = Shop::getAttributesByUserId($post['product_seller_id'], 'shop_fulfillment_type');
+            $shopDetails = Shop::getAttributesByUserId($post['product_seller_id'], null, false);
+            $address = new Address(0, $this->siteLangId);
+            $addresses = $address->getData(Address::TYPE_SHOP_PICKUP, $shopDetails['shop_id']);
+            $fulfillmentType = empty($addresses) ? Shipping::FULFILMENT_SHIP : $fulfillmentType;
+        } else {
+            $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
+        }
+
+        $post['product_fulfillment_type'] = FatApp::getPostedData('product_fulfillment_type', FatUtility::VAR_INT, 0);
+        $fullfilmentOptions = Shipping::getFulFillmentArr($this->siteLangId, $fulfillmentType);
+        if (!array_key_exists($post['product_fulfillment_type'], $fullfilmentOptions)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         /* TODO:
@@ -940,7 +958,7 @@ class ProductsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $productId = ProdSpecification::getAttributesById($prodSpecId,'prodspec_product_id');
+        $productId = ProdSpecification::getAttributesById($prodSpecId, 'prodspec_product_id');
         if (1 > $productId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -1395,6 +1413,7 @@ class ProductsController extends ListingBaseController
     {
         $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT);
         if (1 > $langId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -1402,22 +1421,33 @@ class ProductsController extends ListingBaseController
         $shipProfileArr = [];
         $showShippingProfile = 1;
         if ($shippingObj->getShippingApiObj($userId)) {
-            $showShippingProfile = 0;      
-            if(1 === FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && 1 == FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0)){
+            $showShippingProfile = 0;
+            if (1 === FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && 1 == FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0)) {
                 $showShippingProfile = 1;
-            }      
-            elseif(0 >= $userId && 1 == FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0)){
+            } elseif (0 >= $userId && 1 == FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0)) {
                 $showShippingProfile = 1;
-            }elseif(0 < $userId && 1 == Shop::getAttributesByUserId($userId,'shop_use_manual_shipping_rates')){
+            } elseif (0 < $userId && 1 == Shop::getAttributesByUserId($userId, 'shop_use_manual_shipping_rates')) {
                 $showShippingProfile = 1;
-            } 
+            }
         }
 
-        if(1 === $showShippingProfile){
+        $fulfillmentType = -1;
+        if ($userId && !FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+            $fulfillmentType = Shop::getAttributesByUserId($userId, 'shop_fulfillment_type');
+            $shopDetails = Shop::getAttributesByUserId($userId, null, false);
+            $address = new Address(0, $this->siteLangId);
+            $addresses = $address->getData(Address::TYPE_SHOP_PICKUP, $shopDetails['shop_id']);
+            $fulfillmentType = empty($addresses) ? Shipping::FULFILMENT_SHIP : $fulfillmentType;
+        } else {
+            $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
+        }
+        $fullfilmentOptions = Shipping::getFulFillmentArr($this->siteLangId, $fulfillmentType);
+
+        if (1 === $showShippingProfile) {
             $shipProfileArr = ShippingProfile::getProfileArr($langId, $userId, true, true);
         }
-        
-        FatUtility::dieJsonSuccess(['shipProfileArr' => $shipProfileArr, 'showShippingProfile' => $showShippingProfile]);
+
+        FatUtility::dieJsonSuccess(['shipProfileArr' => $shipProfileArr, 'showShippingProfile' => $showShippingProfile, 'fullfilmentOptions' => $fullfilmentOptions]);
     }
 
     protected function getFormColumns(): array

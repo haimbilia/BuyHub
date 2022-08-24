@@ -177,11 +177,11 @@ class ProductsController extends MyAppController
     }
 
     public function brandFilters()
-    {        
+    {
         $post = FilterHelper::getParamsAssocArr();
 
         $langIdForKeywordSeach = 0;
-        if (array_key_exists('keyword', $post) && !empty($post['keyword'])) {            
+        if (array_key_exists('keyword', $post) && !empty($post['keyword'])) {
             $langIdForKeywordSeach = $this->siteLangId;
         }
 
@@ -1301,6 +1301,7 @@ class ProductsController extends MyAppController
             $brandSrch->addMultipleFields(array('brand_id', 'COALESCE(tb_l.brand_name, brand.brand_identifier) as brand_name', 'if(LOCATE("' . $keyword . '", COALESCE(tb_l.brand_name, brand.brand_identifier)) > 0, LOCATE("' . $keyword . '", COALESCE(tb_l.brand_name, brand.brand_identifier)), 99) as level'));
             //$brandSrch->addKeywordSearch($keyword, false, false);
             $brandSrch->addCondition('brand_name', 'LIKE', '%' . $keyword . '%');
+            // $cnd->attachCondition('brand.brand_identifier', 'LIKE', '%' . $keyword . '%', 'OR');
             $brandSrch->addOrder('level');
             $brandSrch->addGroupBy('brand_id');
             $brandSrch->setPageSize(5);
