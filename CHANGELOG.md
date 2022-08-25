@@ -1173,6 +1173,7 @@ TV-9.4.0.20220719
     - #066380 - A duplicate entry error occurs when the user clicks on the reset button multiple times on the billing address setup popup.
     - #066357 - The text appears 'Cash On Delivery Available' on the all sellers page even if the COD payment method is disabled
     - #066347 - sorting issue in category requests and brand requests
+    - #066338 - The mobile view option in the marketplace restore popup should not be available on mobile devices.
 
 ## UAT points:
 
