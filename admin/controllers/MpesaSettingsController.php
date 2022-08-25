@@ -13,7 +13,7 @@ class MpesaSettingsController extends PaymentMethodSettingsController
         $frm->addRequiredField(Labels::getLabel('FRM_CONSUMER_KEY', $langId), 'consumer_key');
         $frm->addRequiredField(Labels::getLabel('FRM_CONSUMER_SECRET', $langId), 'consumer_secret');
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_ACCOUNT_REFERENCE', $langId), 'account_reference');
-        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_MPESA_ACCOUNT_REFERENCE_DESCRIPTION", $langId) . '</span>';
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_MPESA_ACCOUNT_REFERENCE_DESCRIPTION", $langId) . '</span>';
 
         $frm->addTextBox(Labels::getLabel('FRM_LIPA_NA_MPESA_ONLINE_SHORTCODE', $langId), 'shortcode');
         $shortCodeFld = new FormFieldRequirement('shortcode', Labels::getLabel('FRM_LIPA_NA_MPESA_ONLINE_SHORTCODE', $langId));
