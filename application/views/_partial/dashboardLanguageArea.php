@@ -8,10 +8,12 @@
         <li class="menu__item">
             <div class="menu__item__inner">
                 <a href="" class="accordianheader">
-                    <i class="icn "><svg class="svg">
+                    <i class="icn ">
+                        <svg class="svg">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#language"></use>
                         </svg>
-                    </i><span class="menu-item__title"><?php echo $languages[$siteLangId]['language_name']; ?></span></a>
+                    </i>
+                    <span class="menu-item__title"><?php echo $languages[$siteLangId]['language_name']; ?></span></a>
                 <ul class="accordianbody">
                     <?php foreach ($languages as $langId => $language) { ?>
                         <li <?php echo ($siteLangId == $langId) ? 'class="is-active"' : ''; ?>><a href="javascript:void(0);" onClick="setSiteDefaultLang(<?php echo $langId; ?>)"> <?php echo $language['language_name']; ?></a></li>

@@ -25,26 +25,10 @@
         .subnav {
             display: block;
             &-inner {
-                //border-top: solid 1px lighten($border-color, 02);
-                // background: $bg-white;
-                // box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-                // top: 100%;
-                // left: 0;
-                // right: 0;
-                // position: absolute;
-                // z-index: -1;
-                // width: 100%;
-                // min-height: 350px;
-                // padding: 0;
-                // margin: 0;
-                // background-clip: padding-box;
-                // visibility: hidden;
-                // transform: translateY(-30px);
-                // transition: all 0.2s ease-out;
                 position: absolute;
                 top: 100%;
-                left: 0;
-                right: 0;
+                #{$start-direction}: 0;
+                #{$end-direction}: 0;
                 //bottom: 0;
                 width: 100%;
                 opacity: 0;
@@ -136,7 +120,6 @@
 }
 
 /*Nav mobile toggle*/
-
 .navs_toggle {
     cursor: pointer;
     display: none;
@@ -208,7 +191,7 @@
                 &:after {
                     transition: all 0.5s ease;
                     position: absolute;
-                    right: -0.5rem;
+                    #{$end-direction}: -0.5rem;
                     opacity: 0;
                     content: "→";
                 }
@@ -217,7 +200,7 @@
                     text-decoration: none;
                     &:after {
                         transition: all 0.5s ease;
-                        right: -1rem;
+                        #{$end-direction}: -1rem;
                         width: auto;
                         opacity: 1;
                     }
@@ -238,8 +221,8 @@
     .navs_toggle:after {
         position: fixed;
         top: 0;
-        left: 0;
-        right: 0;
+        #{$start-direction}: 0;
+        #{$end-direction}: 0;
         bottom: 0;
         z-index: 10;
         background-color: rgba(13, 17, 55, 0.8);
@@ -254,13 +237,13 @@
         visibility: visible;
         pointer-events: auto;
     }
-    body.toggled_left .common_overlay {
+    body.toggled_#{$start-direction} .common_overlay {
         opacity: 1;
         visibility: visible;
         transform: translateY(0%);
         transition: opacity 0.5s, transform 0.5s;
     }
-    body.toggled_left .navigation-wrapper {
+    body.toggled_#{$start-direction} .navigation-wrapper {
         opacity: 1;
         transform: translate(0px, 0px);
     }
@@ -268,7 +251,7 @@
         background: $bg-white;
         bottom: 0;
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-        left: 0;
+        #{$start-direction}: 0;
         opacity: 0;
         overflow: auto;
         padding: 0;
@@ -301,7 +284,7 @@
                 display: block;
                 opacity: 1;
                 position: absolute;
-                right: 0;
+                #{$end-direction}: 0;
                 top: 0;
                 visibility: visible;
                 width: 40px;
@@ -311,7 +294,7 @@
                     background: #000;
                     content: "";
                     height: 2px;
-                    left: 14px;
+                    #{$start-direction}: 14px;
                     position: absolute;
                     top: 15px;
                     width: 12px;
@@ -346,7 +329,7 @@
         }
 
         &-link {
-            text-align: left;
+            text-align: #{$start-direction};
             color: inherit;
             display: block;
             padding: 20px 15px;

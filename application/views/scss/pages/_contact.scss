@@ -1,8 +1,11 @@
 .contact-address {
+    background-color: $bg-gray;
+    border-radius: $common-radius;
+    padding: 3rem;
     // border: $border;
     // border-radius: 4px;
     @include media-breakpoint-up(md) {
-        padding: 0 3rem;
+        padding: 1.5rem;
     }
     color: $txt-gray;
     font-size: 0.85rem;
@@ -29,7 +32,16 @@
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     }
 }
-
+.list-contact {
+    display: flex;
+    flex-direction: column;
+    li {
+        padding: 10px 0;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+}
 .g-map {
     position: relative;
     height: 490px;

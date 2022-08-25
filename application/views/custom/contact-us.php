@@ -136,21 +136,22 @@ $fld->developerTags['col'] = 12;
                             </form>
                             <?php echo $contactFrm->getExternalJs(); ?>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-4 offset-lg-1">
                             <div class="contact-address">
                                 <?php
                                 ?>
                                 <div class="contact-address-item">
                                     <h6><?php echo Labels::getLabel('LBL_GENERAL_INQUIRY', $siteLangId); ?>
                                     </h6>
-                                    <ul>
+                                    <ul class="list-contact">
                                         <?php
                                         $phone = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
                                         if (!empty($phone)) {
                                         ?>
                                             <li>
-                                                <span class="icon"><svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#phone"></use>
+                                                <span class="icon">
+                                                    <svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#phones"></use>
                                                     </svg>
                                                 </span>
                                                 <span class="label">
@@ -176,7 +177,7 @@ $fld->developerTags['col'] = 12;
                                         <?php } ?>
                                         <li>
                                             <span class="icon"><svg class="svg" width="18" height="18">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fax"></use>
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#customer-care"></use>
                                                 </svg>
                                             </span>
                                             <span class="label"><?php echo Labels::getLabel('LBL_24_A_DAY_7_DAYS_WEEK', $siteLangId); ?></span>
@@ -192,9 +193,7 @@ $fld->developerTags['col'] = 12;
                                         </p>
                                     </div>
                                 <?php } ?>
-                                <div class="contact-address-item">
-                                    <?php
-                                    $this->includeTemplate('_partial/footerSocialMedia.php'); ?></div>
+
                             </div>
 
                         </div>
