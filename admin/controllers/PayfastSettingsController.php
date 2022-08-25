@@ -11,9 +11,9 @@ class PayfastSettingsController extends PaymentMethodSettingsController
         $envFld->requirement->setRequired(true);
 
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_PASSPHRASE', $langId), 'passphrase');
-        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_PAYFAST_PASSPHRASE_DESCRIPTION", $langId) . '</span>';
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_PAYFAST_PASSPHRASE_DESCRIPTION", $langId) . '</span>';
         $fld = $frm->addTextBox(Labels::getLabel('FRM_SIGNATURE', $langId), 'signature');
-        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_PAYFAST_SIGNATURE_DESCRIPTION", $langId) . '</span>';
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("LBL_PAYFAST_SIGNATURE_DESCRIPTION", $langId) . '</span>';
 
         $frm->addTextBox(Labels::getLabel('FRM_MERCHANT_ID', $langId), 'merchant_id');
         $fld1 = new FormFieldRequirement('merchant_id', Labels::getLabel('FRM_MERCHANT_ID', $langId));
