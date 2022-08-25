@@ -1,10 +1,11 @@
 <div class="js-scrollable table-wrap table-responsive">
     <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
     $arr_flds = array(
-        'listserial' => Labels::getLabel('LBL_#', $siteLangId),
-        'brand_name' => Labels::getLabel('LBL_Brand_Name', $siteLangId),
-        'brand_requested_on' => Labels::getLabel('LBL_Requested_on', $siteLangId),
-        'brand_status' => Labels::getLabel('LBL_Status', $siteLangId),
+        'listserial' => '#',
+        'brand_name' => Labels::getLabel('LBL_BRAND_NAME', $siteLangId),
+        'brand_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $siteLangId),
+        'brand_updated_on' => Labels::getLabel('LBL_UPDATED_ON', $siteLangId),
+        'brand_status' => Labels::getLabel('LBL_STATUS', $siteLangId),
     );
     if ($canEdit) {
         $arr_flds['action'] = '';
@@ -54,6 +55,9 @@
                     break;
                 case 'brand_requested_on':
                     $td->appendElement('plaintext', array(), (isset($row[$key]) && $row[$key] != '0000-00-00 00:00:00') ? FatDate::Format($row[$key]) : Labels::getLabel('LBL_NA', $siteLangId), true);
+                    break;
+                case 'brand_updated_on':
+                    $td->appendElement('plaintext', array(), (isset($row[$key]) && $row[$key] != '0000-00-00 00:00:00') ? FatDate::Format($row[$key], true) : Labels::getLabel('LBL_NA', $siteLangId), true);
                     break;
                 case 'action':
                     $ul = $td->appendElement("ul", array('class' => 'actions'), '', true);

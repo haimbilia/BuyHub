@@ -54,7 +54,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'prodcat_name');
+            $this->addSortingElements($frm, 'prodcat_updated_on', applicationConstants::SORT_DESC);
         }
         $frm->addSelectBox(
             Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId),
@@ -93,11 +93,11 @@ class ProductCategoriesRequestController extends ListingBaseController
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'prodcat_updated_on');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'prodcat_updated_on';
         }
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
@@ -441,6 +441,7 @@ class ProductCategoriesRequestController extends ListingBaseController
             'prodcat_parent' => Labels::getLabel('LBL_PARENT_CATEGORY', $this->siteLangId),
             'prodcat_name' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
             'prodcat_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
+            'prodcat_updated_on' => Labels::getLabel('LBL_UPDATED_ON', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('productCatRequestTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -454,6 +455,7 @@ class ProductCategoriesRequestController extends ListingBaseController
             'prodcat_parent',
             'prodcat_name',
             'prodcat_requested_on',
+            'prodcat_updated_on',
             'action',
         ];
     }

@@ -39,6 +39,9 @@ foreach ($arrListing as $sn => $row) {
             case 'prodcat_requested_on':
                 $td->appendElement('plaintext', array(), HtmlHelper::formatDateTime($row[$key]), true);
                 break;
+            case 'prodcat_updated_on':
+                $td->appendElement('plaintext', array(), HtmlHelper::formatDateTime($row[$key], true), true);
+                break;
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
