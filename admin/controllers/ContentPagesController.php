@@ -129,6 +129,7 @@ class ContentPagesController extends ListingBaseController
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->addOrder($sortBy, $sortOrder);
+        $srch->addMultipleFields(['cpage_id','cpage_identifier', 'COALESCE(cpage_title, cpage_identifier) as cpage_title']);
         $srch->setPageSize($pageSize);
         $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('postedData', $post);
@@ -258,7 +259,7 @@ class ContentPagesController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $langId), 'cpage_title');
         $frm->addHiddenField('', 'cpage_layout', $cpage_layout);
-        if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {           
+        if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
             $frm->addHTML('', 'cpage_bg_image', '');
             $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE);
             $getImageDimensions = ImageDimension::getData(ImageDimension::TYPE_CPAGE_BG, ImageDimension::VIEW_DEFAULT);
@@ -623,7 +624,7 @@ class ContentPagesController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'cpage_id' => Labels::getLabel('LBL_ID', $this->siteLangId),
             'cpage_title' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),

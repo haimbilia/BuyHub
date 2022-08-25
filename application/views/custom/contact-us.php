@@ -138,38 +138,60 @@ $fld->developerTags['col'] = 12;
                         </div>
                         <div class="col-md-5">
                             <div class="contact-address">
-                                <?php $phone = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
-                                if (!empty($phone)) { ?>
+                                <?php
+                                ?>
+                                <div class="contact-address-item">
+                                    <h6><?php echo Labels::getLabel('LBL_GENERAL_INQUIRY', $siteLangId); ?>
+                                    </h6>
+                                    <ul>
+                                        <?php
+                                        $phone = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
+                                        if (!empty($phone)) {
+                                        ?>
+                                            <li>
+                                                <span class="icon"><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#phone"></use>
+                                                    </svg>
+                                                </span>
+                                                <span class="label">
+                                                    <?php $dialCode = FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
+                                                    echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, ''); ?>
+                                                </span>
+                                            </li>
+                                        <?php } ?>
+                                        <?php
+                                        $fax = FatApp::getConfig('CONF_SITE_FAX', FatUtility::VAR_INT, '');
+                                        if (!empty($fax)) {
+                                        ?>
+                                            <li>
+                                                <span class="icon"><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fax"></use>
+                                                    </svg>
+                                                </span>
+                                                <span class="label">
+                                                    <?php $dialCode = FatApp::getConfig('CONF_SITE_FAX_DCODE', FatUtility::VAR_STRING, '');
+                                                    echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_FAX', FatUtility::VAR_STRING, ''); ?>
+                                                </span>
+                                            </li>
+                                        <?php } ?>
+                                        <li>
+                                            <span class="icon"><svg class="svg" width="18" height="18">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fax"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="label"><?php echo Labels::getLabel('LBL_24_A_DAY_7_DAYS_WEEK', $siteLangId); ?></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <?php if (!empty(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, ''))) { ?>
                                     <div class="contact-address-item">
-                                        <h6><?php echo Labels::getLabel('LBL_General_Inquiry', $siteLangId); ?>
+                                        <h6><?php echo Labels::getLabel('LBL_Address', $siteLangId); ?>
                                         </h6>
-                                        <p class="">
-                                            <?php
-                                            $dialCode = FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
-                                            echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
-                                            echo '<br>';
-                                            echo Labels::getLabel('LBL_24_A_DAY_7_DAYS_WEEK', $siteLangId);
-                                            ?>
+                                        <p>
+                                            <?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, '')); ?>
                                         </p>
                                     </div>
                                 <?php } ?>
-                                <div class="contact-address-item">
-                                    <h6><?php echo Labels::getLabel('LBL_Fax', $siteLangId); ?>
-                                    </h6>
-                                    <p class="">
-                                        <?php
-                                        $dialCode = FatApp::getConfig('CONF_SITE_FAX_DCODE', FatUtility::VAR_STRING, '');
-                                        echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_FAX', FatUtility::VAR_STRING, ''); ?>
-                                        <br><?php echo Labels::getLabel('LBL_24_A_DAY_7_DAYS_WEEK', $siteLangId); ?>
-                                    </p>
-                                </div>
-                                <div class="contact-address-item">
-                                    <h6><?php echo Labels::getLabel('LBL_Address', $siteLangId); ?>
-                                    </h6>
-                                    <p class="">
-                                        <?php echo nl2br(FatApp::getConfig('CONF_ADDRESS_' . $siteLangId, FatUtility::VAR_STRING, '')); ?>
-                                    </p>
-                                </div>
                                 <div class="contact-address-item">
                                     <?php
                                     $this->includeTemplate('_partial/footerSocialMedia.php'); ?></div>
