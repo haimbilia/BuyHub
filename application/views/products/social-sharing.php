@@ -31,7 +31,7 @@ if (isset($productView) && true == $productView) { ?>
             <li class="via-social-sharing-item">
                 <a href="javascript:void(0)" class="via-social-sharing-link st-custom-button" data-network="twitter">
                     <svg class="svg" width="20" height="20">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitteritter">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter">
                         </use>
                     </svg>
                 </a>
