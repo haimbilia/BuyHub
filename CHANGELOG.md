@@ -1172,6 +1172,9 @@ TV-9.4.0.20220719
     - #066324 - Only a success message appears but the product does not get removed from the cart when the user clicks on the remove item from the cart button
     - #066380 - A duplicate entry error occurs when the user clicks on the reset button multiple times on the billing address setup popup.
     - #066357 - The text appears 'Cash On Delivery Available' on the all sellers page even if the COD payment method is disabled
+```sh 
+TV-9.4.0.20220825
+```
 
 ## UAT points:
 
