@@ -27,14 +27,14 @@
         .filter-directory_indices {
             display: flex;
             gap: 5px;
-
-            justify-content: space-around;
+            //justify-content: space-around;
             flex: 1;
             flex-direction: row;
             flex-wrap: nowrap;
+            overflow-x: auto;
             @include media-breakpoint-down(md) {
                 justify-content: flex-start;
-                overflow-x: auto;
+                
                 width: 100%;
             }
             li {
