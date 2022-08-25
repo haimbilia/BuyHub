@@ -1330,7 +1330,7 @@ class GuestUserController extends MyAppController
     {
         $userId = FatUtility::int($userId);
         $selProdId = FatUtility::int($selProdId);
-        if (!UserAuthentication::isUserLogged()) {
+        if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged()) {
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
         if ($reminderEmail == true) {

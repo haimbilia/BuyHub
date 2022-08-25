@@ -4,7 +4,7 @@ $url = UrlHelper::generateFullUrl('GuestUser', 'redirectAbandonedCartUser', arra
 <tr>
     <td>
         <div class="btn-wrapper" style="text-align: center">
-            <a href="<?php echo $url;?>" style="
+            <a href="<?php echo $url; ?>" style="
                 border-radius: 4px;
                 background-color: #f13925;
                 color: #fff;
@@ -14,7 +14,7 @@ $url = UrlHelper::generateFullUrl('GuestUser', 'redirectAbandonedCartUser', arra
                 padding: 9px 20px;
                 display: inline-block;
                 margin-bottom: 30px;
-            ">Shop Now</a>
+            "><?php echo Labels::getLabel('LBL_SHOP_NOW'); ?></a>
         </div>
     </td>
 </tr>
