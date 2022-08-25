@@ -61,11 +61,11 @@ class AbandonedCartController extends ListingBaseController
         $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'abandonedcart_id');
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'abandonedcart_added_on');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = 'abandonedcart_id';
+            $sortBy = 'abandonedcart_added_on';
         }
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
@@ -136,7 +136,7 @@ class AbandonedCartController extends ListingBaseController
         $frm = new Form('frmAbandonedCartSearch');
         $frm->addHiddenField('', 'page', 1);
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'abandonedcart_id', applicationConstants::SORT_DESC);
+            $this->addSortingElements($frm, 'abandonedcart_added_on', applicationConstants::SORT_DESC);
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_SEARCH_BY_USER_NAME_OR_EMAIL', $this->siteLangId), 'abandonedcart_user_id', []);
