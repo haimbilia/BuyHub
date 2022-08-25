@@ -2202,3 +2202,4 @@ ON DUPLICATE KEY UPDATE stpl_name = VALUES(stpl_name), stpl_body = VALUES(stpl_b
 
 DELETE FROM `tbl_sms_templates` WHERE `stpl_code` = 'user_signup_verification';
 DELETE FROM `tbl_sms_templates` WHERE `stpl_code` = 'guest_welcome_registration';
+-- -----------------TV-9.4.0.20220825------------------------
