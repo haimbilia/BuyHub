@@ -506,4 +506,7 @@ if (0 < $recordId) {
         })
 
     });
+    $(document).ready(function() {
+        $('#product_fulfillment_type').trigger('change');
+    });
 </script>
