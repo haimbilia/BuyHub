@@ -1170,6 +1170,7 @@ TV-9.4.0.20220719
     - #065264 - When user got the reminder mail for wishlist and abandoned cart
     - #066277 - The currency selected by the front-end user is automatically marked as default currency on the admin end
     - #066324 - Only a success message appears but the product does not get removed from the cart when the user clicks on the remove item from the cart button
+    - #066380 - A duplicate entry error occurs when the user clicks on the reset button multiple times on the billing address setup popup.
 
 ## UAT points:
 

@@ -91,15 +91,15 @@
     <div class="form-edit-foot">
         <div class="row">
             <?php
-            $backJsFunc = 'showAddressList();';
+            $resetJsFunc = 'showAddressList();';
             $contiJsFunc = 'setUpAddressSelection();';
             if ($addressType == Address::ADDRESS_TYPE_BILLING) {
-                $backJsFunc = 'loadPaymentSummary();';
+                $resetJsFunc = 'loadAddressDiv(1);';
                 $contiJsFunc = 'setUpBillingAddressSelection(this);';
             }
             ?>
             <div class="col">
-                <button type="button" class="btn btn-outline-gray btn-wide" onclick="<?php echo $backJsFunc; ?>">
+                <button type="button" class="btn btn-outline-gray btn-wide" onclick="<?php echo $resetJsFunc; ?>">
                     <?php echo Labels::getLabel('LBL_RESET', $siteLangId); ?>
                 </button>
             </div>
