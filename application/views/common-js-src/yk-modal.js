@@ -4,7 +4,7 @@
     $.ykmodal = function (data, popupView = '', dialogClassParm = "", modalClassParm = "", bodyClass = "") {
         modalClass = 'fixed-right ' + modalClassParm;
         var dialogClass = 'modal-dialog-vertical ' + dialogClassParm;
-        var bodyClass = 'pd-0 ' + bodyClass;
+        var bodyClass = 'p-0 ' + bodyClass;
 
         /* !! is used to convert variable type in to bool. */
         displayInPopup = !!popupView;
