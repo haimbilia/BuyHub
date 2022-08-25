@@ -170,7 +170,6 @@
                         </li>
                         <li class="social-twitter">
                             <a class="social-link st-custom-button" data-network="twitter">
-
                                 <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter">
                                     </use>
@@ -180,7 +179,6 @@
                         </li>
                         <li class="social-pintrest">
                             <a class="social-link st-custom-button" data-network="pinterest">
-
                                 <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pinterest">
                                     </use>
@@ -190,12 +188,12 @@
                         </li>
                         <li class="social-email">
                             <a class="social-link st-custom-button" data-network="email">
-                                <i class="icn">
-                                    <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
-                                        </use>
-                                    </svg>
-                                </i>
+
+                                <svg class="svg" width="16" height="16">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                                    </use>
+                                </svg>
+
                             </a>
                         </li>
                     </ul>

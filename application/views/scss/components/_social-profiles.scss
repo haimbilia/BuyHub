@@ -33,30 +33,22 @@
         margin: 0;
         border-radius: 40px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-
         a {
+            color: #fff;
             cursor: pointer;
             display: block;
-            padding: 0.5rem;
-            color: #fff;
-            .icn {
-                height: inherit;
-                width: inherit;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                .svg {
-                    fill: #fff;
-                    width: 1.5rem;
-                    height: 1.5rem;
-                }
+            padding: 1rem 0.5rem;
+
+            .svg {
+                width: 1.5rem;
+                height: 1.5rem;
             }
         }
         &.social-facebook {
             background: #3b5998;
         }
         &.social-twitter {
-            background: #6cdfea;
+            background: #1da1f2;
         }
         &.social-pintrest {
             background: #c8232c;

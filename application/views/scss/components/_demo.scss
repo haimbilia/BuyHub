@@ -164,9 +164,9 @@ $top-space: 30%;
     padding: 1.5rem;
 }
 .contacts {
-    padding: 1rem;
+    padding: 1rem 0;
     display: flex;
-    justify-content: center;
+    //justify-content: center;
     gap: 4rem;
     margin: 0 auto;
     flex-flow: row wrap;

@@ -38,7 +38,6 @@
                     $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
                     ?>
                 </div>
-
                 <div class="shop-btn-group">
                     <div class="dropdown">
                         <a class="dropdown-toggle no-after share-icon" href="javascript:void(0)" data-bs-toggle="dropdown">
@@ -51,35 +50,31 @@
                             <ul class="social-sharing">
                                 <li class="social-facebook">
                                     <a href="javascript:void(0)" class="social-link st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Shops', 'view', array($shop['shop_id'])); ?>/">
-                                        <i class="icn">
-                                            <svg class="svg" width="20" height="20">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#facebook"></use>
-                                            </svg></i>
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#facebook"></use>
+                                        </svg>
                                     </a>
                                 </li>
                                 <li class="social-twitter">
                                     <a href="javascript:void(0)" class="social-link st-custom-button" data-network="twitter">
-                                        <i class="icn">
-                                            <svg class="svg" width="20" height="20">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter"></use>
-                                            </svg></i>
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter"></use>
+                                        </svg>
                                     </a>
                                 </li>
                                 <li class="social-pintrest">
                                     <a href="javascript:void(0)" class="social-link st-custom-button" data-network="pinterest">
-                                        <i class="icn">
-                                            <svg class="svg" width="20" height="20">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pinterest"></use>
-                                            </svg></i>
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pinterest"></use>
+                                        </svg>
                                     </a>
                                 </li>
                                 <li class="social-email">
                                     <a href="javascript:void(0)" class="social-link st-custom-button" data-network="email">
-                                        <i class="icn">
-                                            <svg class="svg" width="20" height="20">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
-                                                </use>
-                                            </svg></i>
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                                            </use>
+                                        </svg>
                                     </a>
                                 </li>
                             </ul>
