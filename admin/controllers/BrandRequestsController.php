@@ -63,7 +63,7 @@ class BrandRequestsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'brand_requested_on');
+            $this->addSortingElements($frm, 'brand_updated_on', applicationConstants::SORT_DESC);
         }
         $frm->addSelectBox(
             Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId),
@@ -104,12 +104,12 @@ class BrandRequestsController extends ListingBaseController
 
         $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'brand_updated_on');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'brand_updated_on';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC), applicationConstants::SORT_DESC);
 
         $searchForm = $this->getSearchForm($fields);
 
@@ -538,10 +538,11 @@ class BrandRequestsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'brand_logo' => Labels::getLabel('LBL_Logo', $this->siteLangId),
-            'brand_name' => Labels::getLabel('LBL_Brand_Name', $this->siteLangId),
+            'brand_logo' => Labels::getLabel('LBL_LOGO', $this->siteLangId),
+            'brand_name' => Labels::getLabel('LBL_BRAND_NAME', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
-            'brand_requested_on' => Labels::getLabel('LBL_Requested_On', $this->siteLangId),
+            'brand_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
+            'brand_updated_on' => Labels::getLabel('LBL_UPDATED_ON', $this->siteLangId),
             'brand_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'brand_status' => Labels::getLabel('LBL_BRAND_APPROVAL', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -558,6 +559,7 @@ class BrandRequestsController extends ListingBaseController
             'brand_name',
             'user_name',
             'brand_requested_on',
+            'brand_updated_on',
             'brand_active',
             'brand_status',
             'action',

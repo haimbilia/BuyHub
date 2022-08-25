@@ -54,8 +54,7 @@ class SellerRequestsController extends SellerBaseController
         $srch = $this->getRequestedbrandObj();
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $requestedBrands = FatApp::getDb()->fetchAll($rs);
+        $requestedBrands = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set('canEdit', $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true));
         $this->set("arrListing", $requestedBrands);
@@ -159,8 +158,6 @@ class SellerRequestsController extends SellerBaseController
     private function getRequestedCatObj()
     {
         $srch = ProductCategory::getSearchObject(false, $this->siteLangId, false, -1);
-        $srch->addOrder('m.prodcat_active', 'DESC');
-
         $userArr = User::getAuthenticUserIds(UserAuthentication::getLoggedUserId(), $this->userParentId);
         $srch->addCondition('prodcat_seller_id', 'in', $userArr);
         $srch->addCondition('prodcat_deleted', '=', applicationConstants::NO);

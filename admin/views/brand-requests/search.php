@@ -26,12 +26,12 @@ foreach ($arrListing as $sn => $row) {
                 if ($canViewUsers) {
                     $href = "javascript:void(0)";
                     $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
-                    $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId, 'displayProfileImage'=> false, 'href' => $href, 'onclick' => $onclick,], false, true);
+                    $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId, 'displayProfileImage' => false, 'href' => $href, 'onclick' => $onclick,], false, true);
                     $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 } else {
                     $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 }
-                break;     
+                break;
             case 'brand_logo':
                 $uploadedTime = AttachedFile::setTimeParam($row['brand_updated_on']);
                 $languages = Language::getAllNames();
@@ -49,19 +49,25 @@ foreach ($arrListing as $sn => $row) {
                     true
                 );
                 break;
-            case 'brand_active':              
+            case 'brand_active':
                 $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['brand_id'], $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
-            case 'brand_status': 
+            case 'brand_status':
                 $statusAct = ($canEdit) ? 'updateApprovalStatus(event, this, ' . $row['brand_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
-                $statusClass = ($canEdit) ? '' : 'disabled';               
+                $statusClass = ($canEdit) ? '' : 'disabled';
                 $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
                 $str =  '<label class="switch switch-sm switch-icon"  data-bs-toggle="tooltip" data-placement="top">
                             <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['brand_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                             <span class="input-helper"></span>
                         </label>';
-                $td->appendElement('plaintext', $tdAttr, $str , true);        
+                $td->appendElement('plaintext', $tdAttr, $str, true);
+                break;
+            case 'brand_requested_on':
+                $td->appendElement('plaintext', array(), HtmlHelper::formatDateTime($row[$key]), true);
+                break;
+            case 'brand_updated_on':
+                $td->appendElement('plaintext', array(), HtmlHelper::formatDateTime($row[$key], true), true);
                 break;
             case 'action':
                 $data = [
