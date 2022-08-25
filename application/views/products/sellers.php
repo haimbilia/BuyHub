@@ -67,8 +67,8 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                     </span>
                                     <span class="payment-mode">
                                         <?php
-                                        $codAvailableTxt = Labels::getLabel('LBL_N/A', $siteLangId);;
-                                        if (!empty($product['cod'][$moresellers['selprod_user_id']]) && $product['cod'][$moresellers['selprod_user_id']]) {
+                                        $codAvailableTxt = '';
+                                        if (Plugin::isActive('CashOnDelivery') && !empty($product['cod'][$moresellers['selprod_user_id']]) && $product['cod'][$moresellers['selprod_user_id']]) {
                                             $codAvailableTxt = Labels::getLabel('LBL_CASH_ON_DELIVERY_AVAILABLE', $siteLangId);
                                         }
                                         echo $codAvailableTxt;
