@@ -102,7 +102,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                         <div class="info">
                             <span>
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#linkedinfo">
                                     </use>
                                 </svg> <?php echo Labels::getLabel('LBL_REWARD_POINTS', $siteLangId); ?>
                                 <strong><?php echo $cartSummary['cartRewardPoints']; ?>

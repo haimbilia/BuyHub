@@ -108,15 +108,13 @@ if ($showAddToFavorite) {
                         </button>
                     </div>
                     <div class="modal-body">
-
                         <div class="share-wrap">
                             <h6><?php echo Labels::getLabel('Lbl_Share_this_via', $siteLangId); ?></h6>
                             <ul class="social-sharing">
                                 <li class="social-facebook">
                                     <a href="javascript:void(0)" class="st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
-
                                         <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#facebook">
                                             </use>
                                         </svg>
 
@@ -126,17 +124,15 @@ if ($showAddToFavorite) {
                                     <a href="javascript:void(0)" class="st-custom-button" data-network="twitter">
 
                                         <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter">
                                             </use>
                                         </svg>
-
                                     </a>
                                 </li>
                                 <li class="social-pintrest">
                                     <a href="javascript:void(0)" class="st-custom-button" data-network="pinterest">
-
                                         <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pinterest">
                                             </use>
                                         </svg>
                                     </a>
@@ -147,7 +143,6 @@ if ($showAddToFavorite) {
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
                                             </use>
                                         </svg>
-
                                     </a>
                                 </li>
                             </ul>

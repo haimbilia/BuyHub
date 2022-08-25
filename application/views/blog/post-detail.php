@@ -161,9 +161,8 @@
                     <ul class="social-sharing">
                         <li class="social-facebook">
                             <a class="social-link st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Blog', 'postDetail', array($blogPostData['post_id'])) . '/'; ?>">
-
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#facebook">
                                     </use>
                                 </svg>
 
@@ -173,7 +172,7 @@
                             <a class="social-link st-custom-button" data-network="twitter">
 
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter">
                                     </use>
                                 </svg>
 
@@ -183,7 +182,7 @@
                             <a class="social-link st-custom-button" data-network="pinterest">
 
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pinterest">
                                     </use>
                                 </svg>
 

@@ -53,7 +53,7 @@
                                     <a href="javascript:void(0)" class="social-link st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Shops', 'view', array($shop['shop_id'])); ?>/">
                                         <i class="icn">
                                             <svg class="svg" width="20" height="20">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb"></use>
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#facebook"></use>
                                             </svg></i>
                                     </a>
                                 </li>
@@ -61,7 +61,7 @@
                                     <a href="javascript:void(0)" class="social-link st-custom-button" data-network="twitter">
                                         <i class="icn">
                                             <svg class="svg" width="20" height="20">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw"></use>
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#twitter"></use>
                                             </svg></i>
                                     </a>
                                 </li>
@@ -69,7 +69,7 @@
                                     <a href="javascript:void(0)" class="social-link st-custom-button" data-network="pinterest">
                                         <i class="icn">
                                             <svg class="svg" width="20" height="20">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt"></use>
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pinterest"></use>
                                             </svg></i>
                                     </a>
                                 </li>
