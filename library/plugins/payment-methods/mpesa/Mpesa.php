@@ -2,6 +2,7 @@
 
 /**
  * Mpesa - M-Pesa services in 10 countries: Albania, the Democratic Republic of Congo, Egypt, Ghana, India, Kenya, Lesotho, Mozambique, Romania and Tanzania. 
+ * Documentation : https://developer.safaricom.co.ke/Documentation (LIPA NA M-PESA ONLINE API)
  */
 class Mpesa extends PaymentMethodBase
 {
