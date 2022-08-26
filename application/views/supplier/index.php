@@ -67,7 +67,7 @@ if (!empty($slogan)) {
         <section class="section">
             <div class="container">
                 <div class="row align-items-center justify-content-center">
-                    <div class="col-md-6">
+                    <div class="col-lg-8">
                         <div class="section-head section-head-center mb-0">
                             <div class="section-heading">
                                 <h2><?php echo Labels::getLabel('LBL_Frequently_Asked_Questions', $siteLangId); ?></h2>
@@ -86,7 +86,7 @@ if (!empty($slogan)) {
         <section class="section pt-0">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-md-6 faqSectionJs position-relative">
+                    <div class="col-lg-8 faqSectionJs position-relative">
                         <?php if ($faqCount > 0) { ?>
                             <div class="faq-filters mb-4" id="categoryPanel"></div>
                         <?php } ?>
