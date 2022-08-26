@@ -136,6 +136,7 @@
     margin: 0 auto;
     text-align: center;
     background-color: $bg-gray;
+    overflow: hidden;
     @include media-breakpoint-up(lg) {
         aspect-ratio: 10/3.33;
     }

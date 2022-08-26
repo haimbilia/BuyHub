@@ -2,22 +2,21 @@
 if (!empty($allShops)) {
     $i = 0;
 ?>
-    <ul class="ftshops">
+    <ul class="collection-shops">
         <?php
         foreach ($allShops as $shop) { ?>
 
-            <li class="ftshops_item">
-                <div class="shop-detail-side">
-                    <div class="shop-detail-inner">
-                        <div class="ftshops_logo">
-                            <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shop['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB); ?>>
+            <li class="collection-shops-item">
+                <div class="shop">
+                    <div class="shop-head">
+                        <div class="shop-logo"> <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $shop['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB); ?>>
                         </div>
-                        <div class="ftshops_detail">
-                            <div class="ftshops_name"><a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($shop['shop_id'])); ?>"><?php echo $shop['shop_name']; ?></a></div>
-                            <div class="ftshops_location"><?php echo $shop['state_name']; ?><?php echo ($shop['country_name'] && $shop['state_name']) ? ', ' : ''; ?><?php echo $shop['country_name']; ?></div>
-                        </div>
-
-
+                    </div>
+                    <div class="shop-body">
+                        <div class="shop-title"><a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($shop['shop_id'])); ?>"><?php echo $shop['shop_name']; ?></a></div>
+                        <div class="shop-location"><?php echo $shop['state_name']; ?><?php echo ($shop['country_name'] && $shop['state_name']) ? ', ' : ''; ?><?php echo $shop['country_name']; ?></div>
+                    </div>
+                    <div class="shop-foot">
                         <?php
                         $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
                         $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
@@ -30,7 +29,7 @@ if (!empty($allShops)) {
                                 <span class="rate"><?php echo  round($shop['shopRating'], 1); ?> </span>
                             </div>
                         <?php } ?>
-                        <a class="btn btn-brand btn-sm ripplelink" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($shop['shop_id']), '', null, false, false, true, true); ?>">
+                        <a class="btn btn-outline-black btn-sm" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($shop['shop_id']), '', null, false, false, true, true); ?>">
                             <?php echo Labels::getLabel('LBL_View_Shop', $siteLangId); ?></a>
 
                     </div>
