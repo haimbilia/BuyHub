@@ -1,9 +1,10 @@
 $top-space: 30%;
+$right-space: 3rem;
 
 .restore-btn {
     @include bg-brand;
     border: none;
-    border-radius: 50%;
+    border-radius: 50px;
     border-top-#{$end-direction}-radius: 0;
     border-bottom-#{$end-direction}-radius: 0;
     //box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
@@ -17,11 +18,17 @@ $top-space: 30%;
     //transform-origin: right top;
     padding: 10px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     font-size: 0.9rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     &:hover {
         color: #fff;
+        width: 50px;
+    }
+    .svg {
+        min-width: 1.5rem;
+        min-height: 1.5rem;
     }
 
     &-icon {
@@ -68,7 +75,7 @@ $top-space: 30%;
 .offcanvas-restore {
     max-width: 220px;
     top: $top-space;
-    #{$end-direction}: 3rem;
+    #{$end-direction}: $right-space;
     bottom: auto;
     background-color: transparent;
     .offcanvas-body {

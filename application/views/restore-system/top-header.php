@@ -1,5 +1,5 @@
 <button class="restore-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRestore">
-    <svg class="svg" width="32" height="32">
+    <svg class="svg" width="24" height="24">
         <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#gear">
         </use>
     </svg>
