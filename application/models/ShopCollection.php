@@ -25,10 +25,9 @@ class ShopCollection extends MyAppModel
 
     public static function getSearchObject()
     {
-        $srch = new SearchBase(static::DB_TBL, 'scol');
-
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'scol');
     }
+    
     public function save()
     {
         if (!($this->mainTableRecordId > 0)) {
@@ -151,8 +150,7 @@ class ShopCollection extends MyAppModel
         $srch->addGroupBy('scollection_id');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        return  FatApp::getDb()->fetchAll($rs);
+        return  FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     public function deleteCollection($collection_id)
