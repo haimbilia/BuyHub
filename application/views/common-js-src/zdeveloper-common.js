@@ -1,5 +1,5 @@
-$(window).on("load", function() {
-    setTimeout(function() {
+$(window).on("load", function () {
+    setTimeout(function () {
         $("body").addClass("loaded");
         stylePhoneNumberFld(".phone-js");
     }, 1000);
@@ -13,8 +13,8 @@ $(window).on("load", function() {
     }
 });
 
-$(function() {
-    $(document).on("click", ".selectItem--js", function() {
+$(function () {
+    $(document).on("click", ".selectItem--js", function () {
         if ($(this).prop("checked") == false) {
             $(".selectAll-js").prop("checked", false);
             $(this).closest("tr").removeClass("selected-row");
@@ -29,7 +29,7 @@ $(function() {
     if (0 < $(".js-widget-scroll").length) {
         // slickWidgetScroll();
     }
-    $(document).on("click", ".accordianheader", function() {
+    $(document).on("click", ".accordianheader", function () {
         $(this).next(".accordianbody").slideToggle();
         $(this).parent().parent().siblings().children().children().next().slideUp();
         return false;
@@ -39,7 +39,7 @@ $(function() {
     bindFeatherLight();
     /* Binding Feather Light gallery */
 });
-$(document).on("keyup", "input.otpVal-js", function(e) {
+$(document).on("keyup", "input.otpVal-js", function (e) {
     if ("" != $(this).val()) {
         $(this).removeClass("is-invalid");
     }
@@ -55,26 +55,26 @@ $(document).on("keyup", "input.otpVal-js", function(e) {
     }
 });
 
-showSignInForm = function() {
+showSignInForm = function () {
     $('.socialSigninJs').hide();
     $('.localSigninJs').fadeIn();
 }
 
-hideSignInForm = function() {
+hideSignInForm = function () {
     $('.localSigninJs').hide();
     $('.socialSigninJs').fadeIn();
 }
 
-installJsColor = function() {
+installJsColor = function () {
     if (0 < $(".jscolor").length) {
-        $(".jscolor").each(function() {
+        $(".jscolor").each(function () {
             $(this).attr("data-jscolor", "{}");
         });
         jscolor.install();
     }
 };
 installJsColor();
-unlinkSlick = function() {
+unlinkSlick = function () {
     $(".js-widget-scroll").slick("unslick");
 };
 /*slickWidgetScroll = function () {
@@ -88,19 +88,19 @@ unlinkSlick = function() {
         });
     );
 };*/
-invalidOtpField = function() {
+invalidOtpField = function () {
     $("input.otpVal-js")
         .val("")
         .addClass("is-invalid")
         .attr("onkeyup", "checkEmpty($(this))");
 };
-checkEmpty = function(element) {
+checkEmpty = function (element) {
     if ("" == element.val()) {
         element.addClass("is-invalid");
     }
 };
 var otpIntervalObj;
-startOtpInterval = function(parent = "", callback = "", params = []) {
+startOtpInterval = function (parent = "", callback = "", params = []) {
     if ("undefined" != typeof otpIntervalObj) {
         clearInterval(otpIntervalObj);
     }
@@ -113,7 +113,7 @@ startOtpInterval = function(parent = "", callback = "", params = []) {
     var resendOtpEle = $(parent + ".resendOtp-js");
     var onClickFn = resendOtpEle.attr("onclick");
     resendOtpEle.removeAttr("onclick");
-    otpIntervalObj = setInterval(function() {
+    otpIntervalObj = setInterval(function () {
         counter--;
         if (counter === 0) {
             clearInterval(otpIntervalObj);
@@ -126,12 +126,12 @@ startOtpInterval = function(parent = "", callback = "", params = []) {
         element.text(counter);
     }, 1000);
 };
-loginPopupOtp = function(userId, getOtpOnly = 0) {
+loginPopupOtp = function (userId, getOtpOnly = 0) {
     fcom.displayProcessing();
     fcom.ajax(
         fcom.makeUrl("GuestUser", "resendOtp", [userId, getOtpOnly]),
         "",
-        function(t) {
+        function (t) {
             t = $.parseJSON(t);
             if (1 > t.status) {
                 fcom.displayErrorMessage(t.msg);
@@ -176,7 +176,7 @@ function showFormActionsBtns() {
     } else {
         $(".formActionBtn-js").removeClass("disabled");
     }
-    var validateActionButtons = setInterval(function() {
+    var validateActionButtons = setInterval(function () {
         if (1 > $(".selectItem--js:checked").length) {
             $(".formActionBtn-js").addClass("disabled");
             clearInterval(validateActionButtons);
@@ -188,7 +188,7 @@ function showFormActionsBtns() {
 }
 
 function selectAll(obj) {
-    $(".selectItem--js").each(function() {
+    $(".selectItem--js").each(function () {
         if (obj.prop("checked") == false) {
             $(this).prop("checked", false).closest("tr").removeClass("selected-row");
         } else {
@@ -205,7 +205,7 @@ function formAction(frm, callback) {
     }
     fcom.displayProcessing();
     data = fcom.frmData(frm);
-    fcom.updateWithAjax(frm.action, data, function(resp) {
+    fcom.updateWithAjax(frm.action, data, function (resp) {
         callback();
     });
 }
@@ -221,7 +221,7 @@ function getCountryStates(countryId, stateId, dv) {
     fcom.ajax(
         fcom.makeUrl("GuestUser", "getStates", [countryId, stateId]),
         "",
-        function(res) {
+        function (res) {
             $(dv).empty();
             $(dv).append(res);
         }
@@ -241,7 +241,7 @@ function getStatesByCountryCode(
             idCol,
         ]),
         "",
-        function(res) {
+        function (res) {
             $(dv).empty();
             $(dv).append(res).change();
         }
@@ -254,7 +254,7 @@ function interRelatedProducts(selprodId) {
     }
     fcom.updateWithAjax(
         fcom.makeUrl("Products", "interRelatedProducts", [selprodId]), "",
-        function(ans) {
+        function (ans) {
             fcom.removeLoader();
             if ('' != ans.relatedProductsHtml) {
                 $('.relatedProductsSectionJs').replaceWith(ans.relatedProductsHtml);
@@ -284,7 +284,7 @@ function resendVerificationLink(user) {
     fcom.updateWithAjax(
         fcom.makeUrl("GuestUser", "resendVerification", [user]),
         "",
-        function(ans) {
+        function (ans) {
             fcom.displaySuccessMessage(ans.msg);
         }
     );
@@ -311,7 +311,7 @@ function getCardType(number) {
     if (number.match(re) != null) return "Visa Electron";
     return "";
 }
-viewWishList = function(selprod_id, dv, event, excludeWishList = 0) {
+viewWishList = function (selprod_id, dv, event, excludeWishList = 0) {
     event.stopPropagation();
     if ($(dv).next().hasClass("is-item-active")) {
         $(dv).next().toggleClass("open-menu");
@@ -323,7 +323,7 @@ viewWishList = function(selprod_id, dv, event, excludeWishList = 0) {
         loginPopUpBox();
         return false;
     }
-    $.facebox(function() {
+    $.facebox(function () {
         fcom.ajax(
             fcom.makeUrl(
                 "Account",
@@ -331,9 +331,9 @@ viewWishList = function(selprod_id, dv, event, excludeWishList = 0) {
                 siteConstants.webroot_dashboard
             ),
             "",
-            function(ans) {
+            function (ans) {
                 fcom.updateFaceboxContent(ans);
-                $("input[name=uwlist_title]").bind("focus", function(e) {
+                $("input[name=uwlist_title]").bind("focus", function (e) {
                     e.stopPropagation();
                 });
                 activeFavList = selprod_id;
@@ -342,7 +342,7 @@ viewWishList = function(selprod_id, dv, event, excludeWishList = 0) {
     });
     return false;
 };
-toggleShopFavorite = function(shop_id) {
+toggleShopFavorite = function (shop_id) {
     fcom.displayProcessing();
     var data = "shop_id=" + shop_id;
     fcom.updateWithAjax(
@@ -352,7 +352,7 @@ toggleShopFavorite = function(shop_id) {
             siteConstants.webroot_dashboard
         ),
         data,
-        function(ans) {
+        function (ans) {
             fcom.removeLoader();
             fcom.displaySuccessMessage(ans.msg);
             if (ans.status) {
@@ -367,7 +367,7 @@ toggleShopFavorite = function(shop_id) {
         }
     );
 };
-setupWishList = function(frm, event) {
+setupWishList = function (frm, event) {
     if (!$(frm).validate()) return false;
     var data = fcom.frmData(frm);
     var selprod_id = $(frm).find('input[name="selprod_id"]').val();
@@ -378,7 +378,7 @@ setupWishList = function(frm, event) {
             siteConstants.webroot_dashboard
         ),
         data,
-        function(ans) {
+        function (ans) {
             if (ans.status) {
                 fcom.ajax(
                     fcom.makeUrl(
@@ -387,9 +387,9 @@ setupWishList = function(frm, event) {
                         siteConstants.webroot_dashboard
                     ),
                     "",
-                    function(ans) {
+                    function (ans) {
                         $(".collection-ui-popup").html(ans);
-                        $("input[name=uwlist_title]").bind("focus", function(e) {
+                        $("input[name=uwlist_title]").bind("focus", function (e) {
                             e.stopPropagation();
                         });
                     }
@@ -403,7 +403,7 @@ setupWishList = function(frm, event) {
         }
     );
 };
-addRemoveWishListProduct = function(selprod_id, wish_list_id, event) {
+addRemoveWishListProduct = function (selprod_id, wish_list_id, event) {
     event.stopPropagation();
     wish_list_id = (typeof wish_list_id != "undefined" ? parseInt(wish_list_id) : 0);
     var dv = ".collection-ui-popup";
@@ -427,7 +427,7 @@ addRemoveWishListProduct = function(selprod_id, wish_list_id, event) {
             siteConstants.webroot_dashboard
         ),
         alternateData,
-        function(ans) {
+        function (ans) {
             if (ans.status == 1) {
                 $(document).trigger("close.facebox");
                 $(dv + " .active").removeClass("active");
@@ -457,9 +457,9 @@ addRemoveWishListProduct = function(selprod_id, wish_list_id, event) {
         }
     );
 };
-removeFromCart = function(key) {
+removeFromCart = function (key) {
     var data = "key=" + key;
-    fcom.updateWithAjax(fcom.makeUrl("Cart", "remove"), data, function(ans) {
+    fcom.updateWithAjax(fcom.makeUrl("Cart", "remove"), data, function (ans) {
         fcom.removeLoader();
         if (ans.status) {
             if (ans.total == 0) {
@@ -657,9 +657,9 @@ function codeLatLng(lat, lng, callback) {
     initialize();
     var latlng = new google.maps.LatLng(lat, lng);
     geocoder.geocode({
-            latLng: latlng,
-        },
-        function(results, status) {
+        latLng: latlng,
+    },
+        function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 if (results[1]) {
                     var lat = results[0]["geometry"]["location"].lat();
@@ -711,23 +711,21 @@ function codeLatLng(lat, lng, callback) {
 
 function defaultSetUpLogin(frm, v) {
     var formClass = "";
-
+    var isPopup = $(frm).hasClass("loginpopup--js");
     if ($('.submitBtn--js').css('display') == 'none') {
         $('.getOtpBtnBlock--js button').trigger('click');
         return;
     }
 
-    if ($(frm).hasClass("loginpopup--js")) {
+    if (isPopup) {
         formClass = "form.loginpopup--js ";
+        $.ykmodal(fcom.getLoader(), true);
+    } else {
+        $(".loginFormJs").prepend(fcom.getLoader());
     }
 
-    if ($('#car').css('display') == 'none') {
-        alert('Car 2 is hidden');
-    }
-
-    $(".loginFormJs").prepend(fcom.getLoader());
     if (0 < $(formClass + ".loginWithOtp--js").length && 0 < $(formClass + ".loginWithOtp--js").val()) {
-        $(formClass + "input.otpVal-js").each(function() {
+        $(formClass + "input.otpVal-js").each(function () {
             if ("undefined" == typeof $(this).val() || "" == $(this).val()) {
                 $(formClass + '.pwdField--js input[name="password"]').attr(
                     "data-fatreq",
@@ -748,11 +746,13 @@ function defaultSetUpLogin(frm, v) {
     fcom.ajax(
         fcom.makeUrl("GuestUser", "login"),
         fcom.frmData(frm),
-        function(ans) {
+        function (ans) {
             fcom.removeLoader();
             if (ans.status == 1) {
                 fcom.displaySuccessMessage(ans.msg);
-                location.href = ans.redirectUrl;
+                setTimeout(() => {
+                    location.href = ans.redirectUrl;
+                }, 1000);
                 return;
             }
             fcom.displayErrorMessage(ans.msg);
@@ -760,7 +760,7 @@ function defaultSetUpLogin(frm, v) {
     );
     return false;
 }
-sendResetPasswordLink = function(user) {
+sendResetPasswordLink = function (user) {
     if (user == "") {
         return false;
     }
@@ -768,42 +768,42 @@ sendResetPasswordLink = function(user) {
     fcom.updateWithAjax(
         fcom.makeUrl("GuestUser", "sendResetPasswordLink", [user]),
         "",
-        function(ans) {
+        function (ans) {
             fcom.displaySuccessMessage(ans.msg);
         }
     );
 };
-(function($) {
+(function ($) {
     var screenHeight = $(window).height() - 100;
-    window.onresize = function(event) {
+    window.onresize = function (event) {
         var screenHeight = $(window).height() - 100;
     };
     $.extend(fcom, {
         processingCounter: 0,
         processingClass: 'processingJs',
-        getLoader: function(addAsNew = false) {
+        getLoader: function (addAsNew = false) {
             $(document.body).css({ cursor: "wait" });
             return '<div class="processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
-        getPageLoader: function() {
+        getPageLoader: function () {
             return '<div class="page-loader"><span> Loading... <i class="loader-line"></i></span></div>';
         },
-        scrollToTop: function(obj) {
+        scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {
                 $("html, body").animate({
-                        scrollTop: $("html, body").offset().top - 100,
-                    },
+                    scrollTop: $("html, body").offset().top - 100,
+                },
                     "slow"
                 );
             } else {
                 $("html, body").animate({
-                        scrollTop: $(obj).offset().top - 100,
-                    },
+                    scrollTop: $(obj).offset().top - 100,
+                },
                     "slow"
                 );
             }
         },
-        resetEditorInstance: function() {
+        resetEditorInstance: function () {
             if (extendEditorJs == true) {
                 var editors = oUtil.arrEditor;
                 for (x in editors) {
@@ -812,15 +812,15 @@ sendResetPasswordLink = function(user) {
                 oUtil.arrEditor = [];
             }
         },
-        resetEditorWidth: function(width = "100%") {
+        resetEditorWidth: function (width = "100%") {
             if (typeof oUtil != "undefined") {
-                oUtil.arrEditor.forEach(function(input) {
+                oUtil.arrEditor.forEach(function (input) {
                     var oEdit1 = eval(input);
                     $("#idArea" + oEdit1.oName).attr("width", width);
                 });
             }
         },
-        setEditorLayout: function(lang_id) {
+        setEditorLayout: function (lang_id) {
             if (extendEditorJs == true) {
                 var editors = oUtil.arrEditor;
                 layout = langLbl["language" + lang_id];
@@ -832,11 +832,11 @@ sendResetPasswordLink = function(user) {
                 }
             }
         },
-        displayProcessing: function() {
+        displayProcessing: function () {
             fcom.processingCounter++;
             $.ykmsg.info(langLbl.processing, -1, fcom.processingClass + " " + fcom.processingClass + '-' + fcom.processingCounter);
         },
-        closeProcessing: function(counter) {
+        closeProcessing: function (counter) {
             var cls = fcom.processingClass;
             if (typeof counter !== "undefined") {
                 cls += '-' + counter
@@ -845,28 +845,28 @@ sendResetPasswordLink = function(user) {
             //$.ykmsg.close();
         },
 
-        displaySuccessMessage: function(msg) {
+        displaySuccessMessage: function (msg) {
             $.ykmsg.close();
             $.ykmsg.success(msg);
         },
 
-        displayErrorMessage: function(msg) {
+        displayErrorMessage: function (msg) {
             $.ykmsg.close();
             $.ykmsg.error(msg);
         },
 
-        getModalBody: function() {
+        getModalBody: function () {
             return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
         },
-        removeLoader: function(cls) {
+        removeLoader: function (cls) {
             $(document.body).css({ cursor: "default" });
             $(".loaderJs").remove();
             $(".submitBtnJs").removeClass("loading");
         },
-        getRowSpinner: function() {
+        getRowSpinner: function () {
             return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
         },
-        updateFaceboxContent: function(t, cls) {
+        updateFaceboxContent: function (t, cls) {
             if (typeof cls == "undefined" || cls == "undefined") {
                 cls = "";
             }
@@ -874,11 +874,11 @@ sendResetPasswordLink = function(user) {
             $.ykmsg.close();
             fcom.resetFaceboxHeight();
         },
-        resetFaceboxHeight: function() {
+        resetFaceboxHeight: function () {
             facebocxHeight = screenHeight;
             var fbContentHeight =
                 parseInt($("#facebox .content").height()) + parseInt(150);
-            setTimeout(function() {
+            setTimeout(function () {
                 $("#facebox .content").css(
                     "max-height",
                     parseInt(facebocxHeight) - parseInt(facebocxHeight) / 4 + "px"
@@ -893,11 +893,11 @@ sendResetPasswordLink = function(user) {
         },
     });
 
-    $.fn.serialize_without_blank = function() {
+    $.fn.serialize_without_blank = function () {
         var $form = this,
             result,
             $disabled = $([]);
-        $form.find(":input").each(function() {
+        $form.find(":input").each(function () {
             var $this = $(this);
             if ($.trim($this.val()) === "" && !$this.is(":disabled")) {
                 $disabled.add($this);
@@ -909,41 +909,41 @@ sendResetPasswordLink = function(user) {
         return result;
     };
 })(jQuery);
-$(function() {
+$(function () {
     var typingTimer;
     var doneTypingInterval = 400;
     var $input = $("#header_search_keyword");
-    $input.focus(function(e) {
+    $input.focus(function (e) {
         searchProductTagsAuto($input.val());
     });
-    $input.keyup(function(e) {
+    $input.keyup(function (e) {
         clearTimeout(typingTimer);
         typingTimer = setTimeout(doneTyping, doneTypingInterval);
     });
-    $input.keydown(function(e) {
+    $input.keydown(function (e) {
         clearTimeout(typingTimer);
     });
-    doneTyping = function(e) {
+    doneTyping = function (e) {
         searchProductTagsAuto($input.val());
     };
     let $formfloating = $(".form-floating");
-    $formfloating.on("keyup", "input, textarea", function(event) {
+    $formfloating.on("keyup", "input, textarea", function (event) {
         if ($(this).val().length > 0) {
             $(this).addClass("filled");
         } else {
             $(this).removeClass("filled");
         }
     });
-    $(document).on("click", ".recentSearch-js", function() {
+    $(document).on("click", ".recentSearch-js", function () {
         $input.val($(this).parent("li").attr("data-keyword"));
         searchProductTagsAuto($(this).parent("li").attr("data-keyword"));
     });
-    $(document).on("click", ".clearSearch-js", function() {
+    $(document).on("click", ".clearSearch-js", function () {
         var obj = $(this).hasClass("clear-all") ? "all" : "";
         clearSearchKeyword(obj);
     });
 });
-$(document).mouseup(function(e) {
+$(document).mouseup(function (e) {
     var container = $("#search-suggestions-js");
     var inputFld = $("#header_search_keyword");
     if (!container.is(e.target) &&
@@ -954,19 +954,19 @@ $(document).mouseup(function(e) {
         $("#search-suggestions-js").html("");
     }
 });
-$(function() {
+$(function () {
     var searchSuggestionsJs = $("#search-suggestions-js");
     var currentRequest = null;
-    removeAutoSuggest = function() {
+    removeAutoSuggest = function () {
         $("#header_search_keyword").val("");
         searchSuggestionsJs.html("");
     };
-    searchTags = function(obj) {
+    searchTags = function (obj) {
         var frmSiteSearch = document.frmSiteSearch;
         $(frmSiteSearch.keyword).val($(obj).data("txt"));
         $(frmSiteSearch).trigger("submit");
     };
-    searchProductTagsAuto = function(keyword) {
+    searchProductTagsAuto = function (keyword) {
         if (parseInt($(window).width()) < 768 || keyword.length < 3) {
             return;
         }
@@ -977,7 +977,7 @@ $(function() {
         currentRequest = fcom.updateWithAjax(
             fcom.makeUrl("Products", "searchProductTagsAutocomplete"),
             data,
-            function(t) {
+            function (t) {
                 if (t.html.length > 0) {
                     if (!searchSuggestionsJs.find("div").hasClass("search-suggestions")) {
                         searchSuggestionsJs.html(
@@ -995,7 +995,7 @@ $(function() {
             false
         );
     };
-    clearSearchKeyword = function(obj) {
+    clearSearchKeyword = function (obj) {
         var data = "";
         var keyword = $(obj).attr("data-keyword");
         if (typeof keyword != "undefined") {
@@ -1004,7 +1004,7 @@ $(function() {
         fcom.ajax(
             fcom.makeUrl("Products", "clearSearchKeywords"),
             data,
-            function(t) {
+            function (t) {
                 if ("all" == obj) {
                     $("#search-suggestions-js").html("");
                 } else {
@@ -1027,10 +1027,10 @@ $(function() {
     ) {
         $(".system_message").show();
     }
-    $(".close").on('click', function() {
+    $(".close").on('click', function () {
         $(".system_message").hide();
     });
-    markAsFavorite = function(selProdId) {
+    markAsFavorite = function (selProdId) {
         if (isUserLogged() == 0) {
             loginPopUpBox();
             return false;
@@ -1043,7 +1043,7 @@ $(function() {
                 siteConstants.webroot_dashboard
             ),
             "",
-            function(ans) {
+            function (ans) {
                 if (ans.status) {
                     $("[data-id=" + selProdId + "]").addClass("active");
                     $("[data-id=" + selProdId + "]").attr(
@@ -1060,7 +1060,7 @@ $(function() {
         );
     };
 
-    removeFromFavorite = function(selProdId, callbackFunction = false) {
+    removeFromFavorite = function (selProdId, callbackFunction = false) {
         if (isUserLogged() == 0) {
             loginPopUpBox();
             return false;
@@ -1073,7 +1073,7 @@ $(function() {
                 siteConstants.webroot_dashboard
             ),
             "",
-            function(ans) {
+            function (ans) {
                 if (ans.status) {
                     $("[data-id=" + selProdId + "]").removeClass("active");
                     $("[data-id=" + selProdId + "]").attr(
@@ -1092,17 +1092,14 @@ $(function() {
             window[callbackFunction]();
         }
     };
-    guestUserFrm = function() {
-        fcom.ajax(fcom.makeUrl("GuestUser", "form"), "", function(t) {
+    guestUserFrm = function () {
+        fcom.ajax(fcom.makeUrl("GuestUser", "form"), "", function (t) {
             fcom.updateFaceboxContent(t);
         });
     };
-    signInWithPhone = function(obj, flag) {
+    signInWithPhone = function (obj, flag) {
         var form = $(obj).data("form");
         var formElement = "undefined" != typeof form ? 'form[name="' + form + '"]' : "form";
-        var title = 0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
-        var objLbl = 0 < flag ? langLbl.byEmail : langLbl.byPhone;
-        $(obj).attr("onclick", "signInWithPhone(this, " + !flag + ")").text(objLbl).attr('title', title);
 
         var data = 'signInWithPhone=' + parseInt(flag);
         if (parseInt(flag) == 0) {
@@ -1116,7 +1113,7 @@ $(function() {
         } else {
             $(".loginFormJs").prepend(fcom.getLoader());
         }
-        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function (t) {
             if (0 < popup.length) {
                 $.ykmodal(t.html, true);
             } else {
@@ -1127,11 +1124,16 @@ $(function() {
         });
     };
 
-    getLoginOtp = function(obj) {
+    getLoginOtp = function (obj) {
         var formClass = "";
-        if ($(obj).closest("form").hasClass("loginpopup--js")) {
+        var isPopup = $(obj).closest("form").hasClass("loginpopup--js");
+        if (isPopup) {
             formClass = "form.loginpopup--js ";
+            $.ykmodal(fcom.getLoader(), true);
+        } else {
+            $(".loginFormJs").prepend(fcom.getLoader());
         }
+
         var phone = $(formClass + 'input[name="username"]').val();
         var dialCode = $(formClass + 'input[name="username_dcode"]').val();
 
@@ -1142,10 +1144,9 @@ $(function() {
             return false;
         }
 
-        $(".loginFormJs").prepend(fcom.getLoader());
         fcom.displayProcessing();
         var data = "username=" + $(formClass + 'input[name="username"]').val() + "&username_dcode=" + $(formClass + 'input[name="username_dcode"]').val();
-        fcom.ajax(fcom.makeUrl("GuestUser", "getLoginOtp", []), data, function(t) {
+        fcom.ajax(fcom.makeUrl("GuestUser", "getLoginOtp", []), data, function (t) {
             fcom.removeLoader();
             t = $.parseJSON(t);
             if (1 > t.status) {
@@ -1165,11 +1166,11 @@ $(function() {
         return false;
     };
 
-    validateRegOtp = function(frm) {
+    validateRegOtp = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         $('#sign-up').prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('GuestUser', 'validateOtp'), data, function(t) {
+        fcom.ajax(fcom.makeUrl('GuestUser', 'validateOtp'), data, function (t) {
             fcom.removeLoader();
             t = $.parseJSON(t);
             if (1 == t.status) {
@@ -1184,27 +1185,27 @@ $(function() {
         return false;
     };
 
-    openSignInForm = function(includeGuestLogin) {
+    openSignInForm = function (includeGuestLogin) {
         if (typeof includeGuestLogin == "undefined") {
             includeGuestLogin = false;
         }
         data = "includeGuestLogin=" + includeGuestLogin + "&signinpopup=1";
         fcom.displayProcessing();
-        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('GuestUser', 'loginForm'), data, function (t) {
             fcom.closeProcessing();
             $.ykmodal(t.html, true);
             fcom.removeLoader();
         });
     };
 
-    guestUserLogin = function(frm, v) {
+    guestUserLogin = function (frm, v) {
         v.validate();
         if (!v.isValid()) return;
         fcom.displayProcessing();
         fcom.ajax(
             fcom.makeUrl("GuestUser", "guestLogin"),
             fcom.frmData(frm),
-            function(t) {
+            function (t) {
                 var ans = JSON.parse(t);
                 if (ans.status == 1) {
                     fcom.displaySuccessMessage(ans.msg);
@@ -1216,7 +1217,7 @@ $(function() {
         );
         return false;
     };
-    autofillLangData = function(autoFillBtn, frm) {
+    autofillLangData = function (autoFillBtn, frm) {
         var actionUrl = autoFillBtn.data("action");
         var defaultLangField = $("input.defaultLang", frm);
         if (1 > defaultLangField.length) {
@@ -1225,7 +1226,7 @@ $(function() {
         }
         var proceed = true;
         var stringToTranslate = "";
-        defaultLangField.each(function(index) {
+        defaultLangField.each(function (index) {
             if ("" != $(this).val()) {
                 if (0 < index) {
                     stringToTranslate += "&";
@@ -1240,10 +1241,10 @@ $(function() {
         });
         if (true == proceed) {
             fcom.displayProcessing();
-            fcom.ajax(actionUrl, stringToTranslate, function(t) {
+            fcom.ajax(actionUrl, stringToTranslate, function (t) {
                 var res = $.parseJSON(t);
-                $.each(res, function(langId, values) {
-                    $.each(values, function(selector, value) {
+                $.each(res, function (langId, values) {
+                    $.each(values, function (selector, value) {
                         $("input.langField_" + langId + "[name='" + selector + "']").val(
                             value
                         );
@@ -1253,14 +1254,14 @@ $(function() {
         }
     };
 
-    redirectfunc = function(url, orderStatus) {
+    redirectfunc = function (url, orderStatus) {
         var input =
             '<input type="hidden" name="status" value="' + orderStatus + '">';
         $('<form action="' + url + '" method="POST">' + input + "</form>")
             .appendTo($(document.body))
             .submit();
     };
-    $(document).on("click", ".wishListJs", function() {
+    $(document).on("click", ".wishListJs", function () {
         if (isUserLogged() == 0) {
             loginPopUpBox();
             return false;
@@ -1268,29 +1269,29 @@ $(function() {
         window.location.href = fcom.makeUrl('account', 'wishlist', [], siteConstants.webroot_dashboard);
     });
 
-    $(document).on("click", ".sign-in-popup-js", function() {
+    $(document).on("click", ".sign-in-popup-js", function () {
         openSignInForm();
     });
 
-    $(".cc-cookie-accept-js").on('click', function() {
+    $(".cc-cookie-accept-js").on('click', function () {
         var data = {
             statistical_cookies: 1,
             personalise_cookies: 1,
         };
         updateUserCookies(data);
     });
-    $(".cookie-preferences-js").on('click', function() {
-        $.facebox(function() {
+    $(".cookie-preferences-js").on('click', function () {
+        $.facebox(function () {
             fcom.ajax(
                 fcom.makeUrl("Custom", "cookiePreferencesData"),
                 "",
-                function(t) {
+                function (t) {
                     fcom.updateFaceboxContent(t, "modal-lg");
                 }
             );
         });
     });
-    setUserCookiePreferences = function() {
+    setUserCookiePreferences = function () {
         var statisticalCookies = 0;
         if ($("input[name='statistical_cookies']").prop("checked") == true) {
             statisticalCookies = 1;
@@ -1305,11 +1306,11 @@ $(function() {
         };
         updateUserCookies(data);
     };
-    updateUserCookies = function(data) {
+    updateUserCookies = function (data) {
         fcom.ajax(
             fcom.makeUrl("Custom", "updateUserCookies"),
             data,
-            function(rsp) {
+            function (rsp) {
                 var ans = $.parseJSON(rsp);
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
@@ -1323,7 +1324,7 @@ $(function() {
             }
         );
     };
-    $(document).on("click", ".increase-js", function() {
+    $(document).on("click", ".increase-js", function () {
         var type = $('input[name="fulfillment_type"]:checked').val();
         if ($(this).hasClass("not-allowed")) {
             return false;
@@ -1362,7 +1363,7 @@ $(function() {
         section.prepend(fcom.getLoader());
         cart.update(key, page, type);
     });
-    $(document).on("keyup", ".productQty-js", function() {
+    $(document).on("keyup", ".productQty-js", function () {
         if ($(this).val() > $(this).parent().data("stock")) {
             val = $(this).parent().data("stock");
             var message = langLbl.quantityAdjusted.replace(/{qty}/g, val);
@@ -1393,10 +1394,10 @@ $(function() {
             val = $(this).val();
             if (
                 $(this)
-                .parent()
-                .parent("div")
-                .find(".decrease-js")
-                .hasClass("not-allowed")
+                    .parent()
+                    .parent("div")
+                    .find(".decrease-js")
+                    .hasClass("not-allowed")
             ) {
                 $(this)
                     .parent()
@@ -1406,10 +1407,10 @@ $(function() {
             }
             if (
                 $(this)
-                .parent()
-                .parent("div")
-                .find(".increase-js")
-                .hasClass("not-allowed")
+                    .parent()
+                    .parent("div")
+                    .find(".increase-js")
+                    .hasClass("not-allowed")
             ) {
                 $(this)
                     .parent()
@@ -1425,7 +1426,7 @@ $(function() {
             return false;
         }
     });
-    $(document).on("blur", ".productQty-js", function() {
+    $(document).on("blur", ".productQty-js", function () {
         var key = $(this).attr("data-key");
         var page = $(this).attr("data-page");
         if (page == "product-view") {
@@ -1441,13 +1442,13 @@ $(function() {
             section = $("#cartList");
         }
         section.prepend(fcom.getLoader());
-        cart.addCallBackFn = function(results) {
+        cart.addCallBackFn = function (results) {
             loadShippingSummaryDiv();
         }
         cart.update(key, page, fulfillmentType);
     });
 
-    $(document).on("click", ".decrease-js", function() {
+    $(document).on("click", ".decrease-js", function () {
         var type = $('input[name="fulfillment_type"]:checked').val();
         if ($(this).hasClass("not-allowed")) {
             return false;
@@ -1489,26 +1490,26 @@ $(function() {
         section.prepend(fcom.getLoader());
         cart.update(key, page, type);
     });
-    $(document).on("click", ".setactive-js li", function() {
+    $(document).on("click", ".setactive-js li", function () {
         $(this).closest(".setactive-js").find("li").removeClass("is-active");
         $(this).addClass("is-active");
     });
-    $(document).on("keydown", "input[name=user_username]", function(e) {
+    $(document).on("keydown", "input[name=user_username]", function (e) {
         if (e.which === 32) {
             return false;
         }
         this.value = this.value.replace(/\s/g, "");
     });
-    $(document).on("change", "input[name=user_username]", function(e) {
+    $(document).on("change", "input[name=user_username]", function (e) {
         this.value = this.value.replace(/\s/g, "");
     });
-    $(document).on("submit", "form", function() {
+    $(document).on("submit", "form", function () {
         moveErrorAfterIti();
     });
     $(document).on(
         "keyup",
         "form .iti input[data-intl-tel-input-id]",
-        function() {
+        function () {
             moveErrorAfterIti();
         }
     );
@@ -1526,7 +1527,7 @@ function isUserLogged() {
         url: fcom.makeUrl("GuestUser", "checkAjaxUserLoggedIn"),
         async: false,
         dataType: "json",
-    }).done(function(ans) {
+    }).done(function (ans) {
         isUserLogged = parseInt(ans.isUserLogged);
     });
     return isUserLogged;
@@ -1543,7 +1544,7 @@ function setSiteDefaultLang(langId) {
     fcom.ajax(
         fcom.makeUrl("Home", "setLanguage", [langId]),
         data,
-        function(res) {
+        function (res) {
             var ans = $.parseJSON(res);
             if (ans.status == 1) {
                 window.location.href = ans.redirectUrl + srchString;
@@ -1557,7 +1558,7 @@ function setSiteDefaultCurrency(currencyId) {
     fcom.ajax(
         fcom.makeUrl("Home", "setCurrency", [currencyId]),
         "",
-        function(res) {
+        function (res) {
             document.location.reload();
         }
     );
@@ -1570,10 +1571,10 @@ function stylePhoneNumberFld(
     var inputList = document.querySelectorAll(element);
     var country =
         "" == langLbl.defaultCountryCode ||
-        "undefined" == typeof langLbl.defaultCountryCode ?
-        "in" :
-        langLbl.defaultCountryCode;
-    inputList.forEach(function(input) {
+            "undefined" == typeof langLbl.defaultCountryCode ?
+            "in" :
+            langLbl.defaultCountryCode;
+    inputList.forEach(function (input) {
         var form = input.closest("form");
         if (true == destroy) {
             $(input, form).removeAttr("style");
@@ -1638,7 +1639,7 @@ function stylePhoneNumberFld(
                 $(input, form).val(phoneNumber);
             }
 
-            input.addEventListener("countrychange", function(e) {
+            input.addEventListener("countrychange", function (e) {
                 if (typeof iti.getSelectedCountryData().dialCode !== "undefined") {
                     var dialCode = "+" + iti.getSelectedCountryData().dialCode;
                     var dialCodeWithPhone =
@@ -1671,7 +1672,7 @@ function stylePhoneNumberFld(
                     $(input, form).attr("data-before", dialCode);
                 }
             });
-            input.addEventListener("keyup", function(e) {
+            input.addEventListener("keyup", function (e) {
                 if (true === hasOnlyFlag && "+" != input.value.charAt(0)) {
                     input.value = "+" + input.value;
                 }
@@ -1682,12 +1683,12 @@ function stylePhoneNumberFld(
 
 function getCountryIso2CodeFromDialCode(dialCode) {
     var countriesData = window.intlTelInputGlobals.getCountryData();
-    var countryData = countriesData.filter(function(country) {
+    var countryData = countriesData.filter(function (country) {
         return country.dialCode == dialCode;
     });
     return countryData[0].iso2;
 }
-$(document).on("click", ".readMore", function() {
+$(document).on("click", ".readMore", function () {
     var $this = $(this);
     var $moreText = $this.siblings(".moreText");
     var $lessText = $this.siblings(".lessText");
@@ -1703,14 +1704,14 @@ $(document).on("click", ".readMore", function() {
     }
     $this.toggleClass("expanded");
 });
-$(document).on("click", "#btn-demo", function() {
-    $.facebox(function() {
-        fcom.ajax(fcom.makeUrl("Custom", "requestDemo"), "", function(t) {
+$(document).on("click", "#btn-demo", function () {
+    $.facebox(function () {
+        fcom.ajax(fcom.makeUrl("Custom", "requestDemo"), "", function (t) {
             fcom.updateFaceboxContent(t);
         });
     });
 });
-$(document).on("click", ".add-to-cart--js", function(event) {
+$(document).on("click", ".add-to-cart--js", function (event) {
     ykevents.addToCart();
     event.preventDefault();
     var selprodId = $(this).siblings('input[name="selprod_id"]').val();
@@ -1719,14 +1720,14 @@ $(document).on("click", ".add-to-cart--js", function(event) {
     cart.add(selprodId, quantity);
     return false;
 });
-$(function() {
+$(function () {
     if ($(window).width() < 1025) {
         $("html").removeClass("sticky-demo-header");
         $("div.demo-header").hide();
     }
 });
 
-$(document).ajaxComplete(function() {
+$(document).ajaxComplete(function () {
     stylePhoneNumberFld(".phone-js");
     if (0 < $("#facebox").length) {
         if ($("#facebox").is(":visible")) {
@@ -1734,11 +1735,11 @@ $(document).ajaxComplete(function() {
         } else {
             $("html").removeClass("pop-on");
         }
-        $("#facebox .close.close--white").on("click", function() {
+        $("#facebox .close.close--white").on("click", function () {
             $("html").removeClass("pop-on");
         });
     }
-    $("body").on('click', function() {
+    $("body").on('click', function () {
         if ($("html").hasClass("pop-on")) {
             $("html").removeClass("pop-on");
         }
@@ -1755,10 +1756,10 @@ $(document).ajaxComplete(function() {
     }
     /* -------------------------- */
 });
-$(function() {
+$(function () {
     $("body")
         .find("*[data-trigger]")
-        .on("click", function() {
+        .on("click", function () {
             var targetElmId = $(this).data("trigger");
             var elmToggleClass = targetElmId + "--on";
             if ($("body").hasClass(elmToggleClass)) {
@@ -1769,11 +1770,11 @@ $(function() {
         });
     $("body")
         .find("*[data-bs-target-close]")
-        .on("click", function() {
+        .on("click", function () {
             var targetElmId = $(this).data("target-close");
             $("body").toggleClass(targetElmId + "--on");
         });
-    $("body").on("mouseup", function(event) {
+    $("body").on("mouseup", function (event) {
         if (
             $(event.target).data("trigger") != "" &&
             typeof $(event.target).data("trigger") !== typeof undefined
@@ -1783,7 +1784,7 @@ $(function() {
         }
         $("body")
             .find("*[data-close-on-click-outside]")
-            .each(function(idx, elm) {
+            .each(function (idx, elm) {
                 var slctr = $(elm);
                 if (!slctr.is(event.target) && !$.contains(slctr[0], event.target)) {
                     $("body").removeClass(slctr.data("close-on-click-outside") + "--on");
@@ -1815,24 +1816,24 @@ function bytesToSize(bytes) {
 }
 $(".form-floating")
     .find("input, textarea, select")
-    .each(function() {
+    .each(function () {
         if ($(this).val() != "") {
             $(this).addClass("filled");
         } else {
             $(this).removeClass("filled");
         }
     });
-$(".dropdown-menu").on("click", function(e) {
+$(".dropdown-menu").on("click", function (e) {
     e.stopPropagation();
 });
 
 function awebersignup() {
     var content = $(".aweber-js").html();
     fcom.updateFaceboxContent(content);
-    var weberformload = setInterval(function() {
+    var weberformload = setInterval(function () {
         if (0 < $(".aweberform-js form").length) {
             var myForm = $(".aweberform-js form")[0];
-            myForm.onsubmit = function() {
+            myForm.onsubmit = function () {
                 var popwidth = 500,
                     popheight = 700,
                     popleft = $(window).width() / 2 - popwidth / 2,
@@ -1856,14 +1857,14 @@ function awebersignup() {
         }
     }, 1000);
 }
-$(document).on("click", ".v-tabs--js ul li", function(e) {
+$(document).on("click", ".v-tabs--js ul li", function (e) {
     e.preventDefault();
     $(".v-tabs--js .is-active").removeClass("is-active");
     var target = $("a.v-tab--js", this).attr("href");
     $(this).addClass("is-active");
     $(target).addClass("is-active");
 });
-var imagesPreview = function(input, placeToInsertImagePreview) {
+var imagesPreview = function (input, placeToInsertImagePreview) {
     if (input.files) {
         if (1 > $(placeToInsertImagePreview + " ul").length) {
             $(placeToInsertImagePreview).html(
@@ -1875,17 +1876,17 @@ var imagesPreview = function(input, placeToInsertImagePreview) {
         for (i = 0; i < filesAmount; i++) {
             let selectedFile = input.files[i];
             var reader = new FileReader();
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 var htm =
                     '<li><div class="uploaded-file"><span class="uploaded-file__thumb"></span><a href="javascript:void(0);" class="close-layer close-layer-sm fileRemove--js" data-filefld="' +
                     fileFldName +
                     '"></a></div></li>';
                 $(placeToInsertImagePreview + " ul").append(htm);
                 $(
-                        $.parseHTML(
-                            '<img class="imgToUpload--js" title="' + selectedFile.name + '">'
-                        )
+                    $.parseHTML(
+                        '<img class="imgToUpload--js" title="' + selectedFile.name + '">'
                     )
+                )
                     .attr("src", event.target.result)
                     .appendTo(
                         placeToInsertImagePreview +
@@ -1901,8 +1902,8 @@ function DataURIToBlob(dataURI) {
     const splitDataURI = dataURI.split(",");
     const byteString =
         splitDataURI[0].indexOf("base64") >= 0 ?
-        atob(splitDataURI[1]) :
-        decodeURI(splitDataURI[1]);
+            atob(splitDataURI[1]) :
+            decodeURI(splitDataURI[1]);
     const mimeString = splitDataURI[0].split(":")[1].split(";")[0];
     const ia = new Uint8Array(byteString.length);
     for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
@@ -1911,7 +1912,7 @@ function DataURIToBlob(dataURI) {
     });
 }
 
-$(document).on("click", ".fileRemove--js", function() {
+$(document).on("click", ".fileRemove--js", function () {
     $(this).closest("li").remove();
 });
 
@@ -1941,7 +1942,7 @@ function bindFeatherLight() {
             return;
         }
 
-        $('.featherLightGalleryJs').each(function() {
+        $('.featherLightGalleryJs').each(function () {
             $(this).find('[data-featherlight]').featherlightGallery({
                 previousIcon: '«',
                 nextIcon: '»',
@@ -1956,7 +1957,7 @@ function redirectUrl(url) {
     window.location.href = url;
 }
 $.extend(fcom, {
-    copyToClipboard: function(targetId) {
+    copyToClipboard: function (targetId) {
         var targetId = targetId || "_copytext_";
         var target = document.getElementById(targetId);
         target.select();
@@ -1973,10 +1974,10 @@ $.extend(fcom, {
     },
 });
 
-copyText = function(obj) {
+copyText = function (obj) {
     var copyText = $(obj).siblings('.clipboardTextJs').text();
 
-    document.addEventListener('copy', function(e) {
+    document.addEventListener('copy', function (e) {
         e.clipboardData.setData('text/plain', copyText);
         e.preventDefault();
     }, true);
@@ -1986,7 +1987,7 @@ copyText = function(obj) {
 }
 
 /* Check if element is in viewport. */
-$.fn.isInViewport = function() {
+$.fn.isInViewport = function () {
     let elem = $(this);
     // if the element doesn't exist, abort
     if (elem.length == 0) {

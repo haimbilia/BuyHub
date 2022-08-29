@@ -43,15 +43,6 @@ echo $loginFrm->getFormTag(); ?>
                 ?>
             </div>
         </div>
-        <?php if (true === $canSendSms) { ?>
-            <div class="col-auto">
-                <div class="form-group">
-                    <button type="button" class="link-underline" data-form="frmLogin" onclick="signInWithPhone(this, 1)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_USE_PHONE_NUMBER_INSTEAD_?', $siteLangId); ?>">
-                        <?php echo Labels::getLabel('LBL_PHONE_?', $siteLangId); ?>
-                    </button>
-                </div>
-            </div>
-        <?php } ?>
     </div>
     <div class="row submitBtn--js">
         <div class="col-md-12">
