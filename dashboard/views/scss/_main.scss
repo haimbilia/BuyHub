@@ -3,7 +3,7 @@
 @import "bootstrap/variables";
 
 //themes
-@import "themes/variables";   
+@import "themes/variables";
 
 //layout
 @import "layout/sidebar";
@@ -11,7 +11,7 @@
 @import "layout/offcanvas-menu";
 
 //components
-@import "components/demo";
+
 @import "components/toaster";
 @import "components/searchbar";
 @import "components/alert";
@@ -55,6 +55,7 @@
 @import "components/usercard";
 @import "components/modal";
 @import "components/offcanvas";
+@import "../../../application/views/scss/components/demo";
 @import "components/catalog-popup";
 @import "components/multi-list";
 @import "components/pagination";
@@ -82,9 +83,9 @@
 @import "components/progress-checkout";
 @import "components/list-group";
 // @import 'components/media-more';
-@import "../../../application/views/scss/components/bg";  
+@import "../../../application/views/scss/components/bg";
 // @import 'components/location-permission';
-// @import 'components/quick-view'; 
+// @import 'components/quick-view';
 // @import 'components/quantity-input';
 @import "components/saved-cards";
 @import "components/no-data";

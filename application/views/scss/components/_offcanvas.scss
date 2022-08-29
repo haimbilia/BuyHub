@@ -9,8 +9,16 @@ $offcanvas-space: 1rem 2rem;
     &-foot {
         padding: $offcanvas-space;
     }
+    &-start {
+        border: none;
+        #{$end-direction}: auto;
+        #{$start-direction}: 0;
+    }
     &-end {
         border: none;
+        #{$start-direction}: auto;
+        #{$end-direction}: 0;
+        transform: translateX(100% * $transform-direction);
     }
 
     &-gps-location {

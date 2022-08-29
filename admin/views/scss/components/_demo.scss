@@ -1,6 +1,12 @@
 $top-space: 30%;
 $right-space: 3rem;
 
+.demo-restore-clone {
+    position: fixed;
+    z-index: 9999;
+    #{$end-direction}: $right-space;
+    top: $top-space;
+}
 .restore-btn {
     @include bg-brand;
     border: none;
@@ -29,6 +35,10 @@ $right-space: 3rem;
     .svg {
         min-width: 1.5rem;
         min-height: 1.5rem;
+
+        [dir="rtl"] & {
+            transform: rotate(-180deg);
+        }
     }
 
     &-icon {

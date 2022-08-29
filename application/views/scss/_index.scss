@@ -12,7 +12,7 @@
 //@import "layout/mega-nav";
 @import "layout/footer";
 //
-@import "components/demo";
+
 @import "components/main-search";
 @import "components/carousels";
 @import "components/accordion";
@@ -29,7 +29,6 @@
 @import "components/section";
 //@import "components/cms";
 @import "components/cookies";
-
 @import "components/no-data";
 @import "components/dropdown";
 @import "components/hamburger";
@@ -40,6 +39,7 @@
 @import "components/modal";
 @import "components/toaster";
 @import "components/offcanvas";
+@import "components/demo";
 //@import "components/multi-list";
 //@import "components/pagination";
 @import "components/product-card";
@@ -106,7 +106,7 @@
 //@import "vendors/xzoom";
 @import "vendors/jquery.fancybox";
 //@import "vendors/tagify";
-//@import "vendors/intlTelInput.min";
+@import "vendors/intlTelInput.min";
 //@import "vendors/nouislider.min";
 
 //
