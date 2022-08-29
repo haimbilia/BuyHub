@@ -444,24 +444,24 @@ class ProductsController extends ListingBaseController
             $post['product_approved'] = applicationConstants::YES;
         }
 
+        if (Product::PRODUCT_TYPE_PHYSICAL == $productType) {
+            $fulfillmentType = -1;
+            if ($post['product_seller_id'] && !FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+                $fulfillmentType = Shop::getAttributesByUserId($post['product_seller_id'], 'shop_fulfillment_type');
+                $shopDetails = Shop::getAttributesByUserId($post['product_seller_id'], null, false);
+                $address = new Address(0, $this->siteLangId);
+                $addresses = $address->getData(Address::TYPE_SHOP_PICKUP, $shopDetails['shop_id']);
+                $fulfillmentType = empty($addresses) ? Shipping::FULFILMENT_SHIP : $fulfillmentType;
+            } else {
+                $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
+            }
 
-        $fulfillmentType = -1;
-        if ($post['product_seller_id'] && !FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
-            $fulfillmentType = Shop::getAttributesByUserId($post['product_seller_id'], 'shop_fulfillment_type');
-            $shopDetails = Shop::getAttributesByUserId($post['product_seller_id'], null, false);
-            $address = new Address(0, $this->siteLangId);
-            $addresses = $address->getData(Address::TYPE_SHOP_PICKUP, $shopDetails['shop_id']);
-            $fulfillmentType = empty($addresses) ? Shipping::FULFILMENT_SHIP : $fulfillmentType;
-        } else {
-            $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
+            $post['product_fulfillment_type'] = FatApp::getPostedData('product_fulfillment_type', FatUtility::VAR_INT, 0);
+            $fullfilmentOptions = Shipping::getFulFillmentArr($this->siteLangId, $fulfillmentType);
+            if (!array_key_exists($post['product_fulfillment_type'], $fullfilmentOptions)) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
         }
-
-        $post['product_fulfillment_type'] = FatApp::getPostedData('product_fulfillment_type', FatUtility::VAR_INT, 0);
-        $fullfilmentOptions = Shipping::getFulFillmentArr($this->siteLangId, $fulfillmentType);
-        if (!array_key_exists($post['product_fulfillment_type'], $fullfilmentOptions)) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
         /* TODO:
           1) in case productid > 0 (edit product) need to check
           a) product_attachements_with_inventory is yes and attachments/links added with product catalog then return with error to remove the links/files first.

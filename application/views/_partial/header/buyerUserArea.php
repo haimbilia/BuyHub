@@ -14,12 +14,12 @@ $html = ($layoutType == applicationConstants::SCREEN_MOBILE) ? '<i class="icon i
 
 ?>
 <li class="<?php echo $liClass; ?>">
-    <a class="<?php echo $aClass; ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'Orders', [], CONF_WEBROOT_DASHBOARD); ?>"><?php echo Labels::getLabel("LBL_Orders", $siteLangId); ?>
+    <a class="<?php echo $aClass; ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'Orders', [], CONF_WEBROOT_DASHBOARD, null, false, false, false); ?>"><?php echo Labels::getLabel("LBL_Orders", $siteLangId); ?>
         <?php echo $html; ?></a>
 </li>
 <li class="<?php echo $liClass; ?>">
-    <a class="<?php echo $aClass; ?>" href="<?php echo UrlHelper::generateUrl('Account', 'credits', [], CONF_WEBROOT_DASHBOARD); ?>"><?php echo Labels::getLabel('LBL_My_Credits', $siteLangId); ?><?php echo $html; ?></a>
+    <a class="<?php echo $aClass; ?>" href="<?php echo UrlHelper::generateUrl('Account', 'credits', [], CONF_WEBROOT_DASHBOARD, null, false, false, false); ?>"><?php echo Labels::getLabel('LBL_My_Credits', $siteLangId); ?><?php echo $html; ?></a>
 </li>
 <li class="<?php echo $liClass; ?>">
-    <a class="<?php echo $aClass; ?>" href="<?php echo UrlHelper::generateUrl('Account', 'myAddresses', [], CONF_WEBROOT_DASHBOARD); ?>"><?php echo Labels::getLabel("LBL_Manage_Addresses", $siteLangId); ?><?php echo $html; ?></a>
+    <a class="<?php echo $aClass; ?>" href="<?php echo UrlHelper::generateUrl('Account', 'myAddresses', [], CONF_WEBROOT_DASHBOARD, null, false, false, false); ?>"><?php echo Labels::getLabel("LBL_Manage_Addresses", $siteLangId); ?><?php echo $html; ?></a>
 </li>

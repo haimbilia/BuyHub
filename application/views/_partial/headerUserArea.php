@@ -90,7 +90,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                     $this->includeTemplate('_partial/header/buyerUserArea.php', ['siteLangId' => $siteLangId]);
                     ?>
                     <li class="dropdown-menu-item">
-                        <a class="dropdown-menu-link" data-org-url="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo', [], CONF_WEBROOT_DASHBOARD); ?>"><?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?></a>
+                        <a class="dropdown-menu-link" data-org-url="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo', [], CONF_WEBROOT_DASHBOARD, null, false, false, false); ?>"><?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?></a>
                     </li>
                     <li class="dropdown-menu-item logout">
                         <a class="dropdown-menu-link" data-org-url="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', array(), CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>"><?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
