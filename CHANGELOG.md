@@ -1179,6 +1179,7 @@ TV-9.4.0.20220825
     - #066338 - The mobile view option in the marketplace restore popup should not be available on mobile devices.
     - #066395 - Multiple UI issues in the brands listing popup
     - #066457 - The blank spacing appears under the comments section if no comments are added by the admin for the master product request status change
+    - #066418 - The blog description is missing on the blog listing page
 
 ## UAT points:
 
