@@ -39,17 +39,21 @@ $html = '<div class="modal-header"><h5 class="modal-title">Yo!kart</h5></div><di
 
         var str = ('0' + hours).slice(-2) + ":" + ('0' + minutes).slice(-2) + ":" + ('0' + seconds).slice(-2);
         // Display the result in the element with id="demo"
-        document.getElementById("restoreCounter").innerHTML = str;
-        //$('#restoreCounter').html(str);
+        $('.restoreCounterJs').html(str);
         var progressPercentage = 100 - (parseFloat(hours + '.' + parseFloat(minutes / 15 * 25)) * 100 / 4);
         $('.restore__progress-bar').css('width', progressPercentage + '%');
         // If the count down is finished, write some text
         if (distance < 0) {
             clearInterval(x);
-            $('#restoreCounter').html("Process...");
+            $('.restoreCounterJs').html("Process...");
             showRestorePopup();
             restoreSystem();
         }
+        
+        if (1 > hours && 5 >= minutes && 1 > $('.timerSectionCloneJs').length) {
+            $($('.timerSectionJs')[0].outerHTML).addClass('timerSectionClone timerSectionCloneJs').insertAfter('.restoreBtnJs')
+        }
+
     }, 1000);
 
     function showRestorePopup() {

@@ -124,3 +124,4 @@ php_errors.log
 /manager-application/views/css/main-ltr.css.map
 /manager-application/views/css/main-rtl.css.map
 /.php-cs-fixer.cache
+/public/adminer.php
