@@ -1,4 +1,4 @@
-<button class="restore-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRestore">
+<button class="restore-btn restoreBtnJs" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRestore">
     <svg class="svg" width="24" height="24">
         <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#gear">
         </use>
@@ -7,13 +7,13 @@
 <div class="offcanvas offcanvas-end offcanvas-restore" tabindex="-1" id="offcanvasRestore">
     <div class="offcanvas-body">
         <div class="demo">
-            <div class="demo-restore">
+            <div class="demo-restore timerSectionJs">
                 <button class="demo-restore-btn" type="button" onclick="showRestorePopup()">
                     <svg class="svg" width="20" height="20">
                         <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#clock">
                         </use>
                     </svg>
-                    <span class="restore-counter" id="restoreCounter">00:00:00</span>
+                    <span class="restore-counter restoreCounterJs">00:00:00</span>
                 </button>
             </div>
             <div class="demo-bg-wrap">
