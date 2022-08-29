@@ -1178,6 +1178,7 @@ TV-9.4.0.20220825
     - #066347 - sorting issue in category requests and brand requests
     - #066338 - The mobile view option in the marketplace restore popup should not be available on mobile devices.
     - #066395 - Multiple UI issues in the brands listing popup
+    - #066457 - The blank spacing appears under the comments section if no comments are added by the admin for the master product request status change
 
 ## UAT points:
 
