@@ -70,7 +70,7 @@ class PayFortPayController extends PaymentController
         }
         if (!$orderId) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD));
+            FatApp::redirectUser(UrlHelper::generateUrl('Account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
 
         $paymentChargeUrl = UrlHelper::generateUrl('PayFortPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND);

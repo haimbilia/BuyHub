@@ -998,7 +998,7 @@ class EmailHandler extends FatModel
             return false;
         }
 
-        $url = UrlHelper::generateUrl('seller', 'sellerProductForm', array($productInfo['selprod_product_id'], $productInfo['selprod_id']), CONF_WEBROOT_DASHBOARD);
+        $url = UrlHelper::generateUrl('seller', 'sellerProductForm', array($productInfo['selprod_product_id'], $productInfo['selprod_id']), CONF_WEBROOT_DASHBOARD, null, false, false, false);
 
         $arrReplacements = array(
             '{shop_name}' => $productInfo['shop_name'],
@@ -1537,7 +1537,7 @@ class EmailHandler extends FatModel
             return false;
         }
 
-        $sellerOrderDetailUrl = UrlHelper::generateFullUrl('Seller', 'ViewOrder', array($ocRequestRow["op_id"]), CONF_WEBROOT_DASHBOARD);
+        $sellerOrderDetailUrl = UrlHelper::generateFullUrl('Seller', 'ViewOrder', array($ocRequestRow["op_id"]), CONF_WEBROOT_DASHBOARD, null, false, false, false);
         $sellerOrderAnchor = "<a href='" . $sellerOrderDetailUrl . "'>" . $ocRequestRow["op_invoice_number"] . "</a>";
 
         $arrReplacements = array(
@@ -1775,7 +1775,7 @@ class EmailHandler extends FatModel
             '{request_number}' => $msgDetail["orrequest_reference"], /* CommonHelper::formatOrderReturnRequestNumber($msgDetail['orrequest_id']), */
             '{message}' => nl2br($msgDetail["orrmsg_msg"]),
             '{user_full_name}' => $msgDetail["buyer_name"],
-            '{click_here}' => UrlHelper::generateFullUrl('Buyer', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']), CONF_WEBROOT_DASHBOARD),
+            '{click_here}' => UrlHelper::generateFullUrl('Buyer', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']), CONF_WEBROOT_DASHBOARD, null, false, false, false),
             '{prod_title}' => $msgDetail['op_selprod_title'],
         );
 
@@ -1806,7 +1806,7 @@ class EmailHandler extends FatModel
             if ($msgDetail['orrmsg_from_admin_id']) {
                 $arrReplacements["{username}"] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId);
             }
-            $arrReplacements['{click_here}'] = UrlHelper::generateFullUrl('Seller', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']), CONF_WEBROOT_DASHBOARD);
+            $arrReplacements['{click_here}'] = UrlHelper::generateFullUrl('Seller', 'ViewOrderReturnRequest', array($msgDetail['orrequest_id']), CONF_WEBROOT_DASHBOARD, null, false, false, false);
             /* if ($return_request['refmsg_from_type']=="U"){
               $arr_replacements["{username}"] = $return_request["message_sent_by_username"];
               } */
@@ -2259,7 +2259,7 @@ class EmailHandler extends FatModel
                 '{new_order_status}' => $statuesArr[$orderProduct["op_status_id"]],
                 '{invoice_number}' => $orderProduct["op_invoice_number"],
                 '{order_items_table_format}' => $orderItemsTableFormatHtml,
-                '{review_page_url}' => UrlHelper::generateFullUrl('Buyer', 'orderFeedback', array($orderProduct['op_id']), CONF_WEBROOT_DASHBOARD),
+                '{review_page_url}' => UrlHelper::generateFullUrl('Buyer', 'orderFeedback', array($orderProduct['op_id']), CONF_WEBROOT_DASHBOARD, null, false, false, false),
             );
 
             if (!empty($userInfo["credential_email"])) {

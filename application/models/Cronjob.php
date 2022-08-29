@@ -849,7 +849,7 @@ class Cronjob extends FatModel
         foreach ($row as $val) {
             $dialCode = !empty($row['user_phone_dcode']) ? ValidateElement::formatDialCode($row['user_phone_dcode']) : '';
             $phone = !empty($row['user_phone']) ? $row['user_phone'] : '';
-            $data = array("user_id" => $val['user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => UrlHelper::generateFullUrl('Account', 'wishlist', [], CONF_WEBROOT_DASHBOARD), 'user_phone_dcode' => $dialCode, 'user_phone' => $phone);
+            $data = array("user_id" => $val['user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => UrlHelper::generateFullUrl('Account', 'wishlist', [], CONF_WEBROOT_DASHBOARD, null, false, false, false), 'user_phone_dcode' => $dialCode, 'user_phone' => $phone);
 
             $email = new EmailHandler();
             if (!$email->remindBuyerForWishlistItems(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), $data)) {

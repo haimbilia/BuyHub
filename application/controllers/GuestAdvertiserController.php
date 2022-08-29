@@ -10,11 +10,11 @@ class GuestAdvertiserController extends MyAppController
     public function account()
     {
         if (UserAuthentication::isUserLogged() && (User::isAdvertiser() || User::isSigningUpAdvertiser())) {
-            FatApp::redirectUser(UrlHelper::generateUrl('advertiser', '', [], CONF_WEBROOT_DASHBOARD));
+            FatApp::redirectUser(UrlHelper::generateUrl('advertiser', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
         if (UserAuthentication::isUserLogged()) {
             Message::addErrorMessage(Labels::getLabel('ERR_YOU_ARE_ALREADY_LOGGED_IN._PLEASE_LOGOUT_AND_REGISTER_FOR_ADVERTISER.', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
 
         $obj = new Extrapage();
@@ -214,7 +214,7 @@ class GuestAdvertiserController extends MyAppController
             if (!$authentication->login($userdata['credential_email'], $userdata['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {
                 LibHelper::exitWithError($authentication->getError());
             }
-            $this->set('redirectUrl', UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD));
+            $this->set('redirectUrl', UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
 
         unset($_SESSION['registered_supplier']['id']);
