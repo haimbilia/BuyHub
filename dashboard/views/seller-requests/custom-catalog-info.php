@@ -46,14 +46,15 @@
                         </li>
                     <?php } ?>
                 </ul>
-                <div class="separator separator-dashed my-4"></div>
-
-                <h3 class="h3 mb-3"><?php echo Labels::getLabel('LBL_Comments', $siteLangId); ?></h3>
-                <ul class="list-stats list-stats-double">
-                    <li class="list-stats-item list-stats-item-full">
-                        <span class="lable"><?php echo $product['preq_comment']; ?></span>
-                    </li>
-                </ul>
+                <?php if (!empty($product['preq_comment'])) { ?>
+                    <div class="separator separator-dashed my-4"></div>
+                    <h3 class="h3 mb-3"><?php echo Labels::getLabel('LBL_Comments', $siteLangId); ?></h3>
+                    <ul class="list-stats list-stats-double">
+                        <li class="list-stats-item list-stats-item-full">
+                            <span class="lable"><?php echo $product['preq_comment']; ?></span>
+                        </li>
+                    </ul>
+                <?php } ?>
             </form>
         </div>
     </div>

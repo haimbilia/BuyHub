@@ -196,6 +196,9 @@ if (!empty($postList)) { ?>
                                 <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo $blogPost['post_title'] ?>
                                 </a>
                             </h2>
+                            <p class="post-description">
+                                <?php echo mb_strimwidth(strip_tags(html_entity_decode($blogPost['post_description'])), 0, 130, "..."); ?>
+                            </p>
                             <a class="post-link" href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo Labels::getLabel('LBL_READ_MORE', $siteLangId); ?></a>
                         </div>
                     </div>
