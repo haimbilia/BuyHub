@@ -10,7 +10,11 @@ if ($recordId > 0) {
 
     $fld = $frm->getField('credential_email');
     $fld->setFieldTagAttribute('disabled', 'disabled');
+    
+    $fld = $frm->getField('user_phone');
+    $fld->setFieldTagAttribute('disabled', 'disabled');
 }
+
 
 $countryFld = $frm->getField('user_country_id');
 $countryFld->setFieldTagAttribute('id', 'addrCountryIdJs');

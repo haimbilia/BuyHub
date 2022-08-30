@@ -41,7 +41,6 @@ class UserRewards extends MyAppModel
         );
         $rewardsRecord->assignValues($rewarPointArr);
         if (!$rewardsRecord->save()) {
-            //Message::addErrorMessage($rewardsRecord->getError());
             return false;
         }
 
@@ -51,7 +50,6 @@ class UserRewards extends MyAppModel
             return true;
         }
 
-        //Message::addErrorMessage($emailObj->getError());
         return false;
     }
 
