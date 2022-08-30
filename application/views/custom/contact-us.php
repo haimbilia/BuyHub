@@ -22,20 +22,9 @@ $fld->developerTags['col'] = 12;
     ykevents.contactUs();
 </script>
 <div id="body" class="body">
+    <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_GET_IN_TOUCH', $siteLangId), 'subHeadLabel' => Labels::getLabel('LBL_GET_IN_TOUCH_TXT', $siteLangId)]); ?>
     <section class="section">
         <div class="container">
-            <div class="row align-items-center justify-content-center">
-                <div class="col-md-8">
-                    <div class="section-head section-head-center">
-                        <div class="section-heading">
-                            <h1><?php echo Labels::getLabel('LBL_Get_in_Touch', $siteLangId); ?>
-                            </h1>
-                            <p><?php echo Labels::getLabel('LBL_Get_in_Touch_Txt', $siteLangId); ?>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="row justify-content-center mt-3">
                 <div class="col-xl-9">
                     <div class="row">

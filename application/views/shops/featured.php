@@ -1,15 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
 <div id="body" class="body">
+    <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_FEATURED_SHOPS')]); ?>
     <?php if ($geoLocation) { ?>
-        <section class="section pb-0">
-            <div class="container">
-                <div class="section-head section-head-center">
-                    <div class="section-heading">
-                        <h1><?php echo Labels::getLabel('Lbl_Featured_Shops', $siteLangId); ?> </h1>
-                    </div>
-                </div>
-            </div>
-        </section>
         <div class="interactive-stores">
             <div class="interactive-stores-map">
                 <div class="map-loader is-loading">
@@ -24,7 +16,6 @@
             </div>
             <div id="listing"></div>
         </div>
-
 
     <?php } else { ?>
         <section class="section">

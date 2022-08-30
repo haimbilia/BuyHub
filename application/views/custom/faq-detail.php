@@ -1,25 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div id="body" class="body">
-
-    <div class="bg-brand-light pt-3 pb-3">
-        <div class="container container--fixed">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <div class="section-head mb-0">
-                        <div class="section-heading">
-                            <h2 class="mb-0">FAQ</h2>
-                            <div class="breadcrumbs breadcrumbs--white">
-                                <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 align--right"></div>
-            </div>
-        </div>
-    </div>
-
-
+    <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_FAQ'), 'includeBreadcrumb' => true]); ?>
     <section class="section bg-white">
         <div class="container">
             <div class="row">
@@ -27,12 +8,10 @@
                     <div id="listing"></div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <h3><?php echo Labels::getLabel('LBL_Few_More_Questions', $siteLangId) ?></h3>
+                    <h3><?php echo Labels::getLabel('LBL_FEW_MORE_QUESTIONS', $siteLangId) ?></h3>
                     <div id="categoryPanel"></div>
                 </div>
             </div>
-
-
             <div class="gap"></div>
             <div class="divider"></div>
             <div class="text-center  pt-5">
@@ -43,7 +22,6 @@
 
         </div>
     </section>
-
 </div>
 <script>
     var faqcatId = '<?php echo $faqCatId ?>';

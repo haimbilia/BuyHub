@@ -1,15 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
 <div id="body" class="body">
-    <section class="section pb-0">
-        <div class="container">
-            <div class="section-head justify-content-center">
-                <div class="section-heading">
-                    <h1><?php echo Labels::getLabel('Lbl_All_Shops', $siteLangId); ?>
-                    </h1>
-                </div>
-            </div>
-        </div>
-    </section>
+    <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_ALL_SHOPS')]); ?>
     <?php if ($geoLocation) { ?>
         <div class="interactive-stores">
             <div class="interactive-stores-map">

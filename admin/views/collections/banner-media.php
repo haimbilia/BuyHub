@@ -117,7 +117,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         } else {
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['width'] .
                                                                                             " x " . $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['height']; ?>'));
-            $('input[name=min_width]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['height']; ?>');
+            $('input[name=min_width]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['width']; ?>');
             $('input[name=min_height]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['height']; ?>');
 
         }

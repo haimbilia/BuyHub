@@ -21,9 +21,12 @@
                 }
             })()
             </script>
-            <div style="font-family: Sans-Serif;font-size: 12px;color: #999;opacity: 0.5; padding-top: 5px;"> powered by
-                <a href="https://admin.typeform.com/signup?utm_campaign=NP9oQm&utm_source=typeform.com-10145801-Basic&utm_medium=typeform&utm_content=typeform-embedded-poweredbytypeform&utm_term=EN"
-                    style="color: #999" target="_blank">Typeform</a> </div>
+            <div style="font-family: Sans-Serif;font-size: 12px;color: #999;opacity: 0.5; padding-top: 5px;">
+                <?php echo Labels::getLabel('LBL_POWERED_BY'); ?>
+                <a href="https://admin.typeform.com/signup?utm_campaign=NP9oQm&utm_source=typeform.com-10145801-Basic&utm_medium=typeform&utm_content=typeform-embedded-poweredbytypeform&utm_term=EN" style="color: #999" target="_blank">
+                    <?php echo Labels::getLabel('LBL_Typeform'); ?>
+                </a> 
+            </div>
         </div>
     </section>
     <div class="gap"></div>

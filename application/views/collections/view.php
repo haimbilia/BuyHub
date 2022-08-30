@@ -1,15 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
 <div id="body" class="body">
-    <section class="bg-brand-light pt-3 pb-3">
-        <div class="container">
-            <div class="section-head justify-content-center mb-0">
-                <div class="section-heading">
-                    <h2 class="mb-0"><?php echo $collection['collection_name']; ?>
-                    </h2>
-                </div>
-            </div>
-        </div>
-    </section>
+    <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => $collection['collection_name']]); ?>
     <section class="section">
         <div class="container">
             <div id="listing"></div>

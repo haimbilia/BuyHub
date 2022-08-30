@@ -126,8 +126,7 @@ class CustomController extends MyAppController
             $contentPageSrch->addCondition('cpage_id', 'in', $cmsPagesToFaq);
             $contentPageSrch->addMultipleFields(array('cpage_id', 'cpage_identifier', 'cpage_title'));
             $contentPageSrch->doNotCalculateRecords();
-            $rs = $contentPageSrch->getResultSet();
-            $cpages = FatApp::getDb()->fetchAll($rs);
+            $cpages = FatApp::getDb()->fetchAll($contentPageSrch->getResultSet());
             $this->set('cpages', $cpages);
         }
         $this->set('siteLangId', $this->siteLangId);

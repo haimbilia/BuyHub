@@ -1182,6 +1182,7 @@ TV-9.4.0.20220825
     - #066418 - The blog description is missing on the blog listing page
     - #066463 - The 'Term & Conditions and 'Privacy Policies' links are not clickable on the signup page
     - #066465 - The user email address appears prefilled on the sign-in with the phone number field.
+    - #066409 - The page heading is missing on some pages.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
