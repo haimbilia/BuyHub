@@ -1185,6 +1185,7 @@ TV-9.4.0.20220825
     - #066409 - The page heading is missing on some pages.
     - #066438 - Suggestion: To add the sign-in button on the registration successful page
     - #066387 - Multiple UI issues on the shops listing page on mobile devices
+    - #066492 - Inconsistency issue in the 'Display time slots after order [Hours]' fields on the admin and seller end.
 
 ## UAT points:
 

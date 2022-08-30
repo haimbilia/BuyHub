@@ -3640,9 +3640,8 @@ class SellerController extends SellerBaseController
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
 
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_DISPLAY_TIME_SLOTS_AFTER_ORDER', $this->siteLangId) . ' [' . Labels::getLabel('FRM_HOURS', $this->siteLangId) . ']', 'shop_pickup_interval');
-        $fld->requirements()->setInt();
-        $fld->requirements()->setPositive();
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_DISPLAY_TIME_SLOTS_AFTER_ORDER', $this->siteLangId) . ' [' . Labels::getLabel('FRM_HOURS', $this->siteLangId) . ']', 'shop_pickup_interval', 2);
+        $fld->requirements()->setRange('2', '9999999999');
 
         $shopDetails = Shop::getAttributesByUserId(UserAuthentication::getLoggedUserId(), null, false);
         $address = new Address(0, $this->siteLangId);
