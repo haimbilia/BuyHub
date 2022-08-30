@@ -1,52 +1,53 @@
 <div id="body" class="body">
     <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_SHOP_BY_CATEGORIES')]); ?>
     <section class="section">
-        <div class="category-layout-2 category-layout-page">
-            <?php foreach ($categoriesArr as $category) {  ?>
-                <div class="category">
-                    <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $category['prodcat_id']);
-                    $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
-                    ?>
-                    <div class="category-head">
-                        <?php
-                        $pictureAttr = [
-                            'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'WEBP' . ImageDimension::VIEW_MEDIUM, 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
-                            'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, ImageDimension::VIEW_MEDIUM, 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
-                            'ratio' => '4:1',
-                            'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, ImageDimension::VIEW_MEDIUM, 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
-                            'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $category['prodcat_name'],
-                            'title' => (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $category['prodcat_name'],
-                            'siteLangId' => $siteLangId,
-                        ];
-
-                        $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+        <div class="container">
+            <div class="category-layout-2 category-layout-page">
+                <?php foreach ($categoriesArr as $category) {  ?>
+                    <div class="category">
+                        <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $category['prodcat_id']);
+                        $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
                         ?>
-                    </div>
+                        <div class="category-head">
+                            <?php
+                            $pictureAttr = [
+                                'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'WEBP' . ImageDimension::VIEW_MEDIUM, 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
+                                'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, ImageDimension::VIEW_MEDIUM, 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
+                                'ratio' => '4:1',
+                                'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, ImageDimension::VIEW_MEDIUM, 0, applicationConstants::SCREEN_DESKTOP, true)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $category['prodcat_name'],
+                                'title' => (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $category['prodcat_name'],
+                                'siteLangId' => $siteLangId,
+                            ];
 
-                    <div class="category-body">
-                        <ul class="category-list">
-                            <li class="category-list-item category-list-head">
-                                <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($category['prodcat_id'])); ?>">
-                                    <?php echo $category['prodcat_name']; ?>
-                                </a>
-                            </li>
-                            <?php
-                            if (array_key_exists('children', $category) && 0 < count($category['children'])) {
-                                foreach ($category['children'] as $subCat) { ?>
-                                    <li class="category-list-item">
-                                        <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($subCat['prodcat_id'])); ?>">
-                                            <?php echo $subCat['prodcat_name']; ?></a>
-                                    </li>
-                            <?php
-                                }
-                            } ?>
-                        </ul>
+                            $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                            ?>
+                        </div>
+
+                        <div class="category-body">
+                            <ul class="category-list">
+                                <li class="category-list-item category-list-head">
+                                    <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($category['prodcat_id'])); ?>">
+                                        <?php echo $category['prodcat_name']; ?>
+                                    </a>
+                                </li>
+                                <?php
+                                if (array_key_exists('children', $category) && 0 < count($category['children'])) {
+                                    foreach ($category['children'] as $subCat) { ?>
+                                        <li class="category-list-item">
+                                            <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($subCat['prodcat_id'])); ?>">
+                                                <?php echo $subCat['prodcat_name']; ?></a>
+                                        </li>
+                                <?php
+                                    }
+                                } ?>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            <?php } ?>
+                <?php } ?>
+            </div>
         </div>
-</div>
-</section>
+    </section>
 </div>
 <script>
     $(function() {
