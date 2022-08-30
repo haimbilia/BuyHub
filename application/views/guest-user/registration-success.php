@@ -10,10 +10,11 @@
                             <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"></path>
                         </svg>
                     </div>
-
                     <h2><?php echo Labels::getLabel('MSG_Congratulations', $siteLangId); ?></h2>
-
                     <p><?php echo $registrationMsg; ?> </p>
+                    <button class="btn btn-secondary btn-wide mt-4 sign-in-popup-js">
+                        <?php echo Labels::getLabel('MSG_LOG_IN_TO_YOUR_ACCOUNT', $siteLangId); ?>
+                    </button>
                 </div>
             </div>
         </div>
