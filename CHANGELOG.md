@@ -1188,6 +1188,8 @@ TV-9.4.0.20220825
     - #066492 - Inconsistency issue in the 'Display time slots after order [Hours]' fields on the admin and seller end.
     - #066491 - The success message appears when the user clicks on the 'Move to Wishlist' button on the cart page without login. 
     - #066490 - The navigation on the top of the product details page gets disappeared for the product which is available from any future date
+    - #066489 - Admin is not able to edit the email if of the user but not the phone number of the user.
+    - #066488 - No option or button is available to remove the applied rewards points if the user applied all the available rewards points.
 
 ## UAT points:
 

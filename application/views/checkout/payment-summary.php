@@ -70,7 +70,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
             </ul>
         <?php } ?>
 
-        <?php if ($rewardPointBalance > 0) { ?>
+        <?php if ($rewardPointBalance > 0 || 0 < $cartSummary['cartRewardPoints']) { ?>
             <div class="step_section">
                 <div class="step_head">
                     <h5 class="step_title"><?php echo Labels::getLabel('LBL_REWARD_POINTS', $siteLangId); ?></h5>
