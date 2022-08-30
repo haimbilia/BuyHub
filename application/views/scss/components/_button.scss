@@ -168,7 +168,7 @@ $btn-line-height: $btn-height;
 button:focus,
 .btn:focus {
     outline: none;
-    box-shadow: none !important;
+    box-shadow: none;
 }
 
 a.link {

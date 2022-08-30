@@ -1,10 +1,11 @@
 .cart-page {
     display: grid;
     grid-gap: 2rem;
-    padding: 3rem 0;
+    padding: 1rem 0;
     @include media-breakpoint-up(xl) {
         grid-template-columns: 2fr 1fr;
         grid-gap: 6rem;
+        padding: 3rem 0;
     }
     &-head {
         display: flex;
@@ -112,14 +113,13 @@
     }
     &_main {
         padding: 0;
-        margin-bottom: 2rem;
         @include media-breakpoint-up(lg) {
             margin-bottom: 0;
         }
     }
     &_aside {
         flex: 1;
-        margin-bottom: 2rem;
+
         @include media-breakpoint-up(lg) {
             margin-bottom: 0;
         }
@@ -462,9 +462,11 @@
         margin: 0 auto;
         text-align: center;
         position: relative;
-        flex: 0 0 clamp(80px, 130px, 150px);
-        max-width: clamp(80px, 130px, 150px);
+        flex: 0 0 80px;
+        max-width: 80px;
         @include media-breakpoint-up(lg) {
+            flex: 0 0 130px;
+            max-width: 130px;
         }
         .products-img {
             margin-bottom: 0;
