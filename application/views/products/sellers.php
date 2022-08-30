@@ -5,6 +5,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
 }
 ?>
 <div id="body" class="body">
+<?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel("LBL_PRODUCT'S_SELLERS")]); ?>
     <section class="section">
         <div class="container">
             <div class="grid-layout">

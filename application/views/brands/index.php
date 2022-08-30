@@ -1,22 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');  ?>
 
 <div id="body" class="body">
-    <div class="bg-brand-light pt-3 pb-3">
-        <div class="container">
-            <div class="row align-items-center justify-content-center">
-                <div class="col-md-8">
-                    <div class="section-head justify-content-center mb-0">
-                        <div class="section-heading">
-                            <h2><?php echo Labels::getLabel('LBL_All_Top_Brands', $siteLangId); ?></h2>
-                            <div class="breadcrumb  breadcrumb-center">
-                                <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_ALL_TOP_BRANDS'), 'includeBreadcrumb' => true]); ?>
     <section class="section">
         <div class="container">
             <div class="row">
@@ -25,12 +10,6 @@
                         <?php if (!empty($allBrands)) {
                             $firstCharacter = '';
                             foreach ($allBrands as $brands) {
-                                /* if($layoutDirection == 'rtl'){
-
-							$str = substr(strtolower($brands['brand_name']), -1);
-						}else{
-							$str = substr(strtolower($brands['brand_name']), 0, 1);
-						} */
                                 $str = substr(strtolower(trim($brands['brand_name'])), 0, 1);
 
                                 if (is_numeric($str)) {
@@ -41,19 +20,18 @@
                                     if ($firstCharacter != '') {
                                         echo "</ul></div>";
                                     }
-                                    $firstCharacter = $str;
-                        ?>
+                                    $firstCharacter = $str; ?>
                                     <div class="item">
                                         <h6 class="big-title"><?php echo $firstCharacter; ?></h6>
                                         <ul>
-                                        <?php } ?>
-                                        <li><a href="<?php echo UrlHelper::generateUrl('Brands', 'view', array($brands['brand_id'])); ?>"><?php echo $brands['brand_name']; ?></a>
-                                        </li>
-                                    <?php } ?>
+                                <?php } ?>
+                                            <li>
+                                                <a href="<?php echo UrlHelper::generateUrl('Brands', 'view', array($brands['brand_id'])); ?>"><?php echo $brands['brand_name']; ?></a>
+                                            </li>
+                            <?php } ?>
                                         </ul>
                                     </div>
-                                <?php } ?>
-
+                        <?php } ?>
                     </div>
                 </div>
             </div>

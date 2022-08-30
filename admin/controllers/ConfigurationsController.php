@@ -1513,18 +1513,19 @@ class ConfigurationsController extends ListingBaseController
 
                 $frm->addSelectBox(Labels::getLabel('FRM_DATE_FORMAT', $langId), 'CONF_DATE_FORMAT', Configurations::dateFormatPhpArr(), false, array(), '');
 
-                $fld = $frm->addCheckBox(Labels::getLabel("FRM_HEADER_MEGA_MENU", $langId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
-                HtmlHelper::configureSwitchForCheckbox($fld);
-                $fld = $frm->addCheckBox(Labels::getLabel("FRM_HOME_PAGE_LOADER", $langId), 'CONF_LOADER', 1, array(), false, 0);
-                HtmlHelper::configureSwitchForCheckbox($fld);
+                $fld = $frm->addTextBox(Labels::getLabel('FRM_TIME_FOR_AUTO_CLOSE_MESSAGES', $langId), 'CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES');
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_NOTE:_After_how_much_seconds_system_message_should_be_close", $langId) . '.</span>';
+                $fld->requirements()->setInt();
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_AUTO_CLOSE_SYSTEM_MESSAGES", $langId), 'CONF_AUTO_CLOSE_SYSTEM_MESSAGES', applicationConstants::YES, array(), false, applicationConstants::NO);
                 HtmlHelper::configureSwitchForCheckbox($fld);
                 $fld->addFieldTagAttribute("onchange", "changedMessageAutoCloseSetting(this.value);");
 
-                $fld = $frm->addTextBox(Labels::getLabel('FRM_TIME_FOR_AUTO_CLOSE_MESSAGES', $langId), 'CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES');
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_NOTE:_After_how_much_seconds_system_message_should_be_close", $langId) . '.</span>';
-                $fld->requirements()->setInt();
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_HOME_PAGE_LOADER", $langId), 'CONF_LOADER', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_HEADER_MEGA_MENU", $langId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_MAINTENANCE_TEXT', $this->siteLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];

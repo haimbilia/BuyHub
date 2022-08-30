@@ -1,23 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div id="body" class="body">
-
-    <div class="bg-brand-light pt-3 pb-3">
-        <div class="container">
-            <div class="row align-items-center justify-content-center">
-                <div class="col-md-12">
-                    <div class="section-head section-head-center mb-0">
-                        <div class="section-heading">
-                            <h1><?php echo Labels::getLabel('Lbl_Testimonials', $siteLangId); ?></h1>
-                            <div class="breadcrumb breadcrumb-center">
-                                <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
+    <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_TESTIMONIALS'), 'includeBreadcrumb' => true]); ?>
     <section class="section">
         <div class="container">
             <div class="cms">
@@ -27,5 +10,4 @@
             </div>
         </div>
     </section>
-
 </div>

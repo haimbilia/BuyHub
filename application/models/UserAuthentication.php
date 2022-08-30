@@ -312,9 +312,7 @@ class UserAuthentication extends FatModel
             $condition = $userSrch->addCondition('credential_username', '=', $username);
             $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $username, 'OR', true);
             $userSrch->doNotCalculateRecords();
-            $userRs = $userSrch->getResultSet();
-            // echo $userSrch->getQuery();
-            if ($row = $db->fetch($userRs)) {
+            if ($row = $db->fetch($userSrch->getResultSet())) {
                 $email = new EmailHandler();
                 $email->failedLoginAttempt(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), $row);
             }
@@ -355,9 +353,7 @@ class UserAuthentication extends FatModel
             }
         }
 
-        $rs = $srch->getResultSet();
-
-        if (!$row = $db->fetch($rs)) {
+        if (!$row = $db->fetch($srch->getResultSet())) {
             $this->error = Labels::getLabel('ERR_INVALID_USER_NAME_OR_PASSWORD', $this->commonLangId);
             if ($withPhone) {
                 $this->error = Labels::getLabel('ERR_INVALID_OTP', $this->commonLangId);
@@ -367,7 +363,6 @@ class UserAuthentication extends FatModel
 
         /* [To Do - need to remove credential_password_old in next release */
         if (false === $this->loginWithOtp && false === $this->loginWithSocialAccount) {
-
             if ($row['credential_verified'] == applicationConstants::YES  && !$isAdmin) {
                 if (empty($row['credential_password'])) {
                     ///Forced user to update password

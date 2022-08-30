@@ -1,14 +1,7 @@
 <div id="body" class="body">
-
-
+    <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_SHOP_BY_CATEGORIES')]); ?>
     <section class="section">
         <div class="container">
-            <div class="section-head">
-                <div class="section-heading">
-                    <h2><?php echo Labels::getLabel('LBL_Shop_By_Categories', $siteLangId); ?></h2>
-                </div>
-            </div>
-
             <div class="category-layout-2 category-layout-page">
                 <?php foreach ($categoriesArr as $category) {  ?>
                     <div class="category">

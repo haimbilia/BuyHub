@@ -1182,6 +1182,13 @@ TV-9.4.0.20220825
     - #066418 - The blog description is missing on the blog listing page
     - #066463 - The 'Term & Conditions and 'Privacy Policies' links are not clickable on the signup page
     - #066465 - The user email address appears prefilled on the sign-in with the phone number field.
+    - #066409 - The page heading is missing on some pages.
+    - #066438 - Suggestion: To add the sign-in button on the registration successful page
+    - #066387 - Multiple UI issues on the shops listing page on mobile devices
+    - #066492 - Inconsistency issue in the 'Display time slots after order [Hours]' fields on the admin and seller end.
+    - #066491 - The success message appears when the user clicks on the 'Move to Wishlist' button on the cart page without login. 
+    - #066490 - The navigation on the top of the product details page gets disappeared for the product which is available from any future date
+
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last

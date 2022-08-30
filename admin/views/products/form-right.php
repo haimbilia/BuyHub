@@ -96,10 +96,9 @@
         </div>
         <div class="card-table p-0 show" id="stock-block1">
             <?php
-                if ($hasInventory) {
-                    echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_INVENTORY_ALREADY_ADDED_FOR_THESE_OPTIONS'));
-                }
-            ?>
+            if (0 < $recordId) {
+                echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_IF_INVENTORY_IS_ALREADY_ADDED_THEN_YOU_CANNOT_BIND_FURTHER_OPTIONS.'));
+            } ?>
             <div class="table-responsive table-scrollable js-scrollable">
                 <table class="table table-variants" id="variantsJs">
                     <thead class="tableHeadJs">
@@ -180,7 +179,7 @@
                             <strong> <?php echo Labels::getLabel('LBL_UPLOAD_IMAGES(S)', $langId); ?></strong>
                             <span class="text-muted form-text"><?php echo Labels::getLabel('MSG_PNG,JPEG_ACCEPTED', $langId); ?></span></button></li>
                 </ul>
-                
+
                 <div class="form-text text-muted pt-2"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $imgFrm->getField('min_width')->value . ' x ' . $imgFrm->getField('min_height')->value); ?></div>
             </div>
         </div>

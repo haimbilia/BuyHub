@@ -1,15 +1,7 @@
 <div id="body" class="body">
-
+    <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_SITEMAP'), 'includeBreadcrumb' => true]); ?>
     <section class="section">
         <div class="container">
-            <div class="section-head section-head-center">
-                <div class="section-heading">
-                    <h2 class="mb-0"><?php echo Labels::getLabel('LBL_SITEMAP', $siteLangId); ?></h2>
-                    <div class="breadcrumb">
-                        <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
-                    </div>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-lg-12 ">
                     <div class="cg-main">
@@ -17,7 +9,6 @@
                             <h6 class="big-title">
                                 <?php echo Labels::getLabel('LBL_CONTENT_PAGES', $siteLangId); ?>
                             </h6>
-
                             <div class="item">
                                 <ul>
                                     <?php
@@ -29,33 +20,22 @@
                                         </li>
                                     <?php } ?>
                                 </ul>
-
                             </div>
-
                         <?php
                         }
-                        if ($categoriesArr) {
-                        ?>
-
+                        if ($categoriesArr) { ?>
                             <h6 class="big-title">
                                 <?php echo Labels::getLabel('LBL_Categories', $siteLangId); ?>
                             </h6>
-
                             <div class="item">
                                 <?php $this->includeTemplate('_partial/custom/categories-list.php', array('categoriesArr' => $categoriesArr), false); ?>
-
                             </div>
-
-
                         <?php
-
                         }
                         if (!empty($allShops)) { ?>
-
                             <h6 class="big-title">
                                 <?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?>
                             </h6>
-
                             <div class="item ">
                                 <ul>
                                     <?php foreach ($allShops as $shop) {
@@ -68,17 +48,13 @@
                                     <?php } ?>
                                 </ul>
                             </div>
-
-
                         <?php
                         }
 
                         if (!empty($allBrands)) { ?>
-
                             <h6 class="big-title">
                                 <?php echo Labels::getLabel('LBL_Brands', $siteLangId); ?>
                             </h6>
-
                             <div class="item ">
                                 <ul>
                                     <?php foreach ($allBrands as $brands) {
@@ -91,18 +67,12 @@
                                     <?php } ?>
                                 </ul>
                             </div>
-
-
                         <?php
                         }
                         ?>
                     </div>
-
                 </div>
             </div>
         </div>
-
-
     </section>
-
 </div>

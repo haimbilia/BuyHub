@@ -25,13 +25,18 @@ class Notification extends MyAppModel
 
     public const NEW_USER_REGISTERATION_NOTIFICATION = 1;
     public const NEW_SUPPLIER_REGISTERATION_NOTIFICATION = 2;
+    public const GUEST_AFFILIATE_REGISTERATION = 3;
+    public const GUEST_ADVERTISER_REGISTERATION = 4;
     public const NEW_CATALOG_REQUEST_NOTIFICATION = 5;
+    public const SUPPLIER_APPROVAL = 6;
     public const BRAND_REQUEST_NOTIFICATION = 7;
     public const NEW_ORDER_STATUS_NOTIFICATION = 8;
     public const ORDER_CANCELLATION_NOTIFICATION = 9;
     public const ORDER_RETURNED_NOTIFICATION = 10;
     public const ORDER_RETURNED_REQUEST_NOTIFICATION = 11;
     public const CATALOG_REQUEST_MESSAGE_NOTIFICATION = 12;
+    public const RETURN_REQUEST_STATUS_CHANGE_NOTIFICATION = 13;
+    /*public const NOTIFICATION_ABUSIVE_WORD = 15;*/
     public const NEW_SUBSCRIPTION_PURCHASE_NOTIFICATION = 16;
     public const ABUSIVE_REVIEW_POSTED_NOTIFICATION = 17;
     public const ORDER_RETURNED_REQUEST_MESSAGE_NOTIFICATION = 18;
@@ -49,12 +54,6 @@ class Notification extends MyAppModel
     public const BLOG_CONTRIBUTION_NOTIFICATION = 30;
     public const PRODUCT_CATEGORY_REQUEST_NOTIFICATION = 31;
     public const ORDER_PAYMENT_TRANSFERRED_TO_BANK = 32;
-
-    public const GUEST_AFFILIATE_REGISTERATION = 3;
-    public const GUEST_ADVISER_REGISTERATION = 4;
-    public const SUPPLIER_APPROVAL = 6;
-    public const RETURN_REQUEST_STATUS_CHANGE_NOTIFICATION = 13;
-    /*public const NOTIFICATION_ABUSIVE_WORD = 15;*/
 
 
 
@@ -82,8 +81,8 @@ class Notification extends MyAppModel
         $labelArr = array(
             Notification::NEW_USER_REGISTERATION_NOTIFICATION => array(Labels::getLabel('LBL_USER_REGISTRATION_NOTIFICATION', $langId), 'users'),
             Notification::NEW_SUPPLIER_REGISTERATION_NOTIFICATION => array(Labels::getLabel('LBL_SUPPLIER_REGISTRATION_NOTIFICATION', $langId), 'users'),
-            Notification::GUEST_AFFILIATE_REGISTERATION => array(Labels::getLabel('LBL_ADVISER_REGISTRATION_NOTIFICATION', $langId), 'users'),
-            Notification::GUEST_ADVISER_REGISTERATION => array(Labels::getLabel('LBL_USER_ORDER_PLACED_NOTIFICATION', $langId), 'orders'),
+            Notification::GUEST_AFFILIATE_REGISTERATION => array(Labels::getLabel('LBL_AFFILIATE_REGISTRATION_NOTIFICATION', $langId), 'users'),
+            Notification::GUEST_ADVERTISER_REGISTERATION => array(Labels::getLabel('LBL_ADVERTISER_REGISTRATION_NOTIFICATION', $langId), 'orders'),
             Notification::NEW_CATALOG_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_CATALOG_REQUEST_NOTIFICATION', $langId), 'products'),
             Notification::BRAND_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_SELLER_BRAND_REQUEST_NOTIFICATION', $langId), $brandRequestUrl),
             Notification::NEW_ORDER_STATUS_NOTIFICATION => array(Labels::getLabel('LBL_USER_ORDER_STATUS_NOTIFICATION', $langId), 'orders'),
