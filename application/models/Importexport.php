@@ -2429,7 +2429,7 @@ class Importexport extends ImportexportCommon
                         } else {
                             if (Product::hasInventory($productId)) {
                                 $errorInRow = true;
-                                CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), Labels::getLabel("ERR_INVENTORY_ALREADY_ADDED_FOR_THESE_OPTIONS.", $langId)));
+                                CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), Labels::getLabel("ERR_INVENTORY_ALREADY_ADDED_FOR_THIS_PRODUCT.", $langId)));
                             }
                         }
                     }
@@ -3678,7 +3678,7 @@ class Importexport extends ImportexportCommon
                         $sellerProduct = FatApp::getDb()->fetch($rs);
 
                         if (!empty($sellerProduct['selprod_id']) && $sellerProduct['selprod_id'] != $selprodId && empty($sellerProduct['prodoption_option_id'])) {
-                            $errMsg = Labels::getLabel("ERR_INVENTORY_ALREADY_ADDED", $langId);
+                            $errMsg = Labels::getLabel("ERR_INVENTORY_ALREADY_ADDED_FOR_THIS_PRODUCT.", $langId);
                             $invalid = true;
                         }
                     }

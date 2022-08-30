@@ -121,9 +121,9 @@ if (0 < $recordId) {
                     </div>
                     <div class="collapse" id="stock-block1">
                         <div class="card-body  p-0">
-                            <?php
-                            if ($hasInventory) {
-                                echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_INVENTORY_ALREADY_ADDED_FOR_THESE_OPTIONS'));
+                            <?php 
+                            if (0 < $recordId) {
+                                echo HtmlHelper::getErrorMessageHtml(Labels::getLabel("ERR_IF_INVENTORY_IS_ALREADY_ADDED_THEN_YOU_CANNOT_BIND_FURTHER_OPTIONS.")); 
                             }
                             ?>
                             <div class="js-scrollable table-wrap table-responsive">
