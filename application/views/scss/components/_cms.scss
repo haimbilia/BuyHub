@@ -390,8 +390,9 @@
         padding-#{$end-direction}: 1rem;
         a {
             color: inherit;
+            text-decoration: underline;
             &:hover {
-                color: inherit;
+                color: $brand-color;
                 text-decoration: underline;
             }
         }

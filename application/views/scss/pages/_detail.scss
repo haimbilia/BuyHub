@@ -349,9 +349,8 @@ $sharing-height: 50px;
     }
 }
 .specification-group {
-    margin: 2rem 0;
+    margin: 3rem 0;
     h6 {
-        text-decoration: underline;
         text-transform: uppercase;
         margin-bottom: 1rem;
         font-weight: 600;
@@ -368,14 +367,14 @@ $sharing-height: 50px;
     &-item {
         list-style: none;
         margin: 0;
-        padding: 2rem 0;
+        padding: 1rem 0;
         display: flex;
         font-size: 0.85rem;
         color: $txt-gray;
         border-bottom: dashed 1px $border-color;
         &:first-child {
             border-top: none;
-            padding-top: 0;
+            // padding-top: 0;
         }
         &:last-child {
             border-bottom: none;
@@ -385,7 +384,7 @@ $sharing-height: 50px;
         .label {
             white-space: normal;
             padding: 0;
-            padding-#{$end-direction}: 1rem;
+            padding-#{$end-direction}: 1rem; 
             margin: 0;
             flex: 0 0 30%;
             max-width: 30%;
