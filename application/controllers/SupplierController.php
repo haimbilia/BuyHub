@@ -10,17 +10,17 @@ class SupplierController extends MyAppController
     public function index()
     {
         if (UserAuthentication::isUserLogged() && (User::isSeller() || User::isSigningUpForSeller())) {
-            FatApp::redirectUser(UrlHelper::generateUrl('seller', '', [], CONF_WEBROOT_DASHBOARD));
+            FatApp::redirectUser(UrlHelper::generateUrl('seller', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
         if (isset($_SESSION['registered_supplier']['id'])) {
             FatApp::redirectUser(UrlHelper::generateUrl('supplier', 'account'));
         }
         if (UserAuthentication::isUserLogged()) {
             if (User::canViewSupplierTab()) {
-                FatApp::redirectUser(UrlHelper::generateUrl('account', 'supplierApprovalForm', [], CONF_WEBROOT_DASHBOARD));
+                FatApp::redirectUser(UrlHelper::generateUrl('account', 'supplierApprovalForm', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
             }
             Message::addErrorMessage(Labels::getLabel('ERR_YOU_ARE_ALREADY_LOGGED_IN._PLEASE_LOGOUT_AND_REGISTER_FOR_SELLER.', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
         if (!FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) {
             FatApp::redirectUser(UrlHelper::generateUrl('guest-user', 'login-form', array(applicationConstants::YES)));
@@ -68,7 +68,7 @@ class SupplierController extends MyAppController
     public function account()
     {
         if (UserAuthentication::isUserLogged()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
         if (!FatApp::getConfig("CONF_ACTIVATE_SEPARATE_SIGNUP_FORM", FatUtility::VAR_INT, 1)) {
             FatApp::redirectUser(UrlHelper::generateUrl('guest-user', 'registration-form'));

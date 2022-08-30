@@ -1181,7 +1181,7 @@ TV-9.4.0.20220825
     - #066457 - The blank spacing appears under the comments section if no comments are added by the admin for the master product request status change
     - #066418 - The blog description is missing on the blog listing page
     - #066463 - The 'Term & Conditions and 'Privacy Policies' links are not clickable on the signup page
-
+    - #066465 - The user email address appears prefilled on the sign-in with the phone number field.
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
@@ -1204,7 +1204,7 @@ TV-9.4.0.20220825
 ```sh 
 TV-9.4.0.20220406
 ```
-
+    
 ## Known Issues and Problems :
 
     - #82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

@@ -49,9 +49,9 @@ $html = '<div class="modal-header"><h5 class="modal-title">Yo!kart</h5></div><di
             showRestorePopup();
             restoreSystem();
         }
-        
+
         if (1 > hours && 5 >= minutes && 1 > $('.timerSectionCloneJs').length) {
-            $($('.timerSectionJs')[0].outerHTML).addClass('timerSectionClone timerSectionCloneJs').insertAfter('.restoreBtnJs')
+            $($('.timerSectionJs')[0].outerHTML).addClass('demo-restore-clone timerSectionCloneJs').insertAfter('.restoreBtnJs');
         }
 
     }, 1000);

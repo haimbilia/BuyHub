@@ -478,7 +478,7 @@ class CustomController extends MyAppController
             $cartObj->updateUserCart(); */
         }
         if (isset($_SESSION['order_type']) && $_SESSION['order_type'] == Orders::ORDER_SUBSCRIPTION) {
-            FatApp::redirectUser(UrlHelper::generateFullUrl('SubscriptionCheckout', '', [], CONF_WEBROOT_DASHBOARD));
+            FatApp::redirectUser(UrlHelper::generateFullUrl('SubscriptionCheckout', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
 
         FatApp::redirectUser(UrlHelper::generateFullUrl('Checkout'));
@@ -566,15 +566,15 @@ class CustomController extends MyAppController
             }
         } elseif ($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             $searchReplaceArray = array(
-                '{account}' => '<a href="' . UrlHelper::generateUrl('seller', '', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
-                '{subscription}' => '<a href="' . UrlHelper::generateUrl('seller', 'subscriptions', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_MY_SUBSCRIPTION', $this->siteLangId) . '</a>',
+                '{account}' => '<a href="' . UrlHelper::generateUrl('seller', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false) . '" class="link">' . Labels::getLabel('MSG_My_Account', $this->siteLangId) . '</a>',
+                '{subscription}' => '<a href="' . UrlHelper::generateUrl('seller', 'subscriptions', [], CONF_WEBROOT_DASHBOARD, null, false, false, false) . '" class="link">' . Labels::getLabel('MSG_MY_SUBSCRIPTION', $this->siteLangId) . '</a>',
             );
             $textMessage = Labels::getLabel('MSG_SUBSCRIPTION_SUCCESS_ORDER_{account}_{subscription}', $this->siteLangId);
             $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);
         } elseif ($orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
             $searchReplaceArray = array(
-                '{account}' => '<a href="' . UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_MY_ACCOUNT', $this->siteLangId) . '</a>',
-                '{credits}' => '<a href="' . UrlHelper::generateUrl('account', 'credits', [], CONF_WEBROOT_DASHBOARD) . '" class="link">' . Labels::getLabel('MSG_MY_CREDITS', $this->siteLangId) . '</a>',
+                '{account}' => '<a href="' . UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false) . '" class="link">' . Labels::getLabel('MSG_MY_ACCOUNT', $this->siteLangId) . '</a>',
+                '{credits}' => '<a href="' . UrlHelper::generateUrl('account', 'credits', [], CONF_WEBROOT_DASHBOARD, null, false, false, false) . '" class="link">' . Labels::getLabel('MSG_MY_CREDITS', $this->siteLangId) . '</a>',
             );
             $textMessage = Labels::getLabel('MSG_WALLET_SUCCESS_ORDER_{account}_{credits}', $this->siteLangId);
             $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);

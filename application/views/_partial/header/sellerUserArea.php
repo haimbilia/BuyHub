@@ -16,7 +16,7 @@ $userPrivilege = UserPrivilege::getInstance();
 if ($userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true)) {
 ?>
     <li class="<?php echo $liClass; ?>">
-        <a class="<?php echo $aClass; ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'Sales', [], CONF_WEBROOT_DASHBOARD); ?>"><?php echo Labels::getLabel("LBL_Sales", $siteLangId); ?><?php echo $html; ?></a>
+        <a class="<?php echo $aClass; ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'Sales', [], CONF_WEBROOT_DASHBOARD, null, false, false, false); ?>"><?php echo Labels::getLabel("LBL_Sales", $siteLangId); ?><?php echo $html; ?></a>
     </li>
 <?php
 }
@@ -24,7 +24,7 @@ if ($userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true)) {
 
 <?php if ($userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) { ?>
     <li class="<?php echo $liClass; ?>">
-        <a class="<?php echo $aClass; ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'products', [], CONF_WEBROOT_DASHBOARD); ?>"><?php echo Labels::getLabel('LBL_Shop_Inventory', $siteLangId); ?><?php echo $html; ?></a>
+        <a class="<?php echo $aClass; ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'products', [], CONF_WEBROOT_DASHBOARD, null, false, false, false); ?>"><?php echo Labels::getLabel('LBL_Shop_Inventory', $siteLangId); ?><?php echo $html; ?></a>
     </li>
 
 <?php } ?>

@@ -392,6 +392,9 @@ $blog-header-height: 58px;
             background-color: $bg-gray;
             padding: 3rem;
         }
+        &-title {
+            flex: 0;
+        }
     }
 }
 .collection-2 {

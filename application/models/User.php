@@ -479,19 +479,19 @@ class User extends MyAppModel
     {
         switch ($preferredDashboard) {
             case User::USER_BUYER_DASHBOARD:
-                return UrlHelper::generateFullUrl('buyer', '', [], CONF_WEBROOT_DASHBOARD);
+                return UrlHelper::generateFullUrl('buyer', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
                 break;
             case User::USER_SELLER_DASHBOARD:
-                return UrlHelper::generateFullUrl('seller', '', [], CONF_WEBROOT_DASHBOARD);
+                return UrlHelper::generateFullUrl('seller', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
                 break;
             case User::USER_ADVERTISER_DASHBOARD:
-                return UrlHelper::generateFullUrl('advertiser', '', [], CONF_WEBROOT_DASHBOARD);
+                return UrlHelper::generateFullUrl('advertiser', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
                 break;
             case User::USER_AFFILIATE_DASHBOARD:
-                return UrlHelper::generateFullUrl('affiliate', '', [], CONF_WEBROOT_DASHBOARD);
+                return UrlHelper::generateFullUrl('affiliate', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
                 break;
         }
-        return UrlHelper::generateFullUrl('account', '', [], CONF_WEBROOT_DASHBOARD);
+        return UrlHelper::generateFullUrl('account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
     }
 
     public static function getSupplierReqStatusArr($langId)

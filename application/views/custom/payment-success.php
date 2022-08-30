@@ -29,14 +29,14 @@ $products = $orderInfo['orderProducts'];
                                 <?php
                                 if (Orders::ORDER_PRODUCT == $orderInfo['order_type']) {
                                     $msg = Labels::getLabel('LBL_YOUR_ORDER_{ORDER-ID}_HAS_BEEN_PLACED!', $siteLangId);
-                                    $orderDetailUrl = UrlHelper::generateUrl('Buyer', 'viewOrder', array($orderInfo['order_id']), CONF_WEBROOT_DASHBOARD);
+                                    $orderDetailUrl = UrlHelper::generateUrl('Buyer', 'viewOrder', array($orderInfo['order_id']), CONF_WEBROOT_DASHBOARD, null, false, false, false);
                                     $orderDetailLinkHtml = '<a href="' . $orderDetailUrl . '" class="link-underline">#' . $orderInfo['order_number'] . '</a>';
                                 } else {
                                     $msg = Labels::getLabel('LBL_ORDER_#{ORDER-ID}_TRANSACTION_COMPLETED!', $siteLangId);
                                     $orderDetailLinkHtml = $orderInfo['order_number'];
                                     if (array_key_exists('orderProducts', $orderInfo) && !empty($orderInfo['orderProducts'])) {
                                         $orderProducts = current($orderInfo['orderProducts']);
-                                        $orderDetailUrl = UrlHelper::generateUrl('Seller', 'viewSubscriptionOrder', array($orderProducts['ossubs_id']), CONF_WEBROOT_DASHBOARD);
+                                        $orderDetailUrl = UrlHelper::generateUrl('Seller', 'viewSubscriptionOrder', array($orderProducts['ossubs_id']), CONF_WEBROOT_DASHBOARD, null, false, false, false);
                                         if (isset($orderProducts['ossubs_id'])) {
                                             $orderDetailLinkHtml = '<a href="' . $orderDetailUrl . '">' . $orderInfo['order_number'] . '</a>';
                                         }

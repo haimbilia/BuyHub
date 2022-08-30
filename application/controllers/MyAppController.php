@@ -381,7 +381,7 @@ class MyAppController extends FatController
         $userName = '';
         $pass = '';
         if (CommonHelper::demoUrl()) {
-            $userName = 'login@dummyid.com';
+            $userName = (false === $signInWithPhone) ? 'login@dummyid.com' : '';
             $pass = 'kanwar@123';
         }
 

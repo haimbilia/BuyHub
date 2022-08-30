@@ -12,7 +12,7 @@
 //@import "layout/mega-nav";
 @import "layout/footer";
 //
-@import "components/demo";
+
 @import "components/main-search";
 @import "components/carousels";
 @import "components/accordion";
@@ -29,7 +29,6 @@
 @import "components/section";
 //@import "components/cms";
 @import "components/cookies";
-
 @import "components/no-data";
 @import "components/dropdown";
 @import "components/hamburger";
@@ -40,6 +39,7 @@
 @import "components/modal";
 @import "components/toaster";
 @import "components/offcanvas";
+@import "components/demo";
 //@import "components/multi-list";
 //@import "components/pagination";
 @import "components/product-card";
@@ -87,7 +87,6 @@
 //@import "components/ion.rangeSlider";
 //@import "components/ion.rangeSlider.skinHTML5";
 //@import "components/jquery.datetimepicker";
-//@import "components/jquery-ui-timepicker-addon";
 // @import "components/collection-faq";
 //@import "components/product-gallery-slider";
 @import "components/alert";
@@ -100,11 +99,11 @@
 //@import "vendors/cropper";
 //@import 'vendors/facebox';
 @import "vendors/jquery-ui";
-@import "vendors/jquery-ui-timepicker-addon";
+//@import "vendors/jquery-ui-timepicker-addon";
 //@import "vendors/simplebar";
 @import "vendors/slick";
 //@import "vendors/xzoom";
-@import "vendors/jquery.fancybox";
+//@import "vendors/jquery.fancybox";
 //@import "vendors/tagify";
 @import "vendors/intlTelInput.min";
 //@import "vendors/nouislider.min";
