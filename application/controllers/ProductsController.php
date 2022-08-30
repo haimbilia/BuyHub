@@ -1415,14 +1415,14 @@ class ProductsController extends MyAppController
                     $selprod_id = FatUtility::int($parameters[0]);
                     if ($selprod_id) {
                         $srch = new ProductSearch($this->siteLangId);
-                        $srch->joinSellerProducts();
+                        $srch->joinSellerProducts(0, '', ['doNotJoinSpecialPrice' => true]);
                         $srch->joinProductToCategory();
                         $srch->doNotCalculateRecords();
                         $srch->setPageSize(1);
                         $srch->addMultipleFields(array('COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'COALESCE(product_name, product_identifier)as product_name', 'prodcat_code'));
                         $srch->addCondition('selprod_id', '=', $selprod_id);
-                        $rs = $srch->getResultSet();
-                        $row = FatApp::getDb()->fetch($rs);
+                        $srch->getResultSet();
+                        $row = FatApp::getDb()->fetch($srch->getResultSet());
                         if ($row) {
                             $productCatCode = $row['prodcat_code'];
                             $productCatCode = explode("_", $productCatCode);
