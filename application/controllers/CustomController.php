@@ -117,7 +117,7 @@ class CustomController extends MyAppController
         $this->_template->render();
     }
 
-    public function faqDetail($catId = 0, $faqId = 0)
+    public function faqDetail($catId, $faqId = 0)
     {
         $cmsPagesToFaq = FatApp::getConfig('conf_cms_pages_to_faq_page');
         $cmsPagesToFaq = unserialize($cmsPagesToFaq);
@@ -138,7 +138,7 @@ class CustomController extends MyAppController
     }
 
     public function searchFaqsDetail($catId = 0, $faqId = 0)
-    {      
+    {
         $srch = FaqCategory::getSearchObject($this->siteLangId);
         $srch->joinTable('tbl_faqs', 'LEFT OUTER JOIN', 'faq_faqcat_id = faqcat_id AND faq_active = ' . applicationConstants::ACTIVE . '  AND faq_deleted = ' . applicationConstants::NO);
         $srch->joinTable('tbl_faqs_lang', 'LEFT OUTER JOIN', 'faqlang_faq_id = faq_id');
@@ -154,7 +154,7 @@ class CustomController extends MyAppController
         }
 
         $srch->setPageSize(1);
-       
+
         $question = FatApp::getPostedData('question', FatUtility::VAR_STRING, '');
         if (!empty($question)) {
             $srchCondition = $srch->addCondition('faq_title', 'like', "%$question%");
@@ -284,9 +284,9 @@ class CustomController extends MyAppController
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
         $result = FatApp::getDb()->fetchAll($srch->getResultSet());
-      
+
         $this->set('result', $result);
-        $this->set('page', $type == FaqCategory::SELLER_PAGE ? 'seller':'faq');
+        $this->set('page', $type == FaqCategory::SELLER_PAGE ? 'seller' : 'faq');
         $this->set('type', $type);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
@@ -387,12 +387,12 @@ class CustomController extends MyAppController
                 $srch->addCondition('faqcat_id', '=', $parameters[0]);
                 $srch->setPageSize(1);
                 $srch->doNotCalculateRecords();
-
-                $rs = $srch->getResultSet();
-                $records = FatApp::getDb()->fetch($rs);
+                $records = FatApp::getDb()->fetch($srch->getResultSet());
 
                 $nodes[] = array('title' => Labels::getLabel('MSG_FAQ', $this->siteLangId), 'href' => UrlHelper::generateUrl('custom', 'Faq'));
-                $nodes[] = array('title' => $records['faqcat_name']);
+                if (!empty($records)) {
+                    $nodes[] = array('title' => $records['faqcat_name'] ?? '');
+                }
 
                 break;
 
@@ -773,7 +773,7 @@ class CustomController extends MyAppController
         $brandsArr = FatApp::getDb()->fetchAll($brandRs);
         $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, 0, true, false, true);
         $contentPages = ContentPage::getPagesForSelectBox($this->siteLangId);
-        
+
         $srch = new ShopSearch($this->siteLangId);
         $srch->setDefinedCriteria($this->siteLangId);
         $srch->joinShopCountry();

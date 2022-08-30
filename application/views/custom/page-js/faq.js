@@ -19,15 +19,14 @@ $(document).on("search", "#faqQuestionJs", function (e) {
 	};
 
 	$(document).on('click', 'a.selectedCat', function () {
-		var catId = $(this).attr('id');
-		var faqId = 0;
-		window.location.href = fcom.makeUrl('Custom', 'faqDetail', [catId, faqId]);
+		var catId = $(this).attr('id');		
+		window.location.href = fcom.makeUrl('Custom', 'faqDetail', [parseInt(catId)]);
 	});
 
 	$(document).on('click', 'a.selectedFaq', function () {
 		var faqId = $(this).attr('data-id');
 		var faqcatId = $(this).attr('data-cat-id');
-		window.location.href = fcom.makeUrl('Custom', 'faqDetail', [faqcatId, faqId]);
+		window.location.href = fcom.makeUrl('Custom', 'faqDetail', [parseInt(faqcatId), parseInt(faqId)]);
 	});
 
 	searchFaqsListing = function (frm) {

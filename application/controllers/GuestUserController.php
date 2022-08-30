@@ -359,6 +359,7 @@ class GuestUserController extends MyAppController
 
     public function checkAjaxUserLoggedIn()
     {
+        var_dump(FatApp::getPostedData());
         $json = array();
         $json['isUserLogged'] = FatUtility::int(UserAuthentication::isUserLogged());
         if (!$json['isUserLogged']) {
