@@ -1,4 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage');
 ?>
 <div id="body" class="body">
     <?php if ($cPage['cpage_layout'] == Contentpage::CONTENT_PAGE_LAYOUT1_TYPE) { ?>
@@ -37,7 +37,7 @@
                         </div>
                     </section>
                 <?php
-                }               
+                }
                 if (isset($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_4]['cpblocklang_text']) && !empty(trim($blockData[Contentpage::CONTENT_PAGE_LAYOUT1_BLOCK_4]['cpblocklang_text']))) {
                 ?>
                     <section class="section  bg-gray">
@@ -61,22 +61,19 @@
 
         ?>
     <?php } else { ?>
-        <div class="bg-brand-light pt-3 pb-3">
+        <div class="bg-brand-light py-4">
             <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-md-12">
-                        <div class="section-head section-head-center mb-0">
-                            <div class="section-heading">
-                                <h2><?php echo $cPage['cpage_title']; ?></h2>
-                                <?php if (!$isAppUser) { ?>
-                                    <div class="breadcrumb  breadcrumb-center">
-                                        <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
-                                    </div>
-                                <?php } ?>
+                <div class="section-head section-head-center mb-0">
+                    <div class="section-heading">
+                        <h2><?php echo $cPage['cpage_title']; ?></h2>
+                        <?php if (!$isAppUser) { ?>
+                            <div class="breadcrumb  breadcrumb-center">
+                                <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
                             </div>
-                        </div>
+                        <?php } ?>
                     </div>
                 </div>
+
             </div>
         </div>
         <section class="section bg-white">

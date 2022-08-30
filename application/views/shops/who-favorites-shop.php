@@ -1,13 +1,13 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $shop_city = $shopData['shop_city'];
-$shop_state = ( strlen($shopData['shop_city']) > 0 ) ? ', '. $shopData['shop_state_name'] : $shopData['shop_state_name'];
-$shop_country = ( strlen($shop_state) > 0 ) ? ', '.$shopData['shop_country_name'] : $shopData['shop_country_name'];
-$shopLocation = $shop_city . $shop_state. $shop_country;
+$shop_state = (strlen($shopData['shop_city']) > 0) ? ', ' . $shopData['shop_state_name'] : $shopData['shop_state_name'];
+$shop_country = (strlen($shop_state) > 0) ? ', ' . $shopData['shop_country_name'] : $shopData['shop_country_name'];
+$shopLocation = $shop_city . $shop_state . $shop_country;
 ?>
-<div class="bg-brand-light pt-3 pb-3">
-    <div class="container container--fixed">
+<div class="bg-brand-light py-4">
+    <div class="container">
         <div class="row">
-            <div class="col-md-8 col-sm-8">
+            <div class="col-md-8">
                 <div class="cell">
                     <div class="shop-info">
                         <h3><?php echo $shopData['shop_name']; ?></h3>
@@ -16,10 +16,7 @@ $shopLocation = $shop_city . $shop_state. $shop_country;
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-4 align--right"><a
-                    href="<?php echo UrlHelper::generateUrl('Shops', 'View', array($shopData['shop_id'])); ?>"
-                    class="btn btn-outline-white btn-sm"><?php echo Labels::getLabel('LBL_Back_to_Shop', $siteLangId); ?></a>
-
+            <div class="col-md-4 align--right"><a href="<?php echo UrlHelper::generateUrl('Shops', 'View', array($shopData['shop_id'])); ?>" class="btn btn-outline-white btn-sm"><?php echo Labels::getLabel('LBL_Back_to_Shop', $siteLangId); ?></a>
             </div>
         </div>
     </div>
@@ -30,7 +27,7 @@ $shopLocation = $shop_city . $shop_state. $shop_country;
         </h4>
     </div>
     <div class="section__body">
-        <?php echo $searchForm->getFormHtml();?>
+        <?php echo $searchForm->getFormHtml(); ?>
         <div class="box box--white" id="shopFavListing">
 
         </div>

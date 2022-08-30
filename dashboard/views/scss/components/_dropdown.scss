@@ -86,11 +86,10 @@
 .dropdown-toggle {
     &[data-toggle="collapse"] {
         &:after {
-            -webkit-transition: all 0.1s ease-in-out;
             transition: all 0.1s ease-in-out;
-            -webkit-transform-origin: center center;
+
             transform-origin: center center;
-            -webkit-transform: rotate(-90deg);
+
             transform: rotate(-90deg);
         }
         &[aria-expanded="true"] {
@@ -98,5 +97,12 @@
                 transform: rotate(0deg);
             }
         }
+    }
+
+    &:hover {
+        box-shadow: none;
+    }
+    &:focus {
+        box-shadow: none;
     }
 }

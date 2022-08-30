@@ -1,7 +1,7 @@
-<div class="bg-brand-light pt-3 pb-3">
+<div class="bg-brand-light py-4">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 align-center">
+            <div class="col-lg-12 align-center">
                 <div class="width--narrow">
                     <h2><?php echo Labels::getLabel('LBL_Batch_Details', $siteLangId); ?></h2>
                 </div>

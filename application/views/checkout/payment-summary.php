@@ -24,7 +24,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
             <div class="step_section">
                 <div class="step_head">
                     <p><?php echo Labels::getLabel('LBL_MY_BILLING_IS_SAME_AS_SHIPPING_ADDRESS', $siteLangId); ?></p>
-                    <button class="btn btn-underline" type="button" onClick="loadAddressDiv(1);"><?php echo Labels::getLabel('LBL_CHANGE_ADDRESS_?') ?></button>
+                    <button class="btn btn-outline-gray" type="button" onClick="loadAddressDiv(1);"><?php echo Labels::getLabel('LBL_CHANGE_ADDRESS_?') ?></button>
                 </div>
             </div>
         <?php } else { ?>
