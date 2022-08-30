@@ -1524,8 +1524,10 @@ function moveErrorAfterIti() {
 function isUserLogged() {
     var isUserLogged = 0;
     $.ajax({
+        method: "POST",
         url: fcom.makeUrl("GuestUser", "checkAjaxUserLoggedIn"),
-        async: false,
+        data:'fIsAjax=1',
+        async: false,        
         dataType: "json",
     }).done(function (ans) {
         isUserLogged = parseInt(ans.isUserLogged);
