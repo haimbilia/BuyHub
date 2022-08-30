@@ -757,9 +757,6 @@ $(document).ready(function () {
     signInWithPhone = function (obj, flag) {
         var form = $(obj).data("form");
         var formElement = "undefined" != typeof form ? 'form[name="' + form + '"]' : "form";
-        var title = 0 < flag ? langLbl.withUsernameOrEmail : langLbl.withPhoneNumber;
-        var objLbl = 0 < flag ? langLbl.byEmail : langLbl.byPhone;
-        $(obj).attr("onclick", "signInWithPhone(this, " + !flag + ")").text(objLbl).attr('title', title);
 
         var data = 'signInWithPhone=' + parseInt(flag);
         var popup = $(formElement).closest('.' + $.ykmodal.element);

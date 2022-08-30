@@ -7,7 +7,12 @@
         gap: 3rem;
         padding: 2rem 0;
         &:nth-child(even) {
-            flex-direction: row-reverse;
+            @include media-breakpoint-up(xl) {
+                flex-direction: row-reverse;
+                .row {
+                    flex-direction: row-reverse;
+                }
+            }
             @include media-breakpoint-down(sm) {
                 flex-direction: column;
             }
