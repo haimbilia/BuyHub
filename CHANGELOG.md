@@ -1184,6 +1184,8 @@ TV-9.4.0.20220825
     - #066465 - The user email address appears prefilled on the sign-in with the phone number field.
     - #066409 - The page heading is missing on some pages.
     - #066438 - Suggestion: To add the sign-in button on the registration successful page
+    - #066387 - Multiple UI issues on the shops listing page on mobile devices
+
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
