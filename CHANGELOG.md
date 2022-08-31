@@ -1190,6 +1190,7 @@ TV-9.4.0.20220825
     - #066490 - The navigation on the top of the product details page gets disappeared for the product which is available from any future date
     - #066489 - Admin is not able to edit the email if of the user but not the phone number of the user.
     - #066488 - No option or button is available to remove the applied rewards points if the user applied all the available rewards points.
+    - #066504 - Multiple issues on the inventory setup page on the seller end.
 
 ## UAT points:
 

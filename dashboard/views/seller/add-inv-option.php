@@ -29,18 +29,30 @@ $skuFieldName = 'selprod_sku' . $optionId;
         <ul class="actions">
             <li>
                 <a href="javascript:void(0)" onclick="copyRowData(this)" title="<?php echo Labels::getLabel('LBL_COPY_TO_FORM', $siteLangId); ?>">
-                    <i class="fas fa-paste"></i>
+                    <svg class="svg" width="18" height="18">
+                        <use
+                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#copy">
+                        </use>
+                    </svg>
                 </a>
             </li>
             <?php if (0 < $selprod_id) { ?>
                 <li>
                     <a href="javascript:void(0)" onclick="copyRowData(this, <?php echo $selprod_id; ?>)" title="<?php echo Labels::getLabel('LBL_EDIT', $siteLangId); ?>">
-                        <i class="fas fa-edit"></i>
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                            </use>
+                        </svg>
                     </a>
                 </li>
                 <li>
                     <a href="javascript:void(0)" onclick="sellerProductDelete(this, <?php echo $selprod_id; ?>)" title="<?php echo Labels::getLabel('LBL_DELETE', $siteLangId); ?>">
-                        <i class="fas fa-trash"></i>
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                            </use>
+                        </svg>
                     </a>
                 </li>
             <?php } ?>

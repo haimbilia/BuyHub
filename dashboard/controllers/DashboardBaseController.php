@@ -199,6 +199,7 @@ class DashboardBaseController extends FatController
                     'systemIdentifier' => Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $this->siteLangId),
                     'maxLengthValidator' => CommonHelper::replaceStringData(Labels::getLabel('FRM_USED_{charsTyped}_of_{charsTotal}_CHAR', $this->siteLangId), ["{charsTyped}" => "%charsTyped%", "{charsTotal}" => "%charsTotal%"]), /* Used By Maxlength bootstrap validator. */
                     'fieldNotFound' => Labels::getLabel('LBL_{field}_NOT_FOUND', $this->siteLangId),
+                    'savePrefilledValues' => Labels::getLabel('LBL_SAVE_PREFILLED_VALUES_FIRST.', $this->siteLangId),
                 );
 
                 $languages = Language::getAllNames(false);

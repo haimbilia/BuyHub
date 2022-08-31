@@ -234,14 +234,13 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
             </div>
             <div class="row">
                 <div class="col-md-12">
+                    <div class="form-text text-muted my-4">
+                        <?php
+                        $errorMsg = Labels::getLabel('MSG_SELLING_PRICE_CANNOT_BE_LESS_THEN_MINIMUM_SELLING_PRICE_{MINIMUM-SELLING-PRICE}.');
+                        echo $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true)]);
+                        ?>
+                    </div>
                     <div class="js-scrollable table-wrap table-responsive">
-                        <span class="form-text text-muted">
-                            <?php
-                            $errorMsg = Labels::getLabel('MSG_SELLING_PRICE_CANNOT_BE_LESS_THEN_MINIMUM_SELLING_PRICE_{MINIMUM-SELLING-PRICE}.');
-                            echo $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true)]);
-                            ?>
-                        </span>
-
                         <table id="optionsTable-js" class="table table-justified">
                             <thead>
                                 <tr>
@@ -263,6 +262,9 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                                     </th>
                                     <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
                                         <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
+                                    </th>
+                                    <th style="min-width:100px;">
+                                        <?php echo Labels::getLabel('LBL_ACTION', $siteLangId); ?>
                                     </th>
                                 </tr>
                             </thead>

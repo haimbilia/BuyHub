@@ -347,12 +347,12 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
 
 
             <?php if ($selprod_id == 0) { ?>
-                <div class="divider"></div>
+                <div class="divider my-4"></div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <h4>
+                    <div class="col-md-12 mb-3">
+                        <h6>
                             <?php echo Labels::getLabel('LBL_INVENTORY_OPTIONS', $siteLangId); ?>
-                        </h4>
+                        </h6>
                     </div>
                 </div>
                 <div class="row">
@@ -363,13 +363,14 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
             <?php } ?>
             <div class="row">
                 <div class="col-md-12">
+                    <div class="form-text text-muted my-4">
+                        <?php
+                        $errorMsg = Labels::getLabel('MSG_SELLING_PRICE_CANNOT_BE_LESS_THEN_MINIMUM_SELLING_PRICE_{MINIMUM-SELLING-PRICE}.');
+                        echo $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true)]);
+                        ?>
+
+                    </div>
                     <div class="js-scrollable table-wrap table-responsive">
-                        <span class="form-text text-muted">
-                            <?php
-                            $errorMsg = Labels::getLabel('MSG_SELLING_PRICE_CANNOT_BE_LESS_THEN_MINIMUM_SELLING_PRICE_{MINIMUM-SELLING-PRICE}.');
-                            echo $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true)]);
-                            ?>
-                        </span>
                         <table id="optionsTable-js" class="table table-justified <?php echo ($selprod_id == 0) ? 'd-none' : ''; ?>">
                             <thead>
                                 <tr>
@@ -389,6 +390,9 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                                     </th>
                                     <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
                                         <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
+                                    </th>
+                                    <th style="min-width:100px;">
+                                        <?php echo Labels::getLabel('LBL_ACTION', $siteLangId); ?>
                                     </th>
                                 </tr>
                             </thead>
@@ -621,7 +625,9 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
             }
 
             var invForm = $('.inventoryForm-js');
-            if (!$(invForm[0]).validate()) return;
+            if (!$(invForm[0]).validate()) {
+                return false;
+            }
 
             var postData = {
                 inv_option_index: $("table#optionsTable-js tbody tr").length,
@@ -688,6 +694,10 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
         <?php } ?>
 
         copyRowData = function(btn, selProdId = 0) {
+            if ('' != $('.optionForm-js input[name="inv_option_id"]').val()) {
+                fcom.displayErrorMessage(langLbl.savePrefilledValues);
+                return false;
+            }
             var copiedData = '';
             var tr = $(btn).closest('tr');
             tr.find('[data-val]').each(function() {
@@ -714,12 +724,14 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                 $('.optionForm-js input[name="inv_option_selprod_id"]').val(selProdId);
                 $('.optionForm-js .optionname--js, .optionForm-js .select2').hide();
 
-                var optionNameHtm = '<input disabled="disabled" name="optname" class="optionName-js" value="' + optionName + '">'
+                var optionNameHtm = '<input disabled="disabled" name="optname" class="optionName-js" value="' + optionName + '">';
+                console.log(optionNameHtm);
                 $('.optionForm-js .optionname--js').parent().append(optionNameHtm);
                 tr.remove();
             }
 
             pasteData(copiedData, '.optionForm-js input:first');
+            $('.optionName-js').attr('type', 'text');
         }
 
         pasteData = function(pastedData, selector) {
@@ -739,7 +751,7 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
         viewProdOptions = function(productId) {
             fcom.ajax(fcom.makeUrl('Seller', 'viewProdOptions', [productId]), '', function(t) {
                 var res = $.parseJSON(t);
-                $.ykmodal(res.html);
+                $.ykmodal(res.html, true);
             });
         };
 
