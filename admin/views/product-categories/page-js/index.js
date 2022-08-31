@@ -1,6 +1,6 @@
 (function () {
 	var catListing = ".listingRecordJs";
-	
+
 	deleteRecord = function (recordId) {
 		if (false === checkControllerName()) {
 			return false;
@@ -28,7 +28,7 @@
 	};
 
 	goToProducts = function (prodCatId) {
-		redirectToProductList(0, { prodcat_id: prodCatId });
+		redirectToProductList(0, { prodcat_id: prodCatId, include_child: 1 });
 	};
 
 	updateStatus = function (e, obj, recordId, status) {
