@@ -158,11 +158,13 @@
             flex: 1;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             flex-direction: column;
             // padding: 0;
             min-height: 50%;
+            min-width: 0;
             @include media-breakpoint-up(lg) {
+                align-items: center;
                 min-height: 234px;
             }
         }
