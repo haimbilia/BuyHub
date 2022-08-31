@@ -44,7 +44,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
         if (typeof page == undefined || page == null) {
             page = 1;
         }
-        var frm = document.frmSearchCustomCatalogProducts;
+        var frm = document.frmCatalogProductSearchPaging;
         $(frm.page).val(page);
         searchCustomCatalogProducts();
     };
@@ -52,8 +52,8 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
     searchCustomCatalogProducts = function () {
         checkRunningAjax();
         $(dv).prepend(fcom.getLoader());
-        // markActive('a.customCatalogReq--js');
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'searchCustomCatalogProducts'), '', function (res) {
+        var data = fcom.frmData(document.frmCatalogProductSearchPaging);
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'searchCustomCatalogProducts'), data, function (res) {
             fcom.removeLoader();
             runningAjaxReq = false;
             $(dv).html(res);
@@ -78,8 +78,8 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
     searchBrandRequests = function () {
         checkRunningAjax();
         $(dv).prepend(fcom.getLoader());
-        // markActive('a.brandReq--js');
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'searchBrandRequests'), '', function (res) {
+        var data = fcom.frmData(document.frmSearchBrandRequest);
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'searchBrandRequests'), data, function (res) {
             fcom.removeLoader();
             runningAjaxReq = false;
             $(dv).html(res);
@@ -98,8 +98,8 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
     searchProdCategoryRequests = function () {
         checkRunningAjax();
         $(dv).prepend(fcom.getLoader());
-        // markActive('a.catReq--js');
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'searchProdCategoryRequests'), '', function (res) {
+        var data = fcom.frmData(document.frmSrchProdCategoryRequest);
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'searchProdCategoryRequests'), data, function (res) {
             fcom.removeLoader();
             runningAjaxReq = false;
             $(dv).html(res);
@@ -511,12 +511,21 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
         if (!confirm(langLbl.confirmDelete)) { return; }
         fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'deleteBadgeRequest', [badgeReqId]), '', function (t) { searchBadgeRequests(); });
     }
+    
+    goToBadgeSearchPage = function (page) {
+        if (typeof page == undefined || page == null) {
+            page = 1;
+        }
+        var frm = document.frmSearchBadgeRequest;
+        $(frm.page).val(page);
+        searchBadgeRequests();
+    };
 
     searchBadgeRequests = function () {
         checkRunningAjax();
         $(dv).prepend(fcom.getLoader());
-        // markActive('a.badgeReq--js');
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'searchBadgeRequests'), '', function (res) {
+        var data = fcom.frmData(document.frmSearchBadgeRequest);
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'searchBadgeRequests'), data, function (res) {
             fcom.removeLoader();
             runningAjaxReq = false;
             $(dv).html(res);

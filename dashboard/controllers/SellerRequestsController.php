@@ -85,6 +85,7 @@ class SellerRequestsController extends SellerBaseController
         $this->set('canEdit', $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true));
         $this->set("arrListing", $requestedCategories);
         $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
@@ -144,7 +145,7 @@ class SellerRequestsController extends SellerBaseController
 
     private function getRequestedbrandObj()
     {
-        $srch = Brand::getSearchObject($this->siteLangId);
+        $srch = Brand::getSearchObject($this->siteLangId, true, false, false);
 
         $userArr = User::getAuthenticUserIds(UserAuthentication::getLoggedUserId(), $this->userParentId);
         $srch->addCondition('brand_seller_id', 'in', $userArr);

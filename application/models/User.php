@@ -3077,8 +3077,7 @@ class User extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(array('user_id', 'shop_id'));
-        $rs = $srch->getResultSet();
-        $record = FatApp::getDb()->fetchAllAssoc($rs);
+        $record = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         return array_keys($record);
     }
 
