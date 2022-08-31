@@ -396,4 +396,18 @@ $(document).on('change', '#digitalFrmLangId,#digitalFrmdownloadType,#digitalFrmO
         }
     };
 
+    deleteCatalog = function (recordId) {
+        if (!confirm(langLbl.confirmDelete)) {
+            return;
+        }
+        data = "recordId=" + recordId;
+        fcom.updateWithAjax(
+            fcom.makeUrl('Seller', "deleteCatalog"),
+            data,
+            function (t) {
+                fcom.displaySuccessMessage(t.msg);
+                searchCatalogProducts(document.frmRecordSearch);
+            }
+        );
+    };
 })();

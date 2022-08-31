@@ -125,12 +125,12 @@
                                     'a',
                                     array('href' => 'javascript:void(0)', 'onclick' => 'fileLinkForm(' . $row['product_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_LINK_OR_FILES', $siteLangId), true),
                                     '<i class="icn">
-                                <svg class="svg" width="18" height="18">
-                                    <use
-                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#icon-download">
-                                    </use>
-                                </svg>
-                            </i>',
+                                        <svg class="svg" width="18" height="18">
+                                            <use
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#icon-download">
+                                            </use>
+                                        </svg>
+                                    </i>',
                                     true
                                 );
                             }
@@ -138,40 +138,55 @@
                             if (0 != $row['product_seller_id']) {
                                 $li = $ul->appendElement("li");
                                 $li->appendElement('a', array('class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "href" => UrlHelper::generateUrl('products', 'form', array($row['product_id']))), '<i class="icn">
-                            <svg class="svg" width="18" height="18">
-                                <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
-                                </use>
-                            </svg>
-                        </i>', true);
+                                    <svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
+                                        </use>
+                                    </svg>
+                                </i>', true);
                             }
 
                             if ($canEditShipProfile && $row['product_added_by_admin_id'] && $row['psbs_user_id'] && $row['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
                                 $li = $ul->appendElement("li");
                                 $li->appendElement("a", array('title' => Labels::getLabel('LBL_Edit_Shipping', $siteLangId), 'onclick' => 'sellerShippingForm(' . $row['product_id'] . ')', 'href' => 'javascript:void(0)'), '<i class="icn">
-                            <svg class="svg" width="18" height="18">
-                                <use
-                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#shipping">
-                                </use>
-                            </svg>
-                        </i>', true);
+                                <svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#shipping">
+                                    </use>
+                                </svg>
+                            </i>', true);
                             }
                         }
 
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
-                            array('href' => 'javascript:void(0)', 'onclick' => 'catalogInfo(' . $row['product_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_product_Info', $siteLangId), true),
+                            array('href' => 'javascript:void(0)', 'onclick' => 'catalogInfo(' . $row['product_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_PRODUCT_INFO', $siteLangId), true),
                             '<i class="icn">
-                        <svg class="svg" width="18" height="18">
-                            <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
-                            </use>
-                        </svg>
-                    </i>',
+                                <svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                    </use>
+                                </svg>
+                            </i>',
                             true
                         );
 
+                        if (0 != $row['product_seller_id']) {
+                            $li = $ul->appendElement("li");
+                            $li->appendElement(
+                                'a',
+                                array('href' => 'javascript:void(0)', 'onclick' => 'deleteCatalog(' . $row['product_id'] . ')', 'class' => '', 'title' => Labels::getLabel('LBL_DELETE_PRODUCT', $siteLangId), true),
+                                '<i class="icn">
+                                <svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                    </use>
+                                </svg>
+                            </i>',
+                                true
+                            );
+                        }
                         break;
                     default:
                         $td->appendElement('plaintext', array(), $row[$key], true);

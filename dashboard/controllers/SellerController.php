@@ -806,13 +806,13 @@ class SellerController extends SellerBaseController
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS")));
         $srch->addCondition('op_selprod_user_id', '=', $loggedUserId);
         $srch->addCondition('op_id', '=', $op_id);
-        $srch->addMultipleFields(['op.*', 'pm.*', 'opshipping_by_seller_user_id', 'ocrequest_status', 'opshipping_fulfillment_type', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code', 'opship_tracking_number', 'orderstatus_id', 'opshipping_carrier_code','order_payment_status','order_id']);
-      
+        $srch->addMultipleFields(['op.*', 'pm.*', 'opshipping_by_seller_user_id', 'ocrequest_status', 'opshipping_fulfillment_type', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code', 'opship_tracking_number', 'orderstatus_id', 'opshipping_carrier_code', 'order_payment_status', 'order_id']);
+
         $orderDetail = FatApp::getDb()->fetch($srch->getResultSet());
         if (empty($orderDetail)) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
-      
+
         $shippedBySeller = CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']);
 
         $activatedTrackPlugin = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING, ['plugin_id', 'plugin_code']);
@@ -925,9 +925,9 @@ class SellerController extends SellerBaseController
         } else {
             FatUtility::dieJsonError(Labels::getLabel('M_ERROR_INVALID_REQUEST', $this->siteLangId));
         }
-        
+
         if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
-           
+
             $orderProducts = new OrderProductSearch($this->siteLangId, true, true);
             $orderProducts->joinPaymentMethod();
             $orderProducts->addMultipleFields(['op_status_id']);
@@ -1151,9 +1151,9 @@ class SellerController extends SellerBaseController
         $frmSearch->fill(['lang_id' => $this->siteLangId]);
         $this->set("frmSearch", $frmSearch);
         $this->set("languages", Language::getAllNames());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));       
-        $this->_template->addJs(['js/tagify.min.js','js/tagify.polyfills.min.js']);
-        $this->_template->addCss(['css/tagify.min.css']);        
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
+        $this->_template->addJs(['js/tagify.min.js', 'js/tagify.polyfills.min.js']);
+        $this->_template->addCss(['css/tagify.min.css']);
         $this->_template->render(true, true);
     }
 
@@ -6014,5 +6014,43 @@ class SellerController extends SellerBaseController
             $this->nodes[] = array('title' => ucwords($title));
         }
         return $this->nodes;
+    }
+
+    public function deleteCatalog()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $this->markAsDeleted($recordId);
+        $this->set('msg', Labels::getLabel('LBL_RECORD_DELETED_SUCCESSFULLY'));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    protected function markAsDeleted(int $recordId)
+    {
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+        $prodSellerId = Product::getAttributesById($recordId, 'product_seller_id');
+        if ($this->userParentId != $prodSellerId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+        $product = new Product($recordId);
+        $product->assignValues(
+            [
+                $product::tblFld('deleted') => 1,
+                $product::tblFld('identifier') => 'mysql_func_CONCAT(' . $product::tblFld('identifier') . ',"{deleted}",' . $product::tblFld('id') . ')'
+            ],
+            false,
+            '',
+            '',
+            true
+        );
+        if (!$product->save()) {
+            LibHelper::exitWithError($product->getError(), true);
+        }
     }
 }
