@@ -10,11 +10,19 @@ if ($recordId > 0) {
 
     $fld = $frm->getField('credential_email');
     $fld->setFieldTagAttribute('disabled', 'disabled');
-    
+
     $fld = $frm->getField('user_phone');
     $fld->setFieldTagAttribute('disabled', 'disabled');
 }
 
+$fld = $frm->getField('user_profile_info');
+if ($fld != null) {
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
+$fld = $frm->getField('user_products_services');
+if ($fld != null) {
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
 
 $countryFld = $frm->getField('user_country_id');
 $countryFld->setFieldTagAttribute('id', 'addrCountryIdJs');
