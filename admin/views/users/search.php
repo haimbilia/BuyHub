@@ -29,7 +29,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'credential_active':
-                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['user_id'], $row[$key]);
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['user_id'], ($row[$key] ?? 0));
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'user_regdate':
