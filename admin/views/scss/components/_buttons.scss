@@ -119,9 +119,13 @@
             }
         }
         &:hover {
+            box-shadow: none;
             .arrow {
                 transform: translateX(0.25rem * $transform-direction);
             }
+        }
+        &:focus {
+            box-shadow: none;
         }
     }
     &-underline {

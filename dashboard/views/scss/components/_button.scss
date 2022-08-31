@@ -1,43 +1,19 @@
-@-webkit-keyframes moltinShake {
-    12.5% {
-        transform: translateX(-6px) rotateY(-5deg);
-    }
-    37.5% {
-        transform: translateX(5px) rotateY(4deg);
-    }
-    62.5% {
-        transform: translateX(-3px) rotateY(-2deg);
-    }
-    87.5% {
-        transform: translateX(2px) rotateY(1deg);
-    }
-    100% {
-        transform: translateX(0);
-    }
+button:focus,
+.btn:focus {
+    outline: none;
+    //box-shadow: none;
 }
 
-@keyframes moltinShake {
-    12.5% {
-        transform: translateX(-6px) rotateY(-5deg);
-    }
-    37.5% {
-        transform: translateX(5px) rotateY(4deg);
-    }
-    62.5% {
-        transform: translateX(-3px) rotateY(-2deg);
-    }
-    87.5% {
-        transform: translateX(2px) rotateY(1deg);
-    }
-    100% {
-        transform: translateX(0);
-    }
-}
-
-.invalid {
-    animation: moltinShake 0.4s ease-in-out 0.1s normal forwards 1 running;
-}
-
+$btn-padding: 0 0.75rem;
+$btn-height: 3rem;
+$btn-border: solid 1px transparent;
+$btn-radius: 4px;
+$btn-font-size: 0.85rem;
+$btn-font-weight: 500;
+$btn-line-height: $btn-height;
+$btn-hover-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+$btn-focus-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.4);
+$btn-active-shadow: inset 0 1px 7px 0 rgba(0, 0, 0, 0.2);
 .btn {
     display: inline-flex;
     align-items: center;
@@ -49,6 +25,18 @@
     display: inline-flex;
     align-items: center;
     font-weight: 500;
+    &:hover {
+        text-decoration: none !important;
+        box-shadow: $btn-hover-shadow;
+    }
+    &:focus {
+        outline: none !important;
+        box-shadow: $btn-focus-shadow;
+    }
+    &:active {
+        box-shadow: $btn-active-shadow;
+    }
+
     &-brand {
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
@@ -163,9 +151,13 @@
             }
         }
         &:hover {
+            box-shadow: none;
             .arrow {
                 transform: translateX(0.25rem);
             }
+        }
+        &:focus {
+            box-shadow: none;
         }
     }
 
@@ -209,6 +201,42 @@
     }
     &-black {
         color: $black;
+    }
+}
+
+@-webkit-keyframes moltinShake {
+    12.5% {
+        transform: translateX(-6px) rotateY(-5deg);
+    }
+    37.5% {
+        transform: translateX(5px) rotateY(4deg);
+    }
+    62.5% {
+        transform: translateX(-3px) rotateY(-2deg);
+    }
+    87.5% {
+        transform: translateX(2px) rotateY(1deg);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes moltinShake {
+    12.5% {
+        transform: translateX(-6px) rotateY(-5deg);
+    }
+    37.5% {
+        transform: translateX(5px) rotateY(4deg);
+    }
+    62.5% {
+        transform: translateX(-3px) rotateY(-2deg);
+    }
+    87.5% {
+        transform: translateX(2px) rotateY(1deg);
+    }
+    100% {
+        transform: translateX(0);
     }
 }
 a.link {
@@ -298,4 +326,8 @@ a.link {
     &:hover {
         color: $brand-color;
     }
+}
+
+.invalid {
+    animation: moltinShake 0.4s ease-in-out 0.1s normal forwards 1 running;
 }

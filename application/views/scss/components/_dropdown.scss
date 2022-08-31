@@ -213,6 +213,13 @@
             }
         }
     }
+
+    &:hover {
+        box-shadow: none;
+    }
+    &:focus {
+        box-shadow: none;
+    }
 }
 
 .nav-block {

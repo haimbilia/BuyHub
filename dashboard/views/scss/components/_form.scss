@@ -9,6 +9,7 @@ $input-border: none;
 $input-border-radius: 0.25rem;
 $input-bg: #fff;
 $input-color: #474747;
+$input-border-focus: #000;
 @mixin input {
     border: $input-border-style 1px $input-border-color;
     background-color: $input-bg;
@@ -94,15 +95,6 @@ $input-color: #474747;
     cursor: pointer;
     //border-color: transparent;
     width: auto;
-    &:hover {
-        box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rgba(0, 0, 0, 0.04), 0px 1px 10px 0px rgba(0, 0, 0, 0.04);
-    }
-    &:focus {
-        box-shadow: inset 0px 1px 2px -1px rgba(0, 0, 0, 0.08), inset 0px 4px 5px 0px rgba(0, 0, 0, 0.08), inset 0px 1px 10px 0px rgba(0, 0, 0, 0.08);
-    }
-    &:active {
-        box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rgba(0, 0, 0, 0.04), 0px 1px 10px 0px rgba(0, 0, 0, 0.04);
-    }
 }
 
 .form {
