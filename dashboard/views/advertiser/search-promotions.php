@@ -52,12 +52,9 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('span', array('class' => 'badge badge-inline ' . $arrYesNoClassArr[$row[$key]]), $arrYesNo[$row[$key]], true);
                 break;
             case 'promotion_active':
-                $active = "";
-                if (applicationConstants::ACTIVE == $row['promotion_active']) {
-                    $active = 'checked';
-                }
-                $str = '<label class="toggle-switch" for="switch' . $row['promotion_id'] . '"><input ' . $active . ' type="checkbox" value="' . $row['promotion_id'] . '" id="switch' . $row['promotion_id'] . '" onclick="togglePromotionStatus(event,this)"/><div class="slider round"></div></label>';
-
+                $attributes = (applicationConstants::ACTIVE == $row['promotion_active']) ? "checked" : "";
+                $attributes .= ' onclick="togglePromotionStatus(event,this)"';
+                $str = HtmlHelper::configureSwitchForCheckboxStatic('', $row['promotion_id'], $attributes);
                 $td->appendElement('plaintext', array(), $str, true);
                 break;
             case 'promotion_end_date':

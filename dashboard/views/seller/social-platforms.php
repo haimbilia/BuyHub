@@ -81,14 +81,10 @@
                         }
                         break;
                     case 'splatform_active':
-                        /* $td->appendElement( 'plaintext', array(), $activeInactiveArr[$row[$key]],true ); */
-                        $active = "";
-                        if (applicationConstants::ACTIVE == $row['splatform_active']) {
-                            $active = 'checked';
-                        }
-                        $checked = (!$canEdit) ? 'disabled' : $active;
-                        $str = '<label class="toggle-switch" for="switch' . $row['splatform_id'] . '"><input ' . $checked . ' type="checkbox" value="' . $row['splatform_id'] . '" id="switch' . $row['splatform_id'] . '" onclick="toggleSocialPlatformStatus(event,this)"/><div class="slider round"></div></label>';
-
+                        $attributes = (applicationConstants::ACTIVE == $row['splatform_active']) ? "checked" : "";
+                        $attributes .= (!$canEdit) ? ' disabled' : '';
+                        $attributes .= ' onclick="toggleSocialPlatformStatus(event,this)"';
+                        $str = HtmlHelper::configureSwitchForCheckboxStatic('', $row['splatform_id'], $attributes);
                         $td->appendElement('plaintext', array(), $str, true);
                         break;
                     case 'action':

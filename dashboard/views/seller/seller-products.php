@@ -62,12 +62,12 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     $td->appendElement('plaintext', array(), FatDate::format($row[$key], false), true);
                     break;
                 case 'selprod_active':
-                    $active = "";
+                    $attributes = "";
                     if (applicationConstants::ACTIVE == $row['selprod_active']) {
-                        $active = 'checked';
+                        $attributes = 'checked';
                     }
-                    $str = '<label class="toggle-switch" for="switch' . $row['selprod_id'] . '"><input ' . $active . ' type="checkbox" value="' . $row['selprod_id'] . '" id="switch' . $row['selprod_id'] . '" onclick="toggleSellerProductStatus(event,this)"/><div class="slider round"></div></label>';
-
+                    $attributes .= ' onclick="toggleSellerProductStatus(event,this)"';
+                    $str = HtmlHelper::configureSwitchForCheckboxStatic('', $row['selprod_id'], $attributes);
                     $td->appendElement('plaintext', array(), $str, true);
                     break;
                 case 'action':
