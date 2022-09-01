@@ -9,12 +9,16 @@
                 <div class="cms text-center">
                     <?php if ($supplierRequest["usuprequest_status"] == User::SUPPLIER_REQUEST_PENDING) { ?>
                         <div class="block-empty">
-                            <img width="200px" class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/supplier-request.svg" alt="">
-                            <h4>
+                            <img class="block__img" width="200" height="200" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/supplier-request.svg" alt="">
+                            <h3>
                                 <?php echo Labels::getLabel('LBL_Hello', $siteLangId), ' ', $supplierRequest["user_name"] ?> ,
-                                <br><?php echo Labels::getLabel('LBL_Thank_you_for_submitting_your_application', $siteLangId) ?>
-                            </h4>
-                            <p><?php echo Labels::getLabel('LBL_application_awaiting_approval', $siteLangId) ?></p>
+                                <br>
+
+                                <?php echo Labels::getLabel('LBL_Thank_you_for_submitting_your_application', $siteLangId) ?>
+                            </h3>
+                            <p>
+                                <?php echo Labels::getLabel('LBL_application_awaiting_approval', $siteLangId) ?>
+                            </p>
                             <p><?php echo Labels::getLabel('LBL_Application_Reference', $siteLangId) ?>: <strong><?php echo $supplierRequest["usuprequest_reference"]; ?></strong></p>
                         </div>
                     <?php } elseif ($supplierRequest["usuprequest_status"] == User::SUPPLIER_REQUEST_APPROVED) { ?>

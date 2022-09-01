@@ -118,7 +118,7 @@ class ProductsController extends ListingBaseController
             $cnd->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        $active = FatApp::getPostedData('active');
+        $active = FatApp::getPostedData('active', FatUtility::VAR_STRING, '');
         if ('' != $active && $active > -1) {
             $srch->addCondition('product_active', '=', $active);
         }
@@ -157,7 +157,12 @@ class ProductsController extends ListingBaseController
         $prodcat_id = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, -1);
         if ($prodcat_id > 0) {
             $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'product_id = ptc_product_id', 'ptcat');
-            $srch->addCondition('ptcat.ptc_prodcat_id', '=', $prodcat_id);
+            $includeChild = FatApp::getPostedData('include_child', FatUtility::VAR_INT, 0);
+            if ($includeChild) {
+                $srch->addCondition('mysql_func_GETCATCODE(ptc_prodcat_id)', 'LIKE', '%' . str_pad($prodcat_id, 6, '0', STR_PAD_LEFT) . '%', 'AND', true);
+            } else {
+                $srch->addCondition('ptcat.ptc_prodcat_id', '=', $prodcat_id);
+            }
         }
 
         $product_type = FatApp::getPostedData('product_type', FatUtility::VAR_INT, 0);
@@ -712,7 +717,7 @@ class ProductsController extends ListingBaseController
         $frm->setRequiredStarWith('caption');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-
+        $frm->addHiddenField('', 'include_child', FatApp::getPostedData('include_child', FatUtility::VAR_INT, applicationConstants::NO));
         if (FatApp::getAction() == 'approvalPending') {
             $frm->addHiddenField('', 'is_custom_or_catalog', applicationConstants::CUSTOM_CATALOG);
         } else {
@@ -727,6 +732,7 @@ class ProductsController extends ListingBaseController
         $categories = $prodCatObj->makeAssociativeArray($arrCategories);
         $prodCat = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, 0);
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'prodcat_id', $categories, $prodCat);
+
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'active', array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $activeInactiveArr, '', array(), '');
 

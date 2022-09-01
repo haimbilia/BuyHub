@@ -417,7 +417,9 @@ mark,
 .browse-more {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    justify-content: center;
+    flex-flow: row wrap;
+    gap: 10px;
     li {
         a {
             background: $bg-brand-light;
@@ -427,11 +429,11 @@ mark,
             //border: $border;
             font-size: 0.75rem;
             display: block;
-            margin: 5px;
             &:hover {
                 background: $brand-color;
                 color: $brand-color-inverse;
                 border-color: currentColor;
+                text-decoration: none;
             }
         }
     }
