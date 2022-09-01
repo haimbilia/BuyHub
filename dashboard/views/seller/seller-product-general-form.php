@@ -110,7 +110,12 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                 </div>
                 <div class="col-md-6">
                     <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_min_order_qty')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
+                        <div class="caption-wraper">
+                            <label class="field_label">
+                                <?php echo $frmSellerProduct->getField('selprod_min_order_qty')->getCaption(); ?>
+                                <span class="spn_must_field">*</span>
+                            </label>
+                        </div>
                         <div class="field-wraper">
                             <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_min_order_qty'); ?>
                             </div>
@@ -122,7 +127,11 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                 <div class="row">
                     <div class="col-md-6">
                         <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_max_download_times')->getCaption(); ?></label>
+                            <div class="caption-wraper">
+                                <label class="field_label">
+                                    <?php echo $frmSellerProduct->getField('selprod_max_download_times')->getCaption(); ?>
+                                    <span class="spn_must_field">*</span>
+                                </label>
                             </div>
                             <div class="field-wraper">
                                 <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_max_download_times'); ?>
@@ -132,7 +141,11 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                     </div>
                     <div class="col-md-6">
                         <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_download_validity_in_days')->getCaption(); ?></label>
+                            <div class="caption-wraper">
+                                <label class="field_label">
+                                    <?php echo $frmSellerProduct->getField('selprod_download_validity_in_days')->getCaption(); ?>
+                                    <span class="spn_must_field">*</span>
+                                </label>
                             </div>
                             <div class="field-wraper">
                                 <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_download_validity_in_days'); ?>
