@@ -276,9 +276,11 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                                     <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
                                         <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
                                     </th>
-                                    <th style="min-width:100px;">
-                                        <?php echo Labels::getLabel('LBL_ACTION', $siteLangId); ?>
-                                    </th>
+                                    <?php if (!empty($availableOptions)) { ?>
+                                        <th style="min-width:100px;">
+                                            <?php echo Labels::getLabel('LBL_ACTION', $siteLangId); ?>
+                                        </th>
+                                    <?php } ?>
                                 </tr>
                             </thead>
                             <tbody>

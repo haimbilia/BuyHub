@@ -79,8 +79,11 @@
 .onboarding {
     background-color: $bg-white;
     box-shadow: $shadow4;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
+
+    @include media-breakpoint-up(xl) {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+    }
     &-aside {
         color: $txt-gray;
         display: flex;
