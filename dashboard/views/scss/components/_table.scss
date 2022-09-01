@@ -30,6 +30,15 @@
             }
         }
     }
+    tbody {
+        tr {
+            &:last-child {
+                td {
+                    border-bottom-color: transparent;
+                }
+            }
+        }
+    }
     tr {
         &:hover,
         &.selected-row {
