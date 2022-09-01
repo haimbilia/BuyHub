@@ -36,13 +36,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     ];
 
     if ($canEdit) {
-        $active = ($autoRenew) ? 'checked' : '';
-        $btnTxt = '<label class="toggle-switch auto-renew">
-                        ' . Labels::getLabel('LBL_AutoRenew_Subscription', $siteLangId) . '
-                        <input ' . $active . ' type="checkbox" onclick="toggleAutoRenewal()">
-                        <div class="slider round"></div>
-                    </label>';
-
+        $attributes = ($autoRenew) ? "checked" : "";
+        $attributes .= ' onclick="toggleAutoRenewal()"';
+        $btnTxt = HtmlHelper::configureSwitchForCheckboxStatic('', '', $attributes, Labels::getLabel('LBL_AutoRenew_Subscription', $siteLangId));
         $data['otherButtons']['html'] = $btnTxt;
     }
 

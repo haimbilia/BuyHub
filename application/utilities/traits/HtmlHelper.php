@@ -55,6 +55,17 @@ class HtmlHelper
         }
         $fld->developerTags['noCaptionTag'] = true;
     }
+    
+    public static function configureSwitchForCheckboxStatic($name, $value, $attributes = '', $caption = '')
+    {
+        $name = !empty($name) ? 'name="' . $name . '"' : '';
+        $value = !empty($value) ? 'value="' . $value . '"' : '';
+        return '<label class="switch switch-sm switch-icon">
+                    <input data-field-caption="' . $caption . '" type="checkbox" ' . $name . ' '. $value .' ' . $attributes . '>
+                    <span class="input-helper"></span>
+                    ' . $caption . '
+                </label>';
+    }
 
     public static function configureSwitchForRadio($fld, $msg = '')
     {

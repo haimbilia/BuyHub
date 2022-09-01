@@ -2148,7 +2148,7 @@ trait SellerProducts
         $this->_template->render(false, false);
     }
 
-    public function searchPoliciesToLink()
+    /* public function searchPoliciesToLink()
     {
         $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $ppoint_type = FatApp::getPostedData('ppoint_type', FatUtility::VAR_INT, 0);
@@ -2173,7 +2173,7 @@ trait SellerProducts
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         $this->_template->render(false, false, 'seller/search-policies-to-link.php', false, false);
-    }
+    } */
 
     public function getSpecialPriceDiscountString()
     {
