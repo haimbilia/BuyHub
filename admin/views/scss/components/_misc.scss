@@ -3216,6 +3216,7 @@ $header-height: 65px;
 .iti {
     // width: 100%;
     //height: $input-height;
+    display: flex;
     font-size: 0.8rem;
     position: relative;
     &__selected-flag {
