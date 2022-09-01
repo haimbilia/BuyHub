@@ -1806,7 +1806,7 @@ class ConfigurationsController extends ListingBaseController
                 */
                 /* block start */
 
-                $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_INVOICE_LOGO", $langId) . ' </h6>
+                /* $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_INVOICE_LOGO", $langId) . ' </h6>
                     <span class="form-text text-muted">
                         <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_LOGO_APPEAR_ON_INVOICE_GENERATED_WITH_A_PURCHASE_ORDER", $langId) . '</span>');
 
@@ -1831,7 +1831,7 @@ class ConfigurationsController extends ListingBaseController
                 ));
 
                 $fld = $frm->addHtml('', 'spacer8', '<div class="separator separator-dashed my-5"></div>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null]; */
 
 
                 /* block start */

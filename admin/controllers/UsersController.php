@@ -364,7 +364,7 @@ class UsersController extends ListingBaseController
 
         $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('placeholder' => Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
 
-        $frm->addHiddenField('', 'user_phone_dcode');        
+        $frm->addHiddenField('', 'user_phone_dcode');
         $companyFld = $frm->addTextBox(Labels::getLabel('FRM_COMPANY', $this->siteLangId), 'user_company');
 
         if (1 > $recordId) {
@@ -377,7 +377,8 @@ class UsersController extends ListingBaseController
             $userTypefld->requirements()->addOnChangerequirementUpdate(User::USER_TYPE_ADVERTISER, 'ne', 'user_company', $companyUnReqObj);
         }
 
-        if(1 < $recordId && !User::getAttributesById($recordId, 'user_is_advertiser')){
+        $isAdvertiser = User::getAttributesById($recordId, 'user_is_advertiser');
+        if (1 < $recordId && !$isAdvertiser) {
             $frm->removeField($companyFld);
         }
 
@@ -391,6 +392,12 @@ class UsersController extends ListingBaseController
 
         $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('FRM_Select', $this->siteLangId));
         $frm->addTextBox(Labels::getLabel('FRM_CITY', $this->siteLangId), 'user_city');
+
+        if ($isAdvertiser) {
+            $fld = $frm->addTextArea(Labels::getLabel('FRM_BRIEF_PROFILE', $this->siteLangId), 'user_profile_info');
+            $fld->html_after_field = '<small>' . Labels::getLabel('FRM_PLEASE_TELL_US_SOMETHING_ABOUT_YOURSELF', $this->siteLangId) . '</small>';
+            $frm->addTextArea(Labels::getLabel('FRM_WHAT_KIND_PRODUCTS_SERVICES_ADVERTISE', $this->siteLangId), 'user_products_services');
+        }
 
         return $frm;
     }
