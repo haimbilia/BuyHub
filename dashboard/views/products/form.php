@@ -119,52 +119,50 @@ if (0 < $recordId) {
                         </div>
                         <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
                     </div>
-                    <div class="collapse" id="stock-block1">
-                        <div class="card-body  p-0">
-                            <?php 
-                            if (0 < $recordId) {
-                                echo HtmlHelper::getErrorMessageHtml(Labels::getLabel("ERR_IF_INVENTORY_IS_ALREADY_ADDED_THEN_YOU_CANNOT_BIND_FURTHER_OPTIONS.")); 
-                            }
-                            ?>
-                            <div class="js-scrollable table-wrap table-responsive">
-                                <table class="table  listingTableJs" id="variantsJs">
-                                    <thead class="tableHeadJs">
-                                        <tr>
-                                            <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                                            <th width="45%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                                            <?php if (false === $hasInventory) { ?>
-                                                <th class="align-right" width="15%"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
-                                            <?php } ?>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $optionCount = count($productOptions);
-                                        for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
-                                            $prodOption = $productOptions[$i] ?? [];
-                                            $this->includeTemplate('products/get-variant-row.php', ['langId' => $langId, 'index' => $i, 'hasInventory' => $hasInventory, 'productOption' => $prodOption]);
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
-                                <div class="separator separator-dashed my-4"></div>
-                                <div class="form-group row justify-content-between px-4">
-                                    <div class="col">
-                                        <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
-                                    </div>
-                                    <div class="col-auto">
-                                        <?php
-                                        $fld = $frm->getField('upc_type');
-                                        HtmlHelper::configureSwitchForRadio($fld);
-                                        $fld->addOptionListTagAttribute('class', 'list-radio');
-                                        $fld->addFieldTagAttribute('onchange', 'upcType()');
-                                        $fld->addFieldTagAttribute('class', 'upc_type');
-                                        echo $fld->getHtml();
-                                        ?>
-                                    </div>
+                    <div class="card-body collapse" id="stock-block1">
+                        <?php
+                        if (0 < $recordId) {
+                            echo HtmlHelper::getErrorMessageHtml(Labels::getLabel("ERR_IF_INVENTORY_IS_ALREADY_ADDED_THEN_YOU_CANNOT_BIND_FURTHER_OPTIONS."));
+                        }
+                        ?>
+                        <div class="js-scrollable table-wrap table-responsive">
+                            <table class="table listingTableJs" id="variantsJs" data-autoColumnWidth="0">
+                                <thead class="tableHeadJs">
+                                    <tr>
+                                        <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
+                                        <th width="45%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                                        <?php if (false === $hasInventory) { ?>
+                                            <th class="align-right" width="15%"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
+                                        <?php } ?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $optionCount = count($productOptions);
+                                    for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
+                                        $prodOption = $productOptions[$i] ?? [];
+                                        $this->includeTemplate('products/get-variant-row.php', ['langId' => $langId, 'index' => $i, 'hasInventory' => $hasInventory, 'productOption' => $prodOption]);
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                            <div class="separator separator-dashed my-4"></div>
+                            <div class="form-group row justify-content-between px-4">
+                                <div class="col">
+                                    <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
                                 </div>
-                                <div id="variantsListJs"></div>
+                                <div class="col-auto">
+                                    <?php
+                                    $fld = $frm->getField('upc_type');
+                                    HtmlHelper::configureSwitchForRadio($fld);
+                                    $fld->addOptionListTagAttribute('class', 'list-radio');
+                                    $fld->addFieldTagAttribute('onchange', 'upcType()');
+                                    $fld->addFieldTagAttribute('class', 'upc_type');
+                                    echo $fld->getHtml();
+                                    ?>
+                                </div>
                             </div>
+                            <div id="variantsListJs"></div>
                         </div>
                     </div>
                 </div>
