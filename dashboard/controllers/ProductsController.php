@@ -207,6 +207,7 @@ class ProductsController extends SellerBaseController
         $this->set('productOptions', $productOptions);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         if (FatUtility::isAjaxCall()) {
+            $this->set('nodes', $this->getBreadcrumbNodes($this->_actionName));
             $this->set('html', $this->_template->render(false, false, NULL, true));
             $this->_template->render(false, false, 'json-success.php', true, false);
             return;
@@ -890,10 +891,6 @@ class ProductsController extends SellerBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        if (FatUtility::isAjaxCall()) {
-            return;
-        }
-
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);

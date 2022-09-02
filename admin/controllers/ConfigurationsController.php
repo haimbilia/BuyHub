@@ -1722,7 +1722,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_WATERMARK_IMAGE", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong>' . Labels::getLabel("MSG_A_WATERMARK_TRANSPARENT_LOGO_ON_PHOTOGRAPH", $langId) . ' </span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong>' . Labels::getLabel("MSG_A_WATERMARK_TRANSPARENT_LOGO_ON_PHOTOGRAPH", $langId) . ' ' . Labels::getLabel('FRM_AND_DIMENSIONS_SHOULD_BE', $langId) . ' 120*90</span></span>');
 
                 $fileType = AttachedFile::FILETYPE_WATERMARK_IMAGE;
 
@@ -1736,7 +1736,7 @@ class ConfigurationsController extends ListingBaseController
                 }
 
                 $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-min_width' => 168, 'data-min_height' => 37, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_WATERMARK_IMAGE", $langId)],
+                    ['onChange' => 'popupImage(this)', 'data-min_width' => 120, 'data-min_height' => 90, 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_WATERMARK_IMAGE", $langId)],
                     $langId,
                     'removeMediaImage(' . $fileType . ',' . $langId . ')',
                     'editDropZoneImages(this)',

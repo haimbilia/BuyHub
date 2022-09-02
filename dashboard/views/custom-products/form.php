@@ -117,9 +117,9 @@ if (0 < $recordId) {
                         </div>
                         <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
                     </div>
-                    <div class="collapse" id="stock-block1">
-                        <div class="card-body p-0">
-                            <table class="table listingTableJs" id="variantsJs">
+                    <div class="card-body collapse" id="stock-block1">
+                        <div class="js-scrollable table-wrap table-responsive">
+                            <table class="table listingTableJs" id="variantsJs" data-autoColumnWidth="0">
                                 <thead class="tableHeadJs">
                                     <tr>
                                         <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>

@@ -720,13 +720,26 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
     /* Fix width of table headings. */
     fixTableColumnWidth = function () {
-        var thWidthArr = [];
-        var autoTableColumWidth = $('.listingTableJs').data('autoColumnWidth');
-        if (1 > autoTableColumWidth) {
-            return false;
+        if (0 < $('.listingTableJs').length) {
+            $('.listingTableJs').each(function () {
+                let autoColumnWidth = $(this).attr('data-autoColumnWidth');
+                if ('undefined' == typeof autoColumnWidth || 0 < autoColumnWidth || '' == autoColumnWidth) {
+                    fixWidth($(this));
+                }
+            });
+        } else {
+            let autoTableColumWidth = $('.listingTableJs').data('autoColumnWidth');
+            if (1 > autoTableColumWidth) {
+                return false;
+            }
+            fixWidth($('.listingTableJs'));
         }
+    }
 
-        $('.listingTableJs .tableHeadJs th').each(function () {
+    fixWidth = function (formObj) {
+        var thWidthArr = [];
+
+        $('.tableHeadJs th', formObj).each(function () {
             var arr = {
                 'width': $(this).outerWidth(true),
                 'element': $(this)
@@ -737,17 +750,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         thWidthArr.sort((a, b) => (a.width > b.width) ? 1 : -1)
         /* Sort By width */
 
-        /* let isSortableTable = 0 < $(".listingTableJs .listingRecordJs .handleJs").length; */
-
         $.each(thWidthArr, function (index, value) {
             var width = value.width;
             var element = value.element;
             $(element).attr('width', width);
-
-            /* Not required for drag drop functionality. */
-            /* if (isSortableTable) {
-                $(".listingTableJs .listingRecordJs tr td:nth-child(" + (value.element.index() + 1) + ")").attr('width', width);
-            } */
         });
     }
 
