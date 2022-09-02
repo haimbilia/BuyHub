@@ -351,9 +351,10 @@ $sharing-height: 50px;
 .specification-group {
     margin: 3rem 0;
     h6 {
-        text-transform: uppercase;
-        margin-bottom: 1rem;
-        font-weight: 600;
+        margin-bottom: 0;
+        font-weight: 300;
+        font-size: 0.85rem;
+        color: $txt-gray;
     }
     .label {
         color: $txt-gray;
@@ -373,18 +374,17 @@ $sharing-height: 50px;
         color: $txt-gray;
         border-bottom: dashed 1px $border-color;
         &:first-child {
-            border-top: none;
             // padding-top: 0;
         }
         &:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
+            // border-bottom: none;
+            // padding-bottom: 0;
         }
 
         .label {
             white-space: normal;
             padding: 0;
-            padding-#{$end-direction}: 1rem; 
+            padding-#{$end-direction}: 1rem;
             margin: 0;
             flex: 0 0 30%;
             max-width: 30%;
