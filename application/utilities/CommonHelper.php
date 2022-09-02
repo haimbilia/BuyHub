@@ -186,6 +186,11 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_code'])) {
             return self::$_currencyData['currency_code'];
         }
+
+        if (empty(self::$_currency_id)) {
+            self::setClassVariables();
+        }
+        
         return self::$_currencyData['currency_code'] = Currency::getAttributesById(self::$_currency_id, 'currency_code');
     }
 
@@ -194,6 +199,11 @@ class CommonHelper extends FatUtility
         if (isset(self::$_currencyData['currency_value'])) {
             return self::$_currencyData['currency_value'];
         }
+
+        if (empty(self::$_currency_id)) {
+            self::setClassVariables();
+        }
+
         return self::$_currencyData['currency_value'] = Currency::getAttributesById(self::$_currency_id, 'currency_value');
     }
 
