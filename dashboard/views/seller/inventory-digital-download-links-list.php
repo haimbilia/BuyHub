@@ -10,7 +10,7 @@ if (true === $canDoDigDownload) {
     $arr_flds['action'] = Labels::getLabel('LBL_Action', $siteLangId);
 }
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-justified'));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);
@@ -44,14 +44,14 @@ foreach ($records as $sn => $row) {
                 break;
             case 'pdl_download_link':
                 if ('' != $row[$key] && true === $canDoDigDownload) {
-                    $td->appendElement('div', array("class" => "clipboard"), '<input class="copy-input" value="' . $row[$key] . '" id="copymain_' . $row['pdl_id'] . '" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_' . $row['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copymain_' . $row['pdl_id'] . '\')"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class" => "clipboard"), '<input class="copy-input" value="' . $row[$key] . '" id="copymain_' . $row['pdl_id'] . '" readonly> <button class="btn btn-light copy-btn" id="copyButton_' . $row['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copymain_' . $row['pdl_id'] . '\')"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
                 break;
             case 'pdl_preview_link':
                 if ('' != $row[$key]) {
-                    $td->appendElement('div', array("class" => "clipboard"), '<input class="copy-input" value="' . $row[$key] . '" id="copypreview_' . $row['pdl_id'] . '" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_' . $row['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copypreview_' . $row['pdl_id'] . '\')"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class" => "clipboard"), '<input class="copy-input" value="' . $row[$key] . '" id="copypreview_' . $row['pdl_id'] . '" readonly> <button class="btn btn-light copy-btn" id="copyButton_' . $row['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copypreview_' . $row['pdl_id'] . '\')"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
