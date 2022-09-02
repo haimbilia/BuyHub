@@ -144,7 +144,7 @@ $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
                 fcom.displayErrorMessage(ans.msg);
                 return false;
             }
-			searchBuyerDownloadLinks(document.frmSrch);
+            searchBuyerDownloadLinks(document.frmSrch);
             return true;
         });
     }

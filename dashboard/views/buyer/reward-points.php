@@ -15,7 +15,7 @@ $frmSrch->developerTags['fld_default_col'] = 12;
             ];
             $this->includeTemplate('_partial/header/content-header.php', $data); ?>
             <div class="content-body">
-                <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-1.png);">
+                <div class="card card-commerce card-commerce-bg" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>/images/card-commerce-bg-3.png);">
                     <div class="card-head border-0">
                         <div class="card-head-label">
                             <h5 class="card-title"><?php echo Labels::getLabel('LBL_CURRENT_REWARD_POINTS', $siteLangId); ?></h5>
