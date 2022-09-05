@@ -670,7 +670,9 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
                 fcom.displayErrorMessage(res.msg);
                 return false;
             }
-            $('.refFile--js').remove();
+            $('.refFileJs').remove();
+            $('.fileUpload--js').removeAttr('disabled');
+            fcom.displaySuccessMessage(res.msg);
         });
     };
 })();
