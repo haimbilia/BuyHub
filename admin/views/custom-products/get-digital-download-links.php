@@ -1,18 +1,18 @@
 <?php
 
-if(1 > count($links)){
+if (1 > count($links)) {
     return;
 }
 $arr_flds = [
     'pdl_download_link' => Labels::getLabel('LBL_DOWNLOAD_LINK', $siteLangId),
-    'pdl_preview_link' => Labels::getLabel('LBL_PREVIEW_LINK', $siteLangId),   
-    'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId),    
+    'pdl_preview_link' => Labels::getLabel('LBL_PREVIEW_LINK', $siteLangId),
+    'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId),
 ];
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table listingTableJs'));
-$th = $tbl->appendElement('thead',['class'=> 'tableHeadJs'])->appendElement('tr', array('class' => 'hide--mobile'));
+$th = $tbl->appendElement('thead', ['class' => 'tableHeadJs'])->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
-    $tdAttr = ('action' == $key) ? ['class' => 'align-right','width'=>'20%'] : ['width'=>'40%'];
+    $tdAttr = ('action' == $key) ? ['class' => 'align-right', 'width' => '20%'] : ['width' => '40%'];
     $e = $th->appendElement('th', $tdAttr, $val);
 }
 
@@ -23,7 +23,7 @@ foreach ($links as $sn => $row) {
 
     foreach ($arr_flds as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
-        $td = $tr->appendElement('td', $tdAttr);       
+        $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo, true);
@@ -46,30 +46,30 @@ foreach ($links as $sn => $row) {
                 break;
             case 'pdl_download_link':
                 if ('' != $row['pdl_download_link']) {
-                    $td->appendElement('div', array("class"=>"clipboard"), '<input  name ="copy" class="form-control copy-input"  title="'.$row[$key].'"  value="'.$row[$key].'" readonly> <button type="button" data-title="'.$row[$key].'" class="btn btn-light btn-sm copy-btn"  onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class" => "clipboard"), '<input  name ="copy" class="form-control copy-input"  title="' . $row[$key] . '"  value="' . $row[$key] . '" readonly> <button type="button" data-title="' . $row[$key] . '" class="copy-btn"  onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', $tdAttr, Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
-                
+
                 break;
             case 'pdl_preview_link':
                 if ('' != $row['pdl_preview_link']) {
-                    $td->appendElement('div', array("class"=>"clipboard"), '<input name ="copy" class="form-control copy-input"  title="'.$row[$key].'" value="'.$row[$key].'"  readonly> <button type="button" data-title="'.$row[$key].'" class="btn btn-light btn-sm copy-btn" onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class" => "clipboard"), '<input name ="copy" class="form-control copy-input"  title="' . $row[$key] . '" value="' . $row[$key] . '"  readonly> <button type="button" data-title="' . $row[$key] . '" class="copy-btn" onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', $tdAttr, Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
                 break;
-            case 'action':           
-                    $data = [
-                        'siteLangId' => $siteLangId,
-                        'recordId' => $row['pdl_id']
-                    ];
-                    $data['deleteButton'] = [
-                        'onclick' => 'deleteDigitallink(' . $row['pdl_id'] . ',' . $row['pdl_record_id'] . ')'
-                    ];                  
+            case 'action':
+                $data = [
+                    'siteLangId' => $siteLangId,
+                    'recordId' => $row['pdl_id']
+                ];
+                $data['deleteButton'] = [
+                    'onclick' => 'deleteDigitallink(' . $row['pdl_id'] . ',' . $row['pdl_record_id'] . ')'
+                ];
 
-                    $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
-                    $td->appendElement('plaintext', $tdAttr, $actionItems, true);
+                $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
+                $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);

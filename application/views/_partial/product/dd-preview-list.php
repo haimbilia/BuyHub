@@ -10,8 +10,8 @@
         <?php
         if (0 < count($product['preview_links']) || 0 < count($product['preview_attachments'])) {
             if (0 < count($product['preview_links'])) { ?>
-                <div class="h6">
-                    <?php echo Labels::getLabel('LBL_Links', $siteLangId); ?></div>
+                <h6 class="h6">
+                    <?php echo Labels::getLabel('LBL_Links', $siteLangId); ?></h6>
                 <ul class="list-files">
                     <?php
                     foreach ($product['preview_links'] as $keys => $link) {
@@ -20,20 +20,25 @@
                         }
                     ?>
                         <li>
-                            <?php echo '<div class="clipboard"><input class="copy-input" value="' . $link['pdl_preview_link'] . '" id="copypreview_' . $link['pdl_id'] . '" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_' . $link['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copypreview_' . $link['pdl_id'] . '\')">
-                                            <span class="icon">                                           
+
+                            <?php echo '<div class="clipboard">
+                                <input class="copy-input" value="' . $link['pdl_preview_link'] . '" id="copypreview_' . $link['pdl_id'] . '" readonly> <button class="copy-btn" id="copyButton_' . $link['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copypreview_' . $link['pdl_id'] . '\')">
+       
                                                 <svg class="svg" width="18" height="18">
                                                     <use xlink:href="' . CONF_WEBROOT_FRONTEND . 'images/retina/sprite.svg#copy-to-all">
                                                     </use>
                                                 </svg>                                           
-                                            </span>
-                                        </button><br/>'; ?>
+                                           
+                                        </button>'; ?>
+
+
                         </li>
+
                     <?php } ?>
                 </ul>
             <?php }
             if (0 < count($product['preview_attachments'])) { ?>
-                <div class="prod-attached-files h6"><?php echo Labels::getLabel('LBL_Attachments', $siteLangId); ?></div>
+                <h6 class="prod-attached-files mt-4 h6"><?php echo Labels::getLabel('LBL_Attachments', $siteLangId); ?></h6>
                 <ul class="list-files">
                     <?php foreach ($product['preview_attachments'] as $keys => $attachment) {
                         if (0 < strlen($attachment['preview'])) {
@@ -41,21 +46,26 @@
                             $fileExt = strtolower($fileExt);
                             $videoPath = AttachedFile::getProductPreviewVideoUrl($attachment['prev_afile_id']); ?>
                             <li>
-                                <div class="text-break">
-                                    <?php echo $attachment['preview']; ?>
-                                </div>
-                                <div class="btn-group">
-                                    <?php if (in_array($fileExt, applicationConstants::allowedVideoFileExtensions())) { ?>
-                                        <a class="btn btn-light btn-sm play-preview" href="javascript:void(0);" title="<?php echo $attachment['preview']; ?>" onclick="playVideo('<?php echo $videoPath; ?>', '<?php echo $fileExt; ?>','<?php echo $attachment['preview']; ?>','<?php echo $attachment['preview']; ?>'); return false;">
-                                            <i class="fa fa-caret-square-right icon"></i>
+                                <div class="clipboard">
+                                    <div class="copy-input">
+                                        <?php echo $attachment['preview']; ?>
+                                    </div>
+                                    <div class="btn-group">
+                                        <?php if (in_array($fileExt, applicationConstants::allowedVideoFileExtensions())) { ?>
+                                            <button class="copy-btn play-preview" type="button" title="<?php echo $attachment['preview']; ?>" onclick="playVideo('<?php echo $videoPath; ?>', '<?php echo $fileExt; ?>','<?php echo $attachment['preview']; ?>','<?php echo $attachment['preview']; ?>'); return false;">
+                                                <svg class="svg" width="18" height="18">
+                                                    <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#icon-preview">
+                                                    </use>
+                                                </svg>
+                                            </button>
+                                        <?php } ?>
+                                        <a class="copy-btn download-preview" target="_blank" href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>" title="<?php echo $attachment['preview']; ?>">
+                                            <svg class="svg" width="18" height="18">
+                                                <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#icon-download">
+                                                </use>
+                                            </svg>
                                         </a>
-                                    <?php } ?>
-                                    <a class="btn btn-light btn-sm download--preview" target="_blank" href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>" title="<?php echo $attachment['preview']; ?>">
-                                        <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#icon-download">
-                                            </use>
-                                        </svg>
-                                    </a>
+                                    </div>
                                 </div>
                             </li>
                     <?php

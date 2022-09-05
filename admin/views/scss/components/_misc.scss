@@ -2047,7 +2047,7 @@ mark,
         border: none;
     }
 }
-
+$clipboard-size: 40px;
 .clipboard {
     position: relative;
     display: flex;
@@ -2067,6 +2067,21 @@ mark,
         // margin-#{$end-direction}: 10px;
         &:focus {
             outline: none;
+        }
+    }
+    .copy-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: $clipboard-size;
+        width: $clipboard-size;
+        background-color: transparent;
+        border: none;
+        font-size: 1.2rem;
+        transition: all 0.5s ease;
+        &:active,
+        &:focus {
+            box-shadow: none;
         }
     }
 }

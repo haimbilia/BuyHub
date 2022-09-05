@@ -42,14 +42,14 @@ foreach ($links as $sn => $row) {
                 break;
             case 'pdl_download_link':
                 if ('' != $row[$key]) {
-                    $td->appendElement('div', array("class" => "clipboard"), '<input class="copy-input" value="' . $row[$key] . '" id="copymain_' . $row['pdl_id'] . '" readonly> <button class="btn btn-light copy-btn" id="copyButton_' . $row['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copymain_' . $row['pdl_id'] . '\')"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class" => "clipboard"), '<input class="copy-input" value="' . $row[$key] . '" id="copymain_' . $row['pdl_id'] . '" readonly> <button class="copy-btn" id="copyButton_' . $row['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copymain_' . $row['pdl_id'] . '\')"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
                 break;
             case 'pdl_preview_link':
                 if ('' != $row[$key]) {
-                    $td->appendElement('div', array("class" => "clipboard"), '<input class="copy-input" value="' . $row[$key] . '" id="copypreview_' . $row['pdl_id'] . '" readonly> <button class="btn btn-light copy-btn" id="copyButton_' . $row['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copypreview_' . $row['pdl_id'] . '\')"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class" => "clipboard"), '<input class="copy-input" value="' . $row[$key] . '" id="copypreview_' . $row['pdl_id'] . '" readonly> <button class="copy-btn" id="copyButton_' . $row['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copypreview_' . $row['pdl_id'] . '\')"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
