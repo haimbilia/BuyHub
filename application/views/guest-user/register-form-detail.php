@@ -12,7 +12,7 @@ $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'sit
     <div class="card-sign">
         <div class="card-sign_head">
             <h2 class="title">
-                <?php echo Labels::getLabel('LBL_Create_your_Yokart_account', $siteLangId); ?>
+                <?php echo Labels::getLabel('LBL_CREATE_YOUR_SITE_ACCOUNT', $siteLangId); ?>
             </h2>
         </div>
         <div class="card-sign_body">

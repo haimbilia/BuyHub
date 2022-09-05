@@ -4,7 +4,7 @@ class UserAuthentication extends FatModel
 {
     public const SESSION_ELEMENT_NAME = 'yokartUserSession';
     public const AFFILIATE_SESSION_ELEMENT_NAME = 'yokartAffiliateSession';
-    public const YOKARTUSER_COOKIE_NAME = '_uyokart';
+    public const SYSTEMUSER_COOKIE_NAME = '_uyokart';
     public const TEMP_SESSION_ELEMENT_NAME = 'yokartTempUserSession';
 
     public const DB_TBL_USER_PRR = 'tbl_user_password_reset_requests';
@@ -159,7 +159,7 @@ class UserAuthentication extends FatModel
 
     public static function doCookieLogin($returnAuthRow = true)
     {
-        $cookieName = self::YOKARTUSER_COOKIE_NAME;
+        $cookieName = self::SYSTEMUSER_COOKIE_NAME;
 
         if (!array_key_exists($cookieName, $_COOKIE)) {
             return false;
@@ -564,22 +564,22 @@ class UserAuthentication extends FatModel
 
     public static function clearLoggedUserLoginCookie()
     {
-        if (!isset($_COOKIE[static::YOKARTUSER_COOKIE_NAME])) {
+        if (!isset($_COOKIE[static::SYSTEMUSER_COOKIE_NAME])) {
             return false;
         }
 
         $db = FatApp::getDb();
-        if (strlen($_COOKIE[static::YOKARTUSER_COOKIE_NAME])) {
+        if (strlen($_COOKIE[static::SYSTEMUSER_COOKIE_NAME])) {
             $db->deleteRecords(
                 static::DB_TBL_USER_AUTH,
                 array(
                     'smt' => static::DB_TBL_UAUTH_PREFIX . 'token = ?',
-                    'vals' => array($_COOKIE[static::YOKARTUSER_COOKIE_NAME])
+                    'vals' => array($_COOKIE[static::SYSTEMUSER_COOKIE_NAME])
                 )
             );
         }
 
-        setcookie($_COOKIE[static::YOKARTUSER_COOKIE_NAME], '', time() - 3600, CONF_WEBROOT_URL);
+        setcookie($_COOKIE[static::SYSTEMUSER_COOKIE_NAME], '', time() - 3600, CONF_WEBROOT_URL);
         return true;
     }
 
