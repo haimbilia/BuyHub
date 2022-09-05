@@ -200,15 +200,15 @@
                     <div class="gap"></div>
                     <h6><?php echo Labels::getLabel('MSG_OR_COPY_LINK', $siteLangId); ?></h6>
                     <div class="clipboard">
-                        <span class="clipboard_url clipboardTextJs">
+                        <span class="copy-input clipboardTextJs">
                             <?php echo UrlHelper::generateFullUrl('Blog', 'postDetail', array($blogPostData['post_id'])); ?>
                         </span>
-                        <a class="clipboard_btn" href="javascript:void(0);" onclick="copyText($(this))" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
+                        <button class="copy-btn" type="button" onclick="copyText($(this))" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#copy-to-all">
                                 </use>
                             </svg>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>

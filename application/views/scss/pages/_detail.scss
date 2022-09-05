@@ -955,29 +955,6 @@ $sharing-height: 50px;
     }
 }
 
-.clipboard {
-    position: relative;
-    display: flex;
-    align-items: center;
-    flex: 1;
-    gap: 10px;
-    .copy-input {
-        //max-width: 248px;
-        width: 100%;
-        cursor: pointer;
-        background-color: $bg-white;
-        font-size: 0.8rem;
-        border: none;
-        border-radius: $common-radius;
-        padding: 8px;
-        color: $txt-gray;
-        // margin-#{$end-direction}: 10px;
-        &:focus {
-            outline: none;
-        }
-    }
-}
-
 .jwplayer--content {
     /* (16:9 ratio) */
     width: 100%;
