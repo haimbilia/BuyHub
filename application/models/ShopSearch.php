@@ -44,6 +44,7 @@ class ShopSearch extends SearchBase
         $this->addCondition('u.user_is_supplier', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
 
         if ($isActive) {
+            $this->addCondition('u.user_deleted', '=', applicationConstants::NO);
             $this->addCondition('credential_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
             $this->addCondition('credential_verified', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         }
