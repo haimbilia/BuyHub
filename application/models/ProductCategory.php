@@ -1161,9 +1161,7 @@ class ProductCategory extends MyAppModel
 
         $this->assignValues($post);
         if ($this->save()) {
-            $this->updateCatCode();
             $this->rewriteUrl($post['urlrewrite_custom'], false, $parentCatId);
-            // Product::updateMinPrices();
         } else {
             $categoryId = self::getDeletedProductCategoryByIdentifier($post['prodcat_identifier']);
             if (!$categoryId) {
@@ -1180,17 +1178,16 @@ class ProductCategory extends MyAppModel
                 return false;
             }
             $this->mainTableRecordId = $record->getMainTableRecordId();
-            $this->updateCatCode();
         }
 
-        $childrens = $this->getChildrens();
+        /*  $childrens = $this->getChildrens();
         $db = FatApp::getDb();
         foreach ($childrens as $catId => $notInUse) {
             if (!$db->query('CALL updateCategoryRelations(' . $catId . ')')) {
                 $this->error = $db->getError();
                 return false;
             }
-        }
+        } */
 
         if (array_key_exists('prodcat_active', $post)) {
             if (applicationConstants::INACTIVE == $post['prodcat_active']) {
