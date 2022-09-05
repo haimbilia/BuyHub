@@ -352,7 +352,7 @@ class ProductCategoriesController extends ListingBaseController
         }
 
         $newParentCatId = FatUtility::int($post['prodcat_parent']);
-        $newRecord = (1 > $recordId || $newParentCatId != $oldParentCatId);
+        $isParentUpdated = (1 > $recordId || $newParentCatId != $oldParentCatId);
 
         $prodCatStatus = FatApp::getPostedData('prodcat_status', FatUtility::VAR_INT, 0);
         $post['prodcat_status'] = 0 < $prodCatReq ? $prodCatStatus : ProductCategory::REQUEST_APPROVED;
@@ -378,9 +378,18 @@ class ProductCategoriesController extends ListingBaseController
             $this->set('openMediaForm', true);
         }
 
-        FatApp::getDb()->query('CALL updateCategoryRelations(0)');
+        $updateRecordId = ($isParentUpdated ? (1 > $newParentCatId ? $recordId : $newParentCatId) : $recordId);
+        if ($isParentUpdated) {
+            $prodCatCode = new ProductCategory($updateRecordId);
+            $prodCatCode->updateCatCode();
+            FatApp::getDb()->query('CALL updateCategoryRelations(' . $updateRecordId . ')');
+            if (0 < $oldParentCatId) {
+                $prodCatCode->setMainTableRecordId($oldParentCatId);
+                $prodCatCode->updateCatCode();
+                FatApp::getDb()->query('CALL updateCategoryRelations(' . $oldParentCatId . ')');
+            }
+        }
 
-        $updateRecordId = ($newRecord ? (1 > $newParentCatId ? $recordId : $newParentCatId) : $recordId);
         $prodCat = new ProductCategory($updateRecordId);
         $row = (array) $prodCat->getData(true, true);
         $this->set("row", $row);
