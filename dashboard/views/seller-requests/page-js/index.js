@@ -499,7 +499,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
                     return false;
                 }
                 fcom.displaySuccessMessage(ans.msg);
-                backToListing();
+                searchBadgeRequests();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
