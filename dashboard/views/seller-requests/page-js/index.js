@@ -499,7 +499,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
                     return false;
                 }
                 fcom.displaySuccessMessage(ans.msg);
-                backToListing();
+                searchBadgeRequests();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -670,7 +670,9 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
                 fcom.displayErrorMessage(res.msg);
                 return false;
             }
-            $('.refFile--js').remove();
+            $('.refFileJs').remove();
+            $('.fileUpload--js').removeAttr('disabled');
+            fcom.displaySuccessMessage(res.msg);
         });
     };
 })();

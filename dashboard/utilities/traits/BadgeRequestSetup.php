@@ -219,7 +219,7 @@ trait BadgeRequestSetup
     {
         $this->userPrivilege->canEditBadgesAndRibbons();
         $frm = $this->getBadgeForm($badgeReqId, $badgeId);
-        $badgeId = $badgeId;
+        $res = [];
         if (0 < $badgeReqId) {
             $srch = $this->getRequestedBadgeObj();
             $srch->addCondition('breq_id', '=', $badgeReqId);
@@ -234,8 +234,9 @@ trait BadgeRequestSetup
             $frm->fill($requestedBadge);
 
             $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
-            $this->set('fileFound', (false !== $res && 0 < $res['afile_id']));
         }
+        $this->set('attachment', $res);
+
         $approvalRequiredBadges = BadgeLinkCondition::getApprovalRequestBadges($this->siteLangId);
         $this->set('approvalRequiredBadges', $approvalRequiredBadges);
         $this->set('frm', $frm);

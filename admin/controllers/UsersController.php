@@ -301,7 +301,7 @@ class UsersController extends ListingBaseController
             Product::updateMinPrices(0, $shopId);
         }
 
-        $this->set('msg', $this->str_setup_successful);
+        $this->set('msg', Labels::getLabel('LBL_RECORD_DELETED_SUCCESSFULLY.'));
         $this->_template->render(false, false, 'json-success.php');
     }
 

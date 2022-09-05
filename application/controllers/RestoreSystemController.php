@@ -8,7 +8,7 @@ class RestoreSystemController extends MyAppController
     public const BACKUP_FILE = CONF_INSTALLATION_PATH . "restore/database/db.sql";
     public const DATABASE_FIRST = CONF_RESTORE_DB_INSTANCE_1;
     public const DATABASE_SECOND = CONF_RESTORE_DB_INSTANCE_2;
-    public const RESTORE_TIME_INTERVAL_HOURS = 4;
+    public const RESTORE_TIME_INTERVAL_HOURS = 8;
 
     public function index()
     {
