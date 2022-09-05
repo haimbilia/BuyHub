@@ -56,12 +56,9 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case 'pu_active':
-                $active = "";
-                if (applicationConstants::ACTIVE == $row['pu_active']) {
-                    $active = 'checked';
-                }
-                $str = '<label class="toggle-switch" for="switch' . $row['plugin_id'] . '"><input ' . $active . ' type="checkbox" value="' . $row['plugin_id'] . '" id="switch' . $row['plugin_id'] . '" onclick="toggleStatus(this,' . ($row['pu_active'] > 0 ? 0 : 1) . ')"/><div class="slider round"></div></label>';
-
+                $attributes = (applicationConstants::ACTIVE == $row['pu_active']) ? "checked" : "";
+                $attributes .= ' onclick="toggleStatus(this,' . ($row['pu_active'] > 0 ? 0 : 1) . ')"';
+                $str = HtmlHelper::configureSwitchForCheckboxStatic('', $row['plugin_id'], $attributes);
                 $td->appendElement('plaintext', array(), $str, true);
                 break;
             case 'action':

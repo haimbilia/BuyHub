@@ -191,6 +191,12 @@ $(document).ajaxComplete(function () {
         redirectfunc(fcom.makeUrl('TrackingCodeRelation'));
     };
     /* ----- */
+
+    confirmTaxPluginActivation = function (obj, msg) {
+        if (!confirm(msg)) { return false; }
+        eval($(obj).data('function'));
+        return true;
+    }
 })();
 
 $(document).on('click', '.uploadFile-Js', function () {

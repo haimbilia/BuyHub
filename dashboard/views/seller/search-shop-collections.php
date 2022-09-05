@@ -82,12 +82,10 @@
                         break;
 
                     case 'scollection_active':
-                        $active = "";
-                        if (applicationConstants::ACTIVE == $row['scollection_active']) {
-                            $active = 'checked';
-                        }
-                        $checked = (!$canEdit) ? 'disabled' : $active;
-                        $str = '<label class="toggle-switch" for="switch' . $row['scollection_id'] . '"><input ' . $checked . ' type="checkbox" value="' . $row['scollection_id'] . '" id="switch' . $row['scollection_id'] . '" onclick="toggleShopCollectionStatus(event,this)"/><div class="slider round"></div></label>';
+                        $attributes = (applicationConstants::ACTIVE == $row['scollection_active']) ? "checked" : "";
+                        $attributes .= (!$canEdit) ? ' disabled' : '';
+                        $attributes .= ' onclick="toggleShopCollectionStatus(event,this)"';
+                        $str = HtmlHelper::configureSwitchForCheckboxStatic('', $row['scollection_id'], $attributes);
 
                         $td->appendElement('plaintext', array(), $str, true);
                         break;

@@ -3,7 +3,7 @@
 <ul class="timeline">
     <?php
     $orderCancelled = (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']);
-  
+
 
     $selectUpto = array_search($currentStatus, array_keys($orderProductStatusArr));
 
@@ -11,15 +11,15 @@
         $selectUpto = array_search($childOrderDetail['orderstatus_id'], array_keys($orderProductStatusArr));
     }
     $index = 0;
-  
+
 
     foreach ($orderProductStatusArr as $statusId => $statusLabel) {
         $current = $currentStatus == $statusId || $orderCancelled ? 'currently ' : '';
         $highlight = ($index <= $selectUpto || in_array($statusId, $highlightEnabled) || $orderCancelled ? 'enable ' : 'disabled ');
         $orderTimeLineRecords = !empty($orderTimeLine) && isset($orderTimeLine[$statusId]) ? $orderTimeLine[$statusId] : [];
-       
 
-       /* $orderStatusClass = ($orderCancelled && $index > $selectUpto) ? 'shipped' : OrderStatus::getOpStatusClass($statusId);
+
+        /* $orderStatusClass = ($orderCancelled && $index > $selectUpto) ? 'shipped' : OrderStatus::getOpStatusClass($statusId);
         if ('disabled' == trim($highlight)) {
             $orderStatusClass = "";
         }
@@ -58,13 +58,12 @@
                                         $trackingNumber = number_format($trackingNumber, 0, null, '');
                                     }
                                 ?>
-                                    <div class="clipboard p-2 mb-4">
-                                        <p class="clipboard_url trackingNumberJs">
-                                            <?php echo $trackingNumber; ?>
-                                        </p>
-                                        <a class="clipboard_btn" onclick="copyContent(this)" href="javascript:void(0);" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
+                                    <div class="clipboard mb-4">
+                                        <input class="copy-input trackingNumberJs" type="text" readonly value="<?php echo $trackingNumber; ?>" />
+
+                                        <button class="btn btn-light copy-btn" type="button" onclick="copyContent(this)" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
                                             <i class="far fa-copy"></i>
-                                        </a>
+                                        </button>
                                     </div>
                                 <?php  } ?>
                                 <p>

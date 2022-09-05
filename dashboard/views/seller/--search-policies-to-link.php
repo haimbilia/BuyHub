@@ -38,13 +38,11 @@
                     }
                     break;
                 case 'action':
-                    $active = "";
-                    if ($row['sppolicy_ppoint_id']) {
-                        $active = 'checked';
-                    }
-                    $statucAct = (!$row['sppolicy_ppoint_id']) ? 'addPolicyPoint(' . $selprod_id . "," . $row['ppoint_id'] . ')' : 'removePolicyPoint(' . $selprod_id . "," . $row['ppoint_id'] . ')';
+                    $attributes = ($row['sppolicy_ppoint_id']) ? "checked" : "";
+                    $fn = (!$row['sppolicy_ppoint_id']) ? 'addPolicyPoint(' . $selprod_id . "," . $row['ppoint_id'] . ')' : 'removePolicyPoint(' . $selprod_id . "," . $row['ppoint_id'] . ')';
 
-                    $str = '<label class="toggle-switch" for="switch' . $row['ppoint_id'] . '"><input ' . $active . ' type="checkbox" id="switch' . $row['ppoint_id'] . '" onclick="' . $statucAct . '"/><div class="slider round"></div></label';
+                    $attributes .= ' onclick="' . $fn . '"';
+                    $str = HtmlHelper::configureSwitchForCheckboxStatic('', $row['ppoint_id'], $attributes);
                     $td->appendElement('plaintext', array(), $str, true);
 
                     break;

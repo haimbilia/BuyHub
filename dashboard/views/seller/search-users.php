@@ -42,12 +42,9 @@
                     $td->appendElement('plaintext', array(), $sr_no, true);
                     break;
                 case 'credential_active':
-                    $active = "";
-                    if (applicationConstants::ACTIVE == $row['credential_active']) {
-                        $active = 'checked';
-                    }
-
-                    $str = '<label class="toggle-switch" for="switch' . $row['user_id'] . '"><input ' . $active . ' type="checkbox" value="' . $row['user_id'] . '" id="switch' . $row['user_id'] . '" onclick="toggleSellerUserStatus(event,this)"/><div class="slider round"></div></label>';
+                    $attributes = (applicationConstants::ACTIVE == $row['credential_active']) ? "checked" : "";
+                    $attributes .= ' onclick="toggleSellerUserStatus(event,this)"';
+                    $str = HtmlHelper::configureSwitchForCheckboxStatic('', $row['user_id'], $attributes);
 
                     $td->appendElement('plaintext', array(), $str, true);
                     break;

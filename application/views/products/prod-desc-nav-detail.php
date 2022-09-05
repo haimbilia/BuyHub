@@ -28,8 +28,8 @@
                     <div id="specification" class="collapse show" data-bs-parent="#accordionExample">
                         <div class="descriptions-data">
                             <?php foreach ($prodSpeciByGroup as $key => $speciGroup) {
-                                if (!empty($key)) { ?>
-                                    <hgroup class="specification-group">
+                                if (!empty(trim($key))) { ?>
+                                    <div class="specification-group">
                                         <h6><?php echo ucfirst($key); ?></h6>
                                     <?php } ?>
                                     <ul class="list-specification">
@@ -42,8 +42,8 @@
                                         <?php } ?>
                                     </ul>
                                     <?php
-                                    if (!empty($key)) { ?>
-                                    </hgroup>
+                                    if (!empty(trim($key))) { ?>
+                                    </div>
                             <?php  }
                                 }
                             ?>

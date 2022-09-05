@@ -3,7 +3,7 @@ $accountId = !empty($accountId) && true === $isSubUser ? substr($accountId, 0, 5
 ?>
 <div class="card-body">
     <div class="row justify-content-center my-5">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <?php if (empty($accountId)) { ?>
                 <div class="features-block">
                     <div class="features-block_head">
@@ -29,7 +29,7 @@ $accountId = !empty($accountId) && true === $isSubUser ? substr($accountId, 0, 5
                         <?php if ($isSubUser) {
                             echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_PARENT_MERCHANT_NEEDS_TO_CONFIGURE_THEIR_STRIPE_CONNECT_ACCOUNT_FIRST.', $siteLangId));
                         } else { ?>
-                            <a class="btn btn-outline-gray btn-sm me-2" onclick="register(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'register'); ?>">
+                            <a class="btn btn-brand btn-wide me-2" onclick="register(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'register'); ?>">
                                 <?php echo Labels::getLabel('LBL_REGISTER', $siteLangId); ?>
                             </a>
                         <?php } ?>

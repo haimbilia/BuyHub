@@ -88,8 +88,10 @@ foreach ($arrListing as $sn => $row) {
                     $statusAct = "changeStatusEitherPluginTypes(this, " . ($row['plugin_active'] > 0 ? 0 : 1) . ", '" . $msg . "')";
                 }
 
+                $otherAttribute = '';
                 if ($row['plugin_type'] == Plugin::TYPE_TAX_SERVICES) {
-                    $statusAct = 'alert(\'' . Labels::getLabel('LBL_PLEASE_RE-BIND_THE_PRODUCT_TAX_CATEGORY.') . '\');' . $statusAct;
+                    $otherAttribute = 'data-function="' . $statusAct . '"';
+                    $statusAct = 'return confirmTaxPluginActivation(this, \'' . Labels::getLabel('LBL_PLEASE_RE-BIND_THE_PRODUCT_TAX_CATEGORY.') . '\');';
                 }
 
                 $statusClass = ($canEdit) ? '' : 'disabled';
@@ -97,7 +99,7 @@ foreach ($arrListing as $sn => $row) {
 
                 $htm = '<span class="switch switch-sm switch-icon">
                                     <label>
-                                        <input type="checkbox" id="' . $row['plugin_id'] . '" data-old-status="' . $row[$key] . '" value="' . $row['plugin_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                                        <input type="checkbox" id="' . $row['plugin_id'] . '" data-old-status="' . $row[$key] . '" value="' . $row['plugin_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . ' ' . $otherAttribute . '>
                                         <span class="input-helper"></span>
                                     </label>
                                 </span>';

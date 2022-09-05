@@ -65,17 +65,14 @@
                         $td->appendElement('span', array('class' => 'badge badge-inline ' . $activeInactiveClassArr[$row[$key]]), $activeInactiveArr[$row[$key]] . '<br>', true);
                         break;
                     case 'product_shipped_by':
-                        $active = "";
-                        if ($row['psbs_user_id']) {
-                            $active = 'checked';
-                        }
-
                         $str = Labels::getLabel('LBL_N/A', $siteLangId);
                         if (!$row['product_seller_id'] && $row['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
+                            $attributes = ($row['psbs_user_id']) ? "checked" : "";
                             $statucAct = (!$row['psbs_user_id']) ? 'setShippedBySeller(' . $row['product_id'] . ')' : 'setShippedByAdmin(' . $row['product_id'] . ')';
-
-                            $str = '<label class="toggle-switch" for="switch' . $row['product_id'] . '"><input ' . $active . ' type="checkbox" id="switch' . $row['product_id'] . '" onclick="' . $statucAct . '"/><div class="slider round"></div></label>';
+                            $attributes .= ' onclick="' . $statucAct . '"';
+                            $str = HtmlHelper::configureSwitchForCheckboxStatic('', $row['product_id'], $attributes);
                         }
+
                         $td->appendElement('plaintext', array(), $str, true);
                         break;
                     case 'action':

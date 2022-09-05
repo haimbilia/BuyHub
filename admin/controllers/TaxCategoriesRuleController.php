@@ -392,7 +392,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         /* ] */
 
         $taxStructures = TaxStructure::getAllAssoc($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TAX', $this->siteLangId), 'taxrule_taxstr_id', $taxStructures, '', array(), Labels::getLabel('FRM_Select_Tax', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TAX_STRUCTURE', $this->siteLangId), 'taxrule_taxstr_id', $taxStructures, '', array(), Labels::getLabel('FRM_Select_Tax', $this->siteLangId));
         $fld->requirements()->setRequired();
 
         /* [ TAX GROUP RULE COMBINED DETAILS FORM */

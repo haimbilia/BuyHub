@@ -218,6 +218,7 @@
         //box-shadow: $shadow-theme;
         background: rgba(255, 255, 255, 0.5);
         backdrop-filter: blur(7px);
+        border-bottom: $border;
 
         .header-icons-group {
             display: flex;
@@ -227,6 +228,8 @@
             margin-#{$start-direction}: auto;
         }
         .c-header-icon {
+            background-color: transparent;
+            border: none;
             display: flex;
             margin: 0;
             padding: 0.6rem 0.75rem;
@@ -471,8 +474,11 @@
 
 .scrolled {
     .header-dashboard {
-        height: 70px;
-        box-shadow: 0 10px 30px 0 rgba(132, 126, 140, 0.1%);
+        @include media-breakpoint-up(lg) {
+            height: 70px;
+            border-color: transparent;
+            box-shadow: 0 10px 30px 0 rgba(132, 126, 140, 0.1%);
+        }
     }
 }
 
@@ -566,7 +572,7 @@
         flex: 1;
         padding-left: $content-space;
         padding-right: $content-space;
-        padding-top: 1rem;
+        padding-top: 2rem;
         //min-height: calc(100vh - 100px);
         @include media-breakpoint-down(xl) {
             padding: 2rem;

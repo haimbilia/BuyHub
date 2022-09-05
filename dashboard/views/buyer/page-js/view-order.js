@@ -55,7 +55,7 @@ $(document).ready(function () {
     };
 
     copyContent = function (obj) {
-        var text = $(obj).siblings('.trackingNumberJs').text().trim();
+        var text = $(obj).siblings('.trackingNumberJs').val().trim();
         var elem = document.createElement("textarea");
         document.body.appendChild(elem);
         elem.value = text;
