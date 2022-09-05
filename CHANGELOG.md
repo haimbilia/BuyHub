@@ -1193,6 +1193,7 @@ TV-9.4.0.20220825
     - #066504 - Multiple issues on the inventory setup page on the seller end.
     - #066548 - The navigation gets disappeared from the top of the product setup page when the user makes any changes in the product.
     - #066498 - UI issue in the 'Variants & options' section on the product setup page
+    - #066567 - The UI of the content under the reference file field is not proper.
     
 ## UAT points:
 

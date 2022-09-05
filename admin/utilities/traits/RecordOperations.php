@@ -285,9 +285,11 @@ trait RecordOperations
         if (0 < $userId) {
             $user = new User($userId);
             $userInfo = $user->getUserInfo(null, false, false);
-            $options = [
-                $userId => $userInfo['user_name'] . ' (' . $userInfo['credential_username'] . ')'
-            ];
+            if (!empty($userInfo)) {
+                $options = [
+                    $userId => $userInfo['user_name'] . ' (' . $userInfo['credential_username'] . ')'
+                ];
+            }
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_NAME_OR_EMAIL', $this->siteLangId), 'user_id', $options, $userId);

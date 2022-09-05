@@ -25,23 +25,36 @@ if (null != $fld) {
     $fld->developerTags['col'] = 4;
 }
 
+$fileFound = (!empty($attachment) && 0 < $attachment['afile_id']);
+
 $fld = $frm->getField('breq_file');
 if (null != $fld) {
     $fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm fileUpload--js');
     $fld->htmlAfterField = '<small class="form-text text-muted">' . Labels::getLabel('LBL_BADGE_REQUEST_REFERENCE_FILE', $siteLangId) . '</small>';
     if (0 < $badgeReqId && true === $fileFound) {
-        $fld->htmlAfterField .= '<a class="refFile--js" title="' . Labels::getLabel('LBL_DOWNLOAD_FILE', $siteLangId) . '" href="' . UrlHelper::generateUrl('SellerRequests', 'downloadFile', array($badgeReqId)) . '">
-                                <svg class="svg btn-icon-start" width="18" height="18">
-                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
-                                </use>
-                            </svg>
-                                </a>';
-        $fld->htmlAfterField .= '<a class="refFile--js" title="' . Labels::getLabel('LBL_DELETE_FILE', $siteLangId) . '" href="javascript:void(0);" onclick="removeBadgeRequestRefFile(' . $badgeReqId . ')">
-                                <svg class="svg btn-icon-start" width="18" height="18">
-                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
-                                </use>
-                            </svg>
-                                </a>';
+        $fld->addFieldTagAttribute('disabled', 'disabled');
+        $fld->htmlAfterField .= '<br>
+                            <div class="clipboard mt-3 refFileJs">
+                                <div class="copy-input" title="' . $attachment['afile_name'] . '">' . $attachment['afile_name'] . '</div>
+                                <ul class="actions">
+                                    <li>
+                                        <a title="' . Labels::getLabel('LBL_DOWNLOAD_FILE', $siteLangId) . '" href="' . UrlHelper::generateUrl('SellerRequests', 'downloadFile', array($badgeReqId)) . '">
+                                            <svg class="svg btn-icon-start" width="18" height="18">
+                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                                                </use>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a title="' . Labels::getLabel('LBL_DELETE_FILE', $siteLangId) . '" href="javascript:void(0);" onclick="removeBadgeRequestRefFile(' . $badgeReqId . ')">
+                                            <svg class="svg btn-icon-start" width="18" height="18">
+                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                                </use>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>';
     }
 }
 
