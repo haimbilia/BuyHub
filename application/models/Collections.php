@@ -251,16 +251,7 @@ class Collections extends MyAppModel
                 self::TYPE_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_CATEGORY_LAYOUT1', $langId),
                 self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_CATEGORY_LAYOUT2', $langId),
                 self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_CATEGORY_LAYOUT3', $langId),
-            ],
-            self::COLLECTION_TYPE_FAQ => [
-                self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ', $langId),
-            ],
-            self::COLLECTION_TYPE_FAQ_CATEGORY => [
-                self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORY', $langId),
-            ],
-            self::COLLECTION_TYPE_REVIEWS => [
-                self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
-            ],
+            ],            
             self::COLLECTION_TYPE_PRODUCT => [
                 self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
                 self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_PRODUCT_LAYOUT2', $langId),
@@ -279,6 +270,15 @@ class Collections extends MyAppModel
             self::COLLECTION_TYPE_TESTIMONIAL => [
                 self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_TESTIMONIAL', $langId),
             ],
+            self::COLLECTION_TYPE_FAQ => [
+                self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ', $langId),
+            ],
+            self::COLLECTION_TYPE_FAQ_CATEGORY => [
+                self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORY', $langId),
+            ],
+            self::COLLECTION_TYPE_REVIEWS => [
+                self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
+            ]
             /* self::COLLECTION_TYPE_CONTENT_BLOCK => [
                 self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_Content_Block', $langId),
             ] */
