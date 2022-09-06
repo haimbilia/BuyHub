@@ -35,7 +35,6 @@ $(document).on('change', '#conditionTypeJs', function () {
     var ratePercElements = [COND_TYPE_RETURN_ACCEPTANCE, COND_TYPE_ORDER_CANCELLED];
 
     var toSelector = $('#conditionToJs');
-    $('#conditionToSectionJs').show();
 
     toSelector.attr('data-fatreq', JSON.stringify({ required: true }));
     if (1 > $('#conditionToSectionJs label .spn_must_field').length) {
@@ -45,14 +44,13 @@ $(document).on('change', '#conditionTypeJs', function () {
     var htm = '<label class="label">' + langLbl.from + '<span class="spn_must_field">*</span></label>';
     $('#conditionFromSectionJs label').replaceWith(htm);
 
-    $('#conditionFromSectionJs').removeClass("col-md-12");
-
     if (-1 < jQuery.inArray(parseInt($(this).val()), ratePercElements)) {
-        $('#conditionFromSectionJs').addClass("col-md-12");
-        $('#conditionToSectionJs').hide();
-        toSelector.attr('data-fatreq', JSON.stringify({ required: false }));
-        var htm = '<label class="label">' + langLbl.rateDecimal + '<span class="spn_must_field">*</span></label>';
+        var htm = '<label class="label">' + langLbl.rateFromDecimal + '<span class="spn_must_field">*</span></label>';
         $('#conditionFromSectionJs label').replaceWith(htm);
+        
+        var htm = '<label class="label">' + langLbl.rateToDecimal + '<span class="spn_must_field">*</span></label>';
+        $('#conditionToSectionJs label').replaceWith(htm);
+
     } else if (parseInt($(this).val()) == COND_TYPE_COMPLETED_ORDERS) {
         var htm = '<label class="label">' + langLbl.fromDigit + '<span class="spn_must_field">*</span></label>';
         $('#conditionFromSectionJs label').replaceWith(htm);

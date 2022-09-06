@@ -478,11 +478,13 @@ class BadgeLinkConditionsController extends ListingBaseController
                     break;
                 case BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE:
                 case BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED:
-                    $rate = FatApp::getPostedData('blinkcond_condition_from', FatUtility::VAR_FLOAT, 0);
-                    if (0 > $rate || 100 < $rate) {
+                    $rateFrom = FatApp::getPostedData('blinkcond_condition_from', FatUtility::VAR_FLOAT, 0);
+                    $rateTo = FatApp::getPostedData('blinkcond_condition_to', FatUtility::VAR_FLOAT, 0);
+                    if (0 > $rateFrom || 100 < $rateFrom || $rateFrom > $rateTo) {
                         LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_RATE_VALUE', $this->siteLangId), true);
                     }
-                    $post['blinkcond_condition_from'] = $rate;
+                    $post['blinkcond_condition_from'] = $rateFrom;
+                    $post['blinkcond_condition_to'] = $rateTo;
                     break;
 
                 default:
