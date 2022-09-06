@@ -1199,6 +1199,7 @@ TV-9.4.0.20220825
     - #066581 - Deleted products also appears in the suggestion listing on the badge request popup in the link field.
     - #066604 - The content is not visible on some pages until the admin does not clear the cache.
     - #066334 - Mobile >> An invalid string is displayed in the restore time on the restore popup on iOS devices
+    - #066232 - UI issue in the shop collection section on the shop details page
     
 ## UAT points:
 

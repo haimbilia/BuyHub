@@ -878,7 +878,7 @@ class ImageController extends FatController
 
     public function shopCollectionImage($recordId, $langId = 0, $sizeType = '', $displayUniversalImage = true)
     {
-        $default_image = 'banner-default-image.png';
+        $default_image = 'shop-collections-default-image.jpg';
         $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_COLLECTION_IMAGE, $recordId, 0, $langId, $displayUniversalImage);

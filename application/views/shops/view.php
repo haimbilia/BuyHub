@@ -10,10 +10,23 @@
     if (!empty($collectionData)) { ?>
         <section class="section pt-0">
             <div class="container">
-                <div class="js-carousel shop-slider" data-slides="3,3,2,2">
+                <div class="section-head">
+                    <div class="section-heading">
+                        <h2><?php echo Labels::getLabel('LBL_SHOP_COLLECTIONS'); ?></h2>
+                    </div>
+                    <div class="section-action">
+                        <div class="slider-controls">
+                            <button class="btn btn-prev" type="button" data-href="#shop-collection-listing" aria-label="Previous"> <span></span>
+                            </button>
+                            <button class="btn btn-next" type="button" data-href="#shop-collection-listing" aria-label="Next"> <span></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="js-carousel shop-slider" id="shop-collection-listing" data-slides="3,3,2,2">
                     <?php foreach ($collectionData as $collection) { ?>
                         <div class="item">
-                            <img class="" src="<?php echo UrlHelper::generateFileUrl('Image', 'shopCollectionImage', array($collection['scollection_id'], $siteLangId, ImageDimension::VIEW_SHOP)); ?>"  <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_COLLECTION_IMAGE, ImageDimension::VIEW_SHOP);?>>
+                            <img class="" src="<?php echo UrlHelper::generateFileUrl('Image', 'shopCollectionImage', array($collection['scollection_id'], $siteLangId, ImageDimension::VIEW_SHOP)); ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_COLLECTION_IMAGE, ImageDimension::VIEW_SHOP); ?>>
                             <div class="overlay-content">
                                 <h4><?php echo $collection['scollection_name']; ?></h4>
                                 <!--<p>From the runway to your wardrobe</p>-->
