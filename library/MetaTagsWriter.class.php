@@ -25,24 +25,15 @@ class MetaTagsWriter
         $srch->addOrder('meta_default', 'asc');
 
         if (!empty($arrParameters)) {
-            switch ($controllerName) {
-                    /* case 'products':
-                    if( isset($arrParameters[0]) && FatUtility::int($arrParameters[0]) > 0 && $action == 'view' ){
-                        $srch->addCondition( 'meta_record_id', '=', FatUtility::int( $arrParameters[0] ) );
-                    }
-                break; */
-                default:
-                    if (isset($arrParameters[0]) && FatUtility::int($arrParameters[0]) > 0) {
-                        $cond = $srch->addCondition('meta_record_id', '=', FatUtility::int($arrParameters[0]));
-                        $cond->attachCondition('meta_record_id', '=', 0, 'OR');
-                        $srch->addOrder('meta_record_id', 'DESC');
-                    }
-                    if (isset($arrParameters[1]) && FatUtility::int($arrParameters[1]) > 0) {
-                        $cond = $srch->addCondition('meta_subrecord_id', '=', FatUtility::int($arrParameters[1]));
-                        $cond->attachCondition('meta_subrecord_id', '=', 0, 'OR');
-                        $srch->addOrder('meta_subrecord_id', 'DESC');
-                    }
-                    break;
+            if (isset($arrParameters[0]) && FatUtility::int($arrParameters[0]) > 0) {
+                $cond = $srch->addCondition('meta_record_id', '=', FatUtility::int($arrParameters[0]));
+                $cond->attachCondition('meta_record_id', '=', 0, 'OR');
+                $srch->addOrder('meta_record_id', 'DESC');
+            }
+            if (isset($arrParameters[1]) && FatUtility::int($arrParameters[1]) > 0) {
+                $cond = $srch->addCondition('meta_subrecord_id', '=', FatUtility::int($arrParameters[1]));
+                $cond->attachCondition('meta_subrecord_id', '=', 0, 'OR');
+                $srch->addOrder('meta_subrecord_id', 'DESC');
             }
         }
 
@@ -81,71 +72,4 @@ class MetaTagsWriter
 			<meta name='apple-mobile-web-app-title' content='" . $title . "'>";
         }
     }
-
-    /* static function getHeaderTags( $controller, $action, $arrParameters, $anotherTitle = '', $metaData = array() ) {
-
-        $title = '';
-
-        if( $anotherTitle == '' ) {
-
-            $controller = explode( '-', FatUtility::camel2dashed( $controller ) );
-
-            if( current( $controller ) == 'home' ) $title = '';
-            else $title = implode( ' ', $controller );
-
-            if( $title != '' )
-                $title = trim( str_replace( 'controller', '', $title ) );
-
-            if( $action != '' ) {
-
-                $action = explode( '-', FatUtility::camel2dashed( $action ) );
-                if( current( $action ) == 'index' ) $actionTitle = '';
-                else $actionTitle = implode( ' ', $action );
-
-                if( $actionTitle != '' )
-                    $title .= ( ( $title )? ' - ' : '' ) . $actionTitle;
-
-            }
-
-        } else {
-            $title = $anotherTitle;
-        }
-
-        $data = self::getFrontendTitle( ucwords( $title ) );
-        $data .= self::getMetaTags( $metaData );
-
-        return $data;
-
-    }
-
-    static function getAdminTitle( $title = '' ){
-        if( strlen( trim ( $title ) ) > 0 ) {
-            echo '<title> Administrator | ' . $title . ' | ' . FatApp::getConfig( "conf_website_name" ) . '</title>' . "\n";
-        }else{
-            echo '<title> Administrator | ' . FatApp::getConfig( "conf_website_name" ) . '</title>' . "\n";
-        }
-    }
-
-    static function getFrontendTitle( $title = '' ){
-
-        if( strlen( trim( $title ) ) > 0 ) {
-            return '<title>' . $title . ' | ' . FatApp::getConfig( "conf_website_name" ) . '</title>' . "\n";
-        } else {
-            return '<title>' . FatApp::getConfig( "conf_website_name" ) . '</title>' . "\n";
-        }
-
-    }
-
-    static function getMetaTags( $metaData = array() ){
-
-        $data = '';
-        if( is_array( $metaData ) && !empty( $metaData ) ) {
-            foreach( $metaData as $name => $content ) {
-                $data .= '<meta name="' .$name. '" content="' . $content . '" />' . "\n";
-            }
-        }
-
-        return $data;
-
-    } */
 }
