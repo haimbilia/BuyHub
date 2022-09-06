@@ -167,8 +167,15 @@ class BadgeLinkConditionsController extends ListingBaseController
         $srch = BadgeLinkCondition::getBadgeLinksSearchObj($this->siteLangId);
         $srch->joinTable(Shop::DB_TBL, 'LEFT JOIN', 'blnku.user_id = shp.shop_user_id', 'shp');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shp.shop_id = shp_l.shoplang_shop_id AND shp_l.shoplang_lang_id = ' . $this->siteLangId, 'shp_l');
+        $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'br.breq_id = blc.badgelink_breq_id', 'br');
         $srch->addFld('shop_id, COALESCE(shp_l.shop_name, shp.shop_identifier) as shop_name, shop_updated_on, blnku.user_name');
         $srch->addCondition('blinkcond_badge_id', '=', 'mysql_func_' . $objectId, 'AND', true);
+
+        $srch->addDirectCondition("(CASE 
+                                        WHEN " . Badge::COND_MANUAL . " = bdg.badge_trigger_type AND " . Badge::APPROVAL_REQUIRED . " = bdg.badge_required_approval 
+                                        THEN br.breq_status = '" . BadgeRequest::REQUEST_APPROVED . "' 
+                                        ELSE TRUE
+                                    END)");
 
         if (!empty($badgeType)) {
             $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
@@ -224,9 +231,7 @@ class BadgeLinkConditionsController extends ListingBaseController
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
@@ -473,11 +478,13 @@ class BadgeLinkConditionsController extends ListingBaseController
                     break;
                 case BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE:
                 case BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED:
-                    $rate = FatApp::getPostedData('blinkcond_condition_from', FatUtility::VAR_FLOAT, 0);
-                    if (0 > $rate || 100 < $rate) {
+                    $rateFrom = FatApp::getPostedData('blinkcond_condition_from', FatUtility::VAR_FLOAT, 0);
+                    $rateTo = FatApp::getPostedData('blinkcond_condition_to', FatUtility::VAR_FLOAT, 0);
+                    if (0 > $rateFrom || 100 < $rateFrom || $rateFrom > $rateTo) {
                         LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_RATE_VALUE', $this->siteLangId), true);
                     }
-                    $post['blinkcond_condition_from'] = $rate;
+                    $post['blinkcond_condition_from'] = $rateFrom;
+                    $post['blinkcond_condition_to'] = $rateTo;
                     break;
 
                 default:

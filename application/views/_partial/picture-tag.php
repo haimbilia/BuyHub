@@ -1,5 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $webpImageUrl = $webpImageUrl ?? [];
 $jpgImageUrl = $jpgImageUrl ?? [];
@@ -8,7 +7,8 @@ $lazyLoading = $lazyLoading ?? true;
 
 $imageUrl = isset($imageUrl) ? $imageUrl : '';
 $ratio = isset($ratio) ? $ratio : '';
-$alt = isset($alt) ? htmlspecialchars_decode($alt) : FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId);
+
+$alt = isset($alt) ? htmlspecialchars_decode($alt) : FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId, FatUtility::VAR_STRING, '');
 $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
 ?>
 <picture>
@@ -57,16 +57,6 @@ $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
     ?>
 
         <source srcset="<?php echo $url; ?>" type="image/jpeg" <?php echo $media; ?>>
-    <?php }
-
-    /* $srcSet = '';
-    $sizes = '';
-    if (!empty($imgSrcSet)) {
-        foreach ($imgSrcSet as $imgKey => $imgVal) {
-            $srcSet .= $imgVal . ' ' . $imgKey . 'w,';
-            $mediaArr = ImageDimension::getPictureTagMedia($imgKey);
-            $sizes .= '(' . $mediaArr['key'] . ':' . $mediaArr['value'] . 'px),';
-        }
-    }  */ ?>
-    <img <?php /* echo (!empty($srcSet)) ? 'srcset="' . rtrim($srcSet, ',') . '"' : ''; ?> <?php echo (!empty($sizes)) ? 'sizes="' . rtrim($sizes, ',') . '"' : ''; */ ?> <?php (true == $lazyLoading) ? "loading='lazy'" : ""; ?> <?php !empty($ratio) ? "data-ratio='" . $ratio . "'" : ""; ?> src="<?php echo empty($imageUrl) ? rtrim($jpgImageUrl[ImageDimension::VIEW_DESKTOP], ',') : rtrim($imageUrl, ','); ?>" alt="<?php echo $alt; ?>" title="<?php echo $title; ?>">
+    <?php } ?>
+    <img <?php (true == $lazyLoading) ? "loading='lazy'" : ""; ?> <?php !empty($ratio) ? "data-ratio='" . $ratio . "'" : ""; ?> src="<?php echo empty($imageUrl) ? rtrim($jpgImageUrl[ImageDimension::VIEW_DESKTOP], ',') : rtrim($imageUrl, ','); ?>" alt="<?php echo $alt; ?>" title="<?php echo $title; ?>">
 </picture>

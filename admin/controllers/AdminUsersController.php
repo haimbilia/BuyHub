@@ -140,6 +140,7 @@ class AdminUsersController extends ListingBaseController
             "CREATE TRIGGER `UPDATECATEGORY` AFTER UPDATE ON `tbl_product_categories`
             FOR EACH ROW IF new.prodcat_parent != old.prodcat_parent THEN 
                CALL UPDATECATEGORYRELATIONS(new.prodcat_id);
+               CALL UPDATECATEGORYRELATIONS(old.prodcat_parent);
             END IF",
             "CALL updateCategoryRelations(0)",
         );

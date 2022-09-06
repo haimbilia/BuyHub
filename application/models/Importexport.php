@@ -975,6 +975,7 @@ class Importexport extends ImportexportCommon
 
         $ProductCategory = new ProductCategory();
         $ProductCategory->updateCatCode();
+        FatApp::getDb()->query('CALL updateCategoryRelations(0)');
         // Close File
         CommonHelper::writeToCSVFile($this->CSVfileObj, array(), true);
 
@@ -1585,7 +1586,7 @@ class Importexport extends ImportexportCommon
         if (isset($minId) && isset($maxId)) {
             $srch->addCondition('product_id', '>=', $minId);
             $srch->addCondition('product_id', '<=', $maxId);
-        }       
+        }
         $rs = $srch->getResultSet();
 
         $sheetData = array();
@@ -2292,36 +2293,36 @@ class Importexport extends ImportexportCommon
 
         $sheetData = array();
         /* Sheet Heading Row [ */
-        $headingsArr = $this->getProductOptionColoumArr($langId);  
+        $headingsArr = $this->getProductOptionColoumArr($langId);
         CommonHelper::writeExportDataToCSV($this->CSVfileObj, $headingsArr, false, '', true);
         /* ] */
-        $optionValuesArr = []; 
-        while ($row = $this->db->fetch($rs)) {    
+        $optionValuesArr = [];
+        while ($row = $this->db->fetch($rs)) {
             $sheetData = array();
             foreach ($headingsArr as $columnKey => $heading) {
                 $colValue = array_key_exists($columnKey, $row) ? $row[$columnKey] : '';
                 if ($columnKey == 'option_value_ids') {
                     $colValue = $row['prodoption_optionvalue_ids'];
-                }elseif ($columnKey == 'option_values_identifiers') {
-                    if(!empty($row['prodoption_optionvalue_ids'])){
+                } elseif ($columnKey == 'option_values_identifiers') {
+                    if (!empty($row['prodoption_optionvalue_ids'])) {
                         $colValue = $row['prodoption_optionvalue_ids'];
-                        $colValueArr = explode(",",$colValue);                       
-                        if(!array_key_exists($row['option_id'], $optionValuesArr)){
+                        $colValueArr = explode(",", $colValue);
+                        if (!array_key_exists($row['option_id'], $optionValuesArr)) {
                             $opvalArr = $this->getAllOptionValues($row['option_id'], true);
                             $optionValuesArr[$row['option_id']] = $opvalArr;
-                        }else{
+                        } else {
                             $opvalArr = $optionValuesArr[$row['option_id']];
                         }
-                        foreach($opvalArr as $opValId =>  $opValIdIden){
-                            if(!in_array($opValId,$colValueArr)){
+                        foreach ($opvalArr as $opValId =>  $opValIdIden) {
+                            if (!in_array($opValId, $colValueArr)) {
                                 unset($opvalArr[$opValId]);
                             }
                         }
-                        $colValue = implode(",",$opvalArr);
-                    }                    
+                        $colValue = implode(",", $opvalArr);
+                    }
                 } else {
                     $colValue = array_key_exists($columnKey, $row) ? $row[$columnKey] : '';
-                } 
+                }
                 $sheetData[] = $this->parseContentForExport($colValue);
             }
             CommonHelper::writeExportDataToCSV($this->CSVfileObj, $sheetData);
@@ -2373,14 +2374,14 @@ class Importexport extends ImportexportCommon
                         $colValue = array_key_exists($colValue, $prodIndetifierArr) ? $prodIndetifierArr[$colValue] : 0;
                     } elseif ('option_identifier' == $columnKey || 'option_id' == $columnKey) {
                         if (!array_key_exists($colValue, $optionIdentifierArr)) {
-                            $res = $this->array_change_key_case_unicode($this->getAllOptions(false, $colValue), CASE_LOWER);                                 
-                            if (!$res) {                          
+                            $res = $this->array_change_key_case_unicode($this->getAllOptions(false, $colValue), CASE_LOWER);
+                            if (!$res) {
                                 $invalid = true;
                             } else {
                                 $optionId = current($res);
                                 $optionValuesArr[$optionId] = $this->array_change_key_case_unicode($this->getAllOptionValues($optionId, false), CASE_LOWER);
                                 $optionIdentifierArr = $optionIdentifierArr + $res;
-                            }                            
+                            }
                         }
                         if ('option_identifier' == $columnKey) {
                             $colValue = array_key_exists($colValue, $optionIdentifierArr) ? $optionIdentifierArr[$colValue] : 0;
@@ -2397,11 +2398,11 @@ class Importexport extends ImportexportCommon
                                 break;
                             }
                         }
-                    } elseif ('option_values_identifiers' == $columnKey && isset($optionsArr['prodoption_option_id'])) {                        
+                    } elseif ('option_values_identifiers' == $columnKey && isset($optionsArr['prodoption_option_id'])) {
                         if (isset($optionValuesArr[$optionsArr['prodoption_option_id']]) && !empty($optionValuesArr[$optionsArr['prodoption_option_id']])  && empty($colValue)) {
                             $invalid = true;
                         } elseif (!empty($colValue)) {
-                            $colValueArr = explode(",", $colValue);                          
+                            $colValueArr = explode(",", $colValue);
                             $optionValues = [];
                             foreach ($colValueArr as $colVal) {
                                 if (!array_key_exists($colVal, $optionValuesArr[$optionsArr['prodoption_option_id']])) {
@@ -2411,7 +2412,7 @@ class Importexport extends ImportexportCommon
                                 $optionValues[] = $optionValuesArr[$optionsArr['prodoption_option_id']][$colVal];
                             }
                             $colValue =  implode(",", $optionValues);
-                        }else{
+                        } else {
                             $colValue = '';
                         }
                     }
@@ -2445,7 +2446,7 @@ class Importexport extends ImportexportCommon
                     if (true === $invalid) {
                         $errMsg = str_replace('{column-name}', $columnTitle, Labels::getLabel("ERR_INVALID_{column-name}.", $langId));
                         CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, ($colIndex + 1), $errMsg));
-                        $errorInRow = true;                    
+                        $errorInRow = true;
                     } else {
                         $optionsArr[$columnKey] = $colValue;
                     }
@@ -2764,8 +2765,8 @@ class Importexport extends ImportexportCommon
                             if ($userId) {
                                 $productId = $colValue = $this->getCheckAndSetProductIdByTempId($colValue, $userId);
                             }
-                            if(1 > $productId){
-                                $invalid = true; 
+                            if (1 > $productId) {
+                                $invalid = true;
                             }
                             break;
                         case 'prodspeclang_lang_id':

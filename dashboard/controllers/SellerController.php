@@ -3226,6 +3226,7 @@ class SellerController extends SellerBaseController
         $srch->addCondition('sp.selprod_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('p.product_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('p.product_approved', '=', Product::APPROVED);
+        $srch->addCondition('p.product_deleted', '=', applicationConstants::NO);
         $srch->addOrder('product_name');
         $srch->addOrder('selprod_title');
         $srch->addOrder('selprod_id');

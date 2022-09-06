@@ -1194,6 +1194,9 @@ TV-9.4.0.20220825
     - #066548 - The navigation gets disappeared from the top of the product setup page when the user makes any changes in the product.
     - #066498 - UI issue in the 'Variants & options' section on the product setup page
     - #066567 - The UI of the content under the reference file field is not proper.
+    - #066585 - The Badge get linked linked to the 'Shop/product/product variant' even if the badge request is rejected by the admin
+    - #066584 - Confirmation alert should appear when the user tries to delete the uploaded file in the reference field in the badge request
+    - #066581 - Deleted products also appears in the suggestion listing on the badge request popup in the link field.
     
 ## UAT points:
 

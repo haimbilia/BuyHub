@@ -100,7 +100,7 @@ trait ApiProducts
                     $images = array_slice($universalImages, 0, $universal_allowed_images_count);
                     $productUniversalImagesArr = $images;
                     $universal_allowed_images_count = $universal_allowed_images_count - count($productUniversalImagesArr);
-                }                
+                }
             }
         }
 
@@ -121,7 +121,6 @@ trait ApiProducts
                 'src' => UrlHelper::generateFullFileUrl('Image', 'product', [$recordId, ImageDimension::VIEW_ORIGINAL, 0, $row['afile_id']]),
                 'thumb_src' => UrlHelper::generateFullFileUrl('Image', 'product', [$recordId, ImageDimension::VIEW_THUMB, 0, $row['afile_id']]),
             ];
-            
         }
 
         return $imageArr;
@@ -136,7 +135,7 @@ trait ApiProducts
     {
         $this->db = FatApp::getDb();
         $page = !isset($post['page']) || 1 > $post['page'] ? 1 : $post['page'];
-        
+
         $pagesize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 50);
         $pagesize = isset($post['pagesize']) ? $post['pagesize'] : $pagesize;
 
@@ -144,14 +143,14 @@ trait ApiProducts
         $srch->joinTable(Product::DB_PRODUCT_SHIPPED_BY_SELLER, 'LEFT JOIN', 'psbs.psbs_product_id = tp.product_id', 'psbs');
         $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'tp.product_id = sp.selprod_product_id', 'sp');
         $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT JOIN', 'tp.product_id = ptc_product_id', 'ptc');
-        $srch->joinTable(ProductCategory::DB_TBL, 'LEFT JOIN', 'ptc.ptc_prodcat_id = pc.prodcat_id', 'pc' );
-        $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT JOIN', 'pc.prodcat_id = pc_l.prodcatlang_prodcat_id AND pc_l.prodcatlang_lang_id = '. $this->langId, 'pc_l' );
+        $srch->joinTable(ProductCategory::DB_TBL, 'LEFT JOIN', 'ptc.ptc_prodcat_id = pc.prodcat_id', 'pc');
+        $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT JOIN', 'pc.prodcat_id = pc_l.prodcatlang_prodcat_id AND pc_l.prodcatlang_lang_id = ' . $this->langId, 'pc_l');
         $srch->joinTable(Brand::DB_TBL, 'LEFT JOIN', 'tp.product_brand_id = brand.brand_id', 'brand');
         $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT JOIN', 'brand.brand_id = tb_l.brandlang_brand_id AND brandlang_lang_id = ' . $this->langId, 'tb_l');
         $srch->addCondition('product_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('product_approved', '=', applicationConstants::YES);
         $srch->addCondition('selprod_user_id', '=', $this->userId);
-        
+
         $cnd = $srch->addCondition('psbs_user_id', '=', $this->userId);
         $cnd->attachCondition('product_seller_id', '=', $this->userId);
 
@@ -180,7 +179,7 @@ trait ApiProducts
             $this->addOptionsArr($sellerProducts);
             foreach ($sellerProducts as &$selprodRow) {
                 $count = -1;
-                if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
+                if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
                     $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($this->langId, $selprodRow['selprod_user_id'], ['ossubs_images_allowed']);
                     $count = $currentPlanData['ossubs_images_allowed'];
                 }
