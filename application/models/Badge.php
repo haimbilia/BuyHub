@@ -372,9 +372,9 @@ class Badge extends MyAppModel
                     WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS . ' 
                         THEN ' . $completedOrders . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
                     WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_RETURN_ACCEPTANCE . ' 
-                        THEN ' . $returnAcceptanceRate . ' = blinkcond_condition_from
+                        THEN ' . $returnAcceptanceRate . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
                     WHEN blinkcond_condition_type = ' . BadgeLinkCondition::COND_TYPE_ORDER_CANCELLED . ' 
-                        THEN ' . $orderCancellationRate . ' = blinkcond_condition_from
+                        THEN ' . $orderCancellationRate . ' BETWEEN blinkcond_condition_from AND blinkcond_condition_to
                     ELSE FALSE
                 END)'
             );
@@ -398,6 +398,7 @@ class Badge extends MyAppModel
             if (true === $addGroupBy) {
                 $srch->addGroupBy('blinkcond_badge_id');
             }
+            echo $srch->getQuery();
             $shopAutoBadges += FatApp::getDb()->fetchAll($srch->getResultSet(), 'blinkcond_badge_id');
         }
         return $shopAutoBadges;
