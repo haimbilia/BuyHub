@@ -359,18 +359,6 @@ class Navigation
         $template->set('footer_navigation', $footerNavigation);
     }
 
-    public static function sellerNavigationLeft($template)
-    {
-        $seller_navigation_left = self::getNavigation(Navigations::NAVTYPE_SELLER_LEFT);
-        $template->set('seller_navigation_left', $seller_navigation_left);
-    }
-
-    public static function sellerNavigationRight($template)
-    {
-        $seller_navigation_right = self::getNavigation(Navigations::NAVTYPE_SELLER_RIGHT);
-        $template->set('seller_navigation_right', $seller_navigation_right);
-    }
-
     public static function blogNavigation($template)
     {
         $siteLangId = CommonHelper::getLangId();
