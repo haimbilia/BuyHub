@@ -398,7 +398,6 @@ class Badge extends MyAppModel
             if (true === $addGroupBy) {
                 $srch->addGroupBy('blinkcond_badge_id');
             }
-
             $shopAutoBadges += FatApp::getDb()->fetchAll($srch->getResultSet(), 'blinkcond_badge_id');
         }
         return $shopAutoBadges;

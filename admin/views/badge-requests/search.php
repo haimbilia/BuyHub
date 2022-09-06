@@ -24,13 +24,13 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'media':
                 $name = $row['badge_name'];
-                $getBadgeRatio = ImageDimension::getData(ImageDimension::TYPE_BADGE_ICON, ImageDimension::VIEW_THUMB);
+                $getBadgeRatio = ImageDimension::getData(ImageDimension::TYPE_BADGE_ICON, ImageDimension::VIEW_MINI);
                 $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[Badge::DB_TBL_PREFIX . 'id'], 0, $siteLangId);
                 $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
 
                 $imgA = $td->appendElement('a', ['href' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], ImageDimension::VIEW_ORIGINAL, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'data-featherlight' => 'image'], '', true);
 
-                $imgA->appendElement('img', ['data-aspect-ratio' => $getBadgeRatio[ImageDimension::VIEW_THUMB]['aspectRatio'], 'src' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], ImageDimension::VIEW_THUMB, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
+                $imgA->appendElement('img', ['data-aspect-ratio' => $getBadgeRatio[ImageDimension::VIEW_MINI]['aspectRatio'], 'src' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], ImageDimension::VIEW_MINI, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $name, 'alt' => $name], '', true);
                 break;
             case 'breq_requested_on':
                 $htm = (isset($row[$key]) && $row[$key] != '0000-00-00 00:00:00') ? HtmlHelper::formatDateTime($row[$key]) : Labels::getLabel('LBL_NA', $siteLangId);

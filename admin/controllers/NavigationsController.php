@@ -89,8 +89,7 @@ class NavigationsController extends ListingBaseController
         $srch->addGroupBy('nav.nav_id');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set("arrListing", $records);
         $this->set('canView', $this->objPrivilege->canViewNavigationManagement($this->admin_id, true));
