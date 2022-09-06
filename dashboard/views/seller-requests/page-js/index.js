@@ -160,7 +160,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
 
     brandMediaForm = function (brandReqId, langId = 0, slide_screen = 1) {
         $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandMediaForm', [brandReqId, langId]), '', function (t) {            
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandMediaForm', [brandReqId, langId]), '', function (t) {
             brandImages(brandReqId, 'logo', slide_screen, langId);
             brandImages(brandReqId, 'image', slide_screen, langId);
             fcom.removeLoader();
@@ -217,8 +217,8 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
     };
 
     brandPopupImage = function (inputBtn) {
-        if(!validateFileUpload(inputBtn.files[0])){
-            return;    
+        if (!validateFileUpload(inputBtn.files[0])) {
+            return;
         }
         loadCropperSkeleton();
         $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
@@ -243,7 +243,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
                     width: minWidth,
                     height: minHeight,
                 };
-               
+
                 var file = inputBtn.files[0];
                 $(inputBtn).val('');
                 setTimeout(function () { cropImage(file, options, 'uploadBrandMedia', inputBtn); }, 100);
@@ -251,11 +251,11 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
         }
     };
 
-    uploadBrandMedia = function (formData) {  
-      
+    uploadBrandMedia = function (formData) {
+
         var frmName = formData.get("frmName");
         var frm = document.forms[frmName];
-   
+
         var langId = 0;
         if ('undefined' != typeof frm.lang_id) {
             langId = frm.lang_id.value;
@@ -285,7 +285,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
             success: function (ans) {
                 fcom.removeLoader();
                 $("#modalBoxJs").modal("hide");
-                if (ans.status == true) {                  
+                if (ans.status == true) {
                     $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] [name='lang_id']").val(langId).change();
                     fcom.displaySuccessMessage(ans.msg);
                 }
@@ -306,7 +306,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
         });
     };
 
-    addCategoryReqLangForm = function (categoryReqId, langId, autoFillLangData = 0) {       
+    addCategoryReqLangForm = function (categoryReqId, langId, autoFillLangData = 0) {
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqLangForm', [categoryReqId, langId, autoFillLangData]), '', function (t) {
             fcom.removeLoader();
@@ -314,17 +314,17 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
         });
     };
 
-    categoryReqMediaForm = function (categoryReqId, langId = 0) {   
+    categoryReqMediaForm = function (categoryReqId, langId = 0) {
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('SellerRequests', 'categoryReqMediaForm', [categoryReqId, langId]), '', function (t) {
             fcom.removeLoader();
-            $.ykmodal(t);            
+            $.ykmodal(t);
         });
     };
 
     categoryPopupImage = function (inputBtn) {
-        if(!validateFileUpload(inputBtn.files[0])){
-            return;    
+        if (!validateFileUpload(inputBtn.files[0])) {
+            return;
         }
         loadCropperSkeleton();
         $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
@@ -335,7 +335,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
                 var frmName = $(inputBtn).closest('form').attr('name');
                 var minWidth = document[frmName].min_width.value;
                 var minHeight = document[frmName].min_height.value;
-                var options = {                    
+                var options = {
                     aspectRatio: minWidth / minHeight,
                     preview: '.img-preview',
                     imageSmoothingQuality: 'high',
@@ -353,14 +353,14 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
 
     uploadCategoryLogo = function (formData) {
         var frmName = formData.get("frmName");
-        var frm = document.forms[frmName];       
+        var frm = document.forms[frmName];
         let langId = 0;
         if ('undefined' != typeof frm.lang_id) {
             langId = frm.lang_id.value;
         }
 
         var other_data = $('form[name="' + frmName + '"]').serializeArray();
-        $.each(other_data, function(key, input) {
+        $.each(other_data, function (key, input) {
             formData.append(input.name, input.value);
         });
         $.ajax({
@@ -403,7 +403,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
         if (!$(frm).validate())
             return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'setupCategoryReq'), data, function (t) {          
+        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'setupCategoryReq'), data, function (t) {
             if (0 < t.langId) {
                 addCategoryReqLangForm(t.categoryReqId, t.langId);
             }
@@ -499,6 +499,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
                     return false;
                 }
                 fcom.displaySuccessMessage(ans.msg);
+                eval($(frm).data('onclear'));
                 searchBadgeRequests();
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -511,7 +512,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
         if (!confirm(langLbl.confirmDelete)) { return; }
         fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'deleteBadgeRequest', [badgeReqId]), '', function (t) { searchBadgeRequests(); });
     }
-    
+
     goToBadgeSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
@@ -579,7 +580,7 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
                 delay: 250,
                 method: 'post',
                 data: function (params) {
-                    return { keyword: params.term ,excludeRecords:  ($("input[name='record_ids']").val() != '' ? JSON.parse($("input[name='record_ids']").val()) : {})    };
+                    return { keyword: params.term, excludeRecords: ($("input[name='record_ids']").val() != '' ? JSON.parse($("input[name='record_ids']").val()) : {}) };
                 },
                 processResults: function (data, params) {
                     return { results: getRecordData(data) };
@@ -625,9 +626,9 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
         }).on('select2:unselect', function (e) {
             updateRecordIds(e.params.args.data.id);
         }).on('select2:open', function (e) {
-            selector.data("select2").$dropdown.addClass("custom-select2 custom-select2-multiple");               
+            selector.data("select2").$dropdown.addClass("custom-select2 custom-select2-multiple");
         })
-        .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-multiple");
+            .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-multiple");
     }
 
 
@@ -664,6 +665,9 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
     };
 
     removeBadgeRequestRefFile = function (badgeReqId) {
+        if (!confirm(langLbl.confirmDelete)) {
+            return;
+        }
         fcom.ajax(fcom.makeUrl('SellerRequests', 'removeBadgeRequestRefFile', [badgeReqId]), '', function (t) {
             var res = $.parseJSON(t);
             if (1 > res.status) {
