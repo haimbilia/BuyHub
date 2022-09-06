@@ -1,4 +1,10 @@
 .modal {
+    &-backdrop {
+        opacity: 1 !important;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+    }
+
     &-content {
         border: none;
         border-radius: $common-radius;
@@ -41,7 +47,7 @@
             border-radius: 0 !important;
         }
     }
-    .modal-dialog-vertical {
+    &-dialog-vertical {
         height: 100%;
         max-width: 500px;
         margin: 0;
