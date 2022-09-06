@@ -14,6 +14,7 @@ $html = '<div class="modal-header"><h5 class="modal-title">Yo!kart</h5></div><di
     <?php
     $dateTime = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' +4 hours'));
     $restoreTime = FatApp::getConfig('CONF_RESTORE_SCHEDULE_TIME', FatUtility::VAR_STRING, $dateTime);
+    $restoreTime = date('Y/m/d H:i:s', strtotime($restoreTime));
     ?>
     // Set the date we're counting down to
     var countDownDate = new Date('<?php echo $restoreTime; ?>').getTime();
@@ -45,7 +46,7 @@ $html = '<div class="modal-header"><h5 class="modal-title">Yo!kart</h5></div><di
         // If the count down is finished, write some text
         if (distance < 0) {
             clearInterval(x);
-            $('.restoreCounterJs').html("Process...");
+            $('.restoreCounterJs').html("Processing..");
             showRestorePopup();
             restoreSystem();
         }

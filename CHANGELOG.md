@@ -1197,6 +1197,9 @@ TV-9.4.0.20220825
     - #066585 - The Badge get linked linked to the 'Shop/product/product variant' even if the badge request is rejected by the admin
     - #066584 - Confirmation alert should appear when the user tries to delete the uploaded file in the reference field in the badge request
     - #066581 - Deleted products also appears in the suggestion listing on the badge request popup in the link field.
+    - #066604 - The content is not visible on some pages until the admin does not clear the cache.
+    - #066334 - Mobile >> An invalid string is displayed in the restore time on the restore popup on iOS devices
+    - #066232 - UI issue in the shop collection section on the shop details page
     
 ## UAT points:
 

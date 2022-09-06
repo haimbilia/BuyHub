@@ -222,9 +222,7 @@ class ShopsController extends MyAppController
             }
 
             $this->includeProductPageJsCss();
-            $this->_template->addJs('js/slick.min.js');
-            $this->_template->addJs('js/shop-nav.js');
-            $this->_template->addJs('js/jquery.colourbrightness.min.js');
+            $this->_template->addJs(['js/slick.min.js', 'js/shop-nav.js', 'js/jquery.colourbrightness.min.js', 'js/slick-carousels.js']);
         }
 
         if (true === MOBILE_APP_API_CALL && true === $includeShopData) {

@@ -61,7 +61,7 @@ class OrderSubscriptionSearch extends SearchBase
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(array('opcharge_op_id', 'sum(opcharge_amount) as op_other_charges'));
-        $srch->addCondition(Orders::DB_TBL_CHARGES_PREFIX . 'order_type', '=', Orders::ORDER_SUBSCRIPTION);     
+        $srch->addCondition(Orders::DB_TBL_CHARGES_PREFIX . 'order_type', '=', Orders::ORDER_SUBSCRIPTION);
         $srch->addGroupBy('opc.opcharge_op_id');
         $qryOtherCharges = $srch->getQuery();
         $this->joinTable('(' . $qryOtherCharges . ')', 'LEFT OUTER JOIN', 'oss.ossubs_id = opcc.opcharge_op_id', 'opcc');
@@ -204,12 +204,13 @@ class OrderSubscriptionSearch extends SearchBase
     {
         $srch = new SearchBase(Orders::DB_TBL, 'o');
         $srch->addCondition('o.order_type', '=', Orders::ORDER_SUBSCRIPTION);
-        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'o_temp.order_date_added > o.order_date_added and o_temp.order_user_id = o.order_user_id and o_temp.order_type = ' . Orders::ORDER_SUBSCRIPTION, 'o_temp');
+        $srch->addCondition('o.order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
+        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'o_temp.order_date_added > o.order_date_added and o_temp.order_user_id = o.order_user_id and o_temp.order_type = ' . Orders::ORDER_SUBSCRIPTION . ' and o_temp.order_payment_status = ' . Orders::ORDER_PAYMENT_PAID, 'o_temp');
         $srch->addMultipleFields(['COALESCE(o_temp.order_id, o.order_id) as currentOrderId']);
         $srch->addGroupBy('o.order_id');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-
+        $srch->addCondition('o_temp.order_id', 'is', 'mysql_func_NULL', 'AND', true);
         $this->joinTable('(' . $srch->getQuery() . ')', 'INNER JOIN', 'oscurr.currentOrderId = oss.ossubs_order_id', 'oscurr');
     }
 

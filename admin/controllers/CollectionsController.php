@@ -68,7 +68,8 @@ class CollectionsController extends ListingBaseController
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
-                'onclick' => 'layoutSelectorForm()'
+                'onclick' => 'layoutSelectorForm()',
+                'title' => Labels::getLabel('MSG_ADD_LAYOUT_TYPE_BASED_COLLECTION', $this->siteLangId),
             ]
         ];
 
