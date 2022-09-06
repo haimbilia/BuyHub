@@ -46,7 +46,7 @@ $html = '<div class="modal-header"><h5 class="modal-title">Yo!kart</h5></div><di
         // If the count down is finished, write some text
         if (distance < 0) {
             clearInterval(x);
-            $('.restoreCounterJs').html("Process...");
+            $('.restoreCounterJs').html("Processing..");
             showRestorePopup();
             restoreSystem();
         }
