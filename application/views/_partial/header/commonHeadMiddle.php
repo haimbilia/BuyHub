@@ -1,7 +1,7 @@
-<link rel='dns-prefetch' href='//maps.google.com'>
-<link rel='dns-prefetch' href='//maps.googleapis.com'>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel='dns-prefetch' href='//maps.google.com'>
+<link rel='dns-prefetch' href='//maps.googleapis.com'>
 <link rel="shortcut icon" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'favicon', array($siteLangId)) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
 <link rel="apple-touch-icon" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId)) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
 <link rel="apple-touch-icon" sizes="57x57" href="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'appleTouchIcon', array($siteLangId, '57-57')) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.png'); ?>">
