@@ -2210,3 +2210,7 @@ ON DUPLICATE KEY UPDATE etpl_name = VALUES(etpl_name), etpl_subject = VALUES(etp
 
 DELETE FROM `tbl_navigations` WHERE `nav_type` = 4;
 DELETE FROM `tbl_navigations` WHERE `nav_type` = 5;
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('MSG_ADD_LAYOUT_TYPE_BASED_COLLECTION', 1, 'Click here to check the layout type and create layout based collection', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
