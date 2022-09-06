@@ -596,6 +596,7 @@ class SellerProductsController extends ListingBaseController
 
         $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
         $srch->addCondition(Product::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'approved', '=', Product::APPROVED);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
         $srch->addMultipleFields(array('selprod_id as id', 'COALESCE(selprod_title ,product_name, product_identifier) as product_name', 'product_identifier', 'credential_username', 'selprod_price', 'selprod_stock'));
