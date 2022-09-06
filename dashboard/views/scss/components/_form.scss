@@ -602,7 +602,7 @@ form.custom-form {
     }
     .btn[disabled="disabled"] {
         background-color: #999;
-        border-color: transparent;
+        border: solid 1px transparent;
         cursor: not-allowed;
     }
 }
