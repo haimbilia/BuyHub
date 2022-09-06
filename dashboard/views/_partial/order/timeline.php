@@ -61,7 +61,7 @@
                                     <div class="clipboard mb-4">
                                         <input class="copy-input trackingNumberJs" type="text" readonly value="<?php echo $trackingNumber; ?>" />
 
-                                        <button class="btn btn-light copy-btn" type="button" onclick="copyContent(this)" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
+                                        <button class="copy-btn" type="button" onclick="copyContent(this)" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
                                             <i class="far fa-copy"></i>
                                         </button>
                                     </div>

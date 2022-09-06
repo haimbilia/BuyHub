@@ -51,7 +51,7 @@ foreach ($links as $sn => $row) {
                 break;
             case 'pdl_download_link':
                 if ('' != $row['pdl_download_link'] && 0 == $product['product_seller_id']) {
-                    $td->appendElement('div', array("class" => "clipboard"), '<input  name ="copy" class="form-control copy-input" title="' . $row[$key] . '" value="' . $row[$key] . '" readonly> <button type="button" data-title="' . $row[$key] . '" class="btn btn-light btn-sm copy-btn"  onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class" => "clipboard"), '<input  name ="copy" class="form-control copy-input" title="' . $row[$key] . '" value="' . $row[$key] . '" readonly> <button type="button" data-title="' . $row[$key] . '" class="copy-btn"  onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', $tdAttr, Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
@@ -59,7 +59,7 @@ foreach ($links as $sn => $row) {
                 break;
             case 'pdl_preview_link':
                 if ('' != $row['pdl_preview_link']) {
-                    $td->appendElement('div', array("class" => "clipboard"), '<input name ="copy" class="form-control copy-input" title="' . $row[$key] . '" value="' . $row[$key] . '"  readonly> <button type="button" data-title="' . $row[$key] . '" class="btn btn-light btn-sm copy-btn" onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class" => "clipboard"), '<input name ="copy" class="form-control copy-input" title="' . $row[$key] . '" value="' . $row[$key] . '"  readonly> <button type="button" data-title="' . $row[$key] . '" class="copy-btn" onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', $tdAttr, Labels::getLabel('LBL_NA', $siteLangId), true);
                 }

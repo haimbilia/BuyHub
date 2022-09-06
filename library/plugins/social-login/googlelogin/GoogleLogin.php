@@ -38,11 +38,11 @@ class GoogleLogin extends SocialMediaAuthBase
         if (false == $this->validateSettings($this->langId)) {
             return false;
         }
-        
+
         $this->redirectUri = $this->getRedirectUri();
 
         $this->client = new Google_Client();
-        $this->client->setApplicationName(FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->langId));
+        $this->client->setApplicationName(FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->langId, FatUtility::VAR_STRING, ''));
         $this->client->setScopes(['email']);
         $this->client->setClientId($this->settings['client_id']);
         $this->client->setClientSecret($this->settings['client_secret']);
@@ -51,7 +51,7 @@ class GoogleLogin extends SocialMediaAuthBase
 
         return true;
     }
-    
+
     /**
      * getRedirectUri
      *
@@ -61,7 +61,7 @@ class GoogleLogin extends SocialMediaAuthBase
     {
         return !empty($this->redirectUri) ? $this->redirectUri : UrlHelper::generateFullUrl(self::KEY_NAME, 'index', [], '', false);
     }
-    
+
     /**
      * getResponse
      *
@@ -71,7 +71,7 @@ class GoogleLogin extends SocialMediaAuthBase
     {
         return empty($this->response) ? (object) array() : $this->response;
     }
-    
+
     /**
      * authenticate
      *

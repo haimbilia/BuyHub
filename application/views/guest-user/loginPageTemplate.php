@@ -26,7 +26,7 @@ $canSendSms = $canSendSms ?? false;
 <div class="card-sign">
     <div class="card-sign_head">
         <h2 class="title">
-            <?php echo Labels::getLabel('LBL_SIGN_IN_TO_YOUR_YOKART_ACCOUNT', $siteLangId); ?>
+            <?php echo Labels::getLabel('LBL_SIGN_IN_TO_YOUR_SITE_ACCOUNT', $siteLangId); ?>
         </h2>
     </div>
     <div class="card-sign_body">

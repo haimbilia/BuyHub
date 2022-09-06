@@ -46,7 +46,7 @@ class KhipuPayController extends PaymentController
         $processRequest = false;
         if (!empty($postOrderId) && $orderId = $postOrderId) {
             $receiver_id = $this->settings['receiver_id'];
-            $subject = Labels::getLabel('MSG_YOKART_PAYMENT', $this->siteLangId);
+            $subject = Labels::getLabel('MSG_SYSTEM_PAYMENT', $this->siteLangId);
             $body = '';
             $return_url = UrlHelper::generateFullUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo()));
             $notify_url = UrlHelper::generateNoAuthUrl('KhipuPay', 'send');

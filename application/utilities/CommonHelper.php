@@ -81,7 +81,7 @@ class CommonHelper extends FatUtility
             return;
         }
 
-        if (isset($_COOKIE['defaultSiteLang'])) {
+        if (!$isAdmin && isset($_COOKIE['defaultSiteLang'])) {
             $languages = Language::getAllNames();
             if (array_key_exists($_COOKIE['defaultSiteLang'], $languages)) {
                 self::$_lang_id = FatUtility::int(trim($_COOKIE['defaultSiteLang']));
@@ -190,7 +190,7 @@ class CommonHelper extends FatUtility
         if (empty(self::$_currency_id)) {
             self::setClassVariables();
         }
-        
+
         return self::$_currencyData['currency_code'] = Currency::getAttributesById(self::$_currency_id, 'currency_code');
     }
 
