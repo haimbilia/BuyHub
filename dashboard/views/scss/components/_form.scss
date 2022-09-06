@@ -594,6 +594,12 @@ form.custom-form {
             margin-#{$start-direction}: 5rem;
         }
     }
+    .advanced-trigger {
+        &:hover,
+        &:focus {
+            box-shadow: none;
+        }
+    }
     .btn-search {
         margin-#{$start-direction}: 0.5rem;
         + .btn {
@@ -602,7 +608,7 @@ form.custom-form {
     }
     .btn[disabled="disabled"] {
         background-color: #999;
-        border: solid 1px transparent;
+        border: solid 1px #999;
         cursor: not-allowed;
     }
 }
