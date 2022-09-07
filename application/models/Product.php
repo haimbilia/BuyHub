@@ -360,14 +360,7 @@ class Product extends MyAppModel
                 $srch->addFld($attr);
             }
         }
-        $rs = $srch->getResultSet();
-
-        $row = FatApp::getDb()->fetch($rs);
-        if ($row == false) {
-            return array();
-        } else {
-            return $row;
-        }
+        return (array) FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public function deleteProductImage($productId, $imageId, $fileType)

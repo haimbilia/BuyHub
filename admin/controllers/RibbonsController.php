@@ -229,8 +229,12 @@ class RibbonsController extends ListingBaseController
         $frm->addHiddenField('', 'badge_type', Badge::TYPE_RIBBON);
 
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'badge_name');
+        
+        $themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, "#FFF");
+        $frm->addRequiredField(Labels::getLabel('FRM_TEXT_COLOR', $this->siteLangId), 'badge_text_color', $themeColorInverse, ['class' => 'jscolor']);
+        
         $themeColor = FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59");
-        $frm->addRequiredField(Labels::getLabel('FRM_COLOR', $this->siteLangId), 'badge_color', $themeColor, ['class' => 'jscolor']);
+        $frm->addRequiredField(Labels::getLabel('FRM_BACKGROUND_COLOR', $this->siteLangId), 'badge_color', $themeColor, ['class' => 'jscolor']);
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'badge_active', $activeInactiveArr, '', array(), '');
