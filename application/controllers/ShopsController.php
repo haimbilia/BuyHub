@@ -426,7 +426,7 @@ class ShopsController extends MyAppController
         $get['top_products'] = 1;
         $get['shop_id'] = $shop_id;
 
-       
+
         $data = $this->getListingData($get);
         $frm->fill($data['postedData']);
 
@@ -521,7 +521,7 @@ class ShopsController extends MyAppController
         $fld = $frm->getField('sortBy');
         $fld->value = 'popularity_desc';
         $fld->fldType = 'hidden';
-       
+
         $data = $this->getListingData($get);
         $frm->fill($data['postedData']);
 
@@ -560,9 +560,7 @@ class ShopsController extends MyAppController
 
         if (false === MOBILE_APP_API_CALL) {
             $this->includeProductPageJsCss();
-            $this->_template->addJs('js/slick.min.js');
-            $this->_template->addJs('js/shop-nav.js');
-            $this->_template->addJs('js/jquery.colourbrightness.min.js');
+            $this->_template->addJs(['js/slick.min.js', 'js/shop-nav.js', 'js/jquery.colourbrightness.min.js', 'js/slick-carousels.js']);
         }
         $this->_template->render(true, true, 'shops/view.php');
     }
@@ -1013,7 +1011,7 @@ class ShopsController extends MyAppController
 
 
     private function getListingData($get, $includeShopData = true)
-    {        
+    {
         $shop_id = 0;
         if (array_key_exists('shop_id', $get)) {
             $shop_id = FatUtility::int($get['shop_id']);
