@@ -1326,6 +1326,7 @@ class ProductsController extends MyAppController
             $catSrch->doNotCalculateRecords();
 
             $catSrch->joinProductToCategory($this->siteLangId);
+            $catSrch->joinProductToTax();
             $catSrch->joinCategoryRelationWithChild();
             $catSrch->addMultipleFields(array('DISTINCT(prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
             $catSrch->removeFld('1 as availableInLocation');
@@ -1346,11 +1347,9 @@ class ProductsController extends MyAppController
             $srch->setPageSize($catListingCount);
             $srch->addOrder('level');
             $srch->addGroupBy('prodcat_id');
-
-            $catRs = $srch->getResultSet();
-            // $catArr = FatApp::getDb()->fetchAll($catRs);
             $catArr = [];
-            while ($row = FatApp::getDb()->fetch($catRs)) {
+            $rs = $srch->getResultSet();
+            while ($row = FatApp::getDb()->fetch($rs)) {
                 $catArr[$row['prodcat_id']] = $row['prodcat_name'];
             }
 
@@ -1361,8 +1360,7 @@ class ProductsController extends MyAppController
             $srch->addOrder('level');
             $srch->addGroupby('tag_id');
             $srch->addHaving('tag_name', 'LIKE', '%' . urldecode($keyword) . '%');
-            $rs = $srch->getResultSet();
-            $tags = FatApp::getDb()->fetchAll($rs);
+            $tags = FatApp::getDb()->fetchAll($srch->getResultSet());
             $prodArr = [];
             if (empty($tags)) {
                 $prodSrchObj->validateAndJoinDeliveryLocation(false, false);
