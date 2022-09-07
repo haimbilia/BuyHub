@@ -408,6 +408,7 @@ function removeFilter(id, reload) {
 function clearFilters(id, obj) {
     $('.' + id).parent('span').remove();
     $('#' + id).find('input[type=\'checkbox\']').prop('checked', false);
+    $('[data-id="' + id + '"]').prop('checked', false);
     $("input:checkbox[name=brands]").each(function () {
         if ($(this).attr('data-id') == id) {
             $(this).prop("checked", false);

@@ -74,8 +74,9 @@
         }
     }
     &-list {
-        padding: 3rem;
+        padding: 1rem;
         @include media-breakpoint-up(lg) {
+            padding: 3rem;
             //max-height: 574px;
             overflow: hidden;
             overflow-y: auto;

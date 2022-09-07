@@ -90,7 +90,8 @@ trait BadgeRequestSetup
             $_FILES['breq_file']['type'],
             0
         )) {
-            FatUtility::dieJsonError($fileHandlerObj->getError());
+            $this->error = $fileHandlerObj->getError();
+            return false;
         }
         return true;
     }
@@ -153,6 +154,9 @@ trait BadgeRequestSetup
             FatUtility::dieJsonError(Labels::getLabel('ERR_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', $this->siteLangId));
         }
 
+        $db = FatApp::getDb();
+        $db->startTransaction();
+
         $data = [
             'blinkcond_badge_id' => $badgeId,
             'blinkcond_record_type' => $recordType,
@@ -164,6 +168,7 @@ trait BadgeRequestSetup
         $record = new BadgeLinkCondition($badgeLinkCondId);
         $record->assignValues($data);
         if (!$record->save()) {
+            $db->rollbackTransaction();
             FatUtility::dieJsonError($record->getError());
         }
 
@@ -176,6 +181,7 @@ trait BadgeRequestSetup
 
         $status = BadgeRequest::getRequestStatus($post['breq_blinkcond_id'], UserAuthentication::getLoggedUserId());
         if (BadgeRequest::REQUEST_APPROVED == $status || BadgeRequest::REQUEST_REJECTED == $status) {
+            $db->rollbackTransaction();
             $msg = Labels::getLabel('MSG_YOUR_REQUEST_TO_THIS_BADGE_ID_ALREADY_APPROVED/REJECTED', $this->siteLangId);
             FatUtility::dieJsonError($msg);
         }
@@ -184,11 +190,15 @@ trait BadgeRequestSetup
         $record->assignValues($post);
 
         if (!$record->save()) {
+            $db->rollbackTransaction();
             FatUtility::dieJsonError($record->getError());
         }
 
         $badgeReqId = $record->getMainTableRecordId();
-        $this->setupBadgeRequestImage($badgeReqId);
+        if (false === $this->setupBadgeRequestImage($badgeReqId)) {
+            $db->rollbackTransaction();
+            FatUtility::dieJsonError($this->error);
+        }
 
         foreach ($recordIds as $recordId) {
             $linkData = array(
@@ -199,12 +209,14 @@ trait BadgeRequestSetup
             FatApp::getDb()->insertFromArray(BadgeLinkCondition::DB_TBL_BADGE_LINKS, $linkData);
         }
 
+        $db->commitTransaction();
         $msg = Labels::getLabel("MSG_REQUESTED_SUCCESSFULLY", $this->siteLangId);
         if (0 < $badgeReqId) {
             $msg = Labels::getLabel("MSG_REQUEST_UPDATED_SUCCESSFULLY", $this->siteLangId);
         }
         $this->set('msg', $msg);
         $this->set('badgeReqId', $badgeReqId);
+        $this->set('badgeId', $badgeId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
