@@ -245,7 +245,7 @@ class Badge extends MyAppModel
         $srch->joinShops();
         $srch->doNotCalculateRecords();
 
-        $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'blnk.blinkcond_position', 'bdg.badge_display_inside', 'bdg.badge_shape_type', 'bdg.badge_color', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'COALESCE(sp.selprod_id,prod.product_selprod_id,shpprod.shop_selprod_id) as selprod_id']);
+        $srch->addMultipleFields(['blnk.blinkcond_id', 'blnk.blinkcond_badge_id', 'blnk.blinkcond_position', 'bdg.badge_display_inside', 'bdg.badge_shape_type', 'bdg.badge_text_color', 'bdg.badge_color', 'COALESCE(bdg_l.badge_name, bdg.badge_identifier) as badge_name', 'blc.badgelink_id', 'blc.badgelink_record_id', 'COALESCE(sp.selprod_id,prod.product_selprod_id,shpprod.shop_selprod_id) as selprod_id']);
         $srch->addCondition('blnk.blinkcond_from_date', '<=', $date);
         $cnd = $srch->addCondition('blnk.blinkcond_to_date', '>=', $date);
         $cnd->attachCondition('blnk.blinkcond_to_date', '=', '0000-00-00 00:00:00');

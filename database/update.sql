@@ -2216,3 +2216,6 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 -- -----------------TV-9.4.0.20220907--------------------------
+
+ALTER TABLE `tbl_badges` ADD `badge_text_color` VARCHAR(150) NOT NULL AFTER `badge_color`;
+ALTER TABLE `tbl_badges` CHANGE `badge_display_inside` `badge_display_inside` TINYINT NOT NULL COMMENT 'For Ribbons', CHANGE `badge_shape_type` `badge_shape_type` INT NOT NULL COMMENT 'For Ribbons', CHANGE `badge_color` `badge_color` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'For Ribbons', CHANGE `badge_text_color` `badge_text_color` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'For Ribbons';

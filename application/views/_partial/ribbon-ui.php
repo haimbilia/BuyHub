@@ -3,6 +3,7 @@
 $ribbon = "";
 if (is_array($ribbRow) && !empty($ribbRow)) {
     $type = $ribbRow['badge_shape_type'];
+    $textColor = $ribbRow['badge_text_color'];
     $color = $ribbRow['badge_color'];
     $text = $title = $ribbRow['badge_name'];
     if (applicationConstants::NO == $ribbRow['badge_display_inside']) {
@@ -15,7 +16,7 @@ if (is_array($ribbRow) && !empty($ribbRow)) {
 
     switch ($type) {
         case Badge::SHAPE_RECTANGLE:
-            $ribbon = '<div class="badges-wrap"><div class="badge badges-' . $type . ' ' . $class . '" style="background:' . $color . '" title="' . $title . '">' . $text . '</div></div>';
+            $ribbon = '<div class="badges-wrap"><div class="badge badges-' . $type . ' ' . $class . '" style="background:' . $color . '; color:' . $textColor . '" title="' . $title . '">' . $text . '</div></div>';
             break;
         case Badge::SHAPE_STRIP:
         case Badge::SHAPE_STAR:
@@ -25,7 +26,7 @@ if (is_array($ribbRow) && !empty($ribbRow)) {
                         <svg class="svg" style="fill:' . $color . '">
                             <use xlink:href="' . CONF_WEBROOT_FRONT_URL . 'images/retina/badges/sprite.svg#badges-' . $type . '"></use>
                         </svg>
-                        <span class="text">' . $text . '</span>
+                        <span class="text" style="color:' . $textColor . '">' . $text . '</span>
                     </div></div>';
             break;
     }
