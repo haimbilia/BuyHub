@@ -1326,6 +1326,7 @@ class ProductsController extends MyAppController
             $catSrch->doNotCalculateRecords();
 
             $catSrch->joinProductToCategory($this->siteLangId);
+            $catSrch->joinProductToTax();
             $catSrch->joinCategoryRelationWithChild();
             $catSrch->addMultipleFields(array('DISTINCT(prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
             $catSrch->removeFld('1 as availableInLocation');

@@ -1200,6 +1200,7 @@ TV-9.4.0.20220825
     - #066604 - The content is not visible on some pages until the admin does not clear the cache.
     - #066334 - Mobile >> An invalid string is displayed in the restore time on the restore popup on iOS devices
     - #066232 - UI issue in the shop collection section on the shop details page
+    - #066139 - The categories in which no products are available should not appear in the search result.
     
 ## UAT points:
 
