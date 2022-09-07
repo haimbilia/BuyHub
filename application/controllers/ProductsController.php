@@ -1346,11 +1346,8 @@ class ProductsController extends MyAppController
             $srch->setPageSize($catListingCount);
             $srch->addOrder('level');
             $srch->addGroupBy('prodcat_id');
-
-            $catRs = $srch->getResultSet();
-            // $catArr = FatApp::getDb()->fetchAll($catRs);
             $catArr = [];
-            while ($row = FatApp::getDb()->fetch($catRs)) {
+            while ($row = FatApp::getDb()->fetch($srch->getResultSet())) {
                 $catArr[$row['prodcat_id']] = $row['prodcat_name'];
             }
 
@@ -1361,8 +1358,7 @@ class ProductsController extends MyAppController
             $srch->addOrder('level');
             $srch->addGroupby('tag_id');
             $srch->addHaving('tag_name', 'LIKE', '%' . urldecode($keyword) . '%');
-            $rs = $srch->getResultSet();
-            $tags = FatApp::getDb()->fetchAll($rs);
+            $tags = FatApp::getDb()->fetchAll($srch->getResultSet());
             $prodArr = [];
             if (empty($tags)) {
                 $prodSrchObj->validateAndJoinDeliveryLocation(false, false);
