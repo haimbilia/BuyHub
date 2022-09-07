@@ -36,6 +36,7 @@
     - Manage Product Reviews.
     - Multilingual Sitemap and canonical url update.
     - Add product screen.
+    - Product varients URL rewriting (Included varients name and shop name)
 
 ## Updates/Fixes : 
 

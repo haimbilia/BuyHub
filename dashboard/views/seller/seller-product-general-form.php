@@ -27,9 +27,11 @@ if ('' === $returnAgeFld->value || '' === $cancellationAgeFld->value) {
 }
 
 $urlFld = $frmSellerProduct->getField('selprod_url_keyword');
-$urlFld->setFieldTagAttribute('id', "urlrewrite_custom");
-$urlFld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$selprod_id)");
-$urlFld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Products', 'View', array($selprod_id), CONF_WEBROOT_FRONTEND) . '</span>';
+if ($urlFld) {
+    $urlFld->setFieldTagAttribute('id', "urlrewrite_custom");
+    $urlFld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$selprod_id)");
+    $urlFld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Products', 'View', array($selprod_id), CONF_WEBROOT_FRONTEND) . '</span>';
+}
 
 if (false === Plugin::isActive('EasyEcom')) {
     $fld = $frmSellerProduct->getField('selprod_subtract_stock');
@@ -57,7 +59,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
         <div class="form__subcontent">
             <?php echo $frmSellerProduct->getFormTag(); ?>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-<?php echo ($urlFld) ? 6 : 12; ?>">
                     <div class="field-set">
                         <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_title' . $siteDefaultLangId)->getCaption(); ?><span class="spn_must_field">*</span></label></div>
                         <div class="field-wraper">
@@ -66,15 +68,17 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_url_keyword')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_url_keyword'); ?>
+                <?php if ($urlFld) { ?>
+                    <div class="col-md-6">
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_url_keyword')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
+                            <div class="field-wraper">
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_url_keyword'); ?>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                <?php } ?>
             </div>
             <?php if (false === Plugin::isActive('EasyEcom')) { ?>
                 <div class="row">

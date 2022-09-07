@@ -242,7 +242,7 @@ trait SellerProducts
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), false);
         }
 
-        $productLangRow = Product::getProductDataById($this->siteLangId, $product_id, array('product_identifier'));
+        // $productLangRow = Product::getProductDataById($this->siteLangId, $product_id, array('product_identifier'));
 
         $productOptions = Product::getProductOptions($product_id, $this->siteLangId, true);
 
@@ -280,7 +280,7 @@ trait SellerProducts
         } else {
             $sellerProductRow['selprod_available_from'] = date('Y-m-d');
             $sellerProductRow['selprod_cod_enabled'] = $productRow['product_cod_enabled'];
-            $sellerProductRow['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($productLangRow['product_identifier']));
+            // $sellerProductRow['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($productLangRow['product_identifier']));
         }
 
         $productWarranty = Product::getAttributesById($product_id, 'product_warranty', true);
@@ -498,7 +498,10 @@ trait SellerProducts
             }
         }
         /* ] */
-        $post['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($post['selprod_url_keyword']));
+
+        if ((isset($post['selprod_url_keyword']) && !empty($post['selprod_url_keyword'])) || $selprod_id) {
+            $post['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($post['selprod_url_keyword']));
+        }
 
         if (isset($post['selprod_track_inventory']) && $post['selprod_track_inventory'] == Product::INVENTORY_NOT_TRACK) {
             $post['selprod_threshold_stock_level'] = 0;
@@ -542,7 +545,7 @@ trait SellerProducts
 
         $post['selprod_subtract_stock'] = FatApp::getPostedData('selprod_subtract_stock', FatUtility::VAR_INT, 0);
         $post['selprod_track_inventory'] = FatApp::getPostedData('selprod_track_inventory', FatUtility::VAR_INT, 0);
-        // CommonHelper::printArray($post, true);
+
         $data_to_be_save = $post;
         $sellerProdObj = new SellerProduct($selprod_id);
         $sellerProdObj->assignValues($data_to_be_save);
@@ -685,6 +688,7 @@ trait SellerProducts
                 FatUtility::dieJsonError($selProdSpecificsObj->getError());
             }
         }
+        $post['selprod_url_keyword'] = $post['selprod_url_keyword'] ?? $data_to_be_save['selprod_url_keyword'];
 
         $sellerProdObj->rewriteUrlProduct($post['selprod_url_keyword']);
         $sellerProdObj->rewriteUrlReviews($post['selprod_url_keyword']);
@@ -759,10 +763,14 @@ trait SellerProducts
         $minSellingPrice = Product::getAttributesById($productId, 'product_min_selling_price');
         $productCount = SellerProduct::getActiveCount($this->userParentId);
 
+        $productLangRow = Product::getProductDataById($this->siteLangId, $productId, array('product_identifier', 'product_name'));
+        $keywordSlug = $productLangRow['product_name'] ?? $productLangRow['product_identifier'];
+
+        $shopData = Shop::getAttributesByUserId($this->userParentId, ['COALESCE(shop_name,shop_identifier) as shop_name'], false, $this->userParentId);
+
         if (SellerProduct::INVENTORY_RESTRICT_LIMIT >= $availableOptionsCount) {
 
             $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
-
             foreach ($optionCombinations as $optionKey => $optionValue) {
                 /* Check if product already added for this option [ */
                 $selProdCode = $post['selprod_code'] . $optionKey;
@@ -797,6 +805,9 @@ trait SellerProducts
                 $data_to_be_save['selprod_price'] = $sellingPrice;
                 $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
                 $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey] ?? '';
+
+                $keywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
+                $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($keywordSlug));
                 $this->addOption($selprod_id, $data_to_be_save, $optionKey);
                 $productCount++;
             }
@@ -830,6 +841,8 @@ trait SellerProducts
             $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionValue];
             $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionValue];
             $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionValue];
+            $keywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
+            $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($keywordSlug));
             $this->addOption($selprod_id, $data_to_be_save, $optionValue);
         }
 
