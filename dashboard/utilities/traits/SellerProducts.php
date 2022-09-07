@@ -777,8 +777,13 @@ trait SellerProducts
         $minSellingPrice = Product::getAttributesById($productId, 'product_min_selling_price');
         $productCount = SellerProduct::getActiveCount($this->userParentId);
 
-        $productLangRow = Product::getProductDataById($this->siteLangId, $productId, array('product_identifier', 'product_name'));
-        $keywordSlug = $productLangRow['product_name'] ?? $productLangRow['product_identifier'];
+        $keywordSlug = '';
+        if (empty($post['selprod_title' . $this->siteLangId])) {
+            $productLangRow = Product::getProductDataById($this->siteLangId, $productId, array('product_identifier', 'product_name'));
+            $keywordSlug = $productLangRow['product_name'] ?? $productLangRow['product_identifier'];
+        }
+
+        $keywordSlug =  $post['selprod_title' . $this->siteLangId] ?? $keywordSlug;
 
         $shopData = Shop::getAttributesByUserId($this->userParentId, ['COALESCE(shop_name,shop_identifier) as shop_name'], false, $this->userParentId);
 
