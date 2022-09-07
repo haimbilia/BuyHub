@@ -546,6 +546,19 @@ trait SellerProducts
         $post['selprod_subtract_stock'] = FatApp::getPostedData('selprod_subtract_stock', FatUtility::VAR_INT, 0);
         $post['selprod_track_inventory'] = FatApp::getPostedData('selprod_track_inventory', FatUtility::VAR_INT, 0);
 
+        $keywordSlug = '';
+        $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
+        if (empty($post['selprod_title' . $this->siteLangId])) {
+            $productLangRow = Product::getProductDataById($this->siteLangId, $productId, array('product_identifier', 'product_name'));
+            $keywordSlug = $productLangRow['product_name'] ?? $productLangRow['product_identifier'];
+        }
+
+        $keywordSlug =  $post['selprod_title' . $this->siteLangId] ?? $keywordSlug;
+        $shopData = Shop::getAttributesByUserId($this->userParentId, ['COALESCE(shop_name,shop_identifier) as shop_name'], false, $this->userParentId);
+
+        $keywordSlug = $keywordSlug . '-' . $shopData['shop_name'];
+        $post['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($keywordSlug));
+
         $data_to_be_save = $post;
         $sellerProdObj = new SellerProduct($selprod_id);
         $sellerProdObj->assignValues($data_to_be_save);
@@ -570,6 +583,7 @@ trait SellerProducts
                 FatUtility::dieJsonError($selProdSpecificsObj->getError());
             }
         }
+
 
         $sellerProdObj->rewriteUrlProduct($post['selprod_url_keyword']);
         $sellerProdObj->rewriteUrlReviews($post['selprod_url_keyword']);
