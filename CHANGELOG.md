@@ -1202,6 +1202,7 @@ TV-9.4.0.20220825
     - #066232 - UI issue in the shop collection section on the shop details page
     - #066139 - The categories in which no products are available should not appear in the search result.
     - #066342 - Multiple issues on the category details page
+    - #066626 - Badge requests without any linked record and reference file get submitted when the seller uploads an invalid file in the reference field
     
 ## UAT points:
 
