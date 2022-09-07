@@ -77,6 +77,7 @@ class ImageAttributesController extends ListingBaseController
             case AttachedFile::FILETYPE_PRODUCT_IMAGE:
                 $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'product_id = afile_record_id', 'p');
                 $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
+                $srch->addCondition('p.product_deleted', '=', applicationConstants::NO);
                 $srch->addMultipleFields(
                     array('product_id as record_id', 'IFNULL(product_name, product_identifier) as record_name', 'afile_type')
                 );
@@ -122,6 +123,7 @@ class ImageAttributesController extends ListingBaseController
             default:
                 $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'product_id = afile_record_id', 'p');
                 $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
+                $srch->addCondition('p.product_deleted', '=', applicationConstants::NO);
                 $srch->addMultipleFields(
                     array('product_id as record_id', 'IFNULL(product_name, product_identifier) as record_name', 'afile_type', 'afile_id')
                 );
@@ -163,7 +165,7 @@ class ImageAttributesController extends ListingBaseController
         switch ($moduleType) {
             case AttachedFile::FILETYPE_PRODUCT_IMAGE:
                 $data = Product::getProductDataById($this->siteLangId, $recordId, 'IFNULL(product_name, product_identifier) as title');
-                $title = $data['title'];
+                $title = $data['title'] ?? '';
                 break;
             case AttachedFile::FILETYPE_CATEGORY_BANNER:
                 $srch = ProductCategory::getSearchObject(false, $this->siteLangId);

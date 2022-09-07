@@ -555,6 +555,7 @@ class BadgeLinkConditionsController extends ListingBaseController
                 'badge_type',
                 'badge_trigger_type',
                 'badge_shape_type',
+                'badge_text_color',
                 'badge_color',
                 'badge_display_inside',
             ];
