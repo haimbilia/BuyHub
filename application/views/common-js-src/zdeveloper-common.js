@@ -1526,8 +1526,8 @@ function isUserLogged() {
     $.ajax({
         method: "POST",
         url: fcom.makeUrl("GuestUser", "checkAjaxUserLoggedIn"),
-        data:'fIsAjax=1',
-        async: false,        
+        data: 'fIsAjax=1',
+        async: false,
         dataType: "json",
     }).done(function (ans) {
         isUserLogged = parseInt(ans.isUserLogged);
