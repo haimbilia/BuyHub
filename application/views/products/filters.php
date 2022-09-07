@@ -285,10 +285,12 @@ if (isset($prodcat_code)) {
                                         if (empty($condition) || $condition['selprod_condition'] == 0) {
                                             continue;
                                         } ?>
-                                        <li><label class="checkbox condition" id="condition_<?php echo $condition['selprod_condition']; ?>"><input value="<?php echo $condition['selprod_condition']; ?>" name="conditions" type="checkbox" <?php if (in_array($condition['selprod_condition'], $conditionsCheckedArr)) {
-                                                                                                                                                                                                                                                echo "checked='true'";
-                                                                                                                                                                                                                                            } ?>><?php echo Product::getConditionArr($siteLangId)[$condition['selprod_condition']]; ?>
-                                            </label></li>
+                                        <li>
+                                            <label class="checkbox condition" id="condition_<?php echo $condition['selprod_condition']; ?>">
+                                            <input value="<?php echo $condition['selprod_condition']; ?>" data-id="condition_<?php echo $condition['selprod_condition']; ?>" name="conditions" type="checkbox" <?php if (in_array($condition['selprod_condition'], $conditionsCheckedArr)) { echo "checked='true'";} ?>>
+                                                <?php echo Product::getConditionArr($siteLangId)[$condition['selprod_condition']]; ?>
+                                            </label>
+                                        </li>
                                     <?php
                                     } ?>
                                 </ul>
