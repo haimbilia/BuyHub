@@ -1201,7 +1201,10 @@ TV-9.4.0.20220825
     - #066334 - Mobile >> An invalid string is displayed in the restore time on the restore popup on iOS devices
     - #066232 - UI issue in the shop collection section on the shop details page
     - #066139 - The categories in which no products are available should not appear in the search result.
-    
+```sh 
+TV-9.4.0.20220907
+```
+
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
