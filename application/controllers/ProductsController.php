@@ -1347,7 +1347,8 @@ class ProductsController extends MyAppController
             $srch->addOrder('level');
             $srch->addGroupBy('prodcat_id');
             $catArr = [];
-            while ($row = FatApp::getDb()->fetch($srch->getResultSet())) {
+            $rs = $srch->getResultSet();
+            while ($row = FatApp::getDb()->fetch($rs)) {
                 $catArr[$row['prodcat_id']] = $row['prodcat_name'];
             }
 
