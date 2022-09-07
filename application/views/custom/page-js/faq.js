@@ -81,7 +81,9 @@ $(document).on("search", "#faqQuestionJs", function (e) {
 
 			$(dv).find('.loader-yk').remove();
 			$(dvCategoryPanel).html(ans.categoriesPanelHtml);
-
+			if (0 < $('.noRecordFoundJs').length && '' != ans.categoriesPanelHtml) {
+				$('.noRecordFoundJs').remove();
+			}
 			window.recordCount = ans.recordCount;
 			if (0 < $('.faqCatIdJs.is--active').length) {
 				$('.faqCatIdJs.is--active').click();

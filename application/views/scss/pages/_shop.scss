@@ -60,7 +60,7 @@
     &-logo {
         border: $border-black;
         border-radius: $common-radius;
-        width: 155px;
+        width: 75px;
         margin: 0;
         background-color: #fff;
         display: flex;
@@ -68,7 +68,8 @@
         justify-content: center;
         overflow: hidden;
         aspect-ratio: 1/1;
-        @include media-breakpoint-down(md) {
+        @include media-breakpoint-up(lg) {
+            width: 155px;
             //margin: 0 auto;
         }
         img {

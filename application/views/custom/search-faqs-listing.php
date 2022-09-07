@@ -17,8 +17,7 @@
                                 <p class="faq_data">' . $faqCat['faq_content'] . '</p>
                             </div>
                         </li>';
-        }
-    ?>
+        } ?>
         <div class="faq-filters mb-4" id="categoryPanel">
             <?php echo $catsHtml; ?>
         </div>
@@ -26,8 +25,8 @@
             <?php echo $quesHtml; ?>
         </ul>
     <?php } else { ?>
+        <?php $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);?>
         <div class="faq-filters mb-4" id="categoryPanel"></div>
         <ul class="faq-list" id="listing"></ul>
-    <?php $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
-    } ?>
+    <?php } ?>
 </div>

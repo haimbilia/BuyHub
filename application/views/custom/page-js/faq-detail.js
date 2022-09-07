@@ -73,9 +73,10 @@ $(function () {
 
 			$(dv).find('.loader-yk').remove();
 			$(dvCategoryPanel).html(ans.categoriesPanelHtml);
-
+			if (0 < $('.noRecordFoundJs').length && '' != ans.categoriesPanelHtml) {
+				$('.noRecordFoundJs').remove();
+			}
 			window.recordCount = ans.recordCount;
-
 		});
 	}
 	goToLoadMore = function (page) {
