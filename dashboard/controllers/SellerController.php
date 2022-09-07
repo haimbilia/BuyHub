@@ -4249,7 +4249,9 @@ class SellerController extends SellerBaseController
             if ($productData['product_type'] == Product::PRODUCT_TYPE_PHYSICAL && true == $shipBySeller) {
                 $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $this->siteLangId), 'selprod_fulfillment_type', $fulFillmentArr, applicationConstants::NO, []);
             }
-            $frm->addRequiredField(Labels::getLabel('FRM_URL_KEYWORD', $this->siteLangId), 'selprod_url_keyword');
+            if (0 < $selprod_id) {
+                $frm->addRequiredField(Labels::getLabel('FRM_URL_KEYWORD', $this->siteLangId), 'selprod_url_keyword');
+            }
             $productOptions = Product::getProductOptions($product_id, $this->siteLangId, true);
             if (!empty($productOptions) && $selprod_id == 0) {
                 if (SellerProduct::INVENTORY_RESTRICT_LIMIT >= $inventoryCount) {
