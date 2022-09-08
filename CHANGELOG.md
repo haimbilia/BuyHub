@@ -1209,6 +1209,7 @@ TV-9.4.0.20220907
 
     - #066342 - Multiple issues on the category details page
     - #066626 - Badge requests without any linked record and reference file get submitted when the seller uploads an invalid file in the reference field
+    - #066644 - The seller is not able to switch between the tabs on the inventory setup page
 
 ## UAT points:
 

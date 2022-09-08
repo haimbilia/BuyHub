@@ -385,26 +385,6 @@ $(function () {
             }
         });
     };
-    /*
-    copyText = function (obj) {
-        var copyText = $(obj).text();
-
-        document.addEventListener(
-            "copy",
-            function (e) {
-                e.clipboardData.setData("text/plain", copyText.trim());
-                e.preventDefault();
-            },
-            true
-        );
-        document.execCommand("copy");
-        var elOriginalText = $(obj).attr("data-original-title");
-        $(obj)
-            .attr("data-original-title", langLbl.copied)
-            .tooltip("show")
-            .attr("data-original-title", elOriginalText);
-    };
-    */
 
     installJsColor = function () {
         if (0 < $(".jscolor").length) {

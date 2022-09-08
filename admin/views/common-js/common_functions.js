@@ -87,14 +87,14 @@ copyText = function (obj, applyToolTipInfo = true) {
 tooltipCopyHelper = function (obj, title) {
     $(obj)
         .tooltip("hide")
-        .attr("data-original-title", langLbl.copied + ": " + title)
+        .attr("data-bs-original-title", langLbl.copied + ": " + title)
         .tooltip("update")
         .tooltip("show");
 
     $(obj).mouseout(function () {
         $(obj)
             .tooltip("hide")
-            .attr("data-original-title", langLbl.clickToCopy)
+            .attr("data-bs-original-title", langLbl.clickToCopy + ": " + title)
             .tooltip("update");
         $(obj).unbind("mouseout");
     });

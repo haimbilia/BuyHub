@@ -1976,17 +1976,38 @@ $.extend(fcom, {
     },
 });
 
-copyText = function (obj) {
-    var copyText = $(obj).siblings('.clipboardTextJs').text();
+copyText = function (obj, applyToolTipInfo = true) {
+    var title = $(obj).data("title");
+    if (!navigator.clipboard) {
+        console.warn('clipboard API only works on localhost and https');
+        // Clipboard API  only works on localhost anf https as per doc
+        return;
+    }
+    try {
+        navigator.clipboard.writeText(title);
+        if (applyToolTipInfo) {
+            tooltipCopyHelper(obj, title);
+        }
+    } catch (err) {
+        console.error("Failed to copy!", err);
+    }
+};
 
-    document.addEventListener('copy', function (e) {
-        e.clipboardData.setData('text/plain', copyText);
-        e.preventDefault();
-    }, true);
-    document.execCommand('copy');
-    var elOriginalText = $(obj).attr('data-original-title');
-    $(obj).attr('data-original-title', langLbl.copied).tooltip('show').attr('data-original-title', elOriginalText);
-}
+tooltipCopyHelper = function (obj, title) {
+    $(obj)
+        .tooltip("hide")
+        .attr("data-bs-original-title", langLbl.copied + ": " + title)
+        .tooltip("update")
+        .tooltip("show");
+
+    $(obj).mouseout(function () {
+        $(obj)
+            .tooltip("hide")
+            .attr("data-bs-original-title", langLbl.clickToCopy + ": " + title)
+            .tooltip("update");
+        $(obj).unbind("mouseout");
+    });
+};
 
 /* Check if element is in viewport. */
 $.fn.isInViewport = function () {

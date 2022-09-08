@@ -65,32 +65,7 @@ $(document).ready(function () {
             //$(".submitBtnJs").attr('disabled', 'disabled');
         });
     };
-
-    copy = function (obj) {
-        var copyText = obj.data('url');
-        document.addEventListener('copy', function (e) {
-            e.clipboardData.setData('text/plain', copyText);
-            e.preventDefault();
-        }, true);
-        document.execCommand('copy');
-        var elOriginalText = $(obj).attr('data-original-title');
-        $(obj).attr('data-original-title', langLbl.copied).tooltip('show').attr('data-original-title', elOriginalText);
-    }
 })();
-
-
-function fbSubmit2() {
-    alert("called 1");
-    FB.getLoginStatus(function (response) {
-        if (response.status === 'connected') {
-            alert("connected");
-            //facebook_redirect(response);
-        } else {
-            alert("not connected");
-        }
-    });
-    alert("called 2");
-}
 
 function fbSubmit() {
     FB.getLoginStatus(function (response) {

@@ -35,16 +35,6 @@ $(document).ready(function () {
 		});
 	};
 
-	copy = function (obj) {
-		var copyText = obj.attr('title');
-		document.addEventListener('copy', function (e) {
-			e.clipboardData.setData('text/plain', copyText);
-			e.preventDefault();
-		}, true);
-		document.execCommand('copy');
-		alert('copied text: ' + copyText);
-	}
-
 	addressInfo = function (el) {
 		$(tabListing).html(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('Affiliate', 'addressInfo'), '', function (res) {
