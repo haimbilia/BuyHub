@@ -32,8 +32,8 @@ foreach ($attachments as $sn => $row) {
                 $td->appendElement('plaintext', array(), $serialNo, true);
                 break;
             case 'mainfile':
-                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
-                $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                $dvElem = $td->appendElement('div', array('class' => 'actions-downloads'));
+                $dvElem->appendElement('div', array('class' => 'file-name'), $row[$key], true);
                 if (0 < $row['afile_id']) {             
                         $ul = new HtmlElement("ul", array("class" => "actions"));     
                         $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
@@ -72,10 +72,10 @@ foreach ($attachments as $sn => $row) {
                 }
                 break;
             case 'preview':
-                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));               
+                $dvElem = $td->appendElement('div', array('class' => 'actions-downloads'));               
                 $ul = new HtmlElement("ul", array("class" => "actions"));                
                 if (0 < $row['prev_afile_id']) {
-                    $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                    $dvElem->appendElement('div', array('class' => 'file-name'), $row[$key], true);
                     $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
                     $li->appendElement(
                         'a',
