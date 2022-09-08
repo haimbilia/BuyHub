@@ -62,7 +62,7 @@ foreach ($links as $sn => $row) {
                 if ('' != $row['pdl_preview_link']) {
                     $td->appendElement('div', array("class" => "clipboard"), '<input name ="copy" class="copy-input" title="' . $row[$key] . '" value="' . $row[$key] . '"  readonly> <button type="button" data-title="' . $row[$key] . '" class="copy-btn" onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
                 } else {
-                    $td->appendElement('p', $tdAttr, Labels::getLabel('LBL_NA', $siteLangId), true);
+                    $td->appendElement('p', $tdAttr, Labels::getLabel('LBL_NO_PREVIEW_AVAILABLE', $siteLangId), true);
                 }
                 break;
             case 'action':

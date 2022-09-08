@@ -220,7 +220,6 @@ $(document).on('change', '.selprodoption_optionvalue_id', function () {
 	}
 
 	setUpSellerProductDownloads = function (type, product_id, selprod_id) {
-		alert();
 		var data = new FormData();
 		$inputs = $('#frmDownload input[type=text],#frmDownload input[type=textarea],#frmDownload select,#frmDownload input[type=hidden]');
 		$inputs.each(function () { data.append(this.name, $(this).val()); });
@@ -334,6 +333,10 @@ $(document).on('click', '.tabs_001', function () {
 $(document).on('click', '.tabs_002', function () {
 	if (selprod_id > 0) {
 		sellerProductDownloadFrm(product_id, selprod_id);
+	} else {
+		$(this).removeClass('active');
+		$('.tabs_001').addClass('active');
+		return false;
 	}
 });
 

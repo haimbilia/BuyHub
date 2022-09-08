@@ -175,6 +175,7 @@ if (false == $canDo) {
         <?php echo $downloadFrm->getExternalJS(); ?>
     </div>
     <script>
+        var selprod_id = <?php echo $selProdId; ?>;
         var DIGITAL_DOWNLOAD_FILE = <?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>;
         var DIGITAL_DOWNLOAD_LINK = <?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>;
         $("select[name='download_type']").change(function() {

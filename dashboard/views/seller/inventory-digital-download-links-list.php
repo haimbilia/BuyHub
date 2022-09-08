@@ -53,7 +53,7 @@ foreach ($records as $sn => $row) {
                 if ('' != $row[$key]) {
                     $td->appendElement('div', array("class" => "clipboard"), '<input class="copy-input" value="' . $row[$key] . '" id="copypreview_' . $row['pdl_id'] . '" readonly> <button class="copy-btn" id="copyButton_' . $row['pdl_id'] . '" onclick="fcom.copyToClipboard(\'copypreview_' . $row['pdl_id'] . '\')"><i class="far fa-copy"></i></button>', true);
                 } else {
-                    $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
+                    $td->appendElement('p', array(), Labels::getLabel('LBL_NO_PREVIEW_AVAILABLE', $siteLangId), true);
                 }
                 break;
             case 'action':

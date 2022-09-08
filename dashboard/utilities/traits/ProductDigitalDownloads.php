@@ -98,6 +98,7 @@ trait ProductDigitalDownloads
         $this->set('canDo', $canDo);
         $this->set('savedOptions', $savedOptions);
         $this->set('downloadFrm', $frm);
+        $this->set('selProdId', $selProdId);
         $this->set('languages', Language::getAllNames());
         $this->_template->render(false, false);
     }
