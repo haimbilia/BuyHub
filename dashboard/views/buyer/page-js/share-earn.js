@@ -67,20 +67,6 @@ $(document).ready(function () {
     };
 })();
 
-
-function fbSubmit2() {
-    alert("called 1");
-    FB.getLoginStatus(function (response) {
-        if (response.status === 'connected') {
-            alert("connected");
-            //facebook_redirect(response);
-        } else {
-            alert("not connected");
-        }
-    });
-    alert("called 2");
-}
-
 function fbSubmit() {
     FB.getLoginStatus(function (response) {
         if (response.status === 'connected') {
