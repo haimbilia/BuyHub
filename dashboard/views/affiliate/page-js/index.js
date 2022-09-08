@@ -42,7 +42,8 @@ $(document).ready(function () {
 			e.preventDefault();
 		}, true);
 		document.execCommand('copy');
-		alert('copied text: ' + copyText);
+		var elOriginalText = $(obj).attr('data-original-title');
+		$(obj).attr('data-original-title', langLbl.copied).tooltip('show').attr('data-original-title', elOriginalText);
 	}
 
 	addressInfo = function (el) {

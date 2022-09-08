@@ -38,8 +38,9 @@
         let langId = $("#addProductfrm [name='lang_id']").val();
         let productType = $(el).val();
         $('.productWrapper').prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('CustomProducts', 'form', [recordId, productType]), { langId }, function (res) {
-            $('.mainJs').replaceWith(res);
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'form', [recordId, productType]), { langId }, function (res) {
+            fcom.closeProcessing();
+            $('.mainJs').replaceWith(res.html);
         });
     };
 
