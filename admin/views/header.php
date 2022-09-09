@@ -28,5 +28,5 @@ $commonHeadHtmlData = array(
 $this->includeTemplate('_partial/header/common-header-html.php', $commonHeadHtmlData, false);
 
 if ($isAdminLogged) {
-    include('_partial/header/logged-user-header.php');
+    $this->includeTemplate('_partial/header/logged-user-header.php', $commonHeadData, false);
 }

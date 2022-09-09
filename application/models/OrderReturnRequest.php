@@ -151,7 +151,7 @@ class OrderReturnRequest extends MyAppModel
         }
 
         $oObj = new Orders();
-        $oObj->addChildProductOrderHistory($op_id, $orderLangId, FatApp::getConfig("CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS"), Labels::getLabel('MSG_BUYER_WITHDRAWN_RETURN_REQUEST', $orderLangId), 1);
+        $oObj->addChildProductOrderHistory($op_id, $orderLangId, FatApp::getConfig("CONF_RETURN_REQUEST_WITHDRAWN_ORDER_STATUS"), Labels::getLabel('MSG_RETURN_REQUEST_WITHDRAWN', $orderLangId), 1);
         return true;
     }
 

@@ -1,7 +1,7 @@
 <div class="app">
-    <?php 
-        $this->includeTemplate('_partial/navigation/left-navigation.php');
-        $getProfileImageData = ImageDimension::getData(ImageDimension::TYPE_USER_PROFILE_IMAGE, ImageDimension::VIEW_CROPED); 
+    <?php
+    $this->includeTemplate('_partial/navigation/left-navigation.php');
+    $getProfileImageData = ImageDimension::getData(ImageDimension::TYPE_USER_PROFILE_IMAGE, ImageDimension::VIEW_CROPED);
     ?>
     <div class="wrap">
         <header class="main-header mainHeaderJs">
@@ -12,15 +12,15 @@
                             <?php
                             if (0 < SiteTourHelper::getStepIndex()) {
                                 echo Labels::getLabel('NAV_GETTING_STARTED', $siteLangId);
-                            }elseif (array_key_exists('pageTitle', $this->variables)) {
+                            } elseif (array_key_exists('pageTitle', $this->variables)) {
                                 echo $this->variables['pageTitle'];
                             } else {
                                 echo Labels::getLabel('NAV_DASHBOARD', $siteLangId);
                             } ?>
                         </h1>
                         <?php if (isset($pageData['plang_summary'])) { ?>
-                            <span class="page-title-sub"> <?php echo $pageData['plang_summary']; ?> <a href="javascript:void(0)" class="openAlertJs" data-pageid="<?php echo $pageData['plang_id']; ?>" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>" title="<?php echo Labels::getLabel('LBL_ALERT', $siteLangId)?>">
-                                    <?php if (!empty($pageData['plang_warring_msg']) /* && CommonHelper::isSetCookie('alert_' . $pageData['plang_id']) */) { ?>
+                            <span class="page-title-sub"> <?php echo $pageData['plang_summary']; ?> <a href="javascript:void(0)" class="openAlertJs" data-pageid="<?php echo $pageData['plang_id']; ?>" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>" title="<?php echo Labels::getLabel('LBL_ALERT', $siteLangId) ?>">
+                                    <?php if (!empty($pageData['plang_warring_msg'])) { ?>
                                         <i class="fas fa-exclamation-triangle"></i></a></span>
                         <?php } ?>
                     <?php } ?>
@@ -70,8 +70,10 @@
                             </div>
                             <div class="header-action__item dropdown">
                                 <a class="header-action__trigger dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void();" onclick="getNotifications(0);" title="<?php echo Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?>">
-                                <span class="icon"></span>
-                                <span class="icon">
+                                    <?php if (0 < $notificationCount) { ?>
+                                        <span class="dot"></span>
+                                    <?php } ?>
+                                    <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
                                             </use>
@@ -161,7 +163,7 @@
                         </div>
                     </div>
                 </div>
-            </div>           
+            </div>
 
             <?php if (isset($pageData['plang_recommendations']) && !empty($pageData['plang_recommendations'])) { ?>
                 <div class="alert alert-solid-info fade show" role="alert">

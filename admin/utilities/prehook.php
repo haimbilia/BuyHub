@@ -20,5 +20,6 @@ $innova_settings  =  array(/* 'width'=>'100%', */
 
 FatApp::setViewDataProvider('_partial/navigation/left-navigation.php', array('Navigation', 'setLeftNavigationVals'));   
 FatApp::setViewDataProvider('_partial/header/header-breadcrumb.php', array('Common', 'setHeaderBreadCrumb'));
+FatApp::setViewDataProvider('_partial/header/logged-user-header.php', array('Common', 'setNotificationDetail'));
 
 
