@@ -22,7 +22,6 @@ class Common
         $notifyObject->addCondition('n.' . Notification::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
         $notifyObject->addCondition('n.' . Notification::DB_TBL_PREFIX . 'marked_read', '=', applicationConstants::NO);
         $notifyObject->doNotLimitRecords();
-        $notifyObject->setPageSize(1);
         $notifyObject->getResultSet();
         $template->set('notificationCount', $notifyObject->recordCount());
     }
