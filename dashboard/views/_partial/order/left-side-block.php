@@ -133,7 +133,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
             </div>
         </div>
         <div class="card-table">
-            <div class="table-wrap">
+            <div class="js-scrollable table-wrap">
                 <table class="table table-justified table-orders">
                     <thead>
                         <tr>
