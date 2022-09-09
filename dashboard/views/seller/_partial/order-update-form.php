@@ -71,8 +71,10 @@ if ($canEdit && $displayForm && !$print) { ?>
         <?php
         $moreAttachmentsFrm->setFormTagAttribute('class', 'form');
         $moreAttachmentsFrm->setFormTagAttribute('id', 'additional_attachments');
+        $moreAttachmentsFrm->developerTags['colClassPrefix'] = 'col-md-';
+        $moreAttachmentsFrm->developerTags['fld_default_col'] = 8;
         $fld = $moreAttachmentsFrm->getField('downloadable_file');
-        $fld->setFieldTagAttribute('onchange', 'uploadAdditionalAttachment(this); return false;');
+        $fld->setFieldTagAttribute('onchange', 'uploadAdditionalAttachment(this); return false;');        
         echo $moreAttachmentsFrm->getFormHtml();
         ?>
     </div>
