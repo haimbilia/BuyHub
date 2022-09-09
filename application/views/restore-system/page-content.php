@@ -16,6 +16,7 @@ $html = '<div class="modal-header"><h5 class="modal-title">Yo!kart</h5></div><di
     $restoreTime = FatApp::getConfig('CONF_RESTORE_SCHEDULE_TIME', FatUtility::VAR_STRING, $dateTime);
     $restoreTime = date('Y/m/d H:i:s', strtotime($restoreTime));
     ?>
+    var restoreProcessStarted = false;
     // Set the date we're counting down to
     var countDownDate = new Date('<?php echo $restoreTime; ?>').getTime();
 
@@ -46,9 +47,11 @@ $html = '<div class="modal-header"><h5 class="modal-title">Yo!kart</h5></div><di
         // If the count down is finished, write some text
         if (distance < 0) {
             clearInterval(x);
-            $('.restoreCounterJs').html("Processing..");
-            showRestorePopup();
-            restoreSystem();
+            if (false == restoreProcessStarted) {
+                $('.restoreCounterJs').html("Processing..");
+                showRestorePopup();
+                restoreSystem();
+            }
         }
 
         if (1 > hours && 5 >= minutes && 1 > $('.timerSectionCloneJs').length) {
@@ -62,6 +65,7 @@ $html = '<div class="modal-header"><h5 class="modal-title">Yo!kart</h5></div><di
     }
 
     function restoreSystem() {
+        restoreProcessStarted = true;
         $.ykmsg.warning('Restore is in process..');
         setTimeout(function() {
             $.facebox.close();
