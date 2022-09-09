@@ -327,16 +327,6 @@ input.not-allowed {
     font-size: 1.5rem !important;
 }
 
-.clearfix:before,
-.clearfix:after {
-    content: " ";
-    display: table;
-}
-
-.clearfix:after {
-    clear: both;
-}
-
 .icon-sm {
     font-size: 0.75rem !important;
 }
