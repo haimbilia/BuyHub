@@ -91,6 +91,13 @@ class PayoutReportController extends SellerBaseController
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tmp.date = opSrch.date', 'opSrch');
         $srch->joinTable('(' . $sSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tmp.date = sSrch.date', 'sSrch');
         $srch->addGroupBy('date');
+        if (!empty($fromDate)) {
+            $srch->addCondition('tmp.date', '>=', $fromDate . ' 00:00:00');
+        }
+
+        if (!empty($toDate)) {
+            $srch->addCondition('tmp.date', '<=', $toDate . ' 23:59:59');
+        }
         $this->setRecordCount(clone $srch, $pagesize, $page, $post, true);
         $srch->doNotCalculateRecords();
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
