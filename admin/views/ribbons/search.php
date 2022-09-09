@@ -28,6 +28,9 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $html, true);
                 break;
 
+            case 'badge_added_on':
+                $td->appendElement('plaintext', array(), HtmlHelper::formatDateTime($row[$key], true, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())), true);
+                break;
             case Badge::DB_TBL_PREFIX . 'active':
                 $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row[Badge::DB_TBL_PREFIX . 'id'], $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $htm, true);

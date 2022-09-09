@@ -88,9 +88,9 @@ class RibbonsController extends ListingBaseController
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'badge_id');
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'badge_added_on');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = 'badge_id';
+            $sortBy = 'badge_added_on';
         }
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
@@ -148,7 +148,7 @@ class RibbonsController extends ListingBaseController
         $fld->overrideFldType('search');
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'badge_id', applicationConstants::SORT_DESC);
+            $this->addSortingElements($frm, 'badge_added_on', applicationConstants::SORT_DESC);
         }
 
         HtmlHelper::addSearchButton($frm);
@@ -163,7 +163,7 @@ class RibbonsController extends ListingBaseController
 
         $dataToFill = [];
         if ($recordId > 0) {
-            $dataToFill = Badge::getAttributesByLangId($this->siteLangId, $recordId, ['*','IFNULL(badge_name,badge_identifier) as badge_name'], applicationConstants::JOIN_RIGHT);
+            $dataToFill = Badge::getAttributesByLangId($this->siteLangId, $recordId, ['*', 'IFNULL(badge_name,badge_identifier) as badge_name'], applicationConstants::JOIN_RIGHT);
         }
 
         $frm->fill($dataToFill);
@@ -197,10 +197,12 @@ class RibbonsController extends ListingBaseController
         }
 
         $recordId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
+        $dateCol = (1 > $recordId) ? 'badge_added_on' : 'badge_updated_on';
+        $post[$dateCol] = date('Y-m-d H:i:s');
 
         $post['badge_shape_type'] = Badge::SHAPE_RECTANGLE;
         $post['badge_display_inside'] = applicationConstants::YES;
-
+        
         $record = new Badge($recordId);
         $record->setFldValue(Badge::DB_TBL_PREFIX . 'identifier', $post['badge_name']);
         $record->assignValues($post);
@@ -229,10 +231,10 @@ class RibbonsController extends ListingBaseController
         $frm->addHiddenField('', 'badge_type', Badge::TYPE_RIBBON);
 
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'badge_name');
-        
+
         $themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, "#FFF");
         $frm->addRequiredField(Labels::getLabel('FRM_TEXT_COLOR', $this->siteLangId), 'badge_text_color', $themeColorInverse, ['class' => 'jscolor']);
-        
+
         $themeColor = FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59");
         $frm->addRequiredField(Labels::getLabel('FRM_BACKGROUND_COLOR', $this->siteLangId), 'badge_color', $themeColor, ['class' => 'jscolor']);
 
@@ -366,9 +368,10 @@ class RibbonsController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-         /*    'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*    'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_IMAGE', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
+            Badge::DB_TBL_PREFIX . 'added_on' => Labels::getLabel('LBL_ADDED_ON', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -383,6 +386,7 @@ class RibbonsController extends ListingBaseController
             /* 'listSerial', */
             Badge::DB_TBL_PREFIX . 'shape_type',
             Badge::DB_TBL_PREFIX . 'name',
+            Badge::DB_TBL_PREFIX . 'added_on',
             Badge::DB_TBL_PREFIX . 'active',
             'action',
         ];

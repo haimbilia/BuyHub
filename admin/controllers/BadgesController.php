@@ -89,9 +89,9 @@ class BadgesController extends ListingBaseController
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'badge_id');
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'badge_added_on');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = 'badge_id';
+            $sortBy = 'badge_added_on';
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
@@ -225,7 +225,7 @@ class BadgesController extends ListingBaseController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'badge_id', applicationConstants::SORT_DESC);
+            $this->addSortingElements($frm, 'badge_added_on', applicationConstants::SORT_DESC);
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
         $fld->overrideFldType('search');
@@ -524,6 +524,7 @@ class BadgesController extends ListingBaseController
             Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'trigger_type' => Labels::getLabel('LBL_TRIGGER_TYPE', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $this->siteLangId),
+            Badge::DB_TBL_PREFIX . 'added_on' => Labels::getLabel('LBL_ADDED_ON', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -540,6 +541,7 @@ class BadgesController extends ListingBaseController
             Badge::DB_TBL_PREFIX . 'name',
             Badge::DB_TBL_PREFIX . 'trigger_type',
             Badge::DB_TBL_PREFIX . 'required_approval',
+            Badge::DB_TBL_PREFIX . 'added_on',
             Badge::DB_TBL_PREFIX . 'active',
             'action',
         ];
