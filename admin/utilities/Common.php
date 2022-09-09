@@ -10,20 +10,20 @@ class Common
         $template->set('nodes', $controller->getBreadcrumbNodes($action));
         $template->set('siteLangId', CommonHelper::getlangId());
     }
-    
+
     public static function excludeKeysForSort()
     {
         return ['select_all', 'listSerial', 'action'];
     }
-    
+
     public static function setNotificationDetail($template)
     {
-        $notifyObject = Notification::getSearchObject();
-        $notifyObject->addCondition('n.' . Notification::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
-        $notifyObject->addCondition('n.' . Notification::DB_TBL_PREFIX . 'marked_read', '=', applicationConstants::NO);
-        $notifyObject->doNotLimitRecords();
-        $notifyObject->getResultSet();
-        $template->set('notificationCount', $notifyObject->recordCount());
+        $notify = Notification::getSearchObject();
+        $notify->addCondition('n.' . Notification::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
+        $notify->addCondition('n.' . Notification::DB_TBL_PREFIX . 'marked_read', '=', applicationConstants::NO);
+        $notify->doNotCalculateRecords();
+        $notify->addFld('COUNT(1) as recordCount');
+        $result = (array)FatApp::getDb()->fetch($notify->getResultSet());
+        $template->set('notificationCount', $result['recordCount']);
     }
 }
-    
