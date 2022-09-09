@@ -133,7 +133,7 @@ class Extrapage extends MyAppModel
     public function getContentByPageType($pageType = '', $langId = 0)
     {
         if ($pageType == '') {
-            return;
+            return '';
         }
         $langId = FatUtility::int($langId);
 
@@ -141,8 +141,7 @@ class Extrapage extends MyAppModel
         $srch->addCondition('ep.epage_type', '=', $pageType);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetch($rs);
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public static function isActive($pageType)

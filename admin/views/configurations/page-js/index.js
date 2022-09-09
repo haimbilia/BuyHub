@@ -252,6 +252,9 @@ $(document).ready(function () {
             if (1 > $('.confTypesJs .settings-inner-link:visible').length) {
                 $('.noRecordFoundJs').parent().show();
             }
+
+            // $(".confTypesJs .is-active").removeClass('is-active');
+            // $(".confTypesJs li:visible:first").addClass('is-active');
         });
     };
 

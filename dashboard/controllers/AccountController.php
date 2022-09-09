@@ -1749,8 +1749,7 @@ class AccountController extends LoggedUserController
                     $srch->addMultipleFields(array('selprod_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_id', 'IFNULL(product_name, product_identifier) as product_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'product_updated_on'));
                     $srch->addOrder('uwlp_added_on');
                     $srch->addGroupBy('selprod_id');
-                    $rs = $srch->getResultSet();
-                    $products = $db->fetchAll($rs);
+                    $products = $db->fetchAll($srch->getResultSet());
                     $wishlist['products'] = $products;
                     $wishlist['totalProducts'] = $srch->recordCount();
                 }
