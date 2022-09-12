@@ -8,13 +8,11 @@ if (isset($includeEditor) && $includeEditor == true) {
     $includeEditor = false;
 }
 
-$commonHeadData = array(
-    'siteLangId' => $siteLangId,
-    'jsVariables' => $jsVariables,
+$commonHeadData = array(   
     'extendEditorJs' => $extendEditorJs,
     'includeEditor' => $includeEditor,
     'layoutDirection' => CommonHelper::getLayoutDirection()
-);
+) + $this->variables;
 
 $this->includeTemplate('_partial/header/common-head.php', $commonHeadData, false);
 
