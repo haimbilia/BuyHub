@@ -1,0 +1,40 @@
+The CSS Handbook: A Handy Guide to CSS for Developers
+INTRODUCTION: 
+The project is based on the bootstrap CSS and JS framework.
+The project is SCSS-based and gulpJS is being used for CSS compilation.
+This CSS structure supports multiple languages.
+For automating CSS directions, we have config-directions SCSS.
+The left CSS property and values should be set to #[$start-direction] and the right CSS property and values should be set to #[$end-direction].
+
+Glossary:
+LTR: Left to Right
+RTL: Right to Left
+Here are the CSS Syntax example for how to use the direction variables.
+SCSS 
+.example {
+ text-align: #{$start-direction};
+ #{$start-direction}:0;   
+}
+
+CSS
+.example {
+ text-align: left;
+ left:0;   
+}
+
+
+SCSS modules
+There are three SCSS modules:
+Application > views> SCSS for front end CSS
+Dashboard > views > SCSS for buyer/seller/affiliates/advertiser end CSS
+Admin > views > SCSS for Admin end CSS
+
+
+Media Queries:
+All bootstrap media Queries are applicable.
+
+
+Theme variables:
+$brand-color: var(--brand-color);
+$secondary-color: var(--secondary-color);
+For more info regarding variables, check the _variables.scss under the themes folder.
