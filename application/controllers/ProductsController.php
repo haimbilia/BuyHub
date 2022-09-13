@@ -520,7 +520,7 @@ class ProductsController extends MyAppController
                 $productType = Product::CATALOG_TYPE_PRIMARY;
             }
 
-            $product['preview_links'] = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb, 0, null, true);
+            $product['preview_links'] = DigitalDownloadSearch::getLinks($recordId, $productType, $optionComb, $this->siteLangId, null, true, true);
 
             $attrs = [
                 'afile_id as prev_afile_id', 'pddr_id', 'pddr_options_code', 'afile_record_id', 'afile_record_subid', 'afile_lang_id', 'afile_name as preview', 'afile_type', 'afile_id'
