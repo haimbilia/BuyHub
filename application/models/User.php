@@ -784,11 +784,11 @@ class User extends MyAppModel
         $userData = $this->getProfileData();
         $newEmail = '';
         if(!empty($userData['user_email'])){           
-            $newEmail = 'xxxxxxx--' .$this->mainTableRecordId. substr($userData['user_email'], strpos($userData['user_email'], "@"));
+            $newEmail = 'xxxxxxx-' .$this->mainTableRecordId. substr($userData['user_email'], strpos($userData['user_email'], "@"));
         }
 
         $data = array(
-            'credential_username' => 'xxxxxxx'."--".$this->mainTableRecordId,
+            'credential_username' => 'xxxxxxx'."-".$this->mainTableRecordId,
             'credential_email' => $newEmail, 
         );
 
