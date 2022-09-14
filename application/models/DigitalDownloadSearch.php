@@ -49,15 +49,15 @@ class DigitalDownloadSearch extends SearchBase
         }
 
         $srch = static::getSearchObject();
-        
+
         if (0 < $refRecordId) {
             $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'record_id', '=', $refRecordId);
         }
-        
+
         if (-1 != $refRecordType) {
             $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'type', '=', $refRecordType);
         }
-        
+
         $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id';
         $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', $attahcedTblOn, 'afile');
 
@@ -67,7 +67,7 @@ class DigitalDownloadSearch extends SearchBase
         } else {
             $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'type', '=', AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD);
         }
-        
+
         $srch->addMultipleFields(
             [
                 'pddr_id',
@@ -78,10 +78,10 @@ class DigitalDownloadSearch extends SearchBase
                 'afile.afile_physical_path',
             ]
         );
-        
+
         $srch->setPageSize(1);
         $srch->doNotCalculateRecords();
-        
+
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
@@ -105,28 +105,28 @@ class DigitalDownloadSearch extends SearchBase
 
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'record_id', '=', $recordId);
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'type', '=', $recordType);
-        
+
         /* $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi); */
         if (null != $optionCombi) {
             if (is_array($optionCombi)) {
                 $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', 'IN', $optionCombi);
-            // } elseif (is_string($optionCombi) && '0' != $optionCombi) {
-            //     $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
-            // }
+                // } elseif (is_string($optionCombi) && '0' != $optionCombi) {
+                //     $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
+                // }
             } elseif (is_string($optionCombi)) {
                 $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
             }
         }
-        
+
         $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id';
-        $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', $attahcedTblOn, 'afile');      
-        
+        $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', $attahcedTblOn, 'afile');
+
         //if (0 < $langId) {
-            $langCond = $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', $langId);
-            if (true === $displayUniversalFiles) {
-                /* adding a language id 0 if added previews for all language  */
-                $langCond->attachCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', 0);
-            }
+        $langCond = $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', $langId);
+        if (true === $displayUniversalFiles) {
+            /* adding a language id 0 if added previews for all language  */
+            $langCond->attachCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', 0);
+        }
         //}
 
         if (is_array($attr)) {
@@ -149,7 +149,7 @@ class DigitalDownloadSearch extends SearchBase
                 [AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD, AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW]
             );
         }
-        
+
         $srch->doNotCalculateRecords();
         $srch->addOrder('afile.afile_updated_at', 'DESC');
         $rs = $srch->getResultSet();
@@ -159,8 +159,8 @@ class DigitalDownloadSearch extends SearchBase
 
         return $rows;
     }
-    
-    public static function getLinks($recordId, $recordType, $optionCombi = null, $langId = 0, $attr = null, $onlyPreview = false)
+
+    public static function getLinks($recordId, $recordType, $optionCombi = null, $langId = 0, $attr = null, $onlyPreview = false, $displayUniversalFiles = false)
     {
         $srch = static::getSearchObject();
 
@@ -168,22 +168,26 @@ class DigitalDownloadSearch extends SearchBase
 
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'record_id', '=', $recordId);
         $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'type', '=', $recordType);
-        
+
         /* $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi); */
         if (null != $optionCombi) {
             if (is_array($optionCombi)) {
                 $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', 'IN', $optionCombi);
-            // } elseif (is_string($optionCombi) && '0' != $optionCombi) {
-            //     $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
-            // }
+                // } elseif (is_string($optionCombi) && '0' != $optionCombi) {
+                //     $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
+                // }
             } elseif (is_string($optionCombi)) {
                 $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
             }
         }
 
-        //if (0 < $langId) {
+        if (true == $displayUniversalFiles) {
+            $cnd = $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'lang_id', '=', $langId);
+            $cnd->attachCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'lang_id', '=', 0, 'OR');
+        } else {
             $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'lang_id', '=', $langId);
-        //}
+        }
+
         if (true == $onlyPreview) {
             $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'preview_link', '!=', '');
         }
@@ -336,10 +340,10 @@ class DigitalDownloadSearch extends SearchBase
         }
 
         $records = array_replace($records, $commonRecords); */
-        
+
         return $records;
     }
-    
+
     public static function processAttachmentsWithPreview($attachments)
     {
         if (0 > count($attachments)) {
@@ -371,7 +375,7 @@ class DigitalDownloadSearch extends SearchBase
                 $rows[$key]['afile_id'] = 0;
                 continue;
             }
-            
+
             if (!array_key_exists($attachment['afile_record_subid'], $rows)) {
                 $rows[$attachment['afile_record_subid']]['pddr_id'] = $attachment['pddr_id'] . 3;
                 $rows[$attachment['afile_record_subid']]['pddr_options_code'] = $attachment['pddr_options_code'];
@@ -389,7 +393,7 @@ class DigitalDownloadSearch extends SearchBase
             $rows[$attachment['afile_record_subid']]['preview'] = $attachment['afile_name'];
             $rows[$attachment['afile_record_subid']]['prev_afile_id'] = $attachment['afile_id'];
         }
-        
+
         return $rows;
     }
 }

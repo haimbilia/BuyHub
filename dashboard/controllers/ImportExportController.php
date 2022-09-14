@@ -756,11 +756,10 @@ class ImportExportController extends SellerBaseController
         }
         /* ] */
 
-        $firstLine = fgetcsv($fileHandle);
         $defaultColArr = $this->getInventorySheetColoum($this->siteLangId);
-        if ($firstLine != $defaultColArr) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_COLOUM_CSV_FILE', $this->siteLangId));
-        }
+
+        $importExport = new Importexport();
+        $importExport->validateCSVHeaders($fileHandle, $defaultColArr, $this->siteLangId);
 
         $db = FatApp::getDb();
         $error = false;

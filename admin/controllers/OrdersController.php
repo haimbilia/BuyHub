@@ -67,7 +67,7 @@ class OrdersController extends ListingBaseController
                 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_commission_charged', 'op_commission_percentage', 'op_refund_commission', 'op_tax_after_discount'
             )
         );
-
+        $opSrch->addOrder('op_selprod_user_id');
         $this->order['products'] = FatApp::getDb()->fetchAll($opSrch->getResultSet(), 'op_id');
         $orderObj = new Orders($this->order['order_id']);
 
@@ -987,6 +987,7 @@ class OrdersController extends ListingBaseController
                 'op_shop_owner_phone_dcode', 'op_selprod_price', 'op_special_price', 'opshipping_by_seller_user_id', 'op_is_batch', 'op_selprod_id', 'selprod_product_id'
             ]
         );
+        $opSrch->addOrder('op_selprod_user_id');
         $opsShippingDetail = FatApp::getDb()->fetchAll($opSrch->getResultSet());
 
         $oObj = new Orders();

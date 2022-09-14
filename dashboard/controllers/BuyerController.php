@@ -1127,7 +1127,7 @@ class BuyerController extends BuyerBaseController
         $datediff = time() - strtotime($opDetail['order_date_added']);
         $daysSpent = $datediff / (60 * 60 * 24);
 
-        if ($opDetail['op_selprod_cancellation_age'] <= $daysSpent) {
+        if ($opDetail["op_product_type"] == Product::PRODUCT_TYPE_PHYSICAL && $opDetail['op_selprod_cancellation_age'] <= $daysSpent) {
             $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
@@ -2195,7 +2195,7 @@ class BuyerController extends BuyerBaseController
         $datediff = time() - strtotime($opDetail['order_date_added']);
         $daysSpent = $datediff / (60 * 60 * 24);
 
-        if ($opDetail['op_selprod_return_age'] <= $daysSpent) {
+        if ($opDetail["op_product_type"] == Product::PRODUCT_TYPE_PHYSICAL && $opDetail['op_selprod_return_age'] <= $daysSpent) {
             $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
             LibHelper::dieJsonError($message);
         }

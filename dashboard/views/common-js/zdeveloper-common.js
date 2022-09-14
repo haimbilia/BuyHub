@@ -1206,8 +1206,8 @@ $(document).ajaxComplete(function () {
             return $(this).attr("data-bs-content");
         },
     });
-     /* Bind bootstrap tooltip with ajax elements. */
-     $('[data-bs-toggle="tooltip"]').tooltip({
+    /* Bind bootstrap tooltip with ajax elements. */
+    $('[data-bs-toggle="tooltip"]').tooltip({
         trigger: 'hover'
     }).on('click', function () {
         setTimeout(() => {
@@ -1253,8 +1253,8 @@ $(document).ready(function () {
     $("body").tooltip({
         selector: "[data-toggle=tooltip]",
     });
-     /* Bind bootstrap tooltip with ajax elements. */
-     $('[data-bs-toggle="tooltip"]').tooltip({
+    /* Bind bootstrap tooltip with ajax elements. */
+    $('[data-bs-toggle="tooltip"]').tooltip({
         trigger: 'hover'
     }).on('click', function () {
         setTimeout(() => {
@@ -1293,13 +1293,7 @@ $(".form-floating")
 $(".dropdown-menu").on("click", function (e) {
     e.stopPropagation();
 });
-$(document).on("click", ".v-tabs--js ul li", function (e) {
-    e.preventDefault();
-    $(".v-tabs--js .is-active").removeClass("is-active");
-    var target = $("a.v-tab--js", this).attr("href");
-    $(this).addClass("is-active");
-    $(target).addClass("is-active");
-});
+
 var imagesPreview = function (input, placeToInsertImagePreview) {
     if (input.files) {
         if (1 > $(placeToInsertImagePreview + " ul").length) {

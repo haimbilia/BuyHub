@@ -373,7 +373,7 @@ $(document).on('click', '.tabs_002', function () {
 			optionCombi = $("#frmDownload select[name='option_comb_id']").val();
 		}
 
-		if (optionCombi == '') {			
+		if (optionCombi == '') {
 			data += "&option_comb_id=0";
 		} else {
 			data += "&record_id=" + optionCombi;
@@ -395,6 +395,7 @@ $(document).on('click', '.tabs_002', function () {
 	}
 
 	saveDownloadFiles = function () {
+		$('#digital_download_form').prepend(fcom.getLoader())
 		var data = new FormData();
 		$inputs = $('#frmDownload select,#frmDownload input[type=hidden]');
 		$inputs.each(function () { data.append(this.name, $(this).val()); });
@@ -432,11 +433,13 @@ $(document).on('click', '.tabs_002', function () {
 			contentType: false,
 			dataType: "json",
 			success: function (ans) {
+				fcom.removeLoader();
 				$('.downloadable_file').val('');
 				if (ans.status != 1) {
 					fcom.displayErrorMessage(ans.msg);
 					return;
 				}
+				$('#frmDownload').get(0).reset();
 				fcom.displaySuccessMessage(ans.msg);
 				downloadsForm(ans.productId, recordId, function () {
 					$(".option-comb-id-js").val(ans.recordId);
@@ -446,12 +449,13 @@ $(document).on('click', '.tabs_002', function () {
 
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
+				fcom.removeLoader();
 				alert("Error Occurred.");
 			}
 		});
 	}
 
-	attachDigitalPreviewFile = function (option, langId, refId, subRefId) {		
+	attachDigitalPreviewFile = function (option, langId, refId, subRefId) {
 		$(".file-language-js").val(langId);
 		$('#frmDownload input[name=dd_link_id]').val(refId);
 		$('#frmDownload input[name=dd_link_ref_id]').val(subRefId);
@@ -462,7 +466,7 @@ $(document).on('click', '.tabs_002', function () {
 		$('#frmDownload input[name=ref_file_id]').val(subRefId);
 
 		$("#attachement_upload_btn").attr('onclick', 'saveDownloadFiles(); return false;');
-		fcom.displayInfoMessage(lblAddFileInfo);	
+		fcom.displayInfoMessage(lblAddFileInfo);
 
 	}
 

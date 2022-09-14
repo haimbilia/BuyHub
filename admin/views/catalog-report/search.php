@@ -22,8 +22,11 @@ foreach ($arrListing as $sn => $row) {
                 if ($row['brand_name'] != '') {
                     $name .= "<br/><strong>" . Labels::getLabel('LBL_Brand', $siteLangId) . ": </strong>" . $row['brand_name'];
                 }
-                $name = "<div class='info-wrap'>".$name."</div>";
+                $name = "<div class='info-wrap'>" . $name . "</div>";
                 $td->appendElement('plaintext', $tdAttr, $name, true);
+                break;
+            case 'prodcat_name':
+                $td->appendElement('plaintext', $tdAttr, html_entity_decode($row[$key], ENT_QUOTES, 'utf-8'), true);
                 break;
             case 'product_type':
                 $td->appendElement('plaintext', $tdAttr, $productTypeArr[$row[$key]], true);
@@ -48,18 +51,18 @@ foreach ($arrListing as $sn => $row) {
             case 'commissionCharged':
             case 'refundedCommission':
             case 'adminSalesEarnings':
-                $td->appendElement('plaintext',$tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
 
             default:
-                $td->appendElement('plaintext',$tdAttr, $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

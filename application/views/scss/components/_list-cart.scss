@@ -1,5 +1,6 @@
 .list-cart {
     font-size: 0.8rem;
+
     //background-color: $bg-white;
     &-item {
         display: flex;
@@ -7,19 +8,23 @@
         padding-bottom: 2rem;
         margin-bottom: 2rem;
         border-bottom: $border;
+
         @include media-breakpoint-down(sm) {
             //flex-direction: column;
         }
+
         &:last-child {
             border-bottom: none;
             padding-bottom: 0;
             //margin-bottom: 0;
         }
+
         &.list-saved-later {
             @include media-breakpoint-down(md) {
                 flex-direction: row;
             }
         }
+
         &.minus-space {
             padding: 0;
             border: none;
@@ -36,10 +41,12 @@
             padding: 1rem;
             border: none;
             border-top: $border;
+
             &:nth-child(1),
             &:nth-child(2) {
                 border-top: none;
             }
+
             &:last-child {
                 flex: 1;
                 max-width: none;
@@ -48,19 +55,39 @@
     }
 
     //
+
+    &-triple {
+        display: flex;
+        flex-flow: row wrap; 
+        gap: 20px;
+        >li {
+            flex: 0 0 30%;
+            max-width: 30%;
+            &:last-child {
+                padding-bottom: 2rem; 
+                border-bottom: $border;
+            }
+        }
+    }
+
+    //
     &-return {
         li {
             flex-direction: column;
+
             &:last-child {
                 border-bottom: none;
             }
+
             .product-profile-thumbnail img {
                 max-width: 70px;
             }
+
             .product-quantity {
                 margin: 0;
                 margin-top: 1rem;
             }
+
             .product-price {
                 flex: none;
                 max-width: none;
@@ -69,6 +96,7 @@
             }
         }
     }
+
     //
     &-order {
         .product-thumbnail {
@@ -84,6 +112,7 @@
         flex: 0 0 100px;
         max-width: 100px;
         margin-#{$start-direction}: auto;
+
         @include media-breakpoint-down(sm) {
             padding: 10px 0;
             flex: 1;
@@ -91,11 +120,13 @@
             margin-#{$start-direction}: 0;
         }
     }
+
     &_price {
         padding: 0 10px;
         flex: 0 0 100px;
         max-width: 100px;
         margin-#{$start-direction}: auto;
+
         @include media-breakpoint-down(sm) {
             padding: 10px 0;
             flex: 1;
@@ -103,11 +134,13 @@
             margin-#{$start-direction}: 0;
         }
     }
+
     &_action {
         text-align: #{$end-direction};
         // flex: 0 0 30px;
         // max-width: 30px;
         margin-#{$start-direction}: auto;
+
         @include media-breakpoint-down(sm) {
             margin-#{$start-direction}: 0;
             flex: 1;
@@ -115,6 +148,7 @@
             text-align: inherit;
         }
     }
+
     &:last-child {
         padding-#{$end-direction}: 0;
     }
@@ -122,62 +156,76 @@
 
 .product-quantity {
     margin: 0 0;
+
     .remove {
         margin: 0.5rem 0;
         display: inline-block;
     }
+
     .side-price {
         font-weight: 500;
         font-size: 0.8rem;
         margin-#{$start-direction}: 10px;
     }
+
     &-price {
         display: flex;
         align-items: center;
     }
 }
+
 .product-price {
     text-align: #{$end-direction};
+
     @include media-breakpoint-down(sm) {
         text-align: inherit;
     }
 }
+
 .product-action {
     @include media-breakpoint-down(md) {
         position: absolute;
         top: 1rem;
         #{$end-direction}: 1rem;
     }
+
     .list-actions {
         /* padding-top: 8px;*/
         justify-content: flex-end;
     }
 }
+
 .btn-saveforlater {
     border: none;
     background: none;
+
     .svg {
         width: 26px;
         height: 26px;
         fill: $brand-color;
     }
 }
+
 .list-add {
     padding-top: 8px;
     display: flex;
     align-items: center;
     color: $txt-gray;
+
     li {
         margin-#{$end-direction}: 10px;
+
         &:last-child {
             margin: 0;
         }
     }
+
     .svg {
         width: 1rem;
         height: 1rem;
         fill: currentColor;
     }
+
     .active {
         .svg {
             width: 1rem;
