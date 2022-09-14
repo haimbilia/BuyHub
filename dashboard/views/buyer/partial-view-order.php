@@ -38,9 +38,9 @@ if (!empty($digitalDownloads)) { ?>
                         }
 
                         if ($row['downloadable']) {
-                            $fileName = '<a href="' . UrlHelper::generateUrl('Buyer', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'])) . '">' . $row['afile_name'] . '</a>';
+                            $fileName = '<a class="file-name" title="' . $row['afile_name'] . '" data-bs-toggle="tooltip" href="' . UrlHelper::generateUrl('Buyer', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'])) . '">' . $row['afile_name'] . '</a>';
                         } else {
-                            $fileName = $row['afile_name'];
+                            $fileName = '<div class="file-name" title="' . $row['afile_name'] . '" data-bs-toggle="tooltip">' . $row['afile_name'] . '</div>';
                         }
                         $downloads = '<li>
                                                 <a href="' . UrlHelper::generateUrl('Buyer', 'downloadDigitalFile', array($row['afile_id'], $row['afile_record_id'])) . '">
@@ -66,7 +66,7 @@ if (!empty($digitalDownloads)) { ?>
                                 <?php echo $sr_no; ?>
                             </td>
                             <td>
-                                <?php echo '<div>' . $fileName . '</div>'; ?>
+                                <?php echo '<div class="actions-downloads">' . $fileName . '</div>'; ?>
                             </td>
                             <td>
                                 <?php echo $lang_name; ?>
@@ -144,8 +144,8 @@ if (!empty($digitalDownloads)) { ?>
                                 <?php echo $sr_no; ?>
                             </td>
                             <td>
-                                <div class="text-break" style="width: 200px;">
-                                    <a target="_blank" onclick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
+                                <div class="actions-downloads">
+                                    <a class="file-name" title="<?php echo $linkUrl; ?>" data-bs-toggle="tooltip"  target="_blank" onclick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
                                         <?php echo $link; ?>
                                     </a>
                                 </div>

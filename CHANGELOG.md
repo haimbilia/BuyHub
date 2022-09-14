@@ -1212,6 +1212,7 @@ TV-9.4.0.20220907
     - #066644 - The seller is not able to switch between the tabs on the inventory setup page
     - #066118 - Suggestion: To show the dot indicator on the notification icon if any new notification is received by the admin on the admin dashboard.
     - #066814 - The error occurs as invalid access when the buyer tries to cancel the digital product order
+    - #066697 - The download icon is not visible in the Download Links section on the order details page for digital product orders.
 
 ## UAT points:
 
