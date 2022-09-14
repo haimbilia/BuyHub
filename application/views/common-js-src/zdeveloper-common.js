@@ -1859,13 +1859,6 @@ function awebersignup() {
         }
     }, 1000);
 }
-$(document).on("click", ".v-tabs--js ul li", function (e) {
-    e.preventDefault();
-    $(".v-tabs--js .is-active").removeClass("is-active");
-    var target = $("a.v-tab--js", this).attr("href");
-    $(this).addClass("is-active");
-    $(target).addClass("is-active");
-});
 var imagesPreview = function (input, placeToInsertImagePreview) {
     if (input.files) {
         if (1 > $(placeToInsertImagePreview + " ul").length) {

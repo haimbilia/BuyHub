@@ -237,7 +237,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
     <?php if (0 < count($saveForLaterProducts)) { ?>
         <h5 class="cart-title mt-5"><?php echo Labels::getLabel('LBL_Save_For_later', $siteLangId); ?>
             (<?php echo count($saveForLaterProducts); ?>)</h5>
-        <ul class="list-cart">
+        <ul class="list-cart <?php echo 1 > $productsCount ? 'list-cart-triple' : ''; ?>">
             <?php foreach ($saveForLaterProducts as $product) {
                 $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
                 $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
