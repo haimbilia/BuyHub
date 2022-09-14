@@ -17,8 +17,8 @@
             <div class="card-body ">
                 <div class="box__body">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="info--order">
+                        <div class="col-lg-6 ">
+                            <div class="info-order">
                                 <p><strong><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?>: </strong><?php echo $orderDetail['user_name']; ?></p>
                                 <p><strong><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?>: </strong><?php echo $orderStatuses[$orderDetail['op_status_id']]; ?></p>
                                 <p><strong><?php echo Labels::getLabel('LBL_Cart_Total', $siteLangId); ?>: </strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'CART_TOTAL')); ?></p>
@@ -37,14 +37,14 @@
                                 <p><strong><?php echo Labels::getLabel('LBL_Order_Total', $siteLangId); ?>: </strong><?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($orderDetail, 'netamount', false, User::USER_TYPE_SELLER)); ?></p>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="info--order">
+                        <div class="col-lg-6 ">
+                            <div class="info-order">
                                 <p><strong><?php echo Labels::getLabel('LBL_Invoice', $siteLangId); ?> #: </strong><?php echo $orderDetail['op_invoice_number']; ?></p>
                                 <p><strong><?php echo Labels::getLabel('LBL_Date', $siteLangId); ?>: </strong><?php echo FatDate::format($orderDetail['order_date_added']); ?></p>
                             </div>
                         </div>
                     </div>
-
+                    <div class="my-3"></div>
                     <div class="js-scrollable table-wrap table-responsive">
                         <table class="table table-justified">
                             <thead>
@@ -87,12 +87,11 @@
                             </tbody>
                         </table>
                     </div>
-
-
+                    <div class="divider"></div>
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="info--order">
-                                <h5><?php echo Labels::getLabel('LBL_Billing_Details', $siteLangId); ?></h5>
+                        <div class="col-lg-6 ">
+                            <div class="info-order">
+                                <h5 class="h5"><?php echo Labels::getLabel('LBL_Billing_Details', $siteLangId); ?></h5>
                                 <?php $billingAddress = $orderDetail['billingAddress']['oua_name'] . '<br>';
                                 if ($orderDetail['billingAddress']['oua_address1'] != '') {
                                     $billingAddress .= $orderDetail['billingAddress']['oua_address1'] . '<br>';
@@ -126,9 +125,9 @@
                             </div>
                         </div>
                         <?php if (!empty($orderDetail['shippingAddress'])) { ?>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="info--order">
-                                    <h5><?php echo Labels::getLabel('LBL_Shipping_Detail', $siteLangId); ?></h5>
+                            <div class="col-lg-6 ">
+                                <div class="info-order">
+                                    <h5 class="h5"><?php echo Labels::getLabel('LBL_Shipping_Detail', $siteLangId); ?></h5>
                                     <?php $shippingAddress = $orderDetail['shippingAddress']['oua_name'] . '<br>';
                                     if ($orderDetail['shippingAddress']['oua_address1'] != '') {
                                         $shippingAddress .= $orderDetail['shippingAddress']['oua_address1'] . '<br>';
@@ -163,9 +162,9 @@
                             </div>
                         <?php } ?>
                         <?php if (!empty($orderDetail['pickupAddress'])) { ?>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="info--order">
-                                    <h5><?php echo Labels::getLabel('LBL_Pickup_Details', $siteLangId); ?></h5>
+                            <div class="col-lg-6 ">
+                                <div class="info-order">
+                                    <h5 class="h5"><?php echo Labels::getLabel('LBL_Pickup_Details', $siteLangId); ?></h5>
                                     <p>
                                         <strong>
                                             <?php
@@ -206,12 +205,10 @@
                             </div>
                         <?php } ?>
                     </div>
-
-
-
+                    <div class="divider"></div>
                     <?php if (!empty($orderDetail['comments'])) { ?>
                         <div class="section--repeated js-scrollable table-wrap">
-                            <h5><?php echo Labels::getLabel('LBL_Posted_Comments', $siteLangId); ?></h5>
+                            <h5 class="h5"><?php echo Labels::getLabel('LBL_Posted_Comments', $siteLangId); ?></h5>
                             <table class="table table-justified">
                                 <thead>
                                     <tr class="hide--mobile">
@@ -237,9 +234,9 @@
                         </div>
                     <?php } ?>
                     <?php if (!$notEligible) { ?>
-
+                        <div class="divider"></div>
                         <div class="section--repeated no-print cancelReason-js">
-                            <h5><?php echo Labels::getLabel('LBL_Reason_for_cancellation', $siteLangId); ?></h5>
+                            <h5 class="h5"><?php echo Labels::getLabel('LBL_Reason_for_cancellation', $siteLangId); ?></h5>
                             <?php
                             $frm->setFormTagAttribute('onsubmit', 'cancelReason(this); return(false);');
                             $frm->setFormTagAttribute('class', 'form');

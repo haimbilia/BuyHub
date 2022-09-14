@@ -29,7 +29,7 @@ $frm->setFormTagAttribute('id', 'twocheckout');
                         }
                         echo $frm->getFormHtml(); ?>
                     <?php else : ?>
-                        <div class="alert alert--danger"><?php echo $error; ?></div>
+                        <div class="alert alert-danger"><?php echo $error; ?></div>
                     <?php endif; ?>
                     <script type="text/javascript">
                         $(function() {
@@ -133,7 +133,7 @@ $frm->setFormTagAttribute('id', 'twocheckout');
                     </div>
                     </form>
                 <?php else : ?>
-                    <div class="alert alert--danger"><?php echo $error ?></div>
+                    <div class="alert alert-danger"><?php echo $error ?></div>
                 <?php endif; ?>
                 <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
                     <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
@@ -181,7 +181,7 @@ if ($paymentType != 'HOSTED') {
                     var json = $.parseJSON(response);
 
                     if (json['error']) {
-                        $('#ajax_message').html('<div class="alert alert--danger">' + json['error'] + '</div>');
+                        $('#ajax_message').html('<div class="alert alert-danger">' + json['error'] + '</div>');
                     }
                     if (json['redirect']) {
                         $(location).attr("href", json['redirect']);
@@ -200,7 +200,7 @@ if ($paymentType != 'HOSTED') {
                 tokenRequest();
             } else {
                 frmApiCheckout.data('requestRunning', false);
-                $('#ajax_message').html('<div class="alert alert--danger">' + data.errorMsg + '</div>');
+                $('#ajax_message').html('<div class="alert alert-danger">' + data.errorMsg + '</div>');
             }
         };
 

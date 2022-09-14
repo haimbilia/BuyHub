@@ -31,7 +31,7 @@ if (null != $btn) {
                     <h6><?php echo Labels::getLabel('LBL_REDIRECTING_TO_PAYMENT_PAGE...', $siteLangId); ?></h6>
                     <?php echo $frm->getFormHtml(); ?>
                 <?php else : ?>
-                    <div class="alert alert--danger"><?php echo $error ?></div>
+                    <div class="alert alert-danger"><?php echo $error ?></div>
                 <?php endif; ?>
             </div>
             <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>

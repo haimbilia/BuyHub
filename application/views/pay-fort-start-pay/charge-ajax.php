@@ -2,11 +2,11 @@
 <?php if (!isset($error)) { ?>
     <p><?php echo Labels::getLabel('MSG_We_are_redirecting_to_payment_page', $siteLangId); ?></p>
 <?php } else { ?>
-    <div class="alert alert--danger"><?php echo $error; ?></div>
+    <div class="alert alert-danger"><?php echo $error; ?></div>
 <?php  } ?>
 <script src="https://beautiful.start.payfort.com/checkout.js"></script>
 <script>
-    $(function () {
+    $(function() {
 
         var cancelPay = '<?php echo CommonHelper::getPaymentCancelPageUrl(); ?>';
         StartCheckout.config({

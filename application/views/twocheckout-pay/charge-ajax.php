@@ -128,7 +128,7 @@ if (null != $btn) {
             </form>
             <?php echo $frm->getExternalJs(); ?>
         <?php } else { ?>
-            <div class="alert alert--danger"><?php echo $error; ?></div>
+            <div class="alert alert-danger"><?php echo $error; ?></div>
         <?php } ?>
         <div id="ajax_message"></div>
         <?php if (!FatUtility::isAjaxCall()) { ?>
@@ -168,7 +168,7 @@ if (null != $btn) {
                         var json = $.parseJSON(response);
 
                         if (json['error']) {
-                            $('#ajax_message').html('<div class="alert alert--danger">' + json['error'] + '</div>');
+                            $('#ajax_message').html('<div class="alert alert-danger">' + json['error'] + '</div>');
                         }
                         if (json['redirect']) {
                             $(location).attr("href", json['redirect']);
@@ -187,7 +187,7 @@ if (null != $btn) {
                     tokenRequest();
                 } else {
                     frmApiCheckout.data('requestRunning', false);
-                    $('#ajax_message').html('<div class="alert alert--danger">' + data.errorMsg + '</div>');
+                    $('#ajax_message').html('<div class="alert alert-danger">' + data.errorMsg + '</div>');
                 }
             };
 

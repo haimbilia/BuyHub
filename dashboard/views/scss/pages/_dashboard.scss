@@ -1034,9 +1034,11 @@
     }
 }
 
-.info--order p {
-    font-size: 0.8rem;
-    margin: 5px 0;
+.info-order {
+    p {
+        font-size: 0.8rem;
+        margin: 5px 0;
+    }
 }
 
 .note {
@@ -1669,7 +1671,6 @@ input.sp-input {
     }
 }
 
-
 $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 .datatable {
     &_cell {
@@ -1851,7 +1852,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
         max-width: 150px;
     }
     &__detail {
-        margin: 1rem 0;
+        // margin: 1rem 0;
         font-size: 0.8rem;
     }
 }

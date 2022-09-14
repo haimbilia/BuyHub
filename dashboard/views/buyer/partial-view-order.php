@@ -145,7 +145,7 @@ if (!empty($digitalDownloads)) { ?>
                             </td>
                             <td>
                                 <div class="actions-downloads">
-                                    <a class="file-name" title="<?php echo $linkUrl; ?>" data-bs-toggle="tooltip"  target="_blank" onclick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
+                                    <a class="file-name" title="<?php echo $linkUrl; ?>" data-bs-toggle="tooltip" target="_blank" onclick="<?php echo $linkOnClick; ?> " href="<?php echo $linkUrl; ?>" data-link="<?php echo $linkUrl; ?>" title="<?php echo $linkTitle; ?>">
                                         <?php echo $link; ?>
                                     </a>
                                 </div>
@@ -174,7 +174,7 @@ if (!$orderDetail['order_deleted'] && !$primaryOrder && !$orderDetail["order_pay
         <h6>
             <?php echo Labels::getLabel('LBL_ORDER_PAYMENTS', $siteLangId); ?>
         </h6>
-        <div class="info--order">
+        <div class="info-order">
             <?php
             $frm->setFormTagAttribute('onsubmit', 'updatePayment(this); return(false);');
             $frm->setFormTagAttribute('class', 'form');

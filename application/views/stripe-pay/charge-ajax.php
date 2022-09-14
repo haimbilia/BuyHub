@@ -66,7 +66,7 @@ if (isset($client_secret)) { ?>
                             }
 
                             if (response.error) {
-                                $("#stripeCharge").prepend('<div class="alert alert--danger">' + response.error.message + '</div>');
+                                $("#stripeCharge").prepend('<div class="alert alert-danger">' + response.error.message + '</div>');
                                 $("#stripeCharge").find(":submit").removeAttr('disabled');
                                 fcom.removeLoader();
                                 fcom.closeProcessing();
@@ -95,7 +95,7 @@ if (isset($client_secret)) { ?>
                             $(".<?php echo $pmethodCode ?>-js").prepend(fcom.getLoader());
                             fcom.displayProcessing();
                             // prop('disabled', true);
-                            $('.alert--danger').remove();
+                            $('.alert-danger').remove();
 
                             _this = $(this);
                             var _numberWrap = $('#cc_number');
@@ -205,7 +205,7 @@ if (isset($client_secret)) { ?>
                 </div>
             </div>
         </div>
-        
+
         <div class="row justify-content-between">
             <div class="col-auto">
                 <?php
@@ -219,7 +219,7 @@ if (isset($client_secret)) { ?>
         </form>
         <?php echo $frm->getExternalJs(); ?>
     <?php } else { ?>
-        <div class="alert alert--danger"><?php echo $error ?></div>
+        <div class="alert alert-danger"><?php echo $error ?></div>
     <?php } ?>
 
     <div id="ajax_message"></div>

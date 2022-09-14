@@ -19,9 +19,9 @@
                 <p id="paymentStatus"></p>
                 <?php
                 if (isset($error))
-                    echo '<div class="alert alert--danger"><p>' . $error . '</p></div>';
+                    echo '<div class="alert alert-danger"><p>' . $error . '</p></div>';
                 if (isset($success))
-                    echo '<div class="alert alert--success" ><p>' . Labels::getLabel('LBL_Your_payment_has_been_successfully', $siteLangId) . '</p></div>';
+                    echo '<div class="alert alert-success" ><p>' . Labels::getLabel('LBL_Your_payment_has_been_successfully', $siteLangId) . '</p></div>';
                 if (strlen($orderId) > 0 && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) echo '<div class="text-center" style="margin-top:40px;" id="AmazonPayButton"></div>';
                 ?>
             </div>

@@ -26,6 +26,7 @@ $fld->developerTags['col'] = 12;
     <section class="section">
         <div class="container">
             <div class="row justify-content-center mt-3">
+
                 <div class="col-xl-9">
                     <div class="row">
                         <div class="col-md-7">

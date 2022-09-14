@@ -25,7 +25,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     <div class="row">
                         <div class="col-md-12">
                             <p class="note"><?php echo Labels::getLabel('LBL_Affiliate_Sharing_information_text', $siteLangId) ?><br /><strong><?php echo Labels::getLabel('LBL_You_may_copy_invitation_link_below', $siteLangId) ?></strong></p>
-                            <div class="alert--gray"><?php echo $affiliateTrackingUrl; ?></div>
+                            <div class="alert-secondary"><?php echo $affiliateTrackingUrl; ?></div>
                         </div>
                     </div>
 

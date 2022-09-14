@@ -28,7 +28,7 @@
                     }
                     echo '</select>';
                 } else {
-                    echo Labels::getLabel('MSG_Product_is_not_available_for_shipping', $siteLangId);
+                    echo '<div class="alert alert-warning mt-3">' . Labels::getLabel('MSG_Product_is_not_available_for_shipping', $siteLangId) . '</div>';
                 } ?>
 
             </div>
