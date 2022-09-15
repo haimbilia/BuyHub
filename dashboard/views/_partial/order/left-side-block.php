@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
+$primaryOrder = $primaryOrder ?? true;
+$cancelOrder = $cancelOrder ?? false;;
 ?>
 <div class="col-md-8">
     <div class="card">
@@ -20,7 +21,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                     </span>
                 </div>
             </h5>
-            <div class="">
+            <?php if (false === $cancelOrder) { ?>
                 <div class="dropdown">
                     <button class="btn btn-icon btn-outline-gray btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         <svg class="svg" width="20" height="20">
@@ -130,7 +131,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                         <?php } ?>
                     </ul>
                 </div>
-            </div>
+            <?php } ?>
         </div>
         <div class="card-table">
             <div class="js-scrollable table-wrap">
@@ -164,7 +165,7 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
                                     }
                                     echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?>
                                         <?php
-                                        if (0 < $childOrder['op_special_price'] && $childOrder['op_selprod_price'] > $childOrder['op_unit_price']) { ?>
+                                        if (isset($childOrder['op_special_price']) && 0 < $childOrder['op_special_price'] && $childOrder['op_selprod_price'] > $childOrder['op_unit_price']) { ?>
                                         </strong>
                                         <br />
                                         <del>
@@ -263,7 +264,11 @@ $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
     <?php } ?>
     <?php
     if ($isSellerDashboardView) {
-        include CONF_THEME_PATH . 'seller/_partial/order-update-form.php';
+        if (isset($cancelForm)) {
+            include CONF_THEME_PATH . 'seller/_partial/order-cancel-form.php';
+        } else {
+            include CONF_THEME_PATH . 'seller/_partial/order-update-form.php';
+        }
     } else {
         include CONF_THEME_PATH . 'buyer/partial-view-order.php';
     }
