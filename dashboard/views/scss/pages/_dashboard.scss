@@ -1558,7 +1558,6 @@ input.sp-input {
     }
     .btn-add-address {
         border-color: transparent;
-
         width: 100%;
         height: 100%;
         display: flex;
@@ -1574,7 +1573,7 @@ input.sp-input {
         position: relative;
         .radio {
             position: absolute;
-            top: 1rem;
+            top: 20px;
             #{$start-direction}: 1rem;
         }
     }
