@@ -140,7 +140,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                         <span class="text--dark"><?php echo $product['shop_name']; ?></span>
                                     </a>
                                 </div>
-                                <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>                               
+                                <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
                                 <div class="products-price">
                                     <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?></span>
                                     <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
@@ -163,24 +163,21 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         </div>
                         <div class="product-quantity">
                             <div class="quantity quantity-sm" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                <span class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'not-allowed' : ''; ?>">
-                                    <i class="icn">
-                                        <svg class="svg" width="10" height="10">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                            </use>
-                                        </svg>
-                                    </i></span>
+                                <button class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>" type="button">
+                                    <svg class="svg" width="10" height="10">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                        </use>
+                                    </svg>
+                                </button>
                                 <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
                                     <input name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" class="qty-input cartQtyTextBox productQty-js" value="<?php echo $product['quantity']; ?>" type="text" />
                                 </div>
-                                <span class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'not-allowed' : ''; ?>">
-                                    <i class="icn">
-                                        <svg class="svg" width="10" height="10">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                            </use>
-                                        </svg>
-                                    </i>
-                                </span>
+                                <button class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'disabled' : ''; ?>">
+                                    <svg class="svg" width="10" height="10">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>

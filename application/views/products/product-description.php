@@ -109,25 +109,21 @@
                     <div class="options-block-head">
                         <h6 class="h6"><?php echo $qtyFieldName; ?></h6>
                         <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
-                            <span class="decrease decrease-js not-allowed">
-                                <i class="icn">
-                                    <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                        </use>
-                                    </svg>
-                                </i>
-                            </span>
+                            <button class="decrease decrease-js disabled" type="button">
+                                <svg class="svg" width="16" height="16">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                    </use>
+                                </svg>
+                            </button>
                             <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
                                 <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
                             </div>
-                            <span class="increase increase-js <?php echo $product['selprod_stock'] <= $product['selprod_min_order_qty'] ? 'not-allowed' : ''; ?>">
-                                <i class="icn">
-                                    <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg>
-                                </i>
-                            </span>
+                            <button class="increase increase-js <?php echo $product['selprod_stock'] <= $product['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
+                                <svg class="svg" width="16" height="16">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                    </use>
+                                </svg>
+                            </button>
                         </div>
 
                     </div>
@@ -221,25 +217,21 @@
                                     <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice']); ?>
                                 </div>
                                 <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                    <span class="decrease decrease-js not-allowed">
-                                        <i class="icn">
-                                            <svg class="svg" width="16" height="16">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                                </use>
-                                            </svg>
-                                        </i>
-                                    </span>
+                                    <button class="decrease decrease-js disabled" type="button">
+                                        <svg class="svg" width="16" height="16">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                            </use>
+                                        </svg>
+                                    </button>
                                     <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
                                         <input type="text" value="<?php echo $usproduct['selprod_min_order_qty']; ?>" data-min-qty="<?php echo $usproduct['selprod_min_order_qty']; ?>" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
                                     </div>
-                                    <span class="increase increase-js <?php echo $usproduct['selprod_stock'] <= $usproduct['selprod_min_order_qty'] ? 'not-allowed' : ''; ?>">
-                                        <i class="icn">
-                                            <svg class="svg" width="16" height="16">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                                </use>
-                                            </svg>
-                                        </i>
-                                    </span>
+                                    <button class="increase increase-js <?php echo $usproduct['selprod_stock'] <= $usproduct['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
+                                        <svg class="svg" width="16" height="16">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                            </use>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                             <?php if ($usproduct['selprod_stock'] <= 0) { ?>

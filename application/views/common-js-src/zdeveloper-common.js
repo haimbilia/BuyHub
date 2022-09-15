@@ -1326,10 +1326,10 @@ $(function () {
     };
     $(document).on("click", ".increase-js", function () {
         var type = $('input[name="fulfillment_type"]:checked').val();
-        if ($(this).hasClass("not-allowed")) {
+        if ($(this).hasClass("disabled")) {
             return false;
         }
-        $(this).siblings(".not-allowed").removeClass("not-allowed");
+        $(this).siblings(".disabled").removeClass("disabled");
         var rval = $(this).parent().parent("div").find("input").val();
         if (isNaN(rval)) {
             $(this).parent().parent("div").find("input").val(1);
@@ -1340,10 +1340,10 @@ $(function () {
         val = parseInt(rval) + 1;
         if (val > $(this).parent().data("stock")) {
             val = $(this).parent().data("stock");
-            $(this).addClass("not-allowed");
+            $(this).addClass("disabled");
         }
         if (
-            $(this).hasClass("not-allowed") &&
+            $(this).hasClass("disabled") &&
             rval >= $(this).parent().data("stock")
         ) {
             return false;
@@ -1372,24 +1372,24 @@ $(function () {
                 .parent()
                 .parent("div")
                 .find(".increase-js")
-                .addClass("not-allowed");
+                .addClass("disabled");
             $(this)
                 .parent()
                 .parent("div")
                 .find(".decrease-js")
-                .removeClass("not-allowed");
+                .removeClass("disabled");
         } else if ($(this).val() <= 0) {
             val = 1;
             $(this)
                 .parent()
                 .parent("div")
                 .find(".decrease-js")
-                .addClass("not-allowed");
+                .addClass("disabled");
             $(this)
                 .parent()
                 .parent("div")
                 .find(".increase-js")
-                .removeClass("not-allowed");
+                .removeClass("disabled");
         } else {
             val = $(this).val();
             if (
@@ -1397,26 +1397,26 @@ $(function () {
                     .parent()
                     .parent("div")
                     .find(".decrease-js")
-                    .hasClass("not-allowed")
+                    .hasClass("disabled")
             ) {
                 $(this)
                     .parent()
                     .parent("div")
                     .find(".decrease-js")
-                    .removeClass("not-allowed");
+                    .removeClass("disabled");
             }
             if (
                 $(this)
                     .parent()
                     .parent("div")
                     .find(".increase-js")
-                    .hasClass("not-allowed")
+                    .hasClass("disabled")
             ) {
                 $(this)
                     .parent()
                     .parent("div")
                     .find(".increase-js")
-                    .removeClass("not-allowed");
+                    .removeClass("disabled");
             }
         }
         $(this).val(val);
@@ -1450,10 +1450,10 @@ $(function () {
 
     $(document).on("click", ".decrease-js", function () {
         var type = $('input[name="fulfillment_type"]:checked').val();
-        if ($(this).hasClass("not-allowed")) {
+        if ($(this).hasClass("disabled")) {
             return false;
         }
-        $(this).siblings(".not-allowed").removeClass("not-allowed");
+        $(this).siblings(".disabled").removeClass("disabled");
         var rval = $(this).parent().parent("div").find("input").val();
         if (isNaN(rval)) {
             $(this).parent().parent("div").find("input").val(1);
@@ -1470,9 +1470,9 @@ $(function () {
         val = parseInt(rval) - 1;
         if (val <= minVal) {
             val = minVal;
-            $(this).addClass("not-allowed");
+            $(this).addClass("disabled");
         }
-        if ($(this).hasClass("not-allowed") && rval <= minVal) {
+        if ($(this).hasClass("disabled") && rval <= minVal) {
             return false;
         }
         $(this).parent().parent("div").find("input").val(val);
