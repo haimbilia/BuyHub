@@ -287,7 +287,11 @@ class ProductsController extends SellerBaseController
 
         if (!$prodObj->saveProductData($post)) {
             $db->rollbackTransaction();
-            LibHelper::exitWithError($prodObj->getError(), true);
+            $message = $prodObj->getError();
+            if (false !== strpos(strtolower($message), 'duplicate')) {
+                $message = Labels::getLabel('ERR_DUPLICATE_RECORD_IDENTIFIER', $this->siteLangId);
+            }
+            LibHelper::exitWithError($message, true);
         }
         $recordId = $prodObj->getMainTableRecordId();
 

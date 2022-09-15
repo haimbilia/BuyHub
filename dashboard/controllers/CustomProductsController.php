@@ -207,8 +207,8 @@ class CustomProductsController extends SellerBaseController
             return;
         }
 
-        $this->_template->addJs(array('custom-products/page-js/form.js','seller-requests/page-js/index.js', 'js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
-        $this->_template->addCss(array('css/select2.min.css','css/tagify.min.css'));
+        $this->_template->addJs(array('custom-products/page-js/form.js', 'seller-requests/page-js/index.js', 'js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
+        $this->_template->addCss(array('css/select2.min.css', 'css/tagify.min.css'));
         $this->set("includeEditor", true);
         $this->_template->render(true, true, 'custom-products/formWithNavigation.php');
     }
@@ -247,6 +247,12 @@ class CustomProductsController extends SellerBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+
+        $productIdentifier = FatApp::getPostedData('product_identifier', FatUtility::VAR_STRING, '');
+        $record = Product::getAttributesByIdentifier($productIdentifier, 'product_id');
+        if (!empty($record)) {
+            LibHelper::exitWithError(Labels::getLabel('LBL_DUPLICATE_PRODUCT_IDENTIFER'), true);
         }
 
         /* [select2 data */
@@ -308,7 +314,7 @@ class CustomProductsController extends SellerBaseController
             $post['lang_id'],
             $post['record_id'],
             $post['upc_type'],
-        );    
+        );
 
         $data['preq_content']['shipping_profile'] = array_key_first(ShippingProfile::getProfileArr($langId, 0, true, true));
         $data['preq_content'] = array_merge($data['preq_content'], array_diff_key($post, $langData, $data));
@@ -316,7 +322,7 @@ class CustomProductsController extends SellerBaseController
         $data['preq_status'] = $requestStatus;
         $data['preq_user_id'] = $userId;
 
-        if($isNewProduct){
+        if ($isNewProduct) {
             $data['preq_added_on'] = date('Y-m-d H:i:s');
         }
 
@@ -583,7 +589,7 @@ class CustomProductsController extends SellerBaseController
         if (!$productRow = ProductRequest::getAttributesById($recordId, array('preq_user_id', 'preq_content'))) {
             LibHelper::exitWithError($this->str_invalid_request, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('SellerRequests'));
-        }        
+        }
 
         $prodReqObj = new ProductRequest($recordId);
         $data = array(
