@@ -114,7 +114,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             <div class="shop-rating-wrap">
                                                 <div class="shop-card">
                                                     <div class="shop-card__img">
-                                                        <img width="120" height="120" src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND); ?>" />
+                                                        <img width="48" height="48" src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($opDetail['op_shop_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND); ?>" />
                                                     </div>
                                                     <div class="shop-card__detail">
                                                         <h6><?php echo $opDetail['op_shop_name']; ?> </h6>
@@ -150,16 +150,16 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                             <div class="shop-rating-wrap">
                                                 <div class="rating-listing">
 
-                                                <div class="rating-listing rating-listing-column">
-                                                    <?php foreach ($deliveryRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
-                                                        <div class="rating rating-f pb-0">                                                        
-                                                            <?php                                                            
-                                                            $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
-                                                            $fld->setFieldTagAttribute('class', 'd-none star-rating');
-                                                            echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
-                                                        </div>
-                                                    <?php } ?>
-                                                </div>
+                                                    <div class="rating-listing rating-listing-column">
+                                                        <?php foreach ($deliveryRatingTypesArr as $ratingTypeId => $ratingTypeLabel) { ?>
+                                                            <div class="rating rating-f pb-0">
+                                                                <?php
+                                                                $fld = $frm->getField('review_rating[' . $ratingTypeId . ']');
+                                                                $fld->setFieldTagAttribute('class', 'd-none star-rating');
+                                                                echo $frm->getFieldHtml('review_rating[' . $ratingTypeId . ']'); ?>
+                                                            </div>
+                                                        <?php } ?>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

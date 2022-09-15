@@ -331,8 +331,12 @@ class BuyerController extends BuyerBaseController
         $orderTimeLine = [];
         $currentStatus = Orders::ORDER_PAYMENT_PENDING == $orderDetail['order_payment_status'] ? Orders::ORDER_PAYMENT_PENDING : FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS");
         $highlightEnabled = [];
+        $cancellationComment = "";
         if (true === $primaryOrderDisplay && !empty($orderDetail['comments'])) {
             $currentStatus = current($orderDetail['comments'])['oshistory_orderstatus_id'];
+            if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
+                $cancellationComment = current($orderDetail['comments'])['oshistory_comments'];
+            }
             foreach ($orderDetail['comments'] as $comment) {
                 $highlightEnabled[] = $comment['oshistory_orderstatus_id'];
                 $orderTimeLine[$comment['oshistory_orderstatus_id']][] = $comment;
@@ -360,6 +364,7 @@ class BuyerController extends BuyerBaseController
         $this->set('frm', $frm);
         $this->set('highlightEnabled', $highlightEnabled);
         $this->set('currentStatus', $currentStatus);
+        $this->set('cancellationComment', $cancellationComment);
         $this->set('orderProductStatusArr', $orderProductStatusArr);
         $this->set('orderTimeLine', $orderTimeLine);
         $this->set('orderStatusArr', $orderStatusArr);
@@ -1127,7 +1132,7 @@ class BuyerController extends BuyerBaseController
         $datediff = time() - strtotime($opDetail['order_date_added']);
         $daysSpent = $datediff / (60 * 60 * 24);
 
-        if ($opDetail['op_selprod_cancellation_age'] <= $daysSpent) {
+        if ($opDetail["op_product_type"] == Product::PRODUCT_TYPE_PHYSICAL && $opDetail['op_selprod_cancellation_age'] <= $daysSpent) {
             $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
@@ -2195,7 +2200,7 @@ class BuyerController extends BuyerBaseController
         $datediff = time() - strtotime($opDetail['order_date_added']);
         $daysSpent = $datediff / (60 * 60 * 24);
 
-        if ($opDetail['op_selprod_return_age'] <= $daysSpent) {
+        if ($opDetail["op_product_type"] == Product::PRODUCT_TYPE_PHYSICAL && $opDetail['op_selprod_return_age'] <= $daysSpent) {
             $message = Labels::getLabel('MSG_ERROR_INVALID_ACCESS', $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
@@ -3107,6 +3112,10 @@ class BuyerController extends BuyerBaseController
         } else if ($action == 'viewOrderReturnRequest') {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_ORDER_RETURN_REQUESTS'), 'href' => UrlHelper::generateUrl("Buyer", "orderReturnRequests"));
+            $this->nodes[] = array('title' => ucwords($action));
+        } else if ($action == 'orderCancellationRequest') {
+            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_ORDERS'), 'href' => UrlHelper::generateUrl("Buyer", "orders"));
             $this->nodes[] = array('title' => ucwords($action));
         } else {
             $action = str_replace('-', ' ', FatUtility::camel2dashed($action));

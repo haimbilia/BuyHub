@@ -26,7 +26,7 @@
 
                     echo $frm->getFormHtml(); ?>
                 <?php else : ?>
-                    <div class="alert alert--danger"><?php echo $error ?></div>
+                    <div class="alert alert-danger"><?php echo $error ?></div>
                 <?php endif; ?>
             </div>
             <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>

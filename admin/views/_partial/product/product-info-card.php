@@ -42,21 +42,21 @@ $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $produc
             $options = count($options) ? $options : [];
 
             if ($options) { ?>
-                <ul class="list-options list-options--horizontal">
+                <ul class="list-options list-options--horizontal mt-4">
                     <?php foreach ($options as $option) { ?>
-                        <li class="">                          
+                        <li class="">
                             <span class="value"><?php echo $option['optionvalue_name']; ?></span>
                         </li>
                     <?php
                     }
-                ?>
+                    ?>
                 </ul>
-                <?php
+            <?php
             }
 
-            if(isset($sellerName) || isset($shopName)){ ?>
-            <ul class="list-options list-options--vertical">
-            <?php       if (isset($sellerName)) {
+            if (isset($sellerName) || isset($shopName)) { ?>
+                <ul class="list-options list-options--vertical">
+                    <?php if (isset($sellerName)) {
                     ?>
                         <li class="">
                             <span class="label"><?php echo Labels::getLabel('LBL_SELLER', $siteLangId); ?>:</span>
@@ -70,24 +70,24 @@ $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $produc
                             <span class="value"><?php echo $shopName; ?></span>
                         </li>
                     <?php } ?>
-                </ul>                        
+                </ul>
         <?php }
-        }        
-        ?>         
-        <div class="hidden"  id="options-<?php echo $product['selprod_id']; ?>">
-                <p><strong><?php echo $productTitle;?></strong></p>   
-                <?php if (true == $displayOptions && $options) { ?> 
-                <ul class="list-popover">            
+        }
+        ?>
+        <div class="hidden" id="options-<?php echo $product['selprod_id']; ?>">
+            <p><strong><?php echo $productTitle; ?></strong></p>
+            <?php if (true == $displayOptions && $options) { ?>
+                <ul class="list-popover">
                     <?php
-                    foreach ($options as $option) {                       
+                    foreach ($options as $option) {
                         echo '<li class="list-popover-item">
                                 <span class="lable">' . $option['option_name'] . ':</span>
                                 <span class="value">' . $option['optionvalue_name'] . '</span>
                             </li>';
                     }
                     ?>
-                </ul> 
-                <?php } ?>    
+                </ul>
+            <?php } ?>
         </div>
     </div>
 </div>

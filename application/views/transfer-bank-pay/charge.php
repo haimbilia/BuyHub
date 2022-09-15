@@ -172,7 +172,7 @@ $frm->developerTags['fld_default_col'] = 12;
                     <?php echo $frm->getFieldHtml('opayment_order_id'); ?>
                     <?php echo $frm->getExternalJs(); ?>
                 <?php else : ?>
-                    <div class="alert alert--danger"><?php echo $error ?></div>
+                    <div class="alert alert-danger"><?php echo $error ?></div>
                 <?php endif; ?>
                 <div id="ajax_message"></div>
                 </div>
@@ -223,7 +223,7 @@ $frm->developerTags['fld_default_col'] = 12;
                 var json = $.parseJSON(t);
                 var el = $('#ajax_message');
                 if (json['error']) {
-                    el.html('<div class="alert alert--danger">' + json['error'] + '<div>');
+                    el.html('<div class="alert alert-danger">' + json['error'] + '<div>');
                 }
                 if (json['redirect']) {
                     $(location).attr("href", json['redirect']);

@@ -180,25 +180,21 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         </div>
                         <div class="product-quantity">
                             <div class="quantity quantity-sm" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                <span class="decrease decrease-js shipProductsCount <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'not-allowed' : ''; ?>">
-                                    <i class="icn">
-                                        <svg class="svg" width="10" height="10">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                            </use>
-                                        </svg>
-                                    </i>
-                                </span>
+                                <button class="decrease decrease-js shipProductsCount <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>" type="button">
+                                    <svg class="svg" width="10" height="10">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                        </use>
+                                    </svg>
+                                </button>
                                 <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
                                     <input name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" class="qty-input cartQtyTextBox productQty-js" value="<?php echo $product['quantity']; ?>" type="text" />
                                 </div>
-                                <span class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'not-allowed' : ''; ?>">
-                                    <i class="icn">
-                                        <svg class="svg" width="10" height="10">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                            </use>
-                                        </svg>
-                                    </i>
-                                </span>
+                                <button class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'disabled' : ''; ?>">
+                                    <svg class="svg" width="10" height="10">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -253,7 +249,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
     <?php if (0 < count($saveForLaterProducts)) { ?>
         <h5 class="cart-title mt-5"><?php echo Labels::getLabel('LBL_Save_For_later', $siteLangId); ?>
             (<?php echo count($saveForLaterProducts); ?>)</h5>
-        <ul class="list-cart">
+        <ul class="list-cart <?php echo 1 > $productsCount ? 'list-cart-triple' : ''; ?>">
             <?php foreach ($saveForLaterProducts as $product) {
                 $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
                 $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');

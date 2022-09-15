@@ -11,7 +11,7 @@ if ('' === $returnAgeFld->value || '' === $cancellationAgeFld->value) {
 $returnAgeFld->setWrapperAttribute('class', 'use-shop-policy ' . $hidden);
 $cancellationAgeFld->setWrapperAttribute('class', 'use-shop-policy ' . $hidden);
 
-$fld = $frm->getField('use_shop_policy'); 
+$fld = $frm->getField('use_shop_policy');
 HtmlHelper::configureSwitchForCheckbox($fld);
 $fld->developerTags['noCaptionTag'] = true;
 $fld->developerTags['colWidthValues'] = [null, '12', null, null];

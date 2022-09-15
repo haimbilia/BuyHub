@@ -548,8 +548,12 @@ class SellerController extends SellerBaseController
         $orderTimeLine = [];
         $currentStatus = Orders::ORDER_PAYMENT_PENDING == $orderDetail['order_payment_status'] ? Orders::ORDER_PAYMENT_PENDING : FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS");
         $highlightEnabled = [];
+        $cancellationComment = "";
         if (!empty($orderDetail['comments'])) {
             $currentStatus = current($orderDetail['comments'])['oshistory_orderstatus_id'];
+            if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
+                $cancellationComment = current($orderDetail['comments'])['oshistory_comments'];
+            }
             foreach ($orderDetail['comments'] as $comment) {
                 $highlightEnabled[] = $comment['oshistory_orderstatus_id'];
                 $orderTimeLine[$comment['oshistory_orderstatus_id']][] = $comment;
@@ -585,6 +589,7 @@ class SellerController extends SellerBaseController
         $this->set('orderProductStatusArr', $orderProductStatusArr);
         $this->set('orderTimeLine', $orderTimeLine);
         $this->set('cancelledDate', $cancelledDate);
+        $this->set('cancellationComment', $cancellationComment);
 
         $this->set('productType', $productType);
         $this->set('orderDetail', $orderDetail);
@@ -977,16 +982,26 @@ class SellerController extends SellerBaseController
 
         $srch = new OrderProductSearch($this->siteLangId, true, true);
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS")));
+        $srch->joinOrderProductShipment();
+        $srch->joinOrderProductSpecifics();
+        $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
         $srch->joinOrderUser();
-        $srch->addOrderProductCharges();
+        $srch->joinShippingUsers();
         $srch->joinShippingCharges();
         $srch->joinAddress();
+        $srch->addOrderProductCharges();
+        $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
+        $srch->addMultipleFields(
+            array(
+                'ops.*', 'order_id', 'order_number', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_order_id', 'orderstatus_id', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'op_is_batch', 'op_selprod_id', 'selprod_product_id', 'pm.plugin_code', 'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone',
+                'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_product_type',
+                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off', 'ops_plugin.plugin_code as opshipping_plugin_code', 'op_selprod_cancellation_age as cancellation_age', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_special_price', 'op_selprod_price', 'op_tax_after_discount'
+            )
+        );
         $srch->addCondition('op_selprod_user_id', '=', $userId);
         $srch->addCondition('op_id', '=', $op_id);
-        $rs = $srch->getResultSet();
-
-        $orderDetail = FatApp::getDb()->fetch($rs);
+        $orderDetail = FatApp::getDb()->fetch($srch->getResultSet());
 
         if (empty($orderDetail)) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
@@ -1004,16 +1019,60 @@ class SellerController extends SellerBaseController
         $pickUpAddress = $orderObj->getOrderAddresses($orderDetail['order_id'], $op_id);
         $orderDetail['pickupAddress'] = (!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])) ? $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE] : array();
 
+
+        if ($orderDetail['plugin_code'] == 'CashOnDelivery') {
+            $opTimeLineStatus = $orderObj->getAdminAllowedUpdateOrderStatuses(true, $orderDetail['op_product_type']);
+        } else if ($orderDetail['plugin_code'] == 'PayAtStore') {
+            $opTimeLineStatus = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $orderDetail['op_product_type'], true);
+        } else {
+            $opTimeLineStatus = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $orderDetail['op_product_type']);
+        }
+
+        if ($orderDetail["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
+            $opTimeLineStatus = array_diff($opTimeLineStatus, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        } else {
+            $opTimeLineStatus = array_diff($opTimeLineStatus, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        }
+
+        if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+            $opTimeLineStatus = array_diff($opTimeLineStatus, [FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS")]);
+        }
+
+        if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $orderDetail['orderstatus_id'] || FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
+            $opTimeLineStatus[] = $orderDetail['orderstatus_id'];
+            $opTimeLineStatus = array_diff($opTimeLineStatus, [FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS")]);
+        }
+        if (FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS") == $orderDetail['orderstatus_id']) {
+            $opTimeLineStatus[] = $orderDetail['orderstatus_id'];
+            $opTimeLineStatus = array_diff($opTimeLineStatus, [FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS")]);
+        }
+
+        $orderProductStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $opTimeLineStatus);
         $orderDetail['comments'] = $orderObj->getOrderComments($this->siteLangId, array("op_id" => $op_id, 'seller_id' => $userId));
 
-        $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
+        $orderTimeLine = [];
+        $currentStatus = Orders::ORDER_PAYMENT_PENDING == $orderDetail['order_payment_status'] ? Orders::ORDER_PAYMENT_PENDING : FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS");
+        $highlightEnabled = [];
+        if (!empty($orderDetail['comments'])) {
+            $currentStatus = current($orderDetail['comments'])['oshistory_orderstatus_id'];
+            foreach ($orderDetail['comments'] as $comment) {
+                $highlightEnabled[] = $comment['oshistory_orderstatus_id'];
+                $orderTimeLine[$comment['oshistory_orderstatus_id']][] = $comment;
+            }
+        }
+
+        if (Orders::ORDER_PAYMENT_PENDING == $orderDetail['order_payment_status'] && empty($orderTimeLine)) {
+            $currentStatus = Orders::ORDER_PAYMENT_PENDING;
+            $highlightEnabled[] = Orders::ORDER_PAYMENT_PENDING;
+            $orderProductStatusArr = [Orders::ORDER_PAYMENT_PENDING => Labels::getLabel('LBL_PAYMENT_PENDING', $this->siteLangId)] + $orderProductStatusArr;
+        }
 
         $notEligible = false;
         $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
 
         if (in_array($orderDetail["op_status_id"], $notAllowedStatues)) {
             $notEligible = true;
-            Message::addErrorMessage(sprintf(Labels::getLabel('LBL_this_order_already', $this->siteLangId), $orderStatuses[$orderDetail["op_status_id"]]));
+            Message::addErrorMessage(sprintf(Labels::getLabel('LBL_this_order_already', $this->siteLangId), $orderProductStatusArr[$orderDetail["op_status_id"]]));
         }
         $opChargesLog = new OrderProductChargeLog($op_id);
         $taxOptions = $opChargesLog->getData($this->siteLangId);
@@ -1022,11 +1081,19 @@ class SellerController extends SellerBaseController
         $frm = $this->getOrderCancelForm($this->siteLangId);
         $frm->fill(array('op_id' => $op_id));
 
+        $this->set('cancelOrder', true);
+        $this->set('productType', $orderDetail['op_product_type']);
+        $this->set('highlightEnabled', $highlightEnabled);
+        $this->set('currentStatus', $currentStatus);
+        $this->set('orderProductStatusArr', $orderProductStatusArr);
+        $this->set('orderTimeLine', $orderTimeLine);
+
         $this->set('notEligible', $notEligible);
-        $this->set('frm', $frm);
+        $this->set('cancelForm', $frm);
+        $this->set('arr', [$orderDetail]);
         $this->set('orderDetail', $orderDetail);
-        $this->set('orderStatuses', $orderStatuses);
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
+        $this->set('orderColorClasses', OrderStatus::getOrderStatusColorClassArray());
         $this->_template->render(true, true);
     }
 

@@ -2763,6 +2763,7 @@ $header-height: 65px;
     font-size: 0.85rem;
     min-width: 250px;
     list-style: none;
+    gap: 10px;
     &-item {
         list-style: none;
         padding: 0.8rem 0;
@@ -2821,11 +2822,12 @@ $header-height: 65px;
     &-double {
         display: flex;
         flex-wrap: wrap;
+        gap: 10px;
         li {
             padding: 0;
             padding-bottom: 1rem;
-            flex: 0 0 50%;
-            max-width: 50%;
+            flex: 0 0 47%;
+            max-width: 47%;
         }
     }
     &-triple {

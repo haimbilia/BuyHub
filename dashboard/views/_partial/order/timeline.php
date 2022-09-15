@@ -1,29 +1,17 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-
 <ul class="timeline">
     <?php
     $orderCancelled = (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']);
-
-
     $selectUpto = array_search($currentStatus, array_keys($orderProductStatusArr));
-
     if (strtolower($childOrderDetail['plugin_code']) == 'cashondelivery') {
         $selectUpto = array_search($childOrderDetail['orderstatus_id'], array_keys($orderProductStatusArr));
     }
     $index = 0;
 
-
     foreach ($orderProductStatusArr as $statusId => $statusLabel) {
         $current = $currentStatus == $statusId || $orderCancelled ? 'currently ' : '';
         $highlight = ($index <= $selectUpto || in_array($statusId, $highlightEnabled) || $orderCancelled ? 'enable ' : 'disabled ');
         $orderTimeLineRecords = !empty($orderTimeLine) && isset($orderTimeLine[$statusId]) ? $orderTimeLine[$statusId] : [];
-
-
-        /* $orderStatusClass = ($orderCancelled && $index > $selectUpto) ? 'shipped' : OrderStatus::getOpStatusClass($statusId);
-        if ('disabled' == trim($highlight)) {
-            $orderStatusClass = "";
-        }
-  */
 
     ?>
         <li class="<?php echo $highlight . $current; ?>">
@@ -135,17 +123,20 @@
                         <?php } else if ($orderCancelled) { ?>
                             <time class="timeline_date"><?php echo FatDate::format($cancelledDate); ?></time>
                         <?php } ?>
-                        <span class="order-status"> <em class="dot"></em>
+                        <span class="order-status <?php echo $orderColorClasses[$statusId]; ?>"> <em class="dot"></em>
                             <?php echo $statusLabel; ?>
                         </span>
                     </div>
 
-                    <?php if ($index <= $selectUpto) { ?>
+                    <?php if ($orderCancelled) { ?>
+                        <p><?php echo Labels::getLabel('LBL_THE_ORDER_HAS_BEEN_CANCELLED_DUE_TO_CERTAIN_REASON.', $siteLangId); ?></p>
+                        <?php if (isset($cancellationComment) && !empty($cancellationComment)) { ?>
+                            <p><strong><?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_COMMENT:_{COMMENT}'), ['{COMMENT}' => $cancellationComment]); ?></strong></p>
+                        <?php } ?>
+                    <?php } else if ($index <= $selectUpto) { ?>
                         <div class="timeline_data_body">
                             <p> <?php echo OrderStatus::getDefaultOrderStatusMsg($statusId, $siteLangId); ?></p>
                         </div>
-                    <?php } else if ($orderCancelled) { ?>
-                        <p><?php echo Labels::getLabel('LBL_THE_ORDER_HAS_BEEN_CANCELLED_DUE_TO_CERTAIN_REASON.', $siteLangId); ?></p>
                     <?php } ?>
                 </div>
             <?php

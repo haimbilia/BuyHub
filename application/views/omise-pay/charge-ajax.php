@@ -75,7 +75,7 @@ if (!isset($error)) {
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
@@ -99,7 +99,7 @@ if (!isset($error)) {
     </form>
     <?php echo $frm->getExternalJs(); ?>
 <?php } else { ?>
-    <div class="alert alert--danger">
+    <div class="alert alert-danger">
         <?php echo $error ?>
     </div>
 <?php } ?>

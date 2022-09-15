@@ -244,7 +244,7 @@ class Importexport extends ImportexportCommon
         return mb_convert_encoding($colValue, 'utf-8', $encoding);
     }
 
-    private function validateCSVHeaders($csvFilePointer, &$coloumArr, $langId)
+    public function validateCSVHeaders($csvFilePointer, &$coloumArr, $langId)
     {
         $headingRow = $this->getFileRow($csvFilePointer);
         $i = 0;

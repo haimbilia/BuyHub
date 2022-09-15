@@ -1295,7 +1295,7 @@ class AccountController extends LoggedUserController
         }
 
         $userAuthObj = new UserAuthentication();
-        if($userAuthObj->getUserByEmail($post['new_email'],false,false)){
+        if ($userAuthObj->getUserByEmail($post['new_email'], false, false)) {
             LibHelper::dieJsonError(Labels::getLabel('ERR_EMAIL_ALREADY_EXIST', $this->siteLangId));
         }
 
@@ -1353,16 +1353,16 @@ class AccountController extends LoggedUserController
                 LibHelper::dieJsonError(current($message));
             }
             FatUtility::dieJsonError($message);
-        }   
-        $userAuthObj = new UserAuthentication();        
-        if($userAuthObj->getUserByEmail($post['new_email'],false,false)){
+        }
+        $userAuthObj = new UserAuthentication();
+        if ($userAuthObj->getUserByEmail($post['new_email'], false, false)) {
             LibHelper::dieJsonError(Labels::getLabel('ERR_EMAIL_ALREADY_EXIST', $this->siteLangId));
         }
 
-        $userObj = new User($this->userId);      
-        if (!$userObj->verifyUserPhoneOtp($post['otp'], false, false)) {          
+        $userObj = new User($this->userId);
+        if (!$userObj->verifyUserPhoneOtp($post['otp'], false, false)) {
             LibHelper::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-        }        
+        }
 
         $srch = $userObj->getUserSearchObj(array('user_id', 'credential_password', 'credential_email', 'user_name', 'user_phone_dcode', 'user_phone'));
         $data = FatApp::getDb()->fetch($srch->getResultSet(), 'user_id');
@@ -1396,7 +1396,7 @@ class AccountController extends LoggedUserController
             $this->_template->render();
         }
         $this->_template->render(false, false, 'json-success.php');
-    }     
+    }
 
     public function moveToWishList($selProdId)
     {
@@ -3341,7 +3341,7 @@ class AccountController extends LoggedUserController
         if (!$userReqObj->save()) {
             LibHelper::exitWithError($userReqObj->getError());
         }
-        $this->set('msg', Labels::getLabel('MSG_Request_sent_successfully', $this->siteLangId));       
+        $this->set('msg', Labels::getLabel('MSG_Request_sent_successfully', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -3513,12 +3513,12 @@ class AccountController extends LoggedUserController
 
         $frm = $this->getPhoneNumberForm();
         if (1 > $updatePhnFrm && !empty($phData['user_phone'])) {
-            $frm->fill($phData + ['use_for'=> User::OTP_FOR_OLD_PHONE_NO]);
+            $frm->fill($phData + ['use_for' => User::OTP_FOR_OLD_PHONE_NO]);
             $phnFld = $frm->getField('user_phone');
             $phnFld->setFieldTagAttribute('readonly', 'readonly');
         }
-        if (0 < $updatePhnFrm) {           
-            $frm->fill(['use_for'=> User::OTP_FOR_NEW_PHONE_NO]);           
+        if (0 < $updatePhnFrm) {
+            $frm->fill(['use_for' => User::OTP_FOR_NEW_PHONE_NO]);
         }
 
         $countryIso = Countries::getCountryById($phData['user_country_id'], $this->siteLangId, 'country_code');
@@ -3544,11 +3544,11 @@ class AccountController extends LoggedUserController
         $this->set('siteLangId', $this->siteLangId);
         $json['html'] = $this->_template->render(false, false, NULL, true, false);
         FatUtility::dieJsonSuccess($json);
-    }    
+    }
 
     private function sendOtp(int $userId, string $dialCode, int $phone)
     {
-        $userObj = new User($userId);       
+        $userObj = new User($userId);
         $otp = $userObj->prepareUserPhoneOtp($dialCode, $phone);
         if (false == $otp) {
             LibHelper::dieJsonError($userObj->getError());
@@ -3572,7 +3572,7 @@ class AccountController extends LoggedUserController
             LibHelper::dieJsonError(current($frm->getValidationErrors()));
         }
         $useFor = FatApp::getPostedData('use_for', FatUtility::VAR_INT, 0);
-        if(1 > $useFor){
+        if (1 > $useFor) {
             LibHelper::dieJsonError(Labels::getLabel("MSG_INVALID_FORM_TYPE", $this->siteLangId));
         }
         $phoneNumber = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, '');
@@ -3610,7 +3610,7 @@ class AccountController extends LoggedUserController
         $this->set('frm', $otpFrm);
         $this->set('dialCode', $dialCode);
         $this->set('phoneNumber', $phoneNumber);
-        $this->set('useFor', $useFor);        
+        $this->set('useFor', $useFor);
         $json['html'] = $this->_template->render(false, false, 'account/otp-form.php', true, false);
         FatUtility::dieJsonSuccess($json);
     }
@@ -3623,9 +3623,9 @@ class AccountController extends LoggedUserController
         if (User::OTP_FOR_OLD_PHONE_NO == $openFrmType) {
             $this->changePhoneForm(1);
             exit;
-        }elseif(User::OTP_FOR_EMAIL == $openFrmType){
-            $frm = $this->getChangeEmailUsingPhoneForm2();           
-            $frm->fill(['otp' => $this->get('otp')]);          
+        } elseif (User::OTP_FOR_EMAIL == $openFrmType) {
+            $frm = $this->getChangeEmailUsingPhoneForm2();
+            $frm->fill(['otp' => $this->get('otp')]);
             $this->set('frm', $frm);
             $this->set('siteLangId', $this->siteLangId);
             $json['html'] = $this->_template->render(false, false, 'account/change-email-using-phone-form2.php', true, false);
@@ -3634,7 +3634,7 @@ class AccountController extends LoggedUserController
         }
 
         $this->_template->render(false, false, 'json-success.php');
-    }    
+    }
 
     public function resendOtp()
     {

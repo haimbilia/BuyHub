@@ -5,35 +5,31 @@
 </div>
 <div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">
-        <div class="v-tabs v-tabs--js">
             <?php
             $i = 1;
-            $ul = $content = '';
-
+            $ul = '';
             foreach ($productOptions as $optionVal) {
                 if (1 == $i) {
-                    $ul .= '<ul class="v-tabs-list">';
+                    $ul .= '<ul class="list-stats list-stats-double inventory-options">';
                 }
 
                 $optionName = !empty($optionVal['option_name']) ? $optionVal['option_name'] : $optionVal['option_identifier'];
-                $ul .= '<li class="' . ((1 == $i) ? 'is-active' : '') . '">
-                        <a href="#opt' . $optionVal['option_id'] . '" class="v-tab--js">
+                $ul .= '<li class="list-stats-item">
+                        <span class="lable">
                             ' . $optionName . '
-                        </a>
+                        </span>
+                        <span class="value">
+                        ' . implode(', ', $optionVal['optionValues']) . '
+                        </span>
                     </li>';
 
                 if (count($productOptions) == $i) {
                     $ul .= '</ul>';
-                }
-
-                $content .= '<div id="opt' . $optionVal['option_id'] . '" class="v-tabs-data ' . ((1 == $i) ? 'is-active' : '') . '">
-                            ' . implode(', ', $optionVal['optionValues']) . '
-                        </div>';
+                } 
 
                 $i++;
             }
-            echo $ul . $content;
+            echo $ul;
             ?>
-        </div>
     </div>
 </div>

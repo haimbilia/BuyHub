@@ -32,7 +32,7 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                     }
                     echo '</select>';
                 } elseif ($product['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
-                    echo Labels::getLabel('MSG_Product_is_not_available_for_shipping', $siteLangId);
+                    echo '<div class="alert alert-warning  mt-3">' . Labels::getLabel('MSG_Product_is_not_available_for_shipping', $siteLangId) . '</div>';
                 }
                 ?>
             </div>
@@ -64,8 +64,8 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                         <a class="title" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
                         <div class="products-price">
                             <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?></span>
-                            <?php if(FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)){ ?>
-                                <div class="products-price-off">(<?php echo Labels::getLabel('LBL_WITHOUT_TAXES', $siteLangId);?>)</div>
+                            <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) { ?>
+                                <div class="products-price-off">(<?php echo Labels::getLabel('LBL_WITHOUT_TAXES', $siteLangId); ?>)</div>
                             <?php } ?>
                             <?php
                             if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
@@ -86,21 +86,19 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                 </div>
                 <div class="product-quantity">
                     <div class="quantity quantity-sm">
-                        <span class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'not-allowed' : ''; ?>">
-                            <i class="icn">
-                                <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                    </use>
-                                </svg>
-                            </i></span>
+                        <button class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>" type="button">
+                            <svg class="svg" width="16" height="16">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                </use>
+                            </svg>
+                        </button>
                         <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
-                        <span class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'not-allowed' : ''; ?>"> <i class="icn">
-                                <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                    </use>
-                                </svg>
-                            </i>
-                        </span>
+                        <button class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'disabled' : ''; ?>">
+                            <svg class="svg" width="16" height="16">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                </use>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>

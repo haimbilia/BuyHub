@@ -621,14 +621,14 @@
             font-size: 12px;
             vertical-align: top;
             height: 2rem;
-            border-radius: $common-radius;
+            border-radius: 0;
         }
         .input-group-text {
             font-size: 0.8rem;
             font-weight: 500;
             background: $bg-white;
             padding: 0 0.5rem;
-            border-radius: $common-radius;
+            border-radius: 0;
             height: 100%;
         }
     }

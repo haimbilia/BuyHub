@@ -1,9 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
-<?php 
-    $frm->setFormTagAttribute('action', UrlHelper::generateUrl('TransferBankPay', 'send', array($orderInfo['id'])));
-    $frm->setFormTagAttribute('class', 'form');
-    $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-12 col-xs-';
-    $frm->developerTags['fld_default_col'] = 12;
+<?php
+$frm->setFormTagAttribute('action', UrlHelper::generateUrl('TransferBankPay', 'send', array($orderInfo['id'])));
+$frm->setFormTagAttribute('class', 'form');
+$frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-12 col-xs-';
+$frm->developerTags['fld_default_col'] = 12;
 ?>
 <ul class="transfer-payment-detail">
     <li>
@@ -67,18 +67,18 @@
 
     </li>
     <?php if (!empty($settings['routing'])) { ?>
-    <li>
-        <i class="icn">
-            <svg class="svg">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#routing" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#routing"></use>
-            </svg>
-        </i>
-        <div class="lable">
-            <h6><?php echo Labels::getLabel('LBL_ROUTING_#', $siteLangId); ?></h6>
-            <?php echo $settings['routing']; ?>
-        </div>
+        <li>
+            <i class="icn">
+                <svg class="svg">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#routing" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/bank.svg#routing"></use>
+                </svg>
+            </i>
+            <div class="lable">
+                <h6><?php echo Labels::getLabel('LBL_ROUTING_#', $siteLangId); ?></h6>
+                <?php echo $settings['routing']; ?>
+            </div>
 
-    </li>
+        </li>
     <?php } ?>
     <?php if (!empty($settings['bank_notes'])) { ?>
         <li class="notes">
@@ -97,13 +97,13 @@
 
 <?php if (!isset($error)) :
     $frm->setFormTagAttribute('onsubmit', 'confirmPayment(this); return(false);');
-    $btn = $frm->getField('btn_submit'); 
+    $btn = $frm->getField('btn_submit');
     $btn->addFieldTagAttribute('class', 'btn btn-brand');
     $btn->addFieldTagAttribute('data-processing-text', Labels::getLabel('LBL_PLEASE_WAIT..', $siteLangId));
     $btn->developerTags['noCaptionTag'] = true;
     echo $frm->getFormHtml();
 else : ?>
-    <div class="alert alert--danger"><?php echo $error ?></div>
+    <div class="alert alert-danger"><?php echo $error ?></div>
 <?php endif; ?>
 <div id="ajax_message"></div>
 <script>
@@ -121,7 +121,7 @@ else : ?>
                 var json = $.parseJSON(t);
                 var el = $('#ajax_message');
                 if (json['error']) {
-                    el.html('<div class="alert alert--danger">' + json['error'] + '<div>');
+                    el.html('<div class="alert alert-danger">' + json['error'] + '<div>');
                 }
                 if (json['redirect']) {
                     $(location).attr("href", json['redirect']);

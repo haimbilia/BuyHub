@@ -100,7 +100,7 @@ if (!isset($error)) :
     </form>
     <?php echo $frm->getExternalJs(); ?>
 <?php else : ?>
-    <div class="alert alert--danger">
+    <div class="alert alert-danger">
         <h5><?php echo $error ?></h5>
     </div>
 <?php endif; ?>

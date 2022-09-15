@@ -76,7 +76,7 @@ if (isset($client_secret)) { ?>
                             }
 
                             if (response.error) {
-                                $("#stripeCharge").prepend('<div class="alert alert--danger">' + response.error.message + '</div>');
+                                $("#stripeCharge").prepend('<div class="alert alert-danger">' + response.error.message + '</div>');
                                 $("#stripeCharge").find(":submit").removeAttr('disabled');
                             } else {
 
@@ -99,7 +99,7 @@ if (isset($client_secret)) { ?>
                             }
 
                             // prop('disabled', true);
-                            $('.alert--danger').remove();
+                            $('.alert-danger').remove();
 
                             _this = $(this);
                             var _numberWrap = $('#cc_number');
@@ -257,7 +257,7 @@ if (isset($client_secret)) { ?>
 
                 </form>
             <?php else : ?>
-                <div class="alert alert--danger"><?php echo $error ?></div>
+                <div class="alert alert-danger"><?php echo $error ?></div>
             <?php endif; ?>
             <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
                 <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>

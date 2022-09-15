@@ -444,7 +444,11 @@ class CustomProductsController extends ListingBaseController
             $prodObj->assignValues($productData);
             if (!$prodObj->save()) {
                 $db->rollbackTransaction();
-                LibHelper::exitWithError($prodObj->getError(), true);
+                $msg = $prodObj->getError();
+                if (false !== strpos(strtolower($msg), 'duplicate')) {
+                    $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_IDENTIFIER', $this->siteLangId);
+                }
+                LibHelper::exitWithError($msg, true);
             }
 
             $product_id = $prodObj->getMainTableRecordId();
@@ -691,10 +695,10 @@ class CustomProductsController extends ListingBaseController
     private function getForm($langId, $productType = 0, $recordId = 0)
     {
         $frm = $this->getCatalogForm($langId, $productType, $recordId, 1);
-        $shippingObj = new Shipping($langId);   
+        $shippingObj = new Shipping($langId);
         $shippingApiEnabled = false;
-        if($shippingObj->getShippingApiObj(0)){
-            $shippingApiEnabled = true; 
+        if ($shippingObj->getShippingApiObj(0)) {
+            $shippingApiEnabled = true;
         }
         if (!$shippingApiEnabled || ($shippingApiEnabled &&  1 == FatApp::getConfig('CONF_MANUAL_SHIPPING_RATES_ADMIN', FatUtility::VAR_INT, 0))) {
             $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', ShippingProfile::getProfileArr($langId, 0, true, true));
@@ -845,6 +849,12 @@ class CustomProductsController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+
+        $productIdentifier = FatApp::getPostedData('product_identifier', FatUtility::VAR_STRING, '');
+        $record = Product::getAttributesByIdentifier($productIdentifier, 'product_id');
+        if (!empty($record)) {
+            LibHelper::exitWithError(Labels::getLabel('LBL_DUPLICATE_PRODUCT_IDENTIFER'), true);
         }
 
         /* [select2 data */
@@ -1039,7 +1049,7 @@ class CustomProductsController extends ListingBaseController
         } else {
             $lang_id = array_key_first($languagesAssocArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);
-        }        
+        }
 
         $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_PHOTO(s):', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
         $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename"></span>';
