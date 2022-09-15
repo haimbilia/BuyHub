@@ -109,7 +109,7 @@ class Configurations extends FatModel
             Configurations::FORM_SUBSCRIPTION => Labels::getLabel('NAV_SETUP_SUBSCRIPTION_MODULE_VISIBILITY,_SELLER_SUBSCRIPTIONS_AND_MORE', $langId),
             Configurations::FORM_REFERAL => Labels::getLabel('NAV_SETUP_REFERRAL\'S_REWARD_POINTS,_VALIDITY_AND_MORE', $langId),
             Configurations::FORM_SHARING => Labels::getLabel('NAV_SETUP_SHARING_FOR_FB_AND_TWITTER', $langId),
-            Configurations::FORM_SYSTEM => Labels::getLabel('NAV_SETUP_SYSTEM_MESSAGES', $langId),
+            Configurations::FORM_SYSTEM => Labels::getLabel('NAV_SETUP_SYSTEM_LEVEL_CONFIGURATIONS', $langId),
             Configurations::FORM_LIVE_CHAT => Labels::getLabel('NAV_SETUP_LIVE-CHAT_MODULE_VISIBILITY', $langId),
             Configurations::FORM_PPC => Labels::getLabel('NAV_SETUP_COST-PER-CLICK,_PPC_SLIDES_COUNT_AND_MORE', $langId),
             /* Configurations::FORM_SERVER => Labels::getLabel('NAV_SETUP_SSL_AND_MAINTENANCE_MODE', $langId), */
