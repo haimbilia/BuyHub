@@ -190,8 +190,7 @@ class MyAppModel extends FatModel
             }
         }
 
-        $rs = $srch->getResultSet();
-        $row = $db->fetch($rs);
+        $row = $db->fetch($srch->getResultSet());
 
         if (!is_array($row)) {
             return false;
