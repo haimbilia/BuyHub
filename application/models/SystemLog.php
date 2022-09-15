@@ -19,8 +19,7 @@ class SystemLog extends MyAppModel
 
     public static function getSearchObject($isActive = true)
     {
-        $srch = new SearchBase(static::DB_TBL, 'sylog');
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'sylog');
     }
 
     public static function getModuleTypes(): array
