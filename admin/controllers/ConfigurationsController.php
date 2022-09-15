@@ -1554,35 +1554,19 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addSelectBox(Labels::getLabel("FRM_PPC_PRODUCTS_COUNT_HOME_PAGE", $langId), 'CONF_PPC_PRODUCTS_HOME_PAGE', Collections::sponsoredItemsHomePageCount(), '', array(), '');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_HOW_MANY_PPC_PRODUCTS_SHOWN_ON_HOME_PAGE", $langId) . '</span>';
 
-                /* Only 4 sponsored shops will be displayed on home page. */
-                /* $fld = $frm->addTextBox(Labels::getLabel('FRM_PPC_SHOPS_COUNT_HOME_PAGE', $langId), 'CONF_PPC_SHOPS_HOME_PAGE');
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_HOW_MANY_PPC_SHOPS_SHOWN_ON_HOME_PAGE", $langId) . '</span>'; */
-
                 $fld = $frm->addTextBox(Labels::getLabel('FRM_PPC_SLIDES_COUNT_HOME_PAGE', $langId), 'CONF_PPC_SLIDES_HOME_PAGE');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_HOW_MANY_PPC_SLIDES_SHOWN_ON_HOME_PAGE", $langId) . '</span>';
                 $fld = $frm->addTextBox(Labels::getLabel('FRM_PPC_CLICKS_COUNT_TIME_INTERVAL(Minutes)', $langId), 'CONF_PPC_CLICK_COUNT_TIME_INTERVAL');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_SET_TIME_INTERVAL_TO_CALCULATE_NO._of_click_from_one_user_for_each_promotion", $langId) . '</span>';
 
                 break;
-                /*  case Configurations::FORM_SERVER:
-                $fld = $frm->addRadioButtons(Labels::getLabel("FRM_USE_SSL", $langId), 'CONF_USE_SSL', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio'));
-                HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("FRM_NOTE:_To_use_SSL,_check_with_your_host_if_a_SSL_certificate_is_installed_and_enable_it_from_here.", $langId));
-
-                $fld = $frm->addSelectBox(Labels::getLabel("FRM_ENABLE_MAINTENANCE_MODE", $langId), 'CONF_MAINTENANCE', applicationConstants::getYesNoArr($langId), '', array(), '');
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_NOTE:_Enable_Maintenance_Mode_Text", $langId) . '.</span>';
-
-                $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_MAINTENANCE_TEXT', $this->siteLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-                $fld->requirements()->setRequired(true);
-
-                break; */
             case Configurations::FORM_MEDIA:
                 $ratioArr = AttachedFile::getRatioTypeArray($langId);
                 /* block start */
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_ADMIN_LOGO", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_SETUP_LOGO_TO_APPEAR_ON_ADMIN_DASHBOARD", $langId) . '</span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("LBL_ADMIN_LOGO_IMAGE_DISCLAIMER", $langId) . '</span>');
 
                 $fileType = AttachedFile::FILETYPE_ADMIN_LOGO;
 
@@ -1611,7 +1595,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_DESKTOP_LOGO", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong>  ' . Labels::getLabel("MSG_SETUP_LOGO_FOR_WEBSITE_HEADER_AND_USER_DASHBOARD", $langId) . '</span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong>  ' . Labels::getLabel("LBL_DESKTOP_LOGO_IMAGE_DISCLAIMER", $langId) . '</span>');
 
                 $fileType = AttachedFile::FILETYPE_FRONT_LOGO;
                 $imageArr = [];
@@ -1639,7 +1623,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_WEBSITE_FAVICON", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_SETUP_LOGO_TO_APPEAR_ON_THE_BROWSER_TAB", $langId) . '</span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("LBL_WEBSITE_FAVICON_IMAGE_DISCLAIMER", $langId) . '</span>');
 
                 $fileType = AttachedFile::FILETYPE_FAVICON;
 
@@ -1666,7 +1650,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_SOCIAL_FEED_IMAGE", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('FRM_DIMENSIONS', $langId) . ' 160*240</span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('LBL_SOCIAL_FEED_IMAGE_DISCLAIMER', $langId) . ' 160*240</span>');
 
                 $fileType = AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE;
 
@@ -1693,7 +1677,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_PAYMENT_PAGE_LOGO", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong>' . Labels::getLabel("MSG_PLEASE_UPLOAD_WHITE_PNG_IMAGE", $langId) . ' </span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("LBL_PAYMENT_PAGE_LOGO_IMAGE_DISCLAIMER", $langId) . ' </span>');
 
                 $fileType = AttachedFile::FILETYPE_PAYMENT_PAGE_LOGO;
                 $imageArr = [];
@@ -1722,7 +1706,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_WATERMARK_IMAGE", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong>' . Labels::getLabel("MSG_A_WATERMARK_TRANSPARENT_LOGO_ON_PHOTOGRAPH", $langId) . ' ' . Labels::getLabel('FRM_AND_DIMENSIONS_SHOULD_BE', $langId) . ' 120*90</span></span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('LBL_WATERMARK_IMAGE_DISCLAIMER', $langId) . ' 120*90</span></span>');
 
                 $fileType = AttachedFile::FILETYPE_WATERMARK_IMAGE;
 
@@ -1750,7 +1734,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_APPLE_TOUCH_ICON", $langId) . ' </h6>
                      <span class="form-text text-muted">
-                         <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_APPLE_TOUCH_ICON_USED_IN_APPLE_DEVICES", $langId) . '</span>');
+                         <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("LBL_APPLE_TOUCH_ICON_IMAGE_DISCLAIMER", $langId) . '</span>');
 
                 $fileType = AttachedFile::FILETYPE_APPLE_TOUCH_ICON;
 
@@ -1778,7 +1762,7 @@ class ConfigurationsController extends ListingBaseController
                 /* block start */
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_MOBILE_LOGO", $langId) . ' </h6>
                       <span class="form-text text-muted">
-                          <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('FRM_DIMENSIONS', $langId) . ' 168*37</span>');
+                          <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('LBL_MOBILE_LOGO_IMAGE_DISCLAIMER', $langId) . ' 168*37</span>');
 
                 $fileType = AttachedFile::FILETYPE_MOBILE_LOGO;
 
@@ -1802,41 +1786,9 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addHtml('', 'spacer7', '<div class="separator separator-dashed my-5"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
-                /* block start */
-
-                /* $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_INVOICE_LOGO", $langId) . ' </h6>
-                    <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_LOGO_APPEAR_ON_INVOICE_GENERATED_WITH_A_PURCHASE_ORDER", $langId) . '</span>');
-
-                $fileType = AttachedFile::FILETYPE_INVOICE_LOGO;
-                $imageArr = [];
-                $selectedRadio = array_key_first($ratioArr);
-                if ($fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId)) {
-                    if (0 < $fileData['afile_id']) {
-                        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                        $image = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'invoiceLogo', array($langId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $imageArr = ['name' =>  $fileData['afile_name'], 'url' => $image];
-                    }
-                }
-
-                $frm->addHtml('', 'file_input', HtmlHelper::getfileInputHtml(
-                    ['onChange' => 'popupImage(this)', 'data-file_type' => $fileType, 'accept' => 'image/*', 'data-name' => Labels::getLabel("FRM_INVOICE_LOGO", $langId)],
-                    $langId,
-                    'removeMediaImage(' . $fileType . ',' . $langId . ')',
-                    'editDropZoneImages(this)',
-                    $imageArr,
-                    'mt-3 dropzoneContainerJs'
-                ));
-
-                $fld = $frm->addHtml('', 'spacer8', '<div class="separator separator-dashed my-5"></div>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null]; */
-
-
-                /* block start */
-
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_FIRST_PURCHASE_DISCOUNT_IMAGE", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('FRM_DIMENSIONS', $langId) . ' 120*120</span>');
+                        <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel('LBL_FIRST_PURCHASE_DISCOUNT_IMAGE_DISCLAIMER', $langId) . ' 120*120</span>');
 
                 $fileType = AttachedFile::FILETYPE_FIRST_PURCHASE_DISCOUNT_IMAGE;
 
@@ -1864,7 +1816,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'main_heading', '<h6>' . Labels::getLabel("FRM_META_IMAGE", $langId) . ' </h6>
                     <span class="form-text text-muted">
-                       <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("MSG_METATAGS_IMAGE_USED_FOR_SHARING_ON_SOCIAL_MEDIA", $langId) . '</span>');
+                       <strong> ' . Labels::getLabel("MSG_IMAGE_DISCLAIMER", $langId) . ':</strong> ' . Labels::getLabel("LBL_META_IMAGE_DISCLAIMER", $langId) . '</span>');
 
                 $fileType = AttachedFile::FILETYPE_META_IMAGE;
                 $imageArr = [];

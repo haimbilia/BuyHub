@@ -151,8 +151,7 @@ class SystemLogController extends ListingBaseController
         }
         $srch = SystemLog::getSearchObject();
         $srch->addCondition('slog_id', '=', $recordId);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
         
         if (false == $row) {
             LibHelper::exitWithError($this->str_invalid_request, true);
