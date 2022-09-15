@@ -20,11 +20,22 @@ $quantity-size: 26px;
         height: $quantity-size;
         min-width: $quantity-size;
         color: $txt-gray;
-        &:hover {
-            color: $secondary-color;
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $secondary-color;
+            color: $secondary-color-inverse;
             border-color: currentColor;
         }
-        &.not-allowed {
+        &:focus {
+            outline: none !important;
+            box-shadow: $btn-focus-shadow;
+        }
+        &:active {
+            box-shadow: $btn-active-shadow;
+        }
+        &.disabled {
+            pointer-events: none;
             background: none;
             opacity: 0.5;
         }
@@ -34,6 +45,7 @@ $quantity-size: 26px;
         }
     }
     .qty-input {
+        background-color: transparent;
         border: none;
         text-align: center;
         padding: 0 8px;
