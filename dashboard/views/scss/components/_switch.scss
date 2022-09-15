@@ -35,7 +35,7 @@
                         transition: all 100ms ease-in;
                         width: 54px;
                         border-radius: 15px;
-                        background-color: #e8ebf1;
+                        background-color: #666;
                     }
                     &:after {
                         position: absolute;
@@ -67,10 +67,9 @@
                 .input-helper {
                     &:after {
                         margin-#{$start-direction}: 26px;
-                        background-color: $success-color;
                     }
                     &:before {
-                        background-color: #e8ebf1;
+                        background-color: $success-color;
                     }
                 }
             }

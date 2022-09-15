@@ -2,7 +2,6 @@ $quantity-height: 40px;
 $quantity-size: 26px;
 
 .quantity {
-    //height: 38px;
     display: flex;
     align-items: center;
     padding: 0;
@@ -28,6 +27,7 @@ $quantity-size: 26px;
             border-color: currentColor;
         }
         &:focus {
+            color: #fff;
             outline: none !important;
             box-shadow: $btn-focus-shadow;
         }
@@ -35,8 +35,9 @@ $quantity-size: 26px;
             box-shadow: $btn-active-shadow;
         }
         &.disabled {
+            color: $txt-gray;
             pointer-events: none;
-            background: none;
+            background-color: transparent;
             opacity: 0.5;
         }
         .svg {
@@ -57,7 +58,6 @@ $quantity-size: 26px;
     &-sm {
         max-width: 100px;
         height: $quantity-height - 10px;
-
         .svg {
             width: 10px;
             height: 10px;
