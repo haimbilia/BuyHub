@@ -54,38 +54,40 @@
                                         </span>
                                     </li>
                                 <?php } ?>
-                                <?php if (!empty($detail['slog_backtrace'])) { ?>
-                                    <?php
-                                    $backTrace = json_decode($detail['slog_backtrace']);
-                                    if (!empty($backTrace->file)) { ?>
-                                        <li class="list-stats-item list-stats-item-full">
-                                            <span class="lable">
-                                                <?php echo Labels::getLabel('LBL_FILE', $siteLangId) ?>
-                                            </span>
-                                            <span class="value">
-                                                <a href="#" class="timeline-v4__item-link">
-                                                    <?php echo $backTrace->file; ?>
-                                                </a>
-                                            </span>
-                                        </li>
-                                    <?php }
-                                    if (!empty($backTrace->class)) { ?>
-                                        <li class="list-stats-item">
-                                            <span class="lable"><?php echo Labels::getLabel('LBL_CLASS', $siteLangId) ?></span>
-                                            <span class="value"><?php echo $backTrace->class; ?></span>
-                                        </li>
-                                    <?php }
-                                    if (!empty($backTrace->function)) { ?>
-                                        <li class="list-stats-item">
-                                            <span class="lable"><?php echo Labels::getLabel('LBL_FUNCTION', $siteLangId) ?></span>
-                                            <span class="value"><?php echo $backTrace->function; ?></span>
-                                        </li>
-                                    <?php }
-                                    if (!empty($backTrace->line)) { ?>
-                                        <li class="list-stats-item">
-                                            <span class="lable"><?php echo Labels::getLabel('LBL_LINE', $siteLangId) ?></span>
-                                            <span class="value"><?php echo $backTrace->line; ?></span>
-                                        </li>
+                                <?php if (CONF_DEVELOPMENT_MODE) { ?>
+                                    <?php if (!empty($detail['slog_backtrace'])) { ?>
+                                        <?php
+                                        $backTrace = json_decode($detail['slog_backtrace']);
+                                        if (!empty($backTrace->file)) { ?>
+                                            <li class="list-stats-item list-stats-item-full">
+                                                <span class="lable">
+                                                    <?php echo Labels::getLabel('LBL_FILE', $siteLangId) ?>
+                                                </span>
+                                                <span class="value">
+                                                    <a href="#" class="timeline-v4__item-link">
+                                                        <?php echo $backTrace->file; ?>
+                                                    </a>
+                                                </span>
+                                            </li>
+                                        <?php }
+                                        if (!empty($backTrace->class)) { ?>
+                                            <li class="list-stats-item">
+                                                <span class="lable"><?php echo Labels::getLabel('LBL_CLASS', $siteLangId) ?></span>
+                                                <span class="value"><?php echo $backTrace->class; ?></span>
+                                            </li>
+                                        <?php }
+                                        if (!empty($backTrace->function)) { ?>
+                                            <li class="list-stats-item">
+                                                <span class="lable"><?php echo Labels::getLabel('LBL_FUNCTION', $siteLangId) ?></span>
+                                                <span class="value"><?php echo $backTrace->function; ?></span>
+                                            </li>
+                                        <?php }
+                                        if (!empty($backTrace->line)) { ?>
+                                            <li class="list-stats-item">
+                                                <span class="lable"><?php echo Labels::getLabel('LBL_LINE', $siteLangId) ?></span>
+                                                <span class="value"><?php echo $backTrace->line; ?></span>
+                                            </li>
+                                        <?php } ?>
                                     <?php } ?>
                                 <?php } ?>
                             </ul>
