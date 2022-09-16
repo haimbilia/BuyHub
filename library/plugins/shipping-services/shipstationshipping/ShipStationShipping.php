@@ -125,7 +125,7 @@ class ShipStationShipping extends ShippingServicesBase
         if (false === $this->doRequest(self::REQUEST_SHIPPING_RATES, $pkgDetail)) {
             return [];
         }
-        return $this->getResponse();
+        return (array) $this->getResponse();
     }
 
     /**
