@@ -1,7 +1,7 @@
 .list-group-item {
     background: transparent;
     border: $border;
-    -webkit-animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
+
     animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
 }
 
@@ -115,15 +115,96 @@
         }
     }
 }
-
-.list-popover {
+.list-stats {
+    word-break: break-word;
+    font-size: 0.85rem;
     list-style: none;
     &-item {
-        padding: 4px 0;
+        list-style: none;
+        padding: 0.8rem 0;
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        .label {
+            color: $txt-gray;
+            padding: 0;
+            margin-bottom: 0;
+        }
+        .value {
+            font-weight: 500;
+            color: $txt-body;
+            //font-size: 1rem;
+        }
+        &:first-child {
+            padding-top: 0;
+        }
+        &:last-child {
+            padding-bottom: 0;
+        }
+        &-full {
+            flex: 100% !important;
+            max-width: 100% !important;
+        }
     }
-    .value {
-        font-weight: 600;
+    .icn {
+        font-size: 11px;
+    }
+    .dot {
+        background-color: $bg-gray;
+        display: block;
+        min-width: 8px;
+        width: 8px;
+        height: 8px;
+        border-radius: 2px;
+        margin-#{$end-direction}: 8px;
+    }
+    &-inline {
+        flex-flow: row wrap;
+        li {
+            flex-direction: row;
+            justify-content: space-between;
+            border-bottom: $border;
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+        .label {
+            display: flex;
+            align-items: center;
+        }
+    }
+    &-double {
+        display: flex;
+        // flex-wrap: wrap;
+        flex-flow: row wrap;
+        gap: 1rem;
+        justify-content: space-between;
+        li {
+            padding: 0;
+            padding-bottom: 1.5rem;
+            flex: 0 0 45%;
+            max-width: 45%;
+        }
+    }
+    &-triple {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        li {
+            padding: 0;
+            padding-bottom: 1.5rem;
+            flex: 0 0 30%;
+            max-width: 30%;
+        }
+    }
+    &-popover {
+        li {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-flow: row wrap;
+            .value {
+                font-weight: 600;
+            }
+        }
     }
 }

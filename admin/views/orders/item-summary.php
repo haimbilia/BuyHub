@@ -105,41 +105,41 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                     <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($op, 'NETAMOUNT'), true, true, true, false, true); ?>
                 </span>
                 <div class="hidden" id="price-<?php echo $op['op_id']; ?>">
-                    <ul class="list-popover">
-                        <li class="list-popover-item">
+                    <ul class="list-stats list-stats-popover">
+                        <li class="list-stats-item">
                             <span class="lable"><?php echo Labels::getLabel('LBL_UNIT_PRICE:'); ?> </span>
                             <span class="value"><?php echo $op['op_unit_price'] ?></span>
                         </li>
-                        <li class="list-popover-item">
+                        <li class="list-stats-item">
                             <span class="lable"><?php echo Labels::getLabel('LBL_QUANTITY:'); ?> </span>
                             <span class="value"><?php echo $op['op_qty']; ?></span>
                         </li>
                         <?php if (!empty($volumeDiscount)) { ?>
-                            <li class="list-popover-item">
+                            <li class="list-stats-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT:'); ?></span>
                                 <span class="value"><?php echo $volumeDiscount; ?></span>
                             </li>
-                        <?php }
+                            <?php }
                         if ($op['op_tax_after_discount']) {
                             if (!empty($discount)) { ?>
-                                <li class="list-popover-item">
+                                <li class="list-stats-item">
                                     <span class="lable"><?php echo Labels::getLabel('LBL_DISCOUNT:'); ?></span>
                                     <span class="value"><?php echo $discount; ?></span>
                                 </li>
                             <?php } ?>
                             <?php if (!empty($rewardPoint)) { ?>
-                                <li class="list-popover-item">
+                                <li class="list-stats-item">
                                     <span class="lable"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT:'); ?></span>
                                     <span class="value"><?php echo $rewardPoint; ?></span>
                                 </li>
                             <?php }
                         }
                         if (0 < $tax) { ?>
-                            <li class="list-popover-item">
+                            <li class="list-stats-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_TAXABLE_AMOUNT:'); ?></span>
                                 <span class="value"><?php echo $taxableAmount; ?></span>
                             </li>
-                            <li class="list-popover-item">
+                            <li class="list-stats-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_TAX:'); ?></span>
                                 <span class="value"><?php echo $tax; ?></span>
                             </li>
@@ -147,13 +147,13 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                         <?php
                         if (!$op['op_tax_after_discount']) {
                             if (!empty($discount)) { ?>
-                                <li class="list-popover-item">
+                                <li class="list-stats-item">
                                     <span class="lable"><?php echo Labels::getLabel('LBL_DISCOUNT:'); ?></span>
                                     <span class="value"><?php echo $discount; ?></span>
                                 </li>
                             <?php } ?>
                             <?php if (!empty($rewardPoint)) { ?>
-                                <li class="list-popover-item">
+                                <li class="list-stats-item">
                                     <span class="lable"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT:'); ?></span>
                                     <span class="value"><?php echo $rewardPoint; ?></span>
                                 </li>
@@ -161,7 +161,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                         } ?>
 
                         <?php if (0 < $shippingCost) { ?>
-                            <li class="list-popover-item">
+                            <li class="list-stats-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_COST:'); ?></span>
                                 <span class="value"><?php echo $shippingCost; ?></span>
                             </li>

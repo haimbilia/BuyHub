@@ -180,58 +180,58 @@ $cancelOrder = $cancelOrder ?? false;;
                                         <?php echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrder, 'NETAMOUNT', false, ($isSellerDashboardView ? User::USER_TYPE_SELLER : User::USER_TYPE_BUYER)), true, false, true, false, true); ?>
                                     </span>
                                     <div class="hidden" id="price-<?php echo $childOrder['op_id']; ?>">
-                                        <ul class="list-popover">
-                                            <li class="list-popover-item">
+                                        <ul class="list-stats list-stats-popover">
+                                            <li class="list-stats-item">
                                                 <span class="lable"><?php echo Labels::getLabel('LBL_UNIT_PRICE:'); ?> </span>
                                                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?> (* <?php echo $childOrder['op_qty']; ?>)</span>
                                             </li>
                                             <?php if (!empty($volumeDiscount)) { ?>
-                                                <li class="list-popover-item">
+                                                <li class="list-stats-item">
                                                     <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT:'); ?></span>
                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($volumeDiscount, true, false, true, false, true); ?></span>
                                                 </li>
                                             <?php }
                                             if (false === $isSellerDashboardView && $childOrder['op_tax_after_discount']) { ?>
                                                 <?php if (!empty($discount)) { ?>
-                                                    <li class="list-popover-item">
+                                                    <li class="list-stats-item">
                                                         <span class="lable"><?php echo Labels::getLabel('LBL_DISCOUNT:'); ?></span>
                                                         <span class="value"><?php echo CommonHelper::displayMoneyFormat($discount, true, false, true, false, true); ?></span>
                                                     </li>
                                                 <?php } ?>
                                                 <?php if (!empty($rewardPoint)) { ?>
-                                                    <li class="list-popover-item">
+                                                    <li class="list-stats-item">
                                                         <span class="lable"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT:'); ?></span>
                                                         <span class="value"><?php echo CommonHelper::displayMoneyFormat($rewardPoint, true, false, true, false, true); ?></span>
                                                     </li>
                                                 <?php } ?>
                                             <?php } ?>
                                             <?php if (0 < $tax) { ?>
-                                                <li class="list-popover-item">
+                                                <li class="list-stats-item">
                                                     <span class="lable"><?php echo Labels::getLabel('LBL_TAXABLE_AMOUNT:'); ?></span>
                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($taxableAmount, true, false, true, false, true); ?></span>
                                                 </li>
 
-                                                <li class="list-popover-item">
+                                                <li class="list-stats-item">
                                                     <span class="lable"><?php echo Labels::getLabel('LBL_TAX:'); ?></span>
                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($tax, true, false, true, false, true); ?></span>
                                                 </li>
                                             <?php } ?>
                                             <?php if (false === $isSellerDashboardView && !$childOrder['op_tax_after_discount']) { ?>
                                                 <?php if (!empty($discount)) { ?>
-                                                    <li class="list-popover-item">
+                                                    <li class="list-stats-item">
                                                         <span class="lable"><?php echo Labels::getLabel('LBL_DISCOUNT:'); ?></span>
                                                         <span class="value"><?php echo CommonHelper::displayMoneyFormat($discount, true, false, true, false, true); ?></span>
                                                     </li>
                                                 <?php } ?>
                                                 <?php if (!empty($rewardPoint)) { ?>
-                                                    <li class="list-popover-item">
+                                                    <li class="list-stats-item">
                                                         <span class="lable"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT:'); ?></span>
                                                         <span class="value"><?php echo CommonHelper::displayMoneyFormat($rewardPoint, true, false, true, false, true); ?></span>
                                                     </li>
                                                 <?php } ?>
                                             <?php } ?>
                                             <?php if (0 < $shippingCost) { ?>
-                                                <li class="list-popover-item">
+                                                <li class="list-stats-item">
                                                     <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING:'); ?></span>
                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($shippingCost, true, false, true, false, true); ?></span>
                                                 </li>
