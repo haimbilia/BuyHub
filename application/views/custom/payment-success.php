@@ -65,9 +65,8 @@ $products = $orderInfo['orderProducts'];
                                     ?>
                                     &nbsp;&nbsp;&nbsp;
                                     <span class="no-print">
-
                                         <a class="btn btn-link btn-icon" onclick="window.print();" href="javascript:void(0)">
-                                            <svg class="svg" width="22px" height="22px">
+                                            <svg class="svg" width="16" height="16">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#print">
                                                 </use>
                                             </svg>
