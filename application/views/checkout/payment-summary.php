@@ -102,23 +102,15 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                         <div class="info">
                             <span>
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#linkedinfo">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#reward-points">
                                     </use>
                                 </svg> <?php echo Labels::getLabel('LBL_REWARD_POINTS', $siteLangId); ?>
                                 <strong><?php echo $cartSummary['cartRewardPoints']; ?>
                                     (<?php echo CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($cartSummary['cartRewardPoints']), true, false, true, false, true); ?>)</strong>
                                 <?php echo Labels::getLabel('LBL_SUCCESSFULLY_USED', $siteLangId); ?>
                             </span>
-                            <ul class="list-actions">
-                                <li>
-                                    <a class="link" href="javascript:void(0);" onclick="removeRewardPoints()">
-                                        <svg class="svg" width="24" height="24">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#remove">
-                                            </use>
-                                        </svg>
-                                    </a>
-                                </li>
-                            </ul>
+                            <button type="button" class="btn-close text-reset" onclick="removeRewardPoints()" aria-label="Close"></button>
+
                         </div>
                     <?php } ?>
                 </div>

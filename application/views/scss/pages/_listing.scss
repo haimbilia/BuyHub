@@ -274,7 +274,7 @@
         list-style-type: none;
         border: none;
     }
-    .is--active {
+    .is-active {
         font-weight: 500;
     }
     ul li a {
@@ -340,7 +340,7 @@
     width: 10px;
 }
 
-.cat-accordion .acc-trigger.is--active:before {
+.cat-accordion .acc-trigger.is-active:before {
     transform: rotate(0deg);
 }
 
