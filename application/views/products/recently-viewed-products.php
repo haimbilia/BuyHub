@@ -40,10 +40,13 @@ if ($recentViewedProducts) { ?>
                                     }
                                 } ?>
                                 <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $rProduct) && 0 == $rProduct['availableInLocation']) { ?>
-                                    <div class="not-available"><svg class="svg">
+                                    <div class="not-available">
+                                        <svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#linkedinfo">
                                             </use>
-                                        </svg> <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?></div>
+                                        </svg>
+                                        <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?>
+                                    </div>
                                 <?php } ?>
 
                                 <div class="products-img">

@@ -37,10 +37,13 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                 }
                             } ?>
                             <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
-                                <div class="not-available"><svg class="svg">
+                                <div class="not-available">
+                                    <svg class="svg">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#linkedinfo">
                                         </use>
-                                    </svg> <?php echo Labels::getLabel('LBL_NOT_SERVICEABLE', $siteLangId); ?></div>
+                                    </svg>
+                                    <?php echo Labels::getLabel('LBL_NOT_SERVICEABLE', $siteLangId); ?>
+                                </div>
                             <?php } ?>
                             <div class="products-img">
                                 <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
