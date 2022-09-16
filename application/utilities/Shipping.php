@@ -21,6 +21,7 @@ class Shipping
     private $selectedShippingService = [];
     private $systemRatesToFetchSelprodIds = [];
     private $shippingServicesArr = [];
+    private $pluginData = [];
 
     public const FULFILMENT_ALL = -1;
     public const FULFILMENT_PICKUP = 1;
@@ -339,11 +340,26 @@ class Shipping
             if ($carriers) {
                 $carriers = unserialize($carriers);
             } else {
-                $limit = ('ShipStationShipping' == $shippingApiKey ? 0 : 1);
-                $carriers = $shippingApiObj->getCarriers($limit);
-                if (!empty($carriers)) {
-                    CacheHelper::create($cacheKey, serialize($carriers), CacheHelper::TYPE_SHIPING_API);
+                $pluginData = $this->getShippingPluginData();
+                $pluginId = $pluginData['plugin_id'] ?? 0;
+                $pluginSettings = new PluginSetting($pluginId, $shippingApiKey, ($isProductShippedBySeller ? $product['selprod_user_id'] : 0));
+                if (0 < $pluginId) {
+                    $carriers = $pluginSettings->get($this->langId, 'carriers');
+                    $carriers = !empty($carriers) ? unserialize($carriers) : [];
                 }
+                if (empty($carriers)) {
+                    $limit = ('ShipStationShipping' == $shippingApiKey ? 0 : 1);
+                    $carriers = $shippingApiObj->getCarriers($limit);
+                    if (!empty($carriers)) {
+                        if (0 < $pluginId) {
+                            $carriersData = [
+                                'carriers' => $carriers
+                            ];
+                            $pluginSettings->save($carriersData);
+                        }
+                        CacheHelper::create($cacheKey, serialize($carriers), CacheHelper::TYPE_SHIPING_API);
+                    }
+                } 
             }
 
             if (empty($carriers)) {
@@ -412,7 +428,8 @@ class Shipping
                 $shippingAddressDetail
             ];
 
-            foreach ($carriers as $carrier) {
+            foreach ($carriers as $i => $carrier) {
+                if (0 < $i) {break;}
                 $carrierCode = !empty($carrier) && array_key_exists('code', $carrier) ? $carrier['code'] : '';
                 $cacheKeyArr = array_merge($cacheKeyArr, [$carrierCode, $shopAddress['postalCode'], $this->langId]);
                 $cacheKey = self::RATE_CACHE_KEY_NAME . md5(json_encode($cacheKeyArr));
@@ -816,22 +833,22 @@ class Shipping
 
         if (0 < $sellerId) {
             $sellerPluginObj = new SellerPlugin(0, $sellerId);
-            $pluginData = $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES);
-            if (!empty($pluginData)) {
+            $this->pluginData = $sellerPluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES);
+            if (!empty($this->pluginData)) {
                 $isSellerPluginObjActive = true;
                 $pluginObj = $sellerPluginObj;
             }
         }
         if (!$isSellerPluginObjActive) {
             $pluginObj = new Plugin();
-            $pluginData = $pluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES);
-            if (empty($pluginData)) {
+            $this->pluginData = $pluginObj->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES);
+            if (empty($this->pluginData)) {
                 $this->shippingServicesArr[$sellerId] = false;
                 return false;
             }
         }
 
-        $pluginObj = PluginHelper::callPlugin($pluginData['plugin_code'], [$this->langId], $error, $this->langId, false);
+        $pluginObj = PluginHelper::callPlugin($this->pluginData['plugin_code'], [$this->langId], $error, $this->langId, false);
         if (false === $pluginObj) {
             $this->error = $error;
             return false;
@@ -846,6 +863,15 @@ class Shipping
             return false;
         }
         return $this->shippingServicesArr[$sellerId] = $pluginObj;
+    }
+
+    public function getShippingPluginData(): array
+    {
+        if (empty($this->pluginData)) {
+            trigger_error('Call getShippingApiObj method first.', E_USER_ERROR);
+        }
+
+        return (array) $this->pluginData;
     }
 
     public static function canUseShippingApi(int $userId): bool

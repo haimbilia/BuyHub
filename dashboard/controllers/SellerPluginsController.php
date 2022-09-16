@@ -17,6 +17,7 @@ class SellerPluginsController extends SellerPluginBaseController
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
             CommonHelper::redirectUserReferer();
         }
+        
         $this->set("plugins", $pluginTypes);
         $this->set("type", $type);
         $this->_template->render();

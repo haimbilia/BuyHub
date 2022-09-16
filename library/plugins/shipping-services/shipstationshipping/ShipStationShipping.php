@@ -70,7 +70,7 @@ class ShipStationShipping extends ShippingServicesBase
         if (false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
             return [];
         }
-        return $this->getResponse();
+        return (array) $this->getResponse();
     }
 
     /**
