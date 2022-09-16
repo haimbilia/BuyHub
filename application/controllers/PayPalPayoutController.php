@@ -38,7 +38,14 @@ class PayPalPayoutController extends PayoutBaseController
                 $withdrawStatus = Transactions::WITHDRAWL_STATUS_PAYOUT_UNCLAIMED;
                 $txnStatus = Transactions::STATUS_COMPLETED;
                 break;
+
+            default:
+                SystemLog::plugin($event_type, $post, PayPalPayout::KEY_NAME, SystemLog::TYPE_ERROR);
+                break;
         }
-        $this->updateWithdrawalRequest($recordId, $post, $withdrawStatus, $txnStatus);
+        
+        if (!empty($txnStatus)) {
+            $this->updateWithdrawalRequest($recordId, $post, $withdrawStatus, $txnStatus);
+        }
     }
 }
