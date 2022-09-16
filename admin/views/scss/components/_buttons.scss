@@ -1,23 +1,7 @@
-@-webkit-keyframes spin {
-    from {
-        transform: rotate(0);
-    }
-    to {
-        transform: rotate(1turn);
-    }
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0);
-    }
-    to {
-        transform: rotate(1turn);
-    }
-}
+$btn-padding: 0 1.25rem;
 
 .btn {
-    padding: $input-padding;
+    padding: $btn-padding;
     height: $input-height;
     font-size: 0.85rem;
     line-height: 1.5;

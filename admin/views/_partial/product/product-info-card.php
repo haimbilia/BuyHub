@@ -77,10 +77,10 @@ $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $produc
         <div class="hidden" id="options-<?php echo $product['selprod_id']; ?>">
             <p><strong><?php echo $productTitle; ?></strong></p>
             <?php if (true == $displayOptions && $options) { ?>
-                <ul class="list-popover">
+                <ul class="list-stats list-stats-popover">
                     <?php
                     foreach ($options as $option) {
-                        echo '<li class="list-popover-item">
+                        echo '<li class="list-stats-item">
                                 <span class="lable">' . $option['option_name'] . ':</span>
                                 <span class="value">' . $option['optionvalue_name'] . '</span>
                             </li>';

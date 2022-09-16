@@ -78,6 +78,9 @@
         font-size: 1.2rem;
         font-weight: $font-weight-light;
         margin-bottom: 1.5rem;
+        a {
+            color: $brand-color;
+        }
     }
     p {
         font-weight: $font-weight-light;

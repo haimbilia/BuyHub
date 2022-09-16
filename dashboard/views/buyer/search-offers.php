@@ -62,9 +62,9 @@
                                     }
                                 ?>
                                     <p><strong><?php echo $plans['plan_name']; ?></strong></p>
-                                    <ul class="list-popover">
+                                    <ul class="list-stats list-stats-popover">
                                         <?php foreach ($plans['plans'] as $plan) { ?>
-                                            <li class="list-popover-item">
+                                            <li class="list-stats-item">
                                                 <?php echo SellerPackagePlans::getPlanPriceWithPeriod($plan, $plan[SellerPackagePlans::DB_TBL_PREFIX . 'price']); ?>
                                             </li>
                                         <?php } ?>
