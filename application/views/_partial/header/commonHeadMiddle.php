@@ -1,5 +1,5 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin>
 <link rel='dns-prefetch' href='//maps.google.com'>
 <link rel='dns-prefetch' href='//maps.googleapis.com'>
 <link rel='dns-prefetch' href='//maps.gstatic.com'>
@@ -36,10 +36,14 @@ if (0 < FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0)) {
         <link rel="alternate" hreflang="<?php echo strtolower($langCode); ?>" href="<?php echo $canonicalUrl; ?>">
 <?php }
 } ?>
-<?php $googleFontFamily = "'Montserrat', sans-serif !important";
+<?php
 $fontKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');
+$googleFontFamily = "'Montserrat', sans-serif !important";
 $googleFontFamilyUrl = FatApp::getConfig('CONF_THEME_FONT_FAMILY_URL', FatUtility::VAR_STRING, '');
-
+if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
+    $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
+    $googleFontFamily =  '"' . str_replace("+", " ", explode('-', $googleFontFamily)[0]) . '" !important';
+}
 $themeColor = FatApp::getConfig('CONF_THEME_COLOR_RGB', FatUtility::VAR_STRING, "rgb(255,58,89)");
 $themeColor = (false === strpos($themeColor, 'rgb') ? 'rgb(' . $themeColor . ')' : $themeColor);
 $themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE_RGB', FatUtility::VAR_STRING, "rgb(255,255,255)");
@@ -50,17 +54,6 @@ $secondaryColor = (false === strpos($secondaryColor, 'rgb') ? 'rgb(' . $secondar
 $secondaryColorInverse = FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_INVERSE_RGB', FatUtility::VAR_STRING, "rgb(255,255,255)");
 $secondaryColorInverse = (false === strpos($secondaryColorInverse, 'rgb') ? 'rgb(' . $secondaryColorInverse . ')' : $secondaryColorInverse);
 ?>
-<?php
-if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
-    $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
-    $googleFontFamily =  '"' . str_replace("+", " ", explode('-', $googleFontFamily)[0]) . '" !important';
-?>    
-    <link href="<?php echo $googleFontFamilyUrl; ?>" rel="stylesheet">
-<?php
-} else { ?>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<?php } ?>
-
 <style>
     body {
         font-family: <?php echo $googleFontFamily; ?>;

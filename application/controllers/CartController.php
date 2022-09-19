@@ -309,7 +309,7 @@ class CartController extends MyAppController
 
         $cartObj = new Cart($userId, $this->siteLangId, $this->app_user['temp_user_id']);
         $cartObj->setCartShippingAddress($addrData['addr_id']);
-        $rates = $cartObj->getShippingOptions();
+        $cartObj->getShippingOptions();
         return;
     }
 

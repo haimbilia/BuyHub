@@ -29,6 +29,7 @@ class ProductsReportController extends ListingBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('formColumns', $formColumns);
         $this->set('pageTitle', $pageTitle);
+        $this->set('pageData', $pageData);
         $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false);
         $this->_template->addJs(array('js/select2.js'));

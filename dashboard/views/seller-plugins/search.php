@@ -63,12 +63,34 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 $ul = $td->appendElement("ul", array("class" => "actions"));
+                if (applicationConstants::ACTIVE == $row['pu_active'] && Plugin::TYPE_SHIPPING_SERVICES == $row['plugin_type']) {
+                    $li = $ul->appendElement("li");
+                    $li->appendElement(
+                        'a',
+                        array(
+                            'href' => 'javascript:void(0)',
+                            'data-bs-toggle' => 'tooltip',
+                            'title' => Labels::getLabel('LBL_SYNC_PLUGIN_CARRIERS', $siteLangId),
+                            'onclick' => "syncCarriers(" . UserAuthentication::getLoggedUserId() . ")",
+                        ),
+                        '<i class="icn">
+                                    <svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#sync">
+                                        </use>
+                                    </svg>
+                                </i>',
+                        true
+                    );
+                }
+
                 $li = $ul->appendElement("li");
                 $li->appendElement(
                     'a',
                     array(
                         'href' => 'javascript:void(0)',
-                        'class' => 'button small green', 'title' => Labels::getLabel('LBL_Edit', $siteLangId),
+                        'data-bs-toggle' => 'tooltip',
+                        'title' => Labels::getLabel('LBL_Edit', $siteLangId),
                         "onclick" => "editSettingForm('" . $row['plugin_code'] . "')"
                     ),
                     '<i class="icn">
