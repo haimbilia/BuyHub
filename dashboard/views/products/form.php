@@ -68,6 +68,8 @@ if (0 < $recordId) {
                     <div class="card-body">
                         <div class="row">
                             <?php
+                            $fld = $frm->getField('product_type');
+                            $fld->addOptionListTagAttribute('class', 'product-type');
                             echo HtmlHelper::getFieldHtml($frm, 'product_type', 12, ['onchange' => 'productType(this)']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], Labels::getLabel('MSG_A_UNIQUE_IDENTIFIER_ASSOCIATED_FOR_PRODUCT_NAME', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], Labels::getLabel('MSG_A_NAME_OF_THE_PRODUCT_TO_BE_LISTED', $langId));
