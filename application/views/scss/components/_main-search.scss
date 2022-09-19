@@ -68,7 +68,11 @@
         height: 40px;
         width: 100%;
         margin-bottom: 2rem;
+        transition: all 0.2s ease;
         -webkit-appearance: search-cancel-button;
+        &:focus {
+            background-color: darken($bg-gray, 10) !important;
+        }
         &::-webkit-search-cancel-button {
             -webkit-appearance: none;
             height: 1.25em;

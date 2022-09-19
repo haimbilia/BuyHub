@@ -11,7 +11,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                     <div class="card-head">
                         <div class="card-head-label">
                             <h3 class="card-head-title">
-                                <a class="back" href="<?php echo UrlHelper::generateUrl('OrderReturnRequests'); ?>">
+                                <a class="btn-back" href="<?php echo UrlHelper::generateUrl('OrderReturnRequests'); ?>">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                                         </use>

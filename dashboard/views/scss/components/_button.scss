@@ -177,6 +177,26 @@ $btn-active-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0
     }
 }
 
+.btn-back {
+    padding: 0;
+    width: 40px;
+    flex-shrink: 0;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $bg-gray;
+    border-radius: 50%;
+    &:hover {
+        background-color: darken($bg-gray, 05);
+    }
+    .svg {
+        [dir="rtl"] & {
+            transform: scaleX(-1);
+        }
+    }
+}
+
 .link-underline {
     padding: 0;
     color: $brand-color;
@@ -308,18 +328,6 @@ a.link {
     }
 }
 
-.back {
-    color: $txt-body;
-    //margin-#{$end-direction}: 0.5rem;
-    &:hover {
-        text-decoration: none;
-    }
-    .svg {
-        [dir="rtl"] & {
-            transform: scaleX(-1);
-        }
-    }
-}
 .link-dotted {
     text-decoration: dotted underline;
     text-underline-offset: 4px;

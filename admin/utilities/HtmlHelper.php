@@ -546,7 +546,7 @@ class HtmlHelper
 
         switch ($fld->fldType) {
             case 'radio':
-                $fld->addOptionListTagAttribute('class', 'list-radio my-3');
+                $fld->addOptionListTagAttribute('class', 'list-radio product-type');
                 HtmlHelper::configureSwitchForRadio($fld);
                 break;
             case 'hidden':

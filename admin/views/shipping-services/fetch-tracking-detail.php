@@ -10,7 +10,7 @@ if (!empty($trackingData) && array_key_exists('detail', $trackingData) && !empty
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
-        <a class="back" href="javascript:void(0)" onclick="getItemStatusHistory(<?php echo $orderId; ?> ,<?php echo $opId; ?>)">
+        <a class="btn-back" href="javascript:void(0)" onclick="getItemStatusHistory(<?php echo $orderId; ?> ,<?php echo $opId; ?>)">
             <svg class="svg" width="24" height="24">
                 <use xlink:href="<?php echo CONF_WEBROOT_URL ?>images/retina/sprite-actions.svg#back">
                 </use>
@@ -48,11 +48,11 @@ if (!empty($trackingData) && array_key_exists('detail', $trackingData) && !empty
                         <?php } ?>
                     </ul>
                 </div>
-            <?php }          
+            <?php }
             ?>
         </div>
 
-        <?php if (!empty($trackingData) && array_key_exists('trackingUrl', $trackingData)) {?>
+        <?php if (!empty($trackingData) && array_key_exists('trackingUrl', $trackingData)) { ?>
             <a class="link link-third" href="<?php echo $trackingData['trackingUrl']; ?>" target="_blank">
                 <?php echo Labels::getLabel('LBL_CLICK_HERE_TO_TRACK_EXTERNALLY', $siteLangId); ?>
                 <svg class="svg" width="14" height="14">
@@ -60,7 +60,7 @@ if (!empty($trackingData) && array_key_exists('detail', $trackingData) && !empty
                     </use>
                 </svg>
             </a>
-        <?php }else{
+        <?php } else {
             $arrListing = $dateWiseArr;
             $tbody = new HtmlElement('table');
             include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');

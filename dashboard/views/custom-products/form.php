@@ -15,7 +15,7 @@ if (0 < $recordId) {
     <div class="content-header">
         <div class="content-header-title">
             <h2>
-                <a class="btn btn-back back" href="<?php echo UrlHelper::generateUrl('sellerRequests'); ?>">
+                <a class="btn btn-back" href="<?php echo UrlHelper::generateUrl('sellerRequests'); ?>">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                         </use>

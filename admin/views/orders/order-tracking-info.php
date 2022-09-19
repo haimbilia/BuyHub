@@ -9,13 +9,13 @@ if (is_array($trackingInfo['data']['tracking']['checkpoints']) && count($trackin
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
-    <a class="back" href="javascript:void(0)" onclick = "getItemStatusHistory(<?php echo $orderId;?> ,<?php echo $op_id;?>)">
-        <svg class="svg" width="24" height="24">
-            <use xlink:href="<?php echo CONF_WEBROOT_URL ?>images/retina/sprite-actions.svg#back">
-            </use>
-        </svg>
-    </a>
-        <?php echo Labels::getLabel('LBL_TRACKING_DETAIL', $siteLangId) ." - ".$orderNumber; ?> 
+        <a class="btn-back" href="javascript:void(0)" onclick="getItemStatusHistory(<?php echo $orderId; ?> ,<?php echo $op_id; ?>)">
+            <svg class="svg" width="24" height="24">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL ?>images/retina/sprite-actions.svg#back">
+                </use>
+            </svg>
+        </a>
+        <?php echo Labels::getLabel('LBL_TRACKING_DETAIL', $siteLangId) . " - " . $orderNumber; ?>
     </h5>
 </div>
 <div class="modal-body opStausLogJs">
@@ -33,10 +33,10 @@ if (is_array($trackingInfo['data']['tracking']['checkpoints']) && count($trackin
                             <li class="timeline-v4__item">
                                 <span class="timeline-v4__item-time"><?php echo date('H:i', strtotime($data['checkpoint_time'])); ?></span>
                                 <div class="timeline-v4__item-desc">
-                                    <span class="timeline-v4__item-text">                               
-                                        <b><?php echo $data['message']; ?></b>                                     
+                                    <span class="timeline-v4__item-text">
+                                        <b><?php echo $data['message']; ?></b>
                                     </span>
-                                    <span class="timeline-v4__item-text"> 
+                                    <span class="timeline-v4__item-text">
                                         <span><?php echo $data['location']; ?></span>
                                     </span>
                                 </div>
@@ -44,10 +44,10 @@ if (is_array($trackingInfo['data']['tracking']['checkpoints']) && count($trackin
                         <?php } ?>
                     </ul>
                 </div>
-            <?php } 
-            $arrListing = $dateWiseArr;          
+            <?php }
+            $arrListing = $dateWiseArr;
             $tbody = new HtmlElement('table');
-            include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+            include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
             echo $tbody->getHtml();
             ?>
         </div>

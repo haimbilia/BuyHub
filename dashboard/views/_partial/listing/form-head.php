@@ -15,7 +15,7 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
         <?php if (false !== $formBackButtonAttr) {
             $onclick = $formBackButtonAttr['onclick'] ?? '';
         ?>
-            <a class="btn btn-back back" href="javascript:void(0);" onclick="<?php echo $onclick; ?>">
+            <a class="btn btn-back" href="javascript:void(0);" onclick="<?php echo $onclick; ?>">
                 <svg class="svg" width="24" height="24">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                     </use>

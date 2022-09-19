@@ -9,13 +9,13 @@ $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
 $includeTabs = $includeTabs ?? true;
 $displayLangTab = $displayLangTab ?? true;
 $languages = $languages ?? [];
-unset($languages[CommonHelper::getDefaultFormLangId()]); ?> 
+unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
 <div class="modal-header">
     <h5 class="modal-title">
         <?php if (false !== $formBackButtonAttr) {
             $onclick = $formBackButtonAttr['onclick'] ?? '';
         ?>
-            <a class="back" href="javascript:void(0);" onclick="<?php echo $onclick; ?>">
+            <a class="btn-back" href="javascript:void(0);" onclick="<?php echo $onclick; ?>">
                 <svg class="svg" width="24" height="24">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                     </use>

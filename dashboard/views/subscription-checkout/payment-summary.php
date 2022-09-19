@@ -9,7 +9,7 @@ $noPaymentMethod = (1 > count($paymentMethods) && (!$canUseWalletForPayment || (
             <div class="step_section">
                 <div class="step_head">
                     <h5 class="step_title">
-                        <a class="btn btn-back back" type="button" href="<?php echo UrlHelper::generateUrl('seller','packages'); ?>">
+                        <a class="btn btn-back" href="<?php echo UrlHelper::generateUrl('seller', 'packages'); ?>">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                                 </use>

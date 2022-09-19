@@ -9,7 +9,7 @@
                     <div class="card-head">
                         <div class="card-head-label">
                             <h3 class="card-head-title">
-                                <a class="back" href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
+                                <a class="btn-back" href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                                         </use>
@@ -32,10 +32,10 @@
                     </div>
                     <?php require_once(CONF_THEME_PATH . 'orders/item-summary.php'); ?>
                 </div>
-                <?php 
-                $paymentFormCond = (!$order["order_payment_status"] && $canEdit &&  !in_array($order['plugin_code'],['CashOnDelivery','PayAtStore']));
+                <?php
+                $paymentFormCond = (!$order["order_payment_status"] && $canEdit &&  !in_array($order['plugin_code'], ['CashOnDelivery', 'PayAtStore']));
                 $paymentHistory = (!empty($order['payments']));
-                if (!$order['order_deleted'] && ($paymentFormCond || $paymentHistory) && !in_array($order['plugin_code'],['CashOnDelivery','PayAtStore'])) { ?>
+                if (!$order['order_deleted'] && ($paymentFormCond || $paymentHistory) && !in_array($order['plugin_code'], ['CashOnDelivery', 'PayAtStore'])) { ?>
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">

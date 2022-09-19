@@ -12,7 +12,7 @@ $headingBackButton = $headingBackButton ?? false;
                     $href = $headingBackButton['href'] ?? 'javascript:void(0);';
                     $onclick = $headingBackButton['onclick'] ?? 'history.back()';
                 ?>
-                    <a class="btn btn-back back" type="button" href="<?php echo $href; ?>" onclick="<?php echo $onclick; ?>">
+                    <a class="btn btn-back" href="<?php echo $href; ?>" onclick="<?php echo $onclick; ?>">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                             </use>
