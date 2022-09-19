@@ -57,11 +57,16 @@ class PluginSettingController extends LoggedUserController
             FatUtility::dieWithError($pluginSetting->getError());
         }
 
+        $msg = Labels::getLabel('MSG_CONFIGURATION_KEYS_SAVED_SUCCESSFULLY.!!', $this->siteLangId);
         if (Plugin::getAttributesById($post["plugin_id"], 'plugin_type') == Plugin::TYPE_SHIPPING_SERVICES) {
             CacheHelper::clear(CacheHelper::TYPE_SHIPING_API);
+            $pluginCode = (new SellerPlugin(0, UserAuthentication::getLoggedUserId()))->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
+            if (!empty($pluginCode)) {
+                $msg .=  ' ' . Labels::getLabel('MSG_PLEASE_SYNC_THE_CARRIERS.', $this->siteLangId);
+            }
         }
 
-        $this->set('msg', Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
     }
 

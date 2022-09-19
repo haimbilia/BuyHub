@@ -16,8 +16,7 @@ class EasyPost extends ShippingServicesBase
     private const REQUEST_RETRIEVE_ORDER = 7;
     private const REQUEST_REFUND_SHIPMENT = 8;
     private const REQUEST_CARRIER_TYPES = 9;
-    
-
+  
     private $resp;
     private $eCode = '';
     private $toAddress;

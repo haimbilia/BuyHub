@@ -39,7 +39,7 @@
             } catch (e) {
                 $.ykmodal(t);
             }
-            
+
         });
     };
 
@@ -48,8 +48,14 @@
         var data = fcom.frmData(frm);
         var keyName = frm.keyName.value;
         fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings', 'setup'), data, function (t) {
-            
+
         });
     };
 
+    syncCarriers = function (recordId) {
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'syncCarriers', [recordId]), '', function (t) {
+            fcom.displaySuccessMessage(t.msg);
+            fcom.removeLoader();
+        });
+    }
 })();

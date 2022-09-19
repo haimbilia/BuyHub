@@ -175,6 +175,26 @@ class PluginsController extends ListingBaseController
                 ];
                 $this->set("otherButtons", $otherButtons);
             }
+        }else if (Plugin::TYPE_SHIPPING_SERVICES == $type) {
+            $shippingService = Plugin::isActiveByType(Plugin::TYPE_SHIPPING_SERVICES);
+            if ($shippingService && $this->objPrivilege->canEditPlugins($this->admin_id, true)) {
+                $otherButtons = [
+                    [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'class' => 'btn btn-outline-brand btn-icon',
+                            'onclick' => "syncCarriers()",
+                            'title' => Labels::getLabel('LBL_SYNC_PLUGIN_CARRIERS', $this->siteLangId)
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#sync">
+                                        </use>
+                                    </svg><span>' . Labels::getLabel('LBL_SYNC_CARRIERS', $this->siteLangId) . '</span>',
+                    ]
+                ];
+                $this->set("otherButtons", $otherButtons);
+            }
         }
 
         $this->set("arrListing", $arrListing);
