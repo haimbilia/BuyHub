@@ -626,7 +626,7 @@ trait ShippingServices
     }
 
     private function getShippingRatesFromApi($orderData)
-    {die('hi');
+    {
         $this->validateShippingService($orderData);
 
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);

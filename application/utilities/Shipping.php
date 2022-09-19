@@ -428,8 +428,7 @@ class Shipping
                 $shippingAddressDetail
             ];
 
-            foreach ($carriers as $i => $carrier) {
-                if (0 < $i) {break;}
+            foreach ($carriers as $carrier) {
                 $carrierCode = !empty($carrier) && array_key_exists('code', $carrier) ? $carrier['code'] : '';
                 $cacheKeyArr = array_merge($cacheKeyArr, [$carrierCode, $shopAddress['postalCode'], $this->langId]);
                 $cacheKey = self::RATE_CACHE_KEY_NAME . md5(json_encode($cacheKeyArr));
