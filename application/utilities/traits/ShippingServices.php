@@ -779,7 +779,7 @@ trait ShippingServices
 
     private function validateShippingService($orderData, $href = '')
     {
-        $this->loadShippingService($orderData, $href = '');
+        $this->loadShippingService($orderData, $href);
         if (false === $this->shippingService) {
             LibHelper::dieJsonError(Labels::getLabel("ERR_NO_DEFAULT_SHIPPING_SERVICE_PLUGIN_FOUND", $this->langId));
         }
