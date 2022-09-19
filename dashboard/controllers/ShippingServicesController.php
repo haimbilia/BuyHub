@@ -16,7 +16,6 @@ class ShippingServicesController extends SellerBaseController
         $this->langId = $this->siteLangId;        
     }
 
-
     public function shippingRatesForm(int $opId)
     {
         $frm = $this->getShippingRatesForm($opId);       

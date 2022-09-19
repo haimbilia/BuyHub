@@ -197,6 +197,13 @@ $(document).ajaxComplete(function () {
         eval($(obj).data('function'));
         return true;
     }
+
+    syncCarriers = function () {
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'syncCarriers'), '', function (t) {
+            fcom.displaySuccessMessage(t.msg);
+            fcom.removeLoader();
+        });
+    }
 })();
 
 $(document).on('click', '.uploadFile-Js', function () {

@@ -85,7 +85,14 @@ class PluginSettingController extends ListingBaseController
             }
         }
 
-        $this->set('msg', Labels::getLabel('MSG_CONFIGURATION_KEYS_SAVED_SUCCESSFULLY.!!', $this->siteLangId));
+        $msg = Labels::getLabel('MSG_CONFIGURATION_KEYS_SAVED_SUCCESSFULLY.!!', $this->siteLangId);
+
+        $plugin = Plugin::getAttributesById($post["plugin_id"], ['plugin_type', 'plugin_active']);
+        if (Plugin::TYPE_SHIPPING_SERVICES == $plugin['plugin_type'] && $plugin['plugin_active'] == PLugin::ACTIVE) {
+            $msg .=  ' ' . Labels::getLabel('MSG_PLEASE_SYNC_THE_CARRIERS.', $this->siteLangId);
+        }
+
+        $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
     }
 

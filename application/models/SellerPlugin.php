@@ -112,8 +112,7 @@ class SellerPlugin extends PluginCommon
             }
         }
         $srch->doNotCalculateRecords();
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
         if (empty($row) || !is_array($row)) {
             return false;
         }
