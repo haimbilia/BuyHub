@@ -305,6 +305,11 @@ class AdvertiserController extends AdvertiserBaseController
                 if (!$bannerRecord->save()) {
                     FatUtility::dieJsonError($bannerRecord->getError());
                 }
+
+                $recordId = $bannerRecord->getMainTableRecordId();
+                if (!$bannerRecord->updateLangData(CommonHelper::getDefaultFormLangId(), ['banner_title' => $post['promotion_name']])) {
+                    LibHelper::exitWithError($bannerRecord->getError(), true);
+                }
                 break;
 
             case Promotion::TYPE_SLIDES:
@@ -866,7 +871,7 @@ class AdvertiserController extends AdvertiserBaseController
             'blocation_banner_width',
             'blocation_banner_height',
             'slide_id',
-            'collection_layout_type',      
+            'collection_layout_type',
         ));
         $promotionDetails = FatApp::getDb()->fetch($srch->getResultSet());
         if (empty($promotionDetails)) {
