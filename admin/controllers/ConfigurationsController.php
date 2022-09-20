@@ -395,9 +395,9 @@ class ConfigurationsController extends ListingBaseController
                 $faqCategoriesArr = FaqCategory::getFaqPageCategories();
                 $sellerCategoriesArr = FaqCategory::getSellerPageCategories();
 
-                $frm->addSelectBox(Labels::getLabel('FRM_FAQ_PAGE_MAIN_CATEGORY', $langId), 'CONF_FAQ_PAGE_MAIN_CATEGORY', $faqCategoriesArr, '', [], Labels::getLabel('FRM_SELECT', $langId));
+                /* $frm->addSelectBox(Labels::getLabel('FRM_FAQ_PAGE_MAIN_CATEGORY', $langId), 'CONF_FAQ_PAGE_MAIN_CATEGORY', $faqCategoriesArr, '', [], Labels::getLabel('FRM_SELECT', $langId));
                 $frm->addSelectBox(Labels::getLabel('FRM_SELLER_PAGE_MAIN_FAQ_CATEGORY', $langId), 'CONF_SELLER_PAGE_MAIN_CATEGORY', $sellerCategoriesArr, '', [], Labels::getLabel('FRM_SELECT', $langId));
-
+ */
                 /* $fld3 = $frm->addTextBox(Labels::getLabel("FRM_ADMIN_DEFAULT_ITEMS_PER_PAGE", $langId), "CONF_ADMIN_PAGESIZE");
                 $fld3->requirements()->setInt();
                 $fld3->requirements()->setRange('1', '2000');
@@ -1125,7 +1125,7 @@ class ConfigurationsController extends ListingBaseController
                     0
                 );
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_BIRTHDAY_REWARD_POINTS", $langId));
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ENABLE_BIRTHDAY_DISCOUNT_MSG", $langId));
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_BIRTHDAY_REWARD_POINTS", $langId), 'CONF_BIRTHDAY_REWARD_POINTS');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_USER_GET_THIS_REWARD_POINTS_ON_HIS_BIRTHDAY.", $langId) . "</span>";
