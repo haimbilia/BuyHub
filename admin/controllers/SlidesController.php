@@ -549,7 +549,7 @@ class SlidesController extends ListingBaseController
         }
 
         $arr = [
-            'dragdrop' => '',
+            // 'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'slide_media' => Labels::getLabel('LBL_MEDIA', $this->siteLangId),
@@ -569,7 +569,7 @@ class SlidesController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'dragdrop',
+            // 'dragdrop',
             'select_all',
             /*  'listSerial', */
             'slide_media',
@@ -587,20 +587,20 @@ class SlidesController extends ListingBaseController
     protected function setCustomColumnWidth(): void
     {
         $arr = [
-            'dragdrop' => [
+            /* 'dragdrop' => [
                 'width' => '5%'
-            ],
+            ], */
             'select_all' => [
                 'width' => '5%'
             ],
-            'listSerial' => [
+            /* 'listSerial' => [
                 'width' => '5%'
-            ],
+            ], */
             'slide_media' => [
-                'width' => '25%'
+                'width' => '35%'
             ],
             'slide_title' => [
-                'width' => '40%'
+                'width' => '35%'
             ],
             'slide_active' => [
                 'width' => '10%'
