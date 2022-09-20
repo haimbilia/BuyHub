@@ -2,7 +2,6 @@
 
 class ShippingZonesController extends ListingBaseController
 {
-
     protected $modelClass = 'ShippingProfileZone';
     protected $pageKey = 'MANAGE_SHIPPING_ZONES';
 
