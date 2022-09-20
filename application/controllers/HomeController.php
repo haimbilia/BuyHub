@@ -1257,7 +1257,6 @@ class HomeController extends MyAppController
         $srchSlide->addSkipExpiredPromotionAndSlideCondition();
         $srchSlide->joinBudget();
         $srchSlide->joinAttachedFile();
-        $srchSlide->addOrder('slide_display_order');
         $srchSlide->addMultipleFields(array('slide_id', 'slide_record_id', 'slide_type', 'IFNULL(promotion_name, promotion_identifier) as promotion_name,IFNULL(slide_title, slide_identifier) as slide_title', 'slide_target', 'slide_url', 'promotion_id', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'slide_img_updated_on'));
 
         $totalSlidesPageSize = FatApp::getConfig('CONF_TOTAL_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
@@ -1268,7 +1267,7 @@ class HomeController extends MyAppController
 
         $slidesSrch = new SearchBase('(' . $srchSlide->getQuery() . ') as t');
         $slidesSrch->addMultipleFields(array('slide_id', 'slide_type', 'slide_record_id', 'slide_url', 'slide_target', 'slide_title', 'promotion_id', 'userBalance', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'promotion_budget', 'promotion_duration', 'slide_img_updated_on'));
-        // $slidesSrch->addOrder('', 'rand()');
+        $slidesSrch->addOrder('', 'rand()');
         $slidesSrch->doNotCalculateRecords();
 
         if (0 < $ppcSlidesPageSize) {
@@ -1284,7 +1283,8 @@ class HomeController extends MyAppController
 
             $ppcSrch->addCondition('slide_type', '=', Slides::TYPE_PPC);
             $ppcSrch->setPageSize($ppcSlidesPageSize);
-            $ppcSlides = $db->fetchAll($ppcSrch->getResultSet(), 'slide_id');
+            $ppcRs = $ppcSrch->getResultSet();
+            $ppcSlides = $db->fetchAll($ppcRs, 'slide_id');
         }
 
         $ppcSlidesCount = count($ppcSlides);
@@ -1293,7 +1293,8 @@ class HomeController extends MyAppController
             $adminSlideSrch = clone $slidesSrch;
             $adminSlideSrch->addCondition('slide_type', '=', Slides::TYPE_SLIDE);
             $adminSlideSrch->setPageSize($totalSlidesPageSize);
-            $adminSlides = $db->fetchAll($adminSlideSrch->getResultSet(), 'slide_id');
+            $slideRs = $adminSlideSrch->getResultSet();
+            $adminSlides = $db->fetchAll($slideRs, 'slide_id');
         }
 
         return array_merge($ppcSlides, $adminSlides);
