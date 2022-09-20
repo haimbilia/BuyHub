@@ -75,7 +75,6 @@ class ProductCategoriesController extends ListingBaseController
         if (!empty($keyword)) {
             $prodCatSrchObj = new ProductCategorySearch($this->siteLangId, false, false, false, true, true, -1);
             $records = ProductCategory::getTreeArr($this->siteLangId, 0, false, $prodCatSrchObj, false, $keyword);
-            // CommonHelper::printArray($records);
             $this->set("allOpen", true);
             $this->set("searchRequest", true);
         } else {
@@ -85,7 +84,7 @@ class ProductCategoriesController extends ListingBaseController
         $this->set("keyword", $keyword);
         $this->set("arrListing", $records);
         $this->set("siteLangId", $this->siteLangId);
-        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->set('html', $this->_template->render(false, false, NULL, true, false));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
