@@ -51,7 +51,7 @@ class SellerApprovalFormController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);          
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -113,19 +113,24 @@ class SellerApprovalFormController extends ListingBaseController
             $cnd->attachCondition('sf_l.sformfield_caption', 'like', '%' . $post['keyword'] . '%');
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        $srch->doNotCalculateRecords(); 
+        $srch->doNotCalculateRecords();
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
+        $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);        
-        $this->set("arrListing", $records); 
+        $records = FatApp::getDb()->fetchAll($rs);
+        $this->set("arrListing", $records);
 
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
+
+        if (1 == count($records)) {
+            unset($fields['dragdrop']);
+        }
+
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditSellerApprovalForm($this->admin_id, true));
@@ -192,20 +197,12 @@ class SellerApprovalFormController extends ListingBaseController
 
         $recordId = FatUtility::int($post['sformfield_id']);
 
-        if(1 > $recordId){
+        if (1 > $recordId) {
             $srch = SupplierFormFields::getSearchObject();
-            $srch->doNotCalculateRecords(); 
-        $srch->doNotCalculateRecords(); 
-            $srch->doNotCalculateRecords(); 
-            $srch->addFld('MAX(sformfield_display_order) as last_display_order'); 
-        $srch->addFld('MAX(sformfield_display_order) as last_display_order'); 
-            $srch->addFld('MAX(sformfield_display_order) as last_display_order'); 
-            $srch->setPageSize(1); 
-        $srch->setPageSize(1); 
-            $srch->setPageSize(1); 
-            $maxOrder = (array)FatApp::getDb()->fetch($srch->getResultSet());     
-        $maxOrder = (array)FatApp::getDb()->fetch($srch->getResultSet());     
-            $maxOrder = (array)FatApp::getDb()->fetch($srch->getResultSet());     
+            $srch->doNotCalculateRecords();
+            $srch->addFld('MAX(sformfield_display_order) as last_display_order');
+            $srch->setPageSize(1);
+            $maxOrder = (array)FatApp::getDb()->fetch($srch->getResultSet());
             $maxOrder = ((int)current($maxOrder)) + 1;
             $post['sformfield_display_order'] = $maxOrder;
         }
@@ -227,7 +224,7 @@ class SellerApprovalFormController extends ListingBaseController
             [
                 $recordObj::tblFld('caption') => $post[$recordObj::tblFld('caption')],
                 $recordObj::tblFld('comment') => $post[$recordObj::tblFld('comment')]
-            ],            
+            ],
         );
 
         $this->_template->render(false, false, 'json-success.php');
@@ -267,9 +264,18 @@ class SellerApprovalFormController extends ListingBaseController
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
+
+        $srch = SupplierFormFields::getSearchObject();
+        $srch->addFld('COUNT(1) as recordCount');
+        $srch->doNotCalculateRecords();
+        $result = (array)FatApp::getDb()->fetch($srch->getResultSet());
+        if (1 == $result['recordCount']) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_MAINTAIN_ATLEAST_ONE_RECORD.'), true);
+        }
+
         $this->setModel([$recordId]);
         if (!$this->modelObj->deleteRecord(false)) {
-            LibHelper::exitWithError($obj->getError(), true);
+            LibHelper::exitWithError($this->modelObj->getError(), true);
         }
     }
 
@@ -307,7 +313,7 @@ class SellerApprovalFormController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop', 'sformfield_type', 'sformfield_required'],Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop', 'sformfield_type', 'sformfield_required'], Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)
