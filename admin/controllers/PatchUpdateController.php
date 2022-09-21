@@ -64,18 +64,18 @@ class PatchUpdateController extends ListingBaseController
                 $taxRuleObj = new TaxRule($ruleId);
                 $rule['taxrule_taxcat_id'] = $taxCatId;
                 $rule['taxrule_name'] = Labels::getLabel('LBL_ZERO_TAX', CommonHelper::getLangId());
-                $rule['taxrule_taxstr_id'] = $structureId;        
+                $rule['taxrule_taxstr_id'] = $structureId;
                 $taxRuleObj->assignValues($rule);
                 if (!$taxRuleObj->save()) {
                     LibHelper::exitWithError($taxRuleObj->getError());
                 }
 
                 $ruleId = $taxRuleObj->getMainTableRecordId();
-                
-                if (!$taxRuleObj->addUpdateRate(0)) {        
+
+                if (!$taxRuleObj->addUpdateRate(0)) {
                     LibHelper::exitWithError($taxRuleObj->getError());
                 }
-                
+
                 /* [ update location data */
                 $locData = array(
                     'taxruleloc_taxcat_id' => $taxCatId,
@@ -92,10 +92,10 @@ class PatchUpdateController extends ListingBaseController
                     LibHelper::exitWithError($locObj->getError());
                 }
 
-                $combinedTax = array(                
+                $combinedTax = array(
                     'taxruledet_taxstr_id' => $structureId,
                     'taxruledet_rate' => 0,
-                );              
+                );
                 $taxRuleObj->addUpdateCombinedTax($combinedTax, 0);
                 if (!$taxRuleObj->save()) {
                     LibHelper::exitWithError($locObj->getError());
@@ -128,9 +128,9 @@ class PatchUpdateController extends ListingBaseController
         }
 
         $db = FatApp::getDb();
-        $parentArr = [];   
+        $parentArr = [];
         $parentId = 0;
-        $categories = $codesArr['data'] ;
+        $categories = $codesArr['data'];
 
         foreach ($categories as $category) {
             if (isset($category['parentTaxCode']) &&  $category['parentTaxCode'] != '') {
@@ -144,7 +144,7 @@ class PatchUpdateController extends ListingBaseController
                     $parentArr[$category['parentTaxCode']] = $parentId;
                 }
             }
-           
+
             $identifier = ($category['name'] != '') ? $category['name'] : $category['taxCode'];
 
             $arr = [
@@ -301,7 +301,7 @@ class PatchUpdateController extends ListingBaseController
         foreach ($res as $val) {
             // echo "ALTER TABLE " . $val['Tables_in_' . $database] . " CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
             FatApp::getDb()->query("ALTER TABLE " . $val['Tables_in_' . $database] . " CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
-            
+
             echo 'Done:- ' . $val['Tables_in_' . $database] . '<br>';
         }
         // ALTER TABLE tbl_affiliate_commission_settings MODIFY COLUMN afcommsetting_fees decimal(12,4)
@@ -352,13 +352,15 @@ class PatchUpdateController extends ListingBaseController
         }
 
         if ($type == 'orders') {
-            $tables = array('tbl_orders', 'tbl_orders_lang', 'tbl_orders_status_history', 'tbl_order_cancel_requests', 'tbl_order_extras', 'tbl_order_payments', 
+            $tables = array(
+                'tbl_orders', 'tbl_orders_lang', 'tbl_orders_status_history', 'tbl_order_cancel_requests', 'tbl_order_extras', 'tbl_order_payments',
                 'tbl_order_products', 'tbl_order_products_lang', 'tbl_order_product_charges', 'tbl_order_product_charges_lang', 'tbl_order_product_digital_download_links',
                 'tbl_order_product_shipping', 'tbl_order_product_shipping_lang', 'tbl_order_product_to_shipping_users', 'tbl_order_return_requests', 'tbl_order_return_request_messages',
                 'tbl_order_seller_subscriptions', 'tbl_order_seller_subscriptions_lang', 'tbl_order_user_address', 'tbl_user_reward_points', 'tbl_user_reward_point_breakup',
                 'tbl_rewards_on_purchase', 'tbl_coupons_history', 'tbl_coupons_hold', 'tbl_user_cart', 'tbl_order_product_settings', 'tbl_order_product_shipment',
-                'tbl_order_prod_charges_logs','tbl_order_prod_charges_logs_lang','tbl_orders_to_plugin_order','tbl_order_product_shipment_pickup','tbl_order_product_plugin_specifics','tbl_order_product_responses','tbl_user_withdrawal_requests',
-                'tbl_user_withdrawal_requests_specifics','tbl_seller_product_reviews','tbl_seller_product_reviews_abuse','tbl_seller_product_reviews_helpful','tbl_seller_product_rating');
+                'tbl_order_prod_charges_logs', 'tbl_order_prod_charges_logs_lang', 'tbl_orders_to_plugin_order', 'tbl_order_product_shipment_pickup', 'tbl_order_product_plugin_specifics', 'tbl_order_product_responses', 'tbl_user_withdrawal_requests',
+                'tbl_user_withdrawal_requests_specifics', 'tbl_seller_product_reviews', 'tbl_seller_product_reviews_abuse', 'tbl_seller_product_reviews_helpful', 'tbl_seller_product_rating'
+            );
             FatApp::getDb()->query('UPDATE `tbl_seller_products` SET `selprod_sold_count` = 0 WHERE 1');
 
             FatApp::getDb()->query("DELETE FROM `tbl_attached_files` WHERE `afile_type` in (60)");
@@ -372,8 +374,9 @@ class PatchUpdateController extends ListingBaseController
             ('Products', 'index', 0, 0, 1, 0)");
             FatApp::getDb()->query("DELETE FROM `tbl_attached_files` WHERE `afile_type` in (1,2,3,8,11,12,13,24,25,26,27,43)");
         } */ elseif ($type == 'all') {
-            $tables = array('tbl_abusive_words', 'tbl_admin_auth_token', 'tbl_admin_password_reset_requests', 'tbl_admin_permissions', 'tbl_affiliate_commission_setting_history',
-                'tbl_affiliate_commission_settings', 'tbl_attached_files_temp', 'tbl_attribute_group_attributes', 'tbl_attribute_group_attributes_lang', 'tbl_attribute_groups', 
+            $tables = array(
+                'tbl_abusive_words', 'tbl_admin_auth_token', 'tbl_admin_password_reset_requests', 'tbl_admin_permissions', 'tbl_affiliate_commission_setting_history',
+                'tbl_affiliate_commission_settings', 'tbl_attached_files_temp', 'tbl_attribute_group_attributes', 'tbl_attribute_group_attributes_lang', 'tbl_attribute_groups',
                 'tbl_banner_locations_lang', 'tbl_banners', 'tbl_banners_clicks', 'tbl_banners_lang', 'tbl_banners_logs', 'tbl_blog_contributions', 'tbl_blog_post',
                 'tbl_blog_post_categories', 'tbl_blog_post_categories_lang', 'tbl_blog_post_comments', 'tbl_blog_post_lang', 'tbl_blog_post_to_category',
                 'tbl_brands', 'tbl_brands_lang', 'tbl_catalog_request_messages', 'tbl_collection_to_product_categories', 'tbl_collection_to_seller_products',
@@ -400,7 +403,7 @@ class PatchUpdateController extends ListingBaseController
                 'tbl_seller_product_reviews_abuse', 'tbl_seller_product_reviews_helpful', 'tbl_seller_products', 'tbl_seller_products_lang', 'tbl_seller_products_temp_ids',
                 'tbl_shipping_company', 'tbl_shipping_company_lang', 'tbl_shipping_durations', 'tbl_shipping_durations_lang', 'tbl_shippingapi_settings', 'tbl_shop_collection_products',
                 'tbl_shop_collections', 'tbl_shop_collections_lang', 'tbl_shop_reports', 'tbl_shops', 'tbl_shops_lang', 'tbl_shops_to_theme', 'tbl_smart_log_actions',
-                'tbl_smart_products_weightage', 'tbl_smart_remommended_products', 'tbl_smart_user_activity_browsing', 'tbl_smart_weightage_settings', 'tbl_social_platforms', 
+                'tbl_smart_products_weightage', 'tbl_smart_remommended_products', 'tbl_smart_user_activity_browsing', 'tbl_smart_weightage_settings', 'tbl_social_platforms',
                 'tbl_social_platforms_lang', 'tbl_success_stories', 'tbl_success_stories_lang', 'tbl_tag_product_recommendation', 'tbl_tags', 'tbl_tags_lang', 'tbl_tax_categories',
                 'tbl_tax_categories_lang', 'tbl_tax_values', 'tbl_testimonials', 'tbl_testimonials_lang', 'tbl_thread_messages', 'tbl_threads', 'tbl_tool_tips', 'tbl_tool_tips_lang',
                 'tbl_upsell_products', 'tbl_url_rewrite', 'tbl_user_address', 'tbl_user_auth_token', 'tbl_user_bank_details', 'tbl_user_cart', 'tbl_user_credentials',
@@ -409,19 +412,23 @@ class PatchUpdateController extends ListingBaseController
                 'tbl_user_supplier_request_values', 'tbl_user_supplier_request_values_lang', 'tbl_user_supplier_requests', 'tbl_user_transactions', 'tbl_user_wish_list_products',
                 'tbl_user_wish_lists', 'tbl_user_withdrawal_requests', 'tbl_users', 'tbl_order_product_settings', 'tbl_user_requests_history', 'tbl_meta_tags', 'tbl_coupon_to_brands',
                 'tbl_coupon_to_shops', 'tbl_transactions_failure_log', 'tbl_product_category_relations', 'tbl_tax_structure', 'tbl_tax_structure_lang', 'tbl_collection_to_records',
-                'tbl_tracking_courier_code_relation', 'tbl_time_slots', 'tbl_user_collections', 'tbl_addresses', 'tbl_order_product_shipment', 'tbl_order_prod_charges_logs','tbl_order_prod_charges_logs_lang',
+                'tbl_tracking_courier_code_relation', 'tbl_time_slots', 'tbl_user_collections', 'tbl_addresses', 'tbl_order_product_shipment', 'tbl_order_prod_charges_logs', 'tbl_order_prod_charges_logs_lang',
                 'tbl_tax_rule_locations', 'tbl_tax_rule_details_lang', 'tbl_tax_rule_details', 'tbl_tax_rules', 'tbl_shipping_locations', 'tbl_shipping_zone', 'tbl_shipping_rates_lang',
                 'tbl_shipping_rates', 'tbl_shipping_profile_zones', 'tbl_shipping_profile_products', 'tbl_shipping_profile', 'tbl_shipping_packages', 'tbl_abandoned_cart',
-                'tbl_products_min_price', 'tbl_product_requests', 'tbl_product_requests_lang', 'tbl_product_saved_search', 'tbl_product_specifics','tbl_products_to_plugin_product',
-                'tbl_seller_products_to_plugin_selprod','tbl_orders_to_plugin_order','tbl_plugin_to_user','tbl_product_digital_data_relation','tbl_product_digital_links','tbl_badges',
-                'tbl_badges_lang','tbl_badge_link_conditions','tbl_badge_links','tbl_badge_requests','tbl_order_product_shipment_pickup','tbl_system_logs','tbl_order_product_plugin_specifics',
+                'tbl_products_min_price', 'tbl_product_requests', 'tbl_product_requests_lang', 'tbl_product_saved_search', 'tbl_product_specifics', 'tbl_products_to_plugin_product',
+                'tbl_seller_products_to_plugin_selprod', 'tbl_orders_to_plugin_order', 'tbl_plugin_to_user', 'tbl_product_digital_data_relation', 'tbl_product_digital_links', 'tbl_badges',
+                'tbl_badges_lang', 'tbl_badge_link_conditions', 'tbl_badge_links', 'tbl_badge_requests', 'tbl_order_product_shipment_pickup', 'tbl_system_logs', 'tbl_order_product_plugin_specifics',
                 'tbl_order_product_responses'
-                );           
+            );
             FatApp::getDb()->query("DELETE FROM `tbl_attached_files` WHERE `afile_type` in (1,2,3,4,5,7,8,9,10,11,12,13,14,22,23,24,25,26,27,28,29,30,32,33,41,42,43,48,50,52,53,60)");
 
             /*
             Delete FROM `tbl_navigation_links` where nlink_nav_id != 1
             */
+
+            /* nlink_type : 3 (Product Category Page) */
+            FatApp::getDb()->query("DELETE FROM `tbl_navigation_links_lang` WHERE `nlinklang_nlink_id` IN (SELECT nlink_id FROM `tbl_navigation_links` WHERE `nlink_type` = 3)");
+            FatApp::getDb()->query("DELETE FROM `tbl_navigation_links` WHERE `nlink_type` = 3");
         }
 
         foreach ($tables as $table) {
@@ -434,14 +441,14 @@ class PatchUpdateController extends ListingBaseController
             }
         }
 
-        if($type == 'all'){
+        if ($type == 'all') {
             FatApp::getDb()->query("INSERT INTO `tbl_meta_tags`(`meta_controller`, `meta_action`, `meta_record_id`, `meta_subrecord_id`, `meta_default`, `meta_advanced`) VALUES 
             ('', '', 0, 0, 1, 0),
             ('Brands', 'index', 0, 0, 1, 0),
             ('Shops', 'index', 0, 0, 1, 0),
             ('Blog', 'index', 0, 0, 1, 0),
             ('Products', 'index', 0, 0, 1, 0)");
-        }       
+        }
     }
 
     public function changeCustomUrl1()
