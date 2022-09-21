@@ -4,7 +4,7 @@
         <div class="step_body">
             <ul class="list-cart list-shippings">
                 <?php for ($i = 0; $i < $cartItemsCount; $i++) { ?>
-                    <li class="list-cart-item block-cart">
+                    <li class="list-cart-item list-shippings-head block-cart">
                         <div class="block-cart-img skeleton" style="height: 150px;">
                             <!-- Product Image -->
                         </div>

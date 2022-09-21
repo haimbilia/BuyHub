@@ -26,8 +26,8 @@
         </div>
         <div class="step_body">
             <ul class="list-cart list-shippings">
-                <li class="list-cart-item shipping-select">
-                    <div class="shop-detail">
+                <li class="list-cart-item list-shippings-head">
+                    <div class="shop-detail shipping-select">
                         <h6 class="skeleton w-25">
                             <!-- Ship By Shop Name -->
                         </h6>

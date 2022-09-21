@@ -25,18 +25,20 @@
                             <?php echo (strlen($addressData['country_name']) > 0) ? $addressData['country_name'] . '<br>' : ''; ?>
                             <?php echo (strlen($addressData['ura_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $addressData['ura_zip'] . '<br>' : ''; ?>
                         </p>
-                        <p class="phone-txt">
-                            <svg class="svg" width="20" height="20">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
-                                </use>
-                            </svg>
-                            <?php
-                            if (strlen($addressData['ura_phone']) > 0) {
-                                $addrPhone = ValidateElement::formatDialCode($addressData['ura_phone_dcode']) . $addressData['ura_phone'];
-                                echo Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone . '<br>';
-                            }
-                            ?>
-                        </p>
+                        <ul class="phone-list">
+                            <li class="phone-list-item phone-txt">
+                                <svg class="svg" width="20" height="20">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                    </use>
+                                </svg>
+                                <?php
+                                if (strlen($addressData['ura_phone']) > 0) {
+                                    $addrPhone = ValidateElement::formatDialCode($addressData['ura_phone_dcode']) . $addressData['ura_phone'];
+                                    echo Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone . '<br>';
+                                }
+                                ?>
+                            </li>
+                        </ul>
                     </address>
                 </div>
                 <div class="my-addresses__footer">

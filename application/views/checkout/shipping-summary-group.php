@@ -1,6 +1,6 @@
 <ul class="list-cart list-shippings">
-    <li class="list-cart-item shipping-select">
-        <div class="shop-detail">
+    <li class="list-cart-item list-shippings-head">
+        <div class="shop-detail shipping-select">
             <h6 class="shop-title">
                 <?php
                 echo ($shipLevel == Shipping::LEVEL_SHOP) ? $productInfo['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, '');
