@@ -8,31 +8,34 @@ if (!empty($addresses)) { ?>
             <div class="pick-section">
                 <div class="pickup-option">
                     <ul class="pickup-option__list">
-                        <?php foreach ($addresses as $key => $address) { ?>
-                            <li class="addrListJs">
+                        <?php foreach ($addresses as $key => $address) {
+                            $addr = $address['addr_name'] . ', ' . $address['addr_address1'];
+                            $addr .= !empty($address['addr_address2']) ? ', ' . $address['addr_address2'] : '';
+                            $addr .= !empty($address['addr_city']) ? ', ' . $address['addr_city'] : '';
+                            $addr .= !empty($address['state_name']) ? ', ' . $address['state_name'] : '';
+                            $addr .= !empty($address['country_name']) ? ', ' . $address['country_name'] : '';
+                            $addr .= !empty($address['addr_zip']) ? ', ' . $address['addr_zip'] : '';
+                        ?>
+                            <li class="addrListJs <?php echo (($key == 0 && $addrId == 0) || $addrId == $address['addr_id']) ? 'is-active' : ''; ?>">
                                 <label class="radio" for="<?php echo 'p-' . $address['addr_id'] ?>">
                                     <input name="pickup_address" <?php echo (($key == 0 && $addrId == 0) || $addrId == $address['addr_id']) ? 'checked=checked' : ''; ?> onclick="displayCalendar();" type="radio" value="<?php echo $address['addr_id']; ?>" id="<?php echo 'p-' . $address['addr_id'] ?>">
 
-                                    <span class="lb-txt js-addr">
-                                        <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
-                                            <?php if (strlen($address['addr_address2']) > 0) {
-                                                echo ", " . $address['addr_address2']; ?>
-                                            <?php } ?>
-                                        </p>
-                                        <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
-                                        <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
+                                    <address class="lb-txt js-addr">
+                                        <p><?php echo $addr ?></p>
                                         <?php if (strlen($address['addr_phone']) > 0) {
                                             $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                                         ?>
-                                            <p class="phone-txt">
-                                                <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
-                                                    </use>
-                                                </svg>
-                                                <?php echo $addrPhone; ?>
-                                            </p>
+                                            <ul class="phone-list">
+                                                <li class="phone-list-item phone-txt">
+                                                    <svg class="svg" width="20" height="20">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                                        </use>
+                                                    </svg>
+                                                    <?php echo $addrPhone; ?>
+                                                </li>
+                                            </ul>
                                         <?php } ?>
-                                    </span>
+                                    </address>
                                 </label>
                             </li>
                         <?php } ?>
@@ -142,7 +145,7 @@ $displayDateformat = FatDate::convertDateFormatFromPhp(
 
         var slot_time = $(ele).next().children('.time').html();
         var addrHtml = $("input[name='pickup_address']:checked").next('.js-addr').html();
-        var html = addrHtml + '<p class="time-txt"><svg class="svg" width="20" height="20"><use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#calendar-day"></use></svg>' + calendarSelectedDate + ' ' + slot_time + '</p>';
+        var html = addrHtml + '<ul class="phone-list"><li class="phone-list-item time-txt"><svg class="svg" width="20" height="20"><use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#calendar-day"></use></svg>' + calendarSelectedDate + ' ' + slot_time + '</li></ul>';
         $(".pickupAddressBtn-" + pickUpBy + "-js").text(langLbl.changePickup);
         $(".js-slot-addr_" + pickUpBy).html(html);
         $.ykmodal.close();

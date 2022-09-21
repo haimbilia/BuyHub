@@ -6,8 +6,8 @@ $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product
 $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
 ?>
 <ul class="list-cart list-shippings">
-    <li class="list-cart-item shipping-select">
-        <div class="shop-detail">
+    <li class="list-cart-item list-shippings-head">
+        <div class="shop-detail shipping-select">
             <h6 class="shop-title">
                 <?php echo $product['shop_name']; ?>
             </h6>

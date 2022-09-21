@@ -4,15 +4,11 @@
         <div class="blog-detail post-data">
             <div class="blog-detail-left">
                 <a class="btn btn-icon btn-link btn-back" href="<?php echo UrlHelper::generateUrl('Blog'); ?>">
-
                     <svg class="svg" width="20" height="20">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#arrow-back">
                         </use>
                     </svg>
-
-                    <?php echo Labels::getLabel('LBL_BACK_TO_HOME', $siteLangId); ?>
-                </a>
-
+                </a> <?php echo Labels::getLabel('LBL_BACK_TO_HOME', $siteLangId); ?>
                 <div class="blog-head">
                     <h1 class="title"> <?php echo $blogPostData['post_title']; ?></h1>
                     <div class="posted-by">

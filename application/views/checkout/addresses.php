@@ -47,19 +47,20 @@
                                             <?php if (strlen($address['addr_phone']) > 0) {
                                                 $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                                             ?>
-                                                <p class="phone-txt">
-                                                    <svg class="svg" width="20" height="20">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
-                                                        </use>
-                                                    </svg>
-                                                    <?php echo $addrPhone; ?>
-                                                </p>
+                                                <ul class="phone-list">
+                                                    <li class="phone-list-item phone-txt">
+                                                        <svg class="svg" width="20" height="20">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                                            </use>
+                                                        </svg>
+                                                        <?php echo $addrPhone; ?>
+                                                    </li>
+                                                </ul>
                                             <?php } ?>
                                         </div>
                                         <?php if (!commonhelper::isAppUser()) { ?>
                                             <div class="addresses-actions">
                                                 <button class="btn btn-icon btn-addresses" type="button" onClick="editAddress('<?php echo $address['addr_id']; ?>', '<?php echo $addressType; ?>')">
-
                                                     <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
                                                 </button>
                                                 <?php if ($selected_billing_address_id != $address['addr_id']) { ?>
