@@ -26,7 +26,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 
                 <li class="my-addresses-item <?php echo ($address['addr_is_default'] == 1) ? 'is-active' : ''; ?>">
                     <div class="my-addresses__body">
-                        <address class="delivery-address">
+                        <address class="address delivery-address">
                             <h5><?php echo $address['addr_name']; ?><span class="tag"><?php echo $address['addr_title']; ?></span></h5>
                             <p>
                                 <?php echo $address['addr_address1'] . '<br>'; ?>

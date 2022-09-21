@@ -20,7 +20,7 @@ if (!empty($addresses)) { ?>
                                 <label class="radio" for="<?php echo 'p-' . $address['addr_id'] ?>">
                                     <input name="pickup_address" <?php echo (($key == 0 && $addrId == 0) || $addrId == $address['addr_id']) ? 'checked=checked' : ''; ?> onclick="displayCalendar();" type="radio" value="<?php echo $address['addr_id']; ?>" id="<?php echo 'p-' . $address['addr_id'] ?>">
 
-                                    <address class="lb-txt js-addr">
+                                    <address class="address lb-txt js-addr">
                                         <p><?php echo $addr ?></p>
                                         <?php if (strlen($address['addr_phone']) > 0) {
                                             $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];

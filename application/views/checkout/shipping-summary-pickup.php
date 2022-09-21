@@ -93,20 +93,19 @@
                                 </div>
                             </div>
                             <div class="shop-selected">
-                                <address class="shop-address js-slot-addr_<?php echo $pickUpBy; ?>">
-                                    <?php if (!empty($levelItems['pickup_address'])) {
-                                        $fromTime = date('H:i', strtotime($address["time_slot_from"]));
-                                        $toTime = date('H:i', strtotime($address["time_slot_to"]));
-                                    ?>
+                                <address class="address shop-address js-slot-addr_<?php echo $pickUpBy; ?>"><?php if (!empty($levelItems['pickup_address'])) {
+                                                                                                                $fromTime = date('H:i', strtotime($address["time_slot_from"]));
+                                                                                                                $toTime = date('H:i', strtotime($address["time_slot_to"]));
+                                                                                                            ?>
                                         <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
                                             <?php if (strlen($address['addr_address2']) > 0) {
-                                                echo ", " . $address['addr_address2']; ?>
+                                                                                                                    echo ", " . $address['addr_address2']; ?>
                                             <?php } ?>
                                         </p>
                                         <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
                                         <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
                                         <?php if (strlen($address['addr_phone']) > 0) {
-                                            $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
+                                                                                                                    $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                                         ?>
                                             <ul class="phone-list">
                                                 <li class="phone-list-item phone-txt">
