@@ -15,7 +15,7 @@
         <?php } else { ?>
             <li class="my-addresses-item">
                 <div class="my-addresses__body">
-                    <address class="delivery-address">
+                    <address class="address delivery-address">
                         <h5><?php echo $addressData['ura_name']; ?></h5>
                         <p>
                             <?php echo $addressData['ura_address_line_1'] . '<br>'; ?>
