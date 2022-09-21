@@ -642,7 +642,7 @@ class ImageController extends FatController
 
     public function slide($slide_id, $screen = 0, $lang_id, $sizeType = '', $displayUniversalImage = true)
     {
-        $default_image = 'banner-default-image.png';
+        $default_image = 'hero_deafult_image.jpg';
         $slide_id = FatUtility::int($slide_id);
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide_id, 0, $lang_id, $displayUniversalImage, $screen);
