@@ -12,24 +12,28 @@
 
             </div>
             <div class="review-block-body">
-                <p><?php echo $addresses['addr_name'] . ', ' . $addresses['addr_address1']; ?>
-                    <?php if (strlen($addresses['addr_address2']) > 0) {
-                        echo ", " . $addresses['addr_address2']; ?>
-                    <?php } ?>
-                </p>
-                <p><?php echo $addresses['addr_city'] . ", " . $addresses['state_name'] . ", " . $addresses['country_name'] . ", " . $addresses['addr_zip']; ?>
-                </p>
-                <?php if (strlen($addresses['addr_phone']) > 0) {
-                    $addrPhone = ValidateElement::formatDialCode($addresses['addr_phone_dcode']) . $addresses['addr_phone'];
-                ?>
-                    <p class="phone-txt">
-                        <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
-                            </use>
-                        </svg>
-                        <?php echo $addrPhone; ?>
+                <address class="address">
+                    <p><?php echo $addresses['addr_name'] . ', ' . $addresses['addr_address1']; ?>
+                        <?php if (strlen($addresses['addr_address2']) > 0) {
+                            echo ", " . $addresses['addr_address2']; ?>
+                        <?php } ?>
                     </p>
-                <?php } ?>
+                    <p><?php echo $addresses['addr_city'] . ", " . $addresses['state_name'] . ", " . $addresses['country_name'] . ", " . $addresses['addr_zip']; ?>
+                    </p>
+                    <?php if (strlen($addresses['addr_phone']) > 0) {
+                        $addrPhone = ValidateElement::formatDialCode($addresses['addr_phone_dcode']) . $addresses['addr_phone'];
+                    ?>
+                        <ul class="phone-list">
+                            <li class="phone-list-item phone-txt">
+                                <svg class="svg" width="20" height="20">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                    </use>
+                                </svg>
+                                <?php echo $addrPhone; ?>
+                            </li>
+                        </ul>
+                    <?php } ?>
+                </address>
             </div>
         </li>
     </ul>
@@ -64,15 +68,32 @@
                             $seletedSlotDate = $address['time_slot_date'];
                             $seletedAddrId = $address['addr_id'];
                         } ?>
-                        <!-- Header Shop Name-->
-                        <li class="list-cart-item shipping-select">
-                            <div class="shop-detail">
+
+                        <li class="list-cart-item list-shippings-head">
+                            <div class="shop-detail pickup-select">
                                 <h6 class="shop-title">
                                     <?php echo 0 < $pickUpBy ? $productData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
                                 </h6>
+                                <div class="shipping-method js-slot-addr-<?php echo $pickUpBy; ?>" data-addr-id="<?php echo $seletedAddrId; ?>">
+                                    <input type="hidden" name="slot_id[<?php echo $pickUpBy; ?>]" class="js-slot-id" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotId; ?>">
+                                    <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date" data-level="<?php echo $pickUpBy; ?>" value="<?php echo isset($seletedSlotDate) ? $seletedSlotDate : ''; ?>">
+                                    <?php if (count($levelItems['pickup_options']) > 0) { ?>
+                                        <button class="link-underline pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0); return false;" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, <?php echo $shopId; ?>)">
+                                            <?php
+                                            if (!empty($levelItems['pickup_address'])) {
+                                                echo Labels::getLabel('LBL_CHANGE_PICKUP', $siteLangId);
+                                            } else {
+                                                echo Labels::getLabel('LBL_SELECT_PICKUP', $siteLangId);
+                                            }
+                                            ?>
+                                        </button>
+                                    <?php } else {
+                                        echo Labels::getLabel('MSG_NO_PICKUP_ADDRESS_CONFIGURED', $siteLangId);
+                                    } ?>
+                                </div>
                             </div>
                             <div class="shop-selected">
-                                <div class="shop-address js-slot-addr_<?php echo $pickUpBy; ?>">
+                                <address class="shop-address js-slot-addr_<?php echo $pickUpBy; ?>">
                                     <?php if (!empty($levelItems['pickup_address'])) {
                                         $fromTime = date('H:i', strtotime($address["time_slot_from"]));
                                         $toTime = date('H:i', strtotime($address["time_slot_to"]));
@@ -87,40 +108,26 @@
                                         <?php if (strlen($address['addr_phone']) > 0) {
                                             $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                                         ?>
-                                            <p class="phone-txt">
+                                            <ul class="phone-list">
+                                                <li class="phone-list-item phone-txt">
+                                                    <svg class="svg" width="20" height="20">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                                        </use>
+                                                    </svg>
+                                                    <?php echo $addrPhone; ?>
+                                                </li>
+
+                                            <?php } ?>
+                                            <li class="phone-list-item time-txt">
                                                 <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#calendar-day">
                                                     </use>
                                                 </svg>
-                                                <?php echo $addrPhone; ?>
-                                            </p>
+                                                <?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
+                                            </li>
                                         <?php } ?>
-                                        <p class="time-txt">
-                                            <svg class="svg" width="20" height="20">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#calendar-day">
-                                                </use>
-                                            </svg>
-                                            <?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
-                                        </p>
-                                    <?php } ?>
-                                </div>
-                                <div class="shipping-method js-slot-addr-<?php echo $pickUpBy; ?>" data-addr-id="<?php echo $seletedAddrId; ?>">
-                                    <input type="hidden" name="slot_id[<?php echo $pickUpBy; ?>]" class="js-slot-id" data-level="<?php echo $pickUpBy; ?>" value="<?php echo $seletedSlotId; ?>">
-                                    <input type="hidden" name="slot_date[<?php echo $pickUpBy; ?>]" class="js-slot-date" data-level="<?php echo $pickUpBy; ?>" value="<?php echo isset($seletedSlotDate) ? $seletedSlotDate : ''; ?>">
-                                    <?php if (count($levelItems['pickup_options']) > 0) { ?>
-                                        <button class="btn btn-brand pickupAddressBtn-<?php echo $pickUpBy; ?>-js" href="javascript:void(0); return false;" onclick="displayPickupAddress(<?php echo $pickUpBy; ?>, <?php echo $shopId; ?>)">
-                                            <?php
-                                            if (!empty($levelItems['pickup_address'])) {
-                                                echo Labels::getLabel('LBL_CHANGE_PICKUP', $siteLangId);
-                                            } else {
-                                                echo Labels::getLabel('LBL_SELECT_PICKUP', $siteLangId);
-                                            }
-                                            ?>
-                                        </button>
-                                    <?php } else {
-                                        echo Labels::getLabel('MSG_NO_PICKUP_ADDRESS_CONFIGURED', $siteLangId);
-                                    } ?>
-                                </div>
+                                            </ul>
+                                </address>
                             </div>
                         </li>
                         <!-- Header -->
@@ -225,10 +232,9 @@
                     $digiProductData = current($levelItems['digital_products']); ?>
                     <ul class="list-cart list-cart-page list-shippings">
                         <!-- Header Shop Name-->
-                        <li class="list-cart-item shipping-select">
-                            <div class="shop-detail">
+                        <li class="list-cart-item list-shippings-head">
+                            <div class="shop-detail pickup-select">
                                 <h6 class="shop-title">
-
                                     <?php echo (0 < $pickUpBy) ? $digiProductData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
                                 </h6>
                             </div>

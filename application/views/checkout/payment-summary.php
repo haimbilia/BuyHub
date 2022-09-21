@@ -44,7 +44,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                         </div>
                     </div>
                     <div class="review-block-body" role="cell">
-                        <div class="delivery-address">
+                        <address class="address delivery-address">
                             <p><?php echo $billingAddressArr['addr_name'] . ', ' . $billingAddressArr['addr_address1']; ?>
                                 <?php if (strlen($billingAddressArr['addr_address2']) > 0) {
                                     echo ", " . $billingAddressArr['addr_address2']; ?>
@@ -56,15 +56,17 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                             <?php if (strlen($billingAddressArr['addr_phone']) > 0) {
                                 $addrPhone = ValidateElement::formatDialCode($billingAddressArr['addr_phone_dcode']) . $billingAddressArr['addr_phone'];
                             ?>
-                                <p class="phone-txt">
-                                    <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
-                                        </use>
-                                    </svg>
-                                    <?php echo $addrPhone; ?>
-                                </p>
+                                <ul class="phone-list">
+                                    <li class="phone-list-item phone-txt">
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                            </use>
+                                        </svg>
+                                        <?php echo $addrPhone; ?>
+                                        </p>
+                                </ul>
                             <?php } ?>
-                        </div>
+                        </address>
                     </div>
                 </li>
             </ul>

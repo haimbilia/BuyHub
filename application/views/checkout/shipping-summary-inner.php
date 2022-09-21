@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="review-block-body" role="cell">
-                <div class="delivery-address">
+                <address class="address delivery-address">
                     <p><?php echo $addresses['addr_name'] . ', ' . $addresses['addr_address1']; ?>
                         <?php if (strlen($addresses['addr_address2']) > 0) {
                             echo ", " . $addresses['addr_address2']; ?>
@@ -33,15 +33,17 @@
                     <?php if (strlen($addresses['addr_phone']) > 0) {
                         $addrPhone = ValidateElement::formatDialCode($addresses['addr_phone_dcode']) . $addresses['addr_phone'];
                     ?>
-                        <p class="phone-txt">
-                            <svg class="svg" width="20" height="20">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
-                                </use>
-                            </svg>
-                            <?php echo $addrPhone; ?>
-                        </p>
+                        <ul class="phone-list">
+                            <li class="phone-list-item phone-txt">
+                                <svg class="svg" width="20" height="20">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                    </use>
+                                </svg>
+                                <?php echo $addrPhone; ?>
+                            </li>
+                        </ul>
                     <?php } ?>
-                </div>
+                </address>
             </div>
         </li>
     </ul>

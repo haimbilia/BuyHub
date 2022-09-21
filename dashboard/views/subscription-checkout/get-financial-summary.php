@@ -24,7 +24,7 @@ $spackage_type = $cartSubscription['spackage_type'];
                         $spackagePrice = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'price'] : '';
                         $interval = isset($subscription[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval']) ? $subscription[SellerPackagePlans::DB_TBL_PREFIX . 'trial_interval'] : 0;
                         echo  $spackageName . ' / ' . SellerPackagePlans::getPlanPeriod($subscription, $spackagePrice); ?>
-                    </div>                    
+                    </div>
                 </div>
             </li>
         <?php } ?>

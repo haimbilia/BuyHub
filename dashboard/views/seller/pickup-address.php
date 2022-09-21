@@ -36,18 +36,20 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
                                 <?php echo (strlen($address['country_name']) > 0) ? $address['country_name'] . '<br>' : ''; ?>
                                 <?php echo (strlen($address['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $address['addr_zip'] . '<br>' : ''; ?>
                             </p>
-                            <p class="phone-txt">
-                                <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
-                                    </use>
-                                </svg>
-                                <?php
-                                if (strlen($address['addr_phone']) > 0) {
-                                    $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
-                                    echo Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone . '<br>';
-                                }
-                                ?>
-                            </p>
+                            <ul class="phone-list">
+                                <li class="phone-list-item phone-txt">
+                                    <svg class="svg" width="20" height="20">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                        </use>
+                                    </svg>
+                                    <?php
+                                    if (strlen($address['addr_phone']) > 0) {
+                                        $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
+                                        echo Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone . '<br>';
+                                    }
+                                    ?>
+                                </li>
+                            </ul>
                         </address>
                     </div>
                     <div class="my-addresses__footer">

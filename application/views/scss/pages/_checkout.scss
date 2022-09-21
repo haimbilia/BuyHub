@@ -287,49 +287,46 @@
 .pick-section {
     .pickup-option {
         grid-gap: 2rem;
-        padding: 2rem 1rem;
+        padding: 3rem;
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
         @include media-breakpoint-down(md) {
             flex-direction: column;
         }
-
         &__list {
             overflow-y: auto;
             max-height: 300px;
             flex: 1;
-
-            @include media-breakpoint-down(md) {
-                flex: auto;
-                max-width: none;
-                padding: 0;
-                padding-bottom: 2rem;
-            }
-
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
             li {
-                margin-bottom: 1rem;
-                border-radius: $common-radius;
-                border: $border;
                 .radio {
                     padding: 20px;
                     display: flex;
+                    border-radius: $common-radius;
+                    // border: solid 2px $border-color;
+                    &:hover {
+                        border-color: $brand-color;
+                        background-color: $bg-brand-light;
+                    }
                 }
 
                 &.is-active {
-                    border-color: $black;
-
-                    .lb-txt {
-                        font-weight: 500;
+                    .radio {
+                        border-color: $brand-color;
+                        background-color: $bg-brand-light;
+                        .lb-txt {
+                            font-weight: 500;
+                        }
                     }
                 }
             }
         }
-
         .pickup-time {
             flex: 1;
         }
-
         .lb-txt {
             line-height: 1.5;
             font-size: 0.8rem;
@@ -338,30 +335,24 @@
             margin-#{$start-direction}: 12px;
         }
     }
-
     .pickup-time {
         .calendar {
             margin-bottom: 1.2rem;
-
             .xdsoft_datetimepicker .xdsoft_datepicker {
                 width: 256px;
             }
         }
-
         .time-slot {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             flex-wrap: wrap;
             grid-gap: 1rem;
-
             li {
                 //padding-#{$end-direction}: 10px;
                 position: relative;
-
                 &:last-child {
                     padding-#{$end-direction}: 0;
                 }
-
                 .control-input {
                     position: absolute;
                     opacity: 0;
@@ -652,11 +643,6 @@
             display: inline-block;
             max-width: 50%;
         }
-
-        .phone-txt {
-            font-weight: 500;
-            margin-top: 10px;
-        }
     }
 }
 
@@ -783,55 +769,41 @@
     & + & {
         margin-top: 3.5rem;
     }
-
-    .shipping-select {
-        position: relative;
-        font-size: 0.85rem;
+    &-head {
+        flex-direction: column;
         border: none;
         padding: 0;
-        //padding-top: 1.5rem;
-        //align-items: center;
-        display: flex;
-        justify-content: space-between;
-        flex-direction: column;
-    }
-
-    .pickup-select {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: initial;
     }
 
     .shop-detail {
         display: flex;
-        //gap: 1rem;
-        flex-direction: column;
+        gap: 10px;
         justify-content: space-between;
-        //color: $txt-body;
-        //flex: 1;
         width: 100%;
-        /* flex: 0 0 20%;
-       max-width: 20%;*/
+
+        &.shipping-select {
+            flex-direction: column;
+        }
+        &.pickup-select {
+            flex-flow: row wrap;
+        }
         .shop-title {
             margin: 0;
-            padding: 0.5rem 0;
+            padding: 0;
             font-size: 1rem;
             color: $txt-body;
-            //padding-#{$end-direction}: 1rem;
             position: relative;
             display: flex;
             align-items: center;
-            //border-bottom: $border;
             &:after {
-                content: "";
-                background: $secondary-color;
-                height: 2px;
-                width: 1rem;
-                position: absolute;
-                bottom: -1px;
-                #{$start-direction}: 0;
+                // content: "";
+                // background: $secondary-color;
+                // height: 2px;
+                // width: 1rem;
+                // position: absolute;
+                // bottom: -1px;
+                // #{$start-direction}: 0;
             }
-
             .svg {
                 width: 1rem;
                 height: 1rem;
@@ -847,12 +819,14 @@
         align-items: center;
         margin-top: 1.5rem;
     }
-
     .shop-address {
+        background-color: $bg-brand-light;
+        border-radius: 2px;
+        padding: 2rem;
+        font-size: 0.85rem;
         flex: 1;
-        color: $txt-gray;
+        color: $txt-body;
     }
-
     .shipping-method {
         // position: absolute;
         // top: auto;
@@ -1001,17 +975,15 @@
     }
 }
 
-.phone-txt {
-    font-weight: 500;
-    font-size: 0.85rem;
-    margin-top: 8px;
-    .svg {
-        margin-#{$end-direction}: 5px;
+.phone-list {
+    margin-top: 1rem;
+    display: flex;
+    gap: 2rem;
+    flex-flow: row wrap;
+    &-item {
+        display: flex;
+        gap: 7px;
     }
-}
-
-.time-txt {
-    @extend .phone-txt;
 }
 
 .payment-action {
@@ -1166,6 +1138,7 @@
         color: $txt-gray;
     }
 }
-
-.p-cards {
+.address {
+    margin: 0;
+    font-size: 0.85rem;
 }

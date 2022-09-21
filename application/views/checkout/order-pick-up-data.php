@@ -17,18 +17,20 @@ if (!empty($orderPickUpData)) {
                             $fromTime = date('H:i', strtotime($address["opshipping_time_slot_from"]));
                             $toTime = date('H:i', strtotime($address["opshipping_time_slot_to"]));
                             ?>
-                            <p class="time-txt">
-                                <svg class="svg" width="20" height="20">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#calendar-day">
-                                    </use>
-                                </svg>
-                                <?php echo FatDate::format($address["opshipping_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
-                            </p>
+                            <ul class="phone-list">
+                                <li class="phone-list-item time-txt">
+                                    <svg class="svg" width="20" height="20">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#calendar-day">
+                                        </use>
+                                    </svg>
+                                    <?php echo FatDate::format($address["opshipping_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
+                                </li>
+                            </ul>
 
                         </div>
                     </div>
                     <div class="review-block-body">
-                        <div class="delivery-address">
+                        <address class="address delivery-address">
                             <?php echo $address['oua_name']; ?>
                             <p><?php echo $address['oua_address1']; ?>
                                 <?php if (strlen($address['oua_address2']) > 0) {
@@ -38,15 +40,17 @@ if (!empty($orderPickUpData)) {
                             <p><?php echo $address['oua_city'] . ", " . $address['oua_state']; ?></p>
                             <p><?php echo $address['oua_country'] . ", " . $address['oua_zip']; ?></p>
                             <?php if (strlen($address['oua_phone']) > 0) { ?>
-                                <p class="phone-txt">
-                                    <svg class="svg" width="20" height="20">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
-                                        </use>
-                                    </svg>
-                                    <?php echo ValidateElement::formatDialCode($address['oua_phone_dcode']) . $address['oua_phone']; ?>
-                                </p>
+                                <ul class="phone-list">
+                                    <li class="phone-list-item phone-txt">
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
+                                            </use>
+                                        </svg>
+                                        <?php echo ValidateElement::formatDialCode($address['oua_phone_dcode']) . $address['oua_phone']; ?>
+                                    </li>
+                                </ul>
                             <?php } ?>
-                        </div>
+                        </address>
                     </div>
 
                 </li>
