@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$catCode = $row['prodcat_code'];
 $childrenHtml = $childrenHtml ?? '';
+$catCode = $row['prodcat_code'];
 $keyword = $keyword ?? '';
 ?>
 <li id="<?php echo $row['prodcat_id']; ?>" data-parent-cat-code="<?php echo $catCode; ?>" class="liJs <?php echo $allOpen ? 'sortableListsOpen' : 'sortableListsClosed'; ?> <?php if (isset($row['subcategory_count']) && $row['subcategory_count'] == 0) { ?>no-children<?php } ?>">
@@ -8,10 +8,7 @@ $keyword = $keyword ?? '';
         <div class="sorting-bar ">
             <div class="sorting-title">
                 <a href="javascript:void(0);" class="link-dotted clickable" onclick="goToProducts(<?php echo $row['prodcat_id']; ?>)">
-                    <?php
-                    $name = !empty($keyword) ? str_replace($keyword, '<mark>' . $keyword . '</mark>', $row['prodcat_name']) : $row['prodcat_name'];
-                    echo html_entity_decode($name);
-                    ?>
+                    <?php echo !empty($keyword) ? str_ireplace($keyword, '<mark>' . $keyword . '</mark>', $row['prodcat_name']) : $row['prodcat_name']; ?>
                 </a>
                 <?php if (isset($row['category_products'])) { ?>
                     <span class="count badge badge-success " title="<?php echo  Labels::getLabel('LBL_Category_Products', $siteLangId); ?>"><?php echo CommonHelper::displayBadgeCount($row['category_products']); ?></span>

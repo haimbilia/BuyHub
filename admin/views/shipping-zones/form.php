@@ -88,7 +88,7 @@ if (!empty($excludeLocations)) {
                                                 <?php foreach ($countries as $country) {
                                                     $statesCount = count($country['states']);
                                                     $countryId = $country['country_id'];
-                                                    $disabled = '';
+                                                    $disabled = $disabledJs = '';
                                                     $checked = '';
                                                     $countryStates = [];
                                                     $alreadyAddedMsg = '';
@@ -103,12 +103,13 @@ if (!empty($excludeLocations)) {
                                                     $countrySelected = $excludeCountryStates[$countryId] ?? [];
 
                                                     if (!empty($countrySelected)) {
+                                                        $disabledJs = 'disabledJs ';
                                                         $disabled = 'disabled';
                                                         $alreadyAddedMsg = Labels::getLabel('LBL_ALREADY_SELECTED_IN_OTHER_ZONE', $siteLangId);
                                                     } ?>
                                                     <li class="list-states-item filter-country--js">
                                                         <div class="list-zones-head">
-                                                            <label class="checkbox country--js <?php echo $disabled; ?>" data-countryid="<?php echo $countryId; ?>" data-statecount="<?php echo $statesCount; ?>">
+                                                            <label class="checkbox country--js <?php echo $disabledJs . $disabled; ?>" data-countryid="<?php echo $countryId; ?>" data-statecount="<?php echo $statesCount; ?>">
                                                                 <input type="checkbox" name="c_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>" class="checkbox_country_<?php echo $countryId; ?>" <?php echo $checked; ?> <?php echo $disabled; ?> title="<?php echo $alreadyAddedMsg; ?>">
                                                                 <?php echo $country['country_name']; ?>
                                                             </label>
@@ -147,7 +148,7 @@ if (!empty($excludeLocations)) {
                                                                 ?>
                                                                     <li class="list-states-item filter-state-label--js">
                                                                         <div class="list-zones-head">
-                                                                            <label class="checkbox state-label--js" data-stateid="<?php echo $state['state_id']; ?>">
+                                                                            <label class="checkbox state-label--js <?php echo $stateDisabled; ?>" data-stateid="<?php echo $state['state_id']; ?>">
                                                                                 <input type="checkbox" name="s_id[]" value="<?php echo $zone['zone_id']; ?>-<?php echo $countryId; ?>-<?php echo $state['state_id']; ?>" class="state--js" <?php echo $stateChecked; ?> <?php echo $stateDisabled; ?> title="<?php echo $alreadyAddedMsg; ?>">
                                                                                 <?php echo $state['state_name']; ?>
                                                                             </label>
@@ -193,8 +194,8 @@ if (!empty($excludeLocations)) {
                     }
                 }
                 $('.selectedStateCount--js_' + countryId).text(stateCount);
-
             });
+
             $('.zone--js').each(function() {
                 var zoneId = $(this).data('zoneid');
                 var stateCount = $('.zone_' + zoneId + ' .state--js:checked').length;
@@ -202,7 +203,17 @@ if (!empty($excludeLocations)) {
                     $('.containCountries-js-' + zoneId).click();
                 }
             })
-
         }, 150);
     </script>
 <?php } ?>
+
+<script>
+    setTimeout(function() {
+        $('.zones--js').each(function() {
+            if ($('.country--js', this).length == $('.country--js.disabledJs', this).length) {
+                $(this).find('.zone--js').addClass('disabled')
+                $(this).find('.zone--js input[type="checkbox"]').attr('disabled', 'disabled')
+            }
+        })
+    }, 150);
+</script>

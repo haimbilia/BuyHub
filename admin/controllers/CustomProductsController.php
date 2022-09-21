@@ -143,6 +143,7 @@ class CustomProductsController extends ListingBaseController
                 'preq_user_id' => $res['preq_user_id'] ?? 0,
                 'preq_added_on' => $res['preq_added_on'] ?? '',
                 'preq_status' => $res['preq_status'] ?? '',
+                'preq_comment' => $res['preq_comment'] ?? '',
                 'preq_requested_on' => $res['preq_requested_on'] ?? '',
                 'preq_status_updated_on' => $res['preq_status_updated_on'] ?? '',
                 'user_id' => $res['user_id'] ?? 0,
@@ -1033,34 +1034,7 @@ class CustomProductsController extends ListingBaseController
         $this->set("langId", $data['afile_lang_id']);
         $this->set("msg", $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function getImagesFrm($preq_id = 0, $lang_id = 0)
-    {
-        $imgTypesArr = $this->getSeparateImageOptions($preq_id, $lang_id);
-        $frm = new Form('imageFrm', array('id' => 'imageFrm'));
-        $frm->addSelectBox(Labels::getLabel('FRM_IMAGE_FILE_TYPE', $this->siteLangId), 'option_id', $imgTypesArr, 0, array(), '');
-
-        $languagesAssocArr = Language::getAllNames();
-
-        $languages = Language::getAllNames();
-        if (count($languagesAssocArr) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('FRM_ALL_LANGUAGES', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
-        } else {
-            $lang_id = array_key_first($languagesAssocArr);
-            $frm->addHiddenField('', 'lang_id', $lang_id);
-        }
-
-        $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_PHOTO(s):', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
-        $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename"></span>';
-        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('FRM_BROWSE_FILE', $this->siteLangId) . '</label></div><br/><small>' . Labels::getLabel('LBL_PLEASE_KEEP_IMAGE_DIMENSIONS_GREATER_THAN_' . $getImageDimensions['width'] . '_x_' . $getImageDimensions['height'] . '', $this->siteLangId) . '</small>';
-
-        $imgDimension = ImageDimension::getProductImageData(ImageDimension::VIEW_ORIGINAL);
-        $frm->addHiddenField('', 'min_width', $imgDimension[ImageDimension::WIDTH]);
-        $frm->addHiddenField('', 'min_height', $imgDimension[ImageDimension::HEIGHT]);
-        $frm->addHiddenField('', 'preq_id', $preq_id);
-        return $frm;
-    }
+    }   
 
     private function getSeparateImageOptions($preq_id, $lang_id)
     {

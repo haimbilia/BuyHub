@@ -724,6 +724,6 @@ class HtmlHelper
     {
         $template = new FatTemplate('', '');
         $template->set('data', $data);
-        return $template->render(false, false, $tplPath, true);
+        return $template->render(false, false, $tplPath, true, false);
     }
 }

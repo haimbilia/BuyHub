@@ -83,7 +83,7 @@ foreach ($arrListing as $sn => $row) {
                     
                     $data['deleteButton'] = false;
                 }
-                if ($canEdit && $row['preq_status'] == ProductRequest::STATUS_CANCELLED) {
+                if ($canEdit && !empty($row['preq_comment']) && $row['preq_status'] == ProductRequest::STATUS_CANCELLED) {
                     $data['otherButtons'][] = [
                         'attr' => [
                             'href' => 'javascript:void(0)',
