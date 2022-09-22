@@ -1637,7 +1637,7 @@ input.sp-input {
     font-size: 0.85rem;
     color: $txt-gray;
     line-height: 1.5;
-    margin-bottom: 1rem;
+    padding-bottom: 1rem;
     padding-#{$start-direction}: 32px;
     h5 {
         margin-bottom: 10px;
@@ -1660,10 +1660,6 @@ input.sp-input {
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 120px;
-    }
-    .phone-txt {
-        font-weight: 500;
-        margin-top: 8px;
     }
 }
 
