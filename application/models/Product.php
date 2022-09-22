@@ -1773,10 +1773,9 @@ END,   special_price_found ) as special_price_found'
         return $srch;
     }
 
-    public static function getActiveCount($sellerId, $prodId = 0)
+    public static function getActiveCount($sellerId, $prodId = 0, $checkApproved = true)
     {
         if (0 > FatUtility::int($sellerId)) {
-            // $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
             return false;
         }
         $prodId = FatUtility::int($prodId);
@@ -1788,12 +1787,13 @@ END,   special_price_found ) as special_price_found'
         $srch->addMultipleFields(array(static::DB_TBL_PREFIX . 'id'));
         $srch->addCondition(static::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
         $srch->addCondition(static::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
-        $srch->addCondition(static::DB_TBL_PREFIX . 'approved', '=', applicationConstants::YES);
+        if ($checkApproved) {
+            $srch->addCondition(static::DB_TBL_PREFIX . 'approved', '=', applicationConstants::YES);
+        }
         if ($prodId) {
             $srch->addCondition(static::DB_TBL_PREFIX . 'id', '!=', $prodId);
         }
         $srch->getResultSet();
-        // $records = FatApp::getDb()->fetchAll($rs);
         return $srch->recordCount();
     }
 

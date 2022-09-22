@@ -120,7 +120,7 @@ trait CatalogProduct
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_AND_NEXT', $langId));
         return $frm;
     }
-    
+
     public function imageForm(int $recordId = 0, $tempProductId = 0)
     {
         $frm = $this->getImageFrm();
@@ -171,7 +171,7 @@ trait CatalogProduct
 
         return $frm;
     }
-    
+
     private function validateGetForm(&$post)
     {
         $langId = $post['lang_id'];
@@ -192,13 +192,13 @@ trait CatalogProduct
                 $srch->addMultipleFields(['option_id', 'option_is_separate_images']);
                 $srch->doNotLimitRecords();
                 $srch->doNotCalculateRecords();
-                $srch->addCondition(Option::tblFld('id'), 'IN', $post['options']);               
+                $srch->addCondition(Option::tblFld('id'), 'IN', $post['options']);
                 $records =  FatApp::getDb()->fetchAll($srch->getResultSet());
 
                 if (count($records) != count($post['options'])) {
                     LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_OPTION_ID', $langId), true);
                 }
-                
+
                 $opImageCount = 0;
                 foreach ($records as $records) {
                     if ($records['option_is_separate_images'] == 1) {
@@ -226,12 +226,12 @@ trait CatalogProduct
                             }
                         }
                     }
-                }            
+                }
 
                 foreach ($post['options'] as $index => $optionId) {
                     if (!isset($post['optionValues'][$index])) {
                         LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_OPTION_VALUES_ID', $langId), true);
-                    }                    
+                    }
                     if (empty($post['optionValues'][$index])) {
                         $optionData = Option::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $optionId, ['IFNULL(option_name,option_identifier) as option_name'], applicationConstants::JOIN_RIGHT);
                         $optionName = $optionData['option_name'];
@@ -261,6 +261,56 @@ trait CatalogProduct
                 if ($row && $row['upc_product_id'] != $recordId) {
                     LibHelper::exitWithError(Labels::getLabel('ERR_THIS_UPC/EAN_CODE_ALREADY_ASSIGNED_TO_ANOTHER_PRODUCT', $langId), true);
                 }
+            }
+        }
+    }
+
+    private function validateImageSubscriptionLimit($recordId, $productOptionId, $langId, $fileType, $sellerId)
+    {
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && 0 < $sellerId) {
+            $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($this->siteLangId, $sellerId, array('ossubs_images_allowed'));
+            $allowed_images = $currentPlanData['ossubs_images_allowed'];
+
+            if ($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP) {
+                $srch = new SearchBase(AttachedFileTemp::DB_TBL);
+            } else {
+                $srch = new SearchBase(AttachedFile::DB_TBL);
+                $optionValues = Product::getSeparateImageOptions($recordId, $this->siteLangId);
+                $srch->addCondition('afile_record_subid', 'IN', array_keys($optionValues));
+            }
+
+            $srch->doNotCalculateRecords();
+            $srch->addCondition('afile_type', '=', $fileType);
+            $srch->addCondition('afile_record_id', '=', $recordId);
+            if ($langId > 0) {
+                $srch->addCondition('afile_lang_id', 'IN', [$langId, 0]);
+            } else {
+                $srch->addCondition('afile_lang_id', '=', 0);
+            }
+            if (0 < $productOptionId) {
+                $srch->addCondition('afile_record_subid', 'IN', [$productOptionId, 0]);
+                $images = FatApp::getDb()->fetchAll($srch->getResultSet());
+                $allReadyAddedCount = count($images);
+            } else {
+                $srch->addGroupBy('afile_record_subid');
+                $srch->addOrder('image_count', 'desc');
+                $srch->addMultipleFields(['count(afile_id) as image_count', 'afile_record_subid']);
+                $images = FatApp::getDb()->fetchAll($srch->getResultSet(), 'afile_record_subid');
+                $allReadyAddedCount = 0;
+                if ($images) {
+                    if (isset($images[0])) {
+                        $allReadyAddedCount += $images[0]['image_count'];
+                        unset($images[0]);
+                    }
+                    if (count($images)) {
+                        /* adding all option  + max count of other option */
+                        $allReadyAddedCount += current($images)['image_count'];
+                    }
+                }
+            }
+
+            if ($allowed_images > 0 && $allReadyAddedCount >= $allowed_images) {
+                FatUtility::dieJsonError(Labels::getLabel("ERE_CANT_UPLOAD_MORE_THAN_ALLOWED_IMAGES", $this->siteLangId));
             }
         }
     }
