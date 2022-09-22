@@ -408,7 +408,6 @@ class ProductsController extends ListingBaseController
     public function setup()
     {
         $this->checkEditPrivilege();
-
         $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
         $productType = FatApp::getPostedData('product_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
@@ -443,7 +442,19 @@ class ProductsController extends ListingBaseController
             if (0 < $oldProductData['product_seller_id'] && $oldProductData['product_approved'] != $post['product_approved']) {
                 $sendApprovalStatusUpdate = true;
             }
+
+            if (
+                0 < $post['product_approved'] &&
+                $oldProductData['product_approved'] != $post['product_approved'] &&
+                isset($post['product_seller_id']) &&
+                0 < $post['product_seller_id'] &&
+                FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
+                Product::getActiveCount($post['product_seller_id']) >= SellerPackages::getAllowedLimit($post['product_seller_id'], $this->siteLangId, 'ossubs_products_allowed')
+            ) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_SUBSCRIPTION_PACKAGE_LIMIT_CROSSED', $this->siteLangId), true);
+            }
         }
+
         if (1 > $recordId) {
             $isNewProduct = true;
             $post['product_approved'] = applicationConstants::YES;
@@ -869,6 +880,8 @@ class ProductsController extends ListingBaseController
         } else {
             $langId = array_key_first($languages);
         }
+        $sellerId = (int) Product::getAttributesById($recordId, 'product_seller_id');
+        $this->validateImageSubscriptionLimit($recordId, $optionId, $langId, $fileType, $sellerId);
 
         if ($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP) {
             $fileHandlerObj = new AttachedFileTemp();

@@ -75,11 +75,12 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                         </div>
                         <div class="options">
                             <?php if (isset($product['options']) && count($product['options'])) {
-                                $optionStr = '';
-                                foreach ($product['options'] as $option) {
-                                    $optionStr .= $option['optionvalue_name'] . '|';
-                                }
-                                echo rtrim($optionStr, '|');
+                                foreach ($product['options'] as $key => $option) {
+                                    if (0 < $key) {
+                                        echo ' | ';
+                                    }
+                                    echo $option['option_name'] . ':'; ?> <span class="text-muted"><?php echo $option['optionvalue_name']; ?></span>
+                            <?php }
                             } ?>
                         </div>
                     </div>

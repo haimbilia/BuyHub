@@ -1215,6 +1215,9 @@ TV-9.4.0.20220907
     - #066697 - The download icon is not visible in the Download Links section on the order details page for digital product orders.
     - #066810 - The same files get uploaded multiple times when the user clicks on the Upload button multiple times simultaneously.
     - #066851 - The seller is able to place multiple marketplace product requests with the same product identifier
+    - #067045 - It shows no validation error when user tries to add images more than allowed iimages in subscription plan 
+    - #067047 - Inconsistency issue on the cart and checkout page in the options field on the front end
+    - #066866 - Alignment issue in the social platforms on the section on the footer of the page
 
 ## UAT points:
 

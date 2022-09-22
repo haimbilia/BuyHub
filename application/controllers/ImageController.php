@@ -403,7 +403,7 @@ class ImageController extends FatController
         $recordId = 0;
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, $recordId, 0, $lang_id, false);
         $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
-        $default_image = 'no_image.jpg';
+        $default_image = 'logo_default-red.svg';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
@@ -681,7 +681,7 @@ class ImageController extends FatController
 
     public function SocialPlatform($splatform_id, $sizeType = '')
     {
-        $default_image = 'brand_deafult_image.jpg';
+        $default_image = 'social_default_image.jpg';
         $splatform_id = FatUtility::int($splatform_id);
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $splatform_id);

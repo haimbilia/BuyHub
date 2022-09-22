@@ -13,10 +13,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
         });
     ?>
         <ul class="list-cart <?php echo (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) ? '' : ''; ?>">
-            <?php
-            //if (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) > 0 && count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) { 
-            if (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) {
-            ?>
+            <?php if (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) { ?>
                 <li class="list-cart-item minus-space">
                     <div class="delivery-info">
                         <svg class="svg" width="20" height="20">
