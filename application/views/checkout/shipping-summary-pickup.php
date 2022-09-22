@@ -92,12 +92,12 @@
                                     } ?>
                                 </div>
                             </div>
-                            <div class="shop-selected">
-                                <address class="address shop-address js-slot-addr_<?php echo $pickUpBy; ?>">
-                                    <?php if (!empty($levelItems['pickup_address'])) {
-                                        $fromTime = date('H:i', strtotime($address["time_slot_from"]));
-                                        $toTime = date('H:i', strtotime($address["time_slot_to"]));
-                                    ?>
+                            <div class="shop-selected js-slot-addr_<?php echo $pickUpBy; ?>">
+                                <?php if (!empty($levelItems['pickup_address'])) {
+                                    $fromTime = date('H:i', strtotime($address["time_slot_from"]));
+                                    $toTime = date('H:i', strtotime($address["time_slot_to"]));
+                                ?>
+                                    <address class="address shop-address">
                                         <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
                                             <?php if (strlen($address['addr_address2']) > 0) {
                                                 echo ", " . $address['addr_address2']; ?>
@@ -125,8 +125,8 @@
                                                 <?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
                                             </li>
                                         </ul>
-                                    <?php } ?>
-                                </address>
+                                    </address>
+                                <?php } ?>
                             </div>
                         </li>
                         <!-- Header -->

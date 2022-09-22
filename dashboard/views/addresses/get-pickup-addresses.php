@@ -145,7 +145,7 @@ $displayDateformat = FatDate::convertDateFormatFromPhp(
 
         var slot_time = $(ele).next().children('.time').html();
         var addrHtml = $("input[name='pickup_address']:checked").next('.js-addr').html();
-        var html = addrHtml + '<ul class="phone-list"><li class="phone-list-item time-txt"><svg class="svg" width="20" height="20"><use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#calendar-day"></use></svg>' + calendarSelectedDate + ' ' + slot_time + '</li></ul>';
+        var html = '<address class="address shop-address">' + addrHtml + '<ul class="phone-list"><li class="phone-list-item time-txt"><svg class="svg" width="20" height="20"><use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#calendar-day"></use></svg>' + calendarSelectedDate + ' ' + slot_time + '</li></ul></address>';
         $(".pickupAddressBtn-" + pickUpBy + "-js").text(langLbl.changePickup);
         $(".js-slot-addr_" + pickUpBy).html(html);
         $.ykmodal.close();
