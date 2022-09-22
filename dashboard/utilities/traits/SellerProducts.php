@@ -788,7 +788,6 @@ trait SellerProducts
         $shopData = Shop::getAttributesByUserId($this->userParentId, ['COALESCE(shop_name,shop_identifier) as shop_name'], false, $this->userParentId);
 
         if (SellerProduct::INVENTORY_RESTRICT_LIMIT >= $availableOptionsCount) {
-
             $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
             foreach ($optionCombinations as $optionKey => $optionValue) {
                 /* Check if product already added for this option [ */
@@ -816,6 +815,7 @@ trait SellerProducts
                     $post['selprod_stock' . $optionKey] = SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY;
                 }
 
+                $productCount++;
                 if (-1 != $prodAllowedLimit && $prodAllowedLimit < $productCount) {
                     $data_to_be_save['selprod_active'] = applicationConstants::INACTIVE;
                 }
@@ -828,7 +828,6 @@ trait SellerProducts
                 $keywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
                 $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($keywordSlug));
                 $this->addOption($selprod_id, $data_to_be_save, $optionKey);
-                $productCount++;
             }
         } else {
             $optionValue = FatApp::getPostedData('inv_option_id', FatUtility::VAR_STRING, '');
@@ -2609,9 +2608,15 @@ trait SellerProducts
                 Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
-
+        
+        $invAllowedLimit = SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed');
         foreach ($selprodIdsArr as $selprod_id) {
             if (1 > $selprod_id) {
+                continue;
+            }
+
+            $productCount = SellerProduct::getActiveCount($this->userParentId);
+            if (applicationConstants::ACTIVE == $status && -1 != $invAllowedLimit && $invAllowedLimit <= $productCount) {
                 continue;
             }
 

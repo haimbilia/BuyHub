@@ -2219,3 +2219,5 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 ALTER TABLE `tbl_badges` ADD `badge_text_color` VARCHAR(150) NOT NULL AFTER `badge_color`;
 ALTER TABLE `tbl_badges` CHANGE `badge_display_inside` `badge_display_inside` TINYINT NOT NULL COMMENT 'For Ribbons', CHANGE `badge_shape_type` `badge_shape_type` INT NOT NULL COMMENT 'For Ribbons', CHANGE `badge_color` `badge_color` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'For Ribbons', CHANGE `badge_text_color` `badge_text_color` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'For Ribbons';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_SIGNIN_WITH_PHONE', '1', 'Signin With Phone', '2') ON DUPLICATE KEY UPDATE label_caption = 'Signin To Your YoKart Account', label_caption = 'Signin With Phone';

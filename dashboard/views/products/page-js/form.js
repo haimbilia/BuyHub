@@ -497,6 +497,7 @@ var advanceMedia = false; /* open via advance media*/
                 $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
             },
             success: function(ans) {
+                fcom.removeLoader();
                 $.ykmsg.close();
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
@@ -507,7 +508,6 @@ var advanceMedia = false; /* open via advance media*/
                     productImages(ans.record_id, ans.file_type, ans.option_id, ans.lang_id);
                 }
 
-                fcom.removeLoader();
                 fcom.displaySuccessMessage(ans.msg);
                 if (ans.isDefaultLayout) {
                     productDefaultImages();

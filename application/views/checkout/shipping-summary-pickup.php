@@ -93,21 +93,22 @@
                                 </div>
                             </div>
                             <div class="shop-selected">
-                                <address class="address shop-address js-slot-addr_<?php echo $pickUpBy; ?>"><?php if (!empty($levelItems['pickup_address'])) {
-                                                                                                                $fromTime = date('H:i', strtotime($address["time_slot_from"]));
-                                                                                                                $toTime = date('H:i', strtotime($address["time_slot_to"]));
-                                                                                                            ?>
+                                <address class="address shop-address js-slot-addr_<?php echo $pickUpBy; ?>">
+                                    <?php if (!empty($levelItems['pickup_address'])) {
+                                        $fromTime = date('H:i', strtotime($address["time_slot_from"]));
+                                        $toTime = date('H:i', strtotime($address["time_slot_to"]));
+                                    ?>
                                         <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
                                             <?php if (strlen($address['addr_address2']) > 0) {
-                                                                                                                    echo ", " . $address['addr_address2']; ?>
+                                                echo ", " . $address['addr_address2']; ?>
                                             <?php } ?>
                                         </p>
                                         <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
                                         <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
-                                        <?php if (strlen($address['addr_phone']) > 0) {
-                                                                                                                    $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
-                                        ?>
-                                            <ul class="phone-list">
+                                        <ul class="phone-list">
+                                            <?php if (strlen($address['addr_phone']) > 0) {
+                                                $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
+                                            ?>
                                                 <li class="phone-list-item phone-txt">
                                                     <svg class="svg" width="20" height="20">
                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
@@ -115,7 +116,6 @@
                                                     </svg>
                                                     <?php echo $addrPhone; ?>
                                                 </li>
-
                                             <?php } ?>
                                             <li class="phone-list-item time-txt">
                                                 <svg class="svg" width="20" height="20">
@@ -124,8 +124,8 @@
                                                 </svg>
                                                 <?php echo FatDate::format($address["time_slot_date"]) . ' ' . $fromTime . ' - ' . $toTime; ?>
                                             </li>
-                                        <?php } ?>
-                                            </ul>
+                                        </ul>
+                                    <?php } ?>
                                 </address>
                             </div>
                         </li>
@@ -157,9 +157,7 @@
                                                 ?>
                                             </a>
                                         </div>
-
                                     </div>
-
                                 </div>
                                 <div class="block-cart-detail">
                                     <div class="block-cart-detail-top">
@@ -177,13 +175,13 @@
                                                 </div>
                                                 <div class="options">
                                                     <?php if (isset($product['options']) && count($product['options'])) {
-                                                        $optionStr = '';
-                                                        foreach ($product['options'] as $option) {
-                                                            $optionStr .= $option['optionvalue_name'] . '|';
-                                                        }
-                                                        echo rtrim($optionStr, '|');
+                                                        foreach ($product['options'] as $key => $option) {
+                                                            if (0 < $key) {
+                                                                echo ' | ';
+                                                            }
+                                                            echo $option['option_name'] . ':'; ?> <span class="text-muted"><?php echo $option['optionvalue_name']; ?></span>
+                                                    <?php }
                                                     } ?>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -270,11 +268,12 @@
                                                 </div>
                                                 <div class="options">
                                                     <?php if (isset($product['options']) && count($product['options'])) {
-                                                        $optionStr = '';
-                                                        foreach ($product['options'] as $option) {
-                                                            $optionStr .= $option['optionvalue_name'] . '|';
-                                                        }
-                                                        echo rtrim($optionStr, '|');
+                                                        foreach ($product['options'] as $key => $option) {
+                                                            if (0 < $key) {
+                                                                echo ' | ';
+                                                            }
+                                                            echo $option['option_name'] . ':'; ?> <span class="text-muted"><?php echo $option['optionvalue_name']; ?></span>
+                                                    <?php }
                                                     } ?>
                                                 </div>
                                             </div>

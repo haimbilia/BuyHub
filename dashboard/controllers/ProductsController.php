@@ -603,7 +603,7 @@ class ProductsController extends SellerBaseController
             }
         }
 
-        $this->validateImageSubscriptionLimit($recordId, $optionId, $langId, $fileType);
+        $this->validateImageSubscriptionLimit($recordId, $optionId, $langId, $fileType, $this->userParentId);
 
         if ($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP) {
             $fileHandlerObj = new AttachedFileTemp();
@@ -790,57 +790,6 @@ class ProductsController extends SellerBaseController
         }
     }
 
-    private function validateImageSubscriptionLimit($recordId, $productOptionId, $langId, $fileType)
-    {
-        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-            $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($this->siteLangId, $this->userParentId, array('ossubs_images_allowed'));
-            $allowed_images = $currentPlanData['ossubs_images_allowed'];
-
-            if ($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP) {
-                $srch = new SearchBase(AttachedFileTemp::DB_TBL);
-            } else {
-                $srch = new SearchBase(AttachedFile::DB_TBL);
-                $optionValues = Product::getSeparateImageOptions($recordId, $this->siteLangId);
-                $srch->addCondition('afile_record_subid', 'IN', array_keys($optionValues));
-            }
-
-            $srch->doNotCalculateRecords();
-            $srch->addCondition('afile_type', '=', AttachedFile::FILETYPE_PRODUCT_IMAGE);
-            $srch->addCondition('afile_record_id', '=', $recordId);
-            if ($langId > 0) {
-                $srch->addCondition('afile_lang_id', 'IN', [$langId, 0]);
-            } else {
-                $srch->addCondition('afile_lang_id', '=', 0);
-            }
-            if (0 < $productOptionId) {
-                $srch->addCondition('afile_record_subid', 'IN', [$productOptionId, 0]);
-                $images = FatApp::getDb()->fetchAll($srch->getResultSet());
-                $allReadyAddedCount = count($images);
-            } else {
-
-                $srch->addGroupBy('afile_record_subid');
-                $srch->addOrder('image_count', 'desc');
-                $srch->addMultipleFields(['count(afile_id) as image_count', 'afile_record_subid']);
-                $images = FatApp::getDb()->fetchAll($srch->getResultSet(), 'afile_record_subid');
-                $allReadyAddedCount = 0;
-                if ($images) {
-                    if (isset($images[0])) {
-                        $allReadyAddedCount += $images[0]['image_count'];
-                        unset($images[0]);
-                    }
-                    if (count($images)) {
-                        /* adding all option  + max count of other option */
-                        $allReadyAddedCount += current($images)['image_count'];
-                    }
-                }
-            }
-
-            if ($allowed_images > 0 && $allReadyAddedCount >= $allowed_images) {
-                FatUtility::dieJsonError(Labels::getLabel("ERE_CANT_UPLOAD_MORE_THAN_ALLOWED_IMAGES", $this->siteLangId));
-            }
-        }
-    }
-
     protected function getCatalogType(): int
     {
         return Product::CATALOG_TYPE_PRIMARY;
@@ -883,8 +832,9 @@ class ProductsController extends SellerBaseController
         }
 
         if (
-            1 > $recordId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
-            Product::getActiveCount($this->userParentId) >= SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_products_allowed')
+            1 > $recordId &&
+            FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
+            Product::getActiveCount($this->userParentId, 0, false) >= SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_products_allowed')
         ) {
             LibHelper::exitWithError(Labels::getLabel('ERR_YOU_HAVE_CROSSED_YOUR_PACKAGE_LIMIT', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
