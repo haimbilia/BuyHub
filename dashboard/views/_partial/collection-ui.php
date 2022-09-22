@@ -3,7 +3,7 @@ $showActionBtns = !empty($showActionBtns) ? $showActionBtns : false;
 $isWishList = isset($isWishList) ? $isWishList : 0;
 $staticCollectionClass = '';
 if ($controllerName = 'Products' && isset($action) && $action == 'view') {
-    $staticCollectionClass = 'static--collection';
+    $staticCollectionClass = 'static-collection';
 }
 if (!isset($showAddToFavorite)) {
     $showAddToFavorite = true;
