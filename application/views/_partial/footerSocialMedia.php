@@ -7,11 +7,9 @@
             $title = ($row['splatform_title'] != '') ? $row['splatform_title'] : $row['splatform_identifier']; ?>
             <li class="footer-social-item">
                 <a class="footer-social-link" title="<?php echo $title; ?>" <?php if ($row['splatform_url'] != '') { ?>target="_blank" rel="noopener" <?php } ?> href="<?php echo ($row['splatform_url'] != '') ? $row['splatform_url'] : 'javascript:void(0)'; ?>">
-                    <?php if (isset($img['afile_id']) && 0 < $img['afile_id']) {
-                        echo '<img ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_SOCIAL_PLATFORM, ImageDimension::VIEW_NORMAL) . ' class="footer-social-icon" alt="' . $title . '" src = "' . UrlHelper::generateFileUrl('Image', 'SocialPlatform', array($row['splatform_id'])) . '"/>';
-                    } /* elseif ($row['splatform_icon_class'] != '') { ?>
-                        <i class="fab fa-<?php echo $row['splatform_icon_class']; ?>"></i>
-                    <?php }  */ ?>
+                    <?php
+                    echo '<img ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_SOCIAL_PLATFORM, ImageDimension::VIEW_NORMAL) . ' class="footer-social-icon" alt="' . $title . '" src = "' . UrlHelper::generateFileUrl('Image', 'SocialPlatform', array($row['splatform_id'])) . '"/>';
+                    ?>
                     <span class="footer-social-text"><?php echo $title; ?></span>
                 </a>
             </li>

@@ -681,7 +681,7 @@ class ImageController extends FatController
 
     public function SocialPlatform($splatform_id, $sizeType = '')
     {
-        $default_image = 'brand_deafult_image.jpg';
+        $default_image = 'social_default_image.jpg';
         $splatform_id = FatUtility::int($splatform_id);
 
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $splatform_id);
