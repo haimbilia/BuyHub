@@ -1220,6 +1220,7 @@ TV-9.4.0.20220907
     - #066866 - Alignment issue in the social platforms on the section on the footer of the page
     - #067054 - Seller can add products more than Allowed in subscription plan
     - #067048 - It lets the user to add more inventories than allowed 
+    - #067072 - Counts are not proper in Subscription report by plan
 
 ## UAT points:
 
@@ -1242,8 +1243,8 @@ TV-9.4.0.20220907
 
 ```sh 
 TV-9.4.0.20220406
-```
-    
+```    
+
 ## Known Issues and Problems :
 
     - #82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
