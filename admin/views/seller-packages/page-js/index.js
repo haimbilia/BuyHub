@@ -7,21 +7,6 @@ $(document).ajaxComplete(function () {
 });
 
 (function () {
-    addNewPlan = function (spackageId) {
-        fcom.updateWithAjax(fcom.makeUrl('SellerPackagePlans', "form"), { spackageId: spackageId }, function (t) {
-            fcom.closeProcessing();
-            $.ykmodal(t.html);
-            fcom.removeLoader();
-        });
-    };
-
-    editPlanRecord = function (spackageId, spPlanId) {
-        fcom.updateWithAjax(fcom.makeUrl('SellerPackagePlans', "form"), { spackageId: spackageId, spPlanId: spPlanId }, function (t) {
-            fcom.closeProcessing();
-            $.ykmodal(t.html);
-            fcom.removeLoader();
-        });
-    };
     bindSortable = function () {
         if (1 > $('[data-field="dragdrop"]').length) {
             return;
@@ -39,7 +24,7 @@ $(document).ajaxComplete(function () {
                 var data = '';
                 const bindData = new Promise((resolve, reject) => {
                     for (let i = 0; i < order.length; i++) {
-                        data += 'planId[' + (i + 1) + ']=' + order[i];
+                        data += 'packageId[' + (i + 1) + ']=' + order[i];
                         if (i + 1 < order.length) {
                             data += '&';
                         }

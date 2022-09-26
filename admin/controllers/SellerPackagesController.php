@@ -60,7 +60,10 @@ class SellerPackagesController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PACKAGE_NAME', $this->siteLangId));
         $this->getListingData();
+        $this->setCustomColumnWidth();
+        $this->set('autoTableColumWidth', false);
 
+        $this->_template->addJs(['js/jquery.tablednd.js', 'seller-packages/page-js/index.js']);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -140,7 +143,7 @@ class SellerPackagesController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {
-            $data = SellerPackages::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*','IFNULL(spackage_name,spackage_identifier) as spackage_name'], applicationConstants::JOIN_RIGHT);
+            $data = SellerPackages::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, ['*', 'IFNULL(spackage_name,spackage_identifier) as spackage_name'], applicationConstants::JOIN_RIGHT);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -286,6 +289,19 @@ class SellerPackagesController extends ListingBaseController
         die(json_encode($json));
     }
 
+    public function updateOrder()
+    {
+        $this->objPrivilege->canEditSellerPackages();
+        $post = FatApp::getPostedData();
+        if (!empty($post)) {
+            $faqCatObj = new SellerPackages();
+            if (!$faqCatObj->updateOrder($post['packageId'])) {
+                LibHelper::exitWithError($faqCatObj->getError(), true);
+            }
+            LibHelper::exitWithSuccess(Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId), true);
+        }
+    }
+
     protected function getFormColumns(): array
     {
         $subsPkgTblHeadingCols = CacheHelper::get('subsPkgTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -294,8 +310,9 @@ class SellerPackagesController extends ListingBaseController
         }
 
         $arr = [
+            'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            'spackage_display_order' => Labels::getLabel('LBL_DISPLAY_ORDER', $this->siteLangId),
             'spackage_name' => Labels::getLabel('LBL_PACKAGE_NAME', $this->siteLangId),
             'spackage_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -307,8 +324,9 @@ class SellerPackagesController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
+            'dragdrop',
             'select_all',
-           /*  'listSerial', */
+            'spackage_display_order',
             'spackage_name',
             'spackage_active',
             'action',
@@ -317,9 +335,40 @@ class SellerPackagesController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['spackage_active'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop', 'spackage_active'], Common::excludeKeysForSort());
     }
 
+    /**
+     * setCustomColumnWidth
+     *
+     * @return void
+     */
+    protected function setCustomColumnWidth(): void
+    {
+        $arr = [
+            'dragdrop' => [
+                'width' => '5%'
+            ],
+            'select_all' => [
+                'width' => '5%'
+            ],
+            'spackage_display_order' => [
+                'width' => '10%'
+            ],
+            'spackage_name' => [
+                'width' => '45%'
+            ],
+            'spackage_active' => [
+                'width' => '15%'
+            ],
+            'action' => [
+                'width' => '20%'
+            ],
+        ];
+
+        $this->set('tableHeadAttrArr', $arr);
+    }
+    
     public function getBreadcrumbNodes($action)
     {
         switch ($action) {

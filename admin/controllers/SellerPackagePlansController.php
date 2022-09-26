@@ -65,6 +65,8 @@ class SellerPackagePlansController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PLAN_PRICE', $this->siteLangId));
         $this->getListingData($spackageId);
+        $this->setCustomColumnWidth();
+        $this->set('autoTableColumWidth', false);
         $this->_template->addJs(['seller-package-plans/page-js/list.js']);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -156,7 +158,7 @@ class SellerPackagePlansController extends ListingBaseController
         $fld->overrideFldType('search');
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'spplan_price');
+            $this->addSortingElements($frm, 'spplan_display_order');
         }
 
         HtmlHelper::addSearchButton($frm);
@@ -257,6 +259,20 @@ class SellerPackagePlansController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
+
+    public function updateOrder()
+    {
+        $this->objPrivilege->canEditSellerPackages();
+        $post = FatApp::getPostedData();
+        if (!empty($post)) {
+            $faqCatObj = new SellerPackagePlans();
+            if (!$faqCatObj->updateOrder($post['planId'])) {
+                LibHelper::exitWithError($faqCatObj->getError(), true);
+            }
+            LibHelper::exitWithSuccess(Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId), true);
+        }
+    }
+
     protected function getFormColumns(): array
     {
         $subsPkgTblHeadingCols = CacheHelper::get('subsPkgPlanTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -265,8 +281,9 @@ class SellerPackagePlansController extends ListingBaseController
         }
 
         $arr = [
+            'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            'spplan_display_order' => Labels::getLabel('LBL_DISPLAY_ORDER', $this->siteLangId),
             'spplan_price' => Labels::getLabel('LBL_PLAN_PRICE', $this->siteLangId),
             'spplan_interval' => Labels::getLabel('LBL_INTERVAL', $this->siteLangId),
             'spplan_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -279,8 +296,9 @@ class SellerPackagePlansController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
+            'dragdrop',
             'select_all',
-            /* 'listSerial', */
+            'spplan_display_order',
             'spplan_price',
             'spplan_interval',
             'spplan_active',
@@ -290,7 +308,41 @@ class SellerPackagePlansController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['spplan_interval', 'spplan_active'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop', 'spplan_interval', 'spplan_active'], Common::excludeKeysForSort());
+    }
+
+    /**
+     * setCustomColumnWidth
+     *
+     * @return void
+     */
+    protected function setCustomColumnWidth(): void
+    {
+        $arr = [
+            'dragdrop' => [
+                'width' => '5%'
+            ],
+            'select_all' => [
+                'width' => '5%'
+            ],
+            'spplan_display_order' => [
+                'width' => '10%'
+            ],
+            'spplan_price' => [
+                'width' => '15%'
+            ],
+            'spplan_interval' => [
+                'width' => '45%'
+            ],
+            'spplan_active' => [
+                'width' => '10%'
+            ],
+            'action' => [
+                'width' => '10%'
+            ],
+        ];
+
+        $this->set('tableHeadAttrArr', $arr);
     }
 
     public function getBreadcrumbNodes($action)
