@@ -1168,8 +1168,8 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addRadioButtons(Labels::getLabel("FRM_ALLOW_REVIEWS", $langId), 'CONF_ALLOW_REVIEWS', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio'));
                 HtmlHelper::configureSwitchForRadio($fld);
 
-                $fld = $frm->addRadioButtons(Labels::getLabel("FRM_NEW_REVIEW_ALERT_EMAIL", $langId), 'CONF_REVIEW_ALERT_EMAIL', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio'));
-                HtmlHelper::configureSwitchForRadio($fld);
+                // $fld = $frm->addRadioButtons(Labels::getLabel("FRM_NEW_REVIEW_ALERT_EMAIL", $langId), 'CONF_REVIEW_ALERT_EMAIL', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio'));
+                // HtmlHelper::configureSwitchForRadio($fld);
 
                 $reviewStatusArr = SelProdReview::getReviewStatusArr($langId);
                 $fld = $frm->addSelectBox(
