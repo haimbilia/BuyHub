@@ -23,7 +23,7 @@ class LoggedUserController extends DashboardBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS', CommonHelper::getLangId()), false, true, ['displayLoginForm' => 1]);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND));
         }
-        
+
         $invalidAccess = (
             ($this->userId < 1) ||
             false === $this->userInfo ||
@@ -82,6 +82,8 @@ class LoggedUserController extends DashboardBaseController
 
         $this->userParentId = (0 < $this->userInfo['user_parent']) ? $this->userInfo['user_parent'] : $this->userId;
         $this->initCommonValues();
+        global $sellerRating;
+        $sellerRating = [];
     }
 
     private function initCommonValues()

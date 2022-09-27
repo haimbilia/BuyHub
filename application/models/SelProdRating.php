@@ -89,6 +89,11 @@ class SelProdRating extends MyAppModel
     public static function getSellerRating($userId)
     {
         $userId = FatUtility::int($userId);
+        global  $sellerRating;
+        if (isset($sellerRating[$userId]['avg_rating'])) {
+            return $sellerRating[$userId]['avg_rating'];
+        }
+
         $srch = new SelProdReviewSearch();
         $srch->joinSeller(0, $userId);
         $srch->joinSellerProducts();
@@ -104,7 +109,7 @@ class SelProdRating extends MyAppModel
         $srch->addGroupby('spreview_seller_user_id');
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
-        return ($record == false) ? 0 : $record['avg_rating'];
+        return $sellerRating[$userId]['avg_rating'] = ($record == false) ? 0 : $record['avg_rating'];
     }
 
     public static function getProdRatingAspects(int $productId, int $langId): array
