@@ -403,7 +403,7 @@ class LibHelper extends FatUtility
         // url check
         $parts = parse_url($url);
         if ($parts === false) {
-            throw new Exception('Unable to parse URL');
+            return;
         }
 
         $host = $parts['host'] ?? null;
@@ -413,12 +413,12 @@ class LibHelper extends FatUtility
         parse_str($query, $queryParts);
 
         if ($host === null) {
-            throw new Exception('Unknown host');
+            return;
         }
 
         $connection = fsockopen($host, $port, $errno, $errstr, 30);
         if ($connection === false) {
-            throw new Exception('Unable to connect to ' . $host);
+            return;
         }
 
         $method = strtoupper($method);
