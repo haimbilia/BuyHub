@@ -15,8 +15,6 @@ class MyAppController extends FatController
         $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/' . $mainCss . '-' . CommonHelper::getLayoutDirection() . '.css');
         global $rootCatArr;
         $rootCatArr = [];
-        global $sellerRating;
-        $sellerRating = [];
     }
 
     private function setCommonVariables()
