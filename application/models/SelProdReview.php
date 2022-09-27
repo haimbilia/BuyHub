@@ -49,7 +49,7 @@ class SelProdReview extends MyAppModel
     {
         $srch = SelProdRating::getAvgShopReviewsRatingObj($userId);
         $srch->joinUser();
-        $srch->joinSeller();
+        $srch->joinSeller(0, $userId);
         $srch->joinSellerProducts();
         $srch->joinProducts();
         $srch->addMultipleFields(array('count(distinct(spreview_id)) as numOfReviews'));
