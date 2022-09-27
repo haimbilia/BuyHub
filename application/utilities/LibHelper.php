@@ -403,6 +403,7 @@ class LibHelper extends FatUtility
         // url check
         $parts = parse_url($url);
         if ($parts === false) {
+            SystemLog::system('Unable to parse URL', 'Send Add To Cart Async Request', SystemLog::TYPE_ERROR);
             return;
         }
 
@@ -413,11 +414,13 @@ class LibHelper extends FatUtility
         parse_str($query, $queryParts);
 
         if ($host === null) {
+            SystemLog::system('Unknown Host', 'Send Add To Cart Async Request', SystemLog::TYPE_ERROR);
             return;
         }
 
         $connection = fsockopen($host, $port, $errno, $errstr, 30);
         if ($connection === false) {
+            SystemLog::system('Unable To Connect ' . $host, 'Send Add To Cart Async Request', SystemLog::TYPE_ERROR);
             return;
         }
 
