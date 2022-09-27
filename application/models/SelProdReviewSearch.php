@@ -22,12 +22,14 @@ class SelProdReviewSearch extends SearchBase
         }
 
         $cnd = '';
+        $join = 'LEFT OUTER JOIN';
         if (0 < $sellerId) {
             $cnd = ' and us.user_id = ' . $sellerId;
+            $join = 'INNER JOIN';
         }
 
-        $this->joinTable(User::DB_TBL, 'INNER JOIN', 'us.user_id = spr.spreview_seller_user_id ' . $cnd, 'us');
-        $this->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'usc.credential_user_id = us.user_id', 'usc');
+        $this->joinTable(User::DB_TBL, $join, 'us.user_id = spr.spreview_seller_user_id ' . $cnd, 'us');
+        $this->joinTable(User::DB_TBL_CRED, $join, 'usc.credential_user_id = us.user_id', 'usc');
     }
 
     public function joinShops($langId = 0, $isActive = true)
