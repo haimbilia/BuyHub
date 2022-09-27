@@ -12,16 +12,22 @@ class SelProdReviewSearch extends SearchBase
         parent::__construct(SelProdReview::DB_TBL, 'spr');
     }
 
-    public function joinSeller($langId = 0)
+    public function joinSeller($langId = 0, $sellerId = 0)
     {
         $langId = FatUtility::int($langId);
+        $sellerId = FatUtility::int($sellerId);
         $this->commonLangId = CommonHelper::getLangId();
         if ($this->langId) {
             $langId = $this->langId;
         }
 
-        $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'us.user_id = spr.spreview_seller_user_id', 'us');
-        $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'usc.credential_user_id = us.user_id', 'usc');
+        $cnd = '';
+        if (0 < $sellerId) {
+            $cnd = ' and us.user_id = ' . $sellerId;
+        }
+
+        $this->joinTable(User::DB_TBL, 'INNER JOIN', 'us.user_id = spr.spreview_seller_user_id ' . $cnd, 'us');
+        $this->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'usc.credential_user_id = us.user_id', 'usc');
     }
 
     public function joinShops($langId = 0, $isActive = true)

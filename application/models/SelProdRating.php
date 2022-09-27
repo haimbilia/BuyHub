@@ -90,7 +90,7 @@ class SelProdRating extends MyAppModel
     {
         $userId = FatUtility::int($userId);
         $srch = new SelProdReviewSearch();
-        $srch->joinSeller();
+        $srch->joinSeller(0, $userId);
         $srch->joinSellerProducts();
         $srch->joinSelProdRating();
         $srch->joinOrderProduct();
