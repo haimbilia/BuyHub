@@ -88,8 +88,15 @@ class SelProdRating extends MyAppModel
 
     public static function getSellerRating($userId)
     {
-        $userId = FatUtility::int($userId);        
-        if (isset($sellerRating[$userId]['avg_rating'])) {
+        $userId = FatUtility::int($userId);
+        $rating =  Shop::getAttributesByUserId($userId, 'shop_avg_rating');
+
+        if ($rating == false || 1 > $rating) {
+            return 0;
+        }
+        return $rating;
+
+        /* if (isset($sellerRating[$userId]['avg_rating'])) {
             return $sellerRating[$userId]['avg_rating'];
         }
 
@@ -108,7 +115,7 @@ class SelProdRating extends MyAppModel
         $srch->addGroupby('spreview_seller_user_id');
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
-        return $sellerRating[$userId]['avg_rating'] = ($record == false) ? 0 : $record['avg_rating'];
+        return $sellerRating[$userId]['avg_rating'] = ($record == false) ? 0 : $record['avg_rating']; */
     }
 
     public static function getProdRatingAspects(int $productId, int $langId): array

@@ -47,7 +47,14 @@ class SelProdReview extends MyAppModel
 
     public static function getSellerTotalReviews(int $userId)
     {
-        global  $sellerRating;
+        $reviews =  Shop::getAttributesByUserId($userId, 'shop_total_reviews');
+
+        if ($reviews == false || 1 > $reviews) {
+            return 0;
+        }
+        return $reviews;
+
+        /* global  $sellerRating;
         if (isset($sellerRating[$userId]['numOfReviews'])) {
             return $sellerRating[$userId]['numOfReviews'];
         }
@@ -62,7 +69,7 @@ class SelProdReview extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addGroupby('spreview_seller_user_id');
         $record = FatApp::getDb()->fetch($srch->getResultSet());
-        return $sellerRating[$userId]['numOfReviews'] = $record['numOfReviews'] ?? 0;
+        return $sellerRating[$userId]['numOfReviews'] = $record['numOfReviews'] ?? 0; */
     }
 
     public static function getProductOrderId($product_id, $loggedUserId)

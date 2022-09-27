@@ -2308,3 +2308,6 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ('APP_PLEASE_ENTER_YOUR_TITLE', 1, 'Please Enter The Title', 2),
 ('APP_PLEASE_ENTER_YOUR_DESCRIPTION', 1, 'Please Enter The Description', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+ALTER TABLE `tbl_shops` ADD `shop_avg_rating` FLOAT(10,2) NOT NULL AFTER `shop_fulfillment_type`;
+ALTER TABLE `tbl_shops` ADD `shop_total_reviews` INT(11) NOT NULL AFTER `shop_avg_rating`;
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Shop Ratings', 'Cronjob/updateShopsAvgRating', '1440', '1');
