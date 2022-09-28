@@ -110,8 +110,10 @@ $productView = $productView ?? false;
                                 <!-- Rating Section -->
 
                                 <!-- Comments Section -->
-                                <div class="rating-layout-end reviewListJs"></div>
-                                <div id="loadMoreReviewsBtnDiv" class="align-center"></div>
+                                <div class="rating-layout-end">
+                                    <div class="reviewListJs"></div>
+                                    <div id="loadMoreReviewsBtnDiv" class="align-center"></div>
+                                </div>
                                 <!-- Comments Section -->
                             </div>
                         </div>
