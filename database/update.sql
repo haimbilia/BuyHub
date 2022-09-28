@@ -2222,16 +2222,16 @@ ALTER TABLE `tbl_badges` CHANGE `badge_display_inside` `badge_display_inside` TI
 
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_SIGNIN_WITH_PHONE', '1', 'Signin With Phone', '2') ON DUPLICATE KEY UPDATE label_caption = 'Signin To Your YoKart Account', label_caption = 'Signin With Phone';
 
-INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_ALL_SIGN_IN_OPTIONS', '1', 'All Sign In Options', '2') 
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_ALL_SIGN_IN_OPTIONS', '1', 'All Sign In Options', '2') 
 ON DUPLICATE KEY UPDATE label_caption = 'All Sign In Options', label_key = 'APP_ALL_SIGN_IN_OPTIONS';
 
-INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_SIGNIN_TO_YOUR_YOKART_ACCOUNT', '1', 'Signin To Your YoKart Account', '2') 
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_SIGNIN_TO_YOUR_YOKART_ACCOUNT', '1', 'Signin To Your YoKart Account', '2') 
 ON DUPLICATE KEY UPDATE label_caption = 'Signin To Your YoKart Account', label_key = 'APP_SIGNIN_TO_YOUR_YOKART_ACCOUNT';
 
-INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_SIGNIN_WITH_PHONE', '1', 'Signin With Phone', '2') 
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_SIGNIN_WITH_PHONE', '1', 'Signin With Phone', '2') 
 ON DUPLICATE KEY UPDATE label_caption = 'Signin With Phone', label_key = 'APP_SIGNIN_WITH_PHONE';
 
-INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
 ('APP_WELCOME_TO_YOKART', 1, 'Welcome to Yo!kart', 2),
 ('APP_CONTINUE_WITH_EMAIL_ADDRESS', 1, 'Continue with Email Address', 2),
 ('APP_CONTINUE_WITH_PHONE_NUMBER', 1, 'Continue with Phone Number', 2),
