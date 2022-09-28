@@ -255,7 +255,8 @@ class AttachedFile extends MyAppModel
         }
 
         if ($langId == 0) {
-            $srch->addCondition('afile_lang_id', '=', 'mysql_func_0', 'AND', true);
+            $cnd = $srch->addCondition('afile_lang_id', '=', 'mysql_func_' . FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), 'AND', true);
+            $cnd->attachCondition('afile_lang_id', '=', 'mysql_func_0', 'OR', true);
         }
 
         if ($size > 0) {
@@ -263,7 +264,6 @@ class AttachedFile extends MyAppModel
         }
 
         $rs = $srch->getResultSet();
-        //echo $srch->getQuery();die;
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }
 
