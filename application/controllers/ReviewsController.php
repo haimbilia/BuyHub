@@ -240,7 +240,7 @@ class ReviewsController extends MyAppController
 
         $shop_rating = 0;
         if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-            $shop_rating = SelProdRating::getSellerRating($shop['shop_user_id']);
+            $shop_rating = SelProdRating::getSellerRating($shop['shop_user_id'], true);
         }
         $this->set('shopRating', $shop_rating);
         $this->set('shopTotalReviews', $reviews['totReviews'] ?? 0);

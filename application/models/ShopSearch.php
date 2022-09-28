@@ -138,6 +138,7 @@ class ShopSearch extends SearchBase
 
     public function addRatingsCount()
     {
+        /*Need to fetch avg rating from already joined shop table */
         /* $srch = new SelProdReviewSearch();
         $srch->joinSeller();
         $srch->joinSellerProducts();

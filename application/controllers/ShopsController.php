@@ -116,8 +116,12 @@ class ShopsController extends MyAppController
             $Prs = $productShopSrchTempObj->getResultSet();
             $allShops[$val['shop_id']]['products'] = $db->fetchAll($Prs);
             $allShops[$val['shop_id']]['totalProducts'] = $productShopSrchTempObj->recordCount();
-            $allShops[$val['shop_id']]['shopRating'] = SelProdRating::getSellerRating($val['shop_user_id']);
-            $allShops[$val['shop_id']]['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($val['shop_user_id']);
+
+            $allShops[$val['shop_id']]['shopRating'] = 0;
+            if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+                $allShops[$val['shop_id']]['shopRating'] = SelProdRating::getSellerRating($val['shop_user_id'], true);
+            }
+            $allShops[$val['shop_id']]['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($val['shop_user_id'], true);
             $allShops[$val['shop_id']]['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', [$val['shop_id'], $this->siteLangId, 'SMALL']);
 
             $selProdIdsArr = array_column($allShops[$val['shop_id']]['products'], 'selprod_id');
@@ -230,7 +234,7 @@ class ShopsController extends MyAppController
             $data['shop'] = array_merge($data['shop'], $shopInfo);
             $data['shop']['rating'] = 0;
             if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-                $data['shop']['rating'] = SelProdRating::getSellerRating($data['shop']['shop_user_id']);
+                $data['shop']['rating'] = SelProdRating::getSellerRating($data['shop']['shop_user_id'], true);
             }
             $data['shop']['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', array($data['shop']['shop_id'], $this->siteLangId));
             $data['shop']['shop_banner'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'shopBanner', array($data['shop']['shop_id'], $this->siteLangId, ImageDimension::VIEW_MOBILE, 0, applicationConstants::SCREEN_MOBILE)), CONF_IMG_CACHE_TIME, '.jpg');
@@ -330,8 +334,12 @@ class ShopsController extends MyAppController
         }
 
         $this->set('shop', $this->shopPoliciesData($shop));
-        $this->set('shopRating', SelProdRating::getSellerRating($shop['shop_user_id']));
-        $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id']));
+        $shopRating = 0;
+        if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+            $shopRating = SelProdRating::getSellerRating($shop['shop_user_id'], true);
+        }
+        $this->set('shopRating', $shopRating);
+        $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id'], true));
 
         $description = trim(CommonHelper::subStringByWords(strip_tags(CommonHelper::renderHtml($shop['shop_description'], true)), 500));
         $description .= ' - ' . Labels::getLabel('MSG_SEE_MORE_AT', $this->siteLangId) . ": " . UrlHelper::getCurrUrl();

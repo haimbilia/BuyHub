@@ -45,18 +45,15 @@ class SelProdReview extends MyAppModel
         return unserialize(FatApp::getConfig("CONF_REVIEW_READY_ORDER_STATUS"));
     }
 
-    public static function getSellerTotalReviews(int $userId)
+    public static function getSellerTotalReviews(int $userId, bool $getFromLog = false)
     {
-        $reviews =  Shop::getAttributesByUserId($userId, 'shop_total_reviews');
+        if (true == $getFromLog) {
+            $reviews =  Shop::getAttributesByUserId($userId, 'shop_total_reviews');
 
-        if ($reviews == false || 1 > $reviews) {
-            return 0;
-        }
-        return $reviews;
-
-        /* global  $sellerRating;
-        if (isset($sellerRating[$userId]['numOfReviews'])) {
-            return $sellerRating[$userId]['numOfReviews'];
+            if ($reviews == false || 1 > $reviews) {
+                return 0;
+            }
+            return $reviews;
         }
 
         $srch = SelProdRating::getAvgShopReviewsRatingObj($userId);
@@ -69,7 +66,13 @@ class SelProdReview extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addGroupby('spreview_seller_user_id');
         $record = FatApp::getDb()->fetch($srch->getResultSet());
-        return $sellerRating[$userId]['numOfReviews'] = $record['numOfReviews'] ?? 0; */
+        return $sellerRating[$userId]['numOfReviews'] = $record['numOfReviews'] ?? 0;
+    }
+
+    public static function updateSellerTotalReviews($userId)
+    {
+        $totalReviews = self::getSellerTotalReviews($userId);
+        FatApp::getDb()->query("Update tbl_shops set `shop_total_reviews` = '" . $totalReviews . "' where shop_user_id = '" . $userId . "'");
     }
 
     public static function getProductOrderId($product_id, $loggedUserId)

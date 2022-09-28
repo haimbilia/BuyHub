@@ -27,29 +27,30 @@ foreach ($sellers as $key => $sellerDetail) {
         <?php
         $badgesArr = Badge::getShopBadges($siteLangId, [$sellerDetail['shop_id']]);
         $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
-        if($shopTotalReviews > 0){
+        if ($shopTotalReviews > 0) {
         ?>
-        <div class="shop-wrap">
-            <div class="product-ratings">
-                <svg class="svg" width="14" height="14">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                    </use>
-                </svg>
-                <?php
-                $shop_rating = 0;
-                if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-                    $shop_rating = SelProdRating::getSellerRating($sellerDetail['selprod_user_id']);
-                ?>
-                    <span class="rate"><?php echo round($shop_rating, 1); ?></span>
-                <?php
-                }
-                ?>
-                <a href="<?php echo UrlHelper::generateUrl('reviews', 'shop', array($sellerDetail['shop_id'])); ?>" class="totals-review"><?php echo $shopTotalReviews; ?>
-                    <?php echo Labels::getLabel('LBL_REVIEWS', $siteLangId); ?>
-                </a>
+            <div class="shop-wrap">
+                <div class="product-ratings">
+                    <svg class="svg" width="14" height="14">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                        </use>
+                    </svg>
+                    <?php
+                    $shop_rating = 0;
+                    if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+                        $shop_rating = SelProdRating::getSellerRating($sellerDetail['selprod_user_id'], true);
+                    ?>
+                        <span class="rate"><?php echo round($shop_rating, 1); ?></span>
+                    <?php
+                    }
+                    ?>
+                    <a href="<?php echo UrlHelper::generateUrl('reviews', 'shop', array($sellerDetail['shop_id'])); ?>" class="totals-review"><?php echo $shopTotalReviews; ?>
+                        <?php echo Labels::getLabel('LBL_REVIEWS', $siteLangId); ?>
+                    </a>
+                </div>
             </div>
-        </div>
-        <?php } if (false === $isActive) { ?>
+        <?php }
+        if (false === $isActive) { ?>
             <button class="btn btn-outline-black btn-sm btnAddToCart--js" data-id='<?php echo $sellerDetail['selprod_id']; ?>' data-min-qty="<?php echo $sellerDetail['selprod_min_order_qty']; ?>" type="button"><?php echo Labels::getLabel('BTN_ADD_TO_CART', $siteLangId); ?></button>
         <?php } ?>
     </li>

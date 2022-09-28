@@ -2152,7 +2152,7 @@ class AccountController extends LoggedUserController
         $totalProductsToShow = 4;
         if ($shops) {
             foreach ($shops as &$shop) {
-                $shop['shopRating'] = SelProdRating::getSellerRating($shop['shop_user_id']);
+                $shop['shopRating'] = SelProdRating::getSellerRating($shop['shop_user_id'], true);
             }
         }
         $this->set('page', $page);

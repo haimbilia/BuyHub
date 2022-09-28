@@ -2,7 +2,7 @@
 class HomeController extends MyAppController
 {
     public function index()
-    {        
+    {
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
 
         $productSrchObj = $this->getProductSearchObj($loggedUserId);
@@ -46,7 +46,7 @@ class HomeController extends MyAppController
                 }
             }
         }
-        
+
         if (0 < $sponShopLayoutCount) {
             foreach ($sponsoredShopsInCollection as $indexId => $collectionId) {
                 $recordId = (true === MOBILE_APP_API_CALL) ? $indexId : $collectionId;
@@ -70,7 +70,7 @@ class HomeController extends MyAppController
             $this->_template->render();
             die;
         }
-        
+
         $displayProductNotAvailableLable = false;
         //availableInLocation
         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
@@ -82,7 +82,7 @@ class HomeController extends MyAppController
         $geoAddress = Address::getYkGeoData();
         $cacheKey = $this->siteLangId . '-' . CommonHelper::getCurrencyId() . '-' . serialize($geoAddress);
         $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);
-        
+
         $collectionTemplates = array();
         foreach ($collections as $collection) {
             switch ($collection['collection_layout_type']) {
@@ -971,7 +971,7 @@ class HomeController extends MyAppController
                     while ($shopsData = $db->fetch($rs)) {
                         $rating = 0;
                         if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-                            $rating = SelProdRating::getSellerRating($shopsData['shop_user_id']);
+                            $rating = SelProdRating::getSellerRating($shopsData['shop_user_id'], true);
                         }
 
                         if (true === MOBILE_APP_API_CALL) {
@@ -1345,7 +1345,7 @@ class HomeController extends MyAppController
 
             $rating = 0;
             if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-                $rating = SelProdRating::getSellerRating($shops['shop_user_id']);
+                $rating = SelProdRating::getSellerRating($shops['shop_user_id'], true);
             }
 
             $prodData = $db->fetchAll($Prs);

@@ -262,8 +262,12 @@ class CollectionsController extends MyAppController
                         $val['products'] = $products;
                         $val['tRightRibbons'] = $tRightRibbons;
                         $val['totalProducts'] = $prodSrch->recordCount();
-                        $val['shopRating'] = SelProdRating::getSellerRating($val['shop_user_id']);
-                        $val['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($val['shop_user_id']);
+
+                        $val['shopRating'] = 0;
+                        if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+                            $val['shopRating'] = SelProdRating::getSellerRating($val['shop_user_id'], true);
+                        }
+                        $val['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($val['shop_user_id'], true);
                     }
                     $rs = $tempObj->getResultSet();
                     unset($tempObj);

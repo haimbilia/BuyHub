@@ -862,7 +862,7 @@ class Cronjob extends FatModel
         }
     }
 
-    public static function updateShopsAvgRating()
+    /* public static function updateShopsAvgRating()
     {
         $srch = new SelProdReviewSearch();
         $srch->joinSeller();
@@ -873,8 +873,7 @@ class Cronjob extends FatModel
         $srch->addMultipleFields(array('ROUND(AVG(sprating_rating),2) as avg_rating', 'spreview_seller_user_id'));
         $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::TYPE_DELIVERY . "') ELSE `ratingtype_type` = '" . RatingType::TYPE_SHOP . "' END)");
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        // $srch->addCondition('spreview_seller_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
+        $srch->doNotLimitRecords();        
         $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
         $srch->addGroupby('spreview_seller_user_id');
         while ($row = FatApp::getDb()->fetch($srch->getResultSet())) {
@@ -894,5 +893,5 @@ class Cronjob extends FatModel
         }
 
         return Labels::getLabel('MSG_SUCCESS', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
-    }
+    } */
 }
