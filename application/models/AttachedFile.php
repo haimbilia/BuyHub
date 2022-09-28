@@ -227,6 +227,7 @@ class AttachedFile extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->addCondition('afile_type', '=', 'mysql_func_' . $fileType, 'AND', true);
         $srch->addCondition('afile_record_id', '=', 'mysql_func_' . $recordId, 'AND', true);
+        $srch->addMultipleFields(['afile_id','afile_type','afile_record_id','afile_record_subid','afile_lang_id','afile_screen','afile_physical_path','afile_name','afile_attribute_title','afile_attribute_alt','afile_aspect_ratio','afile_display_order','afile_downloaded_times','afile_updated_at']);
 
         if ($recordSubid || $recordSubid == -1 || $haveSubIdZero) {
             if ($recordSubid == -1) {
