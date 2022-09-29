@@ -2,7 +2,7 @@
 class ConfigurationsController extends ListingBaseController
 {
     /* these variables must be only those which will store array type data and will saved as serialized array [*/
-    private array $serializeArrayValues = ['CONF_VENDOR_ORDER_STATUS', 'CONF_BUYER_ORDER_STATUS', 'CONF_PROCESSING_ORDER_STATUS', 'CONF_COMPLETED_ORDER_STATUS', 'CONF_REVIEW_READY_ORDER_STATUS', 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', 'CONF_DIGITAL_RETURN_READY_ORDER_STATUS', 'CONF_ENABLE_DIGITAL_DOWNLOADS', 'CONF_PURCHASE_ORDER_STATUS', 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', 'CONF_SUBSCRIPTION_ORDER_STATUS', 'CONF_SELLER_SUBSCRIPTION_STATUS', 'CONF_BADGE_COUNT_ORDER_STATUS', 'CONF_PRODUCT_IS_ON_ORDER_STATUSES', 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES'];
+    private array $serializeArrayValues = ['CONF_VENDOR_ORDER_STATUS', 'CONF_BUYER_ORDER_STATUS', 'CONF_PROCESSING_ORDER_STATUS', 'CONF_COMPLETED_ORDER_STATUS', 'CONF_REVIEW_READY_ORDER_STATUS', 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', 'CONF_DIGITAL_RETURN_READY_ORDER_STATUS', 'CONF_ENABLE_DIGITAL_DOWNLOADS', 'CONF_PURCHASE_ORDER_STATUS', 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', 'CONF_SUBSCRIPTION_ORDER_STATUS', 'CONF_SELLER_SUBSCRIPTION_STATUS', /* 'CONF_BADGE_COUNT_ORDER_STATUS', */ 'CONF_PRODUCT_IS_ON_ORDER_STATUSES', 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES'];
     /* ] */
     protected $pageKey = 'GENERAL_CONFIGURATION';
 
@@ -977,11 +977,11 @@ class ConfigurationsController extends ListingBaseController
                 $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_ORDER_STATUSES_TO_ALLOW_SELLER_OR_ADMIN_TO_ATTACH_MORE_FILES_WITH_ORDER_PRODUCTS", $langId) . "</span>";
 
-                $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_ORDER_STATUSES_TO_CALCULATE_BADGE_COUNT_(For_Admin)", $langId), 'CONF_BADGE_COUNT_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
+               /*  $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_ORDER_STATUSES_TO_CALCULATE_BADGE_COUNT_(For_Admin)", $langId), 'CONF_BADGE_COUNT_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->developerTags['cbLabelAttributes'] = ['class' => 'checkbox'];
                 $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_ORDER_STATUSES_TO_CALCULATE_BADGE_COUNT_FOR_SELLER_ORDERS_IN_ADMIN_LEFT_NAVIGATION_PANEL", $langId) . "</span>";
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_ORDER_STATUSES_TO_CALCULATE_BADGE_COUNT_FOR_SELLER_ORDERS_IN_ADMIN_LEFT_NAVIGATION_PANEL", $langId) . "</span>"; */
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_PRODUCTS_ON_ORDER_STAGE(For_Seller_Inventory_Report)", $langId), 'CONF_PRODUCT_IS_ON_ORDER_STATUSES', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];

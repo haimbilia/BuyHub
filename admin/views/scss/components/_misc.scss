@@ -2053,6 +2053,7 @@ $clipboard-size: 40px;
         border: none;
         border-radius: $common-radius;
         padding: 0;
+        height: auto;
         color: $txt-gray;
         // margin-#{$end-direction}: 10px;
         &:focus {
@@ -2087,7 +2088,7 @@ $clipboard-size: 40px;
     &:hover {
         // background-color: $bg-gray;
         .actions {
-            display: block;
+            display: inline-flex;
         }
     }
 
