@@ -48,7 +48,7 @@ class ReviewsController extends MyAppController
             }
         }
         $this->set('canSubmitFeedback', $canSubmitFeedback);
-        $frmReviewSearch = $this->getProductReviewSearchForm(FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10));
+        $frmReviewSearch = $this->getProductReviewSearchForm();
         $frmReviewSearch->fill(array('selprod_id' => $selprod_id, 'review_id' => $reviewId));
         $this->set('frmReviewSearch', $frmReviewSearch);
 
@@ -70,7 +70,7 @@ class ReviewsController extends MyAppController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $orderBy = FatApp::getPostedData('orderBy', FatUtility::VAR_STRING, 'most_recent');
         $page = ($page) ? $page : 1;
-        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10));
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, 10);
 
         $srch = new SelProdReviewSearch();
         $srch->joinProducts($this->siteLangId);
@@ -214,7 +214,7 @@ class ReviewsController extends MyAppController
         $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         $this->set('reviews', $reviews);
 
-        $frmReviewSearch = $this->getProductReviewSearchForm(FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10));
+        $frmReviewSearch = $this->getProductReviewSearchForm();
         $frmReviewSearch->fill(array('shop_id' => $shop_id, 'review_id' => $reviewId));
         $this->set('frmReviewSearch', $frmReviewSearch);
 
@@ -240,7 +240,7 @@ class ReviewsController extends MyAppController
 
         $shop_rating = 0;
         if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-            $shop_rating = SelProdRating::getSellerRating($shop['shop_user_id']);
+            $shop_rating = SelProdRating::getSellerRating($shop['shop_user_id'], true);
         }
         $this->set('shopRating', $shop_rating);
         $this->set('shopTotalReviews', $reviews['totReviews'] ?? 0);
@@ -272,7 +272,7 @@ class ReviewsController extends MyAppController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $orderBy = FatApp::getPostedData('orderBy', FatUtility::VAR_STRING, 'most_recent');
         $page = ($page) ? $page : 1;
-        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10));
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, 10);
 
         $srch = SelProdRating::getAvgShopReviewsRatingObj($sellerId, $this->siteLangId);
         $srch->joinProducts($this->siteLangId);
@@ -455,14 +455,14 @@ class ReviewsController extends MyAppController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getProductReviewSearchForm($pageSize = 10)
+    private function getProductReviewSearchForm()
     {
         $frm = new Form('frmReviewSearch');
         $frm->addHiddenField('', 'selprod_id');
         $frm->addHiddenField('', 'review_id');
         $frm->addHiddenField('', 'shop_id');
         $frm->addHiddenField('', 'page');
-        $frm->addHiddenField('', 'pageSize', $pageSize);
+        $frm->addHiddenField('', 'pageSize', 10);
         $frm->addHiddenField('', 'orderBy', 'most_recent');
         return $frm;
     }

@@ -166,7 +166,8 @@ class UserSearch extends SearchBase
 
     public function addRatingsCount()
     {
-        $srch = new SelProdReviewSearch();
+        /*Need to fetch avg rating from already joined shop table */
+        /* $srch = new SelProdReviewSearch();
         $srch->joinSeller();
         $srch->joinSellerProducts();
         $srch->joinSelProdRating();
@@ -177,7 +178,12 @@ class UserSearch extends SearchBase
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
-        $srch->addGroupby('spreview_seller_user_id');
+        $srch->addGroupby('spreview_seller_user_id'); */
+        $srch = new SearchBase(Shop::DB_TBL, 'stemp');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['stemp.shop_user_id as spreview_seller_user_id', 'stemp.shop_avg_rating as avg_rating']);
+        $srch->addGroupby('stemp.shop_user_id');
 
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'sprating.spreview_seller_user_id = u.user_id', 'sprating');
         $this->addFld('IFNULL(sprating.avg_rating, 0) as totRating');

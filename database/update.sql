@@ -2221,3 +2221,92 @@ ALTER TABLE `tbl_badges` ADD `badge_text_color` VARCHAR(150) NOT NULL AFTER `bad
 ALTER TABLE `tbl_badges` CHANGE `badge_display_inside` `badge_display_inside` TINYINT NOT NULL COMMENT 'For Ribbons', CHANGE `badge_shape_type` `badge_shape_type` INT NOT NULL COMMENT 'For Ribbons', CHANGE `badge_color` `badge_color` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'For Ribbons', CHANGE `badge_text_color` `badge_text_color` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'For Ribbons';
 
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_SIGNIN_WITH_PHONE', '1', 'Signin With Phone', '2') ON DUPLICATE KEY UPDATE label_caption = 'Signin To Your YoKart Account', label_caption = 'Signin With Phone';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_ALL_SIGN_IN_OPTIONS', '1', 'All Sign In Options', '2') 
+ON DUPLICATE KEY UPDATE label_caption = 'All Sign In Options', label_key = 'APP_ALL_SIGN_IN_OPTIONS';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_SIGNIN_TO_YOUR_YOKART_ACCOUNT', '1', 'Signin To Your YoKart Account', '2') 
+ON DUPLICATE KEY UPDATE label_caption = 'Signin To Your YoKart Account', label_key = 'APP_SIGNIN_TO_YOUR_YOKART_ACCOUNT';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('APP_SIGNIN_WITH_PHONE', '1', 'Signin With Phone', '2') 
+ON DUPLICATE KEY UPDATE label_caption = 'Signin With Phone', label_key = 'APP_SIGNIN_WITH_PHONE';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('APP_WELCOME_TO_YOKART', 1, 'Welcome to Yo!kart', 2),
+('APP_CONTINUE_WITH_EMAIL_ADDRESS', 1, 'Continue with Email Address', 2),
+('APP_CONTINUE_WITH_PHONE_NUMBER', 1, 'Continue with Phone Number', 2),
+('APP_CONTINUE_WITH_SOCIAL_MEDIA', 1, 'Continue with Social Media', 2),
+('APP_EMAIL_ADDRESS', 1, 'Email Address', 2),
+('APP_CONFIRM_YOUR_NUMBER', 1, 'Confirm your Number', 2),
+('APP_WE_HAVE_SENT_A_VERIFICATION_CODE_TO', 1, 'We have sent a verification code to', 2),
+('APP_ADD_YOUR_INFORMATION', 1, 'Add your information', 2),
+('APP_ENTER_YOUR_PASSWORD', 1, 'Enter your Password', 2),
+('APP_CONTINUE_WITH_FACEBOOK', 1, 'Continue with Facebook', 2),
+('APP_CONTINUE_WITH_GOOGLE', 1, 'Continue with Google', 2),
+('APP_CONTINUE_WITH_APPLE', 1, 'Continue with Apple', 2),
+('APP_CONTINUE_WITH_INSTAGRAM', 1, 'Continue with Instagram', 2),
+('APP_PRODUCTS_NEAR_BY_YOU', 1, 'products near by you', 2),
+('APP_CLEAR_ALL', 1, 'Clear All', 2),
+('APP_QUESTIONS', 1, 'questions', 2),
+('APP_PRICE_RANGE', 1, 'Price Range', 2),
+('APP_YOUR_EMAIL_IS_NOT_VERIFIED', 1, 'Your email is not Verified. Do you want to Verify ?', 2),
+('APP_YOUR_EMAIL_DOES_NOT_EXIST', 1, 'Your email does not exist. Do you want to Register ?', 2),
+('APP_YOUR_PHONE_DOES_NOT_EXIST', 1, 'Your phone does not exist. Do you want to Register ?', 2),
+('APP_RATE_YOUR_PRODUCT', 1, 'Rate Your Product', 2),
+('APP_WRITE_REVIEW', 1, 'Write Reivew', 2),
+('APP_VOICE_SEARCH_TXT', 1, 'Tap Here on Mic and Say Something to Search!', 2),
+('APP_VOICE_SEARCH', 1, 'Voice Search', 2),
+('APP_RATE_YOUR_SELLER', 1, 'Rate Your Seller', 2),
+('APP_RATE_YOUR_EXPERIENCE', 1, 'Rate Your Experience', 2),
+('APP_RATE_YOUR_DELIVERY', 1, 'Rate Your Delivery', 2),
+('APP_RATE_YOUR_DELIVERY_BY', 1, 'Rate Your Delivery By', 2),
+('APP_SKIP', 1, 'Skip', 2),
+('APP_RESEND_OTP', 1, 'Resend OTP', 2),
+('APP_ADD_YOUR_PRODUCT_PHOTOS', 1, 'Add your product photos', 2),
+('APP_I_AGREE_THAT_MY_REVIEW_INCLUDING_MY_NAME', 1, 'I Agree That My Review, Including My Name, Username, May Be Shared By YoKart On Its Website And Mobile App To The Public. Further Details Of Which Are Set Out In The Privacy Policy Which I Have Previously Consented', 2),
+('APP_STAND_A_CHANCE_TO_GET_FEATURED', 1, 'Stand a chance to get featured with the product and become an inspiration for millions of customers.', 2),
+('APP_ADD_PRODUCT_IMAGE', 1, 'Add product images', 2),
+('APP_SHIPPING_BY_OTHER_METHOD', 1, 'Shipping By Other Method', 2),
+('APP_NOT_ACCESSIBLE', 1, 'Not Accessible', 2),
+('APP_OPEN_SETTINGS', 1, 'Open Setting', 2),
+('APP_CHOOSE_CATEGORY', 1, 'Choose Category', 2),
+('APP_SELECT_CATEGORY', 1, 'Select Category', 2),
+('APP_SELECT_BRAND', 1, 'Select Brand', 2),
+('APP_PLEASE_SELECT_THE_CATEGORY', 1, 'Please select the category', 2),
+('APP_PLEASE_SELECT_BRAND', 1, 'Please select the brand', 2),
+('APP_PAYMENT_SCUCCESS', 1, 'Payment Success', 2),
+('APP_VERIFY_OTP', 1, 'Verify OTP', 2),
+('APP_RESET_PASSWORD', 1, 'Reset Password', 2),
+('APP_ERROR', 1, 'Error', 2),
+('APP_PLEASE_ENTER_VALID_OTP', 1, 'Please enter valid OTP', 2),
+('APP_READ_MORE', 1, 'Read More', 2),
+('APP_NEW_VERSION', 1, 'New Version', 2),
+('APP_LATER', 1, 'Later', 2),
+('APP_I_AM_LISTENING', 1, 'Say something I am Listening', 2),
+('APP_YOUR_FAVORITE_IS_EMPTY', 1, 'Your favorite list empty?', 2),
+('APP_TERMS_OF_SERVICES', 1, 'Terms of Services', 2),
+('APP_ALREADY_ADDED_TO_YOUR_WISHLIST', 1, 'Already Added To Your Wishlist', 2),
+('APP_ERROR_SAVING_FILE', 1, 'Error downloading file', 2),
+('APP_PLEASE_REVIEW_THE_PRODUCT', 1, 'Please Review the Product', 2),
+('APP_ITEMS_ARE_NOT_AVAILABLE_FOR_PICKUP', 1, 'Items not available for Pickup', 2),
+('APP_ITEMS_ARE_NOT_AVAILABLE_FOR_PICKUPAPP_ITEMS_ARE_NOT_AVAILABLE_FOR_PICKUP_SHIP_ENTIRE_ORDER', 1, 'Items not available for pickup ship entire order', 2),
+('APP_REQUEST_DATA', 1, 'Request Data', 2),
+('APP_REQUEST_MY_DATA', 1, 'Request My Data', 2),
+('APP_REQUEST_INFO', 1, 'Request System Owner To Get Your Account Information', 2),
+('APP_AGREE_PRIVACY', 1, 'To Read The Policies Of Gdpr', 2),
+('APP_WANT_TO_DELETEACCOUNT', 1, 'Do you want to delete account?', 2),
+('APP_ACCOUNT_DELETE', 1, 'Delete My Account', 2),
+('APP_SIGNIN_TO_YOUR_YOKART_ACCOUNT', 1, 'Signin to your yokart account', 2),
+('APP_SIGNIN_WITH_FACEBOOK', 1, 'Signin with facebook', 2),
+('APP_SIGNIN_WITH_GOOGLE', 1, 'Signin with google', 2),
+('APP_SIGNIN_WITH_INSTAGRAM', 1, 'Signin with instagram', 2),
+('APP_SIGNIN_WITH_APPLE', 1, 'Signin with apple', 2),
+('APP_REGISTER_NOW', 1, 'Register Now', 2),
+('APP_ALL_SIGN_IN_OPTIONS', 1, 'All sign in options', 2),
+('APP_YOUR_EMAIL_WILL_NOT_CHANGE_UNTIL_YOU_VERIFY_YOUR_NUMBER', 1, 'Your email will not change until you verify your number', 2),
+('APP_SIGNIN_WITH_EMAIL', 1, 'Sign In With Email', 2),
+('APP_PLEASE_ENTER_YOUR_TITLE', 1, 'Please Enter The Title', 2),
+('APP_PLEASE_ENTER_YOUR_DESCRIPTION', 1, 'Please Enter The Description', 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+ALTER TABLE `tbl_shops` ADD `shop_avg_rating` FLOAT(10,2) NOT NULL AFTER `shop_fulfillment_type`;
+ALTER TABLE `tbl_shops` ADD `shop_total_reviews` INT(11) NOT NULL AFTER `shop_avg_rating`;

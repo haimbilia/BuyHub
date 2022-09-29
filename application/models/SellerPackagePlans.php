@@ -34,7 +34,7 @@ class SellerPackagePlans extends MyAppModel
             $srch->addCondition(SellerPackagePlans::DB_TBL_PREFIX . 'spackage_id', '=', $packageId);
         }
         $srch->addCondition('spp.spplan_active', '=', applicationConstants::YES);
-        $srch->addOrder('spp.spplan_price', 'ASC');
+        $srch->addOrder('spp.spplan_display_order', 'ASC');
         $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }

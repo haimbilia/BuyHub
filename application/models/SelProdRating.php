@@ -1,5 +1,4 @@
 <?php
-
 class SelProdRating extends MyAppModel
 {
     public const DB_TBL = 'tbl_seller_product_rating';
@@ -86,11 +85,21 @@ class SelProdRating extends MyAppModel
         return (array) FatApp::getDb()->fetchAll($rs);
     }
 
-    public static function getSellerRating($userId)
+    public static function getSellerRating($userId, $getFromLog = false)
     {
+        /*Did update on running site and need to update the login and function param*/
         $userId = FatUtility::int($userId);
+        if (true == $getFromLog) {
+            $rating =  Shop::getAttributesByUserId($userId, 'shop_avg_rating');
+
+            if ($rating == false || 1 > $rating) {
+                return 0;
+            }
+            return $rating;
+        }
+
         $srch = new SelProdReviewSearch();
-        $srch->joinSeller();
+        $srch->joinSeller(0, $userId);
         $srch->joinSellerProducts();
         $srch->joinSelProdRating();
         $srch->joinOrderProduct();
@@ -105,6 +114,12 @@ class SelProdRating extends MyAppModel
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
         return ($record == false) ? 0 : $record['avg_rating'];
+    }
+
+    public static function updateSellerRating($userId)
+    {
+        $rating =  self::getSellerRating($userId);
+        FatApp::getDb()->query("Update tbl_shops set `shop_avg_rating` = '" . $rating . "' where shop_user_id = '" . $userId . "'");
     }
 
     public static function getProdRatingAspects(int $productId, int $langId): array

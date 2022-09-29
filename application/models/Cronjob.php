@@ -590,7 +590,7 @@ class Cronjob extends FatModel
         $srch->addCondition('ossubs_till_date', '!=', '0000-00-00');
         $srch->addCondition('ossubs_type', '=', 'mysql_func_' . SellerPackages::PAID_TYPE, 'AND', true);
         $srch->addCondition('user_autorenew_subscription', '=', 1);
-        $srch->addMultipleFields(array('order_user_id', 'order_language_id', 'order_language_code', 'order_currency_id', 'order_id', 'order_number', 'ossubs_id', 'spackage_type', 'spplan_price', 'spackage_images_per_product', 'spackage_products_allowed', 'spackage_inventory_allowed', 'ossubs_plan_id', 'spplan_interval', 'spplan_frequency', 'spackage_commission_rate','ossubs_price'));
+        $srch->addMultipleFields(array('order_user_id', 'order_language_id', 'order_language_code', 'order_currency_id', 'order_id', 'order_number', 'ossubs_id', 'spackage_type', 'spplan_price', 'spackage_images_per_product', 'spackage_products_allowed', 'spackage_inventory_allowed', 'ossubs_plan_id', 'spplan_interval', 'spplan_frequency', 'spackage_commission_rate', 'ossubs_price'));
 
         /* $srch->addGroupBy('order_user_id');  */
         $srch->addOrder('ossubs_id', 'desc');
@@ -601,7 +601,7 @@ class Cronjob extends FatModel
         if (empty($activeSusbscriptions)) {
             return;
         }
-       
+
         foreach ($activeSusbscriptions as $activeSub) {
             $userId = $activeSub['order_user_id'];
             $userBalance = User::getUserBalance($userId);
@@ -861,4 +861,37 @@ class Cronjob extends FatModel
             }
         }
     }
+
+    /* public static function updateShopsAvgRating()
+    {
+        $srch = new SelProdReviewSearch();
+        $srch->joinSeller();
+        $srch->joinSellerProducts();
+        $srch->joinSelProdRating();
+        $srch->joinOrderProduct();
+        $srch->joinOrderProductShipping();
+        $srch->addMultipleFields(array('ROUND(AVG(sprating_rating),2) as avg_rating', 'spreview_seller_user_id'));
+        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::TYPE_DELIVERY . "') ELSE `ratingtype_type` = '" . RatingType::TYPE_SHOP . "' END)");
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();        
+        $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
+        $srch->addGroupby('spreview_seller_user_id');
+        while ($row = FatApp::getDb()->fetch($srch->getResultSet())) {
+            $rsrch = SelProdRating::getAvgShopReviewsRatingObj($row['spreview_seller_user_id']);
+            $rsrch->joinUser();
+            $rsrch->joinSeller(0, $row['spreview_seller_user_id']);
+            $rsrch->joinSellerProducts();
+            $rsrch->joinProducts();
+            $rsrch->addMultipleFields(array('count(distinct(spreview_id)) as numOfReviews'));
+            $rsrch->doNotCalculateRecords();
+            $rsrch->doNotLimitRecords();
+            $rsrch->addGroupby('spreview_seller_user_id');
+            $record = FatApp::getDb()->fetch($rsrch->getResultSet());
+            $numOfReviews = $record['numOfReviews'] ?? 0;
+
+            FatApp::getDb()->query("Update tbl_shops set `shop_avg_rating` = '" . $row['avg_rating'] . "' and `shop_total_reviews` = '" . $numOfReviews . "' where shop_user_id = '" . $row['spreview_seller_user_id'] . "'");
+        }
+
+        return Labels::getLabel('MSG_SUCCESS', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+    } */
 }

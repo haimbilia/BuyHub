@@ -722,7 +722,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     fixTableColumnWidth = function () {
         if (0 < $('.listingTableJs').length) {
             $('.listingTableJs').each(function () {
-                let autoColumnWidth = $(this).attr('data-autoColumnWidth');
+                let autoColumnWidth = $(this).attr('data-auto-column-width');
                 if ('undefined' == typeof autoColumnWidth || 0 < autoColumnWidth || '' == autoColumnWidth) {
                     fixWidth($(this));
                 }

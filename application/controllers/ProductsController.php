@@ -768,7 +768,7 @@ class ProductsController extends MyAppController
 
         $shop_rating = 0;
         if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-            $shop_rating = SelProdRating::getSellerRating($shop['shop_user_id']);
+            $shop_rating = SelProdRating::getSellerRating($shop['shop_user_id'], true);
         }
 
         /*   [ Promotional Banner   */
@@ -823,7 +823,7 @@ class ProductsController extends MyAppController
         $this->set('product', $product);
         $this->set('shop_rating', $shop_rating);
         $this->set('shop', $shop);
-        $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id']));
+        $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id'], true));
         $this->set('productImagesArr', $productGroupImages);
 
 
@@ -941,7 +941,7 @@ class ProductsController extends MyAppController
     {
         $moreSellers = Product::getMoreSeller($selprodCode, $this->siteLangId, $sellerId);
         foreach ($moreSellers as &$sellerDetail) {
-            $sellerDetail['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($sellerDetail['shop_user_id']);
+            $sellerDetail['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($sellerDetail['shop_user_id'], true);
         }
         $this->set('sellers', $moreSellers);
         $this->_template->render(false, false);
@@ -1657,7 +1657,7 @@ class ProductsController extends MyAppController
 
         foreach ($product['moreSellersArr'] as $seller) {
             if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-                $product['rating'][$seller['selprod_user_id']] = SelProdRating::getSellerRating($seller['selprod_user_id']);
+                $product['rating'][$seller['selprod_user_id']] = SelProdRating::getSellerRating($seller['selprod_user_id'], true);
             } else {
                 $product['rating'][$seller['selprod_user_id']] = 0;
             }

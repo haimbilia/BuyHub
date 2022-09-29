@@ -101,7 +101,7 @@
                     echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_IF_INVENTORY_IS_ALREADY_ADDED_THEN_YOU_CANNOT_BIND_FURTHER_OPTIONS.'));
                 } ?>
                 <div class="table-responsive table-scrollable js-scrollable">
-                    <table class="table table-variants" id="variantsJs" data-autoColumnWidth="0">
+                    <table class="table table-variants" id="variantsJs" data-auto-column-width="0">
                         <thead class="tableHeadJs">
                             <tr>
                                 <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>

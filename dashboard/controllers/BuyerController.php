@@ -2020,6 +2020,10 @@ class BuyerController extends BuyerBaseController
             $db->rollbackTransaction();
             LibHelper::dieJsonError($selProdReview->getError());
         }
+
+        SelProdRating::updateSellerRating($sellerId);
+        SelProdReview::updateSellerTotalReviews($sellerId);
+
         $spreviewId = $selProdReview->getMainTableRecordId();
 
         $ratingsPosted = FatApp::getPostedData('review_rating');

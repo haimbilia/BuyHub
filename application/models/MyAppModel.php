@@ -415,7 +415,7 @@ class MyAppModel extends FatModel
                     continue;
                 }
 
-                FatApp::getDb()->updateFromArray(
+                $resp = FatApp::getDb()->updateFromArray(
                     static::DB_TBL,
                     array(
                         static::DB_TBL_PREFIX . 'display_order' => $i

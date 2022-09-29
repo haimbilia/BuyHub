@@ -227,6 +227,7 @@ class AttachedFile extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->addCondition('afile_type', '=', 'mysql_func_' . $fileType, 'AND', true);
         $srch->addCondition('afile_record_id', '=', 'mysql_func_' . $recordId, 'AND', true);
+        $srch->addMultipleFields(['afile_id','afile_type','afile_record_id','afile_record_subid','afile_lang_id','afile_screen','afile_physical_path','afile_name','afile_attribute_title','afile_attribute_alt','afile_aspect_ratio','afile_display_order','afile_downloaded_times','afile_updated_at']);
 
         if ($recordSubid || $recordSubid == -1 || $haveSubIdZero) {
             if ($recordSubid == -1) {
@@ -255,7 +256,8 @@ class AttachedFile extends MyAppModel
         }
 
         if ($langId == 0) {
-            $srch->addCondition('afile_lang_id', '=', 'mysql_func_0', 'AND', true);
+            $cnd = $srch->addCondition('afile_lang_id', '=', 'mysql_func_' . FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), 'AND', true);
+            $cnd->attachCondition('afile_lang_id', '=', 'mysql_func_0', 'OR', true);
         }
 
         if ($size > 0) {
@@ -263,7 +265,6 @@ class AttachedFile extends MyAppModel
         }
 
         $rs = $srch->getResultSet();
-        //echo $srch->getQuery();die;
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }
 

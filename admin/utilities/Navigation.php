@@ -15,7 +15,7 @@ class Navigation
         // $supReqSrchObj->doNotLimitRecords();
         $supReqSrchObj->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $supReqResult = $db->fetch($supReqSrchObj->getResultset());
-        $supReqCount = FatUtility::int($supReqResult['countOfRec']);     
+        $supReqCount = FatUtility::int($supReqResult['countOfRec']);
 
         /* Custom catalog requests */
         $custReqSrchObj = ProductRequest::getSearchObject(0, false, true);
@@ -107,7 +107,7 @@ class Navigation
         $threshSelProdCount = FatUtility::int($threshSelProdResult['countOfRec']);
 
         /* seller orders */
-        $sellerOrderStatus = FatApp::getConfig('CONF_BADGE_COUNT_ORDER_STATUS', FatUtility::VAR_STRING, '0');
+        /* $sellerOrderStatus = FatApp::getConfig('CONF_BADGE_COUNT_ORDER_STATUS', FatUtility::VAR_STRING, '0');
         if ($sellerOrderStatus && $sellerOrderStatusArr = (array)unserialize($sellerOrderStatus)) {
             $sellerOrderSrchObj = new OrderProductSearch($langId, true, false);
             $sellerOrderSrchObj->addStatusCondition($sellerOrderStatusArr);
@@ -116,7 +116,7 @@ class Navigation
             $sellerOrderResult = $db->fetch($sellerOrderSrchObj->getResultset());
             $sellerOrderCount = FatUtility::int($sellerOrderResult['countOfRec']);
             $template->set('sellerOrderCount', $sellerOrderCount);
-        }
+        } */
 
         /* User GDPR requests */
         $gdprSrch = new UserGdprRequestSearch();
@@ -162,8 +162,8 @@ class Navigation
         $template->set('categoryReqCount', $categoryReqCount);
         $template->set('custProdReqCount', $custProdReqCount);
         $template->set('badgeRequestCount', $badgeRequestCount);
-        $template->set('supReqCount', $supReqCount);  
-        $template->set('selProdReqCount', $selProdReqCount); 
+        $template->set('supReqCount', $supReqCount);
+        $template->set('selProdReqCount', $selProdReqCount);
         $template->set('drReqCount', $drReqCount);
         $template->set('orderCancelReqCount', $orderCancelReqCount);
         $template->set('orderRetReqCount', $orderRetReqCount);

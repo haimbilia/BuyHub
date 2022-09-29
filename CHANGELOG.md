@@ -1218,6 +1218,12 @@ TV-9.4.0.20220907
     - #067045 - It shows no validation error when user tries to add images more than allowed iimages in subscription plan 
     - #067047 - Inconsistency issue on the cart and checkout page in the options field on the front end
     - #066866 - Alignment issue in the social platforms on the section on the footer of the page
+    - #067054 - Seller can add products more than Allowed in subscription plan
+    - #067048 - It lets the user to add more inventories than allowed 
+    - #067072 - Counts are not proper in Subscription report by plan
+    - #067120 - The content on the FAQ listing page is not properly aligned
+    - #067091 - New review alert email does not work
+    - #067067 - Subcription plan price list is not getting listed according to the display orde
 
 ## UAT points:
 
@@ -1240,8 +1246,8 @@ TV-9.4.0.20220907
 
 ```sh 
 TV-9.4.0.20220406
-```
-    
+```    
+
 ## Known Issues and Problems :
 
     - #82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

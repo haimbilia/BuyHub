@@ -33,8 +33,8 @@ foreach ($arrListing as $sn => $row) {
             case 'spRenewalPendings':
             case 'spRenewals':
             case 'spackageCancelled':
-                $td->appendElement('plaintext', $tdAttr, FatUtility::int($row[$key], FatUtility::VAR_INT, 0), true);
-
+                $td->appendElement('plaintext', $tdAttr, FatUtility::int($row[$key]), true);
+                break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
