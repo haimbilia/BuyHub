@@ -1274,8 +1274,6 @@ $(function () {
     });
 
     $(".cc-cookie-accept-js").on('click', function () {
-        $("#cookieInfoBox").hide();
-        return;
         var data = {
             statistical_cookies: 1,
             personalise_cookies: 1,
@@ -1308,7 +1306,8 @@ $(function () {
         };
         updateUserCookies(data);
     };
-    updateUserCookies = function (data) {        
+    updateUserCookies = function (data) {
+        $("#cookieInfoBox").hide();
         fcom.ajax(
             fcom.makeUrl("Custom", "updateUserCookies"),
             data,
@@ -1316,7 +1315,6 @@ $(function () {
                 var ans = $.parseJSON(rsp);
                 if (ans.status == 0) {
                     fcom.displayErrorMessage(ans.msg);
-                    $("#cookieInfoBox").show();
                 } else {
                     $("#cookieInfoBox").hide("slow");
                     $("#cookieInfoBox").remove();
