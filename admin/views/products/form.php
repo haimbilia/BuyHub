@@ -61,6 +61,7 @@ if (0 < $recordId) {
         var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';
         var shippingProfileId = '<?php echo $shippingProfileId; ?>';
         var prodFulfilementType = '<?php echo $prodFulfilementType; ?>';
+        var prodTypeDigital = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
 
         $(function() {
             $('.mainJs').addClass('isLoading');
@@ -134,6 +135,24 @@ if (0 < $recordId) {
             <?php } ?>
             upcType();
             fixTableColumnWidth();
+        });
+
+        $(document).ready(function() {
+            if (prodTypeDigital == $('.productTypeJs:checked').val() && 0 == $('.attachmentWithInventoryJs:checked').val()) {
+                $('.digitalDownloadSectionJS').removeClass('hide');
+            } else if (!$('.digitalDownloadSectionJS').hasClass('hide')) {
+                $('.digitalDownloadSectionJS').addClass('hide');
+            }
+        });
+
+        $(document).on('change', '.attachmentWithInventoryJs', function() {
+            if (prodTypeDigital == $('.productTypeJs:checked').val()) {
+                if (1 == $(this).val()) {
+                    $('.digitalDownloadSectionJS').addClass('hide');
+                } else {
+                    $('.digitalDownloadSectionJS').removeClass('hide');
+                }
+            }
         });
     </script>
 </main>

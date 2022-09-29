@@ -14,7 +14,7 @@
                                 </i>
                                 <div class="">
                                     <h6 class="stock-nav-title">
-                                    <?php echo Labels::getLabel('NAV_BASIC_DETAILS', $siteLangId); ?></h6>
+                                        <?php echo Labels::getLabel('NAV_BASIC_DETAILS', $siteLangId); ?></h6>
                                     <span class="stock-nav-desc"> <?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_BASIC_INFORMATIONS', $siteLangId); ?>
                                     </span>
                                 </div>
@@ -76,37 +76,35 @@
                                 </div>
                             </a>
                         </li>
-                        <?php if ($displayDigitalDownloadList) { ?>
-                            <li class="stock-nav-item">
-                                <a class="stock-nav-link" href="#digital-files">
-                                    <i class="stock-nav-icn">
-                                        <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-digital-files">
-                                            </use>
-                                        </svg>
-                                    </i>
-                                    <div class="">
-                                        <h6 class="stock-nav-title"> <?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h6>
-                                        <span class="stock-nav-desc"> <?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?>
-                                        </span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="stock-nav-item">
-                                <a class="stock-nav-link" href="#digital-links">
-                                    <i class="stock-nav-icn">
-                                        <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-digital-links">
-                                            </use>
-                                        </svg>
-                                    </i>
-                                    <div class="">
-                                        <h6 class="stock-nav-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h6>
-                                        <span class="stock-nav-desc"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?></span>
-                                    </div>
-                                </a>
-                            </li>
-                        <?php } ?>
+                        <li class="stock-nav-item digitalDownloadSectionJS hide">
+                            <a class="stock-nav-link" href="#digital-files">
+                                <i class="stock-nav-icn">
+                                    <svg class="svg" width="20" height="20">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-digital-files">
+                                        </use>
+                                    </svg>
+                                </i>
+                                <div class="">
+                                    <h6 class="stock-nav-title"> <?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h6>
+                                    <span class="stock-nav-desc"> <?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?>
+                                    </span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="stock-nav-item digitalDownloadSectionJS hide">
+                            <a class="stock-nav-link" href="#digital-links">
+                                <i class="stock-nav-icn">
+                                    <svg class="svg" width="20" height="20">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-digital-links">
+                                        </use>
+                                    </svg>
+                                </i>
+                                <div class="">
+                                    <h6 class="stock-nav-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h6>
+                                    <span class="stock-nav-desc"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?></span>
+                                </div>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
