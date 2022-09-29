@@ -50,6 +50,7 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
         var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
         var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';
         var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';
+        var prodTypeDigital = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
 
         $(function() {
             $('.mainJs').addClass('isLoading');
@@ -126,6 +127,24 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
             <?php } ?>
             upcType();
             fixTableColumnWidth();
+        });
+        
+        $(document).ready(function() {
+            if (prodTypeDigital == $('.productTypeJs:checked').val() && 0 == $('.attachmentWithInventoryJs:checked').val()) {
+                $('.digitalDownloadSectionJS').removeClass('hide');
+            } else if (!$('.digitalDownloadSectionJS').hasClass('hide')) {
+                $('.digitalDownloadSectionJS').addClass('hide');
+            }
+        });
+
+        $(document).on('change', '.attachmentWithInventoryJs', function() {
+            if (prodTypeDigital == $('.productTypeJs:checked').val()) {
+                if (1 == $(this).val()) {
+                    $('.digitalDownloadSectionJS').addClass('hide');
+                } else {
+                    $('.digitalDownloadSectionJS').removeClass('hide');
+                }
+            }
         });
     </script>
 </main>
