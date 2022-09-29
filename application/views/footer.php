@@ -160,7 +160,7 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
     !CommonHelper::getUserCookiesEnabled() &&
     FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, '')
 ) { ?>
-    <div class="cc-window no-print" id="cookieInfoBox">
+    <div class="cc-window no-print" id="cookieInfoBox" style="display:none;">
         <div class="box-cookies">
             <p id="cookieconsent:desc" class="cc-message">
                 <?php echo FatUtility::decodeHtmlEntities(mb_substr(FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, ''), 0, 600)); ?>
@@ -177,6 +177,13 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            setInterval(function() {
+                $('#cookieInfoBox').show();
+            }, 5000);
+        });
+    </script>
 <?php }
 if (!isset($_SESSION['geo_location']) && FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '') != '') { ?>
     <script src="https://maps.google.com/maps/api/js?key=<?php echo FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''); ?>&libraries=places"></script>
