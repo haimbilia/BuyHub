@@ -1,3 +1,6 @@
+<?php
+$sellerId = $productData['product_seller_id'] ?? 0;
+?>
 <div class="add-stock-column column-main">
     <div class="add-stock-column-head">
         <div class="add-stock-column-head-label">
@@ -42,7 +45,7 @@
         <div class="card-body">
             <div class="row">
                 <?php
-                echo HtmlHelper::getFieldHtml($frm, 'product_type', 6, ['onchange' => 'productType(this)']);
+                echo HtmlHelper::getFieldHtml($frm, 'product_type', 6, ['onchange' => 'productType(this)', 'class' => 'productTypeJs']);
                 echo HtmlHelper::getFieldHtml($frm, 'product_seller_id', 6, ['id' => 'product_seller_id', 'placeholder' => Labels::getLabel('FRM_SELECT_USER', $langId)]);
                 echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], Labels::getLabel('MSG_A_UNIQUE_IDENTIFIER_ASSOCIATED_FOR_PRODUCT_NAME', $langId));
                 echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], Labels::getLabel('MSG_A_NAME_OF_THE_PRODUCT_TO_BE_LISTED', $langId));
@@ -76,7 +79,7 @@
                     </div>
                 <?php }
                 echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
-                echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
+                echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, ['class' => 'attachmentWithInventoryJs'], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                 echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
                 echo HtmlHelper::getFieldHtml($frm, 'record_id', 6);
                 echo HtmlHelper::getFieldHtml($frm, 'temp_product_id', 6, ['id' => 'temp_product_id']);
@@ -267,15 +270,17 @@
         </div>
     </div>
 
-    <?php if ($displayDigitalDownloadList) { ?>
-        <div class="card card-toggle" id="digital-files">
-            <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-file-block" aria-expanded="false" aria-controls="stock-block2">
-                <div class="card-head-label">
-                    <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
-                    <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
-                </div>
-                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+    <div class="card card-toggle digitalDownloadSectionJS hide" id="digital-files">
+        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-file-block" aria-expanded="false" aria-controls="stock-block2">
+            <div class="card-head-label">
+                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
+                <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
             </div>
+            <?php if ($displayDigitalDownloadList) { ?>
+                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+            <?php } ?>
+        </div>
+        <?php if ($displayDigitalDownloadList) { ?>
             <div class="card-body show" id="digital-file-block">
                 <div id="digitalFilesDefaultListJs">
                 </div>
@@ -295,15 +300,31 @@
                     </div>
                 </div>
             <?php } ?>
-        </div>
-        <div class="card card-toggle" id="digital-links">
-            <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-link-block" aria-expanded="false" aria-controls="stock-block2">
-                <div class="card-head-label">
-                    <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
-                    <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?> </span>
-                </div>
-                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+        <?php } else { ?>
+            <div class="card-body show">
+                <?php
+                if (1 > $sellerId) {
+                    echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_YOU_CAN_UPLOAD_DIGITAL_FILES_AFTER_SETUP.'));
+                } else {
+                    echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_YOU_ARE_NOT_ALLOWED_TO_UPLOAD_AS_THIS_PRODUCT_BELONGS_TO_SELLER.'));
+                }
+                ?>
             </div>
+        <?php } ?>
+    </div>
+    <div class="card card-toggle digitalDownloadSectionJS hide" id="digital-links">
+        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-link-block" aria-expanded="false" aria-controls="stock-block2">
+            <div class="card-head-label">
+                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
+                <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?> </span>
+            </div>
+
+            <?php if ($displayDigitalDownloadList) { ?>
+                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+            <?php } ?>
+        </div>
+
+        <?php if ($displayDigitalDownloadList) { ?>
             <div class="card-body show" id="digital-link-block">
                 <div id="digitalLinksDefaultListJs">
                 </div>
@@ -323,9 +344,18 @@
                     </div>
                 </div>
             <?php } ?>
-
-        </div>
-    <?php } ?>
+        <?php } else { ?>
+            <div class="card-body show">
+                <?php
+                if (1 > $sellerId) {
+                    echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_YOU_CAN_ADD_DIGITAL_LINKS_AFTER_SETUP.'));
+                } else {
+                    echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_YOU_ARE_NOT_ALLOWED_TO_ADD_AS_THIS_PRODUCT_BELONGS_TO_SELLER.'));
+                }
+                ?>
+            </div>
+        <?php } ?>
+    </div>
 </div>
 <div class="add-stock-column column-actions">
     <div class="sticky-top">

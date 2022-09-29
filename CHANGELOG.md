@@ -1223,7 +1223,8 @@ TV-9.4.0.20220907
     - #067072 - Counts are not proper in Subscription report by plan
     - #067120 - The content on the FAQ listing page is not properly aligned
     - #067091 - New review alert email does not work
-    - #067067 - Subcription plan price list is not getting listed according to the display orde
+    - #067067 - Subcription plan price list is not getting listed according to the display order
+    - #067329 - The 'Digital files' and digital links fields should be visible to the user when the user adds a new digital product
 
 ## UAT points:
 

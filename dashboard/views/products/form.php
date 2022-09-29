@@ -70,7 +70,7 @@ if (0 < $recordId) {
                             <?php
                             $fld = $frm->getField('product_type');
                             $fld->addOptionListTagAttribute('class', 'product-type');
-                            echo HtmlHelper::getFieldHtml($frm, 'product_type', 12, ['onchange' => 'productType(this)']);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_type', 12, ['onchange' => 'productType(this)', 'class' => 'productTypeJs']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], Labels::getLabel('MSG_A_UNIQUE_IDENTIFIER_ASSOCIATED_FOR_PRODUCT_NAME', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], Labels::getLabel('MSG_A_NAME_OF_THE_PRODUCT_TO_BE_LISTED', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_BRAND', $langId) : Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrandReqForm(0)', 'class' => 'link']]);
@@ -103,7 +103,7 @@ if (0 < $recordId) {
                                 </div>
                             <?php }
                             echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
+                            echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, ['class' => 'attachmentWithInventoryJs'], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
                             echo HtmlHelper::getFieldHtml($frm, 'record_id', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'temp_product_id', 6, ['id' => 'temp_product_id']);
@@ -283,16 +283,19 @@ if (0 < $recordId) {
                     </div>
                 </div>
 
-                <?php if ($displayDigitalDownloadList) { ?>
 
-                    <div class="card card-toggle" id="digital-files">
-                        <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-file-block" aria-expanded="false" aria-controls="stock-block2">
-                            <div class="card-head-label">
-                                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
-                                <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
-                            </div>
-                            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+                <div class="card card-toggle digitalDownloadSectionJS hidden" id="digital-files">
+                    <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-file-block" aria-expanded="false" aria-controls="stock-block2">
+                        <div class="card-head-label">
+                            <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
+                            <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
                         </div>
+                        <?php if ($displayDigitalDownloadList) { ?>
+                            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+                        <?php } ?>
+                    </div>
+
+                    <?php if ($displayDigitalDownloadList) { ?>
                         <div class="collapse" id="digital-file-block">
                             <div class="card-table">
                                 <div id="digitalFilesDefaultListJs">
@@ -314,16 +317,24 @@ if (0 < $recordId) {
                                 </div>
                             </div>
                         <?php } ?>
-
-                    </div>
-                    <div class="card card-toggle" id="digital-links">
-                        <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-link-block" aria-expanded="false" aria-controls="stock-block2">
-                            <div class="card-head-label">
-                                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
-                                <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?></span>
-                            </div>
-                            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+                    <?php } else { ?>
+                        <div class="card-body collapsed show">
+                            <?php echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_YOU_CAN_UPLOAD_DIGITAL_FILES_AFTER_SETUP.')); ?>
                         </div>
+                    <?php } ?>
+                </div>
+                <div class="card card-toggle digitalDownloadSectionJS hidden" id="digital-links">
+                    <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#digital-link-block" aria-expanded="false" aria-controls="stock-block2">
+                        <div class="card-head-label">
+                            <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
+                            <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?></span>
+                        </div>
+
+                        <?php if ($displayDigitalDownloadList) { ?>
+                            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+                        <?php } ?>
+                    </div>
+                    <?php if ($displayDigitalDownloadList) { ?>
                         <div class="collapse" id="digital-link-block">
                             <div class="card-table">
                                 <div id="digitalLinksDefaultListJs">
@@ -345,8 +356,12 @@ if (0 < $recordId) {
                                 </div>
                             </div>
                         <?php } ?>
-                    </div>
-                <?php } ?>
+                    <?php } else { ?>
+                        <div class="card-body collapsed show">
+                            <?php echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_YOU_CAN_ADD_DIGITAL_LINKS_AFTER_SETUP.')); ?>
+                        </div>
+                    <?php } ?>
+                </div>
             </div>
             <div class="add-stock-column column-actions">
                 <div class="sticky-top">
@@ -446,6 +461,7 @@ if (0 < $recordId) {
     var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
     var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';
     var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';
+    var prodTypeDigital = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
 
     $(function() {
         $('body').addClass('isLoading');
@@ -508,5 +524,21 @@ if (0 < $recordId) {
     });
     $(document).ready(function() {
         $('#product_fulfillment_type').trigger('change');
+
+        if (prodTypeDigital == $('.productTypeJs:checked').val() && 0 == $('.attachmentWithInventoryJs:checked').val()) {
+            $('.digitalDownloadSectionJS').removeClass('hidden');
+        } else if (!$('.digitalDownloadSectionJS').hasClass('hidden')) {
+            $('.digitalDownloadSectionJS').addClass('hidden');
+        }
+    });
+
+    $(document).on('change', '.attachmentWithInventoryJs', function() {
+        if (prodTypeDigital == $('.productTypeJs:checked').val()) {
+            if (1 == $(this).val()) {
+                $('.digitalDownloadSectionJS').addClass('hidden');
+            } else {
+                $('.digitalDownloadSectionJS').removeClass('hidden');
+            }
+        }
     });
 </script>
