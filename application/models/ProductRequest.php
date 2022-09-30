@@ -347,4 +347,23 @@ class ProductRequest extends MyAppModel
         }
         return true;
     }
+
+    public static function isValidProductIdentifier(string $identifier, int $recordId = 0): bool
+    {
+        $srch = static::getSearchObject();
+        $srch->addCondition('preq.preq_product_identifier', '=', $identifier);
+        if (0 < $recordId) {
+            $srch->addCondition('preq.preq_id', '!=', $recordId);
+        }
+        $srch->doNotCalculateRecords();
+        if (false != FatApp::getDb()->fetch($srch->getResultSet())) {
+            return false;
+        }
+
+        $record = Product::getAttributesByIdentifier($identifier, 'product_id');
+        if (!empty($record)) {
+            return false;
+        }
+        return true;
+    }
 }

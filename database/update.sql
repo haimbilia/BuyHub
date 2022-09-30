@@ -2311,3 +2311,8 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUE
 ALTER TABLE `tbl_shops` ADD `shop_avg_rating` FLOAT(10,2) NOT NULL AFTER `shop_fulfillment_type`;
 ALTER TABLE `tbl_shops` ADD `shop_total_reviews` INT(11) NOT NULL AFTER `shop_avg_rating`;
 -- -----------------------TV-9.4.0.20220929---------------------------------
+
+ALTER TABLE `tbl_product_requests` ADD `preq_product_identifier` VARCHAR(100) NOT NULL AFTER `preq_brand_id`;
+UPDATE tbl_product_requests SET preq_product_identifier = CONCAT(TRIM(BOTH '"' FROM (JSON_EXTRACT(preq_content, "$.product_identifier"))), '-', preq_id);
+UPDATE tbl_product_requests SET preq_content = JSON_SET(preq_content, '$.product_identifier', preq_product_identifier);
+ALTER TABLE `tbl_product_requests` ADD UNIQUE(`preq_product_identifier`);

@@ -853,8 +853,8 @@ class CustomProductsController extends ListingBaseController
         }
 
         $productIdentifier = FatApp::getPostedData('product_identifier', FatUtility::VAR_STRING, '');
-        $record = Product::getAttributesByIdentifier($productIdentifier, 'product_id');
-        if (!empty($record)) {
+        $isValid = ProductRequest::isValidProductIdentifier($productIdentifier, $recordId);
+        if (!$isValid) {
             LibHelper::exitWithError(Labels::getLabel('LBL_DUPLICATE_PRODUCT_IDENTIFER'), true);
         }
 
@@ -923,7 +923,8 @@ class CustomProductsController extends ListingBaseController
         $data['preq_content'] = array_merge($data['preq_content'], array_diff_key($post, $langData, $data));
         $data['preq_content'] = json_encode($data['preq_content']);
         $data['preq_status'] = $requestStatus;
-
+        $data['preq_product_identifier'] = $productIdentifier;
+        
         $prodReqObj = new ProductRequest($recordId);
         $prodReqObj->assignValues($data);
         if (!$prodReqObj->save()) {
