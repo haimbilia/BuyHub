@@ -783,13 +783,13 @@ class User extends MyAppModel
 
         $userData = $this->getProfileData();
         $newEmail = '';
-        if(!empty($userData['user_email'])){           
-            $newEmail = 'xxxxxxx-' .$this->mainTableRecordId. substr($userData['user_email'], strpos($userData['user_email'], "@"));
+        if (!empty($userData['user_email'])) {
+            $newEmail = 'xxxxxxx-' . $this->mainTableRecordId . substr($userData['user_email'], strpos($userData['user_email'], "@"));
         }
 
         $data = array(
-            'credential_username' => 'xxxxxxx'."-".$this->mainTableRecordId,
-            'credential_email' => $newEmail, 
+            'credential_username' => 'xxxxxxx' . "-" . $this->mainTableRecordId,
+            'credential_email' => $newEmail,
         );
 
         if (!$db->updateFromArray(static::DB_TBL_CRED, $data, array('smt' => 'credential_user_id = ? ', 'vals' => array($this->mainTableRecordId)))) {
@@ -797,10 +797,10 @@ class User extends MyAppModel
             return false;
         }
 
-        if($shopId = Shop::getAttributesByUserId($this->mainTableRecordId,'shop_id')){
+        if ($shopId = Shop::getAttributesByUserId($this->mainTableRecordId, 'shop_id')) {
             $data = array(
-                'shop_identifier' => 'xxxxxx',                
-                'shop_phone' => '',  
+                'shop_identifier' => 'xxxxxx',
+                'shop_phone' => '',
                 'shop_lng' => '',
                 'shop_lng' => '',
             );
@@ -812,11 +812,11 @@ class User extends MyAppModel
 
             $data = array(
                 'shop_name' => 'xxxxx',
-                'shop_contact_person' => 'xxxxx', 
+                'shop_contact_person' => 'xxxxx',
                 'shop_description' => '',
                 'shop_address_line_1' => 'xxxxxx',
                 'shop_address_line_2' => 'xxxxxx',
-                'shop_city' => 'xxxxx',          
+                'shop_city' => 'xxxxx',
                 'shop_payment_policy' => '',
                 'shop_delivery_policy' => '',
                 'shop_refund_policy' => '',
@@ -827,7 +827,7 @@ class User extends MyAppModel
             if (!$db->updateFromArray(Shop::DB_TBL_LANG, $data, array('smt' => 'shoplang_shop_id = ? ', 'vals' => array($shopId)))) {
                 $this->error = $db->getError();
                 return false;
-            }           
+            }
         }
         /* ] */
 
@@ -1836,7 +1836,7 @@ class User extends MyAppModel
         if (false === $otp) {
             return false;
         }
-       return $this->sendOtp($dialCode . $phone, $user_name, $otp, $langId, $tpl);
+        return $this->sendOtp($dialCode . $phone, $user_name, $otp, $langId, $tpl);
     }
 
     public function sendOtp($phone, $user_name, $otp, $langId, $tpl = SmsTemplate::LOGIN)
@@ -3158,6 +3158,7 @@ class User extends MyAppModel
 
         $srch = new SearchBase(static::DB_TBL_USR_COOKIES_PREFERENCES, 'ucp');
         $srch->addCondition('ucp_user_id', '=', $this->mainTableRecordId);
+        $srch->addMultipleFields(['ucp_user_id', 'ucp_statistical', 'ucp_personalized']);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();

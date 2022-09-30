@@ -46,6 +46,7 @@ class Language extends MyAppModel
             $srch->addMultipleFields(array(static::tblFld('id'), static::tblFld('name')));
             $langData = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         } else {
+            $srch->addMultipleFields(['language_id', 'language_code', 'language_country_code', 'language_name', 'language_active', 'language_css', 'language_layout_direction']);
             $langData = FatApp::getDb()->fetchAll($srch->getResultSet(), static::tblFld('id'));
         }
 

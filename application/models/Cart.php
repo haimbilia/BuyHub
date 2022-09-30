@@ -68,6 +68,7 @@ class Cart extends FatModel
         $srch->setPageSize(1);
         $srch->addCondition('usercart_user_id', '=', $this->cart_user_id);
         $srch->addCondition('usercart_type', '=', 'mysql_func_' . CART::TYPE_PRODUCT, 'AND', true);
+        $srch->addMultipleFields(['usercart_user_id', 'usercart_type', 'usercart_details', 'usercart_added_date', 'usercart_sent_reminder', 'usercart_reminder_date', 'usercart_last_used_date', 'usercart_last_session_id']);
         $rs = $srch->getResultSet();
         $this->cartSameSessionUser = true;
         if ($row = FatApp::getDb()->fetch($rs)) {
@@ -131,6 +132,7 @@ class Cart extends FatModel
         $srch->addCondition('usercart_type', '=', 'mysql_func_' . CART::TYPE_PRODUCT, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
+        $srch->addMultipleFields(['usercart_user_id', 'usercart_type', 'usercart_details', 'usercart_added_date', 'usercart_sent_reminder', 'usercart_reminder_date', 'usercart_last_used_date', 'usercart_last_session_id']);
         $rs = $srch->getResultSet();
         if ($row = FatApp::getDb()->fetch($rs)) {
             self::$cartData = $row;
@@ -558,7 +560,7 @@ class Cart extends FatModel
                     } else {
                         if ($sellerProductRow['product_cod_enabled']) {
                             $codEnabled = true;
-                        }                        
+                        }
                     }
                     $is_cod_enabled = $codEnabled;
                     /* ]*/

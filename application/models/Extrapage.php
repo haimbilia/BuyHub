@@ -135,12 +135,17 @@ class Extrapage extends MyAppModel
         if ($pageType == '') {
             return '';
         }
+        $flds = ['epage_id', 'epage_identifier', 'epage_type', 'epage_content_for', 'epage_active', 'epage_default', 'epage_default_content', 'epage_extra_info', 'epage_updated_on'];
         $langId = FatUtility::int($langId);
+        if (0 < $langId) {
+            $flds = array_merge($flds, ['epagelang_epage_id', 'epagelang_lang_id', 'epage_label', 'epage_content']);
+        }
 
         $srch = self::getSearchObject($langId);
         $srch->addCondition('ep.epage_type', '=', $pageType);
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
+        $srch->addMultipleFields($flds);
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
@@ -153,7 +158,8 @@ class Extrapage extends MyAppModel
         $srch = self::getSearchObject();
         $srch->addCondition('ep.epage_type', '=', $pageType);
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1);
+        $srch->addFld('epage_id');
         $row = FatApp::getDb()->fetch($srch->getResultSet());
 
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['isContentActive'][$pageType] = NULL !== $row;
@@ -264,7 +270,7 @@ class Extrapage extends MyAppModel
         }
         return $translatedData;
     }
-    
+
     /**
      * nonHtmlEditorBlocks
      *

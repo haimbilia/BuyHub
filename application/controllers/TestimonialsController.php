@@ -16,7 +16,7 @@ class TestimonialsController extends MyAppController
     {
         $post = FatApp::getPostedData();
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
-        $pageSize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
+        $pageSize = 12;
 
         $srch = Testimonial::getSearchObject($this->siteLangId, true);
         $srch->addMultipleFields(array('t.*', 't_l.testimonial_title', 't_l.testimonial_text'));

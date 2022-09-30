@@ -2311,3 +2311,4 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUE
 ALTER TABLE `tbl_shops` ADD `shop_avg_rating` FLOAT(10,2) NOT NULL AFTER `shop_fulfillment_type`;
 ALTER TABLE `tbl_shops` ADD `shop_total_reviews` INT(11) NOT NULL AFTER `shop_avg_rating`;
 -- -----------------------TV-9.4.0.20220929---------------------------------
+ALTER TABLE `tbl_extra_pages` ADD UNIQUE( `epage_type`);

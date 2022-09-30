@@ -295,14 +295,19 @@ class Common
     public static function footerSocialMedia($template)
     {
         $siteLangId = CommonHelper::getLangId();
-
-        $srch = SocialPlatform::getSearchObject($siteLangId);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addCondition('splatform_user_id', '=', 'mysql_func_0', 'AND', true);
-        $rs = $srch->getResultSet();
-        $rows = FatApp::getDb()->fetchAll($rs);
-
+        $footerSocialMedia = CacheHelper::get('footerSocialMedia' . $siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        if ($footerSocialMedia) {
+            $rows = unserialize($footerSocialMedia);
+        } else {
+            $srch = SocialPlatform::getSearchObject($siteLangId);
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+            $srch->addCondition('splatform_user_id', '=', 'mysql_func_0', 'AND', true);
+            $srch->addMultipleFields(['splatform_id', 'splatform_title', 'splatform_identifier', 'splatform_url', 'splatform_icon_class']);
+            $rs = $srch->getResultSet();
+            $rows = FatApp::getDb()->fetchAll($rs);
+            CacheHelper::create('footerSocialMedia' . $siteLangId, serialize($rows), CacheHelper::TYPE_NAVIGATION);
+        }
         $template->set('rows', $rows);
         $template->set('siteLangId', $siteLangId);
     }
