@@ -314,32 +314,29 @@ class Navigation
         $srch->addGroupBy('nlink_id');
 
         $rs = $srch->getResultSet();
-        $rows = FatApp::getDb()->fetchAll($rs);
-
 
         $navigation = array();
         $previous_nav_id = 0;
+        $rootCatArr = $rootCatArr ?? ProductCategory::getArray($siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE);
 
-        if ($rows) {
-            $rootCatArr = ProductCategory::getArray($siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE);
-
-            foreach ($rows as $key => $row) {
-                if ($key == 0 || $previous_nav_id != $row['nav_id']) {
-                    $previous_nav_id = $row['nav_id'];
-                }
-                $navigation[$previous_nav_id]['parent'] = $row['nav_name'];
-                $navigation[$previous_nav_id]['pages'][$key] = $row;
-
-                $childrenCats = array();
-                if ($includeCategories && $row['nlink_category_id'] > 0) {
-                    if (array_key_exists($row['nlink_category_id'], $rootCatArr)) {
-                        $childrenCats = $rootCatArr[$row['nlink_category_id']]['children'];
-                    } else {
-                        $childrenCats = ProductCategory::getArray($siteLangId, $row['nlink_category_id'], false, true, false, CONF_USE_FAT_CACHE);
-                    }
-                }
-                $navigation[$previous_nav_id]['pages'][$key]['children'] = isset($childrenCats) ? $childrenCats : [];
+        $count = 0;
+        while ($row = FatApp::getDb()->fetch($rs)) {
+            if ($count == 0 || $previous_nav_id != $row['nav_id']) {
+                $previous_nav_id = $row['nav_id'];
             }
+            $navigation[$previous_nav_id]['parent'] = $row['nav_name'];
+            $navigation[$previous_nav_id]['pages'][$count] = $row;
+
+            $childrenCats = array();
+            if ($includeCategories && $row['nlink_category_id'] > 0) {
+                if (array_key_exists($row['nlink_category_id'], $rootCatArr)) {
+                    $childrenCats = $rootCatArr[$row['nlink_category_id']]['children'];
+                } else {
+                    $childrenCats = ProductCategory::getArray($siteLangId, $row['nlink_category_id'], false, true, false, CONF_USE_FAT_CACHE);
+                }
+            }
+            $navigation[$previous_nav_id]['pages'][$count]['children'] = isset($childrenCats) ? $childrenCats : [];
+            $count++;
         }
 
         CacheHelper::create('headerNavCache' . $siteLangId . '-' . $type . '-' . ($includeCategories ? 1 : 0), serialize($navigation), CacheHelper::TYPE_NAVIGATION);

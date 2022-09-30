@@ -212,6 +212,8 @@ class NavigationsController extends ListingBaseController
             }
         }
 
+        CacheHelper::clear(CacheHelper::TYPE_NAVIGATION);
+
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
@@ -266,7 +268,7 @@ class NavigationsController extends ListingBaseController
         if (!$navObj->changeStatus($status)) {
             LibHelper::exitWithError($navObj->getError(), true);
         }
-
+        CacheHelper::clear(CacheHelper::TYPE_NAVIGATION);
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_STATUS_UPDATED', $this->siteLangId));
     }
 
@@ -370,7 +372,7 @@ class NavigationsController extends ListingBaseController
         }
         $srch->addCondition('nlink_nav_id', '=', $nlink_nav_id);
         $srch->getResultSet();
-        
+        CacheHelper::clear(CacheHelper::TYPE_NAVIGATION);
         $this->set('navId', $nlink_nav_id);
         $this->set('nlinkId', $nlinkId);
         $this->set('subRecordsCount', $srch->recordCount());
@@ -466,6 +468,7 @@ class NavigationsController extends ListingBaseController
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
 
+        CacheHelper::clear(CacheHelper::TYPE_NAVIGATION);
         $this->set('langId', $newTabLangId);
         $this->set('nlinkId', $nlinkId);
         $this->set('msg', $this->str_update_record);
@@ -549,7 +552,7 @@ class NavigationsController extends ListingBaseController
             'msg' => $this->str_delete_record,
             'subRecordsCount' => $srch->recordCount()
         ];
-
+        CacheHelper::clear(CacheHelper::TYPE_NAVIGATION);
         FatUtility::dieJsonSuccess($json);
     }
 
@@ -563,6 +566,7 @@ class NavigationsController extends ListingBaseController
             if (!$nlinkObj->updateOrder($post['nlinksIds'])) {
                 LibHelper::exitWithError($nlinkObj->getError(), true);
             }
+            CacheHelper::clear(CacheHelper::TYPE_NAVIGATION);
             FatUtility::dieJsonSuccess(Labels::getLabel('LBL_ORDER_UPDATED_SUCCESSFUL', $this->siteLangId));
         }
     }

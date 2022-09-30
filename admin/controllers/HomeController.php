@@ -416,8 +416,7 @@ class HomeController extends ListingBaseController
     public function clear()
     {
         CommonHelper::recursiveDelete(CONF_UPLOADS_PATH . "caching");
-        FatCache::clearAll();
-        // Message::addMessage(Labels::getLabel('MSG_CACHE_HAS_BEEN_CLEARED', $this->siteLangId));
+        FatCache::clearAll();       
         if (Labels::isAPCUcacheAvailable()) {
             apcu_clear_cache();
         }
@@ -429,6 +428,12 @@ class HomeController extends ListingBaseController
                 unlink($manifestFile);
             }
         }
+
+        /* $cacheKey = rtrim(CONF_UPLOADS_PATH, '/') . '/cache_keys.txt';
+        if (file_exists($cacheKey)) {
+            unlink($cacheKey);
+        } */
+
         Product::updateMinPrices();
         if (CommonHelper::demoUrl()) {
             $str = file_get_contents('https://' . $_SERVER['SERVER_NAME'] . '/admin/admin-users/createProcedures');
