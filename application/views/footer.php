@@ -179,9 +179,9 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
     </div>
     <script>
         $(document).ready(function() {
-            setInterval(function() {
+            setTimeout(() => {
                 $('#cookieInfoBox').show();
-            }, 5000);
+            }, 3000);
         });
     </script>
 <?php }

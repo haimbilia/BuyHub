@@ -2310,3 +2310,4 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
 ALTER TABLE `tbl_shops` ADD `shop_avg_rating` FLOAT(10,2) NOT NULL AFTER `shop_fulfillment_type`;
 ALTER TABLE `tbl_shops` ADD `shop_total_reviews` INT(11) NOT NULL AFTER `shop_avg_rating`;
+-- -----------------------TV-9.4.0.20220929---------------------------------

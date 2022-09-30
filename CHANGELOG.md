@@ -1226,6 +1226,9 @@ TV-9.4.0.20220907
     - #067067 - Subcription plan price list is not getting listed according to the display order
     - #067329 - The 'Digital files' and digital links fields should be visible to the user when the user adds a new digital product
 
+```sh 
+TV-9.4.0.20220929
+```
 ## UAT points:
 
     - #Admin dashboard sales stats > set tabs priority, Move Affiliate tab to the last
