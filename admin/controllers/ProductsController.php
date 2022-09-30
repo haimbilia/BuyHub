@@ -438,20 +438,27 @@ class ProductsController extends ListingBaseController
         $sendApprovalStatusUpdate = false;
         $isNewProduct = false;
         if (0 < $recordId && isset($post['product_approved'])) {
-            $oldProductData = Product::getAttributesById($recordId, ['product_approved', 'product_seller_id']);
+            $oldProductData = Product::getAttributesById($recordId, ['product_approved', 'product_seller_id', 'product_active']);
             if (0 < $oldProductData['product_seller_id'] && $oldProductData['product_approved'] != $post['product_approved']) {
                 $sendApprovalStatusUpdate = true;
             }
 
             if (
-                0 < $post['product_approved'] &&
-                $oldProductData['product_approved'] != $post['product_approved'] &&
+
+                (
+                    (0 < $post['product_active'] &&
+                        $oldProductData['product_active'] != $post['product_active']
+                    ) ||
+                    (0 < $post['product_approved'] &&
+                        $oldProductData['product_approved'] != $post['product_approved']
+                    )
+                ) &&
                 isset($post['product_seller_id']) &&
                 0 < $post['product_seller_id'] &&
                 FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
                 Product::getActiveCount($post['product_seller_id']) >= SellerPackages::getAllowedLimit($post['product_seller_id'], $this->siteLangId, 'ossubs_products_allowed')
             ) {
-                LibHelper::exitWithError(Labels::getLabel('ERR_SUBSCRIPTION_PACKAGE_LIMIT_CROSSED', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_SELLER_SUBSCRIPTION_PACKAGE_LIMIT_CROSSED.', $this->siteLangId), true);
             }
         }
 
@@ -1543,5 +1550,31 @@ class ProductsController extends ListingBaseController
                 break;
         }
         return $this->nodes;
+    }
+
+    protected function changeStatus(int $recordId, int $status)
+    {
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $productName = current(Product::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(product_name, product_identifier) as product_name'], applicationConstants::JOIN_INNER));
+        $oldProductData = Product::getAttributesById($recordId, ['product_seller_id', 'product_active']);
+        if (
+            0 < $status &&
+            $oldProductData['product_active'] != $status &&
+            0 < $oldProductData['product_seller_id'] &&
+            FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
+            Product::getActiveCount($oldProductData['product_seller_id']) >= SellerPackages::getAllowedLimit($oldProductData['product_seller_id'], $this->siteLangId, 'ossubs_products_allowed')
+        ) {
+            LibHelper::exitWithError(CommonHelper::replaceStringData(Labels::getLabel('ERR_UNABLE_TO_CHANGE_STATUS_FOR_"{PRODUCT-NAME}"._AS_SELLER_SUBSCRIPTION_PACKAGE_LIMIT_CROSSED.', $this->siteLangId), ['{PRODUCT-NAME}' => $productName]), true);
+        }
+
+        $this->setModel([$recordId]);
+        if (!$this->modelObj->changeStatus($status)) {
+            LibHelper::exitWithError($this->modelObj->getError(), true);
+        }
     }
 }

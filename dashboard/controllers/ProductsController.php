@@ -824,15 +824,17 @@ class ProductsController extends SellerBaseController
     {
         $recordId = $post['record_id'];
 
+        $prodData = [];
         if (0 < $recordId) {
-            $prodSellerId = Product::getAttributesById($recordId, 'product_seller_id');
+            $prodData = Product::getAttributesById($recordId, ['product_seller_id', 'product_active']);
+            $prodSellerId = $prodData['product_seller_id'];
             if ($prodSellerId != $this->userParentId) {
                 FatUtility::dieWithError($this->str_invalid_request);
             }
         }
 
         if (
-            1 > $recordId &&
+            ((!empty($prodData) && applicationConstants::ACTIVE == $post['product_active'] && $prodData['product_active'] != $post['product_active']) || 1 > $recordId) &&
             FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
             Product::getActiveCount($this->userParentId, 0, false) >= SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_products_allowed')
         ) {
