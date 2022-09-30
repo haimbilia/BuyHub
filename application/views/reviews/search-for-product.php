@@ -6,18 +6,18 @@ if ($reviewsList) { ?>
             if (!empty($images)) { ?>
                 <h6 class="mb-4"> <?php echo Labels::getLabel('LBL_REVIEWS_WITH_IMAGES'); ?></h6>
                 <div class="review-images featherLightGalleryJs">
-                    <?php                  
+                    <?php
                     foreach ($images as $image) {
                         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                         $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_MINI_THUMB, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_LARGE, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');                     
+                        $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_LARGE, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     ?>
                         <div class="image">
                             <a class="thumbnail" href="<?php echo $largeImgUrl; ?>" data-featherlight="image">
-                                <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">                             
+                                <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
                             </a>
                         </div>
-                    <?php                       
+                    <?php
                     } ?>
                 </div>
             <?php } ?>
@@ -55,15 +55,11 @@ if ($reviewsList) { ?>
                                 <?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?> </a>
                         <?php } ?>
                     </div>
-
-                    <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"> -->
                 </div>
                 <div class="user-reviews-foot">
                     <div class="reviews-by"><?php echo CommonHelper::displayName($review['user_name']); ?> | <span class="dated"><?php echo FatDate::format($review['spreview_posted_on']); ?></span>
                     </div>
                     <ul class="yes-no">
-                        <!-- <li class="yes-no-item"><?php // Labels::getLabel('LBL_WAS_THIS_REVIEW_HELPFUL?', $siteLangId); 
-                                                        ?></li> -->
                         <li class="yes-no-item">
                             <button class="btn btn-thumb btn-icon" type="button" title="<?php echo Labels::getLabel('LBL_LIKE', $siteLangId); ?>" onclick="markReviewHelpful(<?php echo FatUtility::int($review['spreview_id']); ?>,1)">
                                 <svg class="svg" width="16" height="16">

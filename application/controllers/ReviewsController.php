@@ -463,7 +463,7 @@ class ReviewsController extends MyAppController
         $frm->addHiddenField('', 'shop_id');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'pageSize', 10);
-        $frm->addHiddenField('', 'orderBy', 'most_recent');
+        $frm->addHiddenField('', 'orderBy', 'most_helpful');
         return $frm;
     }
 

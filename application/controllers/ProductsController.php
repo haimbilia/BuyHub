@@ -1481,7 +1481,7 @@ class ProductsController extends MyAppController
         $frm->addHiddenField('', 'selprod_id');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'pageSize', $pageSize);
-        $frm->addHiddenField('', 'orderBy', 'most_recent');
+        $frm->addHiddenField('', 'orderBy', 'most_helpful');
         return $frm;
     }
 
