@@ -1134,7 +1134,18 @@ class CommonHelper extends FatUtility
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
-        $record = FatApp::getDb()->fetchAll($rs);
+        while ($rec = FatApp::getDb()->fetch($rs)) {
+            foreach ($langs as $langId => $lang) {
+                if ($rec[$condition_lang_field] == $langId) {
+                    foreach ($lang_flds as $fld) {
+                        $array[$fld][$langId] = $rec[$fld];
+                        $array[$fld . $langId] = $rec[$fld];
+                    }
+                }
+            }
+        }
+
+        /* $record = FatApp::getDb()->fetchAll($rs);
         foreach ($langs as $langId => $lang) {
             foreach ($record as $rec) {
                 if ($rec[$condition_lang_field] == $langId) {
@@ -1145,9 +1156,10 @@ class CommonHelper extends FatUtility
                     continue;
                 }
             }
-        }
+        } */
         return $array;
     }
+
 
     /* static function generateOptionsArr($option_ids, $option_value_ids, $option_names, $option_value_names){
         $option_ids_arr = explode(",",$option_ids);
