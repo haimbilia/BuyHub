@@ -216,7 +216,7 @@ class CommissionController extends ListingBaseController
             $srch->addCondition('commsetting_prodcat_id', '=', $post['commsetting_prodcat_id']);          
             $srch->setPageSize(1);;
             if (FatApp::getDb()->fetch($srch->getResultSet())) {
-                LibHelper::exitWithError(Labels::getLabel('ERR_ALREADY_ADDED,_CATEGORY_OR_USER', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_BIND_ANY_CONDITION_(CATEGORY,_SELLER_OR_PRODUCT).', $this->siteLangId), true);
             }
         }
 
