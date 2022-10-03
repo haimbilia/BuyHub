@@ -2312,3 +2312,4 @@ ALTER TABLE `tbl_shops` ADD `shop_avg_rating` FLOAT(10,2) NOT NULL AFTER `shop_f
 ALTER TABLE `tbl_shops` ADD `shop_total_reviews` INT(11) NOT NULL AFTER `shop_avg_rating`;
 -- -----------------------TV-9.4.0.20220929---------------------------------
 ALTER TABLE `tbl_extra_pages` ADD UNIQUE( `epage_type`);
+-- -----------------------TV-10.0.0.20221003---------------------------------
