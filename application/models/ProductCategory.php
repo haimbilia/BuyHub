@@ -1142,7 +1142,7 @@ class ProductCategory extends MyAppModel
     {
         $date = empty($date) ? date('Y-m-d  H:i:s') : $date;
         $where = array('smt' => 'prodcat_id = ?', 'vals' => array($userId));
-        FatApp::getDb()->updateFromArray(static::DB_TBL, array('prodcat_img_updated_on' => date('Y-m-d  H:i:s')), $where);
+        FatApp::getDb()->updateFromArray(static::DB_TBL, array('prodcat_updated_on' => date('Y-m-d  H:i:s')), $where);
     }
 
     public function saveCategoryData($post)
