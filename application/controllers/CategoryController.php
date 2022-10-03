@@ -305,11 +305,13 @@ class CategoryController extends MyAppController
             if (!array_key_exists('prodcat_id', $val)) {
                 continue;
             }
+            $uploadedTime = AttachedFile::setTimeParam($val['prodcat_updated_on']);
+
             $result[$key] = $val;
             $isLastChildCategory = ProductCategory::isLastChildCategory($val['prodcat_id']);
             $result[$key]['isLastChildCategory'] = $isLastChildCategory ? 1 : 0;
-            $result[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($val['prodcat_id'], $langId, 'COLLECTION_PAGE'));
-            $result[$key]['image'] = UrlHelper::generateFullUrl('Category', 'banner', array($val['prodcat_id'], $langId, 'MOBILE', applicationConstants::SCREEN_MOBILE));
+            $result[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($val['prodcat_id'], $langId, 'COLLECTION_PAGE') ). $uploadedTime;
+            $result[$key]['image'] = UrlHelper::generateFullUrl('Category', 'banner', array($val['prodcat_id'], $langId, 'MOBILE', applicationConstants::SCREEN_MOBILE) ). $uploadedTime;
             $childernArr = array();
             if (!empty($val['children'])) {
                 $array = array_values($val['children']);
@@ -333,7 +335,7 @@ class CategoryController extends MyAppController
 
         if (false === MOBILE_APP_API_CALL) {
             $productCategory = new ProductCategory();
-            $categoriesArr = $productCategory->getCategoryTreeArr($this->siteLangId, $categoriesArr, array('prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(GETCATCODE(prodcat_id),1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'GETCATCODE(prodcat_id) as prodcat_code'));
+            $categoriesArr = $productCategory->getCategoryTreeArr($this->siteLangId, $categoriesArr, array('prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(GETCATCODE(prodcat_id),1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'GETCATCODE(prodcat_id) as prodcat_code', 'prodcat_updated_on'));
         }
 
         $categoriesArr = $this->resetKeyValues(array_values($categoriesArr), $this->siteLangId);
