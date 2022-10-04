@@ -127,8 +127,8 @@ class CustomProductsController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
-
         $rs = $srch->getResultSet();
+
         $records = [];
         while ($res = FatApp::getDb()->fetch($rs)) {
             $content = (!empty($res['preq_content'])) ? json_decode($res['preq_content'], true) : array();
@@ -392,9 +392,7 @@ class CustomProductsController extends ListingBaseController
         $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'credential_email', 'user_phone_dcode', 'user_phone', 'ifnull(shop_name, shop_identifier) as shop_name'));
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $data = $db->fetch($rs);
+        $data = FatApp::getDb()->fetch($srch->getResultSet());
 
         if ($data == false || $data['preq_deleted'] == applicationConstants::YES || $data['preq_status'] != ProductRequest::STATUS_PENDING) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -407,7 +405,16 @@ class CustomProductsController extends ListingBaseController
         $db = FatApp::getDb();
         $db->startTransaction();
         $prodReqObj = new ProductRequest($preqId);
-        $updateData = array('preq_status' => $status, 'preq_comment' => $post['preq_comment'], 'preq_status_updated_on' => date('Y-m-d H:i:s'));
+        $updateData = array(
+            'preq_status' => $status,
+            'preq_comment' => $post['preq_comment'],
+            'preq_status_updated_on' => date('Y-m-d H:i:s')
+        );
+
+        if ($status == ProductRequest::STATUS_CANCELLED) {
+            $updateData['preq_product_identifier'] = $data['preq_product_identifier'] . '-' . $preqId . '{cancelled}';
+        }
+        
         $prodReqObj->assignValues($updateData);
 
         if (!$prodReqObj->save()) {
@@ -923,8 +930,11 @@ class CustomProductsController extends ListingBaseController
         $data['preq_content'] = array_merge($data['preq_content'], array_diff_key($post, $langData, $data));
         $data['preq_content'] = json_encode($data['preq_content']);
         $data['preq_status'] = $requestStatus;
+        if (ProductRequest::STATUS_CANCELLED == $requestStatus) {
+            $productIdentifier .=  '-' . $recordId . '{cancelled}';
+        }
         $data['preq_product_identifier'] = $productIdentifier;
-        
+
         $prodReqObj = new ProductRequest($recordId);
         $prodReqObj->assignValues($data);
         if (!$prodReqObj->save()) {
@@ -1035,7 +1045,7 @@ class CustomProductsController extends ListingBaseController
         $this->set("langId", $data['afile_lang_id']);
         $this->set("msg", $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
-    }   
+    }
 
     private function getSeparateImageOptions($preq_id, $lang_id)
     {

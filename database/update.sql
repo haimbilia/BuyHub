@@ -2325,3 +2325,4 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
 
 UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `etpl_code` IN ('account_credited_debited', 'admin_forgot_password', 'affiliate_welcome_registration', 'COD_OTP_VERIFICATION', 'customer_order_email', 'failed_login_attempt', 'forgot_password', 'guest_welcome_registration', 'password_changed_successfully', 'reward_points_credited_debited', 'send_message', 'test_email', 'user_admin_password_changed_successfully', 'user_change_email_request_notification', 'user_email_changed_notification', 'user_email_verification', 'user_signup_verification', 'welcome_registration');
+UPDATE `tbl_product_requests` SET `preq_product_identifier`= CONCAT(`preq_product_identifier`, '-', `preq_id`, '{cancelled}') WHERE `preq_status` = 2 AND preq_product_identifier NOT LIKE '%{cancelled}';
