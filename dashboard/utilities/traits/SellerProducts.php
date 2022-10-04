@@ -2610,6 +2610,7 @@ trait SellerProducts
         }
         
         $invAllowedLimit = SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed');
+        $msg = '';
         foreach ($selprodIdsArr as $selprod_id) {
             if (1 > $selprod_id) {
                 continue;
@@ -2617,12 +2618,14 @@ trait SellerProducts
 
             $productCount = SellerProduct::getActiveCount($this->userParentId);
             if (applicationConstants::ACTIVE == $status && -1 != $invAllowedLimit && $invAllowedLimit <= $productCount) {
-                continue;
+                $msg = Labels::getLabel('ERR_UNABLE_To_ACTIVATE_SOME_OF_THE_PRODUCTS._AS_YOU_HAVE_CROSSED_YOUR_PACKAGE_LIMIT.', $this->siteLangId);
+                break;
             }
 
             $this->updateSellerProductStatus($selprod_id, $status);
         }
-        $this->set('msg', Labels::getLabel('MSG_Status_changed_Successfully', $this->siteLangId));
+        $msg = !empty($msg) ? $msg : Labels::getLabel('MSG_Status_changed_Successfully', $this->siteLangId);
+        $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
     }
 
