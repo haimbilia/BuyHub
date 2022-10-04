@@ -2316,3 +2316,10 @@ ALTER TABLE `tbl_product_requests` ADD `preq_product_identifier` VARCHAR(100) NO
 UPDATE tbl_product_requests SET preq_product_identifier = CONCAT(TRIM(BOTH '"' FROM (JSON_EXTRACT(preq_content, "$.product_identifier"))), '-', preq_id);
 UPDATE tbl_product_requests SET preq_content = JSON_SET(preq_content, '$.product_identifier', preq_product_identifier);
 ALTER TABLE `tbl_product_requests` ADD UNIQUE(`preq_product_identifier`);
+
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('APP_VALID_ACCOUNT_NUMBER', 1, 'Valid Account Number', 2),
+('APP_PHONE_LENGTH', 1, 'Phone Length', 2),
+('APP_FLAT', 1, 'Flat', 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
