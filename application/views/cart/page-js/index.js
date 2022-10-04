@@ -70,6 +70,7 @@ $(function () {
 			fcom.removeLoader();
 			fcom.closeProcessing();
 			listCartProducts();
+			$.ykmodal.close();
 		});
 	};
 
