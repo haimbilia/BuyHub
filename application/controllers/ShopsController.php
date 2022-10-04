@@ -62,7 +62,7 @@ class ShopsController extends MyAppController
 
         $flds = [
             's.shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_description',
-            'shop_country_l.country_name as country_name', 'shop_state_l.state_name as state_name', 'shop_city',
+            'shop_country_l.country_name as country_name', 'shop_state_l.state_name as state_name', 'shop_city','shop_updated_on'
         ];
         $srch->addMultipleFields($flds);
 
@@ -122,7 +122,8 @@ class ShopsController extends MyAppController
                 $allShops[$val['shop_id']]['shopRating'] = SelProdRating::getSellerRating($val['shop_user_id'], true);
             }
             $allShops[$val['shop_id']]['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($val['shop_user_id'], true);
-            $allShops[$val['shop_id']]['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', [$val['shop_id'], $this->siteLangId, 'SMALL']);
+            $uploadedTime = AttachedFile::setTimeParam($val['shop_updated_on']);
+            $allShops[$val['shop_id']]['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', [$val['shop_id'], $this->siteLangId, 'SMALL']).$uploadedTime;
 
             $selProdIdsArr = array_column($allShops[$val['shop_id']]['products'], 'selprod_id');
             $allShops[$val['shop_id']]['tRightRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);

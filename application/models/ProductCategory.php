@@ -842,7 +842,7 @@ class ProductCategory extends MyAppModel
         $prodCatSrch->doNotCalculateRecords();
         $prodCatSrch->doNotLimitRecords();
 
-        $prodCatSrch->addMultipleFields(array('prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(prodcat_code,1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'prodcat_code as prodcat_code'));
+        $prodCatSrch->addMultipleFields(array('prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(prodcat_code,1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'prodcat_code as prodcat_code', 'prodcat_updated_on'));
 
         if ($excludeCategoriesHavingNoProducts) {
             $prodSrchObj = new ProductSearch();
@@ -877,7 +877,8 @@ class ProductCategory extends MyAppModel
 
         if (true === $includeChildCat && $categoriesArr) {
             foreach ($categoriesArr as $key => $cat) {
-                $categoriesArr[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($cat['prodcat_id'], $langId, 'COLLECTION_PAGE'));
+                $uploadedTime = AttachedFile::setTimeParam($cat['prodcat_updated_on']);
+                $categoriesArr[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($cat['prodcat_id'], $langId, 'COLLECTION_PAGE')) . $uploadedTime;
                 $categoriesArr[$key]['children'] = self::getProdCatParentChildWiseArr($langId, $cat['prodcat_id'], $includeChildCat, $forSelectBox, $sortByName, $prodCatSrchObj, $excludeCategoriesHavingNoProducts);
             }
         }
@@ -1141,7 +1142,7 @@ class ProductCategory extends MyAppModel
     {
         $date = empty($date) ? date('Y-m-d  H:i:s') : $date;
         $where = array('smt' => 'prodcat_id = ?', 'vals' => array($userId));
-        FatApp::getDb()->updateFromArray(static::DB_TBL, array('prodcat_img_updated_on' => date('Y-m-d  H:i:s')), $where);
+        FatApp::getDb()->updateFromArray(static::DB_TBL, array('prodcat_updated_on' => date('Y-m-d  H:i:s')), $where);
     }
 
     public function saveCategoryData($post)
