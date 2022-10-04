@@ -905,7 +905,7 @@ class GuestUserController extends MyAppController
                 $row['user_phone_dcode'] = ValidateElement::formatDialCode($post['user_phone_dcode']);
                 $row['user_phone'] = $post['user_phone'];
                 if (!$userObj->userPhoneVerification($row, $this->siteLangId)) {
-                    $message = !empty($userObj->getError()) ? $userObj->getError() : Labels::getLabel("ERR_ERROR_IN_SENDING_VERFICATION_SMS", $this->siteLangId);
+                    $message = !empty($userObj->getError()) ? $userObj->getError() : Labels::getLabel("ERR_ERROR_IN_SENDING_VERIFICATION_SMS", $this->siteLangId);
                     $error = true;
                 }
                 $notVerified = true;
@@ -1253,7 +1253,7 @@ class GuestUserController extends MyAppController
         );
 
         if (!$this->userEmailVerifications($userObj, $arr, true)) {
-            $message = Labels::getLabel('ERR_ERROR_IN_SENDING_VERFICATION_EMAIL', $this->siteLangId);
+            $message = Labels::getLabel('ERR_ERROR_IN_SENDING_VERIFICATION_EMAIL', $this->siteLangId);
             LibHelper::dieJsonError($message);
         }
 

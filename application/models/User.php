@@ -1820,7 +1820,7 @@ class User extends MyAppModel
         );
         $email = new EmailHandler();
         if (!$email->sendSignupVerificationLink($langId, $data)) {
-            Message::addMessage(Labels::getLabel("ERR_ERROR_IN_SENDING_VERFICATION_EMAIL", $langId));
+            Message::addMessage(Labels::getLabel("ERR_ERROR_IN_SENDING_VERIFICATION_EMAIL", $langId));
             return false;
         }
         return true;
@@ -2538,13 +2538,13 @@ class User extends MyAppModel
         if (empty($userPhone) && FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1) && $socialUser == false) {
             if (!$this->userEmailVerification($postedData, $this->commonLangId)) {
                 $db->rollbackTransaction();
-                $this->error = Labels::getLabel("ERR_ERROR_IN_SENDING_VERFICATION_EMAIL", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_ERROR_IN_SENDING_VERIFICATION_EMAIL", $this->commonLangId);
                 return false;
             }
         } elseif (!empty($userPhone)) {
             if (!$this->userPhoneVerification($postedData, $this->commonLangId)) {
                 $db->rollbackTransaction();
-                $this->error = !empty($this->error) ? $this->error : Labels::getLabel("ERR_ERROR_IN_SENDING_VERFICATION_SMS", $this->commonLangId);
+                $this->error = !empty($this->error) ? $this->error : Labels::getLabel("ERR_ERROR_IN_SENDING_VERIFICATION_SMS", $this->commonLangId);
                 return false;
             }
             $_SESSION[UserAuthentication::TEMP_SESSION_ELEMENT_NAME]['otpUserId'] = $this->getMainTableRecordId();
