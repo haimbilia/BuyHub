@@ -322,6 +322,20 @@ class SellerProductsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
+        $status = Fatutility::int($post['selprod_active']);
+        if (0 < $selProdId) {
+            $selprodTitle = SellerProduct::getAttributesByLangId($this->siteLangId, $selProdId, 'selprod_title');
+            $oldSelprodData = SellerProduct::getAttributesById($selProdId, ['selprod_user_id', 'selprod_active']);
+            if (
+                $oldSelprodData['selprod_active'] != $status &&
+                $status == applicationConstants::ACTIVE &&
+                FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
+                SellerProduct::getActiveCount($oldSelprodData['selprod_user_id']) >= SellerPackages::getAllowedLimit($oldSelprodData['selprod_user_id'], $this->siteLangId, 'ossubs_inventory_allowed')
+            ) {
+                LibHelper::exitWithError(CommonHelper::replaceStringData(Labels::getLabel('ERR_UNABLE_TO_CHANGE_STATUS_FOR_"{PRODUCT-NAME}"._AS_SELLER_SUBSCRIPTION_PACKAGE_LIMIT_CROSSED.', $this->siteLangId), ['{PRODUCT-NAME}' => $selprodTitle]), true);
+            }
+        }
+
         $srch = new SearchBase(SellerProductSpecialPrice::DB_TBL);
         $srch->addCondition('splprice_selprod_id', '=', $selProdId);
         $srch->addCondition('splprice_price', '>=', $post['selprod_price']);
@@ -1916,6 +1930,16 @@ class SellerProductsController extends ListingBaseController
         $selprodId = FatUtility::int($selprodId);
         if (1 > $selprodId || -1 == $status) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+
+        $selprodTitle = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, 'selprod_title');
+        $oldSelprodData = SellerProduct::getAttributesById($selprodId, ['selprod_user_id', 'selprod_active']);
+        if (
+            $status == applicationConstants::ACTIVE &&
+            FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
+            SellerProduct::getActiveCount($oldSelprodData['selprod_user_id']) >= SellerPackages::getAllowedLimit($oldSelprodData['selprod_user_id'], $this->siteLangId, 'ossubs_inventory_allowed')
+        ) {
+            LibHelper::exitWithError(CommonHelper::replaceStringData(Labels::getLabel('ERR_UNABLE_TO_CHANGE_STATUS_FOR_"{PRODUCT-NAME}"._AS_SELLER_SUBSCRIPTION_PACKAGE_LIMIT_CROSSED.', $this->siteLangId), ['{PRODUCT-NAME}' => $selprodTitle]), true);
         }
 
         $sellerProdObj = new SellerProduct($selprodId);

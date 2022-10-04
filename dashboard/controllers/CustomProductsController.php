@@ -250,8 +250,8 @@ class CustomProductsController extends SellerBaseController
         }
 
         $productIdentifier = FatApp::getPostedData('product_identifier', FatUtility::VAR_STRING, '');
-        $record = Product::getAttributesByIdentifier($productIdentifier, 'product_id');
-        if (!empty($record)) {
+        $isValid = ProductRequest::isValidProductIdentifier($productIdentifier, $recordId);
+        if (!$isValid) {
             LibHelper::exitWithError(Labels::getLabel('LBL_DUPLICATE_PRODUCT_IDENTIFER'), true);
         }
 
@@ -325,6 +325,8 @@ class CustomProductsController extends SellerBaseController
         if ($isNewProduct) {
             $data['preq_added_on'] = date('Y-m-d H:i:s');
         }
+
+        $data['preq_product_identifier'] = $productIdentifier;
 
         $prodReqObj = new ProductRequest($recordId);
         $prodReqObj->assignValues($data);
