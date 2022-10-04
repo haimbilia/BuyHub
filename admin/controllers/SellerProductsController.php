@@ -327,6 +327,7 @@ class SellerProductsController extends ListingBaseController
             $selprodTitle = SellerProduct::getAttributesByLangId($this->siteLangId, $selProdId, 'selprod_title');
             $oldSelprodData = SellerProduct::getAttributesById($selProdId, ['selprod_user_id', 'selprod_active']);
             if (
+                $oldSelprodData['selprod_active'] != $status &&
                 $status == applicationConstants::ACTIVE &&
                 FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
                 SellerProduct::getActiveCount($oldSelprodData['selprod_user_id']) >= SellerPackages::getAllowedLimit($oldSelprodData['selprod_user_id'], $this->siteLangId, 'ossubs_inventory_allowed')
