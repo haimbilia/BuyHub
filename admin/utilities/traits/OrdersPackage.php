@@ -139,6 +139,17 @@ trait OrdersPackage
             $srch->addCondition('order_id', '=', $recordId);
         }
 
+        $recordId = FatApp::getPostedData('op_status_id', FatUtility::VAR_INT, 0);
+        if (0 < $recordId) {
+            $opSrch = new OrderProductSearch(0, true, true);
+            $opSrch->addStatusCondition($recordId, ($recordId == FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS", FatUtility::VAR_INT, -1)));
+            $opSrch->addGroupBy('op_order_id');
+            $opSrch->doNotCalculateRecords();
+            $opSrch->doNotLimitRecords();
+            $opSrch->addMultipleFields(['op_order_id']);
+            $srch->joinTable('(' . $opSrch->getQuery() . ')', 'INNER JOIN', 'op.op_order_id = o.order_id', 'op');
+        }
+
         $isDeleted = FatApp::getPostedData('order_deleted', FatUtility::VAR_INT, applicationConstants::NO);
         $srch->addCondition('order_deleted', '=', $isDeleted);
         $this->set("deletedOrders", ($isDeleted == applicationConstants::YES));
@@ -185,13 +196,13 @@ trait OrdersPackage
         $frm = $this->getPaymentForm($this->order['order_id']);
         $this->set('frm', $frm);
 
-        $oSubObj = new OrderSubscription(); 
+        $oSubObj = new OrderSubscription();
         $charges = [];
-        if(isset($this->get('order')['items'])){
+        if (isset($this->get('order')['items'])) {
             $item = current($this->get('order')['items']);
             $charges = $oSubObj->getOrderSubscriptionChargesArr($item['ossubs_id']);
         }
-        $this->set('order',$this->get('order') +  ['charges' => $charges]);
+        $this->set('order', $this->get('order') +  ['charges' => $charges]);
 
         $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
         $this->set('orderStatusArr', $orderStatusArr);
@@ -250,6 +261,9 @@ trait OrdersPackage
         $str = Labels::getLabel('FRM_ORDER_TO[{CURRENCY-SYMBOL}]', $this->siteLangId);
         $str = CommonHelper::replaceStringData($str, ['{CURRENCY-SYMBOL}' => $currencySymbol]);
         $frm->addTextBox(Labels::getLabel('FRM_ORDER_TO', $this->siteLangId), 'price_to', '', array('placeholder' => $str));
+
+        $frm->addSelectBox(Labels::getLabel('FRM_ORDER_ITEM_STATUS', $this->siteLangId), 'op_status_id', Orders::getOrderProductStatusArr($this->siteLangId), '', array(), Labels::getLabel('LBL_All', $this->siteLangId));
+
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);/*clearBtn*/
@@ -330,7 +344,7 @@ trait OrdersPackage
     {
         return [
             'select_all',
-           /*  'listSerial', */
+            /*  'listSerial', */
             'order_number',
             'buyer_user_name',
             'order_date_added',
