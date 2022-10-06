@@ -117,10 +117,17 @@ if ($headerNavigation || $isMegaMenuEnabled) {
                                         </div>
                                     <?php } ?>
                                 </li>
-                        <?php }
+                <?php }
                         }
                     }
                 } ?>
+                <?php if ($navLinkCount < count($nav['pages'])) { ?>
+                    <li class="seemore navigation-item ">
+                        <a class="navigation-link" href="<?php echo UrlHelper::generateUrl('Category'); ?>">
+                            <?php echo Labels::getLabel('LBL_View_All', $siteLangId); ?>
+                        </a>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
         <!-- End Navigation Bar -->
@@ -207,11 +214,19 @@ if ($headerNavigation || $isMegaMenuEnabled) {
                                 ?>
 
                             </li>
-                    <?php }
+                        <?php }
                     }
+
+                    if ($navLinkCount < count($nav['pages'])) { ?>
+                        <li class="seemore is-mobile ">
+                            <a href="<?php echo UrlHelper::generateUrl('Category'); ?>">
+                                <?php echo Labels::getLabel('LBL_View_All', $siteLangId); ?>
+                            </a>
+                        </li>
+                    <?php }
                 }
             }
-            
+
             if ($isMegaMenuEnabled == Navigations::LAYOUT_MEGA_MENU && !empty($headerCategories)) {
                 foreach ($headerCategories as $link) {
                     $href = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']));
