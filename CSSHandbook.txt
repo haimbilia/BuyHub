@@ -1,4 +1,5 @@
 The CSS Handbook: A Handy Guide to CSS for Developers
+
 INTRODUCTION: 
 The project is based on the bootstrap CSS and JS framework.
 The project is SCSS-based and gulpJS is being used for CSS compilation.
@@ -10,6 +11,7 @@ Glossary:
 LTR: Left to Right
 RTL: Right to Left
 Here are the CSS Syntax example for how to use the direction variables.
+
 SCSS 
 .example {
  text-align: #{$start-direction};
@@ -38,3 +40,14 @@ Theme variables:
 $brand-color: var(--brand-color);
 $secondary-color: var(--secondary-color);
 For more info regarding variables, check the _variables.scss under the themes folder.
+
+
+
+Latest Updates in Yokart v10
+
+Bootstrap 5 - CSS & JS Framework
+NPM - Package Management
+Sass - CSS With Superpowers
+CSS3 - Design System
+HTML5 - As Cornerstone
+Gulp - Task Automation

@@ -200,7 +200,13 @@ body {
 .seemore {
     a {
         font-weight: 600 !important;
-        color: $brand-color !important;
+        color: $secondary-color !important;
         border: none;
+        &::after {
+            content: " →";
+            @include media-breakpoint-up(lg) {
+                content: " ↓";
+            }
+        }
     }
 }
