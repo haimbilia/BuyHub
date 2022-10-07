@@ -95,7 +95,7 @@
         foreach ($headerNavigation as $nav) {
             $subMoreNavigation = (count($nav['pages']) > $navLinkCount) ? array_slice($nav['pages'], $navLinkCount) : array();
             if (count($subMoreNavigation)) { ?>
-                <li class="navigation-item navchild">
+                <li class="navigation-item navchild seemore">
                     <a class="navigation-link"><?php echo Labels::getLabel('NAV_MORE', $siteLangId); ?></a>
                     <span class="link__mobilenav"></span>
                     <div class="subnav">
