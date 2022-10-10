@@ -1338,3 +1338,5 @@ TV-9.4.0.20220406
 
 
     - ShipRocket : No sandbox environment available need to test live.
+
+    - Please hit <site-url>/admin/patch-update/update-shops-avg-rating to update reviews and rating while migrating the system to V10.
