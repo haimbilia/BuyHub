@@ -504,7 +504,7 @@ class PatchUpdateController extends ListingBaseController
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
-        $srch->addGroupby('spreview_seller_user_id');
+        $srch->addGroupBy('spreview_seller_user_id');       
         // $srch->addHaving('avg_rating', '>', 0);
         $rs = $srch->getResultSet();        
         while ($row = FatApp::getDb()->fetch($rs)) {
@@ -516,7 +516,7 @@ class PatchUpdateController extends ListingBaseController
             $rsrch->addMultipleFields(array('count(distinct(spreview_id)) as numOfReviews'));
             $rsrch->doNotCalculateRecords();
             $rsrch->doNotLimitRecords();
-            $rsrch->addGroupby('spreview_seller_user_id');
+            $rsrch->addGroupBy('spreview_seller_user_id');
             $record = FatApp::getDb()->fetch($rsrch->getResultSet());
             $numOfReviews = $record['numOfReviews'] ?? 0;
 
