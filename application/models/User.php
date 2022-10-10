@@ -3065,9 +3065,9 @@ class User extends MyAppModel
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
 
         if ($userId != $parentId) {
-            $srch->addDirectCondition('(user_id = ' . $userId . ' or user_id = ' . $parentId . ')');
-        } else {
             $srch->addDirectCondition('(user_id = ' . $userId . ' or user_parent = ' . $userId . ')');
+        } else {
+            $srch->addDirectCondition('(user_id = ' . $userId . ' or user_parent = ' . $parentId . ')');
         }
         if (true == $active) {
             $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');

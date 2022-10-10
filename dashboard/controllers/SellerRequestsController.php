@@ -97,7 +97,6 @@ class SellerRequestsController extends SellerBaseController
 
     public function searchCustomCatalogProducts()
     {
-        // $this->canAddCustomCatalogProduct();
         $post = FatApp::getPostedData();
         $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : intval($post['page']);
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
@@ -105,9 +104,7 @@ class SellerRequestsController extends SellerBaseController
         $srch = $this->getRequestedProdObj();
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $arrListing = FatApp::getDb()->fetchAll($rs);
-
+        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
         foreach ($arrListing as $key => $row) {
             $content = (!empty($row['preq_content'])) ? json_decode($row['preq_content'], true) : array();
             $langContent = (!empty($row['preq_lang_data'])) ? json_decode($row['preq_lang_data'], true) : array();
@@ -171,7 +168,6 @@ class SellerRequestsController extends SellerBaseController
     private function getRequestedProdObj()
     {
         $srch = ProductRequest::getSearchObject($this->siteLangId);
-
         $userArr = User::getAuthenticUserIds(UserAuthentication::getLoggedUserId(), $this->userParentId);
         $srch->addCondition('preq_user_id', 'in', $userArr);
         $srch->addCondition('preq_deleted', '=', applicationConstants::NO);
@@ -249,7 +245,10 @@ class SellerRequestsController extends SellerBaseController
 
         $post['prodcat_requested_on'] = date('Y-m-d H:i:s');
         $post['prodcat_identifier'] = $post['prodcat_name'];
-        $post['prodcat_seller_id'] = $this->userParentId;
+
+        if (1 > $categoryReqId) {
+            $post['prodcat_seller_id'] = UserAuthentication::getLoggedUserId();
+        }
 
         $record = new ProductCategory($categoryReqId);
         $record->assignValues($post);
@@ -533,7 +532,10 @@ class SellerRequestsController extends SellerBaseController
 
         $post['brand_requested_on'] = date('Y-m-d H:i:s');
 
-        $post['brand_seller_id'] = UserAuthentication::getLoggedUserId();
+        if (1 > $brandReqId) {
+            $post['brand_seller_id'] = UserAuthentication::getLoggedUserId();
+        }
+
         $record = new Brand($brandReqId);
         $post[$record::tblFld('identifier')] = $post[$record::tblFld('name')];
         $record->assignValues($post);
@@ -676,19 +678,19 @@ class SellerRequestsController extends SellerBaseController
         $data['ratio_type'] = ($data['ratio_type'] == 0) ? AttachedFile::RATIO_TYPE_SQUARE : $data['ratio_type'];
         $logoFrm->fill($data);
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
-       
+
         $brandImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, false);
         $bannerTypeArr = applicationConstants::getAllLanguages();
 
         $getBrandRequestDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_BRAND_IMAGE);
         $getBrandRequestLogoSquare = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_SQUARE);
         $getBrandRequestLogoRactangle = ImageDimension::getData(ImageDimension::TYPE_BRAND_LOGO, ImageDimension::VIEW_DEFAULT, AttachedFile::RATIO_TYPE_RECTANGULAR);
-       
+
         $this->set('getBrandRequestLogoSquare', $getBrandRequestLogoSquare);
         $this->set('getBrandRequestLogoRactangle', $getBrandRequestLogoRactangle);
         $this->set('getBrandRequestDimensions', $getBrandRequestDimensions);
         $this->set('ratio_type', $data['ratio_type']);
-       
+
         $this->set('languages', Language::getAllNames());
         $this->set('brandReqId', $recordId);
         $this->set('logoFrm', $logoFrm);
@@ -747,7 +749,7 @@ class SellerRequestsController extends SellerBaseController
         $slide_screen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
         $aspectRatio = FatApp::getPostedData('ratio_type', FatUtility::VAR_INT, 0);
 
-        $fileHandlerObj = new AttachedFile();      
+        $fileHandlerObj = new AttachedFile();
         $fileHandlerObj->deleteFile($file_type, $brand_id, 0, 0, $lang_id, $slide_screen);
 
         if (!$fileHandlerObj->saveAttachment(
@@ -823,15 +825,15 @@ class SellerRequestsController extends SellerBaseController
 
         $this->set('file_type', $file_type);
         $this->set('brand_id', $brand_id);
-        $this->set('canEdit', $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true));       
+        $this->set('canEdit', $this->userPrivilege->canEditSellerRequests(UserAuthentication::getLoggedUserId(), true));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
-    }    
+    }
 
     public function removeBrandMedia($brand_id, $imageType = 'logo', $afileId = 0)
     {
         $brand_id = FatUtility::int($brand_id);
-      
+
         if (!$brand_id) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
         }
