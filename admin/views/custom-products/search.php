@@ -33,23 +33,17 @@ foreach ($arrListing as $sn => $row) {
                         </div>';
                 $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
-            case 'user_name':
-                if ($canViewUsers) {
-                    $href = "javascript:void(0)";
-					$onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
-                    $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId, 'displayProfileImage'=> false, 'href' => $href, 'onclick' => $onclick,], false, true);
-                    $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
-                } else {
-                    $td->appendElement('plaintext', $tdAttr, $row[$key], true);
-                }
-                break;                          
-            case 'preq_status':                
-                $td->appendElement('plaintext', $tdAttr, ProductRequest::getPaymentStatusHtml($siteLangId,$row[$key]), true);              
+            case 'shop_name':
+                $str = $this->includeTemplate('_partial/shop/shop-info-card.php', ['shop' => $row, 'siteLangId' => $siteLangId], false, true);
+                $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
-            case 'preq_requested_on':    
+            case 'preq_status':
+                $td->appendElement('plaintext', $tdAttr, ProductRequest::getPaymentStatusHtml($siteLangId, $row[$key]), true);
+                break;
+            case 'preq_requested_on':
             case 'preq_added_on':
                 $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key], true), true);
-                break;          
+                break;
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
@@ -80,7 +74,7 @@ foreach ($arrListing as $sn => $row) {
                                         </use>
                                     </svg>',
                     ];
-                    
+
                     $data['deleteButton'] = false;
                 }
                 if ($canEdit && !empty($row['preq_comment']) && $row['preq_status'] == ProductRequest::STATUS_CANCELLED) {
@@ -109,7 +103,7 @@ foreach ($arrListing as $sn => $row) {
 }
 
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

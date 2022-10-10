@@ -101,16 +101,16 @@ class ProductCategoriesRequestController extends ListingBaseController
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
-        
+
         $srch = ProductCategory::getSearchObject(false, $this->siteLangId, false, ProductCategory::REQUEST_PENDING);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = prodcat_seller_id', 'u');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
-        
+
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
-        }        
+        }
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, -1);
         $prodcatId = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, $recordId);
@@ -124,15 +124,15 @@ class ProductCategoriesRequestController extends ListingBaseController
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array('m.*', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'u.user_name', 'IFNULL(shop_name, shop_identifier) as shop_name'));
+        $srch->addMultipleFields(array('m.*', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'u.user_name', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_id', 'shop_updated_on'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addOrder($sortBy, $sortOrder);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arrListing", $records); 
+        $this->set("arrListing", $records);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -180,7 +180,7 @@ class ProductCategoriesRequestController extends ListingBaseController
                 $data['prodcat_deleted'] = applicationConstants::NO;
             }
         }
-        
+
         $record = new ProductCategory($recordId);
         $record->assignValues($data);
         if (!$record->save()) {
@@ -191,7 +191,7 @@ class ProductCategoriesRequestController extends ListingBaseController
             LibHelper::exitWithError($msg, true);
         }
         $this->setLangData($record, ['prodcat_name' => $data['prodcat_name']]);
-        
+
         /* url data[ */
         $prodCatOriginalUrl = $this->rewriteUrl . $recordId;
         if ($post['urlrewrite_custom'] == '') {
@@ -260,7 +260,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         }
 
         $bannerDimensions = ImageDimension::getScreenSizes(ImageDimension::TYPE_CATEGORY_BANNER);
-        $logoDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON,ImageDimension::VIEW_DEFAULT);
+        $logoDimensions = ImageDimension::getData(ImageDimension::TYPE_CATEGORY_ICON, ImageDimension::VIEW_DEFAULT);
 
         $logoFrm->fill($data);
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
@@ -399,7 +399,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         } else {
             $lang_id = array_key_first($languagesAssocArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);
-        }       
+        }
 
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_CATEGORY_ICON);
         $frm->addHiddenField('', 'min_width');
@@ -440,6 +440,7 @@ class ProductCategoriesRequestController extends ListingBaseController
             /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'prodcat_parent' => Labels::getLabel('LBL_PARENT_CATEGORY', $this->siteLangId),
             'prodcat_name' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
+            'shop_name' => Labels::getLabel('LBL_REQUESTED_BY', $this->siteLangId),
             'prodcat_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
             'prodcat_updated_on' => Labels::getLabel('LBL_UPDATED_ON', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -454,6 +455,7 @@ class ProductCategoriesRequestController extends ListingBaseController
             /* 'listSerial', */
             'prodcat_parent',
             'prodcat_name',
+            'shop_name',
             'prodcat_requested_on',
             'prodcat_updated_on',
             'action',
@@ -462,6 +464,6 @@ class ProductCategoriesRequestController extends ListingBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, [], Common::excludeKeysForSort());
+        return array_diff($fields, ['shop_name'], Common::excludeKeysForSort());
     }
 }

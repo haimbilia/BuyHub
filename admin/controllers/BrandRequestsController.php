@@ -143,7 +143,7 @@ class BrandRequestsController extends ListingBaseController
 
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array('b.*', 'u.user_name','user_id','credential_username', 'credential_email', 'ifnull(shop_name, shop_identifier) as shop_name', 'COALESCE(bl.brand_name, b.brand_identifier) as brand_name'));
+        $srch->addMultipleFields(array('b.*', 'u.user_name','user_id','credential_username', 'credential_email', 'shop_id', 'shop_updated_on', 'ifnull(shop_name, shop_identifier) as shop_name', 'COALESCE(bl.brand_name, b.brand_identifier) as brand_name'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
@@ -540,7 +540,7 @@ class BrandRequestsController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'brand_logo' => Labels::getLabel('LBL_LOGO', $this->siteLangId),
             'brand_name' => Labels::getLabel('LBL_BRAND_NAME', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
+            'shop_name' => Labels::getLabel('LBL_REQUESTED_BY', $this->siteLangId),
             'brand_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
             'brand_updated_on' => Labels::getLabel('LBL_UPDATED_ON', $this->siteLangId),
             'brand_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -557,7 +557,7 @@ class BrandRequestsController extends ListingBaseController
             'select_all',
             'brand_logo',
             'brand_name',
-            'user_name',
+            'shop_name',
             'brand_requested_on',
             'brand_updated_on',
             'brand_active',
@@ -568,6 +568,6 @@ class BrandRequestsController extends ListingBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['brand_logo', 'brand_name', 'sbrandreq_status'], Common::excludeKeysForSort());
+        return array_diff($fields, ['brand_logo', 'shop_name', 'brand_name', 'sbrandreq_status'], Common::excludeKeysForSort());
     }
 }
