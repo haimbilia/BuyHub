@@ -192,9 +192,10 @@ class FatMailer extends FatModel
         $srch->setPageSize(50);
         $srch->addOrder('earch_priority', 'DESC');
         $srch->addOrder('earch_added', 'ASC');
-        $archives = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $srch->addMultipleFields(['earch_id', 'earch_to_email', 'earch_tpl_name', 'earch_to_name', 'earch_from_email', 'earch_from_name', 'earch_cc_email', 'earch_bcc_email', 'earch_attachments', 'earch_subject', 'earch_body', 'earch_id']);
+        $rs = $srch->getResultSet();
         $fatMailerObj = new self(1, '');
-        foreach ($archives as $archive) {
+        while ($archive = FatApp::getDb()->fetch($rs)) {
             $fatMailerObj->toEmail = $archive['earch_to_email'];
             $fatMailerObj->toName = $archive['earch_to_name'];
             $fatMailerObj->fromEmail = $archive['earch_from_email'];

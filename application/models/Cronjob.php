@@ -858,9 +858,13 @@ class Cronjob extends FatModel
 
     public static function removeOlderCartItems()
     {
+        /* Remove older data from cart */
         FatApp::getDb()->query("Delete FROM `tbl_user_cart` where `usercart_last_session_id` = `usercart_user_id` and usercart_last_used_date < date_sub(now(), interval 1 day)");
         FatApp::getDb()->query("Delete FROM `tbl_user_cart` where usercart_last_used_date <= date_sub(now(), interval 1 day) and usercart_details = '[]'");
         FatApp::getDb()->query("Delete FROM `tbl_user_cart` where usercart_last_used_date <= date_sub(now(), interval 2 day) and cast(usercart_user_id as UNSIGNED) = 0");
         FatApp::getDb()->query('Delete FROM `tbl_user_cart` where usercart_last_used_date < date_sub(now(), interval 4 month)');
+
+        /* Remove older emails from archives */
+        FatApp::getDb()->query('Delete FROM `tbl_email_archives` where `earch_sent_on` IS NOT NULL and earch_added < date_sub(now(), interval 6 month)');
     }
 }

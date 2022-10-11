@@ -3,6 +3,18 @@ class HomeController extends MyAppController
 {
     public function index()
     {
+        $srch = new SearchBase(FatMailer::DB_TBL_ARCHIVE);
+        $srch->addCondition('earch_sent_on', 'is', 'mysql_func_null', 'and', true);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(10);
+        $srch->addOrder('earch_priority', 'DESC');
+        $srch->addOrder('earch_added', 'ASC');
+        $rs = $srch->getResultSet();
+        $archives = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $fatMailerObj = new self(1, '');
+        while($archive = FatApp::getDb()->fetch($rs)){
+echo $archive['earch_to_email'].'<br>'; 
+        }exit;
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
 
         $productSrchObj = $this->getProductSearchObj($loggedUserId);
