@@ -171,11 +171,12 @@ class BadgeLinkConditionsController extends ListingBaseController
         $srch->addFld('shop_id, COALESCE(shp_l.shop_name, shp.shop_identifier) as shop_name, shop_updated_on, blnku.user_name');
         $srch->addCondition('blinkcond_badge_id', '=', 'mysql_func_' . $objectId, 'AND', true);
 
-        $srch->addDirectCondition("(CASE 
-                                        WHEN " . Badge::COND_MANUAL . " = bdg.badge_trigger_type AND " . Badge::APPROVAL_REQUIRED . " = bdg.badge_required_approval 
-                                        THEN br.breq_status = '" . BadgeRequest::REQUEST_APPROVED . "' 
-                                        ELSE TRUE
-                                    END)");
+        $srch->addDirectCondition("(
+                                        CASE 
+                                            WHEN breq_id IS NOT NULL THEN breq_status = " . BadgeRequest::REQUEST_APPROVED . "
+                                            ELSE TRUE
+                                        END
+                                    )");
 
         if (!empty($badgeType)) {
             $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
