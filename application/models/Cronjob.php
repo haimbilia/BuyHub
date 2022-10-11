@@ -87,6 +87,9 @@ class Cronjob extends FatModel
             FatApp::getDb()->deleteRecords(RecommendationActivityBrowsing::DB_TBL, array('smt' => 'rab_session_id = ? and rab_record_type = ?', 'vals' => array($val['rab_session_id'], SmartUserActivityBrowsing::TYPE_PRODUCT)));
             //echo FatApp::getDb()->getError();
         }
+
+        FatApp::getDb()->query('Delete FROM `' . RecommendationActivityBrowsing::DB_TBL . '` where `rab_user_id` = 0 and `rab_last_action_datetime` < date_sub(now(), interval 2 day)');
+        FatApp::getDb()->query('Delete FROM `' . RecommendationActivityBrowsing::DB_TBL . '` where `rab_last_action_datetime` < date_sub(now(), interval 4 month)');
         return Labels::getLabel('MSG_SUCCESS', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
     }
 
