@@ -15,14 +15,14 @@ class Cronjob extends FatModel
 
         $srch = RecommendationActivityBrowsing::getSearchObject();
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1000);
         $srch->addCondition('rab_weightage_key', '=', 'mysql_func_' . SmartWeightageSettings::PRODUCT_ORDER_PAID, 'AND', true);
         $srch->addCondition('rab_record_type', '=', 'mysql_func_' . SmartUserActivityBrowsing::TYPE_PRODUCT, 'AND', true);
         $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetchAll($rs);
-        //var_dump($row);
 
-        foreach ($row as $val) {
+        //var_dump($row);
+        while ($val = FatApp::getDb()->fetch($rs)) {
+            // foreach ($row as $val) {
             $srch = RecommendationActivityBrowsing::getSearchObject();
             $srch->doNotCalculateRecords();
             $srch->setPageSize($limit);
@@ -53,15 +53,6 @@ class Cronjob extends FatModel
                     );
                     $onDuplicateKeyTagProdUpdate = array_merge($tagProd, array('tpr_weightage' => 'mysql_func_tpr_weightage + ' . $recommendedProd['weightage']));
                     FatApp::getDb()->insertFromArray('tbl_tag_product_recommendation', $tagProd, true, array(), $onDuplicateKeyTagProdUpdate);
-
-                    // $tagProd = array(
-                    // 'tpr_tag_id' => $relatedTagProdArr[$prodId]['tag_id'],
-                    // 'tpr_product_id' => $val['rab_record_id'],
-                    // 'tpr_weightage' => $recommendedProd['weightage'],
-                    // );
-                    // $onDuplicateKeyTagProdUpdate = array_merge($tagProd, array('tpr_weightage' => 'mysql_func_tpr_weightage + ' . $recommendedProd['weightage']));
-                    // FatApp::getDb()->insertFromArray('tbl_tag_product_recommendation', $tagProd, true, array(), $onDuplicateKeyTagProdUpdate);
-                    //echo FatApp::getDb()->getError();
                 } else {
                     /*User Product Recommendation*/
                     $userProdRecommendation = array(
