@@ -11,13 +11,13 @@
                     $badgesArr = Badge::getShopBadges($siteLangId, [$shop['shop_id']]);
                     $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
                     ?>
-                    <span class="blk-txt">
-                        <?php echo Labels::getLabel('LBL_Shop_Opened_On', $siteLangId); ?> <strong>
-                            <?php $date = new DateTime($shop['user_regdate']);
-                            echo $date->format('M d, Y'); ?>
-                        </strong>
-                    </span>
-                </h6>
+
+                </h6> <span class="blk-txt">
+                    <?php echo Labels::getLabel('LBL_Shop_Opened_On', $siteLangId); ?> <strong>
+                        <?php $date = new DateTime($shop['user_regdate']);
+                        echo $date->format('M d, Y'); ?>
+                    </strong>
+                </span>
                 <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $shopTotalReviews > 0) { ?>
                     <div class="product-ratings">
                         <svg class="svg" width="14" height="14">
