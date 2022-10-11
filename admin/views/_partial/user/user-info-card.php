@@ -51,17 +51,17 @@ $username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['cred
         </div>
 
         <?php if ($displayEmail) { ?>
-            <span class="text-muted">            
-            <?php 
-            if(isset($emailOnClick)){
-                echo '<a class="cell-link" href="javascript:void(0)" onclick="'.$emailOnClick.'">'; 
-            } 
-            echo $user['credential_email']; 
-            if(isset($emailOnClick)){
-                echo "</a>";
-            } 
-            ?> 
-        </span>
+            <span class="text-muted">
+                <?php
+                if (isset($emailOnClick)) {
+                    echo '<a class="cell-link" href="javascript:void(0)" onclick="' . $emailOnClick . '">';
+                }
+                echo $user['credential_email'];
+                if (isset($emailOnClick)) {
+                    echo "</a>";
+                }
+                ?>
+            </span>
         <?php } ?>
         <?php
         if (isset($user['extra_text']) || !empty($user['extra_text'])) {

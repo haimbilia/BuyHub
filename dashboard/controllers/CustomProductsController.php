@@ -36,7 +36,7 @@ class CustomProductsController extends SellerBaseController
     {
         $this->checkEditPrivilege();
 
-        $userId = $this->userParentId;
+        $userId = UserAuthentication::getLoggedUserId();
 
         $recordId = FatUtility::int($recordId);
 
@@ -74,10 +74,6 @@ class CustomProductsController extends SellerBaseController
             }
 
             unset($productData['preq_lang_data']);
-
-            if ($productData['preq_user_id'] != $userId) {
-                LibHelper::exitWithError($this->str_invalid_request, true);
-            }
 
             if ($productData['preq_status'] != ProductRequest::STATUS_PENDING) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -216,17 +212,13 @@ class CustomProductsController extends SellerBaseController
     public function setup()
     {
         $this->checkEditPrivilege();
-        $userId = $this->userParentId;
+        $userId = UserAuthentication::getLoggedUserId();
 
         $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
         $isNewProduct  = true;
         if (0 < $recordId) {
             $productData = ProductRequest::getAttributesById($recordId, ['preq_user_id', 'preq_status']);
             if (empty($productData)) {
-                LibHelper::exitWithError($this->str_invalid_request_id);
-            }
-
-            if ($productData['preq_user_id'] != $userId) {
                 LibHelper::exitWithError($this->str_invalid_request_id);
             }
 
@@ -319,15 +311,14 @@ class CustomProductsController extends SellerBaseController
         $data['preq_content']['shipping_profile'] = array_key_first(ShippingProfile::getProfileArr($langId, 0, true, true));
         $data['preq_content'] = array_merge($data['preq_content'], array_diff_key($post, $langData, $data));
         $data['preq_content'] = json_encode($data['preq_content']);
-        $data['preq_status'] = $requestStatus;
-        $data['preq_user_id'] = $userId;
+        $data['preq_status'] = $requestStatus;      
 
         if ($isNewProduct) {
             $data['preq_added_on'] = date('Y-m-d H:i:s');
+            $data['preq_user_id'] = $userId;
         }
 
         $data['preq_product_identifier'] = $productIdentifier;
-
         $prodReqObj = new ProductRequest($recordId);
         $prodReqObj->assignValues($data);
         if (!$prodReqObj->save()) {

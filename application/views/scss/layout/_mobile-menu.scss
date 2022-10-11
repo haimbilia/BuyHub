@@ -81,11 +81,12 @@
     padding-#{$start-direction}: 0;
     -webkit-overflow-scrolling: touch;
 }
-.zeynep ul > li {
+
+.zeynep ul>li {
     display: block;
 }
 
-.zeynep ul > li > a {
+.zeynep ul>li>a {
     color: inherit;
     display: block;
     font-size: 14px;
@@ -94,23 +95,24 @@
     text-decoration: none;
     transition: all 150ms;
 }
-.zeynep ul > li > a:hover {
+
+.zeynep ul>li>a:hover {
     background-color: #efefef;
     border-radius: 3px;
 }
 
-.zeynep ul > li:not(:last-child) > a {
+.zeynep ul>li:not(:last-child)>a {
     border-bottom: 1px solid #efefef;
 }
 
-.zeynep ul > li.has-submenu > a {
+.zeynep ul>li.has-submenu>a {
     background-image: url("../images/retina/submenu-arrow.svg");
     background-position: right 20px center;
     background-repeat: no-repeat;
     background-size: 8px 14px;
 }
 
-.zeynep ul > li.has-submenu > a:hover {
+.zeynep ul>li.has-submenu>a:hover {
     background-image: url("../images/retina/submenu-arrow-active.svg");
 }
 
@@ -130,7 +132,7 @@
     position: relative;
 }
 
-.zeynep .submenu-header > a {
+.zeynep .submenu-header>a {
     color: inherit;
     display: block;
     font-size: 14px;
@@ -140,7 +142,7 @@
     text-decoration: none;
 }
 
-.zeynep .submenu-header > a:before {
+.zeynep .submenu-header>a:before {
     background-image: url("../images/retina/submenu-arrow.svg");
     background-position: right 20px center;
     background-repeat: no-repeat;
@@ -154,7 +156,7 @@
     width: 20px;
 }
 
-.zeynep .submenu > label {
+.zeynep .submenu>label {
     color: $brand-color;
     display: block;
     font-size: 13px;
@@ -198,12 +200,14 @@ body {
 }
 
 .seemore {
-    a {
+    >a {
         font-weight: 600 !important;
-        color: $secondary-color !important;
+        color: $secondary-color  !important;
         border: none;
+
         &::after {
             content: " →";
+
             @include media-breakpoint-up(lg) {
                 content: " ↓";
             }

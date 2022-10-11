@@ -121,8 +121,6 @@ trait BadgeRequestSetup
             }
         }
 
-        $sellerId = UserAuthentication::getLoggedUserId();
-
         $badgeLinkCondId = FatApp::getPostedData('breq_blinkcond_id', FatUtility::VAR_INT, 0);
         if (1 > $badgeLinkCondId && 1 > $badgeId) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_BADGE', $this->siteLangId));
@@ -131,7 +129,7 @@ trait BadgeRequestSetup
         $recordIds = isset($post['record_ids']) ? json_decode($post['record_ids'], true) : [];
 
         if (BadgeLinkCondition::RECORD_TYPE_SHOP == $recordType) {
-            $shopId = Shop::getAttributesByUserId($sellerId, 'shop_id');
+            $shopId = Shop::getAttributesByUserId($this->userParentId, 'shop_id');
             if (false === $shopId || 1 > $shopId) {
                 FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_SHOP', $this->adminLangId));
             }
@@ -162,8 +160,12 @@ trait BadgeRequestSetup
             'blinkcond_record_type' => $recordType,
             'blinkcond_from_date' => $fromDate,
             'blinkcond_to_date' => $toDate,
-            'blinkcond_user_id' => $sellerId,
+            'blinkcond_user_id' => UserAuthentication::getLoggedUserId(),
         ];
+
+        if (0 < $badgeLinkCondId) {
+            unset($data['blinkcond_user_id']);
+        }
 
         $record = new BadgeLinkCondition($badgeLinkCondId);
         $record->assignValues($data);

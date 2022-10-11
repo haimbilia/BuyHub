@@ -22,6 +22,10 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
+            case 'shop_name':
+                $str = $this->includeTemplate('_partial/shop/shop-info-card.php', ['shop' => $row, 'siteLangId' => $siteLangId], false, true);
+                $td->appendElement('plaintext', $tdAttr, $str, true);
+                break;
             case 'prodcat_parent':
                 $prodCat = new productCategory();
                 $name = $prodCat->getParentTreeStructure($row['prodcat_id'], 0, '', $siteLangId, false, -1);
@@ -62,7 +66,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

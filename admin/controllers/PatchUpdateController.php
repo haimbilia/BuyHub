@@ -490,4 +490,38 @@ class PatchUpdateController extends ListingBaseController
         ProductCategory::updateCategoryRelations($prodCatId);
         echo 'Done';
     }
+
+    public static function updateShopsAvgRating()
+    {
+        $srch = new SelProdReviewSearch();
+        $srch->joinSeller();
+        $srch->joinSellerProducts();
+        $srch->joinSelProdRating();
+        $srch->joinOrderProduct();
+        $srch->joinOrderProductShipping();
+        $srch->addMultipleFields(array('ROUND(AVG(sprating_rating),2) as avg_rating', 'spreview_seller_user_id'));
+        $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::TYPE_DELIVERY . "') ELSE `ratingtype_type` = '" . RatingType::TYPE_SHOP . "' END)");
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
+        $srch->addGroupBy('spreview_seller_user_id');       
+        // $srch->addHaving('avg_rating', '>', 0);
+        $rs = $srch->getResultSet();        
+        while ($row = FatApp::getDb()->fetch($rs)) {
+            $rsrch = SelProdRating::getAvgShopReviewsRatingObj($row['spreview_seller_user_id']);
+            $rsrch->joinUser();
+            $rsrch->joinSeller(0, $row['spreview_seller_user_id']);
+            $rsrch->joinSellerProducts();
+            $rsrch->joinProducts();
+            $rsrch->addMultipleFields(array('count(distinct(spreview_id)) as numOfReviews'));
+            $rsrch->doNotCalculateRecords();
+            $rsrch->doNotLimitRecords();
+            $rsrch->addGroupBy('spreview_seller_user_id');
+            $record = FatApp::getDb()->fetch($rsrch->getResultSet());
+            $numOfReviews = $record['numOfReviews'] ?? 0;
+
+            FatApp::getDb()->query("Update tbl_shops set `shop_avg_rating` = '" . $row['avg_rating'] . "' and `shop_total_reviews` = '" . $numOfReviews . "' where shop_user_id = '" . $row['spreview_seller_user_id'] . "'");
+        }
+        echo 'Done';
+    }
 }

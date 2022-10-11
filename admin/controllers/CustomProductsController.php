@@ -123,7 +123,7 @@ class CustomProductsController extends ListingBaseController
 
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name', 'credential_username', 'credential_email'));
+        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'credential_username', 'credential_email', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_id', 'shop_updated_on'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
@@ -150,6 +150,8 @@ class CustomProductsController extends ListingBaseController
                 'user_name' => $res['user_name'] ?? '',
                 'user_parent' => $res['user_parent'] ?? 0,
                 'shop_name' => $res['shop_name'] ?? '',
+                'shop_id' => $res['shop_id'] ?? '',
+                'shop_updated_on' => $res['shop_updated_on'] ?? '',
                 'product_identifier' => $res['product_identifier'],
                 'product_name' => (!empty($res['product_name'])) ? $res['product_name'] : $res['product_identifier'],
                 'credential_username' => $res['credential_username'] ?? '',
@@ -1481,7 +1483,7 @@ class CustomProductsController extends ListingBaseController
             /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'images' => Labels::getLabel('LBL_IMAGES', $this->siteLangId),
             'product_identifier' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
+            'shop_name' => Labels::getLabel('LBL_REQUESTED_BY', $this->siteLangId),
             'preq_added_on' => Labels::getLabel('LBL_CREATED_ON', $this->siteLangId),
             'preq_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
             'preq_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
@@ -1498,7 +1500,7 @@ class CustomProductsController extends ListingBaseController
             /* 'listSerial', */
             'images',
             'product_identifier',
-            'user_name',
+            'shop_name',
             'preq_added_on',
             'preq_requested_on',
             'preq_status',
@@ -1508,7 +1510,7 @@ class CustomProductsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['images', 'product_identifier'], Common::excludeKeysForSort(['product_identifier']));
+        return array_diff($fields, ['images', 'shop_name', 'product_identifier'], Common::excludeKeysForSort(['product_identifier']));
     }
 
     public function getBreadcrumbNodes($action)
