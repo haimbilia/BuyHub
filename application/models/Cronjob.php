@@ -15,14 +15,14 @@ class Cronjob extends FatModel
 
         $srch = RecommendationActivityBrowsing::getSearchObject();
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->setPageSize(1000);
         $srch->addCondition('rab_weightage_key', '=', 'mysql_func_' . SmartWeightageSettings::PRODUCT_ORDER_PAID, 'AND', true);
         $srch->addCondition('rab_record_type', '=', 'mysql_func_' . SmartUserActivityBrowsing::TYPE_PRODUCT, 'AND', true);
         $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetchAll($rs);
-        //var_dump($row);
 
-        foreach ($row as $val) {
+        //var_dump($row);
+        while ($val = FatApp::getDb()->fetch($rs)) {
+            // foreach ($row as $val) {
             $srch = RecommendationActivityBrowsing::getSearchObject();
             $srch->doNotCalculateRecords();
             $srch->setPageSize($limit);
@@ -53,15 +53,6 @@ class Cronjob extends FatModel
                     );
                     $onDuplicateKeyTagProdUpdate = array_merge($tagProd, array('tpr_weightage' => 'mysql_func_tpr_weightage + ' . $recommendedProd['weightage']));
                     FatApp::getDb()->insertFromArray('tbl_tag_product_recommendation', $tagProd, true, array(), $onDuplicateKeyTagProdUpdate);
-
-                    // $tagProd = array(
-                    // 'tpr_tag_id' => $relatedTagProdArr[$prodId]['tag_id'],
-                    // 'tpr_product_id' => $val['rab_record_id'],
-                    // 'tpr_weightage' => $recommendedProd['weightage'],
-                    // );
-                    // $onDuplicateKeyTagProdUpdate = array_merge($tagProd, array('tpr_weightage' => 'mysql_func_tpr_weightage + ' . $recommendedProd['weightage']));
-                    // FatApp::getDb()->insertFromArray('tbl_tag_product_recommendation', $tagProd, true, array(), $onDuplicateKeyTagProdUpdate);
-                    //echo FatApp::getDb()->getError();
                 } else {
                     /*User Product Recommendation*/
                     $userProdRecommendation = array(
@@ -87,6 +78,9 @@ class Cronjob extends FatModel
             FatApp::getDb()->deleteRecords(RecommendationActivityBrowsing::DB_TBL, array('smt' => 'rab_session_id = ? and rab_record_type = ?', 'vals' => array($val['rab_session_id'], SmartUserActivityBrowsing::TYPE_PRODUCT)));
             //echo FatApp::getDb()->getError();
         }
+
+        FatApp::getDb()->query('Delete FROM `' . RecommendationActivityBrowsing::DB_TBL . '` where `rab_user_id` = 0 and `rab_last_action_datetime` < date_sub(now(), interval 2 day)');
+        FatApp::getDb()->query('Delete FROM `' . RecommendationActivityBrowsing::DB_TBL . '` where `rab_last_action_datetime` < date_sub(now(), interval 4 month)');
         return Labels::getLabel('MSG_SUCCESS', FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
     }
 
@@ -862,11 +856,15 @@ class Cronjob extends FatModel
         }
     }
 
-    public static function removeOlderCartItems()
+    public static function removeGarbageData()
     {
+        /* Remove older data from cart */
         FatApp::getDb()->query("Delete FROM `tbl_user_cart` where `usercart_last_session_id` = `usercart_user_id` and usercart_last_used_date < date_sub(now(), interval 1 day)");
-        FatApp::getDb()->query("Delete FROM `tbl_user_cart` where usercart_last_used_date <= date_sub(now(), interval 1 day) and usercart_details = '[]'");
-        FatApp::getDb()->query("Delete FROM `tbl_user_cart` where usercart_last_used_date <= date_sub(now(), interval 2 day) and cast(usercart_user_id as UNSIGNED) = 0");
-        FatApp::getDb()->query('Delete FROM `tbl_user_cart` where usercart_last_used_date < date_sub(now(), interval 4 month)');
+        FatApp::getDb()->query("Delete FROM `tbl_user_cart` where `usercart_last_used_date` <= date_sub(now(), interval 1 day) and usercart_details = '[]'");
+        FatApp::getDb()->query("Delete FROM `tbl_user_cart` where `usercart_last_used_date` <= date_sub(now(), interval 2 day) and cast(usercart_user_id as UNSIGNED) = 0");
+        FatApp::getDb()->query('Delete FROM `tbl_user_cart` where `usercart_last_used_date` < date_sub(now(), interval 4 month)');
+
+        /* Remove older emails from archives */
+        FatApp::getDb()->query('Delete FROM `tbl_email_archives` where `earch_sent_on` IS NOT NULL and `earch_added` < date_sub(now(), interval 6 month)');
     }
 }

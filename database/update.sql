@@ -2329,3 +2329,5 @@ UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `etpl_code` IN ('ac
 UPDATE `tbl_product_requests` SET `preq_product_identifier`= CONCAT(`preq_product_identifier`, '-', `preq_id`, '{cancelled}') WHERE `preq_status` = 2 AND preq_product_identifier NOT LIKE '%{cancelled}';
 
 INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Cart Cleaning', 'Cronjob/removeOlderCartItems', '1440', '1');
+UPDATE `tbl_cron_schedules` set `cron_duration` = 360 where `cron_command` = 'Cronjob/productRecommendation';
+UPDATE `tbl_cron_schedules` set `cron_name` = 'Data cleaning' , `cron_command` = 'Cronjob/removeGarbageData' where `cron_command` = 'Cronjob/removeOlderCartItems';
