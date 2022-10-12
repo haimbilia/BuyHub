@@ -189,8 +189,8 @@ class SystemLogController extends ListingBaseController
         $arr = [
             /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'slog_title' => Labels::getLabel('LBL_Title', $this->siteLangId),
-            'slog_content' => Labels::getLabel('LBL_Content', $this->siteLangId),
-            'slog_response' => Labels::getLabel('LBL_Response', $this->siteLangId),
+            // 'slog_content' => Labels::getLabel('LBL_Content', $this->siteLangId),
+            // 'slog_response' => Labels::getLabel('LBL_Response', $this->siteLangId),
             'slog_type'    => Labels::getLabel('LBL_Log_Type', $this->siteLangId),
             'slog_module_type' => Labels::getLabel('LBL_Module_Type', $this->siteLangId),
             'slog_created_at' => Labels::getLabel('LBL_CREATED_ON', $this->siteLangId),
@@ -205,8 +205,8 @@ class SystemLogController extends ListingBaseController
         return [
             /* 'listSerial', */
             'slog_title',
-            'slog_content',
-            'slog_response',
+            // 'slog_content',
+            // 'slog_response',
             'slog_type'   ,
             'slog_module_type',
             'slog_created_at',
