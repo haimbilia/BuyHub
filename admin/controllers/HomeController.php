@@ -14,8 +14,7 @@ class HomeController extends ListingBaseController
     }
 
     public function index()
-    {
-        SystemLog::clearOldLog();
+    {        
         $accountId = false;
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);

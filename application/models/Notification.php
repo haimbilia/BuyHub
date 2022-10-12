@@ -64,6 +64,8 @@ class Notification extends MyAppModel
 
     public static function saveNotifications($notificationData)
     {
+        FatApp::getDb()->query('Delete FROM `' . self::DB_TBL . '` where `notification_added_on` < date_sub(now(), interval 12 month)');
+
         $notificationObj = new Notification();
         $notificationObj->assignValues($notificationData);
         if (!$notificationObj->save()) {
@@ -91,7 +93,7 @@ class Notification extends MyAppModel
             Notification::ORDER_RETURNED_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_USER_ORDER_RETURN_REQUEST_NOTIFICATION', $langId), 'order-return-requests'),
             Notification::CATALOG_REQUEST_MESSAGE_NOTIFICATION => array(Labels::getLabel('LBL_USER_CATALOG_REQUEST_MESSAGE_NOTIFICATION', $langId), 'custom-products'),
             Notification::RETURN_REQUEST_STATUS_CHANGE_NOTIFICATION => array(Labels::getLabel('LBL_BUYER_RETURN_REQUEST_STATUS_CHANGE_NOTIFICATION', $langId), 'order-return-requests'),
-            Notification::REPORT_SHOP_NOTIFICATION => array(Labels::getLabel('LBL_USER_REPORT_SHOP_NOTIFICATION', $langId), 'shop-reports'),            
+            Notification::REPORT_SHOP_NOTIFICATION => array(Labels::getLabel('LBL_USER_REPORT_SHOP_NOTIFICATION', $langId), 'shop-reports'),
             Notification::NEW_SUBSCRIPTION_PURCHASE_NOTIFICATION => array(Labels::getLabel('LBL_user_new_subscription_purchase_notification', $langId), ''),
             Notification::PROMOTION_APPROVAL_NOTIFICATION => array(Labels::getLabel('LBL_USER_PROMOTION_APPROVAL_NOTIFICATION', $langId), 'promotions'),
             Notification::WITHDRAWL_REQUEST_NOTIFICATION => array(Labels::getLabel('LBL_USER_WITHDRAWL_REQUEST_NOTIFICATION', $langId), 'withdrawal-requests'),
@@ -117,16 +119,16 @@ class Notification extends MyAppModel
     {
         $srch = new SearchBase(static::DB_TBL, 'n');
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.' . User::DB_TBL_PREFIX . 'id = n.notification_user_id', 'u');
-        $srch->joinTable( User::DB_TBL_CRED,'LEFT OUTER JOIN','uc.'.User::DB_TBL_CRED_PREFIX.'user_id = u.user_id', 'uc' );
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . User::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
 
         $srch->addMultipleFields(
             array(
-            'n.*',
-            'u.' . User::DB_TBL_PREFIX . 'name',
-            'u.' . User::DB_TBL_PREFIX . 'id',
-            'u.' . User::DB_TBL_PREFIX . 'updated_on',
-            'uc.'. User::DB_TBL_CRED_PREFIX .'username',
-            'uc.'. User::DB_TBL_CRED_PREFIX .'email',
+                'n.*',
+                'u.' . User::DB_TBL_PREFIX . 'name',
+                'u.' . User::DB_TBL_PREFIX . 'id',
+                'u.' . User::DB_TBL_PREFIX . 'updated_on',
+                'uc.' . User::DB_TBL_CRED_PREFIX . 'username',
+                'uc.' . User::DB_TBL_CRED_PREFIX . 'email',
             )
         );
 
@@ -145,9 +147,9 @@ class Notification extends MyAppModel
     public function changeReadStatus($status, $recordId)
     {
         $db = FatApp::getDb();
-        if(is_array($recordId)){
-            $recordId = implode(",",$recordId);
-        }     
+        if (is_array($recordId)) {
+            $recordId = implode(",", $recordId);
+        }
         if (!$db->query("UPDATE tbl_notifications SET notification_marked_read = " . $status . " WHERE notification_id in (" . $recordId . ")")) {
             return false;
         }
@@ -157,23 +159,23 @@ class Notification extends MyAppModel
     public static function getPermissionsArr()
     {
         return array(
-        static::TYPE_USER => AdminPrivilege::SECTION_USERS,
-        static::TYPE_BRAND => AdminPrivilege::SECTION_BRANDS,
-        static::TYPE_ORDER => AdminPrivilege::SECTION_ORDERS,
-        static::TYPE_ORDER_PRODUCT => AdminPrivilege::SECTION_ORDERS,
-        static::TYPE_ORDER_CANCELATION => AdminPrivilege::SECTION_ORDER_CANCELLATION_REQUESTS,
-        static::TYPE_ORDER_RETURN_REQUEST => AdminPrivilege::SECTION_ORDER_RETURN_REQUESTS,
-        static::TYPE_CATALOG => AdminPrivilege::SECTION_CATALOG_REQUESTS,
-        static::TYPE_CATALOG_REQUEST => AdminPrivilege::SECTION_CATALOG_REQUESTS,
-        static::TYPE_PRODUCT_REVIEW => AdminPrivilege::SECTION_PRODUCT_REVIEWS,
-        static::TYPE_WITHDRAWAL_REQUEST => AdminPrivilege::SECTION_WITHDRAW_REQUESTS,
-        static::TYPE_WITHDRAW_RETURN_REQUEST => AdminPrivilege::SECTION_WITHDRAW_REQUESTS,
-        static::TYPE_SHOP => AdminPrivilege::SECTION_SHOPS,
-        static::TYPE_PROMOTION => AdminPrivilege::SECTION_PROMOTIONS,
-        static::TYPE_ORDER_RETURN_REQUEST_MESSAGE => AdminPrivilege::SECTION_ORDER_RETURN_REQUESTS,
-        static::TYPE_BLOG => AdminPrivilege::SECTION_BLOG_POSTS,
-        static::TYPE_PRODUCT_CATEGORY => AdminPrivilege::SECTION_PRODUCT_CATEGORIES,
-        static::TYPE_ADMIN => AdminPrivilege::SECTION_ADMIN_USERS,
+            static::TYPE_USER => AdminPrivilege::SECTION_USERS,
+            static::TYPE_BRAND => AdminPrivilege::SECTION_BRANDS,
+            static::TYPE_ORDER => AdminPrivilege::SECTION_ORDERS,
+            static::TYPE_ORDER_PRODUCT => AdminPrivilege::SECTION_ORDERS,
+            static::TYPE_ORDER_CANCELATION => AdminPrivilege::SECTION_ORDER_CANCELLATION_REQUESTS,
+            static::TYPE_ORDER_RETURN_REQUEST => AdminPrivilege::SECTION_ORDER_RETURN_REQUESTS,
+            static::TYPE_CATALOG => AdminPrivilege::SECTION_CATALOG_REQUESTS,
+            static::TYPE_CATALOG_REQUEST => AdminPrivilege::SECTION_CATALOG_REQUESTS,
+            static::TYPE_PRODUCT_REVIEW => AdminPrivilege::SECTION_PRODUCT_REVIEWS,
+            static::TYPE_WITHDRAWAL_REQUEST => AdminPrivilege::SECTION_WITHDRAW_REQUESTS,
+            static::TYPE_WITHDRAW_RETURN_REQUEST => AdminPrivilege::SECTION_WITHDRAW_REQUESTS,
+            static::TYPE_SHOP => AdminPrivilege::SECTION_SHOPS,
+            static::TYPE_PROMOTION => AdminPrivilege::SECTION_PROMOTIONS,
+            static::TYPE_ORDER_RETURN_REQUEST_MESSAGE => AdminPrivilege::SECTION_ORDER_RETURN_REQUESTS,
+            static::TYPE_BLOG => AdminPrivilege::SECTION_BLOG_POSTS,
+            static::TYPE_PRODUCT_CATEGORY => AdminPrivilege::SECTION_PRODUCT_CATEGORIES,
+            static::TYPE_ADMIN => AdminPrivilege::SECTION_ADMIN_USERS,
         );
     }
 
