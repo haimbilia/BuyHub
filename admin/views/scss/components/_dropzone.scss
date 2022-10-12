@@ -131,6 +131,7 @@ $dropzone-height: 160px;
             opacity: 0;
             visibility: hidden;
             background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(7px);
             top: 0;
             bottom: 0;
             #{$start-direction}: 0;
@@ -140,8 +141,16 @@ $dropzone-height: 160px;
             display: flex;
             align-items: self-start;
             justify-content: flex-end;
-            .actions li a {
-                background-color: #fff;
+            .actions {
+                margin: 1rem;
+                li {
+                    a {
+                        color: #fff;
+                        &:hover {
+                            color: $brand-color;
+                        }
+                    }
+                }
             }
         }
         &:hover {
