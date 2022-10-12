@@ -31,14 +31,14 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
 
                     <ul class="contact-info">
                         <?php
-                        $dialCode = FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
-                        $site_conatct = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
+                        $dialCode =  FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
+                        $site_conatct =  FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
                         if ($site_conatct) { ?>
                             <li class="contact-info-item">
-                                <?php echo ValidateElement::formatDialCode($dialCode) . $site_conatct; ?>
+                                <?php echo (CommonHelper::demoUrl() == true) ? '+1 469 844 3346' : ValidateElement::formatDialCode($dialCode) . $site_conatct; ?>
                             </li>
                         <?php } ?>
-                        <?php $email_id = FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, '');
+                        <?php $email_id = (CommonHelper::demoUrl() == true) ? 'sales@fatbit.com' : FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, '');
                         if ($email_id) { ?>
                             <li class="contact-info-item">
                                 <a class="contact-info-link" href="mailto:<?php echo $email_id; ?>"><?php echo $email_id; ?>
