@@ -396,7 +396,7 @@ class ShipRocket extends ShippingServicesBase
         $requestParam = [
             'pickup_location' => FatUtility::convertToType($pickupLocationId, FatUtility::VAR_STRING),
             'name' => $address['shop_name'],
-            // 'email' => $this->orderDetail['op_shop_owner_email'],
+            'email' => $this->orderDetail['op_shop_owner_email'],
             'phone' => $address['phone'],
             'address' => $address['line1'],
             'address_2' => $address['line2'],
