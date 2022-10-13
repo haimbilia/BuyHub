@@ -54,6 +54,16 @@
                                         </span>
                                     </li>
                                 <?php } ?>
+                                <?php if (!empty($detail['slog_response'])) { ?>
+                                    <li class="list-stats-item list-stats-item-full">
+                                        <span class="lable">
+                                            <?php echo Labels::getLabel('LBL_RESPONSE', $siteLangId); ?>
+                                        </span>
+                                        <span class="value">
+                                            <?php echo $detail['slog_response']; ?>
+                                        </span>
+                                    </li>
+                                <?php } ?>
                                 <?php if (CONF_DEVELOPMENT_MODE) { ?>
                                     <?php if (!empty($detail['slog_backtrace'])) { ?>
                                         <?php

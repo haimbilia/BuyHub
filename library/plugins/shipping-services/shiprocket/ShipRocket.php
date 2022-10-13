@@ -316,21 +316,20 @@ class ShipRocket extends ShippingServicesBase
      * getPickupLocation
      *
      * @param  int $shopId
-     * @return int
+     * @return mixed
      */
-    private function getPickupLocation(int $shopId): int
+    private function getPickupLocation(int $shopId)
     {
         if (0 < $this->orderDetail['opshipping_by_seller_user_id']) {
             $updatedOn = Shop::getAttributesById($shopId, 'shop_updated_on');
             $pickupLocationId = $shopId . date('ym', strtotime($updatedOn));
         } else {
-            $pickupLocationId = 0; // admin
+            $pickupLocationId = 'ADMIN';
         }
 
         $pickups = $this->getAllPickupLocations();
-
         if (false !== array_search($pickupLocationId, array_column($pickups, 'pickup_location'))) {
-            return (int) $pickupLocationId;
+            return $pickupLocationId;
         }
 
         if (false === $this->addPickupLocation($pickupLocationId)) {
@@ -390,23 +389,14 @@ class ShipRocket extends ShippingServicesBase
      *
      * @return array
      */
-    private function addPickupLocation(int $pickupLocationId)
+    private function addPickupLocation($pickupLocationId)
     {
-        $attr = [
-            'shop_address_line_1',
-            'shop_address_line_2',
-            'shop_city',
-            'COALESCE(state_name, state_identifier) as state_name',
-            'country_name',
-            'shop_postalcode',
-        ];
-
         $address = $this->getShopAddress($this->orderDetail['opshipping_by_seller_user_id']);
 
         $requestParam = [
             'pickup_location' => FatUtility::convertToType($pickupLocationId, FatUtility::VAR_STRING),
             'name' => $address['shop_name'],
-            // 'email' => $this->orderDetail['op_shop_owner_email'],
+            'email' => $this->orderDetail['op_shop_owner_email'],
             'phone' => $address['phone'],
             'address' => $address['line1'],
             'address_2' => $address['line2'],
@@ -510,7 +500,7 @@ class ShipRocket extends ShippingServicesBase
             'billing_state' => $billingAddress['oua_state'],
             'billing_country' => $billingAddress['oua_country'],
             'billing_email' => $this->orderDetail['buyer_email'],
-            'billing_phone' => $this->orderDetail['buyer_phone'],
+            'billing_phone' => $billingAddress['oua_phone'],
             'shipping_is_billing' => false,
             'shipping_customer_name' => User::getFirstName($this->orderDetail['buyer_user_name']),
             "shipping_last_name" => User::getLastName($this->orderDetail['buyer_user_name']),
@@ -521,7 +511,7 @@ class ShipRocket extends ShippingServicesBase
             'shipping_country' => $shippingAddress['oua_country'],
             'shipping_state' => $shippingAddress['oua_state'],
             'shipping_email' => $this->orderDetail['buyer_email'],
-            'shipping_phone' => $this->orderDetail['buyer_phone'],
+            'shipping_phone' => $shippingAddress['oua_phone'],
             'order_items' => [
                 [
                     'name' =>  $this->orderDetail['op_selprod_title'],
@@ -559,21 +549,25 @@ class ShipRocket extends ShippingServicesBase
         ];
 
         if (false === $this->doRequest(self::REQUEST_ASSIGN_AWB, $requestParam)) {
+            SystemLog::plugin(json_encode($requestParam), $this->getError(), self::KEY_NAME);
             return false;
         }
 
         $awbResp = $this->getResponse();
         if (applicationConstants::SUCCESS != $awbResp['awb_assign_status']) {
+            SystemLog::plugin(json_encode($requestParam), json_encode($awbResp), self::KEY_NAME);
             $this->error = Labels::getLabel('ERR_UNABLE_TO_ASSIGN_AWB_FOR_THE_ORDER', $this->langId);
             return false;
         }
 
         if (false === $this->doRequest(self::REQUEST_GENERATE_LABEL, ['shipment_id' => [$orderShipment['shipment_id']]])) {
+            SystemLog::plugin(json_encode(['shipment_id' => [$orderShipment['shipment_id']]]), $this->getError(), self::KEY_NAME);
             return false;
         }
 
         $labelResp = $this->getResponse();
         if (applicationConstants::SUCCESS != $labelResp['label_created']) {
+            SystemLog::plugin(json_encode(['shipment_id' => [$orderShipment['shipment_id']]]), json_encode($labelResp), self::KEY_NAME);
             $this->error = Labels::getLabel('ERR_UNABLE_TO_BIND_LABEL', $this->langId);
             return false;
         }
@@ -832,7 +826,8 @@ class ShipRocket extends ShippingServicesBase
             }
             return true;
         } catch (Exception $e) {
-            SystemLog::plugin(json_encode($requestParam), $e->getMessage(), self::KEY_NAME);
+            $previous = $e->getPrevious();
+            SystemLog::plugin(json_encode($requestParam), $previous->getMessage(), self::KEY_NAME);
             $this->error = $e->getMessage();
             if ($requestType == self::REQUEST_AUTH_LOGIN && $e->getCode() == 400) {
                 $this->error = 'INVALID KEYS';
@@ -853,7 +848,7 @@ class ShipRocket extends ShippingServicesBase
     public function validateKeys(array $keys): bool
     {
         $keys['plugin_active'] = Plugin::ACTIVE;
-        $this->settings = $keys;   
-        return $this->init();        
+        $this->settings = $keys;
+        return $this->init();
     }
 }
