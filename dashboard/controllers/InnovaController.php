@@ -50,7 +50,7 @@ class InnovaController extends LoggedUserController
             case 'svg':
                 //$content_type = 'image/svg+xml';
                 break;
-            /* default :
+                /* default :
               die('Unknown file type.'); */
         }
 
@@ -58,7 +58,10 @@ class InnovaController extends LoggedUserController
             header('Content-Type: ' . $content_type);
         }
 
-        include_once CONF_THEME_PATH . 'assetmanager/' . implode('/', func_get_args());
+        $str = implode('/', func_get_args());
+        if (substr(strtolower($str), -4) == '_php') {
+            $str = substr($str, 0, -4) . '.php';
+        }
+        include_once CONF_THEME_PATH . 'assetmanager/' . $str;
     }
-
 }

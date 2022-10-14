@@ -42,7 +42,7 @@
                 $('#container_id').html("");
                 $('#container_id').fileTree({
                     root: base + '/',
-                    script: 'jqueryFileTree/jqueryFileTree.php',
+                    script: 'jqueryFileTree/jqueryFileTree_php',
                     expandSpeed: 750,
                     collapseSpeed: 750,
                     expandEasing: 'easeOutBounce',

@@ -82,7 +82,7 @@ class HomeController extends ListingBaseController
                 $visits_chart_data = $chatStats .= "]";
                 $visitCount = $statsInfo['result'];
                 foreach ($statsInfo['result'] as $key => $val) {
-                    $visitCount[$key] = $val['totalsForAllResults'];
+                    $visitCount[$key] = $val['totalsForAllResults'] ?? 0;
                 }
                 $socialVisits = $analytics->getSocialVisits();
             }
