@@ -197,7 +197,7 @@ class BrandsController extends ListingBaseController
         $recordId = $brand->getMainTableRecordId();
 
         if (!$brand->updateLangData(CommonHelper::getDefaultFormLangId(), ['brand_name' => $data['brand_name']])) {
-            LibHelper::exitWithError($record->getError(), true);
+            LibHelper::exitWithError($brand->getError(), true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
