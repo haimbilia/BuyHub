@@ -1092,7 +1092,7 @@ class CommonHelper extends FatUtility
                     ["group4", "", ["Undo", "Redo", "FullScreen", "SourceDialog","ImageDialog"]]
                     ];
                     window["fatbit_'.$textareaId.'"].REPLACE("'.$textareaId.'", "'.$divId.'");
-                    window["fatbit_'.$textareaId.'"] .fileBrowser = "/admin/innova/assetmanager/asset.php";
+                    window["fatbit_'.$textareaId.'"] .fileBrowser = "/admin/innova/assetmanager/asset_php";
                     ';
 
         if($jsTag){

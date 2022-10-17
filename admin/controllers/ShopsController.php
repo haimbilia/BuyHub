@@ -498,7 +498,8 @@ class ShopsController extends ListingBaseController
         $fld->requirements()->setFloat();
         $fld->htmlAfterField = "<br><small>" . Labels::getLabel("MSG_SELLER_NEEDS_TO_MAINTAIN_TO_ACCEPT_COD_ORDERS._DEFAULT_IS_-1", $this->siteLangId) . "</small>";
         $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $this->siteLangId), 'shop_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $this->siteLangId), 'shop_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
+        $fld->requirements()->setRequired(true);
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'shop_active', applicationConstants::ACTIVE, array(), false, applicationConstants::INACTIVE);
 
         $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'shop_featured', 1, array(), false, 0);

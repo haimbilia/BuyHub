@@ -12,7 +12,7 @@ $innova_settings = array(
     ["group2", "", ["Bullets", "Numbering", "JustifyLeft", "JustifyCenter", "JustifyRight"]],
     ["group3", "", ["LinkDialog", "ImageDialog", "YoutubeDialog", "Table", "TableDialog"]],
     ["group5", "", ["Undo", "Redo", "SourceDialog"]]]',
-    'fileBrowser' => '"' . CONF_WEBROOT_URL . 'innova/assetmanager/asset.php"'
+    'fileBrowser' => '"' . CONF_WEBROOT_URL . 'innova/assetmanager/asset_php"'
 );
 
 FatApp::setViewDataProvider('_partial/cart-summary.php', array('Common', 'cartSummary'));
