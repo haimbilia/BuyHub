@@ -474,7 +474,7 @@ class ShipRocket extends ShippingServicesBase
         $this->orderDetail['op_other_charges'] = array_sum(array_column($this->orderDetail['charges'], 'opcharge_amount'));
 
         $taxOptions = !empty($this->orderDetail['op_product_tax_options']) ? json_decode($this->orderDetail['op_product_tax_options'], true) : [];
-        $taxPercentage = !empty($taxOptions) ? $taxOptions['Tax']['percentageValue'] : 0;
+        $taxPercentage = !empty($taxOptions) && isset($taxOptions['Tax']['percentageValue']) ? $taxOptions['Tax']['percentageValue'] : 0;
 
         $taxCharged = CommonHelper::orderProductAmount($this->orderDetail, 'TAX');
 
@@ -827,7 +827,7 @@ class ShipRocket extends ShippingServicesBase
             return true;
         } catch (Exception $e) {
             $previous = $e->getPrevious();
-            SystemLog::plugin(json_encode($requestParam), $previous->getMessage(), self::KEY_NAME);
+            SystemLog::plugin(json_encode($requestParam), $e, self::KEY_NAME);
             $this->error = $e->getMessage();
             if ($requestType == self::REQUEST_AUTH_LOGIN && $e->getCode() == 400) {
                 $this->error = 'INVALID KEYS';
