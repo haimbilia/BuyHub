@@ -826,7 +826,7 @@ class ImportExportController extends SellerBaseController
         // Close File
         CommonHelper::writeToCSVFile($CSVfileObj, array(), true);
         if (CommonHelper::checkCSVFile($importExport->getCsvFileName())) {
-            $success['CSVfileUrl'] = FatUtility::generateFullUrl('custom', 'downloadLogFile', array($importExport->getCsvFileName()), CONF_WEBROOT_FRONTEND);
+            $success['CSVfileUrl'] = UrlHelper::generateFullUrl('custom', 'downloadLogFile', array($importExport->getCsvFileName()), CONF_WEBROOT_FRONTEND);
         }
 
         if ($error) {
