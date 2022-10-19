@@ -124,7 +124,8 @@ You will require the following server specifications for setting up the Yokart s
 
 10. **Create Procedure**
 
-    Login to admin dashboard and Open url https://yourdomain.com/admin/admin-users/createProcedures to create procedures
+    - Login to admin dashboard 
+	- Open url https://yourdomain.com/admin/admin-users/createProcedures to create procedures.
 
 11. **Custom Configuration**
 
@@ -133,3 +134,54 @@ You will require the following server specifications for setting up the Yokart s
 		define('CONF_DEVELOPMENT_MODE', false);
 		define('CONF_USE_FAT_CACHE', true);
 		define('ALLOW_EMAILS', true);
+
+## Notes:
+
+- Stripe Connect Installation :
+     - Required to configure callback url as "{domain-name}/public/index.php?url=stripe-connect/callback" inside stripe's web master's account under https://dashboard.stripe.com/settings/applications under "Integration" -> "Redirects"
+       -  Setup webhook Stripe Connect  https://dashboard.stripe.com/test/webhooks . 
+        - Add Webhook url under "Endpoints receiving events from your account" 
+        - "Webhook Detail" > Url as "{domain-name}/stripe-connect-pay/payment-status" bind events "payment_intent.payment_failed", "payment_intent.succeeded".
+
+- S3 bucket notes for bulk media:
+	- Create a Lambda function.
+	-	 Add trigers and upload zip file from  git-ignored-files/user-uploads/lib-files/fatbit-s3-zip-extractor.zip.
+	- Set permission and update Resource based on function created by you.
+		
+    	    {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Action": "logs:CreateLogGroup",
+                    "Resource": "arn:aws:logs:us-east-2:765751105868:*"
+                },
+                {
+                    "Effect": "Allow",
+                    "Action": [
+                        "logs:CreateLogStream",
+                        "logs:PutLogEvents"
+                    ],
+                    "Resource": "arn:aws:logs:*:*:*"
+                },
+                {
+                    "Effect": "Allow",
+                    "Action": [
+                        "s3:PutObject",
+                        "s3:GetObject",
+                        "s3:DeleteObject"
+                    ],
+                    "Resource": [
+                        "*"
+                    ]
+                }
+            ]
+        }
+
+## Migration  Instructions
+
+- Upload the latest script files into your root directory and make sure that the changes updated on the setup-files directory files shall be updated with your root script files.
+- Execute the updates.sql file which is placed under /path/to/your/rootdir/database direcotry.
+- Login to admin account and Open url https://yourdomain.com/admin/patch-update/update-shops-avg-rating to update reviews and ratings.
+- Labels table shall be updated from the sample.sql file which is placed under /path/to/your/rootdir/database/ directory 
+- user-uploads directory shall be remain same.
