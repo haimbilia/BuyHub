@@ -111,7 +111,8 @@
     li {
         list-style-type: none;
     }
-    .radio {
+    .radio,
+    .checkbox {
         padding: 10px 1rem;
         background-color: $bg-gray;
         height: $input-height;
