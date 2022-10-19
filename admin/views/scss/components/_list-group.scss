@@ -107,9 +107,20 @@
 
 .list-radio {
     display: flex;
-    grid-gap: 1.5rem;
+    gap: 2px;
     li {
         list-style-type: none;
+    }
+    .radio {
+        padding: 10px 1rem;
+        background-color: $bg-gray;
+        height: $input-height;
+        border-radius: $input-border-radius;
+        display: flex;
+        align-items: center;
+        &:hover {
+            background-color: darken($bg-gray, 10);
+        }
     }
 }
 
