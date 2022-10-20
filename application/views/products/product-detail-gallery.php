@@ -38,17 +38,15 @@
                 <?php } ?>
             </div>
             <div class="thumb-nav" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
-                <?php $count = 1;
-                if ($productImagesArr) { ?>
+                <?php if ($productImagesArr) { ?>
                     <?php foreach ($productImagesArr as $afile_id => $image) {
                         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                         $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         /* $mainWebpImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');  */ ?>
-                        <div class="thumb-nav-item" data-count="<?php echo $count; ?>">
+                        <div class="thumb-nav-item">
                             <img width="110" height="110" title="<?php echo $image['afile_attribute_title']; ?>" alt="<?php echo $image['afile_attribute_alt']; ?>" src="<?php echo $mainImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB); ?> />
                         </div>
-                    <?php $count++;
-                    } ?>
+                    <?php } ?>
 
                 <?php } else { ?>
                     <div class="thumb-nav-item">

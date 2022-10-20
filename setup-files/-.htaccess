@@ -15,10 +15,11 @@ RewriteRule ^dashboard/cache/(.*)$ /cache/$1 [L]
 RewriteRule ^app-api/(.*)/dashboard/(.*)$ /dashboard/app-api/$1/$2 [L]
 
 <IfModule mod_headers.c>
+    #Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 	Header unset ETag
     Header set X-Frame-Options "sameorigin"
     Header set X-XSS-Protection "1; mode=block"
-    #Header set X-Content-Type-Options "nosniff"
+    #Header set X-Content-Type-Options "nosniff"    
 </IfModule>
 FileETag None
 

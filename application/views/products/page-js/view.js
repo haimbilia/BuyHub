@@ -55,7 +55,7 @@ $(window).on('load', function () {
 
     /* Product Gallery */
     $("#detail .main-img-slider").slick({
-        rtl: ('rtl' == langLbl.layoutDirection),
+        rtl: false,
         slidesToShow: 1,
         slidesToScroll: 1,
         infinite: false,

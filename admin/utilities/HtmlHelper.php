@@ -333,6 +333,7 @@ class HtmlHelper
         if (!empty($msg)) {
             $fld->htmlAfterField = '<span class="form-text text-muted">' . $msg . '</span>';
         }
+        $fld->developerTags['rdHtmlAfterRadio'] = '<i class="input-helper"></i>';
     }
 
     public static function configureRadioAsButton(&$frm, $fldName)
