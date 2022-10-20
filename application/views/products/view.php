@@ -70,7 +70,7 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
 
         $("#btnAddToCart").addClass("quickView");
         // $('#slider-for').slick(getSlickGallerySettings(false));
-        // $('#slider-nav').slick(getSlickGallerySettings(true, '<?php echo CommonHelper::getLayoutDirection(); ?>'));
+        // $('#slider-nav').slick(getSlickGallerySettings(true, '<?php /* echo CommonHelper::getLayoutDirection(); */ ?>'));
 
         /* for toggling of tab/list view[ */
         $('.list-js').hide();
