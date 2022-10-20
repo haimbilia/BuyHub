@@ -15,7 +15,7 @@
         ?>
         <div class="product-images demo-gallery">
             <div class="main-img-slider" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
-                <?php if ($productImagesArr) {                 
+                <?php if ($productImagesArr) {
                     foreach ($productImagesArr as $afile_id => $image) {
                         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                         $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_ORIGINAL, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
@@ -23,7 +23,7 @@
                         $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 ?>
                         <a data-fancybox="gallery" href="<?php echo $mainImgUrl; ?>">
-                            <img loading="lazy" class="img-fluid" title="<?php echo $image['afile_attribute_title'];?>" alt="<?php echo $image['afile_attribute_alt'];?>" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_ORIGINAL); ?>>
+                            <img loading="lazy" class="img-fluid" title="<?php echo $image['afile_attribute_title']; ?>" alt="<?php echo $image['afile_attribute_alt']; ?>" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_ORIGINAL); ?>>
                         </a>
                     <?php
                     }
@@ -33,7 +33,7 @@
                     /* $mainWebpImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, 'WEBP' . ImageDimension::VIEW_MEDIUM, 0)), CONF_IMG_CACHE_TIME, '.webp'); */
                     ?>
                     <a data-fancybox="gallery" href="<?php echo $mainImgUrl; ?>">
-                        <img loading="lazy" class="img-fluid" title="<?php echo Labels::getLabel('LBL_DUMMY_IMAGE', $siteLangId);?>" alt="<?php echo Labels::getLabel('LBL_DUMMY_IMAGE', $siteLangId);?>" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM); ?>>
+                        <img loading="lazy" class="img-fluid" title="<?php echo Labels::getLabel('LBL_DUMMY_IMAGE', $siteLangId); ?>" alt="<?php echo Labels::getLabel('LBL_DUMMY_IMAGE', $siteLangId); ?>" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MEDIUM); ?>>
                     </a>
                 <?php } ?>
             </div>
@@ -43,17 +43,17 @@
                         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                         $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         /* $mainWebpImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');  */ ?>
-                        <div>
-                            <img width="110" height="110" title="<?php echo $image['afile_attribute_title'];?>" alt="<?php echo $image['afile_attribute_alt'];?>" src="<?php echo $mainImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB); ?> />
+                        <div class="thumb-nav-item">
+                            <img width="110" height="110" title="<?php echo $image['afile_attribute_title']; ?>" alt="<?php echo $image['afile_attribute_alt']; ?>" src="<?php echo $mainImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB); ?> />
                         </div>
                     <?php } ?>
 
                 <?php } else { ?>
-                    <div>
-                        <img width="110" height="110" title="<?php echo Labels::getLabel('LBL_DUMMY_IMAGE', $siteLangId);?>" alt="<?php echo Labels::getLabel('LBL_DUMMY_IMAGE', $siteLangId);?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_THUMB, 0)), CONF_IMG_CACHE_TIME, '.jpg'); ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB); ?> />
+                    <div class="thumb-nav-item">
+                        <img width="110" height="110" title="<?php echo Labels::getLabel('LBL_DUMMY_IMAGE', $siteLangId); ?>" alt="<?php echo Labels::getLabel('LBL_DUMMY_IMAGE', $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array(0, ImageDimension::VIEW_THUMB, 0)), CONF_IMG_CACHE_TIME, '.jpg'); ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB); ?> />
                     </div>
                 <?php } ?>
-                </div>
+            </div>
         </div>
     </div>
 </div>
