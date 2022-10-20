@@ -904,6 +904,10 @@ class MyAppController extends FatController
             return true;
         }
 
+        if(isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && FatUtility::int($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]['admin_id']) > 0){
+            return true;
+        }
+
         LibHelper::exitWithError(Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()), false, true);
         FatApp::redirectUser(UrlHelper::generateUrl('maintenance'));
     }
