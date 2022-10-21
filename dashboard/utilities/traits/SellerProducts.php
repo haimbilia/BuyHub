@@ -522,25 +522,25 @@ trait SellerProducts
 
         if ($selprod_id > 0) {
             unset($post['selprod_code']);
-        }
 
-        $srch = new SearchBase(SellerProductSpecialPrice::DB_TBL);
-        $srch->addCondition('splprice_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
-        $srch->addCondition('splprice_price', '>=', $post['selprod_price']);
-        $srch->addCondition('splprice_end_date', '>=', date('Y-m-d H:i:s'));
-        $srch->addFld('splprice_price');
-        $srch->addOrder('splprice_price', 'DESC');
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $db = FatApp::getDb();
-        $rs = $srch->getResultSet();
-        $result = $db->fetch($rs);
-        if (is_array($result) && !empty($result)) {
-            $price = CommonHelper::displayMoneyFormat($result['splprice_price']);
-            $msg = Labels::getLabel('MSG_SELLING_PRICE_MUST_BE_GREATER_THAN_SPECIAL_PRICE_{SPECIAL-PRICE}', $this->siteLangId);
-            $msg = CommonHelper::replaceStringData($msg, ['{SPECIAL-PRICE}' => $price]);
-            Message::addErrorMessage($msg);
-            FatUtility::dieWithError(Message::getHtml());
+            $srch = new SearchBase(SellerProductSpecialPrice::DB_TBL);
+            $srch->addCondition('splprice_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
+            $srch->addCondition('splprice_price', '>=', $post['selprod_price']);
+            $srch->addCondition('splprice_end_date', '>=', date('Y-m-d H:i:s'));
+            $srch->addFld('splprice_price');
+            $srch->addOrder('splprice_price', 'DESC');
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
+            $db = FatApp::getDb();
+            $rs = $srch->getResultSet();
+            $result = $db->fetch($rs);
+            if (is_array($result) && !empty($result)) {
+                $price = CommonHelper::displayMoneyFormat($result['splprice_price']);
+                $msg = Labels::getLabel('MSG_SELLING_PRICE_MUST_BE_GREATER_THAN_SPECIAL_PRICE_{SPECIAL-PRICE}', $this->siteLangId);
+                $msg = CommonHelper::replaceStringData($msg, ['{SPECIAL-PRICE}' => $price]);
+                Message::addErrorMessage($msg);
+                FatUtility::dieWithError(Message::getHtml());
+            }
         }
 
         $post['selprod_subtract_stock'] = FatApp::getPostedData('selprod_subtract_stock', FatUtility::VAR_INT, 0);
@@ -2608,7 +2608,7 @@ trait SellerProducts
                 Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
             );
         }
-        
+
         $invAllowedLimit = SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed');
         $msg = '';
         foreach ($selprodIdsArr as $selprod_id) {
