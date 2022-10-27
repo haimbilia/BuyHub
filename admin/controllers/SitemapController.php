@@ -91,13 +91,23 @@ class SitemapController extends AdminBaseController
             }
             $file .= '/products';
 
-            $prodSrch->addMultipleFields(array('selprod_id'));
+            $prodSrch->addMultipleFields(array('selprod_id', 'product_id'));
             $prodSrch->addGroupBy('selprod_id');
             $prodSrch->doNotCalculateRecords();
             $prodSrch->doNotLimitRecords();
             $rs = $prodSrch->getResultSet();
             while ($row = FatApp::getDb()->fetch($rs)) {
-                $this->writeSitemapUrl(UrlHelper::generateFullUrl('products', 'view', array($row['selprod_id']), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file);
+                $productImagesArr = array();
+                $options = SellerProduct::getSellerProductOptions($row['selprod_id'], false);
+                if (count($options) > 0) {
+                    foreach ($options as $op) {
+                        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $row['product_id'], $op['selprodoption_optionvalue_id'], $language['language_id'], true);
+                        if ($images) {
+                            $productImagesArr += $images;
+                        }
+                    }
+                }
+                $this->writeSitemapUrl(UrlHelper::generateFullUrl('products', 'view', array($row['selprod_id']), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file, 'weekly', ['product' => $productImagesArr]);
             }
 
             $this->endSitemapXml($file);
@@ -226,10 +236,10 @@ class SitemapController extends AdminBaseController
     {
         ob_start();
         echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-        echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="https://www.google.com/schemas/sitemap-image/1.1">' . "\n";
     }
 
-    private function writeSitemapUrl($url, $file, $freq = 'weekly')
+    private function writeSitemapUrl($url, $file, $freq = 'weekly', $imagesUrl = [])
     {
         $this->recordCountInc++;
         if ($this->recordCountInc > $this->limit) {
@@ -242,8 +252,19 @@ class SitemapController extends AdminBaseController
 				<loc>" . $url . "</loc>
                 <lastmod>" . date('Y-m-d') . "</lastmod>
                 <changefreq>" . $freq . "</changefreq>
-                <priority>0.8</priority>
-			</url>";
+                <priority>0.8</priority>";
+
+        if (isset($imagesUrl) && !empty($imagesUrl['product'])) {
+            foreach (array_filter($imagesUrl['product']) as $afile_id => $image) {
+                $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+                $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($image['afile_record_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                echo "<image:image>
+                <image:loc>" . $mainImgUrl . "</image:loc>
+                </image:image>";
+            }
+        }
+
+        echo "</url>";
         echo "\n";
     }
 
@@ -268,7 +289,7 @@ class SitemapController extends AdminBaseController
 
         if (1 < count($this->siteMapLanguages)) {
             foreach ($this->siteMapLanguages as $language) {
-                $url = UrlHelper::getUrlScheme() . '/'. $this->sitemapDir;
+                $url = UrlHelper::getUrlScheme() . '/' . $this->sitemapDir;
                 // $url .=  "/" . strtolower($language['language_code']);
                 if ($this->defaultLangId != $language['language_id']) {
                     $url .=  "/" . strtolower($language['language_code']);
@@ -278,7 +299,7 @@ class SitemapController extends AdminBaseController
         } else {
             $structure = $this->getStructure();
             foreach ($structure as $val) {
-                echo "<sitemap><loc>" . UrlHelper::getUrlScheme() . '/'. $this->sitemapDir . '/' . strtolower($val) . ".xml</loc></sitemap>\n";
+                echo "<sitemap><loc>" . UrlHelper::getUrlScheme() . '/' . $this->sitemapDir . '/' . strtolower($val) . ".xml</loc></sitemap>\n";
             }
         }
 
@@ -296,7 +317,7 @@ class SitemapController extends AdminBaseController
             echo "<?xml version='1.0' encoding='UTF-8'?>
     <sitemapindex xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>\n";
             foreach ($structure as $val) {
-                $url = UrlHelper::getUrlScheme() . '/'. $this->sitemapDir;
+                $url = UrlHelper::getUrlScheme() . '/' . $this->sitemapDir;
                 if ($this->defaultLangId != $language['language_id']) {
                     $url .=  "/" . strtolower($language['language_code']);
                 }

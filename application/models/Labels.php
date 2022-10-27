@@ -89,7 +89,7 @@ class Labels extends MyAppModel
                 'SUC' => self::getLabel('SUC_SUCCESS_MESSAGES', $langId),
                 'CON' => self::getLabel('CON_CONFIRMATION_MESSAGES', $langId),
             ];
-        CacheHelper::create('abusiveWordsTblHeadingCols' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('labelsPrefixes' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 

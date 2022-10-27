@@ -55,10 +55,10 @@ $(window).on('load', function () {
 
     /* Product Gallery */
     $("#detail .main-img-slider").slick({
-        rtl: ('rtl' == langLbl.layoutDirection),
+        rtl: false,
         slidesToShow: 1,
         slidesToScroll: 1,
-        infinite: true,
+        infinite: false,
         arrows: true,
         fade: true,
         autoplay: true,
@@ -96,7 +96,7 @@ $(window).on('load', function () {
         rtl: ('rtl' == langLbl.layoutDirection),
         slidesToShow: 5,
         slidesToScroll: 1,
-        infinite: true,
+        infinite: false,
         centerMode: true,
         centerPadding: '0px',
         asNavFor: ".main-img-slider",

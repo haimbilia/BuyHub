@@ -57,7 +57,7 @@ var fcom = {
 			if (!data.fOutMode) data.fOutMode = o.fOutMode;
 		}
 
-		var dbmsg = o.dbmsg || '<img src="' + fcom.makeUrl() + 'img/loading.gif" alt="Processing..">';
+		var dbmsg = o.dbmsg || '<img src="' + fcom.makeUrl('','','',siteConstants.rooturl) + 'img/loading.gif" alt="Processing..">';
 		var dvdebug = $('<div />').append(dbmsg);
 		dvdebug.appendTo($('#dv-bg-processes'));
 		isAjaxRunning = true;
