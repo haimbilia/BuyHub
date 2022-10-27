@@ -823,12 +823,27 @@ trait ShippingServices
             ];
 
             if (!FatApp::getDb()->insertFromArray(PluginSetting::DB_TBL, $updateData, false, [], $updateData)) {
-                $this->error = FatApp::getDb()->getError();
-                return false;
+                LibHelper::dieJsonError(FatApp::getDb()->getError());
             }
         }
         $cacheKey = Shipping::CARRIER_CACHE_KEY_NAME . $this->langId . $shippingApiClass . $sellerId;
         CacheHelper::create($cacheKey, serialize($carriers), CacheHelper::TYPE_SHIPING_API);
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESSFULLY_SYNCED', $this->langId));
+    }
+
+    /**
+     * syncDefaultAddressId : Used for Shipstation Plugin. Get admin's Default Ship From Location Address Id and updated to db.
+     *
+     * @return void
+     */
+    public function syncDefaultAddressId()
+    {
+        $shippingObj = new Shipping($this->langId);
+        $shippingApiObj = $shippingObj->getShippingApiObj(0);
+
+        if (false === $shippingApiObj->syncDefaultAddressId()) {
+            LibHelper::dieJsonError($shippingApiObj->getError());
+        }
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESSFULLY_SYNCED', $this->langId));
     }
 }

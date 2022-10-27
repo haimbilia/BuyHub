@@ -32,7 +32,12 @@ class PluginSetting
         return $this->error;
     }
 
-    private function delete(array $statement = []): bool
+    public function getPluginId()
+    {
+        return (int) $this->pluginId;
+    }
+
+    private function delete(): bool
     {
         if (1 > $this->pluginId) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);

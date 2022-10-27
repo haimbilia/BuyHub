@@ -110,6 +110,7 @@ trait ShipStationFunctions
         $this->endpoint = 'carriers';
         return $this->get();
     }
+    
     /**
      * 
      * @return bool
@@ -118,7 +119,7 @@ trait ShipStationFunctions
     {
         $this->endpoint = 'warehouses';
         return $this->get();
-    }
+    }    
 
     /**
      * shippingRates
@@ -190,6 +191,18 @@ trait ShipStationFunctions
     private function markAsShipped(array $requestParam): bool
     {
         $this->endpoint = 'orders/markasshipped';
+        return $this->post($requestParam);
+    }
+    
+    /**
+     * createWarehouse
+     *
+     * @param  array $requestParam
+     * @return bool
+     */
+    private function createWarehouse(array $requestParam): bool
+    {
+        $this->endpoint = 'warehouses/createwarehouse';
         return $this->post($requestParam);
     }
 
