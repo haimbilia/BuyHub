@@ -61,7 +61,6 @@ class StripeConnectController extends PaymentMethodBaseController
         LibHelper::exitWithError($msg, true);
     }
 
-
     /**
      * index
      *
@@ -127,6 +126,9 @@ class StripeConnectController extends PaymentMethodBaseController
      */
     public function requiredFieldsForm()
     {
+        $loadBankForm = FatApp::getPostedData('loadBankForm', FatUtility::VAR_INT, 0);
+        $this->stripeConnect->loadBankForm($loadBankForm);
+
         $businessType = FatApp::getPostedData('businessType', FatUtility::VAR_STRING, 'individual');
         $businessType = 'undefined' == $businessType ? 'individual' : $businessType;
 
@@ -141,6 +143,7 @@ class StripeConnectController extends PaymentMethodBaseController
         $stateCode = isset($initialFieldsValue['business_profile']['support_address']['state']) ? $initialFieldsValue['business_profile']['support_address']['state'] : '';
         $errors = $this->stripeConnect->getErrorWhileUpdate();
 
+        $this->set('loadBankForm', $loadBankForm);
         $this->set('errors', $errors);
         $this->set('frm', $frm);
         $this->set('stateCode', $stateCode);
@@ -182,6 +185,11 @@ class StripeConnectController extends PaymentMethodBaseController
 
         if (array_key_exists('merchantCatCode', $post)) {
             unset($post['merchantCatCode']);
+        }
+
+        $loadBankForm = FatApp::getPostedData('loadBankForm', FatUtility::VAR_INT, 0);
+        if (0 < $loadBankForm) {
+            unset($post['loadBankForm']);
         }
 
         if (array_key_exists('verification', $_FILES) && !empty($this->stripeConnect->getRelationshipPersonId())) {
@@ -227,7 +235,12 @@ class StripeConnectController extends PaymentMethodBaseController
             }
             FatUtility::dieJsonError($msg);
         }
+        
         $msg = Labels::getLabel('MSG_SUCCESS', $this->siteLangId);
+        if (0 < $loadBankForm) {
+            FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUBMITTED_TO_STRIPE.', $this->siteLangId));    
+        }
+        
         if (true === $redirect) {
             Message::addMessage($msg);
             FatApp::redirectUser(UrlHelper::generateUrl('seller', 'shop', [self::KEY_NAME]));
@@ -290,6 +303,12 @@ class StripeConnectController extends PaymentMethodBaseController
         $userEmail = current($userData);
 
         $frm = new Form('frm' . self::KEY_NAME);
+
+        $loadBankForm = FatApp::getPostedData('loadBankForm', FatUtility::VAR_INT, 0);
+        if (0 < $loadBankForm) {
+            $frm->addHiddenField('', 'loadBankForm', 1);
+        }
+
         $stateFldClass = '';
         $j = 0;
         foreach ($fieldsData as $field => $labelData) {
@@ -414,8 +433,8 @@ class StripeConnectController extends PaymentMethodBaseController
             }
             $j++;
         }
-
-        if (0 < $j) {
+        
+        if (0 < $j && 1 > $loadBankForm) {
             $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONTINUE', $this->siteLangId));
             $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearForm();'));
         }
