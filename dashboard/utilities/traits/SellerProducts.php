@@ -333,7 +333,9 @@ trait SellerProducts
             foreach ($sellerProductRow['selprodoption_optionvalue_id'] as $opId => $op) {
                 $optionValue = new OptionValue($op[$opId]);
                 $option = $optionValue->getOptionValue($opId);
-                $optionValues[] = $option['optionvalue_name' . $this->siteLangId];
+                if (isset($option['optionvalue_name' . $this->siteLangId]) && $option['optionvalue_name' . $this->siteLangId] != '') {
+                    $optionValues[] = $option['optionvalue_name' . $this->siteLangId];
+                }
             }
         }
 
