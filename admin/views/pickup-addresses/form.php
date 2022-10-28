@@ -89,7 +89,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                             $fromFld->value = $fromTime;
 
                                             $toFld = $frm->getField('tslot_to_time[' . $i . '][]');
-                                            $toFld->setFieldTagAttribute('class', 'js-slot-to-' . $i);
+                                            $toFld->setFieldTagAttribute('class', 'js-slot-to-' . $i . ' toTime-js');
                                             $toFld->setFieldTagAttribute('data-row', $row);
                                             $toFld->setFieldTagAttribute('onChange', 'displayAddRowValues(' . $i . ', this)');
                                             $toFld->value = $toTime;
@@ -146,7 +146,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                         $toFld = $frm->getField('tslot_to_time[' . $i . '][]');
                                         $toFld->setFieldTagAttribute('disabled', 'true');
                                         $toFld->setFieldTagAttribute('data-row', $row);
-                                        $toFld->setFieldTagAttribute('class', 'js-slot-to-' . $i);
+                                        $toFld->setFieldTagAttribute('class', 'js-slot-to-' . $i . ' toTime-js');
                                         $toFld->setFieldTagAttribute('onChange', 'displayAddRowValues(' . $i . ', this)'); ?>
                                         <tr data-count="<?php echo $i; ?>" class="rows timeSlotJs jsDay-<?php echo $i; ?> row-<?php echo $row; ?>">
                                             <td class="align-middle jsWeekDay">
