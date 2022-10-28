@@ -506,6 +506,11 @@ $(document).on("change", ".state", function () {
                 $.ykmsg.error(langLbl.selectTimeslotDay);
                 return false;
             }
+        }else {
+            if ('' == $(".fromTime-js option:selected").val() || '' == $(".toTime-js option:selected").val()) {
+                $.ykmsg.error(langLbl.invalidTimeSlot);
+                return false;
+            }
         }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Seller', 'setPickupAddress'), data, function (t) {
