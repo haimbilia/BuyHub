@@ -7,6 +7,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
             <thead class="tableHeadJs">
                 <tr>
                     <th><?php echo Labels::getLabel('LBL_ITEMS_SUMMARY', $siteLangId); ?></th>
+                    <th><?php echo Labels::getLabel('LBL_FULLFILED_BY', $siteLangId); ?></th>
                     <th><?php echo Labels::getLabel('LBL_STATUS', $siteLangId); ?></th>
                     <th><?php echo Labels::getLabel('LBL_QTY.', $siteLangId); ?></th>
                     <th><?php echo Labels::getLabel('LBL_TOTAL', $siteLangId); ?></th>
@@ -75,6 +76,17 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
         <tr>
             <td>
                 <?php $this->includeTemplate('_partial/product/order-product-info-card.php', ['order' => $op, 'siteLangId' => $siteLangId, 'horizontalAlignOptions' => true], false); ?>
+            </td>
+            <td>
+                <?php
+                    $label = (0 == $op['opshipping_by_seller_user_id'] ? Labels::getLabel('LBL_ME', $siteLangId) : Labels::getLabel('LBL_SELLER', $siteLangId));
+                    $class = (0 == $op['opshipping_by_seller_user_id'] ? 'badge-warning' : 'badge-success');
+                    if ($op['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                        $label = Labels::getLabel('LBL_N/A', $siteLangId);
+                        $class = 'badge-danger';
+                    }
+                ?>
+                <span class="badge <?php echo $class; ?>"><?php echo $label; ?></span>
             </td>
             <td>
                 <?php

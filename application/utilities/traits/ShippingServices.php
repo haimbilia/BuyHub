@@ -832,16 +832,17 @@ trait ShippingServices
     }
 
     /**
-     * syncDefaultAddressId : Used for Shipstation Plugin. Get admin's Default Ship From Location Address Id and updated to db.
+     * syncDefaultAddressId : Used for Shipstation Plugin. Get admin's/Seller's Default Ship From Location Address Id and updated to db.
      *
+     * @param  int $recordId : 0 For Admin else Selller
      * @return void
      */
-    public function syncDefaultAddressId()
+    public function syncDefaultAddressId(int $recordId = 0)
     {
         $shippingObj = new Shipping($this->langId);
-        $shippingApiObj = $shippingObj->getShippingApiObj(0);
+        $shippingApiObj = $shippingObj->getShippingApiObj($recordId);
 
-        if (false === $shippingApiObj->syncDefaultAddressId()) {
+        if (false === $shippingApiObj->syncDefaultAddressId($recordId)) {
             LibHelper::dieJsonError($shippingApiObj->getError());
         }
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESSFULLY_SYNCED', $this->langId));

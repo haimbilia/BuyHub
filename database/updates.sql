@@ -2334,5 +2334,5 @@ UPDATE `tbl_cron_schedules` set `cron_name` = 'Data cleaning' , `cron_command` =
 -- -----------------------RV-10.0.0-----------------------------------
 
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
-('LBL_SYNC_ADMIN_SHIPSTATION_DEFAULT_ADDRESS_DESCRIPTION', 1, "Please add admin's Default address entry inside ShipStation dashboard. From Settings(Gear Icon) > Shipping > Ship From Location (https://ss6.shipstation.com/#/settings/warehouses)", 1)
+('LBL_SYNC_SHIPSTATION_DEFAULT_ADDRESS_DESCRIPTION', 1, "Please add Default address entry inside ShipStation dashboard. From Settings(Gear Icon) > Shipping > Ship From Location (https://ss6.shipstation.com/#/settings/warehouses)", 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

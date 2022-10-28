@@ -68,7 +68,6 @@ trait ShipStationFunctions
         }
 
         curl_setopt_array($ch, $request);
-
         $this->resp = curl_exec($ch);
         if (false === $this->resp) {
             throw new Exception(curl_error($ch));

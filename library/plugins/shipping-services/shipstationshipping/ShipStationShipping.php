@@ -78,7 +78,34 @@ class ShipStationShipping extends ShippingServicesBase
         return (array) $this->getResponse();
     }
 
-    public function syncDefaultAddressId()
+    /**
+     * addWarehouseToDb
+     *
+     * @return bool
+     */
+    private function addWarehouseIdToDb(int $recordId = 0): bool
+    {
+        $updateData = [
+            'pluginsetting_plugin_id' => Plugin::getAttributesByCode(self::KEY_NAME, 'plugin_id'),
+            'pluginsetting_record_id' => $recordId,
+            'pluginsetting_key' => 'SHIPSTATION_WAREHOUSE_ID',
+            'pluginsetting_value' => $this->warehouseId,
+        ];
+
+        if (!FatApp::getDb()->insertFromArray(PluginSetting::DB_TBL, $updateData, false, [], $updateData)) {
+            $this->error = FatApp::getDb()->getError();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * syncDefaultAddressId
+     *
+     * @param  int $recordId
+     * @return bool
+     */
+    public function syncDefaultAddressId(int $recordId = 0): bool
     {
         if (false === $this->doRequest(self::REQUEST_WAREHOUSES_LIST)) {
             return false;
@@ -92,21 +119,12 @@ class ShipStationShipping extends ShippingServicesBase
         }
 
         if (empty($warehouse)) {
-            trigger_error('Please add 1 Default address entry for admin address inside ShipStation dashboard. Visit Settings(Gear Icon) > Shipping > Ship From Location (https://ss6.shipstation.com/#/settings/warehouses)', E_USER_ERROR);
+            $this->error = Labels::getLabel('LBL_SYNC_SHIPSTATION_DEFAULT_ADDRESS_DESCRIPTION');
+            return false;
         }
 
         $this->warehouseId = current($warehouse)['warehouseId'];
-        $assignValues = array('conf_name' => 'CONF_SHIPSTATION_WAREHOUSE_ID', 'conf_val' => $this->warehouseId);
-        if (false === FatApp::getDb()->insertFromArray(
-            'tbl_configurations',
-            $assignValues,
-            false,
-            array(),
-            $assignValues
-        )) {
-            $this->error = FatApp::getDb()->getError();
-            return false;
-        }
+        return $this->addWarehouseIdToDb($recordId);
     }
 
     /**
@@ -118,18 +136,7 @@ class ShipStationShipping extends ShippingServicesBase
     {
         $sellerId = $this->orderDetail['opshipping_by_seller_user_id'];
         if (1 > $sellerId) {
-            $this->warehouseId = FatApp::getConfig("CONF_SHIPSTATION_WAREHOUSE_ID", FatUtility::VAR_INT, 0);
-            if (1 > $this->warehouseId) {
-                if (false === $this->doRequest(self::REQUEST_WAREHOUSES_LIST)) {
-                    return false;
-                }
-                
-                if (false === $this->syncDefaultAddressId()) {
-                    return false;
-                }
-            }
-
-            return true;
+            return $this->syncDefaultAddressId();
         }
 
         $address = $this->getShopAddress($sellerId);
@@ -147,21 +154,9 @@ class ShipStationShipping extends ShippingServicesBase
             return false;
         }
         $warehouse =  (array) $this->getResponse();
+        $this->warehouseId = $warehouse['warehouseId'];
 
-        $updateData = [
-            'pluginsetting_plugin_id' => Plugin::getAttributesByCode(self::KEY_NAME, 'plugin_id'),
-            'pluginsetting_record_id' => $sellerId,
-            'pluginsetting_key' => 'SHIPSTATION_WAREHOUSE_ID',
-            'pluginsetting_value' => $warehouse['warehouseId'],
-        ];
-
-        if (!FatApp::getDb()->insertFromArray(PluginSetting::DB_TBL, $updateData, false, [], $updateData)) {
-            $this->error = FatApp::getDb()->getError();
-            return false;
-        }
-
-        $this->warehouseId = $wareHouse['warehouseId'];
-        return true;
+        return $this->addWarehouseIdToDb($sellerId);
     }
 
     /**
@@ -171,12 +166,8 @@ class ShipStationShipping extends ShippingServicesBase
      */
     private function getWarehouseId()
     {
-        if (0 < $this->orderDetail['opshipping_by_seller_user_id']) {
-            $pluginSettings = new PluginSetting(0, self::KEY_NAME, $this->orderDetail['opshipping_by_seller_user_id']);
-            $this->warehouseId = $pluginSettings->get(0, 'SHIPSTATION_WAREHOUSE_ID');
-        } else {
-            $this->warehouseId = FatApp::getConfig("CONF_SHIPSTATION_WAREHOUSE_ID", FatUtility::VAR_INT, 0);
-        }
+        $pluginSettings = new PluginSetting(0, self::KEY_NAME, $this->orderDetail['opshipping_by_seller_user_id']);
+        $this->warehouseId = $pluginSettings->get(0, 'SHIPSTATION_WAREHOUSE_ID');
 
         if (1 > $this->warehouseId) {
             if (false === $this->addWarehouse()) {
@@ -269,7 +260,7 @@ class ShipStationShipping extends ShippingServicesBase
         $billingAddress = $addresses[Orders::BILLING_ADDRESS_TYPE];
         $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
 
-        $warehouseId = $this->getWarehouseId($this->orderDetail['op_shop_id']);
+        $warehouseId = $this->getWarehouseId();
         if (0 > $warehouseId) {
             if (empty($this->error)) {
                 $this->error = Labels::getLabel('ERR_UNABLE_TO_GET_WAREHOUSE_ID', $this->langId);

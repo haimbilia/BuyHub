@@ -58,4 +58,11 @@
             fcom.removeLoader();
         });
     }
+
+    syncDefaultAddressId = function (recordId) {
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'syncDefaultAddressId', [recordId]), '', function (t) {
+            fcom.displaySuccessMessage(t.msg);
+            fcom.removeLoader();
+        });
+    }
 })();
