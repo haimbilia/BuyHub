@@ -129,7 +129,10 @@ class SitemapController extends AdminBaseController
             $file .= '/categories';
             $categoriesArr = ProductCategory::getArray($language['language_id'], 0, false, true, false, CONF_USE_FAT_CACHE, false);
             foreach ($categoriesArr as $key => $val) {
-                $this->writeSitemapUrl(UrlHelper::generateFullUrl('category', 'view', array($val['prodcat_id']), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file);
+                $imagesArr = [];
+                $imagesArr[] = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $val['prodcat_id'], 0, $language['language_id']);
+
+                $this->writeSitemapUrl(UrlHelper::generateFullUrl('category', 'view', array($val['prodcat_id']), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file, 'weekly', ['category' => $imagesArr]);
             }
 
             $this->endSitemapXml($file);
@@ -151,14 +154,16 @@ class SitemapController extends AdminBaseController
             $file .= '/brands';
 
             $brandSrch = clone $prodSrchObj;
-            $brandSrch->addMultipleFields(array('brand_id'));
+            $brandSrch->addMultipleFields(array('brand_id', 'brand_updated_on'));
             $brandSrch->addGroupBy('brand_id');
             $brandSrch->addOrder('brand_name');
             $brandSrch->doNotCalculateRecords();
             $brandSrch->doNotLimitRecords();
             $brandRs = $brandSrch->getResultSet();
             while ($row = FatApp::getDb()->fetch($brandRs)) {
-                $this->writeSitemapUrl(UrlHelper::generateFullUrl('brands', 'view', array($row['brand_id']), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file);
+                $imagesArr = [];
+                $imagesArr[] = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $row['brand_id'], 0, $language['language_id'], (count($this->siteMapLanguages) > 1) ? false : true);
+                $this->writeSitemapUrl(UrlHelper::generateFullUrl('brands', 'view', array($row['brand_id']), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file, 'weekly', ['brand' => $imagesArr]);
             }
 
             $this->endSitemapXml($file);
@@ -188,7 +193,10 @@ class SitemapController extends AdminBaseController
             $shopSrch->addMultipleFields(array('shop_id'));
             $rs = $shopSrch->getResultSet();
             while ($row = FatApp::getDb()->fetch($rs)) {
-                $this->writeSitemapUrl(UrlHelper::generateFullUrl('shops', 'view', array($row['shop_id']), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file);
+                $imagesArr = [];
+                $imagesArr[] = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $row['shop_id'], 0, $language['language_id']);
+
+                $this->writeSitemapUrl(UrlHelper::generateFullUrl('shops', 'view', array($row['shop_id']), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file, 'weekly', ['shop' => $imagesArr]);
             }
 
             $this->endSitemapXml($file);
@@ -254,13 +262,58 @@ class SitemapController extends AdminBaseController
                 <changefreq>" . $freq . "</changefreq>
                 <priority>0.8</priority>";
 
-        if (isset($imagesUrl) && !empty($imagesUrl['product'])) {
-            foreach (array_filter($imagesUrl['product']) as $afile_id => $image) {
-                $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-                $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($image['afile_record_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                echo "<image:image>
-                <image:loc>" . $mainImgUrl . "</image:loc>
-                </image:image>";
+        if (isset($imagesUrl) && !empty($imagesUrl)) {
+            foreach ($imagesUrl as $key => $imagesArr) {
+                switch ($key) {
+                    case 'product':
+                        foreach (array_filter($imagesArr) as $image) {
+                            if (1 > $image['afile_id']) {
+                                continue;
+                            }
+                            $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+                            $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($image['afile_record_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            echo "<image:image>
+                            <image:loc>" . $mainImgUrl . "</image:loc>
+                            </image:image>";
+                        }
+                        break;
+                    case 'brand':
+                        foreach (array_filter($imagesArr) as $image) {
+                            if (1 > $image['afile_id']) {
+                                continue;
+                            }
+                            $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+                            $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'brand', array($image['afile_record_id'], ImageDimension::VIEW_MINI_THUMB, 0, $image['afile_id']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            echo "<image:image>
+                            <image:loc>" . $mainImgUrl . "</image:loc>
+                            </image:image>";
+                        }
+                        break;
+                    case 'category':
+                        foreach (array_filter($imagesArr) as $image) {
+                            if (1 > $image['afile_id']) {
+                                continue;
+                            }
+                            $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+                            $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'Banner', array($image['afile_record_id'], $image['afile_lang_id'], ImageDimension::VIEW_DESKTOP, $image['afile_id'], applicationConstants::SCREEN_DESKTOP), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            echo "<image:image>
+                                <image:loc>" . $mainImgUrl . "</image:loc>
+                                </image:image>";
+                        }
+                        break;
+                    case 'shop':
+                        foreach (array_filter($imagesArr) as $image) {
+                            if (1 > $image['afile_id']) {
+                                continue;
+                            }
+                            $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+                            $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'ShopLogo', array($image['afile_record_id'], $image['afile_lang_id'], ImageDimension::VIEW_THUMB, $image['afile_id']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            echo "<image:image>
+                                <image:loc>" . $mainImgUrl . "</image:loc>
+                                </image:image>";
+                        }
+                        break;
+                }
             }
         }
 
