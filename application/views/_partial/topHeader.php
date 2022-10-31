@@ -114,10 +114,10 @@
                             <?php }
                             if (CommonHelper::demoUrl()) { ?>
                                 <li class="quick-nav-item item-desktop quick-nav-pipe">
-                                    <a class="quick-nav-link btn-cta-outline" href="https://www.yo-kart.com/request-demo.html" rel="noopener"> Request a Demo </a>
+                                    <a class="quick-nav-link btn-cta-outline" href="https://www.yo-kart.com/request-demo.html" rel="noopener" title="Get a Free demo of Yo!Kart system by an expert"> Request a Demo </a>
                                 </li>
                                 <li class="quick-nav-item item-desktop">
-                                    <a class="quick-nav-link btn-cta" href="https://www.yo-kart.com/contact-us.html?demo-cta" rel="noopener" target="_blank">Start Your Marketplace</a>
+                                    <a class="quick-nav-link btn-cta" href="https://www.yo-kart.com/contact-us.html?demo-cta" rel="noopener" target="_blank" title="Connect with Yo!Kart team to build a Multivendor Marketplace">Start Your Marketplace</a>
                                 </li>
 
                             <?php } ?>
