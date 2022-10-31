@@ -137,13 +137,14 @@ $header-height: 122px;
         }
     }
 }
+$quick-nav-gap: 2rem;
 .quick-nav {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     grid-gap: 1rem;
     @include media-breakpoint-up(lg) {
-        grid-gap: 3rem;
+        grid-gap: $quick-nav-gap;
     }
     &-item {
         display: block;
@@ -164,7 +165,7 @@ $header-height: 122px;
     }
     &-link {
         margin: 0;
-        padding: 0;
+        padding: 6px 0;
         background: none;
         border: none;
         font-weight: 500;
@@ -172,7 +173,9 @@ $header-height: 122px;
         display: flex;
         align-items: center;
         gap: 0.5rem;
+
         &:hover {
+            text-decoration: none;
             color: $secondary-color;
         }
     }
@@ -181,7 +184,17 @@ $header-height: 122px;
             content: " ↓";
         }
     }
-
+    &-pipe {
+        position: relative;
+        &:before {
+            content: "";
+            position: absolute;
+            #{$start-direction}: -17px;
+            top: 0;
+            bottom: 0;
+            border-#{$start-direction}: $border;
+        }
+    }
     .svg {
         color: $secondary-color;
     }
@@ -190,6 +203,17 @@ $header-height: 122px;
         display: none;
         @include media-breakpoint-up(lg) {
             display: inherit;
+        }
+    }
+    .btn-cta {
+        border: $border-black;
+        border-radius: 40px;
+        padding: 0.5rem 1rem;
+        &:hover,
+        &:focus {
+            text-decoration: none;
+            @include bg-secondary;
+            border-color: $secondary-color;
         }
     }
 }
@@ -214,7 +238,7 @@ $header-height: 122px;
     .cart-qty {
         position: absolute;
         #{$start-direction}: 10px;
-        top: -3px;
+        top: 6px;
         // background-color: $brand-color;
         // color: $brand-color-inverse;
         @include bg-brand;

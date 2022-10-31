@@ -1,8 +1,8 @@
 $(document).on('change', '#addrStateJs', function () {
     if (0 < $(this).val()) {
-        $(this).removeClass('error'); 
+        $(this).removeClass('error');
     } else {
-        $(this).addClass('error'); 
+        $(this).addClass('error');
     }
 });
 
@@ -41,12 +41,20 @@ $(document).on('change', '#addrStateJs', function () {
                 fcom.displayErrorMessage(langLbl.selectTimeslotDay);
                 return false;
             }
+            /* $(".slotDays-js:checkbox:checked").each(function () {
+                var row = $(this).parent('.timeSlotJs');               
+                if ('' == row.closest(".fromTime-js option:selected").val() || '' == row.closest(".toTime-js option:selected").val()) {
+                    fcom.displayErrorMessage(langLbl.invalidTimeSlot);
+                    return false;
+                }
+            }); */
+
         } else {
-            if ('' == $(".selectAllFromTime-js option:selected").val() || '' == $(".selectAllToTime-js option:selected").val()) {
+            if ('' == $(".fromTime-js option:selected").val() || '' == $(".toTime-js option:selected").val()) {
                 fcom.displayErrorMessage(langLbl.invalidTimeSlot);
                 return false;
             }
-        }        
+        }
         $.ykmodal(fcom.getLoader(), false);
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('PickupAddresses', 'setup'), data, function (t) {

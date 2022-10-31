@@ -318,9 +318,9 @@ class ImportexportCommon extends FatModel
                 $arr['product_identifier'] = Labels::getLabel('LBL_PRODUCT_IDENTIFIER', $langId);
             }
         } else {
-            if ($this->isDefaultSheetData($langId)) {
+           /*  if ($this->isDefaultSheetData($langId)) {
                 $arr['product_id'] = Labels::getLabel('LBL_PRODUCT_ID', $langId);
-            }
+            } */
             $arr['product_identifier'] = Labels::getLabel('LBL_PRODUCT_IDENTIFIER', $langId);
         }
 
