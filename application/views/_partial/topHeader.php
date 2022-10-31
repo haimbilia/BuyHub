@@ -114,11 +114,12 @@
                             <?php }
                             if (CommonHelper::demoUrl()) { ?>
                                 <li class="quick-nav-item item-desktop quick-nav-pipe">
-                                    <a class="quick-nav-link" href="https://www.yo-kart.com/contact-us.html?demo-cta" rel="noopener" target="_blank">Start Your Project</a>
+                                    <a class="quick-nav-link btn-cta-outline" href="https://www.yo-kart.com/request-demo.html" rel="noopener"> Request a Demo </a>
                                 </li>
                                 <li class="quick-nav-item item-desktop">
-                                    <a class="quick-nav-link btn-cta" href="https://www.yo-kart.com/request-demo.html" rel="noopener"> Request a Demo </a>
+                                    <a class="quick-nav-link btn-cta" href="https://www.yo-kart.com/contact-us.html?demo-cta" rel="noopener" target="_blank">Start Your Project</a>
                                 </li>
+
                             <?php } ?>
 
                         </ul>
