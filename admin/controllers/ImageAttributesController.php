@@ -51,12 +51,12 @@ class ImageAttributesController extends ListingBaseController
 
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'afile_id');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'afile_id';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $searchForm = $this->getSearchForm($fields);
@@ -300,7 +300,7 @@ class ImageAttributesController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE, [], '');
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'record_name');
+            $this->addSortingElements($frm, 'afile_id', applicationConstants::SORT_DESC);
         }
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);

@@ -137,7 +137,7 @@ $header-height: 122px;
         }
     }
 }
-$quick-nav-gap: 2rem;
+$quick-nav-gap: 1.5rem;
 .quick-nav {
     display: flex;
     align-items: center;
@@ -185,11 +185,12 @@ $quick-nav-gap: 2rem;
         }
     }
     &-pipe {
+        margin-#{$start-direction}: 1rem;
         position: relative;
         &:before {
             content: "";
             position: absolute;
-            #{$start-direction}: -17px;
+            #{$start-direction}: -21px;
             top: 0;
             bottom: 0;
             border-#{$start-direction}: $border;
@@ -206,13 +207,26 @@ $quick-nav-gap: 2rem;
         }
     }
     .btn-cta {
-        border: $border-black;
+        @include bg-secondary;
+        border: solid 1px $secondary-color;
         border-radius: 40px;
         padding: 0.5rem 1rem;
         &:hover,
         &:focus {
             text-decoration: none;
+            @include bg-brand;
+            border-color: $brand-color;
+        }
+    }
+    .btn-cta-outline {
+        border: solid 1px $secondary-color;
+        border-radius: 40px;
+        color: $secondary-color;
+        padding: 0.5rem 1rem;
+        &:hover,
+        &:focus {
             @include bg-secondary;
+            text-decoration: none;
             border-color: $secondary-color;
         }
     }
