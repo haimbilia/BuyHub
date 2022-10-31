@@ -352,14 +352,20 @@ class Shipping
                     $carriers = $shippingApiObj->getCarriers($limit);
                     if (!empty($carriers)) {
                         if (0 < $pluginId) {
-                            $carriersData = [
-                                'carriers' => $carriers
+                            $updateData = [
+                                'pluginsetting_plugin_id' => $pluginId,
+                                'pluginsetting_record_id' => ($isProductShippedBySeller ? $product['selprod_user_id'] : 0),
+                                'pluginsetting_key' => 'carriers',
+                                'pluginsetting_value' => serialize($carriers),
                             ];
-                            $pluginSettings->save($carriersData);
+
+                            if (!FatApp::getDb()->insertFromArray(PluginSetting::DB_TBL, $updateData, false, [], $updateData)) {
+                                LibHelper::dieJsonError(FatApp::getDb()->getError());
+                            }
                         }
                         CacheHelper::create($cacheKey, serialize($carriers), CacheHelper::TYPE_SHIPING_API);
                     }
-                } 
+                }
             }
 
             if (empty($carriers)) {
