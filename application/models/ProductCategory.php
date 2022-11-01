@@ -214,7 +214,7 @@ class ProductCategory extends MyAppModel
     {
         $cacheKey = $langId . '-' . $parentId . '-' . $sortByName . '-' . $excludeCatHavingNoProducts . '-' . $keywords . '-' . $parseTree;
         global $rootCatArr;
-        if (array_key_exists($cacheKey, $rootCatArr)) {
+        if (!empty($rootCatArr) && array_key_exists($cacheKey, $rootCatArr)) {
             return $rootCatArr[$cacheKey];
         }
 

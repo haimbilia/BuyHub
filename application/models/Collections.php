@@ -30,9 +30,11 @@ class Collections extends MyAppModel
     public const TYPE_PRODUCT_LAYOUT1 = 1;
     public const TYPE_PRODUCT_LAYOUT2 = 2;
     public const TYPE_PRODUCT_LAYOUT3 = 3;
+    public const TYPE_PRODUCT_LAYOUT4 = 24;
     public const TYPE_CATEGORY_LAYOUT1 = 4;
     public const TYPE_CATEGORY_LAYOUT2 = 5;
     public const TYPE_CATEGORY_LAYOUT3 = 20;
+    public const TYPE_CATEGORY_LAYOUT4 = 23;
     public const TYPE_SHOP_LAYOUT1 = 6;
     public const TYPE_SHOP_LAYOUT2 = 22;
     public const TYPE_BRAND_LAYOUT1 = 7;
@@ -52,10 +54,12 @@ class Collections extends MyAppModel
     public const LIMIT_PRODUCT_LAYOUT1 = 12;
     public const LIMIT_PRODUCT_LAYOUT2 = 6;
     public const LIMIT_PRODUCT_LAYOUT3 = 3;
+    public const LIMIT_PRODUCT_LAYOUT4 = 6;
     public const LIMIT_CATEGORY_LAYOUT1 = 8;
     public const LIMIT_CATEGORY_LAYOUT1_PRODUCT = 3;
     public const LIMIT_CATEGORY_LAYOUT2 = 4;
     public const LIMIT_CATEGORY_LAYOUT3 = 4;
+    public const LIMIT_CATEGORY_LAYOUT4 = 4;
     public const LIMIT_SHOP_LAYOUT1 = 4;
     public const LIMIT_SHOP_LAYOUT2 = 3;
     public const LIMIT_BRAND_LAYOUT1 = 5;
@@ -104,6 +108,7 @@ class Collections extends MyAppModel
     public const COLLECTIONS_NOT_FOR_APP = [
         self::TYPE_FAQ_CATEGORY_LAYOUT1,
         self::TYPE_CATEGORY_LAYOUT3,
+        self::TYPE_CATEGORY_LAYOUT4,
         self::TYPE_BRAND_LAYOUT2,
         self::TYPE_SHOP_LAYOUT2,
     ];
@@ -205,9 +210,11 @@ class Collections extends MyAppModel
             self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
             self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_PRODUCT_LAYOUT2', $langId),
             self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_PRODUCT_LAYOUT3', $langId),
+            self::TYPE_PRODUCT_LAYOUT4 => Labels::getLabel('LBL_PRODUCT_LAYOUT4', $langId),
             self::TYPE_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_CATEGORY_LAYOUT1', $langId),
             self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_CATEGORY_LAYOUT2', $langId),
             self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_CATEGORY_LAYOUT3', $langId),
+            self::TYPE_CATEGORY_LAYOUT4 => Labels::getLabel('LBL_CATEGORY_LAYOUT4', $langId),
             self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_SHOP_LAYOUT1', $langId),
             self::TYPE_SHOP_LAYOUT2 => Labels::getLabel('LBL_SHOP_LAYOUT2', $langId),
             self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_BRAND_LAYOUT1', $langId),
@@ -251,11 +258,13 @@ class Collections extends MyAppModel
                 self::TYPE_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_CATEGORY_LAYOUT1', $langId),
                 self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_CATEGORY_LAYOUT2', $langId),
                 self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_CATEGORY_LAYOUT3', $langId),
+                self::TYPE_CATEGORY_LAYOUT4 => Labels::getLabel('LBL_CATEGORY_LAYOUT4', $langId),
             ],            
             self::COLLECTION_TYPE_PRODUCT => [
                 self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
                 self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_PRODUCT_LAYOUT2', $langId),
                 self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_PRODUCT_LAYOUT3', $langId),
+                self::TYPE_PRODUCT_LAYOUT4 => Labels::getLabel('LBL_PRODUCT_LAYOUT4', $langId),
             ],
             self::COLLECTION_TYPE_SHOP => [
                 self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_SHOP_LAYOUT1', $langId),
@@ -365,6 +374,7 @@ class Collections extends MyAppModel
             self::TYPE_PRODUCT_LAYOUT1 => 'Product-Layout-1.png',
             self::TYPE_PRODUCT_LAYOUT2 => 'Product-Layout-2.png',
             self::TYPE_PRODUCT_LAYOUT3 => 'Product-Layout-3.png',
+            self::TYPE_PRODUCT_LAYOUT4 => 'Product-Layout-4.png',
             self::TYPE_CATEGORY_LAYOUT1 => 'Category-Layout-1.png',
             self::TYPE_CATEGORY_LAYOUT2 => 'Category-Layout-2.png',
             self::TYPE_SHOP_LAYOUT1 => 'Shop-Layout-1.png',
@@ -936,9 +946,11 @@ class Collections extends MyAppModel
             self::TYPE_PRODUCT_LAYOUT1 => 'product-layout-1',
             self::TYPE_PRODUCT_LAYOUT2 => 'product-layout-2',
             self::TYPE_PRODUCT_LAYOUT3 => 'product-layout-3',
+            self::TYPE_PRODUCT_LAYOUT4 => 'product-layout-4',
             self::TYPE_CATEGORY_LAYOUT1 => 'category-layout-1',
             self::TYPE_CATEGORY_LAYOUT2 => 'category-layout-2',
             self::TYPE_CATEGORY_LAYOUT3 => 'category-layout-3',
+            self::TYPE_CATEGORY_LAYOUT4 => 'category-layout-4',
             self::TYPE_SHOP_LAYOUT1 => 'shop-layout-1',
             self::TYPE_SHOP_LAYOUT2 => 'shop-layout-2',
             self::TYPE_BRAND_LAYOUT1 => 'brand-layout-1',

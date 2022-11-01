@@ -39,8 +39,7 @@ class PluginSettingController extends LoggedUserController
         $this->frmObj->fill($settings);
         $this->set('frm', $this->frmObj);
         $this->set('plugin_name', $settings['plugin_name']);
-        $this->set('keyName', $settings['plugin_name']);
-
+        $this->set('keyName', $settings['plugin_code']);
         $this->_template->render(false, false, 'seller-plugins/settings.php');
     }
 

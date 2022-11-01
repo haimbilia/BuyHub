@@ -204,6 +204,13 @@ $(document).ajaxComplete(function () {
             fcom.removeLoader();
         });
     }
+
+    syncDefaultAddressId = function () {
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'syncDefaultAddressId'), '', function (t) {
+            fcom.displaySuccessMessage(t.msg);
+            fcom.removeLoader();
+        });
+    }
 })();
 
 $(document).on('click', '.uploadFile-Js', function () {

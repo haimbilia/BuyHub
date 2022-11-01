@@ -76,7 +76,7 @@
                     </ul>
                 </div>
                 <div class="demo-action">
-                    <a class="btn btn-brand" href="https://www.yo-kart.com/contact-us.html?demo-cta" rel="noopener" target="_blank">Start Your Project</a>
+                    <a class="btn btn-brand" href="https://www.yo-kart.com/contact-us.html?demo-cta" rel="noopener" target="_blank">Start Your Marketplace</a>
                     <a class="btn btn-outline-brand" href="https://www.yo-kart.com/request-demo.html" rel="noopener"> Request a Demo </a>
                     <a class="btn btn-underline" href="https://www.yo-kart.com/yokart-marketing-website-feedback.html">Share Your Feedback</a>
                 </div>
