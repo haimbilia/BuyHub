@@ -260,14 +260,15 @@
             left: 0;
             right: 0;
             bottom: 0;
-            height: 50%;
+            // height: 50%;
             z-index: 0;
-            background: transparent linear-gradient(180deg, #ffffff00 0%, #000000 100%) 0% 0% no-repeat padding-box;
+            // background: transparent linear-gradient(180deg, #ffffff00 0%, #000000 100%) 0% 0% no-repeat padding-box;
         }
         &-price {
             display: inline-block;
             padding: 0.2rem 0.8rem;
             background-color: rgba(255, 255, 255, 1);
+            box-shadow: $shadow2;
             color: $txt-body;
             font-weight: 600;
             border-radius: 30px;
