@@ -725,7 +725,7 @@ class User extends MyAppModel
         }
         return true;
     }
-    public function updateInfo($data = array(), $userId)
+    public function updateInfo($userId, $data = array())
     {
         $assignValues = array(
             'user_company' => $data['user_company'],
@@ -888,7 +888,7 @@ class User extends MyAppModel
         return true;
     }
 
-    public function updateCredInfo($data = array(), $userId)
+    public function updateCredInfo($userId, $data = array())
     {
         $assignValues = array(
             static::DB_TBL_CRED_PREFIX . 'password' => UserAuthentication::encryptPassword($data['user_password'])

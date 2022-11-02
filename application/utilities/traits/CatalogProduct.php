@@ -3,7 +3,7 @@
 trait CatalogProduct
 {
 
-    abstract public function checkEditPrivilege(): bool;
+    abstract public function checkEditPrivilege(): void;
 
     /**
      * getForm
