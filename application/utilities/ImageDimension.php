@@ -58,7 +58,8 @@ class ImageDimension extends FatUtility
     public const VIEW_THUMB = 'THUMB';
     public const VIEW_MINI = 'MINI';
     public const VIEW_MINI_THUMB = 'MINITHUMB';
-
+    
+    public const VIEW_CLAYOUT4 = 'CLAYOUT4';
     public const VIEW_CLAYOUT3 = 'CLAYOUT3';
     public const VIEW_CLAYOUT2 = 'CLAYOUT2';
     public const VIEW_CLAYOUT1 = 'CLAYOUT1';
@@ -246,7 +247,9 @@ class ImageDimension extends FatUtility
             self::VIEW_CLAYOUT2 => [self::WIDTH => 468, self::HEIGHT => 468],
             self::VIEW_CLAYOUT1 => [self::WIDTH => 341, self::HEIGHT => 341],
             self::VIEW_CLAYOUT3 => [self::WIDTH => 300, self::HEIGHT => 300],
+            self::VIEW_CLAYOUT4 => [self::WIDTH => 478, self::HEIGHT => 478],
             self::VIEW_MOBILE => [self::WIDTH => 180, self::HEIGHT => 180],
+            self::VIEW_TABLET => [self::WIDTH => 346, self::HEIGHT => 346],
 
             self::VIEW_THUMB => [self::WIDTH => 110, self::HEIGHT => 110],
             self::VIEW_MINI => [self::WIDTH => 50, self::HEIGHT => 50],

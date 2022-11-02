@@ -29,6 +29,8 @@
                     if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
                         $displayProductNotAvailableLable = true;
                     }
+
+                    $productThumb = (in_array($count, [1, 4])) ? ImageDimension::VIEW_CLAYOUT4 : ImageDimension::VIEW_SMALL;
                 ?>
                     <div class="products-<?php echo $count; ?>">
                         <?php include('product-layout-4-list.php'); ?>
