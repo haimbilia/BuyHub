@@ -105,6 +105,7 @@ Seller shall have to place a request for linking a Manual badge at Shop/Product/
 - UI/UX for Frontend and Admin dashboard.
 - Help text section has been added at the Admin side for the majority of the Primary Pages explaining the steps and impacts associated with functionalities. It appears at the right side of a page at the Admin’s end.
 - Sorting feature has been introduced at the listing pages to perform bi-directional sorting operations.
+- Removed trailing zeros from the product listing page.
 
 ### Alert and Suggestion text bar (Admin)
 - Alert and Suggestion/Recommendation bar has been introduced at Admin’s end.

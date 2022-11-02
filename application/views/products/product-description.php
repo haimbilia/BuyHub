@@ -178,8 +178,8 @@
                         <span class="wholesale-slider-value"> <?php echo ($volumeDiscountRow['voldiscount_min_qty']); ?>
                             <?php echo Labels::getLabel('LBL_OR_MORE_PIECES', $siteLangId); ?></span>
                         <div class="products-price">
-                            <span class="products-price-new"><?php echo CommonHelper::displayMoneyFormat($price); ?></span>
-                            <del class="products-price-old"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></del>
+                            <span class="products-price-new"><?php echo CommonHelper::displayMoneyFormat($price, true, false, true, false, false, true); ?></span>
+                            <del class="products-price-old"><?php echo CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true); ?></del>
                             <span class="products-price-off"><?php echo $volumeDiscountRow['voldiscount_percentage'] . '%'; ?> <?php echo Labels::getLabel('LBL_OFF', $siteLangId); ?></span>
                         </div>
                     </li>
@@ -214,7 +214,7 @@
                                 <a class="title" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><?php echo $usproduct['selprod_title'] ?></a>
 
                                 <div class="products-price">
-                                    <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice']); ?>
+                                    <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice'], true, false, true, false, false, true); ?>
                                 </div>
                                 <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
                                     <button class="decrease decrease-js disabled" type="button">
