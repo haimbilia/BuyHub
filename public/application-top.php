@@ -11,8 +11,8 @@ if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
 
 ini_set('display_errors', (CONF_DEVELOPMENT_MODE) ? 1 : 0);
 
-#error_reporting((CONF_DEVELOPMENT_MODE) ? E_ALL : E_ALL & ~E_NOTICE & ~E_WARNING);
-error_reporting(E_ALL & ~E_WARNING);
+error_reporting((CONF_DEVELOPMENT_MODE) ? E_ALL : E_ALL & ~E_NOTICE & ~E_WARNING);
+
 require_once CONF_INSTALLATION_PATH . 'library/autoloader.php';
 
 /* --- Redirect SSL --- */
