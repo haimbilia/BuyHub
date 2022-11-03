@@ -38,7 +38,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     private function init()
     {
         $userId = UserAuthentication::getLoggedUserId();
-        $this->googleShoppingFeed = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId, $userId], $error, $this->siteLangId);
+        $this->googleShoppingFeed = LibHelper::callPlugin(self::KEY_NAME, [$this->siteLangId, $userId], $error, $this->siteLangId);
         if (false === $this->googleShoppingFeed) {
             $this->setError($error, 'Seller');
         }

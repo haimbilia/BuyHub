@@ -24,7 +24,7 @@ class ShipmentTracking
             return false;
         }
 
-        $this->shipmentTracking = PluginHelper::callPlugin($this->keyName, [$this->langId], $this->error, $this->langId, false);
+        $this->shipmentTracking = LibHelper::callPlugin($this->keyName, [$this->langId], $this->error, $this->langId, false);
         if (false === $this->shipmentTracking) {
             return false;
         }

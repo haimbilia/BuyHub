@@ -12,7 +12,7 @@ class FixerCurrencyConverterController extends CurrencyConverterBaseController
     {
         parent::__construct($action);
         $error = '';
-        $this->fixer = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
+        $this->fixer = LibHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $this->fixer) {
             $this->setError($error);
         }

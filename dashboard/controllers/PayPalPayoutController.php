@@ -12,7 +12,7 @@ class PayPalPayoutController extends PayoutBaseController
     
     private function init(): void
     {
-        $this->plugin = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
+        $this->plugin = LibHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
     }
 
     public static function reqFields()

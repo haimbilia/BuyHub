@@ -25,7 +25,7 @@ class StripeConnectController extends PaymentMethodBaseController
     public function init()
     {
         $error = '';
-        $this->stripeConnect = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
+        $this->stripeConnect = LibHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $this->stripeConnect) {
             FatUtility::dieJsonError($error);
         }

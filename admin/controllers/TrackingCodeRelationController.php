@@ -33,7 +33,7 @@ class TrackingCodeRelationController extends AdminBaseController
 
         $plugin = new Plugin();
         $shipApiPluginData = $plugin->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, ['plugin_code', 'plugin_id']);
-        $shipApi = PluginHelper::callPlugin($shipApiPluginData['plugin_code'], [$this->siteLangId], $error, $this->siteLangId);
+        $shipApi = LibHelper::callPlugin($shipApiPluginData['plugin_code'], [$this->siteLangId], $error, $this->siteLangId);
         if ($shipApi->init() === false) {
             LibHelper::exitWithError($shipApi->getError(), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Plugins'));

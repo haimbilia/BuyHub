@@ -64,7 +64,7 @@ class PluginSettingController extends ListingBaseController
             LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_KEY_NAME'));
         }
 
-        $plugin = PluginHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId, false);
+        $plugin = LibHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId, false);
         if (false === $plugin->validateKeys($post)) {
             if (empty($error)) {
                 $error = $plugin->getError();
@@ -132,7 +132,7 @@ class PluginSettingController extends ListingBaseController
         if (empty($keyName)) {
             LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_KEY_NAME', $langId));
         }
-        $plugin = PluginHelper::callPlugin($keyName, [$langId], $error, $langId, false);
+        $plugin = LibHelper::callPlugin($keyName, [$langId], $error, $langId, false);
         if (false == method_exists($plugin, 'getFormFieldsArr')) {
             LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_LOAD_SETTINGS_FORM', $langId));
         }

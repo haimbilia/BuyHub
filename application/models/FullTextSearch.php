@@ -20,7 +20,7 @@ class FullTextSearch extends FatModel
         }
         
         $error = '';
-        if (false === PluginHelper::includePlugin($this->defaultPlugin, 'full-text-search', $error, $this->langId)) {
+        if (false === LibHelper::includePlugin($this->defaultPlugin, 'full-text-search', $error, $this->langId)) {
             trigger_error($error, E_USER_ERROR);
         }
     }
@@ -493,7 +493,7 @@ class FullTextSearch extends FatModel
         }
         
         $error = '';
-        $srch = PluginHelper::callPlugin($defaultPlugin, [$langId], $error, $langId);
+        $srch = LibHelper::callPlugin($defaultPlugin, [$langId], $error, $langId);
         if (false === $srch) {
             trigger_error($error, E_USER_ERROR);
         }

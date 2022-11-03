@@ -10,7 +10,7 @@ class AppleLoginController extends SocialMediaAuthController
     {
         parent::__construct($action);
 
-        $this->apple = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
+        $this->apple = LibHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $this->apple) {
             $this->setErrorAndRedirect($error, true);
         }

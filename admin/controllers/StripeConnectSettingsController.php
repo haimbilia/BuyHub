@@ -10,7 +10,7 @@ class StripeConnectSettingsController extends PaymentMethodSettingsController
 
         $keyName = 'StripeConnect';
 
-        $obj = PluginHelper::callPlugin($keyName, [$langId], $error, $langId, false);
+        $obj = LibHelper::callPlugin($keyName, [$langId], $error, $langId, false);
         if (false === $obj && !empty($error)) {
             LibHelper::exitWithError($error);
         }

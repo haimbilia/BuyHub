@@ -19,7 +19,7 @@ class EasyEcomController extends MarketplaceChannelsBaseController
     {
         parent::__construct($action);
         $this->userId = $this->getUserId();
-        $this->easyEcom = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId, $action, $this->userId], $error, $this->siteLangId);
+        $this->easyEcom = LibHelper::callPlugin(self::KEY_NAME, [$this->siteLangId, $action, $this->userId], $error, $this->siteLangId);
         if (false === $this->easyEcom) {
             $error = is_string($error) ? $this->formatOutput(Plugin::RETURN_FALSE, $error) : $error;
             LibHelper::dieJsonResponse($error, $this->langId);

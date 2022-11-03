@@ -1958,7 +1958,7 @@ class ProductsController extends MyAppController
         $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
 
         $error = '';
-        $shippingService = PluginHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId);
+        $shippingService = LibHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $shippingService) {
             FatUtility::dieJsonError($error);
         }

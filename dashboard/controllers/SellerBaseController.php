@@ -30,7 +30,7 @@ class SellerBaseController extends LoggedUserController
 
         /* Validate Seller If stripe connect correctly configured. */
         $isStripeConnectLogin = (get_called_class() == 'StripeConnectController' && in_array($action, ['login', 'callback']));
-        $stripeConnectObj = PluginHelper::callPlugin('StripeConnect', [$this->siteLangId]);
+        $stripeConnectObj = LibHelper::callPlugin('StripeConnect', [$this->siteLangId]);
         if (false !== $stripeConnectObj) {
             if (
                 0 < $stripeConnectObj->isMandatoryForSeller() &&

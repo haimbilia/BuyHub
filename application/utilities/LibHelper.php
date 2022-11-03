@@ -451,4 +451,85 @@ class LibHelper extends FatUtility
         fwrite($connection, $request);
         fclose($connection);
     }
+
+    /**
+     * callPlugin - Used to call plugin file without including plugin. This function is used for files exists in library\plugins.
+     *
+     * @param string $keyname - ClassName
+     * @param string $args - Constructor Arguments
+     * @param string $error
+     * @param int $langId
+     * @param bool $checkActive
+     * @return mixed
+     */
+    public static function callPlugin(string $keyName, array $args = [], &$error = '', int $langId = 0, bool $checkActive = true)
+    {
+        if (1 > $langId) {
+            $langId = CommonHelper::getLangId();
+        }
+
+        if (empty($keyName)) {
+            $error =  Labels::getLabel('MSG_INVALID_KEY_NAME', $langId);
+            return false;
+        }
+
+        $pluginType = Plugin::getAttributesByCode($keyName, 'plugin_type');
+
+        $directory = Plugin::getDirectory($pluginType);
+
+        if (false == $directory) {
+            $error =  Labels::getLabel('MSG_INVALID_PLUGIN_TYPE', $langId);
+            return false;
+        }
+
+        $error = '';
+        if (false === self::includePlugin($keyName, $directory, $error, $langId, $checkActive)) {
+            return false;
+        }
+
+        $reflect  = new ReflectionClass($keyName);
+        return $reflect->newInstanceArgs($args);
+    }
+
+    /**
+     * includePlugin
+     *
+     * @param  string $keyName
+     * @param  string $directory
+     * @param  string $error
+     * @param  int $langId
+     * @param bool $checkActive
+     * @return mixed
+     */
+    public static function includePlugin(string $keyName, string $directory, &$error = '', int $langId = 0, bool $checkActive = true)
+    {
+        if (1 > $langId) {
+            $langId = CommonHelper::getLangId();
+        }
+
+        if (empty($directory)) {
+            $error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
+            return false;
+        }
+
+        if (true === $checkActive && 1 > Plugin::isActive($keyName)) {
+            $str =  Labels::getLabel('MSG_{NAME}_IS_NOT_ACTIVE', $langId);
+            $error = CommonHelper::replaceStringData($str, ['{NAME}' => $keyName]);
+            return false;
+        }
+
+        $file = CONF_PLUGIN_DIR . $directory . '/' . strtolower($keyName) . '/' . $keyName . '.php';
+
+        if (!file_exists($file)) {
+            $error =  Labels::getLabel('MSG_UNABLE_TO_LOCATE_REQUIRED_FILE', $langId) . '-' . $keyName;
+            return false;
+        }
+
+        try {
+            require_once $file;
+        } catch (\Error $e) {
+            $error = $e->getMessage();
+            return false;
+        }
+    }
 }

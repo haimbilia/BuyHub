@@ -853,7 +853,7 @@ class Shipping
             }
         }
 
-        $pluginObj = PluginHelper::callPlugin($this->pluginData['plugin_code'], [$this->langId], $error, $this->langId, false);
+        $pluginObj = LibHelper::callPlugin($this->pluginData['plugin_code'], [$this->langId], $error, $this->langId, false);
         if (false === $pluginObj) {
             $this->error = $error;
             return false;

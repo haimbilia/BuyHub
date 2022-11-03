@@ -114,7 +114,7 @@ class PatchUpdateController extends ListingBaseController
         }
         $pluginKey = $getDefaultPlugin['plugin_code'];
         $pluginId = $getDefaultPlugin['plugin_id'];
-        if (false === $taxPluginObj = PluginHelper::callPlugin($pluginKey, [$this->siteLangId], $error, $this->siteLangId)) {
+        if (false === $taxPluginObj = LibHelper::callPlugin($pluginKey, [$this->siteLangId], $error, $this->siteLangId)) {
             LibHelper::exitWithError($error, true);
         }
 

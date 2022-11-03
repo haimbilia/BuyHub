@@ -48,7 +48,7 @@ class DataMigration
             return false;
         }
 
-        $this->pluginObj = PluginHelper::callPlugin($pluginData['plugin_code'], [$this->langId], $error, $this->langId);
+        $this->pluginObj = LibHelper::callPlugin($pluginData['plugin_code'], [$this->langId], $error, $this->langId);
         $this->pluginObj->setVendorType(self::MULTIVENDOR_VENDOR);
         if (false === $this->pluginObj) {
             $this->error = $error;
@@ -120,7 +120,7 @@ class DataMigration
         if (empty($pluginData)) {
             return;
         }
-        $this->pluginObj = PluginHelper::callPlugin($pluginData['plugin_code'], [$this->langId, self::SINGLE_VENDOR], $error, $this->langId, false);
+        $this->pluginObj = LibHelper::callPlugin($pluginData['plugin_code'], [$this->langId, self::SINGLE_VENDOR], $error, $this->langId, false);
         $this->pluginObj->setVendorType(self::SINGLE_VENDOR);
         $this->pluginObj->setUserId($userId);
         $this->pluginObj->setRecordId($userId); /* to fetch setting by record id */

@@ -78,7 +78,7 @@ class PaymentMethods
     {
         $this->keyname = $keyname;
         $this->langId = $langId;
-        $this->paymentPlugin = PluginHelper::callPlugin($this->keyname, [$this->langId]);
+        $this->paymentPlugin = LibHelper::callPlugin($this->keyname, [$this->langId]);
         return $this->canRefundToCard = method_exists($this->paymentPlugin, 'initiateRefund');
     }
 

@@ -1515,7 +1515,7 @@ class CheckoutController extends MyAppController
         }
 
         $methodCode = Plugin::getAttributesById($plugin_id, 'plugin_code');
-        $this->plugin = PluginHelper::callPlugin($methodCode, [$this->siteLangId], $error, $this->siteLangId);
+        $this->plugin = LibHelper::callPlugin($methodCode, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $this->plugin) {
             LibHelper::exitWithError($error);
         }
