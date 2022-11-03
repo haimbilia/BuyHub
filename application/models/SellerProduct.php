@@ -1465,7 +1465,7 @@ class SellerProduct extends MyAppModel
         return $arrListing;
     }
 
-    public static function getBuyTogetherProduct($userId, $langId, $relatedProdIds = [], $selProdId)
+    public static function getBuyTogetherProduct($userId, $langId, $relatedProdIds, $selProdId)
     {
         if (empty($relatedProdIds)) {
             return [];
