@@ -113,48 +113,6 @@ trait PluginHelper
 
         return true;
     }
-
-    /**
-     * includePlugin
-     *
-     * @param  string $keyName
-     * @param  string $directory
-     * @param  string $error
-     * @param  int $langId
-     * @param bool $checkActive
-     * @return mixed
-     */
-    public static function includePlugin(string $keyName, string $directory, &$error = '', int $langId = 0, bool $checkActive = true)
-    {
-        if (1 > $langId) {
-            $langId = CommonHelper::getLangId();
-        }
-
-        if (empty($directory)) {
-            $error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
-            return false;
-        }
-
-        if (true === $checkActive && 1 > Plugin::isActive($keyName)) {
-            $str =  Labels::getLabel('MSG_{NAME}_IS_NOT_ACTIVE', $langId);
-            $error = CommonHelper::replaceStringData($str, ['{NAME}' => $keyName]);
-            return false;
-        }
-
-        $file = CONF_PLUGIN_DIR . $directory . '/' . strtolower($keyName) . '/' . $keyName . '.php';
-
-        if (!file_exists($file)) {
-            $error =  Labels::getLabel('MSG_UNABLE_TO_LOCATE_REQUIRED_FILE', $langId) . '-' . $keyName;
-            return false;
-        }
-
-        try {
-            require_once $file;
-        } catch (\Error $e) {
-            $error = $e->getMessage();
-            return false;
-        }
-    }
     
 
     /** updateSettings
