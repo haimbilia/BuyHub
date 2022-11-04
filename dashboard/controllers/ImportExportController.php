@@ -818,6 +818,7 @@ class ImportExportController extends SellerBaseController
 
             $assignValues['selprod_cost'] = $selprod_cost_price;
             $assignValues['selprod_stock'] = $selprod_stock;
+            $assignValues['selprod_sku'] = $selprod_sku;
             if ($selprod_id > 0) {
                 $whereSmt = array('smt' => 'selprod_user_id = ? and selprod_id = ?', 'vals' => array($loggedUserId, $selprod_id));
                 $db->updateFromArray(SellerProduct::DB_TBL, $assignValues, $whereSmt);
