@@ -250,13 +250,13 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
         <h5 class="cart-title mt-5"><?php echo Labels::getLabel('LBL_Save_For_later', $siteLangId); ?>
             (<?php echo count($saveForLaterProducts); ?>)</h5>
         <ul class="list-cart <?php echo 1 > $productsCount ? 'list-cart-triple' : ''; ?>">
-            <?php foreach ($saveForLaterProducts as $product) {
+            <?php foreach ($saveForLaterProducts as $product) {                
                 $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
                 $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                 $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
                 $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.webp');
             ?>
-                <li class="list-cart-item block-cart <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
+                <li class="list-cart-item block-cart <?php echo isset($product['key']) ? md5($product['key']) : ''; ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
                     <div class="block-cart-img">
                         <div class="products-img">
                             <a href="<?php echo $productUrl; ?>">

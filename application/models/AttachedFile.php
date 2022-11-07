@@ -551,9 +551,9 @@ class AttachedFile extends MyAppModel
         $newWidth = $w;
         $newHeight = $h;
         if ($w / $h > $ratio_orig) {
-            $newWidth = $h * $ratio_orig;
+            $newWidth = floor($h * $ratio_orig);
         } else {
-            $newHeight = $w / $ratio_orig;
+            $newHeight = floor($w / $ratio_orig);
         }
 
         switch ($fileMimeType) {
@@ -611,8 +611,8 @@ class AttachedFile extends MyAppModel
             }
         }
 
-        $xPosition = ($w - $newWidth) / 2;
-        $yPosition = ($h - $newHeight) / 2;
+        $xPosition = floor(($w - $newWidth) / 2);
+        $yPosition = floor(($h - $newHeight) / 2);
         imagecopyresampled($thumb, $img, $xPosition, $yPosition, 0, 0, $newWidth, $newHeight, $width, $height);
 
         if (CONF_USE_FAT_CACHE && $cache) {

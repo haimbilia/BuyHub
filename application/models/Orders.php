@@ -1076,7 +1076,7 @@ class Orders extends MyAppModel
         return FatApp::getDb()->fetchAll($srch->getResultSet(), 'oua_type');
     }
 
-    public function addOrderHistory($order_id, $order_status_id, $comment = '', $notify = false, $langId)
+    public function addOrderHistory($order_id, $order_status_id, $comment = '', $notify = false, $langId = 0)
     {
         $notify = FatUtility::int($notify);
         $langId = FatUtility::int($langId);
@@ -2685,7 +2685,7 @@ class Orders extends MyAppModel
         return true;
     }
 
-    public static function getOrderCommentById($orderId = 0, $langId)
+    public static function getOrderCommentById($orderId, $langId)
     {
         $srch = new  OrderSearch($langId);
         $srch->addCondition('order_id', '=', $orderId);
