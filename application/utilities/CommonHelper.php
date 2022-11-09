@@ -1537,6 +1537,9 @@ class CommonHelper extends FatUtility
 
     public static function displayText($value = '')
     {
+        if (empty($value)) {
+            return '-';
+        }
         return empty(trim($value)) ? '-' : $value;
     }
 

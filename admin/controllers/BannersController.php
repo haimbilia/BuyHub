@@ -49,7 +49,7 @@ class BannersController extends ListingBaseController
         $frm->addHiddenField('', 'banner_location_id', $this->bannerLocationId);
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-        
+
         $frm->addSelectBox(Labels::getLabel('FRM_BANNER_TYPE', $this->siteLangId), 'banner_type', Banner::getBannerTypesArr($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT_BANNER_TYPE', $this->siteLangId));
 
         if (!empty($fields)) {
@@ -62,7 +62,7 @@ class BannersController extends ListingBaseController
     }
 
     public function list($bannerLocationId)
-    {       
+    {
         if (1 > $bannerLocationId) {
             Message::addErrorMessage($this->str_invalid_request);
             FatApp::redirectUser(UrlHelper::generateUrl('BannerLocation'));
@@ -127,7 +127,7 @@ class BannersController extends ListingBaseController
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $srch->addCondition('banner_title', 'like', '%' . $post['keyword'] . '%');
         }
-        
+
         $bannerType = FatApp::getPostedData('banner_type', FatUtility::VAR_INT, 0);
         if (0 < $bannerType) {
             $srch->addCondition('banner_type', '=', $bannerType);
@@ -167,11 +167,11 @@ class BannersController extends ListingBaseController
         $urlFld->requirements()->setRequired();
         $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_OPEN_IN', $this->siteLangId), 'banner_target', $linkTargetsArr, '', array(), '');
-       
+
         $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'banner_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         $languageArr = Language::getDropDownList();
-        
+
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
@@ -253,7 +253,7 @@ class BannersController extends ListingBaseController
             LibHelper::exitWithError($bannerObj->getError(), true);
         }
 
-        $recordId = $bannerObj->getMainTableRecordId();  
+        $recordId = $bannerObj->getMainTableRecordId();
         if (!$bannerObj->updateLangData(CommonHelper::getDefaultFormLangId(), ['banner_title' => $post['banner_title']])) {
             LibHelper::exitWithError($bannerObj->getError(), true);
         }
@@ -266,7 +266,7 @@ class BannersController extends ListingBaseController
             }
         }
 
-        $newTabLangId = 0;       
+        $newTabLangId = 0;
         $languages = (array)Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         foreach ($languages as $langId => $langName) {
             $newTabLangId = $langId;
@@ -275,7 +275,7 @@ class BannersController extends ListingBaseController
                 break;
             }
         }
-        
+
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('recordId', $recordId);
         $this->set('bannerLocationId', $bannerLocationId);
@@ -297,12 +297,12 @@ class BannersController extends ListingBaseController
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Banner::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId, CommonHelper::getDefaultFormLangId());
-            if (false === $translatedData) {              
+            if (false === $translatedData) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = Banner::getAttributesByLangId($langId, $recordId);
+            $langData = (array) Banner::getAttributesByLangId($langId, $recordId);
         }
 
         $bannerLocationId = Banner::getAttributesById($recordId, 'banner_blocation_id');
@@ -383,7 +383,7 @@ class BannersController extends ListingBaseController
         //$screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         //$displayFor = ($bannerLocationId == BannerLocation::HOME_PAGE_MOBILE_BANNER) ? applicationConstants::SCREEN_MOBILE : '';
         //$frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'slide_screen', $screenArr, $displayFor, array(), '');
-        $frm->addHiddenField('', 'slide_screen', applicationConstants::SCREEN_DESKTOP);        
+        $frm->addHiddenField('', 'slide_screen', applicationConstants::SCREEN_DESKTOP);
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BANNER);
         $frm->addHiddenField('', 'min_width');
         $frm->addHiddenField('', 'min_height');
@@ -392,7 +392,7 @@ class BannersController extends ListingBaseController
     }
 
     // Media functionality
-    public function media($recordId = 0, $bannerLocationId, $langId = 0, $slideScreen = 1)
+    public function media($recordId, $bannerLocationId, $langId = 0, $slideScreen = 1)
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $bannerLocationId || 1 > $recordId) {
@@ -405,16 +405,16 @@ class BannersController extends ListingBaseController
         }
 
         $imageFrm = $this->getMediaForm($bannerLocationId, $recordId);
-        if (!false == $bannerDetail) {          
+        if (!false == $bannerDetail) {
             $bannerImge = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $recordId, 0, -1);
             $this->set('image', $bannerImge);
         }
 
-        $locationDimensions = BannerLocation::getDimensions($bannerLocationId,applicationConstants::SCREEN_DESKTOP);
-        
+        $locationDimensions = BannerLocation::getDimensions($bannerLocationId, applicationConstants::SCREEN_DESKTOP);
+
         $this->set('locationDimensions', $locationDimensions);
         $this->set('frm', $imageFrm);
-        $this->set('languages', Language::getAllNames());       
+        $this->set('languages', Language::getAllNames());
         $this->set('bannerLocationId', $bannerLocationId);
         $this->set('recordId', $recordId);
         $this->set('banner_id', $recordId);

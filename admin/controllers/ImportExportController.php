@@ -572,7 +572,7 @@ class ImportExportController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function getImportExportForm($langId, $type = 'EXPORT', $actionType)
+    public function getImportExportForm($langId, $type, $actionType)
     {
         $frm = new Form('frmImportExport', array('id' => 'frmImportExport'));
         $languages = Language::getAllNames();

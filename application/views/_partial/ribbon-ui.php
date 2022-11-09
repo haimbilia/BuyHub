@@ -3,8 +3,8 @@
 $ribbon = "";
 if (is_array($ribbRow) && !empty($ribbRow)) {
     $type = $ribbRow['badge_shape_type'];
-    $textColor = $ribbRow['badge_text_color'];
-    $color = $ribbRow['badge_color'];
+    $textColor = $ribbRow['badge_text_color'] ?? '';
+    $color = $ribbRow['badge_color'] ?? '';
     $text = $title = $ribbRow['badge_name'];
     if (applicationConstants::NO == $ribbRow['badge_display_inside']) {
         $text = "";

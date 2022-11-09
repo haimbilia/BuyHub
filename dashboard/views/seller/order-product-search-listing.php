@@ -61,7 +61,7 @@
                         $labelClass = 'label-danger';
                     } else {
                         $txt = $order['orderstatus_name'];
-                        if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") != $order['orderstatus_id'] && in_array(strtolower($order['plugin_code']), ['cashondelivery', 'payatstore'])) {
+                        if (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") != $order['orderstatus_id'] && isset($order['plugin_code']) && in_array(strtolower($order['plugin_code']), ['cashondelivery', 'payatstore'])) {
                             $txt .= ' (' . $order['plugin_name']  . ')';
                         }
                         $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'badge-info';
