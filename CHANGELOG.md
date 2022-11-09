@@ -3,6 +3,10 @@
 > IOS/Android Buyer APP version : 2.0.1
 > System API version : 2.3
 
+# RV-10.0.0.20221109
+## Bug Fixes:
+- Bug-068381 Bool must be compatible with the function return type.
+
 # RV-10.0.0.20221102
 
 ## Enhancements:

@@ -292,7 +292,7 @@ trait ProductDigitalDownloads
         FatUtility::dieJsonError($fileHandlerObj->getError());
     }
 
-    abstract protected function checkEditPrivilege(): bool;
+    abstract protected function checkEditPrivilege(): void;
     abstract protected function getCatalogType(): int;
 
     public function digitalDownloadForm($recordId, $type)
