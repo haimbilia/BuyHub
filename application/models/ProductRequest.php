@@ -74,10 +74,10 @@ class ProductRequest extends MyAppModel
         return $row_data;
     }
 
-    public function deleteProductImage($recordId, $image_id , $fileType = 0)
+    public function deleteProductImage($recordId, $image_id, $fileType = 0)
     {
-        $recordId = FatUtility :: int($recordId);
-        $image_id = FatUtility :: int($image_id);
+        $recordId = FatUtility::int($recordId);
+        $image_id = FatUtility::int($image_id);
         if ($recordId < 1 || $image_id < 1) {
             $this->error = 'Invalid Request!';
             return false;
@@ -88,8 +88,8 @@ class ProductRequest extends MyAppModel
         } else {
             $fileHandlerObj = new AttachedFile();
             $fileType = AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE;
-        }        
-       
+        }
+
         if (!$fileHandlerObj->deleteFile($fileType, $recordId, $image_id)) {
             $this->error = $fileHandlerObj->getError();
             return false;
@@ -97,9 +97,9 @@ class ProductRequest extends MyAppModel
         return true;
     }
 
-    public function updateProdImagesOrder($preq_id, $fileType = AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $order)
+    public function updateProdImagesOrder($preq_id, $fileType = AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, $order = [])
     {
-        $preq_id = FatUtility :: int($preq_id);
+        $preq_id = FatUtility::int($preq_id);
         if (is_array($order) && sizeof($order) > 0) {
             foreach ($order as $i => $id) {
                 if (FatUtility::int($id) < 1) {
@@ -188,9 +188,11 @@ class ProductRequest extends MyAppModel
 
                 $shipCompSrch = ShippingCompanies::getListingObj(
                     $lang_id,
-                    array('ifNull(' . ShippingCompanies::DB_TBL_PREFIX . 'name', ShippingCompanies::DB_TBL_PREFIX . 'identifier) as ' . ShippingCompanies::DB_TBL_PREFIX . 'name',
-                                    ShippingCompanies::DB_TBL_PREFIX . 'id',
-                                    ShippingCompanies::DB_TBL_LANG_PREFIX . 'scompany_id')
+                    array(
+                        'ifNull(' . ShippingCompanies::DB_TBL_PREFIX . 'name', ShippingCompanies::DB_TBL_PREFIX . 'identifier) as ' . ShippingCompanies::DB_TBL_PREFIX . 'name',
+                        ShippingCompanies::DB_TBL_PREFIX . 'id',
+                        ShippingCompanies::DB_TBL_LANG_PREFIX . 'scompany_id'
+                    )
                 );
                 $shipCompSrch->addCondition(ShippingCompanies::DB_TBL_PREFIX . 'id', '=', $val['company_id']);
                 $shipCompSrch->doNotCalculateRecords();
@@ -202,12 +204,14 @@ class ProductRequest extends MyAppModel
 
                 $shipDurationSrch = ShippingDurations::getListingObj(
                     $lang_id,
-                    array(ShippingDurations::DB_TBL_PREFIX . 'name',
-                                    ShippingDurations::DB_TBL_PREFIX . 'id',
-                                    ShippingDurations::DB_TBL_PREFIX . 'from',
-                                    ShippingDurations::DB_TBL_PREFIX . 'identifier ',
-                                    ShippingDurations::DB_TBL_PREFIX . 'to',
-                                    ShippingDurations::DB_TBL_PREFIX . 'days_or_weeks')
+                    array(
+                        ShippingDurations::DB_TBL_PREFIX . 'name',
+                        ShippingDurations::DB_TBL_PREFIX . 'id',
+                        ShippingDurations::DB_TBL_PREFIX . 'from',
+                        ShippingDurations::DB_TBL_PREFIX . 'identifier ',
+                        ShippingDurations::DB_TBL_PREFIX . 'to',
+                        ShippingDurations::DB_TBL_PREFIX . 'days_or_weeks'
+                    )
                 );
                 $shipDurationSrch->addCondition(ShippingDurations::DB_TBL_PREFIX . 'id', '=', $val['processing_time_id']);
                 $shipDurationSrch->doNotCalculateRecords();
@@ -285,7 +289,7 @@ class ProductRequest extends MyAppModel
         return HtmlHelper::getStatusHtml($status, rtrim($msg));
     }
 
-     /**
+    /**
      * move images from temp to main table
      */
     public function moveTempFiles(int $tempRecordId)
@@ -326,7 +330,7 @@ class ProductRequest extends MyAppModel
         FROM
             tbl_attached_files_temp
         WHERE
-            afile_type = ".AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP." AND afile_record_id = $tempRecordId";
+            afile_type = " . AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP . " AND afile_record_id = $tempRecordId";
 
 
         if (!$db->query($sql)) {
@@ -334,7 +338,7 @@ class ProductRequest extends MyAppModel
             return false;
         }
 
-        $sql = "delete from tbl_attached_files_temp where afile_type = ".AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP." AND afile_record_id = $tempRecordId";
+        $sql = "delete from tbl_attached_files_temp where afile_type = " . AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP . " AND afile_record_id = $tempRecordId";
         if (!$db->query($sql)) {
             $this->error = $db->getError();
             return false;

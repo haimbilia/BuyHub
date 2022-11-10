@@ -33,6 +33,7 @@ $(document).on('change', ".inputDateJs", function () {
         var formattedValue = obj.attr('data-formated-value');
         var tagId = obj.attr('data-id');
         var productId = obj.attr('data-product-id');
+        console.log(value);
         if ('tpr_custom_weightage' == attribute) {
             value = parseFloat(value);
             if (Number.isNaN(value)) {
@@ -51,7 +52,7 @@ $(document).on('change', ".inputDateJs", function () {
                     value = oldValue;
                     updatedValue = formattedValue;
                 } else {
-                    updatedValue = ans.data.value.toFixed(2);
+                    updatedValue = ans.data.value/* .toFixed(2); */
                 }
                 obj.attr('data-value', value);
                 obj.attr('data-formated-value', updatedValue);

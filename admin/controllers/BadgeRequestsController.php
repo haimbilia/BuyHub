@@ -94,6 +94,7 @@ class BadgeRequestsController extends ListingBaseController
                 'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
                 'shop_name',
                 'shop_id',
+                'shop_user_id',
                 'shop_updated_on',
                 'user_name',
                 Badge::DB_TBL_PREFIX . 'id'

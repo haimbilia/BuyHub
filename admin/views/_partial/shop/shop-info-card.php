@@ -1,6 +1,5 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
-
 $uploadedTime = AttachedFile::setTimeParam($shop['shop_updated_on']);
 $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 $getShopAspectRatio = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB);
@@ -30,7 +29,7 @@ if (1 == $useFeatherLightJs) {
             <ul class="list-options <?php echo isset($horizontalAlignOptions) && $horizontalAlignOptions ? 'list-options--horizontal' : 'list-options--vertical"'; ?>">
                 <li>
                     <span class="label"><?php echo Labels::getLabel('LBL_SELLER', $siteLangId); ?>:</span>
-                    <a href="javascript:void();" onclick="redirectUser(<?php echo $shop['shop_user_id']; ?>);" class="value"><?php echo $shop['user_name']; ?></a>
+                    <a href="javascript:void();" onclick="redirectUser(<?php echo $shop['user_id'] ?? $shop['shop_user_id']; ?>);" class="value"><?php echo $shop['user_name']; ?></a>
                 </li>
             </ul>
         <?php } ?>

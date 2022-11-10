@@ -139,7 +139,7 @@ class TagsController extends ListingBaseController
         return $frm;
     }
 
-    protected function getSearchFrm($fields = [], $langId)
+    protected function getSearchFrm($fields, $langId)
     {
         $fields = $this->getFormColumns($langId);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
