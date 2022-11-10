@@ -932,7 +932,7 @@ class ShopsController extends MyAppController
         return $frm;
     }
 
-    public function track($shopId = 0, $redirectType, $recordId)
+    public function track($shopId, $redirectType, $recordId)
     {
         $shopId = FatUtility::int($shopId);
         if (1 > $shopId) {
