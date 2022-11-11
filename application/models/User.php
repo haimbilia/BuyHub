@@ -725,7 +725,7 @@ class User extends MyAppModel
         }
         return true;
     }
-    public function updateInfo($data = array(), $userId)
+    public function updateInfo($userId, $data = array())
     {
         $assignValues = array(
             'user_company' => $data['user_company'],
@@ -888,7 +888,7 @@ class User extends MyAppModel
         return true;
     }
 
-    public function updateCredInfo($data = array(), $userId)
+    public function updateCredInfo($userId, $data = array())
     {
         $assignValues = array(
             static::DB_TBL_CRED_PREFIX . 'password' => UserAuthentication::encryptPassword($data['user_password'])
@@ -918,7 +918,7 @@ class User extends MyAppModel
             $srch->joinTable(static::DB_TBL_USR_RETURN_ADDR_LANG, 'LEFT OUTER JOIN', 'tura_l.uralang_user_id = tura.ura_user_id and tura_l.uralang_lang_id = ' . $langId, 'tura_l');
             $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'c_l.countrylang_country_id = tura.ura_country_id and c_l.countrylang_lang_id = ' . $langId, 'c_l');
             $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 's_l.statelang_state_id = tura.ura_state_id and s_l.statelang_lang_id = ' . $langId, 's_l');
-            $srch->addMultipleFields(array('tura_l.*', 'IFNULL(country_name,country_code) as country_name', 'IFNULL(state_name,state_identifier) as state_name'));
+            $srch->addMultipleFields(array('tura_l.*', 'IFNULL(country_name,country_code) as country_name', 'country_code', 'IFNULL(state_name,state_identifier) as state_name'));
         }
 
         $srch->addMultipleFields(array('tura.*'));

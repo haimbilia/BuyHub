@@ -19,14 +19,14 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                         foreach ($slideArr as $slideScreen) {
                             $uploadedTime = AttachedFile::setTimeParam($slideScreen['afile_updated_at']);
                             switch ($slideScreen['afile_screen']) {
-                                case applicationConstants::SCREEN_MOBILE:
+                               /*  case applicationConstants::SCREEN_MOBILE:
                                     $mobileUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT2, $siteLangId, applicationConstants::SCREEN_MOBILE, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                     $mobileWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT2, $siteLangId, applicationConstants::SCREEN_MOBILE, 'webp' . ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
                                     break;
                                 case applicationConstants::SCREEN_IPAD:
                                     $tabletUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT2, $siteLangId, applicationConstants::SCREEN_IPAD, ImageDimension::VIEW_TABLET)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                     $tabletWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT2, $siteLangId, applicationConstants::SCREEN_IPAD), 'webp' . ImageDimension::VIEW_TABLET) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
-                                    break;
+                                    break; */
                                 case applicationConstants::SCREEN_DESKTOP:
                                     $desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT2, $siteLangId, applicationConstants::SCREEN_DESKTOP, ImageDimension::VIEW_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                     $desktopWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT2, $siteLangId, applicationConstants::SCREEN_DESKTOP, 'webp' . ImageDimension::VIEW_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');

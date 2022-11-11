@@ -26,6 +26,7 @@ class StripeConnect extends PaymentMethodBase
     private $payoutScheduleDelayDays = '';
     private $payoutScheduleWeekly = '';
     private $payoutScheduleMonthly = '';
+    private $loadBankForm = 0;
 
     public $requiredKeys = [
         'env',
@@ -457,7 +458,7 @@ class StripeConnect extends PaymentMethodBase
     }
 
     /**
-     * updateAccount
+     * updateAllAccounts
      *
      * @return bool
      */
@@ -669,6 +670,17 @@ class StripeConnect extends PaymentMethodBase
     }
 
     /**
+     * loadBankForm
+     *
+     * @param  mixed $flag
+     * @return void
+     */
+    public function loadBankForm(int $flag = 0)
+    {
+        $this->loadBankForm = $flag;
+    }
+
+    /**
      * getRequiredFields
      *
      * @return array
@@ -680,7 +692,7 @@ class StripeConnect extends PaymentMethodBase
         }
         $formSubmittedFlag = $this->getUserMeta('stripe_form_submitted');
 
-        if (empty($formSubmittedFlag)) {
+        if (empty($formSubmittedFlag) || 0 < $this->loadBankForm) {
             $this->requiredFields = $this->getBusinessTypeFields();
         }
 

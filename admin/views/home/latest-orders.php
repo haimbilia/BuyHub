@@ -6,7 +6,7 @@
 			<th><?php echo Labels::getLabel('LBL_CUSTOMER', $siteLangId); ?></th>
 			<th><?php echo Labels::getLabel('LBL_DATE', $siteLangId); ?></th>
 			<th><?php echo Labels::getLabel('LBL_ORDER_TOTAL', $siteLangId); ?></th>
-			<th><?php echo Labels::getLabel('LBL_STATUS', $siteLangId); ?></th>
+			<th><?php echo Labels::getLabel('LBL_PAYMENT_STATUS', $siteLangId); ?></th>
 		</tr>
 	</thead>
 	<tbody>

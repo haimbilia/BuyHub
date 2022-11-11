@@ -1719,7 +1719,7 @@ END,   special_price_found ) as special_price_found'
             $sortBy = $get['sortBy'];
         }
 
-        $sortOrder = 'asc';
+        $sortOrder = 'desc';
         if (array_key_exists('sortOrder', $get)) {
             $sortOrder = $get['sortOrder'];
         }
@@ -1730,7 +1730,7 @@ END,   special_price_found ) as special_price_found'
             $sortOrder = isset($sortByArr[1]) ? $sortByArr[1] : $sortOrder;
 
             if (!in_array($sortOrder, array('asc', 'desc'))) {
-                $sortOrder = 'asc';
+                $sortOrder = 'desc';
             }
 
             if (!in_array($sortBy, array('keyword', 'price', 'popularity', 'rating', 'discounted'))) {
@@ -1769,7 +1769,7 @@ END,   special_price_found ) as special_price_found'
         if (array_key_exists('keyword', $get) && !empty($get['keyword'])) {
             $srch->addOrder('keywordmatched', 'desc');
         }
-
+        $srch->addOrder('selprod_updated_on', 'DESC');
         return $srch;
     }
 

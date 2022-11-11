@@ -681,7 +681,7 @@ class CommonHelper extends FatUtility
         return $val;
     }
 
-    public static function displayMoneyFormat($val, $numberFormat = true, $showInConfiguredDefaultCurrency = false, $displaySymbol = true, $stringFormat = false, $withHtml = false)
+    public static function displayMoneyFormat($val, $numberFormat = true, $showInConfiguredDefaultCurrency = false, $displaySymbol = true, $stringFormat = false, $withHtml = false, $includeZeroDecimal = false)
     {
         $val = FatUtility::convertToType($val, FatUtility::VAR_FLOAT, 0);
         $currencyValue = self::getCurrencyValue();
@@ -707,9 +707,15 @@ class CommonHelper extends FatUtility
             $sign = '-';
         }
 
+        $decimals = 2;
+        if (true == $includeZeroDecimal) {
+            if (is_numeric($val) && floor($val) == $val) {
+                $decimals = 0;
+            }
+        }
 
         if ($numberFormat) {
-            $val = self::numberFormat($val, $numberFormat, $stringFormat);
+            $val = self::numberFormat($val, $numberFormat, $stringFormat, $decimals);
         } else {
             $val = round($val, 2);
         }
@@ -717,6 +723,7 @@ class CommonHelper extends FatUtility
         if ($stringFormat) {
             $val = static::numberStringFormat($val);
         }
+
 
         if ($displaySymbol) {
             $sign .= ' ';

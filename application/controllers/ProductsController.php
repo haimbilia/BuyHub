@@ -1173,7 +1173,7 @@ class ProductsController extends MyAppController
         uksort(
             $recentViewedProducts,
             function ($key1, $key2) use ($cookiesProductsArr) {
-                return (array_search($key1, $cookiesProductsArr) > array_search($key2, $cookiesProductsArr));
+                return (array_search($key1, $cookiesProductsArr) <=> array_search($key2, $cookiesProductsArr));
             }
         );
         return $recentViewedProducts;

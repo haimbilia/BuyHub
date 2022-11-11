@@ -110,7 +110,7 @@ class Statistics extends MyAppModel
         }
     }
 
-    public function getDashboardLast12MonthsSummary($langId = 0, $type, $userTypeArr = array(), $months = 12)
+    public function getDashboardLast12MonthsSummary($langId, $type, $userTypeArr = array(), $months = 12)
     {
         $last12Months = Stats::getLast12MonthsDetails($months);
         $type = strtolower($type);
@@ -123,14 +123,13 @@ class Statistics extends MyAppModel
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
                 $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-
                 foreach ($last12Months as $key => $val) {
                     $srchObj = clone $srch;
                     $srchObj->addDirectCondition("month(`order_date_added` ) = $val[monthCount] and year(`order_date_added` )= $val[year]");
                     $srchObj->addMultipleFields(array('SUM((op_unit_price * op_qty ) + COALESCE(op_other_charges,0) + COALESCE(op_rounding_off,0) - COALESCE(op_refund_amount,0)) AS Sales,avg((op_unit_price * op_qty ) + COALESCE(op_other_charges,0) + COALESCE(op_rounding_off,0) - COALESCE(op_refund_amount,0)) AS avg_order,count(op_id) as total_orders'));
                     $rs = $srchObj->getResultSet();
                     $row = $this->db->fetch($rs);
-                    $sales_data[] = array("duration" => Labels::getLabel('LBL_' . $val['monthShort'], $langId) . "-" . $val['year'], "value" => round($row["Sales"], 2));
+                    $sales_data[] = array("duration" => Labels::getLabel('LBL_' . $val['monthShort'], $langId) . "-" . $val['year'], "value" => round($row["Sales"] ?? 0, 2));
                 }
                 return $sales_data;
                 break;
@@ -149,7 +148,7 @@ class Statistics extends MyAppModel
                     $srchObj->addDirectCondition("month(`order_date_added` ) = $val[monthCount] and year(`order_date_added` )= $val[year]");
                     $rs = $srchObj->getResultSet();
                     $row = $this->db->fetch($rs);
-                    $earnings_data[] = array("duration" => Labels::getLabel('LBL_' . $val['monthShort'], $langId) . "-" . $val['year'], "value" => round($row["Earning"], 2));
+                    $earnings_data[] = array("duration" => Labels::getLabel('LBL_' . $val['monthShort'], $langId) . "-" . $val['year'], "value" => round($row["Earning"] ?? 0, 2));
                 }
                 return $earnings_data;
                 break;

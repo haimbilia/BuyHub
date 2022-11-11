@@ -256,6 +256,9 @@ class CollectionsController extends ListingBaseController
             case Collections::TYPE_PRODUCT_LAYOUT3:
                 return Collections::LIMIT_PRODUCT_LAYOUT3;
                 break;
+            case Collections::TYPE_PRODUCT_LAYOUT4:
+                return Collections::LIMIT_PRODUCT_LAYOUT4;
+                break;    
             case Collections::TYPE_CATEGORY_LAYOUT1:
                 return Collections::LIMIT_CATEGORY_LAYOUT1;
                 break;
@@ -265,6 +268,9 @@ class CollectionsController extends ListingBaseController
             case Collections::TYPE_CATEGORY_LAYOUT3:
                 return Collections::LIMIT_CATEGORY_LAYOUT3;
                 break;
+            case Collections::TYPE_CATEGORY_LAYOUT4:
+                return Collections::LIMIT_CATEGORY_LAYOUT4;
+                break;    
             case Collections::TYPE_SHOP_LAYOUT1:
                 return Collections::LIMIT_SHOP_LAYOUT1;
                 break;

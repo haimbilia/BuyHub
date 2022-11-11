@@ -2,7 +2,27 @@
 
 > IOS/Android Buyer APP version : 2.0.1
 > System API version : 2.3
-    
+
+# RV-10.0.0.20221109
+## Bug Fixes:
+- Bug-068381 Bool must be compatible with the function return type.
+
+# RV-10.0.0.20221102
+
+## Enhancements:
+- Task-103261 Removed trailing zeros from the product listing page.
+- Task-103082-2062129 Parent category listing page added display order updated on in descending order. 
+- Task-103198 Added more product and category layout types for Home page collections.
+- Task-103094 Sellers shall be able to update their bank details while using stripe connect.
+- Task-103016 Included images URLs in the sitemap.
+- Bug-068175 Product Id shall be removed from the import/export sheet based on ID configuration at import/export settings.
+- Task-103028 Enhanced shipstation API and now shipping label shall be generated based on shipment handling by Seller/Admin.
+
+## Bug Fixes:
+- Bug-068127 Pickup address time slots selection validations.
+ 
+# RV-10.0.0
+
 ## New Features:
 
 ### Shipping API Integrations (New) 
@@ -105,6 +125,7 @@ Seller shall have to place a request for linking a Manual badge at Shop/Product/
 - UI/UX for Frontend and Admin dashboard.
 - Help text section has been added at the Admin side for the majority of the Primary Pages explaining the steps and impacts associated with functionalities. It appears at the right side of a page at the Admin’s end.
 - Sorting feature has been introduced at the listing pages to perform bi-directional sorting operations.
+- Removed trailing zeros from the product listing page.
 
 ### Alert and Suggestion text bar (Admin)
 - Alert and Suggestion/Recommendation bar has been introduced at Admin’s end.

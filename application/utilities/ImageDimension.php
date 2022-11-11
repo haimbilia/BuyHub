@@ -59,6 +59,7 @@ class ImageDimension extends FatUtility
     public const VIEW_MINI = 'MINI';
     public const VIEW_MINI_THUMB = 'MINITHUMB';
 
+    public const VIEW_CLAYOUT4 = 'CLAYOUT4';
     public const VIEW_CLAYOUT3 = 'CLAYOUT3';
     public const VIEW_CLAYOUT2 = 'CLAYOUT2';
     public const VIEW_CLAYOUT1 = 'CLAYOUT1';
@@ -100,7 +101,7 @@ class ImageDimension extends FatUtility
                 $imageDimensions = self::getUserImageData($sizeType);
                 break;
             case self::TYPE_SHOP_LOGO:
-                $imageDimensions = self::getShopLogoImageData($sizeType, $aspectRatioType);
+                $imageDimensions = self::getShopLogoImageData($aspectRatioType, $sizeType);
                 break;
             case self::TYPE_SHOP_BANNER:
                 $imageDimensions = self::getShopBannerImageData($sizeType);
@@ -109,13 +110,13 @@ class ImageDimension extends FatUtility
                 $imageDimensions = self::getPromotionMediaImageData($sizeType);
                 break;
             case self::TYPE_BRAND_LOGO:
-                $imageDimensions = self::getBrandLogoImageData($sizeType, $aspectRatioType);
+                $imageDimensions = self::getBrandLogoImageData($aspectRatioType, $sizeType);
                 break;
             case self::TYPE_BRAND_IMAGE:
                 $imageDimensions = self::getBrandImageData($sizeType);
                 break;
             case self::TYPE_EMAIL_LOGO:
-                $imageDimensions = self::getEmailLogoImageData($sizeType, $aspectRatioType);
+                $imageDimensions = self::getEmailLogoImageData($aspectRatioType, $sizeType);
                 break;
             case self::TYPE_SOCIAL_FEED:
                 $imageDimensions = self::getSocialFeedImageData($sizeType);
@@ -246,7 +247,9 @@ class ImageDimension extends FatUtility
             self::VIEW_CLAYOUT2 => [self::WIDTH => 468, self::HEIGHT => 468],
             self::VIEW_CLAYOUT1 => [self::WIDTH => 341, self::HEIGHT => 341],
             self::VIEW_CLAYOUT3 => [self::WIDTH => 300, self::HEIGHT => 300],
+            self::VIEW_CLAYOUT4 => [self::WIDTH => 478, self::HEIGHT => 478],
             self::VIEW_MOBILE => [self::WIDTH => 180, self::HEIGHT => 180],
+            self::VIEW_TABLET => [self::WIDTH => 346, self::HEIGHT => 346],
 
             self::VIEW_THUMB => [self::WIDTH => 110, self::HEIGHT => 110],
             self::VIEW_MINI => [self::WIDTH => 50, self::HEIGHT => 50],
@@ -275,7 +278,7 @@ class ImageDimension extends FatUtility
         return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
-    public static function getShopLogoImageData(string $sizeType = '', int $aspectRatioType): array
+    public static function getShopLogoImageData(int $aspectRatioType, string $sizeType = ''): array
     {
         $sizeType = self::formatString($sizeType);
 
@@ -324,7 +327,7 @@ class ImageDimension extends FatUtility
         return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
 
-    public static function getBrandLogoImageData(string $sizeType = '', int $aspectRatioType): array
+    public static function getBrandLogoImageData(int $aspectRatioType, string $sizeType = ''): array
     {
         $sizeType = self::formatString($sizeType);
 
@@ -366,7 +369,7 @@ class ImageDimension extends FatUtility
         return self::returnData($arr, self::VIEW_DESKTOP, $sizeType);
     }
 
-    public static function getEmailLogoImageData(string $sizeType = '', int $aspectRatioType): array
+    public static function getEmailLogoImageData(int $aspectRatioType, string $sizeType = ''): array
     {
         $arr = [
             AttachedFile::RATIO_TYPE_SQUARE => [

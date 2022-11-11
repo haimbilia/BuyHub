@@ -1,5 +1,7 @@
 <?php
 
+use Aws\ClientSideMonitoring\Configuration;
+
 require_once dirname(__FILE__) . '/ShipStationFunctions.php';
 
 class ShipStationShipping extends ShippingServicesBase
@@ -18,9 +20,12 @@ class ShipStationShipping extends ShippingServicesBase
     private const REQUEST_GET_ORDER = 6;
     private const REQUEST_MARK_AS_SHIPPED = 7;
     private const REQUEST_WAREHOUSES_LIST = 8;
+    private const REQUEST_CREATE_WAREHOUSE = 9;
 
     private $resp;
     private $endpoint = '';
+    private $orderDetail = [];
+    private $warehouseId = 0;
 
     public $requiredKeys = [
         'api_key',
@@ -71,6 +76,105 @@ class ShipStationShipping extends ShippingServicesBase
             return [];
         }
         return (array) $this->getResponse();
+    }
+
+    /**
+     * addWarehouseToDb
+     *
+     * @return bool
+     */
+    private function addWarehouseIdToDb(int $recordId = 0): bool
+    {
+        $updateData = [
+            'pluginsetting_plugin_id' => Plugin::getAttributesByCode(self::KEY_NAME, 'plugin_id'),
+            'pluginsetting_record_id' => $recordId,
+            'pluginsetting_key' => 'SHIPSTATION_WAREHOUSE_ID',
+            'pluginsetting_value' => $this->warehouseId,
+        ];
+
+        if (!FatApp::getDb()->insertFromArray(PluginSetting::DB_TBL, $updateData, false, [], $updateData)) {
+            $this->error = FatApp::getDb()->getError();
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * syncDefaultAddressId
+     *
+     * @param  int $recordId
+     * @return bool
+     */
+    public function syncDefaultAddressId(int $recordId = 0): bool
+    {
+        if (false === $this->doRequest(self::REQUEST_WAREHOUSES_LIST)) {
+            return false;
+        }
+        $warehousesArr =  (array) $this->getResponse();
+        $warehouse = [];
+        if (!empty($warehousesArr)) {
+            $warehouse = array_filter($warehousesArr, function ($wareHouse) {
+                return ($wareHouse['isDefault'] == applicationConstants::YES);
+            });
+        }
+
+        if (empty($warehouse)) {
+            $this->error = Labels::getLabel('LBL_SYNC_SHIPSTATION_DEFAULT_ADDRESS_DESCRIPTION');
+            return false;
+        }
+
+        $this->warehouseId = current($warehouse)['warehouseId'];
+        return $this->addWarehouseIdToDb($recordId);
+    }
+
+    /**
+     * addWarehouse
+     *
+     * @return bool
+     */
+    private function addWarehouse(): bool
+    {
+        $sellerId = $this->orderDetail['opshipping_by_seller_user_id'];
+        if (1 > $sellerId) {
+            return $this->syncDefaultAddressId();
+        }
+
+        $address = $this->getShopAddress($sellerId);
+        $this->setAddress($address['shop_name'], $address['line1'], $address['line2'], $address['city'], $address['state'], $address['postalCode'], $address['countryCode'], $address['phone']);
+        $requestData = [
+            'warehouseName' => $address['shop_name'],
+            'originAddress' => $this->getAddress()
+        ];
+        $userObj = new User($sellerId);
+        $returnAddress = $userObj->getUserReturnAddress(CommonHelper::getLangId());
+        $this->setAddress($address['shop_name'], $returnAddress['ura_address_line_1'], $returnAddress['ura_address_line_2'], $returnAddress['ura_city'], $returnAddress['state_name'], $returnAddress['ura_zip'], $returnAddress['country_code'], $returnAddress['ura_phone']);
+
+        $requestData['returnAddress'] = $this->getAddress();
+        if (false === $this->doRequest(self::REQUEST_CREATE_WAREHOUSE, $requestData)) {
+            return false;
+        }
+        $warehouse =  (array) $this->getResponse();
+        $this->warehouseId = $warehouse['warehouseId'];
+
+        return $this->addWarehouseIdToDb($sellerId);
+    }
+
+    /**
+     * getWarehouseId
+     *
+     * @return mixed
+     */
+    private function getWarehouseId()
+    {
+        $pluginSettings = new PluginSetting(0, self::KEY_NAME, $this->orderDetail['opshipping_by_seller_user_id']);
+        $this->warehouseId = $pluginSettings->get(0, 'SHIPSTATION_WAREHOUSE_ID');
+
+        if (1 > $this->warehouseId) {
+            if (false === $this->addWarehouse()) {
+                return -1;
+            }
+        }
+        return $this->warehouseId;
     }
 
     /**
@@ -136,25 +240,33 @@ class ShipStationShipping extends ShippingServicesBase
      */
     public function addOrder(int $opId): bool
     {
-        $orderDetail = $this->getSystemOrder($opId);
-        if (empty($orderDetail)) {
+        $this->orderDetail = $this->getSystemOrder($opId);
+        if (empty($this->orderDetail)) {
             return false;
         }
 
-        $orderTimestamp = strtotime($orderDetail['order_date_added']);
+        $orderTimestamp = strtotime($this->orderDetail['order_date_added']);
         $orderDate = date('Y-m-d', $orderTimestamp) . 'T' . date('H:i:s', $orderTimestamp) . '.0000000';
 
         $orderInvoiceNumber = 0;
 
-        $shippingTotal = CommonHelper::orderProductAmount($orderDetail, 'SHIPPING');
-        $taxCharged = CommonHelper::orderProductAmount($orderDetail, 'TAX');
+        $shippingTotal = CommonHelper::orderProductAmount($this->orderDetail, 'SHIPPING');
+        $taxCharged = CommonHelper::orderProductAmount($this->orderDetail, 'TAX');
 
-        $orderInvoiceNumber = $orderDetail['op_invoice_number'];
+        $orderInvoiceNumber = $this->orderDetail['op_invoice_number'];
 
-        $orderObj = new Orders($orderDetail['order_id']);
-        $addresses = $orderObj->getOrderAddresses($orderDetail['order_id']);
+        $orderObj = new Orders($this->orderDetail['order_id']);
+        $addresses = $orderObj->getOrderAddresses($this->orderDetail['order_id']);
         $billingAddress = $addresses[Orders::BILLING_ADDRESS_TYPE];
         $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
+
+        $warehouseId = $this->getWarehouseId();
+        if (0 > $warehouseId) {
+            if (empty($this->error)) {
+                $this->error = Labels::getLabel('ERR_UNABLE_TO_GET_WAREHOUSE_ID', $this->langId);
+            }
+            return false;
+        }
 
         $this->order = [];
         $this->order['orderNumber'] = $orderInvoiceNumber;
@@ -162,17 +274,18 @@ class ShipStationShipping extends ShippingServicesBase
         $this->order['orderDate'] = $orderDate;
         $this->order['paymentDate'] = $orderDate;
         $this->order['orderStatus'] = "awaiting_shipment"; // {awaiting_shipment, on_hold, shipped, cancelled}
-        $this->order['customerUsername'] = $orderDetail['buyer_user_name'];
-        $this->order['customerEmail'] = $orderDetail['buyer_email'];
-        $this->order['amountPaid'] = $orderDetail['order_net_amount'];
+        $this->order['customerUsername'] = $this->orderDetail['buyer_user_name'];
+        $this->order['customerEmail'] = $this->orderDetail['buyer_email'];
+        $this->order['amountPaid'] = $this->orderDetail['order_net_amount'];
         $this->order['taxAmount'] = $taxCharged;
         $this->order['shippingAmount'] = $shippingTotal;
         /* $this->order['customerNotes'] = null;
         $this->order['internalNotes'] = "Express Shipping Please"; */
-        $this->order['paymentMethod'] = $orderDetail['plugin_name'];
-        $this->order['carrierCode'] = $orderDetail['opshipping_carrier_code'];
-        $this->order['serviceCode'] = $orderDetail['opshipping_service_code'];
+        $this->order['paymentMethod'] = $this->orderDetail['plugin_name'];
+        $this->order['carrierCode'] = $this->orderDetail['opshipping_carrier_code'];
+        $this->order['serviceCode'] = $this->orderDetail['opshipping_service_code'];
         $this->order['packageCode'] = "package";
+        $this->order['advancedOptions'] = ['warehouseId' => $warehouseId];
         /* $this->order['confirmation'] = null;
         $this->order['shipDate'] = null; */
 
@@ -184,23 +297,23 @@ class ShipStationShipping extends ShippingServicesBase
         $this->order['shipTo'] = $this->getAddress();
 
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
-        $weightUnitName = ($orderDetail['op_product_weight_unit']) ? $weightUnitsArr[$orderDetail['op_product_weight_unit']] : '';
-        $productWeightInOunce = Shipping::convertWeightInOunce($orderDetail['op_product_weight'], $weightUnitName);
+        $weightUnitName = ($this->orderDetail['op_product_weight_unit']) ? $weightUnitsArr[$this->orderDetail['op_product_weight_unit']] : '';
+        $productWeightInOunce = Shipping::convertWeightInOunce($this->orderDetail['op_product_weight'], $weightUnitName);
 
         $this->setWeight($productWeightInOunce);
         $this->order['weight'] = $this->getWeight();
 
         $lengthUnitsArr = applicationConstants::getLengthUnitsArr($this->langId, true);
-        $dimUnitName = ($orderDetail['op_product_dimension_unit']) ? $lengthUnitsArr[$orderDetail['op_product_dimension_unit']] : '';
+        $dimUnitName = ($this->orderDetail['op_product_dimension_unit']) ? $lengthUnitsArr[$this->orderDetail['op_product_dimension_unit']] : '';
 
-        $lengthInCenti = Shipping::convertLengthInCenti($orderDetail['op_product_length'], $dimUnitName);
-        $widthInCenti = Shipping::convertLengthInCenti($orderDetail['op_product_width'], $dimUnitName);
-        $heightInCenti = Shipping::convertLengthInCenti($orderDetail['op_product_height'], $dimUnitName);
+        $lengthInCenti = Shipping::convertLengthInCenti($this->orderDetail['op_product_length'], $dimUnitName);
+        $widthInCenti = Shipping::convertLengthInCenti($this->orderDetail['op_product_width'], $dimUnitName);
+        $heightInCenti = Shipping::convertLengthInCenti($this->orderDetail['op_product_height'], $dimUnitName);
 
         $this->setDimensions($lengthInCenti, $widthInCenti, $heightInCenti);
         $this->order['dimensions'] = $this->getDimensions();
 
-        $this->setItem($orderDetail);
+        $this->setItem($this->orderDetail);
         $this->order['items'] = [$this->getItem()];
         return $this->doRequest(self::REQUEST_CREATE_ORDER, $this->order); //Return bool
     }
@@ -451,6 +564,9 @@ class ShipStationShipping extends ShippingServicesBase
                     break;
                 case self::REQUEST_WAREHOUSES_LIST:
                     $this->wareHousesList();
+                    break;
+                case self::REQUEST_CREATE_WAREHOUSE:
+                    $this->createWarehouse($requestParam);
                     break;
             }
 
