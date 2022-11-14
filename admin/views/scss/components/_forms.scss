@@ -681,45 +681,6 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
         }
     }
 }
-.switch-button {
-    position: relative;
-    width: 70px;
-    display: inline-block;
-    vertical-align: top;
-    margin: 0 auto;
-    &:before {
-        content: "";
-        position: absolute;
-        background: #e6e6e6;
-        border-radius: 30px;
-        width: 70px;
-        height: 25px;
-        top: 0;
-        margin: 0 auto;
-        #{$start-direction}: 0;
-        #{$end-direction}: 0;
-    }
-    &:after {
-        background: $brand-color;
-        color: $brand-color-inverse;
-        width: 18px;
-        height: 18px;
-        display: block;
-        border-radius: 50%;
-        content: "";
-        position: absolute;
-        #{$start-direction}: 4px;
-        top: 3px;
-        transition: all ease 0.3s;
-    }
-    &.is--active {
-        &:after {
-            #{$start-direction}: auto;
-            #{$end-direction}: 4px;
-            transition: all ease 0.3s;
-        }
-    }
-}
 
 .switch-links a.is--active {
     color: $brand-color;

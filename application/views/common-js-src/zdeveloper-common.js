@@ -1286,7 +1286,7 @@ $(function () {
                 fcom.makeUrl("Custom", "cookiePreferencesData"),
                 "",
                 function (t) {
-                    fcom.updateFaceboxContent(t, "modal-lg");
+                    fcom.updateFaceboxContent(t);
                 }
             );
         });
