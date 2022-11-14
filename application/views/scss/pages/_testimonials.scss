@@ -3,68 +3,34 @@
     position: relative;
     height: 100%;
     border-radius: $common-radius;
-    box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.22);
+    border: $border;
+    //box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.22);
     background-color: $bg-white;
+    padding: 1.5rem;
     .user {
-        width: 60px;
-        height: 60px;
-        position: relative;
-        position: absolute;
-        top: -10px;
-        #{$start-direction}: 25px;
-        z-index: 3;
+        display: flex;
+
+        gap: 10px;
         transition: all 0.3s ease 0s;
-        border-radius: $common-radius;
-        overflow: hidden;
-        box-shadow: 0 -5px 15px 0 rgba(0, 0, 0, 0.22);
+        margin-bottom: 1rem;
         img {
+            border-radius: $common-radius;
+            overflow: hidden;
+            width: 60px;
+            height: 60px;
             max-width: 100%;
+        }
+        .user-name {
+            padding-top: 10px;
+            font-size: 1rem;
+            font-weight: 500;
         }
     }
     .testimonials-content {
-        overflow: hidden;
-        position: relative;
-        .user-name {
-            display: block;
+        p {
             font-weight: 400;
-            font-size: 1rem;
-            color: #3b566e;
-            margin-top: 20px;
-            padding-#{$start-direction}: 100px;
-            margin-bottom: 5px;
-            position: relative;
-            z-index: 3;
-        }
-        span {
-            display: block;
-            font-weight: 400;
-            font-size: 14px;
-            color: #6f8ba4;
-            padding-#{$start-direction}: 100px;
-            padding-#{$end-direction}: 25px;
-            position: relative;
-            z-index: 3;
-        }
-        .txt {
-            position: relative;
-            overflow: hidden;
-            p {
-                padding-#{$start-direction}: 25px;
-                padding-#{$end-direction}: 25px;
-                margin-bottom: 25px;
-                margin-top: 1rem;
-                font-weight: 400;
-                font-size: 0.85rem;
-                position: relative;
-                z-index: 3;
-                max-height: 250px;
-                overflow-y: auto;
-            }
-        }
-    }
-    &:hover {
-        .user {
-            top: -20px;
+            font-size: 0.95rem;
+            padding: 0;
         }
     }
 }
