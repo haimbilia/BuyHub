@@ -4,8 +4,7 @@
         "friendsofphp/php-cs-fixer": "dev-master",
         "taxjar/taxjar-php": "1.10.4",
         "avalara/avataxclient": "20.12.1",
-        "php-curl-class/php-curl-class": "9.10.0",
-        "facebook/graph-sdk": "5.7.1",
+        "php-curl-class/php-curl-class": "9.10.0",      
         "google/apiclient": "2.12.6",
         "stripe/stripe-php": "9.9.0",
         "league/oauth2-client": "2.6.0",
@@ -19,11 +18,11 @@
         "easypost/easypost-php": "dev-master",
         "mollie/mollie-api-php": "2.48.0",
         "rajathans/shiprocket-php": "1.0.0",
-        "phpmailer/phpmailer": "^6.5"
+        "phpmailer/phpmailer": "^6.5",
     },
     "config": {
         "platform": {
             "php": "8.1"
         }
     }
- }
+}
