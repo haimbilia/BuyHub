@@ -58,13 +58,13 @@ class MetaTagsWriter
             echo '<title>' . $title . '</title>' . "\n";
             echo '<meta name="application-name" content="' . $title . '">' . "\n";
             echo '<meta name="apple-mobile-web-app-title" content="' . $title . '">' . "\n";
-            if (isset($metas['meta_description'])) {
+            if (isset($metas['meta_description']) && !empty($metas['meta_description'])) {
                 echo '<meta name="description" content="' . $metas['meta_description'] . '" />';
             }
-            if (isset($metas['meta_keywords'])) {
+            if (isset($metas['meta_keywords']) && !empty($metas['meta_keywords'])) {
                 echo '<meta name="keywords" content="' . $metas['meta_keywords'] . '" />';
             }
-            if (isset($metas['meta_other_meta_tags'])) {
+            if (isset($metas['meta_other_meta_tags']) && !empty($metas['meta_other_meta_tags'])) {
                 echo CommonHelper::renderHtml($metas['meta_other_meta_tags'], ENT_QUOTES, 'UTF-8');
             }
         } else {
