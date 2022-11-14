@@ -89,7 +89,7 @@ class StripePayController extends PaymentController
                 $this->error = CommonHelper::replaceStringData(Labels::getLabel('ERR_MINIMUM_STRIPE_CHARGE_AMOUNT_IS_{MIN-AMOUNT}', $this->siteLangId), ['{MIN-AMOUNT}' => $stripeMinAmount]);
             }
         }
-        
+
         if (!$orderInfo['id']) {
             $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($message, FatUtility::isAjaxCall());
@@ -177,10 +177,10 @@ class StripePayController extends PaymentController
         $frm->addRequiredField(Labels::getLabel('FRM_ENTER_CREDIT_CARD_NUMBER', $this->siteLangId), 'cc_number');
         $frm->addRequiredField(Labels::getLabel('FRM_CARD_HOLDER_NAME', $this->siteLangId), 'cc_owner');
         $data['months'] = applicationConstants::getMonthsArr($this->siteLangId);
-        $today = getdate();
+
         $data['year_expire'] = array();
-        for ($i = $today['year']; $i < $today['year'] + 11; $i++) {
-            $data['year_expire'][strftime('%Y', mktime(0, 0, 0, 1, 1, $i))] = strftime('%Y', mktime(0, 0, 0, 1, 1, $i));
+        for ($i = date('Y'); $i < date('Y') + 11; $i++) {
+            $data['year_expire'][$i] = $i;
         }
         $frm->addSelectBox(Labels::getLabel('FRM_EXPIRY_MONTH', $this->siteLangId), 'cc_expire_date_month', $data['months'], '', array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_EXPIRY_YEAR', $this->siteLangId), 'cc_expire_date_year', $data['year_expire'], '', array(), '');
@@ -283,7 +283,7 @@ class StripePayController extends PaymentController
             if (false === MOBILE_APP_API_CALL && !FatUtility::isAjaxCall()) {
                 FatApp::redirectUser(UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
             }
-        } else {  
+        } else {
             SystemLog::transaction(json_encode($charge), self::KEY_NAME . "-" . $_POST['order_id']);
             $orderPaymentObj->addOrderPaymentComments($message);
             if (false === MOBILE_APP_API_CALL && !FatUtility::isAjaxCall()) {
