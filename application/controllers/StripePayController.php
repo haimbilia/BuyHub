@@ -168,7 +168,7 @@ class StripePayController extends PaymentController
         }
 
         $amount = number_format($amount, 2, '.', '');
-        return $amount * 100;
+        return $amount * 100;s
     }
 
     private function getPaymentForm($orderId)
