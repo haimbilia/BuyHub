@@ -212,7 +212,7 @@ class Plugin extends PluginCommon
         }
         $arr = [];
         $pluginsTypeArr = static::getDataByType($typeId, $langId);
-        array_walk($pluginsTypeArr, function (&$value, &$key) use (&$arr) {
+        array_walk($pluginsTypeArr, function (&$value, $key) use (&$arr) {
             $arr[$value['plugin_code']] = $value['plugin_name'];
         });
         return $arr;
