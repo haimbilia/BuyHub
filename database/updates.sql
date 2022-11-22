@@ -2345,3 +2345,9 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 -- ---------------------RV-10.0.0.20221109-----------------------
+
+
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+("LBL_IS_MCRYPT_EXTENSION_INSTALLED", "1", 'Note: Make sure "mcrypt" extension is installed at the server level.', "1"),
+("LBL_MCRYPT_EXTENSION_NOT_LOADED", "1", "'mcrypt' Extension needs to be installed at server level.", "1")
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
