@@ -190,10 +190,11 @@
         flex-direction: row-reverse;
         flex: 1;
         width: 100%;
-
-        .input-helper {
+        input {
             flex: 0 0 40px;
-            margin: 0 !important;
+        }
+        .input-helper {
+            display: none;
         }
     }
     &:hover {
