@@ -47,7 +47,7 @@ class AppleLogin extends SocialMediaAuthBase
             'response_mode' => 'form_post',
             'client_id' => $this->settings['client_id'],
             'redirect_uri' => $this->getRedirectUri(),
-            'state' => $_SESSION['appleSignIn']['state'],
+            'state' => session_id(),
             'scope' => 'name email',
         ]);
     }

@@ -64,7 +64,13 @@ class PluginSettingController extends ListingBaseController
             LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_KEY_NAME'));
         }
 
-        $plugin = LibHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId, false);
+        $error = '';
+        $plugin = PluginHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId, false);
+        if (false === $plugin) {
+            $error = !empty($error) ? $error : Labels::getLabel('LBL_UNABLE_TO_LOCATE_REQUIRED_FILE.');
+            FatUtility::dieJsonError($error);
+        }
+        
         if (false === $plugin->validateKeys($post)) {
             if (empty($error)) {
                 $error = $plugin->getError();

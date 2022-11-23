@@ -1,7 +1,6 @@
-/*cookies*/
+//cookies
 
 .cc-window {
-    //box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 5px;
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: $shadow1;
     backdrop-filter: blur(3px);
@@ -44,11 +43,6 @@
         }
     }
 
-    .cookie-alert {
-        p {
-            color: $txt-gray;
-        }
-    }
     .cookies-actions {
         display: flex;
         gap: 1rem;
@@ -57,6 +51,60 @@
         .btn {
             //border-radius: 6px;
             flex: 1;
+        }
+    }
+}
+
+.cookie-alert {
+    font-size: 0.85rem;
+    padding: 2rem;
+    p {
+        color: $txt-gray;
+    }
+    .cookies-group {
+        margin: 2rem 0;
+        &-head {
+            border: $border;
+            border-radius: $radius;
+            font-size: 1rem;
+            color: $txt-body;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            padding-#{$start-direction}: 2.5rem;
+            margin: 0;
+            position: relative;
+            cursor: pointer;
+            &:before {
+                content: "";
+                position: absolute;
+                top: calc(50% - 6px);
+                #{$start-direction}: 1.2rem;
+                display: inline-block;
+                border-right: 1px solid black;
+                border-bottom: 1px solid black;
+                width: 8px;
+                height: 8px;
+                transform: rotate(45deg);
+                transform-origin: center;
+                transition: all 0.5s ease;
+            }
+            &[aria-expanded="true"] {
+                &:before {
+                    top: calc(50% - 1px);
+                    transform: rotate(-134deg);
+                }
+            }
+
+            h6 {
+                margin: 0;
+                padding: 0;
+            }
+        }
+        &-body {
+            margin: 1rem 0;
         }
     }
 }
