@@ -56,7 +56,12 @@ class CcavenuePayController extends PaymentController
         $this->set('orderInfo', $orderInfo);
         $this->set('exculdeMainHeaderDiv', true);
         if (FatUtility::isAjaxCall()) {
-            $json['html'] = $this->_template->render(false, false, 'ccavenue-pay/charge-ajax.php', true, false);
+            if (!function_exists('mcrypt_encrypt')) {
+                Message::addErrorMessage(Labels::getLabel('LBL_MCRYPT_EXTENSION_NOT_LOADED', $this->siteLangId));
+                $json['html'] = Message::getHtml();
+            } else {
+                $json['html'] = $this->_template->render(false, false, 'ccavenue-pay/charge-ajax.php', true, false);
+            }
             FatUtility::dieJsonSuccess($json);
         }
         $this->_template->render(true, false);
