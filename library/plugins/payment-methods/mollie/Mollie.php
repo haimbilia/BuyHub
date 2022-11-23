@@ -69,7 +69,7 @@ class Mollie extends PaymentMethodBase
 					"value" => $payableAmount
 				],
 				"description" => Labels::getLabel('LBL_Order',$this->langId)." #".$orderId,
-				"redirectUrl" => CommonHelper::generateFullUrl('Custom','paymentSuccess',[$orderId]),
+				"redirectUrl" => CommonHelper::generateFullUrl('Custom','paymentSuccess',[$orderPaymentObj->getOrderNo()]),
 				"webhookUrl" =>  CommonHelper::generateFullUrl('MolliePay','callback', [$orderId]),
 				"metadata" => [
 					"order_id" => $orderId, 
