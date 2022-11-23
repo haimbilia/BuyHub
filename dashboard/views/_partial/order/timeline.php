@@ -3,7 +3,7 @@
     <?php
     $orderCancelled = (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']);
     $selectUpto = array_search($currentStatus, array_keys($orderProductStatusArr));
-    if (strtolower($childOrderDetail['plugin_code']) == 'cashondelivery') {
+    if (isset($childOrderDetail['plugin_code']) && strtolower($childOrderDetail['plugin_code']) == 'cashondelivery') {
         $selectUpto = array_search($childOrderDetail['orderstatus_id'], array_keys($orderProductStatusArr));
     }
     $index = 0;

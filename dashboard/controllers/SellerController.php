@@ -444,12 +444,12 @@ class SellerController extends SellerBaseController
         $this->set('shippingApiObj', $shippingApiObj);
 
         $codOrder = false;
-        if (strtolower($orderDetail['plugin_code']) == 'cashondelivery') {
+        if (isset($orderDetail['plugin_code']) && strtolower($orderDetail['plugin_code']) == 'cashondelivery') {
             $codOrder = true;
         }
 
         $pickupOrder = false;
-        if (strtolower($orderDetail['plugin_code']) == 'payatstore') {
+        if (isset($orderDetail['plugin_code']) && strtolower($orderDetail['plugin_code']) == 'payatstore') {
             $pickupOrder = true;
         }
 
@@ -830,12 +830,12 @@ class SellerController extends SellerBaseController
         }
 
         $codOrder = false;
-        if (strtolower($orderDetail['plugin_code']) == 'cashondelivery') {
+        if (isset($orderDetail['plugin_code']) && strtolower($orderDetail['plugin_code']) == 'cashondelivery') {
             $codOrder = true;
         }
 
         $pickupOrder = false;
-        if (strtolower($orderDetail['plugin_code']) == 'payatstore') {
+        if (isset($orderDetail['plugin_code']) && strtolower($orderDetail['plugin_code']) == 'payatstore') {
             $pickupOrder = true;
         }
 
@@ -931,7 +931,7 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Labels::getLabel('M_ERROR_INVALID_REQUEST', $this->siteLangId));
         }
 
-        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
+        if (isset($orderDetail['plugin_code']) &&  in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
 
             $orderProducts = new OrderProductSearch($this->siteLangId, true, true);
             $orderProducts->joinPaymentMethod();

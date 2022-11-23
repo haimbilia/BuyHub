@@ -6,7 +6,7 @@
         $lbl = Labels::getLabel('LBL_{UNIT}_{UNIT-NAME}_WARRANTY', $siteLangId);
         $replace = [
             '{UNIT}' => $product['product_warranty'],
-            '{UNIT-NAME}' => $warrantTypes[$product['product_warranty_unit']]
+            '{UNIT-NAME}' => $warrantTypes[$product['product_warranty_unit']] ?? $warrantTypes[$product['product_warranty_unit']]
         ];
         ?>
         <li title="<?php echo CommonHelper::replaceStringData($lbl, $replace); ?>">

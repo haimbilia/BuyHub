@@ -277,7 +277,7 @@ class OrdersController extends ListingBaseController
         $allowedShippingUserStatuses = $orderObj->getAdminAllowedUpdateShippingUser();
         $displayShippingUserForm = (
             (
-                (in_array(strtolower($opRow['plugin_code']), ['cashondelivery', 'payatstore'])
+                (isset($opRow['plugin_code']) && in_array(strtolower($opRow['plugin_code']), ['cashondelivery', 'payatstore'])
                 ) ||
                 (in_array($opRow['op_status_id'], $allowedShippingUserStatuses)
                 )
@@ -925,7 +925,7 @@ class OrdersController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
+        if (isset($orderDetail['plugin_code']) && in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
             $orderProducts = new OrderProductSearch($this->siteLangId, true, true);
             $orderProducts->joinPaymentMethod();
             $orderProducts->addMultipleFields(['op_status_id']);

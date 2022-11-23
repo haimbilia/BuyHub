@@ -1636,7 +1636,7 @@ class Orders extends MyAppModel
         }
 
         // If current order status is not paid up but new status is paid then commence updating the product's weightage
-        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
+        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0)) && (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))) {
             if ($childOrderInfo['op_is_batch']) {
                 $opSelprodCodeArr = explode('|', $childOrderInfo['op_selprod_code']);
             } else {
@@ -1810,7 +1810,7 @@ class Orders extends MyAppModel
         /* ] */
 
         /* If current order status is not return request approved but new status is return request approved then commence the order operation [ */
-        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array($opStatusId, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0)) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID || in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))) {
+        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array($opStatusId, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0)) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID || (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])))) {
             if ($moveRefundToWallet) {
                 $formattedRequestValue = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = sprintf(Labels::getLabel('LBL_RETURN_REQUEST_APPROVED', $langId), $formattedRequestValue);
@@ -1913,7 +1913,7 @@ class Orders extends MyAppModel
         /* ] */
 
         /* If current order status is not delivered but new Status is delivered and the order is of COD, then, check if delivered by seller then debiting transaction entry from seller wallet [ */
-        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
+        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))) {
             if (CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
                 $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = Labels::getLabel('LBL_CASH_COLLECTED_FOR_COD_ORDER', $langId) . ' ' . $formattedInvoiceNumber;
@@ -1944,7 +1944,7 @@ class Orders extends MyAppModel
         /*]*/
 
         // If COD order and shipping user not set then assign shipping company  user seller/admin shiping company.
-        if (in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']) && !$childOrderInfo['optsu_user_id'] && CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
+        if (isset($childOrderInfo['plugin_code']) &&  (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) && !$childOrderInfo['optsu_user_id'] && CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
             if (CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
                 $shippingUserdata = array('optsu_op_id' => $childOrderInfo['op_id'], 'optsu_user_id' => $childOrderInfo['op_selprod_user_id']);
                 $db->insertFromArray(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, $shippingUserdata, false, array('IGNORE'));
@@ -1952,10 +1952,10 @@ class Orders extends MyAppModel
         }
 
         // If current order status is not completed but new status is completed then commence completing the order
-        if (!in_array($childOrderInfo['op_status_id'], (array) $this->getVendorOrderPaymentCreditedStatuses()) && in_array($opStatusId, (array) $this->getVendorOrderPaymentCreditedStatuses()) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID || in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))) {
+        if (!in_array($childOrderInfo['op_status_id'], (array) $this->getVendorOrderPaymentCreditedStatuses()) && in_array($opStatusId, (array) $this->getVendorOrderPaymentCreditedStatuses()) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID || (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])))) {
             /* If shipped by admin credit to shipping user as COD order payment deposited by them[*/
             $amt = CommonHelper::orderProductAmount($childOrderInfo);
-            if (!CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
+            if (!CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id']) && (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))) {
                 $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = Labels::getLabel('LBL_CASH_DEPOSITED_FOR_COD_ORDER', $langId) . ' ' . $formattedInvoiceNumber;
 
@@ -1974,7 +1974,7 @@ class Orders extends MyAppModel
             /*]*/
 
             /* add payment in tbl_order_payments in case of cod and paystore order*/
-            if (in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
+            if (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
                 !$db->updateFromArray(
                     Orders::DB_TBL_ORDER_PAYMENTS,
                     array('opayment_txn_status' => Orders::ORDER_PAYMENT_PAID),

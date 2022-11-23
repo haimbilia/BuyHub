@@ -26,12 +26,12 @@ class OrderPayment extends Orders
     }
 
     public function getOrderNo()
-    {       
+    {
         return $this->attributes['order_number'];
     }
 
     public function getPaymentGatewayCode()
-    {       
+    {
         return $this->attributes['plugin_code'];
     }
 
@@ -277,12 +277,12 @@ class OrderPayment extends Orders
             $this->error = $db->getError();
             return false;
         }
-     
+
         $orderPaymentObj = new OrderPayment($orderId, $langId);
         $request = $orderPaymentObj->getPaymentGatewayCode();
         $orderPaymentObj->addOrderPaymentComments($request);
 
-        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();       
+        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderPaymentObj->addOrderPayment($request, 'S-' . time(), $paymentAmount, Labels::getLabel("LBL_RECEIVED_PAYMENT", $langId), Labels::getLabel('LBL_PAYMENT_FROM_USER_PAY_AT_STORE_ORDER', $langId), false, 0, Orders::ORDER_PAYMENT_PENDING);
         return true;
     }
@@ -297,12 +297,12 @@ class OrderPayment extends Orders
             return false;
         }
 
-        
+
         $orderPaymentObj = new OrderPayment($orderId, $langId);
         $request = $orderPaymentObj->getPaymentGatewayCode();
-        $orderPaymentObj->addOrderPaymentComments($request);        
+        $orderPaymentObj->addOrderPaymentComments($request);
 
-        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();       
+        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderPaymentObj->addOrderPayment($request, 'C-' . time(), $paymentAmount, Labels::getLabel("LBL_RECEIVED_PAYMENT", $langId), Labels::getLabel('LBL_PAYMENT_FROM_USER_COD_ORDER', $langId), false, 0, Orders::ORDER_PAYMENT_PENDING);
         return true;
     }
@@ -330,7 +330,7 @@ class OrderPayment extends Orders
             $this->error = Message::addErrorMessage(Labels::getLabel('ERR_WALLET_BALANCE_IS_LESS_THAN_AMOUNT_TO_BE_CHARGE', $defaultSiteLangId));
             return false;
         }
-       
+
         $transObj = new Transactions();
         $transaction_comment = Orders::getOrderCommentById($orderInfo["order_id"], $defaultSiteLangId);
         $txnDataArr = array(
@@ -399,10 +399,15 @@ class OrderPayment extends Orders
     public function getPaymentGatewayResponse(): array
     {
         $orderPaymentInfo = $this->getOrderPayments(['order_id' => $this->paymentOrderId]);
-        $data = empty($orderPaymentInfo) ? [] : current($orderPaymentInfo);
-        if (empty($data)) {
+        if (empty($orderPaymentInfo)) {
             return [];
         }
+        $data = current($orderPaymentInfo);
+
+        if (empty($data['opayment_gateway_response']) || false == LibHelper::isJson($data['opayment_gateway_response'])) {
+            return [];
+        }
+        
         return json_decode($data['opayment_gateway_response'], true);
     }
 }

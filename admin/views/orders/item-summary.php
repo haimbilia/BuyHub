@@ -24,7 +24,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
 
                     $displayShippingUserForm = (
                         (
-                            (in_array(strtolower($op['plugin_code']), ['cashondelivery', 'payatstore'])) ||
+                            (isset($op['plugin_code']) && in_array(strtolower($op['plugin_code']), ['cashondelivery', 'payatstore'])) ||
                             (in_array($op['op_status_id'], $allowedShippingUserStatuses))
                         ) &&
                         $canEditSellerOrders &&
