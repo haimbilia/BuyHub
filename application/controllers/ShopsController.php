@@ -987,7 +987,7 @@ class ShopsController extends MyAppController
                 'pclick_cost' => $row['promotion_cpc'],
                 'pclick_session_id' => session_id(),
             );
-            FatApp::getDb()->insertFromArray(Promotion::DB_TBL_CLICKS, $promotionClickData, false, '', $promotionClickData);
+            FatApp::getDb()->insertFromArray(Promotion::DB_TBL_CLICKS, $promotionClickData, false, [], $promotionClickData);
             $clickId = FatApp::getDb()->getInsertId();
 
             $promotionClickChargesData = array(
