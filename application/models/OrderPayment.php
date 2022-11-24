@@ -404,10 +404,14 @@ class OrderPayment extends Orders
         }
         $data = current($orderPaymentInfo);
 
-        if (empty($data['opayment_gateway_response']) || false == LibHelper::isJson($data['opayment_gateway_response'])) {
+        if (empty($data['opayment_gateway_response'])) {
             return [];
         }
-        
-        return json_decode($data['opayment_gateway_response'], true);
+
+        if (true == LibHelper::isJson($data['opayment_gateway_response'])) {
+            return json_decode($data['opayment_gateway_response'], true);
+        }
+
+        return [$data['opayment_gateway_response']];
     }
 }

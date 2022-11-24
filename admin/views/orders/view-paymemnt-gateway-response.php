@@ -7,10 +7,12 @@
 <div class="modal-body">
     <div class="form-edit-body">
         <?php
-        header('Content-Type: application/json');
-        echo '<pre style="max-height: 400px;">';
-        echo json_encode($response, JSON_PRETTY_PRINT); 
-        echo '</pre>';
+        if (!empty($response)) {
+            header('Content-Type: application/json');
+            echo '<pre style="max-height: 400px;">';
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            echo '</pre>';
+        }
         ?>
     </div>
 </div>
