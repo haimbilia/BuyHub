@@ -27,9 +27,11 @@ foreach ($arrListing as $sn => $row) {
             case 'product_identifier':
                 $str = '<div class="user-profile">
                             <div class="user-profile_data">
-                                <span class="user-profile_title">' . $row['product_name'] . '</span>
-                                <span class="text-muted">' . $row[$key] . '</span>
-                            </div>
+                                <span class="user-profile_title">' . $row['product_name'] . '</span>';
+                if ($row['product_name'] != $row[$key]) {
+                    $str .= '<span class="text-muted">' . $row[$key] . '</span>';
+                }
+                $str .= '</div>
                         </div>';
                 $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;

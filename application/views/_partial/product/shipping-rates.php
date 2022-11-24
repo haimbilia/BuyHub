@@ -2,11 +2,12 @@
     <?php
     if (!empty($product['product_warranty'])) { ?>
         <?php
-        $warrantTypes = Product::getWarrantyUnits($siteLangId);
+        $warrantTypes = Product::getWarrantyUnits($siteLangId);        
         $lbl = Labels::getLabel('LBL_{UNIT}_{UNIT-NAME}_WARRANTY', $siteLangId);
+        unset($warrantTypes[$product['product_warranty_unit']]);
         $replace = [
             '{UNIT}' => $product['product_warranty'],
-            '{UNIT-NAME}' => $warrantTypes[$product['product_warranty_unit']] ?? $warrantTypes[$product['product_warranty_unit']]
+            '{UNIT-NAME}' => (isset($product['product_warranty_unit']) && array_key_exists($product['product_warranty_unit'], $warrantTypes) ) ? $warrantTypes[$product['product_warranty_unit']] : ''
         ];
         ?>
         <li title="<?php echo CommonHelper::replaceStringData($lbl, $replace); ?>">
