@@ -147,6 +147,7 @@ class ShopsController extends ListingBaseController
         $stateData = States::getStateByCountryAndCode($post['shop_country_id'], FatApp::getPostedData('shop_state'));
         $post['shop_state_id'] = $stateData['state_id'];
         $post['shop_phone_dcode'] = FatApp::getPostedData('shop_phone_dcode', FatUtility::VAR_STRING, '');
+        $post['shop_identifier'] = $post['shop_name'];
 
         $shop = new Shop($shop_id);
         $shop->assignValues($post);

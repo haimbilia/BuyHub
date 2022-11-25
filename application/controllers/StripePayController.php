@@ -111,7 +111,7 @@ class StripePayController extends PaymentController
                             'cvc' => $_POST['cc_cvv'],
                         ],
                     ]);
-                    $payment_method = $payment_method->__toArray();
+                    $payment_method = $payment_method->toArray();
 
                     $this->set('order_id', $orderId);
                     $this->set('payment_intent_id', $charge['id']);
@@ -239,7 +239,7 @@ class StripePayController extends PaymentController
 
                 ]);
 
-                $charge = $charge->__toArray();
+                $charge = $charge->toArray();
                 return $charge;
             }
         } catch (Exception $e) {
@@ -264,7 +264,7 @@ class StripePayController extends PaymentController
             $_POST['payment_intent_id']
         );
 
-        $charge = $charge->__toArray();
+        $charge = $charge->toArray();
 
         $orderPaymentObj = new OrderPayment($_POST['order_id']);
 
