@@ -251,7 +251,7 @@ class CollectionsController extends MyAppController
                         if (true === MOBILE_APP_API_CALL) {
                             $val['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', array($val['shop_id'], $this->siteLangId, ImageDimension::VIEW_THUMB));
                             $val['shop_banner'] = UrlHelper::generateFullUrl('image', 'shopBanner', array($val['shop_id'], $this->siteLangId, ImageDimension::VIEW_MOBILE));
-                            array_walk($products, function (&$value, &$key) {
+                            array_walk($products, function (&$value, $key) {
                                 $uploadedTime = AttachedFile::setTimeParam($value['product_updated_on']);
                                 $value['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($value['product_id'], ImageDimension::VIEW_THUMB, $value['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                             });
@@ -297,7 +297,7 @@ class CollectionsController extends MyAppController
 
                     unset($brandSearchTempObj);
                     if (true === MOBILE_APP_API_CALL) {
-                        array_walk($collectionsArr, function (&$value, &$key) {
+                        array_walk($collectionsArr, function (&$value, $key) {
                             $value['brand_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'brand', array($value['brand_id'], $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                         });
                         $this->set('collections', $collectionsArr);
@@ -338,7 +338,7 @@ class CollectionsController extends MyAppController
 
                     unset($blogSearchTempObj);
                     if (true === MOBILE_APP_API_CALL) {
-                        array_walk($collectionsArr, function (&$value, &$key) {
+                        array_walk($collectionsArr, function (&$value, $key) {
                             $value['post_image'] = UrlHelper::generateFullUrl('Image', 'blogPostFront', array($value['post_id'], $this->siteLangId, ImageDimension::VIEW_LAYOUT2));
                         });
                         $this->set('collections', $collectionsArr);

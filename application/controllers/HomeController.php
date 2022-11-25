@@ -1108,7 +1108,7 @@ class HomeController extends MyAppController
                     $blogPostsDetail = $db->fetchAll($rs);
                     /* ] */
                     if (true === MOBILE_APP_API_CALL) {
-                        array_walk($blogPostsDetail, function (&$value, &$key) {
+                        array_walk($blogPostsDetail, function (&$value, $key) {
                             $value['post_image'] = UrlHelper::generateFullUrl('Image', 'blogPostFront', array($value['post_id'], $this->siteLangId, ImageDimension::VIEW_LAYOUT2));
                         });
                     }

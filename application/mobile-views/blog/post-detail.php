@@ -2,7 +2,7 @@
 
 $postImages = [];
 if (isset($post_images) && !empty($post_images)) {
-    array_walk($post_images, function (&$value, &$key) use (&$postImages) {
+    array_walk($post_images, function (&$value, $key) use (&$postImages) {
         $postImages[] = FatUtility::generateFullUrl('image', 'blogPostFront', array($value['afile_record_id'], $value['afile_lang_id'], ImageDimension::VIEW_LAYOUT2, 0, $value['afile_id']), CONF_WEBROOT_FRONT_URL);
     });
 }
