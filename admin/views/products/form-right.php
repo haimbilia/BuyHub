@@ -413,7 +413,7 @@ $sellerId = $productData['product_seller_id'] ?? 0;
             <div class="card">
                 <div class="card-head">
                     <div class="card-head-label">
-                        <h3 class="card-head-title">Tags</h3>
+                        <h3 class="card-head-title"><?php echo Labels::getLabel('FRM_TAGS', $langId); ?></h3>
                         <span class="text-muted">
                             <?php echo Labels::getLabel('FRM_CREATE_KEYWORD_TAGS_TO_MAKE_IT_EASIER_FOR_BUYERS', $langId); ?>
                         </span>
