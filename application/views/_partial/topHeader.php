@@ -112,6 +112,14 @@
                                     </button>
                                 </li>
                             <?php }
+
+                            if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VAR_STRING, '') && UserAuthentication::getLoggedUserId(true) > 0) {
+                            ?>
+                                <li class="quick-nav-item">
+                                    <div class="btn-engagespot" id="engagespotUI"></div>
+                                </li>
+                            <?php }
+
                             if (CommonHelper::demoUrl()) { ?>
                                 <li class="quick-nav-item item-desktop quick-nav-pipe">
                                     <a class="quick-nav-link btn-cta-outline" href="https://www.yo-kart.com/request-demo.html" rel="noopener" title="Get a Free demo of Yo!Kart system by an expert"> Request a Demo </a>
@@ -139,6 +147,7 @@
                             </svg>
                         </button>
                     </div>
+
                 </div>
             </div>
         </div>
