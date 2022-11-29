@@ -68,7 +68,8 @@ $header-height: 122px;
             flex: 1;
             padding: 0;
 
-            @include media-breakpoint-down(sm) {}
+            @include media-breakpoint-down(sm) {
+            }
         }
     }
 
@@ -319,10 +320,9 @@ $quick-nav-gap: 1.5rem;
 }
 
 .btn-engagespot {
-    button {
+    .sc-jOrMOR {
         border-radius: 50% !important;
-
-        svg {
+        > svg {
             fill: $secondary-color;
             stroke: $secondary-color !important;
         }
