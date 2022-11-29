@@ -1,4 +1,5 @@
 $header-height: 122px;
+
 .header {
     position: sticky;
     z-index: $zindex-fixed;
@@ -8,31 +9,39 @@ $header-height: 122px;
     font-size: 0.875rem;
     background: $bg-white;
     border-bottom: $border;
+
     @include media-breakpoint-up(lg) {
         min-height: $header-height;
     }
+
     .container {
         max-width: none;
+
         @include media-breakpoint-up(lg) {
             padding: 0 3rem;
         }
     }
+
     .top-bar {
         padding: 10px 0;
         fill: currentColor;
         transition: all 300ms linear 0s;
+
         @include media-breakpoint-up(lg) {
             border-bottom: $border;
             padding: 0;
         }
+
         &__inner {
             display: grid;
             align-items: center;
             grid-template-columns: 1fr 2fr;
+
             @include media-breakpoint-up(lg) {
                 //grid-template-columns: auto;
             }
         }
+
         &__left {
             display: flex;
             align-items: center;
@@ -44,17 +53,21 @@ $header-height: 122px;
             padding: 8px 0;
         }
     }
+
     .main-bar {
         display: none;
+
         @include media-breakpoint-up(lg) {
             display: block;
         }
+
         &__inner {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex: 1;
             padding: 0;
+
             @include media-breakpoint-down(sm) {
             }
         }
@@ -66,19 +79,24 @@ $header-height: 122px;
         margin-#{$end-direction}: 1.5rem;
         display: flex;
         justify-content: center;
+
         @include media-breakpoint-down(lg) {
             max-width: 100px;
         }
+
         img {
             height: auto;
+
             @include media-breakpoint-down(sm) {
                 max-width: 90px;
             }
+
             &[data-ratio="16:9"] {
                 @include media-breakpoint-up(lg) {
                     max-width: 120px;
                 }
             }
+
             &[data-ratio="1:1"] {
                 @include media-breakpoint-up(lg) {
                     max-width: 60px;
@@ -90,6 +108,7 @@ $header-height: 122px;
     &-location {
         display: flex;
         align-items: center;
+
         input {
             border: none;
             background-color: transparent;
@@ -100,27 +119,33 @@ $header-height: 122px;
             background-repeat: no-repeat;
             background-position: left center;
             padding-#{$start-direction}: 30px;
+
             &::-webkit-input-placeholder {
                 /* Chrome/Opera/Safari */
                 color: #fff;
             }
+
             &::-moz-placeholder {
                 /* Firefox 19+ */
                 color: #fff;
             }
+
             &:-ms-input-placeholder {
                 /* IE 10+ */
                 color: #fff;
             }
+
             &:-moz-placeholder {
                 /* Firefox 18- */
                 color: #fff;
             }
+
             &:focus {
                 background-color: transparent;
                 color: #fff;
             }
         }
+
         &__icon {
             margin-#{$start-direction}: 1rem;
             width: 40px;
@@ -132,37 +157,47 @@ $header-height: 122px;
         background: none;
         border: none;
         margin-#{$end-direction}: 10px;
+
         @include media-breakpoint-up(xl) {
             display: none;
         }
     }
 }
+
 $quick-nav-gap: 1.5rem;
+
 .quick-nav {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     grid-gap: 1rem;
+
     @include media-breakpoint-up(lg) {
         grid-gap: $quick-nav-gap;
     }
+
     &-item {
         display: block;
         padding: 0;
+
         //position: relative;
         &.item-desktop {
             display: none;
+
             @include media-breakpoint-up(lg) {
                 display: block;
             }
         }
+
         &.item-mobile {
             display: block;
+
             @include media-breakpoint-up(lg) {
                 display: none;
             }
         }
     }
+
     &-link {
         margin: 0;
         padding: 6px 0;
@@ -179,14 +214,17 @@ $quick-nav-gap: 1.5rem;
             color: $secondary-color;
         }
     }
+
     &-more {
         &::after {
             content: " ↓";
         }
     }
+
     &-pipe {
         margin-#{$start-direction}: 1rem;
         position: relative;
+
         &:before {
             content: "";
             position: absolute;
@@ -196,21 +234,25 @@ $quick-nav-gap: 1.5rem;
             border-#{$start-direction}: $border;
         }
     }
+
     .svg {
         color: $secondary-color;
     }
 
     .txt {
         display: none;
+
         @include media-breakpoint-up(lg) {
             display: inherit;
         }
     }
+
     .btn-cta {
         @include bg-secondary;
         border: solid 1px $secondary-color;
         border-radius: 40px;
         padding: 0.5rem 1rem;
+
         &:hover,
         &:focus {
             text-decoration: none;
@@ -218,11 +260,13 @@ $quick-nav-gap: 1.5rem;
             border-color: $brand-color;
         }
     }
+
     .btn-cta-outline {
         border: solid 1px $secondary-color;
         border-radius: 40px;
         color: $secondary-color;
         padding: 0.5rem 1rem;
+
         &:hover,
         &:focus {
             @include bg-secondary;
@@ -231,6 +275,7 @@ $quick-nav-gap: 1.5rem;
         }
     }
 }
+
 .nav-more {
     position: absolute;
     left: 0;
@@ -239,6 +284,7 @@ $quick-nav-gap: 1.5rem;
     background-color: #fff;
     border-bottom: $border;
     padding: 3rem 2rem;
+
     ul {
         max-width: 1000px;
         margin: 0 auto;
@@ -247,8 +293,10 @@ $quick-nav-gap: 1.5rem;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
 }
+
 .button-cart {
     position: relative;
+
     .cart-qty {
         position: absolute;
         #{$start-direction}: 10px;
@@ -266,6 +314,17 @@ $quick-nav-gap: 1.5rem;
         justify-content: center;
     }
 }
+
 .dropdown.is-active .dropdown__target {
     pointer-events: auto;
+}
+
+.btn-engagespot {
+    .sc-jOrMOR {
+        border-radius: 50% !important;
+        > svg {
+            fill: $secondary-color;
+            stroke: $secondary-color !important;
+        }
+    }
 }

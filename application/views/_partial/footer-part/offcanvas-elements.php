@@ -18,7 +18,6 @@ $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
     <div class="offcanvas-body productFiltersJs">
     </div>
 </div>
-
 <?php if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) {
     $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]);
 }

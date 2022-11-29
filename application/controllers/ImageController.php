@@ -587,7 +587,7 @@ class ImageController extends FatController
         }
     }
 
-    public function metaImage($lang_id = 0, $sizeType = '')
+    public function metaImage($lang_id = 0, $sizeType = ImageDimension::VIEW_DEFAULT)
     {
         $lang_id = FatUtility::int($lang_id);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_META_IMAGE, 0, 0, $lang_id);

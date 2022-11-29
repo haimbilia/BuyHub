@@ -3,9 +3,12 @@
 > IOS/Android Buyer APP version : 2.0.1
 > System API version : 2.3
 
+# RV-10.0.0.20221123
+
 ## Bug Fixes:
 - Bug-068701 Invalid return url from Mollie payment gateway
 - Bug-068725 Error occurs when the admin tries to add new FAQ caegory
+- Bug-068864 Admin - Product catalog form Tag title called statically.
 
 # RV-10.0.0.20221109
 ## Bug Fixes:
