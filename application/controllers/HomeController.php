@@ -50,7 +50,7 @@ class HomeController extends MyAppController
         if (0 < $sponShopLayoutCount) {
             foreach ($sponsoredShopsInCollection as $indexId => $collectionId) {
                 $recordId = (true === MOBILE_APP_API_CALL) ? $indexId : $collectionId;
-                $sponsoredShops = $this->getSponsoredShops($productSrchObj);
+                $sponsoredShops = $this->getSponsoredShops();
 
                 if (empty($sponsoredShops)) {
                     unset($collections[$recordId]);
@@ -1325,7 +1325,7 @@ class HomeController extends MyAppController
         return array_merge($ppcSlides, $adminSlides);
     }
 
-    private function getSponsoredShops($productSrchObj)
+    private function getSponsoredShops()
     {
         $langId = $this->siteLangId;
         $shopPageSize = FatApp::getConfig('CONF_PPC_SHOPS_HOME_PAGE', FatUtility::VAR_INT, 2);
@@ -1350,62 +1350,27 @@ class HomeController extends MyAppController
         $shopObj->addOrder('', 'rand()');
         $shopObj->setPageSize($shopPageSize);
         $shopObj->doNotCalculateRecords();
+        $shopObj->addMultipleFields(array('shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'shop_updated_on', 'promotion_id'));
 
         $rs = $shopObj->getResultSet();
         $i = 0;
         while ($shops = $db->fetch($rs)) {
             /* fetch Shop data[ */
-            $productShopSrchTempObj = clone $productSrchObj;
-
-            if (true === MOBILE_APP_API_CALL) {
-                $productShopSrchTempObj->joinProductRating();
-                $productShopSrchTempObj->addFld('IFNULL(prod_rating, 0) as prod_rating');
-            }
-
-            $productShopSrchTempObj->addCondition('selprod_user_id', '=', $shops['shop_user_id']);
-            $productShopSrchTempObj->addGroupBy('selprod_product_id');
-            $productShopSrchTempObj->doNotCalculateRecords();
-            $productShopSrchTempObj->setPageSize(Shop::SHOP_PRODUCTS_COUNT_AT_HOMEPAGE);
-            $Prs = $productShopSrchTempObj->getResultSet();
-
             $rating = 0;
             if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
                 $rating = SelProdRating::getSellerRating($shops['shop_user_id'], true);
             }
 
-            $prodData = $db->fetchAll($Prs);
-            $selProdIdsArr = array_column($prodData, 'selprod_id');
-            $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
-
             if (true === MOBILE_APP_API_CALL) {
-                $sponsoredShops[$i]['shopData'] = $shops;
-                $sponsoredShops[$i]['shopData']['promotion_id'] = $shops['promotion_id'];
-                $sponsoredShops[$i]['shopData']['rating'] = $rating;
-                $sponsoredShops[$i]['shopData']['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', array($shops['shop_id'], $langId));
-                $sponsoredShops[$i]['shopData']['shop_banner'] = UrlHelper::generateFullUrl('image', 'shopBanner', array($shops['shop_id'], $langId, ImageDimension::VIEW_MOBILE));
-
-                foreach ($prodData as &$product) {
-                    $selProdRibbons = [];
-                    if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
-                        $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
-                    }
-
-                    $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-                    $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_CLAYOUT3, $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                    $product['discount'] = ($product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
-                    $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price']);
-                    $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice']);
-                    $product['ribbons'] = $selProdRibbons;
-                }
-
-                $sponsoredShops[$i]['products'] = $prodData;
+                $sponsoredShops[$i] = $shops;
+                $sponsoredShops[$i]['rating'] = $rating;
+                $sponsoredShops[$i]['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', array($shops['shop_id'], $langId));
+                $sponsoredShops[$i]['shop_banner'] = UrlHelper::generateFullUrl('image', 'shopBanner', array($shops['shop_id'], $langId, ImageDimension::VIEW_MOBILE));
             } else {
                 $sponsoredShops['shops'][$shops['shop_id']]['shopData'] = $shops;
                 $sponsoredShops['shops'][$shops['shop_id']]['shopData']['promotion_id'] = $shops['promotion_id'];
 
                 $sponsoredShops['rating'][$shops['shop_id']] = $rating;
-                $sponsoredShops['shops'][$shops['shop_id']]['products'] = $prodData;
-                $sponsoredShops['shops'][$shops['shop_id']]['tRightRibbons'] = $tRightRibbons;
             }
             /* ] */
             $i++;
