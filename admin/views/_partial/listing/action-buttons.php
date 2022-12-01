@@ -69,7 +69,7 @@ if (isset($otherButtons) && is_array($otherButtons)) {
             unset($attr['attr']['title']);
         }
         $li = $ul->appendElement('li', $liAttr);
-        $li->appendElement('a', $attr['attr'], html_entity_decode($attr['label'], ENT_QUOTES, 'utf-8'), true);
+        $li->appendElement('a', str_replace('&#039;', "'", $attr['attr']), html_entity_decode($attr['label'], ENT_QUOTES, 'utf-8'), true);
     }
 }
 
