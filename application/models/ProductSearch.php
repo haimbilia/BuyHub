@@ -833,6 +833,10 @@ class ProductSearch extends SearchBase
             /* $this->addCondition('GETCATCODE(`prodcat_id`)', 'LIKE', '%' . str_pad($category_id, 6, '0', STR_PAD_LEFT ) . '%', 'AND', true); */
             $this->addCondition('c.prodcat_code', 'LIKE', $catCode . '%', 'AND', true);
         } else {
+            if (empty($category)) {
+                return;
+            }
+            
             if (!is_array($category)) {
                 $category = explode(",", $category);
             }
