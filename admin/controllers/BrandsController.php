@@ -567,7 +567,12 @@ class BrandsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $prodBrandObj->assignValues(array(Brand::tblFld('deleted') => 1));
+        $arr = [
+            Brand::tblFld('deleted') => 1,
+            Brand::tblFld('identifier') => 'mysql_func_CONCAT(' . Brand::tblFld('identifier') . ',"{deleted}",' . Brand::tblFld('id') . ')'
+        ];
+
+        $prodBrandObj->assignValues($arr, false, '', '', true);
         if (!$prodBrandObj->save()) {
             LibHelper::exitWithError($prodBrandObj->getError(), true);
         }
