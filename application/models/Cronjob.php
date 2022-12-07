@@ -870,4 +870,32 @@ class Cronjob extends FatModel
         FatApp::getDb()->query('Delete FROM `' . FatMailer::DB_TBL_ARCHIVE . '` where `earch_sent_on` IS NOT NULL and `earch_added` < date_sub(now(), interval 6 month)');
         FatApp::getDb()->query('Delete FROM `' . SmsArchive::DB_TBL . '` where `smsarchive_sent_on` < date_sub(now(), interval 6 month)');
     }
+
+    public static function publishGoogleShoppingFeed()
+    {
+        $srch = AdsBatch::getSearchObject();
+        $attr = [
+            'adsbatch_id',
+            'adsbatch_name',
+            'adsbatch_lang_id',
+            'adsbatch_target_country_id',
+            'adsbatch_expired_on',
+            'adsbatch_next_execution_on',
+            'adsbatch_synced_on',
+            'adsbatch_status',
+        ];
+        $srch->addMultipleFields($attr);
+        $srch->addCondition(AdsBatch::DB_TBL_PREFIX . 'status', '!=', AdsBatch::STATUS_DELETED);
+
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        if ('' !== $keyword) {
+            $srch->addCondition(AdsBatch::DB_TBL_PREFIX . 'name', 'LIKE', '%' . $keyword . '%');
+        }
+
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+
+        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
+        CommonHelper::printArray($arrListing, true);
+    }
 }

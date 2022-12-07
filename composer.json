@@ -6,7 +6,7 @@
         "avalara/avataxclient": "20.12.1",
         "php-curl-class/php-curl-class": "8.8.0",
         "facebook/graph-sdk": "5.7.0",
-        "google/apiclient": "2.6.0",
+        "google/apiclient": "^2.0",
         "stripe/stripe-php": "7.40.0",
         "league/oauth2-client": "2.6.0",
         "twilio/sdk": "6.10.1",

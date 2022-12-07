@@ -64,7 +64,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     private function setError(string $msg = '', string $controller = '', string $action = '')
     {
         $msg = !empty($msg) ? $msg : $this->googleShoppingFeed->getError();
-        Message::addErrorMessage($msg);
+        LibHelper::exitWithError($msg, false, true);
         $this->redirectBack($controller, $action);
     }
 
@@ -215,8 +215,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     private function validateBatchRequest()
     {
         $recordData = AdsBatch::getBatchesByUserId(UserAuthentication::getLoggedUserId(), $this->adsBatchId);
-        $status = AdsBatch::getAttributesById($this->adsBatchId, 'adsbatch_status');
-        if (1 > $this->adsBatchId || empty($recordData) || AdsBatch::STATUS_PENDING != $status) {
+        if (1 > $this->adsBatchId || empty($recordData)) {
             $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId);
             return false;
         }
@@ -324,14 +323,15 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     public function bindProducts(int $adsBatchId)
     {
         $this->userPrivilege->canEditAdvertisementFeed();
-        $adsBatchId = FatUtility::int($adsBatchId);
-        $this->set('adsBatchId', $adsBatchId);
+        if (1 > $adsBatchId) {
+            $this->setError(Labels::getLabel('LBL_INVALID_REQUEST'), LibHelper::getControllerName());
+        }
 
-        $frm = $this->getProductsSearchForm($this->siteLangId);
-        $this->set('frmSearch', $frm);
+        $this->set('adsBatchId', $adsBatchId);
+        $this->set('frmSearch', $this->getProductsSearchForm($this->siteLangId));
         $this->set('keywordPlaceholder', Labels::getLabel('LBL_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
-        $this->_template->addJs(array('js/select2.js'));
-        $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->addJs(['js/select2.js']);
+        $this->_template->addCss(['css/select2.min.css']);
         $this->_template->render();
     }
 
@@ -412,9 +412,15 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $this->userPrivilege->canEditAdvertisementFeed();
         $frm = $this->getBatchForm($this->siteLangId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        CommonHelper::printArray($post, true);
 
         if (false === $post) {
             LibHelper::dieJsonError(current($frm->getValidationErrors()));
+        }
+
+        $expiredOn = FatApp::getPostedData('adsbatch_expired_on', FatUtility::VAR_STRING, '');
+        if (empty($expiredOn)) {
+
         }
 
         $this->adsBatchId = $post['adsbatch_id'];
@@ -452,6 +458,16 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         }
         $isEdit = FatApp::getPostedData('is_edit', FatUtility::VAR_INT, 0);
 
+        $adsBatchId = FatApp::getPostedData('abprod_adsbatch_id', FatUtility::VAR_INT, 0);
+        if (1 > $adsBatchId) {
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+        }
+
+        $adsBatchData = (array)AdsBatch::getAttributesById($adsBatchId, ['adsbatch_user_id', 'adsbatch_status']);
+        if (empty($adsBatchData) || $adsBatchData['adsbatch_user_id'] != UserAuthentication::getLoggedUserId()) {
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+        }
+
         $adsBatchObj = AdsBatch::getSearchObject(true);
         $adsBatchObj->addCondition('abprod_selprod_id', '=', $post['abprod_selprod_id']);
         $adsBatchObj->addCondition('abprod_adsbatch_id', '=', $post['abprod_adsbatch_id']);
@@ -469,6 +485,15 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $db = FatApp::getDb();
         if (!$db->insertFromArray(AdsBatch::DB_TBL_BATCH_PRODS, $post, false, array(), $post)) {
             LibHelper::dieJsonError($db->getError());
+        }
+
+        if (AdsBatch::STATUS_PUBLISHED == $adsBatchData['adsbatch_status']) {
+            $adsBatchObj = new AdsBatch($adsBatchId);
+            $adsBatchObj->assignValues(['adsbatch_status' => AdsBatch::STATUS_PARTIALLY_PENDING]);
+
+            if (!$adsBatchObj->save()) {
+                LibHelper::dieJsonError($adsBatchObj->getError());
+            }
         }
 
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_ADS_BATCH_SETUP_SUCCESSFULLY', $this->siteLangId));
@@ -506,9 +531,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
-        $db = FatApp::getDb();
-        $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs);
+        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $arrListing);
 
         $this->set('keyName', self::KEY_NAME);

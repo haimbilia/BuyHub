@@ -2351,3 +2351,6 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ("LBL_IS_MCRYPT_EXTENSION_INSTALLED", "1", 'Note: Make sure "mcrypt" extension is installed at the server level.', "1"),
 ("LBL_MCRYPT_EXTENSION_NOT_LOADED", "1", "'mcrypt' Extension needs to be installed at server level.", "1")
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+ALTER TABLE `tbl_ads_batches` CHANGE `adsbatch_status` `adsbatch_status` TINYINT NOT NULL AFTER `adsbatch_target_country_id`;
+ALTER TABLE `tbl_ads_batches` ADD `adsbatch_next_execution_on` DATETIME NOT NULL AFTER `adsbatch_expired_on`;

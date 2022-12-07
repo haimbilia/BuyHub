@@ -11,17 +11,20 @@ class AdsBatch extends MyAppModel
     public const STATUS_PENDING = 0;
     public const STATUS_PUBLISHED = 1;
     public const STATUS_DELETED = 2;
+    public const STATUS_PARTIALLY_PENDING = 3;
     
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
     }
 
-    public static function statusArr()
+    public static function statusArr(int $langId = 0)
     {
+        $langId = 1 > $langId ? CommonHelper::getLangId() : $langId;
         return [
-            self::STATUS_PENDING => Labels::getLabel('LBL_PENDING', CommonHelper::getLangId()),
-            self::STATUS_PUBLISHED => Labels::getLabel('LBL_PUBLISHED', CommonHelper::getLangId())
+            self::STATUS_PENDING => Labels::getLabel('LBL_PENDING', $langId),
+            self::STATUS_PUBLISHED => Labels::getLabel('LBL_PUBLISHED', $langId),
+            self::STATUS_PARTIALLY_PENDING => Labels::getLabel('LBL_PARTIALLY_PENDING', $langId)
         ];
     }
 
@@ -70,7 +73,7 @@ class AdsBatch extends MyAppModel
 
     public function getStatusArr()
     {
-        return [self::STATUS_PENDING, self::STATUS_PUBLISHED];
+        return [self::STATUS_PENDING, self::STATUS_PUBLISHED, self::STATUS_PARTIALLY_PENDING];
     }
 
     public static function getBatchProdDetail($adsBatchId, $selProdId)
