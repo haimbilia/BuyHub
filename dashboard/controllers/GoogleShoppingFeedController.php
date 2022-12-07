@@ -12,6 +12,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     private $accessToken;
     private $adsBatchId;
     private $recordData = [];
+    private $batchRow = []; 
 
     /**
      * __construct
@@ -215,10 +216,13 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     private function validateBatchRequest()
     {
         $recordData = AdsBatch::getBatchesByUserId(UserAuthentication::getLoggedUserId(), $this->adsBatchId);
+       
         if (1 > $this->adsBatchId || empty($recordData)) {
             $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId);
             return false;
         }
+
+        $this->batchRow = current($recordData);
         return true;
     }
 
@@ -411,16 +415,15 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     {
         $this->userPrivilege->canEditAdvertisementFeed();
         $frm = $this->getBatchForm($this->siteLangId);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        CommonHelper::printArray($post, true);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());       
 
         if (false === $post) {
             LibHelper::dieJsonError(current($frm->getValidationErrors()));
         }
 
         $expiredOn = FatApp::getPostedData('adsbatch_expired_on', FatUtility::VAR_STRING, '');
-        if (empty($expiredOn)) {
-
+        if (!empty($expiredOn) && strtotime($expiredOn) < strtotime(date("Y-m-d"))) {
+            LibHelper::dieJsonError(Labels::getLabel('ERR_EXPIRE_DATE_MUST_BE_GREATER_THAN_TODAY_OR_BLANK', $this->siteLangId));
         }
 
         $this->adsBatchId = $post['adsbatch_id'];
@@ -711,44 +714,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $data = $this->googleShoppingFeed->getProductCategoryAutocomplete($keyword);
         CommonHelper::jsonEncodeUnicode($data, true);
-    }
-
-    /**
-     * getData
-     *
-     * @return void
-     */
-    private function getData()
-    {
-        $db = FatApp::getDb();
-        $srch = $this->getBatchProductsObj();
-
-        $srch->addMultipleFields(
-            [
-                'selprod_id', 'selprod_title', 'selprod_stock', 'selprod_condition', 'selprod_price', 'selprod_available_from', 'product_id', 'product_description', 'product_upc', 'language_code', 'country_code', 'IFNULL(brand_name, brand_identifier) as brand_name', 'abprod_item_group_identifier', 'adsbatch_expired_on', 'abprod_cat_id'
-            ]
-        );
-        $rs = $srch->getResultSet();
-        $productData = $db->fetchAll($rs);
-        if (empty($productData)) {
-            LibHelper::dieJsonError(Labels::getLabel("ERR_PLEASE_ADD_ATLEAST_ONE_PRODUCT_TO_THE_BATCH", $this->siteLangId));
-        }
-
-        foreach ($productData as &$prodDetail) {
-            $srch = new SearchBase(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'spo');
-            $srch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', 'spo.selprodoption_optionvalue_id = ov.optionvalue_id', 'ov');
-            $srch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'ov_lang.optionvaluelang_optionvalue_id = ov.optionvalue_id AND ov_lang.optionvaluelang_lang_id = ' . $this->siteLangId, 'ov_lang');
-            $srch->joinTable(Option::DB_TBL, 'INNER JOIN', 'o.option_id = ov.optionvalue_option_id', 'o');
-            $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'o.option_id = o_lang.optionlang_option_id AND o_lang.optionlang_lang_id = ' . $this->siteLangId, 'o_lang');
-            $srch->addMultipleFields(['optionvalue_identifier', 'option_is_color', 'option_name']);
-            $srch->addCondition('selprodoption_selprod_id', '=', $prodDetail['selprod_id']);
-            $rs = $srch->getResultSet();
-            $prodDetail['optionsData'] = $db->fetchAll($rs);
-            $prodDetail['selprod_condition'] = (Product::getConditionArr($this->siteLangId))[$prodDetail['selprod_condition']];
-            $prodDetail['selprod_stock'] = (0 < $prodDetail['selprod_stock'] ? "in stock" : 'out of stock');
-        }
-        return $productData;
-    }
+    }    
 
     /**
      * publishBatch
@@ -764,11 +730,30 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
             LibHelper::dieJsonError($this->error);
         }
 
-        $productData = $this->getData();
+        // after max days
+        $strToTime = strtotime("+" . $this->googleShoppingFeed->getMaxPublishDays() . " days");
+
+        if ($this->batchRow['adsbatch_expired_on'] == '0000-00-00 00:00:00') {
+            $expireOn = date('Y-m-d', $strToTime);
+        }elseif(strtotime($this->batchRow['adsbatch_expired_on']) < strtotime(date("Y-m-d H:i:s"))){ 
+            LibHelper::dieJsonError(Labels::getLabel('ERR_CANNOT_PUBLISH_AS_EXPIRE_DATE_ALREADY_PASSED', $this->siteLangId));
+        }elseif($strToTime >  strtotime($this->batchRow['adsbatch_expired_on'])){
+            $expireOn = date("Y-m-d", strtotime($this->batchRow['adsbatch_expired_on']));
+        }else{
+            $expireOn = date("Y-m-d", $strToTime);
+        }   
+        
+        $adsBatchobj = new AdsBatch($this->adsBatchId);
+        $productData = $adsBatchobj->getBatchDataForFeed(UserAuthentication::getLoggedUserId()); 
+        if(!empty($productData)){
+            LibHelper::dieJsonError(Labels::getLabel("ERR_PLEASE_ADD_ATLEAST_ONE_PRODUCT_TO_THE_BATCH", $this->siteLangId));
+        } 
+       
         $data = [
             'batchId' => $this->adsBatchId,
             'currency_code' => strtoupper(Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code')),
-            'data' => $productData
+            'data' => $productData,
+            'expire_on' => $expireOn,
         ];
 
         $response = $this->googleShoppingFeed->publishBatch($data);
@@ -778,8 +763,10 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
 
         $dataToUpdate = [
             'adsbatch_status' => AdsBatch::STATUS_PUBLISHED,
-            'adsbatch_synced_on' => date('Y-m-d H:i:s')
+            'adsbatch_synced_on' => date('Y-m-d H:i:s'),
+            'adsbatch_next_execution_on' => $expireOn,
         ];
+        
         if (false === AdsBatch::updateDetail($this->adsBatchId, $dataToUpdate)) {
             LibHelper::dieJsonError(Labels::getLabel("ERR_UNABLE_TO_UPDATE", $this->siteLangId));
         }

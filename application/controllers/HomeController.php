@@ -1690,4 +1690,9 @@ class HomeController extends MyAppController
     {
         $this->_template->render();
     }
+
+    public function test(){
+
+        Cronjob::publishGoogleShoppingFeed();
+    }
 }

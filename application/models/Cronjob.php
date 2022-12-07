@@ -872,30 +872,103 @@ class Cronjob extends FatModel
     }
 
     public static function publishGoogleShoppingFeed()
-    {
-        $srch = AdsBatch::getSearchObject();
-        $attr = [
-            'adsbatch_id',
-            'adsbatch_name',
-            'adsbatch_lang_id',
-            'adsbatch_target_country_id',
-            'adsbatch_expired_on',
-            'adsbatch_next_execution_on',
-            'adsbatch_synced_on',
-            'adsbatch_status',
-        ];
-        $srch->addMultipleFields($attr);
-        $srch->addCondition(AdsBatch::DB_TBL_PREFIX . 'status', '!=', AdsBatch::STATUS_DELETED);
+    {     
 
-        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-        if ('' !== $keyword) {
-            $srch->addCondition(AdsBatch::DB_TBL_PREFIX . 'name', 'LIKE', '%' . $keyword . '%');
+        if(!Plugin::isActive('GoogleShoppingFeed')){
+            return;
         }
 
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch = AdsBatch::getSearchObject();
+        $attr = [
+            'adsbatch_id',      
+            'adsbatch_target_country_id',
+            'adsbatch_expired_on',
+            'adsbatch_next_execution_on', 
+            'adsbatch_user_id'   
+        ];
 
+        $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'user_id = adsbatch_user_id AND user_deleted ='.applicationConstants::NO.' AND user_is_supplier = ' . applicationConstants::YES);
+        $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'credential_user_id = user_id and credential_active = ' . applicationConstants::ACTIVE . ' and credential_verified = ' . applicationConstants::YES);
+        $srch->addMultipleFields($attr);       
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(10);
+        $srch->addCondition(AdsBatch::DB_TBL_PREFIX . 'status', '!=', AdsBatch::STATUS_DELETED); 
+
+        $srch->addOrder('adsbatch_synced_on','ASC');
+
+        $srch->addDirectCondition("(adsbatch_next_execution_on = '0000-00-00 00:00:00' 
+                                        OR  
+                (DATEDIFF(IF(adsbatch_expired_on = '0000-00-00 00:00:00',curdate() + INTERVAL 10 YEAR, adsbatch_expired_on), adsbatch_next_execution_on) > 0
+                                                        AND
+                    date(adsbatch_next_execution_on) < '". date('Y-m-d')."'                                                 
+                )        
+            )"
+        );
         $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+
+        foreach($arrListing as $batch){
+
+            $adsBatchobj = new AdsBatch($batch['adsbatch_id']);
+            $adsBatchobj->assignValues(['adsbatch_synced_on' => date('Y-m-d H:i:s')]);
+
+            if (!$adsBatchobj->save()) {               
+                continue;
+            }
+            
+            if (false === AdsBatch::updateDetail($batch['adsbatch_id'], $dataToUpdate)) {               
+                continue;
+            }
+
+            $shoppingFeedObj = PluginHelper::callPlugin('GoogleShoppingFeed', [CommonHelper::getLangId(), $batch['adsbatch_user_id']], $error, CommonHelper::getLangId());
+            if (false === $shoppingFeedObj->googleShoppingFeed) {
+               continue;
+            }
+
+            if (false === $shoppingFeedObj->validateSettings(CommonHelper::getLangId())) {
+                continue;
+            }   
+         
+            if (empty($shoppingFeedObj->getSettings())) {
+                continue;
+            }
+           
+            $productData = $adsBatchobj->getBatchDataForFeed(UserAuthentication::getLoggedUserId()); 
+            if(!empty($productData)){
+                continue;
+            } 
+
+            $expireOn = date('Y-m-d', strtotime("+" . $shoppingFeedObj->getMaxPublishDays() . " days"));
+            if(FatDate::diff(date('Y-m-d'), $batch['adsbatch_expired_on']) < $shoppingFeedObj->getMaxPublishDays()){
+                $expireOn = date('Y-m-d', strtotime($batch['adsbatch_expired_on']));
+            }  
+      
+            $data = [
+                'batchId' => $batch['adsbatch_id'],
+                'currency_code' => strtoupper(Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code')),
+                'data' => $productData,
+                'expire_on' => $expireOn,
+            ];
+
+            $response = $shoppingFeedObj->publishBatch($data);
+            if (false === $response['status'] || Plugin::RETURN_FALSE === $response['status']) { 
+                SystemLog::transaction($shoppingFeedObj->getError(), 'GoogleShoppingFeed');
+                continue;
+            }
+
+            $dataToUpdate = [
+                'adsbatch_status' => AdsBatch::STATUS_PUBLISHED,
+                'adsbatch_synced_on' => date('Y-m-d H:i:s'),
+                'adsbatch_next_execution_on' => $expireOn,
+            ];
+
+            $adsBatchobj->assignValues($dataToUpdate);
+            if (!$adsBatchobj->save()) {               
+                continue;
+            }           
+
+        }       
+
         CommonHelper::printArray($arrListing, true);
     }
 }
