@@ -729,7 +729,6 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         if (false === $this->validateBatchRequest()) {
             LibHelper::dieJsonError($this->error);
         }
-
         // after max days
         $strToTime = strtotime("+" . $this->googleShoppingFeed->getMaxPublishDays() . " days");
 
@@ -744,8 +743,8 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         }   
         
         $adsBatchobj = new AdsBatch($this->adsBatchId);
-        $productData = $adsBatchobj->getBatchDataForFeed(UserAuthentication::getLoggedUserId()); 
-        if(!empty($productData)){
+        $productData = $adsBatchobj->getBatchDataForFeed(UserAuthentication::getLoggedUserId(), $this->batchRow['adsbatch_lang_id']); 
+        if(empty($productData)){
             LibHelper::dieJsonError(Labels::getLabel("ERR_PLEASE_ADD_ATLEAST_ONE_PRODUCT_TO_THE_BATCH", $this->siteLangId));
         } 
        
@@ -754,7 +753,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
             'currency_code' => strtoupper(Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code')),
             'data' => $productData,
             'expire_on' => $expireOn,
-        ];
+        ];  
 
         $response = $this->googleShoppingFeed->publishBatch($data);
         if (false === $response['status'] || Plugin::RETURN_FALSE === $response['status']) {
@@ -770,7 +769,6 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         if (false === AdsBatch::updateDetail($this->adsBatchId, $dataToUpdate)) {
             LibHelper::dieJsonError(Labels::getLabel("ERR_UNABLE_TO_UPDATE", $this->siteLangId));
         }
-
         FatUtility::dieJsonSuccess($response['msg']);
     }
 

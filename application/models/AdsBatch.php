@@ -111,20 +111,17 @@ class AdsBatch extends MyAppModel
         return true;
     }
 
-    public function getBatchDataForFeed(int $userId): array
-    {
-        $db = FatApp::getDb();
+    public function getBatchDataForFeed(int $userId ,int $langId): array
+    {       
         $srch = AdsBatch::getSearchObject(true);
         $srch->addCondition(AdsBatch::DB_TBL_BATCH_PRODS_PREFIX . 'adsbatch_id', '=', $this->getMainTableRecordId());
         $srch->addCondition(AdsBatch::DB_TBL_PREFIX . 'user_id', '=', $userId);
-
         $srch->addMultipleFields(
             [
                 'selprod_id', 'selprod_title', 'selprod_stock', 'selprod_condition', 'selprod_price', 'selprod_available_from', 'product_id', 'product_description', 'product_upc', 'language_code', 'country_code', 'IFNULL(brand_name, brand_identifier) as brand_name', 'abprod_item_group_identifier', 'adsbatch_expired_on', 'abprod_cat_id'
             ]
-        );
-        $rs = $srch->getResultSet();
-        $productData = $db->fetchAll($rs);
+        );       
+        $productData = FatApp::getDb()->fetchAll($srch->getResultSet());
         if (empty($productData)) {
             return [];            
         }
@@ -132,14 +129,13 @@ class AdsBatch extends MyAppModel
         foreach ($productData as &$prodDetail) {
             $srch = new SearchBase(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'spo');
             $srch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', 'spo.selprodoption_optionvalue_id = ov.optionvalue_id', 'ov');
-            $srch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'ov_lang.optionvaluelang_optionvalue_id = ov.optionvalue_id AND ov_lang.optionvaluelang_lang_id = ' . $this->siteLangId, 'ov_lang');
+            $srch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'ov_lang.optionvaluelang_optionvalue_id = ov.optionvalue_id AND ov_lang.optionvaluelang_lang_id = ' . $langId, 'ov_lang');
             $srch->joinTable(Option::DB_TBL, 'INNER JOIN', 'o.option_id = ov.optionvalue_option_id', 'o');
-            $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'o.option_id = o_lang.optionlang_option_id AND o_lang.optionlang_lang_id = ' . $this->siteLangId, 'o_lang');
+            $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'o.option_id = o_lang.optionlang_option_id AND o_lang.optionlang_lang_id = ' . $langId, 'o_lang');
             $srch->addMultipleFields(['optionvalue_identifier', 'option_is_color', 'option_name']);
-            $srch->addCondition('selprodoption_selprod_id', '=', $prodDetail['selprod_id']);
-            $rs = $srch->getResultSet();
-            $prodDetail['optionsData'] = $db->fetchAll($rs);
-            $prodDetail['selprod_condition'] = (Product::getConditionArr($this->siteLangId))[$prodDetail['selprod_condition']];
+            $srch->addCondition('selprodoption_selprod_id', '=', $prodDetail['selprod_id']);          
+            $prodDetail['optionsData'] = FatApp::getDb()->fetchAll($srch->getResultSet());
+            $prodDetail['selprod_condition'] = (Product::getConditionArr($langId))[$prodDetail['selprod_condition']];
             $prodDetail['selprod_stock'] = (0 < $prodDetail['selprod_stock'] ? "in stock" : 'out of stock');
         }
         return $productData;
