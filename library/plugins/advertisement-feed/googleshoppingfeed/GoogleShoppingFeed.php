@@ -110,7 +110,7 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
             $product->setChannel('online');
             $product->setAvailability($prodDetail['selprod_stock']);
             $product->setAvailabilityDate(date('Y-m-d', strtotime($prodDetail['selprod_available_from'])));
-            if (!array_key_exists('expire_on', $data)) {
+            if (array_key_exists('expire_on', $data)) {
                 $product->setExpirationDate($data['expire_on']);  
             }
             $product->setCondition($prodDetail['selprod_condition']);
