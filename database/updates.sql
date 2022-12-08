@@ -2351,3 +2351,5 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ("LBL_IS_MCRYPT_EXTENSION_INSTALLED", "1", 'Note: Make sure "mcrypt" extension is installed at the server level.', "1"),
 ("LBL_MCRYPT_EXTENSION_NOT_LOADED", "1", "'mcrypt' Extension needs to be installed at server level.", "1")
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+ALTER TABLE `tbl_user_wish_list_products` ADD INDEX( `uwlp_selprod_id`);
+ALTER TABLE `tbl_user_wish_lists` ADD INDEX( `uwlist_user_id`);
