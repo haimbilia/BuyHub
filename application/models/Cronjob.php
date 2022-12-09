@@ -879,35 +879,43 @@ class Cronjob extends FatModel
         }  
 
         $srch = AdsBatch::getSearchObject();
-        $attr = [
+        $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'user_id = adsbatch_user_id AND user_deleted =' . applicationConstants::NO . ' AND user_is_supplier = ' . applicationConstants::YES);
+        $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'credential_user_id = user_id and credential_active = ' . applicationConstants::ACTIVE . ' and credential_verified = ' . applicationConstants::YES);
+        $srch->addMultipleFields([
             'adsbatch_id',
             'adsbatch_target_country_id',
             'adsbatch_expired_on',
             'adsbatch_next_execution_on',
             'adsbatch_user_id',
             'adsbatch_lang_id'
-        ];
+        ]);
 
-        $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'user_id = adsbatch_user_id AND user_deleted =' . applicationConstants::NO . ' AND user_is_supplier = ' . applicationConstants::YES);
-        $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'credential_user_id = user_id and credential_active = ' . applicationConstants::ACTIVE . ' and credential_verified = ' . applicationConstants::YES);
-        $srch->addMultipleFields($attr);
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $subSrch = new SearchBase(Orders::DB_TBL, 'o');
+            $subSrch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and o.order_type = '.Orders::ORDER_SUBSCRIPTION.' and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . ' and oss.ossubs_till_date >="'.date('Y-m-d').'"', 'oss');      
+            $subSrch->addCondition('o.order_payment_status', '=', 'mysql_func_1', 'AND', true);
+            $subSrch->doNotCalculateRecords();
+            $subSrch->doNotLimitRecords();    
+            $subSrch->addFld('order_user_id');                
+            $srch->joinTable('(' . $subSrch->getQuery() . ')', 'INNER JOIN', 'osub.order_user_id = user_id','osub');
+        }
         $srch->doNotCalculateRecords();
-        $srch->setPageSize(10);
+        $srch->setPageSize(100);
         $srch->addCondition(AdsBatch::DB_TBL_PREFIX . 'status', '!=', AdsBatch::STATUS_DELETED);
         $srch->addOrder('adsbatch_synced_on', 'ASC');
+        $srch->addOrder('adsbatch_next_execution_on', 'ASC');
         $srch->addDirectCondition(
             "(adsbatch_next_execution_on = '0000-00-00 00:00:00' 
                                         OR  
-                (DATEDIFF(IF(adsbatch_expired_on = '0000-00-00 00:00:00',curdate() + INTERVAL 10 YEAR, adsbatch_expired_on), adsbatch_next_execution_on) > 0
+                (DATEDIFF(IF(adsbatch_expired_on = '0000-00-00 00:00:00',curdate() + INTERVAL 1 YEAR, adsbatch_expired_on), adsbatch_next_execution_on) > 0
                                                         AND
                     date(adsbatch_next_execution_on) < '" . date('Y-m-d') . "'                                                 
                 )        
             )"
-        );
+        );  
 
-        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
-
-        foreach ($arrListing as $batch) {
+        $rs = $srch->getResultSet();
+        while($batch = FatApp::getDb()->fetch($rs)){       
             $adsBatchobj = new AdsBatch($batch['adsbatch_id']);
             $adsBatchobj->assignValues(['adsbatch_synced_on' => date('Y-m-d H:i:s')]);
             if (!$adsBatchobj->save()) {
