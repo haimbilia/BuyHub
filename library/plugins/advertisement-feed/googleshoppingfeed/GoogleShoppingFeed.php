@@ -110,10 +110,8 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
             $product->setChannel('online');
             $product->setAvailability($prodDetail['selprod_stock']);
             $product->setAvailabilityDate(date('Y-m-d', strtotime($prodDetail['selprod_available_from'])));
-
-            $timestamp = strtotime($prodDetail['adsbatch_expired_on']);
-            if (0 < $timestamp) {
-                $product->setExpirationDate(date('Y-m-d', $timestamp));
+            if (array_key_exists('expire_on', $data)) {
+                $product->setExpirationDate($data['expire_on']);  
             }
             $product->setCondition($prodDetail['selprod_condition']);
             $product->setGoogleProductCategory($prodDetail['abprod_cat_id']);
@@ -235,5 +233,11 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
             'msg' => $msg,
             'data' => $data,
         ];
+    }
+
+
+    public function getMaxPublishDays()
+    {
+        return 30;
     }
 }

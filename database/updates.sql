@@ -2353,3 +2353,7 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 ALTER TABLE `tbl_user_wish_list_products` ADD INDEX( `uwlp_selprod_id`);
 ALTER TABLE `tbl_user_wish_lists` ADD INDEX( `uwlist_user_id`);
+
+ALTER TABLE `tbl_ads_batches` CHANGE `adsbatch_status` `adsbatch_status` TINYINT NOT NULL AFTER `adsbatch_target_country_id`;
+ALTER TABLE `tbl_ads_batches` ADD `adsbatch_next_execution_on` DATETIME NOT NULL AFTER `adsbatch_expired_on`;
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'publish Google Shopping Feed', 'Cronjob/publishGoogleShoppingFeed', '10', '1');
