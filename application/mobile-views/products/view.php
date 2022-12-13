@@ -324,6 +324,32 @@ $data = array(
     )
 );
 
+if (!empty($data['shop'])) {
+    if (isset($data['shop']['shop_payment_policy']) && !empty(array_filter((array)$data['shop']['shop_payment_policy']))) {
+        $data['shop']['policies'][] = [
+            'title' => Labels::getLabel('LBL_Payment', $siteLangId),
+            'description' => $data['shop']['shop_payment_policy']
+        ];
+    }
+    if (isset($data['shop']['shop_delivery_policy']) && !empty(array_filter((array)$data['shop']['shop_delivery_policy']))) {
+        $data['shop']['policies'][] = [
+            'title' => Labels::getLabel('LBL_Shipping', $siteLangId),
+            'description' => $data['shop']['shop_delivery_policy']
+        ];
+    }
+    if (isset($data['shop']['shop_refund_policy']) && !empty(array_filter((array)$data['shop']['shop_refund_policy']))) {
+        $data['shop']['policies'][] = [
+            'title' => Labels::getLabel('LBL_Refunds_Exchanges', $siteLangId),
+            'description' => $data['shop']['shop_refund_policy']
+        ];
+    }
+
+    $data['shop']['policies'] = !empty($data['shop']['policies']) ? $data['shop']['policies'] : [];
+
+    unset($data['shop']['shop_payment_policy'], $data['shop']['shop_delivery_policy'], $data['shop']['shop_refund_policy'], $data['shop']['shop_additional_info'], $data['shop']['shop_seller_info']);
+}
+
+$data['shop'] = !empty($data['shop']) ? $data['shop'] : (object)array();
 
 if (empty((array) $product)) {
     $status = applicationConstants::OFF;
