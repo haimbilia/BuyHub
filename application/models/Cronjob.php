@@ -922,7 +922,7 @@ class Cronjob extends FatModel
                 continue;
             }
 
-            $shoppingFeedObj = PluginHelper::callPlugin($activePluginCode, [CommonHelper::getLangId(), $batch['adsbatch_user_id']], $error, CommonHelper::getLangId());
+            $shoppingFeedObj = LibHelper::callPlugin($activePluginCode, [CommonHelper::getLangId(), $batch['adsbatch_user_id']], $error, CommonHelper::getLangId());
             if (false === $shoppingFeedObj) {
                 continue;
             }
