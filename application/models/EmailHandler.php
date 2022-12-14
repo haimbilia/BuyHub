@@ -1084,7 +1084,7 @@ class EmailHandler extends FatModel
                     '{order_id}' => $orderDetail['order_number'],
                 );
 
-                if (!empty($paymentType) && in_array(strtolower($paymentType), ['cashondelivery', 'payatstore'])) {
+                if (!empty($paymentType)  && in_array(strtolower($paymentType), ['cashondelivery', 'payatstore'])) {
                     $tpl = "vendor_cod_order_email";
                 } else if (!empty($paymentType) && strtolower($paymentType) == 'transferbank') {
                     $tpl = "vendor_bank_transfer_order_email";

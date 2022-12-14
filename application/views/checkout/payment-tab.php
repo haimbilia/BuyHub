@@ -2,7 +2,7 @@
 $pmethodName = $paymentMethod["plugin_name"];
 $pmethodCode = $paymentMethod["plugin_code"];
 
-$isCodOrPayAtStore = in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']);
+$isCodOrPayAtStore = (isset($pmethodCode) && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']));
 
 $frm->setFormTagAttribute('class', 'form');
 

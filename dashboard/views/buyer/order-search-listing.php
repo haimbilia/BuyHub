@@ -66,7 +66,7 @@
                     } else {
                         $pMethod = '';
                         $paymentMethodCode = Plugin::getAttributesById($order['order_pmethod_id'], 'plugin_code');
-                        if (in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
+                        if (isset($paymentMethodCode) && in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
                             if ($orderStatus != $order['plugin_name']) {
                                 $orderStatus .= " - " . $order['plugin_name'];
                             }
