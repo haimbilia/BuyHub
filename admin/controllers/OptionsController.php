@@ -289,7 +289,8 @@ class OptionsController extends ListingBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_THIS_OPTION_IS_LINKED_WITH_PRODUCT', $this->siteLangId), true);
         }
 
-        $optionObj->assignValues(array(Option::tblFld('deleted') => 1));
+        $optionIdentifier = Option::getAttributesById($recordId, Option::tblFld('identifier'));
+        $optionObj->assignValues(array(Option::tblFld('identifier') => $optionIdentifier . '-' . $recordId, Option::tblFld('deleted') => 1));
         if (!$optionObj->save()) {
             LibHelper::exitWithError($optionObj->getError(), true);
         }
