@@ -316,7 +316,8 @@ trait Options
             FatUtility::dieJsonError(Labels::getLabel('ERR_THIS_OPTION_IS_LINKED_WITH_PRODUCT', $this->siteLangId));
         }
 
-        $optionObj->assignValues(array(Option::tblFld('deleted') => 1));
+        $optionIdentifier = Option::getAttributesById($option_id, Option::tblFld('identifier'));
+        $optionObj->assignValues(array(Option::tblFld('identifier') => $optionIdentifier . '-' . $option_id, Option::tblFld('deleted') => 1));
         if (!$optionObj->save()) {
             FatUtility::dieJsonError($optionObj->getError());
         }
