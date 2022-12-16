@@ -1,5 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$conditionArr = Product::getConditionArr($siteLangId);
+$product['selprod_condition_title'] = $conditionArr[$product['selprod_condition']] ?? '';
 $product['ribbons'] = $selProdRibbons;
 
 /* Shop and SelProd Badge */
