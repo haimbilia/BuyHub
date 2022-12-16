@@ -9030,6 +9030,14 @@ LOCK TABLES `tbl_zones_lang` WRITE;
 INSERT INTO `tbl_zones_lang` VALUES (1,1,'Africa'),(10,1,'Antarctica'),(2,1,'Asia'),(3,1,'Central America'),(4,1,'Europe'),(5,1,'Middle East'),(6,1,'North America'),(7,1,'Oceania'),(8,1,'South America'),(9,1,'The Caribbean');
 /*!40000 ALTER TABLE `tbl_zones_lang` ENABLE KEYS */;
 UNLOCK TABLES;
+
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `etpl_code` IN ('account_credited_debited', 'admin_forgot_password', 'affiliate_welcome_registration', 'COD_OTP_VERIFICATION', 'customer_order_email', 'failed_login_attempt', 'forgot_password', 'guest_welcome_registration', 'password_changed_successfully', 'reward_points_credited_debited', 'send_message', 'test_email', 'user_admin_password_changed_successfully', 'user_change_email_request_notification', 'user_email_changed_notification', 'user_email_verification', 'user_signup_verification', 'welcome_registration');
+UPDATE `tbl_product_requests` SET `preq_product_identifier`= CONCAT(`preq_product_identifier`, '-', `preq_id`, '{cancelled}') WHERE `preq_status` = 2 AND preq_product_identifier NOT LIKE '%{cancelled}';
+
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Cart Cleaning', 'Cronjob/removeOlderCartItems', '1440', '1');
+UPDATE `tbl_cron_schedules` set `cron_duration` = 360 where `cron_command` = 'Cronjob/productRecommendation';
+UPDATE `tbl_cron_schedules` set `cron_name` = 'Data cleaning' , `cron_command` = 'Cronjob/removeGarbageData' where `cron_command` = 'Cronjob/removeOlderCartItems';
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
