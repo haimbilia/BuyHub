@@ -156,8 +156,7 @@ class TransactionReportController extends ListingBaseController
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        echo $srch->getError();
+        $rs = $srch->getResultSet();        
         $arrListing = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $arrListing);
