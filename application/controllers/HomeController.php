@@ -682,6 +682,11 @@ class HomeController extends MyAppController
                     $collections[$ind] = $collection;
 
                     if (true === MOBILE_APP_API_CALL && array_key_exists('banners', $banners) && !empty($banners['banners'])) {
+                        $screen = CommonHelper::getAppScreenType();
+                        if (Collections::TYPE_BANNER_LAYOUT2 == $collection['collection_layout_type']) {
+                            $screen = applicationConstants::SCREEN_IPAD;
+                        }
+
                         foreach ($banners['banners'] as &$banner) {
                             $uploadedTime = AttachedFile::setTimeParam($banner['banner_updated_on']);
                             $urlTypeData = CommonHelper::getUrlTypeData($banner['banner_url']);
@@ -693,7 +698,7 @@ class HomeController extends MyAppController
                                 );
                             }
 
-                            $banner['banner_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Banner', 'BannerImage', array($banner['banner_id'], $this->siteLangId, CommonHelper::getAppScreenType(), 'TOPLAYOUT')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            $banner['banner_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Banner', 'BannerImage', array($banner['banner_id'], $this->siteLangId, $screen, 'TOPLAYOUT')) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
                             $banner['banner_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $banner['banner_url'] : $urlTypeData['recordId']);
                             $banner['banner_url_type'] = $urlTypeData['urlType'];
