@@ -684,7 +684,7 @@ class HomeController extends MyAppController
                     if (true === MOBILE_APP_API_CALL && array_key_exists('banners', $banners) && !empty($banners['banners'])) {
                         $screen = CommonHelper::getAppScreenType();
                         if (Collections::TYPE_BANNER_LAYOUT2 == $collection['collection_layout_type']) {
-                            $screen = applicationConstants::SCREEN_IPAD;
+                            $screen = 0;
                         }
 
                         foreach ($banners['banners'] as &$banner) {
