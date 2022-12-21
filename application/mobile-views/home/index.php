@@ -7,10 +7,10 @@ foreach ($slides as &$slideDetail) {
     $uploadedTime = AttachedFile::setTimeParam($slideDetail['slide_img_updated_on']);
     $slideDetail['slide_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'slide', array($slideDetail['slide_id'], $appScreenType, $siteLangId, $resType)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $urlTypeData = CommonHelper::getUrlTypeData($slideDetail['slide_url']);
-
-    $slideDetail['slide_url_type'] = $slideDetail['slide_url_title'] = "";
+    $slideUrl = $slideDetail['slide_url'];
+    $slideDetail['slide_url'] = $slideDetail['slide_url_type'] = $slideDetail['slide_url_title'] = "";
     if (false != $urlTypeData) {
-        $slideDetail['slide_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $slideDetail['slide_url'] : $urlTypeData['recordId']);
+        $slideDetail['slide_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $slideUrl : $urlTypeData['recordId']);
         $slideDetail['slide_url_type'] = $urlTypeData['urlType'];
 
         switch ($urlTypeData['urlType']) {
