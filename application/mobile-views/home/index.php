@@ -10,7 +10,7 @@ foreach ($slides as &$slideDetail) {
 
     $slideDetail['slide_url'] = $slideDetail['slide_url_type'] = $slideDetail['slide_url_title'] = "";
     if (false != $urlTypeData) {
-        $slideDetail['slide_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $slideDetail['slide_url'] : $urlTypeData['recordId']);
+        $slideDetail['slide_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $slideDetail['url'] : $urlTypeData['recordId']);
         $slideDetail['slide_url_type'] = $urlTypeData['urlType'];
 
         switch ($urlTypeData['urlType']) {
@@ -29,7 +29,6 @@ foreach ($slides as &$slideDetail) {
         }
     }
 }
-
 
 $data = array(
     'slides' => $slides,

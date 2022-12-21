@@ -115,6 +115,9 @@ $arr_flds = array(
 );
 
 if (!empty($product)) {
+    $warrantTypes = Product::getWarrantyUnits($siteLangId);
+    $product['product_warranty_unit_label'] = (isset($product['product_warranty_unit']) && array_key_exists($product['product_warranty_unit'], $warrantTypes)) ? $warrantTypes[$product['product_warranty_unit']] : '';
+
     $product['productPolicies'] = [];
     $product['discount'] = ($product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
     $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price']);
