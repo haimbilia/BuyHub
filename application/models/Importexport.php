@@ -2802,13 +2802,20 @@ class Importexport extends ImportexportCommon
 
                     $srch = new SearchBase(Product::DB_PRODUCT_SPECIFICATION);
                     $srch->addCondition(Product::DB_PRODUCT_SPECIFICATION_PREFIX . 'product_id', '=', $productId);
+                    $srch->joinTable(Product::DB_PRODUCT_LANG_SPECIFICATION, 'INNER JOIN', 'prodspec_id = prodspeclang_prodspec_id');
                     $srch->doNotCalculateRecords();
+                    $srch->addMultipleFields(['prodspec_id', 'count("prodspeclang_lang_id") as record']);
+                    $srch->addGroupBy('prodspec_id');
                     $rs = $srch->getResultSet();
                     $res = FatApp::getDb()->fetchAll($rs);
                     foreach ($res as $val) {
-                        $this->db->deleteRecords(Product::DB_PRODUCT_LANG_SPECIFICATION, array('smt' => 'prodspeclang_prodspec_id = ? ', 'vals' => array($val['prodspec_id'])));
+                        if ($val['record'] <= 1) {
+                            $this->db->deleteRecords(Product::DB_PRODUCT_SPECIFICATION, array('smt' => 'prodspec_product_id = ? ', 'vals' => array($productId)));
+                            $this->db->deleteRecords(Product::DB_PRODUCT_LANG_SPECIFICATION, array('smt' => 'prodspeclang_prodspec_id = ?', 'vals' => array($val['prodspec_id'])));
+                        } else {
+                            $this->db->deleteRecords(Product::DB_PRODUCT_LANG_SPECIFICATION, array('smt' => 'prodspeclang_prodspec_id = ? and prodspeclang_lang_id = ?', 'vals' => array($val['prodspec_id'], $langId)));
+                        }
                     }
-                    $this->db->deleteRecords(Product::DB_PRODUCT_SPECIFICATION, array('smt' => 'prodspec_product_id = ? ', 'vals' => array($productId)));
                 }
 
                 if (!in_array($languageId, $langArr)) {
