@@ -86,8 +86,9 @@
             content: "";
             height: 2px;
             position: absolute;
-            right: 0;
-            top: calc(50% - 1px);
+            #{$end-direction}: 0;
+            // top: calc(50% - 1px);
+            top: 14px;
             width: 12px;
         }
         &:before {
