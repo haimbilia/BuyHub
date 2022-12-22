@@ -35,7 +35,7 @@ class UrlRewritingController extends ListingBaseController
     }
 
     public function search()
-    {
+    { 
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'url-rewriting/search.php', true),
