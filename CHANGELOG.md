@@ -10,7 +10,7 @@
 - Bug-068725 Error occurs when the admin tries to add new FAQ caegory
 - Bug-068864 Admin - Product catalog form Tag title called statically.
 - Bug-069185 Option should be recreated with same name when a user deleted any existing option from the patform
-
+- Bug-069336 Contact Shop email should not allow links
 # RV-10.0.0.20221109
 ## Bug Fixes:
 - Bug-068381 Bool must be compatible with the function return type.
