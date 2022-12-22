@@ -640,7 +640,7 @@ class ShopsController extends MyAppController
 
         $threadObj = new Thread();
         $threadDataToSave = array(
-            'thread_subject' => $post['thread_subject'],
+            'thread_subject' => htmlentities($post['thread_subject']),
             'thread_started_by' => $loggedUserId,
             'thread_start_date' => date('Y-m-d H:i:s')
         );

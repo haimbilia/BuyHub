@@ -149,19 +149,21 @@ if (0 < $recordId) {
                                 </tbody>
                             </table>
                             <div class="separator separator-dashed my-4"></div>
-                            <div class="form-group row justify-content-between px-4">
-                                <div class="col">
-                                    <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
-                                </div>
-                                <div class="col-auto">
-                                    <?php
-                                    $fld = $frm->getField('upc_type');
-                                    HtmlHelper::configureSwitchForRadio($fld);
-                                    $fld->addOptionListTagAttribute('class', 'list-radio');
-                                    $fld->addFieldTagAttribute('onchange', 'upcType()');
-                                    $fld->addFieldTagAttribute('class', 'upc_type');
-                                    echo $fld->getHtml();
-                                    ?>
+                            <div class="form-group">
+                                <div class="form-group px-4">
+                                    <div class="col">
+                                        <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <?php
+                                        $fld = $frm->getField('upc_type');
+                                        HtmlHelper::configureSwitchForRadio($fld);
+                                        $fld->addOptionListTagAttribute('class', 'list-radio');
+                                        $fld->addFieldTagAttribute('onchange', 'upcType()');
+                                        $fld->addFieldTagAttribute('class', 'upc_type');
+                                        echo $fld->getHtml();
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
                             <div id="variantsListJs"></div>
