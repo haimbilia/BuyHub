@@ -31,7 +31,7 @@ trait Couriers
 	}
 	
 	public function assignAWBs(
-		$shipment_ids = [],
+		$shipment_ids,
 		$courier_id,
 		$weight
 	) {
