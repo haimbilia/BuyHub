@@ -2802,14 +2802,19 @@ class Importexport extends ImportexportCommon
 
                     $srch = new SearchBase(Product::DB_PRODUCT_SPECIFICATION);
                     $srch->addCondition(Product::DB_PRODUCT_SPECIFICATION_PREFIX . 'product_id', '=', $productId);
-                    $srch->joinTable(Product::DB_PRODUCT_LANG_SPECIFICATION, 'INNER JOIN', 'prodspec_id = prodspeclang_prodspec_id');
                     $srch->doNotCalculateRecords();
-                    $srch->addMultipleFields(['prodspec_id', 'count("prodspeclang_lang_id") as record']);
-                    $srch->addGroupBy('prodspec_id');
+                    $srch->addMultipleFields(['prodspec_id']);
                     $rs = $srch->getResultSet();
                     $res = FatApp::getDb()->fetchAll($rs);
                     foreach ($res as $val) {
-                        if ($val['record'] <= 1) {
+                        $langSrch = new SearchBase(Product::DB_PRODUCT_LANG_SPECIFICATION);
+                        $langSrch->addCondition('prodspeclang_prodspec_id', '=', $val['prodspec_id']);
+                        $langSrch->addCondition('prodspeclang_lang_id', '!=', $langId);
+                        $langSrch->doNotCalculateRecords();
+                        $langSrch->addMultipleFields(['count(1) as record']);
+                        $langRs = $langSrch->getResultSet();
+                        $row = FatApp::getDb()->fetch($langRs);
+                        if (false == $row || $row['record'] == 0) {
                             $this->db->deleteRecords(Product::DB_PRODUCT_SPECIFICATION, array('smt' => 'prodspec_product_id = ? ', 'vals' => array($productId)));
                             $this->db->deleteRecords(Product::DB_PRODUCT_LANG_SPECIFICATION, array('smt' => 'prodspeclang_prodspec_id = ?', 'vals' => array($val['prodspec_id'])));
                         } else {
