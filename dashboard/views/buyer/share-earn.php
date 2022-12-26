@@ -51,7 +51,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             </div>
                             <ul class="social-invites ">
                                 <li>
-                                    <a href="javascript:void(0);" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>" onclick="copyText(this, true)" data-url="<?php echo $referralTrackingUrl; ?>" data-bs-toggle="tooltip" data-placement="top" class="btn">
+                                    <a href="javascript:void(0);" title="<?php echo $referralTrackingUrl; ?>" onclick="copyText(this, true)" data-url="<?php echo $referralTrackingUrl; ?>" data-bs-toggle="tooltip" data-placement="top" class="btn">
                                         <span class="icon">
                                             <i class="svg--icon">
                                                 <svg class="svg">
