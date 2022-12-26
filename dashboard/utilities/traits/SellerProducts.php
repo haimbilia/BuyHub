@@ -555,7 +555,6 @@ trait SellerProducts
             $productLangRow = Product::getProductDataById($this->siteLangId, $productId, array('product_identifier', 'product_name'));
             $keywordSlug = $productLangRow['product_name'] ?? $productLangRow['product_identifier'];
         }
-
         $keywordSlug =  $post['selprod_title' . $this->siteLangId] ?? $keywordSlug;
 
         if ($selprod_url_keyword == '') {
