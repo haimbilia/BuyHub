@@ -2361,3 +2361,10 @@ ALTER TABLE `tbl_user_wish_lists` ADD INDEX( `uwlist_user_id`);
 ALTER TABLE `tbl_ads_batches` CHANGE `adsbatch_status` `adsbatch_status` TINYINT NOT NULL AFTER `adsbatch_target_country_id`;
 ALTER TABLE `tbl_ads_batches` ADD `adsbatch_next_execution_on` DATETIME NOT NULL AFTER `adsbatch_expired_on`;
 INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'publish Google Shopping Feed', 'Cronjob/publishGoogleShoppingFeed', '10', '1');
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('APP_NO_IMAGE_FOUND', 1, 'No Image Found', 2),
+('APP_PRODUCT_DETAIL', 1, 'Product Detail', 2),
+('APP_SHOP_POLICIES', 1, 'Shop Policies', 2),
+('APP_REASON_FOR_CANCELLATION', 1, 'Reason for Cancellation', 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);

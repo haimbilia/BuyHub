@@ -557,12 +557,14 @@ trait SellerProducts
         }
 
         $keywordSlug =  $post['selprod_title' . $this->siteLangId] ?? $keywordSlug;
-        $shopData = Shop::getAttributesByUserId($this->userParentId, ['COALESCE(shop_name,shop_identifier) as shop_name'], false, $this->userParentId);
 
         if ($selprod_url_keyword == '') {
-            $options = SellerProduct::getSellerProductOptions($selprod_id, true, $this->siteLangId);
-            foreach ($options as $optionValue) {
-                $keywordSlug .= '-' . $optionValue['optionvalue_name'];
+            $shopData = Shop::getAttributesByUserId($this->userParentId, ['COALESCE(shop_name,shop_identifier) as shop_name'], false, $this->userParentId);
+            if (0 < $selprod_id) {
+                $options = SellerProduct::getSellerProductOptions($selprod_id, true, $this->siteLangId);
+                foreach ($options as $optionValue) {
+                    $keywordSlug .= '-' . $optionValue['optionvalue_name'];
+                }
             }
 
             $keywordSlug = $keywordSlug . '-' . $shopData['shop_name'];
