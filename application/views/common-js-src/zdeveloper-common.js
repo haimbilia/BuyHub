@@ -1970,7 +1970,7 @@ $.extend(fcom, {
     },
 });
 
-copyText = function (obj, applyToolTipInfo = true) {
+copyText = function (obj, applyToolTipInfo = true) {    
     if(applyToolTipInfo){
         var title = $(obj).data("title");
     }else{
