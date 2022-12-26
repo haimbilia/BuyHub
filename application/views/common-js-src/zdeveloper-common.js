@@ -1972,7 +1972,7 @@ $.extend(fcom, {
 
 copyText = function (obj, applyToolTipInfo = true) {
     if(applyToolTipInfo){
-        var title = $(obj).attr("title");
+        var title = $(obj).data("title");
     }else{
         var title = $(obj).attr("data-url");
     }
