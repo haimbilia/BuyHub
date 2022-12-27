@@ -2012,7 +2012,7 @@ class Importexport extends ImportexportCommon
                             }
                             break;
                         case 'product_fulfillment_type':
-                            $colValue = str_replace(' ', '_', mb_strtolower($colValue));
+                            // $colValue = str_replace(' ', '_', mb_strtolower($colValue));
                             switch ($colValue) {
                                 case Labels::getLabel('LBL_SHIPPED_ONLY', $langId):
                                     $colValue = Shipping::FULFILMENT_SHIP;
