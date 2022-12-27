@@ -576,7 +576,7 @@ class ShipRocket extends ShippingServicesBase
             'awb_response' => $awbResp,
             'label_response' => $labelResp,
             'orderNumber' => $orderShipment['order_id'],
-            'tracking_code' => $labelResp['shipment_id'],
+            'tracking_code' => $orderShipment['shipment_id'],
         ];
         return true;
     }
