@@ -299,7 +299,7 @@ class Address extends MyAppModel
 
         if (!empty($address)) {
             $address['ykGeoCountryId'] = Countries::getCountryByCode($address['ykGeoCountryCode'], 'country_id');
-            $address['ykGeoStateId'] = States::getStateByCode($address['ykGeoStateCode'], 'state_id');
+            $address['ykGeoStateId'] = States::getStateByCode($address['ykGeoStateCode'], 'state_id', $address['ykGeoCountryId']);
         }
 
         return $address;
