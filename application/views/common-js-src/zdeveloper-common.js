@@ -1970,8 +1970,13 @@ $.extend(fcom, {
     },
 });
 
-copyText = function (obj, applyToolTipInfo = true) {
-    var title = $(obj).data("title");
+copyText = function (obj, applyToolTipInfo = true) {    
+    if(applyToolTipInfo){
+        var title = $(obj).data("title");
+    }else{
+        var title = $(obj).attr("data-url");
+    }
+    
     if (!navigator.clipboard) {
         console.warn('clipboard API only works on localhost and https');
         // Clipboard API  only works on localhost anf https as per doc
