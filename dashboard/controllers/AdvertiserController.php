@@ -124,6 +124,10 @@ class AdvertiserController extends AdvertiserBaseController
             FatUtility::dieJsonError(str_replace("{amount}", CommonHelper::displayMoneyFormat($minimumWithdrawLimit), Labels::getLabel('MSG_YOUR_ACCOUNT_BALANCE_HAS_TO_BE_GREATER_THAN_{amount}_TO_CREATE_PROMOTIONS.', $this->siteLangId)));
         }
 
+        if (strtotime($post['promotion_start_date']) > strtotime($post['promotion_end_date'])) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_END_DATE_SHOULD_BE_GREATOR_THAN_START_DATE', $this->siteLangId));
+        }
+
         $promotion_record_id = 0;
         $promotionApproved = applicationConstants::NO;
         $bannerData = array();
