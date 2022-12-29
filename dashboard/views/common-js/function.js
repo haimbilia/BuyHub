@@ -337,7 +337,7 @@ function animation(obj) {
         } if (extra && pos == 'post') {
             str = str + '-' + extra;
         }
-        $(obj).next().html(siteConstants.webroot + str);
+        $(obj).next().html(siteConstants.webrootfront + str);
     };
 
     getIdentifier = function (obj) {

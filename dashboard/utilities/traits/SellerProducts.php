@@ -2628,7 +2628,7 @@ trait SellerProducts
             }
 
             $productCount = SellerProduct::getActiveCount($this->userParentId);
-            if (applicationConstants::ACTIVE == $status && -1 != $invAllowedLimit && $invAllowedLimit <= $productCount) {
+            if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && applicationConstants::ACTIVE == $status && -1 != $invAllowedLimit && $invAllowedLimit <= $productCount) {
                 $msg = Labels::getLabel('ERR_UNABLE_To_ACTIVATE_SOME_OF_THE_PRODUCTS._AS_YOU_HAVE_CROSSED_YOUR_PACKAGE_LIMIT.', $this->siteLangId);
                 break;
             }
