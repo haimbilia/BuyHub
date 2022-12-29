@@ -2368,3 +2368,4 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 ('APP_SHOP_POLICIES', 1, 'Shop Policies', 2),
 ('APP_REASON_FOR_CANCELLATION', 1, 'Reason for Cancellation', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+ALTER TABLE `tbl_user_credentials` ADD UNIQUE( `credential_username`);

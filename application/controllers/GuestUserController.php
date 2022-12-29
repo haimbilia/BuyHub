@@ -513,7 +513,7 @@ class GuestUserController extends MyAppController
                         $redirectUrl = UrlHelper::generateUrl('Checkout');
                     }
                     if (FatUtility::isAjaxCall()) {
-                        $this->set('msg', Labels::getLabel('MSG_REGISTERATION_SUCCESSFULLY', $this->siteLangId));
+                        $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_REGISTERED', $this->siteLangId));
                         $this->set('redirectUrl', $redirectUrl);
                         $this->_template->render(false, false, 'json-success.php');
                         exit;
@@ -528,7 +528,7 @@ class GuestUserController extends MyAppController
                 $this->set('data', ['user_id' => $userId]);
                 $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
             } else {
-                $this->set('msg', Labels::getLabel('MSG_REGISTERATION_SUCCESSFULLY', $this->siteLangId));
+                $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_REGISTERED', $this->siteLangId));
             }
             $this->_template->render();
         }
