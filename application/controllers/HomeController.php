@@ -1449,7 +1449,11 @@ class HomeController extends MyAppController
         $productSrchSponObj->setPageSize($pagesize);
         $sponsoredProds = FatApp::getDb()->fetchAll($productSrchSponObj->getResultSet());
 
+        $selProdIdsArr = array_column($sponsoredProds, 'selprod_id');
+        $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
         $this->set('sponsoredProds', $sponsoredProds);
+        $this->set('tRightRibbons', $tRightRibbons);
         $this->set('page', $page);
         $this->set('pageCount', $productSrchSponObj->pages());
         $this->set('recordCount', $productSrchSponObj->recordCount());
