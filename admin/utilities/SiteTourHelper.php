@@ -221,6 +221,9 @@ class SiteTourHelper
 
     public function validateGeneralConfiguration()
     {
+        if (empty(FatApp::getConfig('CONF_SITE_OWNER_EMAIL', FatUtility::VAR_STRING, '')) || empty(FatApp::getConfig('CONF_ZIP_CODE', FatUtility::VAR_STRING, '')) || empty(FatApp::getConfig('CONF_ADDRESS_1', FatUtility::VAR_STRING, ''))) {
+            return false;
+        }
         return true;
     }
 

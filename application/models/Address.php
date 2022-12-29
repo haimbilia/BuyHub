@@ -84,6 +84,7 @@ class Address extends MyAppModel
         $srch->addMultipleFields(array('addr.*', 'state_code', 'country_code', 'country_code_alpha3', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'));
         $srch->addCondition('country_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('state_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('addr_deleted', '=', applicationConstants::NO);
         $srch->addCondition(self::tblFld('type'), '=', $type);
         $srch->addCondition(self::tblFld('record_id'), '=', $recordId);
 
