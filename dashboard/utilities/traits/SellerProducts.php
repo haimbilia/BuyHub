@@ -835,8 +835,8 @@ trait SellerProducts
                 $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
                 $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey] ?? '';
 
-                $keywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
-                $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($keywordSlug));
+                $selProdKeywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
+                $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($selProdKeywordSlug));
                 $this->addOption($selprod_id, $data_to_be_save, $optionKey);
             }
         } else {
@@ -869,8 +869,8 @@ trait SellerProducts
             $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionValue];
             $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionValue];
             $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionValue];
-            $keywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
-            $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($keywordSlug));
+            $selProdKeywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
+            $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($selProdKeywordSlug));
             $this->addOption($selprod_id, $data_to_be_save, $optionValue);
         }
 
