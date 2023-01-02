@@ -289,13 +289,20 @@ class GuestUserController extends MyAppController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if ($post == false) {
-            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, current($frm->getValidationErrors()));
+            LibHelper::dieJsonResponse($resp);
         }
 
         $authentication = new UserAuthentication();
         if (!$authentication->guestLogin(FatApp::getPostedData('user_email'), FatApp::getPostedData('user_name'), $_SERVER['REMOTE_ADDR'])) {
-            FatUtility::dieJsonError(Labels::getLabel($authentication->getError(), $this->siteLangId));
+            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $authentication->getError());
+            LibHelper::dieJsonResponse($resp);
         }
+
+        /* if (true === MOBILE_APP_API_CALL) {
+            $resp = LibHelper::formatResponse(applicationConstants::SUCCESS, Labels::getLabel("MSG_GUEST_LOGIN_SUCCESSFULLY", $this->siteLangId));
+            LibHelper::dieJsonResponse($resp);
+        } */
 
         $redirectUrl = '';
 
@@ -626,7 +633,7 @@ class GuestUserController extends MyAppController
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_CODE', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
         }
-        
+
         unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['newEmailToVerify']);
 
         $userdata = $userObj->getUserInfo(array('credential_email', 'credential_password', 'user_name', 'credential_active'), false);
@@ -760,7 +767,7 @@ class GuestUserController extends MyAppController
             LibHelper::exitWithError(Labels::getLabel('ERR_ALREADY_LOGGED_IN', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
-        
+
         $frm = $this->getForgotForm($withPhone);
         $frm->addSecurityToken();
 

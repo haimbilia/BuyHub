@@ -270,9 +270,7 @@ class AttachedFile extends MyAppModel
             $srch->setPageSize($size);
         }
 
-        $rs = $srch->getResultSet();
-        echo $srch->getError();
-        return FatApp::getDb()->fetchAll($rs, 'afile_id');
+        return FatApp::getDb()->fetchAll($srch->getResultSet(), 'afile_id');
     }
 
     public static function getAttachment($fileType, $recordId, $recordSubid = 0, $langId = 0, $displayUniversalImage = true, $screen = 0)
