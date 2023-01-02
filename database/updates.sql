@@ -2357,3 +2357,4 @@ ALTER TABLE `tbl_user_wish_lists` ADD INDEX( `uwlist_user_id`);
 ALTER TABLE `tbl_ads_batches` CHANGE `adsbatch_status` `adsbatch_status` TINYINT NOT NULL AFTER `adsbatch_target_country_id`;
 ALTER TABLE `tbl_ads_batches` ADD `adsbatch_next_execution_on` DATETIME NOT NULL AFTER `adsbatch_expired_on`;
 INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'publish Google Shopping Feed', 'Cronjob/publishGoogleShoppingFeed', '10', '1');
+-- ---------------------RV-10.0.0.20230102-----------------------

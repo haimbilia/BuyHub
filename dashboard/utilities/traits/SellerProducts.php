@@ -555,8 +555,7 @@ trait SellerProducts
             $productLangRow = Product::getProductDataById($this->siteLangId, $productId, array('product_identifier', 'product_name'));
             $keywordSlug = $productLangRow['product_name'] ?? $productLangRow['product_identifier'];
         }
-
-        $keywordSlug =  $post['selprod_title' . $this->siteLangId] ?? $keywordSlug;      
+        $keywordSlug =  $post['selprod_title' . $this->siteLangId] ?? $keywordSlug;
 
         if ($selprod_url_keyword == '') {
             $shopData = Shop::getAttributesByUserId($this->userParentId, ['COALESCE(shop_name,shop_identifier) as shop_name'], false, $this->userParentId);
@@ -836,8 +835,8 @@ trait SellerProducts
                 $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
                 $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey] ?? '';
 
-                $keywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
-                $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($keywordSlug));
+                $selProdKeywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
+                $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($selProdKeywordSlug));
                 $this->addOption($selprod_id, $data_to_be_save, $optionKey);
             }
         } else {
@@ -870,8 +869,8 @@ trait SellerProducts
             $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionValue];
             $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionValue];
             $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionValue];
-            $keywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
-            $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($keywordSlug));
+            $selProdKeywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
+            $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($selProdKeywordSlug));
             $this->addOption($selprod_id, $data_to_be_save, $optionValue);
         }
 
