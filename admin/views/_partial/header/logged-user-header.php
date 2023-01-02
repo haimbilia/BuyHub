@@ -149,7 +149,7 @@
 
                                             </a>
                                             <div class="languages collapse" id="languages">
-                                                <?php foreach ($languages as $languageId => $language) { ?>
+                                                <?php  foreach ($languages as $languageId => $language) { ?>
                                                     <a class="languages-link <?php echo ($siteLangId == $languageId) ? 'is--active' : ''; ?>" href="" onclick="setSiteDefaultLang(<?php echo $languageId; ?>)"><?php echo $language['language_name']; ?></a>
                                                 <?php } ?>
                                             </div>

@@ -22,7 +22,7 @@ trait ShippingServices
             LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_ORDER", $this->langId));
         }
 
-        if ((in_array(strtolower($orderData['plugin_code']), ['cashondelivery', 'payatstore']) ||  in_array($orderData['op_status_id'], (new Orders())->getAdminAllowedUpdateShippingUser())) && !CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id']) && !$orderData['optsu_user_id']) {
+        if (((isset($orderData['plugin_code']) && in_array(strtolower($orderData['plugin_code']), ['cashondelivery', 'payatstore'])) ||  in_array($orderData['op_status_id'], (new Orders())->getAdminAllowedUpdateShippingUser())) && !CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id']) && !$orderData['optsu_user_id']) {
             LibHelper::dieJsonError([
                 'msg' =>  Labels::getLabel('ERR_PLEASE_ASSIGN_SHIPPING_USER', $this->langId),
                 'status' => 0,
@@ -229,7 +229,7 @@ trait ShippingServices
             LibHelper::dieJsonError($msg);
         }
 
-        if ((in_array(strtolower($data['plugin_code']), ['cashondelivery', 'payatstore']) || in_array($data['op_status_id'], (new Orders())->getAdminAllowedUpdateShippingUser())) && !CommonHelper::canAvailShippingChargesBySeller($data['op_selprod_user_id'], $data['opshipping_by_seller_user_id']) && !$data['optsu_user_id']) {
+        if (((isset($data['plugin_code']) && in_array(strtolower($data['plugin_code']), ['cashondelivery', 'payatstore'])) || in_array($data['op_status_id'], (new Orders())->getAdminAllowedUpdateShippingUser())) && !CommonHelper::canAvailShippingChargesBySeller($data['op_selprod_user_id'], $data['opshipping_by_seller_user_id']) && !$data['optsu_user_id']) {
             LibHelper::dieJsonError([
                 'msg' =>  Labels::getLabel('ERR_PLEASE_ASSIGN_SHIPPING_USER', $this->langId),
                 'status' => 0,

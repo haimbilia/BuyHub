@@ -1522,7 +1522,7 @@ class CheckoutController extends MyAppController
         $paymentMethod = $this->plugin->getSettings();
 
         $frm = '';
-        if (in_array(strtolower($methodCode), ['cashondelivery', 'payatstore']) && isset($paymentMethod["otp_verification"]) && 0 < $paymentMethod["otp_verification"]) {
+        if (isset($methodCode) &&  in_array(strtolower($methodCode), ['cashondelivery', 'payatstore']) && isset($paymentMethod["otp_verification"]) && 0 < $paymentMethod["otp_verification"]) {
             $userObj = new User($user_id);
             $userData = $userObj->getUserInfo([], false, false);
             $phoneNumber = $userData['user_phone'];
@@ -1554,7 +1554,7 @@ class CheckoutController extends MyAppController
         $this->set('paymentMethod', $paymentMethod);
         $this->set('frm', $frm);
         /* Partial Payment is not allowed, Wallet + COD, So, disabling COD in case of Partial Payment Wallet Selected. [ */
-        if (in_array(strtolower($methodCode), ['cashondelivery', 'payatstore'])) {
+        if (isset($methodCode) && in_array(strtolower($methodCode), ['cashondelivery', 'payatstore'])) {
             if ($this->cartObj->hasDigitalProduct()) {
                 $str = Labels::getLabel('ERR_{COD}_IS_NOT_AVAILABLE_IF_YOUR_CART_HAS_ANY_DIGITAL_PRODUCT', $this->siteLangId);
                 $str = str_replace('{cod}', $paymentMethod['plugin_name'], $str);
@@ -1726,7 +1726,7 @@ class CheckoutController extends MyAppController
             }
         }
 
-        if (!empty($paymentMethodRow) && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']) && $cartSummary['cartWalletSelected'] && $userWalletBalance < $orderNetAmount) {
+        if (!empty($pmethodCode) && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']) && $cartSummary['cartWalletSelected'] && $userWalletBalance < $orderNetAmount) {
             $str = Labels::getLabel('ERR_WALLET_CAN_NOT_BE_USED_ALONG_WITH_{COD}', $this->siteLangId);
             $str = str_replace('{cod}', $pmethodIdentifier, $str);
             LibHelper::dieJsonError($str);
@@ -1824,7 +1824,7 @@ class CheckoutController extends MyAppController
             LibHelper::dieJsonError($this->errMessage);
         }
 
-        if (false === MOBILE_APP_API_CALL && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']) && FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '' && FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '') != '')) {
+        if (false === MOBILE_APP_API_CALL && isset($pmethodCode) && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']) && FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '' && FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '') != '')) {
             if (!CommonHelper::verifyCaptcha()) {
                 LibHelper::dieJsonError(Labels::getLabel('ERR_THAT_CAPTCHA_WAS_INCORRECT', $this->siteLangId));
             }
@@ -1877,7 +1877,7 @@ class CheckoutController extends MyAppController
         }
 
         /* Deduct reward point in case of cashondelivery [ */
-        if (in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']) && $orderInfo['order_reward_point_used'] > 0) {
+        if (isset($pmethodCode) && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore']) && $orderInfo['order_reward_point_used'] > 0) {
             $rewardDebited = UserRewards::debit($orderInfo['order_user_id'], $orderInfo['order_reward_point_used'], $order_id, $orderInfo['order_language_id']);
             if (!$rewardDebited) {
                 $msg = Labels::getLabel("ERR_UNABLE_TO_DEBIT_REWARD_POINTS", $this->siteLangId);

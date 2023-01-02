@@ -2015,15 +2015,15 @@ class Importexport extends ImportexportCommon
                             }
                             break;
                         case 'product_fulfillment_type':
-                            $colValue = str_replace(' ', '_', mb_strtolower($colValue));
+                            // $colValue = str_replace(' ', '_', mb_strtolower($colValue));
                             switch ($colValue) {
-                                case 'shipped_only':
+                                case Labels::getLabel('LBL_SHIPPED_ONLY', $langId):
                                     $colValue = Shipping::FULFILMENT_SHIP;
                                     break;
-                                case 'pickup_only':
+                                case Labels::getLabel('LBL_PICKUP_ONLY', $langId):
                                     $colValue = Shipping::FULFILMENT_PICKUP;
                                     break;
-                                case 'shipped_and_pickup':
+                                case Labels::getLabel('LBL_SHIPPED_AND_PICKUP', $langId):
                                     $colValue = Shipping::FULFILMENT_ALL;
                                     break;
                                 default:
@@ -2806,12 +2806,24 @@ class Importexport extends ImportexportCommon
                     $srch = new SearchBase(Product::DB_PRODUCT_SPECIFICATION);
                     $srch->addCondition(Product::DB_PRODUCT_SPECIFICATION_PREFIX . 'product_id', '=', $productId);
                     $srch->doNotCalculateRecords();
+                    $srch->addMultipleFields(['prodspec_id']);
                     $rs = $srch->getResultSet();
                     $res = FatApp::getDb()->fetchAll($rs);
                     foreach ($res as $val) {
-                        $this->db->deleteRecords(Product::DB_PRODUCT_LANG_SPECIFICATION, array('smt' => 'prodspeclang_prodspec_id = ? ', 'vals' => array($val['prodspec_id'])));
+                        $langSrch = new SearchBase(Product::DB_PRODUCT_LANG_SPECIFICATION);
+                        $langSrch->addCondition('prodspeclang_prodspec_id', '=', $val['prodspec_id']);
+                        $langSrch->addCondition('prodspeclang_lang_id', '!=', $langId);
+                        $langSrch->doNotCalculateRecords();
+                        $langSrch->addMultipleFields(['count(1) as record']);
+                        $langRs = $langSrch->getResultSet();
+                        $row = FatApp::getDb()->fetch($langRs);
+                        if (false == $row || $row['record'] == 0) {
+                            $this->db->deleteRecords(Product::DB_PRODUCT_SPECIFICATION, array('smt' => 'prodspec_product_id = ? ', 'vals' => array($productId)));
+                            $this->db->deleteRecords(Product::DB_PRODUCT_LANG_SPECIFICATION, array('smt' => 'prodspeclang_prodspec_id = ?', 'vals' => array($val['prodspec_id'])));
+                        } else {
+                            $this->db->deleteRecords(Product::DB_PRODUCT_LANG_SPECIFICATION, array('smt' => 'prodspeclang_prodspec_id = ? and prodspeclang_lang_id = ?', 'vals' => array($val['prodspec_id'], $langId)));
+                        }
                     }
-                    $this->db->deleteRecords(Product::DB_PRODUCT_SPECIFICATION, array('smt' => 'prodspec_product_id = ? ', 'vals' => array($productId)));
                 }
 
                 if (!in_array($languageId, $langArr)) {

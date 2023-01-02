@@ -799,7 +799,7 @@ class User extends MyAppModel
 
         if ($shopId = Shop::getAttributesByUserId($this->mainTableRecordId, 'shop_id')) {
             $data = array(
-                'shop_identifier' => 'xxxxxx',
+                'shop_identifier' => 'xxxxxx-' . $shopId,
                 'shop_phone' => '',
                 'shop_lng' => '',
                 'shop_lng' => '',

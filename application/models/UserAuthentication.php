@@ -789,7 +789,7 @@ class UserAuthentication extends FatModel
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         if (!$row = $db->fetch($rs, User::tblFld('id'))) {
-            $this->error = Labels::getLabel('ERR_INVALID_USERNAME', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_USERNAME/EMAIL', $this->commonLangId);
             return false;
         }
 

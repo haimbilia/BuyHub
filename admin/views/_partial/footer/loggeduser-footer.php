@@ -149,7 +149,6 @@
                             <span>
                                 <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/flags/round/<?php echo CommonHelper::getLangCountryCode() ?>.svg"></span>
                         </span>
-
                     </a>
                     <div class="languages collapse" id="languages">
                         <?php foreach ($languages as $languageId => $language) { ?>

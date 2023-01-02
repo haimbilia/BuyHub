@@ -222,6 +222,16 @@ class PromotionsController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
+
+        $minimumWithdrawLimit = FatApp::getConfig("CONF_PPC_MIN_WALLET_BALANCE", FatUtility::VAR_INT, 0);
+        if (User::getUserBalance($userId) < $minimumWithdrawLimit) {
+            FatUtility::dieJsonError(str_replace("{amount}", CommonHelper::displayMoneyFormat($minimumWithdrawLimit), Labels::getLabel('MSG_YOUR_ACCOUNT_BALANCE_HAS_TO_BE_GREATER_THAN_{amount}_TO_CREATE_PROMOTIONS.', $this->siteLangId)));
+        }
+
+        if (strtotime($post['promotion_start_date']) > strtotime($post['promotion_end_date'])) {
+            FatUtility::dieJsonError(Labels::getLabel('MSG_END_DATE_SHOULD_BE_GREATOR_THAN_START_DATE', $this->siteLangId));
+        }
+
         $promotionDetails = Promotion::getAttributesById($recordId);
         $oldApprovalStatus = applicationConstants::INACTIVE;
         if ($promotionDetails) {

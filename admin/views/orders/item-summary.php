@@ -95,7 +95,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                         $orderStatus = Labels::getLabel('LBL_CANCELLED', $siteLangId);
                     } else {
                         $paymentMethodCode = Plugin::getAttributesById($order['order_pmethod_id'], 'plugin_code');
-                        if (in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
+                        if (isset($paymentMethodCode) && in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
                             if ($orderStatus != $order['plugin_name']) {
                                 $orderStatus .= " - " . $order['plugin_name'];
                             }

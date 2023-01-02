@@ -66,7 +66,7 @@ foreach ($arrListing as $sn => $row) {
                 } else {
                     if(0 < $row['order_pmethod_id']){
                         $pluginData = Plugin::getAttributesByLangId($siteLangId, $row['order_pmethod_id'], ['plugin_name', 'plugin_code'],true);
-                        if ($pluginData && in_array(strtolower($pluginData['plugin_code']), ['cashondelivery', 'payatstore'])) {                                              
+                        if ($pluginData && (isset($pluginData['plugin_code']) && in_array(strtolower($pluginData['plugin_code']), ['cashondelivery', 'payatstore']))) {                                              
                             if ($orderStatus != $pluginData['plugin_name']) {
                                 $orderStatus .= " - " . $pluginData['plugin_name'];
                             }

@@ -65,7 +65,7 @@ class PluginSettingController extends ListingBaseController
         }
 
         $error = '';
-        $plugin = PluginHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId, false);
+        $plugin = LibHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId, false);
         if (false === $plugin) {
             $error = !empty($error) ? $error : Labels::getLabel('LBL_UNABLE_TO_LOCATE_REQUIRED_FILE.');
             FatUtility::dieJsonError($error);

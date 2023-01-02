@@ -257,7 +257,7 @@ $totalSaving = $selProdTotalSpecialPrice + $discount + $volDiscount;
                 $selected_method .= ($selected_method != '') ? ' + ' . Labels::getLabel("LBL_Rewards", $siteLangId) : Labels::getLabel("LBL_Rewards", $siteLangId);
             }
 
-            if (in_array(strtolower($childOrderDetail['plugin_code']), ['cashondelivery', 'payatstore'])) {
+            if (isset($childOrderDetail['plugin_code']) && in_array(strtolower($childOrderDetail['plugin_code']), ['cashondelivery', 'payatstore'])) {
                 $selected_method = (empty($childOrderDetail['plugin_name'])) ? $childOrderDetail['plugin_identifier'] : $childOrderDetail['plugin_name'];
             } ?>
             <div class="order-block">

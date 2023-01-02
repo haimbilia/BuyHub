@@ -33,9 +33,9 @@
                     <?php require_once(CONF_THEME_PATH . 'orders/item-summary.php'); ?>
                 </div>
                 <?php
-                $paymentFormCond = (!$order["order_payment_status"] && $canEdit &&  !in_array($order['plugin_code'], ['CashOnDelivery', 'PayAtStore']));
+                $paymentFormCond = (!$order["order_payment_status"] && $canEdit && isset($order['plugin_code']) && !in_array($order['plugin_code'], ['CashOnDelivery', 'PayAtStore']));
                 $paymentHistory = (!empty($order['payments']));
-                if (!$order['order_deleted'] && ($paymentFormCond || $paymentHistory) && !in_array($order['plugin_code'], ['CashOnDelivery', 'PayAtStore'])) { ?>
+                if (!$order['order_deleted'] && ($paymentFormCond || $paymentHistory) && (isset($order['plugin_code']) && !in_array($order['plugin_code'], ['CashOnDelivery', 'PayAtStore']))) { ?>
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">

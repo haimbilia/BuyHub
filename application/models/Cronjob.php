@@ -870,4 +870,104 @@ class Cronjob extends FatModel
         FatApp::getDb()->query('Delete FROM `' . FatMailer::DB_TBL_ARCHIVE . '` where `earch_sent_on` IS NOT NULL and `earch_added` < date_sub(now(), interval 6 month)');
         FatApp::getDb()->query('Delete FROM `' . SmsArchive::DB_TBL . '` where `smsarchive_sent_on` < date_sub(now(), interval 6 month)');
     }
+
+    public static function publishGoogleShoppingFeed()
+    { 
+        $activePluginCode = (new Plugin())->getDefaultPluginKeyName(Plugin::TYPE_ADVERTISEMENT_FEED);
+        if (empty($activePluginCode)) {
+            return;
+        }  
+
+        $srch = AdsBatch::getSearchObject();
+        $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'user_id = adsbatch_user_id AND user_deleted =' . applicationConstants::NO . ' AND user_is_supplier = ' . applicationConstants::YES);
+        $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'credential_user_id = user_id and credential_active = ' . applicationConstants::ACTIVE . ' and credential_verified = ' . applicationConstants::YES);
+        $srch->addMultipleFields([
+            'adsbatch_id',
+            'adsbatch_target_country_id',
+            'adsbatch_expired_on',
+            'adsbatch_next_execution_on',
+            'adsbatch_user_id',
+            'adsbatch_lang_id'
+        ]);
+
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $subSrch = new SearchBase(Orders::DB_TBL, 'o');
+            $subSrch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and o.order_type = '.Orders::ORDER_SUBSCRIPTION.' and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . ' and oss.ossubs_till_date >="'.date('Y-m-d').'"', 'oss');      
+            $subSrch->addCondition('o.order_payment_status', '=', 'mysql_func_1', 'AND', true);
+            $subSrch->doNotCalculateRecords();
+            $subSrch->doNotLimitRecords();    
+            $subSrch->addFld('order_user_id');                
+            $srch->joinTable('(' . $subSrch->getQuery() . ')', 'INNER JOIN', 'osub.order_user_id = user_id','osub');
+        }
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(100);
+        $srch->addCondition(AdsBatch::DB_TBL_PREFIX . 'status', '!=', AdsBatch::STATUS_DELETED);
+        $srch->addOrder('adsbatch_synced_on', 'ASC');
+        $srch->addOrder('adsbatch_next_execution_on', 'ASC');
+        $srch->addDirectCondition(
+            "(adsbatch_next_execution_on = '0000-00-00 00:00:00' 
+                                        OR  
+                (DATEDIFF(IF(adsbatch_expired_on = '0000-00-00 00:00:00',curdate() + INTERVAL 1 YEAR, adsbatch_expired_on), adsbatch_next_execution_on) > 0
+                                                        AND
+                    date(adsbatch_next_execution_on) < '" . date('Y-m-d') . "'                                                 
+                )        
+            )"
+        );  
+
+        $rs = $srch->getResultSet();
+        while($batch = FatApp::getDb()->fetch($rs)){       
+            $adsBatchobj = new AdsBatch($batch['adsbatch_id']);
+            $adsBatchobj->assignValues(['adsbatch_synced_on' => date('Y-m-d H:i:s')]);
+            if (!$adsBatchobj->save()) {
+                continue;
+            }
+
+            $shoppingFeedObj = LibHelper::callPlugin($activePluginCode, [CommonHelper::getLangId(), $batch['adsbatch_user_id']], $error, CommonHelper::getLangId());
+            if (false === $shoppingFeedObj) {
+                continue;
+            }
+
+            if (false === $shoppingFeedObj->validateSettings(CommonHelper::getLangId())) {
+                continue;
+            }
+
+            if (empty($shoppingFeedObj->getSettings())) {           
+                continue;
+            }
+
+            $productData = $adsBatchobj->getBatchDataForFeed($batch['adsbatch_user_id'], $batch['adsbatch_lang_id']);
+            if (empty($productData)) {             
+                continue;
+            }
+
+            $expireOn = date('Y-m-d', strtotime("+" . $shoppingFeedObj->getMaxPublishDays() . " days"));
+            if ($batch['adsbatch_expired_on'] != '0000-00-00 00:00:00' && FatDate::diff(date('Y-m-d'), $batch['adsbatch_expired_on']) < $shoppingFeedObj->getMaxPublishDays()) {
+                $expireOn = date('Y-m-d', strtotime($batch['adsbatch_expired_on']));
+            }
+
+            $data = [
+                'batchId' => $batch['adsbatch_id'],
+                'currency_code' => strtoupper(Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code')),
+                'data' => $productData,
+                'expire_on' => $expireOn,
+            ];
+
+            $response = $shoppingFeedObj->publishBatch($data);
+            if (false === $response['status'] || Plugin::RETURN_FALSE === $response['status']) {                
+                SystemLog::transaction($shoppingFeedObj->getError(), $activePluginCode);
+                continue;
+            }
+
+            $dataToUpdate = [
+                'adsbatch_status' => AdsBatch::STATUS_PUBLISHED,
+                'adsbatch_synced_on' => date('Y-m-d H:i:s'),
+                'adsbatch_next_execution_on' => $expireOn,
+            ];
+
+            $adsBatchobj->assignValues($dataToUpdate);
+            if (!$adsBatchobj->save()) {
+                continue;
+            }
+        }
+    }
 }

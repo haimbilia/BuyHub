@@ -522,9 +522,10 @@ trait SellerProducts
         $post = $this->validatePostedData(FatApp::getPostedData());
         $selprod_id = FatUtility::int($post['selprod_id']);
 
+        $selprod_url_keyword = '';
         if ($selprod_id > 0) {
             unset($post['selprod_code']);
-
+            $selprod_url_keyword = SellerProduct::getAttributesById($selprod_id, 'selprod_url_keyword');
             $srch = new SearchBase(SellerProductSpecialPrice::DB_TBL);
             $srch->addCondition('splprice_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
             $srch->addCondition('splprice_price', '>=', $post['selprod_price']);
@@ -554,12 +555,20 @@ trait SellerProducts
             $productLangRow = Product::getProductDataById($this->siteLangId, $productId, array('product_identifier', 'product_name'));
             $keywordSlug = $productLangRow['product_name'] ?? $productLangRow['product_identifier'];
         }
-
         $keywordSlug =  $post['selprod_title' . $this->siteLangId] ?? $keywordSlug;
-        $shopData = Shop::getAttributesByUserId($this->userParentId, ['COALESCE(shop_name,shop_identifier) as shop_name'], false, $this->userParentId);
 
-        $keywordSlug = $keywordSlug . '-' . $shopData['shop_name'];
-        $post['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($keywordSlug));
+        if ($selprod_url_keyword == '') {
+            $shopData = Shop::getAttributesByUserId($this->userParentId, ['COALESCE(shop_name,shop_identifier) as shop_name'], false, $this->userParentId);
+            if (0 < $selprod_id) {
+                $options = SellerProduct::getSellerProductOptions($selprod_id, true, $this->siteLangId);
+                foreach ($options as $optionValue) {
+                    $keywordSlug .= '-' . $optionValue['optionvalue_name'];
+                }
+            }
+
+            $keywordSlug = $keywordSlug . '-' . $shopData['shop_name'];
+            $post['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($keywordSlug));
+        }
 
         $data_to_be_save = $post;
         $sellerProdObj = new SellerProduct($selprod_id);
@@ -585,7 +594,6 @@ trait SellerProducts
                 FatUtility::dieJsonError($selProdSpecificsObj->getError());
             }
         }
-
 
         $sellerProdObj->rewriteUrlProduct($post['selprod_url_keyword']);
         $sellerProdObj->rewriteUrlReviews($post['selprod_url_keyword']);
@@ -2619,7 +2627,7 @@ trait SellerProducts
             }
 
             $productCount = SellerProduct::getActiveCount($this->userParentId);
-            if (applicationConstants::ACTIVE == $status && -1 != $invAllowedLimit && $invAllowedLimit <= $productCount) {
+            if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && applicationConstants::ACTIVE == $status && -1 != $invAllowedLimit && $invAllowedLimit <= $productCount) {
                 $msg = Labels::getLabel('ERR_UNABLE_To_ACTIVATE_SOME_OF_THE_PRODUCTS._AS_YOU_HAVE_CROSSED_YOUR_PACKAGE_LIMIT.', $this->siteLangId);
                 break;
             }

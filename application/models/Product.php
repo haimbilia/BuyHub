@@ -1537,8 +1537,7 @@ class Product extends MyAppModel
             $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
             $srch->addMultipleFields(['COALESCE(prod_rating,0) prod_rating', 'COALESCE(totReviews,0) totReviews']);
         }
-
-
+     
         if (array_key_exists('category', $criteria)) {
             $srch->addCategoryCondition($criteria['category']);
         }

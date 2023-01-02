@@ -3,10 +3,6 @@
 $pixelId = FatApp::getConfig("CONF_FACEBOOK_PIXEL_ID", FatUtility::VAR_STRING, '');
 if ('' !=  $pixelId) {  ?>
     <img alt="Facebook Pixel" height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=<?php echo $pixelId; ?>&ev=PageView&noscript=1" />
-<?php }
-if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VAR_STRING, '') && UserAuthentication::getLoggedUserId(true) > 0) {
-?>
-    <div class="engagespot-btn" id="engagespotUI"></div>
 <?php } ?>
 
 <?php if (FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 0)) { ?>
@@ -265,7 +261,8 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
 <?php
 } else { ?>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<?php } ?>
+<?php } 
+?>
 </body>
 
 </html>

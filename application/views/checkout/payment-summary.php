@@ -207,7 +207,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                                     $i = 0;
                                     foreach ($paymentMethods as $key => $val) {
                                         $pmethodCode = $val['plugin_code'];
-                                        if ($cartHasDigitalProduct && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore'])) {
+                                        if ($cartHasDigitalProduct && isset($pmethodCode) && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore'])) {
                                             continue;
                                         }
                                         $pmethodId = $val['plugin_id'];

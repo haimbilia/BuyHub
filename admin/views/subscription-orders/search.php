@@ -76,7 +76,7 @@ foreach ($arrListing as $sn => $row) {
                     $value = Orders::getOrderPaymentStatusArr($siteLangId)[$row[$key]];
                 }
 
-                if (in_array(strtolower($row['plugin_code']), ['cashondelivery', 'payatstore'])) {
+                if (isset($row['plugin_code']) && in_array(strtolower($row['plugin_code']), ['cashondelivery', 'payatstore'])) {
                     $value .= ' (' . $row['plugin_name'] . ' )';
                 }
 

@@ -32,7 +32,7 @@ if ($screenFld && $langFld->fldType != 'hidden') {
 
 $fld = $shopBannerFrm->getField('shop_banner');
 $fld->value = '<div class="field-set"><div class="caption-wraper"><label class="field_label">' . Labels::getLabel('LBL_UPLOAD_BANNER', $siteLangId) . '</label></div><div class="field-wraper"><div class="field_cover"><span id="shopBannerHtml"></span></div></div></div>';
-$fld->htmlAfterField = '<span class="form-text text-muted preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500') . '</span>';
+$fld->htmlAfterField = '<span class="form-text text-muted preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $getShopDimensions[ImageDimension::VIEW_DESKTOP]['width'] . ' x ' . $getShopDimensions[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
 
 ?>
 

@@ -1589,12 +1589,12 @@ class CommonHelper extends FatUtility
 
     public static function referralTrackingUrl($code)
     {
-        return self::generateFullUrl('Home', 'Referral', array($code), CONF_WEBROOT_FRONTEND);
+        return UrlHelper::generateFullUrl('Home', 'Referral', array($code), CONF_WEBROOT_FRONTEND);
     }
 
     public static function affiliateReferralTrackingUrl($code)
     {
-        return self::generateFullUrl('Home', 'AffiliateReferral', array($code), CONF_WEBROOT_FRONTEND);
+        return UrlHelper::generateFullUrl('Home', 'AffiliateReferral', array($code), CONF_WEBROOT_FRONTEND);
     }
 
     public static function createSlug($string)
@@ -2159,6 +2159,9 @@ class CommonHelper extends FatUtility
 
     public static function displayEncryptedEmail($email)
     {
+        if (empty($email)) {
+            return;
+        }
         $userEmail = preg_split('/[@.]/', $email);
         if (empty(array_filter($userEmail))) {
             return;

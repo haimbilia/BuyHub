@@ -28,7 +28,7 @@ if (isset($otherButtons) && is_array($otherButtons)) {
         if (isset($attr['attr']['title'])) {
             unset($attr['attr']['title']);
         }
-        $li->appendElement('a', $attr['attr'], (string) $attr['label'], true);
+        $li->appendElement('a', str_replace('&#039;', "'", $attr['attr']), (string) $attr['label'], true);
     }
     $actionItems = true;
 }

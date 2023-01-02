@@ -1,5 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$conditionArr = Product::getConditionArr($siteLangId);
+$product['selprod_condition_title'] = $conditionArr[$product['selprod_condition']] ?? '';
 $product['ribbons'] = $selProdRibbons;
 
 /* Shop and SelProd Badge */
@@ -113,6 +115,9 @@ $arr_flds = array(
 );
 
 if (!empty($product)) {
+    $warrantTypes = Product::getWarrantyUnits($siteLangId);
+    $product['product_warranty_unit_label'] = (isset($product['product_warranty_unit']) && array_key_exists($product['product_warranty_unit'], $warrantTypes)) ? $warrantTypes[$product['product_warranty_unit']] : '';
+
     $product['productPolicies'] = [];
     $product['discount'] = ($product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
     $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price']);
@@ -324,6 +329,32 @@ $data = array(
     )
 );
 
+if (!empty($data['shop'])) {
+    if (isset($data['shop']['shop_payment_policy']) && !empty(array_filter((array)$data['shop']['shop_payment_policy']))) {
+        $data['shop']['policies'][] = [
+            'title' => Labels::getLabel('LBL_Payment', $siteLangId),
+            'description' => $data['shop']['shop_payment_policy']
+        ];
+    }
+    if (isset($data['shop']['shop_delivery_policy']) && !empty(array_filter((array)$data['shop']['shop_delivery_policy']))) {
+        $data['shop']['policies'][] = [
+            'title' => Labels::getLabel('LBL_Shipping', $siteLangId),
+            'description' => $data['shop']['shop_delivery_policy']
+        ];
+    }
+    if (isset($data['shop']['shop_refund_policy']) && !empty(array_filter((array)$data['shop']['shop_refund_policy']))) {
+        $data['shop']['policies'][] = [
+            'title' => Labels::getLabel('LBL_Refunds_Exchanges', $siteLangId),
+            'description' => $data['shop']['shop_refund_policy']
+        ];
+    }
+
+    $data['shop']['policies'] = !empty($data['shop']['policies']) ? $data['shop']['policies'] : [];
+
+    unset($data['shop']['shop_payment_policy'], $data['shop']['shop_delivery_policy'], $data['shop']['shop_refund_policy'], $data['shop']['shop_additional_info'], $data['shop']['shop_seller_info']);
+}
+
+$data['shop'] = !empty($data['shop']) ? $data['shop'] : (object)array();
 
 if (empty((array) $product)) {
     $status = applicationConstants::OFF;

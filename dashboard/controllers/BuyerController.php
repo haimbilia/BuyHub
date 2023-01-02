@@ -2231,6 +2231,7 @@ class BuyerController extends BuyerBaseController
             }
         }
 
+        $opDetail['opcharge_amount'] = $opDetail['opcharge_amount'] ?? 0;
         if (abs($opDetail['opcharge_amount']) > 0) {
             $orrequestQty = FatUtility::int($post['orrequest_qty']);
             $volumeDiscountPerItem = abs($opDetail['opcharge_amount']) / $opDetail['op_qty'];

@@ -13,4 +13,5 @@ $data = array(
 
 if (empty($couponsList)) {
     $status = applicationConstants::OFF;
+    $msg = Labels::getLabel('MSG_NO_VALID_COUPONS_AVAILABLE', $siteLangId);;
 }
