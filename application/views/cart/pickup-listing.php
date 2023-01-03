@@ -31,7 +31,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 </button>
                             <?php } ?>
                         </span>
-                        <button class="btn-close" onClick="removeShippedOnlyProducts();">
+                        <button class="btn-close" onClick="removeShippedOnlyProducts();" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_REMOVE_SHIP_ONLY_PRODUCTS', $siteLangId); ?>">
                         </button>
                     </div>
                 </li>

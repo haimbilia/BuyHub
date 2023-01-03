@@ -49,7 +49,6 @@ class LibHelper extends FatUtility
      */
     public static function exitWithError($message, $json = false, $redirect = false, $jsonData = [])
     {
-
         if (true === MOBILE_APP_API_CALL) {
             if (is_array($message)) {
                 array_walk_recursive($message, function (&$item) {

@@ -26,7 +26,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 <a class="link-underline" href="javascript:void(0);" onClick="listCartProducts(<?php echo Shipping::FULFILMENT_PICKUP; ?>);"><?php echo Labels::getLabel('LBL_Pickup_Entire_Order', $siteLangId); ?></a>
                             <?php } ?>
                         </span>
-                        <button class="btn-close" onClick="removePickupOnlyProducts();">
+                        <button class="btn-close" onClick="removePickupOnlyProducts();" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_REMOVE_PICKUP_ONLY_PRODUCTS', $siteLangId); ?>">
                         </button>
                     </div>
                 </li>
