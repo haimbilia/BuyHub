@@ -11,6 +11,8 @@ class AdminBaseController extends FatController
     protected $str_invalid_Action;
     protected $str_setup_successful;
     protected $siteLangId;
+    protected $siteDefaultCurrencyCode;
+    protected $pageKey;
     protected $nodes = [];
 
     public function __construct($action)
