@@ -75,10 +75,12 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                                         }
                                                         echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
                                                 <?php }
-                                                } ?></p>
+                                                } ?>
+                                            </p>
                                         </div>
                                         <p class="text-danger pt-2">
-                                            <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_SHIPPING', $siteLangId); ?></p>
+                                            <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_SHIPPING', $siteLangId); ?>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
