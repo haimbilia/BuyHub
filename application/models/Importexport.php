@@ -2808,9 +2808,7 @@ class Importexport extends ImportexportCommon
                     $res = FatApp::getDb()->fetchAll($rs);
                     foreach ($res as $val) {
                         $prodSpec = new ProdSpecification($val['prodspec_id']);
-                        if (!$prodSpec->deleteRecords($langId)) {
-                            LibHelper::exitWithError($prodSpec->getError(), true);
-                        }
+                        $prodSpec->deleteRecords($langId);
                     }
                 }
 
