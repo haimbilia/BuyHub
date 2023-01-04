@@ -3,6 +3,10 @@
 > IOS/Android Buyer APP version : 2.0.1
 > System API version : 2.3
 
+# RV-10.0.0.20230104
+## Enhancements:
+- Bug-069557 Translate Product Specification
+
 # RV-10.0.0.20221123
 
 ## Bug Fixes:

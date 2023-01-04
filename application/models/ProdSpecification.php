@@ -70,4 +70,26 @@ class ProdSpecification extends MyAppModel
         $db = FatApp::getDb();
         return $db->fetchAll($rs);
     }
+
+    public function deleteRecords(int $langId): bool
+    {
+        if (1 > $this->getMainTableRecordId()) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST_ID');
+            return false;
+        }
+        $langSrch = new SearchBase(Product::DB_PRODUCT_LANG_SPECIFICATION);
+        $langSrch->addCondition('prodspeclang_prodspec_id', '=', $this->getMainTableRecordId());
+        $langSrch->addCondition('prodspeclang_lang_id', '!=', $langId);
+        $langSrch->doNotCalculateRecords();
+        $langSrch->addMultipleFields(['count(1) as record']);
+        $langRs = $langSrch->getResultSet();
+        $row = FatApp::getDb()->fetch($langRs);
+        if (false == $row || $row['record'] == 0) {
+            $this->db->deleteRecords(Product::DB_PRODUCT_SPECIFICATION, array('smt' => 'prodspec_id = ? ', 'vals' => [$this->getMainTableRecordId()]));
+            $this->db->deleteRecords(Product::DB_PRODUCT_LANG_SPECIFICATION, array('smt' => 'prodspeclang_prodspec_id = ?', 'vals' => [$this->getMainTableRecordId()]));
+        } else {
+            $this->db->deleteRecords(Product::DB_PRODUCT_LANG_SPECIFICATION, array('smt' => 'prodspeclang_prodspec_id = ? and prodspeclang_lang_id = ?', 'vals' => [$this->getMainTableRecordId(), $langId]));
+        }
+        return true;
+    }
 }

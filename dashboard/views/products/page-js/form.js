@@ -239,6 +239,7 @@ var advanceMedia = false; /* open via advance media*/
 
     deleteProdSpec = function(el) {
         let prodSpecId = $(el).closest('tr').data('id');
+        let prodSpecLangId = $(el).data('langId');
         if (1 > prodSpecId) {
             $(el).closest('tr').remove();
             if ($('#specificationsListJs').find('table tbody tr').length == 0) {
@@ -247,7 +248,7 @@ var advanceMedia = false; /* open via advance media*/
             }
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId }, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId, prodSpecLangId }, function(t) {
             prodSpecifications();
         });
     };

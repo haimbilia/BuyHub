@@ -317,6 +317,24 @@ class ProductsController extends SellerBaseController
                     $db->rollbackTransaction();
                     LibHelper::exitWithError($prodObj->getError(), true);
                 }
+
+                $specId = $prodObj->prodSpecId;
+                $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+                if (0 < $autoUpdateOtherLangsData && 0 < $specId && empty($post['record_id'])) {
+                    $languages = Language::getAllNames(false);
+                    unset($languages[$langId]);
+                    foreach ($languages as $toLangId => $langData) {
+                        $translateLangobj = new TranslateLangData(ProdSpecification::DB_TBL);
+                        $translatedData = $translateLangobj->directTranslate($specification, $toLangId);
+                        if (isset($translatedData[$toLangId]) && !empty($translatedData[$toLangId])) {
+                            $translatedData = $translatedData[$toLangId];
+                            if (!$prodObj->saveProductSpecifications($specId, $toLangId, $translatedData['name'], $translatedData['value'], $translatedData['group'])) {
+                                $db->rollbackTransaction();
+                                LibHelper::exitWithError($prodObj->getError(), true);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -709,6 +727,7 @@ class ProductsController extends SellerBaseController
     {
         $this->checkEditPrivilege();
         $prodSpecId = FatApp::getPostedData('prodSpecId', FatUtility::VAR_INT, 0);
+        $prodSpecLangId = FatApp::getPostedData('prodSpecLangId', FatUtility::VAR_INT, 0);
         if ($prodSpecId < 1) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -719,9 +738,10 @@ class ProductsController extends SellerBaseController
         }
 
         $prodSpec = new ProdSpecification($prodSpecId);
-        if (!$prodSpec->deleteRecord(true)) {
+        if (!$prodSpec->deleteRecords($prodSpecLangId)) {
             LibHelper::exitWithError($prodSpec->getError(), true);
         }
+
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
