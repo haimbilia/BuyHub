@@ -805,7 +805,8 @@ class BuyerController extends BuyerBaseController
                         $file['downloadable'] = false;
                     }
                 }
-                $file['downloadUrl'] = UrlHelper::generateFullUrl() . 'public/index.php?url=buyer/download-digital-file/' . $file['afile_id'] . '/' . $file['afile_record_id'];
+                
+                $file['downloadUrl'] = UrlHelper::generateFullUrl('Buyer', 'downloadDigitalFile', array($file['afile_id'], $file['afile_record_id']));
             }
 
             $op['files'] = (true === MOBILE_APP_API_CALL) ? array_values($files) : $files;
