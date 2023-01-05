@@ -1601,12 +1601,13 @@ class User extends MyAppModel
         $srch = static::getSearchObject(true);
         $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $srch->doNotCalculateRecords();
-        $rs = $srch->getResultSet();
-        $record = FatApp::getDb()->fetch($rs);
+        $record = FatApp::getDb()->fetch($srch->getResultSet());
+        if (false === $record || is_null($record)) {
+            return false;
+        }
         unset($record['credential_password']);
         $record['user_email'] = $record['credential_email'];
         return $record;
-        //return $this->getAttributesById($this->mainTableRecordId);
     }
 
     public function prepareUserVerificationCode($email = '', $verificationCode = '')

@@ -3,6 +3,9 @@
 > IOS/Android Buyer APP version : 2.0.1
 > System API version : 2.3
 
+## Bug Fixes:
+- Bug-069472 - Android, iOS >> Error occurs and the app stop working when the user deletes his account
+
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
