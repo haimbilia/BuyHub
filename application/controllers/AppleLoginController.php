@@ -27,7 +27,7 @@ class AppleLoginController extends SocialMediaAuthController
 
         if (isset($post['id_token'])) {
             $state = $post['state'] ?? '';
-            if (false === MOBILE_APP_API_CALL && !empty($state) && session_id() != $post['state']) {
+            if ((false === MOBILE_APP_API_CALL || false == CommonHelper::isAppUser()) && !empty($state) && session_id() != $post['state']) {
                 $message = Labels::getLabel('ERR_AUTHORIZATION_SERVER_RETURNED_AN_INVALID_STATE_PARAMETER', $this->siteLangId);
                 $this->setErrorAndRedirect($message, true);
             }
