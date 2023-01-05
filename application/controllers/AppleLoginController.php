@@ -25,12 +25,7 @@ class AppleLoginController extends SocialMediaAuthController
         $post = FatApp::getPostedData();
         $userType = FatApp::getPostedData('type', FatUtility::VAR_INT, User::USER_TYPE_BUYER);
 
-        if (isset($post['id_token'])) {
-            $state = $post['state'] ?? '';
-            if ((false === MOBILE_APP_API_CALL || false == CommonHelper::isAppUser()) && !empty($state) && session_id() != $post['state']) {
-                $message = Labels::getLabel('ERR_AUTHORIZATION_SERVER_RETURNED_AN_INVALID_STATE_PARAMETER', $this->siteLangId);
-                $this->setErrorAndRedirect($message, true);
-            }
+        if (isset($post['id_token'])) {            
             if (isset($post['error'])) {
                 $message = Labels::getLabel('ERR_AUTHORIZATION_SERVER_RETURNED_AN_ERROR: ', $this->siteLangId);
                 $message .= htmlspecialchars($post['error']);
