@@ -5,6 +5,7 @@
 
 ## Bug Fixes:
 - Bug-069472 - Android, iOS >> Error occurs and the app stop working when the user deletes his account
+- Bug-069442 - Android, iOS >> The Same review appears on all the shop's details pages.
 
 # RV-10.0.0.20221123
 
