@@ -2376,3 +2376,8 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ('APP_RATE_YOUR_EXPERIENCE', 1, 'Rate Your Experience', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('REMOVE_ITEMS_NOT_AVAILABLE_FOR_SHIPPING', 1, 'Are you sure do you want to remove items not available for shipping?', 2),
+('REMOVE_ITEMS_NOT_AVAILABLE_FOR_PICKUP', 1, 'Are you sure do you want to remove items not available for pickup?', 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
