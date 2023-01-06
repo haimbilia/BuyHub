@@ -12,12 +12,10 @@ class Brand extends MyAppModel
     public const BRAND_REQUEST_CANCELLED = 2;
 
     public const REWRITE_URL_PREFIX = 'brands/view/';
-    private $db;
 
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
     }
 
     public static function getSearchObject($langId = 0, $isDeleted = true, $isActive = false, $addOrderBy = true)
@@ -108,7 +106,7 @@ class Brand extends MyAppModel
         return $srch;
     }
 
-    public static function getAllIdentifierAssoc(int $langId = 0, bool $isDeleted = true, bool $isActive = false): array
+    public static function getAllIdentifierAssoc(int $langId = 0): array
     {
         $langId = FatUtility::int($langId);
         $srch = self::getSearchObject($langId, true);
