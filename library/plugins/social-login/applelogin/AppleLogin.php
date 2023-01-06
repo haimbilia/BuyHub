@@ -30,7 +30,7 @@ class AppleLogin extends SocialMediaAuthBase
     {
         return $this->validateSettings($this->langId);
     }
-    
+
     /**
      * getRequestUri
      *
@@ -41,17 +41,18 @@ class AppleLogin extends SocialMediaAuthBase
         if (1 > $this->settings['plugin_active']) {
             return "";
         }
-        
+        $stateToken = bin2hex(random_bytes(5));
+        setcookie(self::KEY_NAME . '_state', $stateToken, 0, "/");
         return static::PRODUCTION_URL . 'authorize?' . http_build_query([
             'response_type' => 'code id_token',
             'response_mode' => 'form_post',
             'client_id' => $this->settings['client_id'],
             'redirect_uri' => $this->getRedirectUri(),
-            'state' => session_id(),
+            'state' => $stateToken,
             'scope' => 'name email',
         ]);
     }
-    
+
     /**
      * getRedirectUri
      *
