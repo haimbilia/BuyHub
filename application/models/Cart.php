@@ -405,7 +405,7 @@ class Cart extends FatModel
         return (int) $this->shipmentItemsCount;
     }
 
-    public function getProducts($siteLangId = 0)
+    public function getProducts($siteLangId = 0, $checkFulfilmentType = true)
     {
         if (!$this->products) {
             $this->isAnyOutOfStock = true;
@@ -495,8 +495,8 @@ class Cart extends FatModel
                     if (isset($this->SYSTEM_ARR['shopping_cart']['checkout_type'])) {
                         $fulfilmentType =  $this->SYSTEM_ARR['shopping_cart']['checkout_type'];
                     }
-
-                    if ($this->valdateCheckoutType && isset($fulfilmentType) && $fulfilmentType > 0 && $sellerProductRow['selprod_fulfillment_type'] != Shipping::FULFILMENT_ALL && $sellerProductRow['selprod_fulfillment_type'] != $fulfilmentType && $sellerProductRow['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
+                    
+                    if ($this->valdateCheckoutType && isset($fulfilmentType) && $fulfilmentType > 0 && $sellerProductRow['selprod_fulfillment_type'] != Shipping::FULFILMENT_ALL && $sellerProductRow['selprod_fulfillment_type'] != $fulfilmentType && $sellerProductRow['product_type'] != Product::PRODUCT_TYPE_DIGITAL && $checkFulfilmentType) {
                         unset($this->products[$key]);
                         continue;
                     }
@@ -2095,7 +2095,7 @@ class Cart extends FatModel
 
     public function removePickupOnlyProducts()
     {
-        $cartProducts = $this->getProducts($this->cart_lang_id);
+        $cartProducts = $this->getProducts($this->cart_lang_id, false);
         foreach ($cartProducts as $cartKey => $product) {
             if ($product['fulfillment_type'] != Shipping::FULFILMENT_PICKUP) {
                 continue;
@@ -2114,7 +2114,7 @@ class Cart extends FatModel
     public function removeShippedOnlyProducts()
     {
         $this->invalidateCheckoutType();
-        $cartProducts = $this->getProducts($this->cart_lang_id);
+        $cartProducts = $this->getProducts($this->cart_lang_id, false);
         foreach ($cartProducts as $cartKey => $product) {
             if ($product['fulfillment_type'] != Shipping::FULFILMENT_SHIP) {
                 continue;
