@@ -3,9 +3,11 @@
 > IOS/Android Buyer APP version : 2.0.1
 > System API version : 2.3
 
-# RV-10.0.0.20230104
 ## Enhancements:
 - Bug-069557 Translate Product Specification
+
+## Bug Fixes:
+- Bug-069687 - Displaying invalid request when user tries to update currency language data in different language.
 
 # RV-10.0.0.20221123
 
