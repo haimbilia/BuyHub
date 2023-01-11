@@ -2741,9 +2741,8 @@ class User extends MyAppModel
         $srch = $this->getUserSearchObj($attr);
         $srch->joinTable(static::DB_TBL_META, 'LEFT OUTER JOIN', 't_um.' . static::DB_TBL_META_PREFIX . 'user_id = u.user_id', 't_um');
 
-        $srch->addCondition('credential_email', '=', $email);
-        $cnd = $srch->addCondition('usermeta_key', '=', strtolower($keyName) . '_account_id', 'OR');
-        $cnd->attachCondition('usermeta_value', '=', $socialAccountId, 'AND');
+        $srch->addDirectCondition('(credential_email = "' . $email .'" OR (usermeta_key = "' . strtolower($keyName) . '_account_id" AND usermeta_value = "' . $socialAccountId . '"))');
+
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
