@@ -58,7 +58,7 @@ class MyAppModel extends FatModel
 
     public function updateLangData($lang_id, $data)
     {
-        if (!($this->mainTableRecordId > 0)) {
+        if (1 > $this->mainTableRecordId) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
@@ -102,7 +102,7 @@ class MyAppModel extends FatModel
 
     public function updateModifiedTime()
     {
-        if (!($this->mainTableRecordId > 0)) {
+        if (1 > $this->mainTableRecordId) {
             return false;
         }
 
@@ -124,8 +124,8 @@ class MyAppModel extends FatModel
 
     public function deleteRecord($deleteLangData = false)
     {
-        if (!($this->mainTableRecordId > 0)) {
-            $this->error = 'ERR_INVALID_REQUEST_ID';
+        if (1 > $this->mainTableRecordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST_ID');
             return false;
         }
 
@@ -386,8 +386,8 @@ class MyAppModel extends FatModel
 
     public function changeStatus($v = 1)
     {
-        if (!($this->mainTableRecordId > 0)) {
-            $this->error = 'ERR_INVALID_REQUEST_ID';
+        if (1 > $this->mainTableRecordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST_ID');
             return false;
         }
         $data = array(

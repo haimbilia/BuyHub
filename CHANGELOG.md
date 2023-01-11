@@ -3,7 +3,13 @@
 > IOS/Android Buyer APP version : 2.0.1
 > System API version : 2.3
 
+
+## Enhancements:
+- Bug-069557 Translate Product Specification
+
 ## Bug Fixes:
+- Bug-069687 - Displaying invalid request when user tries to update currency language data in different language.
+- Bug-069724 - Admin sub-user write permission for metatags and collection management
 - Bug-069472 - Android, iOS >> Error occurs and the app stop working when the user deletes his account
 - Bug-069442 - Android, iOS >> The Same review appears on all the shop's details pages.
 - Bug-069587 - iOS >> User is not able to register again with the apple id if the user account is deleted once previously.
