@@ -8,7 +8,7 @@
 
 ## Bug Fixes:
 - Bug-069687 - Displaying invalid request when user tries to update currency language data in different language.
-
+- Bug-069724 - Admin sub-user write permission for metatags and collection management
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
