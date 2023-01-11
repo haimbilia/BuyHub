@@ -261,7 +261,7 @@ class ReviewsController extends MyAppController
 
     public function searchForShop()
     {
-        $shop_id = 3/* FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0) */;
+        $shop_id = FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);
         $sellerId = Shop::getAttributesById($shop_id, 'shop_user_id', false);
         $reviewId = FatApp::getPostedData('review_id', FatUtility::VAR_INT, 0);
 

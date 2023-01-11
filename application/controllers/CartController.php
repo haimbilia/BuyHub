@@ -796,17 +796,12 @@ class CartController extends MyAppController
     {
         $cart = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
         if (!$cart->removePickupOnlyProducts()) {
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($cart->getError());
-            }
-            Message::addMessage($cart->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($cart->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel("MSG_PICKUP_ONLY_ITEMS_REMOVED_FROM_CART", $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
-            $total = $cart->countProducts();
-            $this->set('data', array('cartItemsCount' => $total));
+            $this->set('data', ['cartItemsCount' => $cart->countProducts()]);
             $this->_template->render();
         }
         $this->_template->render(false, false, 'json-success.php');
@@ -816,17 +811,12 @@ class CartController extends MyAppController
     {
         $cart = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
         if (!$cart->removeShippedOnlyProducts()) {
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($cart->getError());
-            }
-            Message::addMessage($cart->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($cart->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel("MSG_SHIPPED_ONLY_ITEMS_REMOVED_FROM_CART", $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
-            $total = $cart->countProducts();
-            $this->set('data', array('cartItemsCount' => $total));
+            $this->set('data', ['cartItemsCount' => $cart->countProducts()]);
             $this->_template->render();
         }
         $this->_template->render(false, false, 'json-success.php');

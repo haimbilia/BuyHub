@@ -31,7 +31,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 </button>
                             <?php } ?>
                         </span>
-                        <button class="btn-close" onClick="removeShippedOnlyProducts();">
+                        <button class="btn-close" onClick="removeShippedOnlyProducts();" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_REMOVE_SHIP_ONLY_PRODUCTS', $siteLangId); ?>">
                         </button>
                     </div>
                 </li>
@@ -79,17 +79,22 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                         </div>
                                         <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
                                         <div class="options">
-                                            <?php
-                                            if (isset($product['options']) && count($product['options'])) {
-                                                foreach ($product['options'] as $key => $option) {
-                                                    if (0 < $key) {
-                                                        echo ' | ';
-                                                    }
-                                                    echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
-                                            <?php }
-                                            } ?>
+                                            <p class="">
+                                                <?php
+                                                if (isset($product['options']) && count($product['options'])) {
+                                                    foreach ($product['options'] as $key => $option) {
+                                                        if (0 < $key) {
+                                                            echo ' | ';
+                                                        }
+                                                        echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
+                                                <?php }
+                                                } ?>
+                                            </p>
                                         </div>
 
+                                        <p class="text-danger pt-2">
+                                            <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_PICKUP', $siteLangId); ?>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -101,9 +106,6 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                         </button>
                                     </li>
                                 </ul>
-                                <p class="not-available-txt">
-                                    <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_PICKUP', $siteLangId); ?>
-                                </p>
                             </div>
 
                         </div>
@@ -250,7 +252,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
         <h5 class="cart-title mt-5"><?php echo Labels::getLabel('LBL_Save_For_later', $siteLangId); ?>
             (<?php echo count($saveForLaterProducts); ?>)</h5>
         <ul class="list-cart <?php echo 1 > $productsCount ? 'list-cart-triple' : ''; ?>">
-            <?php foreach ($saveForLaterProducts as $product) {                
+            <?php foreach ($saveForLaterProducts as $product) {
                 $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
                 $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                 $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];

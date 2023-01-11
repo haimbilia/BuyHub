@@ -780,7 +780,7 @@ class BuyerController extends BuyerBaseController
 
         foreach ($orderProducts as &$op) {
             $uploadedTime = AttachedFile::setTimeParam($op['product_updated_on']);
-            $op['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($op['selprod_product_id'], ImageDimension::VIEW_CLAYOUT3, $op['op_selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $op['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($op['selprod_product_id'], ImageDimension::VIEW_CLAYOUT3, $op['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
             $files = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, $op['op_id'], 0, $this->siteLangId, true);
             foreach ($files as &$file) {
@@ -805,7 +805,8 @@ class BuyerController extends BuyerBaseController
                         $file['downloadable'] = false;
                     }
                 }
-                $file['downloadUrl'] = UrlHelper::generateFullUrl() . 'public/index.php?url=buyer/download-digital-file/' . $file['afile_id'] . '/' . $file['afile_record_id'];
+                
+                $file['downloadUrl'] = UrlHelper::generateFullUrl('Buyer', 'downloadDigitalFile', array($file['afile_id'], $file['afile_record_id']));
             }
 
             $op['files'] = (true === MOBILE_APP_API_CALL) ? array_values($files) : $files;

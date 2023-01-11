@@ -738,11 +738,16 @@ class MyAppController extends FatController
 
     private function checkTempTokenLogin()
     {
-        if (!in_array($this->_actionName, ['downloadDigitalFile'])) {
+        if (!in_array($this->_controllerName, ['BuyerController', 'StripeConnectPayController'])) {
             return;
         }
 
-        $get = FatApp::getQueryStringData();
+        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile'])) {
+            return;
+        }
+
+        // $get = FatApp::getQueryStringData();
+        $get = $_REQUEST;
         if (empty($get) || !array_key_exists('ttk', $get)) {
             return;
         }

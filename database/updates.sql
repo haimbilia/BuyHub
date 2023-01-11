@@ -2370,3 +2370,14 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUE
 ALTER TABLE `tbl_user_credentials` ADD UNIQUE( `credential_username`);
 -- ---------------------RV-10.0.0.20230102-----------------------
 
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('APP_YOU_CANNOT_ADD_MORE_THAN_IMAGES', 1, 'You Cannot Add More Than 8 Images', 2),
+('APP_WANT_TO_WITHDRAW_REQUEST', 1, 'Do You Want To Withdraw Request', 2),
+('APP_RATE_YOUR_EXPERIENCE', 1, 'Rate Your Experience', 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('REMOVE_ITEMS_NOT_AVAILABLE_FOR_SHIPPING', 1, 'Are you sure do you want to remove items not available for shipping?', 2),
+('REMOVE_ITEMS_NOT_AVAILABLE_FOR_PICKUP', 1, 'Are you sure do you want to remove items not available for pickup?', 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
