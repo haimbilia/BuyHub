@@ -123,7 +123,7 @@ class MetaTagsController extends ListingBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditCommissionSettings($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditMetaTags($this->admin_id, true));
         $this->set('tabsArr', $this->tabsArr);
 
         $withoutSearchForm = [

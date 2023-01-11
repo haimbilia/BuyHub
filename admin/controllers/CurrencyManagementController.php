@@ -20,7 +20,7 @@ class CurrencyManagementController extends ListingBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditCurrencyManagement();
-        $this->setModel();
+        $this->modelObj = (new ReflectionClass('Currency'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->siteLangId));
     }
