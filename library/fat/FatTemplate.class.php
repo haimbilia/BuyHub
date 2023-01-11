@@ -119,7 +119,7 @@ class FatTemplate
                 'rooturl' => CONF_WEBROOT_FRONTEND,
                 'webroot' => CONF_WEBROOT_URL . $langCode,
                 'webrootfront' => CONF_WEBROOT_FRONTEND . $langCode,
-                'webroot_dashboard' => CONF_WEBROOT_DASHBOARD . $langCode,
+                'webroot_dashboard' => CONF_WEBROOT_DASHBOARD,
                 'webroot_traditional' => CONF_WEBROOT_URL_TRADITIONAL,
                 'rewritingEnabled' => (CONF_URL_REWRITING_ENABLED ? '1' : '0'),
             )) . ';

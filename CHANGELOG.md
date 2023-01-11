@@ -8,7 +8,8 @@
 
 ## Bug Fixes:
 - Bug-069687 - Displaying invalid request when user tries to update currency language data in different language.
-- Bug-069724 - Admin sub-user write permission for metatags and collection management
+- Bug-069724 - Admin sub-user write permission for metatags and collection management.
+- Bug-069726 - order with pickup in store when I am in English I can select the date of pickup but in French and Arabic impossible the pop up does not appear 
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
