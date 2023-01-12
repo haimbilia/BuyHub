@@ -13,6 +13,8 @@
 - Bug-069472 - Android, iOS >> Error occurs and the app stop working when the user deletes his account
 - Bug-069442 - Android, iOS >> The Same review appears on all the shop's details pages.
 - Bug-069587 - iOS >> User is not able to register again with the apple id if the user account is deleted once previously.
+- Bug-069724 - Admin sub-user write permission for metatags and collection management.
+- Bug-069726 - order with pickup in store when I am in English I can select the date of pickup but in French and Arabic impossible the pop up does not appear 
 
 # RV-10.0.0.20221123
 
