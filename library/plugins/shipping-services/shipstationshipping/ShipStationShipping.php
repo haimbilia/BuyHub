@@ -98,7 +98,7 @@ class ShipStationShipping extends ShippingServicesBase
         }
         return true;
     }
-    
+
     /**
      * syncDefaultAddressId
      *
@@ -570,11 +570,13 @@ class ShipStationShipping extends ShippingServicesBase
                     break;
             }
 
-            if (array_key_exists('Message', (array)$this->getResponse(true))) {
+            $resp = (array)$this->getResponse(true);
+            if (array_key_exists('Message', $resp)) {
                 $this->error = (true === $formatError) ? $this->getResponse(true) : $this->resp;
                 if (true === $formatError) {
                     $this->error = $this->formatError();
                 }
+                SystemLog::plugin(json_encode($requestParam), json_encode($resp), self::KEY_NAME);
                 return false;
             }
 

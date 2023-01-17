@@ -201,6 +201,14 @@ class ProductsController extends MyAppController
             $brandsArr = unserialize($brandFilter);
         }
 
+        if (true === MOBILE_APP_API_CALL) {
+            $this->set('data', [
+                'brandsArr' => $brandsArr,
+                'brandsCheckedArr' => $brandsCheckedArr,
+            ]);
+            $this->_template->render();
+        }
+
         $this->set('brandsArr', $brandsArr);
         $this->set('brandsCheckedArr', $brandsCheckedArr);
 
