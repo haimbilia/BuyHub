@@ -15,6 +15,7 @@
 - Bug-069587 - iOS >> User is not able to register again with the apple id if the user account is deleted once previously.
 - Bug-069724 - Admin sub-user write permission for metatags and collection management.
 - Bug-069726 - order with pickup in store when I am in English I can select the date of pickup but in French and Arabic impossible the pop up does not appear 
+- Bug-069778 - A success message appears and the product does not get added to the cart when the user clicks on the Reorder button on the order details page.
 
 # RV-10.0.0.20221123
 

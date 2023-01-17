@@ -21,8 +21,7 @@ $(document).ready(function () {
     }
 
     addItemsToCart = function (orderId) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('Buyer', 'addItemsToCart', [orderId]), '', function (ans) {
+        fcom.updateWithAjax(fcom.makeUrl('Buyer', 'addItemsToCart', [orderId]), '', function (ans) {
             window.location = fcom.makeUrl('Cart', '', '', siteConstants.webrootfront);
             return true;
         });
