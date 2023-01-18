@@ -340,3 +340,88 @@ a.link {
 .invalid {
     animation: moltinShake 0.4s ease-in-out 0.1s normal forwards 1 running;
 }
+
+//social login
+
+.buttons-list {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-flow: column wrap;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    &-item {
+        flex: 1;
+        width: 100%;
+        max-width: 380px;
+    }
+    &-link {
+        background-color: #fff;
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 10px;
+        border: $border;
+        border-color: rgb(168, 168, 168);
+        // box-shadow: 1px 1px 1px grey;
+        padding: 0 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &:hover {
+            color: rgba(0, 0, 0, 1);
+            border-color: currentColor;
+            text-decoration: none;
+            box-shadow: $btn-hover-shadow;
+            cursor: pointer;
+        }
+        &:focus {
+            box-shadow: $btn-focus-shadow;
+        }
+    }
+    &-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        // width: 200px;
+    }
+    &-icon {
+        $size: 50px;
+        padding: 0;
+        flex: 0 0 $size;
+        max-width: $size;
+        margin: 0;
+        //background: rgba(0, 0, 0, 0.1);
+        width: $size;
+        height: $size;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    img,
+    .svg {
+        margin: 0 auto;
+        width: 42px;
+        height: 42px;
+    }
+
+    .btn-fb,
+    .btn-FacebookLogin {
+        background: #3b5a99;
+    }
+    .btn-gp,
+    .btn-GoogleLogin {
+        background: #da4a42;
+    }
+    .btn-gm {
+        background: #333333;
+    }
+    .btn-AppleLogin {
+        background: #000000;
+    }
+    .btn-InstagramLogin {
+        background: #3f729b;
+    }
+}

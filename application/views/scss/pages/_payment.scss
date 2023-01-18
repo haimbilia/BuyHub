@@ -9,7 +9,9 @@
             display: flex;
             align-items: center;
             flex-flow: row wrap;
-            justify-content: space-between;
+            gap: 2rem;
+
+            //justify-content: space-between;
             margin-bottom: 1rem;
         }
         &-body {
@@ -18,12 +20,13 @@
         &-footer {
         }
         &-total {
+            font-size: 0.75rem;
             .label {
-                font-size: 0.85rem;
+                // font-size: 0.85rem;
             }
             .value {
                 font-weight: 600;
-                font-size: 1rem;
+                font-size: 0.8rem;
             }
         }
     }
