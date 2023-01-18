@@ -82,7 +82,7 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
                             </div>
                             <div class="card-body pt-0 ">
                                 <div class="stats">
-                                    <button type="button" class="btn btn-outline-gray btn-sm mt-4" title="<?php echo $affiliateTrackingUrl; ?>" onclick="copyText(this, true)"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></button>
+                                    <button type="button" class="btn btn-outline-gray btn-sm mt-4" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>" data-url="<?php echo $affiliateTrackingUrl; ?>" onclick="copyText(this, false)"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></button>
                                 </div>
                             </div>
                         </div>

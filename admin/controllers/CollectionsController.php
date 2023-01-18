@@ -166,6 +166,7 @@ class CollectionsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('applicableTypes', Collections::getLayoutApplicableTypes($this->siteLangId));
+        $this->set('canEdit', $this->objPrivilege->canEditCollections($this->admin_id, true));
     }
 
     protected function getSearchForm(array $fields = [])

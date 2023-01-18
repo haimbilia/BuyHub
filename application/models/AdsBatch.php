@@ -11,17 +11,20 @@ class AdsBatch extends MyAppModel
     public const STATUS_PENDING = 0;
     public const STATUS_PUBLISHED = 1;
     public const STATUS_DELETED = 2;
+    public const STATUS_PARTIALLY_PENDING = 3;
     
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
     }
 
-    public static function statusArr()
+    public static function statusArr(int $langId = 0)
     {
+        $langId = 1 > $langId ? CommonHelper::getLangId() : $langId;
         return [
-            self::STATUS_PENDING => Labels::getLabel('LBL_PENDING', CommonHelper::getLangId()),
-            self::STATUS_PUBLISHED => Labels::getLabel('LBL_PUBLISHED', CommonHelper::getLangId())
+            self::STATUS_PENDING => Labels::getLabel('LBL_PENDING', $langId),
+            self::STATUS_PUBLISHED => Labels::getLabel('LBL_PUBLISHED', $langId),
+            self::STATUS_PARTIALLY_PENDING => Labels::getLabel('LBL_PARTIALLY_PENDING', $langId)
         ];
     }
 
@@ -70,7 +73,7 @@ class AdsBatch extends MyAppModel
 
     public function getStatusArr()
     {
-        return [self::STATUS_PENDING, self::STATUS_PUBLISHED];
+        return [self::STATUS_PENDING, self::STATUS_PUBLISHED, self::STATUS_PARTIALLY_PENDING];
     }
 
     public static function getBatchProdDetail($adsBatchId, $selProdId)
@@ -106,5 +109,35 @@ class AdsBatch extends MyAppModel
             return false;
         }
         return true;
+    }
+
+    public function getBatchDataForFeed(int $userId ,int $langId): array
+    {       
+        $srch = AdsBatch::getSearchObject(true);
+        $srch->addCondition(AdsBatch::DB_TBL_BATCH_PRODS_PREFIX . 'adsbatch_id', '=', $this->getMainTableRecordId());
+        $srch->addCondition(AdsBatch::DB_TBL_PREFIX . 'user_id', '=', $userId);
+        $srch->addMultipleFields(
+            [
+                'selprod_id', 'selprod_title', 'selprod_stock', 'selprod_condition', 'selprod_price', 'selprod_available_from', 'product_id', 'product_description', 'product_upc', 'language_code', 'country_code', 'IFNULL(brand_name, brand_identifier) as brand_name', 'abprod_item_group_identifier', 'adsbatch_expired_on', 'abprod_cat_id'
+            ]
+        );       
+        $productData = FatApp::getDb()->fetchAll($srch->getResultSet());
+        if (empty($productData)) {
+            return [];            
+        }
+
+        foreach ($productData as &$prodDetail) {
+            $srch = new SearchBase(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'spo');
+            $srch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', 'spo.selprodoption_optionvalue_id = ov.optionvalue_id', 'ov');
+            $srch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'ov_lang.optionvaluelang_optionvalue_id = ov.optionvalue_id AND ov_lang.optionvaluelang_lang_id = ' . $langId, 'ov_lang');
+            $srch->joinTable(Option::DB_TBL, 'INNER JOIN', 'o.option_id = ov.optionvalue_option_id', 'o');
+            $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'o.option_id = o_lang.optionlang_option_id AND o_lang.optionlang_lang_id = ' . $langId, 'o_lang');
+            $srch->addMultipleFields(['optionvalue_identifier', 'option_is_color', 'option_name']);
+            $srch->addCondition('selprodoption_selprod_id', '=', $prodDetail['selprod_id']);          
+            $prodDetail['optionsData'] = FatApp::getDb()->fetchAll($srch->getResultSet());
+            $prodDetail['selprod_condition'] = (Product::getConditionArr($langId))[$prodDetail['selprod_condition']];
+            $prodDetail['selprod_stock'] = (0 < $prodDetail['selprod_stock'] ? "in stock" : 'out of stock');
+        }
+        return $productData;
     }
 }

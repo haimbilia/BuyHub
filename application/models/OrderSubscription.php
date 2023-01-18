@@ -50,7 +50,7 @@ class OrderSubscription extends MyAppModel
         $srch->addCondition(Orders::DB_TBL_PREFIX . 'user_id', '=', $userId);
         $srch->setPageSize(1);
 
-        $srch->addOrder(Orders::DB_TBL_PREFIX . 'no');
+        $srch->addOrder(Orders::DB_TBL_PREFIX . 'number');
         $rs = $srch->getResultSet();
 
         $rowCount = $srch->recordCount();

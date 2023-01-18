@@ -64,69 +64,77 @@
                     break;
                 case 'adsbatch_status':
                     $statusArr = AdsBatch::statusArr();
+                    $title = Labels::getLabel('LBL_PRODUCTS_ARE_PENDING_TO_BE_PUBLISHED.', $siteLangId);
                     switch ($row[$key]) {
                         case AdsBatch::STATUS_PENDING:
                             $class = 'badge-info';
                             break;
+                        case AdsBatch::STATUS_PARTIALLY_PENDING:
+                            $title = Labels::getLabel('LBL_SOME_PRODUCTS_ARE_PENDING_TO_BE_PUBLISHED.', $siteLangId);
+                            $class = 'badge-info';
+                            break;
                         case AdsBatch::STATUS_PUBLISHED:
+                            $title = Labels::getLabel('LBL_ALL_PRODUCTS_HAVE_BEEN_PUBLISHED.', $siteLangId);
                             $class = 'badge-success';
                             break;
                         default:
                             $class = 'badge-dark';
                             break;
                     }
-                    $htm = '<span class="badge ' . $class . '">'  . $statusArr[$row[$key]] . '</span>';
+                    $htm = '<span class="badge ' . $class . '" title="' . $title . '" data-bs-toggle="tooltip">'  . $statusArr[$row[$key]] . '</span>';
                     $td->appendElement('plaintext', array(), $htm, true);
                     break;
                 case 'action':
                     $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
-                    if (AdsBatch::STATUS_PUBLISHED != $row['adsbatch_status']) {
-                        $li = $ul->appendElement('li');
-                        $li->appendElement(
-                            'a',
-                            [
-                                'href' => UrlHelper::generateUrl($keyName, 'bindProducts', [$row['adsbatch_id']]),
-                                'title' => Labels::getLabel('LBL_BIND_PRODUCTS', $siteLangId)
-                            ],
-                            '<svg class="svg" width="18" height="18">
+
+                    $li = $ul->appendElement('li');
+                    $li->appendElement(
+                        'a',
+                        [
+                            'href' => UrlHelper::generateUrl($keyName, 'bindProducts', [$row['adsbatch_id']]),
+                            'title' => Labels::getLabel('LBL_BIND_PRODUCTS', $siteLangId)
+                        ],
+                        '<svg class="svg" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#link">
                                 </use>
                             </svg>',
-                            true
-                        );
+                        true
+                    );
 
-                        $li = $ul->appendElement('li');
-                        $li->appendElement(
-                            'a',
-                            [
-                                'href' => 'javascript:void(0)',
-                                'title' => Labels::getLabel('LBL_PUBLISH', $siteLangId),
-                                'onclick' => "publishBatch(" . $row['adsbatch_id'] . ")"
-                            ],
-                            '<svg class="svg" width="18" height="18">
+                    $title = (AdsBatch::STATUS_PUBLISHED == $row['adsbatch_status']) ? Labels::getLabel('LBL_RE_-_PUBLISH', $siteLangId) : Labels::getLabel('LBL_PUBLISH', $siteLangId);
+                    $li = $ul->appendElement('li');
+                    $li->appendElement(
+                        'a',
+                        [
+                            'href' => 'javascript:void(0)',
+                            'title' => $title,
+                            'onclick' => "publishBatch(" . $row['adsbatch_id'] . ")"
+                        ],
+                        '<svg class="svg" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#publish-rss">
                                 </use>
                             </svg>',
-                            true
-                        );
+                        true
+                    );
 
-                        $li = $ul->appendElement('li');
-                        $li->appendElement(
-                            'a',
-                            [
-                                'href' => 'javascript:void(0)',
-                                'title' => Labels::getLabel('LBL_EDIT', $siteLangId),
-                                'onclick' => "batchForm(" . $row['adsbatch_id'] . ", " . $row['adsbatch_lang_id'] . ")"
-                            ],
-                            '<svg class="svg" width="18" height="18">
+                    $li = $ul->appendElement('li');
+                    $li->appendElement(
+                        'a',
+                        [
+                            'href' => 'javascript:void(0)',
+                            'title' => Labels::getLabel('LBL_EDIT', $siteLangId),
+                            'onclick' => "batchForm(" . $row['adsbatch_id'] . ", " . $row['adsbatch_lang_id'] . ")"
+                        ],
+                        '<svg class="svg" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
                                 </use>
                             </svg>',
-                            true
-                        );
+                        true
+                    );
+                    if (AdsBatch::STATUS_PENDING == $row['adsbatch_status']) {
                         $li = $ul->appendElement('li');
                         $li->appendElement(
                             'a',
@@ -141,7 +149,7 @@
                             </svg>',
                             true
                         );
-                    } else if (AdsBatch::STATUS_PUBLISHED == $row['adsbatch_status']) {
+                    } else if (AdsBatch::STATUS_PUBLISHED == $row['adsbatch_status'] || AdsBatch::STATUS_PARTIALLY_PENDING == $row['adsbatch_status']) {
                         $li = $ul->appendElement('li');
                         $li->appendElement(
                             'a',
@@ -150,10 +158,10 @@
                                 'title' => Labels::getLabel('LBL_VIEW', $siteLangId)
                             ],
                             '<svg class="svg" width="18" height="18">
-                        <use
-                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
-                        </use>
-                    </svg>',
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                </use>
+                            </svg>',
                             true
                         );
                     }

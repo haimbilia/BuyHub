@@ -88,6 +88,8 @@ class Product extends MyAppModel
 
     public const VIEW_MORE_SELLER_COUNT = 2;
 
+    public $prodSpecId = 0;
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -2028,27 +2030,27 @@ END,   special_price_found ) as special_price_found'
 
     public function saveProductSpecifications($prodSpecId, $langId, $prodSpecName, $prodSpecValue, $prodSpecGroup)
     {
-        $prodSpecId = FatUtility::int($prodSpecId);
+        $this->prodSpecId = FatUtility::int($prodSpecId);
         $langId = FatUtility::int($langId);
-        if ($langId < 1 || empty($prodSpecName) || empty($prodSpecValue) || ($prodSpecId < 1 && $this->mainTableRecordId < 1)) {
+        if ($langId < 1 || empty($prodSpecName) || empty($prodSpecValue) || ($this->prodSpecId < 1 && $this->mainTableRecordId < 1)) {
             $this->error = Labels::getLabel('ERR_PLEASE_FILL_PRODUCT_SPEICIFICATION_TEXT_AND_VALUE', $this->commonLangId);
             return false;
         }
 
-        if ($prodSpecId < 1) {
-            $prodSpec = new ProdSpecification($prodSpecId);
+        if ($this->prodSpecId < 1) {
+            $prodSpec = new ProdSpecification($this->prodSpecId);
             $data['prodspec_product_id'] = $this->mainTableRecordId;
             $prodSpec->assignValues($data);
             if (!$prodSpec->save()) {
                 $this->error = $prodSpec->getError();
                 return false;
             }
-            $prodSpecId = $prodSpec->getMainTableRecordId();
+            $this->prodSpecId = $prodSpec->getMainTableRecordId();
         }
 
-        $prodSpec = new ProdSpecification($prodSpecId);
+        $prodSpec = new ProdSpecification($this->prodSpecId);
         $langData = array(
-            'prodspeclang_prodspec_id' => $prodSpecId,
+            'prodspeclang_prodspec_id' => $this->prodSpecId,
             'prodspeclang_lang_id' => $langId,
             'prodspec_name' => $prodSpecName,
             'prodspec_value' => $prodSpecValue,

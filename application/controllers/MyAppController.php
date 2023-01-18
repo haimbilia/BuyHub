@@ -630,7 +630,7 @@ class MyAppController extends FatController
             $verificationCode = $userObj->prepareUserVerificationCode($data['user_email']);
         }
 
-        $link = UrlHelper::generateFullUrl('GuestUser', 'changeEmailVerification', array('verify' => $verificationCode));
+        $link = UrlHelper::generateFullUrl('GuestUser', 'changeEmailVerification', array('verify' => $verificationCode), CONF_WEBROOT_FRONTEND);
 
         $email = new EmailHandler();
         if (!$configureEmail) {

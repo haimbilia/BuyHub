@@ -60,6 +60,7 @@ foreach ($productSpecifications as  $specification) {
                         'title' => Labels::getLabel('BTN_DELETE', $langId),
                         'onclick' => "deleteProdSpec(this)",
                         'data-id' => $prodSpecId,
+                        'data-lang-id' => $langId,
                     ],
                     '<svg class="svg" width="18" height="18">
                                 <use
