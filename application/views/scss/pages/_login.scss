@@ -61,11 +61,9 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
         margin: 0 auto;
     }
 }
-
 .other-option {
     margin-top: 1.5rem;
 }
-
 .buttons-list {
     margin-bottom: 1.5rem;
     display: flex;
@@ -79,18 +77,24 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
         max-width: 380px;
     }
     &-link {
-        font-weight: 600;
-        font-size: 0.8rem;
-        border-radius: 3px;
-        border: $border-black;
-        padding: 0.5rem 1rem;
+        background-color: #fff;
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 10px;
+        border: $border;
+        border-color: rgb(168, 168, 168);
+        // box-shadow: 1px 1px 1px grey;
+        padding: 0 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
-
         &:hover {
-            color: $brand-color;
+            color: rgba(0, 0, 0, 1);
             border-color: currentColor;
+            text-decoration: none;
+            box-shadow: $btn-hover-shadow;
+            cursor: pointer;
         }
         &:focus {
             box-shadow: $btn-focus-shadow;
@@ -100,16 +104,17 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
         display: flex;
         align-items: center;
         gap: 10px;
-        width: 200px;
+        // width: 200px;
     }
     &-icon {
+        $size: 50px;
         padding: 0;
-        flex: 0 0 30px;
-        max-width: 30px;
+        flex: 0 0 $size;
+        max-width: $size;
         margin: 0;
         //background: rgba(0, 0, 0, 0.1);
-        width: 30px;
-        height: 30px;
+        width: $size;
+        height: $size;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -119,8 +124,8 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
     img,
     .svg {
         margin: 0 auto;
-        width: 30px;
-        height: 30px;
+        width: 42px;
+        height: 42px;
     }
 
     .btn-fb,
