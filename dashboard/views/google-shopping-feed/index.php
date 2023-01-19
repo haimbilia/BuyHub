@@ -28,11 +28,18 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
                 <div class="card ">
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <h6 class="m-0">
-                            <?php echo Labels::getLabel('Lbl_MERCHANT_ID', $siteLangId); ?> :
-                            <?php echo $merchantId;
-                            if (empty($merchantId) && $userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
-                                <a class="btn btn-outline-gray btn-sm" href="<?php echo UrlHelper::generateUrl($keyName, 'getAccessToken') ?>" title="<?php echo Labels::getLabel('Lbl_SETUP_MERCHANT_ACCOUNT', $siteLangId); ?>"><?php echo Labels::getLabel('Lbl_SETUP_MERCHANT_ACCOUNT', $siteLangId); ?></a>
-                            <?php }
+                            <?php if (empty($merchantId) && $userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
+                                <?php echo Labels::getLabel('Lbl_SETUP_MERCHANT_ACCOUNT', $siteLangId); ?>
+                                <a class="buttons-list-link" href="<?php echo UrlHelper::generateUrl($keyName, 'getAccessToken'); ?>">
+                                    <span class="buttons-list-wrap"> <span class="buttons-list-icon">
+                                            <img class="svg" width="42" height="42" alt="" src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/social-icons/GoogleLogin.svg">
+                                        </span>
+                                        <?php echo Labels::getLabel('LBL_SIGN_IN_WITH_GOOGLE', $siteLangId); ?>
+                                    </span>
+                                </a>
+                            <?php } else {
+                                echo Labels::getLabel('Lbl_MERCHANT_ID', $siteLangId) . ':' . $merchantId;
+                            }
 
                             if (empty($merchantId) && !$userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) {
                                 echo Labels::getLabel('LBL_YOU_ARE_NOT_ALLOWED_TO_SETUP_ACCOUNT', $siteLangId);
@@ -67,7 +74,7 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
 
 <?php if (!empty($merchantId) && empty($serviceAccInfo) && $userPrivilege->canEditAdvertisementFeed(UserAuthentication::getLoggedUserId(), true)) { ?>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             serviceAccountForm();
         });
     </script>
