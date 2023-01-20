@@ -805,7 +805,7 @@ class BuyerController extends BuyerBaseController
                         $file['downloadable'] = false;
                     }
                 }
-                
+
                 $file['downloadUrl'] = UrlHelper::generateFullUrl('Buyer', 'downloadDigitalFile', array($file['afile_id'], $file['afile_record_id']));
             }
 
@@ -2920,35 +2920,26 @@ class BuyerController extends BuyerBaseController
     {
         if (!$orderId) {
             $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            return;
+            LibHelper::exitWithError($message, true);
         }
-
         $userId = UserAuthentication::getLoggedUserId();
 
         $orderObj = new Orders();
         $orderDetail = $orderObj->getOrderById($orderId, $this->siteLangId);
         if (!$orderDetail || ($orderDetail && $orderDetail['order_user_id'] != $userId)) {
             $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            return;
+            LibHelper::exitWithError($message, true);
         }
 
         $cartObj = new Cart();
         $cartInfo = LibHelper::isJson($orderDetail['order_cart_data']) ? json_decode($orderDetail['order_cart_data'], true) : unserialize($orderDetail['order_cart_data']);
         unset($cartInfo['shopping_cart']);
         $outOfStock = false;
+        $notAvailable = 0;
         foreach ($cartInfo as $key => $quantity) {
             $keyDecoded = LibHelper::isJson($orderDetail['order_cart_data']) ? json_decode(base64_decode($key), true) : unserialize(base64_decode($key));
 
             $selprod_id = 0;
-
             if (strpos($keyDecoded, Cart::CART_KEY_PREFIX_PRODUCT) !== false) {
                 $selprod_id = FatUtility::int(str_replace(Cart::CART_KEY_PREFIX_PRODUCT, '', $keyDecoded));
             }
@@ -2957,19 +2948,28 @@ class BuyerController extends BuyerBaseController
                 $outOfStock = true;
                 continue;
             }
+            
+            $product = $this->getProductDetail($selprod_id);
+            if (!$product) {
+                $notAvailable++;
+            }
             $cartObj->add($selprod_id, $quantity);
         }
 
         if ($outOfStock) {
             $message = Labels::getLabel('MSG_Product_not_available_or_out_of_stock_so_removed_from_cart_listing', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                $error['status'] = 0;
-                $error['msg'] = strip_tags($message);
-                $error['cartItemsCount'] = $this->cartItemsCount;
-                FatUtility::dieJsonError($error);
+            LibHelper::exitWithError($message, true);
+        }
+        
+        if (0 < $notAvailable) {
+            $message = Labels::getLabel('ERR_CURRENTLY_THE_PRODUCT_IS_UNAVAILABLE', $this->siteLangId);
+            if (1 < $notAvailable) {
+                $message = Labels::getLabel('ERR_CURRENTLY_THE_PRODUCTS_ARE_UNAVAILABLE', $this->siteLangId);
+                if (count($cartInfo) > $notAvailable) {
+                    $message = Labels::getLabel('ERR_SOME_OF_THE_PRODUCTS_ARE_UNAVAILABLE', $this->siteLangId);
+                }
             }
-            Message::addErrorMessage($message);
-            return false;
+            LibHelper::exitWithError($message, true);
         }
 
         $cartObj->removeUsedRewardPoints();
@@ -2978,11 +2978,7 @@ class BuyerController extends BuyerBaseController
 
         LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
 
-        if (true === MOBILE_APP_API_CALL) {
-            $this->_template->render();
-        }
-
-        return;
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
     }
 
     public function shareEarnUrl()
@@ -3088,6 +3084,82 @@ class BuyerController extends BuyerBaseController
         $this->set('comments', OrderCancelRequest::getAttributesById($recordId, 'ocrequest_message'));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    private function getSelProdReviewObj()
+    {
+        $selProdReviewObj = new SelProdReviewSearch();
+        $selProdReviewObj->joinProducts($this->siteLangId);
+        $selProdReviewObj->joinSellerProducts($this->siteLangId);
+        $selProdReviewObj->joinSelProdRating();
+        $selProdReviewObj->joinUser();
+        // $selProdReviewObj->joinSelProdReviewHelpful();
+        $selProdReviewObj->addCondition('ratingtype_type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
+        $selProdReviewObj->doNotCalculateRecords();
+        $selProdReviewObj->doNotLimitRecords();
+        $selProdReviewObj->addGroupBy('spr.spreview_product_id');
+        // $selProdReviewObj->addGroupBy('sprh_spreview_id');
+        $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', 'spr.spreview_product_id', "ROUND(AVG(sprating_rating),2) as prod_rating", "COUNT(DISTINCT(spreview_id)) AS totReviews"));
+        return $selProdReviewObj;
+    }
+
+    private function getProductDetail(int $selprod_id)
+    {
+        $prodSrchObj = new ProductSearch($this->siteLangId);
+        $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id');
+        if (empty($productId)) {
+            if (true === MOBILE_APP_API_CALL) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_PRODUCT'));
+            }
+            FatUtility::exitWithErrorCode(404);
+        }
+        /* fetch requested product[ */
+        $prodSrch = clone $prodSrchObj;
+        $prodSrch->setLocationBasedInnerJoin(false);
+        $prodSrch->setGeoAddress();
+        $prodSrch->setDefinedCriteria(0, 0, array('product_id' => $productId), false);
+        $prodSrch->joinProductToCategory();
+        $prodSrch->joinShopSpecifics();
+        $prodSrch->joinProductSpecifics();
+        $prodSrch->joinSellerProductSpecifics();
+        $prodSrch->joinSellerSubscription();
+        $prodSrch->addSubscriptionValidCondition();
+        $prodSrch->validateAndJoinDeliveryLocation(false);
+        $prodSrch->joinProductToTax();
+        $prodSrch->doNotCalculateRecords();
+        $prodSrch->addCondition('selprod_id', '=', $selprod_id);
+        $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $prodSrch->doNotLimitRecords();
+
+        /* sub query to find out that logged user have marked current product as in wishlist or not[ */
+        $loggedUserId = 0;
+        if (UserAuthentication::isUserLogged()) {
+            $loggedUserId = UserAuthentication::getLoggedUserId();
+        }
+        if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+            $prodSrch->joinFavouriteProducts($loggedUserId);
+            $prodSrch->addFld('IFNULL(ufp_id, 0) as ufp_id');
+        } else {
+            $prodSrch->joinUserWishListProducts($loggedUserId);
+            $prodSrch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
+        }
+
+        $selProdReviewObj = $this->getSelProdReviewObj();
+        $selProdReviewObj->addCondition('spr.spreview_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
+        $prodSrch->joinTable('(' . $selProdReviewObj->getQuery() . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
+        $prodSrch->addMultipleFields(
+            array(
+                'product_id', 'selprod_sku', 'product_identifier', 'COALESCE(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description',
+                'selprod_id', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'selprod_price', 'special_price_found', 'splprice_start_date', 'splprice_end_date', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_warranty', 'selprod_return_policy', 'selprodComments',
+                'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name',
+                'shop_id', 'COALESCE(shop_name, shop_identifier) as shop_name', 'COALESCE(sq_sprating.prod_rating,0) prod_rating ', 'COALESCE(sq_sprating.totReviews,0) totReviews',
+                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age',
+                'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'selprod_condition', 'product_warranty_unit'
+            )
+        );
+        $productRs = $prodSrch->getResultSet();
+        return (array) FatApp::getDb()->fetch($productRs);
     }
 
     public function getBreadcrumbNodes($action)

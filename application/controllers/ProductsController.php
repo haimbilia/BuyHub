@@ -201,6 +201,14 @@ class ProductsController extends MyAppController
             $brandsArr = unserialize($brandFilter);
         }
 
+        if (true === MOBILE_APP_API_CALL) {
+            $this->set('data', [
+                'brandsArr' => $brandsArr,
+                'brandsCheckedArr' => $brandsCheckedArr,
+            ]);
+            $this->_template->render();
+        }
+
         $this->set('brandsArr', $brandsArr);
         $this->set('brandsCheckedArr', $brandsCheckedArr);
 
@@ -493,7 +501,7 @@ class ProductsController extends MyAppController
         $product = $this->getProductDetail($selprod_id);
         if (!$product) {
             if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+                FatUtility::dieJsonError(Labels::getLabel('ERR_CURRENTLY_THE_PRODUCT_IS_UNAVAILABLE', $this->siteLangId));
             }
             FatUtility::exitWithErrorCode(404);
         }
