@@ -1,5 +1,5 @@
 <?php
-require_once 'APIs/fb-graph-sdk-5.4/src/Facebook/autoload.php';
+require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
 use Facebook\Facebook;
 
 class Fbapi{
