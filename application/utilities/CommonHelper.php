@@ -1530,7 +1530,7 @@ class CommonHelper extends FatUtility
             }
 
             if ($removeParent) {
-                // return @rmdir($str);
+                return @rmdir($str);
             }
         }
     }
