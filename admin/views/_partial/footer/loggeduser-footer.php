@@ -110,6 +110,7 @@
             </div>
         </div>
     </div>
+    <?php $getProfileImageData = ImageDimension::getData(ImageDimension::TYPE_USER_PROFILE_IMAGE, ImageDimension::VIEW_CROPED); ?>
     <div class="footer-action__item dropdown header-account">
         <a class=" dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
             <span class="header-account__img">
@@ -152,7 +153,7 @@
                     </a>
                     <div class="languages collapse" id="languages">
                         <?php foreach ($languages as $languageId => $language) { ?>
-                            <a class="languages-link <?php echo ($siteLangId == $languageId) ? 'is--active' : ''; ?>" href="" onclick="setSiteDefaultLang(<?php echo $languageId; ?>)"><?php echo $language; ?></a>
+                            <a class="languages-link <?php echo ($siteLangId == $languageId) ? 'is--active' : ''; ?>" href="" onclick="setSiteDefaultLang(<?php echo $languageId; ?>)"><?php echo $language['language_name']; ?></a>
                         <?php } ?>
                     </div>
                 <?php
