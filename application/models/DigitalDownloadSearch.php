@@ -76,6 +76,7 @@ class DigitalDownloadSearch extends SearchBase
                 'afile.afile_id as afile_id',
                 'afile.afile_record_id',
                 'afile.afile_physical_path',
+                'afile.afile_name'
             ]
         );
 

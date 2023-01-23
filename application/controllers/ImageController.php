@@ -121,13 +121,15 @@ class ImageController extends FatController
             /* CommonHelper::printArray($row); die(); */
         }
         /* ] */
+        
         $objectName = 'AttachedFile';
         if ($fileType == $objectName::FILETYPE_PRODUCT_IMAGE_TEMP) {
             $objectName = 'AttachedFileTemp';
         } else {
             $fileType =  $objectName::FILETYPE_PRODUCT_IMAGE;
         }
-
+        
+        $file_row = false;
         if ($selprod_id && $row) {
             $file_row = $objectName::getAttachment($fileType, $row['afile_record_id'], $row['afile_record_subid'], $lang_id);
         } elseif ($afile_id > 0) {
@@ -136,7 +138,7 @@ class ImageController extends FatController
                 $file_row = $res;
             }
         }
-
+        
         if ($file_row == false) { 
             $file_row = $objectName::getAttachment($fileType, $recordId, -1, $lang_id);
         }
@@ -145,6 +147,7 @@ class ImageController extends FatController
         $image_name = $objectName::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_PRODUCTS, $sizeType);
         $apply_watermark  = $imageDimensions['width'] > 400 || $imageDimensions['width'] > 400;
+        
         if ($sizeType) {
             $objectName::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark);
         } else {
