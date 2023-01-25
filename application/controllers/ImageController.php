@@ -643,7 +643,7 @@ class ImageController extends FatController
         }
     }
 
-    public function slide($slide_id, $screen = 0, $lang_id, $sizeType = '', $displayUniversalImage = true)
+    public function slide($slide_id, $screen = 0, $lang_id = 0, $sizeType = '', $displayUniversalImage = true)
     {
         $default_image = 'hero_deafult_image.jpg';
         $slide_id = FatUtility::int($slide_id);
@@ -860,7 +860,7 @@ class ImageController extends FatController
         }
     }
 
-    public function cblockBackgroundImage($cblockId, $langId = 0, $sizeType = '', $fileType)
+    public function cblockBackgroundImage($cblockId, $langId = 0, $sizeType = '', $fileType = '')
     {
         $cblockId = FatUtility::int($cblockId);
         $langId = FatUtility::int($langId);
