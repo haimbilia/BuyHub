@@ -69,7 +69,7 @@ class WalletPayController extends MyAppController
 
         if ($orderPaymentFinancials["order_credits_charge"] > 0) {
             $orderPaymentObj = new OrderPayment($orderId);
-            $orderPaymentObj->chargeUserWallet($orderPaymentFinancials["order_credits_charge"]);
+            $orderPaymentObj->chargeUserWallet($orderPaymentFinancials["order_credits_charge"]);            
         }
 
         if (!empty($subsSessionOrderId)) {
@@ -88,7 +88,7 @@ class WalletPayController extends MyAppController
         }
 
         if ($isAjaxCall) {
-            $this->set('redirectUrl', UrlHelper::generateUrl('Custom', 'paymentSuccess', array($orderId)));
+            $this->set('redirectUrl', UrlHelper::generateUrl('Custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
             $this->set('msg', Labels::getLabel("MSG_PAYMENT_FROM_WALLET_MADE_SUCCESSFULLY", $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }

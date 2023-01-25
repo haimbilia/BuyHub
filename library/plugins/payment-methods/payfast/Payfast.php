@@ -177,7 +177,7 @@ class Payfast extends PaymentMethodBase
             // Merchant details
             'merchant_id' => $this->getmerchantId(),
             'merchant_key' => $this->getMerchantKey(),
-            'return_url' => CommonHelper::generateFullUrl('Custom', 'paymentSuccess', [$orderId]),
+            'return_url' => CommonHelper::generateFullUrl('Custom', 'paymentSuccess', [$orderPaymentObj->getOrderNo()]),
 			'cancel_url' => CommonHelper::generateFullUrl('Custom', 'paymentFailed'),
             'notify_url' => CommonHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'callback', [$orderId]),
             // Buyer details
