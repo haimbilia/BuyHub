@@ -17,6 +17,7 @@
 - Bug-069726 - order with pickup in store when I am in English I can select the date of pickup but in French and Arabic impossible the pop up does not appear 
 - Bug-069874 - Seller dashbaord Google Shoping feed authentication process - use Google branding guidelines 
 - Bug-069778 - A success message appears and the product does not get added to the cart when the user clicks on the Reorder button on the order details page.
+- Bug-069970 - On product detail page option vaules should be displated as per display order
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
