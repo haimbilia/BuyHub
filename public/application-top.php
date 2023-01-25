@@ -3,7 +3,7 @@ if (!array_key_exists('screenWidth', $_COOKIE)) {
     setcookie('screenWidth', 769, 0, CONF_WEBROOT_URL);
 }
 
-if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
     ob_start("ob_gzhandler");
 } else {
     ob_start();
