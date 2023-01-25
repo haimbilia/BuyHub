@@ -801,7 +801,7 @@ class AttachedFile extends MyAppModel
             echo file_get_contents($image_name);
             exit;
         }
-        return $img = new ImageResize($image_name);
+        return  new ImageResize($image_name);
     }
 
     public static function displayOriginalImageWebp($imageName, $noImage = 'no_image.jpg', $uploadedFilePath = '', $cache = false)

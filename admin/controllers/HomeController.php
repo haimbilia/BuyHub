@@ -14,7 +14,7 @@ class HomeController extends ListingBaseController
     }
 
     public function index()
-    {        
+    {
         $accountId = false;
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
@@ -413,9 +413,9 @@ class HomeController extends ListingBaseController
     }
 
     public function clear()
-    {     
-        CommonHelper::recursiveDelete(CONF_UPLOADS_PATH . "caching");  
-        FatCache::clearAll();       
+    {
+        CommonHelper::recursiveDelete(CONF_UPLOADS_PATH . "caching");
+        FatCache::clearAll();
         if (Labels::isAPCUcacheAvailable()) {
             apcu_clear_cache();
         }
@@ -437,7 +437,7 @@ class HomeController extends ListingBaseController
         if (CommonHelper::demoUrl()) {
             $str = file_get_contents('https://' . $_SERVER['SERVER_NAME'] . '/admin/admin-users/createProcedures');
         }
-        
+
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_CACHE_HAS_BEEN_CLEARED', $this->siteLangId));
         //FatApp::redirectUser(UrlHelper::generateUrl("home"));
     }

@@ -70,7 +70,7 @@ $html = '<div class="modal-header"><h5 class="modal-title">Yo!kart</h5></div><di
         setTimeout(function() {
             $.facebox.close();
         }, 5000);
-        fcom.updateWithAjax(fcom.makeUrl('RestoreSystem', 'index', '',
+        fcom.updateWithAjax(fcom.makeUrl('RestoreSystem', 'index', [],
             '<?php echo CONF_WEBROOT_FRONT_URL; ?>'), '', function(
             resp) {
             fcom.removeLoader();

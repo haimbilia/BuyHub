@@ -19,7 +19,8 @@
         "mollie/mollie-api-php": "2.48.0",
         "rajathans/shiprocket-php": "1.0.0",
         "phpmailer/phpmailer": "^6.5",
-        "nickdnk/graph-sdk": "7.0.1"
+        "nickdnk/graph-sdk": "7.0.1",
+        "tecnickcom/tcpdf":"6.6.2"
     },
     "config": {
         "platform": {

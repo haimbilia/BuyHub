@@ -25,8 +25,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 <div class="col-auto">
                                     <select class="form-control form-select" onchange="langForm(this)" name="lang_id">
                                         <?php foreach ($languages as $langId => $langName) {
-                                            $selectedClass = $langFld->value == $langId ? 'selected' : '';
-                                            echo "<option value='$langId' $selectedClass>$langName</option>";
+                                            echo "<option value='$langId'>$langName</option>";
                                         }
                                         ?>
                                     </select>
