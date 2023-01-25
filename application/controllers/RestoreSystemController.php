@@ -179,6 +179,8 @@ class RestoreSystemController extends MyAppController
 
     private function fullCopy($source, $target, $empty_first = true)
     {
+        $source = rtrim($source, '/');
+        $target = rtrim($target, '/');
         if ($empty_first) {
             $this->recursiveDelete($target);
         }

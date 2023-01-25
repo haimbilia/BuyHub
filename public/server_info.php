@@ -1,5 +1,5 @@
 <?php
-phpinfo();
+// phpinfo();
 
 function getInBytes($value)
 {
@@ -369,7 +369,7 @@ $calendar = extension_loaded('calendar');
         <?php } ?>
         <div class="row">
             <div class="col-sm-12">
-                <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data">
+                <form action="<?php echo $action ?? ''; ?>" method="post" enctype="multipart/form-data">
                     <p><?php echo $text_install_php; ?>
                     </p>
                     <fieldset>
