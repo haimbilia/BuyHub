@@ -12,6 +12,7 @@
 - Bug-069726 - order with pickup in store when I am in English I can select the date of pickup but in French and Arabic impossible the pop up does not appear.
 - Bug-069874 - Seller dashbaord Google Shoping feed authentication process - use Google branding guidelines 
 - Bug-069970 - On product detail page option vaules should be displated as per display order
+- Bug-070009 - On deleting seller product, its options are not deleting.
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
