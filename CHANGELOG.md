@@ -13,6 +13,7 @@
 - Bug-069874 - Seller dashbaord Google Shoping feed authentication process - use Google branding guidelines 
 - Bug-069970 - On product detail page option vaules should be displated as per display order
 - Bug-070009 - On deleting seller product, its options are not deleting.
+- Bug-070036 - Admin top selling products should be based on completed orders.
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
