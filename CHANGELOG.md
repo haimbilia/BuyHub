@@ -19,6 +19,7 @@
 - Bug-069778 - A success message appears and the product does not get added to the cart when the user clicks on the Reorder button on the order details page.
 - Bug-069970 - On product detail page option vaules should be displated as per display order
 - Bug-070009 - On deleting seller product, its options are not deleting.
+- Bug-070036 - Admin top selling products should be based on completed orders.
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
