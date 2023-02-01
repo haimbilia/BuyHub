@@ -326,10 +326,13 @@ class HomeController extends ListingBaseController
         $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
         $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
         $cnd->attachCondition('plugin_code', '=', 'payatstore');
+        $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
         $srch->setPageSize($limit);
         $srch->addOrder('SUM(op_qty - op_refund_qty)', 'DESC');
-        $srch->addMultipleFields(array('op_selprod_title', 'order_id', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'op_selprod_sku', 'op_shop_name', 'op_selprod_id', 'shop_id'));
+        $srch->addMultipleFields(array('op_selprod_title', 'order_id', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'op_selprod_sku', 'op_shop_name', 'op_selprod_id', 'shop_id', 'SUBSTRING( op.op_selprod_code, 1, (LOCATE( "_", op.op_selprod_code ) - 1 ) ) as product_id'));
+        $srch->addGroupBy('op.op_selprod_id');
         $srch->addHaving('totSoldQty', '>', 0);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $productsList = FatApp::getDb()->fetchAll($rs);
 

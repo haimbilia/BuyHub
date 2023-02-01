@@ -14,7 +14,7 @@
                     <td>
                         <div class="media-group">
                             <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="<?php echo $product['op_selprod_title']; ?>">
-                                <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
+                            <img data-aspect-ratio="1:1" src="<?php echo UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND).'?t='.time(); ?>" alt="image">
                             </a>
                         </div>
                     </td>
