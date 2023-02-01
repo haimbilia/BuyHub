@@ -2385,6 +2385,7 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ('REMOVE_ITEMS_NOT_AVAILABLE_FOR_PICKUP', 1, 'Are you sure do you want to remove items not available for pickup?', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
+UPDATE `tbl_collections` SET `collection_display_order`= (`collection_display_order` + 1);
 INSERT INTO `tbl_collections`(
     `collection_identifier`,
     `collection_type`,
@@ -2401,4 +2402,4 @@ INSERT INTO `tbl_collections`(
     `collection_for_app`
 )
 VALUES('Home Page Hero Slides', '14', '', '', '', '1', '1', '0', '', '25', '0', '1', '1')
-ON DUPLICATE KEY UPDATE collection_identifier = VALUES(collection_identifier), collection_type = VALUES(collection_type), collection_layout_type = VALUES(collection_layout_type);
+ON DUPLICATE KEY UPDATE collection_identifier = VALUES(collection_identifier), collection_type = VALUES(collection_type), collection_layout_type = VALUES(collection_layout_type), collection_display_order = VALUES(collection_display_order);
