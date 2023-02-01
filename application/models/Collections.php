@@ -11,6 +11,8 @@ class Collections extends MyAppModel
     public const DB_TBL_COLLECTION_TO_RECORDS = 'tbl_collection_to_records';
     public const DB_TBL_COLLECTION_TO_RECORDS_PREFIX = 'ctr_';
 
+    public const HOMEPAGE_COLLECTION_LIMIT = 5;
+
     //public const TYPE_PRODUCT = 1;
     public const COLLECTION_TYPE_PRODUCT = 1;
     public const COLLECTION_TYPE_CATEGORY = 2;

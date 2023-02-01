@@ -1919,7 +1919,8 @@ class CommonHelper extends FatUtility
         if (true === $convertToType) {
             $data = static::cleanArray($data);
         }
-
+        
+        header('Content-Type: application/json; charset=utf-8');
         die(LibHelper::convertToJson($data, JSON_UNESCAPED_UNICODE));
     }
 

@@ -1,9 +1,4 @@
 $(function () {
-    /* $('.navchild').hover(function () {
-        reinitSlick();
-    }); */
-
-
     $('.js-hero-slider').slick({
         rtl: ('rtl' == langLbl.layoutDirection),
         autoplay: true,
@@ -16,9 +11,7 @@ $(function () {
         infinite: true,
         cssEase: 'cubic-bezier(0.7, 0, 0.3, 1)',
         touchThreshold: 100
-    });
-
-
+    });    
 });
 resendOtp = function (userId, getOtpOnly = 0) {
     fcom.displayProcessing();
