@@ -533,4 +533,29 @@ class LibHelper extends FatUtility
             return false;
         }
     }
+
+    public static function getCacheKey()
+    {
+        $calledRoute = debug_backtrace()[1] ?? [];
+        if (empty($calledRoute)) {
+            die('Invalid Calling Route');
+        }
+        $class = $calledRoute['class'];
+        $function = $calledRoute['function'];
+        $args = (array)$calledRoute['args'];
+        foreach ($args as &$val) {
+            if (empty($val)) {
+                $val = 0;
+            }
+            
+            if (is_object($val)) {
+                die('Object is being passed inside arguments please avoid using cache key in '. $class . ' > ' . $function . '.');
+            }
+            
+            if (is_array($val)) {
+                $val = json_encode($val);
+            }
+        }
+        return strtoupper($class . '-' . $function . '-' . implode('-', $args));
+    }
 }
