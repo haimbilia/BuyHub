@@ -2384,3 +2384,21 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ('REMOVE_ITEMS_NOT_AVAILABLE_FOR_SHIPPING', 1, 'Are you sure do you want to remove items not available for shipping?', 2),
 ('REMOVE_ITEMS_NOT_AVAILABLE_FOR_PICKUP', 1, 'Are you sure do you want to remove items not available for pickup?', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT INTO `tbl_collections`(
+    `collection_identifier`,
+    `collection_type`,
+    `collection_criteria`,
+    `collection_primary_records`,
+    `collection_child_records`,
+    `collection_display_order`,
+    `collection_active`,
+    `collection_deleted`,
+    `collection_link_url`,
+    `collection_layout_type`,
+    `collection_display_media_only`,
+    `collection_for_web`,
+    `collection_for_app`
+)
+VALUES('Home Page Hero Slides', '14', '', '', '', '1', '1', '0', '', '25', '0', '1', '1')
+ON DUPLICATE KEY UPDATE collection_identifier = VALUES(collection_identifier), collection_type = VALUES(collection_type), collection_layout_type = VALUES(collection_layout_type);

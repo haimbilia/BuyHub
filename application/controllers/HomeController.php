@@ -86,6 +86,13 @@ class HomeController extends MyAppController
         $collectionTemplates = array();
         foreach ($collections as $collection) {
             switch ($collection['collection_layout_type']) {
+                case Collections::TYPE_HERO_SLIDES_LAYOUT1:
+                    $tpl = new FatTemplate('', '');
+                    $tpl->set('siteLangId', $this->siteLangId);
+                    $tpl->set('slides', $collection['slides']);
+                    $sponsoredProdsLayout = $tpl->render(false, false, '_partial/homePageSlides.php', true, true);
+                    $collectionTemplates[$collection['collection_id']]['html'] = $sponsoredProdsLayout;
+                    break;
                 case Collections::TYPE_SPONSORED_PRODUCT_LAYOUT:
                     $tpl = new FatTemplate('', '');
                     $tpl->set('siteLangId', $this->siteLangId);
@@ -652,7 +659,7 @@ class HomeController extends MyAppController
 
         $i = 0;
         foreach ($collectionsArr as $collection_id => $collection) {
-            if ($collectionCache && !in_array($collection['collection_type'], [Collections::COLLECTION_TYPE_SPONSORED_SHOPS, Collections::COLLECTION_TYPE_SPONSORED_PRODUCTS, Collections::COLLECTION_TYPE_BANNER])) {
+            if ($collectionCache && !in_array($collection['collection_type'], [Collections::COLLECTION_TYPE_SPONSORED_SHOPS, Collections::COLLECTION_TYPE_SPONSORED_PRODUCTS, Collections::COLLECTION_TYPE_BANNER, Collections::COLLECTION_TYPE_HERO_SLIDES])) {
                 continue;
             }
 
@@ -668,6 +675,41 @@ class HomeController extends MyAppController
             $ind = (true === MOBILE_APP_API_CALL) ? $i : $collection['collection_id'];
 
             switch ($collection['collection_type']) {
+                case Collections::COLLECTION_TYPE_HERO_SLIDES:
+                    $collections[$ind] = $collection;
+                    $slides = $this->getSlides();
+                    if (true === MOBILE_APP_API_CALL) {
+                        $appScreenType = CommonHelper::getAppScreenType();
+                        $resType = $appScreenType == applicationConstants::SCREEN_IPAD ? ImageDimension::VIEW_TABLET : ImageDimension::VIEW_MOBILE;
+                        foreach ($slides as &$slideDetail) {
+                            $uploadedTime = AttachedFile::setTimeParam($slideDetail['slide_img_updated_on']);
+                            $slideDetail['slide_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'slide', array($slideDetail['slide_id'], $appScreenType, $this->siteLangId, $resType)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            $urlTypeData = CommonHelper::getUrlTypeData($slideDetail['slide_url']);
+                            $slideUrl = $slideDetail['slide_url'];
+                            $slideDetail['slide_url'] = $slideDetail['slide_url_type'] = $slideDetail['slide_url_title'] = "";
+                            if (false != $urlTypeData) {
+                                $slideDetail['slide_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $slideUrl : $urlTypeData['recordId']);
+                                $slideDetail['slide_url_type'] = $urlTypeData['urlType'];
+
+                                switch ($urlTypeData['urlType']) {
+                                    case applicationConstants::URL_TYPE_SHOP:
+                                        $slideDetail['slide_url_title'] = Shop::getName($urlTypeData['recordId'], $this->siteLangId);
+                                        break;
+                                    case applicationConstants::URL_TYPE_PRODUCT:
+                                        $slideDetail['slide_url_title'] = SellerProduct::getProductDisplayTitle($urlTypeData['recordId'], $this->siteLangId);
+                                        break;
+                                    case applicationConstants::URL_TYPE_CATEGORY:
+                                        $slideDetail['slide_url_title'] = ProductCategory::getProductCategoryName($urlTypeData['recordId'], $this->siteLangId);
+                                        break;
+                                    case applicationConstants::URL_TYPE_BRAND:
+                                        $slideDetail['slide_url_title'] = Brand::getBrandName($urlTypeData['recordId'], $this->siteLangId);
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                    $collections[$ind]['slides'] = $slides;
+                    break;
                 case Collections::COLLECTION_TYPE_SPONSORED_PRODUCTS:
                     $collections[$ind] = $collection;
                     $sponsoredProdsInCollection[$ind] = $collection['collection_id'];
@@ -808,7 +850,7 @@ class HomeController extends MyAppController
                     /* ] */
                     $collections[$ind] = $collection;
                     $counter = 0;
-                    if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT2, Collections::TYPE_CATEGORY_LAYOUT3])) {
+                    if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT2, Collections::TYPE_CATEGORY_LAYOUT3, Collections::TYPE_CATEGORY_LAYOUT5])) {
                         while ($catData = $db->fetch($rs)) {
                             if (true === MOBILE_APP_API_CALL) {
                                 $imgUpdatedOn = ProductCategory::getAttributesById($catData['prodcat_id'], 'prodcat_updated_on');

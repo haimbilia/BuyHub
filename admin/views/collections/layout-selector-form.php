@@ -16,7 +16,6 @@
                     <div class="layout-data collapse" id="collectionType<?php echo $type; ?>">
                         <?php foreach ($layouts as $layoutId => $layout) { ?>
                             <div class="layout-block" data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo $layout; ?>" onclick="collectionForm(<?php echo $type; ?>, <?php echo $layoutId; ?>)">
-
                                 <svg class="svg" width="140" height="70">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg#<?php echo Collections::layoutIconClass($layoutId); ?>"></use>
                                 </svg>
