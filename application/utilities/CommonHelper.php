@@ -2211,5 +2211,5 @@ class CommonHelper extends FatUtility
             return $_COOKIE[$cookieName];
         }
         return false;
-    }
+    }    
 }

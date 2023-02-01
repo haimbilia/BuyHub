@@ -333,28 +333,16 @@ class CategoryController extends MyAppController
         return array_values($result);
     }
 
+    /**
+     * (For API only)
+     */
     public function structure()
     {
-        $prodSrchObj = (true === MOBILE_APP_API_CALL ? false : new ProductCategorySearch($this->siteLangId));
         $parentId = FatApp::getPostedData('parentId', FatUtility::VAR_INT, 0);
-        $includeChild = true;
-        if (true === MOBILE_APP_API_CALL && 0 == $parentId) {
-            $includeChild = false;
-        }
-
-        $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId, $includeChild, false, false, $prodSrchObj, true);
-
-        if (false === MOBILE_APP_API_CALL) {
-            $productCategory = new ProductCategory();
-            $categoriesArr = $productCategory->getCategoryTreeArr($this->siteLangId, $categoriesArr, array('prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(GETCATCODE(prodcat_id),1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'GETCATCODE(prodcat_id) as prodcat_code', 'prodcat_updated_on'));
-        }
+        $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId, true, false, false, false, true);
 
         $categoriesArr = $this->resetKeyValues(array_values($categoriesArr), $this->siteLangId);
-        if (empty($categoriesArr)) {
-            $categoriesArr = array();
-        }
-
-        $this->set('categoriesData', $categoriesArr);
+        $this->set('categoriesData', (array)$categoriesArr);
         $this->_template->render();
     }
 
