@@ -229,10 +229,10 @@ class Importexport extends ImportexportCommon
         return fgetcsv($csvFilePointer);
     }
 
-    public function getCell($arr = array(), $index, $defaultValue = '')
+    public function getCell($arr, $index, $defaultValue = '')
     {
         if (array_key_exists($index, $arr) && trim($arr[$index]) != '') {
-            return $str = str_replace("\xc2\xa0", '', trim($arr[$index]));
+            return str_replace("\xc2\xa0", '', trim($arr[$index]));
             /*  return str_replace("\xa0", '', $str); */
         }
         return $defaultValue;
@@ -240,6 +240,9 @@ class Importexport extends ImportexportCommon
 
     public function parseContentForExport($colValue)
     {
+        if (empty($colValue)) {
+            return '';
+        }
         $encoding = mb_detect_encoding($colValue, "auto");
         return mb_convert_encoding($colValue, 'utf-8', $encoding);
     }
