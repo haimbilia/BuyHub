@@ -3652,15 +3652,15 @@ class Importexport extends ImportexportCommon
                             }
                             break;
                         case 'selprod_fulfillment_type':
-                            $colValue = str_replace(' ', '_', mb_strtolower($colValue));
+                            // $colValue = str_replace(' ', '_', mb_strtolower($colValue));
                             switch ($colValue) {
-                                case 'shipped_only':
+                                case Labels::getLabel('LBL_SHIPPED_ONLY', $langId):
                                     $colValue = Shipping::FULFILMENT_SHIP;
                                     break;
-                                case 'pickup_only':
+                                case Labels::getLabel('LBL_PICKUP_ONLY', $langId):
                                     $colValue = Shipping::FULFILMENT_PICKUP;
                                     break;
-                                case 'shipped_and_pickup':
+                                case Labels::getLabel('LBL_SHIPPED_AND_PICKUP', $langId):
                                     $colValue = Shipping::FULFILMENT_ALL;
                                     break;
                                 default:
