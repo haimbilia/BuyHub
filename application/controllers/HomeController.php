@@ -623,16 +623,19 @@ class HomeController extends MyAppController
 
         $cacheKey = $langId . '_' . CommonHelper::getCurrencyId() . '_' . FatUtility::int(MOBILE_APP_API_CALL) . '_' . serialize($geoAddress);
         $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);
-        $cacheKey .= '_' . $page . '_' . $pageSize;
+        if (MOBILE_APP_API_CALL) {
+            $cacheKey .= '_' . $page . '_' . $pageSize;
+        }
 
         $collectionCache = CacheHelper::get('collectionCache_' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+        /* Sponsered shops and products shall not be added in cache and we have handled rest of the through this cache variable*/
         $db = FatApp::getDb();
 
         $collectionsArr = CacheHelper::get('collectionsArr' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
         if (!empty($collectionsArr)) {
             if (MOBILE_APP_API_CALL) {
-                $cacheData = unserialize($collectionsArr);
-                $pagesCount = $cacheData['pageCount'];
+                $collectionsArr = unserialize($collectionsArr);
+                $pagesCount = $collectionsArr['pageCount'];               
             }
             $collectionsArr = unserialize($collectionCache);
         } else {
@@ -656,7 +659,7 @@ class HomeController extends MyAppController
             $rs = $srch->getResultSet();
             $collectionsArr = $db->fetchAll($rs, 'collection_id');
 
-            if (MOBILE_APP_API_CALL) { 
+            if (MOBILE_APP_API_CALL) {
                 $cacheData = [
                     'pageCount' => (1 == $page ? $srch->pages() : $pagesCount),
                     'collectionArr' => $collectionsArr,
