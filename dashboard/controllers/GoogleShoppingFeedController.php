@@ -12,7 +12,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     private $accessToken;
     private $adsBatchId;
     private $recordData = [];
-    private $batchRow = []; 
+    private $batchRow = [];
 
     /**
      * __construct
@@ -216,7 +216,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     private function validateBatchRequest()
     {
         $recordData = AdsBatch::getBatchesByUserId(UserAuthentication::getLoggedUserId(), $this->adsBatchId);
-       
+
         if (1 > $this->adsBatchId || empty($recordData)) {
             $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId);
             return false;
@@ -415,7 +415,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     {
         $this->userPrivilege->canEditAdvertisementFeed();
         $frm = $this->getBatchForm($this->siteLangId);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());       
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
             LibHelper::dieJsonError(current($frm->getValidationErrors()));
@@ -714,7 +714,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $data = $this->googleShoppingFeed->getProductCategoryAutocomplete($keyword);
         CommonHelper::jsonEncodeUnicode($data, true);
-    }    
+    }
 
     /**
      * publishBatch
@@ -734,26 +734,26 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
 
         if ($this->batchRow['adsbatch_expired_on'] == '0000-00-00 00:00:00') {
             $expireOn = date('Y-m-d', $strToTime);
-        }elseif(strtotime($this->batchRow['adsbatch_expired_on']) < strtotime(date("Y-m-d H:i:s"))){ 
+        } elseif (strtotime($this->batchRow['adsbatch_expired_on']) < strtotime(date("Y-m-d H:i:s"))) {
             LibHelper::dieJsonError(Labels::getLabel('ERR_CANNOT_PUBLISH_AS_EXPIRE_DATE_ALREADY_PASSED', $this->siteLangId));
-        }elseif($strToTime >  strtotime($this->batchRow['adsbatch_expired_on'])){
+        } elseif ($strToTime >  strtotime($this->batchRow['adsbatch_expired_on'])) {
             $expireOn = date("Y-m-d", strtotime($this->batchRow['adsbatch_expired_on']));
-        }else{
+        } else {
             $expireOn = date("Y-m-d", $strToTime);
-        }   
-        
+        }
+
         $adsBatchobj = new AdsBatch($this->adsBatchId);
-        $productData = $adsBatchobj->getBatchDataForFeed(UserAuthentication::getLoggedUserId(), $this->batchRow['adsbatch_lang_id']); 
-        if(empty($productData)){
+        $productData = $adsBatchobj->getBatchDataForFeed(UserAuthentication::getLoggedUserId(), $this->batchRow['adsbatch_lang_id']);
+        if (empty($productData)) {
             LibHelper::dieJsonError(Labels::getLabel("ERR_PLEASE_ADD_ATLEAST_ONE_PRODUCT_TO_THE_BATCH", $this->siteLangId));
-        } 
-       
+        }
+
         $data = [
             'batchId' => $this->adsBatchId,
             'currency_code' => strtoupper(Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code')),
             'data' => $productData,
             'expire_on' => $expireOn,
-        ];  
+        ];
 
         $response = $this->googleShoppingFeed->publishBatch($data);
         if (false === $response['status'] || Plugin::RETURN_FALSE === $response['status']) {
@@ -765,7 +765,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
             'adsbatch_synced_on' => date('Y-m-d H:i:s'),
             'adsbatch_next_execution_on' => $expireOn,
         ];
-        
+
         if (false === AdsBatch::updateDetail($this->adsBatchId, $dataToUpdate)) {
             LibHelper::dieJsonError(Labels::getLabel("ERR_UNABLE_TO_UPDATE", $this->siteLangId));
         }
@@ -782,21 +782,18 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
         $urlController = implode('-', $arr);
-        $className = ucwords(implode(' ', $arr));
+        $className = ucwords(implode('_', $arr));
 
 
         if ($action == 'index') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
         } else if ($action == 'viewProducts') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
-            $this->nodes[] = array('title' => $title);
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         } else {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => $title);
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;
     }

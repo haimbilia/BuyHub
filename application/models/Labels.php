@@ -10,6 +10,7 @@
  * TXT - Text
  * NAV - Navigation
  * CON - confiramtion
+ * BCN - BreadcrumbNodes
  */
 class Labels extends MyAppModel
 {
@@ -88,6 +89,7 @@ class Labels extends MyAppModel
                 'ERR' => self::getLabel('ERR_ERROR_MESSAGES', $langId),
                 'SUC' => self::getLabel('SUC_SUCCESS_MESSAGES', $langId),
                 'CON' => self::getLabel('CON_CONFIRMATION_MESSAGES', $langId),
+                'BCN' => self::getLabel('BCN_BREADCRUM_NODES', $langId),
             ];
         CacheHelper::create('labelsPrefixes' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

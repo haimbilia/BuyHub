@@ -870,16 +870,15 @@ class ProductsController extends SellerBaseController
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
-        $className = ucwords(implode(' ', $arr));
+        $className = ucwords(implode('_', $arr));
 
         if ($action == 'form') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_CATALOG'), 'href' => UrlHelper::generateUrl("Seller", "catalog"));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         } else {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($title));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));            
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;
     }

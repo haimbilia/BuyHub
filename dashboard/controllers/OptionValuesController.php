@@ -86,19 +86,19 @@ class OptionValuesController extends LoggedUserController
 
     public function setup()
     {
-        $option_id = FatApp::getPostedData('optionvalue_option_id',FatUtility::VAR_INT, 0);
+        $option_id = FatApp::getPostedData('optionvalue_option_id', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($option_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
-        
+
         if ($option_id > 0) {
             if (!UserPrivilege::canSellerEditOption($this->userParentId, $option_id)) {
                 FatUtility::dieJsonError($this->str_invalid_request);
             }
         }
-        $optionvalue_id = FatApp::getPostedData('optionvalue_id',FatUtility::VAR_INT, 0);
+        $optionvalue_id = FatApp::getPostedData('optionvalue_id', FatUtility::VAR_INT, 0);
         unset($post['optionvalue_id']);
 
         if (0 < $optionvalue_id) {
@@ -332,9 +332,8 @@ class OptionValuesController extends LoggedUserController
 
     public function getBreadcrumbNodes($action)
     {
-        $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords(Labels::getLabel('LBL_OPTION_VALUES', $this->siteLangId))]);
         $this->nodes[] = array('title' => ucwords(Labels::getLabel('LBL_OPTIONS', $this->siteLangId)), 'href' => UrlHelper::generateUrl('seller', 'options', [], CONF_WEBROOT_DASHBOARD));
-        $this->nodes[] = array('title' => $title);
+        $this->nodes[] = array('title' => Labels::getLabel('LBL_OPTION_VALUES', $this->siteLangId));
         return $this->nodes;
     }
 }

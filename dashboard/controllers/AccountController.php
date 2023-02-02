@@ -3897,33 +3897,26 @@ class AccountController extends LoggedUserController
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
-        $className = ucwords(implode(' ', $arr));
+        $className = ucwords(implode('_', $arr));
 
         if ($action == 'index') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
         } else if ($action == 'bankInfoForm') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_BANK_ACCOUNT_INFORMATION', $this->siteLangId)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_BANK_ACCOUNT_INFORMATION', $this->siteLangId));
         } else if ($action == 'cookiesPreferencesForm') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_COOKIE_PREFERENCES', $this->siteLangId)]);
-            $this->nodes[] = array('title' => $title);
-        } else if ($action == 'messages' || $action == 'credits') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_COOKIE_PREFERENCES', $this->siteLangId));
         } else if ($action == 'changeEmailPassword') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => ucwords(Labels::getLabel('LBL_UPDATE_CREDENTIALS')));
         } else if ($action == 'wishlist') {
-            $title = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $title = str_replace('-', '_', FatUtility::camel2dashed($action));
+            $title = ucwords(Labels::getLabel('BCN_' . $title, $this->siteLangId));
             if (1 > FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1)) {
                 $title = Labels::getLabel('LBL_FAVORITES');
             }
             $this->nodes[] = array('title' => $title);
         } else {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => $title);
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action, $this->siteLangId)));
         }
         return $this->nodes;
     }
