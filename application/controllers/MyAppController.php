@@ -322,15 +322,14 @@ class MyAppController extends FatController
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
         $urlController = implode('-', $arr);
-        $className = ucwords(implode(' ', $arr));
+        $className = mb_strtoupper(implode('_', $arr));
 
         if ($action == 'index') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
-            $nodes[] = array('title' => $title);
-        } else {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $nodes[] = array('title' => ucwords($className), 'href' => UrlHelper::generateUrl($urlController));
-            $nodes[] = array('title' => $title);
+            $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
+        } else {            
+            $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)), 'href' => UrlHelper::generateUrl($urlController));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
+            $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $nodes;
     }

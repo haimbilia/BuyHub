@@ -230,7 +230,7 @@ class AdminBaseController extends FatController
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
         $urlController = implode('-', $arr);
-        $className = ucwords(implode(' ', $arr));
+        $className = mb_strtoupper(implode('_', $arr));
 
         $pageTitle = '';
         if (isset($this->pageKey)) {
@@ -241,12 +241,12 @@ class AdminBaseController extends FatController
         if (!empty($pageTitle)) {
             $this->nodes[] = array('title' => $pageTitle);
         } else if ($action == 'index') {
-            $this->nodes[] = array('title' => $className);
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
         } else {
             $arr = explode('-', FatUtility::camel2dashed($action));
-            $action = ucwords(implode(' ', $arr));
-            $this->nodes[] = array('title' => $className, 'href' => UrlHelper::generateUrl($urlController));
-            $this->nodes[] = array('title' => $action);
+            $action = mb_strtoupper(implode('_', $arr));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)), 'href' => UrlHelper::generateUrl($urlController));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;
     }

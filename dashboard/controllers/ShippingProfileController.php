@@ -3,7 +3,7 @@ class ShippingProfileController extends SellerBaseController
 {
     public function __construct($action)
     {
-        parent::__construct($action);        
+        parent::__construct($action);
         $this->userPrivilege->canViewShippingProfiles(UserAuthentication::getLoggedUserId());
     }
 
@@ -42,15 +42,15 @@ class ShippingProfileController extends SellerBaseController
 
         if (!empty($post['keyword'])) {
             $cnd =  $srch->addCondition('sprofile_l.shipprofile_name', 'like', '%' . $post['keyword'] . '%');
-            $cnd->attachCondition('sprofile.shipprofile_identifier', 'like', '%' . $post['keyword'] . '%');            
+            $cnd->attachCondition('sprofile.shipprofile_identifier', 'like', '%' . $post['keyword'] . '%');
         }
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post); 
-        $srch->doNotCalculateRecords(); 
-        
-        $srch->addMultipleFields(array('sprofile.*', 'if(sproduct.totalProducts is null, 0, sproduct.totalProducts) as totalProducts','IFNULL(shipprofile_name, shipprofile_identifier) as shipprofile_name'));
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+
+        $srch->addMultipleFields(array('sprofile.*', 'if(sproduct.totalProducts is null, 0, sproduct.totalProducts) as totalProducts', 'IFNULL(shipprofile_name, shipprofile_identifier) as shipprofile_name'));
         $srch->addOrder('shipprofile_default', 'DESC');
         $srch->addOrder('shipprofile_id', 'ASC');
-        
+
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
@@ -63,7 +63,7 @@ class ShippingProfileController extends SellerBaseController
         }
 
         $this->set('arrListing', $records);
-        $this->set('zones', $zones);  
+        $this->set('zones', $zones);
         $this->set('postedData', $post);
         $this->set('canEdit', $this->userPrivilege->canEditShippingProfiles(UserAuthentication::getLoggedUserId(), true));
         $this->_template->render(false, false);
@@ -75,10 +75,10 @@ class ShippingProfileController extends SellerBaseController
         $profileId = FatUtility::int($profileId);
         $frm = $this->getForm($profileId);
         $data = [];
-        
+
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         if (0 < $profileId) {
-            $data = ShippingProfile::getAttributesById($profileId);            
+            $data = ShippingProfile::getAttributesById($profileId);
             if ($data === false) {
                 Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
@@ -86,18 +86,18 @@ class ShippingProfileController extends SellerBaseController
             if ($data['shipprofile_user_id'] != $userId) {
                 Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
                 FatApp::redirectUser(UrlHelper::generateUrl('shippingProfile'));
-            }           
-  
-            $spObj = new ShippingProfile();        
+            }
+
+            $spObj = new ShippingProfile();
             foreach (Language::getAllNames() as $langId => $langName) {
                 $profileName = $spObj->getAttributesByLangId($langId, $profileId, 'shipprofile_name');
                 if (!empty($profileName)) {
                     $data['shipprofile_name'][$langId] = $profileName;
                 }
             }
-            if(empty($data['shipprofile_name'][$siteDefaultLangId])){
+            if (empty($data['shipprofile_name'][$siteDefaultLangId])) {
                 $data['shipprofile_name'][$siteDefaultLangId] = $data['shipprofile_identifier'];
-            }          
+            }
             $frm->fill($data);
         }
 
@@ -118,28 +118,28 @@ class ShippingProfileController extends SellerBaseController
         if (empty($post)) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
         }
-        
+
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 
         $profileId = $post['shipprofile_id'];
         unset($post['shipprofile_id']);
-        
+
         $post['shipprofile_identifier'] = $post['shipprofile_name'][$siteDefaultLangId] ?? '';
 
         $spObj = new ShippingProfile($profileId);
-        
+
         $spObj->assignValues($post);
 
         if (!$spObj->save()) {
             FatUtility::dieJsonError($spObj->getError());
         }
-        
+
         $languages = Language::getAllNames();
-        foreach ($post['shipprofile_name'] as $langId => $profileName) {                       
-            if(empty($profileName)){
+        foreach ($post['shipprofile_name'] as $langId => $profileName) {
+            if (empty($profileName)) {
                 continue;
             }
-            if (!$spObj->updateLangData($langId, ['shipprofile_name'=> $profileName])) {
+            if (!$spObj->updateLangData($langId, ['shipprofile_name' => $profileName])) {
                 Message::addErrorMessage($spObj->getError());
                 FatUtility::dieWithError(Message::getHtml());
             }
@@ -240,7 +240,7 @@ class ShippingProfileController extends SellerBaseController
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'total_record_count', '');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('placeholder' => Labels::getLabel('LBL_Keyword', $this->siteLangId)));
-        
+
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }
@@ -274,19 +274,17 @@ class ShippingProfileController extends SellerBaseController
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
-        $className = ucwords(implode(' ', $arr));
+        $className = ucwords(implode('_', $arr));
 
         if ($action == 'index') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
         } else if ($action == 'form') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $action = str_replace('-', ' _', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_SHIPPING_PROFILE'), 'href' => UrlHelper::generateUrl("ShippingProfile"));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         } else {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($title));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;
     }

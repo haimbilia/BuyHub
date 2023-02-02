@@ -3171,34 +3171,32 @@ class BuyerController extends BuyerBaseController
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
-        $className = ucwords(implode(' ', $arr));
+        $className = ucwords(implode('_', $arr));
 
         if ($action == 'index') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
         } else if ($action == 'viewOrder') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_ORDERS'), 'href' => UrlHelper::generateUrl("Buyer", "Orders"));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         } else if ($action == 'orderFeedback') {
             $params = FatApp::getParameters();
             $orderId = OrderProduct::getAttributesById(current($params), 'op_order_id');
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_ORDERS'), 'href' => UrlHelper::generateUrl("Buyer", "orders"));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_VIEW_ORDER'), 'href' => UrlHelper::generateUrl("Buyer", "viewOrder", [$orderId, current($params)]));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         } else if ($action == 'viewOrderReturnRequest') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_ORDER_RETURN_REQUESTS'), 'href' => UrlHelper::generateUrl("Buyer", "orderReturnRequests"));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         } else if ($action == 'orderCancellationRequest') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_ORDERS'), 'href' => UrlHelper::generateUrl("Buyer", "orders"));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         } else {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($title));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;
     }

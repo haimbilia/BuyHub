@@ -957,24 +957,19 @@ class ReportsController extends SellerBaseController
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
-        $className = ucwords(implode(' ', $arr));
+        $className = ucwords(implode('_', $arr));
 
         if ($action == 'index') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
         } else if ($action == 'productsInventory') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_PRODUCTS_INVENTORY_REPORT', $this->siteLangId)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_PRODUCTS_INVENTORY_REPORT', $this->siteLangId));
         } else if ($action == 'productsInventoryStockStatus') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_PRODUCTS_INVENTORY_STOCK_STATUS_REPORT', $this->siteLangId)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_PRODUCTS_INVENTORY_STOCK_STATUS_REPORT', $this->siteLangId));
         } else if ($action == 'productsPerformance') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_PRODUCTS_PERFORMANCE_REPORT', $this->siteLangId)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_PRODUCTS_PERFORMANCE_REPORT', $this->siteLangId));
         } else {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => $title);
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;
     }

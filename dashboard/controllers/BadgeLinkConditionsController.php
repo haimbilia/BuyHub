@@ -783,21 +783,22 @@ class BadgeLinkConditionsController extends SellerBaseController
             '{OBJECT-NAME}' => $this->badgeData['badge_name'],
         ]);
 
+        $className = str_replace('-', '_', FatUtility::camel2dashed($this->objectTypeName));;
+
         if ($action == 'list') {
             $this->nodes = [
-                ['title' => $this->objectTypeName, 'href' => UrlHelper::generateUrl('badges', 'list', [$params[1]])],
+                ['title' => ucwords(Labels::getLabel('BCN_' . $className)), 'href' => UrlHelper::generateUrl('badges', 'list', [$params[1]])],
                 ['title' => $pageTitle]
             ];
         } else if ($action == 'conditionForm') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($this->objectTypeName), 'href' => UrlHelper::generateUrl('badges', 'list', [$params[1]]));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
+            $title = ucwords(Labels::getLabel('BCN_' . $action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)), 'href' => UrlHelper::generateUrl('badges', 'list', [$params[1]]));
             $this->nodes[] = ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('badgeLinkConditions', 'list', [$params[0], $params[1]])];
             $this->nodes[] = ['title' => $title];
         } else {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => $title);
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));            
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;
     }
