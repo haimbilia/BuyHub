@@ -123,7 +123,7 @@
                         <?php } else if ($orderCancelled) { ?>
                             <time class="timeline_date"><?php echo FatDate::format($cancelledDate); ?></time>
                         <?php } ?>
-                        <span class="order-status <?php echo $orderColorClasses[$statusId]; ?>"> <em class="dot"></em>
+                        <span class="order-status <?php echo $orderColorClasses[$statusId] ?? ''; ?>"> <em class="dot"></em>
                             <?php echo $statusLabel; ?>
                         </span>
                     </div>

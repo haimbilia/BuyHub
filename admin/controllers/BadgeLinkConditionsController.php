@@ -279,8 +279,8 @@ class BadgeLinkConditionsController extends ListingBaseController
 
                 $recordId = $badgeLink['badgelink_record_id'];
                 $recordName = $badgeLink['record_name'];
-                $optionName = explode('|', $badgeLink['option_name']);
-                $optionValueName = explode('|', $badgeLink['option_value_name']);
+                $optionName = (isset($badgeLink['option_name'])) ? explode('|', $badgeLink['option_name']) : [];
+                $optionValueName = isset($badgeLink['option_value_name']) ? explode('|', $badgeLink['option_value_name']) : [];
 
                 $seller = $badgeLink['seller'];
                 unset($badgeLink['badgelink_record_id'], $badgeLink['record_name'], $badgeLink['option_name'], $badgeLink['option_value_name'], $badgeLink['seller']);
