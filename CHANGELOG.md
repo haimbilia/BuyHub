@@ -21,6 +21,7 @@
 - Bug-070009 - On deleting seller product, its options are not deleting.
 - Bug-070036 - Admin top selling products should be based on completed orders.
 - Bug-070110 - User dashboard area breadcrumb labels shall be manageable from admin end
+- Bug-070125 - Testimonial image is not rendering incase of other language
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
