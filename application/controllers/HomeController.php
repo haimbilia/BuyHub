@@ -617,20 +617,36 @@ class HomeController extends MyAppController
     {
         $langId = $this->siteLangId;
         $geoAddress = Address::getYkGeoData();
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, Collections::HOMEPAGE_COLLECTION_LIMIT);
+        $pagesCount = 0;
+
         $cacheKey = $langId . '_' . CommonHelper::getCurrencyId() . '_' . FatUtility::int(MOBILE_APP_API_CALL) . '_' . serialize($geoAddress);
         $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);
-
+        $cacheKey .= '_' . $page . '_' . $pageSize;
 
         $collectionCache = CacheHelper::get('collectionCache_' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
         $db = FatApp::getDb();
 
         $collectionsArr = CacheHelper::get('collectionsArr' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
         if (!empty($collectionsArr)) {
+            if (MOBILE_APP_API_CALL) {
+                $cacheData = unserialize($collectionsArr);
+                $pagesCount = $cacheData['pageCount'];
+            }
             $collectionsArr = unserialize($collectionCache);
         } else {
             $srch = new CollectionSearch($langId);
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
+            if (MOBILE_APP_API_CALL) {
+                $srch->setPageNumber($page);
+                $srch->setPageSize($pageSize);
+                if ($page > 1) {
+                    $srch->doNotCalculateRecords();
+                }
+            } else {
+                $srch->doNotCalculateRecords();
+                $srch->doNotLimitRecords();
+            }
             $srch->addOrder('collection_display_order', 'ASC');
             $srch->addMultipleFields(array('collection_id', 'IFNULL(collection_name,collection_identifier) as collection_name', 'IFNULL( collection_description, "" ) as collection_description', 'IFNULL(collection_link_caption, "") as collection_link_caption', 'collection_link_url', 'collection_layout_type', 'collection_type', 'collection_criteria', 'collection_child_records', 'collection_primary_records', 'collection_display_media_only', 'collection_for_app', 'collection_for_web', 'collection_display_order', 'collection_updated_on'));
 
@@ -639,7 +655,23 @@ class HomeController extends MyAppController
 
             $rs = $srch->getResultSet();
             $collectionsArr = $db->fetchAll($rs, 'collection_id');
-            CacheHelper::create('collectionsArr' . $cacheKey, serialize($collectionsArr), CacheHelper::TYPE_COLLECTIONS);
+
+            if (MOBILE_APP_API_CALL) { 
+                $cacheData = [
+                    'pageCount' => (1 == $page ? $srch->pages() : $pagesCount),
+                    'collectionArr' => $collectionsArr,
+                ];
+            } else {
+                $cacheData = $collectionsArr;
+            }
+            CacheHelper::create('collectionsArr' . $cacheKey, serialize($cacheData), CacheHelper::TYPE_COLLECTIONS);
+            $pagesCount = (1 == $page ? $srch->pages() : $pagesCount);
+        }
+
+        if (MOBILE_APP_API_CALL) {
+            $this->set('page', $page);
+            $this->set('pageCount', $pagesCount);
+            $this->set('pageSize', $pageSize);
         }
 
         if (empty($collectionsArr)) {
