@@ -580,7 +580,7 @@ class Shopify extends DataMigrationBase
             foreach ($product->variants as $variant) {
                 $inventory = [
                     'id' => $isSingleVendor ? $variant->id : $variant->shopify_variant_id,
-                    'selprod_title' => $product->product_name ?? '',
+                    'selprod_title' => $catalog['product_name'],
                     'selprod_url_keyword' => $product->handle ?? '',
                     'selprod_subtract_stock' => ($isSingleVendor ? ($product->status == 'active' ? 1 : 0 ) : $variant->track_inventory),
                     'selprod_active' => ($isSingleVendor ? ($product->status == 'active' ? 1 : 0 ) : $product->active),
