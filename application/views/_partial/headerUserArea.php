@@ -35,7 +35,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
                         </svg>
                         <span class="txt">
-                            <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName; ?>
+                            <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . htmlspecialchars($userName, ENT_QUOTES, 'utf-8'); ?>
                         </span>
                     </button>
 
@@ -78,7 +78,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
                     </svg>
                     <span class="txt">
-                        <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_name']; ?></span>
+                        <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . htmlspecialchars($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_name'], ENT_QUOTES, 'utf-8'); ?></span>
                 </button>
 
                 <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
