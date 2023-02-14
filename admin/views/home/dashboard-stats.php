@@ -48,7 +48,7 @@ switch (strtoupper($stats_type)) {
         break;
     case 'VISITORS_STATS':
         if (!empty($stats_info['stats'])) {
-            $chatStats = "[['".Labels::getLabel('NAV_YEAR', $siteLangId)."', '".Labels::getLabel('NAV_TODAY', $siteLangId)."','".Labels::getLabel('NAV_LAST_WEEK', $siteLangId)."','".Labels::getLabel('NAV_LAST_MONTH', $siteLangId)."','".Labels::getLabel('NAV_LAST_3_MONTH', $siteLangId)."'],";
+            $chatStats = "[['".Labels::getLabel('NAV_YEAR', $siteLangId)."', '".Labels::getLabel('NAV_TODAY', $siteLangId)."','".Labels::getLabel('NAV_LAST_WEEK', $siteLangId)."','".Labels::getLabel('NAV_LAST_MONTH', $siteLangId)."','".Labels::getLabel('NAV_LAST_3_MONTHS', $siteLangId)."'],";
             foreach ($stats_info['stats'] as $key => $val) {
                 if ($key == '') {
                     continue;
