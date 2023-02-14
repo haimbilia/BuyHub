@@ -290,7 +290,7 @@ class ProductsController extends ListingBaseController
                 }
             }
 
-            $productCategories = $this->modelObj->getProductCategories($recordId);
+            $productCategories = $this->modelObj->getProductCategories($recordId);           
             if (!empty($productCategories)) {
                 $selectedCat = current($productCategories)['prodcat_id'];
                 $productData['ptc_prodcat_id'] = $selectedCat;
