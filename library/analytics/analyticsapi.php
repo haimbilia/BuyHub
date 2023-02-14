@@ -9,7 +9,7 @@ Class Ykart_analytics
 		$this->analyticsApiConfig=$analyticsApiConfig;
 		
 		if($analyticsApiConfig['googleAnalyticsID']=='' || $analyticsApiConfig['clientSecretKey']=='' ||$analyticsApiConfig['clientId']==''){
-			throw new Exception('You must provide the Analytic Id,ClientId and Secret Key');
+			throw new Exception('You must provide the Analytic ID, Client ID and Secret Key');
 		}
 		require_once('GoogleAnalyticsAPI.class.php');
 		$this->ga = new GoogleAnalyticsAPI();
