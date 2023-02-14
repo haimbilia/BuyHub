@@ -474,7 +474,7 @@ class GoogleOauthService extends GoogleOauth {
 	public function getAccessToken($data=null) {
 
 		if (!$this->clientId || !$this->email || !$this->privateKey) {
-			throw new Exception('You must provide the clientId, email and a path to your private Key');
+			throw new Exception('You must provide the client ID, email and a path to your private Key');
 		}
 
 		$jwt = $this->generateSignedJWT();
@@ -597,7 +597,7 @@ class GoogleOauthWeb extends GoogleOauth {
 	public function buildAuthUrl($params = array()) {
 
 		if (!$this->clientId || !$this->redirectUri) {
-			throw new Exception('You must provide the clientId and a redirectUri');
+			throw new Exception('You must provide the client ID and a redirectUri');
 		}
 
 		$defaults = array(
@@ -625,7 +625,7 @@ class GoogleOauthWeb extends GoogleOauth {
 	public function getAccessToken($data=null) {
 
 		if (!$this->clientId || !$this->clientSecret || !$this->redirectUri) {
-			throw new Exception('You must provide the clientId, clientSecret and a redirectUri');
+			throw new Exception('You must provide the client ID, client Secret and a redirectUri');
 		}
 
 		$params = array(
@@ -652,7 +652,7 @@ class GoogleOauthWeb extends GoogleOauth {
 	public function refreshAccessToken($refreshToken) {
 
 		if (!$this->clientId || !$this->clientSecret) {
-			throw new Exception('You must provide the clientId and clientSecret');
+			throw new Exception('You must provide the client ID and client Secret');
 		}
 
 		$params = array(
