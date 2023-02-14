@@ -602,10 +602,11 @@ class ProductCategory extends MyAppModel
 
             $this_deleted = 0;
             foreach ($hierarchyArr as $node) {
+                $this_deleted = 0;
                 $node = FatUtility::int($node);
                 if (!in_array($node, $tempArr)) {
                     $this_deleted = 1;
-                    break;
+                    continue;
                 }
             }
             if ($this_deleted == 0) {
@@ -622,7 +623,7 @@ class ProductCategory extends MyAppModel
     public function getCategoriesForSelectBox($langId, $ignoreCategoryId = 0, $prefCategoryid = array(), $checkActive = true)
     {
         /* $srch = new SearchBase(static::DB_TBL); */
-        $srch = static::getSearchObject(false, 0, $checkActive);
+        $srch = static::getSearchObject(false, 0, $checkActive, -1);
         $srch->joinTable(static::DB_TBL_LANG, 'LEFT OUTER JOIN', 'prodcatlang_prodcat_id = prodcat_id
 			AND prodcatlang_lang_id = ' . $langId);
         $srch->addCondition(static::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
@@ -829,6 +830,15 @@ class ProductCategory extends MyAppModel
 
     public static function getProdCatParentChildWiseArr(int $langId = 0, int $parentId = 0, bool $includeChildCat = true, bool $forSelectBox = false, bool $sortByName = false, $prodCatSrchObj = false, bool $excludeCategoriesHavingNoProducts = false)
     {
+        $cacheKey = '';
+        if (!is_object($prodCatSrchObj)) {
+            $cacheKey = LibHelper::getCacheKey();
+            $categoryArrCache = CacheHelper::get($cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+            if ($categoryArrCache) {
+                return unserialize($categoryArrCache);
+            }
+        }
+
         if (!$langId) {
             trigger_error("Language not specified", E_USER_ERROR);
         }
@@ -881,6 +891,10 @@ class ProductCategory extends MyAppModel
                 $categoriesArr[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($cat['prodcat_id'], $langId, 'COLLECTION_PAGE')) . $uploadedTime;
                 $categoriesArr[$key]['children'] = self::getProdCatParentChildWiseArr($langId, $cat['prodcat_id'], $includeChildCat, $forSelectBox, $sortByName, $prodCatSrchObj, $excludeCategoriesHavingNoProducts);
             }
+        }
+
+        if (!empty($cacheKey)) {
+            CacheHelper::create($cacheKey, serialize($categoriesArr), CacheHelper::TYPE_PRODUCT_CATEGORIES);
         }
         return $categoriesArr;
     }
