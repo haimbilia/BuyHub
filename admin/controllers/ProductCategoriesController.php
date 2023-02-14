@@ -163,6 +163,13 @@ class ProductCategoriesController extends ListingBaseController
             foreach ($langData as $value) {
                 $catNameArr[ProductCategory::DB_TBL_PREFIX . 'name'][$value[ProductCategory::DB_TBL_LANG_PREFIX . 'lang_id']] = $value[ProductCategory::DB_TBL_PREFIX . 'name'];
             }
+
+            $productCatCode = $data['prodcat_code'];
+            $productCatCode = explode("_", $productCatCode);
+            $productCatCode = array_filter($productCatCode, 'strlen');
+            $prodCat = new ProductCategory();
+            $categoriesArr = $prodCat->getCategoriesForSelectBox($this->siteLangId, $recordId, $productCatCode, false);
+            $categories =  array(0 => Labels::getLabel('FRM_ROOT_CATEGORY', $this->siteLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
             $data['parent_category_name'] = $categories[$data['prodcat_parent']] ?? '';
 
             $prodCat = new ProductCategory($recordId);

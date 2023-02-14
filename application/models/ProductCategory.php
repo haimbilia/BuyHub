@@ -602,10 +602,11 @@ class ProductCategory extends MyAppModel
 
             $this_deleted = 0;
             foreach ($hierarchyArr as $node) {
+                $this_deleted = 0;
                 $node = FatUtility::int($node);
                 if (!in_array($node, $tempArr)) {
                     $this_deleted = 1;
-                    break;
+                    continue;
                 }
             }
             if ($this_deleted == 0) {
@@ -622,7 +623,7 @@ class ProductCategory extends MyAppModel
     public function getCategoriesForSelectBox($langId, $ignoreCategoryId = 0, $prefCategoryid = array(), $checkActive = true)
     {
         /* $srch = new SearchBase(static::DB_TBL); */
-        $srch = static::getSearchObject(false, 0, $checkActive);
+        $srch = static::getSearchObject(false, 0, $checkActive, -1);
         $srch->joinTable(static::DB_TBL_LANG, 'LEFT OUTER JOIN', 'prodcatlang_prodcat_id = prodcat_id
 			AND prodcatlang_lang_id = ' . $langId);
         $srch->addCondition(static::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
