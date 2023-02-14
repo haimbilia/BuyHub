@@ -32,7 +32,7 @@ switch (strtoupper($stats_type)) {
         }
         break;
     case 'TRAFFIC_SOURCE':
-        $pieChatStats = "[['".Labels::getLabel('NAV_SOURCE', $siteLangId)."', '".Labels::getLabel('NAV_VISITORS', $siteLangId)."'],";
+        $pieChatStats = "[['Source', 'Visitors'],";
         if ($stats_info != null && array_key_exists('totalsForAllResults', $stats_info) && $stats_info['totalsForAllResults'] > 0) {
             foreach ($stats_info['rows'] as $key => $val) {
                 if ($key == '') {
@@ -48,7 +48,7 @@ switch (strtoupper($stats_type)) {
         break;
     case 'VISITORS_STATS':
         if (!empty($stats_info['stats'])) {
-            $chatStats = "[['".Labels::getLabel('NAV_YEAR', $siteLangId)."', '".Labels::getLabel('NAV_TODAY', $siteLangId)."','".Labels::getLabel('NAV_LAST_WEEK', $siteLangId)."','".Labels::getLabel('NAV_LAST_MONTH', $siteLangId)."','".Labels::getLabel('NAV_LAST_3_MONTH', $siteLangId)."'],";
+            $chatStats = "[['Year', 'Today','Weekly','Last Month','Last 3 Month'],";
             foreach ($stats_info['stats'] as $key => $val) {
                 if ($key == '') {
                     continue;
