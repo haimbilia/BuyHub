@@ -80,6 +80,8 @@ class Product extends MyAppModel
     public const FILTER_TYPE_OPTION = 3;
     public const FILTER_TYPE_SORT_BY = 4;
     public const FILTER_TYPE_PRICE = 5;
+    public const FILTER_TYPE_CONDITION = 6;
+    public const FILTER_TYPE_AVAILABILITY = 7;
     /* For API */
 
     public const WARRANTY_TYPE_DAY = 0;
