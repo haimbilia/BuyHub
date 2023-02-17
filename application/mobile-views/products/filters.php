@@ -85,7 +85,7 @@ if (Product::FILTER_POSITION_DEFAULT == $position) {
         $data['filters'][] = [
             'title' => Labels::getLabel('LBL_CONDITION_FILTER', $siteLangId),
             'type' => Product::FILTER_TYPE_CONDITION,
-            'data' => [$conditions],
+            'data' => $conditions,
         ];
     }
 
