@@ -117,7 +117,7 @@ class Labels extends MyAppModel
         $srch->addMultipleFields($attr);
 
         if ($langId > 0) {
-            $srch->addCondition('lbl.' . static::DB_TBL_PREFIX . 'lang_id', '=', 'mysql_func_' .$langId, 'AND', true);
+            $srch->addCondition('lbl.' . static::DB_TBL_PREFIX . 'lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
         }
         return $srch;
     }
@@ -283,7 +283,12 @@ class Labels extends MyAppModel
     public static function updateDataToFile($langId, $langCode = '', $type = Labels::TYPE_WEB, $updateForceFully = false, $key = '')
     {
         if (empty($langCode)) {
-            $langCode = Language::getAttributesById($langId, 'language_code', false);
+            global $languages;
+            if (!isset($languages[$langId])) {
+                $languages[$langId] = Language::getAttributesById($langId, 'language_code', false);
+            }
+
+            $langCode = $languages[$langId];
         }
 
         $lastLabelsUpdatedAt = FatApp::getConfig('CONF_LANG_LABELS_UPDATED_AT', FatUtility::VAR_INT, time());
