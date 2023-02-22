@@ -81,7 +81,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
 } elseif ($layoutType == applicationConstants::SCREEN_MOBILE) { ?>
     <div class="offcanvas  offcanvas-start offcanvas-account" tabindex="-1" id="offcanvas-account">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title">Profile </h5>
+            <h5 class="offcanvas-title"><?php echo Labels::getLabel('LBL_Profile', $siteLangId); ?> </h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body p-0">
