@@ -130,7 +130,7 @@ class FatMailer extends FatModel
 
         if (empty($this->fromEmail)) {
             if ($this->isDemoUrlMail()) {
-                $this->fromEmail = DEMO_FROM_EMAIL;
+                $this->fromEmail = (FatApp::getConfig('CONF_SEND_SMTP_EMAIL'))? FatApp::getConfig("CONF_SMTP_USERNAME"): DEMO_FROM_EMAIL;
             } else {
                 $this->fromEmail = FatApp::getConfig("CONF_FROM_EMAIL");
             }
