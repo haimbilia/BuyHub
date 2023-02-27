@@ -2403,3 +2403,18 @@ INSERT INTO `tbl_collections`(
 )
 VALUES('Home Page Hero Slides', '14', '', '', '', '1', '1', '0', '', '25', '0', '1', '1')
 ON DUPLICATE KEY UPDATE collection_identifier = VALUES(collection_identifier), collection_type = VALUES(collection_type), collection_layout_type = VALUES(collection_layout_type), collection_display_order = VALUES(collection_display_order);
+
+
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('APP_DELIVER_TO', 1, 'Deliver To', 2),
+('APP_ALL_CATEGORIES', 1, 'All Categories', 2),
+('APP_SHOP_BY', 1, 'Shop By', 2),
+('APP_CANCELLATION_REQUESTS', 1, 'Cancellation Requests', 2),
+('APP_RETURN_REQUESTS', 1, 'Return Requests', 2),
+('APP_MY_OFFERS', 1, 'My Offers', 2),
+('APP_REACH_OUT_TO_US', 1, 'Reach Out To Us', 2),
+('APP_LOGOUT', 1, 'Logout', 2),
+('APP_MY_REWARDS', 1, 'My Rewards', 2),
+('APP_MIN', 1, 'Min', 2),
+('APP_MAX', 1, 'Max', 2),
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
