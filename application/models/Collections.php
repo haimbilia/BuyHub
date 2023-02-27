@@ -39,10 +39,12 @@ class Collections extends MyAppModel
     public const TYPE_CATEGORY_LAYOUT3 = 20;
     public const TYPE_CATEGORY_LAYOUT4 = 23;
     public const TYPE_CATEGORY_LAYOUT5 = 26; /* Applicable For Apps only. */
+    public const TYPE_CATEGORY_LAYOUT6 = 27; /* Applicable For Apps only. */
     public const TYPE_SHOP_LAYOUT1 = 6;
     public const TYPE_SHOP_LAYOUT2 = 22;
     public const TYPE_BRAND_LAYOUT1 = 7;
     public const TYPE_BRAND_LAYOUT2 = 21;
+    public const TYPE_BRAND_LAYOUT3 = 28; /* Applicable For Apps only. */
     public const TYPE_BLOG_LAYOUT1 = 8;
     public const TYPE_SPONSORED_PRODUCT_LAYOUT = 9;
     public const TYPE_SPONSORED_SHOP_LAYOUT = 10;
@@ -66,10 +68,12 @@ class Collections extends MyAppModel
     public const LIMIT_CATEGORY_LAYOUT3 = 4;
     public const LIMIT_CATEGORY_LAYOUT4 = 4;
     public const LIMIT_CATEGORY_LAYOUT5 = 5;
+    public const LIMIT_CATEGORY_LAYOUT6 = 4;
     public const LIMIT_SHOP_LAYOUT1 = 4;
     public const LIMIT_SHOP_LAYOUT2 = 3;
     public const LIMIT_BRAND_LAYOUT1 = 5;
     public const LIMIT_BRAND_LAYOUT2 = 5;
+    public const LIMIT_BRAND_LAYOUT3 = 4;
     public const LIMIT_BLOG_LAYOUT1 = 3;
     public const LIMIT_FAQ_LAYOUT1 = 3;
     public const LIMIT_TESTIMONIAL_LAYOUT1 = 10;
@@ -111,6 +115,8 @@ class Collections extends MyAppModel
         self::TYPE_BANNER_LAYOUT3,
         self::TYPE_PENDING_REVIEWS1,
         self::TYPE_CATEGORY_LAYOUT5,
+        self::TYPE_CATEGORY_LAYOUT6,
+        self::TYPE_BRAND_LAYOUT3,
     ];
 
     public const COLLECTIONS_NOT_FOR_APP = [
@@ -225,10 +231,12 @@ class Collections extends MyAppModel
             self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_CATEGORY_LAYOUT3', $langId),
             self::TYPE_CATEGORY_LAYOUT4 => Labels::getLabel('LBL_CATEGORY_LAYOUT4', $langId),
             self::TYPE_CATEGORY_LAYOUT5 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT5', $langId),
+            self::TYPE_CATEGORY_LAYOUT6 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT6', $langId),
             self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_SHOP_LAYOUT1', $langId),
             self::TYPE_SHOP_LAYOUT2 => Labels::getLabel('LBL_SHOP_LAYOUT2', $langId),
             self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_BRAND_LAYOUT1', $langId),
             self::TYPE_BRAND_LAYOUT2 => Labels::getLabel('LBL_BRAND_LAYOUT2', $langId),
+            self::TYPE_BRAND_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BRAND_LAYOUT3', $langId),
             self::TYPE_BLOG_LAYOUT1 => Labels::getLabel('LBL_BLOG_LAYOUT1', $langId),
             self::TYPE_SPONSORED_PRODUCT_LAYOUT => Labels::getLabel('LBL_SPONSORED_PRODUCTS', $langId),
             self::TYPE_SPONSORED_SHOP_LAYOUT => Labels::getLabel('LBL_SPONSORED_SHOPS', $langId),
@@ -263,6 +271,7 @@ class Collections extends MyAppModel
             self::COLLECTION_TYPE_BRAND => [
                 self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_BRAND_LAYOUT1', $langId),
                 self::TYPE_BRAND_LAYOUT2 => Labels::getLabel('LBL_BRAND_LAYOUT2', $langId),
+                self::TYPE_BRAND_LAYOUT3 => Labels::getLabel('LBL_BRAND_LAYOUT3', $langId),
             ],
             self::COLLECTION_TYPE_BLOG => [
                 self::TYPE_BLOG_LAYOUT1 => Labels::getLabel('LBL_BLOG_LAYOUT1', $langId),
@@ -273,6 +282,7 @@ class Collections extends MyAppModel
                 self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_CATEGORY_LAYOUT3', $langId),
                 self::TYPE_CATEGORY_LAYOUT4 => Labels::getLabel('LBL_CATEGORY_LAYOUT4', $langId),
                 self::TYPE_CATEGORY_LAYOUT5 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT5', $langId),
+                self::TYPE_CATEGORY_LAYOUT6 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT6', $langId),
             ],            
             self::COLLECTION_TYPE_PRODUCT => [
                 self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
@@ -393,6 +403,7 @@ class Collections extends MyAppModel
             self::TYPE_CATEGORY_LAYOUT1 => 'Category-Layout-1.png',
             self::TYPE_CATEGORY_LAYOUT2 => 'Category-Layout-2.png',
             self::TYPE_CATEGORY_LAYOUT5 => 'Category-Layout-5.png',
+            self::TYPE_CATEGORY_LAYOUT6 => 'Category-Layout-6.png',
             self::TYPE_SHOP_LAYOUT1 => 'Shop-Layout-1.png',
             self::TYPE_BRAND_LAYOUT1 => 'Brand-Layout-1.png',
             self::TYPE_BLOG_LAYOUT1 => 'Blog-Layout-1.png',
@@ -969,10 +980,12 @@ class Collections extends MyAppModel
             self::TYPE_CATEGORY_LAYOUT3 => 'category-layout-3',
             self::TYPE_CATEGORY_LAYOUT4 => 'category-layout-4',
             self::TYPE_CATEGORY_LAYOUT5 => 'category-layout-5',
+            self::TYPE_CATEGORY_LAYOUT6 => 'category-layout-6',
             self::TYPE_SHOP_LAYOUT1 => 'shop-layout-1',
             self::TYPE_SHOP_LAYOUT2 => 'shop-layout-2',
             self::TYPE_BRAND_LAYOUT1 => 'brand-layout-1',
             self::TYPE_BRAND_LAYOUT2 => 'brand-layout-2',
+            self::TYPE_BRAND_LAYOUT3 => 'brand-layout-3',
             self::TYPE_BLOG_LAYOUT1 => 'blog-layout-1',
             self::TYPE_SPONSORED_PRODUCT_LAYOUT => 'sponsored-product-layout',
             self::TYPE_SPONSORED_SHOP_LAYOUT => 'sponsored-shop-layout',
