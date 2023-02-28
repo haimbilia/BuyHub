@@ -271,7 +271,7 @@ class Collections extends MyAppModel
             self::COLLECTION_TYPE_BRAND => [
                 self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_BRAND_LAYOUT1', $langId),
                 self::TYPE_BRAND_LAYOUT2 => Labels::getLabel('LBL_BRAND_LAYOUT2', $langId),
-                self::TYPE_BRAND_LAYOUT3 => Labels::getLabel('LBL_BRAND_LAYOUT3', $langId),
+                self::TYPE_BRAND_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BRAND_LAYOUT3', $langId),
             ],
             self::COLLECTION_TYPE_BLOG => [
                 self::TYPE_BLOG_LAYOUT1 => Labels::getLabel('LBL_BLOG_LAYOUT1', $langId),
