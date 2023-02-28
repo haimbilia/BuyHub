@@ -816,7 +816,10 @@ class HomeController extends MyAppController
 
                     $productSrchTempObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
                     $productSrchTempObj->addGroupBy('selprod_id');
-                    $productSrchTempObj->setPageSize($collection['collection_primary_records']);
+
+                    if (false === MOBILE_APP_API_CALL) {
+                        $productSrchTempObj->setPageSize($collection['collection_primary_records']);
+                    }
 
                     $recordCount = $this->getRecordsCount(clone $productSrchTempObj, true);
                     if (empty($recordCount)) {
@@ -872,7 +875,10 @@ class HomeController extends MyAppController
                     $productCatSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
 
                     $productCatSrchTempObj->addCondition('prodcat_deleted', '=', applicationConstants::NO);
-                    $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
+
+                    if (false === MOBILE_APP_API_CALL) {
+                        $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
+                    }
 
                     $recordCount = $this->getRecordsCount(clone $productCatSrchTempObj);
                     if (empty($recordCount)) {
@@ -1118,7 +1124,10 @@ class HomeController extends MyAppController
                     $brandSearchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'brand_id = ctr.ctr_record_id', 'ctr');
                     $brandSearchTempObj->addMultipleFields(array('brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'));
                     //$brandSearchTempObj->addCondition('brand_id', 'IN', array_keys($brandIds));
-                    $brandSearchTempObj->setPageSize($collection['collection_primary_records']);
+
+                    if (false === MOBILE_APP_API_CALL) {
+                        $brandSearchTempObj->setPageSize($collection['collection_primary_records']);
+                    }
 
                     $recordCount = $this->getRecordsCount(clone $brandSearchTempObj);
                     if (empty($recordCount)) {
