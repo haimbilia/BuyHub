@@ -1,5 +1,8 @@
 <?php
-
+/* 
+* Google Shopping Content Class library where you can find used classes and their methods.
+* https://developers.google.com/resources/api-libraries/documentation/content/v2.1/php/latest/class-Google_Service_ShoppingContent_Product.html 
+*/
 class GoogleShoppingFeed extends AdvertisementFeedBase
 {
     public const KEY_NAME = __CLASS__;
@@ -94,7 +97,7 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
                 return array_key_exists('option_is_color', $v) && 1 == $v['option_is_color'];
             });
             $color = !empty($colorOption) ? array_shift($colorOption)['optionvalue_identifier'] : '';
-            
+
             $product = new Google_Service_ShoppingContent_Product();
             $product->setId($prodDetail['selprod_id']);
             $product->setOfferId($prodDetail['selprod_id']);
@@ -111,7 +114,7 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
             $product->setAvailability($prodDetail['selprod_stock']);
             $product->setAvailabilityDate(date('Y-m-d', strtotime($prodDetail['selprod_available_from'])));
             if (array_key_exists('expire_on', $data)) {
-                $product->setExpirationDate($data['expire_on']);  
+                $product->setExpirationDate($data['expire_on']);
             }
             $product->setCondition($prodDetail['selprod_condition']);
             $product->setGoogleProductCategory($prodDetail['abprod_cat_id']);
@@ -126,6 +129,15 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
             }
             $product->setPrice($price);
 
+            if (0 < $prodDetail['special_price_found']) {
+                $price = new Google_Service_ShoppingContent_Price();
+                $price->setValue($prodDetail['theprice']);
+                if ('' != $currencyCode) {
+                    $price->setCurrency($data['currency_code']);
+                }
+                $product->setSalePrice($price);
+            }
+            
             $request = $service->products->insert($this->merchantId, $product);
             $batch->add($request, $product->getOfferId());
         }
