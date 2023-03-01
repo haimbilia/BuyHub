@@ -36,7 +36,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
                     <img alt="<?php echo $userName; ?>" src="<?php echo $profilePicUrl; ?>">
                 </div>
                 <div class="profile-detail">
-                    <h6 class="h6"><?php echo Labels::getLabel('LBL_HI,', $siteLangId) . ' ' . $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_name']; ?></h6>
+                    <h6 class="h6"><?php echo Labels::getLabel('LBL_HI,', $siteLangId) . ' ' .  htmlspecialchars($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_name'], ENT_QUOTES, 'utf-8'); ?></h6>
                     <span class="text-muted">
                         <?php echo $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_email']; ?>
                     </span>

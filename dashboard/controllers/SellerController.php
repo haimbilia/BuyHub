@@ -5791,45 +5791,41 @@ class SellerController extends SellerBaseController
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
-        $className = ucwords(implode(' ', $arr));
+        $className = mb_strtoupper(implode('_', $arr));
 
         if ($action == 'index') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
         } else if ($action == 'productSeo') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_META_TAGS', $this->siteLangId)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_META_TAGS', $this->siteLangId));
         } else if ($action == 'sellerProductForm') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_PRODUCTS'), 'href' => UrlHelper::generateUrl("Seller", "products"));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         } else if ($action == 'productUrlRewriting') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => Labels::getLabel('LBL_URL_REWRITING', $this->siteLangId)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => Labels::getLabel('LBL_URL_REWRITING', $this->siteLangId));
         } else if ($action == 'taxRules') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_TAX_CATEGORIES'), 'href' => UrlHelper::generateUrl("Seller", "taxCategories"));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action, $this->siteLangId)));
         } else if ($action == 'viewOrder') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_Sales'), 'href' => UrlHelper::generateUrl("Seller", "sales"));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action, $this->siteLangId)));
         } else if ($action == 'cancelOrder') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_Sales'), 'href' => UrlHelper::generateUrl("Seller", "sales"));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action, $this->siteLangId)));
         } else if ($action == 'viewOrderReturnRequest') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_ORDER_RETURN_REQUESTS'), 'href' => UrlHelper::generateUrl("Seller", "orderReturnRequests"));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action, $this->siteLangId)));
         } else if ($action == 'userPermissions') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_USERS'), 'href' => UrlHelper::generateUrl("Seller", "users"));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action, $this->siteLangId)));
         } else {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($title));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action, $this->siteLangId)));
         }
         return $this->nodes;
     }

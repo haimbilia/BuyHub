@@ -348,15 +348,13 @@ class DashboardBaseController extends FatController
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
-        $className = ucwords(implode(' ', $arr));
+        $className = strtoupper(implode('_', $arr));
 
         if ($action == 'index') {
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{CLASS}', $this->siteLangId), ['{CLASS}' => ucwords($className)]);
-            $this->nodes[] = array('title' => $title);
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
         } else {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => $title);
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;
     }
@@ -569,7 +567,7 @@ class DashboardBaseController extends FatController
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
-    }    
+    }
 
     protected function getOtpForm()
     {
@@ -597,7 +595,7 @@ class DashboardBaseController extends FatController
 
         $link = UrlHelper::generateFullUrl('GuestUser', 'changeEmailVerification', array('verify' => $verificationCode), CONF_WEBROOT_FRONTEND);
 
-        $email = new EmailHandler();       
+        $email = new EmailHandler();
 
         if (!$configureEmail) {
             $dataArr = array(
@@ -740,10 +738,10 @@ class DashboardBaseController extends FatController
 
     protected function getPhoneNumberForm()
     {
-        $frm = new Form('phoneNumberFrm'.rand(1,1000));
+        $frm = new Form('phoneNumberFrm' . rand(1, 1000));
         $frm->addHiddenField('', 'user_phone_dcode');
         $frm->addRequiredField(Labels::getLabel('FRM_PHONE_NUMBER', $this->siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('FRM_PHONE_NUMBER', $this->siteLangId)));
-        $frm->addHiddenField('', 'use_for'); 
+        $frm->addHiddenField('', 'use_for');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_GET_OTP', $this->siteLangId));
         return $frm;
     }

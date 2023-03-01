@@ -8,8 +8,16 @@
 
 ## Bug Fixes:
 - Bug-069687 - Displaying invalid request when user tries to update currency language data in different language.
+- Bug-069724 - Admin sub-user write permission for metatags and collection management.
+- Bug-069726 - order with pickup in store when I am in English I can select the date of pickup but in French and Arabic impossible the pop up does not appear.
+- Bug-069874 - Seller dashbaord Google Shoping feed authentication process - use Google branding guidelines 
+- Bug-069970 - On product detail page option vaules should be displated as per display order
+- Bug-070009 - On deleting seller product, its options are not deleting.
+- Bug-070036 - Admin top selling products should be based on completed orders.
+- Bug-070110 - User dashboard area breadcrumb labels shall be manageable from admin end
+- Bug-070125 - Testimonial image is not rendering incase of other language
+- Bug-070173 - shopify data migration not worrking as tag lang table not exisit in current release
 - Bug-070827 - Adding special price to batch products in google shopping feed.
-
 # RV-10.0.0.20221123
 
 ## Bug Fixes:

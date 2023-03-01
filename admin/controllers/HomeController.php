@@ -14,7 +14,7 @@ class HomeController extends ListingBaseController
     }
 
     public function index()
-    {        
+    {
         $accountId = false;
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
@@ -326,10 +326,13 @@ class HomeController extends ListingBaseController
         $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
         $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
         $cnd->attachCondition('plugin_code', '=', 'payatstore');
+        $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
         $srch->setPageSize($limit);
         $srch->addOrder('SUM(op_qty - op_refund_qty)', 'DESC');
-        $srch->addMultipleFields(array('op_selprod_title', 'order_id', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'op_selprod_sku', 'op_shop_name', 'op_selprod_id', 'shop_id'));
+        $srch->addMultipleFields(array('op_selprod_title', 'order_id', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'op_selprod_sku', 'op_shop_name', 'op_selprod_id', 'shop_id', 'SUBSTRING( op.op_selprod_code, 1, (LOCATE( "_", op.op_selprod_code ) - 1 ) ) as product_id'));
+        $srch->addGroupBy('op.op_selprod_id');
         $srch->addHaving('totSoldQty', '>', 0);
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $productsList = FatApp::getDb()->fetchAll($rs);
 
@@ -415,7 +418,7 @@ class HomeController extends ListingBaseController
     public function clear()
     {
         CommonHelper::recursiveDelete(CONF_UPLOADS_PATH . "caching");
-        FatCache::clearAll();       
+        FatCache::clearAll();
         if (Labels::isAPCUcacheAvailable()) {
             apcu_clear_cache();
         }
@@ -437,6 +440,7 @@ class HomeController extends ListingBaseController
         if (CommonHelper::demoUrl()) {
             $str = file_get_contents('https://' . $_SERVER['SERVER_NAME'] . '/admin/admin-users/createProcedures');
         }
+
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_CACHE_HAS_BEEN_CLEARED', $this->siteLangId));
         //FatApp::redirectUser(UrlHelper::generateUrl("home"));
     }

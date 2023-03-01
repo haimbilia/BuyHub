@@ -229,10 +229,10 @@ class Importexport extends ImportexportCommon
         return fgetcsv($csvFilePointer);
     }
 
-    public function getCell($arr = array(), $index, $defaultValue = '')
+    public function getCell($arr, $index, $defaultValue = '')
     {
         if (array_key_exists($index, $arr) && trim($arr[$index]) != '') {
-            return $str = str_replace("\xc2\xa0", '', trim($arr[$index]));
+            return str_replace("\xc2\xa0", '', trim($arr[$index]));
             /*  return str_replace("\xa0", '', $str); */
         }
         return $defaultValue;
@@ -240,6 +240,9 @@ class Importexport extends ImportexportCommon
 
     public function parseContentForExport($colValue)
     {
+        if (empty($colValue)) {
+            return '';
+        }
         $encoding = mb_detect_encoding($colValue, "auto");
         return mb_convert_encoding($colValue, 'utf-8', $encoding);
     }
@@ -3531,6 +3534,8 @@ class Importexport extends ImportexportCommon
 
     public function importSellerProdGeneralData($csvFilePointer, $post, $langId, $sellerId = null)
     {
+        FatApp::getDb()->query('delete t1 from tbl_seller_product_options t1 left join tbl_seller_products t2 on t2.selprod_id = t1.selprodoption_selprod_id where t2.selprod_id is null');
+
         $sellerId = FatUtility::int($sellerId);
 
         $rowIndex = 1;
@@ -3649,15 +3654,15 @@ class Importexport extends ImportexportCommon
                             }
                             break;
                         case 'selprod_fulfillment_type':
-                            $colValue = str_replace(' ', '_', mb_strtolower($colValue));
+                            // $colValue = str_replace(' ', '_', mb_strtolower($colValue));
                             switch ($colValue) {
-                                case 'shipped_only':
+                                case Labels::getLabel('LBL_SHIPPED_ONLY', $langId):
                                     $colValue = Shipping::FULFILMENT_SHIP;
                                     break;
-                                case 'pickup_only':
+                                case Labels::getLabel('LBL_PICKUP_ONLY', $langId):
                                     $colValue = Shipping::FULFILMENT_PICKUP;
                                     break;
-                                case 'shipped_and_pickup':
+                                case Labels::getLabel('LBL_SHIPPED_AND_PICKUP', $langId):
                                     $colValue = Shipping::FULFILMENT_ALL;
                                     break;
                                 default:
@@ -3898,6 +3903,8 @@ class Importexport extends ImportexportCommon
 
     public function importSellerProdOptionData($csvFilePointer, $post, $langId, $userId = null)
     {
+        FatApp::getDb()->query('delete t1 from tbl_seller_product_options t1 left join tbl_seller_products t2 on t2.selprod_id = t1.selprodoption_selprod_id where t2.selprod_id is null');
+        
         $rowIndex = 1;
         $optionIdentifierArr = array();
         $optionValueIndetifierArr = array();

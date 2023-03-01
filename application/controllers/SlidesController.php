@@ -65,7 +65,7 @@ class SlidesController extends MyAppController
             'pclick_session_id' => session_id(),
             );
 
-            FatApp::getDb()->insertFromArray(Promotion::DB_TBL_CLICKS, $promotionClickData, false, '', $promotionClickData);
+            FatApp::getDb()->insertFromArray(Promotion::DB_TBL_CLICKS, $promotionClickData, false, [], $promotionClickData);
 
             $clickId = FatApp::getDb()->getInsertId();
 

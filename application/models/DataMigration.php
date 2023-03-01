@@ -634,7 +634,7 @@ class DataMigration
                     $db->rollbackTransaction();
                     return false;
                 }
-                $selprodId = $selProdObj->getMainTableRecordId();
+                $selprodId = $selProdObj->getMainTableRecordId();             
 
                 if ($isNewSelProd) {
                     $record = new TableRecord(SellerProduct::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD);
@@ -1221,23 +1221,26 @@ class DataMigration
         $srch->addCondition('optionvalue_option_id', "=", $optionId);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
-        if (empty($row)) {
-            $optionValueObj = new OptionValue();
+        if (empty($row)) {         
+            $recordObj = new TableRecord(OptionValue::DB_TBL);            
             $opSaveData = array(
                 'optionvalue_option_id' => $optionId,
                 'optionvalue_identifier' => $name,
             );
-            $optionValueObj->assignValues($opSaveData);
-            $data = $optionValueObj->getFlds();
-            if (!$optionValueObj->addNew(array(), $data)) {
-                $this->error = $userObj->getError();
+          
+            $recordObj->assignValues($opSaveData);
+            $data = $recordObj->getFlds();
+            if (!$recordObj->addNew(array(), $data)) {
+                $this->error = $recordObj->getError();
                 return false;
             }
+
+            $optionValueObj = new OptionValue($recordObj->getId());
             if (!$optionValueObj->updateLangData($langId, ['optionvalue_name' => $name])) {
                 $this->error = $optionValueObj->getError();
                 return false;
             }
-            return $this->optionValArr[$optionId . "_" . $name] = $optionValueObj->getMainTableRecordId();
+            return $this->optionValArr[$optionId . "_" . $name] = $recordObj->getId();
         }
         return $this->optionValArr[$optionId . "_" . $name] = $row['optionvalue_id'];
     }
@@ -1253,22 +1256,20 @@ class DataMigration
         $cnd = $srch->addCondition('tag_name', "=", $name);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
-        if (empty($row)) {
-            $tagObj = new Tag();
+        if (empty($row)) {           
+            $recordObj =  new TableRecord(Tag::DB_TBL);
             $tagSaveData = array(
-                'tag_name' => $name,              
+                'tag_name' => $name, 
+                'tag_lang_id'=>  $langId           
             );
-            $tagObj->assignValues($tagSaveData);
-            $data = $tagObj->getFlds();
-            if (!$tagObj->addNew(array(), $data)) {
-                $this->error = $tagObj->getError();
+            $recordObj->assignValues($tagSaveData);
+            $data = $recordObj->getFlds();
+            if (!$recordObj->addNew(array(), $data)) {
+                $this->error = $recordObj->getError();
                 return false;
             }
-            if (!$tagObj->updateLangData($langId, ['tag_name' => $name])) {
-                $this->error = $tagObj->getError();
-                return false;
-            }
-            return $this->tagArr[$name] = $tagObj->getMainTableRecordId();
+           
+            return $this->tagArr[$name] = $recordObj->getId();
         }
         return $this->tagArr[$name] = $row['tag_id'];
     }

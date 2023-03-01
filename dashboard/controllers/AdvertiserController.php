@@ -1622,16 +1622,17 @@ class AdvertiserController extends AdvertiserBaseController
         $className = get_class($this);
         $arr = explode('-', FatUtility::camel2dashed($className));
         array_pop($arr);
-        $className = ucwords(implode(' ', $arr));
+        $className = ucwords(implode('_', $arr));
 
-        if ($action == 'analytics') {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
+        if ($action == 'index') {
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
+        } else if ($action == 'analytics') {
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => Labels::getLabel('LBL_PROMOTIONS'), 'href' => UrlHelper::generateUrl("Advertiser", "promotions"));
-            $this->nodes[] = array('title' => ucwords($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         } else {
-            $action = str_replace('-', ' ', FatUtility::camel2dashed($action));
-            $title = CommonHelper::replaceStringData(Labels::getLabel('LBL_{ACTION}', $this->siteLangId), ['{ACTION}' => ucwords($action)]);
-            $this->nodes[] = array('title' => ucwords($title));
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
+            $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;
     }

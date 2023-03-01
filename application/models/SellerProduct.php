@@ -815,6 +815,13 @@ class SellerProduct extends MyAppModel
             $this->error = $sellerProdObj->getError();
             return false;
         }
+
+        $where = array('smt' => 'selprodoption_selprod_id = ?', 'vals' => array($selprodId));
+        if (!FatApp::getDb()->deleteRecords(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, $where)) {
+            $this->error = FatApp::getDb()->getError();
+            return false;
+        }
+
         return true;
     }
 
