@@ -8,6 +8,7 @@
 
 ## Bug Fixes:
 - Bug-069687 - Displaying invalid request when user tries to update currency language data in different language.
+- Bug-070827 - Adding special price to batch products in google shopping feed.
 
 # RV-10.0.0.20221123
 
