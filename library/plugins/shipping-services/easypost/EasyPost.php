@@ -16,7 +16,7 @@ class EasyPost extends ShippingServicesBase
     private const REQUEST_RETRIEVE_ORDER = 7;
     private const REQUEST_REFUND_SHIPMENT = 8;
     private const REQUEST_CARRIER_TYPES = 9;
-  
+
     private $resp;
     private $eCode = '';
     private $toAddress;
@@ -140,6 +140,11 @@ class EasyPost extends ShippingServicesBase
     public function getCarrierTypes(): array
     {
         if (Plugin::INACTIVE == $this->settings['plugin_active']) {
+            return [];
+        }
+        
+        if (!array_key_exists('live_api_key', $this->settings) || empty($this->settings['live_api_key'])) {
+            $this->error = Labels::getLabel('ERR_PRODUCTION_API_KEY_REQUIRED_FOR_CARRIER_LISTING', $this->langId);
             return [];
         }
 
@@ -740,12 +745,13 @@ class EasyPost extends ShippingServicesBase
     public function validateKeys(array $keys): bool
     {
         $keys['plugin_active'] = Plugin::ACTIVE;
-        $this->settings = $keys;           
+        $this->settings = $keys;
         $this->getCarrierTypes();
         if (!empty($this->eCode) && 'APIKEY.INACTIVE' == $this->eCode) {
             return false;
         }
-        return true;
+
+        return empty($this->error);
     }
 
     /**
@@ -765,9 +771,9 @@ class EasyPost extends ShippingServicesBase
                 case self::REQUEST_CARRIER_LIST:
                     $this->resp = \EasyPost\CarrierAccount::all(null, $this->settings['live_api_key']);
                     break;
-                case self::REQUEST_CARRIER_TYPES:                  
-                    $this->resp = \EasyPost\CarrierAccount::types(null, $this->settings['api_key']);
-                    break;    
+                case self::REQUEST_CARRIER_TYPES:
+                    $this->resp = \EasyPost\CarrierAccount::types(null, $this->settings['live_api_key']);
+                    break;
                 case self::REQUEST_CREATE_ADDRESS:
                     $this->resp = \EasyPost\Address::create_and_verify($requestParam, $this->apiKey);
                     break;

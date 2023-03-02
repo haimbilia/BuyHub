@@ -24,6 +24,7 @@
 - Bug-070125 - Testimonial image is not rendering incase of other language
 - Bug-070173 - shopify data migration not worrking as tag lang table not exisit in current release
 - Bug-070827 - Adding special price to batch products in google shopping feed.
+- Bug-070881 - Easypost : Unable to validate plugin API keys
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
