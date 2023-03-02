@@ -275,6 +275,9 @@ class CollectionsController extends ListingBaseController
             case Collections::TYPE_CATEGORY_LAYOUT5:
                 return Collections::LIMIT_CATEGORY_LAYOUT5;
                 break;    
+            case Collections::TYPE_CATEGORY_LAYOUT6:
+                return Collections::LIMIT_CATEGORY_LAYOUT6;
+                break;    
             case Collections::TYPE_SHOP_LAYOUT1:
                 return Collections::LIMIT_SHOP_LAYOUT1;
                 break;
@@ -286,6 +289,9 @@ class CollectionsController extends ListingBaseController
                 break;
             case Collections::TYPE_BRAND_LAYOUT2:
                 return Collections::LIMIT_BRAND_LAYOUT2;
+                break;
+            case Collections::TYPE_BRAND_LAYOUT3:
+                return Collections::LIMIT_BRAND_LAYOUT3;
                 break;
             case Collections::TYPE_BLOG_LAYOUT1:
                 return Collections::LIMIT_BLOG_LAYOUT1;
@@ -315,6 +321,7 @@ class CollectionsController extends ListingBaseController
             $maxDisplayOrder = Collections::getMaxDisplayOrder();
             $post['collection_display_order'] = $maxDisplayOrder + 1;
         }
+        
         $collection = new Collections($recordId);
         $collection->assignValues($post);
         if (!$collection->save()) {

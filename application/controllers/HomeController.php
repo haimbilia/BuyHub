@@ -246,6 +246,7 @@ class HomeController extends MyAppController
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageShopLayout2;
                     break;
                 case Collections::TYPE_BRAND_LAYOUT1:
+                case Collections::TYPE_BRAND_LAYOUT3:
                     $homePageBrandLayout1 = CacheHelper::get('homePageBrandLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageBrandLayout1) {
                         $tpl = new FatTemplate('', '');
@@ -635,7 +636,7 @@ class HomeController extends MyAppController
         if (!empty($collectionsArr)) {
             if (MOBILE_APP_API_CALL) {
                 $collectionsArr = unserialize($collectionsArr);
-                $pagesCount = $collectionsArr['pageCount'];               
+                $pagesCount = $collectionsArr['pageCount'];
             }
             $collectionsArr = unserialize($collectionCache);
         } else {
@@ -658,7 +659,6 @@ class HomeController extends MyAppController
 
             $rs = $srch->getResultSet();
             $collectionsArr = $db->fetchAll($rs, 'collection_id');
-
             if (MOBILE_APP_API_CALL) {
                 $cacheData = [
                     'pageCount' => (1 == $page ? $srch->pages() : $pagesCount),
@@ -816,7 +816,10 @@ class HomeController extends MyAppController
 
                     $productSrchTempObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
                     $productSrchTempObj->addGroupBy('selprod_id');
-                    $productSrchTempObj->setPageSize($collection['collection_primary_records']);
+
+                    if (false === MOBILE_APP_API_CALL) {
+                        $productSrchTempObj->setPageSize($collection['collection_primary_records']);
+                    }
 
                     $recordCount = $this->getRecordsCount(clone $productSrchTempObj, true);
                     if (empty($recordCount)) {
@@ -861,6 +864,7 @@ class HomeController extends MyAppController
                     if (true === MOBILE_APP_API_CALL && Collections::TYPE_CATEGORY_LAYOUT2 == $collection['collection_layout_type']) {
                         continue 2;
                     }
+
                     $tempObj = clone $collectionObj;
                     $tempObj->addCondition('collection_id', '=', $collection_id);
                     $tempObj->doNotCalculateRecords();
@@ -871,7 +875,10 @@ class HomeController extends MyAppController
                     $productCatSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
 
                     $productCatSrchTempObj->addCondition('prodcat_deleted', '=', applicationConstants::NO);
-                    $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
+
+                    if (false === MOBILE_APP_API_CALL) {
+                        $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
+                    }
 
                     $recordCount = $this->getRecordsCount(clone $productCatSrchTempObj);
                     if (empty($recordCount)) {
@@ -885,7 +892,7 @@ class HomeController extends MyAppController
                     /* ] */
                     $collections[$ind] = $collection;
                     $counter = 0;
-                    if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT2, Collections::TYPE_CATEGORY_LAYOUT3, Collections::TYPE_CATEGORY_LAYOUT5])) {
+                    if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT2, Collections::TYPE_CATEGORY_LAYOUT3, Collections::TYPE_CATEGORY_LAYOUT5, Collections::TYPE_CATEGORY_LAYOUT6])) {
                         while ($catData = $db->fetch($rs)) {
                             if (true === MOBILE_APP_API_CALL) {
                                 $imgUpdatedOn = ProductCategory::getAttributesById($catData['prodcat_id'], 'prodcat_updated_on');
@@ -1117,6 +1124,7 @@ class HomeController extends MyAppController
                     $brandSearchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'brand_id = ctr.ctr_record_id', 'ctr');
                     $brandSearchTempObj->addMultipleFields(array('brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name'));
                     //$brandSearchTempObj->addCondition('brand_id', 'IN', array_keys($brandIds));
+
                     if (false === MOBILE_APP_API_CALL) {
                         $brandSearchTempObj->setPageSize($collection['collection_primary_records']);
                     }
@@ -1129,7 +1137,6 @@ class HomeController extends MyAppController
                     $brandSearchTempObj->addOrder('ctr_display_order', 'ASC');
                     $rs = $brandSearchTempObj->getResultSet();
                     $brands = $db->fetchAll($rs);
-
 
                     if (true === MOBILE_APP_API_CALL) {
                         foreach ($brands as &$brand) {
