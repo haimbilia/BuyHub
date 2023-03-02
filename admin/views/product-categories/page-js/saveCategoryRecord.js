@@ -98,7 +98,7 @@
         $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
 
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('productCategories', "langSetup"), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "langSetup"), data, function (t) {
             fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
 
@@ -109,7 +109,11 @@
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
             } else if ("openMediaForm" in t) {
-                catMediaForm(t.recordId);
+                if ('undefined' != typeof catMediaForm) {
+                    catMediaForm(t.recordId);
+                } else {
+                    mediaForm(t.recordId);
+                }
             }
         });
     };
