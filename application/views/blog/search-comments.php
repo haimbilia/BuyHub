@@ -9,7 +9,7 @@
                         <cite><?php echo CommonHelper::displayName($comment['bpcomment_author_name']); ?></cite>
                         <time datetime="<?php echo FatDate::format($comment['bpcomment_added_on']); ?>"><?php echo FatDate::format($comment['bpcomment_added_on']); ?></time>
                         <div class="comment-content">
-                            <p><?php echo nl2br($comment['bpcomment_content']); ?></p>
+                            <p><?php echo (isset($comment['bpcomment_content']) && !empty($comment['bpcomment_content'])) ? nl2br($comment['bpcomment_content']):''; ?></p>
                         </div>
                         <!--<div class="reply">
                         <a rel="nofollow" class="comment-reply-link" href="#comment-3712" onclick="return addComment.moveForm( &quot;comment-3712&quot;, &quot;3712&quot;, &quot;respond&quot;, &quot;4666&quot; )" aria-label="Reply to FATbit Chef">Reply</a> </div>-->
