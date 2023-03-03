@@ -4,7 +4,7 @@
         "friendsofphp/php-cs-fixer": "dev-master",
         "taxjar/taxjar-php": "1.10.4",
         "avalara/avataxclient": "20.12.1",
-        "php-curl-class/php-curl-class": "9.10.0",
+        "php-curl-class/php-curl-class": "9.14.1",
         "google/apiclient": "2.12.6",
         "stripe/stripe-php": "9.9.0",
         "league/oauth2-client": "2.6.0",
@@ -25,6 +25,9 @@
     "config": {
         "platform": {
             "php": "8.1"
+        },
+        "allow-plugins": {
+            "php-http/discovery": true
         }
     }
 }
