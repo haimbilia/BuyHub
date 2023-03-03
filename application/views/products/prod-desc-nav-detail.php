@@ -51,7 +51,7 @@
                     </div>
                 </div>
             <?php } ?>
-            <?php if (trim($product['product_description']) != '') { ?>
+            <?php if (!empty($product['product_description'])) { ?>
                 <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?>
                         <svg class="svg plus toggleAccordianJs" width="16" height="16">

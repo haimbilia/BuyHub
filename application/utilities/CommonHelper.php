@@ -593,6 +593,9 @@ class CommonHelper extends FatUtility
 
     public static function renderHtml($content = '', $stripJs = false)
     {
+        if (empty($content)) {
+            return '';
+        }
         $str = html_entity_decode($content);
         $str = ($stripJs == true) ? static::stripJavascript($str) : $str;
 
@@ -1919,7 +1922,7 @@ class CommonHelper extends FatUtility
         if (true === $convertToType) {
             $data = static::cleanArray($data);
         }
-        
+
         header('Content-Type: application/json; charset=utf-8');
         die(LibHelper::convertToJson($data, JSON_UNESCAPED_UNICODE));
     }
@@ -2212,5 +2215,5 @@ class CommonHelper extends FatUtility
             return $_COOKIE[$cookieName];
         }
         return false;
-    }    
+    }
 }
