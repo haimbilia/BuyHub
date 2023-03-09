@@ -358,7 +358,7 @@ class EasyPost extends ShippingServicesBase
             if (false === $this->createParcel()) {
                 return [];
             }
-
+            
             $orderDetail = [
                 "from_address" => $this->fromAddress,
                 "to_address" => $this->toAddress,
@@ -372,10 +372,17 @@ class EasyPost extends ShippingServicesBase
             if (false === $this->doRequest(self::REQUEST_CREATE_ORDER, $orderDetail)) {
                 return [];
             }
-
+            
             $shipment = $this->getResponse();
             if (empty($shipment) || 0 == count($shipment['rates'])) {
                 $this->error = Labels::getLabel('ERR_UNABLE_TO_CALCULATE_RATES_FOR_GIVEN_ADDRESSES', $this->langId);
+                if (isset($shipment['messages']) && 0 < count($shipment['messages'])) {
+                    $this->error = '';
+                    foreach ($shipment['messages'] as $msg) {
+                        $error = $msg['carrier'] . ': ' . $msg['message'];
+                        $this->error .= !empty($this->error) ? '\n' . $error : $error;
+                    }
+                }
                 return [];
             }
             $rates = $shipment['rates'];
