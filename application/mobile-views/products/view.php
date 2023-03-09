@@ -237,6 +237,11 @@ if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr']))
     $product['badges'] = $badges;
     /* Shop and SelProd Badge */
     foreach ($product['moreSellersArr'] as &$value) {
+        if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+            $shop_rating = SelProdRating::getSellerRating($value['selprod_user_id'], true);
+            $value['shop_rating'] = round($shop_rating, 1);
+        }
+        $value['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($value['shop_user_id'], true);
         $value['discount'] = ($value['selprod_price'] > $value['theprice']) ? CommonHelper::showProductDiscountedText($value, $siteLangId) : '';
         $value['selprod_price'] = CommonHelper::displayMoneyFormat($value['selprod_price']);
         $value['theprice'] = CommonHelper::displayMoneyFormat($value['theprice']);
