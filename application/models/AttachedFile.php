@@ -229,6 +229,7 @@ class AttachedFile extends MyAppModel
         $srch->addCondition('afile_record_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
         $attr = ['afile_id', 'afile_type', 'afile_record_id', 'afile_record_subid', 'afile_lang_id', 'afile_screen', 'afile_physical_path', 'afile_name', 'afile_attribute_title', 'afile_attribute_alt', 'afile_aspect_ratio', 'afile_display_order', 'afile_updated_at'];
+
         if ($fileType != AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP && $fileType != AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP) {
             $attr[] = 'afile_downloaded_times';
         }

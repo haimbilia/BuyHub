@@ -129,7 +129,12 @@ class FatMailer extends FatModel
         }
 
         if (empty($this->fromEmail)) {
-            $this->fromEmail = FatApp::getConfig("CONF_FROM_EMAIL");
+            if ($this->isDemoUrlMail()) {
+                $this->fromEmail = (FatApp::getConfig('CONF_SEND_SMTP_EMAIL'))? FatApp::getConfig("CONF_SMTP_USERNAME"): DEMO_FROM_EMAIL;
+            } else {
+                $this->fromEmail = FatApp::getConfig("CONF_FROM_EMAIL");
+            }
+
             $this->fromName = FatApp::getConfig('CONF_FROM_NAME_' . $this->langId, FatUtility::VAR_STRING, '');
         }
 
@@ -427,5 +432,16 @@ class FatMailer extends FatModel
             '{CONTACT-EMAIL}' => FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, ''),
             '{SITE-PHONE}' => ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode', FatUtility::VAR_STRING, '')) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_STRING, ''),
         );
+    }
+
+    private function isDemoUrlMail()
+    {
+        if (strpos($_SERVER['SERVER_NAME'], 'demo.yo-kart.com') !== false) {
+            return true;
+        } else if (strpos($_SERVER['SERVER_NAME'], '4livedemo.com') !== false) {
+            return true;
+        }
+
+        return false;
     }
 }

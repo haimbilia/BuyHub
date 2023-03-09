@@ -495,7 +495,7 @@ class GuestUserController extends MyAppController
             }
 
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'registrationForm', CONF_WEBROOT_FRONTEND));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'registrationForm',[], CONF_WEBROOT_FRONTEND));
         }
         if (!MOBILE_APP_API_CALL) {
             $frm->expireSecurityToken(FatApp::getPostedData());

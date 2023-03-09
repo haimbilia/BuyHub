@@ -51,7 +51,7 @@
                     </div>
                 </div>
             <?php } ?>
-            <?php if (trim($product['product_description']) != '') { ?>
+            <?php if (!empty($product['product_description'])) { ?>
                 <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?>
                         <svg class="svg plus toggleAccordianJs" width="16" height="16">
@@ -102,17 +102,17 @@
                             <div class="cms">
                                 <?php if ($shop['shop_payment_policy'] != '') { ?>
                                     <h6><?php echo Labels::getLabel('LBL_Payment_Policy', $siteLangId) ?></h6>
-                                    <p><?php echo nl2br($shop['shop_payment_policy']); ?></p>
+                                    <p><?php echo !empty($shop['shop_payment_policy']) ? nl2br($shop['shop_payment_policy']) : ''; ?></p>
                                     <br>
                                 <?php } ?>
                                 <?php if ($shop['shop_delivery_policy'] != '') { ?>
                                     <h6><?php echo Labels::getLabel('LBL_Delivery_Policy', $siteLangId) ?></h6>
-                                    <p><?php echo nl2br($shop['shop_delivery_policy']); ?></p>
+                                    <p><?php echo (!empty($shop['shop_delivery_policy'])) ? nl2br($shop['shop_delivery_policy']) : ''; ?></p>
                                     <br>
                                 <?php } ?>
                                 <?php if ($shop['shop_refund_policy'] != '') { ?>
                                     <h6><?php echo Labels::getLabel('LBL_Refund_Policy', $siteLangId) ?></h6>
-                                    <p><?php echo nl2br($shop['shop_refund_policy']); ?></p>
+                                    <p><?php echo (!empty($shop['shop_refund_policy'])) ? nl2br($shop['shop_refund_policy']) : ''; ?></p>
                                 <?php } ?>
                             </div>
                         </div>

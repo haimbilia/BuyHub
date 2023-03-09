@@ -10,7 +10,9 @@ if (!empty($bannerSlogan)) {
     $imageSizeType = $bannerSlogan['epage_extra_info'] && array_key_exists(Extrapage::TYPE_BKGROUND_IMAGE_SIZE, $bannerSlogan['epage_extra_info']) ? $bannerSlogan['epage_extra_info'][Extrapage::TYPE_BKGROUND_IMAGE_SIZE] : 'auto';
     $bgImageUrl .= "background-size: $imageSizeType;";
 
-    $pageContent = FatUtility::decodeHtmlEntities(nl2br($bannerSlogan['epage_content']));
+    if ((isset($bannerSlogan['epage_content']) && !empty($bannerSlogan['epage_content']))) {
+        $pageContent = FatUtility::decodeHtmlEntities(nl2br($bannerSlogan['epage_content']));
+    }
 }
 
 ?>
@@ -24,7 +26,7 @@ if (!empty($bannerSlogan)) {
                         <?php if (isset($bannerSlogan['epage_label'])) { ?>
                             <h3><?php echo $bannerSlogan['epage_label']; ?></h3>
                         <?php } ?>
-                        <p><?php echo nl2br($pageContent); ?></p>
+                        <p><?php echo $pageContent; ?></p>
                     </div>
                 </div>
                 <div class="seller-register-form">

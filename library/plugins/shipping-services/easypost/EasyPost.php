@@ -653,14 +653,11 @@ class EasyPost extends ShippingServicesBase
         if (false === $this->loadOrder($rateId)) {
             return false;
         }
-
         if (is_null($this->shipment) || empty($this->shipment)) {
             $this->error = Labels::getLabel('ERR_LOAD_ORDER_BEFORE_PROCEED_TO_RETURN_SHIPMENT', $this->langId);
             return false;
         }
-
         $shipments = array_slice($this->shipment['shipments'], 0, $qty);
-
         $resp = [];
         foreach ($shipments as $shipment) {
             $requestParam = [
@@ -675,7 +672,6 @@ class EasyPost extends ShippingServicesBase
                 ],
                 'is_return' => true
             ];
-
             if (false === $this->doRequest(self::REQUEST_CREATE_SHIPPING, $requestParam, false)) {
                 return false;
             }
@@ -683,7 +679,6 @@ class EasyPost extends ShippingServicesBase
             $shipmentReturn->buy($shipmentReturn->lowest_rate());
             $resp[] = \EasyPost\Util::convertEasyPostObjectToArray($shipmentReturn);
         }
-
         $this->resp = $resp;
         return true;
     }

@@ -547,11 +547,11 @@ class LibHelper extends FatUtility
             if (empty($val)) {
                 $val = 0;
             }
-            
+
             if (is_object($val)) {
-                die('Object is being passed inside arguments please avoid using cache key in '. $class . ' > ' . $function . '.');
+                die('Object is being passed inside arguments please avoid using cache key in ' . $class . ' > ' . $function . '.');
             }
-            
+
             if (is_array($val)) {
                 $val = json_encode($val);
             }

@@ -34,7 +34,7 @@ $shopLocation = $shop_city . $shop_state . $shop_country; ?>
                                 <tbody>
                                     <tr>
                                         <th><?php echo Labels::getLabel('LBL_Payment', $siteLangId) ?></th>
-                                        <td><?php echo nl2br($shop['shop_payment_policy']); ?></td>
+                                        <td><?php echo (!empty($shop['shop_payment_policy'])) ? nl2br($shop['shop_payment_policy']) : ''; ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -46,7 +46,7 @@ $shopLocation = $shop_city . $shop_state . $shop_country; ?>
                                 <tbody>
                                     <tr>
                                         <th><?php echo Labels::getLabel('LBL_Shipping', $siteLangId) ?></th>
-                                        <td><?php echo nl2br($shop['shop_delivery_policy']); ?></td>
+                                        <td><?php echo !empty($shop['shop_delivery_policy']) ? nl2br($shop['shop_delivery_policy']) : ''; ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -58,7 +58,7 @@ $shopLocation = $shop_city . $shop_state . $shop_country; ?>
                                 <tbody>
                                     <tr>
                                         <th><?php echo Labels::getLabel('LBL_Refunds_Exchanges', $siteLangId) ?></th>
-                                        <td><?php echo nl2br($shop['shop_refund_policy']); ?></td>
+                                        <td><?php echo !empty($shop['shop_refund_policy']) ? nl2br($shop['shop_refund_policy']) : ''; ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -70,7 +70,7 @@ $shopLocation = $shop_city . $shop_state . $shop_country; ?>
                                 <tbody>
                                     <tr>
                                         <th><?php echo Labels::getLabel('LBL_Additional_Policies_FAQs', $siteLangId) ?></th>
-                                        <td><?php echo nl2br($shop['shop_additional_info']); ?></td>
+                                        <td><?php echo !empty($shop['shop_additional_info']) ? nl2br($shop['shop_additional_info']) : ''; ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -82,7 +82,7 @@ $shopLocation = $shop_city . $shop_state . $shop_country; ?>
                                 <tbody>
                                     <tr>
                                         <th><?php echo Labels::getLabel('LBL_Seller_Information', $siteLangId) ?></th>
-                                        <td><?php echo nl2br($shop['shop_seller_info']); ?></td>
+                                        <td><?php echo !empty($shop['shop_seller_info']) ? nl2br($shop['shop_seller_info']) : ''; ?></td>
                                     </tr>
                                 </tbody>
                             </table>
