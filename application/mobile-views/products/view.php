@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-
+$data['pageCount'] = 2;
 if (1 == $page) {
     $conditionArr = Product::getConditionArr($siteLangId);
     $product['selprod_condition_title'] = $conditionArr[$product['selprod_condition']] ?? '';
@@ -418,7 +418,6 @@ if (1 == $page) {
         ];
     }
 }
-
 
 /* $data = array(
     'shop_rating' => round($shop_rating, 1),
