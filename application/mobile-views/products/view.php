@@ -115,6 +115,15 @@ $arr_flds = array(
 );
 
 if (!empty($product)) {
+    if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) {
+        foreach ($volumeDiscountRows as &$volumeDiscountRow) {
+            $volumeDiscount = $product['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
+            $price = ($product['theprice'] - $volumeDiscount);
+            $volumeDiscountRow['price'] = CommonHelper::displayMoneyFormat($price, true, false, true, false, false, true);
+            $volumeDiscountRow['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true);
+        }
+    }
+
     $warrantTypes = Product::getWarrantyUnits($siteLangId);
     $product['product_warranty_unit_label'] = (isset($product['product_warranty_unit']) && array_key_exists($product['product_warranty_unit'], $warrantTypes)) ? $warrantTypes[$product['product_warranty_unit']] : '';
 
