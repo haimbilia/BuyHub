@@ -1,234 +1,20 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-
-$conditionArr = Product::getConditionArr($siteLangId);
-$product['selprod_condition_title'] = $conditionArr[$product['selprod_condition']] ?? '';
-$product['ribbons'] = $selProdRibbons;
-
-/* Shop and SelProd Badge */
-$selProdBadge = Badge::getSelprodBadges($siteLangId, [$product['selprod_id']]);
-$shopBadge = Badge::getShopBadges($siteLangId, [$product['shop_id']]);
-$badgesArr = array_merge($selProdBadge, $shopBadge);
-$badges = [];
-foreach ($badgesArr as $bdgRow) {
-    $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $bdgRow[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $siteLangId);
-    $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
-    $url = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $siteLangId, ImageDimension::VIEW_MINI, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    $badges[] = [
-        'url' => $url,
-        Badge::DB_TBL_PREFIX . 'name' => $bdgRow[Badge::DB_TBL_PREFIX . 'name'],
-    ];
-}
-
-$product['badges'] = $badges;
-/* Shop and SelProd Badge */
-
-$btTRightRibbons = $upsellProductsRibbons['tRightRibbons'];
-foreach (array_filter($upsellProducts) as $index => $btProduct) {
-    $selProdRibbons = [];
-
-    if (array_key_exists($btProduct['selprod_id'], $btTRightRibbons)) {
-        $selProdRibbons[] = $btTRightRibbons[$btProduct['selprod_id']];
-    }
-
-    $uploadedTime = AttachedFile::setTimeParam($btProduct['product_updated_on']);
-    $upsellProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($btProduct['product_id'], ImageDimension::VIEW_MEDIUM, $btProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    $upsellProducts[$index]['discount'] = ($btProduct['selprod_price'] > $btProduct['theprice']) ? CommonHelper::showProductDiscountedText($btProduct, $siteLangId) : '';
-    $upsellProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($btProduct['selprod_price']);
-    $upsellProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($btProduct['theprice']);
-    $upsellProducts[$index]['ribbons'] = $selProdRibbons;
-}
-
-$relTRightRibbons = $relatedProductsRibbons['tRightRibbons'];
-foreach (array_filter($relatedProductsRs) as $index => $rProduct) {
-    $selProdRibbons = [];
-
-    if (array_key_exists($rProduct['selprod_id'], $relTRightRibbons)) {
-        $selProdRibbons[] = $relTRightRibbons[$rProduct['selprod_id']];
-    }
-    $uploadedTime = AttachedFile::setTimeParam($rProduct['product_updated_on']);
-    $relatedProductsRs[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($rProduct['product_id'], ImageDimension::VIEW_MEDIUM, $rProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    $relatedProductsRs[$index]['discount'] = ($rProduct['selprod_price'] > $rProduct['theprice']) ? CommonHelper::showProductDiscountedText($rProduct, $siteLangId) : '';
-    $relatedProductsRs[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($rProduct['selprod_price']);
-    $relatedProductsRs[$index]['theprice'] = CommonHelper::displayMoneyFormat($rProduct['theprice']);
-    $relatedProductsRs[$index]['ribbons'] = $selProdRibbons;
-}
-
-$recTRightRibbons = $recommendedProductsRibbons['tRightRibbons'];
-foreach (array_filter($recommendedProducts) as $index => $recProduct) {
-    $selProdRibbons = [];
-    if (array_key_exists($recProduct['selprod_id'], $recTRightRibbons)) {
-        $selProdRibbons[] = $recTRightRibbons[$recProduct['selprod_id']];
-    }
-    $uploadedTime = AttachedFile::setTimeParam($recProduct['product_updated_on']);
-    $recommendedProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recProduct['product_id'], ImageDimension::VIEW_MEDIUM, $recProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    $recommendedProducts[$index]['discount'] = ($recProduct['selprod_price'] > $recProduct['theprice']) ? CommonHelper::showProductDiscountedText($recProduct, $siteLangId) : '';
-    $recommendedProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recProduct['selprod_price']);
-    $recommendedProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($recProduct['theprice']);
-    $recommendedProducts[$index]['ribbons'] = $selProdRibbons;
-}
-
-$recentTRightRibbons = $recentlyViewedRibbons['tRightRibbons'];
-foreach (array_filter($recentlyViewed) as $index => $recViewed) {
-    $selProdRibbons = [];
-    if (array_key_exists($recViewed['selprod_id'], $recentTRightRibbons)) {
-        $selProdRibbons[] = $recentTRightRibbons[$recViewed['selprod_id']];
-    }
-    $uploadedTime = AttachedFile::setTimeParam($recViewed['product_updated_on']);
-    $recentlyViewed[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recViewed['product_id'], ImageDimension::VIEW_MEDIUM, $recViewed['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    $recentlyViewed[$index]['discount'] = ($recViewed['selprod_price'] > $recViewed['theprice']) ? CommonHelper::showProductDiscountedText($recViewed, $siteLangId) : '';
-    $recentlyViewed[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recViewed['selprod_price']);
-    $recentlyViewed[$index]['theprice'] = CommonHelper::displayMoneyFormat($recViewed['theprice']);
-    $recentlyViewed[$index]['ribbons'] = $selProdRibbons;
-}
-
-foreach (array_filter($productImagesArr) as $afile_id => $image) {
-    $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-    $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_ORIGINAL, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    $productImagesArr[$afile_id]['product_image_url'] = $mainImgUrl;
-}
-
-$selectedOptionsArr = $product['selectedOptionValues'];
-foreach ($optionRows as $key => &$option) {
-    foreach ($option['values'] as $index => &$opVal) {
-        $opVal['theprice'] = CommonHelper::displayMoneyFormat($opVal['theprice']);
-        $opVal['isAvailable'] = 1;
-        $opVal['isSelected'] = 1;
-        $opVal['optionUrlValue'] = $product['selprod_id'];
-        if (!in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
-            $opVal['isSelected'] = 0;
-            $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id']);
-            $optionUrlArr = explode("::", $optionUrl);
-            if (is_array($optionUrlArr) && count($optionUrlArr) == 2) {
-                $opVal['isAvailable'] = 0;
-            }
-            $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id'], true);
-            $opVal['optionUrlValue'] = $optionUrl;
-        }
-    }
-}
-
-$arr_flds = array(
-    'country_name' => Labels::getLabel('LBL_SHIP_TO', $siteLangId),
-    'pship_charges' => Labels::getLabel('LBL_COST', $siteLangId),
-    'pship_additional_charges' => Labels::getLabel('LBL_WITH_ANOTHER_ITEM', $siteLangId),
-);
-
-if (!empty($product)) {
-    $warrantTypes = Product::getWarrantyUnits($siteLangId);
-    $product['product_warranty_unit_label'] = (isset($product['product_warranty_unit']) && array_key_exists($product['product_warranty_unit'], $warrantTypes)) ? $warrantTypes[$product['product_warranty_unit']] : '';
-
-    $product['productPolicies'] = [];
-    $product['discount'] = ($product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
-    $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price']);
-    $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice']);
-    $product['inclusiveTax'] = FatUtility::int(FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId());
-
-    if (!empty($product['selprod_return_age']) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
-        $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);
-        $returnAge = !empty($product['selprod_return_age']) ? $product['selprod_return_age'] : $product['shop_return_age'];
-        $returnAge = !empty($returnAge) ? $returnAge : 0;
-        $returnAge = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]);
-        $product['productPolicies'][] = array(
-            'title' => $returnAge,
-            'isSvg' => Plugin::RETURN_FALSE,
-            'icon' => CONF_WEBROOT_URL . 'images/easyreturns.png'
-        );
-    }
-    if (!empty($product['selprod_cancellation_age']) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
-        $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_CANCELLATION_POLICY', $siteLangId);
-        $cancellationAge = !empty($product['selprod_cancellation_age']) ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
-        $cancellationAge = !empty($cancellationAge) ? $cancellationAge : 0;
-        $cancellationAge = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]);
-        $product['productPolicies'][] = array(
-            'title' => $cancellationAge,
-            'isSvg' => Plugin::RETURN_FALSE,
-            'icon' => CONF_WEBROOT_URL . 'images/easyreturns.png'
-        );
-    }
-    if (!empty($product['product_warranty'])) {
-        $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_WARRANTY', $siteLangId);
-        $warranty = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]);
-        $product['productPolicies'][] = array(
-            'title' => $warranty,
-            'isSvg' => Plugin::RETURN_FALSE,
-            'icon' => CONF_WEBROOT_URL . 'images/yearswarranty.png'
-        );
-    }
-
-    if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
-        if (isset($shippingDetails['ps_free']) && $shippingDetails['ps_free'] == applicationConstants::YES) {
-            $product['productPolicies'][] = array(
-                'title' => Labels::getLabel('LBL_FREE_SHIPPING_ON_THIS_ORDER', $siteLangId),
-                'isSvg' => Plugin::RETURN_FALSE,
-                'icon' => CONF_WEBROOT_URL . 'images/freeshipping.png'
-            );
-        }
-    }
-
-    if (0 < $codEnabled && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
-        $product['productPolicies'][] = array(
-            'title' => Labels::getLabel('LBL_CASH_ON_DELIVERY_IS_AVAILABLE', $siteLangId),
-            'isSvg' => Plugin::RETURN_FALSE,
-            'icon' => CONF_WEBROOT_URL . 'images/safepayments.png'
-        );
-    }
-
-    $product['youtubeUrlThumbnail'] = '';
-    if (!empty($product['product_youtube_video'])) {
-        $youtubeVideoUrl = $product['product_youtube_video'];
-        $videoCode = UrlHelper::parseYouTubeurl($youtubeVideoUrl);
-        $product['youtubeUrlThumbnail'] = 'https://img.youtube.com/vi/' . $videoCode . '/hqdefault.jpg';
-    }
-    $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
-}
-
-$product['selprod_return_policies'] = !empty($product['selprod_return_policies']) ? $product['selprod_return_policies'] : (object) array();
-$product['selprod_warranty_policies'] = !empty($product['selprod_warranty_policies']) ? $product['selprod_warranty_policies'] : (object) array();
-
-if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
-    $fulfillmentLabel = Labels::getLabel('LBL_INVALID_FULFILLMENT', $siteLangId);
-    $icon = CONF_WEBROOT_URL . 'images/';
-    switch ($fulfillmentType) {
-        case Shipping::FULFILMENT_SHIP:
-            $fulfillmentLabel = Labels::getLabel('LBL_SHIPPED_ONLY', $siteLangId);
-            $icon .= 'shipping_30x30.png';
-            break;
-        case Shipping::FULFILMENT_PICKUP:
-            $fulfillmentLabel = Labels::getLabel('LBL_PICKUP_ONLY', $siteLangId);
-            $icon .= 'item_pickup_30x30.png';
-            break;
-        case Shipping::FULFILMENT_ALL:
-            $fulfillmentLabel = Labels::getLabel('LBL_SHIPPMENT_AND_PICKUP', $siteLangId);
-            $icon .= 'shipping_30x30.png';
-            break;
-        default:
-            $fulfillmentLabel = Labels::getLabel('LBL_SHIPPED_ONLY', $siteLangId);
-            $icon .= 'shipping_30x30.png';
-            break;
-    }
-
-    $product['productPolicies'][] = array(
-        'title' => $fulfillmentLabel,
-        'isSvg' => Plugin::RETURN_TRUE,
-        'icon' => $icon
-    );
-}
-
-$product['product_description'] = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
-$product['product_description'] = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $product['product_description']);
-
-if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr'])) {
+$data['pageCount'] = 2;
+if (1 == $page) {
+    $conditionArr = Product::getConditionArr($siteLangId);
+    $product['selprod_condition_title'] = $conditionArr[$product['selprod_condition']] ?? '';
+    $product['ribbons'] = $selProdRibbons;
 
     /* Shop and SelProd Badge */
-    $shopIdsArr = array_column($product['moreSellersArr'], 'shop_id');
-    $shopBadges = Badge::getShopBadges($siteLangId, $shopIdsArr);
-    $shopBadgesArr = [];
-    foreach ($shopBadges as $bdgRow) {
+    $selProdBadge = Badge::getSelprodBadges($siteLangId, [$product['selprod_id']]);
+    $shopBadge = Badge::getShopBadges($siteLangId, [$product['shop_id']]);
+    $badgesArr = array_merge($selProdBadge, $shopBadge);
+    $badges = [];
+    foreach ($badgesArr as $bdgRow) {
         $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $bdgRow[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $siteLangId);
         $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
         $url = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $siteLangId, ImageDimension::VIEW_MINI, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-        $shopBadgesArr[$bdgRow['shop_id']] = [
+        $badges[] = [
             'url' => $url,
             Badge::DB_TBL_PREFIX . 'name' => $bdgRow[Badge::DB_TBL_PREFIX . 'name'],
         ];
@@ -236,97 +22,408 @@ if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr']))
 
     $product['badges'] = $badges;
     /* Shop and SelProd Badge */
-    foreach ($product['moreSellersArr'] as &$value) {
-        $value['discount'] = ($value['selprod_price'] > $value['theprice']) ? CommonHelper::showProductDiscountedText($value, $siteLangId) : '';
-        $value['selprod_price'] = CommonHelper::displayMoneyFormat($value['selprod_price']);
-        $value['theprice'] = CommonHelper::displayMoneyFormat($value['theprice']);
-        $value['badges'] = [];
-        if (isset($shopBadgesArr[$value['shop_id']])) {
-            $value['badges'][] = $shopBadgesArr[$value['shop_id']];
-        }
-    }
-}
 
-$productDetailPageBanner = [];
-if (!empty($banners) && $banners['blocation_active'] && count($banners['banners'])) {
-    foreach ($banners['banners'] as &$val) {
-        $bannerImageUrl = '';
-        if (!AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId)) {
-            continue;
-        } else {
-            $slideArr = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId);
-            foreach ($slideArr as $slideScreen) {
-                switch ($slideScreen['afile_screen']) {
-                    case applicationConstants::SCREEN_MOBILE:
-                        $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE, 'PRODUCTLAYOUT'));
-                        break;
-                    case applicationConstants::SCREEN_IPAD:
-                        $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD, 'PRODUCTLAYOUT'));
-                        break;
-                    case applicationConstants::SCREEN_DESKTOP:
-                        $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, 'PRODUCTLAYOUT'));
-                        break;
+    $btTRightRibbons = $upsellProductsRibbons['tRightRibbons'];
+    foreach (array_filter($upsellProducts) as $index => $btProduct) {
+        $selProdRibbons = [];
+
+        if (array_key_exists($btProduct['selprod_id'], $btTRightRibbons)) {
+            $selProdRibbons[] = $btTRightRibbons[$btProduct['selprod_id']];
+        }
+
+        $uploadedTime = AttachedFile::setTimeParam($btProduct['product_updated_on']);
+        $upsellProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($btProduct['product_id'], ImageDimension::VIEW_MEDIUM, $btProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $upsellProducts[$index]['discount'] = ($btProduct['selprod_price'] > $btProduct['theprice']) ? CommonHelper::showProductDiscountedText($btProduct, $siteLangId) : '';
+        $upsellProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($btProduct['selprod_price']);
+        $upsellProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($btProduct['theprice']);
+        $upsellProducts[$index]['ribbons'] = $selProdRibbons;
+    }
+
+    foreach (array_filter($productImagesArr) as $afile_id => $image) {
+        $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+        $originalImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_ORIGINAL, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_MEDIUM, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $productImagesArr[$afile_id]['product_image_url'] = $mainImgUrl;
+    }
+
+    $selectedOptionsArr = $product['selectedOptionValues'];
+    foreach ($optionRows as $key => &$option) {
+        foreach ($option['values'] as $index => &$opVal) {
+            $opVal['theprice'] = CommonHelper::displayMoneyFormat($opVal['theprice']);
+            $opVal['isAvailable'] = 1;
+            $opVal['isSelected'] = 1;
+            $opVal['optionUrlValue'] = $product['selprod_id'];
+            if (!in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
+                $opVal['isSelected'] = 0;
+                $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id']);
+                $optionUrlArr = explode("::", $optionUrl);
+                if (is_array($optionUrlArr) && count($optionUrlArr) == 2) {
+                    $opVal['isAvailable'] = 0;
                 }
+                $optionUrl = Product::generateProductOptionsUrl($product['selprod_id'], $selectedOptionsArr, $option['option_id'], $opVal['optionvalue_id'], $product['product_id'], true);
+                $opVal['optionUrlValue'] = $optionUrl;
             }
-            $val['banner_image_url'] = $bannerImageUrl;
-            $bannerUrl = UrlHelper::generateFullUrl('Banner', 'url', array($val['banner_id']));
-            $urlTypeData = CommonHelper::getUrlTypeData($bannerUrl);
-
-            $val['banner_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $bannerUrl : $urlTypeData['recordId']);
-            $val['banner_url_type'] = $urlTypeData['urlType'];
-        }
-    }
-    $productDetailPageBanner = $banners['banners'];
-}
-
-if (!empty($reviews)) {
-    if (!empty($ratingAspects)) {
-        foreach ($ratingAspects as &$ratingAsp) {
-            $ratingAsp['prod_rating'] = CommonHelper::numberFormat($ratingAsp['prod_rating'], false, true, 1);
         }
     }
 
-    $reviews['prod_rating'] = FatUtility::convertToType($reviews['prod_rating'], FatUtility::VAR_FLOAT);
-    $reviews['ratingAspects'] = (array) $ratingAspects;
+    if (!empty($product)) {
+        if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) {
+            foreach ($volumeDiscountRows as &$volumeDiscountRow) {
+                $volumeDiscount = $product['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
+                $price = ($product['theprice'] - $volumeDiscount);
+                $volumeDiscountRow['price'] = CommonHelper::displayMoneyFormat($price, true, false, true, false, false, true);
+                $volumeDiscountRow['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true);
+            }
+        }
+
+        $warrantTypes = Product::getWarrantyUnits($siteLangId);
+        $product['product_warranty_unit_label'] = (isset($product['product_warranty_unit']) && array_key_exists($product['product_warranty_unit'], $warrantTypes)) ? $warrantTypes[$product['product_warranty_unit']] : '';
+
+        $product['productPolicies'] = [];
+        $product['discount'] = ($product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
+        $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price']);
+        $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice']);
+        $product['inclusiveTax'] = FatUtility::int(FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId());
+
+        if (!empty($product['selprod_return_age']) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
+            $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);
+            $returnAge = !empty($product['selprod_return_age']) ? $product['selprod_return_age'] : $product['shop_return_age'];
+            $returnAge = !empty($returnAge) ? $returnAge : 0;
+            $returnAge = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]);
+            $product['productPolicies'][] = array(
+                'title' => $returnAge,
+                'isSvg' => Plugin::RETURN_FALSE,
+                'icon' => CONF_WEBROOT_URL . 'images/easyreturns.png'
+            );
+        }
+        if (!empty($product['selprod_cancellation_age']) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
+            $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_CANCELLATION_POLICY', $siteLangId);
+            $cancellationAge = !empty($product['selprod_cancellation_age']) ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
+            $cancellationAge = !empty($cancellationAge) ? $cancellationAge : 0;
+            $cancellationAge = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]);
+            $product['productPolicies'][] = array(
+                'title' => $cancellationAge,
+                'isSvg' => Plugin::RETURN_FALSE,
+                'icon' => CONF_WEBROOT_URL . 'images/easyreturns.png'
+            );
+        }
+        if (!empty($product['product_warranty'])) {
+            $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_WARRANTY', $siteLangId);
+            $warranty = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]);
+            $product['productPolicies'][] = array(
+                'title' => $warranty,
+                'isSvg' => Plugin::RETURN_FALSE,
+                'icon' => CONF_WEBROOT_URL . 'images/yearswarranty.png'
+            );
+        }
+
+        if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
+            if (isset($shippingDetails['ps_free']) && $shippingDetails['ps_free'] == applicationConstants::YES) {
+                $product['productPolicies'][] = array(
+                    'title' => Labels::getLabel('LBL_FREE_SHIPPING_ON_THIS_ORDER', $siteLangId),
+                    'isSvg' => Plugin::RETURN_FALSE,
+                    'icon' => CONF_WEBROOT_URL . 'images/freeshipping.png'
+                );
+            }
+        }
+
+        if (0 < $codEnabled && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
+            $product['productPolicies'][] = array(
+                'title' => Labels::getLabel('LBL_CASH_ON_DELIVERY_IS_AVAILABLE', $siteLangId),
+                'isSvg' => Plugin::RETURN_FALSE,
+                'icon' => CONF_WEBROOT_URL . 'images/safepayments.png'
+            );
+        }
+
+        $product['youtubeUrlThumbnail'] = '';
+        if (!empty($product['product_youtube_video'])) {
+            $youtubeVideoUrl = $product['product_youtube_video'];
+            $videoCode = UrlHelper::parseYouTubeurl($youtubeVideoUrl);
+            $product['youtubeUrlThumbnail'] = 'https://img.youtube.com/vi/' . $videoCode . '/hqdefault.jpg';
+        }
+        $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
+    }
+
+    $product['selprod_return_policies'] = !empty($product['selprod_return_policies']) ? $product['selprod_return_policies'] : (object) array();
+    $product['selprod_warranty_policies'] = !empty($product['selprod_warranty_policies']) ? $product['selprod_warranty_policies'] : (object) array();
+
+    if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
+        $fulfillmentLabel = Labels::getLabel('LBL_INVALID_FULFILLMENT', $siteLangId);
+        $icon = CONF_WEBROOT_URL . 'images/';
+        switch ($fulfillmentType) {
+            case Shipping::FULFILMENT_SHIP:
+                $fulfillmentLabel = Labels::getLabel('LBL_SHIPPED_ONLY', $siteLangId);
+                $icon .= 'shipping_30x30.png';
+                break;
+            case Shipping::FULFILMENT_PICKUP:
+                $fulfillmentLabel = Labels::getLabel('LBL_PICKUP_ONLY', $siteLangId);
+                $icon .= 'item_pickup_30x30.png';
+                break;
+            case Shipping::FULFILMENT_ALL:
+                $fulfillmentLabel = Labels::getLabel('LBL_SHIPPMENT_AND_PICKUP', $siteLangId);
+                $icon .= 'shipping_30x30.png';
+                break;
+            default:
+                $fulfillmentLabel = Labels::getLabel('LBL_SHIPPED_ONLY', $siteLangId);
+                $icon .= 'shipping_30x30.png';
+                break;
+        }
+
+        $product['productPolicies'][] = array(
+            'title' => $fulfillmentLabel,
+            'isSvg' => Plugin::RETURN_TRUE,
+            'icon' => $icon
+        );
+    }
+
+    $product['product_description'] = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
+    $product['product_description'] = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $product['product_description']);
+
+    if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr'])) {
+
+        /* Shop and SelProd Badge */
+        $shopIdsArr = array_column($product['moreSellersArr'], 'shop_id');
+        $shopBadges = Badge::getShopBadges($siteLangId, $shopIdsArr);
+        $shopBadgesArr = [];
+        foreach ($shopBadges as $bdgRow) {
+            $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $bdgRow[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'], 0, $siteLangId);
+            $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
+            $url = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $siteLangId, ImageDimension::VIEW_MINI, $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $shopBadgesArr[$bdgRow['shop_id']] = [
+                'url' => $url,
+                Badge::DB_TBL_PREFIX . 'name' => $bdgRow[Badge::DB_TBL_PREFIX . 'name'],
+            ];
+        }
+
+        $product['badges'] = $badges;
+        /* Shop and SelProd Badge */
+        foreach ($product['moreSellersArr'] as &$value) {
+            if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+                $shop_rating = SelProdRating::getSellerRating($value['selprod_user_id'], true);
+                $value['shop_rating'] = round($shop_rating, 1);
+            }
+            $value['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($value['shop_user_id'], true);
+            $value['discount'] = ($value['selprod_price'] > $value['theprice']) ? CommonHelper::showProductDiscountedText($value, $siteLangId) : '';
+            $value['selprod_price'] = CommonHelper::displayMoneyFormat($value['selprod_price']);
+            $value['theprice'] = CommonHelper::displayMoneyFormat($value['theprice']);
+            $value['badges'] = [];
+            if (isset($shopBadgesArr[$value['shop_id']])) {
+                $value['badges'][] = $shopBadgesArr[$value['shop_id']];
+            }
+        }
+    }
+
+    $product['codEnabled'] = (true === $codEnabled ? 1 : 0);
+    $product['isOutOfMinOrderQty'] = $isOutOfMinOrderQty;
+    $product['shippingDetails'] = empty($shippingDetails) ? (object) array() : $shippingDetails;
+    $product['socialShareContent'] = empty($socialShareContent) ? (object) array() : $socialShareContent;
+    $product['shopTotalReviews'] = $shopTotalReviews;
+
+    $data['data'][] = [
+        'type' => 'productImages',
+        'title' => Labels::getLabel('LBL_PRODUCT_IMAGES', $siteLangId),
+        'content' => array_values($productImagesArr),
+    ];
+    $data['data'][] = [
+        'type' => 'product',
+        'title' => Labels::getLabel('LBL_PRODUCT_DETAIL', $siteLangId),
+        'content' => empty($product) ? (object) array() : $product,
+    ];
+
+    if (!empty($optionRows)) {
+        $data['data'][] = [
+            'type' => 'options',
+            'title' => Labels::getLabel('LBL_PRODUCT_OPTIONS', $siteLangId),
+            'content' => $optionRows,
+        ];
+    }
+
+    if (!empty($productSpecifications)) {
+        $data['data'][] = [
+            'type' => 'specifications',
+            'title' => Labels::getLabel('LBL_PRODUCT_SPECIFICATIONS', $siteLangId),
+            'content' => $productSpecifications
+        ];
+    }
+
+    if (!empty($volumeDiscountRows)) {
+        $data['data'][] = [
+            'type' => 'volumeDiscountRows',
+            'title' => Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId),
+            'content' => $volumeDiscountRows,
+        ];
+    }
+
+    if (!empty($upsellProducts)) {
+        $data['data'][] = [
+            'type' => 'buyTogether',
+            'title' => Labels::getLabel('LBL_BUY_TOGETHER', $siteLangId),
+            'content' => $upsellProducts,
+        ];
+    }
+
+    if (empty((array) $product)) {
+        $status = applicationConstants::OFF;
+    }
+} else if (1 < $page) {
+    $relTRightRibbons = $relatedProductsRibbons['tRightRibbons'];
+    foreach (array_filter($relatedProductsRs) as $index => $rProduct) {
+        $selProdRibbons = [];
+
+        if (array_key_exists($rProduct['selprod_id'], $relTRightRibbons)) {
+            $selProdRibbons[] = $relTRightRibbons[$rProduct['selprod_id']];
+        }
+        $uploadedTime = AttachedFile::setTimeParam($rProduct['product_updated_on']);
+        $relatedProductsRs[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($rProduct['product_id'], ImageDimension::VIEW_MEDIUM, $rProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $relatedProductsRs[$index]['discount'] = ($rProduct['selprod_price'] > $rProduct['theprice']) ? CommonHelper::showProductDiscountedText($rProduct, $siteLangId) : '';
+        $relatedProductsRs[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($rProduct['selprod_price']);
+        $relatedProductsRs[$index]['theprice'] = CommonHelper::displayMoneyFormat($rProduct['theprice']);
+        $relatedProductsRs[$index]['ribbons'] = $selProdRibbons;
+    }
+
+    $recTRightRibbons = $recommendedProductsRibbons['tRightRibbons'];
+    foreach (array_filter($recommendedProducts) as $index => $recProduct) {
+        $selProdRibbons = [];
+        if (array_key_exists($recProduct['selprod_id'], $recTRightRibbons)) {
+            $selProdRibbons[] = $recTRightRibbons[$recProduct['selprod_id']];
+        }
+        $uploadedTime = AttachedFile::setTimeParam($recProduct['product_updated_on']);
+        $recommendedProducts[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recProduct['product_id'], ImageDimension::VIEW_MEDIUM, $recProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $recommendedProducts[$index]['discount'] = ($recProduct['selprod_price'] > $recProduct['theprice']) ? CommonHelper::showProductDiscountedText($recProduct, $siteLangId) : '';
+        $recommendedProducts[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recProduct['selprod_price']);
+        $recommendedProducts[$index]['theprice'] = CommonHelper::displayMoneyFormat($recProduct['theprice']);
+        $recommendedProducts[$index]['ribbons'] = $selProdRibbons;
+    }
+
+    $recentTRightRibbons = $recentlyViewedRibbons['tRightRibbons'];
+    foreach (array_filter($recentlyViewed) as $index => $recViewed) {
+        $selProdRibbons = [];
+        if (array_key_exists($recViewed['selprod_id'], $recentTRightRibbons)) {
+            $selProdRibbons[] = $recentTRightRibbons[$recViewed['selprod_id']];
+        }
+        $uploadedTime = AttachedFile::setTimeParam($recViewed['product_updated_on']);
+        $recentlyViewed[$index]['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($recViewed['product_id'], ImageDimension::VIEW_MEDIUM, $recViewed['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        $recentlyViewed[$index]['discount'] = ($recViewed['selprod_price'] > $recViewed['theprice']) ? CommonHelper::showProductDiscountedText($recViewed, $siteLangId) : '';
+        $recentlyViewed[$index]['selprod_price'] = CommonHelper::displayMoneyFormat($recViewed['selprod_price']);
+        $recentlyViewed[$index]['theprice'] = CommonHelper::displayMoneyFormat($recViewed['theprice']);
+        $recentlyViewed[$index]['ribbons'] = $selProdRibbons;
+    }
+
+    $productDetailPageBanner = [];
+    if (!empty($banners) && $banners['blocation_active'] && count($banners['banners'])) {
+        foreach ($banners['banners'] as &$val) {
+            $bannerImageUrl = '';
+            if (!AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId)) {
+                continue;
+            } else {
+                $slideArr = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $val['banner_id'], 0, $siteLangId);
+                foreach ($slideArr as $slideScreen) {
+                    switch ($slideScreen['afile_screen']) {
+                        case applicationConstants::SCREEN_MOBILE:
+                            $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE, 'PRODUCTLAYOUT'));
+                            break;
+                        case applicationConstants::SCREEN_IPAD:
+                            $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD, 'PRODUCTLAYOUT'));
+                            break;
+                        case applicationConstants::SCREEN_DESKTOP:
+                            $bannerImageUrl = UrlHelper::generateFullUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, 'PRODUCTLAYOUT'));
+                            break;
+                    }
+                }
+                $val['banner_image_url'] = $bannerImageUrl;
+                $bannerUrl = UrlHelper::generateFullUrl('Banner', 'url', array($val['banner_id']));
+                $urlTypeData = CommonHelper::getUrlTypeData($bannerUrl);
+
+                $val['banner_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $bannerUrl : $urlTypeData['recordId']);
+                $val['banner_url_type'] = $urlTypeData['urlType'];
+            }
+        }
+        $productDetailPageBanner = $banners['banners'];
+    }
+
+    if (!empty($reviews)) {
+        if (!empty($ratingAspects)) {
+            foreach ($ratingAspects as &$ratingAsp) {
+                $ratingAsp['prod_rating'] = CommonHelper::numberFormat($ratingAsp['prod_rating'], false, true, 1);
+            }
+        }
+
+        $reviews['prod_rating'] = FatUtility::convertToType($reviews['prod_rating'], FatUtility::VAR_FLOAT);
+        $reviews['ratingAspects'] = (array) $ratingAspects;
+    }
+
+    if (!empty($reviewsList) && is_array($reviewsList)) {
+        foreach ($reviewsList as &$review) {
+            $uploadedTime = AttachedFile::setTimeParam($review['user_updated_on']);
+            $review['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', [$review['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB]) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $review['spreview_id']);
+            $review['images'] = [];
+            foreach ($images as $image) {
+                $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+                $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_MINI_THUMB, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_LARGE, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $review['images'][] = [
+                    'imageUrl' => $imgUrl,
+                    'largeImageUrl' => $largeImgUrl
+                ];
+            }
+
+            foreach ($recordRatings as $rating) {
+                if ($review['spreview_id'] != $rating['sprating_spreview_id']) {
+                    continue;
+                }
+                $review['ratingAspects'][] = $rating;
+            }
+        }
+        $reviews['reviewsList'] = (array) $reviewsList;
+    }
+
+    if (!empty($relatedProductsRs)) {
+        $data['data'][] = [
+            'type' => 'relatedProducts',
+            'title' => Labels::getLabel('LBL_SIMILAR_PRODUCTS', $siteLangId),
+            'content' => array_values($relatedProductsRs)
+        ];
+    }
+
+    if (!empty($recommendedProducts)) {
+        $data['data'][] = [
+            'type' => 'recommendedProducts',
+            'title' => Labels::getLabel('LBL_RECOMMENDED_PRODUCTS', $siteLangId),
+            'content' => $recommendedProducts
+        ];
+    }
+
+    if (!empty($reviews)) {
+        $data['data'][] = [
+            'type' => 'reviews',
+            'title' => Labels::getLabel('LBL_REVIEWS', $siteLangId),
+            'content' => $reviews,
+        ];
+    }
+
+    if (!empty($productDetailPageBanner)) {
+        $data['data'][] = [
+            'type' => 'banners',
+            'title' => Labels::getLabel('LBL_BANNER', $siteLangId),
+            'content' => $productDetailPageBanner,
+        ];
+    }
+
+    if (!empty($recentlyViewed)) {
+        $data['data'][] = [
+            'type' => 'recentlyViewed',
+            'title' => Labels::getLabel('LBL_RECENTLY_VIEWED', $siteLangId),
+            'content' => array_values($recentlyViewed)
+        ];
+    }
 }
 
-$data = array(
-    'reviews' => empty($reviews) ? (object) array() : $reviews,
-    'codEnabled' => (true === $codEnabled ? 1 : 0),
-    'isOutOfMinOrderQty' => $isOutOfMinOrderQty,
-    'shippingDetails' => empty($shippingDetails) ? (object) array() : $shippingDetails,
-    'optionRows' => $optionRows,
-    'productSpecifications' => array(
-        'title' => Labels::getLabel('LBL_SPECIFICATIONS', $siteLangId),
-        'data' => $productSpecifications,
-    ),
-    'banners' => $productDetailPageBanner,
-    'product' => array(
-        'title' => Labels::getLabel('LBL_DETAIL', $siteLangId),
-        'data' => empty($product) ? (object) array() : $product,
-    ),
+/* $data = array(
     'shop_rating' => round($shop_rating, 1),
     'shop' => empty($shop) ? (object) array() : $shop,
     'shopTotalReviews' => $shopTotalReviews,
-    'productImagesArr' => array_values($productImagesArr),
-    'volumeDiscountRows' => $volumeDiscountRows,
-    'socialShareContent' => empty($socialShareContent) ? (object) array() : $socialShareContent,
-    'buyTogether' => array(
-        'title' => Labels::getLabel('LBL_PRODUCT_ADD-ONS', $siteLangId),
-        'data' => $upsellProducts,
-    ),
-    'relatedProducts' => array(
-        'title' => Labels::getLabel('LBL_SIMILAR_PRODUCTS', $siteLangId),
-        'data' => array_values($relatedProductsRs)
-    ),
-    'recommendedProducts' => array(
-        'title' => Labels::getLabel('LBL_RECOMMENDED_PRODUCTS', $siteLangId),
-        'data' => $recommendedProducts
-    ),
-    'recentlyViewed' => array(
-        'title' => Labels::getLabel('LBL_RECENTLY_VIEWED', $siteLangId),
-        'data' => array_values($recentlyViewed)
-    )
+    
 );
 
 if (!empty($data['shop'])) {
@@ -355,7 +452,4 @@ if (!empty($data['shop'])) {
 }
 
 $data['shop'] = !empty($data['shop']) ? $data['shop'] : (object)array();
-
-if (empty((array) $product)) {
-    $status = applicationConstants::OFF;
-}
+ */

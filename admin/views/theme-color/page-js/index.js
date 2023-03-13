@@ -30,6 +30,7 @@ $(document).ready(function () {
                         }
                     },
                     'select': function (event, ui) {
+                        console.log(ui);
                         if (null != ui.item) {
                             $('.tagifyWeightJs').removeAttr('disabled');
                         }
@@ -198,6 +199,7 @@ $(document).ready(function () {
 
     tagifyElement = function () {
         var input = document.querySelector('input[name=CONF_THEME_FONT_WEIGHT]');
+        console.log(input);
         if (null == input) {
             return false;
         }
