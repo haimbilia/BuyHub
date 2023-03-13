@@ -1534,6 +1534,7 @@ class ConfigurationsController extends ListingBaseController
                 break;
             case Configurations::FORM_PPC:
                 $fld = $frm->addFloatField(Labels::getLabel('FRM_MINIMUM_WALLET_BALANCE', $langId), 'CONF_PPC_MIN_WALLET_BALANCE');
+                $fld->requirements()->setPositive();
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_MINIMUM_WALLET_BALANCE_TO_START_PROMOTION", $langId) . '</span>';
 
                 $fld = $frm->addTextBox(Labels::getLabel('FRM_DAYS_INTERVAL_TO_CHARGE_WALLET', $langId), 'CONF_PPC_WALLET_CHARGE_DAYS_INTERVAL');
@@ -1541,14 +1542,17 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addFloatField(Labels::getLabel('FRM_COST_PER_CLICK_(product)', $langId), 'CONF_CPC_PRODUCT');
                 $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
+                $fld->requirements()->setPositive();
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_PPC_COST_PER_CLICK_FOR_PRODUCT", $langId) . '</span>';
 
                 $fld = $frm->addFloatField(Labels::getLabel('FRM_COST_PER_CLICK_(shop)', $langId), 'CONF_CPC_SHOP');
                 $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
+                $fld->requirements()->setPositive();
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_PPC_COST_PER_CLICK_FOR_SHOP", $langId) . '</span>';
 
                 $fld = $frm->addFloatField(Labels::getLabel('FRM_COST_PER_CLICK_(slide)', $langId), 'CONF_CPC_SLIDES');
                 $fld->requirements()->setCompareWith('CONF_PPC_MIN_WALLET_BALANCE', 'lt');
+                $fld->requirements()->setPositive();
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_PPC_COST_PER_CLICK_FOR_SLIDE", $langId) . '</span>';
 
                 $fld = $frm->addSelectBox(Labels::getLabel("FRM_PPC_PRODUCTS_COUNT_HOME_PAGE", $langId), 'CONF_PPC_PRODUCTS_HOME_PAGE', Collections::sponsoredItemsHomePageCount(), '', array(), '');
