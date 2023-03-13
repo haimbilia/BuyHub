@@ -105,9 +105,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 });
 
 (function () {
-    var dv = ".listingRecordJs";
-    var paginationDv = ".listingPaginationJs";
-    var listingTableJs = ".listingTableJs";
+    let dv = ".listingRecordJs";
+    let paginationDv = ".listingPaginationJs";
+    let listingTableJs = ".listingTableJs";
+    let isAjaxRunning = false;
 
     checkControllerName = function () {
         if ("undefined" == typeof controllerName || "" == controllerName) {
@@ -375,19 +376,24 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     };
 
     saveRecord = function (frm, callback = '') {
-        if (false === checkControllerName()) {
+        if (false === checkControllerName() || true === isAjaxRunning) {
             return false;
         }
         if (!$(frm).validate()) { return; }
         $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
-
+        let onSubmitFn = $(frm).attr('onsubmit');
+        $(frm).attr('onsubmit', 'return false;');
+        isAjaxRunning = true;
+        $("." + $.ykmodal.element + ' .submitBtnJs').attr('disabled', 'disabled');
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
-            $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
+            isAjaxRunning = false;
+            $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading').removeAttr('disabled');
             fcom.removeLoader();
             if ('undefined' != typeof t.msg) {
                 fcom.displaySuccessMessage(t.msg);
             }
+
             reloadList();
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
@@ -395,8 +401,14 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 mediaForm(t.recordId);
             } else if ('' != callback) {
                 window[callback](t.recordId);
+            } else {
+                $(frm).attr('onsubmit', onSubmitFn);
             }
         });
+
+        setTimeout(() => {
+            isAjaxRunning = false;
+        }, 5000);
     };
 
     saveLangData = function (frm) {

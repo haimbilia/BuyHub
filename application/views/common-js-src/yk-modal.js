@@ -140,6 +140,10 @@
                 form.submit();
             }
             // $(this).addClass('loading');
+            $(this).attr('disabled', 'disabled');
+            setTimeout(() => {
+                $(this).removeAttr('disabled');
+            }, 1500);
         }
     });
 
@@ -160,7 +164,11 @@
     $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
         e.stopImmediatePropagation();
         if (e.keyCode === 13 && !$(e.target).is('textarea') && (false === displayInPopup)) {
-            $('.' + $.ykmodal.element + " .submitBtnJs").click();
+            let btn = $('.' + $.ykmodal.element + " .submitBtnJs");
+            btn.click().attr('disabled', 'disabled');
+            setTimeout(() => {
+                btn.removeAttr('disabled');
+            }, 1500);
         }
     });
 })(jQuery);
