@@ -20,7 +20,8 @@
 - Bug-070827 - Adding special price to batch products in google shopping feed.
 - Bug-070881 - Easypost : Unable to validate plugin API keys
 - Bug-070882 - Unable to save lang data of Tax category, Add Brand, Add Category from Admin > Add Product.
-- Bug-071040 - Currency management form submittion not working at admin end
+- Bug-071040 - Currency management form submittion not working at admin end.
+- Bug-071057 - Product detail page - Add to cart min length should be remove
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
