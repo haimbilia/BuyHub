@@ -222,19 +222,19 @@ if (1 == $page) {
     $data['data'][] = [
         'type' => 'productImages',
         'title' => Labels::getLabel('LBL_PRODUCT_IMAGES', $siteLangId),
-        'data' => array_values($productImagesArr),
+        'content' => array_values($productImagesArr),
     ];
     $data['data'][] = [
         'type' => 'product',
         'title' => Labels::getLabel('LBL_PRODUCT_DETAIL', $siteLangId),
-        'data' => empty($product) ? (object) array() : $product,
+        'content' => empty($product) ? (object) array() : $product,
     ];
 
     if (!empty($optionRows)) {
         $data['data'][] = [
             'type' => 'options',
             'title' => Labels::getLabel('LBL_PRODUCT_OPTIONS', $siteLangId),
-            'data' => $optionRows,
+            'content' => $optionRows,
         ];
     }
 
@@ -242,7 +242,7 @@ if (1 == $page) {
         $data['data'][] = [
             'type' => 'specifications',
             'title' => Labels::getLabel('LBL_PRODUCT_SPECIFICATIONS', $siteLangId),
-            'data' => $productSpecifications
+            'content' => $productSpecifications
         ];
     }
 
@@ -250,7 +250,7 @@ if (1 == $page) {
         $data['data'][] = [
             'type' => 'volumeDiscountRows',
             'title' => Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId),
-            'data' => $volumeDiscountRows,
+            'content' => $volumeDiscountRows,
         ];
     }
 
@@ -258,7 +258,7 @@ if (1 == $page) {
         $data['data'][] = [
             'type' => 'buyTogether',
             'title' => Labels::getLabel('LBL_BUY_TOGETHER', $siteLangId),
-            'data' => $upsellProducts,
+            'content' => $upsellProducts,
         ];
     }
 
@@ -382,7 +382,7 @@ if (1 == $page) {
         $data['data'][] = [
             'type' => 'relatedProducts',
             'title' => Labels::getLabel('LBL_SIMILAR_PRODUCTS', $siteLangId),
-            'data' => array_values($relatedProductsRs)
+            'content' => array_values($relatedProductsRs)
         ];
     }
 
@@ -390,7 +390,7 @@ if (1 == $page) {
         $data['data'][] = [
             'type' => 'recommendedProducts',
             'title' => Labels::getLabel('LBL_RECOMMENDED_PRODUCTS', $siteLangId),
-            'data' => $recommendedProducts
+            'content' => $recommendedProducts
         ];
     }
 
@@ -398,7 +398,7 @@ if (1 == $page) {
         $data['data'][] = [
             'type' => 'reviews',
             'title' => Labels::getLabel('LBL_REVIEWS', $siteLangId),
-            'data' => $reviews,
+            'content' => $reviews,
         ];
     }
 
@@ -406,7 +406,7 @@ if (1 == $page) {
         $data['data'][] = [
             'type' => 'banners',
             'title' => Labels::getLabel('LBL_BANNER', $siteLangId),
-            'data' => $productDetailPageBanner,
+            'content' => $productDetailPageBanner,
         ];
     }
 
@@ -414,7 +414,7 @@ if (1 == $page) {
         $data['data'][] = [
             'type' => 'recentlyViewed',
             'title' => Labels::getLabel('LBL_RECENTLY_VIEWED', $siteLangId),
-            'data' => array_values($recentlyViewed)
+            'content' => array_values($recentlyViewed)
         ];
     }
 }
