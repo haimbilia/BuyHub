@@ -220,19 +220,19 @@ if (1 == $page) {
     $product['shopTotalReviews'] = $shopTotalReviews;
 
     $data['data'][] = [
-        'type' => 'productImages',
+        'type' => Product::CONTENT_TYPE_PRODUCT_IMAGES,
         'title' => Labels::getLabel('LBL_PRODUCT_IMAGES', $siteLangId),
         'content' => array_values($productImagesArr),
     ];
     $data['data'][] = [
-        'type' => 'product',
+        'type' => Product::CONTENT_TYPE_PRODUCT,
         'title' => Labels::getLabel('LBL_PRODUCT_DETAIL', $siteLangId),
         'content' => empty($product) ? (object) array() : $product,
     ];
 
     if (!empty($optionRows)) {
         $data['data'][] = [
-            'type' => 'options',
+            'type' => Product::CONTENT_TYPE_OPTIONS,
             'title' => Labels::getLabel('LBL_PRODUCT_OPTIONS', $siteLangId),
             'content' => $optionRows,
         ];
@@ -240,7 +240,7 @@ if (1 == $page) {
 
     if (!empty($productSpecifications)) {
         $data['data'][] = [
-            'type' => 'specifications',
+            'type' => Product::CONTENT_TYPE_SPECIFICATIONS,
             'title' => Labels::getLabel('LBL_PRODUCT_SPECIFICATIONS', $siteLangId),
             'content' => $productSpecifications
         ];
@@ -248,7 +248,7 @@ if (1 == $page) {
 
     if (!empty($volumeDiscountRows)) {
         $data['data'][] = [
-            'type' => 'volumeDiscountRows',
+            'type' => Product::CONTENT_TYPE_VOLUME_DISCOUNT,
             'title' => Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId),
             'content' => $volumeDiscountRows,
         ];
@@ -256,7 +256,7 @@ if (1 == $page) {
 
     if (!empty($upsellProducts)) {
         $data['data'][] = [
-            'type' => 'buyTogether',
+            'type' => Product::CONTENT_TYPE_BUY_TOGETHER,
             'title' => Labels::getLabel('LBL_BUY_TOGETHER', $siteLangId),
             'content' => $upsellProducts,
         ];
@@ -380,7 +380,7 @@ if (1 == $page) {
 
     if (!empty($relatedProductsRs)) {
         $data['data'][] = [
-            'type' => 'relatedProducts',
+            'type' => Product::CONTENT_TYPE_RELATED_PRODUCTS,
             'title' => Labels::getLabel('LBL_SIMILAR_PRODUCTS', $siteLangId),
             'content' => array_values($relatedProductsRs)
         ];
@@ -388,7 +388,7 @@ if (1 == $page) {
 
     if (!empty($recommendedProducts)) {
         $data['data'][] = [
-            'type' => 'recommendedProducts',
+            'type' => Product::CONTENT_TYPE_RECOMMENDED_PRODUCTS,
             'title' => Labels::getLabel('LBL_RECOMMENDED_PRODUCTS', $siteLangId),
             'content' => $recommendedProducts
         ];
@@ -396,7 +396,7 @@ if (1 == $page) {
 
     if (!empty($reviews)) {
         $data['data'][] = [
-            'type' => 'reviews',
+            'type' => Product::CONTENT_TYPE_REVIEWS,
             'title' => Labels::getLabel('LBL_REVIEWS', $siteLangId),
             'content' => $reviews,
         ];
@@ -404,7 +404,7 @@ if (1 == $page) {
 
     if (!empty($productDetailPageBanner)) {
         $data['data'][] = [
-            'type' => 'banners',
+            'type' => Product::CONTENT_TYPE_BANNERS,
             'title' => Labels::getLabel('LBL_BANNER', $siteLangId),
             'content' => $productDetailPageBanner,
         ];
@@ -412,7 +412,7 @@ if (1 == $page) {
 
     if (!empty($recentlyViewed)) {
         $data['data'][] = [
-            'type' => 'recentlyViewed',
+            'type' => Product::CONTENT_TYPE_RECENTLY_VIEWED,
             'title' => Labels::getLabel('LBL_RECENTLY_VIEWED', $siteLangId),
             'content' => array_values($recentlyViewed)
         ];
