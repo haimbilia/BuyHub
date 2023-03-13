@@ -82,6 +82,21 @@ class Product extends MyAppModel
     public const FILTER_TYPE_PRICE = 5;
     public const FILTER_TYPE_CONDITION = 6;
     public const FILTER_TYPE_AVAILABILITY = 7;
+
+    /* Used in products/view API response */
+    public const CONTENT_TYPE_PRODUCT = 1;
+    public const CONTENT_TYPE_PRODUCT_IMAGES = 2;
+    public const CONTENT_TYPE_OPTIONS = 3;
+    public const CONTENT_TYPE_SPECIFICATIONS = 4;
+    public const CONTENT_TYPE_VOLUME_DISCOUNT = 5;
+    public const CONTENT_TYPE_BUY_TOGETHER = 6;
+    public const CONTENT_TYPE_RELATED_PRODUCTS = 7;
+    public const CONTENT_TYPE_RECOMMENDED_PRODUCTS = 8;
+    public const CONTENT_TYPE_REVIEWS = 9;
+    public const CONTENT_TYPE_BANNERS = 10;
+    public const CONTENT_TYPE_RECENTLY_VIEWED = 12;
+    /* ------------------------------------------- */
+
     /* For API */
 
     public const WARRANTY_TYPE_DAY = 0;
@@ -1406,7 +1421,7 @@ class Product extends MyAppModel
     {
         $productId = FatUtility::int($this->mainTableRecordId);
         if (0 >= $productId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST_ID'));
             FatUtility::dieWithError(Message::getHtml());
         }
 
