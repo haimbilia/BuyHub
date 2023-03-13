@@ -22,6 +22,7 @@
 - Bug-070882 - Unable to save lang data of Tax category, Add Brand, Add Category from Admin > Add Product.
 - Bug-071040 - Currency management form submittion not working at admin end.
 - Bug-071057 - Product detail page - Add to cart min length should be remove
+- Bug-071062 - Positive value validation should be there while configuring PPC configuration values.
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
