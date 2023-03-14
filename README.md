@@ -13,7 +13,7 @@ You will require the following server specifications for setting up the Yokart s
    - Supported Web Servers: 
        - Apache 2.4.x
        - Nginx
-   - PHP Compatibility: 7.4
+   - PHP Compatibility: 8.1
    - Server Hosting :
        - Ability to run scheduled jobs.
        - Ability to override options in .htaccess files
