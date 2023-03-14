@@ -340,7 +340,7 @@ class Aramex extends ShippingServicesBase
      */
     private function convertToSiteCurrency(array $val)
     {
-        $defaultCurrencyId = CommonHelper::getCurrencyId();
+        $defaultCurrencyId = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
         $allCurrencies = Currency::getCurrencyAssoc($this->langId);
 
         $convertCurrency = $val['CurrencyCode'];
