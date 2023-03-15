@@ -101,5 +101,5 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
     <?php } ?>
     <!-- Todo need to refine logic [override lisiting page variable name {controllerName}so we can able to save/edit popup of other controller like brands]  -->
     <script>
-        var controllerName = '<?php echo LibHelper::getControllerName(true); ?>';
+        var controllerName = '<?php echo LibHelper::getControllerName(); ?>';
     </script>

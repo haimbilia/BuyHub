@@ -29,6 +29,9 @@ $(document).on('click', '#showPass', function () {
         }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('AdminGuest', 'login'), data, function (t) {
+            if (typeof t.redirectUrl == 'undefined') {
+				t.redirectUrl = fcom.makeUrl('AdminGuest', 'loginForm');
+			}
             location.href = t.redirectUrl;
         });
     };

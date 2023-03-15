@@ -1469,7 +1469,7 @@ class ProductsController extends MyAppController
     private function getCartForm($formLangId)
     {
         $frm = new Form('frmBuyProduct', array('id' => 'frmBuyProduct'));
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_QUANTITY', $formLangId), 'quantity', 1, array('maxlength' => '3'));
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_QUANTITY', $formLangId), 'quantity', 1);
         $fld->requirements()->setIntPositive();
         $frm->addHTML('', 'btnAddToCart', '<button name="btnAddToCart" type="submit" id="btnAddToCart" class="btn btn-brand btn-block quickView add-to-cart add-to-cart--js "> ' . Labels::getLabel('BTN_ADD_TO_CART', $formLangId) . '</button>');
         $frm->addHiddenField('', 'selprod_id');
