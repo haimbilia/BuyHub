@@ -97,7 +97,7 @@ if (1 == $page) {
     $product['selprod_warranty_policies'] = !empty($product['selprod_warranty_policies']) ? $product['selprod_warranty_policies'] : (object) array();
     $product['product_description'] = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
     $product['product_description'] = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $product['product_description']);
-    
+
     if (!empty($product['moreSellersArr']) && 0 < count($product['moreSellersArr'])) {
 
         /* Shop and SelProd Badge */
@@ -157,7 +157,9 @@ if (1 == $page) {
     }
 
     $productPolicies = [];
-    if (!empty($product['selprod_return_age']) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
+
+    $returnAge = '' != $product['selprod_return_age'] ? $product['selprod_return_age'] : $product['shop_return_age'];
+    if (!empty($product['shop_return_age']) && 0 < $returnAge && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
         $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);
         $returnAge = !empty($product['selprod_return_age']) ? $product['selprod_return_age'] : $product['shop_return_age'];
         $returnAge = !empty($returnAge) ? $returnAge : 0;
@@ -168,7 +170,9 @@ if (1 == $page) {
             'icon' => CONF_WEBROOT_URL . 'images/easyreturns.png'
         );
     }
-    if (!empty($product['selprod_cancellation_age']) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
+
+    $cancellationAge = '' != $product['selprod_cancellation_age'] ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
+    if (!empty($product['shop_cancellation_age']) && 0 <  $cancellationAge && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
         $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_CANCELLATION_POLICY', $siteLangId);
         $cancellationAge = !empty($product['selprod_cancellation_age']) ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
         $cancellationAge = !empty($cancellationAge) ? $cancellationAge : 0;
