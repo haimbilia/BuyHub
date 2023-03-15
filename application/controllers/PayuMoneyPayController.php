@@ -69,8 +69,10 @@ class PayuMoneyPayController extends PaymentController
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $paymentGatewayCharge = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
-        if ($orderInfo) {
-            $orderPaymentGatewayDescription = sprintf(Labels::getLabel('MSG_ORDER_PAYMENT_GATEWAY_DESCRIPTION', $this->siteLangId), $orderInfo["site_system_name"], $orderInfo['invoice']);
+        if (!$orderInfo['id']) {
+            $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
+            $this->setErrorAndRedirect($message, FatUtility::isAjaxCall());
+        } elseif ($orderInfo && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) {
             switch ($post['status']) {
                 case 'success':
                     $receiver_match = (strtolower($post['key']) == strtolower($this->settings['merchant_key']));
@@ -101,7 +103,7 @@ class PayuMoneyPayController extends PaymentController
                 FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
             }
         } else {
-            Message::addErrorMessage(Labels::getLabel('ERR_ERROR_INVALID_ACCESS', $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
             FatApp::redirectUser(CommonHelper::getPaymentFailurePageUrl());
         }
     }
@@ -113,7 +115,7 @@ class PayuMoneyPayController extends PaymentController
         if (FatApp::getConfig('CONF_TRANSACTION_MODE', FatUtility::VAR_BOOLEAN, false) == true) {
             $actionUrl = 'https://secure.payu.in/_payment';
         } else {
-            $actionUrl = 'https://sandboxsecure.payu.in/_payment';
+            $actionUrl = 'https://test.payu.in/_payment';
         }
 
         $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $actionUrl;
@@ -154,10 +156,9 @@ class PayuMoneyPayController extends PaymentController
 
             $frm->addHiddenField('curl', 'curl', $cancelBtnUrl);
             $key = $this->settings["merchant_key"];
-            $amount = $paymentGatewayCharge;
             $salt = $this->settings["salt"];
             $udf1 = $orderId;
-            $Hash = hash('sha512', $key . '|' . $txnid . '|' . $paymentGatewayCharge . '|' . $orderPaymentGatewayDescription . '|' . $firstname . '|' . $email . '|' . $udf1 . '||||||||||' . $salt);
+            $Hash = strtolower(hash('sha512', $key . '|' . $txnid . '|' . $paymentGatewayCharge . '|' . $orderPaymentGatewayDescription . '|' . $firstname . '|' . $email . '|' . $udf1 . '||||||||||' . $salt));
             $frm->addHiddenField('hash', 'hash', $Hash);
             $frm->addHiddenField('udf1', 'udf1', $udf1);
             $frm->addHiddenField('Pg', 'Pg', 'CC');
@@ -167,8 +168,6 @@ class PayuMoneyPayController extends PaymentController
             $frm->addHiddenField('country', 'country', $orderInfo["customer_billing_country"]);
             $frm->addHiddenField('state', 'state', $orderInfo["customer_billing_state"]);
             $frm->addHiddenField('custom_note', 'custom_note', Labels::getLabel('FRM_ORDER_CUSTOM_NOTE', $this->siteLangId));
-            /* $frm->addHiddenField('api_version', 'api_version', 1);
-            $frm->addHiddenField('service_provider', 'service_provider', 'payu_paisa'); */
             $frm->setJsErrorDisplay('afterfield');
         }
         return $frm;
