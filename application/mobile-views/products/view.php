@@ -295,7 +295,7 @@ if (1 == $page) {
         $recommendedProducts[$index]['ribbons'] = $selProdRibbons;
     }
 
-    $recentTRightRibbons = $recentlyViewedRibbons['tRightRibbons'];
+    $recentTRightRibbons = $recentlyViewedRibbons['tRightRibbons'] ?? [];
     foreach (array_filter($recentlyViewed) as $index => $recViewed) {
         $selProdRibbons = [];
         if (array_key_exists($recViewed['selprod_id'], $recentTRightRibbons)) {
