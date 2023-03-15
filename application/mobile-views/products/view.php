@@ -130,6 +130,10 @@ if (1 == $page) {
                 $value['badges'][] = $shopBadgesArr[$value['shop_id']];
             }
         }
+        if (!empty($shop)) {
+            $shop['moreSellersArr'] = $product['moreSellersArr'];
+        }
+        unset($product['moreSellersArr']);
     }
 
     $product['codEnabled'] = (true === $codEnabled ? 1 : 0);
@@ -283,6 +287,7 @@ if (1 == $page) {
         $shop['shopTotalReviews'] = $shopTotalReviews;
         $shop['shop_rating'] = round($shop_rating, 1);
     }
+    
     $data['data'][] = [
         'type' => Product::CONTENT_TYPE_SHOP,
         'title' => Labels::getLabel('LBL_Shop', $siteLangId),
