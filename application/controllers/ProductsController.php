@@ -889,16 +889,37 @@ class ProductsController extends MyAppController
             $this->set('recentlyViewed', $recentViewedProducts);
             /* ----------------- */
 
-            /* Reviews */
+            /* Reviews with Images*/
+            $selProdReviewObj = $this->getSelProdReviewObj(false);
             $selProdReviewObj = $this->getSelProdReviewObj(false);
             $selProdReviewObj->joinSelProdReviewHelpful();
             $selProdReviewObj->addGroupBy('spr.spreview_id');
             $selProdReviewObj->addCondition('spr.spreview_product_id', '=', $product['product_id']);
             $selProdReviewObj->setPageNumber(1);
+            $selProdReviewObj->setPageSize(4);
+            $selProdReviewObj->addOrder('spr.spreview_posted_on', 'desc');
+            $selProdReviewObj->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'af.afile_type = ' . AttachedFile::FILETYPE_ORDER_FEEDBACK . ' AND af.afile_record_id = spr.spreview_id', 'af');
+            $selProdReviewObj->addMultipleFields(array('spreview_id', 'user_updated_on', 'spreview_postedby_user_id', 'user_updated_on'));
+            $reviewsList = (array) FatApp::getDb()->fetchAll($selProdReviewObj->getResultSet(), 'spreview_id');
+            $this->set('imageReviewsPageCount', $selProdReviewObj->pages());
+            $this->set('imageReviewsRecordCount', $selProdReviewObj->recordCount());
+            $this->set('imageReviewsList', array_values($reviewsList));
+            /* ----------------- */
+
+            /* Reviews without Images*/
+            $selProdReviewObj = $this->getSelProdReviewObj(false);
+            $selProdReviewObj->joinSelProdReviewHelpful();
+            $selProdReviewObj->addGroupBy('spr.spreview_id');
+            $selProdReviewObj->addCondition('spr.spreview_product_id', '=', $product['product_id']);
+            $selProdReviewObj->addCondition('af.afile_id', 'IS', 'mysql_func_null', 'AND', true);
+            $selProdReviewObj->setPageNumber(1);
             $selProdReviewObj->setPageSize(3);
             $selProdReviewObj->addOrder('spr.spreview_posted_on', 'desc');
+            $selProdReviewObj->joinTable(AttachedFile::DB_TBL, 'LEFT JOIN', 'af.afile_type = ' . AttachedFile::FILETYPE_ORDER_FEEDBACK . ' AND af.afile_record_id = spr.spreview_id', 'af');
             $selProdReviewObj->addMultipleFields(array('spreview_id', 'spreview_selprod_id', 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
             $reviewsList = (array) FatApp::getDb()->fetchAll($selProdReviewObj->getResultSet(), 'spreview_id');
+            $this->set('reviewsPageCount', $selProdReviewObj->pages());
+            $this->set('reviewsRecordCount', $selProdReviewObj->recordCount());
             $this->set('reviewsList', array_values($reviewsList));
 
             $recordRatings = [];
