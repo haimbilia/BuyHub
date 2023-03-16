@@ -374,7 +374,17 @@ if (1 == $page) {
         $productDetailPageBanner = $banners['banners'];
     }
 
-    $reviewsWithImages = [];
+    if (!empty($reviews)) {
+        if (!empty($ratingAspects)) {
+            foreach ($ratingAspects as &$ratingAsp) {
+                $ratingAsp['prod_rating'] = CommonHelper::numberFormat($ratingAsp['prod_rating'], false, true, 1);
+            }
+        }
+
+        $reviews['prod_rating'] = FatUtility::convertToType($reviews['prod_rating'], FatUtility::VAR_FLOAT);
+        $reviews['ratingAspects'] = (array) $ratingAspects;
+    }
+
     if (!empty($imageReviewsList) && is_array($imageReviewsList)) {
         foreach ($imageReviewsList as &$review) {
             $uploadedTime = AttachedFile::setTimeParam($review['user_updated_on']);
@@ -391,42 +401,6 @@ if (1 == $page) {
                 ];
             }
 
-            /* foreach ($recordRatings as $rating) {
-                if ($review['spreview_id'] != $rating['sprating_spreview_id']) {
-                    continue;
-                }
-                $review['ratingAspects'][] = $rating;
-            } */
-        }
-        $reviewsWithImages['imageReviewsPageCount'] = $imageReviewsPageCount;
-        $reviewsWithImages['imageReviewsRecordCount'] = $imageReviewsRecordCount;
-        $reviewsWithImages['imageReviewsList'] = (array) $imageReviewsList;
-    }
-
-    if (!empty($reviewsWithImages)) {
-        $data['data'][] = [
-            'type' => Product::CONTENT_TYPE_REVIEWS_WITH_IMAGES,
-            'title' => Labels::getLabel('LBL_REVIEWS_WITH_IMAGES', $siteLangId),
-            'content' => $reviewsWithImages,
-        ];
-    }
-
-    if (!empty($reviews)) {
-        if (!empty($ratingAspects)) {
-            foreach ($ratingAspects as &$ratingAsp) {
-                $ratingAsp['prod_rating'] = CommonHelper::numberFormat($ratingAsp['prod_rating'], false, true, 1);
-            }
-        }
-
-        $reviews['prod_rating'] = FatUtility::convertToType($reviews['prod_rating'], FatUtility::VAR_FLOAT);
-        $reviews['ratingAspects'] = (array) $ratingAspects;
-    }
-
-    if (!empty($reviewsList) && is_array($reviewsList)) {
-        foreach ($reviewsList as &$review) {
-            $uploadedTime = AttachedFile::setTimeParam($review['user_updated_on']);
-            $review['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', [$review['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB]) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-
             foreach ($recordRatings as $rating) {
                 if ($review['spreview_id'] != $rating['sprating_spreview_id']) {
                     continue;
@@ -434,14 +408,31 @@ if (1 == $page) {
                 $review['ratingAspects'][] = $rating;
             }
         }
-        $reviews['reviewsList'] = (array) $reviewsList;
+        $reviews['imageReviewsPageCount'] = $imageReviewsPageCount;
+        $reviews['imageReviewsRecordCount'] = $imageReviewsRecordCount;
+        $reviews['imageReviewsList'] = (array) $imageReviewsList;
     }
 
     if (!empty($reviews)) {
         $data['data'][] = [
+            'type' => Product::CONTENT_TYPE_REVIEWS_WITH_IMAGES,
+            'title' => Labels::getLabel('LBL_REVIEWS_WITH_IMAGES', $siteLangId),
+            'content' => $reviews,
+        ];
+    }
+
+    if (!empty($reviewsList) && is_array($reviewsList)) {
+        foreach ($reviewsList as &$review) {
+            $uploadedTime = AttachedFile::setTimeParam($review['user_updated_on']);
+            $review['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', [$review['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB]) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        }
+    }
+
+    if (!empty($reviewsList)) {
+        $data['data'][] = [
             'type' => Product::CONTENT_TYPE_REVIEWS,
             'title' => Labels::getLabel('LBL_REVIEWS', $siteLangId),
-            'content' => $reviews,
+            'content' => $reviewsList,
         ];
     }
 
