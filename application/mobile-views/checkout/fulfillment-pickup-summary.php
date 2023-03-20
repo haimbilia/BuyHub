@@ -27,7 +27,9 @@ foreach ($shippingRates as $pickUpBy => $levelItems) {
             $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
             $product['shopUrl'] = UrlHelper::generateFullUrl('Shops', 'View', array($product['shop_id']));
             $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
-
+            $product['discount'] = ($product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
+            $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price']);
+            $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice']);
             $productItems[$pickUpBy]['products'][] = $product;
         }
     }
