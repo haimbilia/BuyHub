@@ -32,6 +32,7 @@
 - Bug-071062 - Positive value validation should be there while configuring PPC configuration values.
 - bug-071069 - In case of Aramex shipping api when we have a default currency in USD and displaying shipping rates in other currency then there is a mismatch in amount
 - Bug-071353 - Hide email sent on for thresold products 
+- Bug-071080 - PayUMoney Or PayUIndia payment gateway Sandbox mode functionality not working
 # RV-10.0.0.20221123
 
 ## Bug Fixes:

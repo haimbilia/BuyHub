@@ -79,61 +79,10 @@ if (1 == $page) {
         $warrantTypes = Product::getWarrantyUnits($siteLangId);
         $product['product_warranty_unit_label'] = (isset($product['product_warranty_unit']) && array_key_exists($product['product_warranty_unit'], $warrantTypes)) ? $warrantTypes[$product['product_warranty_unit']] : '';
 
-        $product['productPolicies'] = [];
         $product['discount'] = ($product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $siteLangId) : '';
         $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price']);
         $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice']);
         $product['inclusiveTax'] = FatUtility::int(FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId());
-
-        if (!empty($product['selprod_return_age']) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
-            $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);
-            $returnAge = !empty($product['selprod_return_age']) ? $product['selprod_return_age'] : $product['shop_return_age'];
-            $returnAge = !empty($returnAge) ? $returnAge : 0;
-            $returnAge = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]);
-            $product['productPolicies'][] = array(
-                'title' => $returnAge,
-                'isSvg' => Plugin::RETURN_FALSE,
-                'icon' => CONF_WEBROOT_URL . 'images/easyreturns.png'
-            );
-        }
-        if (!empty($product['selprod_cancellation_age']) && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
-            $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_CANCELLATION_POLICY', $siteLangId);
-            $cancellationAge = !empty($product['selprod_cancellation_age']) ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
-            $cancellationAge = !empty($cancellationAge) ? $cancellationAge : 0;
-            $cancellationAge = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]);
-            $product['productPolicies'][] = array(
-                'title' => $cancellationAge,
-                'isSvg' => Plugin::RETURN_FALSE,
-                'icon' => CONF_WEBROOT_URL . 'images/easyreturns.png'
-            );
-        }
-        if (!empty($product['product_warranty'])) {
-            $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_WARRANTY', $siteLangId);
-            $warranty = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]);
-            $product['productPolicies'][] = array(
-                'title' => $warranty,
-                'isSvg' => Plugin::RETURN_FALSE,
-                'icon' => CONF_WEBROOT_URL . 'images/yearswarranty.png'
-            );
-        }
-
-        if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
-            if (isset($shippingDetails['ps_free']) && $shippingDetails['ps_free'] == applicationConstants::YES) {
-                $product['productPolicies'][] = array(
-                    'title' => Labels::getLabel('LBL_FREE_SHIPPING_ON_THIS_ORDER', $siteLangId),
-                    'isSvg' => Plugin::RETURN_FALSE,
-                    'icon' => CONF_WEBROOT_URL . 'images/freeshipping.png'
-                );
-            }
-        }
-
-        if (0 < $codEnabled && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
-            $product['productPolicies'][] = array(
-                'title' => Labels::getLabel('LBL_CASH_ON_DELIVERY_IS_AVAILABLE', $siteLangId),
-                'isSvg' => Plugin::RETURN_FALSE,
-                'icon' => CONF_WEBROOT_URL . 'images/safepayments.png'
-            );
-        }
 
         $product['youtubeUrlThumbnail'] = '';
         if (!empty($product['product_youtube_video'])) {
@@ -146,36 +95,6 @@ if (1 == $page) {
 
     $product['selprod_return_policies'] = !empty($product['selprod_return_policies']) ? $product['selprod_return_policies'] : (object) array();
     $product['selprod_warranty_policies'] = !empty($product['selprod_warranty_policies']) ? $product['selprod_warranty_policies'] : (object) array();
-
-    if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
-        $fulfillmentLabel = Labels::getLabel('LBL_INVALID_FULFILLMENT', $siteLangId);
-        $icon = CONF_WEBROOT_URL . 'images/';
-        switch ($fulfillmentType) {
-            case Shipping::FULFILMENT_SHIP:
-                $fulfillmentLabel = Labels::getLabel('LBL_SHIPPED_ONLY', $siteLangId);
-                $icon .= 'shipping_30x30.png';
-                break;
-            case Shipping::FULFILMENT_PICKUP:
-                $fulfillmentLabel = Labels::getLabel('LBL_PICKUP_ONLY', $siteLangId);
-                $icon .= 'item_pickup_30x30.png';
-                break;
-            case Shipping::FULFILMENT_ALL:
-                $fulfillmentLabel = Labels::getLabel('LBL_SHIPPMENT_AND_PICKUP', $siteLangId);
-                $icon .= 'shipping_30x30.png';
-                break;
-            default:
-                $fulfillmentLabel = Labels::getLabel('LBL_SHIPPED_ONLY', $siteLangId);
-                $icon .= 'shipping_30x30.png';
-                break;
-        }
-
-        $product['productPolicies'][] = array(
-            'title' => $fulfillmentLabel,
-            'isSvg' => Plugin::RETURN_TRUE,
-            'icon' => $icon
-        );
-    }
-
     $product['product_description'] = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
     $product['product_description'] = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $product['product_description']);
 
@@ -211,13 +130,16 @@ if (1 == $page) {
                 $value['badges'][] = $shopBadgesArr[$value['shop_id']];
             }
         }
+        if (!empty($shop)) {
+            $shop['moreSellersArr'] = $product['moreSellersArr'];
+        }
+        unset($product['moreSellersArr']);
     }
 
     $product['codEnabled'] = (true === $codEnabled ? 1 : 0);
     $product['isOutOfMinOrderQty'] = $isOutOfMinOrderQty;
     $product['shippingDetails'] = empty($shippingDetails) ? (object) array() : $shippingDetails;
     $product['socialShareContent'] = empty($socialShareContent) ? (object) array() : $socialShareContent;
-    $product['shopTotalReviews'] = $shopTotalReviews;
 
     $data['data'][] = [
         'type' => Product::CONTENT_TYPE_PRODUCT_IMAGES,
@@ -237,6 +159,105 @@ if (1 == $page) {
             'content' => $optionRows,
         ];
     }
+
+    $productPolicies = [];
+
+    $returnAge = '' != $product['selprod_return_age'] ? $product['selprod_return_age'] : $product['shop_return_age'];
+    if (!empty($product['shop_return_age']) && 0 < $returnAge && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
+        $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_RETURN_BACK_POLICY', $siteLangId);
+        $returnAge = !empty($product['selprod_return_age']) ? $product['selprod_return_age'] : $product['shop_return_age'];
+        $returnAge = !empty($returnAge) ? $returnAge : 0;
+        $returnAge = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]);
+        $productPolicies[] = array(
+            'title' => $returnAge,
+            'isSvg' => Plugin::RETURN_FALSE,
+            'icon' => CONF_WEBROOT_URL . 'images/easyreturns.png'
+        );
+    }
+
+    $cancellationAge = '' != $product['selprod_cancellation_age'] ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
+    if (!empty($product['shop_cancellation_age']) && 0 <  $cancellationAge && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
+        $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_CANCELLATION_POLICY', $siteLangId);
+        $cancellationAge = !empty($product['selprod_cancellation_age']) ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
+        $cancellationAge = !empty($cancellationAge) ? $cancellationAge : 0;
+        $cancellationAge = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]);
+        $productPolicies[] = array(
+            'title' => $cancellationAge,
+            'isSvg' => Plugin::RETURN_FALSE,
+            'icon' => CONF_WEBROOT_URL . 'images/easyreturns.png'
+        );
+    }
+    if (!empty($product['product_warranty'])) {
+        $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_WARRANTY', $siteLangId);
+        $warranty = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]);
+        $productPolicies[] = array(
+            'title' => $warranty,
+            'isSvg' => Plugin::RETURN_FALSE,
+            'icon' => CONF_WEBROOT_URL . 'images/yearswarranty.png'
+        );
+    }
+
+    if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
+        if (isset($shippingDetails['ps_free']) && $shippingDetails['ps_free'] == applicationConstants::YES) {
+            $productPolicies[] = array(
+                'title' => Labels::getLabel('LBL_FREE_SHIPPING_ON_THIS_ORDER', $siteLangId),
+                'isSvg' => Plugin::RETURN_FALSE,
+                'icon' => CONF_WEBROOT_URL . 'images/freeshipping.png'
+            );
+        }
+    }
+
+    if (0 < $codEnabled && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
+        $productPolicies[] = array(
+            'title' => Labels::getLabel('LBL_CASH_ON_DELIVERY_IS_AVAILABLE', $siteLangId),
+            'isSvg' => Plugin::RETURN_FALSE,
+            'icon' => CONF_WEBROOT_URL . 'images/safepayments.png'
+        );
+    }
+    if (Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) {
+        $fulfillmentLabel = Labels::getLabel('LBL_INVALID_FULFILLMENT', $siteLangId);
+        $icon = CONF_WEBROOT_URL . 'images/';
+        switch ($fulfillmentType) {
+            case Shipping::FULFILMENT_SHIP:
+                $fulfillmentLabel = Labels::getLabel('LBL_SHIPPED_ONLY', $siteLangId);
+                $icon .= 'shipping_30x30.png';
+                break;
+            case Shipping::FULFILMENT_PICKUP:
+                $fulfillmentLabel = Labels::getLabel('LBL_PICKUP_ONLY', $siteLangId);
+                $icon .= 'item_pickup_30x30.png';
+                break;
+            case Shipping::FULFILMENT_ALL:
+                $fulfillmentLabel = Labels::getLabel('LBL_SHIPPMENT_AND_PICKUP', $siteLangId);
+                $icon .= 'shipping_30x30.png';
+                break;
+            default:
+                $fulfillmentLabel = Labels::getLabel('LBL_SHIPPED_ONLY', $siteLangId);
+                $icon .= 'shipping_30x30.png';
+                break;
+        }
+
+
+        $productPolicies[] = array(
+            'title' => $fulfillmentLabel,
+            'isSvg' => Plugin::RETURN_TRUE,
+            'icon' => $icon
+        );
+    }
+    
+    $data['data'][] = [
+        'type' => Product::CONTENT_TYPE_PRODUCT_POLICIES,
+        'title' => Labels::getLabel('LBL_PRODUCT_POLICIES', $siteLangId),
+        'content' => $productPolicies
+    ];
+    
+    $productDescription = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
+    $productDescription = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $productDescription);
+    $data['data'][] = [
+        'type' => Product::CONTENT_TYPE_PRODUCT_DESCRIPTION,
+        'title' => Labels::getLabel('LBL_PRODUCT_DESCRIPTION', $siteLangId),
+        'content' => $productDescription
+    ];
+
 
     if (!empty($productSpecifications)) {
         $data['data'][] = [
@@ -261,6 +282,18 @@ if (1 == $page) {
             'content' => $upsellProducts,
         ];
     }
+
+    if (!empty($shop)) {
+        $shop['shopTotalReviews'] = $shopTotalReviews;
+        $shop['shop_rating'] = round($shop_rating, 1);
+    }
+    
+    $data['data'][] = [
+        'type' => Product::CONTENT_TYPE_SHOP,
+        'title' => Labels::getLabel('LBL_Shop', $siteLangId),
+        'content' => empty($shop) ? (object) array() : $shop,
+    ];
+
 
     if (empty((array) $product)) {
         $status = applicationConstants::OFF;
@@ -295,7 +328,7 @@ if (1 == $page) {
         $recommendedProducts[$index]['ribbons'] = $selProdRibbons;
     }
 
-    $recentTRightRibbons = $recentlyViewedRibbons['tRightRibbons'];
+    $recentTRightRibbons = $recentlyViewedRibbons['tRightRibbons'] ?? [];
     foreach (array_filter($recentlyViewed) as $index => $recViewed) {
         $selProdRibbons = [];
         if (array_key_exists($recViewed['selprod_id'], $recentTRightRibbons)) {
@@ -352,8 +385,8 @@ if (1 == $page) {
         $reviews['ratingAspects'] = (array) $ratingAspects;
     }
 
-    if (!empty($reviewsList) && is_array($reviewsList)) {
-        foreach ($reviewsList as &$review) {
+    if (!empty($imageReviewsList) && is_array($imageReviewsList)) {
+        foreach ($imageReviewsList as &$review) {
             $uploadedTime = AttachedFile::setTimeParam($review['user_updated_on']);
             $review['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', [$review['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB]) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $review['spreview_id']);
@@ -375,7 +408,32 @@ if (1 == $page) {
                 $review['ratingAspects'][] = $rating;
             }
         }
-        $reviews['reviewsList'] = (array) $reviewsList;
+        $reviews['imageReviewsPageCount'] = $imageReviewsPageCount;
+        $reviews['imageReviewsRecordCount'] = $imageReviewsRecordCount;
+        $reviews['imageReviewsList'] = (array) $imageReviewsList;
+    }
+
+    if (!empty($reviews)) {
+        $data['data'][] = [
+            'type' => Product::CONTENT_TYPE_REVIEWS_WITH_IMAGES,
+            'title' => Labels::getLabel('LBL_REVIEWS_WITH_IMAGES', $siteLangId),
+            'content' => $reviews,
+        ];
+    }
+
+    if (!empty($reviewsList) && is_array($reviewsList)) {
+        foreach ($reviewsList as &$review) {
+            $uploadedTime = AttachedFile::setTimeParam($review['user_updated_on']);
+            $review['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', [$review['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB]) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        }
+    }
+
+    if (!empty($reviewsList)) {
+        $data['data'][] = [
+            'type' => Product::CONTENT_TYPE_REVIEWS,
+            'title' => Labels::getLabel('LBL_REVIEWS', $siteLangId),
+            'content' => $reviewsList,
+        ];
     }
 
     if (!empty($relatedProductsRs)) {
@@ -391,14 +449,6 @@ if (1 == $page) {
             'type' => Product::CONTENT_TYPE_RECOMMENDED_PRODUCTS,
             'title' => Labels::getLabel('LBL_RECOMMENDED_PRODUCTS', $siteLangId),
             'content' => $recommendedProducts
-        ];
-    }
-
-    if (!empty($reviews)) {
-        $data['data'][] = [
-            'type' => Product::CONTENT_TYPE_REVIEWS,
-            'title' => Labels::getLabel('LBL_REVIEWS', $siteLangId),
-            'content' => $reviews,
         ];
     }
 

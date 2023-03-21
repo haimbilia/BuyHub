@@ -66,6 +66,9 @@ class ReviewsController extends MyAppController
         $productView = FatApp::getPostedData('productView', FatUtility::VAR_INT, 0);
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
         $reviewId = FatApp::getPostedData('review_id', FatUtility::VAR_INT, 0);
+        
+        $withImagesOnly = FatApp::getPostedData('withImages', FatUtility::VAR_INT, 0);
+        $withoutImages = FatApp::getPostedData('withoutImages', FatUtility::VAR_INT, 0);
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $orderBy = FatApp::getPostedData('orderBy', FatUtility::VAR_STRING, 'most_recent');
@@ -81,6 +84,16 @@ class ReviewsController extends MyAppController
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $srch->addMultipleFields(array('spreview_id', 'spreview_selprod_id', 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
         $srch->addGroupBy('spr.spreview_id');
+
+        if (0 < $withImagesOnly || 0 < $withoutImages) {
+            $join = 0 < $withImagesOnly ? 'INNER' : 'LEFT';
+            $srch->joinTable(AttachedFile::DB_TBL, $join . ' JOIN', 'af.afile_type = ' . AttachedFile::FILETYPE_ORDER_FEEDBACK . ' AND af.afile_record_id = spr.spreview_id', 'af');
+
+            if (0 < $withoutImages) {
+                $srch->addCondition('af.afile_id', 'IS', 'mysql_func_null', 'AND', true);
+            }
+        }
+
         if (0 < $reviewId) {
             $srch->addCondition('spr.spreview_id', '=', $reviewId);
         }
