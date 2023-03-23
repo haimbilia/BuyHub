@@ -30,7 +30,7 @@ class ImportexportCommon extends FatModel
 
         $langData = Language::getAttributesById($langId, array('language_code'));
 
-        $fileName = empty($fileName) ? 'CSV_FILE' : $fileName;
+        $fileName = empty($fileName) ? 'CSV_FILE' : str_replace(' ','_',$fileName);
 
         return $fileName . '_' . $langData['language_code'] . '_' . date("d-M-Y-His") . mt_rand() . '.csv';
     }
