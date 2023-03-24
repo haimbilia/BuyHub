@@ -5,13 +5,13 @@ $shopName = $options = $otherInfo = $date = '';
 if (isset($order)) {
     $prodUrl = 'javascript:fcom.displayErrorMessage(\'' . Labels::getLabel('ERR_THIS_PRODUCT_IS_NOT_AVAILABLE.') . '\')';
     if (isset($order['op_is_batch']) && $order['op_is_batch']) {
-        $prodUrl = UrlHelper::generateUrl('Products', 'batch', array($order['op_selprod_id']), CONF_WEBROOT_FRONTEND);
+        $prodUrl = UrlHelper::generateUrl('Products', 'batch', array($order['op_selprod_id'] ?? 0), CONF_WEBROOT_FRONTEND);
         $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($order['op_selprod_id'], $siteLangId, ImageDimension::VIEW_MINI), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
     } else {
         if (Product::verifyProductIsValid($order['op_selprod_id']) == true) {
             $prodUrl = UrlHelper::generateUrl('Products', 'view', array($order['op_selprod_id']), CONF_WEBROOT_FRONTEND);
         }
-        $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($order['selprod_product_id'], ImageDimension::VIEW_MINI, $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.jpg');
+        $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($order['selprod_product_id'] ?? 0, ImageDimension::VIEW_MINI, $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.jpg');
     }
     // $productName = $order['op_product_name'];
     $productName = '';
@@ -24,7 +24,7 @@ if (isset($order)) {
     if ($order['op_selprod_options'] != '') {
         $options .= ' | ' . $order['op_selprod_options'];
     }
-    
+
     $shopName = $order['op_shop_name'] ?? '';
     if (isset($order['totOrders']) && $order['totOrders'] > 1) {
         $otherInfo = Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'])) . '">' . $order['order_number'] . "</a>";
@@ -55,7 +55,7 @@ if (isset($order)) {
 <div class="product-profile">
     <figure class="product-profile__pic">
         <a href="<?php echo $prodUrl; ?>">
-            <img src="<?php echo $imgSrc; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI);?> title="<?php echo $productName; ?>" alt="<?php echo $productName; ?>">
+            <img src="<?php echo $imgSrc; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI); ?> title="<?php echo $productName; ?>" alt="<?php echo $productName; ?>">
         </a>
     </figure>
     <div class="product-profile__description">
