@@ -2416,5 +2416,6 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ('APP_LOGOUT', 1, 'Logout', 2),
 ('APP_MY_REWARDS', 1, 'My Rewards', 2),
 ('APP_MIN', 1, 'Min', 2),
-('APP_MAX', 1, 'Max', 2)
+('APP_MAX', 1, 'Max', 2),
+('APP_SEE_ALL', 1, 'See ALl', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
