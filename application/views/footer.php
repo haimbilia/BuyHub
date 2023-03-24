@@ -214,7 +214,7 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
                 var s1 = document.createElement("script"),
                     s0 = document.getElementsByTagName("script")[0];
                 s1.async = true;
-                s1.src = 'https://embed.tawk.to/640ed3b64247f20fefe58ac2/1grcum192';
+                s1.src = 'https://embed.tawk.to/5fe08aa9df060f156a8ef9fd/1eq2hracf';
                 s1.charset = 'UTF-8';
                 s1.setAttribute('crossorigin', '*');
                 s0.parentNode.insertBefore(s1, s0);
