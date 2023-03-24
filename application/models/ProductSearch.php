@@ -306,7 +306,11 @@ class ProductSearch extends SearchBase
         }
 
         if (isset($criteria['condition']) && !empty($criteria['condition'])) {
-            $this->addConditionCondition($criteria['condition'], $srch);
+            if (true === MOBILE_APP_API_CALL) {
+                $criteria['condition'] = json_decode($criteria['condition'], true);
+            }
+            $condition = is_array($criteria['condition']) ? array_filter($criteria['condition']) : $criteria['condition'];
+            $this->addConditionCondition($condition, $srch);
         }
 
         if (isset($criteria['out_of_stock']) && !empty($criteria['out_of_stock'])) {
@@ -320,11 +324,6 @@ class ProductSearch extends SearchBase
             $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'prodcatlang_prodcat_id = tc.prodcat_id AND prodcatlang_lang_id = ' . $this->langId, 'tc_l');
             $this->addKeywordSearch($criteria['keyword'], $srch, false);
         }
-
-        /*if (isset($criteria['top_products']) && !empty($criteria['top_products'])) {
-            $srch->joinProductRating();
-            $srch->addCondition('prod_rating', '>=', 3);
-        }*/
 
         if ($checkAvailableFrom) {
             $srch->addCondition('sprods.selprod_available_from', '<=', $splPriceForDate);
@@ -346,11 +345,6 @@ class ProductSearch extends SearchBase
 
         $tmpQry = $srch->getQuery();
 
-        /*if (!empty($criteria['keyword'])) {
-            $this->joinTable('(' . $tmpQry . ')', 'INNER JOIN', '((pricetbl.selprod_product_id = msellprod.selprod_product_id AND (splprice_price = theprice OR selprod_price = theprice)) or (selprod_title LIKE '.FatApp::getDb()->quoteVariable('%'.$criteria['keyword'].'%').'))', 'pricetbl');
-        } else {
-            $this->joinTable('(' . $tmpQry . ')', 'INNER JOIN', 'pricetbl.selprod_product_id = msellprod.selprod_product_id AND (splprice_price = theprice OR selprod_price = theprice)', 'pricetbl');
-        }*/
         $this->joinTable('(' . $tmpQry . ')', 'INNER JOIN', "pricetbl.selprod_product_id = msellprod.selprod_product_id and (splprice_price = theprice OR selprod_price = theprice)", 'pricetbl');
     }
 
