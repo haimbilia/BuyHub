@@ -487,9 +487,14 @@ class LibHelper extends FatUtility
         if (false === self::includePlugin($keyName, $directory, $error, $langId, $checkActive)) {
             return false;
         }
-
-        $reflect  = new ReflectionClass($keyName);
-        return $reflect->newInstanceArgs($args);
+        
+        try {
+            $reflect = new ReflectionClass($keyName);
+            return $reflect->newInstanceArgs($args);
+        } catch (\Error $e) {
+            $error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
