@@ -717,7 +717,7 @@ class BuyerController extends BuyerBaseController
             $charges = $oObj->getOrderProductChargesArr($order['op_id'], MOBILE_APP_API_CALL);
             $order['charges'] = $charges;
             $order['orderstatus_color_code'] = applicationConstants::getClassColor((string) $order['orderstatus_color_class']);
-            $order['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($order['selprod_product_id'], ImageDimension::VIEW_THUMB, $order['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND);
+            $order['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($order['selprod_product_id']??0, ImageDimension::VIEW_THUMB, $order['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND);
         }
         $this->set('orders', $orders);
         $this->set('postedData', $post);
