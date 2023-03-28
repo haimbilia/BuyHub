@@ -243,13 +243,13 @@ if (1 == $page) {
             'icon' => $icon
         );
     }
-    
+
     $data['data'][] = [
         'type' => Product::CONTENT_TYPE_PRODUCT_POLICIES,
         'title' => Labels::getLabel('LBL_PRODUCT_POLICIES', $siteLangId),
         'content' => $productPolicies
     ];
-    
+
     $productDescription = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
     $productDescription = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $productDescription);
     $data['data'][] = [
@@ -287,7 +287,7 @@ if (1 == $page) {
         $shop['shopTotalReviews'] = $shopTotalReviews;
         $shop['shop_rating'] = round($shop_rating, 1);
     }
-    
+
     $data['data'][] = [
         'type' => Product::CONTENT_TYPE_SHOP,
         'title' => Labels::getLabel('LBL_Shop', $siteLangId),
@@ -385,40 +385,26 @@ if (1 == $page) {
         $reviews['ratingAspects'] = (array) $ratingAspects;
     }
 
+    $reviewsWithImages = [];
     if (!empty($imageReviewsList) && is_array($imageReviewsList)) {
-        foreach ($imageReviewsList as &$review) {
-            $uploadedTime = AttachedFile::setTimeParam($review['user_updated_on']);
-            $review['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', [$review['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB]) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-            $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $review['spreview_id']);
-            $review['images'] = [];
+        foreach ($imageReviewsList as &$imgReview) {
+            $uploadedTime = AttachedFile::setTimeParam($imgReview['user_updated_on']);
+            $imgReview['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', [$imgReview['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB]) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $imgReview['spreview_id']);
+            $imgReview['images'] = [];
             foreach ($images as $image) {
                 $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-                $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_MINI_THUMB, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_LARGE, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                $review['images'][] = [
+                $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($imgReview['spreview_id'], 0, ImageDimension::VIEW_MINI_THUMB, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($imgReview['spreview_id'], 0, ImageDimension::VIEW_LARGE, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                $imgReview['images'][] = [
                     'imageUrl' => $imgUrl,
                     'largeImageUrl' => $largeImgUrl
                 ];
             }
-
-            foreach ($recordRatings as $rating) {
-                if ($review['spreview_id'] != $rating['sprating_spreview_id']) {
-                    continue;
-                }
-                $review['ratingAspects'][] = $rating;
-            }
         }
-        $reviews['imageReviewsPageCount'] = $imageReviewsPageCount;
-        $reviews['imageReviewsRecordCount'] = $imageReviewsRecordCount;
-        $reviews['imageReviewsList'] = (array) $imageReviewsList;
-    }
-
-    if (!empty($reviews)) {
-        $data['data'][] = [
-            'type' => Product::CONTENT_TYPE_REVIEWS_WITH_IMAGES,
-            'title' => Labels::getLabel('LBL_REVIEWS_WITH_IMAGES', $siteLangId),
-            'content' => $reviews,
-        ];
+        $reviewsWithImages['imageReviewsPageCount'] = $imageReviewsPageCount;
+        $reviewsWithImages['imageReviewsRecordCount'] = $imageReviewsRecordCount;
+        $reviewsWithImages['imageReviewsList'] = (array) $imageReviewsList;
     }
 
     if (!empty($reviewsList) && is_array($reviewsList)) {
@@ -426,13 +412,24 @@ if (1 == $page) {
             $uploadedTime = AttachedFile::setTimeParam($review['user_updated_on']);
             $review['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', [$review['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB]) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
         }
+
+        foreach ($recordRatings as $rating) {
+            if ($review['spreview_id'] != $rating['sprating_spreview_id']) {
+                continue;
+            }
+            $review['ratingAspects'][] = $rating;
+        }
+        $reviews['reviewsList'] = (array) $reviewsList;
     }
 
-    if (!empty($reviewsList)) {
+    if (!empty($reviewsWithImages) || !empty($reviews)) {
         $data['data'][] = [
             'type' => Product::CONTENT_TYPE_REVIEWS,
             'title' => Labels::getLabel('LBL_REVIEWS', $siteLangId),
-            'content' => $reviewsList,
+            'content' => [
+                'withImages' => $reviewsWithImages,
+                'withoutImages' => $reviews
+            ],
         ];
     }
 
