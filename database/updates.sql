@@ -2420,3 +2420,18 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ('APP_SEE_ALL', 1, 'See All', 2),
 ('APP_SEARCH_FOR_BRANDS_&_PRODUCTS ', 1, 'Search For Brands & Products', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('APP_SIGN_IN_JOIN', 1, 'Sign In/Join', 2),
+('APP_SPECIFICATIONS', 1, 'Specifications', 2),
+('APP_CUSTOMER_REVIEWS', 1, 'Customer Reviews', 2),
+('APP_RATE_PRODUCT', 1, 'Rate Product', 2),
+('APP_REVIEW_WITH_IMAGES', 1, 'Review with Images', 2),
+('APP_SEARCH_FOR_BRANDS_PRODUCTS', 1, 'Search for brands & products', 2),
+('APP_MY_BAG', 1, 'My Bag', 2),
+('APP_VIEW_DETAILS', 1, 'View Details', 2),
+('APP_COUPON_SAVING', 1, 'Coupon Saving', 2),
+('APP_COUPON_APPLIED', 1, ' Coupon applied', 2),
+('APP_ADD_NEW', 1, 'Add New', 2),
+('APP_CHOOSE_PICKUP_ADDRESS', 1, 'Choose Pickup Address', 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
