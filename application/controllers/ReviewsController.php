@@ -409,13 +409,13 @@ class ReviewsController extends MyAppController
             FatUtility::dieWithError(Message::getHtml());
         }
         $tblRecObj = new SelProdReviewHelpful($reviewId);
-        $success['msg'] = Labels::getLabel('MSG_SUCCESSFULLY_UPDATED', $this->siteLangId);
-        $success['data'] = $tblRecObj->getData();
-
+        $data = $tblRecObj->getData();
         if (true === MOBILE_APP_API_CALL) {
+            $this->set('data', $data);
             $this->_template->render();
         }
-
+        $success['msg'] = Labels::getLabel('MSG_SUCCESSFULLY_UPDATED', $this->siteLangId);
+        $success['data'] = $data;
         FatUtility::dieJsonSuccess($success);
     }
 
