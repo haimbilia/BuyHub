@@ -2435,3 +2435,6 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ('APP_ADD_NEW', 1, 'Add New', 2),
 ('APP_CHOOSE_PICKUP_ADDRESS', 1, 'Choose Pickup Address', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_PRODUCT_WEIGHT_ENABLE', '1', '0')
+ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
