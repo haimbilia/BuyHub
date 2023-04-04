@@ -411,14 +411,14 @@ if (1 == $page) {
         foreach ($reviewsList as &$review) {
             $uploadedTime = AttachedFile::setTimeParam($review['user_updated_on']);
             $review['user_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', [$review['spreview_postedby_user_id'], ImageDimension::VIEW_THUMB]) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            foreach ($recordRatings as $rating) {
+                if ($review['spreview_id'] != $rating['sprating_spreview_id']) {
+                    continue;
+                }
+                $review['ratingAspects'][] = $rating;
+            }
         }
 
-        foreach ($recordRatings as $rating) {
-            if ($review['spreview_id'] != $rating['sprating_spreview_id']) {
-                continue;
-            }
-            $review['ratingAspects'][] = $rating;
-        }
         $reviews['reviewsList'] = (array) $reviewsList;
     }
 
