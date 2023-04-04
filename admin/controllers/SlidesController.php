@@ -167,7 +167,7 @@ class SlidesController extends ListingBaseController
 
         $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_OPEN_IN', $this->siteLangId), 'slide_target', $linkTargetsArr, '', [], '');
-        $frm->addCheckBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'slide_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_ACTIVATION_STATUS', $this->siteLangId), 'slide_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
