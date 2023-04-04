@@ -456,10 +456,10 @@ class BuyerController extends BuyerBaseController
 
         # create new zip opbject
         $zip = new ZipArchive();
-
+        
         # create a temp file & open it
-        $tmp_file = tempnam('.', '');
-        $zip->open($tmp_file, ZipArchive::CREATE);
+        $tmp_file = tempnam(sys_get_temp_dir(), '');
+        $zip->open($tmp_file, ZipArchive::OVERWRITE);
 
         $fileId = [];
         foreach ($downloads as $ind => $row) {
@@ -482,7 +482,9 @@ class BuyerController extends BuyerBaseController
         /* Remove Temp File from public folder. */
 
         /* Update downlod count */
-        FatApp::getDb()->query("UPDATE " . AttachedFile::DB_TBL . " SET afile_downloaded_times = (afile_downloaded_times+1) where afile_record_id = " . $opId . " AND afile_id IN (" . implode(',', $fileId) . ")");
+        if(!empty($fileId)){
+            FatApp::getDb()->query("UPDATE " . AttachedFile::DB_TBL . " SET afile_downloaded_times = (afile_downloaded_times+1) where afile_record_id = " . $opId . " AND afile_id IN (" . implode(',', $fileId) . ")");
+        }        
         /* Update downlod count */
         exit;
     }
@@ -717,7 +719,7 @@ class BuyerController extends BuyerBaseController
             $charges = $oObj->getOrderProductChargesArr($order['op_id'], MOBILE_APP_API_CALL);
             $order['charges'] = $charges;
             $order['orderstatus_color_code'] = applicationConstants::getClassColor((string) $order['orderstatus_color_class']);
-            $order['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($order['selprod_product_id']??0, ImageDimension::VIEW_THUMB, $order['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND);
+            $order['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($order['selprod_product_id'] ?? 0, ImageDimension::VIEW_THUMB, $order['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND);
         }
         $this->set('orders', $orders);
         $this->set('postedData', $post);
@@ -2948,7 +2950,7 @@ class BuyerController extends BuyerBaseController
                 $outOfStock = true;
                 continue;
             }
-            
+
             $product = $this->getProductDetail($selprod_id);
             if (!$product) {
                 $notAvailable++;
@@ -2960,7 +2962,7 @@ class BuyerController extends BuyerBaseController
             $message = Labels::getLabel('MSG_Product_not_available_or_out_of_stock_so_removed_from_cart_listing', $this->siteLangId);
             LibHelper::exitWithError($message, true);
         }
-        
+
         if (0 < $notAvailable) {
             $message = Labels::getLabel('ERR_CURRENTLY_THE_PRODUCT_IS_UNAVAILABLE', $this->siteLangId);
             if (1 < $notAvailable) {

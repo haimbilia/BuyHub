@@ -33,6 +33,7 @@
 - Bug-071353 - Hide email sent on for thresold products 
 - bug-071069 - In case of Aramex shipping api when we have a default currency in USD and displaying shipping rates in other currency then there is a mismatch in amount.- Bug-071409 - import export module - while throwing any sheet, the name of the sheet contains space and causing this error.
 - Bug-071080 - PayUMoney Or PayUIndia payment gateway Sandbox mode functionality not working
+- Bug-071902 - Buyer zip download not working when development mode is off. 
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
