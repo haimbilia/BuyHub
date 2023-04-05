@@ -427,7 +427,7 @@ if (1 == $page) {
             'type' => Product::CONTENT_TYPE_REVIEWS,
             'title' => Labels::getLabel('LBL_REVIEWS', $siteLangId),
             'content' => [
-                'withImages' => $reviewsWithImages,
+                'withImages' =>  (object) $reviewsWithImages,
                 'withoutImages' => $reviews
             ],
         ];
