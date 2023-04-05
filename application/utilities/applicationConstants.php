@@ -456,8 +456,11 @@ class applicationConstants
         );
     }
 
-    public static function getClassColor(string $class): string
+    public static function getClassColor(int $class): string
     {
+        $classArr = self::getClassArr();
+        $class = $classArr[$class] ?? '';
+        
         switch ($class) {
             case applicationConstants::CLASS_INFO:
                 return '#5578eb';

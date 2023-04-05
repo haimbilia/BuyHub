@@ -456,7 +456,7 @@ class BuyerController extends BuyerBaseController
 
         # create new zip opbject
         $zip = new ZipArchive();
-        
+
         # create a temp file & open it
         $tmp_file = tempnam(sys_get_temp_dir(), '');
         $zip->open($tmp_file, ZipArchive::OVERWRITE);
@@ -482,9 +482,9 @@ class BuyerController extends BuyerBaseController
         /* Remove Temp File from public folder. */
 
         /* Update downlod count */
-        if(!empty($fileId)){
+        if (!empty($fileId)) {
             FatApp::getDb()->query("UPDATE " . AttachedFile::DB_TBL . " SET afile_downloaded_times = (afile_downloaded_times+1) where afile_record_id = " . $opId . " AND afile_id IN (" . implode(',', $fileId) . ")");
-        }        
+        }
         /* Update downlod count */
         exit;
     }
@@ -718,7 +718,7 @@ class BuyerController extends BuyerBaseController
         foreach ($orders as &$order) {
             $charges = $oObj->getOrderProductChargesArr($order['op_id'], MOBILE_APP_API_CALL);
             $order['charges'] = $charges;
-            $order['orderstatus_color_code'] = applicationConstants::getClassColor((string) $order['orderstatus_color_class']);
+            $order['orderstatus_color_code'] = applicationConstants::getClassColor((int)$order['orderstatus_color_class']);
             $order['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($order['selprod_product_id'] ?? 0, ImageDimension::VIEW_THUMB, $order['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND);
         }
         $this->set('orders', $orders);
