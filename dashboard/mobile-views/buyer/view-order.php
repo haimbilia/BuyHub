@@ -175,6 +175,9 @@ foreach ($childArr as &$childOrder) {
     } else {
         $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $childOrder['op_product_type']);
     }
+
+    $childOrder['op_unit_price'] = CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true);
+    $childOrder['op_selprod_price'] = CommonHelper::displayMoneyFormat($childOrder['op_selprod_price'], true, false, true, false, true);
 }
 
 $data = array(
