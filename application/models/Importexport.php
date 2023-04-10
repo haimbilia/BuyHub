@@ -1984,7 +1984,7 @@ class Importexport extends ImportexportCommon
                             if (Product::PRODUCT_TYPE_DIGITAL == $prodType) {
                                 $colValue = '';
                             } else {
-                                if (FatApp::getConfig('CONF_PRODUCT_DIMENSIONS_ENABLE', FatUtility::VAR_INT, 0) && $prodType == Product::PRODUCT_TYPE_PHYSICAL) {
+                                if (FatApp::getConfig('CONF_PRODUCT_WEIGHT_ENABLE', FatUtility::VAR_INT, 0) && $prodType == Product::PRODUCT_TYPE_PHYSICAL) {
                                     if (!array_key_exists($colValue, $weightUnitsArr)) {
                                         $invalid = true;
                                     } else {

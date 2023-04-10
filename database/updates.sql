@@ -2362,3 +2362,6 @@ INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_SIGN_IN_WITH_GOOGLE', 1, "Sign in with Google", 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_PRODUCT_WEIGHT_ENABLE', '1', '0')
+ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);

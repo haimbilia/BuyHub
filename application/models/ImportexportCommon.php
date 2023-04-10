@@ -30,7 +30,7 @@ class ImportexportCommon extends FatModel
 
         $langData = Language::getAttributesById($langId, array('language_code'));
 
-        $fileName = empty($fileName) ? 'CSV_FILE' : $fileName;
+        $fileName = empty($fileName) ? 'CSV_FILE' : str_replace(' ', '_', $fileName);
 
         return $fileName . '_' . $langData['language_code'] . '_' . date("d-M-Y-His") . mt_rand() . '.csv';
     }
@@ -318,7 +318,7 @@ class ImportexportCommon extends FatModel
                 $arr['product_identifier'] = Labels::getLabel('LBL_PRODUCT_IDENTIFIER', $langId);
             }
         } else {
-           /*  if ($this->isDefaultSheetData($langId)) {
+            /*  if ($this->isDefaultSheetData($langId)) {
                 $arr['product_id'] = Labels::getLabel('LBL_PRODUCT_ID', $langId);
             } */
             $arr['product_identifier'] = Labels::getLabel('LBL_PRODUCT_IDENTIFIER', $langId);
@@ -392,13 +392,13 @@ class ImportexportCommon extends FatModel
             } else {
                 $arr['product_dimension_unit_identifier'] = Labels::getLabel('LBL_Dimension_Unit_Identifier', $langId);
             } */
-
-            $arr['product_weight'] = Labels::getLabel('LBL_Weight', $langId);
-
-            if ($this->settings['CONF_USE_WEIGHT_UNIT_ID']) {
-                $arr['product_weight_unit'] = Labels::getLabel('LBL_WEIGHT_UNIT_ID', $langId);
-            } else {
-                $arr['product_weight_unit_identifier'] = Labels::getLabel('LBL_WEIGHT_UNIT_IDENTIFIER', $langId);
+            if (FatApp::getConfig("CONF_PRODUCT_WEIGHT_ENABLE", FatUtility::VAR_INT, 1)) {
+                $arr['product_weight'] = Labels::getLabel('LBL_Weight', $langId);
+                if ($this->settings['CONF_USE_WEIGHT_UNIT_ID']) {
+                    $arr['product_weight_unit'] = Labels::getLabel('LBL_WEIGHT_UNIT_ID', $langId);
+                } else {
+                    $arr['product_weight_unit_identifier'] = Labels::getLabel('LBL_WEIGHT_UNIT_IDENTIFIER', $langId);
+                }
             }
             $arr['product_warranty'] = Labels::getLabel('LBL_PRODUCT_WARRANTY_(DAYS)', $langId);
             $arr['product_upc'] = Labels::getLabel('LBL_EAN/UPC/GTIN_CODE', $langId);
@@ -450,7 +450,7 @@ class ImportexportCommon extends FatModel
             $arr['option_value_ids'] = Labels::getLabel('LBL_OPTION_VALUE_Ids', $langId);
         } else {
             $arr['option_values_identifiers'] = Labels::getLabel('LBL_OPTION_VALUE_IDENTIFIERS', $langId);
-        }   
+        }
 
         return $arr;
     }
@@ -1090,7 +1090,7 @@ class ImportexportCommon extends FatModel
             if ($productIdOrIdentifier) {
                 $srch->addCondition('product_identifier', '=', $productIdOrIdentifier);
             }
-        }       
+        }
         return $this->db->fetchAllAssoc($srch->getResultSet());
     }
 

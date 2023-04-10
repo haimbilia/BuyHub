@@ -76,7 +76,9 @@ trait CatalogProduct
             if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
                 $shipPackArr = ShippingPackage::getNames();
                 $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PACKAGE', $langId), 'product_ship_package', $shipPackArr, '', [], Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
+            }
 
+            if (FatApp::getConfig("CONF_PRODUCT_WEIGHT_ENABLE", FatUtility::VAR_INT, 1)) {
                 $weightUnitsArr = applicationConstants::getWeightUnitsArr($langId);
                 $frm->addSelectBox(Labels::getLabel('FRM_WEIGHT_UNIT', $langId), 'product_weight_unit', $weightUnitsArr, '', [], Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
 

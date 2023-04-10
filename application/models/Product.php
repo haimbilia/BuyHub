@@ -159,10 +159,16 @@ class Product extends MyAppModel
         if (FatApp::getConfig('CONF_PRODUCT_DIMENSIONS_ENABLE', FatUtility::VAR_INT, 0) && $prodType == Product::PRODUCT_TYPE_PHYSICAL) {
             $physical = array(
                 'product_dimension_unit_identifier',
-                'product_weight_unit_identifier',
                 'product_length',
                 'product_width',
                 'product_height',
+            );
+            $arr[ImportexportCommon::VALIDATE_NOT_NULL] = array_merge($arr[ImportexportCommon::VALIDATE_NOT_NULL], $physical);
+        }
+
+        if (FatApp::getConfig('CONF_PRODUCT_WEIGHT_ENABLE', FatUtility::VAR_INT, 0) && $prodType == Product::PRODUCT_TYPE_PHYSICAL) {
+            $physical = array(
+                'product_weight_unit_identifier',
                 'product_weight',
             );
             $arr[ImportexportCommon::VALIDATE_NOT_NULL] = array_merge($arr[ImportexportCommon::VALIDATE_NOT_NULL], $physical);

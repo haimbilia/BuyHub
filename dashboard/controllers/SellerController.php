@@ -4099,7 +4099,20 @@ class SellerController extends SellerBaseController
             $pHeightReqObj->setFloatPositive();
             $pHeightReqObj->setRange('0.00001', '9999999999');
             /* ] */
+            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_DIGITAL, 'eq', 'product_length', $pLengthUnReqObj);
+            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_PHYSICAL, 'eq', 'product_length', $pLengthReqObj);
 
+            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_DIGITAL, 'eq', 'product_width', $pWidthUnReqObj);
+            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_PHYSICAL, 'eq', 'product_width', $pWidthReqObj);
+
+            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_DIGITAL, 'eq', 'product_height', $pHeightUnReqObj);
+            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_PHYSICAL, 'eq', 'product_height', $pHeightReqObj);
+
+            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_DIGITAL, 'eq', 'product_dimension_unit', $pDimensionUnitUnReqObj);
+            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_PHYSICAL, 'eq', 'product_dimension_unit', $pDimensionUnitReqObj);
+        }
+
+        if (FatApp::getConfig("CONF_PRODUCT_WEIGHT_ENABLE", FatUtility::VAR_INT, 1)) {
             /* weight unit[ */
             $weightUnitsArr = applicationConstants::getWeightUnitsArr($langId);
             $pWeightUnitsFld = $frm->addSelectBox(Labels::getLabel('FRM_WEIGHT_UNIT', $langId), 'product_weight_unit', $weightUnitsArr, '', array(), Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();;
@@ -4119,18 +4132,6 @@ class SellerController extends SellerBaseController
             $pWeightReqObj = new FormFieldRequirement('product_weight', Labels::getLabel('FRM_WEIGHT', $langId));
             $pWeightReqObj->setRequired(true);
             /* ] */
-
-            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_DIGITAL, 'eq', 'product_length', $pLengthUnReqObj);
-            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_PHYSICAL, 'eq', 'product_length', $pLengthReqObj);
-
-            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_DIGITAL, 'eq', 'product_width', $pWidthUnReqObj);
-            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_PHYSICAL, 'eq', 'product_width', $pWidthReqObj);
-
-            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_DIGITAL, 'eq', 'product_height', $pHeightUnReqObj);
-            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_PHYSICAL, 'eq', 'product_height', $pHeightReqObj);
-
-            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_DIGITAL, 'eq', 'product_dimension_unit', $pDimensionUnitUnReqObj);
-            $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_PHYSICAL, 'eq', 'product_dimension_unit', $pDimensionUnitReqObj);
 
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_DIGITAL, 'eq', 'product_weight', $pWeightUnReqObj);
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_PHYSICAL, 'eq', 'product_weight', $pWeightReqObj);
@@ -5264,13 +5265,14 @@ class SellerController extends SellerBaseController
                 $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PACKAGE', $this->siteLangId), 'product_ship_package', $shipPackArr)->requirements()->setRequired();
             }
 
-            $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel('FRM_WEIGHT_UNIT', $this->siteLangId), 'product_weight_unit', $weightUnitsArr)->requirements()->setRequired();
-
-            $weightFld = $frm->addFloatField(Labels::getLabel('FRM_WEIGHT', $this->siteLangId), 'product_weight', '0.00');
-            $weightFld->requirements()->setRequired(true);
-            $weightFld->requirements()->setFloatPositive();
-            $weightFld->requirements()->setRange('0.01', '9999999999');
+            if (FatApp::getConfig("CONF_PRODUCT_WEIGHT_ENABLE", FatUtility::VAR_INT, 1)) {
+                $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->siteLangId);
+                $frm->addSelectBox(Labels::getLabel('FRM_WEIGHT_UNIT', $this->siteLangId), 'product_weight_unit', $weightUnitsArr)->requirements()->setRequired();
+                $weightFld = $frm->addFloatField(Labels::getLabel('FRM_WEIGHT', $this->siteLangId), 'product_weight', '0.00');
+                $weightFld->requirements()->setRequired(true);
+                $weightFld->requirements()->setFloatPositive();
+                $weightFld->requirements()->setRange('0.01', '9999999999');
+            }
 
             if (!FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
                 /*  $frm->addCheckBox(Labels::getLabel('FRM_PRODUCT_IS_ELIGIBLE_FOR_FREE_SHIPPING?', $this->siteLangId), 'ps_free', 1, array(), false, 0); */
