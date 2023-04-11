@@ -385,6 +385,14 @@ $(function () {
             }
         });
     };
+    
+    getCountryIso2CodeFromDialCode = function (dialCode) {
+        var countriesData = window.intlTelInputGlobals.getCountryData();
+        var countryData = countriesData.filter(function (country) {
+            return country.dialCode == dialCode;
+        });
+        return countryData[0].iso2;
+    }
 
     installJsColor = function () {
         if (0 < $(".jscolor").length) {
