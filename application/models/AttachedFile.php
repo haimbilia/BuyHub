@@ -1217,8 +1217,12 @@ class AttachedFile extends MyAppModel
         $client->registerStreamWrapper();
     }
 
-    public static function setTimeParam($dateTime)
+    public static function setTimeParam($dateTime = '')
     {
+        if (empty($dateTime)) {
+            return;
+        }
+        
         $time = strtotime($dateTime);
         if (0 < $time) {
             return '?t=' . $time;
