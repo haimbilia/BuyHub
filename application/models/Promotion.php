@@ -223,9 +223,9 @@ class Promotion extends MyAppModel
         }
 
         return array(
-        static::DAILY => Labels::getLabel('LBL_DAILY', $langId),
-        static::WEEKLY => Labels::getLabel('LBL_WEEKLY', $langId),
-        static::MONTHLY => Labels::getLabel('LBL_MONTHLY', $langId)
+        static::DAILY => Labels::getLabel('LBL_DAILY_BASIS', $langId),
+        static::WEEKLY => Labels::getLabel('LBL_WEEKLY_BASIS', $langId),
+        static::MONTHLY => Labels::getLabel('LBL_MONTHLY_BASIS', $langId)
         );
     }
 

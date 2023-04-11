@@ -31,12 +31,7 @@ $action = strtolower($action);
                     <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'advertiser' && ($action == 'promotioncharges' || $action == 'viewpromotions')) ? 'is-active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Promotion_Charges", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('advertiser', 'promotionCharges'); ?>">
                         <span class="menu-item__title navTextJs"><?php echo Labels::getLabel("LBL_Promotion_Charges", $siteLangId); ?></span></a>
                 </li>
-                <?php if ($userParentId == UserAuthentication::getLoggedUserId()) { ?>
-                    <li class="menu-sub-item navItemJs">
-                        <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'account' && $action == 'credits') ? 'is-active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_My_Credits", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
-                            <span class="menu-item__title navTextJs"><?php echo Labels::getLabel('LBL_My_Credits', $siteLangId); ?></span></a>
-                    </li>
-                <?php } ?>
+
             </ul>
         </li>
     <?php } ?>
@@ -61,6 +56,12 @@ $action = strtolower($action);
                 <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'account' && $action == 'profileinfo') ? 'is-active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo'); ?>">
                     <span class="menu-item__title navTextJs"><?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?></span></a>
             </li>
+            <?php if ($userParentId == UserAuthentication::getLoggedUserId()) { ?>
+                <li class="menu-sub-item navItemJs">
+                    <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'account' && $action == 'credits') ? 'is-active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_My_Credits", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
+                        <span class="menu-item__title navTextJs"><?php echo Labels::getLabel('LBL_My_Credits', $siteLangId); ?></span></a>
+                </li>
+            <?php } ?>
             <?php if (!User::isAffiliate()) { ?>
                 <li class="menu-sub-item navItemJs">
                     <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'account' && ($action == 'bankInfoForm')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_BANK_ACCOUNT', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('account', 'bankInfoForm'); ?>">
