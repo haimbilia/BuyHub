@@ -2438,3 +2438,19 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUE
 
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) VALUES ('CONF_PRODUCT_WEIGHT_ENABLE', '1', '0')
 ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
+
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+("APP_SIGN_IN_JOIN", 1, "Sign In/Join", 2),
+("APP_SPECIFICATIONS", 1, "Specifications", 2),
+("APP_CUSTOMER_REVIEWS", 1, "Customer Reviews", 2),
+("APP_RATE_PRODUCT", 1, "Rate Product", 2),
+("APP_REVIEW_WITH_IMAGES", 1, "Review with Images", 2),
+("APP_SEARCH_FOR_BRANDS_PRODUCTS", 1, "Search for brands & products", 2),
+("APP_MY_BAG", 1, "My Bag", 2),
+("APP_VIEW_DETAILS", 1, "View Details", 2),
+("APP_COUPON_SAVING", 1, "Coupon Saving", 2),
+("APP_COUPON_APPLIED", 1, "Coupon applied", 2),
+("APP_ADD_NEW", 1, "Add New +", 2),
+("APP_SEARCH_BY_ORDER_ID_PRODUCT_NAME", 1, "Search by Order ID , Product Name", 2),
+("APP_NO_REVIEWS_FOUND", 1, "No Reviews Found!", 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
