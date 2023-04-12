@@ -76,7 +76,7 @@ foreach ($arrListing as $sn => $row) {
             case 'promotion_date':
                 $str = '<span class="text-nowrap">' . Labels::getLabel('LBL_Start', $siteLangId) . ' : ' . FatDate::format($row['promotion_start_date']). '</span><br>';
                 $str .= '<span class="text-nowrap">' . Labels::getLabel('LBL_End', $siteLangId) . ' : ' . FatDate::format($row['promotion_end_date']) . '</span><br>';
-                $str .= '<span class="text-nowrap">' . Labels::getLabel('LBL_duration', $siteLangId) . ' : ' . date("H:i", strtotime($row['promotion_start_time'])) . ' - ' . date("H:i", strtotime($row['promotion_end_time'])) . '</span>';
+                $str .= '<span class="text-nowrap">' . Labels::getLabel('LBL_Promotion_Interval', $siteLangId) . ' : ' . date("H:i", strtotime($row['promotion_start_time'])) . ' - ' . date("H:i", strtotime($row['promotion_end_time'])) . '</span>';
 
                 $td->appendElement('plaintext', array(), $str, true);
                 break;
