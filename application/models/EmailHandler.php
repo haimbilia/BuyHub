@@ -2255,7 +2255,7 @@ class EmailHandler extends FatModel
             $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_phone_dcode', 'user_phone'));
 
             $arrReplacements = array(
-                '{user_full_name}' => trim($userInfo["user_name"]),
+                '{user_full_name}' => isset($userInfo["user_name"]) ? trim($userInfo["user_name"]) : $userInfo["credential_email"],
                 '{new_order_status}' => $statuesArr[$orderProduct["op_status_id"]],
                 '{invoice_number}' => $orderProduct["op_invoice_number"],
                 '{order_items_table_format}' => $orderItemsTableFormatHtml,
