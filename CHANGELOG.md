@@ -35,6 +35,7 @@
 - Bug-071080 - PayUMoney Or PayUIndia payment gateway Sandbox mode functionality not working
 - Bug-071902 - Buyer zip download not working when development mode is off. 
 - Bug-071904 - Add settings under admin to enable or disable weight and weight unit fields inside products.
+- Bug-071128 - The maximum discount value for the coupon linked with the user is not correct on the My offer page
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
