@@ -7,6 +7,10 @@ $request['charges'] = array_key_exists('charges', $request) && is_array($request
 $request['orRequestTypeTitle'] = !empty($returnRequestTypeArr[$request['orrequest_type']]) ? $returnRequestTypeArr[$request['orrequest_type']] : '';
 $request['orRequestStatusTitle'] = !empty($requestRequestStatusArr[$request['orrequest_status']]) ? $requestRequestStatusArr[$request['orrequest_status']] : '';
 
+$request['attachmentFile'] = '';
+if (isset($attachedFile)) {
+    $request['attachmentFile'] = UrlHelper::generateFullUrl('Buyer', 'downloadAttachedFileForReturn', array($request['orrequest_id']));
+}
 $data = array(
     'canEscalateRequest' => $canEscalateRequest,
     'canWithdrawRequest' => $canWithdrawRequest,
