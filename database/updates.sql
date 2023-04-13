@@ -2454,3 +2454,5 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ("APP_SEARCH_BY_ORDER_ID_PRODUCT_NAME", 1, "Search by Order ID , Product Name", 2),
 ("APP_NO_REVIEWS_FOUND", 1, "No Reviews Found!", 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+
+UPDATE `tbl_collections` SET `collection_for_app`='0' WHERE `collection_layout_type` = 3;

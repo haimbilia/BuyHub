@@ -36,6 +36,7 @@
 - Bug-071902 - Buyer zip download not working when development mode is off. 
 - Bug-071904 - Add settings under admin to enable or disable weight and weight unit fields inside products.
 - Bug-071128 - The maximum discount value for the coupon linked with the user is not correct on the My offer page
+- Bug-071050 - No layout is there on the admin end to add a full-width banner and one product collection
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
