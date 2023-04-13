@@ -58,7 +58,7 @@ HtmlHelper::configureSwitchForCheckbox($fld);
                                         <?php echo $frm->getFieldHtml('ucp_personalized'); ?>
                                         <div class="data">
                                             <p>
-                                                <?php echo Labels::getLabel('LBL_Statistical_Analysis_Cookies_Information', $siteLangId); ?>
+                                                <?php echo Labels::getLabel('LBL_Personalise_Cookies_Information', $siteLangId); ?>
                                             </p>
                                         </div>
                                     </li>
