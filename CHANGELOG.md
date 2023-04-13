@@ -38,6 +38,7 @@
 - Bug-071128 - The maximum discount value for the coupon linked with the user is not correct on the My offer page
 - Bug-071050 - No layout is there on the admin end to add a full-width banner and one product collection
 - Bug-071038 - Categories images are missing in the categories mobile layout6 collection
+- Bug-069639 - Android, iOS >> Product price appears exclusive of tax on the cart page when the 'Product prices will be inclusive of tax' setting is ON.
 # RV-10.0.0.20221123
 
 ## Bug Fixes:

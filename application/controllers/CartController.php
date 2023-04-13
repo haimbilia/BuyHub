@@ -128,8 +128,6 @@ class CartController extends MyAppController
                 $cartObj->removeProductShippingMethod();
                 $cartObj->removeUsedRewardPoints();
 
-                $loggedUserId = UserAuthentication::getLoggedUserId(true);
-
                 $billingAddressDetail = array();
                 $billingAddressId = $cartObj->getCartBillingAddress();
                 if ($billingAddressId > 0) {
@@ -144,7 +142,6 @@ class CartController extends MyAppController
                     $shippingddressDetail = $address->getData(Address::TYPE_USER, $loggedUserId);
                 }
 
-                $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id'], Cart::PAGE_TYPE_CART);
                 $cartObj->setFulfilmentType($fulfilmentType);
                 $cartObj->setCartCheckoutType($fulfilmentType);
                 $cartSummary = $cartObj->getCartFinancialSummary($this->siteLangId);
