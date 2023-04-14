@@ -904,12 +904,9 @@ class DashboardBaseController extends FatController
             return;
         }
 
-        $get = $_REQUEST;
+        $get = FatApp::getQueryStringData();
         if (empty($get) || !array_key_exists('ttk', $get)) {
-            $get = FatApp::getQueryStringData();
-            if (empty($get) || !array_key_exists('ttk', $get)) {
-                return;
-            }
+            return;
         }
 
         $ttk = ($get['ttk'] != '') ? $get['ttk'] : '';

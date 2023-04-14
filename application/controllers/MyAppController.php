@@ -13,7 +13,7 @@ class MyAppController extends FatController
     protected $pageData;
 
     public function __construct($action)
-    {       
+    {
         parent::__construct($action);
         $this->checkMaintenance();
         $this->setCommonVariables();
@@ -326,7 +326,7 @@ class MyAppController extends FatController
 
         if ($action == 'index') {
             $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
-        } else {
+        } else {            
             $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)), 'href' => UrlHelper::generateUrl($urlController));
             $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
@@ -741,16 +741,14 @@ class MyAppController extends FatController
             return;
         }
 
-        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile','downloadAttachedFileForReturn'])) {
+        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile'])) {
             return;
         }
 
+        // $get = FatApp::getQueryStringData();
         $get = $_REQUEST;
         if (empty($get) || !array_key_exists('ttk', $get)) {
-            $get = FatApp::getQueryStringData();
-            if (empty($get) || !array_key_exists('ttk', $get)) {
-                return;
-            }
+            return;
         }
 
         $ttk = ($get['ttk'] != '') ? $get['ttk'] : '';
@@ -917,7 +915,7 @@ class MyAppController extends FatController
             return true;
         }
 
-        if (isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && FatUtility::int($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]['admin_id']) > 0) {
+        if(isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && FatUtility::int($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]['admin_id']) > 0){
             return true;
         }
 
