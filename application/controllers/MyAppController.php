@@ -741,7 +741,7 @@ class MyAppController extends FatController
             return;
         }
 
-        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile'])) {
+        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile','downloadAttachedFileForReturn'])) {
             return;
         }
 
