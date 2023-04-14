@@ -326,7 +326,7 @@ class MyAppController extends FatController
 
         if ($action == 'index') {
             $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
-        } else {            
+        } else {
             $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)), 'href' => UrlHelper::generateUrl($urlController));
             $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
@@ -745,10 +745,12 @@ class MyAppController extends FatController
             return;
         }
 
-        // $get = FatApp::getQueryStringData();
         $get = $_REQUEST;
         if (empty($get) || !array_key_exists('ttk', $get)) {
-            return;
+            $get = FatApp::getQueryStringData();
+            if (empty($get) || !array_key_exists('ttk', $get)) {
+                return;
+            }
         }
 
         $ttk = ($get['ttk'] != '') ? $get['ttk'] : '';
@@ -915,7 +917,7 @@ class MyAppController extends FatController
             return true;
         }
 
-        if(isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && FatUtility::int($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]['admin_id']) > 0){
+        if (isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && FatUtility::int($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]['admin_id']) > 0) {
             return true;
         }
 
