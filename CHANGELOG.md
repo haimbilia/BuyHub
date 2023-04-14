@@ -35,6 +35,11 @@
 - Bug-071080 - PayUMoney Or PayUIndia payment gateway Sandbox mode functionality not working
 - Bug-071902 - Buyer zip download not working when development mode is off. 
 - Bug-071904 - Add settings under admin to enable or disable weight and weight unit fields inside products.
+- Bug-071128 - The maximum discount value for the coupon linked with the user is not correct on the My offer page
+- Bug-071050 - No layout is there on the admin end to add a full-width banner and one product collection
+- Bug-071038 - Categories images are missing in the categories mobile layout6 collection
+- Bug-069639 - Android, iOS >> Product price appears exclusive of tax on the cart page when the 'Product prices will be inclusive of tax' setting is ON.
+- Bug-069259 - iOS >> Multiple issues on the Return request details page
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
