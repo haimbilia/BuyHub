@@ -9,7 +9,7 @@ class CommonHelper extends FatUtility
     public static function initCommonVariables($isAdmin = false)
     {
         self::setClassVariables($isAdmin);
-
+        die('dsdsdsd');
         $currencyNdLangData = CacheHelper::get('currencyNdLangData' .  self::$_currency_id . '-' . self::$_lang_id, CONF_DEF_CACHE_TIME, '.txt');
         if ($currencyNdLangData) {
             $arr = json_decode($currencyNdLangData, true);

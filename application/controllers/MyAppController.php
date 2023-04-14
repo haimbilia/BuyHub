@@ -13,7 +13,7 @@ class MyAppController extends FatController
     protected $pageData;
 
     public function __construct($action)
-    {
+    {       
         parent::__construct($action);
         $this->checkMaintenance();
         $this->setCommonVariables();
