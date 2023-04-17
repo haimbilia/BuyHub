@@ -501,7 +501,8 @@ class GuestUserController extends MyAppController
             $frm->expireSecurityToken(FatApp::getPostedData());
         }
 
-        if (1 > $signUpWithPhone && !FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
+        $emailVerification = FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1);
+        if (1 > $signUpWithPhone && !$emailVerification) {
             $cartObj = new Cart();
             $isCheckOutPage = (isset($post['isCheckOutPage']) && $cartObj->hasProducts()) ? FatUtility::int($post['isCheckOutPage']) : 0;
             $confAutoLoginRegisteration = ($isCheckOutPage) ? 1 : FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1);
@@ -535,7 +536,8 @@ class GuestUserController extends MyAppController
                 $this->set('data', ['user_id' => $userId]);
                 $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
             } else {
-                $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_REGISTERED', $this->siteLangId));
+                $msg = ($emailVerification) ? Labels::getLabel('MSG_SUCCESSFULLY_REGISTERED._EMAIL_VERIFICATION_PENDING') : Labels::getLabel('MSG_SUCCESSFULLY_REGISTERED', $this->siteLangId);
+                $this->set('msg', $msg);
             }
             $this->_template->render();
         }
