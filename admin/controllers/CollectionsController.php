@@ -149,7 +149,6 @@ class CollectionsController extends ListingBaseController
             $srch->addCondition('collection_for_web', '=', applicationConstants::NO);
             $srch->addCondition('collection_for_app', '=', applicationConstants::YES);
         }
-
         $srch->addMultipleFields(array('c.*', 'COALESCE(c_l.collection_name, c.collection_identifier) as collection_name'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -1357,6 +1356,6 @@ class CollectionsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop', 'collection_layout_type'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop', 'collection_layout_type', 'applicable_for'], Common::excludeKeysForSort());
     }
 }
