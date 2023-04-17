@@ -23,10 +23,9 @@ class DashboardBaseController extends FatController
             }
             FatApp::redirectUser(UrlHelper::generateUrl('maintenance', '', [], CONF_WEBROOT_FRONTEND));
         }
-
+        $this->checkTempTokenLogin();
         CommonHelper::initCommonVariables();
         $this->initCommonVariables();
-        $this->tempTokenLogin();
         $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');
     }
 
@@ -685,44 +684,6 @@ class DashboardBaseController extends FatController
         return $this->app_user['temp_user_id'] = $generatedTempId;
     }
 
-    public function tempTokenLogin()
-    {
-        $forTempTokenBasedGetActions = array('downloadDigitalFile');
-        if (!in_array($this->action, $forTempTokenBasedGetActions)) {
-            return;
-        }
-
-        $get = FatApp::getQueryStringData();
-        if (empty($get) || !array_key_exists('ttk', $get)) {
-            return;
-        }
-
-        $ttk = ($get['ttk'] != '') ? $get['ttk'] : '';
-
-        if (strlen($ttk) != UserAuthentication::TOKEN_LENGTH) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_TEMP_TOKEN', CommonHelper::getLangId()));
-        }
-
-        $userId = 0;
-        if (!empty($get) && array_key_exists('user_id', $get)) {
-            $userId = FatUtility::int($get['user_id']);
-        }
-
-        $uObj = new User($userId);
-        if (!$user_temp_token_data = $uObj->validateAPITempToken($ttk)) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_TOKEN_DATA', CommonHelper::getLangId()));
-        }
-
-        if (!$user = $uObj->getUserInfo(array('credential_username', 'credential_password', 'user_id'), true, true)) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
-        }
-
-        $authentication = new UserAuthentication();
-        if ($authentication->login($user['credential_username'], $user['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {
-            $uObj->deleteUserAPITempToken();
-        }
-    }
-
     public function translateLangFields($tbl, $data)
     {
         if (!empty($tbl) && !empty($data)) {
@@ -892,5 +853,46 @@ class DashboardBaseController extends FatController
         $this->set('recordCount', $recordCount);
         $this->set('pageSize', $pageSize);
         $this->set('page', $page);
+    }
+
+    private function checkTempTokenLogin()
+    {
+        if (!in_array($this->_controllerName, ['BuyerController', 'StripeConnectPayController'])) {
+            return;
+        }
+
+        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile','downloadAttachedFileForReturn'])) {
+            return;
+        }
+
+        $get = FatApp::getQueryStringData();
+        if (empty($get) || !array_key_exists('ttk', $get)) {
+            return;
+        }
+
+        $ttk = ($get['ttk'] != '') ? $get['ttk'] : '';
+
+        if (strlen($ttk) != UserAuthentication::TOKEN_LENGTH) {
+            FatUtility::dieJSONError(Labels::getLabel('ERR_INVALID_TEMP_TOKEN', CommonHelper::getLangId()));
+        }
+
+        $userId = 0;
+        if (!empty($get) && array_key_exists('user_id', $get)) {
+            $userId = FatUtility::int($get['user_id']);
+        }
+
+        $uObj = new User($userId);
+        if (!$uObj->validateAPITempToken($ttk)) {
+            FatUtility::dieJSONError(Labels::getLabel('ERR_INVALID_TOKEN_DATA', CommonHelper::getLangId()));
+        }
+
+        if (!$user = $uObj->getUserInfo(array('credential_username', 'credential_password', 'user_id'), true, true)) {
+            FatUtility::dieJSONError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
+        }
+
+        $authentication = new UserAuthentication();
+        if ($authentication->login($user['credential_username'], $user['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {
+            $uObj->deleteUserAPITempToken();
+        }
     }
 }
