@@ -925,21 +925,8 @@ class ShopsController extends MyAppController
         return $frm;
     }
 
-    private function getWhoFavouriteSearchForm($langId)
+    public function track(int $shopId, int $redirectType, int $recordId)
     {
-        $frm = new Form('frmsearchWhoFavouriteShop');
-        $frm->addHiddenField('', 'shop_id');
-        return $frm;
-    }
-
-    public function track($shopId, $redirectType, $recordId)
-    {
-        $shopId = FatUtility::int($shopId);
-        if (1 > $shopId) {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl(''));
-        }
-
         /* Track Click */
         $srch = new PromotionSearch($this->siteLangId, true);
         $srch->joinActiveUser();
@@ -960,23 +947,19 @@ class ShopsController extends MyAppController
         $row = FatApp::getDb()->fetch($rs);
 
         if ($row == false) {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl(''));
         }
 
+        $url = UrlHelper::generateFullUrl('shops', 'view', array($recordId));
         if ($redirectType == PROMOTION::REDIRECT_PRODUCT) {
             $url = UrlHelper::generateFullUrl('products', 'view', array($recordId));
         } elseif ($redirectType == PROMOTION::REDIRECT_CATEGORY) {
             $url = UrlHelper::generateFullUrl('category', 'view', array($recordId));
-        } else {
-            $url = UrlHelper::generateFullUrl('shops', 'view', array($recordId));
         }
 
-        $userId = 0;
-
-        if (UserAuthentication::isUserLogged()) {
-            $userId = UserAuthentication::getLoggedUserId();
-        }
+        
+        $userId = UserAuthentication::getLoggedUserId(true);
 
         if (Promotion::isUserClickCountable($userId, $row['promotion_id'], $_SERVER['REMOTE_ADDR'], session_id())) {
             $promotionClickData = array(
@@ -991,7 +974,6 @@ class ShopsController extends MyAppController
             $clickId = FatApp::getDb()->getInsertId();
 
             $promotionClickChargesData = array(
-
                 'picharge_pclick_id' => $clickId,
                 'picharge_datetime' => date('Y-m-d H:i:s'),
                 'picharge_cost' => $row['promotion_cpc'],
@@ -1006,9 +988,12 @@ class ShopsController extends MyAppController
                 'plog_clicks' => 1,
             );
 
-
             $onDuplicatePromotionLogData = array_merge($promotionLogData, array('plog_clicks' => 'mysql_func_plog_clicks+1'));
             FatApp::getDb()->insertFromArray(Promotion::DB_TBL_LOGS, $promotionLogData, true, array(), $onDuplicatePromotionLogData);
+        }
+
+        if (MOBILE_APP_API_CALL) {
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
         }
 
         if (!filter_var($url, FILTER_VALIDATE_URL) === false) {

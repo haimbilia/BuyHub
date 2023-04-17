@@ -504,10 +504,6 @@ class ProductsController extends MyAppController
             $loggedUserId = UserAuthentication::getLoggedUserId();
         }
 
-        if (MOBILE_APP_API_CALL) {
-            $this->track($selprod_id);
-        }
-
         if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) {
             $selProdOption = explode('_', $product['selprod_code']);
             array_shift($selProdOption);
@@ -1517,7 +1513,6 @@ class ProductsController extends MyAppController
 
     public function track(int $selprod_id)
     {
-        $userId = UserAuthentication::getLoggedUserId();
         /* Track Click */
         $prodObj = new PromotionSearch($this->siteLangId, true);
         $prodObj->joinProducts();
@@ -1562,6 +1557,8 @@ class ProductsController extends MyAppController
             FatApp::redirectUser($url);
         }
 
+        $userId = UserAuthentication::getLoggedUserId(true);
+
         if (Promotion::isUserClickCountable($userId, $row['promotion_id'], $_SERVER['REMOTE_ADDR'], session_id())) {
             $promotionClickData = array(
                 'pclick_promotion_id' => $row['promotion_id'],
@@ -1594,12 +1591,14 @@ class ProductsController extends MyAppController
         }
 
 
-        if (!MOBILE_APP_API_CALL) {
-            if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
-                FatApp::redirectUser($url);
-            }
-            FatApp::redirectUser(UrlHelper::generateUrl(''));
+        if (MOBILE_APP_API_CALL) {
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
         }
+
+        if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
+            FatApp::redirectUser($url);
+        }
+        FatApp::redirectUser(UrlHelper::generateUrl(''));
     }
 
     public function setUrlString()
