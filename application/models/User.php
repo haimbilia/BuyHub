@@ -2345,7 +2345,7 @@ class User extends MyAppModel
         $srch->addCondition('uttr_expiry', '>=', date('Y-m-d H:i:s'));
         $srch->addMultipleFields(array('uttr_user_id', 'uttr_token'));
         $srch->doNotCalculateRecords();
-        $srch->setPagesize(1);
+        $srch->setPagesize(1);       
         $rs = $srch->getResultSet();
         if ((!$row = FatApp::getDb()->fetch($rs)) || ($row['uttr_token'] !== $token)) {
             return false;
