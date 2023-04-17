@@ -488,30 +488,24 @@ class ProductsController extends MyAppController
         return (array) FatApp::getDb()->fetch($productRs);
     }
 
-    public function view($selprod_id = 0)
+    public function view(int $selprod_id)
     {
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $this->set('page', $page);
 
-        $selprod_id = FatUtility::int($selprod_id);
-        if (1 > $selprod_id) {
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
-            }
-            FatUtility::exitWithErrorCode(404);
-        }
-
         $product = $this->getProductDetail($selprod_id);
         if (!$product) {
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError(Labels::getLabel('ERR_CURRENTLY_THE_PRODUCT_IS_UNAVAILABLE', $this->siteLangId));
-            }
+            LibHelper::exitWithError(Labels::getLabel('ERR_CURRENTLY_THE_PRODUCT_IS_UNAVAILABLE', $this->siteLangId), false, true);
             FatUtility::exitWithErrorCode(404);
         }
 
         $loggedUserId = 0;
         if (UserAuthentication::isUserLogged()) {
             $loggedUserId = UserAuthentication::getLoggedUserId();
+        }
+
+        if (MOBILE_APP_API_CALL) {
+            $this->track($selprod_id);
         }
 
         if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type']) {
@@ -1521,17 +1515,9 @@ class ProductsController extends MyAppController
         FatUtility::exitWithErrorCode(404);
     }
 
-    public function track($productId = 0)
+    public function track(int $selprod_id)
     {
-        $productId = FatUtility::int($productId);
-        if (1 > $productId) {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl(''));
-        }
-        $loggedUserId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $loggedUserId = UserAuthentication::getLoggedUserId();
-        }
+        $userId = UserAuthentication::getLoggedUserId();
         /* Track Click */
         $prodObj = new PromotionSearch($this->siteLangId, true);
         $prodObj->joinProducts();
@@ -1544,22 +1530,14 @@ class ProductsController extends MyAppController
         $prodObj->addBudgetCondition();
         $prodObj->doNotCalculateRecords();
         $prodObj->addMultipleFields(array('selprod_id as proSelProdId', 'promotion_id'));
-        $prodObj->addCondition('promotion_record_id', '=', $productId);
+        $prodObj->addCondition('promotion_record_id', '=', $selprod_id);
         $prodObj->addCondition('promotion_deleted', '=', applicationConstants::NO);
-        $sponsoredProducts = array();
+
         $productSrchObj = new ProductSearch($this->siteLangId);
         $productSrchObj->joinProductToCategory($this->siteLangId);
         $productSrchObj->doNotCalculateRecords();
         $productSrchObj->setPageSize(1);
         $productSrchObj->setDefinedCriteria();
-
-        /* if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-            $productSrchObj->joinFavouriteProducts($loggedUserId);
-            $productSrchObj->addFld('IFNULL(ufp_id, 0) as ufp_id');
-        } else {
-            $productSrchObj->joinUserWishListProducts($loggedUserId);
-            $productSrchObj->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        } */
         $productSrchObj->joinProductRating();
         $productSrchObj->addMultipleFields(
             array(
@@ -1568,11 +1546,6 @@ class ProductsController extends MyAppController
                 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'COALESCE(sq_sprating.prod_rating,0) prod_rating ', 'selprod_sold_count'
             )
         );
-
-        /*  $productCatSrchObj = ProductCategory::getSearchObject(false, $this->siteLangId);
-        $productCatSrchObj->addOrder('m.prodcat_active', 'DESC');
-        $productCatSrchObj->doNotCalculateRecords();       
-        $productCatSrchObj->addMultipleFields(array('prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_description')); */
 
         $productSrchObj->joinTable('(' . $prodObj->getQuery() . ') ', 'INNER JOIN', 'selprod_id = ppr.proSelProdId ', 'ppr');
         $productSrchObj->addFld(array('promotion_id'));
@@ -1583,16 +1556,10 @@ class ProductsController extends MyAppController
         $rs = $productSrchObj->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
-        $url = UrlHelper::generateFullUrl('products', 'view', array($productId));
+        $url = UrlHelper::generateFullUrl('products', 'view', array($selprod_id));
         if ($row == false) {
-            if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
-                FatApp::redirectUser($url);
-            }
-        }
-
-        $userId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $userId = UserAuthentication::getLoggedUserId();
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), false, true);
+            FatApp::redirectUser($url);
         }
 
         if (Promotion::isUserClickCountable($userId, $row['promotion_id'], $_SERVER['REMOTE_ADDR'], session_id())) {
@@ -1626,11 +1593,13 @@ class ProductsController extends MyAppController
             FatApp::getDb()->insertFromArray(Promotion::DB_TBL_LOGS, $promotionLogData, true, array(), $onDuplicatePromotionLogData);
         }
 
-        if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
-            FatApp::redirectUser($url);
-        }
 
-        FatApp::redirectUser(UrlHelper::generateUrl(''));
+        if (!MOBILE_APP_API_CALL) {
+            if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
+                FatApp::redirectUser($url);
+            }
+            FatApp::redirectUser(UrlHelper::generateUrl(''));
+        }
     }
 
     public function setUrlString()
