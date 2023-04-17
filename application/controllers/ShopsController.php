@@ -925,7 +925,7 @@ class ShopsController extends MyAppController
         return $frm;
     }
 
-    public function track(int $shopId, int $redirectType, int $recordId)
+    public function track(int $shopId)
     {
         /* Track Click */
         $srch = new PromotionSearch($this->siteLangId, true);
@@ -951,14 +951,7 @@ class ShopsController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl(''));
         }
 
-        $url = UrlHelper::generateFullUrl('shops', 'view', array($recordId));
-        if ($redirectType == PROMOTION::REDIRECT_PRODUCT) {
-            $url = UrlHelper::generateFullUrl('products', 'view', array($recordId));
-        } elseif ($redirectType == PROMOTION::REDIRECT_CATEGORY) {
-            $url = UrlHelper::generateFullUrl('category', 'view', array($recordId));
-        }
-
-        
+        $url = UrlHelper::generateFullUrl('shops', 'view', array($shopId));        
         $userId = UserAuthentication::getLoggedUserId(true);
 
         if (Promotion::isUserClickCountable($userId, $row['promotion_id'], $_SERVER['REMOTE_ADDR'], session_id())) {

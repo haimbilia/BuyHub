@@ -25,7 +25,7 @@
             </div>
             <div class="shop-foot">
                 <div class="shop-title">
-                    <a href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id'], Promotion::REDIRECT_SHOP, $shop['shopData']['promotion_record_id']))); ?>"><?php echo $shop['shopData']['shop_name']; ?>
+                    <a href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id']))); ?>"><?php echo $shop['shopData']['shop_name']; ?>
                     </a>
                 </div>
                 <div class="shop-location">
@@ -42,7 +42,7 @@
                     </div>
                 <?php } ?>
                 <div class="shop-action">
-                    <a class="btn btn-outline-black btn-sm" href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id'], Promotion::REDIRECT_SHOP, $shop['shopData']['promotion_record_id']))); ?>"> <?php echo Labels::getLabel('LBL_Shop_Now', $siteLangId); ?></a>
+                    <a class="btn btn-outline-black btn-sm" href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id'],))); ?>"> <?php echo Labels::getLabel('LBL_Shop_Now', $siteLangId); ?></a>
                 </div>
 
             </div>
