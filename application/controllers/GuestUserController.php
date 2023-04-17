@@ -446,7 +446,7 @@ class GuestUserController extends MyAppController
         $frm = $this->getRegistrationForm($showNewsLetterCheckBox, $signUpWithPhone);
         $userName = FatApp::getPostedData('user_username', FatUtility::VAR_STRING, '');
         if (empty($userName) || false === ValidateElement::username($userName)) {
-            $message = Labels::getLabel("ERR_INVALID_FATBIT_USERNAME", $this->siteLangId);
+            $message = Labels::getLabel("ERR_INVALID_USERNAME", $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
         }

@@ -2456,3 +2456,6 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
 
 UPDATE `tbl_collections` SET `collection_for_app`='0' WHERE `collection_layout_type` = 3;
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+("ERR_INVALID_USERNAME", 1, "Username Must start with a letter and can contain only alphanumeric characters. length must be between 4 to 20 characters. Should Not Have spaces.", 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);

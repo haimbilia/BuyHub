@@ -42,6 +42,7 @@
 - Bug-069259 - iOS >> Multiple issues on the Return request details page
 - Bug-069412 - Android, iOS >> Promotions impression and Click count do not get increased when the user clicks on the Promotion on the app.
 - Bug-067077 - UI and inconsistency issues on the messages appear on the signup page.
+- Bug-067077 - Invalid User name message should be correct.
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
