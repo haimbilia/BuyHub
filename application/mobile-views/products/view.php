@@ -364,7 +364,7 @@ if (1 == $page) {
                     }
                 }
                 $val['banner_image_url'] = $bannerImageUrl;
-                $bannerUrl = UrlHelper::generateFullUrl('Banner', 'url', array($val['banner_id']));
+                $bannerUrl = UrlHelper::generateFullUrl('Banner', 'track', array($val['banner_id']));
                 $urlTypeData = CommonHelper::getUrlTypeData($bannerUrl);
 
                 $val['banner_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $bannerUrl : $urlTypeData['recordId']);
