@@ -244,7 +244,7 @@ class DiscountCouponsController extends ListingBaseController
 
     public function toggleBulkStatuses()
     {
-        $this->objPrivilege->canEditOrderStatus();
+        $this->objPrivilege->canEditDiscountCoupons();
 
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
