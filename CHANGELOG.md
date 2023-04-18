@@ -43,6 +43,8 @@
 - Bug-069412 - Android, iOS >> Promotions impression and Click count do not get increased when the user clicks on the Promotion on the app.
 - Bug-067077 - UI and inconsistency issues on the messages appear on the signup page.
 - Bug-067077 - Invalid User name message should be correct.
+- Bug-071904 - Add settings under admin to enable or disable weight and weight unit fields inside products.
+
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
