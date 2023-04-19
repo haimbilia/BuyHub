@@ -1463,6 +1463,10 @@ class CommonHelper extends FatUtility
 
     public static function truncateCharacters($string, $limit, $break = " ", $pad = "...", $nl2br = false)
     {
+        if(null == $string){
+            return ;
+        }
+
         if (strlen($string) <= $limit) {
             return ($nl2br) ? nl2br($string) : $string;
         }

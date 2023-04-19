@@ -3,7 +3,10 @@
     <div class="col-lg-7">
         <div class="descriptions" id="accordionExample">
             <?php
-            $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]);
+            $youtube_embed_code = '';
+            if(!empty($product["product_youtube_video"])){
+                $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]);
+            }
             ?>
             <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type'] && (0 < count($product['preview_attachments']) || 0 < count($product['preview_links']))) { ?>
                 <?php $this->includeTemplate('_partial/product/dd-preview-list.php', array('siteLangId' => $siteLangId, 'product' => $product), false); ?>
