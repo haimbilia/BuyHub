@@ -4100,7 +4100,6 @@ class SellerController extends SellerBaseController
             $pHeightReqObj->setFloatPositive();
             $pHeightReqObj->setRange('0.00001', '9999999999');
             /* ] */
-
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_DIGITAL, 'eq', 'product_length', $pLengthUnReqObj);
             $pTypeFld->requirements()->addOnChangerequirementUpdate(Product::PRODUCT_TYPE_PHYSICAL, 'eq', 'product_length', $pLengthReqObj);
 

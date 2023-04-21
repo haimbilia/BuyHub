@@ -15,7 +15,7 @@ if (isset($order['op_is_batch']) && $order['op_is_batch']) {
 }
 
 $options = $order['op_selprod_options'] ?? '';
-$options = explode(SellerProduct::MULTIPLE_OPTION_SEPARATOR, $options);
+$options = !empty($options) ? explode(SellerProduct::MULTIPLE_OPTION_SEPARATOR, $options) : [];
 
 $includeShopName = $includeShopName ?? false;
 $shopName = $order['op_shop_name'] ?? '';

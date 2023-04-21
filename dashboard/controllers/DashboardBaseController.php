@@ -861,7 +861,7 @@ class DashboardBaseController extends FatController
             return;
         }
 
-        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile','downloadAttachedFileForReturn'])) {
+        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile','downloadDigitalFiles','downloadAttachedFileForReturn'])) {
             return;
         }
 

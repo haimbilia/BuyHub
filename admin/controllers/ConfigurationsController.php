@@ -555,6 +555,9 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_THIS_SETTING_TO_ADD_WEIGHT_AND_WEIGHT_UNIT", $langId), 'CONF_PRODUCT_WEIGHT_ENABLE', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_YOU_CAN_ADD_WEIGHT_AND_WEIGHT_UNIT_TO_PRODUCT_IF_THIS_SETTING_IS_ENABLED.", $langId));
 
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_THIS_SETTING_TO_ADD_WEIGHT_AND_WEIGHT_UNIT", $langId), 'CONF_PRODUCT_WEIGHT_ENABLE', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_YOU_CAN_ADD_WEIGHT_AND_WEIGHT_UNIT_TO_PRODUCT_IF_THIS_SETTING_IS_ENABLED.", $langId));
+                
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_BRANDS_REQUESTED_BY_SELLERS_WILL_REQUIRE_APPROVAL", $langId), 'CONF_BRAND_REQUEST_APPROVAL', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_Admin_Need_To_Approve_the_brand_requests_(User_Cannot_link_the_requested_brand_with_any_product_until_it_gets_approved_by_Admin)", $langId));
 

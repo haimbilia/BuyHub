@@ -459,7 +459,7 @@ class BadgesController extends ListingBaseController
 
     public function deleteRecord()
     {
-        $this->objPrivilege->canEditAbusiveWords();
+        $this->objPrivilege->canEditBadgesAndRibbons();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if ($recordId < 1) {
