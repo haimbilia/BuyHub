@@ -1206,7 +1206,7 @@ class EmailHandler extends FatModel
             $this->sendSms("child_order_status_change", ValidateElement::formatDialCode($orderComment['buyer_phone_dcode']) . $orderComment["buyer_phone"], $arrReplacements, $langId);
             $replaceVal = array(
                 '{INVOICE}' => $orderComment["op_invoice_number"],
-                '{PRODUCT}' => $orderComment["op_product_name"],
+                '{PRODUCT}' => isset($orderComment["op_selprod_title"]) && !empty($orderComment["op_selprod_title"]) ? $orderComment["op_selprod_title"] : $orderComment["op_product_name"],
                 '{STATUS}' => $statuesArr[$orderComment["oshistory_orderstatus_id"]]
             );
             $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_ORDER_{INVOICE}_{PRODUCT}_STATUS_{STATUS}', $langId), $replaceVal, true);
@@ -1638,7 +1638,7 @@ class EmailHandler extends FatModel
             $productUrl = UrlHelper::generateFullUrl('Products', 'view', array($msgDetail['op_selprod_id']));
         }
 
-        $productTitle = ($msgDetail['op_selprod_title'] != '') ? $msgDetail['op_selprod_title'] . ' (' . $msgDetail['op_product_name'] . ')' : $msgDetail['op_product_name'];
+        $productTitle = ($msgDetail['op_selprod_title'] != '') ? $msgDetail['op_selprod_title'] : $msgDetail['op_product_name'];
 
         $productExtraDetails = '';
         if ($msgDetail['op_selprod_options'] != '') {
