@@ -85,7 +85,7 @@ if (isset($client_secret)) { ?>
                                 var token = response['id'];
                                 // insert the token into the form so it gets submitted to the server
                                 form.append("<input type='hidden' name='stripeToken' value='" + token + "' />");
-                                form.attr('onsubmit', 'sendPayment(this, ".payment-from"); return(false);');
+                                form.attr('onsubmit', 'sendPayment(this, ".paymentFormJs"); return(false);');
                                 form.submit();
                             }
 
@@ -160,7 +160,7 @@ if (isset($client_secret)) { ?>
                 </p>
             </div>
         </div>
-        <div class="payable-amount-body from-payment">
+        <div class="payable-amount-body from-payment paymentFormJs">
             <?php
             if (!isset($error)) :
                 // $frm->setFormTagAttribute('onsubmit', 'sendPayment(this); return(false);');
@@ -232,8 +232,6 @@ if (isset($client_secret)) { ?>
                 </div>
                 <div class="payable-form-footer">
                     <div class="row">
-
-
                         <div class="col-6">
                             <?php if (FatUtility::isAjaxCall()) { ?>
                                 <a href="javascript:void(0);" onclick="loadPaymentSummary()" class="btn btn-outline-brand btn-block">

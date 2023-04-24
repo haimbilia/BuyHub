@@ -56,6 +56,13 @@ $(document).ready(function () {
     $(document).on('change', '.discountInJs', function () {
         showHideMaxDiscountVal();
     });
+    
+    $(document).on("keyup", "input[name='CONF_REFERRER_URL_VALIDITY']", function () {
+        let val = $(this).val();
+        if ('' == val || 1 > val) {
+            $(this).val(1);
+        }
+    });
 });
 
 (function () {
