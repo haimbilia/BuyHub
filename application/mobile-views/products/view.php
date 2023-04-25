@@ -277,11 +277,14 @@ if (1 == $page) {
             }
             $content['preview_attachments'] = array_values($previewAttachments);
         }
-        $data['data'][] = [
-            'type' => Product::CONTENT_TYPE_DIGITAL_FILES_AND_LINKS,
-            'title' => Labels::getLabel('LBL_Preview_files', $siteLangId),
-            'content' => $content
-        ];
+
+        if (!empty($content)) {
+            $data['data'][] = [
+                'type' => Product::CONTENT_TYPE_DIGITAL_FILES_AND_LINKS,
+                'title' => Labels::getLabel('LBL_Preview_files', $siteLangId),
+                'content' => $content
+            ];
+        }
     }
 
     if (!empty($productSpecifications)) {
