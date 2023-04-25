@@ -264,6 +264,9 @@ if (1 == $page) {
             $content['preview_links'] = array_values($product['preview_links']);
         }
         if (0 < count($product['preview_attachments'])) {
+            foreach ($product['preview_attachments'] as $key => &$attachment) {
+                $attachment['downloadUrl'] = UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview'];
+            }
             $content['preview_attachments'] = array_values($product['preview_attachments']);
         }
         $data['data'][] = [
