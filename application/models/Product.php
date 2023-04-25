@@ -98,6 +98,7 @@ class Product extends MyAppModel
     public const CONTENT_TYPE_SHOP = 13;
     public const CONTENT_TYPE_PRODUCT_POLICIES = 14;
     public const CONTENT_TYPE_PRODUCT_DESCRIPTION = 15;
+    public const CONTENT_TYPE_DIGITAL_FILES_AND_LINKS = 16;
     /* ------------------------------------------- */
 
     /* For API */

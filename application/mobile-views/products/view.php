@@ -141,6 +141,10 @@ if (1 == $page) {
     $product['shippingDetails'] = empty($shippingDetails) ? (object) array() : $shippingDetails;
     $product['socialShareContent'] = empty($socialShareContent) ? (object) array() : $socialShareContent;
 
+    $previewLinks = $product['preview_links'] ?? [];
+    $previewAttachments = $product['preview_attachments'] ?? [];
+    unset($product['preview_links'], $product['preview_attachments']);
+
     $data['data'][] = [
         'type' => Product::CONTENT_TYPE_PRODUCT_IMAGES,
         'title' => Labels::getLabel('LBL_PRODUCT_IMAGES', $siteLangId),
@@ -258,6 +262,23 @@ if (1 == $page) {
         'content' => $productDescription
     ];
 
+    if (0 < count($previewLinks) || 0 < count($previewAttachments)) {
+        $content = [];
+        if (0 < count($previewLinks)) {
+            $content['preview_links'] = array_values($previewLinks);
+        }
+        if (0 < count($previewAttachments)) {
+            foreach ($previewAttachments as $key => &$attachment) {
+                $attachment['downloadUrl'] = UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id']));
+            }
+            $content['preview_attachments'] = array_values($previewAttachments);
+        }
+        $data['data'][] = [
+            'type' => Product::CONTENT_TYPE_DIGITAL_FILES_AND_LINKS,
+            'title' => Labels::getLabel('LBL_Preview_files', $siteLangId),
+            'content' => $content
+        ];
+    }
 
     if (!empty($productSpecifications)) {
         $data['data'][] = [
