@@ -1570,11 +1570,9 @@ class CheckoutController extends MyAppController
                 LibHelper::exitWithError($str);
             }
 
-            if (!$cartSummary['isCodValidForNetAmt']) {
+            if (1 > $cartSummary['isCodValidForNetAmt']) {
                 $str = Labels::getLabel('ERR_SORRY_{COD}_IS_NOT_AVAILABLE_ON_THIS_ORDER.', $this->siteLangId) . ' <br/>' . Labels::getLabel('ERR_{COD}_IS_AVAILABLE_ON_PAYABLE_AMOUNT_BETWEEN_{MIN}_AND_{MAX}', $this->siteLangId);
-                $str = str_replace('{cod}', $paymentMethod['plugin_name'], $str);
-                $str = str_replace('{min}', CommonHelper::displayMoneyFormat(FatApp::getConfig("CONF_MIN_COD_ORDER_LIMIT")), $str);
-                $str = str_replace('{max}', CommonHelper::displayMoneyFormat(FatApp::getConfig("CONF_MAX_COD_ORDER_LIMIT")), $str);
+                $str = CommonHelper::replaceStringData($str, ['{COD}' => $paymentMethod['plugin_name'], '{MIN}' => $cartSummary['min_cod_order_limit'], '{MAX}' => $cartSummary['max_cod_order_limit']]);
                 LibHelper::exitWithError($str);
             }
 

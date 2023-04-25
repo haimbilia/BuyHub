@@ -285,7 +285,13 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                 var paymentMethod = tabObj.data('paymentmethod');
                 var paymentMethodSection = $('.' + paymentMethod + '-js');
                 paymentMethodSection.prepend(fcom.getLoader());
-                fcom.updateWithAjax(tabObj.attr('href'), '', function(res) {
+                fcom.ajax(tabObj.attr('href'), '', function(res) {
+                    if ('undefined' != res.status && 0 == res.status) {
+                        paymentMethodSection.html(res.msg);
+                        fcom.displayErrorMessage(res.msg);
+                        return;
+                    }
+
                     if ('paypal' != paymentMethod.toLowerCase() && 0 < $("#paypal-buttons").length) {
                         $("#paypal-buttons").html("");
                     }
@@ -313,7 +319,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                             }, 100);
                         }
                     }
-                });
+                }, { fOutMode: 'json' });
             }
         </script>
 <?php }

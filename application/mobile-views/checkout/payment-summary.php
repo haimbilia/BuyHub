@@ -18,6 +18,7 @@ $data = array(
     'orderId' => $orderId,
     'orderType' => $orderType,
     'canUseWalletForPayment' => (true == $canUseWalletForPayment ? 1 : 0),
+    'cartSummary' => $cartSummary,
     'paymentMethods' => array_values($paymentMethods),
 );
 
