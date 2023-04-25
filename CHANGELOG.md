@@ -45,6 +45,7 @@
 - Bug-067077 - Invalid User name message should be correct.
 - Bug-071904 - Add settings under admin to enable or disable weight and weight unit fields inside products.
 - Bug-072503 - The product name added on the product setup form appears instead of the inventory name in the order notifications
+- Bug-072387 - The category banner images are missing on category layout 1
 
 # RV-10.0.0.20221123
 

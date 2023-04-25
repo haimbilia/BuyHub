@@ -204,7 +204,8 @@ class CollectionsController extends MyAppController
                             if (true ===  MOBILE_APP_API_CALL) {
                                 $imgUpdatedOn = ProductCategory::getAttributesById($cat['prodcat_id'], 'prodcat_updated_on');
                                 $uploadedTime = AttachedFile::setTimeParam($imgUpdatedOn);
-                                $cat['image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'banner', array($cat['prodcat_id'], $this->siteLangId, 'MOBILE', applicationConstants::SCREEN_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $cat['prodcat_id'], 0, 0, applicationConstants::SCREEN_MOBILE);
+                                $cat['image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'banner', array($cat['prodcat_id'], $this->siteLangId, 'MOBILE', $fileRow['afile_id'], applicationConstants::SCREEN_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                             } else {
                                 $parentId = FatUtility::int($cat['prodcat_id']);
                                 $cat['children'] = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId);
