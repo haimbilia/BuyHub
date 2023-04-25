@@ -136,7 +136,7 @@ class CheckoutController extends MyAppController
                             $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
                             $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
                             if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
-                                $key = false;                               
+                                $key = false;
                                 $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId);
                             } elseif ($product['selprod_min_order_qty'] > ($availableStock + $userTempHoldStock)) {
                                 $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_MIN_PURCHASE_QUANTITY_IS_HIGHER_THAN_AVAILABLE_STOCK_LIMIT._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
@@ -144,7 +144,7 @@ class CheckoutController extends MyAppController
                                 $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_PURCHASE_QUANTITY_IS_LESS_THAN_MIN_PURCHASE_QUANTITY._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
                             }
 
-                            if (!empty($this->errMessage)) {                              
+                            if (!empty($this->errMessage)) {
                                 $this->errMessage = CommonHelper::replaceStringData($this->errMessage, ['{PRODUCT-NAME}' => htmlentities($productName, ENT_QUOTES)]);
                                 if (true === $addErrorMessage) {
                                     Message::addErrorMessage($this->errMessage);
@@ -1570,11 +1570,9 @@ class CheckoutController extends MyAppController
                 LibHelper::exitWithError($str);
             }
 
-            if (!$cartSummary['isCodValidForNetAmt']) {
+            if (1 > $cartSummary['isCodValidForNetAmt']) {
                 $str = Labels::getLabel('ERR_SORRY_{COD}_IS_NOT_AVAILABLE_ON_THIS_ORDER.', $this->siteLangId) . ' <br/>' . Labels::getLabel('ERR_{COD}_IS_AVAILABLE_ON_PAYABLE_AMOUNT_BETWEEN_{MIN}_AND_{MAX}', $this->siteLangId);
-                $str = str_replace('{cod}', $paymentMethod['plugin_name'], $str);
-                $str = str_replace('{min}', CommonHelper::displayMoneyFormat(FatApp::getConfig("CONF_MIN_COD_ORDER_LIMIT")), $str);
-                $str = str_replace('{max}', CommonHelper::displayMoneyFormat(FatApp::getConfig("CONF_MAX_COD_ORDER_LIMIT")), $str);
+                $str = CommonHelper::replaceStringData($str, ['{COD}' => $paymentMethod['plugin_name'], '{MIN}' => $cartSummary['min_cod_order_limit'], '{MAX}' => $cartSummary['max_cod_order_limit']]);
                 LibHelper::exitWithError($str);
             }
 
@@ -1621,7 +1619,7 @@ class CheckoutController extends MyAppController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $orderId = isset($_SESSION['order_id']) ? $_SESSION['order_id'] : '';
+        $orderId = $_SESSION['order_id'] ?? '';
         if (true === MOBILE_APP_API_CALL) {
             if (empty($post['orderId'])) {
                 FatUtility::dieJsonError(Labels::getLabel('ERR_ORDER_ID_IS_REQUIRED', $this->siteLangId));
@@ -1642,9 +1640,15 @@ class CheckoutController extends MyAppController
 
         $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
 
-        $cartTotal = isset($cartSummary['cartTotal']) ? $cartSummary['cartTotal'] : 0;
-        $cartDiscounts = isset($cartSummary['cartDiscounts']["coupon_discount_total"]) ? $cartSummary['cartDiscounts']["coupon_discount_total"] : 0;
+        $cartTotal = $cartSummary['cartTotal'] ?? 0;
+        $cartDiscounts = $cartSummary['cartDiscounts']["coupon_discount_total"] ?? 0;
         $cartTotalWithoutDiscount = $cartTotal - $cartDiscounts;
+        $canBeUse = min($totalBalance, CommonHelper::convertCurrencyToRewardPoint($cartTotal - $cartSummary['cartVolumeDiscount'] - $cartDiscounts));
+        $canBeUse = min($canBeUse, FatApp::getConfig('CONF_MAX_REWARD_POINT', FatUtility::VAR_INT, 0));
+        if ($canBeUse < $rewardPoints) {
+            $this->errMessage = CommonHelper::replaceStringData(Labels::getLabel('ERR_YOU_ARE_NOT_ALLOWED_TO_USE_MORE_THAN_{REWARD}', $this->siteLangId), ['{REWARD}' => $canBeUse]);
+            FatUtility::dieJsonError($this->errMessage);
+        }
 
         $rewardPointValues = min(CommonHelper::convertRewardPointToCurrency($rewardPoints), $cartTotalWithoutDiscount);
         $rewardPoints = CommonHelper::convertCurrencyToRewardPoint($rewardPointValues);
@@ -2054,7 +2058,7 @@ class CheckoutController extends MyAppController
         $products = $this->cartObj->getProducts($this->siteLangId);
         $shippingAddress = $this->cartObj->getCartShippingAddress();
         $userWalletBalance = User::getUserBalance($userId, true);
-      
+
         $fulfillmentType = $this->cartObj->getCartCheckoutType();
         /* Payment Methods[ */
         $splitPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);

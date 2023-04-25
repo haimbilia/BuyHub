@@ -47,7 +47,11 @@
 - Bug-072503 - The product name added on the product setup form appears instead of the inventory name in the order notifications
 - Bug-072387 - The category banner images are missing on category layout 1
 - Bug-072386 - Some elements are missing on digital products detail page
-
+- Bug-072383 - The Category Layout 2 added by the admin is not visible on the apps.
+- Bug-072263 - Seller notifications also appear on the buyer app
+- Bug-069878 - Android, iOS >> The minimum & Maximum COD order total setting is not working on the mobile apps
+- Bug-069881 - Android, iOS >> Invalid pickup slots appear on the Select Pickup page.
+- Bug-072275 - The buyer is able to place an order with zero order amount.
 # RV-10.0.0.20221123
 
 ## Bug Fixes:

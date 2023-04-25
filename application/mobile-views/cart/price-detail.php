@@ -3,11 +3,11 @@
 $loggedUserId = UserAuthentication::getLoggedUserId(true);
 $remainingWalletBalance = $userWalletBalance = User::getUserBalance($loggedUserId, true);
 
+$cartTotal = $cartSummary['cartTotal'] ?? 0;
+$discountTotal = $cartSummary['cartDiscounts']["coupon_discount_total"] ?? 0;
 $totalRewardPoints = UserRewardBreakup::rewardPointBalance($loggedUserId);
-$discountTotal = isset($cartSummary["cartDiscounts"]["coupon_discount_total"]) ? $cartSummary["cartDiscounts"]["coupon_discount_total"] : 0;
-$cartValue = CommonHelper::convertCurrencyToRewardPoint($cartSummary['cartTotal'] - $discountTotal);
-$minValue = min($totalRewardPoints, $cartValue);
-$canBeUse = min($minValue, FatApp::getConfig('CONF_MAX_REWARD_POINT', FatUtility::VAR_INT, 0));
+$canBeUse = min($totalRewardPoints, CommonHelper::convertCurrencyToRewardPoint($cartTotal - $cartSummary['cartVolumeDiscount'] - $discountTotal));
+$canBeUse = min($canBeUse, FatApp::getConfig('CONF_MAX_REWARD_POINT', FatUtility::VAR_INT, 0));
 $canBeUseRPAmt = CommonHelper::displayMoneyFormat(CommonHelper::convertRewardPointToCurrency($canBeUse));
 
 $productsCount = isset($productsCount) ? $productsCount : count($products);

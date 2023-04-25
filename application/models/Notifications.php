@@ -5,6 +5,12 @@ class Notifications extends MyAppModel
     public const DB_TBL = 'tbl_user_notifications';
     public const DB_TBL_PREFIX = 'unotification_';
 
+    public const SELLER_ONLY_NOTIFICATION_TYPES = [
+        'SELLER_ORDER',
+        'ORDER_CANCELLATION_REQUEST',
+        'SELLER_RETURN_REQUEST',
+        'MESSAGE_RETURN_REQUEST',
+    ];
 
     public function __construct($unotificationId = 0)
     {

@@ -128,6 +128,7 @@ class Collections extends MyAppModel
     ];
 
     public const COLLECTIONS_NOT_FOR_APP = [
+        self::TYPE_CATEGORY_LAYOUT2,
         self::TYPE_CATEGORY_LAYOUT3,
         self::TYPE_CATEGORY_LAYOUT4,
         self::TYPE_BRAND_LAYOUT2,
