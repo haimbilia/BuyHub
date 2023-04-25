@@ -141,6 +141,10 @@ if (1 == $page) {
     $product['shippingDetails'] = empty($shippingDetails) ? (object) array() : $shippingDetails;
     $product['socialShareContent'] = empty($socialShareContent) ? (object) array() : $socialShareContent;
 
+    $previewLinks = $product['preview_links'] ?? [];
+    $previewAttachments = $product['preview_attachments'] ?? [];
+    unset($product['preview_links'], $product['preview_attachments']);
+
     $data['data'][] = [
         'type' => Product::CONTENT_TYPE_PRODUCT_IMAGES,
         'title' => Labels::getLabel('LBL_PRODUCT_IMAGES', $siteLangId),
@@ -258,8 +262,6 @@ if (1 == $page) {
         'content' => $productDescription
     ];
 
-    $previewLinks = $product['preview_links'] ?? [];
-    $previewAttachments = $product['preview_attachments'] ?? [];
     if (0 < count($previewLinks) || 0 < count($previewAttachments)) {
         $content = [];
         if (0 < count($previewLinks)) {
@@ -272,13 +274,12 @@ if (1 == $page) {
             $content['preview_attachments'] = array_values($previewAttachments);
         }
         $data['data'][] = [
-            'type' => Product::CONTENT_TYPE_DIGITAL_FILES_AND_LINKS ,
+            'type' => Product::CONTENT_TYPE_DIGITAL_FILES_AND_LINKS,
             'title' => Labels::getLabel('LBL_Preview_files', $siteLangId),
             'content' => $content
         ];
-
     }
-    
+
     if (!empty($productSpecifications)) {
         $data['data'][] = [
             'type' => Product::CONTENT_TYPE_SPECIFICATIONS,
