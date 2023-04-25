@@ -48,6 +48,7 @@
 - Bug-072387 - The category banner images are missing on category layout 1
 - Bug-072386 - Some elements are missing on digital products detail page
 - Bug-072383 - The Category Layout 2 added by the admin is not visible on the apps.
+- Bug-072263 - Seller notifications also appear on the buyer app
 
 # RV-10.0.0.20221123
 

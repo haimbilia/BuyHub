@@ -3455,6 +3455,9 @@ class AccountController extends LoggedUserController
         $pageSize = FatApp::getPostedData('pagesize', FatUtility::VAR_INT, $defaultPageSize);
         $srch = Notifications::getSearchObject();
         $srch->addCondition('unt.unotification_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
+        if (MOBILE_APP_API_CALL) {
+            $srch->addCondition('unt.unotification_type', 'NOT IN', Notifications::SELLER_ONLY_NOTIFICATION_TYPES);
+        }
         $srch->addOrder('unt.unotification_id', 'DESC');
         $srch->addMultipleFields(array('unt.*'));
         $srch->setPageNumber($page);

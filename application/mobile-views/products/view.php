@@ -248,19 +248,23 @@ if (1 == $page) {
         );
     }
 
-    $data['data'][] = [
-        'type' => Product::CONTENT_TYPE_PRODUCT_POLICIES,
-        'title' => Labels::getLabel('LBL_PRODUCT_POLICIES', $siteLangId),
-        'content' => $productPolicies
-    ];
+    if (!empty($productPolicies)) {
+        $data['data'][] = [
+            'type' => Product::CONTENT_TYPE_PRODUCT_POLICIES,
+            'title' => Labels::getLabel('LBL_PRODUCT_POLICIES', $siteLangId),
+            'content' => $productPolicies
+        ];
+    }
 
-    $productDescription = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
-    $productDescription = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $productDescription);
-    $data['data'][] = [
-        'type' => Product::CONTENT_TYPE_PRODUCT_DESCRIPTION,
-        'title' => Labels::getLabel('LBL_PRODUCT_DESCRIPTION', $siteLangId),
-        'content' => $productDescription
-    ];
+    if (!empty($product['product_description'])) {
+        $productDescription = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
+        $productDescription = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $productDescription);
+        $data['data'][] = [
+            'type' => Product::CONTENT_TYPE_PRODUCT_DESCRIPTION,
+            'title' => Labels::getLabel('LBL_PRODUCT_DESCRIPTION', $siteLangId),
+            'content' => $productDescription
+        ];
+    }
 
     if (0 < count($previewLinks) || 0 < count($previewAttachments)) {
         $content = [];
