@@ -59,7 +59,7 @@
                                                 </svg>
                                             </button>
                                         <?php } ?>
-                                        <a class="copy-btn download-preview" target="_blank" href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>" title="<?php echo $attachment['preview']; ?>">
+                                        <a class="copy-btn download-preview" target="_blank" href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])); ?>" title="<?php echo $attachment['preview']; ?>">
                                             <svg class="svg" width="18" height="18">
                                                 <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#icon-download">
                                                 </use>
