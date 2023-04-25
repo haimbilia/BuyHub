@@ -2,7 +2,7 @@
     <div class="section-head">
         <div class="section-heading" id="prev-files">
             <h2>
-                <?php echo Labels::getLabel('LBL_Prev_files', $siteLangId); ?>
+                <?php echo Labels::getLabel('LBL_Preview_files', $siteLangId); ?>
             </h2>
         </div>
     </div>

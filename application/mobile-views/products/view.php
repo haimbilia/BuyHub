@@ -258,7 +258,22 @@ if (1 == $page) {
         'content' => $productDescription
     ];
 
+    if (0 < count($product['preview_links']) || 0 < count($product['preview_attachments'])) {
+        $content = [];
+        if (0 < count($product['preview_links'])) {
+            $content['preview_links'] = $product['preview_links'];
+        }
+        if (0 < count($product['preview_attachments'])) {
+            $content['preview_attachments'] = $product['preview_attachments'];
+        }
+        $data['data'][] = [
+            'type' => Product::CONTENT_TYPE_DIGITAL_FILES_AND_LINKS ,
+            'title' => Labels::getLabel('LBL_Preview_files', $siteLangId),
+            'content' => $content
+        ];
 
+    }
+    
     if (!empty($productSpecifications)) {
         $data['data'][] = [
             'type' => Product::CONTENT_TYPE_SPECIFICATIONS,
