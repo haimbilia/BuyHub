@@ -258,16 +258,18 @@ if (1 == $page) {
         'content' => $productDescription
     ];
 
-    if (0 < count($product['preview_links']) || 0 < count($product['preview_attachments'])) {
+    $previewLinks = $product['preview_links'] ?? [];
+    $previewAttachments = $product['preview_attachments'] ?? [];
+    if (0 < count($previewLinks) || 0 < count($previewAttachments)) {
         $content = [];
-        if (0 < count($product['preview_links'])) {
-            $content['preview_links'] = array_values($product['preview_links']);
+        if (0 < count($previewLinks)) {
+            $content['preview_links'] = array_values($previewLinks);
         }
-        if (0 < count($product['preview_attachments'])) {
-            foreach ($product['preview_attachments'] as $key => &$attachment) {
+        if (0 < count($previewAttachments)) {
+            foreach ($previewAttachments as $key => &$attachment) {
                 $attachment['downloadUrl'] = UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id']));
             }
-            $content['preview_attachments'] = array_values($product['preview_attachments']);
+            $content['preview_attachments'] = array_values($previewAttachments);
         }
         $data['data'][] = [
             'type' => Product::CONTENT_TYPE_DIGITAL_FILES_AND_LINKS ,
