@@ -261,10 +261,10 @@ if (1 == $page) {
     if (0 < count($product['preview_links']) || 0 < count($product['preview_attachments'])) {
         $content = [];
         if (0 < count($product['preview_links'])) {
-            $content['preview_links'] = $product['preview_links'];
+            $content['preview_links'] = array_values($product['preview_links']);
         }
         if (0 < count($product['preview_attachments'])) {
-            $content['preview_attachments'] = $product['preview_attachments'];
+            $content['preview_attachments'] = array_values($product['preview_attachments']);
         }
         $data['data'][] = [
             'type' => Product::CONTENT_TYPE_DIGITAL_FILES_AND_LINKS ,
