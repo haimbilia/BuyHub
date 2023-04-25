@@ -120,10 +120,11 @@ if ($isCodOrPayAtStore && true === $otpVerification) { ?>
         fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(res) {
             if ('undefined' != typeof getExternalLibraryUrl) {
                 fcom.displayProcessing();
-                fcom.ajax(getExternalLibraryUrl, '', function(t) {                   
+                fcom.ajax(getExternalLibraryUrl, '', function(t) {
                     var json = $.parseJSON(t);
                     if (1 > json.status) {
                         $("." + paymentMethodBlockJs + " form input[type='submit']").val(langLbl.confirmPayment);
+                        $('.' + paymentMethodBlockJs).html(json.msg);
                         fcom.displayErrorMessage(json.msg);
                         return;
                     }
