@@ -51,7 +51,7 @@
 - Bug-072263 - Seller notifications also appear on the buyer app
 - Bug-069878 - Android, iOS >> The minimum & Maximum COD order total setting is not working on the mobile apps
 - Bug-069881 - Android, iOS >> Invalid pickup slots appear on the Select Pickup page.
-
+- Bug-072275 - The buyer is able to place an order with zero order amount.
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
