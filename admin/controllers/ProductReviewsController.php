@@ -33,7 +33,7 @@ class ProductReviewsController extends ListingBaseController
         $frmSearch = $this->getSearchForm($fields);
 
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
-        $pageTitle = Labels::getLabel('LBL_MANAGE_PRODUCT_REVIEWS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
