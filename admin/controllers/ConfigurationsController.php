@@ -1385,7 +1385,7 @@ class ConfigurationsController extends ListingBaseController
                 $string = Labels::getLabel("FRM_DAYS,_after_which_Referrer_Url_is_Expired.", $langId);
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . $string . "</span>";
 
-                $fld = $frm->addHtml('', 'RewardsOnRegistration', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_REWARD_BENEFITS_ON_REGISTRATION", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'RewardsOnRegistration', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_REWARD_BENEFITS_ON_REGISTRATION_(_APPLICABLE_FOR_WEB_INTERFACE_ONLY_)", $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_REFERRER_REWARD_POINTS", $langId), 'CONF_REGISTRATION_REFERRER_REWARD_POINTS');
@@ -1404,7 +1404,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->requirements()->setIntPositive();
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REWARDS_POINTS_VALIDITY_IN_DAYS_FROM_THE_DATE_OF_CREDIT", $langId) . "</span>";
 
-                $fld =  $frm->addHtml('', 'RewardsonPurchase', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_REWARD_BENEFITS_ON_FIRST_PURCHASE", $langId) . '</h3>');
+                $fld =  $frm->addHtml('', 'RewardsonPurchase', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_REWARD_BENEFITS_ON_FIRST_PURCHASE_(_APPLICABLE_FOR_WEB_INTERFACE_ONLY_)", $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_REFERRER_REWARD_POINTS", $langId), 'CONF_SALE_REFERRER_REWARD_POINTS');
