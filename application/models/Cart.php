@@ -1295,8 +1295,9 @@ class Cart extends FatModel
                 if ($product['is_batch']) {
                     $cartTotal += $product['prodgroup_total'];
                 } else {
-                    $cartTotal += (int) ($product['total'] ?? 0);
+                    $cartTotal += (float) ($product['total'] ?? 0);
                 }
+                
                 $cartVolumeDiscount += $product['volume_discount_total'];
 
                 $taxableProdPrice = $product['theprice'] - $product['volume_discount'];
