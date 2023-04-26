@@ -52,6 +52,7 @@
 - Bug-069878 - Android, iOS >> The minimum & Maximum COD order total setting is not working on the mobile apps
 - Bug-069881 - Android, iOS >> Invalid pickup slots appear on the Select Pickup page.
 - Bug-072275 - The buyer is able to place an order with zero order amount.
+- Bug-072438 - The product price appears exclusive of tax on the cart page when the Product price inclusive of tax setting is enabled.
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
