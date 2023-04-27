@@ -256,8 +256,8 @@ if (1 == $page) {
         ];
     }
 
-    if (!empty($product['product_description'])) {
-        $productDescription = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
+    $productDescription = html_entity_decode($product['product_description'], ENT_QUOTES, 'utf-8');
+    if (!empty(str_replace("\r\n", '', $productDescription))) {
         $productDescription = str_replace('/editor/editor-image/', FatUtility::generateFullUrl() . 'editor/editor-image/', $productDescription);
         $data['data'][] = [
             'type' => Product::CONTENT_TYPE_PRODUCT_DESCRIPTION,
@@ -277,11 +277,14 @@ if (1 == $page) {
             }
             $content['preview_attachments'] = array_values($previewAttachments);
         }
-        $data['data'][] = [
-            'type' => Product::CONTENT_TYPE_DIGITAL_FILES_AND_LINKS,
-            'title' => Labels::getLabel('LBL_Preview_files', $siteLangId),
-            'content' => $content
-        ];
+
+        if (!empty($content)) {
+            $data['data'][] = [
+                'type' => Product::CONTENT_TYPE_DIGITAL_FILES_AND_LINKS,
+                'title' => Labels::getLabel('LBL_Preview_files', $siteLangId),
+                'content' => $content
+            ];
+        }
     }
 
     if (!empty($productSpecifications)) {

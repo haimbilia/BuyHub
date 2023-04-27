@@ -145,7 +145,6 @@ class CartController extends MyAppController
                 $cartObj->setFulfilmentType($fulfilmentType);
                 $cartObj->setCartCheckoutType($fulfilmentType);
                 $cartSummary = $cartObj->getCartFinancialSummary($this->siteLangId);
-
                 $this->set('cartSummary', $cartSummary);
 
                 $this->set('cartSelectedBillingAddress', $billingAddressDetail);
@@ -615,7 +614,7 @@ class CartController extends MyAppController
         $post = FatApp::getPostedData();
         if (empty($post)) {
             $message = Labels::getLabel('LBL_Invalid_Request', $this->siteLangId);
-            LibHelper::exitWithError($message, true, true);    
+            LibHelper::exitWithError($message, true, true);
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
         if (empty($post['key'])) {
@@ -628,13 +627,16 @@ class CartController extends MyAppController
         }
         $quantity = isset($post['quantity']) ? FatUtility::int($post['quantity']) : 1;
         $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id'], Cart::PAGE_TYPE_CART);
-        if (!$cartObj->update($key, $quantity)) {         
+        if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
+            $cartObj->excludeTax();
+        }
+        if (!$cartObj->update($key, $quantity)) {
             LibHelper::exitWithError($cartObj->getError());
         }
         $cartObj->removeUsedRewardPoints();
         $cartObj->removeProductShippingMethod();
 
-        if (!empty($cartObj->getWarning())) {            
+        if (!empty($cartObj->getWarning())) {
             LibHelper::exitWithError($cartObj->getWarning());
         } else {
             $this->set('msg', Labels::getLabel("MSG_CART_UPDATED_SUCCESSFULLY", $this->siteLangId));
@@ -642,6 +644,9 @@ class CartController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $fulfilmentType = FatApp::getPostedData('fulfilmentType', FatUtility::VAR_INT, Shipping::FULFILMENT_SHIP);
             $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id'], Cart::PAGE_TYPE_CART);
+            if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
+                $cartObj->excludeTax();
+            }
             $cartObj->setFulfilmentType($fulfilmentType);
             $cartObj->setCartCheckoutType($fulfilmentType);
             $productsArr = $cartObj->getProducts($this->siteLangId);

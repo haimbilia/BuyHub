@@ -2460,3 +2460,10 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ("ERR_INVALID_USERNAME", 1, "Username Must start with a letter and can contain only alphanumeric characters. length must be between 4 to 20 characters. Should Not Have spaces.", 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
 UPDATE `tbl_collections` SET `collection_for_app`='0' WHERE `collection_layout_type` = 5;
+
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+("APP_ENTER_YOUR_EMAIL_ADDRESS_TO_RECOVER", 1, "Enter your email address to recover", 2),
+("APP_DOWNLOAD_ATTACHMENT", 1, "Download Attachment", 2),
+("APP_ATTACHMENTS", 1, "Attachments", 2),
+("APP_COD_ERROR", 1, "Sorry Cash On Delivery is not available on this order. Cash On Delivery is available on payable amount between %s and %s", 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);

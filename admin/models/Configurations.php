@@ -66,7 +66,7 @@ class Configurations extends FatModel
             Configurations::FORM_REVIEWS => Labels::getLabel('NAV_REVIEWS', $langId),
             Configurations::FORM_SHARING => Labels::getLabel('NAV_SHARING', $langId),
             Configurations::FORM_REWARD_POINTS => Labels::getLabel('NAV_REWARD_POINTS', $langId),
-            Configurations::FORM_REFERAL => Labels::getLabel('NAV_REFERAL', $langId),
+            Configurations::FORM_REFERAL => Labels::getLabel('NAV_REFERAL_(_APPLICABLE_FOR_WEB_INTERFACE_ONLY_)', $langId),
             Configurations::FORM_COMMISSION => Labels::getLabel('NAV_WEBSITE_COMMISION', $langId),
             Configurations::FORM_AFFILIATE => Labels::getLabel('NAV_AFFILIATE', $langId),
             Configurations::FORM_SUBSCRIPTION => Labels::getLabel('NAV_SUBSCRIPTION', $langId),
