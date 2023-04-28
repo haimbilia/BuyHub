@@ -78,7 +78,7 @@ foreach ($productSpecifications as  $specification) {
                     [
                         'name' => 'specifications[' . $count . '][' . str_replace(ProdSpecification::DB_TBL_PREFIX, '', $key) . ']',
                         'type' => 'hidden',
-                        'value' => $specification[$key],
+                        'value' => html_entity_decode($specification[$key], ENT_QUOTES, 'utf-8'),
                         'data-fatreq' => json_encode(['required' => false]),
                     ]
                 );
