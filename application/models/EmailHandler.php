@@ -880,7 +880,7 @@ class EmailHandler extends FatModel
                 'unotification_user_id' => $orderDetail["order_user_id"],
                 'unotification_body' => $appNotification,
                 'unotification_type' => 'ORDER_PAYMENT_STATUS',
-                'unotification_data' => json_encode(array('orderId' => $arrReplacements['{invoice_number}'], 'status' => $arrReplacements['{new_order_status}'])),
+                'unotification_data' => json_encode(array('orderId' => $orderDetail['order_id'], 'status' => $arrReplacements['{new_order_status}'])),
             );
             if (!$notificationObj->addNotification($notificationDataArr)) {
                 $this->error = $notificationObj->getError();
