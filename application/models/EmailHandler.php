@@ -3144,7 +3144,8 @@ class EmailHandler extends FatModel
         $notificationDataArr = array(
             'unotification_user_id' => $d["order_user_id"],
             'unotification_body' => $msg,
-            'unotification_type' => 'ORDER_PAYMENT_TRANSFERRED_TO_BANK'
+            'unotification_type' => 'ORDER_PAYMENT_TRANSFERRED_TO_BANK',
+            'unotification_data' => json_encode(array('orderId' => $d['order_id'])),
         );
         if (!$notificationObj->addNotification($notificationDataArr)) {
             $this->error = $notificationObj->getError();
