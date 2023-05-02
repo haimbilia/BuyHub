@@ -1127,7 +1127,7 @@ class EmailHandler extends FatModel
                     'unotification_type' => 'SELLER_ORDER',
                     'unotification_data' => json_encode(array('orderId' => $orderDetail['order_id'], 'productName' => $val["op_product_name"])),
                 );
-                if (!$notificationObj->addNotification($notificationDataArr)) {
+                if (!$notificationObj->addNotification($notificationDataArr, false)) {
                     $this->error = $notificationObj->getError();
                     return false;
                 }
