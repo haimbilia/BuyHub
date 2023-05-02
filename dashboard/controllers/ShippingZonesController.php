@@ -135,7 +135,7 @@ class ShippingZonesController extends SellerBaseController
         if (!$this->checkForLocations($post['shipzone_profile_id'], $shipZoneId, $post)) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_LOCATIONS_ALREADY_ADDED_IN_OTHER_ZONE_OF_SAME_PROFILE', $this->siteLangId));
         }
-
+        $post['shipzone_user_id'] = $this->userParentId;
         unset($post['shipzone_id']);
         $sObj = new ShippingZone($shipZoneId);
         $sObj->assignValues($post);

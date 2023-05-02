@@ -2374,7 +2374,6 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ('LBL_SIGN_IN_WITH_GOOGLE', 1, "Sign in with Google", 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
-<<<<<<< HEAD
 INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
 ('APP_YOU_CANNOT_ADD_MORE_THAN_IMAGES', 1, 'You Cannot Add More Than 8 Images', 2),
 ('APP_WANT_TO_WITHDRAW_REQUEST', 1, 'Do You Want To Withdraw Request', 2),

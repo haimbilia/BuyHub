@@ -54,6 +54,7 @@
 - Bug-072275 - The buyer is able to place an order with zero order amount.
 - Bug-072438 - The product price appears exclusive of tax on the cart page when the Product price inclusive of tax setting is enabled.
 - Bug-069775 - iOS, Android >> Reward benefits on first purchase rewards points do not get credited to the user's (Referrer & Referral) account even if the user purchased the first order 
+- Bug-072665 - Product specification special character issue
 - Bug-072693 - Special price do not appear on the cart review page on the iOS devices
 # RV-10.0.0.20221123
 

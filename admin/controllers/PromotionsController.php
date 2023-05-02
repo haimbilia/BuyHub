@@ -1106,7 +1106,7 @@ class PromotionsController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'promotion_name' => Labels::getLabel('LBL_PROMOTION_NAME', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_PROMOTION_ADVERTISER', $this->siteLangId),
             'promotion_type' => Labels::getLabel('LBL_TYPE', $this->siteLangId),
             'blocation_promotion_cost' => Labels::getLabel('LBL_CPC', $this->siteLangId),
             'promotion_budget' => Labels::getLabel('LBL_BUDGET', $this->siteLangId),
