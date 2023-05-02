@@ -880,7 +880,7 @@ class EmailHandler extends FatModel
                 'unotification_user_id' => $orderDetail["order_user_id"],
                 'unotification_body' => $appNotification,
                 'unotification_type' => 'ORDER_PAYMENT_STATUS',
-                'unotification_data' => json_encode(array('orderId' => $arrReplacements['{invoice_number}'], 'status' => $arrReplacements['{new_order_status}'])),
+                'unotification_data' => json_encode(array('orderId' => $orderDetail['order_id'], 'status' => $arrReplacements['{new_order_status}'])),
             );
             if (!$notificationObj->addNotification($notificationDataArr)) {
                 $this->error = $notificationObj->getError();
@@ -1127,7 +1127,7 @@ class EmailHandler extends FatModel
                     'unotification_type' => 'SELLER_ORDER',
                     'unotification_data' => json_encode(array('orderId' => $orderDetail['order_id'], 'productName' => $val["op_product_name"])),
                 );
-                if (!$notificationObj->addNotification($notificationDataArr)) {
+                if (!$notificationObj->addNotification($notificationDataArr, false)) {
                     $this->error = $notificationObj->getError();
                     return false;
                 }
@@ -3144,7 +3144,8 @@ class EmailHandler extends FatModel
         $notificationDataArr = array(
             'unotification_user_id' => $d["order_user_id"],
             'unotification_body' => $msg,
-            'unotification_type' => 'ORDER_PAYMENT_TRANSFERRED_TO_BANK'
+            'unotification_type' => 'ORDER_PAYMENT_TRANSFERRED_TO_BANK',
+            'unotification_data' => json_encode(array('orderId' => $d['order_id'])),
         );
         if (!$notificationObj->addNotification($notificationDataArr)) {
             $this->error = $notificationObj->getError();

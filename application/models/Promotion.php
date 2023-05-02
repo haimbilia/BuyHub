@@ -238,13 +238,8 @@ class Promotion extends MyAppModel
         $srch->addCondition(PROMOTION::DB_TBL_CLICKS_PREFIX . 'ip', '=', $ip);
         $srch->addCondition(PROMOTION::DB_TBL_CLICKS_PREFIX . 'session_id', '=', $session);
         $srch->doNotCalculateRecords();
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if ($row == false) {
-            return true;
-        } else {
-            return false;
-        }
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return ($row == false);
     }
     public static function getPromotionReqStatusArr($langId)
     {
