@@ -58,6 +58,7 @@
 - Bug-072693 - Special price do not appear on the cart review page on the iOS devices
 - Bug-072684 - The user is redirected to the orders listing page when clicks on the newly placed order notification
 - Bug-072683 - The seller notifications appear in the push notifications on the buyer app
+- Bug-072635 - it shows an unwanted validation while moving to cart from save for later section
 # RV-10.0.0.20221123
 
 ## Bug Fixes:
