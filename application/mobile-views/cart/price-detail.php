@@ -121,6 +121,7 @@ $priceDetail['netPayable'] = array(
 
 if (!empty($data['cartSummary']['cartDiscounts'])) {
     $data['cartSummary']['cartDiscounts']['coupon_discount_total'] = CommonHelper::displayMoneyFormat($data['cartSummary']['cartDiscounts']['coupon_discount_total']);
+} else {
+    $data['cartSummary']['cartDiscounts'] = (object)array();
 }
-$data['cartSummary']['cartDiscounts'] = !empty($data['cartSummary']['cartDiscounts']) ? $data['cartSummary']['cartDiscounts'] : (object)array();
 $data = !empty($data) ? array_merge($data, $priceDetail) : $priceDetail;
