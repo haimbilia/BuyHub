@@ -59,6 +59,8 @@
 - Bug-072684 - The user is redirected to the orders listing page when clicks on the newly placed order notification
 - Bug-072683 - The seller notifications appear in the push notifications on the buyer app
 - Bug-072635 - it shows an unwanted validation while moving to cart from save for later section
+- Bug-069598 - Android, iOS >> The 'Auto login after registration' setting is not working for the mobile apps
+- Bug-072778 - Coupon savings are not coming proper
 # RV-10.0.0.20221123
 
 ## Bug Fixes:

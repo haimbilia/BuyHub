@@ -495,12 +495,13 @@ class GuestUserController extends MyAppController
             }
 
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'registrationForm',[], CONF_WEBROOT_FRONTEND));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'registrationForm', [], CONF_WEBROOT_FRONTEND));
         }
         if (!MOBILE_APP_API_CALL) {
             $frm->expireSecurityToken(FatApp::getPostedData());
         }
 
+        $data = [];
         $emailVerification = FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1);
         if (1 > $signUpWithPhone && !$emailVerification) {
             $cartObj = new Cart();
@@ -514,7 +515,20 @@ class GuestUserController extends MyAppController
                     FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm'), [], CONF_WEBROOT_FRONTEND);
                 }
 
-                if (false === MOBILE_APP_API_CALL) {
+                if (true === MOBILE_APP_API_CALL) {
+                    if (!$token = $userObj->setMobileAppToken()) {
+                        LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+                    }
+                    $data = [
+                        'user_name' => $post['user_name'],
+                        'user_id' => $userId,
+                        'user_phone_dcode' => $post['user_phone_dcode'] ?? '',
+                        'user_phone' => $post['user_phone'] ?? '',
+                        'credential_email' => $post['credential_email'] ?? '',
+                        'token' => $token,
+                        'user_image' => UrlHelper::generateFullUrl('image', 'user', array($userId, ImageDimension::VIEW_THUMB))
+                    ];
+                } else {
                     $redirectUrl = UrlHelper::generateUrl('Buyer', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
                     if ($isCheckOutPage) {
                         $this->set('needLogin', 1);
@@ -533,10 +547,12 @@ class GuestUserController extends MyAppController
 
         if (true === MOBILE_APP_API_CALL) {
             if (0 < $signUpWithPhone) {
-                $this->set('data', ['user_id' => $userId]);
+                $data = array_merge($data, ['user_id' => $userId]);
+                $this->set('data', $data);
                 $this->set('msg', Labels::getLabel('MSG_OTP_SENT!_PLEASE_CHECK_YOUR_PHONE.', $this->siteLangId));
             } else {
                 $msg = ($emailVerification) ? Labels::getLabel('MSG_SUCCESSFULLY_REGISTERED._EMAIL_VERIFICATION_PENDING') : Labels::getLabel('MSG_SUCCESSFULLY_REGISTERED', $this->siteLangId);
+                $this->set('data', $data);
                 $this->set('msg', $msg);
             }
             $this->_template->render();
