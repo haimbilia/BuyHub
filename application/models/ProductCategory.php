@@ -856,7 +856,7 @@ class ProductCategory extends MyAppModel
 
         if ($excludeCategoriesHavingNoProducts) {
             $prodSrchObj = new ProductSearch();
-            $prodSrchObj->setDefinedCriteria();
+            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
             $prodSrchObj->doNotCalculateRecords();
             $prodSrchObj->doNotLimitRecords();
             $prodSrchObj->joinSellerSubscription(0, true);
@@ -1097,7 +1097,7 @@ class ProductCategory extends MyAppModel
     public function haveProducts(bool $isActive = true)
     {
         $prodSrchObj = new ProductSearch(0, null, null, $isActive);
-        $prodSrchObj->setDefinedCriteria();
+        $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
         $prodSrchObj->joinProductToCategory(0, $isActive);
         $prodSrchObj->doNotCalculateRecords();
         $prodSrchObj->setPageSize(1);
