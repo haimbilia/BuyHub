@@ -897,8 +897,10 @@ class HomeController extends MyAppController
                             if (true === MOBILE_APP_API_CALL) {
                                 $imgUpdatedOn = ProductCategory::getAttributesById($catData['prodcat_id'], 'prodcat_updated_on');
                                 $uploadedTime = AttachedFile::setTimeParam($imgUpdatedOn);
-                                $catData['prodcat_name'] = html_entity_decode($catData['prodcat_name'], ENT_QUOTES, 'utf-8');
-                                $catData['prodcat_description'] = strip_tags(html_entity_decode($catData['prodcat_description'], ENT_QUOTES, 'utf-8'));
+                                $productName = !empty($catData['prodcat_name']) ? html_entity_decode($catData['prodcat_name'], ENT_QUOTES, 'utf-8') : '';
+                                $productDescription = !empty($catData['prodcat_description']) ? html_entity_decode($catData['prodcat_description'], ENT_QUOTES, 'utf-8') : '';
+                                $catData['prodcat_name'] = $productName;
+                                $catData['prodcat_description'] = $productDescription;
                                 $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $catData['prodcat_id'], 0, 0, applicationConstants::SCREEN_MOBILE);
                                 $catData['category_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'banner', array($catData['prodcat_id'], $this->siteLangId, 'MOBILE', $fileRow['afile_id'], applicationConstants::SCREEN_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
