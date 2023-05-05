@@ -456,9 +456,9 @@ class CartController extends MyAppController
                 $productAdd = false;
                 $str = Labels::getLabel('MSG_PLEASE_ADD_MINIMUM_{MINIMUMQUANTITY}_FOR_{PRODUCT-NAME}', $this->siteLangId);
                 $str = CommonHelper::replaceStringData($str, ["{MINIMUMQUANTITY}" => $minimum_quantity, '{PRODUCT-NAME}' => strip_tags($sellerProductRow['product_name'])]);
-                if (true === MOBILE_APP_API_CALL) {
+                /* if (true === MOBILE_APP_API_CALL) {
                     LibHelper::dieJsonError($str);
-                }
+                } */
                 if ($productId != $selprod_id) {
                     $productErr['addon'][$productId] = $str;
                 } else {
@@ -477,9 +477,9 @@ class CartController extends MyAppController
                 $productAdd = false;
                 $message = Labels::getLabel('MSG_REQUESTED_QUANTITY_MORE_THAN_STOCK_AVAILABLE_{STOCK}_FOR_{PRODUCT-NAME}._SO_CANNOT_BE_ADDED.', $this->siteLangId);
                 $message = CommonHelper::replaceStringData($message, ['{STOCK}' => $selprod_stock, '{PRODUCT-NAME}' => strip_tags($sellerProductRow['product_name'])]);
-                if (true === MOBILE_APP_API_CALL) {
+                /* if (true === MOBILE_APP_API_CALL) {
                     FatUtility::dieJsonError($message);
-                }
+                } */
                 if ($productId != $selprod_id) {
                     $productErr['addon'][$productId] = $message;
                 } else {
