@@ -399,10 +399,19 @@ class OrderPayment extends Orders
     public function getPaymentGatewayResponse(): array
     {
         $orderPaymentInfo = $this->getOrderPayments(['order_id' => $this->paymentOrderId]);
-        $data = empty($orderPaymentInfo) ? [] : current($orderPaymentInfo);
-        if (empty($data)) {
+        if (empty($orderPaymentInfo)) {
             return [];
         }
-        return json_decode($data['opayment_gateway_response'], true);
+        $data = current($orderPaymentInfo);
+
+        if (empty($data['opayment_gateway_response'])) {
+            return [];
+        }
+
+        if (true == LibHelper::isJson($data['opayment_gateway_response'])) {
+            return json_decode($data['opayment_gateway_response'], true);
+        }
+
+        return [$data['opayment_gateway_response']];
     }
 }
