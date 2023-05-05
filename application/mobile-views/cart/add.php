@@ -2,5 +2,5 @@
 
 $data = array(
     'cartItemsCount' => $cartItemsCount,
-    'tempUserId' => $tempUserId,
+    'tempUserId' => $tempUserId ?? 0,
 );
