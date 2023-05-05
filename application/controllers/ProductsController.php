@@ -986,7 +986,7 @@ class ProductsController extends MyAppController
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_DETAIL);
             $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 1, $product['selprod_price']);
 
-            if ($recommendedProducts && 0 < count($recommendedProducts)) {
+            if (isset($recommendedProducts) && 0 < count($recommendedProducts)) {
                 $et->addImpression(Labels::getLabel('MSG_Recommended_Products', $this->siteLangId));
                 $productPostion = 1;
                 foreach ($recommendedProducts as $product) {
