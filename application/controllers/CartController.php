@@ -277,9 +277,10 @@ class CartController extends MyAppController
         LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
 
         if (true === MOBILE_APP_API_CALL) {
+            $msg = $this->get('msg');
             $cartObj = new Cart();
             $this->set('cartItemsCount', $cartObj->countProducts());
-            $this->set('msg', Labels::getLabel('MSG_ADDED_SUCCESSFULLY', $this->siteLangId));
+            $this->set('msg', !empty($msg) ? $msg : Labels::getLabel('MSG_ADDED_SUCCESSFULLY', $this->siteLangId));
             $this->_template->render();
         }
 
@@ -509,8 +510,10 @@ class CartController extends MyAppController
         if (isset($productErr)) {
             $addons = $productErr['addon'] ?? [];
             unset($productErr['addon']);
+            $lineSeparator = MOBILE_APP_API_CALL ? '\n' : '<br>';
             $msg = $productErr['product'] ?? '';
-            $msg = !empty($addons) ? $msg . '<br>' . implode('<br>', $addons) : $msg;
+            $msg .= !empty($msg) ? $lineSeparator : '';
+            $msg = !empty($addons) ? $msg . implode($lineSeparator, $addons) : $msg;
             $this->set('msg', $msg);
         } else {
             $strProduct = '<a href="' . UrlHelper::generateUrl('Products', 'view', array($selprod_id)) . '">' . strip_tags(html_entity_decode($sellerProductRow['product_name'], ENT_QUOTES, 'UTF-8')) . '</a>';
