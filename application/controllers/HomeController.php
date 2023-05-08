@@ -946,6 +946,9 @@ class HomeController extends MyAppController
                             $productShopSrchTempObj->addGroupBy('selprod_product_id');
                             $limit = ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT1) ? Collections::LIMIT_CATEGORY_LAYOUT1_PRODUCT : Collections::LIMIT_CATEGORY_LAYOUT4;
                             $productShopSrchTempObj->setPageSize($limit);
+                            if (CommonHelper::demoUrl()) {
+                                $productShopSrchTempObj->addorder('product_featured', 'DESC');
+                            }
 
                             $recordCount = $this->getRecordsCount(clone $productShopSrchTempObj, true);
                             if (empty($recordCount)) {
@@ -1105,6 +1108,9 @@ class HomeController extends MyAppController
                                 $prodObj = clone $productSrchObj;
                                 $prodObj->addCondition('shop_id', '=', $shopsData['shop_id']);
                                 $prodObj->addGroupBy('shop_id');
+                                if (CommonHelper::demoUrl()) {
+                                    $prodObj->addOder('product_featured', 'DESC');
+                                }
                                 $prodObj->setPageSize(1);
                                 $shopsData['product'] = (array) $db->fetch($prodObj->getResultSet());
                             }
