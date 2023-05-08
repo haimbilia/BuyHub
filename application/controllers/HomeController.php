@@ -1109,7 +1109,7 @@ class HomeController extends MyAppController
                                 $prodObj->addCondition('shop_id', '=', $shopsData['shop_id']);
                                 $prodObj->addGroupBy('shop_id');
                                 if (CommonHelper::demoUrl(true)) {
-                                    $prodObj->addOrder('product_featured', 'DESC');
+                                    $prodObj->addCondition('product_featured', '=', applicationConstants::YES);
                                 }
                                 $prodObj->setPageSize(1);
                                 $shopsData['product'] = (array) $db->fetch($prodObj->getResultSet());
