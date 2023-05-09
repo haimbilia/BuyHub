@@ -219,6 +219,19 @@ class MyAppController extends FatController
             return;
         }
 
+        if (
+            isset($_SERVER['HTTP_X_APP_SESSION_ID']) &&
+            !empty($_SERVER['HTTP_X_APP_SESSION_ID']) &&
+            (session_status() !== PHP_SESSION_ACTIVE ||
+                $_SERVER['HTTP_X_APP_SESSION_ID'] != session_id()
+            )
+        ) {
+            session_destroy();
+            session_id($_SERVER['HTTP_X_APP_SESSION_ID']);
+            session_start();
+        }
+
+
         $post = FatApp::getPostedData();
 
         $this->appToken = CommonHelper::getAppToken();
