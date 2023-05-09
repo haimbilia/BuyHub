@@ -1463,8 +1463,8 @@ class CommonHelper extends FatUtility
 
     public static function truncateCharacters($string, $limit, $break = " ", $pad = "...", $nl2br = false)
     {
-        if(null == $string){
-            return ;
+        if (null == $string) {
+            return;
         }
 
         if (strlen($string) <= $limit) {
@@ -1916,8 +1916,15 @@ class CommonHelper extends FatUtility
         }
     }
 
-    public static function demoUrl()
+    public static function demoUrl($includeDevDemo = false)
     {
+        if (true == $includeDevDemo) {
+            if (strpos($_SERVER['SERVER_NAME'], 'demo.yo-kart.com') !== false || strpos($_SERVER['SERVER_NAME'], 'demo.yokart.4livedemo.com') !== false) {
+                return true;
+            }
+            return false;
+        }
+
         return (strpos($_SERVER['SERVER_NAME'], 'demo.yo-kart.com') !== false);
     }
 
