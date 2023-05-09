@@ -487,7 +487,10 @@ class UserAuthentication extends FatModel
         unset($_SESSION['shopping_cart']["order_id"]);
         unset($_SESSION["order_id"]);
 
-        session_regenerate_id();
+        if (!MOBILE_APP_API_CALL) {
+            session_regenerate_id();
+        }
+        
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME] = array(
             'user_id' => $data['user_id'],
             'user_name' => $data['user_name'],
@@ -638,7 +641,7 @@ class UserAuthentication extends FatModel
     {
         if ($ip == '') {
             $ip = CommonHelper::getClientIp();
-        }        
+        }
 
         if (
             isset($_SESSION[static::SESSION_ELEMENT_NAME])
