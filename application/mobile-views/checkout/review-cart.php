@@ -20,6 +20,8 @@ $data = [
     'fulfillmentType' => $fulfillmentType,
     'hasPhysicalProd' => $hasPhysicalProd,
     'addresses' => $addresses,
+    'isShippingAddressSameAsBilling' => $isShippingAddressSameAsBilling,
+    'billingAddress' => $billingAddress,
     'cartSummary' => $cartSummary,
     'productItems' => $productItems,
 ];

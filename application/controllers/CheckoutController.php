@@ -788,11 +788,17 @@ class CheckoutController extends MyAppController
         $address = new Address($selected_shipping_address_id, $this->siteLangId);
         $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
 
+        $billingAddressId = $this->cartObj->getCartBillingAddress();
+        $address->setMainTableRecordId($billingAddressId);
+        $billingAddress = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
+
         $obj = new Extrapage();
         $headerData = $obj->getContentByPageType(Extrapage::CHECKOUT_PAGE_HEADER_BLOCK, $this->siteLangId);
         $this->set('cartSummary', $cartSummary);
         $this->set('fulfillmentType', $fulfillmentType);
         $this->set('addresses', $addresses);
+        $this->set('billingAddress', $billingAddress);
+        $this->set('isShippingAddressSameAsBilling', (int) ($selected_shipping_address_id == $billingAddressId));
         $this->set('products', $cartProducts);
         $this->set('hasPhysicalProd', $hasPhysicalProd);
         $this->set('cartHasDigitalProduct', $cartHasDigitalProduct);
