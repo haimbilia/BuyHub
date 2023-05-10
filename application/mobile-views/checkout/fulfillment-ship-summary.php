@@ -13,8 +13,8 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                     $productData = $items['products'];
                     $productInfo = current($productData);
 
-                    if (!isset($productItems[$shippedBy.'-'.$shipLevel]['title'])) {
-                        $productItems[$shippedBy.'-'.$shipLevel]['title'] = ($shipLevel == Shipping::LEVEL_SHOP) ? $productInfo['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, '');
+                    if (!isset($productItems[$shippedBy . '-' . $shipLevel]['title'])) {
+                        $productItems[$shippedBy . '-' . $shipLevel]['title'] = ($shipLevel == Shipping::LEVEL_SHOP) ? $productInfo['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, '');
                     }
 
                     $shippingCharges = [];
@@ -57,7 +57,7 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                     }
                     $data['shipLevel'] = $shipLevel;
 
-                    $productItems[$shippedBy.'-'.$shipLevel]['data'][] = $data;
+                    $productItems[$shippedBy . '-' . $shipLevel]['data'][] = $data;
                 }
                 break;
             case Shipping::LEVEL_PRODUCT:
