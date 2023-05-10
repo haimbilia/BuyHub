@@ -180,6 +180,7 @@ foreach ($childArr as &$childOrder) {
     $childOrder['op_selprod_price'] = CommonHelper::displayMoneyFormat($childOrder['op_selprod_price'], true, false, true, false, true);
 }
 
+$orderDetail['order_net_amount'] = CommonHelper::displayMoneyFormat($orderDetail['order_net_amount']);
 $data = array(
     'orderDetail' => $orderDetail,
     'childOrderDetail' => $childArr,
