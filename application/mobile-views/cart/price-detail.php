@@ -124,4 +124,5 @@ if (!empty($data['cartSummary']['cartDiscounts'])) {
 } else {
     $data['cartSummary']['cartDiscounts'] = (object)array();
 }
+$data['cartSummary']['orderPaymentGatewayCharges'] = CommonHelper::displayMoneyFormat($data['cartSummary']['orderPaymentGatewayCharges']);
 $data = !empty($data) ? array_merge($data, $priceDetail) : $priceDetail;
