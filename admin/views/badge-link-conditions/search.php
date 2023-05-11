@@ -39,7 +39,7 @@ foreach ($arrListing as $sn => $row) {
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from':
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to':
                 $lbl = $row[$key];
-                if (!empty($lbl) && BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS != $row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']) {
+                if (!empty($lbl) && (!in_array($row[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type'],[BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS,BadgeLinkCondition::COND_TYPE_AVG_RATING_SHOP]))) {
                     $lbl = $row[$key] . '%';
                 }
                 $td->appendElement('plaintext', [], (!empty($lbl) ? $lbl : Labels::getLabel('LBL_N/A', $siteLangId)), true);
