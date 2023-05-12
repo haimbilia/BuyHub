@@ -255,7 +255,7 @@ class ProductsController extends MyAppController
 
         /* Brand Filters Data[ */
         $brandsCheckedArr = FilterHelper::selectedBrands($headerFormParamsAssocArr);
-        $brandsArr = FilterHelper::brands($prodSrchObj, $this->siteLangId, $headerFormParamsAssocArr, false, true);
+        $brandsArr = FilterHelper::brands($prodSrchObj, $this->siteLangId, $headerFormParamsAssocArr, MOBILE_APP_API_CALL, true);
         /* ] */
 
         /* {Can modify the logic fetch data directly from query . will implement later}

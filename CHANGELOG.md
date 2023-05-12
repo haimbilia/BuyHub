@@ -63,6 +63,7 @@
 - Bug-072778 - Coupon savings are not coming proper
 - Bug-072767 - it does not let the user to add the product into his cart
 - Bug-073064 - Choose pickup address button, Product images and special price does not apear for digital products on pickup summary.
+- Bug-073110 - The complete brand listing does not appear in the filters section on the category details page.
 
 # RV-10.0.0.20221123
 
