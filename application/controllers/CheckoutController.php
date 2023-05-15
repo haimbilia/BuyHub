@@ -1681,6 +1681,16 @@ class CheckoutController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
             $cartProducts = $this->cartObj->getProducts($this->siteLangId);
+            $dataToUpdate = [
+                'order_id' => $orderId,
+                'order_number' => Orders::getAttributesById($orderId, 'order_number'),
+                'order_user_id' => UserAuthentication::getLoggedUserId(true),
+                'order_net_amount' => $cartSummary["orderNetAmount"],
+                'order_type' => Orders::ORDER_PRODUCT
+            ];
+            $orderObj = new Orders();
+            $orderObj->addUpdateOrder($dataToUpdate, $this->siteLangId);
+
             $this->set('cartSummary', $cartSummary);
             $this->set('products', $cartProducts);
             $this->_template->render();
@@ -1704,6 +1714,16 @@ class CheckoutController extends MyAppController
 
             $cartSummary = $cartObj->getCartFinancialSummary($this->siteLangId);
             $cartProducts = $cartObj->getProducts($this->siteLangId);
+
+            $dataToUpdate = [
+                'order_id' => $orderId,
+                'order_number' => Orders::getAttributesById($orderId, 'order_number'),
+                'order_user_id' => UserAuthentication::getLoggedUserId(true),
+                'order_net_amount' => $cartSummary["orderNetAmount"],
+                'order_type' => Orders::ORDER_PRODUCT
+            ];
+            $orderObj = new Orders();
+            $orderObj->addUpdateOrder($dataToUpdate, $this->siteLangId);
 
             $this->set('cartSummary', $cartSummary);
             $this->set('products', $cartProducts);
