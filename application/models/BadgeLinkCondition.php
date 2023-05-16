@@ -96,7 +96,7 @@ class BadgeLinkCondition extends MyAppModel
         if (!$arr) {
             $arr = [
                 // self::COND_TYPE_AVG_RATING_SELPROD => Labels::getLabel('LBL_AVERAGE_RATING_SELLER_PRODUCT_(%)', $langId),
-                self::COND_TYPE_AVG_RATING_SHOP => Labels::getLabel('LBL_AVERAGE_RATING_SHOP_(%)', $langId),
+                self::COND_TYPE_AVG_RATING_SHOP => Labels::getLabel('LBL_AVERAGE_RATING_SHOP_(*)', $langId),
                 self::COND_TYPE_ORDER_COMPLETION_RATE => Labels::getLabel('LBL_ORDER_COMPLETION_RATE_(%)', $langId),
                 self::COND_TYPE_COMPLETED_ORDERS => Labels::getLabel('LBL_COMPLETED_ORDERS', $langId),
                 self::COND_TYPE_RETURN_ACCEPTANCE => Labels::getLabel('LBL_RETURN/_REFUND_ACCEPTANCE_RATE_(%)', $langId),
