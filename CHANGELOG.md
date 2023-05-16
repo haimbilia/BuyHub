@@ -69,6 +69,7 @@
 - Bug-073166 - Order net amount in sales reports displaying negative for the seller dashboard section
 - Bug-069186 - Android, iOS >> warning appears in the email received for the order details
 - Bug-067979 - Android, iOS >> Product warranty is not correct on the product details page on mobile devices
+- Bug-067076 - The user is able to register with the email which is already used
 
 # RV-10.0.0.20221123
 
