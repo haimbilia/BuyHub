@@ -423,9 +423,9 @@ class CartController extends MyAppController
                 $productAdd = false;
                 $message = Labels::getLabel('MSG_OUT_OF_STOCK_PRODUCTS_CANNOT_BE_ADDED_TO_CART_{PRODUCT-NAME}', $this->siteLangId);
                 $message = CommonHelper::replaceStringData($message, ['{PRODUCT-NAME}' => FatUtility::decodeHtmlEntities($sellerProductRow['product_name'])]);
-                if (true === MOBILE_APP_API_CALL) {
+                /* if (true === MOBILE_APP_API_CALL) {
                     FatUtility::dieJsonError($message);
-                }
+                } */
                 if ($productId != $selprod_id) {
                     $productErr['addon'][$productId] = $message;
                 } else {
