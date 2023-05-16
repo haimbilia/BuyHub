@@ -78,7 +78,7 @@ class SlidesController extends ListingBaseController
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        
+
         $sortBy = Slides::DB_TBL_PREFIX . 'display_order';
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
@@ -203,7 +203,7 @@ class SlidesController extends ListingBaseController
         unset($post['slide_id'], $post['slide_title']);
 
         $slideObj = new Slides($recordId);
-        if(1 > $recordId){
+        if (1 > $recordId) {
             $post['slide_display_order'] = $slideObj->getNextMaxOrder();
         }
 
@@ -269,7 +269,7 @@ class SlidesController extends ListingBaseController
             }
             $langData = current($translatedData);
         } else {
-            $langData = Slides::getAttributesByLangId($langId, $recordId);
+            $langData = (array)Slides::getAttributesByLangId($langId, $recordId);
         }
 
         $langData['slide_id'] = $recordId;
