@@ -56,7 +56,7 @@ class Collections extends MyAppModel
 
     public const TYPE_BANNER_LAYOUT1 = 11;
     public const TYPE_BANNER_LAYOUT2 = 12;
-    public const TYPE_BANNER_LAYOUT3 = 13;
+    public const TYPE_BANNER_LAYOUT3 = 13; /* Applicable For Apps only. */
 
     public const TYPE_FAQ_LAYOUT1 = 14;
     public const TYPE_TESTIMONIAL_LAYOUT1 = 15;

@@ -56,8 +56,11 @@ class CommonHelper extends FatUtility
                 self::$_lang_id = FatUtility::int($_SERVER['HTTP_X_LANGUAGE_ID']);
             }
 
-            if (!empty($_SERVER['HTTP_X_CURRENCY_ID'])) {
-                self::$_currency_id = FatUtility::int($_SERVER['HTTP_X_CURRENCY_ID']);
+            if (!empty($_SERVER['HTTP_X_CURRENCY_ID']) && Currency::getAttributesById(self::$_currency_id, 'currency_active')) {
+                echo $currencyId = FatUtility::int($_SERVER['HTTP_X_CURRENCY_ID']);
+                if (Currency::getAttributesById($currencyId, 'currency_active')) {
+                    self::$_currency_id = $currencyId;
+                }
             }
 
             $post = FatApp::getPostedData();

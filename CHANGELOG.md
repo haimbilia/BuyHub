@@ -65,6 +65,7 @@
 - Bug-073064 - Choose pickup address button, Product images and special price does not apear for digital products on pickup summary.
 - Bug-073110 - The complete brand listing does not appear in the filters section on the category details page.
 - Bug-073082 - An error occurs when the buyer tries to make the order payment
+- Bug-073127 - The banner is not properly aligned even if the admin added the banner according to the preferred dimensions.
 
 # RV-10.0.0.20221123
 

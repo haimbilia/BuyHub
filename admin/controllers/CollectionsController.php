@@ -1119,7 +1119,7 @@ class CollectionsController extends ListingBaseController
         $this->setFormTitle($type, $layoutType, 'collectionForm(' . $type . ', ' . $layoutType . ', ' . $collectionId . ');');
         $bannerDimensiomns = ImageDimension::getBannerData('', $layoutType);
         $frm = $this->getBannerMediaForm($recordId);
-        $frm->fill(['collection_id' => $collectionId]);
+        $frm->fill(['collection_id' => $collectionId]);        
         $this->set('bannerDimensiomns', $bannerDimensiomns);
         $this->set('collectionId', $collectionId);
         $this->set('recordId', $recordId);
@@ -1150,13 +1150,14 @@ class CollectionsController extends ListingBaseController
         }
 
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
+
         $displayFor = (!empty($this->collectionDetails) && $this->collectionDetails['collection_layout_type'] == Collections::TYPE_BANNER_LAYOUT3) ? applicationConstants::SCREEN_MOBILE : '';
 
-        if ($this->collectionDetails['collection_layout_type'] != Collections::TYPE_BANNER_LAYOUT2) {
-            $frm->addSelectBox(Labels::getLabel("FRM_DEVICE", $this->siteLangId), 'banner_screen', $screenArr, $displayFor, array(), '');
-        } else {
-            $frm->addHiddenField('', 'banner_screen', applicationConstants::SCREEN_DESKTOP);
+        if (in_array($this->collectionDetails['collection_layout_type'], Collections::COLLECTIONS_FOR_APP_ONLY)) {
+            unset($screenArr[applicationConstants::SCREEN_DESKTOP]);
         }
+        
+        $frm->addSelectBox(Labels::getLabel("FRM_DEVICE", $this->siteLangId), 'banner_screen', $screenArr, $displayFor, array(), '');
         $frm->addHtml('', 'banner', '');
 
         return $frm;
