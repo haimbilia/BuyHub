@@ -902,7 +902,8 @@ class HomeController extends MyAppController
                                 $catData['prodcat_name'] = $productName;
                                 $catData['prodcat_description'] = $productDescription;
                                 $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $catData['prodcat_id'], 0, 0, applicationConstants::SCREEN_MOBILE);
-                                $catData['category_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'banner', array($catData['prodcat_id'], $this->siteLangId, 'MOBILE', $fileRow['afile_id'], applicationConstants::SCREEN_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                
+                                $catData['category_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'thumb', array($catData['prodcat_id'], $this->siteLangId, ImageDimension::VIEW_ICON, 0), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
                                 $collections[$ind]['categories'][$counter] = $catData;
                             } else {
