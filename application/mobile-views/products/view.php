@@ -191,9 +191,9 @@ if (1 == $page) {
             'icon' => CONF_WEBROOT_URL . 'images/easyreturns.png'
         );
     }
-    if (!empty($product['product_warranty'])) {
-        $lbl = Labels::getLabel('MSG_{DAYS}_DAYS_WARRANTY', $siteLangId);
-        $warranty = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]);
+    if (!empty($product['product_warranty']) && !empty($product['product_warranty_unit_label'])) {
+        $lbl = Labels::getLabel('MSG_{DAYS}_{UNIT}_WARRANTY', $siteLangId);
+        $warranty = CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty'], '{UNIT}' => $product['product_warranty_unit_label']]);
         $productPolicies[] = array(
             'title' => $warranty,
             'isSvg' => Plugin::RETURN_FALSE,
