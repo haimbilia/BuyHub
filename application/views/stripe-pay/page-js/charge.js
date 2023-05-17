@@ -3,7 +3,8 @@
         var data = fcom.frmData(frm);
         var action = $(frm).attr('action');
         data +='&chargeAjax=0';
-        $("#payment").prepend(fcom.getLoader());
+        $(".paymentFormJs").prepend(fcom.getLoader());
+        fcom.displayProcessing();
         fcom.ajax(action, data, function (t) {
             // debugger;
             try {

@@ -20,6 +20,8 @@ if (isset($client_secret)) { ?>
         function loadCardConfirmation() {
             var stripe = Stripe(publishable_key);
             var clientSecret = '<?php echo $client_secret; ?>';
+            $(".paymentFormJs").prepend(fcom.getLoader());
+            fcom.displayProcessing();
             stripe.confirmCardPayment(clientSecret, {
                 payment_method: '<?php echo $payment_method_id; ?>'
             }).then(function(result) {
