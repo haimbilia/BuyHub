@@ -99,11 +99,7 @@ if (!$userActiveTab) {
             <div class="modal-footer">
                 <div class="search-native">
                     <label class="checkbox" for="">
-                        <?php
-                        $preferences = $_COOKIE['quickSearchCtrlJs'] ?? 0;
-                        $str = Labels::getLabel('LBL_PRESS_{KEY}_KEY_FOR_BROWSER_SEARCH', $siteLangId);
-                        echo CommonHelper::replaceStringData($str, ['{KEY}' => '<kbd>Ctrl-F</kbd>']); ?>
-                        <input type="checkbox" id="quickSearchCtrlJs" <?php echo (0 < $preferences ? 'checked="checked"' : ''); ?> data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_MARK_AS_CHECKED_TO_USE_THE_ONLY_NATIVE_BROWSER_SEARCH', $siteLangId); ?>">
+                        <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_PRESS_{KEY}_AGAIN_TO_USE_NATIVE_BROWSER_SEARCH', $siteLangId), ['{KEY}' => '<kbd>Ctrl-F</kbd>']); ?>
                     </label>
                 </div>
             </div>
