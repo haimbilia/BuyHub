@@ -2475,3 +2475,8 @@ INSERT INTO `tbl_banner_location_dimensions` (`bldimension_blocation_id`, `bldim
 (1,2,1024,576)
 (1,3,640,360)
 ON DUPLICATE KEY UPDATE bldimension_device_type = VALUES(bldimension_device_type), blocation_banner_width = VALUES(blocation_banner_width), blocation_banner_height = VALUES(blocation_banner_height);
+
+UPDATE `tbl_collections` SET `collection_identifier`= CONCAT(collection_identifier, ' {del}', `collection_id`),`collection_deleted`='1' WHERE `collection_layout_type` = 18 AND `collection_deleted` != 1;
+UPDATE `tbl_collections` SET `collection_for_app`='0' WHERE collection_layout_type = 14;
+UPDATE `tbl_collections` SET `collection_for_app`='0' WHERE collection_layout_type = 15;
+UPDATE `tbl_collections` SET `collection_for_app`='0' WHERE collection_layout_type = 8;

@@ -62,7 +62,7 @@ class Collections extends MyAppModel
     public const TYPE_TESTIMONIAL_LAYOUT1 = 15;
     public const TYPE_CONTENT_BLOCK_LAYOUT1 = 16;
     public const TYPE_PENDING_REVIEWS1 = 17; /* Applicable For Apps only. */
-    public const TYPE_FAQ_CATEGORY_LAYOUT1 = 18; /* Applicable For Apps only. */
+    // public const TYPE_FAQ_CATEGORY_LAYOUT1 = 18; /* Applicable For Apps only. */
     public const TYPE_HERO_SLIDES_LAYOUT1 = 25;
 
     public const LIMIT_PRODUCT_LAYOUT1 = 12;
@@ -134,6 +134,9 @@ class Collections extends MyAppModel
         self::TYPE_BRAND_LAYOUT2,
         self::TYPE_SHOP_LAYOUT2,
         self::TYPE_PRODUCT_LAYOUT3,
+        self::TYPE_FAQ_LAYOUT1,
+        self::TYPE_TESTIMONIAL_LAYOUT1,
+        self::TYPE_BLOG_LAYOUT1,
     ];
 
     /**
@@ -258,7 +261,7 @@ class Collections extends MyAppModel
             self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT1', $langId),
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_CONTENT_BLOCK_LAYOUT1', $langId),
             self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
-            self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORIES', $langId),
+            // self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORIES', $langId),
         ];
     }
 
@@ -318,9 +321,9 @@ class Collections extends MyAppModel
             self::COLLECTION_TYPE_FAQ => [
                 self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ', $langId),
             ],
-            self::COLLECTION_TYPE_FAQ_CATEGORY => [
+            /* self::COLLECTION_TYPE_FAQ_CATEGORY => [
                 self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORY', $langId),
-            ],
+            ], */
             self::COLLECTION_TYPE_REVIEWS => [
                 self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
             ]
@@ -426,7 +429,7 @@ class Collections extends MyAppModel
             self::TYPE_BANNER_LAYOUT2 => 'Banner-Layout-2.png',
             // self::TYPE_BANNER_LAYOUT3 => 'Banner-Layout-2.png',
             self::TYPE_FAQ_LAYOUT1 => 'Faq-Layout-1.png',
-            self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'Faq-Layout-1.png',
+            // self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'Faq-Layout-1.png',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'Testimonial-layout-1.png',
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => 'Content-Block-layout-1.png',
             self::TYPE_PENDING_REVIEWS1 => 'Pending-Reviews-1.png',
@@ -1010,7 +1013,7 @@ class Collections extends MyAppModel
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'testimonial-layout-1',
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => 'content-block-layout-1',
             self::TYPE_PENDING_REVIEWS1 => 'pending-reviews-1',
-            self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'faq-category-layout-1',
+            // self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'faq-category-layout-1',
         ];
         return $classArr[$layoutId] ?? '';
     }

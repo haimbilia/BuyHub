@@ -70,6 +70,7 @@
 - Bug-069186 - Android, iOS >> warning appears in the email received for the order details
 - Bug-067979 - Android, iOS >> Product warranty is not correct on the product details page on mobile devices
 - Bug-067076 - The user is able to register with the email which is already used
+- Bug-073142 - Reminder interval setting for products in the cart and wish list are not working for the app.
 
 # RV-10.0.0.20221123
 

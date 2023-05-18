@@ -128,7 +128,7 @@ class Cart extends FatModel
         }
 
         $srch = new SearchBase('tbl_user_cart');
-        $srch->addCondition('usercart_user_id', '=', $userId);
+        $srch->addCondition('usercart_user_id', 'LIKE', $userId);
         $srch->addCondition('usercart_type', '=', 'mysql_func_' . CART::TYPE_PRODUCT, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
