@@ -56,7 +56,7 @@ class Collections extends MyAppModel
 
     public const TYPE_BANNER_LAYOUT1 = 11;
     public const TYPE_BANNER_LAYOUT2 = 12;
-    public const TYPE_BANNER_LAYOUT3 = 13; /* Applicable For Apps only. */
+    // public const TYPE_BANNER_LAYOUT3 = 13; /* Applicable For Apps only. */
 
     public const TYPE_FAQ_LAYOUT1 = 14;
     public const TYPE_TESTIMONIAL_LAYOUT1 = 15;
@@ -119,7 +119,7 @@ class Collections extends MyAppModel
     ];
 
     public const COLLECTIONS_FOR_APP_ONLY = [
-        self::TYPE_BANNER_LAYOUT3,
+        // self::TYPE_BANNER_LAYOUT3,
         self::TYPE_PENDING_REVIEWS1,
         self::TYPE_CATEGORY_LAYOUT5,
         self::TYPE_CATEGORY_LAYOUT6,
@@ -253,7 +253,7 @@ class Collections extends MyAppModel
             self::TYPE_SPONSORED_SHOP_LAYOUT => Labels::getLabel('LBL_SPONSORED_SHOPS', $langId),
             self::TYPE_BANNER_LAYOUT1 => Labels::getLabel('LBL_BANNER_LAYOUT1', $langId),
             self::TYPE_BANNER_LAYOUT2 => Labels::getLabel('LBL_BANNER_LAYOUT2', $langId),
-            self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
+            // self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
             self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ_LAYOUT1', $langId),
             self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT1', $langId),
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_CONTENT_BLOCK_LAYOUT1', $langId),
@@ -277,7 +277,7 @@ class Collections extends MyAppModel
             self::COLLECTION_TYPE_BANNER => [
                 self::TYPE_BANNER_LAYOUT1 => Labels::getLabel('LBL_BANNER_LAYOUT1', $langId),
                 self::TYPE_BANNER_LAYOUT2 => Labels::getLabel('LBL_BANNER_LAYOUT2', $langId),
-                self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
+                // self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
             ],
             self::COLLECTION_TYPE_BRAND => [
                 self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_BRAND_LAYOUT1', $langId),
@@ -340,7 +340,7 @@ class Collections extends MyAppModel
         return [
             self::TYPE_BANNER_LAYOUT1 => 1,
             self::TYPE_BANNER_LAYOUT2 => 2,
-            self::TYPE_BANNER_LAYOUT3 => 1
+            // self::TYPE_BANNER_LAYOUT3 => 1
         ];
     }
 
@@ -371,7 +371,7 @@ class Collections extends MyAppModel
                     'width' => 920,
                     'height' => 690
                 ],
-                /*
+                
                 applicationConstants::SCREEN_IPAD => [
                     'width' => 660,
                     'height' => 198
@@ -380,9 +380,9 @@ class Collections extends MyAppModel
                     'width' => 640,
                     'height' => 360
                 ],
-                */
+               
             ],
-            self::TYPE_BANNER_LAYOUT3 => [
+            /* self::TYPE_BANNER_LAYOUT3 => [
                 applicationConstants::SCREEN_DESKTOP => [
                     'width' => 600,
                     'height' => 338
@@ -395,7 +395,7 @@ class Collections extends MyAppModel
                     'width' => 640,
                     'height' => 360
                 ],
-            ]
+            ] */
         ];
     }
 
@@ -424,7 +424,7 @@ class Collections extends MyAppModel
             self::TYPE_SPONSORED_SHOP_LAYOUT => 'Sponsored-Shops.png',
             self::TYPE_BANNER_LAYOUT1 => 'Banner-Layout-1.png',
             self::TYPE_BANNER_LAYOUT2 => 'Banner-Layout-2.png',
-            self::TYPE_BANNER_LAYOUT3 => 'Banner-Layout-2.png',
+            // self::TYPE_BANNER_LAYOUT3 => 'Banner-Layout-2.png',
             self::TYPE_FAQ_LAYOUT1 => 'Faq-Layout-1.png',
             self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'Faq-Layout-1.png',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'Testimonial-layout-1.png',
@@ -1005,7 +1005,7 @@ class Collections extends MyAppModel
             self::TYPE_SPONSORED_SHOP_LAYOUT => 'sponsored-shop-layout',
             self::TYPE_BANNER_LAYOUT1 => 'banner-layout-1',
             self::TYPE_BANNER_LAYOUT2 => 'banner-layout-2',
-            self::TYPE_BANNER_LAYOUT3 => 'banner-layout-3',
+            // self::TYPE_BANNER_LAYOUT3 => 'banner-layout-3',
             self::TYPE_FAQ_LAYOUT1 => 'faq-layout-1',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'testimonial-layout-1',
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => 'content-block-layout-1',

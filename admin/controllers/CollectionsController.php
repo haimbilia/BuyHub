@@ -1151,13 +1151,11 @@ class CollectionsController extends ListingBaseController
 
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
 
-        $displayFor = (!empty($this->collectionDetails) && $this->collectionDetails['collection_layout_type'] == Collections::TYPE_BANNER_LAYOUT3) ? applicationConstants::SCREEN_MOBILE : '';
-
         if (in_array($this->collectionDetails['collection_layout_type'], Collections::COLLECTIONS_FOR_APP_ONLY)) {
             unset($screenArr[applicationConstants::SCREEN_DESKTOP]);
         }
         
-        $frm->addSelectBox(Labels::getLabel("FRM_DEVICE", $this->siteLangId), 'banner_screen', $screenArr, $displayFor, array(), '');
+        $frm->addSelectBox(Labels::getLabel("FRM_DEVICE", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
         $frm->addHtml('', 'banner', '');
 
         return $frm;

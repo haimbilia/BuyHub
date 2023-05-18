@@ -84,7 +84,6 @@ $(document).on('change', "select[name='promotion_type']", function () {
             fcom.closeProcessing();
             fcom.removeLoader();
             $("#imageListingJs").html(t.html);
-            console.log(t.html);
         });
     };
 

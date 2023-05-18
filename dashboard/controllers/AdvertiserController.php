@@ -882,7 +882,7 @@ class AdvertiserController extends AdvertiserBaseController
             FatUtility::dieWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId));
         }
         $promotionType = $promotionDetails['promotion_type'];
-
+        
         $mediaFrm = $this->getPromotionMediaForm($recordId, $promotionType, $promotionDetails['collection_layout_type']);
         $bannerWidth = '';
         $bannerHeight = '';
@@ -1430,12 +1430,8 @@ class AdvertiserController extends AdvertiserBaseController
         $bannerTypeArr = applicationConstants::getAllLanguages();
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
 
-        if ($layoutType == Collections::TYPE_BANNER_LAYOUT2 || empty($layoutType)) {
-            $frm->addHiddenField('', 'banner_screen', applicationConstants::SCREEN_DESKTOP);
-        } else {
-            $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
-        }
+        $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel("FRM_DISPLAY_FOR", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
 
         $frm->addHiddenField('', 'banner_min_width');
         $frm->addHiddenField('', 'banner_min_height');

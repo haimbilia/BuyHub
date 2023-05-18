@@ -191,7 +191,7 @@ class PromotionsController extends ListingBaseController
         $srch->addGroupBy('pr.promotion_id');
         $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(pr_l.promotion_name,pr.promotion_identifier)as promotion_name', 'user_name', 'credential_username', 'credential_email', 'credential_email', 'pr.promotion_type', 'pr.promotion_budget', 'pr.promotion_duration', 'promotion_approved', 'bbl.blocation_promotion_cost', 'pri.impressions', 'pri.clicks', 'pri.orders', 'bbl.blocation_id', 'shop_id','shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_id', 'user_updated_on', 'shop_updated_on']);
+        $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(pr_l.promotion_name,pr.promotion_identifier)as promotion_name', 'user_name', 'credential_username', 'credential_email', 'credential_email', 'pr.promotion_type', 'pr.promotion_budget', 'pr.promotion_duration', 'promotion_approved', 'bbl.blocation_promotion_cost', 'pri.impressions', 'pri.clicks', 'pri.orders', 'bbl.blocation_id', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_id', 'user_updated_on', 'shop_updated_on']);
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -602,8 +602,6 @@ class PromotionsController extends ListingBaseController
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-
-        $promotionType = 0;
 
         $srch = new PromotionSearch($this->siteLangId);
         $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
@@ -1028,13 +1026,8 @@ class PromotionsController extends ListingBaseController
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        if ($layoutType == Collections::TYPE_BANNER_LAYOUT2) {
-            $frm->addHiddenField('', 'banner_screen', applicationConstants::SCREEN_DESKTOP);
-        } else {
-            $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel("FRM_Display_For", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
-        }
-
+        $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel("FRM_Display_For", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
 
         $frm->addHtml('', 'banner_image', '');
 

@@ -2467,3 +2467,11 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ("APP_ATTACHMENTS", 1, "Attachments", 2),
 ("APP_COD_ERROR", 1, "Sorry Cash On Delivery is not available on this order. Cash On Delivery is available on payable amount between %s and %s", 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+
+UPDATE `tbl_collections` SET `collection_identifier`= CONCAT(collection_identifier, ' {del}', `collection_id`),`collection_deleted`='1' WHERE `collection_layout_type` = 13 AND `collection_deleted` != 1;
+
+INSERT INTO `tbl_banner_location_dimensions` (`bldimension_blocation_id`, `bldimension_device_type`, `blocation_banner_width`, `blocation_banner_height`) VALUES 
+(1,1,920,690)
+(1,2,1024,576)
+(1,3,640,360)
+ON DUPLICATE KEY UPDATE bldimension_device_type = VALUES(bldimension_device_type), blocation_banner_width = VALUES(blocation_banner_width), blocation_banner_height = VALUES(blocation_banner_height);
