@@ -66,7 +66,7 @@ class ReviewsController extends MyAppController
         $productView = FatApp::getPostedData('productView', FatUtility::VAR_INT, 0);
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
         $reviewId = FatApp::getPostedData('review_id', FatUtility::VAR_INT, 0);
-        
+
         $withImagesOnly = FatApp::getPostedData('withImages', FatUtility::VAR_INT, 0);
         $withoutImages = FatApp::getPostedData('withoutImages', FatUtility::VAR_INT, 0);
 
@@ -87,8 +87,13 @@ class ReviewsController extends MyAppController
 
         if (0 < $withImagesOnly || 0 < $withoutImages) {
             $join = 0 < $withImagesOnly ? 'INNER' : 'LEFT';
-            $srch->joinTable(AttachedFile::DB_TBL, $join . ' JOIN', 'af.afile_type = ' . AttachedFile::FILETYPE_ORDER_FEEDBACK . ' AND af.afile_record_id = spr.spreview_id', 'af');
-
+            $subSrch = new SearchBase(AttachedFile::DB_TBL);
+            $subSrch->addCondition('afile_type', '=', AttachedFile::FILETYPE_ORDER_FEEDBACK);
+            $subSrch->addMultipleFields(['afile_record_id', 'afile_id']);
+            $subSrch->addGroupBy('afile_record_id');
+            $subSrch->doNotLimitRecords();
+            $subSrch->doNotCalculateRecords();
+            $srch->joinTable('(' . $subSrch->getQuery() . ')', $join . ' JOIN', 'af.afile_record_id = spr.spreview_id', 'af');
             if (0 < $withoutImages) {
                 $srch->addCondition('af.afile_id', 'IS', 'mysql_func_null', 'AND', true);
             }
@@ -292,7 +297,7 @@ class ReviewsController extends MyAppController
         $srch->joinSellerProducts($this->siteLangId);
         $srch->joinUser();
         $srch->joinSelProdReviewHelpful();
-        $srch->addMultipleFields(array('selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'spreview_id', 'spreview_seller_user_id', "ROUND(AVG(sprating_rating),2) as shop_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name','sprh_helpful', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful && ratingtype_type = ' . RatingType::TYPE_SHOP . ' , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 && ratingtype_type = ' . RatingType::TYPE_SHOP . ' , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
+        $srch->addMultipleFields(array('selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'spreview_id', 'spreview_seller_user_id', "ROUND(AVG(sprating_rating),2) as shop_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'sprh_helpful', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful && ratingtype_type = ' . RatingType::TYPE_SHOP . ' , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 && ratingtype_type = ' . RatingType::TYPE_SHOP . ' , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
         $srch->addGroupBy('spr.spreview_id');
         if (0 < $reviewId) {
             $srch->addCondition('spr.spreview_id', '=', $reviewId);
