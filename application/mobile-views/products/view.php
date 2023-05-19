@@ -392,10 +392,16 @@ if (1 == $page) {
                     }
                 }
                 $val['banner_image_url'] = $bannerImageUrl;
-                $bannerUrl = UrlHelper::generateFullUrl('Banner', 'track', array($val['banner_id']));
-                $urlTypeData = CommonHelper::getUrlTypeData($bannerUrl);
+                $urlTypeData = CommonHelper::getUrlTypeData($val['banner_url']);
+                if (false === $urlTypeData) {
+                    $urlTypeData = array(
+                        'url' => $val['banner_url'],
+                        'recordId' => 0,
+                        'urlType' => applicationConstants::URL_TYPE_EXTERNAL
+                    );
+                }
 
-                $val['banner_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $bannerUrl : $urlTypeData['recordId']);
+                $val['banner_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $urlTypeData['url'] : $urlTypeData['recordId']);
                 $val['banner_url_type'] = $urlTypeData['urlType'];
             }
         }

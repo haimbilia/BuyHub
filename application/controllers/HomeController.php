@@ -1388,7 +1388,7 @@ class HomeController extends MyAppController
         $ppcSlidesPageSize = FatApp::getConfig('CONF_PPC_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
 
         $ppcSlides = array();
-        $adminSlides = array();
+        $adminSlides = array();        
 
         $slidesSrch = new SearchBase('(' . $srchSlide->getQuery() . ') as t');
         $slidesSrch->addMultipleFields(array('slide_id', 'slide_type', 'slide_record_id', 'slide_url', 'slide_target', 'slide_title', 'promotion_id', 'userBalance', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'promotion_budget', 'promotion_duration', 'slide_img_updated_on'));
