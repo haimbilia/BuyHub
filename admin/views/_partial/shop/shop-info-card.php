@@ -10,7 +10,7 @@ $showImage = $showImage ?? true;
 $imgOrgUrl = 'javascript:void(0)';
 $cls = 'product-profile';
 if (1 == $useFeatherLightJs) {
-    $imgOrgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_ORIGINAL), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $imgOrgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array((int)$shop['shop_id'], $siteLangId, ImageDimension::VIEW_ORIGINAL), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $onclick = 'data-featherlight="image"';
     $cls .= ' featherLightJs';
 }
