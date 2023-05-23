@@ -444,8 +444,7 @@ function googleCaptcha(updateToken = false) {
     var counter = 0;
     var checkToken = setInterval(function () {
         counter++
-        /* Check if not loaded until 30 Sec = counter 150. Because it run 5 times in 1 sec. */
-        if (150 == counter) {
+        if (5 == counter) {
             fcom.displayErrorMessage(langLbl.invalidGRecaptchaKeys);
             clearInterval(checkToken);
             return;
@@ -467,7 +466,7 @@ function googleCaptcha(updateToken = false) {
                 }
             });
         }
-    }, 200); /* 1000 MS = 1 Sec. */
+    }, 1000);
     return;
 }
 
