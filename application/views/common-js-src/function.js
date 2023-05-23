@@ -461,7 +461,9 @@ function googleCaptcha(updateToken = false) {
                     });
                 }
                 catch (error) {
-                    fcom.displayErrorMessage(error);
+                    if (1 == counter) {
+                        fcom.displayErrorMessage(error);
+                    }
                     return;
                 }
             });
