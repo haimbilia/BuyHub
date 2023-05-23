@@ -277,7 +277,9 @@ class LibHelper extends FatUtility
     public static function isJson($string, &$error = ''): bool
     {
         json_decode($string);
-        switch (json_last_error()) {
+        $errValue = json_last_error();
+
+        switch ($errValue) {
             case JSON_ERROR_NONE:
                 $error = Labels::getLabel('MSG_NO_ERRORS', CommonHelper::getLangId());
                 break;
@@ -300,7 +302,7 @@ class LibHelper extends FatUtility
                 $error = Labels::getLabel('MSG_UNKNOWN_ERROR', CommonHelper::getLangId());
                 break;
         }
-        return (json_last_error() == JSON_ERROR_NONE);
+        return ($errValue == JSON_ERROR_NONE);
     }
 
     public static function remove_utf8_bom($text)

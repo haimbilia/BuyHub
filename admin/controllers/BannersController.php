@@ -266,7 +266,7 @@ class BannersController extends ListingBaseController
             }
         }
 
-        $newTabLangId = 0;       
+        $newTabLangId = $this->siteLangId;       
         $languages = (array)Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         foreach ($languages as $langId => $langName) {
             $newTabLangId = $langId;
