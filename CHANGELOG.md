@@ -28,6 +28,7 @@
 - Bug-071069 - In case of Aramex shipping api when we have a default currency in USD and displaying shipping rates in other currency then there is a mismatch in amount
 - Bug-071080 - PayUMoney Or PayUIndia payment gateway Sandbox mode functionality not working
 - Bug-071904 - Add settings under admin to enable or disable weight and weight unit fields inside products.
+- Bug-073303 - Google Captcha v3 is showing errors continuously on contact us page
 
 # RV-10.0.0.20221123
 
