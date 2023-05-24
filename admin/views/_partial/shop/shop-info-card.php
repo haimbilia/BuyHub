@@ -1,16 +1,17 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
 $uploadedTime = AttachedFile::setTimeParam($shop['shop_updated_on']);
-$imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+$shopId = (int)$shop['shop_id'];
+$imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shopId, $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 $getShopAspectRatio = ImageDimension::getData(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB);
-$onclick = !empty($onclick) ? "onclick = '" . $onclick . "'" : "onclick = 'redirectToShop(" . $shop['shop_id'] . ")'";
+$onclick = !empty($onclick) ? "onclick = '" . $onclick . "'" : "onclick = 'redirectToShop(" . $shopId . ")'";
 $useFeatherLightJs = $useFeatherLightJs ?? 0;
 $showImage = $showImage ?? true;
 
 $imgOrgUrl = 'javascript:void(0)';
 $cls = 'product-profile';
 if (1 == $useFeatherLightJs) {
-    $imgOrgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array((int)$shop['shop_id'], $siteLangId, ImageDimension::VIEW_ORIGINAL), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $imgOrgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shopId, $siteLangId, ImageDimension::VIEW_ORIGINAL), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     $onclick = 'data-featherlight="image"';
     $cls .= ' featherLightJs';
 }
