@@ -2471,8 +2471,8 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUE
 UPDATE `tbl_collections` SET `collection_identifier`= CONCAT(collection_identifier, ' {del}', `collection_id`),`collection_deleted`='1' WHERE `collection_layout_type` = 13 AND `collection_deleted` != 1;
 
 INSERT INTO `tbl_banner_location_dimensions` (`bldimension_blocation_id`, `bldimension_device_type`, `blocation_banner_width`, `blocation_banner_height`) VALUES 
-(1,1,920,690)
-(1,2,1024,576)
+(1,1,920,690),
+(1,2,1024,576),
 (1,3,640,360)
 ON DUPLICATE KEY UPDATE bldimension_device_type = VALUES(bldimension_device_type), blocation_banner_width = VALUES(blocation_banner_width), blocation_banner_height = VALUES(blocation_banner_height);
 
