@@ -127,7 +127,7 @@ class GuestUserController extends MyAppController
         $authentication = new UserAuthentication();
         $userType = FatApp::getPostedData('userType', FatUtility::VAR_INT, 0);
         if (true === MOBILE_APP_API_CALL && 1 > $userType) {
-            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('ERR_MISSING REQUEST_PARAMS', $this->siteLangId));
+            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, Labels::getLabel('ERR_MISSING_REQUEST_PARAMS', $this->siteLangId));
             LibHelper::dieJsonResponse($resp);
         }
 
