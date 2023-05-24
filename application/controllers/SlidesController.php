@@ -42,15 +42,16 @@ class SlidesController extends MyAppController
         }
 
         $url = $row['slide_url'];
-
+        $promotionId = FatUtility::int($row['promotion_id']);
         $userId = 0;
 
         if (UserAuthentication::isUserLogged()) {
             $userId = UserAuthentication::getLoggedUserId();
         }
-        if (Promotion::isUserClickCountable($userId, $row['promotion_id'], $_SERVER['REMOTE_ADDR'], session_id())) {
+        
+        if (0 < $promotionId && Promotion::isUserClickCountable($userId, $promotionId, $_SERVER['REMOTE_ADDR'], session_id())) {
             $promotionClickData = array(
-                'pclick_promotion_id' => $row['promotion_id'],
+                'pclick_promotion_id' => $promotionId,
                 'pclick_user_id' => $userId,
                 'pclick_datetime' => date('Y-m-d H:i:s'),
                 'pclick_ip' => $_SERVER['REMOTE_ADDR'],
@@ -73,7 +74,7 @@ class SlidesController extends MyAppController
             FatApp::getDb()->insertFromArray(Promotion::DB_TBL_ITEM_CHARGES, $promotionClickChargesData, false);
 
             $promotionLogData = array(
-                'plog_promotion_id' => $row['promotion_id'],
+                'plog_promotion_id' => $promotionId,
                 'plog_date' => date('Y-m-d'),
                 'plog_clicks' => 1,
             );
