@@ -1142,8 +1142,11 @@ class AccountController extends LoggedUserController
         }
         $userObj->assignValues($post);
         if (!$userObj->save()) {
-            $message = Labels::getLabel($userObj->getError(), $this->siteLangId);
-            FatUtility::dieJsonError($message);
+            $msg = $userObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $postUserName = isset($post['user_name']) ? $post['user_name'] : '';
@@ -3839,7 +3842,7 @@ class AccountController extends LoggedUserController
         $template->set('orderDetail', $orderDetail);
         $template->set('childOrderDetail', $childOrderDetail);
         $template->set('opId', $opId);
-       
+
         require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
