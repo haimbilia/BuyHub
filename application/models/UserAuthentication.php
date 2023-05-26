@@ -364,15 +364,16 @@ class UserAuthentication extends FatModel
         /* [To Do - need to remove credential_password_old in next release */
         if (false === $this->loginWithOtp && false === $this->loginWithSocialAccount) {
             if ($row['credential_verified'] == applicationConstants::YES  && !$isAdmin) {
+                if (empty($row['credential_email']) && !empty($row['user_phone_dcode']) && !empty($row['user_phone'])) {
+                    $this->error = Labels::getLabel('MSG_THIS_ACCOUNT_IS_LINKED_WITH_PHONE._PLEASE_LINK_YOUR_EMAIL_FROM_YOUR_ACCOUNT_TO_LOGIN_USING_PASSWORD.', $this->commonLangId);
+                    return false;
+                }
+
                 if (empty($row['credential_password'])) {
-                    ///Forced user to update password
-                    $emailErrorMsg = str_replace("{clickhere}", '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->commonLangId) . '</a>', Labels::getLabel('MSG_For_Security_Reason_{clickhere}_to_reset_your_password.', $this->commonLangId));
-                    $this->error = $emailErrorMsg;
-                    if (FatUtility::isAjaxCall() || true === MOBILE_APP_API_CALL) {
-                        $json['status'] = 0;
-                        $json['msg'] = $this->error;
-                        $json['notVerified'] = 1;
-                        die(json_encode($json));
+                    if (MOBILE_APP_API_CALL) {
+                        $this->error = Labels::getLabel('MSG_FOR_SECURITY_REASON_RESET_YOUR_PASSWORD.', $this->commonLangId);
+                    } else {
+                        $this->error = CommonHelper::replaceStringData(Labels::getLabel('MSG_FOR_SECURITY_REASON_{CLICKHERE}_TO_RESET_YOUR_PASSWORD.', $this->commonLangId), ["{clickhere}" => '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->commonLangId) . '</a>']);
                     }
                     return false;
                 }
@@ -490,7 +491,7 @@ class UserAuthentication extends FatModel
         if (!MOBILE_APP_API_CALL) {
             session_regenerate_id();
         }
-        
+
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME] = array(
             'user_id' => $data['user_id'],
             'user_name' => $data['user_name'],

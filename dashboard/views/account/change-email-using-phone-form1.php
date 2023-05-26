@@ -14,7 +14,7 @@ $phnFld->changeCaption(Labels::getLabel('LBL_PHONE_NUMBER', $siteLangId));
 $fldSubmit = $frm->getField('btn_submit');
 $fldSubmit->setFieldTagAttribute('class', "btn btn-brand btn-wide");
 $fldSubmit->developerTags['noCaptionTag'] = true;
-$fldSubmit->htmlAfterField = '<br/><span class="form-text text-muted">' . Labels::getLabel('MSG_YOUR_EMAIL_WILL_NOT_CHANGE_UNTIL_YOU_VERIFY_YOUR_NUMBER', $siteLangId) . '</span>';
+$fldSubmit->htmlAfterField = '<br/><span class="form-text text-muted">' . Labels::getLabel('MSG_YOU_CANNOT_UPDATE_YOUR_EMAIL_UNTIL_YOU_VERIFY_YOUR_NUMBER.', $siteLangId) . '</span>';
 
 echo $frm->getFormHtml();
 

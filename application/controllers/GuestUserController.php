@@ -170,12 +170,12 @@ class GuestUserController extends MyAppController
         if (!empty($dialCode) && false === strpos($userName, $dialCode)) {
             $userName = trim($dialCode) . trim($userName);
         }
-
+        
         if (!$authentication->login($userName, $password, $_SERVER['REMOTE_ADDR'], true, false, $this->app_user['temp_user_id'], $userType, $withPhone)) {
             $resp = LibHelper::formatResponse(applicationConstants::FAILURE, $authentication->getError());
             LibHelper::dieJsonResponse($resp);
         }
-
+        
         $this->app_user['temp_user_id'] = 0;
 
         $userId = UserAuthentication::getLoggedUserId();
