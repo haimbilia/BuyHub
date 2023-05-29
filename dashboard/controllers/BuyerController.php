@@ -227,7 +227,7 @@ class BuyerController extends BuyerBaseController
                 'ocr.ocrequest_op_id = op.op_id',
                 'ocr'
             );
-            $srch->addFld(array('*', 'IFNULL(orrequest_id, 0) as return_request', 'IFNULL(ocrequest_id, 0) as cancel_request'));
+            $srch->addFld(array('*', 'IFNULL(orrequest_id, 0) as return_request', 'IFNULL(ocrequest_id, 0) as cancel_request', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name'));
         }
         $childOrderDetail = FatApp::getDb()->fetchAll($srch->getResultSet(), 'op_id');
 
