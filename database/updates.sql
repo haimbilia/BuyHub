@@ -2485,3 +2485,29 @@ UPDATE `tbl_collections` SET `collection_for_app`='0' WHERE collection_layout_ty
 INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
 ("APP_YOUR_ORDER_HAS_BEEN_PLACED", 1, "Your order %s has been placed.", 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+("APP_VIEW_COMPLETE_ORDER", 1, "View Complete Order", 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+("APP_ADD1", 1, "Add +", 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+("APP_SIGN_IN_JOIN", 1, "Sign In/Join", 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+
+
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+("APP_CURRENCY", 1, "Currency", 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+("APP_LANGUAGE", 1, "Language", 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+("APP_PLEASE_ENTER_USERNAME_EMAIL", 1, " Please Enter Username Email", 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+("APP_SHOW_LESS", 1, "Show Less", 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+("APP_VIEW_DETAIL", 1, "View Detail", 2)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);

@@ -2046,7 +2046,7 @@ class BuyerController extends BuyerBaseController
         if (!empty($_FILES) && array_key_exists('spreview_image', $_FILES) && is_array($_FILES['spreview_image']['tmp_name'])) {
             foreach ($_FILES['spreview_image']['tmp_name'] as $index => $tmpName) {
                 if (!is_uploaded_file($tmpName)) {
-                    FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->adminLangId));
+                    FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));
                 }
 
                 $fileHandlerObj = new AttachedFile();
