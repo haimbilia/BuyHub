@@ -2485,3 +2485,5 @@ UPDATE `tbl_collections` SET `collection_for_app`='0' WHERE collection_layout_ty
 INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
 ("APP_YOUR_ORDER_HAS_BEEN_PLACED", 1, "Your order %s has been placed.", 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_key = VALUES(label_key);
+
+UPDATE `tbl_collections` SET `collection_for_web`=0 WHERE `collection_layout_type` = 28;
