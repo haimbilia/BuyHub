@@ -50,7 +50,7 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     $td->appendElement('plaintext', array(), $str, true);
                     break;
                 case 'selprod_price':
-                    $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
+                    $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key]), true);
                     break;
                 case 'selprod_stock':
                     $td->appendElement('plaintext', array(), $row[$key], true);
