@@ -254,7 +254,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                     <div class="form-text text-muted my-4">
                         <?php
                         $errorMsg = Labels::getLabel('MSG_SELLING_PRICE_CANNOT_BE_LESS_THEN_MINIMUM_SELLING_PRICE_{MINIMUM-SELLING-PRICE}.');
-                        echo $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true)]);
+                        echo $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice)]);
                         ?>
                     </div>
                     <div class="js-scrollable table-wrap table-responsive">
