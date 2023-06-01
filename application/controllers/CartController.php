@@ -57,7 +57,11 @@ class CartController extends MyAppController
         }
         $cartObj->unsetCartCheckoutType();
         $cartObj->invalidateCheckoutType();
-        $productsArr = $cartObj->getProducts($this->siteLangId);
+        if (MOBILE_APP_API_CALL) {
+            $cartObj->setFulfilmentType($fulfilmentType);
+        }
+
+        $productsArr = $cartObj->getProducts($this->siteLangId, false);
         $prodGroupIds = array();
         $fulfillmentProdArr = [
             Shipping::FULFILMENT_SHIP => [],
@@ -141,8 +145,8 @@ class CartController extends MyAppController
                     $address = new Address($shippingAddressId);
                     $shippingddressDetail = $address->getData(Address::TYPE_USER, $loggedUserId);
                 }
-
-                $cartObj->setFulfilmentType($fulfilmentType);
+                $cartObj->resetProducts();
+                $cartObj->validateCheckoutType();
                 $cartObj->setCartCheckoutType($fulfilmentType);
                 $cartSummary = $cartObj->getCartFinancialSummary($this->siteLangId);
                 $this->set('cartSummary', $cartSummary);

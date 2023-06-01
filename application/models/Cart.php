@@ -2168,6 +2168,11 @@ class Cart extends FatModel
         return true;
     }
 
+    public function validateCheckoutType()
+    {
+        $this->valdateCheckoutType = true;
+    }
+    
     public function invalidateCheckoutType()
     {
         $this->valdateCheckoutType = false;
@@ -2176,6 +2181,11 @@ class Cart extends FatModel
     public function excludeTax()
     {
         $this->includeTax = false;
+    }
+    
+    public function resetProducts()
+    {
+        $this->products = [];
     }
 
     public function getQtyBySelProdId($selprod_id)
