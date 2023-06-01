@@ -291,7 +291,7 @@ class Paypal extends PaymentMethodBase
             //=== Return a response to the client.
             $this->resp = $client->execute($request);
         } catch (Exception $e) {
-            // Something else happened, completely unrelated to Stripe
+            // Something else happened, completely unrelated to Paypal
             $msg = LibHelper::isJson($e->getMessage()) ? json_decode($e->getMessage(), true) : $e->getMessage();
             $this->error = $msg;
             return false;
