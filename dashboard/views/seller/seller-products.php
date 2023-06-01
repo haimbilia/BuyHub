@@ -1,4 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
+$selectedCurrency = CommonHelper::getCurrencyId();
 $arr_flds = array(
     'select_all' => '',
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
@@ -50,7 +52,11 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     $td->appendElement('plaintext', array(), $str, true);
                     break;
                 case 'selprod_price':
-                    $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key]), true);
+                    $defaultCurrencyValue = '';
+                    if ($currency_id != $selectedCurrency) {
+                        $defaultCurrencyValue = '<br><span class="form-text text-muted" data-bs-toggle="tooltip" title="' . Labels::getLabel('LBL_SYSTEM_DEFAULT_CURRENCY.') . '">(' . CommonHelper::displayMoneyFormat($row[$key], true, true) . ')</span>';
+                    }
+                    $td->appendElement('plaintext', array(), '<span>'. CommonHelper::displayMoneyFormat($row[$key]) . '</span>' . $defaultCurrencyValue , true);
                     break;
                 case 'selprod_stock':
                     $td->appendElement('plaintext', array(), $row[$key], true);
@@ -118,18 +124,18 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     }
 
                     $li = $ul->appendElement("li");
-                        $li->appendElement(
-                            'a',
-                            array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_PRODUCT_MISSING_INFO', $siteLangId), "onclick" => "productMissingInfo(".$row['selprod_id'].")"),
-                            '<i class="icn">
+                    $li->appendElement(
+                        'a',
+                        array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_PRODUCT_MISSING_INFO', $siteLangId), "onclick" => "productMissingInfo(" . $row['selprod_id'] . ")"),
+                        '<i class="icn">
                             <svg class="svg" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#warning">
                                 </use>
                             </svg>
                         </i>',
-                            true
-                        );
+                        true
+                    );
 
                     break;
                 default:
