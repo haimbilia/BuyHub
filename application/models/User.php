@@ -1903,6 +1903,8 @@ class User extends MyAppModel
         $data = array(
             'user_name' => $data['user_name'],
             'user_email' => $data['user_email'],
+            'username' => $data['credential_username'] ?? $data['user_name'],
+            'account_type' => $data['account_type'] ?? '',
             'user_phone_dcode' => $dialCode,
             'user_phone' => $phone,
             'link' => $link,
