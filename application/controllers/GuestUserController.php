@@ -659,7 +659,7 @@ class GuestUserController extends MyAppController
         if (FatApp::getConfig('CONF_WELCOME_EMAIL_REGISTRATION', FatUtility::VAR_INT, 1)) {
             $data['user_email'] = $userdata['credential_email'];
             $data['user_name'] = $userdata['user_name'];
-
+            $data['credential_username'] = $userdata['credential_username'];
             //ToDO::Change login link to contact us link
             $link = UrlHelper::generateFullUrl('GuestUser', 'loginForm');
             if (!$userObj->userWelcomeEmailRegistration($data, $link, $this->siteLangId)) {
