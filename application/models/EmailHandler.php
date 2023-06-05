@@ -278,7 +278,7 @@ class EmailHandler extends FatModel
             '{name}' => $d['user_name'],
             '{contact_us_email}' => FatApp::getConfig('CONF_CONTACT_EMAIL'),
         );
-        
+
         if (!empty($d['user_email'])) {
             return (new FatMailer($langId, $tpl))
                 ->setTo($d['user_email'])
@@ -298,7 +298,9 @@ class EmailHandler extends FatModel
 
         $vars = array(
             '{name}' => $d['user_name'],
+            '{username}' => $d['user_name'],
             '{contact_us_email}' => FatApp::getConfig('CONF_CONTACT_EMAIL'),
+            '{account_type}' => $d['account_type'],
         );
 
         if (isset($d['user_id']) && $d['user_id'] > 0) {
@@ -1575,7 +1577,7 @@ class EmailHandler extends FatModel
         $arrReplacements["{user_name}"] = Labels::getLabel("LBL_ADMIN", $langId);
 
         $this->sendMailToAdminAndAdditionalEmails($tpl, $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-        
+
         $arrReplacements['{invoice_number}'] = $adminOrderDetailUrl;
         $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 

@@ -654,12 +654,12 @@ class GuestUserController extends MyAppController
 
         unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['newEmailToVerify']);
 
-        $userdata = $userObj->getUserInfo(array('credential_email', 'credential_password', 'user_name', 'credential_active'), false);
+        $userdata = $userObj->getUserInfo(array('credential_username', 'credential_email', 'credential_password', 'user_name', 'credential_active'), false);
 
         if (FatApp::getConfig('CONF_WELCOME_EMAIL_REGISTRATION', FatUtility::VAR_INT, 1)) {
             $data['user_email'] = $userdata['credential_email'];
             $data['user_name'] = $userdata['user_name'];
-
+            $data['credential_username'] = $userdata['credential_username'];
             //ToDO::Change login link to contact us link
             $link = UrlHelper::generateFullUrl('GuestUser', 'loginForm');
             if (!$userObj->userWelcomeEmailRegistration($data, $link, $this->siteLangId)) {

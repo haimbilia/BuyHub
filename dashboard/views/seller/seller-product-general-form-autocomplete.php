@@ -369,8 +369,9 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                 <div class="col-md-12">
                     <div class="form-text text-muted my-4">
                         <?php
+                        $defaultCurrencyValue = '<span class="form-text text-muted" data-bs-toggle="tooltip" title="' . Labels::getLabel('LBL_SYSTEM_DEFAULT_CURRENCY.') . '">(' . CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true) . ')</span>';
                         $errorMsg = Labels::getLabel('MSG_SELLING_PRICE_CANNOT_BE_LESS_THEN_MINIMUM_SELLING_PRICE_{MINIMUM-SELLING-PRICE}.');
-                        echo $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice)]);
+                        echo CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice) . $defaultCurrencyValue]);
                         ?>
 
                     </div>
