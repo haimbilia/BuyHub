@@ -14,7 +14,7 @@
                 <div class="top-bar__inner">
                     <div class="top-bar__left">
                         <div class="logo">
-                            <a href="<?php echo UrlHelper::generateUrl(); ?>">
+                            <a href="<?php echo UrlHelper::generateUrl('','',[],CONF_WEBROOT_FRONTEND); ?>">
                                 <?php
                                 $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
                                 $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
