@@ -45,8 +45,10 @@ class UrlHelper extends FatUtility
             return $url;
         }
 
-        $urlForString = FatUtility::generateUrl($controller, $action, $queryData, $useRootUrl, $url_rewriting);
-        $urlString = trim(ltrim($urlForString, CONF_WEBROOT_FRONTEND), '/');
+        /* trim handled to faced issue with /folderName/ in base URL */
+        $urlForString = trim(FatUtility::generateUrl($controller, $action, $queryData, $useRootUrl, $url_rewriting),'/');
+        $urlString = trim(ltrim($urlForString, trim(CONF_WEBROOT_FRONTEND,'/')), '/');
+
         $srch = UrlRewrite::getSearchObject();
         $srch->addFld('urlrewrite_custom');
         if (true == $useLangCode && FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && count(LANG_CODES_ARR) > 1 && $langId  != FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)) {
