@@ -670,7 +670,7 @@ $blog-header-height: 58px;
             border: none;
             color: #fff;
             vertical-align: top;
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-regular;
             border-radius: 0;
             border-top-#{$end-direction}-radius: 50px;
             border-bottom-#{$end-direction}-radius: 50px;
@@ -685,7 +685,7 @@ $blog-header-height: 58px;
     color: $txt-gray;
     font-size: 1rem;
     line-height: 1.6;
-    font-weight: $font-weight-light;
+    font-weight: $font-weight-regular;
 
     blockquote {
         margin-top: 10px;
@@ -709,7 +709,7 @@ $blog-header-height: 58px;
 
     p {
         color: #666;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         line-height: 1.6;
         padding: 0 0 15px 0;
     }
@@ -776,7 +776,7 @@ $blog-header-height: 58px;
             padding: 0 0 10px 0;
             letter-spacing: 0.02em;
 
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-regular;
         }
 
         &.list-spl {
@@ -920,7 +920,7 @@ $blog-header-height: 58px;
         display: block;
         font-style: normal;
         color: lighten($txt-body, 50%);
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         font-size: 0.875rem;
     }
 }
@@ -1086,7 +1086,7 @@ $blog-header-height: 58px;
     display: inline-block;
     line-height: 1;
     vertical-align: top;
-    font-weight: $font-weight-light;
+    font-weight: $font-weight-regular;
     color: #000;
     font-size: 0.875em;
 }

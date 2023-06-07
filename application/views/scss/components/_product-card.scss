@@ -211,14 +211,14 @@
     .products-head-specification {
         color: lighten($txt-body, 50%);
         font-size: 1em;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
     }
 
     .products_ft_list {
         li {
             color: lighten($txt-body, 50%);
             font-size: 0.9em;
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-regular;
             margin: 4px 0;
             position: relative;
             padding: 0 16px;
@@ -494,11 +494,11 @@
 
     &_old {
         color: $txt-gray;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
     }
 
     &_off {
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
     }
 }
 
