@@ -616,7 +616,7 @@ class HomeController extends MyAppController
 
     private function getCollections($productSrchObj, &$sponsoredShopsInCollection, &$sponsoredProdsInCollection)
     {
-        $langId = $this->siteLangId; 
+        $langId = $this->siteLangId;
         $geoAddress = Address::getYkGeoData();
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, Collections::HOMEPAGE_COLLECTION_LIMIT);
