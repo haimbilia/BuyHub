@@ -1,5 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $uploadedTime = AttachedFile::setTimeParam($shop['shop_updated_on']);
 $shopId = (int)$shop['shop_id'];
 $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shopId, $siteLangId, ImageDimension::VIEW_THUMB), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
@@ -29,7 +28,14 @@ if (1 == $useFeatherLightJs) {
         <?php if (!empty($shop['user_name'])) { ?>
             <ul class="list-options <?php echo isset($horizontalAlignOptions) && $horizontalAlignOptions ? 'list-options--horizontal' : 'list-options--vertical"'; ?>">
                 <li>
-                    <span class="label"><?php echo Labels::getLabel('LBL_SELLER', $siteLangId); ?>:</span>
+                    <span class="label">
+                        <?php 
+                        $lbl = Labels::getLabel('LBL_SELLER', $siteLangId);
+                        if (1 > $shopId && 0 < $shop['user_is_advertiser']) {
+                            $lbl = Labels::getLabel('LBL_ADVERTISER', $siteLangId);
+                        } ?>
+                        <?php echo $lbl; ?>:
+                    </span>
                     <a href="javascript:void();" onclick="redirectUser(<?php echo $shop['user_id'] ?? $shop['shop_user_id']; ?>);" class="value"><?php echo $shop['user_name']; ?></a>
                 </li>
             </ul>
