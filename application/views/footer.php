@@ -155,18 +155,18 @@ if ('' !=  $pixelId) {  ?>
     !CommonHelper::getUserCookiesEnabled() &&
     FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, '')
 ) { ?>
-    <div class="cc-window no-print" id="cookieInfoBox" style="display:none;">
-        <div class="box-cookies">
-            <p id="cookieconsent:desc" class="cc-message">
+    <div class="cookies-notice no-print" id="cookieInfoBox" style="display:none;">
+        <div class="cookies-notice-content">
+            <span class="cookies-notice-message">
                 <?php echo FatUtility::decodeHtmlEntities(mb_substr(FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, ''), 0, 600)); ?>
-                <a href="<?php echo UrlHelper::generateUrl('cms', 'view', array(FatApp::getConfig('CONF_COOKIES_BUTTON_LINK', FatUtility::VAR_INT))); ?>">
-                    <?php echo Labels::getLabel('LBL_Read_More', $siteLangId); ?></a>
-            </p>
-            <div class="cookies-actions">
-                <button class="btn btn-outline-gray cookie-preferences-js">
+                <a class="" href="<?php echo UrlHelper::generateUrl('cms', 'view', array(FatApp::getConfig('CONF_COOKIES_BUTTON_LINK', FatUtility::VAR_INT))); ?>">
+                    <?php echo Labels::getLabel('LBL_Cookies_Policy', $siteLangId); ?></a>
+            </span>
+            <div class="cookies-notice-buttons">
+                <button class="btn btn-decline cookie-preferences-js">
                     <?php echo Labels::getLabel('LBL_Set_Cookie_Preferences', $siteLangId); ?>
                 </button>
-                <button class="btn btn-brand cc-cookie-accept-js">
+                <button class="btn btn-accept cc-cookie-accept-js">
                     <?php echo Labels::getLabel('LBL_Accept_Cookies', $siteLangId); ?>
                 </button>
             </div>
