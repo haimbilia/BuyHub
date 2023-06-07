@@ -7,6 +7,7 @@
     font-size: 0.85rem;
     line-height: 1.5;
     gap: 5px;
+
     a {
         color: inherit;
         font-size: inherit;
@@ -16,13 +17,15 @@
         // margin-#{$end-direction}: 8px;
         fill: $secondary-color;
     }
+
     .rate {
         margin: 0;
         padding: 0;
         line-height: inherit;
-        font-weight: 500;
+        font-weight: $font-weight-normal;
         white-space: nowrap;
     }
+
     .be-first {
         line-height: 1;
         font-size: 0.9em;

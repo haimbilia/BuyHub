@@ -82,7 +82,7 @@
     padding-left: 0;
 }
 
-.fa-ul > li {
+.fa-ul>li {
     position: relative;
 }
 
@@ -5882,7 +5882,7 @@ readers do not read off random characters that represent icons */
 @font-face {
     font-family: "Font Awesome 5 Free";
     font-style: normal;
-    font-weight: 400;
+    font-weight: $font-weight-regular;
     font-display: auto;
     src: url("../fonts/fa-regular-400.eot");
     src: url("../fonts/fa-regular-400.eot?#iefix") format("embedded-opentype"), url("../fonts/fa-regular-400.woff2") format("woff2"), url("../fonts/fa-regular-400.woff") format("woff"),
@@ -5891,7 +5891,7 @@ readers do not read off random characters that represent icons */
 
 .far {
     font-family: "Font Awesome 5 Free";
-    font-weight: 400;
+    font-weight: $font-weight-regular;
 }
 
 @font-face {

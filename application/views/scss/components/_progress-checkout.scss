@@ -1,5 +1,6 @@
 .checkout-progress {
     display: none;
+
     @include media-breakpoint-up(lg) {
         display: flex;
         align-items: center;
@@ -14,7 +15,7 @@
         flex: 1;
         padding: 20px 0;
         color: $txt-body;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         list-style: none;
         cursor: pointer;
         background-image: linear-gradient(currentColor, currentColor);
@@ -23,20 +24,23 @@
         background-size: 0% 2px;
         background-color: transparent;
         transition: background-size 0.3s;
+
         &:hover {
             text-decoration: none;
             background-size: 100% 2px;
         }
+
         &.is-complete {
             // color: $txt-gray;
             // opacity: 0.5;
             //cursor: default;
             //background: none !important;
         }
+
         &.is-active {
             background-size: 100% 2px;
         }
-        &.pending {
-        }
+
+        &.pending {}
     }
 }

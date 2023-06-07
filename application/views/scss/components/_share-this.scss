@@ -17,6 +17,7 @@
     -webkit-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     overflow: hidden;
+
     &:before,
     &:after {
         position: absolute;
@@ -29,37 +30,44 @@
         transition: 0.25s linear;
         z-index: 1;
     }
+
     &:before {
         content: "";
         #{$start-direction}: 0;
         justify-content: flex-end;
         background-color: #fff;
     }
+
     &:after {
         content: "";
         #{$end-direction}: 0;
         justify-content: flex-start;
         background-color: #fff;
     }
+
     &:hover {
         border-color: $secondary-color;
         background-color: $secondary-color;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
+
     &:hover span {
         opacity: 0;
         z-index: -3;
     }
+
     &:hover:before {
         opacity: 0.5;
         -webkit-transform: translateY(-100%);
         transform: translateY(-100%);
     }
+
     &:hover:after {
         opacity: 0.5;
         -webkit-transform: translateY(100%);
         transform: translateY(100%);
     }
+
     & span {
         position: absolute;
         top: 0;
@@ -71,13 +79,14 @@
         height: 100%;
         color: $txt-body;
         font-size: 1em;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         opacity: 1;
 
         transition: opacity 0.25s;
         z-index: 2;
         line-height: 1;
     }
+
     & .social-link {
         position: relative;
         display: flex;
@@ -92,21 +101,26 @@
         flex: 1;
         cursor: pointer;
     }
+
     & .social-link i {
         text-shadow: 1px 1px rgba(70, 98, 127, 0.7);
         transform: scale(1);
     }
+
     & .social-link:hover {
         background-color: rgba(245, 245, 245, 0.1);
     }
+
     & .social-link:hover i {
         animation: bounce 0.4s linear;
     }
+
     & .svg {
         width: 16px;
         height: 16px;
         fill: #fff;
     }
+
     & .share .svg {
         width: 18px;
         height: 18px;
@@ -120,14 +134,17 @@
         -webkit-transform: scale(1.4);
         transform: scale(1.4);
     }
+
     60% {
         -webkit-transform: scale(0.8);
         transform: scale(0.8);
     }
+
     80% {
         -webkit-transform: scale(1.2);
         transform: scale(1.2);
     }
+
     100% {
         transform: scale(1);
     }
@@ -138,14 +155,17 @@
         -webkit-transform: scale(1.4);
         transform: scale(1.4);
     }
+
     60% {
         -webkit-transform: scale(0.8);
         transform: scale(0.8);
     }
+
     80% {
         -webkit-transform: scale(1.2);
         transform: scale(1.2);
     }
+
     100% {
         transform: scale(1);
     }

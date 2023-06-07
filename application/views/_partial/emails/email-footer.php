@@ -40,7 +40,7 @@
                                         letter-spacing: -0.2px;
                                         display: block;
                                         box-sizing: border-box;
-                                        font-weight: 400;
+                                        font-weight: $font-weight-regular;
                                         color: #212529;
                                         line-height: 26px;
                                         margin: 0 0 20px 0;
@@ -54,7 +54,7 @@
                                 {SITE-PHONE}
                             </a>
                         </p>
-                        <h5 style="font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: -0.2px; line-height: 24px; display: block; margin: 0 0 15px 0; color: #212529">
+                        <h5 style="font-size: 18px; font-weight: $font-weight-bold; text-transform: uppercase; letter-spacing: -0.2px; line-height: 24px; display: block; margin: 0 0 15px 0; color: #212529">
                             Get In Touch
                         </h5>
                         {social_media_icons}

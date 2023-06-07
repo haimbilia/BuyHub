@@ -73,7 +73,7 @@
     margin: 2px;
     text-decoration: none;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: $font-weight-regular;
     line-height: 2.2;
     text-align: center;
     color: #b6b6b6;
@@ -127,7 +127,7 @@
     color: #646464;
     text-decoration: none;
     font-size: 11px;
-    font-weight: 400;
+    font-weight: $font-weight-regular;
     line-height: 3;
     text-align: center;
 }
@@ -189,7 +189,10 @@
     color: #646464;
 }
 
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+only screen and (min-device-pixel-ratio: 1.5),
+(-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
     .rating-f .br-widget a {
         /* background: url('../images/star@2x.png');
         background-size: 24px 48px; */
@@ -204,9 +207,11 @@
     position: relative;
     display: flex;
     margin-#{$start-direction}: -0.15em;
+
     &-action,
     &-view {
         display: inline-flex;
+
         .icon {
             width: var(--size);
             height: var(--size);
@@ -217,49 +222,59 @@
             margin: 0;
         }
     }
+
     &-action,
     &-view {
         flex-direction: row-reverse;
+
         .icon {
             fill: #ddd;
             stroke: #ddd;
         }
+
         @for $i from 1 through 5 {
             &[data-rating="#{$i}"] {
+
                 .icon:nth-last-child(#{$i}),
-                .icon:nth-last-child(#{$i}) ~ .icon {
+                .icon:nth-last-child(#{$i})~.icon {
                     fill: var(--rating-fg);
                     stroke: var(--rating-fg);
                 }
             }
         }
     }
+
     &-action {
         .icon {
+
             &:hover,
-            &:hover ~ .icon {
+            &:hover~.icon {
                 fill: var(--rating-fg);
                 stroke: var(--rating-fg);
             }
         }
     }
+
     &:not([data-readonly]) {
         .rating-action {
             .icon {
                 cursor: pointer;
+
                 &:hover,
-                &:hover ~ .icon {
+                &:hover~.icon {
                     fill: var(--rating-fg);
                     stroke: var(--rating-fg);
                 }
             }
         }
     }
+
     &__count {
         font-size: 0.875rem;
         color: $txt-gray;
         padding-#{$start-direction}: 0.5rem;
     }
+
     &__text {
         font-size: 12px;
         color: $txt-gray;

@@ -2,9 +2,11 @@
     max-width: 500px;
     padding: 2rem;
     margin: 0 auto;
+
     .payable-amount {
         display: flex;
         flex-direction: column;
+
         &-head {
             display: flex;
             align-items: center;
@@ -14,18 +16,22 @@
             //justify-content: space-between;
             margin-bottom: 1rem;
         }
+
         &-body {
             flex: 1;
         }
-        &-footer {
-        }
+
+        &-footer {}
+
         &-total {
             font-size: 0.75rem;
+
             .label {
                 // font-size: 0.85rem;
             }
+
             .value {
-                font-weight: 600;
+                font-weight: $font-weight-bold;
                 font-size: 0.8rem;
             }
         }

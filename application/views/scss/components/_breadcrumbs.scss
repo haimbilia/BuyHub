@@ -2,11 +2,13 @@
     list-style: none;
     margin: 0;
     padding: 0;
+
     ul {
         display: flex;
         margin: 0;
         align-items: center;
         flex-wrap: wrap;
+
         li {
             position: relative;
             padding: 0;
@@ -15,8 +17,9 @@
             color: $txt-body;
             font-size: 0.8125rem;
             display: block;
-            font-weight: 400;
+            font-weight: $font-weight-regular;
             line-height: 1.5;
+
             &:before {
                 line-height: inherit;
                 padding: 0 !important;
@@ -31,12 +34,15 @@
                 //     transform: rotate(-136deg);
                 // }
             }
+
             &:last-child {
                 padding-#{$end-direction}: 0;
+
                 &:before {
                     display: none;
                 }
             }
+
             a {
                 color: $txt-gray;
                 font-size: inherit;
@@ -45,20 +51,26 @@
             }
         }
     }
+
     &-center {
         justify-content: center;
+
         ul {
             justify-content: center;
         }
     }
+
     &-right {
         color: #fff;
+
         ul {
             justify-content: flex-end;
         }
     }
+
     &-white {
         color: #fff;
+
         ul {
             li {
                 &:before {

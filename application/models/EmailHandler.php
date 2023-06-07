@@ -1151,7 +1151,7 @@ class EmailHandler extends FatModel
             if ($orderComment['oshistory_comments'] != "") {
                 $msgComments = '<br>
                     <div style="background: #f6f6f6; font-size: 14px; text-align: center; border-radius: 4px; color: #212529; padding: 20px; line-height: 24px">
-                        <h5 style="font-weight: 600; text-transform: uppercase; color: #212529; letter-spacing: -0.2px; margin: 0">' . Labels::getLabel('LBL_COMMENTS_FOR_YOUR_ORDER', $langId) . '</h5>
+                        <h5 style="font-weight: $font-weight-bold; text-transform: uppercase; color: #212529; letter-spacing: -0.2px; margin: 0">' . Labels::getLabel('LBL_COMMENTS_FOR_YOUR_ORDER', $langId) . '</h5>
                         <p style="margin: 0">' . nl2br($orderComment['oshistory_comments']) . '</p>
                     </div>
                 ';

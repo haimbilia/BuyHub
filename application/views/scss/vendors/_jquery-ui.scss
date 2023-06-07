@@ -264,18 +264,18 @@ button.ui-button::-moz-focus-inner {
     display: inline-block;
 }
 
-.ui-controlgroup > .ui-controlgroup-item {
+.ui-controlgroup>.ui-controlgroup-item {
     float: left;
     margin-left: 0;
     margin-right: 0;
 }
 
-.ui-controlgroup > .ui-controlgroup-item:focus,
-.ui-controlgroup > .ui-controlgroup-item.ui-visual-focus {
+.ui-controlgroup>.ui-controlgroup-item:focus,
+.ui-controlgroup>.ui-controlgroup-item.ui-visual-focus {
     z-index: 9999;
 }
 
-.ui-controlgroup-vertical > .ui-controlgroup-item {
+.ui-controlgroup-vertical>.ui-controlgroup-item {
     display: block;
     float: none;
     width: 100%;
@@ -296,11 +296,11 @@ button.ui-button::-moz-focus-inner {
     font-size: 80%;
 }
 
-.ui-controlgroup-horizontal .ui-controlgroup-label + .ui-controlgroup-item {
+.ui-controlgroup-horizontal .ui-controlgroup-label+.ui-controlgroup-item {
     border-left: none;
 }
 
-.ui-controlgroup-vertical .ui-controlgroup-label + .ui-controlgroup-item {
+.ui-controlgroup-vertical .ui-controlgroup-label+.ui-controlgroup-item {
     border-top: none;
 }
 
@@ -2120,7 +2120,7 @@ a.ui-button:active,
 .ui-datepicker td.ui-datepicker-today {
     background: $brand-color;
     color: $brand-color-inverse;
-    font-weight: 600;
+    font-weight: $font-weight-bold;
 }
 
 .ui-datepicker td.ui-datepicker-today a {
@@ -2133,7 +2133,7 @@ a.ui-button:active,
     position: relative;
 }
 
-.ui-datepicker td > a {
+.ui-datepicker td>a {
     position: relative;
 }
 
@@ -2145,11 +2145,11 @@ a.ui-button:active,
     display: none;
 }
 
-.ui-datepicker td.ui-datepicker-today .ui-state-active > a {
+.ui-datepicker td.ui-datepicker-today .ui-state-active>a {
     color: #54d1f1;
 }
 
-.ui-datepicker td.ui-datepicker-current-day .ui-state-active > a {
+.ui-datepicker td.ui-datepicker-current-day .ui-state-active>a {
     color: #54d1f1;
 }
 
@@ -2164,7 +2164,7 @@ a.ui-button:active,
 /*.ui-datepicker td.ui-datepicker-today {background: #333;}
 .ui-datepicker td.ui-datepicker-today:before {position: absolute;left: -4px; top: -4px; right: -4px;bottom: -4px;content: "";background: #333;box-shadow:0 0 15px 5px rgba(0, 0, 0, 0.1);}*/
 
-/*.ui-datepicker td.ui-datepicker-today a{color:$brand-color;font-weight: 600;background:#EEE;}*/
+/*.ui-datepicker td.ui-datepicker-today a{color:$brand-color;font-weight: $font-weight-bold;background:#EEE;}*/
 
 .ui-datepicker .ui-datepicker-buttonpane {
     border: none;
@@ -2196,6 +2196,7 @@ a.ui-button:active,
         min-width: 300px;
         /* z-index: 11 !important; */
     }
+
     .ui-datepicker td .ui-state-default {
         padding: 5px;
     }

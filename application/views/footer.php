@@ -81,14 +81,11 @@ if ('' !=  $pixelId) {  ?>
                 </div>
                 <div class="payment">
                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-1.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
-
                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-2.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-3.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-4.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
                 </div>
             </div>
-
-
         </div>
     </section>
 
@@ -97,8 +94,8 @@ if ('' !=  $pixelId) {  ?>
 
     <?php if ('cart' != strtolower($controllerName)) { ?>
         <!-- Mobile menu -->
-        <ul class="mobile-actions">
-            <li class="mobile-actions-item" role="none">
+        <div class="mobile-actions">
+            <div class="mobile-actions-item">
                 <a class="mobile-actions-link" href="<?php echo UrlHelper::generateUrl(); ?>">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-home">
@@ -106,8 +103,8 @@ if ('' !=  $pixelId) {  ?>
                     </svg>
                     <span class="txt"><?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?></span>
                 </a>
-            </li>
-            <li class="mobile-actions-item" role="none">
+            </div>
+            <div class="mobile-actions-item">
                 <button type="button" class="mobile-actions-link btn-open first">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-category">
@@ -115,8 +112,8 @@ if ('' !=  $pixelId) {  ?>
                     </svg>
                     <span class="txt"><?php echo Labels::getLabel("NAV_MENU", $siteLangId); ?></span>
                 </button>
-            </li>
-            <li class="mobile-actions-item" role="none">
+            </div>
+            <div class="mobile-actions-item">
                 <button class="mobile-actions-link wishListJs">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-wishlist">
@@ -124,8 +121,8 @@ if ('' !=  $pixelId) {  ?>
                     </svg>
                     <span class="txt"><?php echo Labels::getLabel('NAV_WISHLIST', $siteLangId); ?></span>
                 </button>
-            </li>
-            <li class="mobile-actions-item" role="none">
+            </div>
+            <div class="mobile-actions-item">
                 <?php if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) {        ?>
                     <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-account">
                     <?php } else { ?>
@@ -137,10 +134,10 @@ if ('' !=  $pixelId) {  ?>
                         </svg>
                         <span class="txt"><?php echo Labels::getLabel("LBL_Account", $siteLangId); ?></span>
                         </button>
-            </li>
+            </div>
 
             <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-                <li class="mobile-actions-item" role="none">
+                <div class="mobile-actions-item">
                     <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-gps-location">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-location">
@@ -148,9 +145,9 @@ if ('' !=  $pixelId) {  ?>
                         </svg>
                         <span class="txt"><?php echo Labels::getLabel("NAV_LOCATION", $siteLangId); ?></span>
                     </button>
-                </li>
+                </div>
             <?php } ?>
-        </ul>
+        </div>
     <?php } ?>
 </footer>
 <?php if (

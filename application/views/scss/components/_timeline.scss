@@ -4,6 +4,7 @@
 
 .timeline-comments {
     display: flex;
+
     .timeline-avatar {
         width: 45px;
         height: 45px;
@@ -16,8 +17,10 @@
         margin-#{$end-direction}: 1rem;
         overflow: hidden;
     }
+
     .timeline-comments-box {
         flex: 1;
+
         .input-group {
             .form-control {
                 @include media-breakpoint-down(sm) {
@@ -26,8 +29,9 @@
                     max-width: 100%;
                 }
             }
+
             .input-group-append {
-                > .btn {
+                >.btn {
                     @include media-breakpoint-down(sm) {
                         border-radius: 3px;
                     }
@@ -36,6 +40,7 @@
         }
     }
 }
+
 /* Timeline */
 
 .timeline {
@@ -50,36 +55,44 @@
     font-size: 0.8rem;
     padding: 0 50px;
     list-style: none;
+
     @include media-breakpoint-down(sm) {
         margin-#{$start-direction}: 0px;
         padding: 0 20px;
     }
+
     p {
         font-size: 0.8rem;
     }
+
     .dropdown-toggle {
-        font-weight: 400;
+        font-weight: $font-weight-regular;
+
         @include media-breakpoint-down(sm) {
             white-space: normal;
         }
     }
+
     .event {
         border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
         padding-bottom: 1rem;
         margin-bottom: 1rem;
         position: relative;
         color: $txt-gray;
+
         &:last-of-type {
             padding-bottom: 0;
             margin-bottom: 0;
             border: none;
         }
+
         &:before,
         &:after {
             position: absolute;
             display: block;
             top: 0;
         }
+
         &:before {
             #{$start-direction}: -200px;
             color: $txt-gray;
@@ -87,6 +100,7 @@
             text-align: #{$end-direction};
             font-size: 0.75rem;
             min-width: 120px;
+
             @include media-breakpoint-down(sm) {
                 #{$start-direction}: 0px;
                 position: relative;
@@ -94,12 +108,15 @@
                 text-align: #{$start-direction};
             }
         }
+
         &:after {
             box-shadow: 0 0 0 2px $brand-color;
             #{$start-direction}: -57px;
+
             @include media-breakpoint-down(sm) {
                 #{$start-direction}: -27px;
             }
+
             background: $bg-white;
             border-radius: 50%;
             height: 11px;
@@ -108,12 +125,14 @@
             top: 2px;
         }
     }
+
     .timeline_status {
         font-size: 0.85rem;
-        font-weight: 500;
+        font-weight: $font-weight-normal;
         display: block;
         color: $txt-body;
         margin-bottom: 0.5rem;
+
         .svg {
             fill: currentColor;
             margin-#{$end-direction}: 5px;

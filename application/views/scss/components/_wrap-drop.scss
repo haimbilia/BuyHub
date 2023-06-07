@@ -13,11 +13,13 @@
     padding-#{$start-direction}: 10px;
     padding-#{$end-direction}: 35px;
     background: #fff;
+
     span {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
     }
+
     &:before,
     &:after {
         top: 50%;
@@ -30,24 +32,29 @@
         transition: all 0.2s ease;
         content: "";
     }
+
     &:after {
         right: 10px;
 
         transform: rotate(-45deg);
     }
+
     &:before {
         right: 16px;
 
         transform: rotate(45deg);
     }
+
     &.wrap-drop--first {
         border-color: $brand-color;
         color: $brand-color;
+
         &:after,
         &:before {
             background-color: $brand-color;
         }
     }
+
     .drop {
         background: #fff;
         border: $border;
@@ -62,12 +69,14 @@
         top: 100%;
         z-index: 2;
         border-radius: $common-radius;
+
         li {
             &:hover {
                 a {
                     color: $brand-color;
                 }
             }
+
             a {
                 cursor: pointer;
                 color: $txt-body;
@@ -76,7 +85,7 @@
                 position: relative;
                 text-align: #{$start-direction};
                 font-size: 0.875em;
-                font-weight: 400;
+                font-weight: $font-weight-regular;
                 padding: 10px;
                 line-height: 1.2;
                 display: flex;
@@ -86,20 +95,24 @@
             }
         }
     }
+
     &.active {
         &:after {
             transform: rotate(45deg);
             border-width: 0 10px 10px;
         }
+
         &:before {
             transform: rotate(-45deg);
         }
+
         .drop {
             display: block;
             opacity: 1;
             pointer-events: auto;
         }
     }
+
     .colors {
         width: 10px;
         height: 10px;

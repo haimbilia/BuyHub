@@ -11,12 +11,14 @@
     background-color: #fff;
     margin-bottom: 0;
     text-align: #{$start-direction};
+
     &-justified {
         thead {
             th:last-child {
                 text-align: #{$end-direction};
             }
         }
+
         tr {
             td:last-child {
                 text-align: #{$end-direction};
@@ -24,6 +26,7 @@
             }
         }
     }
+
     thead {
         th {
             padding: 0.5rem 1rem;
@@ -31,38 +34,46 @@
             background: $bg-gray;
             background: $bg-brand-light;
             color: $brand-color;
-            font-weight: 400;
+            font-weight: $font-weight-regular;
             vertical-align: top;
+
             &:first-child {
                 border-top-#{$start-direction}-radius: $radius4;
                 border-bottom-#{$start-direction}-radius: $radius4;
             }
+
             &:last-child {
                 border-top-#{$end-direction}-radius: $radius4;
                 border-bottom-#{$end-direction}-radius: $radius4;
             }
         }
     }
+
     tr {
         &.selected-row {
             background: $bg-gray;
         }
+
         &:last-child {
             td {
                 border-bottom: none;
             }
         }
+
         td {
             position: relative;
+
             /* word-break:break-word;*/
             &:first-child {
                 /* padding-left: 0;*/
             }
+
             &:last-child {
                 /*  padding-right: 0;*/
             }
         }
     }
+
     th,
     td {
         font-weight: unset;
@@ -73,18 +84,22 @@
         border-bottom: $border;
         vertical-align: top;
     }
+
     a {
         color: $brand-color;
+
         &:hover {
             text-decoration: underline;
         }
     }
+
     table {
         font-size: 100%;
     }
 
     &-fixed {
         position: relative;
+
         th {
             background-color: #fff;
             position: sticky;
@@ -386,6 +401,7 @@
             &:first-child {
                 padding-#{$start-direction}: 0;
             }
+
             &:last-child {
                 padding-#{$end-direction}: 0;
                 text-align: #{$end-direction};
@@ -406,7 +422,7 @@
 .table.cart--full .item-yk-head-title,
 .table.cart--full .item__title {
     font-size: 1.1em;
-    font-weight: 600;
+    font-weight: $font-weight-bold;
 }
 
 .table.cart--full .item-yk-head-specification .btn {
@@ -424,17 +440,20 @@
 .table-fixed-header {
     table-layout: fixed;
     border-collapse: collapse;
+
     thead {
         tr {
             display: table-row;
         }
     }
+
     tbody {
         display: block;
         width: 100%;
         overflow: auto;
         height: 350px;
     }
+
     thead,
     tbody tr,
     tfoot {
@@ -448,10 +467,12 @@
     margin-top: 1rem;
     border: $border;
     border-radius: $common-radius;
+
     table {
         th {
-            font-weight: 600;
+            font-weight: $font-weight-bold;
         }
+
         th,
         td {
             vertical-align: middle;
@@ -459,6 +480,7 @@
             font-size: 0.85rem;
             border-bottom: $border;
         }
+
         tr {
             &:last-child {
                 td {
