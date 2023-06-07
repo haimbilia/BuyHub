@@ -5,42 +5,50 @@
     width: auto;
     align-items: flex-start;
     position: relative;
+
     &-thumbnail {
         position: relative;
         margin-#{$end-direction}: 15px;
+
         img {
             min-width: 30px;
             max-width: 80px;
             border-radius: $common-radius;
             //border: $border;
             border: none;
+
             @include media-breakpoint-down(sm) {
                 max-width: 50px;
             }
         }
     }
+
     &-data {
         display: flex;
         flex: 1;
         min-width: 0px;
         flex-direction: column;
+
         .title {
             color: $txt-body;
-            font-weight: 500;
+            font-weight: $font-weight-normal;
             //font-size: 0.88rem;
             margin-bottom: 10px;
             // white-space: nowrap;
             // overflow: hidden;
             // text-overflow: ellipsis;
         }
+
         .products-price {
             margin-bottom: 1rem;
         }
+
         .options {
             font-size: 0.75rem;
             color: $txt-gray;
         }
     }
+
     &-btn {
         margin-top: 5px;
         font-size: 0.8rem;
@@ -61,14 +69,15 @@
         align-items: center;
         overflow: hidden;
 
-        img {
-        }
+        img {}
+
         &-seller {
             flex: 0 0 100px;
             max-width: 100px;
             padding: 16px;
         }
     }
+
     &-free-size {
         flex: auto;
         max-width: none;
@@ -78,19 +87,22 @@
         font-size: 0.8rem;
         // min-width: min-content;
         min-width: 150px;
+
         p {
             margin: 3px 0;
         }
     }
+
     &__title {
         color: $txt-body;
         margin: 0 0 4px 0;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         overflow-wrap: break-word;
         word-wrap: break-word;
         word-break: break-all;
         word-break: break-word;
         hyphens: auto;
+
         // white-space: nowrap;
         // overflow: hidden;
         // text-overflow: ellipsis;
@@ -98,6 +110,7 @@
             opacity: 1;
             color: inherit;
             font-weight: inherit;
+
             &:hover {
                 text-decoration: underline;
             }
@@ -108,46 +121,56 @@
         display: block;
         opacity: 0.8;
     }
-    &__brand {
-    }
+
+    &__brand {}
+
     &__location {
         margin-bottom: 5px;
+
         .svg {
             width: 14px;
             height: 14px;
         }
     }
+
     &__category {
         opacity: 0.8;
     }
+
     &__specification {
         color: lighten($txt-body, 20%);
     }
-    &__sold_by {
-    }
-    &__shipping {
-    }
-    &__sold_by {
-    }
-    &__shipping {
-    }
+
+    &__sold_by {}
+
+    &__shipping {}
+
+    &__sold_by {}
+
+    &__shipping {}
+
     &__date {
         display: block;
         opacity: 0.6;
     }
+
     &__price {
-        font-weight: 600;
+        font-weight: $font-weight-bold;
+
         &_old {
             color: $txt-gray;
-            font-weight: 300;
+            font-weight: $font-weight-light;
         }
+
         &_off {
-            font-weight: 300;
+            font-weight: $font-weight-light;
         }
     }
+
     &__price_off {
         color: $primary-color;
     }
+
     .btn-close {
         position: absolute;
         #{$end-direction}: 0;

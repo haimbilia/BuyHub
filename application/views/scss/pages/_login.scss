@@ -1,10 +1,12 @@
 $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+
 .enter-page {
     height: 100%;
     position: relative;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+
     @include media-breakpoint-up(md) {
         //align-items: center;
     }
@@ -15,6 +17,7 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
         padding-top: 2.5rem;
         margin: 0 auto;
         max-width: 500px;
+
         &-logo {
             margin: 0 auto;
             margin-bottom: 2.5rem;
@@ -28,9 +31,10 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     h2 {
         color: #000;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         font-size: calc(112.5% + 0.9vw);
     }
 }
@@ -43,6 +47,7 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
     margin: 30px 0;
     display: flex;
     text-align: center;
+
     &:after {
         content: "";
         height: 1px;
@@ -52,6 +57,7 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
         top: 50%;
         left: 0;
     }
+
     span {
         position: relative;
         z-index: 1;
@@ -61,12 +67,14 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
         margin: 0 auto;
     }
 }
+
 .other-option {
     margin-top: 1.5rem;
 }
 
 .login-popup {
     padding: 1rem 2rem;
+
     .title {
         margin-bottom: 1.5rem;
     }
@@ -75,9 +83,11 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
 .login-wrapper {
     .form-side {
         padding: 2rem;
+
         @include media-breakpoint-down(md) {
             padding: 1rem;
         }
+
         input {
             &[type="submit"] {
                 background: $secondary-color;
@@ -90,12 +100,14 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
             }
         }
     }
+
     .forgot {
         text-align: #{$end-direction};
         color: #fff;
         font-size: 0.9em;
         line-height: 1;
     }
+
     .last-button {
         background: none;
         color: #fff;
@@ -107,10 +119,12 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
         text-align: center;
         line-height: 1.42857;
         width: 100%;
+
         &:hover {
             background-color: #424242;
         }
     }
+
     .add-side {
         padding: 2rem;
         display: table-cell;
@@ -135,13 +149,16 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
             width: 100%;
             margin-bottom: 15px;
         }
+
         &.fb {
             background: #3856a0;
         }
+
         &.gp {
             background: #dd4330;
         }
     }
+
     .svg {
         width: 18px;
         height: 18px;
@@ -167,6 +184,7 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+
     //border: $border;
     //border-radius: $common-radius;
     // box-shadow: $shadow1;
@@ -174,32 +192,39 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
     &_head {
         margin-bottom: 2rem;
         text-align: center;
+
         .title {
-            font-weight: 600;
+            font-weight: $font-weight-bold;
             margin: 0;
             margin-bottom: 0.5rem;
             font-size: 1.125rem;
         }
+
         p {
             color: $txt-gray;
             font-size: 0.8rem;
         }
     }
+
     &_body {
         flex: 1;
     }
+
     &_foot {
         margin-top: 4rem;
         text-align: center;
         color: $txt-gray;
+
         a {
             font-size: 0.8rem;
             color: $brand-color;
             text-align: center;
         }
     }
+
     .link {
         font-size: 0.8rem;
+
         &:after {
             content: normal;
         }
@@ -217,15 +242,17 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
     grid-gap: 1rem;
     padding-bottom: 1rem;
 }
+
 .other-links {
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.8rem;
     margin-top: 2rem;
+
     li {
         margin: 0 0.5rem;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         color: $txt-gray;
     }
 }
@@ -241,16 +268,18 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
     flex-direction: column;
     align-items: center;
     gap: 10px;
+
     &-item {
         flex: 1;
         width: 100%;
         max-width: 310px;
     }
+
     &-link {
         background-color: #fff;
         color: rgba(0, 0, 0, 0.54);
         font-size: 14px;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         border-radius: 10px;
         border: $border;
         border-color: rgb(168, 168, 168);
@@ -259,6 +288,7 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
         display: flex;
         align-items: center;
         justify-content: center;
+
         &:hover {
             color: rgba(0, 0, 0, 1);
             border-color: currentColor;
@@ -266,10 +296,12 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
             box-shadow: $btn-hover-shadow;
             cursor: pointer;
         }
+
         &:focus {
             box-shadow: $btn-focus-shadow;
         }
     }
+
     &-wrap {
         display: flex;
         justify-content: center;
@@ -277,6 +309,7 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
         gap: 0;
         width: 220px;
     }
+
     &-icon {
         $size: 40px;
         padding: 0;
@@ -303,16 +336,20 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
     .btn-FacebookLogin {
         background: #3b5a99;
     }
+
     .btn-gp,
     .btn-GoogleLogin {
         background: #da4a42;
     }
+
     .btn-gm {
         background: #333333;
     }
+
     .btn-AppleLogin {
         background: #000000;
     }
+
     .btn-InstagramLogin {
         background: #3f729b;
     }

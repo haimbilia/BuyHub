@@ -16,7 +16,7 @@
 }
 
 .autocomplete-suggestions.search-dropdown-menu li strong {
-    font-weight: 700;
+    font-weight: $font-weight-boldest;
 }
 
 .auto-suggestion {
@@ -35,9 +35,11 @@
     transform: scale(1);
     opacity: 1;
     filter: alpha(opacity=100);
+
     li {
         padding: 5px 10px;
         border-bottom: $border;
+
         a {
             display: block;
         }

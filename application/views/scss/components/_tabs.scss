@@ -7,50 +7,61 @@
     grid-gap: 1rem;
     white-space: nowrap;
     margin-bottom: 2rem;
+
     @include media-breakpoint-up(lg) {
         grid-gap: 2rem;
         margin: 0;
     }
+
     @include media-breakpoint-down(sm) {
         overflow: hidden;
         overflow-x: auto;
         //width: fill-available;
         width: stretch;
     }
+
     &-center {
         margin: 0 auto;
+
         @include media-breakpoint-up(lg) {
             justify-content: center;
         }
     }
+
     .nav-item {
+
         //margin: 0 1rem;
         &:last-child {
             .nav-link {
                 margin-#{$end-direction}: 0;
             }
         }
+
         &:first-child {
             .nav-link {
                 margin-#{$start-direction}: 0;
             }
         }
     }
+
     .nav-link {
         color: $txt-body;
         border: none;
-        font-weight: 500;
+        font-weight: $font-weight-normal;
         font-size: 1rem;
         padding: 0.7rem 0;
+
         //margin: 0 2rem;
         &:hover {
             color: $brand-color;
         }
+
         &.active {
             background: none;
             border: none;
             color: $brand-color;
             position: relative;
+
             &:after {
                 content: "";
                 background: $brand-color;

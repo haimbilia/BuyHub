@@ -36,8 +36,8 @@ if (!$userActiveTab) {
         </p>
         <p class="version"><?php echo CONF_WEB_APP_VERSION; ?></p>
     </div>
-    <ul class="mobile-actions">
-        <li class="mobile-actions-item" role="none">
+    <div class="mobile-actions">
+        <div class="mobile-actions-item">
             <a class="mobile-actions-link" href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId); ?>">
                 <svg class="svg" width="24" height="24">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#home">
@@ -45,8 +45,8 @@ if (!$userActiveTab) {
                 </svg>
                 <span class="txt"><?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?></span>
             </a>
-        </li>
-        <li class="mobile-actions-item" role="none">
+        </div>
+        <div class="mobile-actions-item">
             <button class="mobile-actions-link" type="button" data-trigger="sidebar">
                 <svg class="svg" width="24" height="24">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#menu">
@@ -54,9 +54,8 @@ if (!$userActiveTab) {
                 </svg>
                 <span class="txt"><?php echo Labels::getLabel("NAV_MENU", $siteLangId); ?></span>
             </button>
-        </li>
-
-        <li class="mobile-actions-item" role="none">
+        </div>
+        <div class="mobile-actions-item">
             <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-account" aria-controls="offcanvas-account">
                 <svg class="svg" width="24" height="24">
                     <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite-header.svg#mbl-account">
@@ -64,8 +63,8 @@ if (!$userActiveTab) {
                 </svg>
                 <span class="txt"><?php echo Labels::getLabel("LBL_Account", $siteLangId); ?></span>
             </button>
-        </li>
-    </ul>
+        </div>
+    </div>
 </footer>
 </main>
 </div>

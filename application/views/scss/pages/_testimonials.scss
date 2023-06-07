@@ -7,12 +7,14 @@
     //box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.22);
     background-color: $bg-white;
     padding: 1.5rem;
+
     .user {
         display: flex;
 
         gap: 10px;
         transition: all 0.3s ease 0s;
         margin-bottom: 1rem;
+
         img {
             border-radius: $common-radius;
             overflow: hidden;
@@ -20,15 +22,17 @@
             height: 60px;
             max-width: 100%;
         }
+
         .user-name {
             padding-top: 10px;
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: $font-weight-normal;
         }
     }
+
     .testimonials-content {
         p {
-            font-weight: 400;
+            font-weight: $font-weight-regular;
             font-size: 0.95rem;
             padding: 0;
         }
