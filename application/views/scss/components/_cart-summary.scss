@@ -1,19 +1,23 @@
 .cart-summary {
     font-size: 0.85rem;
+
     &-item {
         padding: 0.5rem 0;
         display: flex;
         align-items: center;
         justify-content: space-between;
+
         .label {
             color: currentColor;
             padding: 0;
         }
+
         .value {
-            font-weight: 600;
+            font-weight: $font-weight-bold;
             text-align: #{$end-direction};
             margin-#{$start-direction}: auto;
         }
+
         &.highlighted {
             font-size: 1rem;
             color: $txt-body;
@@ -21,6 +25,7 @@
             padding-top: 1rem;
             margin-top: 1rem;
         }
+
         &.text-success {
             color: $success-color;
         }

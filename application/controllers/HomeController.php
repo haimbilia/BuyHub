@@ -1624,7 +1624,7 @@ class HomeController extends MyAppController
 
     public function states($countryId)
     {
-        $countryId = FatUtility::int($countryId);
+        $countryId = FatUtility::int($countryId); 
         if (1 > $countryId) {
             $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
             FatUtility::dieJsonError($message);

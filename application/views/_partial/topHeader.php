@@ -14,7 +14,7 @@
                 <div class="top-bar__inner">
                     <div class="top-bar__left">
                         <div class="logo">
-                            <a href="<?php echo UrlHelper::generateUrl('','',[],CONF_WEBROOT_FRONTEND); ?>">
+                            <a href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>">
                                 <?php
                                 $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
                                 $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
@@ -88,7 +88,7 @@
                                 </button>
                             </li>
                             <li class="quick-nav-item item-mobile">
-                                <button class="quick-nav-link btn-mega-search toggle--search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-label="mega-nav-search">
+                                <button class="quick-nav-link btn-mega-search toggle--search" role="button" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-label="search">
                                     <svg class="svg" width="20" height="20">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
                                         </use>

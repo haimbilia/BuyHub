@@ -19,13 +19,15 @@
     z-index: 1050;
     padding: 1rem;
     max-width: 380px;
+
     @include media-breakpoint-up(lg) {
         #{$start-direction}: 1rem;
         #{$end-direction}: auto;
     }
+
     .box-cookies {
         font-size: 13px;
-        font-weight: 400;
+        font-weight: $font-weight-regular;
         line-height: 30px;
         padding: 1rem;
         text-align: center;
@@ -35,9 +37,11 @@
         grid-gap: 10px;
         flex-direction: column;
         flex-flow: row wrap;
+
         @include media-breakpoint-up(lg) {
             flex-direction: column;
         }
+
         a {
             text-decoration: underline;
         }
@@ -47,6 +51,7 @@
         display: flex;
         gap: 1rem;
         flex-flow: row wrap;
+
         //flex-direction: column;
         .btn {
             //border-radius: 6px;
@@ -58,17 +63,20 @@
 .cookie-alert {
     font-size: 0.85rem;
     padding: 2rem;
+
     p {
         color: $txt-gray;
     }
+
     .cookies-group {
         margin: 2rem 0;
+
         &-head {
             border: $border;
             border-radius: $radius;
             font-size: 1rem;
             color: $txt-body;
-            font-weight: 600;
+            font-weight: $font-weight-bold;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -77,6 +85,7 @@
             margin: 0;
             position: relative;
             cursor: pointer;
+
             &:before {
                 content: "";
                 position: absolute;
@@ -91,6 +100,7 @@
                 transform-origin: center;
                 transition: all 0.5s ease;
             }
+
             &[aria-expanded="true"] {
                 &:before {
                     top: calc(50% - 1px);
@@ -103,6 +113,7 @@
                 padding: 0;
             }
         }
+
         &-body {
             margin: 1rem 0;
         }

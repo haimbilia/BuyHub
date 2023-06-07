@@ -4,16 +4,18 @@ button:focus,
     outline: none;
     box-shadow: none;
 }
+
 $btn-padding: 0 1.25rem;
 $btn-height: 3rem;
 $btn-border: solid 1px transparent;
 $btn-radius: 4px;
 $btn-font-size: 0.85rem;
-$btn-font-weight: 500;
+$btn-font-weight: $font-weight-normal;
 $btn-line-height: $btn-height;
 $btn-hover-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 $btn-active-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -26,28 +28,35 @@ $btn-active-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0
     font-weight: $btn-font-weight;
     line-height: $btn-line-height;
     white-space: nowrap;
+
     &:hover {
         text-decoration: none !important;
         box-shadow: $btn-hover-shadow;
     }
+
     &:focus {
         outline: none !important;
         box-shadow: $btn-focus-shadow;
     }
+
     &:active {
         box-shadow: $btn-active-shadow;
     }
+
     &-brand {
         @include bg-brand;
         border-color: $brand-color;
+
         &:hover {
             color: $brand-color-inverse;
         }
     }
+
     &-outline-brand {
         background-color: transparent;
         border-color: $brand-color;
         color: $brand-color;
+
         &:hover {
             color: currentColor;
             @include bg-brand;
@@ -57,14 +66,17 @@ $btn-active-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0
     &-white {
         background-color: #fff;
         color: #000;
+
         &:hover {
             color: currentColor;
         }
     }
+
     &-outline-white {
         background-color: transparent;
         border-color: #fff;
         color: #fff;
+
         &:hover {
             color: currentColor;
         }
@@ -74,6 +86,7 @@ $btn-active-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0
         background-color: $secondary-color;
         border-color: $secondary-color;
         color: $secondary-color-inverse;
+
         &:hover {
             color: $secondary-color-inverse !important;
         }
@@ -83,6 +96,7 @@ $btn-active-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0
         background-color: transparent;
         border-color: $secondary-color;
         color: $secondary-color;
+
         &:hover {
             color: currentColor;
         }
@@ -92,34 +106,42 @@ $btn-active-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0
         background-color: #000;
         border-color: #000;
         color: #fff;
+
         &:hover {
             color: #fff;
         }
     }
+
     &-outline-black {
         background-color: transparent;
         border-color: #000;
         color: $txt-body;
+
         &:hover {
             @include bg-black;
         }
     }
+
     &-outline-gray {
         background-color: transparent;
         border-color: $border-color;
         color: $txt-body;
+
         &:hover {
             color: currentColor;
         }
     }
+
     &-block {
         display: block;
         width: 100% !important;
     }
+
     &-wide {
         padding-left: 2rem !important;
         padding-right: 2rem !important;
     }
+
     &-sm {
         height: auto;
         padding: 0.25rem 0.5rem;
@@ -127,31 +149,38 @@ $btn-active-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0
         line-height: 1.5;
         //border-radius: 0.2rem;
     }
+
     &-arrow {
         gap: 6px;
+
         .svg {
             width: 12px;
             height: 12px;
             margin-top: -4px;
         }
     }
+
     &-icon {
         gap: 6px;
+
         .svg {
             // width: 12px;
             // height: 12px;
             //margin-#{$end-direction}: 6px;
         }
     }
+
     &-link {
         text-decoration: none;
         color: $txt-body;
         padding: 0;
         height: auto;
         line-height: 1;
+
         .arrow {
             display: inline-block;
             transition: all 0.2s ease-in-out;
+
             .svg {
                 width: 12px;
                 height: 12px;
@@ -159,16 +188,20 @@ $btn-active-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0
                 fill: currentcolor;
             }
         }
+
         &:hover {
             box-shadow: none;
+
             .arrow {
                 transform: translateX(0.25rem);
             }
         }
+
         &:focus {
             box-shadow: none;
         }
     }
+
     &-underline {
         text-decoration: underline;
     }
@@ -192,9 +225,11 @@ $btn-active-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0
     justify-content: center;
     background-color: $bg-gray;
     border-radius: 50%;
+
     &:hover {
         background-color: darken($bg-gray, 05);
     }
+
     .svg {
         [dir="rtl"] & {
             transform: scaleX(-1);
@@ -214,6 +249,7 @@ a.link {
     background-repeat: no-repeat;
     background-size: 0% 1px;
     transition: background-size 0.3s;
+
     &:after {
         //content: "";
         position: absolute;
@@ -228,6 +264,7 @@ a.link {
         transition: transform 0.3s ease-in-out;
         transition: transform 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
     }
+
     &:hover {
         text-decoration: none;
         background-size: 100% 1px;
@@ -248,6 +285,7 @@ a.link-arrow {
     transition: background-size 0.3s;
     display: inline-flex;
     align-items: center;
+
     &:after {
         transition: all 0.5s ease;
         position: absolute;
@@ -255,9 +293,11 @@ a.link-arrow {
         opacity: 0;
         content: "→";
     }
+
     &:hover {
         color: $brand-color;
         text-decoration: none;
+
         &:after {
             transition: all 0.5s ease;
             right: -1rem;
@@ -265,6 +305,7 @@ a.link-arrow {
             opacity: 1;
         }
     }
+
     &--inline {
         display: inline-flex;
     }
@@ -275,11 +316,13 @@ a.link-arrow {
     align-items: center;
     font-size: 0.9rem;
     color: $primary-color;
+
     .icn {
         width: 12px;
         height: 12px;
         display: block;
         margin-#{$end-direction}: 8px;
+
         .svg {
             width: 100%;
             height: 100%;
@@ -288,12 +331,13 @@ a.link-arrow {
         }
     }
 }
+
 .link-underline {
     padding: 0;
     color: $brand-color;
     position: relative;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: $font-weight-normal;
     white-space: nowrap;
     text-rendering: optimizeLegibility;
     transition: color 0.3s ease-in-out;
@@ -305,29 +349,36 @@ a.link-arrow {
     text-decoration: none;
     background-size: 100% 1px;
     border: none;
+
     &:hover,
     &:focus {
         color: $secondary-color;
         text-decoration: none !important;
         background-size: 95% 1px;
     }
+
     &-black {
         color: $black;
     }
 }
+
 @-webkit-keyframes moltinShake {
     12.5% {
         transform: translateX(-6px) rotateY(-5deg);
     }
+
     37.5% {
         transform: translateX(5px) rotateY(4deg);
     }
+
     62.5% {
         transform: translateX(-3px) rotateY(-2deg);
     }
+
     87.5% {
         transform: translateX(2px) rotateY(1deg);
     }
+
     100% {
         transform: translateX(0);
     }
@@ -337,15 +388,19 @@ a.link-arrow {
     12.5% {
         transform: translateX(-6px) rotateY(-5deg);
     }
+
     37.5% {
         transform: translateX(5px) rotateY(4deg);
     }
+
     62.5% {
         transform: translateX(-3px) rotateY(-2deg);
     }
+
     87.5% {
         transform: translateX(2px) rotateY(1deg);
     }
+
     100% {
         transform: translateX(0);
     }
@@ -358,6 +413,7 @@ a.link-arrow {
 .link-dotted {
     text-decoration: dotted underline;
     text-underline-offset: 4px;
+
     &:hover {
         color: $brand-color;
     }

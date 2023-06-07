@@ -9,14 +9,16 @@
     margin: 20px;
     color: #4c4c4c;
     max-width: 500px;
+
     .heading {
         font-size: calc(112.5% + 1vw);
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         text-transform: uppercase;
         position: relative;
         line-height: 1.2;
         margin-bottom: 40px;
         color: inherit;
+
         &:after {
             background: $secondary-color;
             color: $secondary-color-inverse;
@@ -27,12 +29,14 @@
             content: "";
             display: block;
         }
+
         span {
             display: block;
             font-size: 0.8rem;
             text-transform: none;
         }
     }
+
     ul {
         li {
             position: relative;
@@ -40,6 +44,7 @@
             padding: 0 15px;
             display: block;
             font-size: 0.9rem;
+
             &:before {
                 width: 5px;
                 height: 5px;
@@ -52,6 +57,7 @@
                 background: #4c4c4c;
             }
         }
+
         ul {
             margin-#{$start-direction}: 15px;
             margin-bottom: 20px;
