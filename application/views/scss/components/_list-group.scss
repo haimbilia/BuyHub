@@ -52,6 +52,7 @@
             border-top: none;
             border-radius: 0;
         }
+
         &:last-child {
             padding-bottom: 0;
             border-bottom: 0;
@@ -64,12 +65,15 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+
     li {
         border: none;
         transition-delay: 250ms;
         margin-#{$end-direction}: 15px;
+
         a {
             color: $txt-body;
+
             .svg {
                 fill: currentColor;
                 opacity: 0.6;
@@ -77,6 +81,7 @@
                 height: 1rem;
                 margin: 0;
             }
+
             &:hover {
                 .svg {
                     fill: $brand-color;
@@ -84,9 +89,11 @@
                 }
             }
         }
+
         &:last-child {
             margin-#{$end-direction}: 0;
         }
+
         &:nth-child(2) {
             transition-delay: 500ms;
         }

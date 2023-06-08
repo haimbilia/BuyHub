@@ -14,7 +14,9 @@
         // font-size: inherit;
     }
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:active {
         border-color: $brand-color;
 
         .products-body {
@@ -545,7 +547,9 @@
                 color: $brand-color;
                 background: #f0f0f0;
 
-                &:hover {
+                &:hover,
+                &:focus,
+                &:active {
                     background: $brand-color;
                     color: $brand-color-inverse;
                 }

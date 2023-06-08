@@ -609,7 +609,9 @@
         padding: 2.5rem 2rem;
         width: 100%;
 
-        &:hover {
+        &:hover,
+        &:focus,
+        &:active {
             border-color: $secondary-color;
             color: $secondary-color;
         }
@@ -909,7 +911,9 @@
             border: none;
         }
 
-        &:hover {
+        &:hover,
+        &:focus,
+        &:active {
             box-shadow: none;
         }
     }

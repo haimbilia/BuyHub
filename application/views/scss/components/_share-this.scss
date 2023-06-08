@@ -58,13 +58,12 @@
 
     &:hover:before {
         opacity: 0.5;
-        -webkit-transform: translateY(-100%);
         transform: translateY(-100%);
     }
 
     &:hover:after {
         opacity: 0.5;
-        -webkit-transform: translateY(100%);
+
         transform: translateY(100%);
     }
 
@@ -95,7 +94,6 @@
         width: auto;
         height: 100%;
         text-decoration: none;
-
         transition: 0.25s;
         padding: 0;
         flex: 1;

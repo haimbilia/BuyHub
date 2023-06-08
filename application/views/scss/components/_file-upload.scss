@@ -10,7 +10,9 @@
     //margin: .875rem 0;
     font-size: 0.8rem;
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:active {
         cursor: pointer;
         color: $primary-color;
     }

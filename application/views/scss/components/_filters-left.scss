@@ -179,7 +179,9 @@
             font-size: 10px;
             color: inherit;
 
-            &:hover {
+            &:hover,
+            &:focus,
+            &:active {
                 background-color: none;
             }
         }

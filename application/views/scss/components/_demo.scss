@@ -30,7 +30,9 @@ $right-space: 3rem;
     font-size: 0.9rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:active {
         color: #fff;
         width: 50px;
     }
@@ -185,7 +187,9 @@ $right-space: 3rem;
             font-weight: $font-weight-bold;
             gap: 10px;
 
-            &:hover {
+            &:hover,
+            &:focus,
+            &:active {
                 color: $brand-color;
             }
 

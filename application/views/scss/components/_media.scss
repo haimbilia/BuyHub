@@ -149,7 +149,9 @@
             align-items: center;
             justify-content: center;
 
-            &:hover {
+            &:hover,
+            &:focus,
+            &:active {
                 background: $txt-body;
                 color: #fff;
             }

@@ -404,7 +404,9 @@ mark,
     border: none;
     background: none;
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:active {
         transform: rotate(-90deg);
         opacity: 1;
     }
@@ -465,7 +467,9 @@ mark,
             font-size: 0.75rem;
             display: block;
 
-            &:hover {
+            &:hover,
+            &:focus,
+            &:active {
                 background: $brand-color;
                 color: $brand-color-inverse;
                 border-color: currentColor;

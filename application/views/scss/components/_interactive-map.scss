@@ -167,7 +167,9 @@
         transform: rotate(45deg * $transform-direction);
         margin-#{$start-direction}: 0.5rem;
 
-        &:hover {
+        &:hover,
+        &:focus,
+        &:active {
             color: #ef4546;
         }
 

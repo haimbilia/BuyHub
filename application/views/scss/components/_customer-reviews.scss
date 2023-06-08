@@ -340,7 +340,9 @@
             font-weight: $font-weight-regular;
         }
 
-        &:hover {
+        &:hover,
+        &:focus,
+        &:active {
             color: $brand-color;
         }
     }

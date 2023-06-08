@@ -141,7 +141,9 @@
         overflow: hidden;
         cursor: pointer;
 
-        &:hover {
+        &:hover,
+        &:focus,
+        &:active {
             .icon-1 {
                 top: -15px;
             }
@@ -215,6 +217,8 @@
         text-decoration: none;
 
         &:hover,
+        &:focus,
+        &:active,
         &.active {
             color: $brand-color;
             text-decoration: none;

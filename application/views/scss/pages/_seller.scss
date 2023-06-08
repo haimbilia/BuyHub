@@ -17,7 +17,10 @@
         margin-#{$start-direction}: 1rem;
 
         a {
-            &:hover {
+
+            &:hover,
+            &:focus,
+            &:active {
                 color: $brand-color-inverse;
             }
         }
