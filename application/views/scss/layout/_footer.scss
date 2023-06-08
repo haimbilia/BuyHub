@@ -143,8 +143,9 @@
                 padding: 10px 0;
 
                 a {
-                    color: $brand-color;
+                    color: $txt-body;
                     font-weight: $font-weight-bold;
+                    text-decoration: underline;
 
                     &:hover {
                         text-decoration: underline;

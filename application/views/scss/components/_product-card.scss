@@ -172,7 +172,7 @@
     }
 
     &-category {
-        color: lighten($txt-body, 50%);
+        color: $txt-gray;
         font-size: 0.85rem;
         font-weight: $font-weight-regular;
         //margin-bottom: 8px;

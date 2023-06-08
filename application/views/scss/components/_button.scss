@@ -347,7 +347,7 @@ a.link-arrow {
     background-color: transparent;
     transition: background-size 0.3s;
     text-decoration: none;
-    background-size: 100% 1px;
+    background-size: 100% 2px;
     border: none;
 
     &:hover,
@@ -355,7 +355,7 @@ a.link-arrow {
     &:active {
         color: $secondary-color;
         text-decoration: none !important;
-        background-size: 95% 1px;
+        background-size: 95% 2px;
     }
 
     &-black {
