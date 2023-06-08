@@ -7,7 +7,8 @@ $header-height: 122px;
     width: 100%;
     font-weight: $font-weight-regular;
     font-size: 0.875rem;
-    background: $bg-white;
+    //background: $bg-white;
+    background-color: #000;
     border-bottom: $border;
 
     @include media-breakpoint-up(lg) {
