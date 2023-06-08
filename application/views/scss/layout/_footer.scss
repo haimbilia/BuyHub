@@ -90,9 +90,11 @@
                 border: none;
 
                 &.is-active {
-                    a {
-                        border-color: $brand-color;
-                        color: $brand-color;
+                    .list-options-link {
+                        // border-color: $brand-color;
+                        // color: $brand-color;
+                        border-color: #000;
+                        color: $txt-body;
                     }
                 }
 
@@ -103,11 +105,14 @@
 
             &-link {
                 color: currentColor;
+                background-color: transparent;
                 border: $border;
                 border-radius: 0;
                 display: flex;
                 align-items: center;
                 padding: 0.4rem 0.8rem;
+
+
             }
 
             .icon {

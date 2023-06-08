@@ -11,7 +11,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                         foreach ($collection['categories'] as $key => $category) {
                             $x++; ?>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link <?php echo 1 == $x ? 'active' : ''; ?>" data-bs-toggle="tab" data-bs-target="#tb-<?php echo $key . "-" . $collection['collection_id']; ?>" type="button" aria-controls="panel-1">
+                                <button class="nav-link <?php echo 1 == $x ? 'active' : ''; ?>" data-bs-toggle="tab" data-bs-target="#tb-<?php echo $key . "-" . $collection['collection_id']; ?>" type="button" aria-controls="<?php echo $category['catData']['prodcat_name']; ?>">
                                     <?php echo $category['catData']['prodcat_name']; ?>
                                 </button>
                             </li>
