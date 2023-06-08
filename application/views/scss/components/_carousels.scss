@@ -1,14 +1,17 @@
 .js-carousel {
     //display: block;
     grid-auto-flow: column;
+
     @include media-breakpoint-up(lg) {
         margin: 0 -1.5rem;
     }
+
     .item {
         @include media-breakpoint-up(lg) {
-            margin: 0 1.5rem;
+            padding: 0 1.5rem;
         }
     }
+
     .slick-track {
         margin: 0;
     }

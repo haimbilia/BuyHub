@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php if (isset($slides) && count($slides)) { ?>
-    <section class="js-hero-slider hero-slider" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+    <section class="js-hero-slider hero-slider" dir="<?php echo CommonHelper::getLayoutDirection(); ?> " role="region" aria-label="hero carousel">
         <?php foreach ($slides as $slide) {
             $desktopUrl = $desktopWebpUrl = '';
             $tabletUrl = $tabletWebpUrl = '';
@@ -45,7 +45,7 @@
             $imageDimension = ImageDimension::getData(ImageDimension::TYPE_SLIDE);
 
 
-            $out = '<div class="hero-slider-item">';
+            $out = '<div class="hero-slider-item" role="group">';
             if ($haveUrl) {
                 if ($slide['promotion_id'] > 0) {
                     $slideUrl =  UrlHelper::generateUrl('slides', 'track', array($slide['slide_id']));
