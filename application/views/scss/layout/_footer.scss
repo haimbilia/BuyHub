@@ -200,7 +200,7 @@
             font-weight: $font-weight-normal;
             padding: 5px 0;
             margin-bottom: 20px;
-            border-radius: $common-radius;
+            border-radius: 60px;
 
             @include media-breakpoint-up(lg) {
                 cursor: default;
