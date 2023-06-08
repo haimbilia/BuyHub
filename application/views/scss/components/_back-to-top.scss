@@ -1,6 +1,10 @@
 .back-to-top {
     background-color: #fff;
+    border-radius: 0;
+    border-top-#{$start-direction}-radius: $common-radius;
+    border-bottom-#{$start-direction}-radius: $common-radius;
     border-radius: $common-radius;
+    border: none;
     cursor: pointer;
     width: 44px;
     height: 50px;
@@ -13,6 +17,8 @@
     text-decoration: none;
     display: flex;
     justify-content: center;
+    align-items: center;
+    // gap: 5px;
     flex-direction: column;
     color: $txt-body;
     font-size: 0.8rem;
@@ -26,7 +32,7 @@
     }
 
     .svg {
-        margin: auto;
+        margin: 0 auto;
         width: 1rem;
         height: 1rem;
     }
