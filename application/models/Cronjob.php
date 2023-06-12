@@ -995,4 +995,12 @@ class Cronjob extends FatModel
             }
         }
     }
+
+    public static function generateSitemap()
+    {
+        if ((new Sitemap())->generate()) {
+            return Labels::getLabel('MSG_SITEMAP_HAS_BEEN_UPDATED_SUCCESSFULLY.');
+        }
+        return Labels::getLabel('MSG_UNABLE_TO_UPDATE_SITEMAP.');
+    }
 }
