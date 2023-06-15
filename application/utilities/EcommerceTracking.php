@@ -31,13 +31,19 @@ class EcommerceTracking
     const PROD_ACTION_TYPE_CHECKOUT = 5;
     const PROD_ACTION_TYPE_PURCHASE = 6;
     const PROD_ACTION_TYPE_REFUND = 7;
-    
-    const DEBUG = false;
 
-    public function __construct($trackingId, $pageTitle = NULL, $userId = NULL)
+    const DEBUG = true;
+
+    public function __construct($pageTitle = NULL, $userId = NULL)
     {
-        $this->trackingId = $trackingId;
-        $this->userId = $userId ?? $this->uuidV4();        
+        if (1 == FatApp::getConfig('CONF_GOOGLE_ANALYTICS_4', FatUtility::VAR_INT, 0)) {
+            $analyticsId = FatApp::getConfig("CONF_PROPERTY_ID");
+        } else {
+            $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
+        }
+
+        $this->trackingId = $analyticsId;
+        $this->userId = $userId ?? $this->uuidV4();
         $this->pageTitle = $pageTitle;
     }
 
@@ -55,7 +61,7 @@ class EcommerceTracking
             'category' => $category,
             'brand' => $brand,
             'position' => $position,
-                //'variant' => $variant,
+            //'variant' => $variant,
         ];
     }
 
@@ -82,7 +88,7 @@ class EcommerceTracking
     {
         $this->productAction = $action;
     }
-    
+
     public function addProductActionList($name)
     {
         $this->productActionList = $name;
@@ -103,14 +109,18 @@ class EcommerceTracking
 
     public function sendRequest()
     {
+        if (empty($this->trackingId)) {
+            return;
+        }
+
         $gaParams = $this->buildParams();
-        
-        $url = 'https://www.google-analytics.com/collect';        
+
+        $url = 'https://www.google-analytics.com/collect';
         if (true == self::DEBUG) {
             $url = 'https://www.google-analytics.com/debug/collect';
             CommonHelper::logData("GOOGLE ECOMMERCE TRACKING PARAMS==>" . $gaParams);
-        }      
-        $curl = new Curl\Curl();        
+        }
+        $curl = new Curl\Curl();
         $curl->setUserAgent($_SERVER['HTTP_USER_AGENT']);
         $curl->setHeader('Content-type', 'application/x-www-form-urlencoded');
         $curl->setOpt(CURLOPT_RETURNTRANSFER, true);
@@ -119,7 +129,7 @@ class EcommerceTracking
             if ($curl->error) {
                 echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
             } else {
-                //CommonHelper::printArray(json_decode($curl->response,true));
+                // CommonHelper::printArray(json_decode($curl->response,true));
                 CommonHelper::logData("GOOGLE ECOMMERCE TRACKING RESPONSE==>" . $curl->response);
             }
         }
@@ -132,7 +142,7 @@ class EcommerceTracking
             'tid' => $this->trackingId, # Tracking ID / Property ID.
             # Anonymous Client Identifier. Ideally, this should be a UUID that
             # is associated with particular user, device, or browser instance.
-            'cid' => $this->userId,   
+            'cid' => $this->userId,
         ];
 
         foreach ($this->impressions as $key => $impression) {
@@ -160,7 +170,7 @@ class EcommerceTracking
                 't' => 'event',
                 'ec' => $this->event['category'], // Event Category. Required.
                 'ea' => $this->event['action'], // Event Action. Required.
-                    /* 'el' => $this->event['label'], // Event label. */
+                /* 'el' => $this->event['label'], // Event label. */
             ];
         } else {
             $gaParams += [
@@ -199,11 +209,11 @@ class EcommerceTracking
             }
             $gaParams['pa'] = $pa;
         }
-        
+
         if (!empty($this->productActionList)) {
             $gaParams['pal'] = $this->productActionList;
         }
-        
+
         foreach ($this->products as $prodKey => $product) {
             $prodKey++;
             $gaKey = "pr" . $prodKey;
@@ -230,24 +240,27 @@ class EcommerceTracking
 
         return http_build_query($gaParams);
     }
-    
+
     private function uuidV4()
     {
-        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-                // 32 bits for "time_low"
-                mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-                // 16 bits for "time_mid"
-                mt_rand(0, 0xffff),
-                // 16 bits for "time_hi_and_version",
-                // four most significant bits holds version number 4
-                mt_rand(0, 0x0fff) | 0x4000,
-                // 16 bits, 8 bits for "clk_seq_hi_res",
-                // 8 bits for "clk_seq_low",
-                // two most significant bits holds zero and one for variant DCE1.1
-                mt_rand(0, 0x3fff) | 0x8000,
-                // 48 bits for "node"
-                mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            // 32 bits for "time_low"
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            // 16 bits for "time_mid"
+            mt_rand(0, 0xffff),
+            // 16 bits for "time_hi_and_version",
+            // four most significant bits holds version number 4
+            mt_rand(0, 0x0fff) | 0x4000,
+            // 16 bits, 8 bits for "clk_seq_hi_res",
+            // 8 bits for "clk_seq_low",
+            // two most significant bits holds zero and one for variant DCE1.1
+            mt_rand(0, 0x3fff) | 0x8000,
+            // 48 bits for "node"
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff)
         );
     }
-
 }

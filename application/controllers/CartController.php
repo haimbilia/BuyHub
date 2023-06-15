@@ -495,10 +495,9 @@ class CartController extends MyAppController
             if ($productAdd) {
                 $returnUserId = (true === MOBILE_APP_API_CALL) ? true : false;
                 $cartUserId = $cartObj->add($productId, $quantity, 0, $returnUserId);
-                $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-                if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+                if (FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
                     $cartQty = $cartObj->getQtyBySelProdId($sellerProductRow['selprod_id']);
-                    $et = new EcommerceTracking($analyticsId, Labels::getLabel('MSG_PRODUCT_DETAIL', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
+                    $et = new EcommerceTracking(Labels::getLabel('MSG_PRODUCT_DETAIL', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
                     $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_ADD_TO_CART);
                     $et->addProduct($sellerProductRow['selprod_id'], $sellerProductRow['selprod_title'], $sellerProductRow['prodcat_name'], $sellerProductRow['brand_name'], $cartQty, $sellerProductRow['selprod_price']);
                     $et->sendRequest();

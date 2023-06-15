@@ -56,7 +56,7 @@ $(document).ready(function () {
     $(document).on('change', '.discountInJs', function () {
         showHideMaxDiscountVal();
     });
-    
+
     $(document).on("keyup", "input[name='CONF_REFERRER_URL_VALIDITY']", function () {
         let val = $(this).val();
         if ('' == val || 1 > val) {
@@ -108,6 +108,9 @@ $(document).ready(function () {
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'setup'), data, function (t) {
             fcom.displaySuccessMessage(t.msg);
             fcom.removeLoader();
+            if ('undefined' != typeof t.form_type && 'undefined' != typeof t.lang_id) {
+                getForm(t.form_type, t.lang_id);
+            }
         });
     }
 

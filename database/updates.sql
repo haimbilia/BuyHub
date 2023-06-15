@@ -2619,3 +2619,17 @@ ALTER TABLE `tbl_cron_schedules` ADD UNIQUE(`cron_command`);
 INSERT INTO `tbl_cron_schedules` (`cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES
 ('Update Sitemap', 'Cronjob/generateSitemap', 4320, 1)
 ON DUPLICATE KEY UPDATE cron_command = VALUES(cron_command);
+
+INSERT INTO `tbl_extra_pages` (`epage_identifier`, `epage_type`, `epage_active`, `epage_default`, `epage_default_content`, `epage_content_for`) VALUES
+('Google Service Account JSON Key', 84, 1, 0, '<h6 class=\"mt-2\">Please Follow Below Steps To Get Service Account Detail :</h6>\r\n<ul class=\"listing--bullet\">      \r\n	<li>Visit <a class=\"link-underline\" href=\"https://console.developers.google.com\" target=\"_blank\">Google Console</a></li>            \r\n    <li>Click on <span style=\"font-weight: bold;\">Navigation Menu</span> (Breadcrumb Icon).</li>            \r\n	<li>Open the <span style=\"font-weight: bold;\">IAM &amp; Admin</span> page in the Cloud Console.</li>            \r\n	<li>Click <span style=\"font-weight: bold;\">Select a project</span>, choose a project, and click <span style=\"font-weight: bold;\">Open.</span></li>            \r\n	<li>In the left nav, click <span style=\"font-weight: bold;\">Service accounts.</span></li>            \r\n	<li>Find the row of the service account that you want to create a key for. Follow below steps.</li>\r\n    <li>Steps > In that row, click the <span style=\"font-weight: bold;\">Actions <i class=\"fa fa-ellipsis-v\"></i></span> button, and then click <span style=\"font-weight: bold;\">Create key/Manage Keys.</span></li>\r\n    <li>If service account row not listing on this page. Then click on <span style=\"font-weight: bold;\">Create service account</span> and fill the required information and follow above mentioned steps.</li>           \r\n	<li>Select a <span style=\"font-weight: bold;\">Key type</span> and click <span style=\"font-weight: bold;\">Create.</span> - OR - Select <span style=\"font-weight: bold;\">Add Key</span> and click <span style=\"font-weight: bold;\">Create new key</span> and select <span style=\"font-weight: bold;\">JSON</span> hit Create.</li>\r\n    <li>A JSON file will be downloaded. Open that JSON file copy whole data inside that file and paste it in above <span style=\"font-weight: bold;\">Service account detail</span> input box.</li>\r\n    <li>Hit Save Button</li>\r\n</ul>', 0)
+ON DUPLICATE KEY UPDATE epage_default_content = VALUES(epage_default_content);
+
+INSERT INTO `tbl_extra_pages` (`epage_identifier`, `epage_type`, `epage_active`, `epage_default`, `epage_default_content`, `epage_content_for`) VALUES
+('Google Analytics Property Id', 85, 1, 0, '<h6 class="mt-2">Please Follow Below Steps To Get GA4 property ID:</h6>
+<ul class="listing--bullet">
+    <li>To find your <span style="font-weight: bold;">property ID</span>, go to <a class="link-underline" href="https://analytics.google.com/analytics/web/" target="_blank">Google Analytics</a> website, admin page.</li>
+    <li>Select the desired <span style="font-weight: bold;">GA4 property from the list.</span></li>
+    <li>From the middle column, click <span style="font-weight: bold;">Property Settings.</span></li>
+    <li>From the right column, you will see your <span style="font-weight: bold;">Property ID</span> (eg: 123456789). Use the icon next right to it to copy the value.</li>
+</ul>', 0)
+ON DUPLICATE KEY UPDATE epage_default_content = VALUES(epage_default_content);
