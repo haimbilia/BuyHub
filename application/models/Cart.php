@@ -19,6 +19,7 @@ class Cart extends FatModel
     private $hasPhysicalProduct = -1;
     private $hasDigitalProduct = -1;
     private $isAnyOutOfStock = -1;
+    private array $removedItems = [];
 
     public const DB_TBL = 'tbl_user_cart';
     public const DB_TBL_PREFIX = 'usercart_';
@@ -959,17 +960,23 @@ class Cart extends FatModel
         $cartProducts = $this->getProducts($this->cart_lang_id);
         $found = false;
         if (is_array($cartProducts)) {
+            $advanceEcommerce = FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0);
+            $ga4 = FatApp::getConfig('CONF_GOOGLE_ANALYTICS_4', FatUtility::VAR_INT, 0);
             foreach ($cartProducts as $cartKey => $product) {
                 if (($key == 'all' || (md5($product['key']) == $key) && !$product['is_batch'])) {
                     $found = true;
                     unset($this->SYSTEM_ARR['cart'][$cartKey]);
                     $this->updateTempStockHold($product['selprod_id'], 0, 0);
                     if (($key == 'all' || md5($product['key']) == $key) && !$product['is_batch']) {
-                        if (FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
-                            $et = new EcommerceTracking(Labels::getLabel('LBL_PRODUCT_DETAIL', commonHelper::getLangId()), $this->cart_user_id);
-                            $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REMOVE_FROM_CART);
-                            $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 0);
-                            $et->sendRequest();
+                        if ($advanceEcommerce) {
+                            if (0 == $ga4) {
+                                $et = new EcommerceTracking(Labels::getLabel('LBL_PRODUCT_DETAIL', commonHelper::getLangId()), $this->cart_user_id);
+                                $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REMOVE_FROM_CART);
+                                $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 0);
+                                $et->sendRequest();
+                            } else if (false === MOBILE_APP_API_CALL) {
+                                $this->removedItems[] = $product;
+                            }
                         }
                         if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {
                             AbandonedCart::saveAbandonedCart($this->cart_user_id, $product['selprod_id'], $product['quantity'], AbandonedCart::ACTION_DELETED);
@@ -984,6 +991,11 @@ class Cart extends FatModel
             $this->error = Labels::getLabel('ERR_INVALID_PRODUCT', $this->cart_lang_id);
         }
         return $found;
+    }
+
+    public function getRemovedItems(): array
+    {
+        return $this->removedItems;
     }
 
     public function removeGroup($prodgroup_id)
@@ -1296,7 +1308,7 @@ class Cart extends FatModel
                 } else {
                     $cartTotal += (float) ($product['total'] ?? 0);
                 }
-                
+
                 $cartVolumeDiscount += $product['volume_discount_total'];
 
                 $taxableProdPrice = $product['theprice'] - $product['volume_discount'];
@@ -1772,9 +1784,22 @@ class Cart extends FatModel
 
     public function clear($includeAbandonedCart = false)
     {
+        $advanceEcommerce = FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0);
+        $ga4 = FatApp::getConfig('CONF_GOOGLE_ANALYTICS_4', FatUtility::VAR_INT, 0);
+
         $cartProducts = $this->getProducts($this->cart_lang_id);
         if (is_array($cartProducts)) {
             foreach ($cartProducts as $cartKey => $product) {
+                if ($advanceEcommerce) {
+                    if (0 == $ga4) {
+                        $et = new EcommerceTracking(Labels::getLabel('LBL_PRODUCT_DETAIL', commonHelper::getLangId()), $this->cart_user_id);
+                        $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REMOVE_FROM_CART);
+                        $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 0);
+                        $et->sendRequest();
+                    } else if (false === MOBILE_APP_API_CALL) {
+                        $this->removedItems[] = $product;
+                    }
+                }
                 $this->updateTempStockHold($product['selprod_id'], 0, 0);
                 if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {
                     if ($includeAbandonedCart == true) {
@@ -2171,7 +2196,7 @@ class Cart extends FatModel
     {
         $this->valdateCheckoutType = true;
     }
-    
+
     public function invalidateCheckoutType()
     {
         $this->valdateCheckoutType = false;
@@ -2181,7 +2206,7 @@ class Cart extends FatModel
     {
         $this->includeTax = false;
     }
-    
+
     public function resetProducts()
     {
         $this->products = [];

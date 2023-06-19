@@ -12,6 +12,9 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
             return  $b['fulfillment_type'] - $a['fulfillment_type'];
         });
     ?>
+        <script>
+            var productData = [];
+        </script>
         <ul class="list-cart <?php echo (count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]) != $productsCount) ? '' : 'list-cart-page'; ?>">
             <?php
             //if (count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]) > 0 && count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]) != $productsCount) {
@@ -244,6 +247,19 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         </ul>
                     </div>
                 </div>
+
+                <script type="text/javascript">
+                    productData.push({
+                        item_id: "<?php echo $product['selprod_id']; ?>",
+                        item_name: "<?php echo $product['selprod_title']; ?>",
+                        discount: "<?php echo ($product['selprod_price'] - $product['theprice']); ?>",
+                        index: "<?php echo $product['selprod_id']; ?>",
+                        item_brand: "<?php echo $product['brand_name']; ?>",
+                        item_category: "<?php echo $product['prodcat_name']; ?>",
+                        price: "<?php echo $product['theprice']; ?>",
+                        quantity: "<?php echo $product['quantity']; ?>"
+                    })
+                </script>
             </li>
         <?php } ?>
         </ul>
@@ -326,3 +342,12 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
         </ul>
     <?php } ?>
 </div>
+<?php $netChargeAmt = $cartSummary['cartTotal'] - ((0 < $cartSummary['cartVolumeDiscount']) ? $cartSummary['cartVolumeDiscount'] : 0);
+$netChargeAmt = $netChargeAmt - ((isset($cartSummary['cartDiscounts']['coupon_discount_total']) && 0 < $cartSummary['cartDiscounts']['coupon_discount_total']) ? $cartSummary['cartDiscounts']['coupon_discount_total'] : 0); ?>
+<script type="text/javascript">
+    ykevents.viewCart({
+        currency: currencyCode,
+        value: "<?php echo $netChargeAmt; ?>",
+        items: productData
+    });
+</script>

@@ -10,7 +10,7 @@ var cart = {
                 }
             });
         }
-        ykevents.addToCart();
+
         fcom.updateWithAjax(fcom.makeUrl('Cart', 'add'), data, function (ans) {
             fcom.closeProcessing();
             fcom.removeLoader();
@@ -18,6 +18,28 @@ var cart = {
                 location = ans['redirect'];
             }
             fcom.displaySuccessMessage(ans.msg);
+
+            productData = [];
+            var totalCartItemsPrice = 0;
+            $.each(ans.cartItems, function (key, val) {
+                totalCartItemsPrice += val.theprice;
+                productData.push({
+                    item_id: val.selprod_id,
+                    item_name: val.selprod_title,
+                    discount: (val.selprod_price - val.theprice),
+                    index: key,
+                    item_brand: val.brand_name,
+                    item_category: val.prodcat_name,
+                    price: val.theprice,
+                    quantity: val.addedQty
+                })
+            });
+
+            ykevents.addToCart({
+                currency: currencyCode,
+                value: totalCartItemsPrice,
+                items: productData
+            });
 
             /* isRedirectToCart needed from product detail page */
             if (isRedirectToCart) {
@@ -37,6 +59,28 @@ var cart = {
             var data = 'key=' + key + '&saveForLater=' + saveForLater;
             fcom.updateWithAjax(fcom.makeUrl('Cart', 'remove'), data, function (ans) {
                 fcom.removeLoader();
+                removedItems = [];
+                var totalCartItemsPrice = 0;
+                $.each(ans.cartItems, function (key, val) {
+                    totalCartItemsPrice += val.theprice;
+                    removedItems.push({
+                        item_id: val.selprod_id,
+                        item_name: val.selprod_title,
+                        discount: (val.selprod_price - val.theprice),
+                        index: key,
+                        item_brand: val.brand_name,
+                        item_category: val.prodcat_name,
+                        price: val.theprice,
+                        quantity: val.addedQty
+                    })
+                });
+
+                ykevents.removeFromCart({
+                    currency: currencyCode,
+                    value: totalCartItemsPrice,
+                    items: removedItems
+                });
+
                 if (page == 'checkout') {
                     if (ans.status) {
                         loadFinancialSummary();
@@ -71,15 +115,15 @@ var cart = {
         var data = 'key=' + key + '&quantity=' + $("input[name='qty_" + key + "']").val();
         fcom.ajax(fcom.makeUrl('Cart', 'update'), data, function (ans) {
             fcom.removeLoader();
-            if(!ans.status){
+            if (!ans.status) {
                 fcom.displayErrorMessage(ans.msg);
-                if(typeof(cart.addCallBackFn) == 'function' ){
+                if (typeof (cart.addCallBackFn) == 'function') {
                     cart.addCallBackFn(ans);
-                }              
+                }
                 return;
             }
-       
-            
+
+
             isAjaxRunning = false;
             if (ans.status) {
                 if (loadDiv != undefined) {
@@ -94,8 +138,8 @@ var cart = {
                     listCartProducts();
                 }
             }
-          
-        },{fOutMode: 'json'});
+
+        }, { fOutMode: 'json' });
     },
 
     updateGroup: function (prodgroup_id) {
@@ -145,6 +189,28 @@ var cart = {
             fcom.updateWithAjax(fcom.makeUrl('Cart', 'clear'), '', function (ans) {
                 fcom.removeLoader();
                 if (ans.status) {
+                    removedItems = [];
+                    var totalCartItemsPrice = 0;
+                    $.each(ans.cartItems, function (key, val) {
+                        totalCartItemsPrice += val.theprice;
+                        removedItems.push({
+                            item_id: val.selprod_id,
+                            item_name: val.selprod_title,
+                            discount: (val.selprod_price - val.theprice),
+                            index: key,
+                            item_brand: val.brand_name,
+                            item_category: val.prodcat_name,
+                            price: val.theprice,
+                            quantity: val.addedQty
+                        })
+                    });
+
+                    ykevents.removeFromCart({
+                        currency: currencyCode,
+                        value: totalCartItemsPrice,
+                        items: removedItems
+                    });
+
                     if (typeof listCartProducts === "function") {
                         listCartProducts();
                     }
@@ -172,52 +238,72 @@ var cart = {
             }
         });
     },
-    addCallBackFn : null,
+    addCallBackFn: null,
 };
 
 var ykevents = {
-    _validateAndTrigger: function (event, data = '') {
-        if (typeof fbPixel !== 'undefined' && true == fbPixel) {
+    /* 1: For FB, 2: For GA4. */
+    _validateAndTrigger: function (requestTo, event, data = '') {
+        if (1 == requestTo && 'undefined' !== typeof fbPixel && true == fbPixel) {
             fbq('track', event, data);
         }
+        if (2 == requestTo && 'undefined' !== typeof gtag && '' != data) {
+            gtag("event", event, data);
+        }
     },
-    addToCart: function () {
-        ykevents._validateAndTrigger('AddToCart');
+
+    viewItem: function (data) {
+        ykevents._validateAndTrigger(2, 'view_item', data);
+    },
+    
+    addToCart: function (data) {
+        ykevents._validateAndTrigger(1, 'AddToCart');
+        ykevents._validateAndTrigger(2, 'add_to_cart', data);
+    },
+
+    viewCart: function (data) {
+        ykevents._validateAndTrigger(2, 'view_cart', data);
+    },
+
+    removeFromCart: function (data) {
+        ykevents._validateAndTrigger(2, 'remove_from_cart', data);
     },
 
     addToWishList: function () {
-        ykevents._validateAndTrigger('AddToWishlist');
+        ykevents._validateAndTrigger(1, 'AddToWishlist');
     },
 
     contactUs: function () {
-        ykevents._validateAndTrigger('Contact');
+        ykevents._validateAndTrigger(1, 'Contact');
     },
 
     customizeProduct: function () {
-        ykevents._validateAndTrigger('CustomizeProduct');
+        ykevents._validateAndTrigger(1, 'CustomizeProduct');
     },
 
-    initiateCheckout: function () {
-        ykevents._validateAndTrigger('InitiateCheckout');
+    initiateCheckout: function (data) {
+        ykevents._validateAndTrigger(1, 'InitiateCheckout');
+        ykevents._validateAndTrigger(2, 'begin_checkout', data);
     },
 
     search: function () {
-        ykevents._validateAndTrigger('search');
+        ykevents._validateAndTrigger(1, 'search');
     },
 
     purchase: function (data) {
-        ykevents._validateAndTrigger('Purchase', data);
+        ykevents._validateAndTrigger(1, 'Purchase', data);
+        ykevents._validateAndTrigger(2, 'purchase', data);
     },
 
     /* 
         A visit to a web page you care about. For example, a product or landing page. View content tells you if someone visits a web page's URL, but not what they do or see on that web page.
     */
     viewContent: function () {
-        ykevents._validateAndTrigger('viewContent');
+        ykevents._validateAndTrigger(1, 'viewContent');
     },
 
     newsLetterSubscription: function () {
-        ykevents._validateAndTrigger('CompleteRegistration');
+        ykevents._validateAndTrigger(1, 'CompleteRegistration');
     },
 };
 

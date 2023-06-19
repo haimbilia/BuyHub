@@ -553,6 +553,8 @@ class CustomController extends MyAppController
                 $srch = new OrderProductSearch($this->siteLangId);
                 $srch->joinShippingCharges();
                 $srch->joinAddress();
+               /*  $srch->joinTable(ProductCategory::DB_TBL, 'LEFT JOIN', 'op_prodcat_id = pc.prodcat_id', 'pc');
+                $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT JOIN', 'pc.prodcat_id = pc_l.prodcatlang_prodcat_id AND pc_l.prodcatlang_lang_id = ' . $this->siteLangId, 'pc_l'); */
                 $srch->addCondition('op_order_id', '=', $orderId);
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
@@ -603,6 +605,7 @@ class CustomController extends MyAppController
             unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]);
         }
 
+        $this->set('orderId', $orderId);
         $this->set('textMessage', $textMessage);
         $this->set('orderInfo', $orderInfo);
         $this->set('showOrderDetails', $showOrderDetails);
@@ -614,88 +617,6 @@ class CustomController extends MyAppController
             $this->_template->render();
         }
     }
-
-    /* public function favoriteShops( $userId ){
-    $userId = FatUtility::int($userId);
-
-    $searchForm = $this->getfavoriteShopsForm($this->siteLangId);
-    $searchForm->fill(array('user_id'=>$userId));
-
-    $user = new User($userId);
-    $userInfo = $user->getUserInfo(array('user_id','user_name','user_city'));
-
-    $this->set('userInfo',$userInfo);
-    $this->set('searchForm',$searchForm);
-    $this->_template->render();
-    }
-    */
-    /* public function SearchFavoriteShops(){
-    $db = FatApp::getDb();
-    $data = FatApp::getPostedData();
-    $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : FatUtility::int($data['page']);
-    $pagesize = FatApp::getConfig('CONF_PAGE_SIZE',FatUtility::VAR_INT, 10);
-
-    $searchForm = $this->getfavoriteShopsForm($this->siteLangId);
-    $post = $searchForm->getFormDataFromArray($data);
-
-    $userId = $post['user_id'];
-    if( 1 > $userId ){
-    FatUtility::dieWithError( Labels::getLabel('LBL_Invalid_Access_ID',$this->siteLangId));
-    }
-
-    $srch = new UserFavoriteShopSearch($this->siteLangId);
-    $srch->joinWhosFavouriteUser();
-    $srch->joinShops();
-    $srch->joinShopCountry();
-    $srch->joinShopState();
-    $srch->joinFavouriteUserShopsCount();
-    $srch->addMultipleFields(array( 'ufs_shop_id as shop_id','IFNULL(shop_name, shop_identifier) as shop_name','IFNULL(state_name, state_identifier) as state_name','country_name','ufs_user_id','user_name','userFavShopcount'));
-    $srch->addCondition('ufs_user_id','=',$userId);
-
-    $page = (empty($page) || $page <= 0)?1:$page;
-    $page = FatUtility::int($page);
-    $srch->setPageNumber($page);
-    $srch->setPageSize($pagesize);
-
-    $rs = $srch->getResultSet();
-    $userFavoriteShops = $db->fetchAll( $rs, 'shop_id');
-
-    $totalProdCountToDisplay = 4;
-    $prodSrchObj = new ProductSearch( $this->siteLangId );
-    $prodSrchObj->setDefinedCriteria();
-    $prodSrchObj->setPageSize($totalProdCountToDisplay);
-
-    foreach($userFavoriteShops as $val){
-    $prodSrch = clone $prodSrchObj;
-    $prodSrch->addShopIdCondition( $val['shop_id'] );
-    $prodSrch->addMultipleFields( array( 'selprod_id', 'product_id', 'shop_id','IFNULL(shop_name, shop_identifier) as shop_name',
-    'IFNULL(product_name, product_identifier) as product_name',
-    'IF(selprod_stock > 0, 1, 0) AS in_stock') );
-    $prodRs = $prodSrch->getResultSet();
-    $userFavoriteShops[$val['shop_id']]['products'] = $db->fetchAll( $prodRs);
-    $userFavoriteShops[$val['shop_id']]['totalProducts'] =     $prodSrch->recordCount();
-    }
-
-    $this->set('userFavoriteShops',$userFavoriteShops);
-    $this->set('totalProdCountToDisplay',$totalProdCountToDisplay);
-    $this->set('pageCount',$srch->pages());
-    $this->set('recordCount',$srch->recordCount());
-    $this->set('page', $page);
-    $this->set('pageSize', $pagesize);
-    $this->set('postedData', $post);
-
-    $startRecord = ($page-1)* $pagesize + 1 ;
-    $endRecord = $pagesize;
-    $totalRecords = $srch->recordCount();
-    if ($totalRecords < $endRecord) { $endRecord = $totalRecords; }
-    $json['totalRecords'] = $totalRecords;
-    $json['startRecord'] = $startRecord;
-    $json['endRecord'] = $endRecord;
-    $json['html'] = $this->_template->render( false, false, 'custom/search-favorite-shops.php', true, false);
-    $json['loadMoreBtnHtml'] = $this->_template->render( false, false, '_partial/load-more-btn.php', true, false);
-    FatUtility::dieJsonSuccess($json);
-    }
-    */
 
     public function referral($userReferralCode, $sharingUrl)
     {

@@ -33,6 +33,7 @@ You will require the following server specifications for setting up the Yokart s
    - My SQL:
        - 5.7 or greater
        - sql_mode - strict_trans_tables should be disabled.
+       - bcmath
 
 ## Documentation & Updates
 

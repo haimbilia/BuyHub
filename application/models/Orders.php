@@ -1058,6 +1058,7 @@ class Orders extends MyAppModel
         if (0 < $langId) {
             $srch->joinTable(Plugin::DB_TBL_LANG, 'LEFT OUTER JOIN', 'plugin_id = pm_l.pluginlang_plugin_id AND pm_l.pluginlang_lang_id = ' . $langId, 'pm_l');
         }
+        
         $srch->addCondition('order_number', '=', $order_no);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -1158,7 +1159,6 @@ class Orders extends MyAppModel
                     $srch->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sp_l.selprodlang_selprod_id = sp.selprod_id AND sp_l.selprodlang_lang_id = ' . $langId, 'sp_l');
                 }
             }
-
             $srch->addOrder("op_id", "desc");
             $rs = $srch->getResultSet();
 

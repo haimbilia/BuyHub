@@ -63,6 +63,14 @@ $(document).ready(function () {
             $(this).val(1);
         }
     });
+
+    $(document).on('change', '.ga4ToggleEleJs', function () {
+        if ($(this).prop("checked")) {
+            $('.gaAccessTokenJs').hide();
+        } else {
+            $('.gaAccessTokenJs').show();
+        }
+    });
 });
 
 (function () {
