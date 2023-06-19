@@ -553,8 +553,6 @@ class CustomController extends MyAppController
                 $srch = new OrderProductSearch($this->siteLangId);
                 $srch->joinShippingCharges();
                 $srch->joinAddress();
-               /*  $srch->joinTable(ProductCategory::DB_TBL, 'LEFT JOIN', 'op_prodcat_id = pc.prodcat_id', 'pc');
-                $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT JOIN', 'pc.prodcat_id = pc_l.prodcatlang_prodcat_id AND pc_l.prodcatlang_lang_id = ' . $this->siteLangId, 'pc_l'); */
                 $srch->addCondition('op_order_id', '=', $orderId);
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
