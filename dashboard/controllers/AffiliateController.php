@@ -217,8 +217,11 @@ class AffiliateController extends AffiliateBaseController
                     $error = $e->getMessage();
                 }
             }
-            $this->set('errors', isset($post->errors) ? $post->errors : $error);
-            $this->_template->render(false, false, 'affiliate/twitter-response.php');
+            
+            $error = json_encode(isset($post->errors) ? $post->errors : $error);
+            Message::addErrorMessage($error);
+            FatApp::redirectUser(UrlHelper::generateUrl('Affiliate'));
+            return;
         }
     }
 
