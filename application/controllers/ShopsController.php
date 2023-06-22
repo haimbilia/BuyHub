@@ -83,7 +83,6 @@ class ShopsController extends MyAppController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder('shop_created_on');
-
         $shopRs = $srch->getResultSet();
         $allShops = $db->fetchAll($shopRs, 'shop_id');
         $totalProdCountToDisplay = 4;
