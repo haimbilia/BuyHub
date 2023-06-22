@@ -13,7 +13,7 @@ class AffiliateController extends AffiliateBaseController
 
     public function index()
     {
-        $get_twitter_url = $_SESSION["TWITTER_URL"] = UrlHelper::generateFullUrl('Affiliate', 'twitterCallback');
+        $get_twitter_url = $_SESSION["TWITTER_URL"] = UrlHelper::generateFullUrl('Affiliate', 'twitterCallback', [], '', false);
 
         try {
             $twitteroauth = new TwitterOAuth(FatApp::getConfig("CONF_TWITTER_API_KEY"), FatApp::getConfig("CONF_TWITTER_API_SECRET"));
@@ -159,8 +159,8 @@ class AffiliateController extends AffiliateBaseController
             try {
                 $access_token = $twitteroauth->oauth("oauth/access_token", ["oauth_verifier" => $get['oauth_verifier']]);
             } catch (exception $e) {
-                $this->set('errors', $e->getMessage());
-                $this->_template->render(false, false, 'buyer/twitter-response.php');
+                Message::addErrorMessage($e->getMessage());
+                FatApp::redirectUser(UrlHelper::generateUrl('Affiliate'));
                 return;
             }
 

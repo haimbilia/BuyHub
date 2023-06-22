@@ -1875,10 +1875,10 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addTextBox(Labels::getLabel('FRM_TWITTER_USERNAME', $langId), 'CONF_TWITTER_USERNAME');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_TWITTER_USERNAME_MSG", $langId) . '</span>';
 
-                $fld = $frm->addTextBox(Labels::getLabel("FRM_TWITTER_APP_KEY", $langId), 'CONF_TWITTER_API_KEY');
+                $fld = $frm->addTextBox(Labels::getLabel("FRM_TWITTER_API_KEY", $langId), 'CONF_TWITTER_API_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_APPLICATION_ID_USED_IN_POST.", $langId) . "</span>";
 
-                $fld = $frm->addTextBox(Labels::getLabel("FRM_TWITTER_APP_SECRET", $langId), 'CONF_TWITTER_API_SECRET');
+                $fld = $frm->addTextBox(Labels::getLabel("FRM_TWITTER_API_SECRET", $langId), 'CONF_TWITTER_API_SECRET');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_TWITTER_SECRET_KEY_USED_FOR_AUTHENTICATION_AND_OTHER_TWITTER_RELATED_PLUGINS_SUPPORT.", $langId) . "</span>";
 
                 $fld = $frm->addTextarea(Labels::getLabel("FRM_TWITTER_POST_DESCRIPTION", $langId), 'CONF_SOCIAL_FEED_TWITTER_POST_TITLE' . $langId);
