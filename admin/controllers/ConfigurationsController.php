@@ -1872,14 +1872,6 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_FACEBOOK_APP_SECRET", $langId), 'CONF_FACEBOOK_APP_SECRET');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_FACEBOOK_SECRET_KEY_USED_FOR_AUTHENTICATION_AND_OTHER_FACEBOOK_RELATED_PLUGINS_SUPPORT.", $langId) . "</span>";
 
-                $fld = $frm->addTextbox(Labels::getLabel("FRM_FACEBOOK_POST_TITLE", $langId), 'CONF_SOCIAL_FEED_FACEBOOK_POST_TITLE_' . $langId);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_TITLE_SHARED_ON_FACEBOOK", $langId) . "</span>";
-                $fld = $frm->addTextbox(Labels::getLabel("FRM_FACEBOOK_POST_CAPTION", $langId), 'CONF_SOCIAL_FEED_FACEBOOK_POST_CAPTION_' . $langId);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_CAPTION_SHARED_ON_FACEBOOK", $langId) . "</span>";
-                $fld = $frm->addTextarea(Labels::getLabel("FRM_FACEBOOK_POST_DESCRIPTION", $langId), 'CONF_SOCIAL_FEED_FACEBOOK_POST_DESCRIPTION_' . $langId);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_DESCRIPTION_SHARED_ON_FACEBOOK", $langId) . "</span>";
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
                 $fld = $frm->addTextBox(Labels::getLabel('FRM_TWITTER_USERNAME', $langId), 'CONF_TWITTER_USERNAME');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_TWITTER_USERNAME_MSG", $langId) . '</span>';
 

@@ -13,8 +13,6 @@ class AffiliateController extends AffiliateBaseController
 
     public function index()
     {
-        include_once CONF_INSTALLATION_PATH . 'library/Fbapi.php';
-
         $get_twitter_url = $_SESSION["TWITTER_URL"] = UrlHelper::generateFullUrl('Affiliate', 'twitterCallback');
 
         try {
@@ -31,25 +29,6 @@ class AffiliateController extends AffiliateBaseController
         $usrObj = new User();
         $loggedUserId = UserAuthentication::getLoggedUserId();
         $userInfo = User::getAttributesById($loggedUserId, array('user_fb_access_token', 'user_referral_code'));
-
-        $fbAccessToken = '';
-        $fbLoginUrl = '';
-        $appId = FatApp::getConfig('CONF_FACEBOOK_APP_ID', FatUtility::VAR_STRING, '');
-        $appSecret = FatApp::getConfig('CONF_FACEBOOK_APP_SECRET', FatUtility::VAR_STRING, '');
-        if (!empty($appId) && !empty($appSecret)) {
-            $config = array(
-                'app_id' => $appId,
-                'app_secret' => $appSecret,
-            );
-            $fb = new Fbapi($config);
-
-            $redirectUrl = UrlHelper::generateFullUrl('Affiliate', 'getFbToken', array(), '', false);
-            $fbLoginUrl = $fb->getLoginUrl($redirectUrl);
-            if ($userInfo['user_fb_access_token'] != '') {
-                $fbAccessToken = $userInfo['user_fb_access_token'];
-            }
-        }
-        //$_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'AFFILIATE';
 
         /*
         * Referred User Listing
@@ -75,8 +54,6 @@ class AffiliateController extends AffiliateBaseController
         $affiliateTrackingUrl = CommonHelper::affiliateReferralTrackingUrl($userInfo['user_referral_code']);
         $this->set('affiliateTrackingUrl', $affiliateTrackingUrl);
         $this->set('sharingFrm', $sharingFrm);
-        $this->set('fbLoginUrl', $fbLoginUrl);
-        $this->set('fbAccessToken', $fbAccessToken);
         $this->set('user_listing', $user_listing);
         $this->set('transactions', $transactions);
         $this->set('txnStatusArr', Transactions::getStatusArr($this->siteLangId));
@@ -172,72 +149,6 @@ class AffiliateController extends AffiliateBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function getFbToken()
-    {
-        $userId = UserAuthentication::getLoggedUserId();
-        if (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['redirect_user'])) {
-            $redirectUrl = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['redirect_user'];
-            unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['redirect_user']);
-        } else {
-            $redirectUrl = UrlHelper::generateUrl('Affiliate', 'Sharing');
-        }
-
-        include_once CONF_INSTALLATION_PATH . 'library/Fbapi.php';
-
-        $config = array(
-            'app_id' => FatApp::getConfig('CONF_FACEBOOK_APP_ID', FatUtility::VAR_STRING, ''),
-            'app_secret' => FatApp::getConfig('CONF_FACEBOOK_APP_SECRET', FatUtility::VAR_STRING, ''),
-        );
-        $fb = new Fbapi($config);
-        $fbObj = $fb->getInstance();
-
-        $helper = $fb->getRedirectLoginHelper();
-
-        try {
-            $accessToken = $helper->getAccessToken();
-        } catch (Facebook\Exceptions\FacebookResponseException $e) {
-            Message::addErrorMessage($e->getMessage());
-            FatApp::redirectUser($redirectUrl);
-        } catch (Facebook\Exceptions\FacebookSDKException $e) {
-            Message::addErrorMessage($e->getMessage());
-            FatApp::redirectUser($redirectUrl);
-        }
-
-        if (!isset($accessToken)) {
-            if ($helper->getError()) {
-                Message::addErrorMessage($helper->getErrorDescription());
-                //Message::addErrorMessage($helper->getErrorReason());
-            } else {
-                Message::addErrorMessage(Labels::getLabel('ERR_BAD_REQUEST', $this->siteLangId));
-            }
-        } else {
-            // The OAuth 2.0 client handler helps us manage access tokens
-            $oAuth2Client = $fbObj->getOAuth2Client();
-
-            if (!$accessToken->isLongLived()) {
-                try {
-                    $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
-                } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                    Message::addErrorMessage($e->getMessage());
-                    FatApp::redirectUser($redirectUrl);
-                }
-            }
-
-            $fbAccessToken = $accessToken->getValue();
-            unset($_SESSION['fb_' . FatApp::getConfig("CONF_FACEBOOK_APP_ID") . '_code']);
-            unset($_SESSION['fb_' . FatApp::getConfig("CONF_FACEBOOK_APP_ID") . '_access_token']);
-            unset($_SESSION['fb_' . FatApp::getConfig("CONF_FACEBOOK_APP_ID") . '_user_id']);
-
-            $userObj = new User($userId);
-            $userData = array('user_fb_access_token' => $fbAccessToken);
-            $userObj->assignValues($userData);
-            if (!$userObj->save()) {
-                Message::addErrorMessage(Labels::getLabel("ERR_Token_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
-            }
-        }
-        FatApp::redirectUser($redirectUrl);
-    }
-
     public function twitterCallback()
     {
         include_once CONF_INSTALLATION_PATH . 'library/APIs/twitteroauth-master/autoload.php';
@@ -309,36 +220,6 @@ class AffiliateController extends AffiliateBaseController
             $this->set('errors', isset($post->errors) ? $post->errors : $error);
             $this->_template->render(false, false, 'affiliate/twitter-response.php');
         }
-    }
-
-    public function sharing()
-    {
-        include_once CONF_INSTALLATION_PATH . 'library/Fbapi.php';
-        include_once CONF_INSTALLATION_PATH . 'library/APIs/twitter/twitteroauth.php';
-        $loggedUserId = UserAuthentication::getLoggedUserId();
-        $userInfo = User::getAttributesById($loggedUserId, array('user_fb_access_token', 'user_referral_code'));
-        $config = array(
-            'app_id' => FatApp::getConfig('CONF_FACEBOOK_APP_ID', FatUtility::VAR_STRING, ''),
-            'app_secret' => FatApp::getConfig('CONF_FACEBOOK_APP_SECRET', FatUtility::VAR_STRING, ''),
-        );
-        $fb = new Fbapi($config);
-
-        $fbAccessToken = '';
-        $fbLoginUrl = '';
-
-        $redirectUrl = UrlHelper::generateFullUrl('Affiliate', 'getFbToken', array(), '', false);
-        $fbLoginUrl = $fb->getLoginUrl($redirectUrl);
-        if ($userInfo['user_fb_access_token'] != '') {
-            $fbAccessToken = $userInfo['user_fb_access_token'];
-        }
-
-        $sharingFrm = $this->getSharingForm($this->siteLangId);
-        $affiliateTrackingUrl = CommonHelper::affiliateReferralTrackingUrl($userInfo['user_referral_code']);
-        $this->set('affiliateTrackingUrl', $affiliateTrackingUrl);
-        $this->set('sharingFrm', $sharingFrm);
-        $this->set('fbLoginUrl', $fbLoginUrl);
-        $this->set('fbAccessToken', $fbAccessToken);
-        $this->_template->render(true, true);
     }
 
     public function setUpMailAffiliateSharing()

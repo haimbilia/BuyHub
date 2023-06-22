@@ -157,36 +157,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 
 <script type="text/javascript">
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src =
-            "//connect.facebook.net/en_US/all.js#xfbml=1&appId=<?php echo FatApp::getConfig("CONF_FACEBOOK_APP_ID", FatUtility::VAR_STRING, ''); ?>";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-
-    function facebook_redirect(response_token) {
-        FB.ui({
-            method: 'share_open_graph',
-            action_type: 'og.likes',
-            action_properties: JSON.stringify({
-                object: {
-                    'og:url': "<?php echo $referralTrackingUrl ?>",
-                    'og:title': "<?php echo sprintf(FatApp::getConfig("CONF_SOCIAL_FEED_FACEBOOK_POST_TITLE_$siteLangId", FatUtility::VAR_STRING, ''), FatApp::getConfig("CONF_WEBSITE_NAME_$siteLangId")) ?>",
-                    'og:description': "<?php echo sprintf(FatApp::getConfig("CONF_SOCIAL_FEED_FACEBOOK_POST_CAPTION_$siteLangId", FatUtility::VAR_STRING, ''), FatApp::getConfig("CONF_WEBSITE_NAME_$siteLangId")) ?>",
-                    'og:image': "<?php echo UrlHelper::generateFullUrl('image', 'socialFeed', array($siteLangId, ''), CONF_WEBROOT_FRONTEND) ?>",
-                }
-            })
-        }, function(response) {
-            if (response !== null && typeof response.post_id !== 'undefined') {
-                fcom.displaySuccessMessage(langLbl.thanksForSharing);
-                /* $("#fb_ajax").html(langLbl.thanksForSharing); */
-            }
-        });
-    }
-
     function twitter_shared(name) {
         fcom.displaySuccessMessage(langLbl.thanksForSharing);
         /* $("#twitter_ajax").html(langLbl.thanksForSharing); */

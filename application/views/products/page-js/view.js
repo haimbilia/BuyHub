@@ -275,22 +275,7 @@ function setupReviewAbuse(frm) {
             reviews(document.frmReviewSearch);
         });
     }
-
-    shareSocialReferEarn = function (selprod_id, socialMediaName) {
-        if (isUserLogged() == 0) {
-            loginPopUpBox();
-            return false;
-        }
-        var data = 'selprod_id=' + selprod_id + '&socialMediaName=' + socialMediaName;
-
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Account', 'shareSocialReferEarn'), data, function (t) {
-                $.facebox(t);
-            });
-        });
-        return false;
-    }
-
+    
     rateAndReviewProduct = function (product_id) {
         if (isUserLogged() == 0) {
             loginPopUpBox();

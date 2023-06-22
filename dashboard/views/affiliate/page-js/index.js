@@ -5,11 +5,6 @@ $(document).ready(function () {
 		$('.showwrap').slideToggle("600");
 	});
 
-	$("#facebook_btn").click(function (event) {
-		event.preventDefault();
-		fbSubmit();
-	});
-
 	$("#twitter_btn").click(function (event) {
 		event.preventDefault();
 		twitter_login();
@@ -52,28 +47,4 @@ $(document).ready(function () {
 			$("#bulkEmailForm").modal('hide');
 		});
 	};
-
-	fbSubmit = function () {
-		FB.login(checkLoginStatus, { scope: 'email' });
-	};
-
-	checkLoginStatus = function (response) {
-		if (response.status === 'connected') {
-			facebook_redirect(response);
-		} else if (response.status === 'not_authorized') {
-			FB.login(function (response) {
-				facebook_redirect(response);
-			}, {
-				scope: facebookScope
-			});
-		} else {
-			FB.login(function (response) {
-				if (response.authResponse) {
-					facebook_redirect(response);
-				}
-			}, {
-				scope: facebookScope
-			});
-		}
-	}
 })();

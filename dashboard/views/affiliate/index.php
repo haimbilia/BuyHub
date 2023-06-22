@@ -86,22 +86,8 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
                                 </div>
                             </div>
                         </div>
-                    </div> <?php
-                            if (!empty(FatApp::getConfig("CONF_FACEBOOK_APP_ID")) && !empty(FatApp::getConfig("CONF_FACEBOOK_APP_SECRET"))) {
-                            ?>
-                        <div class="widget widget-stats">
-                            <button class="btn block-social mb-3" id="facebook_btn" type="button" style="background-color:#4267B2">
-                                <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
-                                </svg>
-
-                                <p> <?php echo sprintf(Labels::getLabel('L_Post_your_wall_facebook', $siteLangId), '<strong>' . Labels::getLabel('L_Facebook', $siteLangId) . '</strong>') ?>
-                                </p>
-                                <span class="ajax_message thanks-msgX" id="fb_ajax"></span>
-                            </button>
-                        </div>
-                    <?php }
-                            if (false !== $twitterUrl) { ?>
+                    </div>
+                    <?php if (false !== $twitterUrl) { ?>
                         <div class="widget widget-stats">
                             <button class="btn block-social mb-3" id="twitter_btn" type="button" style="background-color:#1DA1F2">
                                 <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
@@ -291,66 +277,11 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
                     </div>
                 </div>
             </div>
-
         </div>
-
-        <!-- <div class="row">
-            <div class="col-lg-6 col-md-12">
-                <div class="card">
-                    <div class="card-head border-0">
-                        <h5 class="card-title "><?php echo Labels::getLabel('LBL_Information', $siteLangId); ?></h5>
-                        <div class="action">
-                            <a href="<?php echo UrlHelper::generateUrl('account', 'profileInfo'); ?>" class="link"><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>  <i class="fa fa-pencil"></i></a>
-                        </div>
-                    </div>
-                    <div class="card-body pt-0 ">
-                        <div class="tabs tabs--small   tabs--scroll clearfix setactive-js">
-                            <ul>
-                                <li class="is-active"><a type="button" onclick="personalInfo(this)"><?php echo Labels::getLabel('LBL_Personal', $siteLangId); ?></a></li>
-                                <li><a type="button" onclick="addressInfo(this)"><?php echo Labels::getLabel('LBL_Address_Information', $siteLangId); ?></a></li>
-                            </ul>
-                        </div>
-                        <div class="tabs__content" id="tabListing"><?php echo Labels::getlabel('LBL_loading..', $siteLangId); ?></div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
-
-
-
-
-
     </div>
 </div>
 
 <script type="text/javascript">
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src =
-            "//connect.facebook.net/en_US/all.js#xfbml=1&appId=<?php echo FatApp::getConfig("CONF_FACEBOOK_APP_ID", FatUtility::VAR_STRING, ''); ?>";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-
-    function facebook_redirect(response_token) {
-        FB.ui({
-            method: 'feed',
-            name: "<?php echo sprintf(FatApp::getConfig("CONF_SOCIAL_FEED_FACEBOOK_POST_TITLE_$siteLangId", FatUtility::VAR_STRING, ''), FatApp::getConfig("CONF_WEBSITE_NAME_$siteLangId")) ?>",
-            link: "<?php echo $affiliateTrackingUrl ?>",
-            picture: "<?php echo UrlHelper::generateFullUrl('image', 'socialFeed', array($siteLangId, ''), CONF_WEBROOT_FRONTEND) ?>",
-            caption: "<?php echo sprintf(FatApp::getConfig("CONF_SOCIAL_FEED_FACEBOOK_POST_CAPTION_$siteLangId", FatUtility::VAR_STRING, ''), FatApp::getConfig("CONF_WEBSITE_NAME_$siteLangId")) ?>",
-            description: "<?php echo str_replace(array("\n", "\r", "\r\n"), ' ', sprintf(FatApp::getConfig("CONF_SOCIAL_FEED_FACEBOOK_POST_DESCRIPTION_" . $siteLangId, FatUtility::VAR_STRING, ''), FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId))) ?>",
-        }, function(response) {
-            if (response !== null && typeof response.post_id !== 'undefined') {
-                fcom.displaySuccessMessage(langLbl.thanksForSharing);
-                /* $("#fb_ajax").html(langLbl.thanksForSharing); */
-            }
-        });
-    }
-
     function twitter_shared(name) {
         fcom.displaySuccessMessage(langLbl.thanksForSharing);
         /* $("#twitter_ajax").html(langLbl.thanksForSharing); */
