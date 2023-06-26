@@ -1,9 +1,6 @@
 <?php
 
-require_once CONF_INSTALLATION_PATH . 'library/APIs/twitteroauth-master/autoload.php';
-
-use Abraham\TwitterOAuth\TwitterOAuth;
-
+require_once CONF_INSTALLATION_PATH . 'library/APIs/twitteroauth/Twitter.php';
 class AffiliateController extends AffiliateBaseController
 {
     public function __construct($action)
@@ -13,19 +10,9 @@ class AffiliateController extends AffiliateBaseController
 
     public function index()
     {
-        $get_twitter_url = $_SESSION["TWITTER_URL"] = UrlHelper::generateFullUrl('Affiliate', 'twitterCallback', [], '', false);
-
-        try {
-            $twitteroauth = new TwitterOAuth(FatApp::getConfig("CONF_TWITTER_API_KEY"), FatApp::getConfig("CONF_TWITTER_API_SECRET"));
-            $request_token = $twitteroauth->oauth('oauth/request_token', array('oauth_callback' => $get_twitter_url));
-            $_SESSION['oauth_token'] = $request_token['oauth_token'];
-            $_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
-            $twitterUrl = $twitteroauth->url('oauth/authorize', array('oauth_token' => $request_token['oauth_token']));
-            $this->set('twitterUrl', $twitterUrl);
-        } catch (\Exception $e) {
-            $this->set('twitterUrl', false);
-        }
-
+        $twitter = new Twitter($this->siteLangId);
+        $this->set('twitterUrl', $twitter->getAuthUrl());
+        
         $usrObj = new User();
         $loggedUserId = UserAuthentication::getLoggedUserId();
         $userInfo = User::getAttributesById($loggedUserId, array('user_fb_access_token', 'user_referral_code'));
@@ -64,6 +51,37 @@ class AffiliateController extends AffiliateBaseController
         $this->set('todayRevenue', User::getAffiliateUserRevenue($loggedUserId, date('Y-m-d')));
         $this->_template->addJs('js/slick.min.js');
         $this->_template->render(true, true);
+    }
+
+    public function twitterCallback()
+    {
+        $get = FatApp::getQueryStringData();
+
+        if (!empty($get['oauth_verifier']) && !empty($_SESSION['oauth_token']) && !empty($_SESSION['oauth_token_secret'])) {            
+            $referralLink = CommonHelper::affiliateReferralTrackingUrl(UserAuthentication::getLoggedUserAttribute('user_referral_code'));
+
+            $urlapi = "http://tinyurl.com/api-create.php?url=" . $referralLink;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $urlapi);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $shorturl = curl_exec($ch);
+            curl_close($ch);
+            $anchor_length = strlen($shorturl);
+            $message = substr($shorturl . " " . sprintf(FatApp::getConfig("CONF_SOCIAL_FEED_TWITTER_POST_TITLE" . $this->siteLangId), FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId)), 0, 134 - $anchor_length);
+
+            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE, 0, 0, $this->siteLangId);
+            $imagePath = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+            $imagePath = CONF_UPLOADS_PATH . $imagePath;
+
+            $twitter = new Twitter($this->siteLangId);
+            $response = $twitter->postTweet($get['oauth_verifier'], $imagePath, array(
+                'Name' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId), 
+                'status' => $message)
+            );
+
+            $this->set('errors', (false === $response) ? $twitter->getError() : false);
+            $this->_template->render(true, false, 'affiliate/twitter-response.php');
+        }
     }
 
     public function paymentInfoForm()
@@ -147,82 +165,6 @@ class AffiliateController extends AffiliateBaseController
 
         $this->set('msg', Labels::getLabel('MSG_Payment_details_saved_successfully!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function twitterCallback()
-    {
-        include_once CONF_INSTALLATION_PATH . 'library/APIs/twitteroauth-master/autoload.php';
-        $get = FatApp::getQueryStringData();
-
-        if (!empty($get['oauth_verifier']) && !empty($_SESSION['oauth_token']) && !empty($_SESSION['oauth_token_secret'])) {
-            $twitteroauth = new TwitterOAuth(FatApp::getConfig("CONF_TWITTER_API_KEY"), FatApp::getConfig("CONF_TWITTER_API_SECRET"), $_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
-            try {
-                $access_token = $twitteroauth->oauth("oauth/access_token", ["oauth_verifier" => $get['oauth_verifier']]);
-            } catch (exception $e) {
-                Message::addErrorMessage($e->getMessage());
-                FatApp::redirectUser(UrlHelper::generateUrl('Affiliate'));
-                return;
-            }
-
-            $twitteroauth = new TwitterOAuth(FatApp::getConfig("CONF_TWITTER_API_KEY"), FatApp::getConfig("CONF_TWITTER_API_SECRET"), $access_token['oauth_token'], $access_token['oauth_token_secret']);
-
-            $info = $twitteroauth->get('account/verify_credentials', array("include_entities" => false));
-
-            $anchor_tag = CommonHelper::affiliateReferralTrackingUrl(UserAuthentication::getLoggedUserAttribute('user_referral_code'));
-
-            $urlapi = "http://tinyurl.com/api-create.php?url=" . $anchor_tag;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $urlapi);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $shorturl = curl_exec($ch);
-            curl_close($ch);
-            $anchor_length = strlen($shorturl);
-
-            //$message = substr($shorturl." Twitter Message will go here ",0,(140-$anchor_length-6));
-            $message = substr($shorturl . " " . sprintf(FatApp::getConfig("CONF_SOCIAL_FEED_TWITTER_POST_TITLE" . $this->siteLangId), FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId)), 0, 134 - $anchor_length);
-
-            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE, 0, 0, $this->siteLangId);
-            $error = false;
-            $postMedia = false;
-            if (!empty($file_row)) {
-                $image_path = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-                $image_path = CONF_UPLOADS_PATH . $image_path;
-                if (filesize($image_path) <= (5 * 1000000)) { /*Max 5mb size image can be uploaded by Twitter*/
-                    $handle = fopen($image_path, 'rb');
-                    $image = fread($handle, filesize($image_path));
-                    fclose($handle);
-                    $twitteroauth->setTimeouts(60, 30);
-                    try {
-                        $result = $twitteroauth->upload('media/upload', array('media' => $image_path));
-                        if ($twitteroauth->getLastHttpCode() == 200) {
-                            $parameters = array('Name' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId), 'status' => $message, 'media_ids' => $result->media_id_string);
-                            try {
-                                $post = $twitteroauth->post('statuses/update', $parameters);
-                                $postMedia = true;
-                            } catch (exception $e) {
-                                $error = $e->getMessage();
-                            }
-                        }
-                    } catch (exception $e) {;
-                        $error = $e->getMessage();
-                    }
-                }
-            }
-
-            if (!$postMedia) {
-                $parameters = array('Name' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId), 'status' => $message);
-                try {
-                    $post = $twitteroauth->post('statuses/update', $parameters, false);
-                } catch (exception $e) {
-                    $error = $e->getMessage();
-                }
-            }
-            
-            $error = json_encode(isset($post->errors) ? $post->errors : $error);
-            Message::addErrorMessage($error);
-            FatApp::redirectUser(UrlHelper::generateUrl('Affiliate'));
-            return;
-        }
     }
 
     public function setUpMailAffiliateSharing()

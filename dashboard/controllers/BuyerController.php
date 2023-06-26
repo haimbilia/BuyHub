@@ -1,10 +1,4 @@
 <?php
-
-require_once CONF_INSTALLATION_PATH . 'library/APIs/twitteroauth-master/autoload.php';
-
-use Abraham\TwitterOAuth\TwitterOAuth;
-use Avalara\RateType;
-
 class BuyerController extends BuyerBaseController
 {
 

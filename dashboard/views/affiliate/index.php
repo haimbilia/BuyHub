@@ -87,9 +87,9 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
                             </div>
                         </div>
                     </div>
-                    <?php if (false !== $twitterUrl) { ?>
+                    <?php if (!empty($twitterUrl)) { ?>
                         <div class="widget widget-stats">
-                            <button class="btn block-social mb-3" id="twitter_btn" type="button" style="background-color:#1DA1F2">
+                            <button class="btn block-social mb-3" type="button" onclick="twitterLogin();" style="background-color:#1DA1F2">
                                 <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
                                     <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" />
                                 </svg>
@@ -280,31 +280,34 @@ $submitFld->setFieldTagAttribute('class', "btn btn-brand");
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    function twitter_shared(name) {
-        fcom.displaySuccessMessage(langLbl.thanksForSharing);
-        /* $("#twitter_ajax").html(langLbl.thanksForSharing); */
-    }
-</script>
-<script type="text/javascript">
-    var newwindow;
-    var intId;
-
-    function twitter_login() {
-        var screenX = typeof window.screenX != 'undefined' ? window.screenX : window.screenLeft,
-            screenY = typeof window.screenY != 'undefined' ? window.screenY : window.screenTop,
-            outerWidth = typeof window.outerWidth != 'undefined' ? window.outerWidth : document.body.clientWidth,
-            outerHeight = typeof window.outerHeight != 'undefined' ? window.outerHeight : (document.body.clientHeight - 22),
-            width = 800,
-            height = 600,
-            left = parseInt(screenX + ((outerWidth - width) / 2), 10),
-            top = parseInt(screenY + ((outerHeight - height) / 2.5), 10),
-            features = ('width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
-        newwindow = window.open('<?php echo $twitterUrl; ?>', 'Login_by_twitter', features);
-        if (window.focus) {
-            newwindow.focus()
+<?php if (!empty($twitterUrl)) { ?>
+    <script type="text/javascript">
+        function twitter_shared(name) {
+            fcom.displaySuccessMessage(langLbl.thanksForSharing);
         }
-        return false;
-    }
-</script>
+
+        function twitter_error(msg) {
+            fcom.displayErrorMessage(msg);
+            setTimeout(() => {
+                location.reload();
+            }, 3000);
+        }
+
+        function twitterLogin() {
+            var screenX = typeof window.screenX != 'undefined' ? window.screenX : window.screenLeft,
+                screenY = typeof window.screenY != 'undefined' ? window.screenY : window.screenTop,
+                outerWidth = typeof window.outerWidth != 'undefined' ? window.outerWidth : document.body.clientWidth,
+                outerHeight = typeof window.outerHeight != 'undefined' ? window.outerHeight : (document.body.clientHeight - 22),
+                width = 800,
+                height = 600,
+                left = parseInt(screenX + ((outerWidth - width) / 2), 10),
+                top = parseInt(screenY + ((outerHeight - height) / 2.5), 10),
+                features = ('width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
+            var newwindow = window.open('<?php echo $twitterUrl; ?>', 'Login_by_twitter', features);
+            if (window.focus) {
+                newwindow.focus()
+            }
+            return false;
+        }
+    </script>
+<?php } ?>

@@ -5,10 +5,6 @@ $(document).ready(function () {
 		$('.showwrap').slideToggle("600");
 	});
 
-	$("#twitter_btn").click(function (event) {
-		event.preventDefault();
-		twitter_login();
-	});
 	personalInfo();
 
 	$('.openBulkEmailForm').click(function () {
