@@ -55,5 +55,6 @@ $fld->value = $credential_username;
             </div>
         </div>
     </div>
-
 </div>
+
+<?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>

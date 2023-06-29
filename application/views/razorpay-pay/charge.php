@@ -62,6 +62,7 @@
         </div>
     </div>
 </section>
+<?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
 <?php if (!FatUtility::isAjaxCall()) { ?>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <?php } ?>

@@ -265,3 +265,4 @@ if (isset($client_secret)) { ?>
         </div>
     </div>
 </section>
+<?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>

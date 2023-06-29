@@ -73,6 +73,8 @@ if (0 < $withPhone) {
         </div>
     </div>
 </div>
+
+<?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
 <?php
 $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
 $secretKey = FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '');
