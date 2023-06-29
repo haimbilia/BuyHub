@@ -409,8 +409,8 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td><?php echo $php_version; ?>
                                     </td>
-                                    <td>7.4</td>
-                                    <td class="text-center"><?php if ($php_version >= '7.3' && $php_version < '7.5') { ?>
+                                    <td>8.1</td>
+                                    <td class="text-center"><?php if ($php_version >= '8.1') { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
                                                         <use xlink:href="#Check_Circle" />
                                                     </svg>
