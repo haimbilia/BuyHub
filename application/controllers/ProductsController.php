@@ -135,9 +135,8 @@ class ProductsController extends MyAppController
 
         $data = array_merge($data, $common, $arr);
 
-        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-        if (!empty($analyticsId) && 0 < $data['recordCount'] && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
-            $et = new EcommerceTracking($analyticsId, $method, UserAuthentication::getLoggedUserId(true));
+        if (0 < $data['recordCount'] && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+            $et = new EcommerceTracking($method, UserAuthentication::getLoggedUserId(true));
             $et->addImpression(($method == 'search' ? Labels::getLabel('MSG_SEARCH_RESULTS', $this->siteLangId) : $arr['pageTitle']));
             $productPostion = 1;
             foreach ($data['products'] as $product) {
@@ -953,8 +952,7 @@ class ProductsController extends MyAppController
             $this->_template->addJs(array('js/slick.js', 'js/modaal.js', 'js/product-detail.js', 'js/magnific-popup.js', 'js/jw-player.js', 'js/slick-carousels.js'));
         }
 
-        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-        if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
             /* [product click event from search page */
             $refererParseUrl = parse_url(CommonHelper::redirectUserReferer(true));
             if (isset($refererParseUrl['path'])) {
@@ -972,7 +970,7 @@ class ProductsController extends MyAppController
                 }
             }
             if (!empty($productAction)) {
-                $et = new EcommerceTracking($analyticsId, null, UserAuthentication::getLoggedUserId(true));
+                $et = new EcommerceTracking(null, UserAuthentication::getLoggedUserId(true));
                 $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_CLICK);
                 $et->addProductActionList($productAction);
                 $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 1, $product['selprod_price']);
@@ -982,7 +980,7 @@ class ProductsController extends MyAppController
             /* product click event from search page] */
 
             /* [product view */
-            $et = new EcommerceTracking($analyticsId, Labels::getLabel('MSG_Product_Detail', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
+            $et = new EcommerceTracking(Labels::getLabel('MSG_Product_Detail', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_DETAIL);
             $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 1, $product['selprod_price']);
 

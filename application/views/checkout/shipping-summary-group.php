@@ -43,6 +43,18 @@
         $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
         $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.webp');
     ?>
+        <script type="text/javascript">
+            productData.push({
+                item_id: "<?php echo $product['selprod_id']; ?>",
+                item_name: "<?php echo $product['selprod_title']; ?>",
+                discount: "<?php echo ($product['selprod_price'] - $product['theprice']); ?>",
+                index: "<?php echo $product['selprod_id']; ?>",
+                item_brand: "<?php echo $product['brand_name']; ?>",
+                item_category: "<?php echo $product['prodcat_name']; ?>",
+                price: "<?php echo $product['theprice']; ?>",
+                quantity: "<?php echo $product['quantity']; ?>"
+            })
+        </script>
         <li class="list-cart-item block-cart">
             <div class="block-cart-img">
                 <div class="products-img">

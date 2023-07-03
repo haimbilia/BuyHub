@@ -40,16 +40,21 @@ class HomeController extends ListingBaseController
         if (!$dashboardInfoCache) {
             include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
             try {
-                $analytics = new Ykart_analytics($analyticArr);
-                $token = $analytics->getRefreshToken(FatApp::getConfig("CONF_ANALYTICS_ACCESS_TOKEN"));
-
-                $analytics->setAccessToken((isset($token['accessToken'])) ? $token['accessToken'] : '');
-
-                $accountId = $analytics->setAccountId(FatApp::getConfig("CONF_ANALYTICS_ID"));
-                if (!$accountId) {
-                    Message::addErrorMessage(Labels::getLabel('ERR_ANALYTIC_ID_DOES_NOT_EXIST_WITH_CONFIGURED_ACCOUNT', $this->siteLangId));
+                if (1 == FatApp::getConfig('CONF_GOOGLE_ANALYTICS_4', FatUtility::VAR_INT, 0)) {
+                    include_once(CONF_INSTALLATION_PATH . 'library/ga4/autoloader.php');
+                    $analytics = new Analytics();
                 } else {
-                    $this->set('configuredAnalytics', true);
+                    $analytics = new Ykart_analytics($analyticArr);
+                    $token = $analytics->getRefreshToken(FatApp::getConfig("CONF_ANALYTICS_ACCESS_TOKEN"));
+
+                    $analytics->setAccessToken((isset($token['accessToken'])) ? $token['accessToken'] : '');
+
+                    $accountId = $analytics->setAccountId(FatApp::getConfig("CONF_ANALYTICS_ID"));
+                    if (!$accountId) {
+                        Message::addErrorMessage(Labels::getLabel('ERR_ANALYTIC_ID_DOES_NOT_EXIST_WITH_CONFIGURED_ACCOUNT', $this->siteLangId));
+                    } else {
+                        $this->set('configuredAnalytics', true);
+                    }
                 }
             } catch (exception $e) {
                 /* Message::addErrorMessage(Labels::getLabel('ERR_ANALYTIC_ID_DOES_NOT_EXIST_WITH_CONFIGURED_ACCOUNT',$this->siteLangId)); */
@@ -84,7 +89,6 @@ class HomeController extends ListingBaseController
                 foreach ($statsInfo['result'] as $key => $val) {
                     $visitCount[$key] = $val['totalsForAllResults'] ?? 0;
                 }
-                $socialVisits = $analytics->getSocialVisits();
             }
 
             /* Conversion Stats [*/
@@ -147,7 +151,6 @@ class HomeController extends ListingBaseController
 
             $dashboardInfo['visits_chart_data'] = isset($visits_chart_data) ? rtrim($visits_chart_data, ',') : '';
             $dashboardInfo['visitsCount'] = (isset($visitCount)) ? $visitCount : '';
-            $dashboardInfo['socialVisits'] = isset($socialVisits) ? $socialVisits : '';
             $dashboardInfo['conversionChatData'] = $conversionChatData;
             $dashboardInfo['conversionStats'] = $conversionStats;
             FatCache::set('dashboardInfoCache' . $this->siteLangId, serialize($dashboardInfo), '.txt');
@@ -347,14 +350,6 @@ class HomeController extends ListingBaseController
         $type = $post['rtype'];
         $interval = isset($post['interval']) ? $post['interval'] : '';
 
-        include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
-        $analyticArr = array(
-            'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID"),
-            'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY"),
-            'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
-            'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID")
-        );
-
         $dashboardInfoCache = FatCache::get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->siteLangId, CONF_HOME_PAGE_CACHE_TIME, '.txt');
         //$result = $cache->get("dashboardInfo_" . $type . '_' . $interval . '_' . $this->siteLangId);        
         if (!$dashboardInfoCache) {
@@ -367,12 +362,26 @@ class HomeController extends ListingBaseController
                 $result = $statsObj->getTopSearchKeywords($interval, 10);
             } else {
                 try {
-                    $analytics = new Ykart_analytics($analyticArr);
-                    $token = $analytics->getRefreshToken(FatApp::getConfig("CONF_ANALYTICS_ACCESS_TOKEN"));
-                    if (isset($token['accessToken'])) {
-                        $analytics->setAccessToken($token['accessToken']);
+                    if (1 == FatApp::getConfig('CONF_GOOGLE_ANALYTICS_4', FatUtility::VAR_INT, 0)) {
+                        include_once(CONF_INSTALLATION_PATH . 'library/ga4/autoloader.php');
+                        $analytics = new Analytics();
+                    } else {
+                        include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
+                        $analyticArr = array(
+                            'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID"),
+                            'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY"),
+                            'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
+                            'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID")
+                        );
+                        
+                        $analytics = new Ykart_analytics($analyticArr);
+                        $token = $analytics->getRefreshToken(FatApp::getConfig("CONF_ANALYTICS_ACCESS_TOKEN"));
+                        if (isset($token['accessToken'])) {
+                            $analytics->setAccessToken($token['accessToken']);
+                        }
+                        $analytics->setAccountId(FatApp::getConfig("CONF_ANALYTICS_ID"));
                     }
-                    $analytics->setAccountId(FatApp::getConfig("CONF_ANALYTICS_ID"));
+
                     switch (strtoupper($type)) {
                         case 'TOP_COUNTRIES':
                             $result = $analytics->getTopCountries($interval, 9);

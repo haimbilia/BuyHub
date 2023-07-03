@@ -1,10 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <script>
-    var data = {
-        value: <?php echo $orderInfo['order_net_amount']; ?>,
-        currency: '<?php echo $orderInfo['order_currency_code']; ?>'
-    };
-    ykevents.purchase(data);
+    var productData = [];
 </script>
 <?php
 $products = $orderInfo['orderProducts'];
@@ -247,9 +243,32 @@ $products = $orderInfo['orderProducts'];
                                                                 </div>
                                                             </div>
 
+                                                            <script type="text/javascript">
+                                                                productData.push({
+                                                                    item_id: "<?php echo $product['op_selprod_id']; ?>",
+                                                                    item_name: "<?php echo $product['op_selprod_title']; ?>",
+                                                                    discount: "<?php echo ($product['op_selprod_price'] - ($product["op_unit_price"] * $product["op_qty"])); ?>",
+                                                                    index: "<?php echo $product['op_selprod_id']; ?>",
+                                                                    item_brand: "<?php echo $product['op_brand_name']; ?>",
+                                                                    price: "<?php echo ($product["op_unit_price"] * $product["op_qty"]); ?>",
+                                                                    quantity: "<?php echo $product['op_qty']; ?>"
+                                                                })
+                                                            </script>
                                                         </li>
-                                                    <?php }
-                                                } else {
+                                                    <?php } ?>
+                                                    <script>
+                                                        $(document).ready(function() {
+                                                            ykevents.purchase({
+                                                                transaction_id: "<?php echo $orderId; ?>",
+                                                                value: "<?php echo $orderInfo['order_net_amount']; ?>",
+                                                                tax: "<?php echo $orderInfo['order_tax_charged']; ?>",
+                                                                shipping: "<?php echo $shippingCharges; ?>",
+                                                                currency: "<?php echo $orderInfo['order_currency_code']; ?>",
+                                                                items: productData
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <?php } else {
                                                     foreach ($products as $subscription) {
                                                         $subTotal += $subscription['ossubs_price'];
                                                     ?>

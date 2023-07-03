@@ -148,8 +148,6 @@ class CartController extends MyAppController
                 $cartObj->resetProducts();
                 $cartObj->validateCheckoutType();
                 $cartObj->setCartCheckoutType($fulfilmentType);
-                $cartSummary = $cartObj->getCartFinancialSummary($this->siteLangId);
-                $this->set('cartSummary', $cartSummary);
 
                 $this->set('cartSelectedBillingAddress', $billingAddressDetail);
                 $this->set('cartSelectedShippingAddress', $shippingddressDetail);
@@ -162,6 +160,9 @@ class CartController extends MyAppController
                 $this->set('pickUpProductsCount', count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]));
                 $this->set('availableProductsArr', $availableProductsArr);
             }
+
+            $cartSummary = $cartObj->getCartFinancialSummary($this->siteLangId);
+            $this->set('cartSummary', $cartSummary);
 
             $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId);
             if (!array_key_exists($fulfilmentType, $fulFillmentArr)) {
@@ -381,6 +382,7 @@ class CartController extends MyAppController
             $productErr['product'] = $message;
         }
 
+        $cartItems = [];
         foreach ($productsToAdd as $productId => $quantity) {
             if ($productId <= 0) {
                 $productAdd = false;
@@ -395,7 +397,6 @@ class CartController extends MyAppController
                 }
             }
             $srch = new ProductSearch($this->siteLangId);
-
             $srch->setDefinedCriteria();
             $srch->joinBrands();
             $srch->joinSellerSubscription();
@@ -403,7 +404,7 @@ class CartController extends MyAppController
             $srch->joinProductToCategory();
             $srch->addCondition('pricetbl.selprod_id', '=', 'mysql_func_' . $productId, 'AND', true);
             $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-            $srch->addMultipleFields(array('selprod_id', 'selprod_code', 'selprod_min_order_qty', 'selprod_stock', 'product_name', 'prodcat_name', 'brand_name', 'selprod_title', 'selprod_price'));
+            $srch->addMultipleFields(array('selprod_id', 'selprod_code', 'selprod_min_order_qty', 'selprod_stock', 'product_name', 'prodcat_name', 'brand_name', 'selprod_title', 'selprod_price', 'COALESCE(splprice_price, selprod_price) as theprice'));
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();
@@ -492,16 +493,21 @@ class CartController extends MyAppController
                 }
             }
             /* ] */
+            $advanceEcommerce = FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0);
+            $ga4 = FatApp::getConfig('CONF_GOOGLE_ANALYTICS_4', FatUtility::VAR_INT, 0);
             if ($productAdd) {
                 $returnUserId = (true === MOBILE_APP_API_CALL) ? true : false;
                 $cartUserId = $cartObj->add($productId, $quantity, 0, $returnUserId);
-                $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-                if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
-                    $cartQty = $cartObj->getQtyBySelProdId($sellerProductRow['selprod_id']);
-                    $et = new EcommerceTracking($analyticsId, Labels::getLabel('MSG_PRODUCT_DETAIL', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
-                    $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_ADD_TO_CART);
-                    $et->addProduct($sellerProductRow['selprod_id'], $sellerProductRow['selprod_title'], $sellerProductRow['prodcat_name'], $sellerProductRow['brand_name'], $cartQty, $sellerProductRow['selprod_price']);
-                    $et->sendRequest();
+                if ($advanceEcommerce) {
+                    if (0 == $ga4) {
+                        $et = new EcommerceTracking(Labels::getLabel('MSG_PRODUCT_DETAIL', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
+                        $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_ADD_TO_CART);
+                        $et->addProduct($sellerProductRow['selprod_id'], $sellerProductRow['selprod_title'], $sellerProductRow['prodcat_name'], $sellerProductRow['brand_name'], $quantity, $sellerProductRow['selprod_price']);
+                        $et->sendRequest();
+                    } else if (false === MOBILE_APP_API_CALL) {
+                        $sellerProductRow['addedQty'] = $quantity;
+                        $cartItems[] = $sellerProductRow;
+                    }
                 }
 
                 if (true === MOBILE_APP_API_CALL) {
@@ -509,6 +515,10 @@ class CartController extends MyAppController
                 }
             }
             $productAdd = true;
+        }
+
+        if ($advanceEcommerce && $ga4 && false === MOBILE_APP_API_CALL) {
+            $this->set('cartItems', $cartItems);
         }
 
         if (isset($productErr)) {
@@ -525,6 +535,7 @@ class CartController extends MyAppController
             if ($logMessage) {
                 Message::addMessage(sprintf(Labels::getLabel('MSG_SUCCESS_CART_ADD', $this->siteLangId), $strProduct, $strCart));
             }
+
             $this->set('msg', Labels::getLabel("MSG_ADDED_TO_CART", $this->siteLangId));
         }
         $this->set('total', $cartObj->countProducts());
@@ -553,7 +564,7 @@ class CartController extends MyAppController
 
         $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
         $key = $post['key'];
-
+        
         if ('all' == $key) {
             $cartObj->clear(true);
             $cartObj->updateUserCart();
@@ -573,7 +584,7 @@ class CartController extends MyAppController
             $cartObj->removeCartDiscountCoupon();
         }
         $total = $cartObj->countProducts();
-
+        
         LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
 
         $this->set('msg', Labels::getLabel("MSG_ITEM_REMOVED_FROM_CART", $this->siteLangId));
@@ -588,6 +599,7 @@ class CartController extends MyAppController
             $this->set('cartSummary', $cartSummary);
             $this->_template->render();
         }
+        $this->set('cartItems', $cartObj->getRemovedItems());
         $this->set('total', $total);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -886,6 +898,7 @@ class CartController extends MyAppController
         $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
         $cartObj->clear(true);
         $cartObj->updateUserCart();
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
+        $this->set('cartItems', $cartObj->getRemovedItems());
+        $this->_template->render(false, false, 'json-success.php');
     }
 }
