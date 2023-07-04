@@ -132,7 +132,7 @@
 
 .hero-slider {
     position: relative;
-    margin: 0 auto;
+    margin: 0 auto !important;
     text-align: center;
     background-color: $bg-gray;
     overflow: hidden;
