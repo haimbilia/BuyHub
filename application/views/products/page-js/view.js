@@ -93,7 +93,7 @@ $(window).on('load', function () {
 
     /* Thumbnail/alternates slider for product page */
     $(".thumb-nav").slick({
-        rtl: ('rtl' == langLbl.layoutDirection),
+        rtl: ('rtl' == langLbl.layoutDirection) ? true : false,
         slidesToShow: 5,
         slidesToScroll: 1,
         infinite: false,
