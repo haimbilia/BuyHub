@@ -67,6 +67,27 @@ if (!$userActiveTab) {
     </div>
 </footer>
 </main>
+
+<?php if (CommonHelper::demoUrl()) { ?>
+    <div class="no-print">
+        <!--Start of Tawk.to Script-->
+        <script type="text/javascript">
+            var Tawk_API = Tawk_API || {},
+                Tawk_LoadStart = new Date();
+            (function() {
+                var s1 = document.createElement("script"),
+                    s0 = document.getElementsByTagName("script")[0];
+                s1.async = true;
+                s1.src = 'https://embed.tawk.to/5fe08aa9df060f156a8ef9fd/1eq2hracf';
+                s1.charset = 'UTF-8';
+                s1.setAttribute('crossorigin', '*');
+                s0.parentNode.insertBefore(s1, s0);
+            })();
+        </script>
+        <!--End of Tawk.to Script-->
+    </div>
+<?php } ?>
+
 </div>
 <div class="modal fade" id="search-main">
     <div class="modal-dialog modal-dialog-centered">
@@ -105,7 +126,8 @@ if (!$userActiveTab) {
         </div>
     </div>
 </div>
-<?php include(CONF_THEME_PATH . '_partial/footer-part/offcanvas-elements.php'); ?>
+<?php
+include(CONF_THEME_PATH . '_partial/footer-part/offcanvas-elements.php'); ?>
 </body>
 
 </html>
