@@ -66,7 +66,7 @@ class HomeController extends ListingBaseController
 
                 $chatStats = array();
                 if (!empty($statsInfo['stats'])) {
-                    $chatStats = "[['" . Labels::getLabel('LBL_Year', $this->siteLangId) . "', '" . Labels::getLabel('LBL_Today', $this->siteLangId) . "','" . Labels::getLabel('LBL_Weekly', $this->siteLangId) . "','" . Labels::getLabel('LBL_Last_Month', $this->siteLangId) . "','" . Labels::getLabel('LBL_Last_3_Month', $this->siteLangId) . "'],";
+                    $chatStats = "[['" . Labels::getLabel('LBL_Year', $this->siteLangId) . "', '" . Labels::getLabel('LBL_Today', $this->siteLangId) . "','" . Labels::getLabel('LBL_PAST_7_DAYS', $this->siteLangId) . "','" . Labels::getLabel('LBL_Last_Month', $this->siteLangId) . "','" . Labels::getLabel('LBL_Last_3_Month', $this->siteLangId) . "'],";
                     foreach ($statsInfo['stats'] as $key => $val) {
                         if ($key == '') {
                             continue;
