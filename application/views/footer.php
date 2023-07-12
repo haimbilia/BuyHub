@@ -77,7 +77,7 @@ if ('' !=  $pixelId) {  ?>
                             '{PRODUCT}' => '<a target="_blank" href="https://yo-kart.com">Yo!Kart</a>',
                             '{OWNER}' => '<a target="_blank" href="https://www.fatbit.com/">FATbit Technologies</a>',
                         );
-                       echo $str = CommonHelper::replaceStringData(Labels::getLabel('LBL_COPYRIGHT_TEXT', $siteLangId), $replacements);
+                        echo $str = CommonHelper::replaceStringData(Labels::getLabel('LBL_COPYRIGHT_TEXT', $siteLangId), $replacements);
                     } else {
                         echo $str = 'Copyright &copy; ' . date('Y') . ' ' . FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId, FatUtility::VAR_STRING, '') . '. Powered by <a target="_blank" href="https://yo-kart.com">Yo!Kart</a> and Developed by <a target="_blank" href="https://www.fatbit.com/">FATbit Technologies</a>';
                     }
@@ -94,17 +94,19 @@ if ('' !=  $pixelId) {  ?>
     </section>
 
     <?php
-    $this->includeTemplate('_partial/footerMetaContent.php'); ?>
-    <section class="footer-cta">
-        <div class="container">
-            <div class="footer-cta-inner">
-                <h4 class="footer-cta-title">Yo!Kart Comes With All Essential eCommerce Features To Start An Online Marketplace</h4>
-                <a class="footer-cta-link btn btn-brand" href="https://www.yo-kart.com/contact-us.html?q=demo-footer">Get Started</a>
+    $this->includeTemplate('_partial/footerMetaContent.php');
+    if (CommonHelper::demoUrl()) { ?>
+        <section class="footer-cta">
+            <div class="container">
+                <div class="footer-cta-inner">
+                    <h4 class="footer-cta-title">Yo!Kart Comes With All Essential eCommerce Features To Start An Online Marketplace</h4>
+                    <a class="footer-cta-link btn btn-brand" href="https://www.yo-kart.com/contact-us.html?q=demo-footer">Get Started</a>
 
+                </div>
             </div>
-        </div>
-    </section>
-    <?php if ('cart' != strtolower($controllerName)) { ?>
+        </section>
+    <?php }
+    if ('cart' != strtolower($controllerName)) { ?>
         <!-- Mobile menu -->
         <div class="mobile-actions">
             <div class="mobile-actions-item">
