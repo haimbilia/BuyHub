@@ -401,6 +401,26 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                         </i>' . Labels::getLabel('LBL_VIEW_ATTACHMENTS', $siteLangId),
                         ];
                     }
+
+
+                    $orderObj = new Orders($order['order_id']);
+                    $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
+                    if (!in_array($op["op_status_id"], $notAllowedStatues) && $canEditSellerOrders) {
+                        $data['dropdownButtons']['otherButtons'][] = [
+                            'attr' => [
+                                'href' => 'javascript:void(0)',
+                                'onclick' => 'getCancelOrderProductForm(' . $op['op_id'] . ')',
+                            ],
+                            'label' => '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#close">
+                                                </use>
+                                            </svg>
+                                        </i>' . Labels::getLabel('LBL_CANCEL_ORDER', $siteLangId),
+                        ];
+                    }
+
                     $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false);
                 ?>
             </td>

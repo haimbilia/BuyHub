@@ -193,6 +193,9 @@ class ProductSearch extends SearchBase
             $this->joinTable('(' . $tmpQry . ')', 'INNER JOIN', 'pricetbl.pmp_product_id = msellprod.selprod_product_id and msellprod.selprod_id = pricetbl.pmp_selprod_id', 'pricetbl');
             $this->joinTable(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE, 'LEFT OUTER JOIN', 'msplpric.splprice_selprod_id = pricetbl.pmp_selprod_id and pricetbl.pmp_splprice_id = msplpric.splprice_id', 'msplpric');
             // $this->addFld('pricetbl.maxprice');
+            if ($checkAvailableFrom) {
+                $this->addCondition('msellprod.selprod_available_from', '<=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
+            }
         } else {
             $this->joinBasedOnPriceCondition($splPriceForDate, $criteria, $checkAvailableFrom);
         }

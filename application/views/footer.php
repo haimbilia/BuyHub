@@ -1,5 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
 $pixelId = FatApp::getConfig("CONF_FACEBOOK_PIXEL_ID", FatUtility::VAR_STRING, '');
 if ('' !=  $pixelId) {  ?>
     <img alt="Facebook Pixel" height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=<?php echo $pixelId; ?>&ev=PageView&noscript=1" />
@@ -71,12 +71,16 @@ if ('' !=  $pixelId) {  ?>
             <div class="footer-bottom-inner">
                 <div class="copyright">
                     <?php
-                    $replacements = array(
-                        '{YEAR}' => '&copy; ' . date("Y"),
-                        '{PRODUCT}' => '<a target="_blank" href="https://yo-kart.com" rel="noopener">Yo!Kart</a>',
-                        '{OWNER}' => '<a target="_blank" href="https://www.fatbit.com" rel="noopener">FATbit Technologies</a>',
-                    );
-                    echo CommonHelper::replaceStringData(Labels::getLabel('LBL_COPYRIGHT_TEXT', $siteLangId), $replacements);
+                    if (CommonHelper::demoUrl() || true == WHITE_LABELED) {
+                        $replacements = array(
+                            '{YEAR}' => '&copy; ' . date("Y"),
+                            '{PRODUCT}' => '<a target="_blank" href="https://yo-kart.com">Yo!Kart</a>',
+                            '{OWNER}' => '<a target="_blank" href="https://www.fatbit.com/">FATbit Technologies</a>',
+                        );
+                       echo $str = CommonHelper::replaceStringData(Labels::getLabel('LBL_COPYRIGHT_TEXT', $siteLangId), $replacements);
+                    } else {
+                        echo $str = 'Copyright &copy; ' . date('Y') . ' ' . FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId, FatUtility::VAR_STRING, '') . '. Powered by <a target="_blank" href="https://yo-kart.com">Yo!Kart</a> and Developed by <a target="_blank" href="https://www.fatbit.com/">FATbit Technologies</a>';
+                    }
                     ?>
                 </div>
                 <div class="payment">
@@ -254,24 +258,8 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
     <span>
         <?php echo Labels::getLabel('LBL_TOP', $siteLangId); ?></span>
 </a>
-<?php
-$fontKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');
-$googleFontFamily = "'Montserrat', sans-serif !important";
-$googleFontFamilyUrl = FatApp::getConfig('CONF_THEME_FONT_FAMILY_URL', FatUtility::VAR_STRING, '');
-if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
-    $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
-    $googleFontFamily =  '"' . str_replace("+", " ", explode('-', $googleFontFamily)[0]) . '" !important';
-?>
-    <link href="<?php echo $googleFontFamilyUrl; ?>" rel="stylesheet">
-<?php
-} else { ?>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<?php }
-?>
+
+<?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
 </body>
 
 </html>
-<?php
-//$content  = ob_get_clean();
-//echo CommonHelper::minifyHtml($content);
-?>

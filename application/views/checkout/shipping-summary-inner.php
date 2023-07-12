@@ -61,6 +61,9 @@
                 ?>
             </h5>
         </div>
+        <script>
+            var productData = [];
+        </script>
         <div class="step_body">
             <?php ksort($shippingRates);
             foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
@@ -78,12 +81,38 @@
                         case Shipping::LEVEL_PRODUCT:
                             if (isset($items['products']) && !empty($items['products'])) {
                                 foreach ($items['products'] as $selProdid => $product) {
-                                    require('shipping-summary-product.php');
+                                    require('shipping-summary-product.php'); ?>
+                                    <script type="text/javascript">
+                                        productData.push({
+                                            item_id: "<?php echo $product['selprod_id']; ?>",
+                                            item_name: "<?php echo $product['selprod_title']; ?>",
+                                            discount: "<?php echo ($product['selprod_price'] - $product['theprice']); ?>",
+                                            index: "<?php echo $product['selprod_id']; ?>",
+                                            item_brand: "<?php echo $product['brand_name']; ?>",
+                                            item_category: "<?php echo $product['prodcat_name']; ?>",
+                                            price: "<?php echo $product['theprice']; ?>",
+                                            quantity: "<?php echo $product['quantity']; ?>"
+                                        })
+                                    </script>
+                                <?php
                                 }
                             }
                             if (isset($items['digital_products']) && !empty($items['digital_products'])) {
                                 foreach ($items['digital_products'] as $selProdid => $product) {
-                                    require('shipping-summary-product.php');
+                                    require('shipping-summary-product.php'); ?>
+                                    <script type="text/javascript">
+                                        productData.push({
+                                            item_id: "<?php echo $product['selprod_id']; ?>",
+                                            item_name: "<?php echo $product['selprod_title']; ?>",
+                                            discount: "<?php echo ($product['selprod_price'] - $product['theprice']); ?>",
+                                            index: "<?php echo $product['selprod_id']; ?>",
+                                            item_brand: "<?php echo $product['brand_name']; ?>",
+                                            item_category: "<?php echo $product['prodcat_name']; ?>",
+                                            price: "<?php echo $product['theprice']; ?>",
+                                            quantity: "<?php echo $product['quantity']; ?>"
+                                        })
+                                    </script>
+            <?php
                                 }
                             }
                             break;
@@ -91,6 +120,12 @@
                 }
             } ?>
         </div>
-
     </div>
 </div>
+<script type="text/javascript">
+    ykevents.initiateCheckout({
+        currency: currencyCode,
+        value: "<?php echo $cartSummary['orderNetAmount']; ?>",
+        items: productData
+    });
+</script>

@@ -127,6 +127,7 @@ $(function () {
         },
 
         displayProcessing: function () {
+            $.ykmsg.clear();
             fcom.processingCounter++;
             $.ykmsg.info(langLbl.processing, -1, fcom.processingClass + " " + fcom.processingClass + '-' + fcom.processingCounter);
         },

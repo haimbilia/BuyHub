@@ -389,4 +389,23 @@ $(document).on('change', '.downloadTypeJs', function () {
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md')
         });
     }
+
+    getCancelOrderProductForm = function (opId) {
+        fcom.updateWithAjax(fcom.makeUrl('Orders', 'getCancelOrderProductForm', [opId]), '', function (t) {
+            fcom.closeProcessing();
+            $.ykmodal(t.html, false);
+        });
+    }
+
+    cancelOrderProduct = function (frm) {
+        if (!$(frm).validate()) return;
+        var data = fcom.frmData(frm);
+        $.ykmodal(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl('Orders', 'cancelOrderProduct'), data, function (t) {
+            fcom.closeProcessing();
+            fcom.displaySuccessMessage(t.msg);
+            getOrderParticulars(t.order_id, { value: "" });
+            $.ykmodal.close();
+        });
+    };
 })();

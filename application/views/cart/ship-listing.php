@@ -12,6 +12,9 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
             return  $b['fulfillment_type'] - $a['fulfillment_type'];
         });
     ?>
+        <script>
+            var productData = [];
+        </script>
         <ul class="list-cart <?php echo (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) ? '' : ''; ?>">
             <?php if (count($fulfillmentProdArr[Shipping::FULFILMENT_SHIP]) != $productsCount) { ?>
                 <li class="list-cart-item minus-space">
@@ -54,7 +57,6 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                         'alt' => $productTitle,
                                         'siteLangId' => $siteLangId,
                                     ];
-
                                     $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
                                     ?>
                                 </a>
@@ -110,7 +112,6 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
             $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
             $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
         ?>
-
             <li class="list-cart-item block-cart <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
                 <div class="block-cart-img">
                     <div class="products-img">
@@ -124,7 +125,6 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 'alt' => $productTitle,
                                 'siteLangId' => $siteLangId,
                             ];
-
                             $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
                             ?>
                         </a>
@@ -202,7 +202,6 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                     } else {
                                         if (empty($product['is_in_any_wishlist'])) { ?>
                                             <button class="btn btn-link" onClick="moveToWishlist( <?php echo $product['selprod_id']; ?>, event, '<?php echo md5($product['key']); ?>' );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
-
                                                 <?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>
                                             </button>
                                         <?php  } else { ?>
@@ -226,6 +225,18 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         <?php } ?>
                     </div>
                 </div>
+                <script type="text/javascript">
+                    productData.push({
+                        item_id: "<?php echo $product['selprod_id']; ?>",
+                        item_name: "<?php echo $product['selprod_title']; ?>",
+                        discount: "<?php echo ($product['selprod_price'] - $product['theprice']); ?>",
+                        index: "<?php echo $product['selprod_id']; ?>",
+                        item_brand: "<?php echo $product['brand_name']; ?>",
+                        item_category: "<?php echo $product['prodcat_name']; ?>",
+                        price: "<?php echo $product['theprice']; ?>",
+                        quantity: "<?php echo $product['quantity']; ?>"
+                    })
+                </script>
             </li>
         <?php } ?>
         </ul>
@@ -253,12 +264,10 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                     'alt' => $productTitle,
                                     'siteLangId' => $siteLangId,
                                 ];
-
                                 $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
                                 ?>
                             </a>
                         </div>
-
                     </div>
                     <div class="block-cart-detail">
                         <div class="block-cart-detail-top">
@@ -285,7 +294,6 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div class="block-cart-detail-bottom">
                             <ul class="cart-action">
@@ -300,10 +308,18 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 </li>
                             </ul>
                         </div>
-
                     </div>
                 </li>
             <?php } ?>
         </ul>
     <?php } ?>
 </div>
+<?php $netChargeAmt = $cartSummary['cartTotal'] - ((0 < $cartSummary['cartVolumeDiscount']) ? $cartSummary['cartVolumeDiscount'] : 0);
+$netChargeAmt = $netChargeAmt - ((isset($cartSummary['cartDiscounts']['coupon_discount_total']) && 0 < $cartSummary['cartDiscounts']['coupon_discount_total']) ? $cartSummary['cartDiscounts']['coupon_discount_total'] : 0); ?>
+<script type="text/javascript">
+    ykevents.viewCart({
+        currency: currencyCode,
+        value: "<?php echo $netChargeAmt; ?>",
+        items: productData
+    });
+</script>

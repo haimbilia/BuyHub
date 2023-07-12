@@ -63,4 +63,5 @@ if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
     AttachedFile::registerS3ClientStream();
 }
 define('SYSTEM_INIT', true);
+define('WHITE_LABELED', false);
 define('CONF_WEB_APP_VERSION', 'RV-10.0.0.20230102');

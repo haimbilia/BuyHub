@@ -87,6 +87,7 @@ $secondaryColorInverse = (false === strpos($secondaryColorInverse, 'rgb') ? 'rgb
     var CONF_MAINTENANCE = ' . FatApp::getConfig("CONF_MAINTENANCE", FatUtility::VAR_INT, 0) . ';
     var currencySymbolLeft = "' . CommonHelper::getCurrencySymbolLeft() . '";
     var currencySymbolRight = "' . CommonHelper::getCurrencySymbolRight() . '";   
+    var currencyCode = "' . CommonHelper::getCurrencyCode() . '";   
     var className = "' . FatApp::getController() . '";
     var actionName = "' . FatApp::getAction() . '";
     var productSearchUrl = "' . $productSearchUrl . '";   

@@ -1058,6 +1058,7 @@ class Orders extends MyAppModel
         if (0 < $langId) {
             $srch->joinTable(Plugin::DB_TBL_LANG, 'LEFT OUTER JOIN', 'plugin_id = pm_l.pluginlang_plugin_id AND pm_l.pluginlang_lang_id = ' . $langId, 'pm_l');
         }
+        
         $srch->addCondition('order_number', '=', $order_no);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -1158,7 +1159,6 @@ class Orders extends MyAppModel
                     $srch->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sp_l.selprodlang_selprod_id = sp.selprod_id AND sp_l.selprodlang_lang_id = ' . $langId, 'sp_l');
                 }
             }
-
             $srch->addOrder("op_id", "desc");
             $rs = $srch->getResultSet();
 
@@ -1477,9 +1477,8 @@ class Orders extends MyAppModel
         }
 
         $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type'], CommonHelper::getLangId());
-        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-        if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
-            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_ORDER_PLACED', CommonHelper::getLangId()), $orderInfo['order_user_id']);
+        if (FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+            $et = new EcommerceTracking(Labels::getLabel('LBL_ORDER_PLACED', CommonHelper::getLangId()), $orderInfo['order_user_id']);
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_PURCHASE);
             foreach ($subOrders as $op) {
                 $productTitle = ($op['op_selprod_title']) ? $op['op_selprod_title'] : $op['op_product_name'];
@@ -1890,9 +1889,9 @@ class Orders extends MyAppModel
                 /* ]
                 */
             }
-            $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-            if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
-                $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_REFUND_ORDER', $langId), $childOrderInfo['order_user_id']);
+            
+            if (FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+                $et = new EcommerceTracking(Labels::getLabel('LBL_REFUND_ORDER', $langId), $childOrderInfo['order_user_id']);
                 $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REFUND);
                 $et->addProduct($childOrderInfo['op_selprod_id'], $childOrderInfo['op_refund_qty']);
                 $et->addTransaction($childOrderInfo['op_order_id']);
