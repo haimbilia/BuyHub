@@ -95,7 +95,15 @@ if ('' !=  $pixelId) {  ?>
 
     <?php
     $this->includeTemplate('_partial/footerMetaContent.php'); ?>
+    <section class="footer-cta">
+        <div class="container">
+            <div class="footer-cta-inner">
+                <h4 class="footer-cta-title">Yo!Kart Comes With All Essential eCommerce Features To Start An Online Marketplace</h4>
+                <a class="footer-cta-link btn btn-brand" href="https://www.yo-kart.com/contact-us.html?q=demo-footer">Get Started</a>
 
+            </div>
+        </div>
+    </section>
     <?php if ('cart' != strtolower($controllerName)) { ?>
         <!-- Mobile menu -->
         <div class="mobile-actions">

@@ -4,7 +4,7 @@
     padding-bottom: 5rem !important;
 
     @include media-breakpoint-up(lg) {
-        padding-bottom: 1rem !important;
+        padding-bottom: 0 !important;
     }
 
     &-logo {
@@ -300,6 +300,24 @@
         height: 20px;
         margin-#{$end-direction}: 8px;
         border-radius: 50%;
+    }
+}
+
+.footer-cta {
+    border-top: $border;
+    padding: 1rem 0 !important;
+
+
+    &-inner {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &-title {
+        font-size: 1rem;
+        font-weight: $font-weight-bold;
     }
 }
 
