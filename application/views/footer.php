@@ -71,7 +71,7 @@ if ('' !=  $pixelId) {  ?>
             <div class="footer-bottom-inner">
                 <div class="copyright">
                     <?php
-                    if (CommonHelper::demoUrl()) {
+                    if (CommonHelper::demoUrl() || true == WHITE_LABELED) {
                         $replacements = array(
                             '{YEAR}' => '&copy; ' . date("Y"),
                             '{PRODUCT}' => '<a target="_blank" href="https://yo-kart.com">Yo!Kart</a>',

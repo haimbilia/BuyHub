@@ -23,7 +23,7 @@ if (!$userActiveTab) {
 <footer class="footer">
     <div class="copyright">
         <p class="copyright-txt">
-            <?php if (CommonHelper::demoUrl()) {
+            <?php if (CommonHelper::demoUrl() || true == WHITE_LABELED) {
                 $replacements = array(
                     '{YEAR}' => '&copy; ' . date("Y"),
                     '{PRODUCT}' => '<a target="_blank" href="https://yo-kart.com">Yo!Kart</a>',
