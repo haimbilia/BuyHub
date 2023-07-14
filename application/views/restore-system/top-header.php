@@ -43,7 +43,7 @@
                         ?>
 
                         <li class="views-item <?php echo $admin; ?> restoreElementJs">
-                            <a class="views-links" title="Admin" href="<?php echo UrlHelper::generateUrl($adminUrl, '', [], CONF_WEBROOT_FRONTEND); ?>">
+                            <a class="views-links" title="Admin" href="<?php echo UrlHelper::generateUrl($adminUrl, '', [], CONF_WEBROOT_FRONTEND, null, false, false, false); ?>">
                                 <svg class="svg" width="32" height="32">
                                     <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#admin">
                                     </use>
