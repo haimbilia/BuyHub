@@ -15,7 +15,7 @@ if (isset($order)) {
     }
     // $productName = $order['op_product_name'];
     $productName = '';
-    $productTitle = $order['op_selprod_title'];
+    $productTitle = html_entity_decode($order['op_selprod_title'], ENT_QUOTES, 'utf-8');
     $brandName = $order['op_brand_name'];
 
     $str = Labels::getLabel('LBL_QTY:_{QTY}', $siteLangId);
@@ -36,8 +36,8 @@ if (isset($order)) {
     $prodUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONTEND);
     $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_MINI, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
-    $productName = $product['product_name'];
-    $productTitle = $product['selprod_title'];
+    $productName = html_entity_decode($product['product_name'], ENT_QUOTES, 'utf-8');
+    $productTitle = html_entity_decode($product['selprod_title'], ENT_QUOTES, 'utf-8');
     $brandName = $product['brand_name'] ?? '';
     if (is_array($product['options']) && count($product['options'])) {
         $count = count($product['options']);
