@@ -241,8 +241,8 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
                 if (getCookie("demoImgpopup2") != 1) {
                     setTimeout(function() {
                         $.ykmodal('<a href="https://www.yo-kart.com/contact-us.html?q=demo_v10"><img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup2.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
+                        setCookie('demoImgpopup2', 1);
                     }, 600000);
-                    setCookie('demoImgpopup2', 1);
                 }
             });
         </script>
