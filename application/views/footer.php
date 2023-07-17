@@ -230,6 +230,21 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
                 s1.setAttribute('crossorigin', '*');
                 s0.parentNode.insertBefore(s1, s0);
             })();
+            $(document).ready(function() {
+                if (getCookie("demoImgpopup1") != 1) {
+                    setTimeout(function() {
+                        $.ykmodal('<a href="https://www.yo-kart.com/request-demo.html?q=demo-banner"><img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup1.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
+                        setCookie('demoImgpopup1', 1);
+                    }, 30000);
+                }
+
+                if (getCookie("demoImgpopup2") != 1) {
+                    setTimeout(function() {
+                        $.ykmodal('<a href="https://www.yo-kart.com/contact-us.html?q=demo_v10"><img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup2.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
+                    }, 60000);
+                    setCookie('demoImgpopup2', 1);
+                }
+            });
         </script>
         <!--End of Tawk.to Script-->
     <?php
