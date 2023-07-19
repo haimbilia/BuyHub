@@ -104,7 +104,7 @@ class LabelsController extends ListingBaseController
         $srch->joinTable('tbl_languages', 'inner join', 'label_lang_id = language_id and language_active = ' . applicationConstants::ACTIVE, 'lng');
 
         $srch->addGroupBy('lbl.' . Labels::DB_TBL_PREFIX . 'key');
-        $srch->addGroupBy('lbl.' . Labels::DB_TBL_PREFIX . 'id');
+        // $srch->addGroupBy('lbl.' . Labels::DB_TBL_PREFIX . 'id');
 
         $type = FatApp::getPostedData('label_type', FatUtility::VAR_INT, -1);
         if ($type > -1) {
@@ -114,7 +114,7 @@ class LabelsController extends ListingBaseController
             $cond = $srch->addCondition('lbl.label_key', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('lbl.label_caption', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-        $srch->addCondition('lbl.label_lang_id', '=', $this->siteLangId);
+        // $srch->addCondition('lbl.label_lang_id', '=', $this->siteLangId);
         $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
         $srch->doNotCalculateRecords();
         $page = FatUtility::int($page);
