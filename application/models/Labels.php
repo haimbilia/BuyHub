@@ -309,7 +309,7 @@ class Labels extends MyAppModel
 
         if (true == $updateForceFully) {
             $fld = [
-                'LEFT(label_key, ' . self::DIR_LENGTH  . ') as keyfilename'
+                'UPPER(LEFT(label_key, ' . self::DIR_LENGTH  . ')) as keyfilename'
             ];
             $srch = static::getSearchObject($langId, [$fld]);
             $srch->addCondition('label_type', '=', $type);
