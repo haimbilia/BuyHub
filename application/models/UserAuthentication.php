@@ -563,7 +563,7 @@ class UserAuthentication extends FatModel
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
-        return $db->fetch($rs);
+        return (array)$db->fetch($rs);
     }
 
     public static function clearLoggedUserLoginCookie()
@@ -582,8 +582,7 @@ class UserAuthentication extends FatModel
                 )
             );
         }
-
-        setcookie($_COOKIE[static::SYSTEMUSER_COOKIE_NAME], '', time() - 3600, CONF_WEBROOT_URL);
+        setcookie($_COOKIE[static::SYSTEMUSER_COOKIE_NAME], '', time() - 3600, CONF_WEBROOT_URL);       
         return true;
     }
 
