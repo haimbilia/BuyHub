@@ -609,7 +609,9 @@
         padding: 2.5rem 2rem;
         width: 100%;
 
-        &:hover {
+        &:hover,
+        &:focus,
+        &:active {
             border-color: $secondary-color;
             color: $secondary-color;
         }
@@ -909,7 +911,9 @@
             border: none;
         }
 
-        &:hover {
+        &:hover,
+        &:focus,
+        &:active {
             box-shadow: none;
         }
     }
@@ -1160,7 +1164,7 @@
 
             p {
                 font-size: 0.75rem;
-                font-weight: $font-weight-light;
+                font-weight: $font-weight-regular;
                 color: $txt-gray;
                 margin-bottom: 5px;
                 line-height: 1;

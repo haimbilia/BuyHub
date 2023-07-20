@@ -38,14 +38,14 @@
 
     .brand-title {
         font-size: 1rem;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         color: $txt-gray;
     }
 
     .product-title {
         font-size: 1.625rem;
         line-height: 1.5;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         color: #000;
         overflow-wrap: break-word;
         word-wrap: break-word;
@@ -75,7 +75,7 @@
         }
 
         &-old {
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-regular;
             font-size: 1.125rem;
             text-decoration: line-through;
         }
@@ -297,7 +297,7 @@ $sharing-height: 50px;
     &-value {
         color: $txt-gray;
         font-size: 0.875rem;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         margin-bottom: 10px;
     }
 
@@ -334,7 +334,7 @@ $sharing-height: 50px;
 
     .title {
         font-size: 0.875rem;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         color: $txt-gray;
     }
 
@@ -663,7 +663,7 @@ $sharing-height: 50px;
 }
 
 .profile-bio .deg {
-    font-weight: $font-weight-light;
+    font-weight: $font-weight-regular;
     color: lighten($txt-body, 50%);
     font-size: 0.875rem;
 }

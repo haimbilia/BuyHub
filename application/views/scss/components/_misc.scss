@@ -146,7 +146,7 @@ mark,
 }
 
 .note {
-    font-weight: $font-weight-light;
+    font-weight: $font-weight-regular;
     margin-top: 10px;
     display: block;
 }
@@ -404,7 +404,9 @@ mark,
     border: none;
     background: none;
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:active {
         transform: rotate(-90deg);
         opacity: 1;
     }
@@ -449,6 +451,7 @@ mark,
 }
 
 .browse-more {
+    margin-top: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -463,9 +466,12 @@ mark,
             padding: 0.5rem 1rem;
             //border: $border;
             font-size: 0.75rem;
+            font-weight: $font-weight-bold;
             display: block;
 
-            &:hover {
+            &:hover,
+            &:focus,
+            &:active {
                 background: $brand-color;
                 color: $brand-color-inverse;
                 border-color: currentColor;

@@ -11,7 +11,7 @@ $(function () {
         infinite: true,
         cssEase: 'cubic-bezier(0.7, 0, 0.3, 1)',
         touchThreshold: 100
-    });    
+    });
 });
 resendOtp = function (userId, getOtpOnly = 0) {
     fcom.displayProcessing();

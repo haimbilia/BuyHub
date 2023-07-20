@@ -56,7 +56,9 @@
             border-radius: 40px;
             padding: 10px 14px;
 
-            &:hover {
+            &:hover,
+            &:focus,
+            &:active {
                 text-decoration: underline;
                 box-shadow: none;
             }

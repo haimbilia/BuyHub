@@ -46,7 +46,7 @@
     }
 
     .totals {
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
     }
 }
 
@@ -340,7 +340,9 @@
             font-weight: $font-weight-regular;
         }
 
-        &:hover {
+        &:hover,
+        &:focus,
+        &:active {
             color: $brand-color;
         }
     }

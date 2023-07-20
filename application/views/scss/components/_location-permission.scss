@@ -43,7 +43,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: block;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
     }
 
     &_body {
@@ -143,7 +143,7 @@
             margin: 0 1rem;
             position: relative;
             min-width: 300px;
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-regular;
 
             &:after {
                 position: absolute;

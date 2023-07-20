@@ -132,7 +132,7 @@
 
 .hero-slider {
     position: relative;
-    margin: 0 auto;
+    margin: 0 auto !important;
     text-align: center;
     background-color: $bg-gray;
     overflow: hidden;
@@ -274,7 +274,7 @@
                 opacity: 0.1;
                 color: #000;
                 font-size: 4rem;
-                font-weight: $font-weight-light;
+                font-weight: $font-weight-regular;
             }
 
             h4 {

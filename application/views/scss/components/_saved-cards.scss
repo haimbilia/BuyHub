@@ -81,7 +81,9 @@
                         vertical-align: inherit;
                     }
 
-                    &:hover {
+                    &:hover,
+                    &:focus,
+                    &:active {
                         .svg {
                             fill: #fff;
                         }

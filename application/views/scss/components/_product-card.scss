@@ -14,7 +14,9 @@
         // font-size: inherit;
     }
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:active {
         border-color: $brand-color;
 
         .products-body {
@@ -170,7 +172,7 @@
     }
 
     &-category {
-        color: lighten($txt-body, 50%);
+        color: $txt-gray;
         font-size: 0.85rem;
         font-weight: $font-weight-regular;
         //margin-bottom: 8px;
@@ -211,14 +213,14 @@
     .products-head-specification {
         color: lighten($txt-body, 50%);
         font-size: 1em;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
     }
 
     .products_ft_list {
         li {
             color: lighten($txt-body, 50%);
             font-size: 0.9em;
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-regular;
             margin: 4px 0;
             position: relative;
             padding: 0 16px;
@@ -494,11 +496,11 @@
 
     &_old {
         color: $txt-gray;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
     }
 
     &_off {
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
     }
 }
 
@@ -545,7 +547,9 @@
                 color: $brand-color;
                 background: #f0f0f0;
 
-                &:hover {
+                &:hover,
+                &:focus,
+                &:active {
                     background: $brand-color;
                     color: $brand-color-inverse;
                 }

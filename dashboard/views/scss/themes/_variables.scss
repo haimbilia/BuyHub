@@ -20,6 +20,14 @@ $txt-black: rgba(0, 0, 0, 1);
 $txt-body: rgba(0, 0, 0, 0.87);
 $txt-gray: rgba(0, 0, 0, 0.67);
 $text-muted: #888888 !default;
+
+//Font weight
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-normal: 500;
+$font-weight-bold: 600;
+$font-weight-boldest: 700;
+
 //border colors
 $border-color: #dee2e6;
 $border: solid 1px $border-color;

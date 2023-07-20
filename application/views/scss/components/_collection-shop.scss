@@ -18,7 +18,9 @@
         min-width: 0;
     }
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:active {
         background: none;
         border-color: $brand-color;
     }

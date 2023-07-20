@@ -76,14 +76,14 @@
     h2 {
         color: $txt-body;
         font-size: calc(1.75rem + ((1vw - 0.1875rem) * 1.2346));
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         margin-bottom: 1rem;
     }
 
     h3 {
         color: $txt-body;
         font-size: 1.2rem;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         margin-bottom: 1.5rem;
 
         a {
@@ -92,7 +92,7 @@
     }
 
     p {
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         font-size: 0.85rem;
         margin-bottom: 0.8rem;
     }
