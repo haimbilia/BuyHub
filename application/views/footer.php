@@ -231,19 +231,30 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
                 s0.parentNode.insertBefore(s1, s0);
             })();
             $(document).ready(function() {
-                if (getCookie("demoImgpopup1") != 1) {
-                    setTimeout(function() {
-                        $.ykmodal('<a href="https://www.yo-kart.com/request-demo.html?q=demo-banner"><img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup1.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
-                        setCookie('demoImgpopup1', 1);
-                    }, 180000);
-                }
+                function displayDemoBannerPopup() {
+                    var x = setInterval(function() {
+                        var now = new Date($.now());
+                        var diffMs = (now.getTime() - parseInt(getCookie("demoSessionStartTime"))); // milliseconds between now & stored time
+                        var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+                                               
+                        if (diffMins > 1 && getCookie("demoImgpopup1") != 1) {
+                            $.ykmodal('<a href="https://www.yo-kart.com/request-demo.html?q=demo-banner"><img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup1.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
+                            setCookie('demoImgpopup1', 1);
+                        }
 
-                if (getCookie("demoImgpopup2") != 1) {
-                    setTimeout(function() {
-                        $.ykmodal('<a href="https://www.yo-kart.com/contact-us.html?q=demo_v10"><img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup2.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
-                        setCookie('demoImgpopup2', 1);
-                    }, 360000);
+                        if (diffMins > 3 && getCookie("demoImgpopup2") != 1) {
+                            $.ykmodal('<a href="https://www.yo-kart.com/contact-us.html?q=demo_v10"><img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup2.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
+                            setCookie('demoImgpopup2', 1);
+                        }
+                    }, 6000);
                 }
+                if (getCookie("demoSessionStartTime") == '') {
+                    var now = new Date($.now());
+                    setCookie('demoSessionStartTime', now.getTime());
+                    displayDemoBannerPopup();
+                } else {
+                    displayDemoBannerPopup();
+                };
             });
         </script>
         <!--End of Tawk.to Script-->
