@@ -94,7 +94,7 @@ trait SellerProducts
                 'selprod_active',
                 'selprod_available_from',
                 'IFNULL(product_name, product_identifier) as product_name',
-                'selprod_title',
+                'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
                 'product_updated_on'
             )
         );
