@@ -2,14 +2,18 @@
     var displayInPopup = false;
     $.ykmodal = function (data, popupView = '', dialogClassParm = "", modalClassParm = "", bodyClass = "") {
         modalClass = 'fixed-right ' + modalClassParm;
-        var dialogClass = 'modal-dialog-vertical ' + dialogClassParm;
+        var dialogClass = 'modalDialogJs  modal-dialog-vertical ' + dialogClassParm;
         var bodyClass = 'pd-0 ' + bodyClass;
 
         /* !! is used to convert variable type in to bool. */
         displayInPopup = !!popupView;
         if (true == popupView) {
             modalClass = modalClassParm;
-            dialogClass = 'modal-dialog-centered ' + dialogClassParm;
+            dialogClass = 'modalDialogJs  modal-dialog-centered ' + dialogClassParm;
+        }
+        if ($(data).hasClass("loaderJs") && 0 < $("." + $.ykmodal.element + " .loaderContainerJs").length) {
+            dialogClass = $('.modalDialogJs').attr('class');
+            dialogClass = dialogClass.replace("modal-dialog ", "");
         }
 
         init(modalClass, dialogClass);
@@ -125,11 +129,11 @@
     let submitInterval;
     $(document).on("click", ".submitBtnJs", function () {
 
-        if(submitInterval != undefined){ 
-            clearInterval(submitInterval); 
+        if (submitInterval != undefined) {
+            clearInterval(submitInterval);
             submitInterval = undefined;
-        }          
-        submitInterval = setTimeout(function(){
+        }
+        submitInterval = setTimeout(function () {
             if ($('.' + $.ykmodal.element).hasClass("show")) {
                 var form = $('.' + $.ykmodal.element + ' form');
                 if (true === extendEditorJs) {
@@ -140,9 +144,9 @@
                     }
                 } else {
                     form.submit();
-                }               
+                }
             }
-        }, 800);         
+        }, 800);
     });
 
     /* $('.' + $.ykmodal.element).on("scroll", function () {
@@ -155,11 +159,11 @@
 
 
     /* Submit Form on Enter Key Press. For sidebar forms. */
-    $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {   
+    $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
         if (1 >= $(this).find(':input:not([type=hidden]),select,textarea').length) {
             return;
         }
-        e.stopImmediatePropagation();      
+        e.stopImmediatePropagation();
         if (e.keyCode === 13 && !$(e.target).is('textarea') && (false === displayInPopup)) {
             $('.' + $.ykmodal.element + " .submitBtnJs").click();
         }
