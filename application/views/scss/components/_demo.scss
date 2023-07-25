@@ -119,12 +119,14 @@ $right-space: 3rem;
         &-btn {
             font-weight: $font-weight-bold;
             background-color: #fff;
+            box-shadow: $shadow2;
             border-radius: 30px;
             border: 0;
             gap: 8px;
             padding: 0.6rem 1rem;
             display: flex;
             min-width: 130px;
+
         }
 
         &-title {
