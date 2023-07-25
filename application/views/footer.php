@@ -238,12 +238,12 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
                         var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
 
                         if (diffMins > 1 && getCookie("demoImgpopup1") != 1) {
-                            $.ykmodal('<button type="button" class="btn-close btn-close-end ykmodalJs" data-bs-dismiss="modal" aria-label="Close"></button><a href="https://www.yo-kart.com/request-demo.html?q=demo-banner"><img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup1.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
+                            $.ykmodal('<button type="button" class="btn-close btn-close-end ykmodalJs" data-bs-dismiss="modal" aria-label="Close"></button><a href="https://www.yo-kart.com/request-demo.html?q=demo-banner"><img width="750" height="450" src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup1.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
                             setCookie('demoImgpopup1', 1);
                         }
 
                         if (diffMins > 3 && getCookie("demoImgpopup2") != 1) {
-                            $.ykmodal('<button type="button" class="btn-close btn-close-end ykmodalJs" data-bs-dismiss="modal" aria-label="Close"></button><a href="https://www.yo-kart.com/contact-us.html?q=demo_v10"><img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup2.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
+                            $.ykmodal('<button type="button" class="btn-close btn-close-start ykmodalJs" data-bs-dismiss="modal" aria-label="Close"></button><a href="https://www.yo-kart.com/contact-us.html?q=demo_v10"><img width="750" height="420" src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup2.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
                             setCookie('demoImgpopup2', 1);
                         }
                     }, 6000);
@@ -288,5 +288,4 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
 </button>
 <?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
 </body>
-
 </html>
