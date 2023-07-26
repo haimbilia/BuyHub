@@ -1048,7 +1048,7 @@ class Orders extends MyAppModel
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
-    public static function getOrderByOrderNo($order_no, $langId = 0)
+    public static function getOrderByOrderNo($order_no, $langId = 0, $attr = [])
     {
         if (empty($order_no)) {
             trigger_error(Labels::getLabel('ERR_ORDER_NO_IS_NOT_PASSED', CommonHelper::getLangId()), E_USER_ERROR);
@@ -1058,10 +1058,13 @@ class Orders extends MyAppModel
         if (0 < $langId) {
             $srch->joinTable(Plugin::DB_TBL_LANG, 'LEFT OUTER JOIN', 'plugin_id = pm_l.pluginlang_plugin_id AND pm_l.pluginlang_lang_id = ' . $langId, 'pm_l');
         }
-        
+
         $srch->addCondition('order_number', '=', $order_no);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
+        if (!empty($attr)) {
+            $srch->addMultipleFields($attr);
+        }
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
@@ -1395,7 +1398,7 @@ class Orders extends MyAppModel
             $this->error = Labels::getLabel("ERR_INVALID_ACCESS", $langId);
             return false;
         }
-  
+
         $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($langId, $childOrderInfo['order_user_id'], array(OrderSubscription::DB_TBL_PREFIX . 'id'));
         if (false != $currentPlanData) {
             $currentActiveSubscrId = $currentPlanData[OrderSubscription::DB_TBL_PREFIX . 'id'];
@@ -1889,7 +1892,7 @@ class Orders extends MyAppModel
                 /* ]
                 */
             }
-            
+
             if (FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
                 $et = new EcommerceTracking(Labels::getLabel('LBL_REFUND_ORDER', $langId), $childOrderInfo['order_user_id']);
                 $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REFUND);
@@ -2618,12 +2621,11 @@ class Orders extends MyAppModel
 
     private function generateOrderNo()
     {
-        $orderNo =  'O' . mt_rand(1000000000, 9999999999);
+        $orderNo = 'O' . mt_rand(1000000000, 9999999999);
 
-        if ($this->checkUniqueOrderId($orderNo)) {
+        if (false === self::getOrderByOrderNo($orderNo, attr: ['order_id'])) {
             return $orderNo;
         }
-
         $this->generateOrderNo();
     }
 
@@ -2657,15 +2659,6 @@ class Orders extends MyAppModel
         }
 
         return $row;
-    }
-
-    private function checkUniqueOrderId($order_id)
-    {
-        $row = Orders::getAttributesById($order_id, array('order_id'));
-        if ($row == false) {
-            return true;
-        }
-        return false;
     }
 
     /* For Subscription Module  Get latest Subscription Order */
