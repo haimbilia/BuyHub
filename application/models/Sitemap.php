@@ -228,6 +228,7 @@ class Sitemap extends FatModel
             $cmsSrch->addCondition('nav_active', '=', applicationConstants::ACTIVE);
             $cmsSrch->addMultipleFields(array('nlink_cpage_id, nlink_type'));
             $rs = $cmsSrch->getResultSet();
+            $this->writeSitemapUrl(UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file);
             while ($row = FatApp::getDb()->fetch($rs)) {
                 if ($row['nlink_type'] == NavigationLinks::NAVLINK_TYPE_CMS && $row['nlink_cpage_id']) {
                     $this->writeSitemapUrl(UrlHelper::generateFullUrl('Cms', 'view', array($row['nlink_cpage_id']), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file);
