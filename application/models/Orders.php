@@ -1065,7 +1065,7 @@ class Orders extends MyAppModel
         if (!empty($attr)) {
             $srch->addMultipleFields($attr);
         }
-        return FatApp::getDb()->fetch($srch->getResultSet());
+        return (array)FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public function getOrderAddresses($order_id, $opId = 0)
@@ -2623,7 +2623,7 @@ class Orders extends MyAppModel
     {
         $orderNo = 'O' . mt_rand(1000000000, 9999999999);
 
-        if (false === self::getOrderByOrderNo($orderNo, attr: ['order_id'])) {
+        if (empty(self::getOrderByOrderNo($orderNo, attr: ['order_id']))) {
             return $orderNo;
         }
         $this->generateOrderNo();
