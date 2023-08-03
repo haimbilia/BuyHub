@@ -2988,6 +2988,9 @@ class EmailHandler extends FatModel
     {
         $tpl = 'gdpr_request_status_update_notification_to_user';
         $reqData = UserGdprRequest::getAttributesById($reqId, array('ureq_user_id', 'ureq_type'));
+        if(UserGdprRequest::TYPE_DATA_REQUEST == $reqData['ureq_type']) {
+            $tpl = 'gdpr_request_data_to_user';
+        }
 
         $reqTypeArr = UserGdprRequest::getUserRequestTypesArr($langId);
         $reqTypeName = $reqTypeArr[$reqData['ureq_type']];

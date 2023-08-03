@@ -74,6 +74,7 @@
 - Bug-073078 - Order statuses are not appearing
 - Bug-074291 - Undefined variable issue on cart page with guest user checkout.
 - Bug-072865 - Remove the reviews collections from collection management as they are removed from apps
+- Bug-068853 - Email content is not proper for Data request.
 
 # RV-10.0.0.20221123
 
