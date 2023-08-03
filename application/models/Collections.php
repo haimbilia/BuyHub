@@ -323,11 +323,11 @@ class Collections extends MyAppModel
             ],
             /* self::COLLECTION_TYPE_FAQ_CATEGORY => [
                 self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORY', $langId),
-            ], */
+            ], 
             self::COLLECTION_TYPE_REVIEWS => [
                 self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
             ]
-            /* self::COLLECTION_TYPE_CONTENT_BLOCK => [
+            self::COLLECTION_TYPE_CONTENT_BLOCK => [
                 self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_Content_Block', $langId),
             ] */
         ];
