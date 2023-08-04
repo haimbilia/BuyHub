@@ -267,7 +267,8 @@ class OrderProduct extends MyAppModel
         $srch->addCondition('op.op_id', '=', $this->mainTableRecordId);
 
         $rs = $srch->getResultSet();
-        return (array) FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($rs);
+        return (is_array($row) ? $row : []);
     }
 
     public static function moreAttachmentsForm($langId)

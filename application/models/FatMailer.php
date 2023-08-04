@@ -310,7 +310,8 @@ class FatMailer extends FatModel
         $srch->setPageSize(1);
         $srch->addMultipleFields(['etpl_code', 'etpl_lang_id', 'etpl_name', 'etpl_subject', 'etpl_body', 'etpl_replacements', 'etpl_priority', 'etpl_status', 'if(etpl_lang_id = ' . $langId . ', 0, 1) as priority']);
         $srch->addOrder('priority');
-        return (array) FatApp::getDb()->fetch($srch->getResultSet());
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     /**

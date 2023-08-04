@@ -418,7 +418,8 @@ class BadgeLinkConditionsController extends SellerBaseController
             'badge_display_inside',
         ]);
         $badgeSearch->getResultSet();
-        return (array) FatApp::getDb()->fetch($badgeSearch->getResultSet());
+        $row = FatApp::getDb()->fetch($badgeSearch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     public function conditionForm(int $badgeId, int $badgeType, int $badgeLinkCondId = 0)

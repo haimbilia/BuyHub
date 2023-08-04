@@ -148,7 +148,8 @@ class SellerPackagePlans extends MyAppModel
         $srch->addCondition('spp.spplan_active', '=', applicationConstants::YES);
         $srch->setPageSize(1);
         $srch->doNotCalculateRecords(true);
-        return (array) FatApp::getDb()->fetch($srch->getResultSet());
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     public static function getSubscriptionPlanDataByPlanId($spplan_id = 0, $siteLangId = 0)

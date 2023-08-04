@@ -128,6 +128,7 @@ class BadgeRequest extends MyAppModel
         $attrs[] = 'COALESCE(badge_name, badge_identifier) as badge_name';
         $srch->addMultipleFields($attrs);
         $srch->doNotCalculateRecords();
-        return (array)FatApp::getDb()->fetch($srch->getResultSet());
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 }

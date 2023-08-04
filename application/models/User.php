@@ -2656,7 +2656,8 @@ class User extends MyAppModel
         $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $userPhone, 'OR', true);
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
-        return (array) FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($rs);
+        return (is_array($row) ? $row : []);
     }
 
     public function saveUserNotifications()

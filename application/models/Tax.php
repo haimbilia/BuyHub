@@ -253,7 +253,8 @@ class Tax extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         //echo $srch->getQuery().PHP_EOL.PHP_EOL; 
-        return (array) FatApp::getDb()->fetch($srch->getResultSet());
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     /**

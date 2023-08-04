@@ -181,6 +181,7 @@ class States extends MyAppModel
         $srch->addCondition('state_name', '=', $stateName);
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
-        return (array) FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($rs);
+        return (is_array($row) ? $row : []);
     }
 }

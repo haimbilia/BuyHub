@@ -96,7 +96,8 @@ class SelProdReview extends MyAppModel
         $srch->addDirectCondition('order_user_id =' . $loggedUserId . ' and ( FIND_IN_SET(op_selprod_id,(\'' . $allowedSelProdId . '\')) and op_is_batch = 0) and  FIND_IN_SET(op_status_id,(\'' . $allowedReviewStatus . '\')) ');
         $srch->doNotCalculateRecords();
         /* $srch->addOrder('order_date_added'); */
-        return (array) FatApp::getDb()->fetch($srch->getResultSet());
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
 

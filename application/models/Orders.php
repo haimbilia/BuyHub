@@ -1065,7 +1065,8 @@ class Orders extends MyAppModel
         if (!empty($attr)) {
             $srch->addMultipleFields($attr);
         }
-        return (array)FatApp::getDb()->fetch($srch->getResultSet());
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     public function getOrderAddresses($order_id, $opId = 0)
