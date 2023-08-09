@@ -73,8 +73,12 @@
 - Bug-073142 - Reminder interval setting for products in the cart and wish list are not working for the app.
 - Bug-073078 - Order statuses are not appearing
 - Bug-074291 - Undefined variable issue on cart page with guest user checkout.
+<<<<<<< HEAD
 - Bug-072865 - Remove the reviews collections from collection management as they are removed from apps
 - Bug-068853 - Email content is not proper for Data request.
+=======
+- Bug-074015 - It redirects the user to white screen with no data.
+>>>>>>> f8307a76b0e6d222e6f8b91e8c34b74d13f462cf
 
 # RV-10.0.0.20221123
 

@@ -1570,7 +1570,7 @@ class EmailHandler extends FatModel
             $this->sendSms($tpl, $phone, $arrReplacements, $langId);
         }
 
-        $adminOrderDetailUrl = UrlHelper::generateFullUrl('Orders', 'view', array($ocRequestRow["order_id"]));
+        $adminOrderDetailUrl = UrlHelper::generateFullUrl('Orders', 'view', array($ocRequestRow["order_id"]), CONF_WEBROOT_BACKEND);
         $adminOrderAnchor = "<a href='" . $adminOrderDetailUrl . "'>" . $ocRequestRow["op_invoice_number"] . "</a>";
         $arrReplacements['{invoice_number}'] = $adminOrderAnchor;
 

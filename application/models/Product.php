@@ -389,7 +389,8 @@ class Product extends MyAppModel
                 $srch->addFld($attr);
             }
         }
-        return (array) FatApp::getDb()->fetch($srch->getResultSet());
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     public function deleteProductImage($productId, $imageId, $fileType)

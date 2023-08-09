@@ -372,7 +372,6 @@ class DashboardBaseController extends FatController
 
     public function setUpNewsLetter()
     {
-        include_once CONF_INSTALLATION_PATH . 'library/Mailchimp.php';
         $siteLangId = CommonHelper::getLangId();
         $post = FatApp::getPostedData();
         $frm = Common::getNewsLetterForm(CommonHelper::getLangId());
@@ -385,13 +384,10 @@ class DashboardBaseController extends FatController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $MailchimpObj = new Mailchimp($api_key);
-        $Mailchimp_ListsObj = new Mailchimp_Lists($MailchimpObj);
-
         try {
-            $subscriber = $Mailchimp_ListsObj->subscribe($list_id, array('email' => htmlentities($post['email'])));
-            if (empty($subscriber['leid'])) {
-                Message::addErrorMessage(Labels::getLabel('ERR_NEWSLETTER_SUBSCRIPTION_VALID_EMAIL', $siteLangId));
+            MailchimpHelper::subscribe(['email' => htmlentities($post['email'])], $this->siteLangId);
+            if (!empty($subscriber['msg'])) {
+                Message::addErrorMessage($subscriber['msg']);
                 FatUtility::dieWithError(Message::getHtml());
             }
         } catch (Mailchimp_Error $e) {
@@ -861,7 +857,7 @@ class DashboardBaseController extends FatController
             return;
         }
 
-        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile','downloadDigitalFiles','downloadAttachedFileForReturn'])) {
+        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile', 'downloadDigitalFiles', 'downloadAttachedFileForReturn'])) {
             return;
         }
 

@@ -339,7 +339,7 @@ class MyAppController extends FatController
 
         if ($action == 'index') {
             $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
-        } else {            
+        } else {
             $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)), 'href' => UrlHelper::generateUrl($urlController));
             $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
@@ -349,7 +349,6 @@ class MyAppController extends FatController
 
     public function setUpNewsLetter()
     {
-        include_once CONF_INSTALLATION_PATH . 'library/Mailchimp.php';
         $siteLangId = CommonHelper::getLangId();
         $post = FatApp::getPostedData();
         $frm = Common::getNewsLetterForm(CommonHelper::getLangId());
@@ -362,13 +361,10 @@ class MyAppController extends FatController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $MailchimpObj = new Mailchimp($api_key);
-        $Mailchimp_ListsObj = new Mailchimp_Lists($MailchimpObj);
-
         try {
-            $subscriber = $Mailchimp_ListsObj->subscribe($list_id, array('email' => htmlentities($post['email'])));
-            if (empty($subscriber['leid'])) {
-                Message::addErrorMessage(Labels::getLabel('ERR_NEWSLETTER_SUBSCRIPTION_VALID_EMAIL', $siteLangId));
+            MailchimpHelper::subscribe(['email' => htmlentities($post['email'])], $this->siteLangId);
+            if (!empty($subscriber['msg'])) {
+                Message::addErrorMessage($subscriber['msg']);
                 FatUtility::dieWithError(Message::getHtml());
             }
         } catch (Mailchimp_Error $e) {
@@ -928,7 +924,7 @@ class MyAppController extends FatController
             return true;
         }
 
-        if(isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && FatUtility::int($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]['admin_id']) > 0){
+        if (isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && FatUtility::int($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]['admin_id']) > 0) {
             return true;
         }
 

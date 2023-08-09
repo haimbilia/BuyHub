@@ -68,7 +68,8 @@ class TaxRule extends MyAppModel
         $srch->addCondition(TaxRule::DB_RATES_TBL_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'taxrule_taxcat_id', 'taxrule_taxstr_id', 'trr_rate', 'taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxstr_parent', 'taxstr_is_combined'));
         $srch->doNotCalculateRecords();
-        return (array) FatApp::getDb()->fetch($srch->getResultSet());
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     /**

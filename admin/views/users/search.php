@@ -25,7 +25,7 @@ foreach ($arrListing as $sn => $row) {
                     $row['extra_text'] = CommonHelper::replaceStringData($str, ['{SHOP}' => $row['shop_name']]);
                     $title = Labels::getLabel('LBL_CLICK_HERE_TO_VISIT_SHOP_LIST', $siteLangId);
                 }
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'addVerifiedBadge' => true, 'siteLangId' => $siteLangId, 'onclick' => $onclick, 'title' => $title , 'emailOnClick' => 'sendMailToUser(' . $row['user_id'] . ')'], false, true);
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'addVerifiedBadge' => true, 'siteLangId' => $siteLangId, 'onclick' => $onclick, 'title' => $title, 'emailOnClick' => 'sendMailToUser(' . $row['user_id'] . ')'], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'credential_active':
@@ -97,6 +97,18 @@ foreach ($arrListing as $sn => $row) {
                                                 </use>
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_LOGIN_TO_USER_PROFILE', $siteLangId),
+                        ], [
+                            'attr' => [
+                                'href' => 'javascript::void(0)',
+                                'onclick' => 'sendMailToUser(' . $row['user_id'] . ')',
+                            ],
+                            'label' => '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-mail">
+                                                </use>
+                                            </svg>
+                                        </i>' . Labels::getLabel('LBL_SEND_EMAIL', $siteLangId),
                         ]
                     ];
                     if (0 ==  $row['credential_verified'] && empty($row['credential_verified'])  && empty($row['credential_verified'])) {
@@ -113,7 +125,7 @@ foreach ($arrListing as $sn => $row) {
                                             </svg>
                                         </i>' . Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $siteLangId),
                         ];
-                    }                   
+                    }
 
                     if (!$row['user_is_buyer']) {
                         $data['dropdownButtons']['otherButtons'][] = [
@@ -135,7 +147,7 @@ foreach ($arrListing as $sn => $row) {
                     $data['dropdownButtons']['otherButtons'][] = [
                         'attr' => [
                             'href' => 'javascript:void(0)',
-                            'onclick' => 'redirectfunc(fcom.makeUrl("transactions"),{utxn_user_id:'.$row['user_id'].'})',
+                            'onclick' => 'redirectfunc(fcom.makeUrl("transactions"),{utxn_user_id:' . $row['user_id'] . '})',
                         ],
                         'label' => '<i class="icn">
                                         <svg class="svg" width="18" height="18">
@@ -145,8 +157,6 @@ foreach ($arrListing as $sn => $row) {
                                         </svg>
                                     </i>' . Labels::getLabel('LBL_TRANSACTIONS', $siteLangId),
                     ];
-
-
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);

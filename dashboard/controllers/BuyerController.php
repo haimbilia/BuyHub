@@ -2950,7 +2950,8 @@ class BuyerController extends BuyerBaseController
             )
         );
         $productRs = $prodSrch->getResultSet();
-        return (array) FatApp::getDb()->fetch($productRs);
+        $row = FatApp::getDb()->fetch($productRs);
+        return (is_array($row) ? $row : []);
     }
 
     public function getBreadcrumbNodes($action)

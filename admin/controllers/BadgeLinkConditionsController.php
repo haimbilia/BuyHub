@@ -567,7 +567,8 @@ class BadgeLinkConditionsController extends ListingBaseController
         $badgeSearch->addCondition('badge_id', '=', $objectId);
         $badgeSearch->addMultipleFields($attr);
         $badgeSearch->getResultSet();
-        return (array) FatApp::getDb()->fetch($badgeSearch->getResultSet());
+        $row = FatApp::getDb()->fetch($badgeSearch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     protected function getSearchForm(array $fields = [])

@@ -490,7 +490,7 @@ class CustomController extends MyAppController
         }
 
         $orderInfo = Orders::getOrderByOrderNo($orderNo, $this->siteLangId);
-        if (false === $orderInfo) {
+        if (empty($orderInfo)) {
             FatUtility::exitWithErrorCode(404);
         }
 

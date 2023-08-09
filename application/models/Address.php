@@ -63,7 +63,8 @@ class Address extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->addOrder(self::tblFld('is_default'), 'DESC');
         $rs = $srch->getResultSet();
-        return (array) FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($rs);
+        return (is_array($row) ? $row : []);
     }
 
     /**
@@ -104,7 +105,8 @@ class Address extends MyAppModel
         if (0 < $this->mainTableRecordId) {
             $srch->addCondition(self::tblFld('id'), '=', $this->mainTableRecordId);
             $rs = $srch->getResultSet();
-            return (array) FatApp::getDb()->fetch($rs);
+            $row = FatApp::getDb()->fetch($rs);
+            return (is_array($row) ? $row : []);
         }
 
         $rs = $srch->getResultSet();
