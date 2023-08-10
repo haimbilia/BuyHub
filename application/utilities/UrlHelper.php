@@ -25,6 +25,9 @@ class UrlHelper extends FatUtility
     {
         $useRootUrl = $use_root_url;
         if (true == $useLangCode && FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && count(LANG_CODES_ARR) > 1 && $langId  != FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)) {
+            if (!$use_root_url) {
+                $use_root_url = CONF_WEBROOT_URL;
+            }
             $use_root_url = rtrim($use_root_url, '/') . '/' . strtolower(LANG_CODES_ARR[$langId]) . '/';
         }
         $url = FatUtility::generateUrl($controller, $action, $queryData, $use_root_url, $url_rewriting);
