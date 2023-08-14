@@ -22,7 +22,8 @@
         "nickdnk/graph-sdk": "7.0.1",
         "tecnickcom/tcpdf": "^6.2.13",
         "composer/ca-bundle": "1.3",
-        "google/analytics-data": "0.9.4"
+        "google/analytics-data": "0.9.4",
+        "omise/omise-php": "dev-master"
     },
     "config": {
         "platform": {

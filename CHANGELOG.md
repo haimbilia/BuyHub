@@ -8,3 +8,6 @@
         - Change in minimum selling price when reconfigured by Admin
         - Safari and IE 11 do not support our CSS. More info can be found at https://developer.microsoft.com/en-us/microsoft-edge/platform/status/csslevel3attrfunction/
         - System does not support Zero decimal currency while checking out with stripe
+
+## Bug Fixes:
+    - Bug-074802 - Omise Payment gateway deprecated issue.
