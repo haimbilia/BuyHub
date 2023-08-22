@@ -4167,6 +4167,7 @@ class Importexport extends ImportexportCommon
                     'meta_record_id' => $selProdId,
                 );
                 $data = array_merge($data, $selProdSeoArr);
+                unset($data['selprod_id']);
 
                 $srch = clone $metaSrch;
                 $srch->addCondition('meta_controller', '=', $metaTabArr[MetaTag::META_GROUP_PRODUCT_DETAIL]['controller']);
@@ -4183,7 +4184,6 @@ class Importexport extends ImportexportCommon
                     $this->db->updateFromArray(MetaTag::DB_TBL, $data, $where);
                 } else {
                     if ($this->isDefaultSheetData($langId)) {
-                        unset($data['selprod_id']);
                         $resp = $this->db->insertFromArray(MetaTag::DB_TBL, $data);
                         $metaId = $this->db->getInsertId();
                     }
