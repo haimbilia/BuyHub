@@ -4323,7 +4323,9 @@ class Importexport extends ImportexportCommon
                             $invalid = true;
                         }
                     } */ else if ('splprice_start_date' == $columnKey) {
-                        if (strtotime($colValue) < strtotime($productArr[$selProdId]['selprod_available_from'])) {
+                        $selProdAvailableFrom = $productArr[$selProdId]['selprod_available_from'] ?? '';
+                        $availableColVal = $colValue ?? '';
+                        if (!empty($selProdAvailableFrom) && !empty($availableColVal) && strtotime($colValue) < strtotime($productArr[$selProdId]['selprod_available_from'])) {
                             $str = Labels::getLabel('ERR_SPECIAL_PRICE_DATE_MUST_BE_GREATER_OR_THAN_EQUAL_TO_{availablefrom}', $langId);
                             $errMsg = CommonHelper::replaceStringData($str, array('{availablefrom}' => date('Y-m-d', strtotime($productArr[$selProdId]['selprod_available_from']))));
                             $invalid = true;
