@@ -63,7 +63,11 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                                                                 <span class="text--dark"><?php echo $product['shop_name']; ?></span>
                                                             </a>
                                                         </div>
-                                                        <a class="title" title="<?php echo $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                                                        <?php
+                                                        $productName = ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
+                                                        $productName = htmlspecialchars_decode($productName);
+                                                        ?>
+                                                        <a class="title" title="<?php echo $productName; ?>" href="<?php echo $productUrl; ?>"><?php echo $productName; ?></a>
                                                         <div class="products-price">
                                                             <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true)); ?></span>
                                                             <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
