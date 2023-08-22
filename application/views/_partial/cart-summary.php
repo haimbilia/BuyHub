@@ -60,7 +60,7 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                                                     <div class="product-profile-data">
                                                         <div class="item__category">
                                                             <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
-                                                                <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                                                <span class="text--dark"><?php echo htmlspecialchars_decode($product['shop_name']); ?></span>
                                                             </a>
                                                         </div>
                                                         <?php
