@@ -234,6 +234,7 @@ class ProductsController extends MyAppController
         $cacheKey = FilterHelper::getCacheKey($this->siteLangId, $headerFormParamsAssocArr);
 
         $headerFormParamsAssocArr['doNotJoinSpecialPrice'] = true;
+        $headerFormParamsAssocArr['joinWithRelationTableInstead'] = true;
 
         /* Categories Data[ ToDO need to update logic fetch from prodsrch obj or catid only*/
         $categoriesArr = array();

@@ -819,31 +819,36 @@ class ProductSearch extends SearchBase
         $this->joinTable('(' . $wishListSubQuery . ')', 'LEFT OUTER JOIN', 'uwlp.uwlp_selprod_id = selprod_id', 'uwlp');
     }
 
-    public function addCategoryCondition($category)
+    public function addCategoryCondition($category, bool $joinWithRelationTableInstead = false)
     {
+        if (!empty($category) && true == $joinWithRelationTableInstead) {
+            $this->joinTable(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'INNER JOIN', 'pcr.pcr_prodcat_id = c.prodcat_id', 'pcr');
+        }
+
+        $categoryArr = [];
         if (is_numeric($category)) {
             $category_id = FatUtility::int($category);
             if (!$category_id) {
                 return;
             }
-            $catCode = ProductCategory::getAttributesById($category_id, 'prodcat_code');
-            /* $this->addCondition('GETCATCODE(`prodcat_id`)', 'LIKE', '%' . str_pad($category_id, 6, '0', STR_PAD_LEFT ) . '%', 'AND', true); */
-            $this->addCondition('c.prodcat_code', 'LIKE', $catCode . '%', 'AND', true);
+            if (false == $joinWithRelationTableInstead) {
+                $catCode = ProductCategory::getAttributesById($category_id, 'prodcat_code');
+                $this->addCondition('c.prodcat_code', 'LIKE', $catCode . '%', 'AND', true);
+            } else {
+                $categoryArr[] = $category_id;
+            }
         } else {
             if (empty($category)) {
                 return;
             }
-            
-            if (!is_array($category)) {
-                $category = explode(",", $category);
-            }
-            /* $category = explode(",", $category);
-            $category = FatUtility::int($category);
-            $this->addCondition('prodcat_id', 'IN', $category ); */
 
-            if (0 < count(array_filter($category))) {
+            if (!is_array($category)) {
+                $categoryArr = explode(",", $category);
+            }
+
+            if (0 < count(array_filter($categoryArr)) && false == $joinWithRelationTableInstead) {
                 $condition = '(';
-                foreach ($category as $catId) {
+                foreach ($categoryArr as $catId) {
                     $catId = FatUtility::int($catId);
                     if (1 > $catId) {
                         continue;
@@ -856,6 +861,11 @@ class ProductSearch extends SearchBase
 
                 $this->addDirectCondition($condition);
             }
+        }
+
+        if (!empty($categoryArr) && true == $joinWithRelationTableInstead) {
+            $categoryArr = array_filter($categoryArr);
+            $this->addCondition('pcr.pcr_parent_id', 'IN', $categoryArr);
         }
     }
 

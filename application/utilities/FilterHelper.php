@@ -45,7 +45,8 @@ class FilterHelper extends FatUtility
         $prodSrchObj->joinProductToTax();
 
         if (array_key_exists('category', $post)) {
-            $prodSrchObj->addCategoryCondition($post['category']);
+            $joinWithRelationTableInstead = $headerFormParamsAssocArr['joinWithRelationTableInstead'] ?? false;
+            $prodSrchObj->addCategoryCondition($post['category'], $joinWithRelationTableInstead);
         }
 
         $shopId = FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);
