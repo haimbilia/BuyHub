@@ -161,7 +161,7 @@ class AttachedFile extends MyAppModel
             return json_decode($imgAttrTypeCacheVar, true);
         }
 
-        return $arr = array(
+        $arr = array(
             static::FILETYPE_PRODUCT_IMAGE => Labels::getLabel('LBL_PRODUCTS', $langId),
             static::FILETYPE_BRAND_LOGO => Labels::getLabel('LBL_BRAND_LOGO', $langId),
             static::FILETYPE_BRAND_IMAGE => Labels::getLabel('LBL_BRAND_BANNER', $langId),
