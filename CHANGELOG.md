@@ -11,3 +11,4 @@
 
 ## Bug Fixes:
     - Bug-074802 - Omise Payment gateway deprecated issue.
+    - Bug-076133 - Stripe payment gateway functionality upgrade

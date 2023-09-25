@@ -1,226 +1,44 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-if (isset($stripe)) {
-    if (isset($stripe['secret_key']) && isset($stripe['publishable_key'])) {
-        if (!empty($stripe['secret_key']) && !empty($stripe['publishable_key'])) { ?>
-            <?php if (!FatUtility::isAjaxCall()) { ?>
-                <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-                <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
-            <?php } ?>
-            <script type="text/javascript">
-                var publishable_key = '<?php echo $stripe['publishable_key']; ?>';
-            </script>
-    <?php }
-    }
+$frm->setFormTagAttribute('class', 'form');
+$frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
+$frm->developerTags['fld_default_col'] = 12;
+if (false === $processRequest) {
+    $frm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
 }
 
-if (isset($client_secret)) { ?>
-    <script type="text/javascript">
-        var stripe = Stripe(publishable_key);
-        var clientSecret = '<?php echo $client_secret; ?>';
-        stripe.confirmCardPayment(clientSecret, {
-            payment_method: '<?php echo $payment_method_id; ?>'
-        }).then(function(result) {
-            if (result.error) {
-                // PaymentIntent client secret was invalid
-                location.href = '<?php echo $cancelBtnUrl; ?>';
-            } else {
-                if (result.paymentIntent.status === 'succeeded') {
-
-                    var data = 'order_id=<?php echo $order_id ?>&payment_intent_id=<?php echo $payment_intent_id ?>&is_ajax_request=yes&fIsAjax=1';
-
-                    $.ajax({
-                        type: "POST",
-                        url: '<?php echo UrlHelper::generateUrl('StripePay', 'StripeSuccess') ?>',
-                        data: data,
-                        success: function(data) {
-                            location.href = '<?php echo UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderInfo['order_number']), CONF_WEBROOT_URL); ?>';
-                        }
-                    });
-
-                } else if (result.paymentIntent.status === 'requires_payment_method') {
-                    // Authentication failed, prompt the customer to enter another payment method
-                    location.href = '<?php echo UrlHelper::generateUrl('custom', 'paymentFailed'); ?>';
-                }
-            }
-        });
-    </script>
-<?php
-} else { ?>
-    <script>
-        (function($) {
-            var _this = false;
-            var _subText = false;
-
-            loadStripe = function() {
-                try {
-                    if (typeof publishable_key != typeof undefined) {
-                        // this identifies your website in the createToken call below
-                        Stripe.setPublishableKey(publishable_key);
-                        // console.log(Stripe);
-                        function stripeResponseHandler(status, response) {
-                            $('#stripeCharge').find(":submit").attr('disabled', 'disabled');
-                            $submit = true;
-                            if (_this && _subText) {
-                                _this.find('input[type=submit]').val(_subText);
-                            }
-
-                            if (response.error) {
-                                $("#stripeCharge").prepend('<div class="alert alert-danger">' + response.error.message + '</div>');
-                                $("#stripeCharge").find(":submit").removeAttr('disabled');
-                                fcom.removeLoader();
-                                fcom.closeProcessing();
-                            } else {
-
-                                var form = $("#stripeCharge");
-                                // token contains id, last4, and card type
-                                var token = response['id'];
-                                // insert the token into the form so it gets submitted to the server
-                                form.append("<input type='hidden' name='stripeToken' value='" + token + "' />");
-                                form.attr('onsubmit', 'sendPayment(this, ".<?php echo $pmethodCode ?>-js"); return(false);');
-                                form.submit();
-                            }
-
-                        }
-                        $submit = true;
-                        $(document).on("submit", "#stripeCharge", function(event) {
-                            event.preventDefault();
-                            if (!$(this).validate()) {
-                                return
-                            };
-                            var stripeToken = $("input[name='stripeToken']").val();
-                            if ('' != stripeToken && 'undefined' != typeof stripeToken) {
-                                return;
-                            }
-                            $(".<?php echo $pmethodCode ?>-js").prepend(fcom.getLoader());
-                            fcom.displayProcessing();
-                            // prop('disabled', true);
-                            $('.alert-danger').remove();
-
-                            _this = $(this);
-                            var _numberWrap = $('#cc_number');
-                            var _cvvWrap = $('#cc_cvv');
-                            var _expMonthWrap = $('#cc_expire_date_month');
-                            var _expYearWrap = $('#cc_expire_date_year');
-                            _subText = _this.find('input[type=submit]').val();
-
-
-                            if ($submit && _numberWrap.length > 0 && _cvvWrap.length > 0 && _expMonthWrap.length > 0 && _expYearWrap.length > 0) {
-
-                                var _numberValue = _numberWrap.val().trim();
-                                var _cvvValue = _cvvWrap.val().trim();
-                                var _expMonthValue = _expMonthWrap.val().trim();
-                                var _expYearValue = _expYearWrap.val().trim();
-
-                                if (_numberValue != '' && _cvvValue != '' && _expMonthValue != '' && _expYearValue != '') {
-                                    $submit = false;
-                                    _this.find('input[type=submit]').val(_this.find('input[type=submit]').data('processing-text'));
-                                    Stripe.createToken({
-                                        number: _numberValue,
-                                        cvc: _cvvValue,
-                                        exp_month: _expMonthValue,
-                                        exp_year: _expYearValue
-                                    }, stripeResponseHandler);
-                                }
-
-                            }
-                            return $submit; // submit from callback
-                        });
-
-                    }
-
-                } catch (e) {
-                    // console.log(e.message);
-                    setTimeout(function() {
-                        loadStripe();
-                    }, 500);
-                }
-            }
-            loadStripe();
-        })(jQuery);
-    </script>
-    <?php
-    if (!isset($error)) {
-        $frm->setFormTagAttribute('id', 'stripeCharge');
-        $fld = $frm->getField('cc_number');
-        $fld->addFieldTagAttribute('class', 'p-cards');
-        $fld->addFieldTagAttribute('id', 'cc_number');
-        $fld = $frm->getField('cc_owner');
-        $fld->addFieldTagAttribute('id', 'cc_owner');
-        $fld = $frm->getField('cc_cvv');
-        $fld->addFieldTagAttribute('id', 'cc_cvv'); ?>
-
-        <?php echo $frm->getFormTag(); ?>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="form-label">
-                        <?php echo Labels::getLabel('LBL_ENTER_CREDIT_CARD_NUMBER', $siteLangId); ?></label>
-                    <?php echo $frm->getFieldHtml('cc_number'); ?>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="form-label">
-                        <?php echo Labels::getLabel('LBL_CARD_HOLDER_NAME', $siteLangId); ?>
-                    </label>
-                    <?php echo $frm->getFieldHtml('cc_owner'); ?>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="form-label">
-                        <?php echo Labels::getLabel('LBL_Expiry_Month', $siteLangId); ?></label>
-                    <?php
-                    $fld = $frm->getField('cc_expire_date_month');
-                    $fld->addFieldTagAttribute('id', 'cc_expire_date_month');
-                    $fld->addFieldTagAttribute('class', 'ccExpMonth  combobox required');
-                    echo $fld->getHtml(); ?>
-
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="form-label">
-                        <?php echo Labels::getLabel('LBL_Expiry_year', $siteLangId); ?></label>
-
-
-                    <?php
-                    $fld = $frm->getField('cc_expire_date_year');
-                    $fld->addFieldTagAttribute('id', 'cc_expire_date_year');
-                    $fld->addFieldTagAttribute('class', 'ccExpYear combobox required');
-                    echo $fld->getHtml(); ?>
-
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="form-label"><?php echo Labels::getLabel('LBL_CVV_SECURITY_CODE', $siteLangId); ?></label>
-                    <?php echo $frm->getFieldHtml('cc_cvv'); ?>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="row justify-content-between">
-            <div class="col-auto">
-                <?php
-                $btn = $frm->getField('btn_submit');
-                $btn->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
-                $btn->addFieldTagAttribute('data-processing-text', Labels::getLabel('LBL_PLEASE_WAIT..', $siteLangId));
-                $btn->value = $btn->value . ': ' . CommonHelper::displayMoneyFormat($paymentAmount);
-                echo $frm->getFieldHtml('btn_submit'); ?>
-            </div>
-        </div>
-        </form>
-        <?php echo $frm->getExternalJs(); ?>
+$frm->setFormTagAttribute('id', 'paymentFormJs');
+$btn = $frm->getField('btn_submit');
+if (null != $btn) {
+    $btn->developerTags['noCaptionTag'] = true;
+    $btn->setFieldTagAttribute('class', "btn btn-secondary btn-wide");
+}
+?>
+<div class="text-center" id="paymentFormElement-js">
+    <?php if (false === $processRequest) { ?>
+        <h6><?php echo Labels::getLabel('LBL_PROCEED_TO_PAYMENT_?', $siteLangId); ?></h6>
     <?php } else { ?>
-        <div class="alert alert-danger"><?php echo $error ?></div>
+        <h6><?php echo Labels::getLabel('LBL_REDIRECTING_TO_PAYMENT_PAGE...', $siteLangId); ?></h6>
     <?php } ?>
+    <?php echo $frm->getFormHtml(); ?>
+</div>
+<script type="text/javascript">
+    function confirmOrder(frm) {
+        var data = fcom.frmData(frm);
+        var action = $(frm).attr('action');
+        var submitBtn = $("form#paymentFormJs input[type='submit']");
+        fcom.displayProcessing();
+        submitBtn.attr('disabled', 'disabled');
+        fcom.ajax(action, data, function(res) {
+            var json = $.parseJSON(res);
 
-    <div id="ajax_message"></div>
-<?php } ?>
+            if (1 > json.status) {
+                submitBtn.removeAttr('disabled');
+                fcom.displayErrorMessage(json.msg);
+                return false;
+            }
+            // $("#paymentFormElement-js").replaceWith(json.html);
+            window.location.href = json.redirectUrl;
+        });
+    }
+</script>

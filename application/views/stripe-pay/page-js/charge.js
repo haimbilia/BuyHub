@@ -2,7 +2,7 @@
     sendPayment = function (frm, dv = '') {
         var data = fcom.frmData(frm);
         var action = $(frm).attr('action');
-        data +='&chargeAjax=0';
+        data += '&chargeAjax=0';
         $(".paymentFormJs").prepend(fcom.getLoader());
         fcom.displayProcessing();
         fcom.ajax(action, data, function (t) {
@@ -18,6 +18,7 @@
                     fcom.removeLoader();
                     $(dv).append(json.html);
                 }
+                console.log(json);
                 if (json['redirect']) {
                     $(location).attr("href", json['redirect']);
                 }
