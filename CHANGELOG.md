@@ -13,3 +13,4 @@
     - Bug-074802 - Omise Payment gateway deprecated issue.
     - Bug-076133 - Stripe payment gateway functionality upgrade
     - Bug-076193 - The unlimited plan validity expires after 24 hours.
+    - Bug-076198 - Unable to save downloadable file on new digital product.
