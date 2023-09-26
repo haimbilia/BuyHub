@@ -110,8 +110,14 @@ class SubscriptionSellerReportController extends ListingBaseController
                             $arr[] = CommonHelper::displayMoneyFormat($row[$key], true, true, false);
                             break;
                         case 'ossubs_from_date':
-                        case 'ossubs_till_date':
                             $arr[] = FatDate::format($row[$key]);
+                            break;
+                        case 'ossubs_till_date':
+                            if(SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED == $row['ossubs_frequency']) {
+                                $arr[] = Labels::getLabel("LBL_N/A", $this->siteLangId);
+                            } else { 
+                                $arr[] = FatDate::format($row[$key]);
+                            }
                             break;
                         case 'ossubs_subscription_name':
                             $name = $row['ossubs_subscription_name'] . ' ';

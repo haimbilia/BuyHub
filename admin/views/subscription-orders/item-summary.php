@@ -34,11 +34,15 @@
                             <?php echo OrderSubscription::getSubscriptionTitle($op, $siteLangId); ?>
                         </td>
                         <td>
-                            <?php if ($op['ossubs_from_date'] == 0 || $op['ossubs_till_date'] == 0) {
-                                echo Labels::getLabel("LBL_N/A", $siteLangId);
-                            } else {
-                                echo FatDate::format($op['ossubs_from_date']) . " - " . FatDate::format($op['ossubs_till_date']);
-                            } ?>
+                            <?php if(SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED == $op['ossubs_frequency']) {
+                                echo $subcriptionPeriodArr[$op['ossubs_frequency']];
+                            } else { 
+                                if ($op['ossubs_from_date'] == 0 || $op['ossubs_till_date'] == 0) {
+                                    echo Labels::getLabel("LBL_N/A", $siteLangId);
+                                } else {
+                                    echo FatDate::format($op['ossubs_from_date']) . " - " . FatDate::format($op['ossubs_till_date']);
+                                } 
+                            }?>
                         </td>
                         <td class="align-right">
                             <?php

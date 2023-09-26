@@ -21,11 +21,16 @@ $op = current($order['items']); ?>
             <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_SUBSCRIPTION_PERIOD', $siteLangId); ?>:</span>
                 <span class="value">
-                    <?php if ($op['ossubs_from_date'] == 0 || $op['ossubs_till_date'] == 0) {
-                        echo Labels::getLabel("LBL_N/A", $siteLangId);
-                    } else {
-                        echo FatDate::format($op['ossubs_from_date']) . " - " . FatDate::format($op['ossubs_till_date']);
-                    } ?>
+                    <?php 
+                    if(SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED == $op['ossubs_frequency']) {
+                        echo $subcriptionPeriodArr[$op['ossubs_frequency']];
+                    } else { 
+                        if ($op['ossubs_from_date'] == 0 || $op['ossubs_till_date'] == 0) {
+                            echo Labels::getLabel("LBL_N/A", $siteLangId);
+                        } else {
+                            echo FatDate::format($op['ossubs_from_date']) . " - " . FatDate::format($op['ossubs_till_date']);
+                        } 
+                    }?>
                 </span>
             </li>
             <li class="list-stats-item">

@@ -1630,6 +1630,11 @@ class CommonHelper extends FatUtility
         if ($sub_last_date == '') {
             $sub_last_date = date('Y-m-d');
         }
+
+        if(0 == $days && SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED == $packageInfo['ossubs_frequency']) {
+            $days = 100;
+        }
+
         return  date('Y-m-d', strtotime("+" . $days . " " . $duration, strtotime($sub_last_date)));
     }
 

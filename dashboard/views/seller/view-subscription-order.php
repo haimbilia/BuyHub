@@ -23,10 +23,14 @@
                     <li class="list-stats-item">
                         <span class="label"><?php echo Labels::getLabel('LBL_Subscription_Period', $siteLangId); ?>: </span>
                         <span class="value">
-                            <?php if ($orderDetail['ossubs_from_date'] == 0 || $orderDetail['ossubs_till_date'] == 0) {
-                                echo Labels::getLabel("LBL_N/A", $siteLangId);
+                            <?php if(SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED == $orderDetail['ossubs_frequency']) {
+                                echo $subcriptionPeriodArr[$orderDetail['ossubs_frequency']];
                             } else {
-                                echo FatDate::format($orderDetail['ossubs_from_date']) . " - " . FatDate::format($orderDetail['ossubs_till_date']);
+                                if ($orderDetail['ossubs_from_date'] == 0 || $orderDetail['ossubs_till_date'] == 0) {
+                                    echo Labels::getLabel("LBL_N/A", $siteLangId);
+                                } else {
+                                    echo FatDate::format($orderDetail['ossubs_from_date']) . " - " . FatDate::format($orderDetail['ossubs_till_date']);
+                                }
                             } ?>
                         </span>
                     </li>

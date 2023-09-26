@@ -205,6 +205,9 @@ trait OrdersPackage
         $this->set('order', $this->get('order') +  ['charges' => $charges]);
 
         $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
+        $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($this->siteLangId);
+
+        $this->set('subcriptionPeriodArr', $subcriptionPeriodArr);
         $this->set('orderStatusArr', $orderStatusArr);
         $this->_template->addJs(array('js/jquery.datetimepicker.js'), false);
         $this->_template->addCss(array('css/jquery.datetimepicker.css'), false);
@@ -215,6 +218,9 @@ trait OrdersPackage
     public function getItem($orderId)
     {
         $this->orderData($orderId);
+        $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($this->siteLangId);
+
+        $this->set('subcriptionPeriodArr', $subcriptionPeriodArr);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }

@@ -25,8 +25,14 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $name);
                 break;
             case 'ossubs_from_date':
-            case 'ossubs_till_date':
                 $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
+                break;
+            case 'ossubs_till_date':
+                if(SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED == $row['ossubs_frequency']) {
+                    $td->appendElement('plaintext', $tdAttr, Labels::getLabel("LBL_N/A", $siteLangId), true);
+                } else {
+                    $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
+                }
                 break;
             case 'ossubs_subscription_name':
                 $name = $row['ossubs_subscription_name'] . ' ';
