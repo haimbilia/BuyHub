@@ -9,6 +9,9 @@
         - Safari and IE 11 do not support our CSS. More info can be found at https://developer.microsoft.com/en-us/microsoft-edge/platform/status/csslevel3attrfunction/
         - System does not support Zero decimal currency while checking out with stripe
 
+## Enhancements:
+    - Load all categories on ajax call instead of page load.
+
 ## Bug Fixes:
     - Bug-074802 - Omise Payment gateway deprecated issue.
     - Bug-076133 - Stripe payment gateway functionality upgrade

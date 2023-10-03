@@ -983,8 +983,32 @@ function clearMoreSellerMarkers() {
     });
 }
 
+let sidebarHtml = '';
 function openMobileMenu() {
-    $('.zeynep').zeynep().open();
+    if ('' == sidebarHtml) {
+        fcom.ajax(fcom.makeUrl("Category", "sidebarCategoriesList"), '',
+            function (res) {
+                sidebarHtml = res.html;
+                $('.categoriesJs').html(res.html);
+                var uri = window.location.pathname.replace(/^\/|\/$/g, "");
+                $("#sidebarNavLinks .groupingLinkJs").each(function () {
+                    var attr = $(this).attr("href");
+                    var href = '';
+                    if (typeof attr !== 'undefined' && attr !== false) {
+                        var href = attr.replace(/^\/|\/$/g, "");
+                    }
+
+                    if (uri == href) {
+                        $(this).parent().addClass('active');
+                        if (0 < $(this).siblings().length) {
+                            $(this).parent().siblings('.collapseJs').addClass('show');
+                        }
+                        $(this).parents('.collapseJs').addClass('show');
+                    }
+                });
+            }, { 'fOutMode': 'json' }
+        );
+    }
 }
 
 $(function () {

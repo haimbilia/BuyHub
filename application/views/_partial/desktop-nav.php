@@ -3,7 +3,7 @@
     <ul class="navigation">
         <?php if ($isMegaMenuEnabled == Navigations::LAYOUT_MEGA_MENU) { ?>
             <li>
-                <button class="hamburger-categories" type="button" onclick="openMobileMenu();">
+                <button class="hamburger-categories" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu" onclick="openMobileMenu();">
                     <svg class="svg" width="16" height="16">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#hamburger-menu">
                         </use>

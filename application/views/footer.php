@@ -119,7 +119,7 @@ if ('' !=  $pixelId) {  ?>
                 </a>
             </div>
             <div class="mobile-actions-item">
-                <button type="button" class="mobile-actions-link btn-open first">
+                <button class="mobile-actions-link first" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu" onclick="openMobileMenu();">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-category">
                         </use>
@@ -288,4 +288,5 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
 </button>
 <?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
 </body>
+
 </html>
