@@ -157,6 +157,14 @@ class ProductSearch extends SearchBase
             $this->addOptionCondition($criteria['optionvalue']);
         }
 
+        if (isset($criteria['selProdIds']) && 0 < count($criteria['selProdIds'])) {
+            $joinCondition = ' and msellprod.selprod_id  IN (' . implode(",", $criteria['selProdIds']) . ')';
+        }
+
+        if (isset($criteria['prodIds']) && 0 < count($criteria['prodIds'])) {
+            $joinCondition = ' and msellprod.selprod_product_id  IN (' . implode(",", $criteria['prodIds']) . ')';
+        }
+
         /* if (isset($criteria['collection_product_id']) && $criteria['collection_product_id'] > 0) {
             $this->joinTable(
                 Collections::DB_TBL_COLLECTION_TO_SELPROD,
@@ -412,12 +420,30 @@ class ProductSearch extends SearchBase
             if (isset($criteria['product_id']) && 0 < $criteria['product_id']) {
                 $srch->addCondition('selprod_product_id', '=', $criteria['product_id']);
             }
+
+            if (isset($criteria['selProdIds']) && 0 < count($criteria['selProdIds'])) {
+                $srch->addCondition('sprods.selprod_id', 'IN', $criteria['selProdIds']);
+            }
+           
+            if (isset($criteria['prodIds']) && 0 < count($criteria['prodIds'])) {
+                $srch->addCondition('selprod_product_id', 'IN', $criteria['prodIds']);
+            }
+
             $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'p.product_id = pricetbl.selprod_product_id', 'pricetbl');
         } else {
             $joinCondition = '';
             if (isset($criteria['product_id']) && 0 < $criteria['product_id']) {
                 $joinCondition = ' and sprods.selprod_product_id = ' . $criteria['product_id'];
             }
+
+            if (isset($criteria['selProdIds']) && 0 < count($criteria['selProdIds'])) {
+                $joinCondition = ' and msellprod.selprod_id IN (' . implode(",", $criteria['selProdIds']) . ')';
+            }
+
+            if (isset($criteria['prodIds']) && 0 < count($criteria['prodIds'])) {
+                $joinCondition = ' and sprods.selprod_product_id IN (' . implode(",", $criteria['prodIds']) . ')';
+            }
+            
             $this->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'p.product_id = sprods.selprod_product_id ' . $joinCondition . ' and selprod_active = ' . applicationConstants::ACTIVE . ' and selprod_deleted = ' . applicationConstants::NO, 'sprods');
             if ($this->langId) {
                 $this->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sprods.selprod_id = sprods_l.selprodlang_selprod_id AND sprods_l.selprodlang_lang_id = ' . $this->langId, 'sprods_l');

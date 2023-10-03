@@ -698,8 +698,10 @@ class Cart extends FatModel
 
     public function getSellerProductsData($cartData, $siteLangId, $loggedUserId = 0)
     {
+        $selProdIds = array_keys($cartData);
+
         $prodSrch = new ProductSearch($siteLangId);
-        $prodSrch->setDefinedCriteria();
+        $prodSrch->setDefinedCriteria(0, 0, ['selProdIds' => $selProdIds]);
         $prodSrch->joinProductToCategory();
         $prodSrch->joinSellerSubscription();
         $prodSrch->addSubscriptionValidCondition();
@@ -709,7 +711,7 @@ class Cart extends FatModel
         $prodSrch->joinShops();
         $prodSrch->doNotCalculateRecords();
         $prodSrch->doNotLimitRecords();
-        $prodSrch->addDirectCondition('selprod_id IN (' . implode(',', array_keys($cartData)) . ')');
+        $prodSrch->addDirectCondition('selprod_id IN (' . implode(',', $selProdIds) . ')');
         $prodSrch->addMultipleFields(array(
             'product_id', 'product_type', 'product_length', 'product_width', 'product_height', 'product_ship_free',
             'product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_fulfillment_type',
