@@ -448,14 +448,14 @@ class GuestUserController extends MyAppController
         if (empty($userName) || false === ValidateElement::username($userName)) {
             $message = Labels::getLabel("ERR_INVALID_USERNAME", $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], !MOBILE_APP_API_CALL);
         if ($post == false) {
             $message = Labels::getLabel(current($frm->getValidationErrors()), $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
@@ -463,7 +463,7 @@ class GuestUserController extends MyAppController
         if ((0 < $signUpWithPhone && empty($phoneNumber)) && empty($dialCode)) {
             $message = Labels::getLabel("ERR_INVALID_PHONE_NUMBER", $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', [], CONF_WEBROOT_FRONTEND));
         }
 
         $post['user_phone_dcode'] = $dialCode;
