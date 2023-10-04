@@ -751,7 +751,9 @@ class SellerController extends SellerBaseController
 
         $oSubObj = new OrderSubscription();
         $orderDetail['charges'] = $oSubObj->getOrderSubscriptionChargesArr($op_id);
+        $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($this->siteLangId);
 
+        $this->set('subcriptionPeriodArr', $subcriptionPeriodArr);
         $this->set('orderDetail', $orderDetail);
         $this->set('orderStatuses', $orderStatuses);
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));

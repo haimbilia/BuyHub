@@ -2,10 +2,19 @@
 
 $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
 
-<div class="zeynep">
-    <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]); ?>
+<div class="offcanvas offcanvas-start categories-menu categoriesJs" tabindex="-1" aria-labelledby="categories-menuLabel" id="categories-menu">
+    <ul class="grouping grouping-level">
+        <li class="skeleton grouping-item"></li>
+        <li class="skeleton grouping-item"></li>
+        <li class="skeleton grouping-item"></li>
+        <li class="skeleton grouping-item"></li>
+        <li class="skeleton grouping-item"></li>
+        <li class="skeleton grouping-item"></li>
+        <li class="skeleton grouping-item"></li>
+        <li class="skeleton grouping-item"></li>
+        <li class="skeleton grouping-item"></li>
+    </ul>
 </div>
-<div class="zeynep-overlay"></div>
 
 <?php if (!in_array($controllerName, ['Cart', 'Checkout'])) { ?>
     <?php $this->includeTemplate('_partial/cart-summary.php', ['showHeaderButton' => false]); ?>

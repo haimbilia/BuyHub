@@ -618,7 +618,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $srch->addOrder('ossubs_id', 'desc');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);     
-        $activeSub = FatApp::getDb()->fetch($srch->getResultSet(), 'ossubs_id');
+        $activeSub = (array) FatApp::getDb()->fetch($srch->getResultSet(), 'ossubs_id');
 
         if (empty($activeSub) && count($activeSub) == 0) {
             Message::addErrorMessage(Labels::getLabel("ERR_Subscription_is_not_active", $this->siteLangId));

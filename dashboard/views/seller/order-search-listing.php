@@ -66,13 +66,19 @@
                     $td->appendElement('plaintext', array(), $order['orderstatus_name'], true);
                     break;
                 case 'ossubs_till_date':
-                    if ($order['ossubs_from_date'] == 0 || $order['ossubs_till_date'] == 0) {
-                        $subscritpionValidTill = Labels::getLabel('LBL_N/A', $siteLangId);
+                    if(SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED == $order['ossubs_frequency']) {
+                        $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($siteLangId);
+                        $td->appendElement('plaintext', array(), (($order['ossubs_interval'] > 0) ? $order['ossubs_interval'] . ' ' : '') . $subcriptionPeriodArr[$order['ossubs_frequency']], true);
                     } else {
-                        $subscritpionValidTill = FatDate::format($order['ossubs_from_date']) . " - " . FatDate::format($order['ossubs_till_date']);
+                            if ($order['ossubs_from_date'] == 0 || $order['ossubs_till_date'] == 0) {
+                            $subscritpionValidTill = Labels::getLabel('LBL_N/A', $siteLangId);
+                        } else {
+                            $subscritpionValidTill = FatDate::format($order['ossubs_from_date']) . " - " . FatDate::format($order['ossubs_till_date']);
+                        }
+                        $txt = $subscritpionValidTill;
+                        $td->appendElement('plaintext', array(), $txt, true);
                     }
-                    $txt = $subscritpionValidTill;
-                    $td->appendElement('plaintext', array(), $txt, true);
+
                     break;
                 case 'action':
                     $ul = $td->appendElement("ul", array("class" => "actions"), '', true);

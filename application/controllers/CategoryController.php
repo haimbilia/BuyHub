@@ -373,4 +373,14 @@ class CategoryController extends MyAppController
         }
         FatUtility::dieJsonSuccess(array());
     }
+    public function sidebarCategoriesList()
+    {
+        $sidebarHtml = CacheHelper::get('headerSidebarHtml' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (empty($sidebarHtml)) {
+            $sidebarHtml = $this->_template->render(false, false, NULL, true);
+            CacheHelper::create('headerSidebarHtml' . $this->siteLangId, $sidebarHtml, CacheHelper::TYPE_HEADER_SIDEBAR);
+        }
+        $this->set('html', $sidebarHtml);
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
 }

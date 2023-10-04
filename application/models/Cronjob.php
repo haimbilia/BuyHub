@@ -1003,4 +1003,43 @@ class Cronjob extends FatModel
         }
         return Labels::getLabel('MSG_UNABLE_TO_UPDATE_SITEMAP.');
     }
+
+    public function updateValidSubscription()
+    {
+        if (1 > FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            echo 'Subscription settings not enabled.';
+            return;
+        }
+
+        $sSrch = new SearchBase(Orders::DB_TBL, 'o');
+        $sSrch->addMultipleFields(['max(o.order_id) as currentOrderId']);
+        $sSrch->addCondition('o.order_type', '=', 'mysql_func_' . Orders::ORDER_SUBSCRIPTION, 'AND', true);
+        $sSrch->addCondition('o.order_payment_status', '=',  'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
+        $sSrch->addGroupBy('o.order_id');
+        $sSrch->doNotCalculateRecords();
+        $sSrch->doNotLimitRecords();
+
+        $srch = new searchBase(Orders::DB_TBL, 'o');
+        $srch->joinTable('(' . $sSrch->getQuery() . ')', 'INNER JOIN', 'otemp.currentOrderId=o.order_id', 'otemp');
+        $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . " and oss.ossubs_till_date < '" . date('Y-m-d') . "'", 'oss');
+        $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'o.order_user_id = u.user_id', 'u');
+        
+        $srch->addCondition('u.user_has_valid_subscription', '= ', applicationConstants::YES);
+        $srch->addCondition('oss.ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
+        $srch->addCondition('o.order_type', '=', 'mysql_func_' . ORDERS::ORDER_SUBSCRIPTION, 'AND', true);
+        $srch->addCondition('o.order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
+
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addGroupBy('o.order_user_id');
+        $srch->addFld('o.order_user_id');
+        $srch->addMultipleFields(['o.order_user_id']);
+        
+        $result = FatApp::getDb()->fetchAll($srch->getResultSet());
+        foreach ($result as $user) {
+            $assignValues = ['user_has_valid_subscription' => applicationConstants::NO];
+            FatApp::getDb()->updateFromArray(User::DB_TBL, $assignValues, array('smt' => 'user_id = ? ', 'vals' => array((int) $user['order_user_id'])));
+        }
+        echo 'Done';
+    }
 }

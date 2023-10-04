@@ -41,73 +41,27 @@ if (isset($prodcat_code)) {
         </div>
         <div class="selected-filters selectedFiltersJs"></div>
     </div>
-    <?php if (isset($categoriesArr) && $categoriesArr) { ?>
+    <?php if (isset($categoriesArr) && $categoriesArr) {
+    ?>
         <div class="sidebar-widget">
             <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#category" aria-expanded="true">
                 <?php echo Labels::getLabel('LBL_Categories', $siteLangId); ?>
             </div>
             <div class="sidebar-widget_body collapse show" id="category">
                 <?php if (!$shopCatFilters) { ?>
-                    <div id="accordian" class="cat-accordion toggle-target scrollbar-filters">
-                        <ul>
-                            <?php foreach ($categoriesArr as $cat) {
-                                $catUrl = UrlHelper::generateUrl('category', 'view', array($cat['prodcat_id'])); ?>
-                                <li>
-                                    <?php if (count($cat['children']) > 0) {
-                                        echo '<span class="acc-trigger"></span>';
-                                    } ?>
-                                    <a class="" data-id="<?php echo $cat['prodcat_id']; ?>" href="<?php echo $catUrl; ?>"><?php echo $cat['prodcat_name']; ?></a>
-                                    <?php if (count($cat['children']) > 0) {
-                                        echo '<ul>';
-                                        foreach ($cat['children'] as $children) {
-                                    ?>
-                                <li>
-                                    <?php if (isset($children['children']) && count($children['children']) > 0) {
-                                                echo '<span class="acc-trigger"></span>';
-                                            } ?>
-                                    <a class="" data-id="<?php echo $children['prodcat_id']; ?>" href="<?php echo UrlHelper::generateUrl('category', 'view', array($children['prodcat_id'])); ?>"><?php echo $children['prodcat_name']; ?></a>
-                                    <?php if (isset($children['children']) && count($children['children']) > 0) {
-                                                echo '<ul>';
-                                                foreach ($children['children'] as $subChildren) {
-                                    ?>
-                                <li>
-                                    <?php if (isset($subChildren['children']) && count($subChildren['children']) > 0) {
-                                                        echo '<span class="acc-trigger" ripple="ripple" ripple-color="#000"></span>';
-                                                    } ?>
-                                    <a class="" data-id="<?php echo $subChildren['prodcat_id']; ?>" href="<?php echo UrlHelper::generateUrl('category', 'view', array($subChildren['prodcat_id'])); ?>"><?php echo $subChildren['prodcat_name']; ?></a>
-
-                                    <?php if (isset($subChildren['children']) && count($subChildren['children']) > 0) {
-                                                        echo '<ul>';
-                                                        foreach ($subChildren['children'] as $subSubChildren) {
-                                    ?>
-
-                                <li>
-                                    <?php if (isset($subSubChildren['children']) && count($subSubChildren['children']) > 0) {
-                                                                echo '<span class="acc-trigger" ripple="ripple" ripple-color="#000"></span>';
-                                                            } ?>
-                                    <a class="" data-id="<?php echo $subSubChildren['prodcat_id']; ?>" href="<?php echo UrlHelper::generateUrl('category', 'view', array($subSubChildren['prodcat_id'])); ?>"><?php echo $subSubChildren['prodcat_name']; ?></a>
-                                </li>
+                    <ul class="grouping grouping-level sidebarNavLinksJs">
                         <?php
-                                                        }
-                                                        echo '</ul>';
-                                                    } ?>
-                        </li>
-                <?php
-                                                }
-                                                echo '</ul>';
-                                            } ?>
-                </li>
-        <?php
-                                        }
-                                        echo '</ul>';
-                                    } ?>
+                        foreach ($categoriesArr as $link) {
+                            $href = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']));
+                            $OrgnavUrl = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']), '', false);
+                            if (0 < count($link['children'])) {
+                                $href = '#';
+                            }
 
-        </li>
-    <?php
-                            } ?>
-                        </ul>
-
-                    </div>
+                            require CONF_THEME_PATH . '_partial/navigation/mobile-nav-item-cat.php';
+                        }
+                        ?>
+                    </ul>
                 <?php } else { ?>
                     <div class="scrollbar-filters  scroll scroll-y" id="scrollbar-filters">
                         <ul class="list-vertical">
@@ -128,18 +82,16 @@ if (isset($prodcat_code)) {
                                     }
                                 } ?>
                                 <li>
-                                    <label class="checkbox brand" id="prodcat_<?php echo $cat['prodcat_id']; ?>"><input name="category" value="<?php echo $cat['prodcat_id']; ?>" type="checkbox" data-title="<?php echo $catName; ?>" <?php if (in_array($cat['prodcat_id'], $prodcatArr)) {
-                                                                                                                                                                                                                                            echo "checked";
-                                                                                                                                                                                                                                        } ?>><?php echo $productCatName; ?></label></a>
+                                    <label class="checkbox brand" id="prodcat_<?php echo $cat['prodcat_id']; ?>">
+                                        <input name="category" value="<?php echo $cat['prodcat_id']; ?>" type="checkbox" data-title="<?php echo $catName; ?>" <?php echo (in_array($cat['prodcat_id'], $prodcatArr)) ? "checked" : "";?>>
+                                            <?php echo $productCatName; ?>
+                                    </label>
                                 </li>
-
                             <?php
                             } ?>
                         </ul>
 
                     </div>
-
-
                 <?php } ?>
             </div>
         </div>
@@ -287,7 +239,9 @@ if (isset($prodcat_code)) {
                                         } ?>
                                         <li>
                                             <label class="checkbox condition" id="condition_<?php echo $condition['selprod_condition']; ?>">
-                                            <input value="<?php echo $condition['selprod_condition']; ?>" data-id="condition_<?php echo $condition['selprod_condition']; ?>" name="conditions" type="checkbox" <?php if (in_array($condition['selprod_condition'], $conditionsCheckedArr)) { echo "checked='true'";} ?>>
+                                                <input value="<?php echo $condition['selprod_condition']; ?>" data-id="condition_<?php echo $condition['selprod_condition']; ?>" name="conditions" type="checkbox" <?php if (in_array($condition['selprod_condition'], $conditionsCheckedArr)) {
+                                                                                                                                                                                                                        echo "checked='true'";
+                                                                                                                                                                                                                    } ?>>
                                                 <?php echo Product::getConditionArr($siteLangId)[$condition['selprod_condition']]; ?>
                                             </label>
                                         </li>

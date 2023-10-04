@@ -209,7 +209,7 @@ class PaymentMethods
                                 $transferAmtArr[$txn['utxn_gateway_txn_id']] = $deductableSellerAmount;
                                 $deductableSellerAmount = 0;
                             } else {
-                                $deductableSellerAmount = $deductableSellerAmount - $transferAmtArr[$txn]['utxn_gateway_txn_id'];
+                                $deductableSellerAmount = $deductableSellerAmount - $transferAmtArr[$txn['utxn_gateway_txn_id']];
                             }
                         }
                     }

@@ -18,6 +18,7 @@ class CacheHelper extends FatCache
     const TYPE_BLOCK_CONTENT = 13;
     const TYPE_BLOG_CATEGORY = 14;
     const TYPE_ORDER_STATUS = 15;
+    const TYPE_HEADER_SIDEBAR = 16;
 
     public static function clear(int $type)
     {
