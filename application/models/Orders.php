@@ -1297,11 +1297,11 @@ class Orders extends MyAppModel
     public function addOrderPaymentHistory($orderId, $orderPaymentStatus, $comment = '', $notify = false)
     {
         $orderInfo = $this->getOrderById($orderId);
-
+        $orderPaymentStatus = FatUtility::int($orderPaymentStatus);
         if ($orderInfo) {
             if (!FatApp::getDb()->updateFromArray(
                 Orders::DB_TBL,
-                array('order_payment_status' => FatUtility::int($orderPaymentStatus), 'order_date_updated' => date('Y-m-d H:i:s')),
+                array('order_payment_status' => $orderPaymentStatus, 'order_date_updated' => date('Y-m-d H:i:s')),
                 array('smt' => 'order_id = ? ', 'vals' => array($orderId))
             )) {
                 $this->error = FatApp::getDb()->getError();
@@ -1317,6 +1317,10 @@ class Orders extends MyAppModel
         if ($orderInfo['order_type'] == ORDERS::ORDER_PRODUCT) {
             $this->addProductOrderPayment($orderId, $orderInfo, $orderPaymentStatus, $comment, $notify);
         } elseif ($orderInfo['order_type'] == ORDERS::ORDER_SUBSCRIPTION) {
+            if (Orders::ORDER_PAYMENT_PAID == $orderPaymentStatus) {
+                $assignValues = ['user_has_valid_subscription' => applicationConstants::YES];
+                FatApp::getDb()->updateFromArray(User::DB_TBL, $assignValues, array('smt' => 'user_id = ? ', 'vals' => array((int) $orderInfo['order_user_id'])));
+            }
             $this->addSubscriptionOrderPayment($orderId, $orderInfo, $orderPaymentStatus, $comment, $notify);
         }
 
