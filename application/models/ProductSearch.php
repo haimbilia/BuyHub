@@ -424,7 +424,7 @@ class ProductSearch extends SearchBase
             if (isset($criteria['selProdIds']) && 0 < count($criteria['selProdIds'])) {
                 $srch->addCondition('sprods.selprod_id', 'IN', $criteria['selProdIds']);
             }
-           
+
             if (isset($criteria['prodIds']) && 0 < count($criteria['prodIds'])) {
                 $srch->addCondition('selprod_product_id', 'IN', $criteria['prodIds']);
             }
@@ -443,7 +443,7 @@ class ProductSearch extends SearchBase
             if (isset($criteria['prodIds']) && 0 < count($criteria['prodIds'])) {
                 $joinCondition = ' and sprods.selprod_product_id IN (' . implode(",", $criteria['prodIds']) . ')';
             }
-            
+
             $this->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'p.product_id = sprods.selprod_product_id ' . $joinCondition . ' and selprod_active = ' . applicationConstants::ACTIVE . ' and selprod_deleted = ' . applicationConstants::NO, 'sprods');
             if ($this->langId) {
                 $this->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sprods.selprod_id = sprods_l.selprodlang_selprod_id AND sprods_l.selprodlang_lang_id = ' . $this->langId, 'sprods_l');
@@ -472,7 +472,12 @@ class ProductSearch extends SearchBase
     public function joinSellers()
     {
         $this->sellerUserJoined = true;
-        $this->joinTable(User::DB_TBL, 'INNER JOIN', 'selprod_user_id = seller_user.user_id and seller_user.user_is_supplier = ' . applicationConstants::YES . ' AND seller_user.user_deleted = ' . applicationConstants::NO, 'seller_user');
+        $joinCondition = '';
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $joinCondition = ' and user_has_valid_subscription = ' . applicationConstants::YES;
+        }
+
+        $this->joinTable(User::DB_TBL, 'INNER JOIN', 'selprod_user_id = seller_user.user_id and seller_user.user_is_supplier = ' . applicationConstants::YES . ' AND seller_user.user_deleted = ' . applicationConstants::NO . $joinCondition, 'seller_user');
         $this->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'credential_user_id = seller_user.user_id and credential_active = ' . applicationConstants::ACTIVE . ' and credential_verified = ' . applicationConstants::YES, 'seller_user_cred');
     }
 
@@ -1218,7 +1223,7 @@ class ProductSearch extends SearchBase
             $this->joinSellers();
         }
 
-        if (!$this->sellerUserJoined) {
+        /* if (!$this->sellerUserJoined) {
             trigger_error(Labels::getLabel('ERR_SELLER_MUST_JOINED.', CommonHelper::getLangId()), E_USER_ERROR);
         }
 
@@ -1227,15 +1232,7 @@ class ProductSearch extends SearchBase
             $validDateCondition = " and oss.ossubs_till_date >= '" . date('Y-m-d') . "'";
         }
 
-        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-            /* $sSrch = new SearchBase(Orders::DB_TBL, 'o');
-            $sSrch->addCondition('o.order_type', '=', 'mysql_func_' . Orders::ORDER_SUBSCRIPTION, 'AND', true);
-            $sSrch->addCondition('o.order_payment_status', '=',  'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
-            $sSrch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'o_temp.order_date_added > o.order_date_added and o_temp.order_payment_status = 1 and o_temp.order_user_id = o.order_user_id and o_temp.order_type = ' . Orders::ORDER_SUBSCRIPTION, 'o_temp');
-            $sSrch->addMultipleFields(['COALESCE(o_temp.order_id, o.order_id) as currentOrderId']);
-            $sSrch->addGroupBy('o.order_id');
-            $sSrch->doNotCalculateRecords();
-            $sSrch->doNotLimitRecords(); */
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {            
 
             $sSrch = new SearchBase(Orders::DB_TBL, 'o');
             $sSrch->addMultipleFields(['max(o.order_id) as currentOrderId']);
@@ -1259,23 +1256,18 @@ class ProductSearch extends SearchBase
             $srch->addGroupBy('o.order_user_id');
             $srch->addMultipleFields(array('oss.*', 'order_user_id', 'order_id', 'order_type'));
             $this->joinTable('(' . $srch->getQuery() . ')', 'INNER JOIN', 'oss.order_user_id=seller_user.user_id', 'oss');
-        }
-
-        /* $this->joinSellerOrder();
-        $this->joinSellerOrderSubscription($langId, $includeDateCondition); */
-
-        //$this->addSubscriptionValidCondition();
+        } */
     }
 
     public function addSubscriptionValidCondition($date = '')
     {
-        if ($date == '') {
+        /* if ($date == '') {
             $date = date("Y-m-d");
         }
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE')) {
             $this->addCondition('oss.ossubs_till_date', '>=', $date);
             $this->addCondition('ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
-        }
+        } */
     }
 
     public function joinSellerProductSpecifics()
