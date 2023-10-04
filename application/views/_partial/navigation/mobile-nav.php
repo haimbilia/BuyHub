@@ -31,9 +31,6 @@
     if ($isMegaMenuEnabled == Navigations::LAYOUT_MEGA_MENU && !empty($headerCategories)) {
         $catCount = 0;
         foreach ($headerCategories as $link) {
-            if ($catCount == 8) {
-                break;
-            }
             $href = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']));
             $OrgnavUrl = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']), '', false);
             if (0 < count($link['children'])) {
