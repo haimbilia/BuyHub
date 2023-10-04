@@ -128,7 +128,8 @@ $(document).on('click', '.toggle--search', function () {
     setTimeout(function () { $(".search--keyword--js").focus(); }, 500);
 });
 
-$("document").ready(function () {
+$(document).ready(function () {
+    markCatLinkActive();
     $('.parents--link').on('click', function () {
         $(this).parent().toggleClass("is--active");
         $(this).parent().find('.childs').toggleClass("opened");
@@ -289,6 +290,7 @@ $(function () {
 
 
 $(document).ajaxComplete(function () {
+    markCatLinkActive();
     setTimeout((function () {
         if ('undefined' != typeof $.fn.popover) {
             $('[data-bs-toggle="popover"]').popover();
@@ -990,53 +992,29 @@ function openMobileMenu() {
             function (res) {
                 sidebarHtml = res.html;
                 $('.categoriesJs').html(res.html);
-                var uri = window.location.pathname.replace(/^\/|\/$/g, "");
-                $("#sidebarNavLinks .groupingLinkJs").each(function () {
-                    var attr = $(this).attr("href");
-                    var href = '';
-                    if (typeof attr !== 'undefined' && attr !== false) {
-                        var href = attr.replace(/^\/|\/$/g, "");
-                    }
-
-                    if (uri == href) {
-                        $(this).parent().addClass('active');
-                        if (0 < $(this).siblings().length) {
-                            $(this).parent().siblings('.collapseJs').addClass('show');
-                        }
-                        $(this).parents('.collapseJs').addClass('show');
-                    }
-                });
+                markCatLinkActive();
             }, { 'fOutMode': 'json' }
         );
     }
 }
 
-$(function () {
-    // init zeynepjs side menu
-    var zeynep = $('.zeynep').zeynep({
-        opened: function () {
-            // log
-            // console.log('the side menu opened');
-        },
-        closed: function () {
-            // log
-            // console.log('the side menu closed');
-        }
-    })
+function markCatLinkActive() {
+    var uri = window.location.pathname.replace(/^\/|\/$/g, "");
+    $(".sidebarNavLinksJs").each(function () {
+        $(this).find(".groupingLinkJs").each(function () {
+            var attr = $(this).attr("href");
+            var href = '';
+            if (typeof attr !== 'undefined' && attr !== false) {
+                var href = attr.replace(/^\/|\/$/g, "");
+            }
 
-    // dynamically bind 'closing' event
-    zeynep.on('closing', function () {
-        // log
-        // console.log('this event is dynamically binded');
-    })
-
-    // handle zeynepjs overlay click
-    $('.zeynep-overlay').on('click', function () {
-        zeynep.close();
-    })
-
-    // open zeynepjs side menu
-    $('.btn-open').on('click', function () {
-        zeynep.open();
-    })
-})
+            if (uri == href) {
+                $(this).parent().addClass('active');
+                if (0 < $(this).siblings().length) {
+                    $(this).parent().siblings('.collapseJs').addClass('show');
+                }
+                $(this).parents('.collapseJs').addClass('show');
+            }
+        });
+    });
+}
