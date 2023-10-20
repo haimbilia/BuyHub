@@ -186,3 +186,4 @@ You will require the following server specifications for setting up the Yokart s
 - Login to admin account and Open url https://yourdomain.com/admin/patch-update/update-shops-avg-rating to update reviews and ratings.
 - Labels table shall be updated from the sample.sql file which is placed under /path/to/your/rootdir/database/ directory 
 - user-uploads directory shall be remain same.
+- Hit /admin/patch-update/update-valid-subscription to update user_has_valid_subscription column for seller who has valid subscription plan.
