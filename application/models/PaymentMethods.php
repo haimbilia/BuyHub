@@ -184,7 +184,7 @@ class PaymentMethods
                         'orderInvoice' => $this->invoiceNumber
                     ]
                 ];
-                if (false === $this->paymentPlugin->init(true)) {
+                if (false === $this->paymentPlugin->init()) {
                     $this->error = $this->paymentPlugin->getError();
                     return false;
                 }
