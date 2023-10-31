@@ -160,9 +160,9 @@ class StripePayController extends PaymentController
         return $amount * 100;
     }
 
-    private function getPaymentForm(string $orderId, bool $processRequest = false): object
+    private function getPaymentForm(string $orderId): object
     {
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('StripePay', 'charge', array($orderId)) : $this->paymentUrl;
+        $actionUrl = UrlHelper::generateUrl('StripePay', 'charge', array($orderId));
         $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Pay_Now', $this->siteLangId));
