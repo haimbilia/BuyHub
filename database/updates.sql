@@ -7,3 +7,6 @@ ALTER TABLE `tbl_users` ADD `user_has_valid_subscription` TINYINT(1) NOT NULL CO
 INSERT INTO `tbl_cron_schedules` (`cron_name`, `cron_command`, `cron_duration`, `cron_active`)
 VALUES ('Update Valid Subscription User Flag', 'Cronjob/updateValidSubscription', 1440, 1)
 ON DUPLICATE KEY UPDATE cron_duration = VALUES(cron_duration), cron_active = 1;
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_COPYRIGHT_TEXT', 1, 'Copyright {YEAR} {PRODUCT}', 3)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

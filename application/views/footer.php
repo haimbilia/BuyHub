@@ -70,18 +70,7 @@ if ('' !=  $pixelId) {  ?>
         <div class="container">
             <div class="footer-bottom-inner">
                 <div class="copyright">
-                    <?php
-                    if (CommonHelper::demoUrl() || true == WHITE_LABELED) {
-                        $replacements = array(
-                            '{YEAR}' => '&copy; ' . date("Y"),
-                            '{PRODUCT}' => '<a target="_blank" href="https://yo-kart.com">Yo!Kart</a>',
-                            '{OWNER}' => '<a target="_blank" href="https://www.fatbit.com/">FATbit Technologies</a>',
-                        );
-                        echo $str = CommonHelper::replaceStringData(Labels::getLabel('LBL_COPYRIGHT_TEXT', $siteLangId), $replacements);
-                    } else {
-                        echo $str = 'Copyright &copy; ' . date('Y') . ' ' . FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId, FatUtility::VAR_STRING, '') . '. Powered by <a target="_blank" href="https://yo-kart.com">Yo!Kart</a> and Developed by <a target="_blank" href="https://www.fatbit.com/">FATbit Technologies</a>';
-                    }
-                    ?>
+                    <?php echo CommonHelper::getCopyRight($siteLangId); ?>
                 </div>
                 <div class="payment">
                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-1.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
