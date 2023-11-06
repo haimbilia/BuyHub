@@ -2241,7 +2241,7 @@ class CommonHelper extends FatUtility
         if (self::demoUrl()) {
             $str = 'Copyright &copy; ' . date('Y') . ' <a target="_blank" href="https://yo-kart.com">Yo!Kart</a> and Developed by <a target="_blank" href="https://www.fatbit.com/">FATbit Technologies</a>';
         } else {
-            if (FatApp::getController() == 'HomeController' && false == WHITE_LABELED) {
+            if ((FatApp::getController() == 'HomeController' || true == $backEnd) && false == WHITE_LABELED) {
                 $str = 'Copyright &copy; ' . date('Y') . ' ' . FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId, FatUtility::VAR_STRING, '') . '. Technology Partner: <a href="https://www.fatbit.com/" target="_blank" rel="nofollow">FATbit</a>';
             } else {
                 $replacements = array(
