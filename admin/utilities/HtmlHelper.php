@@ -489,9 +489,10 @@ class HtmlHelper
                     data-placement="top" title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '"
                     data-original-title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '">
                     <a href="' . $imgOrgSrc . '" data-featherlight="image">
-                    <img ' . HtmlHelper::getImgDimParm($dimensionType, ImageDimension::VIEW_MINI) . '
-                        src="' . $imgSrc . '"
-                        alt="' . ($image['afile_attribute_alt'] ?? $defaultImageName) . '"></a>
+                        <img ' . HtmlHelper::getImgDimParm($dimensionType, ImageDimension::VIEW_MINI) . '
+                            src="' . $imgSrc . '"
+                            alt="' . ($image['afile_attribute_alt'] ?? $defaultImageName) . '">
+                    </a>
                 </span>';
             $count++;
         }
@@ -502,7 +503,6 @@ class HtmlHelper
                 data-bs-toggle="tooltip" data-skin="brand"
                 data-placement="top" 
                 data-original-title="' . $defaultImageName . '">
-                <a href="' . CONF_WEBROOT_FRONTEND . 'images/defaults/product_default_image.jpg" data-featherlight="image">
                 <img ' . HtmlHelper::getImgDimParm($dimensionType, ImageDimension::VIEW_MINI) . '
                     src="' . CONF_WEBROOT_FRONTEND . 'images/defaults/product_default_image.jpg"
                     alt="' . $defaultImageName . '">
