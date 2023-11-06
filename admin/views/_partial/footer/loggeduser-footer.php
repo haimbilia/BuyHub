@@ -2,8 +2,12 @@
 <!-- begin:: Footer -->
 <footer class="footer" id="footer">
     <div class="container">
-        <div class="copyright">
-            <?php $this->includeTemplate('_partial/footer/copyright-text.php', $this->variables, false); ?>
+        <div class="footer-inner">
+            <div class="copyright">
+                <?php $this->includeTemplate('_partial/footer/copyright-text.php', $this->variables, false); ?>
+            </div>
+            <div class="tech-partner"><?php $str =  CommonHelper::getTechPartner(true);
+                                        echo !empty($str) ? $str : CONF_WEB_APP_VERSION; ?></div>
         </div>
     </div>
 </footer>

@@ -23,9 +23,14 @@ if (!$userActiveTab) {
 <footer class="footer">
     <div class="copyright">
         <p class="copyright-txt">
-            <?php echo CommonHelper::getCopyRight($siteLangId, true); ?>
+            <?php 
+            $str =  CommonHelper::getTechPartner(true);
+            $includeVesion = !empty($str) ? true:false;
+            echo CommonHelper::getCopyRight($siteLangId, true, $includeVesion); ?>
         </p>
-        <p class="version"><?php echo CONF_WEB_APP_VERSION; ?></p>
+        <p class="version">
+            <?php $str =  CommonHelper::getTechPartner(true);
+            echo !empty($str) ? $str : CONF_WEB_APP_VERSION; ?></p>
     </div>
     <div class="mobile-actions">
         <div class="mobile-actions-item">

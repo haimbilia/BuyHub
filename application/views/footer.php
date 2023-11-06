@@ -46,8 +46,16 @@ if ('' !=  $pixelId) {  ?>
                     </ul>
 
                     <?php
-                    $this->includeTemplate('_partial/headerLanguageArea.php'); ?>
-
+                    $this->includeTemplate('_partial/headerLanguageArea.php');
+                    if (!empty(CommonHelper::getTechPartner())) {
+                    ?>
+                        <div class="payment mt-3">
+                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-1.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-2.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-3.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-4.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                        </div>
+                    <?php } ?>
                 </div>
                 <div class="footer-layout-col">
                     <div class="row">
@@ -59,6 +67,7 @@ if ('' !=  $pixelId) {  ?>
                 <div class="footer-layout-col">
                     <?php
                     $this->includeTemplate('_partial/footerSocialMedia.php'); ?>
+
                 </div>
             </div>
 
@@ -72,12 +81,19 @@ if ('' !=  $pixelId) {  ?>
                 <div class="copyright">
                     <?php echo CommonHelper::getCopyRight($siteLangId); ?>
                 </div>
-                <div class="payment">
-                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-1.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
-                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-2.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
-                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-3.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
-                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-4.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
-                </div>
+                <?php if (empty(CommonHelper::getTechPartner())) {
+                ?>
+                    <div class="payment">
+                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-1.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-2.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-3.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-4.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                    </div>
+                <?php } else { ?>
+                    <div class="tech-partner">
+                        <?php echo CommonHelper::getTechPartner(); ?>
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </section>
