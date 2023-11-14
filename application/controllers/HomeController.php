@@ -902,7 +902,7 @@ class HomeController extends MyAppController
                                 $catData['prodcat_name'] = $productName;
                                 $catData['prodcat_description'] = $productDescription;
                                 $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $catData['prodcat_id'], 0, 0, applicationConstants::SCREEN_MOBILE);
-                                
+
                                 $catData['category_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'thumb', array($catData['prodcat_id'], $this->siteLangId, ImageDimension::VIEW_ICON, 0), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
                                 $collections[$ind]['categories'][$counter] = $catData;
@@ -1388,7 +1388,7 @@ class HomeController extends MyAppController
         $ppcSlidesPageSize = FatApp::getConfig('CONF_PPC_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
 
         $ppcSlides = array();
-        $adminSlides = array();        
+        $adminSlides = array();
 
         $slidesSrch = new SearchBase('(' . $srchSlide->getQuery() . ') as t');
         $slidesSrch->addMultipleFields(array('slide_id', 'slide_type', 'slide_record_id', 'slide_url', 'slide_target', 'slide_title', 'promotion_id', 'userBalance', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'promotion_budget', 'promotion_duration', 'slide_img_updated_on'));
@@ -1624,7 +1624,7 @@ class HomeController extends MyAppController
 
     public function states($countryId)
     {
-        $countryId = FatUtility::int($countryId); 
+        $countryId = FatUtility::int($countryId);
         if (1 > $countryId) {
             $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
             FatUtility::dieJsonError($message);
@@ -1670,9 +1670,9 @@ class HomeController extends MyAppController
         ];
         $data['siteLangId'] = $this->siteLangId;
         $data['newsletterEnabled'] = FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 1);
-        
+
         $data['app_session_id'] = isset($_SERVER['HTTP_X_APP_SESSION_ID']) && !empty($_SERVER['HTTP_X_APP_SESSION_ID']) ? $_SERVER['HTTP_X_APP_SESSION_ID'] : session_id();
-        
+
         $this->set('data', $data);
         $this->set('data', $data);
         $this->_template->render();
@@ -1739,7 +1739,7 @@ class HomeController extends MyAppController
             );
 
             foreach ($iconsArr as $key => $val) {
-                $iconUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'appleTouchIcon', array($this->siteLangId, $val . '-' . $val)), CONF_IMG_CACHE_TIME, '.png');
+                $iconUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'appleTouchIcon', array($this->siteLangId, $val . '-' . $val)) . UrlHelper::getCacheTimestamp($this->siteLangId), CONF_IMG_CACHE_TIME, '.png');
                 $icons = [
                     'src' => $iconUrl,
                     'sizes' => $val . 'x' . $val,
