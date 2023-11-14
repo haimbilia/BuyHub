@@ -2523,7 +2523,7 @@ class User extends MyAppModel
         }
 
         if (empty($userPhone) && isset($postedData['user_newsletter_signup']) && $postedData['user_newsletter_signup'] == 1) {
-            if (!MailchimpHelper::saveSubscriber($email)) {
+            if (!MailchimpHelper::subscribe(['email' => $email], $this->commonLangId)) {
                 $db->rollbackTransaction();
                 $this->error = Labels::getLabel("ERR_Newsletter_is_not_configured_yet,_Please_contact_admin", $this->commonLangId);
                 return false;
