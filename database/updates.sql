@@ -7,3 +7,6 @@ ALTER TABLE `tbl_users` ADD `user_has_valid_subscription` TINYINT(1) NOT NULL CO
 INSERT INTO `tbl_cron_schedules` (`cron_name`, `cron_command`, `cron_duration`, `cron_active`)
 VALUES ('Update Valid Subscription User Flag', 'Cronjob/updateValidSubscription', 1440, 1)
 ON DUPLICATE KEY UPDATE cron_duration = VALUES(cron_duration), cron_active = 1;
+
+ALTER TABLE `tbl_upc_codes` ADD INDEX(`upc_code`);
+ALTER TABLE `tbl_upc_codes` ADD INDEX(`upc_product_id`);
