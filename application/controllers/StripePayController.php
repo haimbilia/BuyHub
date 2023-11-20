@@ -289,7 +289,7 @@ class StripePayController extends PaymentController
                     if (false === MOBILE_APP_API_CALL) {
                         FatApp::redirectUser(CommonHelper::generateUrl('custom', 'paymentFailed'));
                     }
-                } else if ($orderInfo['order_is_paid'] == 0) {
+                } else if ($orderInfo['order_payment_status'] == Orders::ORDER_PAYMENT_PENDING) {
                     /* Recording Payment in DB */
                     $orderPaymentObj->addOrderPayment($this->settings["plugin_code"], $charge['payment_intent'], $payment_amount, Labels::getLabel("MSG_Received_Payment", $this->siteLangId), $message);
                 }
