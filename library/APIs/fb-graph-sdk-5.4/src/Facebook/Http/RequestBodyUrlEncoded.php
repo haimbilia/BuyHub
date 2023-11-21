@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -21,6 +22,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\Http;
 
 /**
@@ -50,6 +52,6 @@ class RequestBodyUrlEncoded implements RequestBodyInterface
      */
     public function getBody()
     {
-        return http_build_query($this->params, null, '&');
+        return http_build_query($this->params, '', '&');
     }
 }

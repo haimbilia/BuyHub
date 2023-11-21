@@ -10,7 +10,8 @@
  * This class has integration methods that help you to complete for integration
  */
 
-class PayfortIntegration {
+class PayfortIntegration
+{
 
     public $amount;
     public $currency;
@@ -31,7 +32,7 @@ class PayfortIntegration {
      */
     public function getRequestParams()
     {
-       $requestParams =   array(
+        $requestParams =   array(
             'amount'                => $this->amount,
             'currency'              => $this->currency,
             'merchant_identifier'   => $this->merchant_identifier,
@@ -45,7 +46,7 @@ class PayfortIntegration {
             'return_url'            => $this->return_url,
         );
 
-       return $requestParams;
+        return $requestParams;
     }
 
     /**
@@ -65,11 +66,11 @@ class PayfortIntegration {
             $redirectUrl = 'https://checkout.payfort.com/FortAPI/paymentPage';
         }
 
-        if($action == 'POST') {
+        if ($action == 'POST') {
             echo "<html xmlns='http://www.w3.org/1999/xhtml'>\n<head></head>\n<body>\n";
             echo "<form action='$redirectUrl' method='post' name='frm'>\n";
             foreach ($requestParams as $a => $b) {
-                echo "\t<input type='hidden' name='".htmlentities($a)."' value='".htmlentities($b)."'>\n";
+                echo "\t<input type='hidden' name='" . htmlentities($a) . "' value='" . htmlentities($b) . "'>\n";
             }
             echo "\t<script type='text/javascript'>\n";
             echo "\t\tdocument.frm.submit();\n";
@@ -79,7 +80,7 @@ class PayfortIntegration {
         } else {
             // mothod get
             $urlQuery = http_build_query($requestParams);
-            $redirectUrl .= '?'.$urlQuery;
+            $redirectUrl .= '?' . $urlQuery;
             header("Location: $redirectUrl");
             die();
         }
@@ -100,7 +101,7 @@ class PayfortIntegration {
         foreach ($arrData as $k => $v) {
             $shaString .= "$k=$v";
         }
-        if($securityType == 'sha128') {
+        if ($securityType == 'sha128') {
             $securityType = 'sha1';
         }
 

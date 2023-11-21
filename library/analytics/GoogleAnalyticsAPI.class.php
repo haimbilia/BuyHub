@@ -36,7 +36,8 @@
  *
  *
  */
-class GoogleAnalyticsAPI {
+class GoogleAnalyticsAPI
+{
 
 	const API_URL = 'https://www.googleapis.com/analytics/v3/data/ga';
 	const WEBPROPERTIES_URL = 'https://www.googleapis.com/analytics/v3/management/accounts/~all/webproperties';
@@ -60,7 +61,8 @@ class GoogleAnalyticsAPI {
 	 * @access public
 	 * @param String $auth (default: 'web') 'web' for Web-applications with end-users involved, 'service' for service applications (server-to-server)
 	 */
-	public function __construct($auth='web') {
+	public function __construct($auth = 'web')
+	{
 
 		if (!function_exists('curl_init')) throw new Exception('The curl extension for PHP is required.');
 		$this->auth = ($auth == 'web') ? new GoogleOauthWeb() : new GoogleOauthService();
@@ -69,32 +71,33 @@ class GoogleAnalyticsAPI {
 			'end-date' => date('Y-m-d'),
 			'metrics' => 'ga:visits',
 		);
-
 	}
 
-	public function __set($key, $value) {
+	public function __set($key, $value)
+	{
 
 		switch ($key) {
-		case 'auth' :
-			if (($value instanceof GoogleOauth) == false) {
-				throw new Exception('auth needs to be a subclass of GoogleOauth');
-			}
-			$this->auth = $value;
-			break;
-		case 'defaultQueryParams' :
-			$this->setDefaultQueryParams($value);
-			break;
-		default:
-			$this->{$key} = $value;
+			case 'auth':
+				if (($value instanceof GoogleOauth) == false) {
+					throw new Exception('auth needs to be a subclass of GoogleOauth');
+				}
+				$this->auth = $value;
+				break;
+			case 'defaultQueryParams':
+				$this->setDefaultQueryParams($value);
+				break;
+			default:
+				$this->{$key} = $value;
 		}
-
 	}
 
-	public function setAccessToken($token) {
+	public function setAccessToken($token)
+	{
 		$this->accessToken = $token;
 	}
 
-	public function setAccountId($id) {
+	public function setAccountId($id)
+	{
 		$this->accountId = $id;
 	}
 
@@ -105,7 +108,8 @@ class GoogleAnalyticsAPI {
 	 * @access public
 	 * @param array() $params Query parameters
 	 */
-	public function setDefaultQueryParams(array $params) {
+	public function setDefaultQueryParams(array $params)
+	{
 		$params = array_merge($this->defaultQueryParams, $params);
 		$this->defaultQueryParams = $params;
 	}
@@ -117,7 +121,8 @@ class GoogleAnalyticsAPI {
 	 * @access public
 	 * @param mixed $bool true to return objects
 	 */
-	public function returnObjects($bool) {
+	public function returnObjects($bool)
+	{
 		$this->assoc = !$bool;
 		$this->auth->returnObjects($bool);
 	}
@@ -130,7 +135,8 @@ class GoogleAnalyticsAPI {
 	 * @param array $params (default: array()) Query parameters
 	 * @return array data
 	 */
-	public function query($params=array()) {
+	public function query($params = array())
+	{
 		return $this->_query($params);
 	}
 
@@ -141,13 +147,13 @@ class GoogleAnalyticsAPI {
 	 * @access public
 	 * @return array data
 	 */
-	public function getWebProperties() {
+	public function getWebProperties()
+	{
 
 		if (!$this->accessToken) throw new Exception('You must provide an accessToken');
 
 		$data = Http::curl(self::WEBPROPERTIES_URL, array('access_token' => $this->accessToken));
 		return json_decode($data, $this->assoc);
-
 	}
 
 
@@ -157,13 +163,13 @@ class GoogleAnalyticsAPI {
 	 * @access public
 	 * @return array data
 	 */
-	public function getProfiles() {
+	public function getProfiles()
+	{
 
 		if (!$this->accessToken) throw new Exception('You must provide an accessToken');
 
 		$data = Http::curl(self::PROFILES_URL, array('access_token' => $this->accessToken));
 		return json_decode($data, $this->assoc);
-
 	}
 
 	/*****************************************************************************************************************************
@@ -177,7 +183,8 @@ class GoogleAnalyticsAPI {
 	 *
 	 */
 
-	public function getVisitsByDate($params=array()) {
+	public function getVisitsByDate($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visits',
@@ -185,20 +192,20 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
-	public function getAudienceStatistics($params=array()) {
+	public function getAudienceStatistics($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visitors,ga:newVisits,ga:percentNewVisits,ga:visits,ga:bounces,ga:pageviews,ga:visitBounceRate,ga:timeOnSite,ga:avgTimeOnSite',
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
-	public function getVisitsByCountries($params=array()) {
+	public function getVisitsByCountries($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visits',
@@ -207,10 +214,10 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
-	public function getVisitsByCities($params=array()) {
+	public function getVisitsByCities($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visits',
@@ -219,10 +226,10 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
-	public function getVisitsByLanguages($params=array()) {
+	public function getVisitsByLanguages($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visits',
@@ -231,10 +238,10 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
-	public function getVisitsBySystemBrowsers($params=array()) {
+	public function getVisitsBySystemBrowsers($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visits',
@@ -243,10 +250,10 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
-	public function getVisitsBySystemOs($params=array()) {
+	public function getVisitsBySystemOs($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visits',
@@ -255,11 +262,10 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
-
 	}
 
-	public function getVisitsBySystemResolutions($params=array()) {
+	public function getVisitsBySystemResolutions($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visits',
@@ -268,10 +274,10 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
-	public function getVisitsByMobileOs($params=array()) {
+	public function getVisitsByMobileOs($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visits',
@@ -281,10 +287,10 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
-	public function getVisitsByMobileResolutions($params=array()) {
+	public function getVisitsByMobileResolutions($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visits',
@@ -294,7 +300,6 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
 	/*
@@ -302,7 +307,8 @@ class GoogleAnalyticsAPI {
 	 *
 	 */
 
-	public function getPageviewsByDate($params=array()) {
+	public function getPageviewsByDate($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:pageviews',
@@ -310,20 +316,20 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
-	public function getContentStatistics($params=array()) {
+	public function getContentStatistics($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:pageviews,ga:uniquePageviews',
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
-	public function getContentTopPages($params=array()) {
+	public function getContentTopPages($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:pageviews',
@@ -332,7 +338,6 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
 	/*
@@ -340,7 +345,8 @@ class GoogleAnalyticsAPI {
 	 *
 	 */
 
-	public function getTrafficSources($params=array()) {
+	public function getTrafficSources($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visits',
@@ -348,10 +354,10 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
-	public function getKeywords($params=array()) {
+	public function getKeywords($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visits',
@@ -360,10 +366,10 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
-	public function getReferralTraffic($params=array()) {
+	public function getReferralTraffic($params = array())
+	{
 
 		$defaults = array(
 			'metrics' => 'ga:visits',
@@ -372,11 +378,11 @@ class GoogleAnalyticsAPI {
 		);
 		$_params = array_merge($defaults, $params);
 		return $this->_query($_params);
-
 	}
 
 
-	protected function _query($params=array()){
+	protected function _query($params = array())
+	{
 
 		if (!$this->accessToken || !$this->accountId) {
 			throw new Exception('You must provide the accessToken and an accountId');
@@ -385,9 +391,7 @@ class GoogleAnalyticsAPI {
 		$queryParams = array_merge($_params, $params);
 		$data = Http::curl(self::API_URL, $queryParams);
 		return json_decode($data, $this->assoc);
-
 	}
-
 }
 
 
@@ -395,7 +399,8 @@ class GoogleAnalyticsAPI {
  * Abstract Auth class
  *
  */
-abstract class GoogleOauth {
+abstract class GoogleOauth
+{
 
 	const TOKEN_URL = 'https://accounts.google.com/o/oauth2/token';
 	const SCOPE_URL = 'https://www.googleapis.com/auth/analytics.readonly';
@@ -403,15 +408,18 @@ abstract class GoogleOauth {
 	protected $assoc = true;
 	protected $clientId = '';
 
-	public function __set($key, $value) {
+	public function __set($key, $value)
+	{
 		$this->{$key} = $value;
 	}
 
-	public function setClientId($id) {
+	public function setClientId($id)
+	{
 		$this->clientId = $id;
 	}
 
-	public function returnObjects($bool) {
+	public function returnObjects($bool)
+	{
 		$this->assoc = !$bool;
 	}
 
@@ -419,8 +427,9 @@ abstract class GoogleOauth {
 	 * To be implemented by the subclasses
 	 *
 	 */
-	public function getAccessToken($data=null) {}
-
+	public function getAccessToken($data = null)
+	{
+	}
 }
 
 
@@ -430,7 +439,8 @@ abstract class GoogleOauth {
  * @extends GoogleOauth
  *
  */
-class GoogleOauthService extends GoogleOauth {
+class GoogleOauthService extends GoogleOauth
+{
 
 	const MAX_LIFETIME_SECONDS = 3600;
 	const GRANT_TYPE = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
@@ -447,7 +457,8 @@ class GoogleOauthService extends GoogleOauth {
 	 * @param string $email (default: '') E-Mail address of your project from the Google APIs console
 	 * @param mixed $privateKey (default: null) Path to your private key file (*.p12)
 	 */
-	public function __construct($clientId='', $email='', $privateKey=null) {
+	public function __construct($clientId = '', $email = '', $privateKey = null)
+	{
 		if (!function_exists('openssl_sign')) throw new Exception('openssl extension for PHP is needed.');
 		$this->clientId = $clientId;
 		$this->email = $email;
@@ -455,11 +466,13 @@ class GoogleOauthService extends GoogleOauth {
 	}
 
 
-	public function setEmail($email) {
+	public function setEmail($email)
+	{
 		$this->email = $email;
 	}
 
-	public function setPrivateKey($key) {
+	public function setPrivateKey($key)
+	{
 		$this->privateKey = $key;
 	}
 
@@ -471,7 +484,8 @@ class GoogleOauthService extends GoogleOauth {
 	 * @param mixed $data (default: null) No data needed in this implementation
 	 * @return array Array with keys: access_token, expires_in
 	 */
-	public function getAccessToken($data=null) {
+	public function getAccessToken($data = null)
+	{
 
 		if (!$this->clientId || !$this->email || !$this->privateKey) {
 			throw new Exception('You must provide the client ID, email and a path to your private Key');
@@ -486,7 +500,6 @@ class GoogleOauthService extends GoogleOauth {
 
 		$auth = Http::curl(GoogleOauth::TOKEN_URL, $params, true);
 		return json_decode($auth, $this->assoc);
-
 	}
 
 
@@ -496,7 +509,8 @@ class GoogleOauthService extends GoogleOauth {
 	 *
 	 * @access protected
 	 */
-	protected function generateSignedJWT() {
+	protected function generateSignedJWT()
+	{
 
 		// Check if a valid privateKey file is provided
 		if (!file_exists($this->privateKey) || !is_file($this->privateKey)) {
@@ -542,9 +556,7 @@ class GoogleOauthService extends GoogleOauth {
 		$encodings[] = base64_encode($sig);
 		$jwt = implode('.', $encodings);
 		return $jwt;
-
 	}
-
 }
 
 
@@ -555,7 +567,8 @@ class GoogleOauthService extends GoogleOauth {
  * @extends GoogleOauth
  *
  */
-class GoogleOauthWeb extends GoogleOauth {
+class GoogleOauthWeb extends GoogleOauth
+{
 
 	const AUTH_URL = 'https://accounts.google.com/o/oauth2/auth';
 	const REVOKE_URL = 'https://accounts.google.com/o/oauth2/revoke';
@@ -572,17 +585,20 @@ class GoogleOauthWeb extends GoogleOauth {
 	 * @param string $clientSecret (default: '') Client-Secret of your web application from the Google APIs console
 	 * @param string $redirectUri (default: '') Redirect URI to your app - must match with an URL provided in the Google APIs console
 	 */
-	public function __construct($clientId='', $clientSecret='', $redirectUri='') {
+	public function __construct($clientId = '', $clientSecret = '', $redirectUri = '')
+	{
 		$this->clientId = $clientId;
 		$this->clientSecret = $clientSecret;
 		$this->redirectUri = $redirectUri;
 	}
 
-	public function setClientSecret($secret) {
+	public function setClientSecret($secret)
+	{
 		$this->clientSecret = $secret;
 	}
 
-	public function setRedirectUri($uri) {
+	public function setRedirectUri($uri)
+	{
 		$this->redirectUri = $uri;
 	}
 
@@ -594,7 +610,8 @@ class GoogleOauthWeb extends GoogleOauth {
 	 * @param array $params Custom parameters
 	 * @return string The auth login-url
 	 */
-	public function buildAuthUrl($params = array()) {
+	public function buildAuthUrl($params = array())
+	{
 
 		if (!$this->clientId || !$this->redirectUri) {
 			throw new Exception('You must provide the client ID and a redirectUri');
@@ -611,7 +628,6 @@ class GoogleOauthWeb extends GoogleOauth {
 		$params = array_merge($defaults, $params);
 		$url = self::AUTH_URL . '?' . http_build_query($params);
 		return $url;
-
 	}
 
 
@@ -622,7 +638,8 @@ class GoogleOauthWeb extends GoogleOauth {
 	 * @param mixed $data The code received with GET after auth
 	 * @return array Array with the following keys: access_token, refresh_token, expires_in
 	 */
-	public function getAccessToken($data=null) {
+	public function getAccessToken($data = null)
+	{
 
 		if (!$this->clientId || !$this->clientSecret || !$this->redirectUri) {
 			throw new Exception('You must provide the client ID, client Secret and a redirectUri');
@@ -638,7 +655,6 @@ class GoogleOauthWeb extends GoogleOauth {
 
 		$auth = Http::curl(GoogleOauth::TOKEN_URL, $params, true);
 		return json_decode($auth, $this->assoc);
-
 	}
 
 
@@ -649,7 +665,8 @@ class GoogleOauthWeb extends GoogleOauth {
 	 * @param mixed $refreshToken The refreshToken
 	 * @return array Array with the following keys: access_token, expires_in
 	 */
-	public function refreshAccessToken($refreshToken) {
+	public function refreshAccessToken($refreshToken)
+	{
 
 		if (!$this->clientId || !$this->clientSecret) {
 			throw new Exception('You must provide the client ID and client Secret');
@@ -664,7 +681,6 @@ class GoogleOauthWeb extends GoogleOauth {
 
 		$auth = Http::curl(GoogleOauth::TOKEN_URL, $params, true);
 		return json_decode($auth, $this->assoc);
-
 	}
 
 
@@ -674,14 +690,13 @@ class GoogleOauthWeb extends GoogleOauth {
 	 * @access public
 	 * @param mixed $token accessToken or refreshToken
 	 */
-	public function revokeAccess($token) {
+	public function revokeAccess($token)
+	{
 
 		$params = array('token' => $token);
 		$data = Http::curl(self::REVOKE_URL, $params);
 		return json_decode($data, $this->assoc);
 	}
-
-
 }
 
 
@@ -690,7 +705,8 @@ class GoogleOauthWeb extends GoogleOauth {
  * Send data with curl
  *
  */
-class Http {
+class Http
+{
 
 
 	/**
@@ -702,7 +718,8 @@ class Http {
 	 * @param array $params (default: array()) Array with key/value pairs to send
 	 * @param bool $post (default: false) True when sending with POST
 	 */
-	public static function curl($url, $params=array(), $post=false) {
+	public static function curl($url, $params = array(), $post = false)
+	{
 
 		if (empty($url)) return false;
 
@@ -719,12 +736,8 @@ class Http {
 		$data = curl_exec($curl);
 		$http_code = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		// Add the status code to the json data, useful for error-checking
-		$data = preg_replace('/^{/', '{"http_code":'.$http_code.',', $data);
+		$data = preg_replace('/^{/', '{"http_code":' . $http_code . ',', $data);
 		curl_close($curl);
 		return $data;
-
 	}
-
 }
-
-?>

@@ -15,7 +15,7 @@ trait ShipStationFunctions
         }
         return (true === $decodeJson ? json_decode($this->resp, true) : $this->resp);
     }
-    
+
     /**
      * unsetResponse
      *
@@ -109,7 +109,7 @@ trait ShipStationFunctions
         $this->endpoint = 'carriers';
         return $this->get();
     }
-    
+
     /**
      * 
      * @return bool
@@ -118,7 +118,7 @@ trait ShipStationFunctions
     {
         $this->endpoint = 'warehouses';
         return $this->get();
-    }    
+    }
 
     /**
      * shippingRates
@@ -192,7 +192,7 @@ trait ShipStationFunctions
         $this->endpoint = 'orders/markasshipped';
         return $this->post($requestParam);
     }
-    
+
     /**
      * createWarehouse
      *
@@ -235,5 +235,5 @@ trait ShipStationFunctions
             return false;
         }
         return true;
-    }    
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * fsockopen HTTP transport
  *
@@ -12,7 +13,8 @@
  * @package Requests
  * @subpackage Transport
  */
-class Requests_Transport_fsockopen implements Requests_Transport {
+class Requests_Transport_fsockopen implements Requests_Transport
+{
 	/**
 	 * Second to microsecond conversion
 	 *
@@ -55,7 +57,8 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 	 * @param array $options Request options, see {@see Requests::response()} for documentation
 	 * @return string Raw HTTP result
 	 */
-	public function request($url, $headers = array(), $data = array(), $options = array()) {
+	public function request($url, $headers = array(), $data = array(), $options = array())
+	{
 		$options['hooks']->dispatch('fsockopen.before_request');
 
 		$url_parts = parse_url($url);
@@ -92,8 +95,7 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 			if (isset($options['verify'])) {
 				if ($options['verify'] === false) {
 					$context_options['verify_peer'] = false;
-				}
-				elseif (is_string($options['verify'])) {
+				} elseif (is_string($options['verify'])) {
 					$context_options['cafile'] = $options['verify'];
 				}
 			}
@@ -104,8 +106,7 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 			}
 
 			stream_context_set_option($context, array('ssl' => $context_options));
-		}
-		else {
+		} else {
 			$remote_socket = 'tcp://' . $host;
 		}
 
@@ -142,8 +143,7 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 		if ($data_format === 'query') {
 			$path = self::format_get($url_parts, $data);
 			$data = '';
-		}
-		else {
+		} else {
 			$path = self::format_get($url_parts, array());
 		}
 
@@ -154,9 +154,8 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 
 		if ($options['type'] !== Requests::TRACE) {
 			if (is_array($data)) {
-				$request_body = http_build_query($data, null, '&');
-			}
-			else {
+				$request_body = http_build_query($data, '', '&');
+			} else {
 				$request_body = $data;
 			}
 
@@ -174,7 +173,7 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 		if (!isset($case_insensitive_headers['Host'])) {
 			$out .= sprintf('Host: %s', $url_parts['host']);
 
-			if (( 'http' === strtolower($url_parts['scheme']) && $url_parts['port'] !== 80 ) || ( 'https' === strtolower($url_parts['scheme']) && $url_parts['port'] !== 443 )) {
+			if (('http' === strtolower($url_parts['scheme']) && $url_parts['port'] !== 80) || ('https' === strtolower($url_parts['scheme']) && $url_parts['port'] !== 443)) {
 				$out .= ':' . $url_parts['port'];
 			}
 			$out .= "\r\n";
@@ -222,8 +221,7 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 		$timeout_sec = (int) floor($options['timeout']);
 		if ($timeout_sec == $options['timeout']) {
 			$timeout_msec = 0;
-		}
-		else {
+		} else {
 			$timeout_msec = self::SECOND_IN_MICROSECONDS * $options['timeout'] % self::SECOND_IN_MICROSECONDS;
 		}
 		stream_set_timeout($socket, $timeout_sec, $timeout_msec);
@@ -271,8 +269,7 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 				$size += strlen($block);
 				if ($download) {
 					fwrite($download, $block);
-				}
-				else {
+				} else {
 					$body .= $block;
 				}
 			}
@@ -281,8 +278,7 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 
 		if ($download) {
 			fclose($download);
-		}
-		else {
+		} else {
 			$this->headers .= "\r\n\r\n" . $body;
 		}
 		fclose($socket);
@@ -298,7 +294,8 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 	 * @param array $options Global options, see {@see Requests::response()} for documentation
 	 * @return array Array of Requests_Response objects (may contain Requests_Exception or string responses as well)
 	 */
-	public function request_multiple($requests, $options) {
+	public function request_multiple($requests, $options)
+	{
 		$responses = array();
 		$class = get_class($this);
 		foreach ($requests as $id => $request) {
@@ -307,8 +304,7 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 				$responses[$id] = $handler->request($request['url'], $request['headers'], $request['data'], $request['options']);
 
 				$request['options']['hooks']->dispatch('transport.internal.parse_response', array(&$responses[$id], $request));
-			}
-			catch (Requests_Exception $e) {
+			} catch (Requests_Exception $e) {
 				$responses[$id] = $e;
 			}
 
@@ -325,7 +321,8 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 	 *
 	 * @return string Accept-Encoding header value
 	 */
-	protected static function accept_encoding() {
+	protected static function accept_encoding()
+	{
 		$type = array();
 		if (function_exists('gzinflate')) {
 			$type[] = 'deflate;q=1.0';
@@ -347,24 +344,23 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 	 * @param array|object $data Data to build query using, see {@see https://secure.php.net/http_build_query}
 	 * @return string URL with data
 	 */
-	protected static function format_get($url_parts, $data) {
+	protected static function format_get($url_parts, $data)
+	{
 		if (!empty($data)) {
 			if (empty($url_parts['query'])) {
 				$url_parts['query'] = '';
 			}
 
-			$url_parts['query'] .= '&' . http_build_query($data, null, '&');
+			$url_parts['query'] .= '&' . http_build_query($data, '', '&');
 			$url_parts['query'] = trim($url_parts['query'], '&');
 		}
 		if (isset($url_parts['path'])) {
 			if (isset($url_parts['query'])) {
 				$get = $url_parts['path'] . '?' . $url_parts['query'];
-			}
-			else {
+			} else {
 				$get = $url_parts['path'];
 			}
-		}
-		else {
+		} else {
 			$get = '/';
 		}
 		return $get;
@@ -376,7 +372,8 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 	 * @param int $errno Error number (e.g. E_WARNING)
 	 * @param string $errstr Error message
 	 */
-	public function connect_error_handler($errno, $errstr) {
+	public function connect_error_handler($errno, $errstr)
+	{
 		// Double-check we can handle it
 		if (($errno & E_WARNING) === 0 && ($errno & E_NOTICE) === 0) {
 			// Return false to indicate the default error handler should engage
@@ -402,7 +399,8 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 	 * @param resource $context Stream context
 	 * @return bool
 	 */
-	public function verify_certificate_from_context($host, $context) {
+	public function verify_certificate_from_context($host, $context)
+	{
 		$meta = stream_context_get_options($context);
 
 		// If we don't have SSL options, then we couldn't make the connection at
@@ -422,7 +420,8 @@ class Requests_Transport_fsockopen implements Requests_Transport {
 	 * @codeCoverageIgnore
 	 * @return boolean True if the transport is valid, false otherwise.
 	 */
-	public static function test($capabilities = array()) {
+	public static function test($capabilities = array())
+	{
 		if (!function_exists('fsockopen')) {
 			return false;
 		}

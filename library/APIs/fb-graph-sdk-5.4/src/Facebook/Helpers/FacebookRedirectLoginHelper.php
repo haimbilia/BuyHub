@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -21,6 +22,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\Helpers;
 
 use Facebook\Authentication\AccessToken;
@@ -168,7 +170,7 @@ class FacebookRedirectLoginHelper
             'access_token' => $accessToken->getValue(),
         ];
 
-        return 'https://www.facebook.com/logout.php?' . http_build_query($params, null, $separator);
+        return 'https://www.facebook.com/logout.php?' . http_build_query($params, '', $separator);
     }
 
     /**

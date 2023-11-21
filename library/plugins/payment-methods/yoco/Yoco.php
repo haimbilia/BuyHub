@@ -109,5 +109,4 @@ class Yoco extends PaymentMethodBase
     {
         return $this->response;
     }
-
 }

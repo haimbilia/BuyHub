@@ -1925,7 +1925,7 @@ class CommonHelper extends FatUtility
     }
 
     public static function demoUrl($includeDevDemo = false)
-    { 
+    {
         if (true == $includeDevDemo) {
             if (strpos($_SERVER['SERVER_NAME'], 'demo.yo-kart.com') !== false || strpos($_SERVER['SERVER_NAME'], 'demo.yokart.4livedemo.com') !== false) {
                 return true;
@@ -2263,7 +2263,7 @@ class CommonHelper extends FatUtility
         $str = '';
         if (self::demoUrl()) {
             $str = 'Developed by <a target="_blank" href="https://www.fatbit.com/">FATbit Technologies</a>';
-        } else {            
+        } else {
             if ((FatApp::getController() == 'HomeController' || true == $backEnd) && false == WHITE_LABELED) {
                 $str = 'Technology Partner: <a href="https://www.fatbit.com/" target="_blank" rel="nofollow">FATbit</a>';
             }
