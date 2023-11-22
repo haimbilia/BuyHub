@@ -10,7 +10,7 @@ class ShipRocketSettingsController extends ShippingServicesSettingsController
         $plugin = LibHelper::callPlugin(self::KEY_NAME, [$langId], $error, $langId, false);
         $labelsArr = $plugin->getFormFieldsArr();
         foreach ($labelsArr as $colName => $colLabel) {
-            $fieldFn = ('password'== strtolower($colName)) ? 'addPasswordField' : 'addTextBox';
+            $fieldFn = ('password' == strtolower($colName)) ? 'addPasswordField' : 'addTextBox';
             $fld = $frm->$fieldFn($colLabel, $colName);
             $fld->requirement->setRequired(true);
         }

@@ -1,8 +1,11 @@
 <?php
-require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
+//require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
+//require_once CONF_PLUGIN_DIR . "shipping-services/rajathans/autoload.php";
+
 require_once dirname(__FILE__) . '/autoload.php';
 
-use Shiprocket\Client as ShiprocketClient;
+use Client as ShiprocketClient;
+
 class ShipRocketApi extends ShiprocketClient
 {
     use Channels,
@@ -10,7 +13,11 @@ class ShipRocketApi extends ShiprocketClient
         OrderLabels,
         ReturnOrders,
         Couriers,
-        Tracking;
+        Tracking,
+        Users,
+        Manifests,
+        Products,
+        SrOrders;
 
     public function __construct($config = [])
     {
