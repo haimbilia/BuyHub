@@ -297,6 +297,11 @@ class applicationConstants
         return array(/* 'qt',  */'mov', 'mp4', 'webm');
     }
 
+    public static function allowedImageFileExtensions()
+    {
+        return ['png', 'jpeg', 'jpg', 'gif'];
+    }
+
     public static function allowedVideoMimeTypes()
     {
         return array('video/quicktime', 'video/mp4', 'video/x-m4v', 'video/webm');

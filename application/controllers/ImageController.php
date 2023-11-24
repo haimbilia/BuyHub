@@ -973,6 +973,28 @@ class ImageController extends FatController
         exit;
     }
 
+    public function previewImage(int $afileId)
+    {
+        if ($afileId < 0) {
+            return false;
+        }
+
+        $res = AttachedFile::getAttributesById($afileId);
+
+        if (false === $res) {
+            return false;
+        }
+        if ($res['afile_type'] != AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW) {
+            return false;
+        }
+        $imageName = (isset($res['afile_physical_path']) && 0 < $res['afile_id']) ? $res['afile_physical_path'] : '';
+        $w = 500;
+        $h = 500;
+
+        echo AttachedFile::displayImage($imageName, $w, $h);
+        exit;
+    }
+
     public function badgeIcon($badgeId, $langId = 0, $sizeType = '')
     {
         $default_image = 'badge_default.png';

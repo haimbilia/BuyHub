@@ -17,3 +17,4 @@
     - Bug-076133 - Stripe payment gateway functionality upgrade
     - Bug-076193 - The unlimited plan validity expires after 24 hours.
     - Bug-076198 - Unable to save downloadable file on new digital product.
+    - Bug-077681 - The user can download the preview files but not able to preview within the system.
