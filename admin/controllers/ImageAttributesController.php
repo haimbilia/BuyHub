@@ -310,9 +310,9 @@ class ImageAttributesController extends ListingBaseController
 
     protected function getFormColumns()
     {
-        $imgAttrCacheVar = CacheHelper::get('imgAttrCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($imgAttrCacheVar) {
-            return json_decode($imgAttrCacheVar, true);
+        $imgAttrCacheVarData = CacheHelper::get('imgAttrCacheVarData' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($imgAttrCacheVarData) {
+            return json_decode($imgAttrCacheVarData, true);
         }
 
         $arr = [
@@ -320,7 +320,7 @@ class ImageAttributesController extends ListingBaseController
             'record_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('imgAttrCacheVar' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('imgAttrCacheVarData' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 

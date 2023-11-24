@@ -22,18 +22,18 @@ class MetaTagsWriter
         $cond1 = $srch->addCondition('meta_action', '=', $action);
         $cond1->attachCondition('meta_action', '=', '', 'OR');
 
-        $srch->addOrder('meta_default', 'asc');
+        // $srch->addOrder('meta_default', 'asc');
 
         if (!empty($arrParameters)) {
             if (isset($arrParameters[0]) && FatUtility::int($arrParameters[0]) > 0) {
                 $cond = $srch->addCondition('meta_record_id', '=', FatUtility::int($arrParameters[0]));
                 $cond->attachCondition('meta_record_id', '=', 0, 'OR');
-                $srch->addOrder('meta_record_id', 'DESC');
+                // $srch->addOrder('meta_record_id', 'DESC');
             }
             if (isset($arrParameters[1]) && FatUtility::int($arrParameters[1]) > 0) {
                 $cond = $srch->addCondition('meta_subrecord_id', '=', FatUtility::int($arrParameters[1]));
                 $cond->attachCondition('meta_subrecord_id', '=', 0, 'OR');
-                $srch->addOrder('meta_subrecord_id', 'DESC');
+                // $srch->addOrder('meta_subrecord_id', 'DESC');
             }
         }
 
@@ -47,6 +47,18 @@ class MetaTagsWriter
         $rs = $srch->getResultSet();
         $title = $websiteName;
         $metas = FatApp::getDb()->fetch($rs);
+
+        if (empty($metas)) {
+            $srch = new MetaTagSearch($langId);
+            $srch->addCondition('meta_default', '=', 1);
+            $srch->setPageSize(1);
+            $srch->addMultipleFields(array(
+                'meta_title',
+                'meta_keywords', 'meta_description', 'meta_other_meta_tags'
+            ));
+            $rs = $srch->getResultSet();
+            $metas = FatApp::getDb()->fetch($rs);
+        }
 
         if (true == $returnArr) {
             $metas = (!empty($metas)) ? $metas : [];

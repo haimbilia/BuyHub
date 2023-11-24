@@ -235,6 +235,7 @@ class AttachedFile extends MyAppModel
         }
 
         $srch->addMultipleFields($attr);
+        $orderBy = [];
 
         if ($recordSubid || $recordSubid == -1 || $haveSubIdZero) {
             if ($recordSubid == -1) {
@@ -248,14 +249,17 @@ class AttachedFile extends MyAppModel
             $cnd = $srch->addCondition('afile_lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
             if ($displayUniversalImage) {
                 $cnd->attachCondition('afile_lang_id', '=', '0');
-                $srch->addOrder('afile_lang_id', 'DESC');
+                // $srch->addOrder('afile_lang_id', 'DESC');
+                $orderBy['afile_lang_id'] = "DESC";
             }
         }
 
-        $srch->addOrder('afile_display_order');
+        // $srch->addOrder('afile_display_order');
+        $orderBy['afile_display_order'] = "ASC";
 
         if ($recordId == 0) {
-            $srch->addOrder('afile_id', 'desc');
+            // $srch->addOrder('afile_id', 'desc');
+            $orderBy['afile_id'] = "desc";
         }
 
         if ($screen > 0) {
@@ -267,8 +271,18 @@ class AttachedFile extends MyAppModel
             $cnd->attachCondition('afile_lang_id', '=', 'mysql_func_0', 'OR', true);
         }
 
+        $tmpSrch = new SearchBase("(" . $srch->getQuery() . ")", 't');
+        $tmpSrch->doNotCalculateRecords();
+
         if ($size > 0) {
-            $srch->setPageSize($size);
+            //$srch->setPageSize($size);
+            $tmpSrch->setPageSize($size);
+        }
+
+        if (!empty($orderBy)) {
+            foreach ($orderBy as $key => $val) {
+                $tmpSrch->addOrder($key, $val);
+            }
         }
 
         return FatApp::getDb()->fetchAll($srch->getResultSet(), 'afile_id');
