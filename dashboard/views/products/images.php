@@ -77,7 +77,7 @@ if ($isDefaultLayout  == applicationConstants::NO && count($images)) {
                         product_id,
                         file_type,
                         ids: sort
-                    });
+                    }, function(t) {});
                 }
             }).disableSelection();
         });
