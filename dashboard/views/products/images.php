@@ -106,7 +106,7 @@ if ($isDefaultLayout  == applicationConstants::NO && count($images)) {
                         record_id,
                         file_type,
                         ids: sort
-                    });
+                    }, function(t) {});
                 }
             }).disableSelection();
         });

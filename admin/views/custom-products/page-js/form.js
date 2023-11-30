@@ -241,7 +241,7 @@
         $('#btnAddSpecJs').text($('#btnAddSpecJs').data('addlbl'));
         $('#specificationsListJs tr.editRowJs').removeClass('editRowJs');
     };
-    
+
     deleteProdSpec = function (el) {
         $(el).closest('tr').remove();
         if ($('#specificationsListJs').find('table tbody tr').length == 0) {
@@ -519,7 +519,7 @@
                     fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setImageOrder'), {
                         record_id,
                         ids: sort
-                    });
+                    }, function (t) { });
                 }
             }).disableSelection();
         }, { fOutMode: 'json' });
