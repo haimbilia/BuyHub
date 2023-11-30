@@ -519,7 +519,7 @@
                     fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setImageOrder'), {
                         record_id,
                         ids: sort
-                    }, function (t) { });
+                    }, function (t) {fcom.displaySuccessMessage(t.msg)});
                 }
             }).disableSelection();
         }, { fOutMode: 'json' });
