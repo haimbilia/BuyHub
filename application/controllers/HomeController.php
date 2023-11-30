@@ -1716,7 +1716,7 @@ class HomeController extends MyAppController
             $cond1 = $srch->addCondition('meta_action', '=', 'index');
             $cond1->attachCondition('meta_action', '=', '', 'OR');
 
-            $srch->addOrder('meta_default', 'asc');
+            // $srch->addOrder('meta_default', 'asc');
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $srch->addMultipleFields(array(
@@ -1726,6 +1726,20 @@ class HomeController extends MyAppController
 
             $rs = $srch->getResultSet();
             $metas = FatApp::getDb()->fetch($rs);
+
+            if (empty($metas)) {
+                $srch = new MetaTagSearch($this->siteLangId);
+                $srch->addCondition('meta_default', '=', 1);
+                $srch->setPageSize(1);
+                $srch->doNotCalculateRecords();
+                $srch->addMultipleFields(array(
+                    'meta_title',
+                    'meta_keywords', 'meta_description', 'meta_other_meta_tags'
+                ));
+                $rs = $srch->getResultSet();
+                $metas = FatApp::getDb()->fetch($rs);
+            }
+
             $arr = array(
                 "display" => "standalone",
                 "name" => $websiteName,
