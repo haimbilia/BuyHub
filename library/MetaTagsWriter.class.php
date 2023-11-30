@@ -50,6 +50,7 @@ class MetaTagsWriter
 
         if (empty($metas)) {
             $srch = new MetaTagSearch($langId);
+            $srch->doNotCalculateRecords();
             $srch->addCondition('meta_default', '=', 1);
             $srch->setPageSize(1);
             $srch->addMultipleFields(array(

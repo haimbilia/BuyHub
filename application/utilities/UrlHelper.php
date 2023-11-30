@@ -1,4 +1,5 @@
 <?php
+$rewriteUrlsData = [];
 class UrlHelper extends FatUtility
 {
     public static function getCurrUrl()
@@ -52,6 +53,12 @@ class UrlHelper extends FatUtility
         $urlForString = trim(FatUtility::generateUrl($controller, $action, $queryData, $useRootUrl, $url_rewriting),'/');
         $urlString = trim(ltrim($urlForString, trim(CONF_WEBROOT_FRONTEND,'/')), '/');
 
+        global $rewriteUrlsData;
+        $key = $urlString . '-' . $langId . '-' . $useLangCode.'-'.$encodeUrl;
+        if (isset($rewriteUrlsData[$key]) && !empty($rewriteUrlsData[$key])) {
+            return $rewriteUrlsData[$key];
+        }
+
         $srch = UrlRewrite::getSearchObject();
         $srch->addFld('urlrewrite_custom');
         if (true == $useLangCode && FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && count(LANG_CODES_ARR) > 1 && $langId  != FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)) {
@@ -72,7 +79,7 @@ class UrlHelper extends FatUtility
                 $url .=  $row['urlrewrite_custom'];
             }
         }
-        return $url;
+        return $rewriteUrlsData[$key] = $url;
     }
 
     public static function generateFullUrl($controller = '', $action = '', $queryData = array(), $use_root_url = '', $url_rewriting = null, $encodeUrl = false, $getOriginalUrl = false, $useLangCode = true, $langId = SYSTEM_LANG_ID)
