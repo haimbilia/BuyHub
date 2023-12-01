@@ -209,7 +209,7 @@ class ProductsController extends ListingBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditEmptyCartItems($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditProducts($this->admin_id, true));
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
     }
 
