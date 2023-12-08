@@ -1,4 +1,7 @@
 <?php
+
+use Google\Service\AndroidManagement\Application;
+
 class BuyerController extends BuyerBaseController
 {
 
@@ -2991,5 +2994,164 @@ class BuyerController extends BuyerBaseController
             $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;
+    }
+
+    public function giftCards()
+    {
+
+        // $frm = $this->getSearchForm();
+        // $frm->fill(FatApp::getQueryStringData());
+        // $this->set('frm', $frm);
+
+        $this->_template->render(true, true);
+    }
+
+
+    public function searchGiftCards()
+    {
+
+        $frm = $this->getGiftCardSearchForm($this->siteLangId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+
+        $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
+        $giftCards = (array) GiftCards::getGiftCards(UserAuthentication::getLoggedUserId());
+
+        $dateOrder = FatApp::getPostedData('date_order', FatUtility::VAR_STRING, "DESC");
+
+        $srch = GiftCards::getSearchObject();
+        $srch->addCondition('ogcards_sender_id', '=', UserAuthentication::getLoggedUserId());
+        $srch->doNotCalculateRecords();
+        $recordCountSrch = clone $srch;
+        $srch->doNotCalculateRecords();
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $srch->addOrder('ogcards_created_on', $dateOrder);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $this->setRecordCount($recordCountSrch, $pagesize, $page, $post, true);
+        $this->set('arrListing', $records);
+        $this->set('postedData', $post);
+        $this->set('frmSearch', $frm);
+        $this->set('siteLangId', $this->siteLangId);
+        $this->set('giftCards', $giftCards);
+        if (empty($giftCards)) {
+            $this->set('noRecordsHtml', $this->_template->render(false, false, '_partial/no-record-found.php', true));
+        }
+        $this->_template->render(false, false, 'buyer/search-gift-cards.php');
+    }
+
+    private function getGiftCardSearchForm($langId)
+    {
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'total_record_count', '');
+        $frm->addHiddenField('', 'page');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $langId), 'keyword', '');
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $langId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $langId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
+        return $frm;
+    }
+
+    public function giftCardForm()
+    {
+        $this->set('form', $this->getForm());
+        $userWalletBalance = User::getUserBalance(UserAuthentication::getLoggedUserId(), true);
+        $this->set('currency',  Currency::getAttributesById(CommonHelper::getCurrencyId()));
+        $this->set('minAmount', 0);
+
+        $canUseWallet = PaymentMethods::canUseWalletForPayment();
+        $this->set('canUseWallet', $canUseWallet);
+        $this->set('userWalletBalance', $userWalletBalance);
+        $this->set('canUseWalletForPayment', PaymentMethods::canUseWalletForPayment());
+        //  $this->set('walletPayId', PaymentMethod::getByCode(WalletPay::KEY)['pmethod_id']);
+        $this->_template->render(false, false);
+    }
+
+
+    private function getForm(): Form
+    {
+
+        $currency = Currency::getAttributesById(CommonHelper::getCurrencyId());
+        $balance = User::getUserBalance(UserAuthentication::getLoggedUserId(), true);
+
+        $regularPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_REGULAR_PAYMENT_METHOD, $this->siteLangId);
+
+        $frm = new Form('frmAddMoney');
+        if ($balance > 0) {
+            $frm->addCheckBox(Labels::getLabel('LBL_ADD_AND_PAY'), 'add_and_pay', 1);
+        }
+        $frm->addRadioButtons(Labels::getLabel('LBL_PAYMENT_METHOD'), 'order_pmethod_id', $regularPaymentMethodsPlugins, array_key_first($regularPaymentMethodsPlugins))->requirements()->setRequired();
+        $str = str_replace("{currency-code}", $currency['currency_code'], Labels::getLabel('LBL_ENTER_AMOUNT_({currency-code})'));
+        $amount = $frm->addFloatField($str, 'order_total_amount', '', ['placeholder' => ""]);
+        $amount->requirements()->setRange(0, 99999);
+        $amount->requirements()->setRequired();
+        $frm->addRequiredField(Labels::getLabel('LBL_RECEIVER_NAME'), 'ogcards_receiver_name', '', ['placeholder' => Labels::getLabel('LBL_RECEIVER_NAME')]);
+        $frm->addEmailField(Labels::getLabel('LBL_RECEIVER_EMAIL'), 'ogcards_receiver_email', '', ['placeholder' => Labels::getLabel('LBL_RECEIVER_EMAIL')]);
+        $frm->addSubmitButton('', 'submit', Labels::getLabel('LBL_SEND_GIFT_CARD'));
+        return $frm;
+    }
+
+    public function setupGiftCard()
+    {
+        $frm = $this->getForm();
+        if (!$post = $frm->getFormDataFromArray(FatApp::getPostedData())) {
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        }
+        UserAuthentication::getLoggedUserId();
+        $userObj = new User(UserAuthentication::getLoggedUserId());
+        $userData = $userObj->getUserInfo();
+
+        if ($post['ogcards_receiver_email'] == $userData['credential_email']) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST'));
+        }
+
+        if (FatUtility::int($post['order_total_amount']) <= 0 || empty($post['order_pmethod_id'])) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST'));
+        }
+        $pmethodId = FatApp::getPostedData('order_pmethod_id', FatUtility::VAR_INT, 0);
+        $regularPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_REGULAR_PAYMENT_METHOD, $this->siteLangId);
+
+
+        $pmethod = $regularPaymentMethodsPlugins[$pmethodId];
+
+        $methodCode = $regularPaymentMethodsPlugins[$pmethodId]['plugin_code'];
+        if (FatUtility::int($post['order_total_amount']) > 0 && (empty($pmethod) || empty($pmethod['plugin_active']))) {
+            FatUtility::dieJsonError(Labels::getLabel('LBL_PAYMENT_METHOD_NOT_AVAILABLE'));
+        }
+        $languageRow = Language::getAttributesById($this->siteLangId);
+        $post['order_language_id'] = $languageRow['language_id'];
+        $post['order_language_code'] = $languageRow['language_code'];
+
+        if (isset($_SESSION['payFromWallet']) && $_SESSION['payFromWallet'] == applicationConstants::YES) {
+            $post['order_pmethod_id'] = 0;
+            $methodCode = "Wallet";
+            $post['order_wallet_amount_charge'] = $post['order_total_amount'];
+            $post['order_is_wallet_selected'] = applicationConstants::YES;
+        } else {
+            $post['order_wallet_amount_charge'] = 0;
+            $post['order_is_wallet_selected'] = applicationConstants::NO;
+        }
+        $order = new Orders(0);
+        $orderId  = $order->placeGiftcardOrder($post);
+        if (empty($orderId)) {
+
+            FatUtility::dieJsonError($order->getError());
+        }
+        $controller = $methodCode . 'Pay';
+        $redirectUrl = UrlHelper::generateFullUrl($controller, 'charge', [$orderId], CONF_WEBROOT_FRONT_URL);
+
+        FatUtility::dieJsonSuccess(['msg' => Labels::getLabel('MSG_REDIRECTING_PLEASE_WAIT'), 'redirectUrl' => $redirectUrl]);
+    }
+
+
+    public function walletSelection()
+    {
+        $payFromWallet = FatApp::getPostedData('payFromWallet', FatUtility::VAR_INT, 0);
+        $_SESSION['payFromWallet'] = $payFromWallet;
+        $this->_template->render(false, false, 'json-success.php');
     }
 }

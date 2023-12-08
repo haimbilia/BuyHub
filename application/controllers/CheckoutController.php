@@ -1735,9 +1735,7 @@ class CheckoutController extends MyAppController
     {
         $order_type = FatApp::getPostedData('order_type', FatUtility::VAR_INT, 0);
         $plugin_id = FatApp::getPostedData('plugin_id', FatUtility::VAR_INT, 0);
-
         $order_id = FatApp::getPostedData("order_id", FatUtility::VAR_STRING, "");
-
         $user_id = UserAuthentication::getLoggedUserId();
         $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
         $userWalletBalance = FatUtility::convertToType(User::getUserBalance($user_id, true), FatUtility::VAR_FLOAT);

@@ -12,3 +12,20 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 ALTER TABLE `tbl_upc_codes` ADD INDEX(`upc_code`);
 ALTER TABLE `tbl_upc_codes` ADD INDEX(`upc_product_id`);
+
+
+CREATE TABLE `yokart-procurenet`.`tbl_order_gift_cards` ( 
+    `ogcards_id` INT NOT NULL AUTO_INCREMENT,
+    `ogcards_order_id` INT NOT NULL,
+    `ogcards_code` VARCHAR(20) NOT NULL,
+    `ogcards_sender_id` INT NOT NULL,
+    `ogcards_receiver_id` INT NOT NULL,
+    `ogcards_receiver_name` VARCHAR(50) NOT NULL,
+    `ogcards_receiver_email` VARCHAR(50) NOT NULL,
+    `ogcards_status` TINYINT NOT NULL,
+    `ogcards_created_on` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `ogcards_usedon` DATETIME NOT NULL,
+     PRIMARY KEY (`ogcards_id`)
+     ) ENGINE = InnoDB;
+
+ALTER TABLE `tbl_order_gift_cards` ADD `ogcards_updated_on` DATETIME NOT NULL AFTER `ogcards_created_on`; 

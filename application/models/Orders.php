@@ -36,6 +36,7 @@ class Orders extends MyAppModel
     public const BILLING_ADDRESS_TYPE = 1;
     public const SHIPPING_ADDRESS_TYPE = 2;
     public const PICKUP_ADDRESS_TYPE = 3;
+    public const GIFT_CARD_TYPE = 4;
 
     public const ORDER_PAYMENT_CANCELLED = -1;
     public const ORDER_PAYMENT_PENDING = 0;
@@ -48,6 +49,7 @@ class Orders extends MyAppModel
     public const ORDER_PRODUCT = 1;
     public const ORDER_SUBSCRIPTION = 2;
     public const ORDER_WALLET_RECHARGE = 3;
+    public const ORDER_GIFT_CARD = 4;
 
     public const REPLACE_ORDER_USER_ADDRESS = 'XXX';
 
@@ -57,7 +59,7 @@ class Orders extends MyAppModel
 
     public function __construct($id = 0)
     {
-        parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'no', $id);
+        parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
     }
 
     public static function getOrderPaymentStatusArr($langId)
@@ -2351,7 +2353,7 @@ class Orders extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         $orderInfo = $this->getOrderById($orderId, $langId);
-
+        CommonHelper::printArray($orderInfo);
         $userBalance = User::getUserBalance($orderInfo["order_user_id"]);
         $orderCreditsCharge = $orderInfo["order_wallet_amount_charge"] ? min($orderInfo["order_wallet_amount_charge"], $userBalance) : 0;
         $orderPaymentGatewayCharge = $orderInfo["order_net_amount"] - $orderInfo["order_wallet_amount_charge"];
@@ -3007,5 +3009,97 @@ class Orders extends MyAppModel
         }
         $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS", FatUtility::VAR_INT, 0));
         return (in_array($opRow['op_status_id'], $processingStatuses) && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED);
+    }
+
+
+    public function placeGiftcardOrder(array $data)
+    {
+        $amount = FatUtility::float($data['order_total_amount']);
+        $minamount =  0; // FatApp::getConfig('MINIMUM_GIFT_CARD_AMOUNT');
+        if ($amount < $minamount) {
+            $minamount = FatUtility::convertToType($minamount, FatUtility::VAR_FLOAT);
+            $label = Labels::getLabel("LBL_MINIMUM_GIFT_CARD_{minamount}");
+            $this->error = str_replace("{minamount}", $minamount, $label);
+            return false;
+        }
+
+        $pmethodId = $data['order_pmethod_id'];
+        $addpay = FatUtility::int($data['add_and_pay']);
+        if ($addpay == applicationConstants::YES) {
+            $balance = User::getUserBalance(UserAuthentication::getLoggedUserId(), true);
+            $remaining = FatUtility::float($amount - $balance);
+            if ($remaining <= 0) {
+                $this->error = Labels::getLabel('LBL_INVALID_REQUEST');
+                return false;
+            }
+            $methodId = $pmethodId;
+            $wallet = PaymentMethod::getByCode(WalletPay::KEY);
+            $pmethodId = FatUtility::int($wallet['pmethod_id']);
+        }
+        $db = FatApp::getDb();
+        if (!$db->startTransaction()) {
+            $this->error = $db->getError();
+            return false;
+        }
+        $currency = Currency::getAttributesById(CommonHelper::getCurrencyId());
+        $orderNumber =  $this->generateOrderNo();
+        $this->assignValues([
+            'order_type' => static::GIFT_CARD_TYPE,
+            'order_user_id' => UserAuthentication::getLoggedUserId(),
+            'order_date_added' => date('Y-m-d H:i:s'),
+            'order_discount_value' => 0,
+            'order_language_id' => $data['order_language_id'],
+            'order_language_code' => $data['order_language_code'],
+            'order_net_amount' => $amount,
+            'order_payment_status' => Orders::ORDER_PAYMENT_PENDING,
+            'order_pmethod_id' => FatUtility::int($pmethodId),
+            'order_currency_id' => $currency['currency_id'],
+            'order_currency_code' => $currency['currency_code'],
+            'order_currency_value' => $currency['currency_value'],
+            'order_status' => 0,
+            'order_number' => $orderNumber,
+            'order_wallet_amount_charge' => $data['order_wallet_amount_charge'],
+            'order_is_wallet_selected' => $data['order_is_wallet_selected']
+
+        ]);
+        if (!$this->save()) {
+            $db->rollbackTransaction();
+            $this->error = $this->getError();
+            return false;
+        }
+        $this->orderId =  $this->getMainTableRecordId();
+        if (FatUtility::int($pmethodId)) {
+            $_SESSION['cart_order_id'] = $this->orderId;
+            $_SESSION['order_type'] = static::GIFT_CARD_TYPE;
+            $this->updateOrderInfo($this->orderId, array('order_pmethod_id' => FatUtility::int($pmethodId)));
+        }
+
+        $cardData = [
+            'ogcards_code' => uniqid(),
+            'ogcards_sender_id' => UserAuthentication::getLoggedUserId(),
+            'ogcards_status' => GiftCards::STATUS_UNUSED,
+            'ogcards_order_id' =>   $this->orderId,
+            'ogcards_receiver_name' => $data['ogcards_receiver_name'],
+            'ogcards_receiver_email' => $data['ogcards_receiver_email'],
+        ];
+        $receiver = User::getByEmail($data['ogcards_receiver_email']);
+        if (!empty($receiver['user_email'])) {
+            $cardData['ogcards_receiver_id'] = $receiver['user_id'];
+        }
+        $card = new GiftCards(0);
+        $card->assignValues($cardData);
+        if (!$card->addNew([])) {
+            $this->error = $card->getError();
+            $db->rollbackTransaction();
+            return false;
+        }
+        if (!$db->commitTransaction()) {
+            $this->error = $db->getError();
+            return false;
+        }
+
+        // sendgift card email to customer/admin
+
+        return $this->orderId;
     }
 }
