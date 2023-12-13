@@ -71,6 +71,7 @@ if ($canEdit) { ?>
                 </li>
             <?php } ?>
 
+
             <?php if (isset($otherButtons) && is_array($otherButtons) && !empty($otherButtons)) {
                 $class = 'btn ';
                 if (count($otherButtons) == count($otherButtons, COUNT_RECURSIVE)) {

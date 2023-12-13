@@ -32,6 +32,29 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         </svg>' . Labels::getLabel('BTN_ADD_CREDITS', $siteLangId)
         ];
     }
+
+    if ($canRedeemGiftCard) {
+
+        $data['otherButtons'] = [
+            [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'class' => 'btn btn-outline-brand btn-icon',
+                    'onclick' => "redeemGiftCard()",
+                    'title' => Labels::getLabel('BTN_REDEEM_GIFT_CARD', $siteLangId)
+                ],
+                'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.actions.svg#add">
+                                        </use>
+                                    </svg><span>' . Labels::getLabel('BTN_REDEEM_GIFT_CARD', $siteLangId) . '</span>',
+            ]
+        ];
+    }
+
+
+
+
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">
         <div class="row mb-4">

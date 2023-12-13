@@ -354,7 +354,6 @@ class MyAppModel extends FatModel
     public function save()
     {
         if (0 < $this->mainTableRecordId) {
-            echo "asdfasd";
             $result = $this->objMainTableRecord->update(array('smt' => $this->mainTableIdField . ' = ?', 'vals' => array($this->mainTableRecordId)));
         } else {
             $result = $this->objMainTableRecord->addNew();

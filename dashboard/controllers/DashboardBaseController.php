@@ -838,7 +838,6 @@ class DashboardBaseController extends FatController
             $recordCountSrch->getResultSet();
             $defaultRecordCount = $recordCountSrch->recordCount();
         }
-        //echo $recordCountSrch->getQuery();
         $this->setPageRecord($defaultRecordCount, $pageSize, $page);
         $post['total_record_count'] = $defaultRecordCount;
     }

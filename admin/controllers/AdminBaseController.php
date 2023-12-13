@@ -15,6 +15,7 @@ class AdminBaseController extends FatController
 
     public function __construct($action)
     {
+
         parent::__construct($action);
 
         if (get_class($this) != 'AdminGuestController' && !FatUtility::isAjaxCall()) {

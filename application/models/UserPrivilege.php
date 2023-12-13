@@ -806,7 +806,11 @@ class UserPrivilege
         return true;
         // return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_READ, $returnResult);
     }
-
+    public function canViewGiftCardOrders($sellerId = 0, $returnResult = false)
+    {
+        return true;
+        // return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_READ, $returnResult);
+    }
     public function canEditSubscription($sellerId = 0, $returnResult = false)
     {
         return true;

@@ -267,6 +267,11 @@ class OrderPayment extends Orders
                 $emailNotificationObj->sendTxnNotification($txnId, $defaultSiteLangId);
                 /* ] */
             }
+
+            if ($orderDetails['order_type'] == Orders::GIFT_CARD_TYPE) {
+                $emailNotificationObj = new EmailHandler();
+                $emailNotificationObj->sendMailToAdminAndRecipient($orderDetails['order_id']);
+            }
             /* ] */
             return true;
         } else {

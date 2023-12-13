@@ -24,8 +24,14 @@ require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
         foreach ($arr_flds as $key => $val) {
             $td = $tr->appendElement('td');
             switch ($key) {
-                case 'ordgift_order_id':
+                case 'ogcards_order_id':
                     $td->appendElement('plaintext', array(),  '<div class="text-nowrap">' . $row[$key] . '</div>', true);
+                    break;
+                case 'ogcards_status':
+                    $statusclass = (GiftCards::STATUS_USED == $row[$key]) ? 'success' : 'warning';
+                    $statusTxt = (GiftCards::STATUS_USED == $row[$key]) ?  Labels::getLabel('LBL_USED', $siteLangId) : Labels::getLabel('LBL_UN_USED', $siteLangId);
+                    $txt = '<span class="badge badge-inline badge-' . $statusclass . '">' . $statusTxt . '</span>';
+                    $td->appendElement('plaintext', array(),  $txt, true);
                     break;
                 default:
                     $td->appendElement('plaintext', array(), $row[$key], true);

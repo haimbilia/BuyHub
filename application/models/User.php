@@ -2605,6 +2605,14 @@ class User extends MyAppModel
             }
         }
 
+        if (!empty($email)) {
+            if (!$this->assignGiftCard($email)) {
+                $db->rollbackTransaction();
+                $this->error = Labels::getLabel('MSG_USER_COULD_NOT_BE_SET');
+                return false;
+            }
+        }
+
         $this->setUpRewardEntry($this->getMainTableRecordId(), $this->commonLangId, $referrerCodeSignup, $affiliateReferrerCodeSignup);
         return true === $returnUserId ? $this->getMainTableRecordId() : true;
     }
@@ -3251,11 +3259,20 @@ class User extends MyAppModel
         $srch = new SearchBase(User::DB_TBL, 'u');
         $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
         $srch->addMultipleFields([
-            'u.user_id as user_id', 'user_name', 'credential_email'
+            'u.user_id as user_id', 'user_name', 'credential_email', 'user_deleted'
         ]);
         $srch->addCondition('credential_email', '=', $email);
-        $srch->addDirectCondition('user_deleted IS NULL');
+        //  $srch->addCondition('user_deleted', '=', applicationConstants::NO);
         $srch->doNotCalculateRecords();
         return FatApp::getDb()->fetch($srch->getResultSet());
+    }
+
+    public function assignGiftCard(string $email): bool
+    {
+        if (!FatApp::getDb()->updateFromArray(GiftCards::DB_TBL, ['ogcards_receiver_id' => $this->getMainTableRecordId()], ['smt' => 'ogcards_receiver_email = ?', 'vals' => [$email]])) {
+            $this->error = FatApp::getDb()->getError();
+            return false;
+        }
+        return true;
     }
 }

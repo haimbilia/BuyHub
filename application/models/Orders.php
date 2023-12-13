@@ -2353,7 +2353,6 @@ class Orders extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         $orderInfo = $this->getOrderById($orderId, $langId);
-        CommonHelper::printArray($orderInfo);
         $userBalance = User::getUserBalance($orderInfo["order_user_id"]);
         $orderCreditsCharge = $orderInfo["order_wallet_amount_charge"] ? min($orderInfo["order_wallet_amount_charge"], $userBalance) : 0;
         $orderPaymentGatewayCharge = $orderInfo["order_net_amount"] - $orderInfo["order_wallet_amount_charge"];
@@ -3014,6 +3013,7 @@ class Orders extends MyAppModel
 
     public function placeGiftcardOrder(array $data)
     {
+
         $amount = FatUtility::float($data['order_total_amount']);
         $minamount =  0; // FatApp::getConfig('MINIMUM_GIFT_CARD_AMOUNT');
         if ($amount < $minamount) {
@@ -3023,18 +3023,16 @@ class Orders extends MyAppModel
             return false;
         }
 
+
         $pmethodId = $data['order_pmethod_id'];
         $addpay = FatUtility::int($data['add_and_pay']);
         if ($addpay == applicationConstants::YES) {
             $balance = User::getUserBalance(UserAuthentication::getLoggedUserId(), true);
-            $remaining = FatUtility::float($amount - $balance);
+            $remaining = FatUtility::float($balance - $amount);
             if ($remaining <= 0) {
                 $this->error = Labels::getLabel('LBL_INVALID_REQUEST');
                 return false;
             }
-            $methodId = $pmethodId;
-            $wallet = PaymentMethod::getByCode(WalletPay::KEY);
-            $pmethodId = FatUtility::int($wallet['pmethod_id']);
         }
         $db = FatApp::getDb();
         if (!$db->startTransaction()) {
@@ -3083,7 +3081,13 @@ class Orders extends MyAppModel
             'ogcards_receiver_email' => $data['ogcards_receiver_email'],
         ];
         $receiver = User::getByEmail($data['ogcards_receiver_email']);
-        if (!empty($receiver['user_email'])) {
+
+        if (!empty($receiver['credential_email']) && $receiver['user_deleted'] == applicationConstants::YES) {
+            $this->error = Labels::getLabel('LBL_INVALID_REQUEST');
+            $db->rollbackTransaction();
+            return false;
+        }
+        if (!empty($receiver['credential_email'])) {
             $cardData['ogcards_receiver_id'] = $receiver['user_id'];
         }
         $card = new GiftCards(0);
@@ -3098,8 +3102,7 @@ class Orders extends MyAppModel
             return false;
         }
 
-        // sendgift card email to customer/admin
-
+        // send email regarding gift card to receiver and admin
         return $this->orderId;
     }
 }
