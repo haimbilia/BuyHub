@@ -3059,27 +3059,24 @@ class BuyerController extends BuyerBaseController
         $this->set('currency',  Currency::getAttributesById(CommonHelper::getCurrencyId()));
         $this->set('minAmount', FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT'));
         $canUseWallet = PaymentMethods::canUseWalletForPayment();
+        $paymentMethods = $this->getPaymentMethods($userWalletBalance, $canUseWallet);
+        $this->set('paymentMethods', $paymentMethods);
         $this->set('canUseWallet', $canUseWallet);
         $this->set('userWalletBalance', $userWalletBalance);
         $this->set('canUseWalletForPayment', PaymentMethods::canUseWalletForPayment());
         $this->_template->render(false, false);
     }
 
-
-
-    private function getForm(): Form
+    private function getPaymentMethods($userWalletBalance, $canUseWallet)
     {
-        $currency = Currency::getAttributesById(CommonHelper::getCurrencyId());
-        $balance = User::getUserBalance(UserAuthentication::getLoggedUserId(), true);
         $regularPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_REGULAR_PAYMENT_METHOD, $this->siteLangId);
-        $canUseWallet = PaymentMethods::canUseWalletForPayment();
-        if ($canUseWallet && $balance > FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT')) {
+        if ($canUseWallet && $userWalletBalance > FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT')) {
             $regularPaymentMethodsPlugins[0] = array(
                 'plugin_id' => 0,
                 'plugin_code' => "Wallet",
                 'plugin_type' => 0,
                 'plugin_description' =>  "",
-                'plugin_name' => "Wallet : " .  CommonHelper::displayMoneyFormat($balance),
+                'plugin_name' => "Wallet : " .  CommonHelper::displayMoneyFormat($userWalletBalance),
                 'plugin_active' => 1,
             );
         }
@@ -3091,16 +3088,28 @@ class BuyerController extends BuyerBaseController
             }
             $payMethod[$key] = $payMeth['plugin_name'];
         }
+
+        return $payMethod;
+    }
+
+
+
+    private function getForm(): Form
+    {
+        $canUseWallet = PaymentMethods::canUseWalletForPayment();
+        $currency = Currency::getAttributesById(CommonHelper::getCurrencyId());
+        $balance = User::getUserBalance(UserAuthentication::getLoggedUserId(), true);
+        $paymentMethods = $this->getPaymentMethods($balance, $canUseWallet);
         $frm = new Form('frmAddMoney');
         $str = str_replace("{currency-code}", $currency['currency_code'], Labels::getLabel('LBL_ENTER_AMOUNT_({currency-code})'));
-        $frm->addTextBox($str, 'order_total_amount', '', ['placeholder' => ""]);
+        $frm->addRequiredField($str, 'order_total_amount', '', ['placeholder' => ""]);
         $fixedPrice = new FormFieldRequirement('order_total_amount', $str);
         $fixedPrice->setRange(FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT'), $balance);
         $fixedPrice->setRequired();
         $allowPrice = new FormFieldRequirement('order_total_amount', $str);
         $allowPrice->setRange(FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT'), 999999);
         $allowPrice->setRequired();
-        $pyMethodFld =  $frm->addRadioButtons(Labels::getLabel('LBL_PAYMENT_METHOD'), 'order_pmethod_id', $payMethod, array_key_first($payMethod));
+        $pyMethodFld =  $frm->addRadioButtons(Labels::getLabel('LBL_PAYMENT_METHOD'), 'order_pmethod_id', $paymentMethods, array_key_first($paymentMethods));
         $pyMethodFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'order_total_amount', $fixedPrice);
         $pyMethodFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'ne', 'order_total_amount', $allowPrice);
         $frm->addRequiredField(Labels::getLabel('LBL_RECEIVER_NAME'), 'ogcards_receiver_name', '', ['placeholder' => Labels::getLabel('LBL_RECEIVER_NAME')]);

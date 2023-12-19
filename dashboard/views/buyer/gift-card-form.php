@@ -57,6 +57,7 @@ $submitField->addFieldTagAttribute('class', 'btn btn-brand btn-wide ');
                             </div>
 
                         </div>
+
                         <div class="col-md-6 col-xl-6">
                             <div class="selection-title">
                                 <label class="field_label margin-bottom-2"><?php echo Labels::getLabel('LBL_PAYMENT_METHOD'); ?> <span class="spn_must_field">*</span></label>
@@ -76,11 +77,14 @@ $submitField->addFieldTagAttribute('class', 'btn btn-brand btn-wide ');
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
-                            <?php echo $submitField->getHTML(); ?>
-
+                            <?php
+                            if (!empty($paymentMethods)) {
+                                echo $submitField->getHTML();
+                            } else {
+                                echo Labels::getLabel('LBL_PLEASE_ENABLED_PAYMENT_METHODS_OR_ADD_MONEY_IN_WALLET');
+                            }
+                            ?>
                         </div>
                     </div>
                     </form>
