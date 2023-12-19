@@ -3073,7 +3073,7 @@ class BuyerController extends BuyerBaseController
         $balance = User::getUserBalance(UserAuthentication::getLoggedUserId(), true);
         $regularPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_REGULAR_PAYMENT_METHOD, $this->siteLangId);
         $canUseWallet = PaymentMethods::canUseWalletForPayment();
-        if ($canUseWallet) {
+        if ($canUseWallet && $balance > FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT')) {
             $regularPaymentMethodsPlugins[0] = array(
                 'plugin_id' => 0,
                 'plugin_code' => "Wallet",
@@ -3128,7 +3128,7 @@ class BuyerController extends BuyerBaseController
         $pmethodId = FatApp::getPostedData('order_pmethod_id', FatUtility::VAR_INT, 0);
         $regularPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_REGULAR_PAYMENT_METHOD, $this->siteLangId);
         $canUseWallet = PaymentMethods::canUseWalletForPayment();
-        if ($canUseWallet) {
+        if ($canUseWallet && $userWalletBalance > FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT')) {
             $regularPaymentMethodsPlugins[0] = array(
                 'plugin_id' => 0,
                 'plugin_code' => "Wallet",
