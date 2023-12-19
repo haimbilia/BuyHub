@@ -3095,10 +3095,10 @@ class BuyerController extends BuyerBaseController
         $str = str_replace("{currency-code}", $currency['currency_code'], Labels::getLabel('LBL_ENTER_AMOUNT_({currency-code})'));
         $frm->addTextBox($str, 'order_total_amount', '', ['placeholder' => ""]);
         $fixedPrice = new FormFieldRequirement('order_total_amount', $str);
-        $fixedPrice->setRange(0, $balance);
+        $fixedPrice->setRange(FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT'), $balance);
         $fixedPrice->setRequired();
         $allowPrice = new FormFieldRequirement('order_total_amount', $str);
-        $allowPrice->setRange(0, 999999);
+        $allowPrice->setRange(FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT'), 999999);
         $allowPrice->setRequired();
         $pyMethodFld =  $frm->addRadioButtons(Labels::getLabel('LBL_PAYMENT_METHOD'), 'order_pmethod_id', $payMethod, array_key_first($payMethod));
         $pyMethodFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'order_total_amount', $fixedPrice);
@@ -3122,7 +3122,7 @@ class BuyerController extends BuyerBaseController
         if ($post['ogcards_receiver_email'] == $userData['credential_email']) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST'));
         }
-        if (FatUtility::int($post['order_total_amount']) < 0) {
+        if (FatUtility::int($post['order_total_amount']) < FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT')) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST'));
         }
         $pmethodId = FatApp::getPostedData('order_pmethod_id', FatUtility::VAR_INT, 0);
