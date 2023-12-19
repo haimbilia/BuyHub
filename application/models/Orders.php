@@ -3015,7 +3015,7 @@ class Orders extends MyAppModel
     {
 
         $amount = FatUtility::float($data['order_total_amount']);
-        $minamount =  0; // FatApp::getConfig('MINIMUM_GIFT_CARD_AMOUNT');
+        $minamount =  FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT');
         if ($amount < $minamount) {
             $minamount = FatUtility::convertToType($minamount, FatUtility::VAR_FLOAT);
             $label = Labels::getLabel("LBL_MINIMUM_GIFT_CARD_{minamount}");
@@ -3081,7 +3081,6 @@ class Orders extends MyAppModel
             'ogcards_receiver_email' => $data['ogcards_receiver_email'],
         ];
         $receiver = User::getByEmail($data['ogcards_receiver_email']);
-
         if (!empty($receiver['credential_email']) && $receiver['user_deleted'] == applicationConstants::YES) {
             $this->error = Labels::getLabel('LBL_INVALID_REQUEST');
             $db->rollbackTransaction();
@@ -3102,7 +3101,6 @@ class Orders extends MyAppModel
             return false;
         }
 
-        // send email regarding gift card to receiver and admin
         return $this->orderId;
     }
 }

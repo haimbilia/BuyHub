@@ -68,7 +68,6 @@ $submitField->addFieldTagAttribute('class', 'btn btn-brand btn-wide ');
                                             <div class="payment-area">
                                                 <div class="payments-nav" id="payment_methods_tab">
                                                     <?php
-
                                                     echo    $pmethodField->getHTML();
                                                     ?>
                                                 </div>

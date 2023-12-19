@@ -3057,7 +3057,7 @@ class BuyerController extends BuyerBaseController
         $this->set('form', $this->getForm());
         $userWalletBalance = User::getUserBalance(UserAuthentication::getLoggedUserId(), true);
         $this->set('currency',  Currency::getAttributesById(CommonHelper::getCurrencyId()));
-        $this->set('minAmount', 0);
+        $this->set('minAmount', FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT'));
         $canUseWallet = PaymentMethods::canUseWalletForPayment();
         $this->set('canUseWallet', $canUseWallet);
         $this->set('userWalletBalance', $userWalletBalance);

@@ -741,6 +741,11 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addIntegerField(Labels::getLabel("FRM_MAX_SELLER_REQUEST_ATTEMPTS", $langId), 'CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', '');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_MAXIMUM_SELLER_REQUEST_ATTEMPTS_ALLOWED", $langId) . "</span>";
 
+                  $fld = $frm->addIntegerField(Labels::getLabel("FRM_MINIMUM_GIFT_CARD_AMOUNT", $langId), 'CONF_MINIMUM_GIFT_CARD_AMOUNT', '');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_MINIMUM_AMOUNT_FOR_GIFT_CARDS", $langId) . "</span>";
+
+
+
                 $fld = $frm->addHtml('', 'Withdrawal', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_WITHDRAWAL", $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
