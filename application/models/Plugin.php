@@ -351,6 +351,8 @@ class Plugin extends PluginCommon
             if (!in_array($pluginKey, $payLater) && $activationLimit == count($plugins) && $activatedPayLaterPlugins == count($payLater)) {
                 $activationLimit++;
             }
+        } else if (self::ACTIVE == $status && self::TYPE_SPLIT_PAYMENT_METHOD == $typeId) {
+            Configurations::updateValue('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', self::INACTIVE);
         }
 
         if (0 < $activationLimit && $activationLimit <= count($plugins) && self::ACTIVE == $status) {

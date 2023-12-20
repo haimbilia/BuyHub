@@ -166,6 +166,18 @@ class Configurations extends FatModel
         return true;
     }
 
+    public static function updateValue(string $key, $val)
+    {
+        $assignValues = ['conf_name' => $key, 'conf_val' => $val];
+        FatApp::getDb()->insertFromArray(
+            static::DB_TBL,
+            $assignValues,
+            false,
+            array(),
+            $assignValues
+        );
+    }
+
     public static function getSvgIconNames()
     {
         return [
@@ -202,7 +214,7 @@ class Configurations extends FatModel
                 'title' => Labels::getLabel('FRM_MANAGE_COMMISSION'),
             ]
         ];
-        
+
         return $arr[$formType] ?? [];
     }
 }
