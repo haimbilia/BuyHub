@@ -21,6 +21,7 @@
     $this->includeTemplate('_partial/header/content-header.php', $data); ?>
     <div class="content-body">
         <div class="card">
+            <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
             <div class="card-body">
                 <div id="listing"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
             </div>

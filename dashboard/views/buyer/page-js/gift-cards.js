@@ -1,9 +1,9 @@
 $(document).ready(function() {
-    searchGiftCards(document.frmOfferSrch);
+    searchRecords(document.frmOfferSrch);
 });
 (function() {
 
-    searchGiftCards = function(frm) {
+    searchRecords = function(frm) {
         var data = fcom.frmData(frm);
         $("#listing").html(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Buyer', 'searchGiftCards'), data, function(res) {
@@ -12,14 +12,16 @@ $(document).ready(function() {
         });
     };
 
-    searchRecords = function(frm) {
-        var data = fcom.frmData(frm);
-        $("#listing").prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Buyer', 'searchGiftCards'), data, function(res) {
-            fcom.removeLoader();
-            $("#listing").html(res);
-        });
+    goToSearchPage = function(page) {
+        if (typeof page == undefined || page == null) {
+            page = 1;
+        }
+        var frm = document.frmRecordSearchPaging;
+        $(frm.page).val(page);
+        searchRecords(frm);
     };
+
+
 
     addGiftCards = function() {
         $.ykmodal(fcom.getLoader(), true);

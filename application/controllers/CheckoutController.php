@@ -1820,6 +1820,45 @@ class CheckoutController extends MyAppController
         }
         /* ] */
 
+        /* Loading GIFT CARDS[ */
+        if ($order_type == Orders::GIFT_CARD_TYPE) {
+            $criteria = array('isUserLogged' => true);
+            if (!$this->isEligibleForNextStep($criteria)) {
+                $this->errMessage = Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
+                LibHelper::dieJsonError($this->errMessage);
+            }
+
+            $user_id = UserAuthentication::getLoggedUserId();
+
+            if ($order_id == '') {
+                $this->errMessage = Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId);
+                LibHelper::dieJsonError($this->errMessage);
+            }
+            $orderObj = new Orders();
+
+            $srch = Orders::getSearchObject();
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
+            $srch->addCondition('order_id', '=', $order_id);
+            $srch->addCondition('order_user_id', '=', 'mysql_func_' . $user_id, 'AND', true);
+            $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
+            $srch->addCondition('order_type', '=', 'mysql_func_' . Orders::GIFT_CARD_TYPE, 'AND', true);
+            $rs = $srch->getResultSet();
+            $orderInfo = FatApp::getDb()->fetch($rs);
+            if (!$orderInfo) {
+                $this->errMessage = Labels::getLabel("ERR_INVALID_ORDER_PAID_CANCELLED", $this->siteLangId);
+                LibHelper::dieJsonError($this->errMessage);
+            }
+            $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => $plugin_id));
+            if (true === MOBILE_APP_API_CALL) {
+                $this->_template->render();
+            }
+            $this->_template->render(false, false, 'json-success.php');
+        }
+        /* Loading GIFT CARDS[ */
+
+
+
         /* confirmOrder function is called for both wallet payments and for paymentgateway selection as well. */
         $criteria = array('isUserLogged' => true, 'hasProducts' => true, 'hasStock' => true, 'hasBillingAddress' => true);
         $fulfillmentType = $this->cartObj->getCartCheckoutType();
@@ -2394,5 +2433,75 @@ class CheckoutController extends MyAppController
         }
         $this->set('orderShippingData', $shippingData);
         $this->_template->render(false, false);
+    }
+
+    public function giftCharge($order_id)
+    {
+        $criteria = array('isUserLogged' => true);
+        if (!$this->isEligibleForNextStep($criteria)) {
+            $this->errMessage = !empty($this->errMessage) ? $this->errMessage : Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
+            LibHelper::exitWithError($this->errMessage);
+        }
+        $userId = UserAuthentication::getLoggedUserId();
+        $userWalletBalance = User::getUserBalance($userId, true);
+        /* Payment Methods[ */
+        $splitPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);
+        $regularPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_REGULAR_PAYMENT_METHOD, $this->siteLangId);
+        $paymentMethods = array_merge($splitPaymentMethodsPlugins, $regularPaymentMethodsPlugins);
+        /* ] */
+        $canUseWallet = PaymentMethods::canUseWalletForPayment();
+        $orderData = array();
+        $srch = Orders::getSearchObject();
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $srch->addCondition('order_id', '=', $order_id);
+        $srch->addCondition('order_type', '=', Orders::GIFT_CARD_TYPE);
+        $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
+        $rs = $srch->getResultSet();
+        $orderData = FatApp::getDb()->fetch($rs);
+        if (!$orderData) {
+            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+        }
+
+        $walletPaymentForm = $this->getWalletPaymentForm($this->siteLangId);
+        if ((FatUtility::convertToType($userWalletBalance, FatUtility::VAR_FLOAT) > 0)  && $orderData['order_net_amount'] > 0) {
+            $walletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($order_id)));
+            $walletPaymentForm->fill(array('order_id' => $order_id));
+            $walletPaymentForm->setFormTagAttribute('onsubmit', 'confirmOrder(this); return(false);');
+            $walletPaymentForm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId));
+        }
+        $obj = new Extrapage();
+        $headerData = $obj->getContentByPageType(Extrapage::CHECKOUT_PAGE_HEADER_BLOCK, $this->siteLangId);
+        $this->set('headerData', $headerData);
+        $this->set('walletPaymentForm', $walletPaymentForm);
+        $this->set('redeemRewardFrm', $this->getRewardsForm($this->siteLangId));
+        $this->set('rewardPointBalance', UserRewardBreakup::rewardPointBalance($userId));
+        $this->set('paymentMethods', $paymentMethods);
+        $this->set('userWalletBalance', $userWalletBalance);
+        $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr();
+        $this->set('excludePaymentGatewaysArr', $excludePaymentGatewaysArr);
+        $this->set('canUseWalletForPayment', $canUseWallet);
+        $this->set('orderId', $order_id);
+        $this->set('orderData', $orderData);
+        $cartSummary = $this->cartObj->getCartGiftFinancialSummary($this->siteLangId, $order_id);
+        $updatedData['order_wallet_amount_charge'] =  $cartSummary['WalletAmountCharge'];
+        $updatedData['order_is_wallet_selected'] = $cartSummary['cartWalletSelected'];
+        $updatedData['order_type'] = Orders::GIFT_CARD_TYPE;
+        $updatedData['order_id'] = $order_id;
+        $orderObj = new Orders($order_id);
+        $orderObj->assignValues($updatedData);
+        if (!$orderObj->save($updatedData, [])) {
+            LibHelper::dieJsonError($orderObj->getError());
+        }
+        $this->set('cartSummary', $cartSummary);
+        $this->set('exculdeMainHeaderDiv', true);
+        $this->_template->render(true, true);
+    }
+
+    public function walletGiftSelection()
+    {
+        $payFromWallet = FatApp::getPostedData('payFromWallet', FatUtility::VAR_INT, 0);
+        $this->cartObj->updateCartGiftWalletOption($payFromWallet);
+        $this->_template->render(false, false, 'json-success.php');
     }
 }

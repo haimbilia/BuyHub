@@ -11,11 +11,13 @@ $submitField = $form->getField('submit');
 $submitField->addFieldTagAttribute('class', 'btn btn-brand btn-wide ');
 
 ?>
+
 <div class="modal-header">
     <h5 class="modal-title">
         <?php echo Labels::getLabel('LBL_PURCHASE_GIFTCARD', $siteLangId); ?>
     </h5>
 </div>
+<?php echo $form->getFormTag(); ?>
 <div class="modal-body">
     <div class="form-edit-body">
 
@@ -23,9 +25,9 @@ $submitField->addFieldTagAttribute('class', 'btn btn-brand btn-wide ');
 
             <div class="facebox-panel__body padding-bottom-0">
                 <div class="selection selection--checkout selection--payment">
-                    <?php echo $form->getFormTag(); ?>
+
                     <div class="row justify-content-between">
-                        <div class="col-md-6 col-xl-6">
+                        <div class="col-md-12 col-xl-12">
                             <div class="field-set">
                                 <label class="field_label margin-bottom-2">
                                     <?php echo $amount->getCaption(); ?>
@@ -57,40 +59,17 @@ $submitField->addFieldTagAttribute('class', 'btn btn-brand btn-wide ');
                             </div>
 
                         </div>
-
-                        <div class="col-md-6 col-xl-6">
-                            <div class="selection-title">
-                                <label class="field_label margin-bottom-2"><?php echo Labels::getLabel('LBL_PAYMENT_METHOD'); ?> <span class="spn_must_field">*</span></label>
-                            </div>
-                            <div class="step">
-                                <div class="step_section">
-                                    <div class="step_body">
-                                        <div id="payment">
-                                            <div class="payment-area">
-                                                <div class="payments-nav" id="payment_methods_tab">
-                                                    <?php
-                                                    echo    $pmethodField->getHTML();
-                                                    ?>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php
-                            if (!empty($paymentMethods)) {
-                                echo $submitField->getHTML();
-                            } else {
-                                echo Labels::getLabel('LBL_PLEASE_ENABLED_PAYMENT_METHODS_OR_ADD_MONEY_IN_WALLET');
-                            }
-                            ?>
-                        </div>
                     </div>
-                    </form>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div class="modal-footer">
+    <?php
+    echo $submitField->getHTML();
+    ?>
+</div>
+</form>
 <?php echo $form->getExternalJS(); ?>

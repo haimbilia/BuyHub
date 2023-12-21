@@ -25,20 +25,6 @@ class GiftCards extends MyAppModel
         return $srch;
     }
 
-    public static function searchGiftCards(int $userId, string $keyword)
-    {
-        $srch = self::getSearchObject();
-        $srch->addCondition('ogcards_sender_id', '=', $userId);
-        if (!empty($keyword)) {
-            $cond = $srch->addCondition('ogcards_receiver_name', 'like', '%' . $keyword . '%');
-            $cond->attachCondition('ogcards_receiver_email', 'like', '%' . $keyword . '%');
-            $cond->attachCondition('ogcards_code', 'like', '%' . $keyword . '%');
-        }
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        return FatApp::getDb()->fetchAll($srch->getResultSet(), 'ogcards_id');
-    }
-
     public static function getGiftCards(int $userId)
     {
         $srch = new SearchBase(static::DB_TBL, 'giftcard');
