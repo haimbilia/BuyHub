@@ -122,12 +122,11 @@ class BlogController extends MyAppController
 
     public function search()
     {
-        $headerFormParamsArr = FatApp::getParameters();
-        $headerFormParamsAssocArr = BlogPost::convertArrToSrchFiltersAssocArr($headerFormParamsArr);
+        $get = BlogPost::convertArrToSrchFiltersAssocArr(FatApp::getParameters());
         $frm = $this->getBlogSearchForm();
-        $frm->fill($headerFormParamsAssocArr);
-        if (isset($headerFormParamsAssocArr['keyword'])) {
-            $keyword = $headerFormParamsAssocArr['keyword'];
+        $frm->fill($get);
+        if (isset($get['keyword'])) {
+            $keyword = $get['keyword'];
             $this->set('keyword', $keyword);
             $this->set('srchFrm', $frm);
         }
@@ -135,7 +134,12 @@ class BlogController extends MyAppController
         $featuredSrch = $this->getBlogSearchObject();
         $featuredSrch->addCondition('post_featured', '=', applicationConstants::YES);
         $featuredSrch->addOrder('post_added_on', 'desc');
-        $featuredSrch->setPageSize(4);
+        $pageSize = 4;
+        if (array_key_exists('pageSize', $get)) {
+            $pageSize = FatUtility::int($get['pageSize']);
+        }
+
+        $featuredSrch->setPageSize($pageSize);
         $featuredSrch->doNotCalculateRecords();
         $featuredRs = $featuredSrch->getResultSet();
         $featuredRecords = FatApp::getDb()->fetchAll($featuredRs);
@@ -594,6 +598,7 @@ class BlogController extends MyAppController
     {
         $frm = new Form('frmBlogSearch');
         $frm->addTextBox('', 'keyword', '', array('id' => 'keyword'));
+        $frm->addHiddenField('', 'pageSize', 4, array('id' => 'pageSizeJs'));
         $frm->addSubmitButton('', 'btnProductSrchSubmit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
         return $frm;
     }

@@ -825,3 +825,59 @@ mark,
     #{$end-direction}: 0.25rem;
     top: 0.25rem;
 }
+
+/* Used in blog search autocomplete. */
+.text-suggestions {
+    -webkit-flex: 1;
+  
+    flex: 1;
+  
+    display: -webkit-flex;
+  
+    display: flex;
+    -webkit-flex-direction: column;
+  
+    flex-direction: column;
+    font-size: 0.75rem;
+  
+    li {
+        padding-bottom: 8px;
+        transition: all 0.2s ease-in-out;
+  
+        a {
+            display: block;
+            position: relative;
+  
+            transition: all 0.2s linear;
+  
+            &:before {
+                visibility: hidden;
+                opacity: 0;
+                position: absolute;
+                left: 10px;
+                top: calc(50% - 3px);
+                content: "";
+                display: block;
+                margin: 0;
+                width: 6px;
+                height: 6px;
+                border-top: 1px solid currentColor;
+                border-#{$end-direction}: 1px solid currentColor;
+                transform: rotate(45deg);
+  
+                transition: all 0.2s linear;
+            }
+  
+            &:hover {
+                margin-#{$start-direction}: 10px;
+                color: $brand-color;
+  
+                &:before {
+                    #{$start-direction}: -12px;
+                    visibility: visible;
+                    opacity: 1;
+                }
+            }
+        }
+    }
+  }
