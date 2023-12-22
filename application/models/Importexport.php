@@ -899,8 +899,8 @@ class Importexport extends ImportexportCommon
                     }
                 }
                 if ($this->isDefaultSheetData($langId)) {
+                    $prodCateObj = new ProductCategory($categoryId);
                     if (applicationConstants::YES == $prodCatDataArr['prodcat_deleted']) {
-                        $prodCateObj = new ProductCategory($categoryId);
                         $childCats = $prodCateObj->getChildrens();
                         if (1 < count($childCats)) {
                             $errInSheet = true;
