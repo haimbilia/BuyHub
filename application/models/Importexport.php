@@ -899,13 +899,15 @@ class Importexport extends ImportexportCommon
                     }
                 }
                 if ($this->isDefaultSheetData($langId)) {
-                    $prodCateObj = new ProductCategory($categoryId);
-                    $childCats = $prodCateObj->getChildrens();
-                    if (1 < count($childCats)) {
-                        $errInSheet = true;
-                        $errMsg = Labels::getLabel("ERR_PLEASE_REMOVE_CHILD_CATEGORIES_FIRST.", $langId);
-                        CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
-                        continue;
+                    if (applicationConstants::YES == $prodCatDataArr['prodcat_deleted']) {
+                        $prodCateObj = new ProductCategory($categoryId);
+                        $childCats = $prodCateObj->getChildrens();
+                        if (1 < count($childCats)) {
+                            $errInSheet = true;
+                            $errMsg = Labels::getLabel("ERR_PLEASE_REMOVE_CHILD_CATEGORIES_FIRST.", $langId);
+                            CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
+                            continue;
+                        }
                     }
 
                     /* Sub-Categories have products[ */
@@ -3905,7 +3907,7 @@ class Importexport extends ImportexportCommon
     public function importSellerProdOptionData($csvFilePointer, $post, $langId, $userId = null)
     {
         FatApp::getDb()->query('delete t1 from tbl_seller_product_options t1 left join tbl_seller_products t2 on t2.selprod_id = t1.selprodoption_selprod_id where t2.selprod_id is null');
-        
+
         $rowIndex = 1;
         $optionIdentifierArr = array();
         $optionValueIndetifierArr = array();
