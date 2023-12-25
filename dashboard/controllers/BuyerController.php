@@ -3116,9 +3116,7 @@ class BuyerController extends BuyerBaseController
         if (FatUtility::int($post['order_total_amount']) < FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT')) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST'));
         }
-        if (FatUtility::int($post['order_total_amount']) > 0) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_PAYMENT_METHOD_NOT_AVAILABLE'));
-        }
+
         $languageRow = Language::getAttributesById($this->siteLangId);
         $post['order_language_id'] = $languageRow['language_id'];
         $post['order_language_code'] = $languageRow['language_code'];

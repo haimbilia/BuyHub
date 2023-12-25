@@ -23,131 +23,133 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $orderData['order_net_amount'
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <div class="step_head">
-                        <h5 class="step_title"><?php echo Labels::getLabel('LBL_PAYMENT_SUMMARY', $siteLangId); ?></h5>
-                        <h5 class="h5">
-                            <?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?> : <?php echo CommonHelper::displayMoneyFormat($orderData['order_net_amount'], true, false, true, false, true); ?>
-                            <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
-                                <p><?php echo CommonHelper::currencyDisclaimer($siteLangId, $orderData['order_net_amount']);  ?></p>
-                            <?php } ?>
-                        </h5>
-                    </div>
-                    <div class="step_body">
-                        <?php if ($noPaymentMethod) { ?>
-                            <div class="text-center">
-                                <img class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-payment-methods.svg" alt="<?php echo Labels::getLabel('LBL_NO_PAYMENT_METHOD_FOUND', $siteLangId); ?>">
-                                <h3><?php echo Labels::getLabel('ERR_PAYMENT_METHOD_IS_NOT_AVAILABLE.', $siteLangId); ?></h3>
-                                <p><?php echo Labels::getLabel('ERR_PLEASE_CONTACT_YOUR_ADMINISTRATOR.', $siteLangId); ?></p>
-                            </div>
-                        <?php } else { ?>
-                            <div id="payment">
-                                <div class="payment-area" ?>
-                                    <?php if ($orderData['order_net_amount'] <= 0) { ?>
-                                        <div class="wallet-payment confirm-payment" id="wallet">
-                                            <h4 class="h4">
-                                                <?php echo Labels::getLabel('LBL_PAYMENT_TO_BE_MADE', $siteLangId); ?>:&nbsp;
-                                                <strong><span class="currency-value" dir="ltr">
-                                                        <?php echo strip_tags(CommonHelper::displayMoneyFormat($orderData['order_net_amount'], true, false, true, false, true)); ?>
-                                                </strong>
-                                            </h4>
-                                            <?php
-                                            $label = Labels::getLabel('LBL_PAYMENT_TO_BE_MADE', $siteLangId) . ' ' . strip_tags(CommonHelper::displayMoneyFormat($orderData['order_net_amount'], true, false, true, false, true));
-                                            $btnSubmitFld = $confirmForm->getField('btn_submit');
-                                            $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand');
-                                            $btnSubmitFld->developerTags['noCaptionTag'] = true;
-                                            $confirmForm->developerTags['colClassPrefix'] = 'col-md-';
-                                            $confirmForm->developerTags['fld_default_col'] = 12;
-                                            echo $confirmForm->getFormHtml(); ?>
-                                        </div>
-                                    <?php } ?>
-
-                                    <?php if ($userWalletBalance > 0 && $orderData['order_net_amount'] > 0 && $canUseWalletForPayment) { ?>
-                                        <div class="wallet-payment">
-                                            <div>
-                                                <label class="checkbox wallet-credits">
-                                                    <?php if ($canUseWalletOrRewards) { ?>
-                                                        <input onchange="walletSelection(this)" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> type="checkbox" name="pay_from_wallet" id="pay_from_wallet" value="1">
-                                                    <?php } ?>
-                                                    <?php echo Labels::getLabel('LBL_WALLET_CREDITS:', $siteLangId); ?>&nbsp;
-                                                    <strong><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true); ?></strong>
-                                                </label>
-                                                <p class="wallet-payment-txt">
-                                                    <?php if ($canUseWalletOrRewards) {
-                                                        echo Labels::getLabel('LBL_USE_MY_WALLET_BALANCE_TO_PAY_FOR_MY_ORDER', $siteLangId);
-                                                    } else {
-                                                        echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_PAYMENT_CANNOT_BE_MADE_DUE_TO_A_LOW_BALANCE', $siteLangId));
-                                                    } ?>
-                                                </p>
-                                            </div>
-                                            <?php if ($cartSummary["cartWalletSelected"] &&  $userWalletBalance >= $orderData['order_net_amount']) {
-                                                $btnSubmitFld = $walletPaymentForm->getField('btn_submit');
-                                                $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
-                                                $btnSubmitFld->value = Labels::getLabel('LBL_PAY', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($orderData['order_net_amount'], true, false, true, false, false);
-                                                $walletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
-                                                $walletPaymentForm->developerTags['fld_default_col'] = 12;
-
-                                                echo $walletPaymentForm->getFormTag();
-                                                echo $walletPaymentForm->getFieldHTML('order_id');
-                                                echo $walletPaymentForm->getFieldHTML('btn_submit');
-                                                echo $walletPaymentForm->getExternalJS();
-                                                echo '</form>';         ?>
-                                                <script>
-                                                    function confirmOrder(frm) {
-                                                        var data = fcom.frmData(frm);
-                                                        data = data + "&order_type=" + <?php echo Orders::GIFT_CARD_TYPE; ?>;
-
-                                                        var action = $(frm).attr('action');
-                                                        $(frm.btn_submit).attr({
-                                                            'disabled': 'disabled'
-                                                        });
-                                                        fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(ans) {
-                                                            $(location).attr("href", action);
-                                                            fcom.removeLoader();
-                                                        });
-                                                    }
-                                                </script>
-                                            <?php } ?>
-                                        </div>
-                                    <?php } ?>
-
-                                    <?php if (0 < count($paymentMethods)) { ?>
-                                        <ul class="payments-nav" id="payment_methods_tab">
-                                            <?php
-                                            $showFirstElement = '';
-                                            $i = 0;
-                                            foreach ($paymentMethods as $key => $val) {
-                                                $pmethodCode = $val['plugin_code'];
-                                                if (isset($pmethodCode) && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore'])) {
-                                                    continue;
-                                                }
-                                                $pmethodId = $val['plugin_id'];
-                                                $pmethodName = $val['plugin_name'];
-
-                                                if (in_array($pmethodCode, $excludePaymentGatewaysArr[applicationConstants::CHECKOUT_PRODUCT])) {
-                                                    continue;
-                                                }
-
-                                                if (0 == $i) {
-                                                    $showFirstElement = 'show';
-                                                    $i++;
-                                                } ?>
-                                                <li class="payments-nav-item">
-                                                    <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderId, $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>" data-bs-toggle="collapse" data-bs-target="#<?php echo $pmethodCode; ?>-section" aria-expanded="true" aria-controls="<?php echo $pmethodCode; ?>-section">
-                                                        <?php echo $pmethodName; ?>
-                                                    </a>
-
-                                                    <?php /* if (0 < $cartSummary['orderPaymentGatewayCharges']) {  */ ?>
-                                                    <div class="accordion-collapse <?php echo $showFirstElement; ?> collapse payment-block paymentBlockJs <?php echo $pmethodCode . '-js'; ?>" id="<?php echo $pmethodCode; ?>-section" aria-labelledby="headingOne" data-bs-parent="#payment_methods_tab"></div>
-                                                    <?php /* } */ ?>
-                                                </li>
-                                            <?php
-                                                $showFirstElement = '';
-                                            } ?>
-                                        </ul>
-                                    <?php } ?>
+                    <div class="step">
+                        <div class="step_head">
+                            <h5 class="step_title"><?php echo Labels::getLabel('LBL_PAYMENT_SUMMARY', $siteLangId); ?></h5>
+                            <h5 class="h5">
+                                <?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?> : <?php echo CommonHelper::displayMoneyFormat($orderData['order_net_amount'], true, false, true, false, true); ?>
+                                <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
+                                    <p><?php echo CommonHelper::currencyDisclaimer($siteLangId, $orderData['order_net_amount']);  ?></p>
+                                <?php } ?>
+                            </h5>
+                        </div>
+                        <div class="step_body">
+                            <?php if ($noPaymentMethod) { ?>
+                                <div class="text-center">
+                                    <img class="block__img" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-payment-methods.svg" alt="<?php echo Labels::getLabel('LBL_NO_PAYMENT_METHOD_FOUND', $siteLangId); ?>">
+                                    <h3><?php echo Labels::getLabel('ERR_PAYMENT_METHOD_IS_NOT_AVAILABLE.', $siteLangId); ?></h3>
+                                    <p><?php echo Labels::getLabel('ERR_PLEASE_CONTACT_YOUR_ADMINISTRATOR.', $siteLangId); ?></p>
                                 </div>
-                            </div>
-                        <?php } ?>
+                            <?php } else { ?>
+                                <div id="payment">
+                                    <div class="payment-area" ?>
+                                        <?php if ($orderData['order_net_amount'] <= 0) { ?>
+                                            <div class="wallet-payment confirm-payment" id="wallet">
+                                                <h4 class="h4">
+                                                    <?php echo Labels::getLabel('LBL_PAYMENT_TO_BE_MADE', $siteLangId); ?>:&nbsp;
+                                                    <strong><span class="currency-value" dir="ltr">
+                                                            <?php echo strip_tags(CommonHelper::displayMoneyFormat($orderData['order_net_amount'], true, false, true, false, true)); ?>
+                                                    </strong>
+                                                </h4>
+                                                <?php
+                                                $label = Labels::getLabel('LBL_PAYMENT_TO_BE_MADE', $siteLangId) . ' ' . strip_tags(CommonHelper::displayMoneyFormat($orderData['order_net_amount'], true, false, true, false, true));
+                                                $btnSubmitFld = $confirmForm->getField('btn_submit');
+                                                $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand');
+                                                $btnSubmitFld->developerTags['noCaptionTag'] = true;
+                                                $confirmForm->developerTags['colClassPrefix'] = 'col-md-';
+                                                $confirmForm->developerTags['fld_default_col'] = 12;
+                                                echo $confirmForm->getFormHtml(); ?>
+                                            </div>
+                                        <?php } ?>
+
+                                        <?php if ($userWalletBalance > 0 && $orderData['order_net_amount'] > 0 && $canUseWalletForPayment) { ?>
+                                            <div class="wallet-payment">
+                                                <div>
+                                                    <label class="checkbox wallet-credits">
+                                                        <?php if ($canUseWalletOrRewards) { ?>
+                                                            <input onchange="walletSelection(this)" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> type="checkbox" name="pay_from_wallet" id="pay_from_wallet" value="1">
+                                                        <?php } ?>
+                                                        <?php echo Labels::getLabel('LBL_WALLET_CREDITS:', $siteLangId); ?>&nbsp;
+                                                        <strong><?php echo CommonHelper::displayMoneyFormat($userWalletBalance, true, false, true, false, true); ?></strong>
+                                                    </label>
+                                                    <p class="wallet-payment-txt">
+                                                        <?php if ($canUseWalletOrRewards) {
+                                                            echo Labels::getLabel('LBL_USE_MY_WALLET_BALANCE_TO_PAY_FOR_MY_ORDER', $siteLangId);
+                                                        } else {
+                                                            echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('LBL_PAYMENT_CANNOT_BE_MADE_DUE_TO_A_LOW_BALANCE', $siteLangId));
+                                                        } ?>
+                                                    </p>
+                                                </div>
+                                                <?php if ($cartSummary["cartWalletSelected"] &&  $userWalletBalance >= $orderData['order_net_amount']) {
+                                                    $btnSubmitFld = $walletPaymentForm->getField('btn_submit');
+                                                    $btnSubmitFld->addFieldTagAttribute('class', 'btn btn-brand btn-wide');
+                                                    $btnSubmitFld->value = Labels::getLabel('LBL_PAY', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($orderData['order_net_amount'], true, false, true, false, false);
+                                                    $walletPaymentForm->developerTags['colClassPrefix'] = 'col-md-';
+                                                    $walletPaymentForm->developerTags['fld_default_col'] = 12;
+
+                                                    echo $walletPaymentForm->getFormTag();
+                                                    echo $walletPaymentForm->getFieldHTML('order_id');
+                                                    echo $walletPaymentForm->getFieldHTML('btn_submit');
+                                                    echo $walletPaymentForm->getExternalJS();
+                                                    echo '</form>';         ?>
+                                                    <script>
+                                                        function confirmOrder(frm) {
+                                                            var data = fcom.frmData(frm);
+                                                            data = data + "&order_type=" + <?php echo Orders::GIFT_CARD_TYPE; ?>;
+
+                                                            var action = $(frm).attr('action');
+                                                            $(frm.btn_submit).attr({
+                                                                'disabled': 'disabled'
+                                                            });
+                                                            fcom.updateWithAjax(fcom.makeUrl('Checkout', 'confirmOrder'), data, function(ans) {
+                                                                $(location).attr("href", action);
+                                                                fcom.removeLoader();
+                                                            });
+                                                        }
+                                                    </script>
+                                                <?php } ?>
+                                            </div>
+                                        <?php } ?>
+
+                                        <?php if (0 < count($paymentMethods)) { ?>
+                                            <ul class="payments-nav" id="payment_methods_tab">
+                                                <?php
+                                                $showFirstElement = '';
+                                                $i = 0;
+                                                foreach ($paymentMethods as $key => $val) {
+                                                    $pmethodCode = $val['plugin_code'];
+                                                    if (isset($pmethodCode) && in_array(strtolower($pmethodCode), ['cashondelivery', 'payatstore'])) {
+                                                        continue;
+                                                    }
+                                                    $pmethodId = $val['plugin_id'];
+                                                    $pmethodName = $val['plugin_name'];
+
+                                                    if (in_array($pmethodCode, $excludePaymentGatewaysArr[applicationConstants::CHECKOUT_PRODUCT])) {
+                                                        continue;
+                                                    }
+
+                                                    if (0 == $i) {
+                                                        $showFirstElement = 'show';
+                                                        $i++;
+                                                    } ?>
+                                                    <li class="payments-nav-item">
+                                                        <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderId, $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>" data-bs-toggle="collapse" data-bs-target="#<?php echo $pmethodCode; ?>-section" aria-expanded="true" aria-controls="<?php echo $pmethodCode; ?>-section">
+                                                            <?php echo $pmethodName; ?>
+                                                        </a>
+
+                                                        <?php /* if (0 < $cartSummary['orderPaymentGatewayCharges']) {  */ ?>
+                                                        <div class="accordion-collapse <?php echo $showFirstElement; ?> collapse payment-block paymentBlockJs <?php echo $pmethodCode . '-js'; ?>" id="<?php echo $pmethodCode; ?>-section" aria-labelledby="headingOne" data-bs-parent="#payment_methods_tab"></div>
+                                                        <?php /* } */ ?>
+                                                    </li>
+                                                <?php
+                                                    $showFirstElement = '';
+                                                } ?>
+                                            </ul>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
             </div>
