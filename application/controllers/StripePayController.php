@@ -93,6 +93,7 @@ class StripePayController extends PaymentController
                 $this->error = CommonHelper::replaceStringData(Labels::getLabel('ERR_MINIMUM_STRIPE_CHARGE_AMOUNT_IS_{MIN-AMOUNT}', $this->siteLangId), ['{MIN-AMOUNT}' => $stripeMinAmount]);
             }
         }
+
         $processRequest = false;
         if (!$orderInfo['id']) {
             $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);

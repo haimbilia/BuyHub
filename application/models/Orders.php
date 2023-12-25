@@ -1,5 +1,6 @@
 <?php
 
+use Google\Service\CloudTasks\CmekConfig;
 use Stripe\Order;
 
 class Orders extends MyAppModel
@@ -3023,22 +3024,20 @@ class Orders extends MyAppModel
             return false;
         }
 
-
-        $pmethodId = $data['order_pmethod_id'];
-        $addpay = FatUtility::int($data['add_and_pay']);
-        if ($addpay == applicationConstants::YES) {
-            $balance = User::getUserBalance(UserAuthentication::getLoggedUserId(), true);
-            $remaining = FatUtility::float($balance - $amount);
-            if ($remaining <= 0) {
-                $this->error = Labels::getLabel('LBL_INVALID_REQUEST');
-                return false;
-            }
-        }
         $db = FatApp::getDb();
         if (!$db->startTransaction()) {
             $this->error = $db->getError();
             return false;
         }
+
+        $receiver = User::getByEmail($data['ogcards_receiver_email']);
+        if (!empty($receiver['credential_email']) && $receiver['user_deleted'] == applicationConstants::YES) {
+            $this->error = Labels::getLabel('LBL_INVALID_REQUEST');
+            $db->rollbackTransaction();
+            return false;
+        }
+
+
         $currency = Currency::getAttributesById(CommonHelper::getCurrencyId());
         $orderNumber =  $this->generateOrderNo();
         $this->assignValues([
@@ -3050,14 +3049,11 @@ class Orders extends MyAppModel
             'order_language_code' => $data['order_language_code'],
             'order_net_amount' => $amount,
             'order_payment_status' => Orders::ORDER_PAYMENT_PENDING,
-            'order_pmethod_id' => FatUtility::int($pmethodId),
             'order_currency_id' => $currency['currency_id'],
             'order_currency_code' => $currency['currency_code'],
             'order_currency_value' => $currency['currency_value'],
             'order_status' => 0,
             'order_number' => $orderNumber,
-            'order_wallet_amount_charge' => $data['order_wallet_amount_charge'],
-            'order_is_wallet_selected' => $data['order_is_wallet_selected']
 
         ]);
         if (!$this->save()) {
@@ -3066,12 +3062,6 @@ class Orders extends MyAppModel
             return false;
         }
         $this->orderId =  $this->getMainTableRecordId();
-        if (FatUtility::int($pmethodId)) {
-            $_SESSION['cart_order_id'] = $this->orderId;
-            $_SESSION['order_type'] = static::GIFT_CARD_TYPE;
-            $this->updateOrderInfo($this->orderId, array('order_pmethod_id' => FatUtility::int($pmethodId)));
-        }
-
         $cardData = [
             'ogcards_code' => uniqid(),
             'ogcards_sender_id' => UserAuthentication::getLoggedUserId(),
@@ -3080,12 +3070,7 @@ class Orders extends MyAppModel
             'ogcards_receiver_name' => $data['ogcards_receiver_name'],
             'ogcards_receiver_email' => $data['ogcards_receiver_email'],
         ];
-        $receiver = User::getByEmail($data['ogcards_receiver_email']);
-        if (!empty($receiver['credential_email']) && $receiver['user_deleted'] == applicationConstants::YES) {
-            $this->error = Labels::getLabel('LBL_INVALID_REQUEST');
-            $db->rollbackTransaction();
-            return false;
-        }
+
         if (!empty($receiver['credential_email'])) {
             $cardData['ogcards_receiver_id'] = $receiver['user_id'];
         }

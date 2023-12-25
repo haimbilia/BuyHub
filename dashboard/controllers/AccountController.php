@@ -443,7 +443,6 @@ class AccountController extends LoggedUserController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TRANSACTION_ID,_ORDER_ID_OR_COMMENT', $this->siteLangId));
         $this->set('accountSummary', $accountSummary);
         $this->set('canAddMoneyToWallet', $this->canAddMoneyWallet());
-
         $this->set('canRedeemGiftCard', $this->canRedeemGiftCard());
         $this->_template->render();
     }
