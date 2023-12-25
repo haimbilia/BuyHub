@@ -130,7 +130,7 @@ class FullTextSearch extends FatModel
             $srch->addSubscriptionValidCondition();
             $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
             $srch->addMultipleFields(array('product_id','product_name', 'product_type', 'product_model', 'product_seller_id', 'product_updated_on', 'product_active', 'product_approved', 'product_upc', 'product_isbn', 'product_ship_country', 'product_ship_free', 'product_cod_enabled', 'product_short_description', 'product_description', 'product_tags_string', 'theprice', 'selprod_id','selprod_price','selprod_title','ROUND(((selprod_price - theprice)*100)/selprod_price) as discountedValue','special_price_found','if(selprod_stock > 0, 1, 0) as in_stock','prod_rating as product_rating', 'brand_id','brand_name','brand_short_description','brand_active'));
-            $srch->joinProductRating();
+            // $srch->joinProductRating();
             $srch->doNotCalculateRecords();
 
             if (1 > $productId) {

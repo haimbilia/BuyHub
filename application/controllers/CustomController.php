@@ -314,7 +314,7 @@ class CustomController extends MyAppController
 
         $srch->addGroupBy('faqcat_id');
         $srch->addMultipleFields(array('IFNULL(faqcat_name, faqcat_identifier) as faqcat_name', 'faqcat_id'));
-        $srch->addFld('COUNT(*) AS faq_count');
+        $srch->addFld('COUNT(1) AS faq_count');
         if (isset($srchCondition)) {
             $srchCondition->remove();
         }

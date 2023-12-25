@@ -1217,7 +1217,7 @@ class ProductsController extends MyAppController
     {
         if (isset($ids) && is_array($ids) && count($ids)) {
             $prodSrch = new ProductSearch($this->siteLangId);
-            $prodSrch->setDefinedCriteria();
+            $prodSrch->setDefinedCriteria(0, 0, ['selProdIds' => $ids]);
             $prodSrch->joinProductToCategory();
             $prodSrch->doNotCalculateRecords();
 
@@ -1533,12 +1533,12 @@ class ProductsController extends MyAppController
         $productSrchObj->doNotCalculateRecords();
         $productSrchObj->setPageSize(1);
         $productSrchObj->setDefinedCriteria();
-        $productSrchObj->joinProductRating();
+        // $productSrchObj->joinProductRating();
         $productSrchObj->addMultipleFields(
             array(
                 'product_id', 'selprod_id', 'COALESCE(product_name, product_identifier) as product_name', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
                 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'COALESCE(sq_sprating.prod_rating,0) prod_rating ', 'selprod_sold_count'
+                'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_rating as prod_rating ', 'selprod_sold_count'
             )
         );
 

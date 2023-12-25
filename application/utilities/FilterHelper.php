@@ -56,8 +56,8 @@ class FilterHelper extends FatUtility
 
         $topProducts = FatApp::getPostedData('top_products', FatUtility::VAR_INT, 0);
         if (0 < $topProducts) {
-            $prodSrchObj->joinProductRating();
-            $prodSrchObj->addCondition('prod_rating', '>=', 3);
+            // $prodSrchObj->joinProductRating();
+            $prodSrchObj->addCondition('product_rating', '>=', 3);
         }
 
         $brandId = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, 0);

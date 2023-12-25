@@ -58,12 +58,12 @@ class CheckuniqueController
         $srch->addCondition(FatApp::getPostedData('tbl_key', FatUtility::VAR_STRING), '!=', FatApp::getPostedData('key_val', FatUtility::VAR_STRING));
 
         $operators = array(
-                'eq' => '=',
-                'ne' => '!=',
-                'gt' => '>',
-                'ge' => '>=',
-                'lt' => '<',
-                'le' => '<='
+            'eq' => '=',
+            'ne' => '!=',
+            'gt' => '>',
+            'ge' => '>=',
+            'lt' => '<',
+            'le' => '<='
         );
 
         if (is_array(FatApp::getPostedData('constraints'))) {
@@ -79,8 +79,8 @@ class CheckuniqueController
         $rs = $srch->getResultSet();
         if ($db->totalRecords($rs) > 0) {
             $arr = array(
-                    'status' => 0,
-                    'existing_value' => ''
+                'status' => 0,
+                'existing_value' => ''
             );
             if (FatApp::getPostedData('key_val') != '' && FatApp::getPostedData('key_val', FatUtility::VAR_STRING) != '0') {
                 $srch = new SearchBase(FatApp::getPostedData('tbl'));
@@ -104,7 +104,7 @@ class CheckuniqueController
         $srch = new SearchBase(self::DB_TBL);
         $srch->addCondition('ucfattempt_ip', '=', $ip);
         $srch->addCondition('ucfattempt_time', '>=', date('Y-m-d H:i:s', strtotime("-1 minutes")));
-        $srch->addFld('COUNT(*) AS total');
+        $srch->addFld('COUNT(1) AS total');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -120,18 +120,20 @@ class CheckuniqueController
         $db = FatApp::getDb();
 
         $db->deleteRecords(self::DB_TBL, array(
-                'smt' => 'ucfattempt_time < ?',
-                'vals' => array(date('Y-m-d H:i:s', strtotime("-7 Day")) ) ));
+            'smt' => 'ucfattempt_time < ?',
+            'vals' => array(date('Y-m-d H:i:s', strtotime("-7 Day")))
+        ));
 
         if ($removeOldEntries) {
             $db->deleteRecords(self::DB_TBL, array(
                 'smt' => 'ucfattempt_ip = ? and ucfattempt_time < ? ',
-                'vals' => array($ip, date('Y-m-d H:i:s', strtotime("-2 Min")) ) ));
+                'vals' => array($ip, date('Y-m-d H:i:s', strtotime("-2 Min")))
+            ));
         }
 
         $db->insertFromArray(self::DB_TBL, array(
-                'ucfattempt_ip' => $ip,
-                'ucfattempt_time' => date('Y-m-d H:i:s')
+            'ucfattempt_ip' => $ip,
+            'ucfattempt_time' => date('Y-m-d H:i:s')
         ));
 
         // For improvement, we can send an email about the failed attempt here.

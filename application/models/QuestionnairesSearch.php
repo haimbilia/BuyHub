@@ -107,7 +107,7 @@ class QuestionnairesSearch extends SearchBase
         $childSrchbase->doNotCalculateRecords();
         $childSrchbase->doNotLimitRecords();
         $childSrchbase->addGroupBy('qtq_questionnaire_id');
-        $childSrchbase->addFld('COUNT(*) AS qnCount');
+        $childSrchbase->addFld('COUNT(1) AS qnCount');
         $childSrchbase->addFld('qtq_questionnaire_id');
 
         $this->joinTable('(' . $childSrchbase->getQuery() . ')', 'LEFT OUTER JOIN', 's.qtq_questionnaire_id = questionnaire.questionnaire_id', 's');
@@ -119,7 +119,7 @@ class QuestionnairesSearch extends SearchBase
         $childSrchbase->doNotCalculateRecords();
         $childSrchbase->doNotLimitRecords();
         $childSrchbase->addGroupBy('qfeedback_questionnaire_id');
-        $childSrchbase->addFld('COUNT(*) AS qFeedbackCount');
+        $childSrchbase->addFld('COUNT(1) AS qFeedbackCount');
         $childSrchbase->addFld('qfeedback_questionnaire_id');
 
         $this->joinTable('(' . $childSrchbase->getQuery() . ')', 'LEFT OUTER JOIN', 'qfeedback_rs.qfeedback_questionnaire_id = questionnaire.questionnaire_id', 'qfeedback_rs');

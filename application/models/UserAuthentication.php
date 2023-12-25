@@ -108,7 +108,7 @@ class UserAuthentication extends FatModel
         $srch = new SearchBase('tbl_failed_login_attempts');
         $srch->addCondition('attempt_ip', '=', $ip)->attachCondition('attempt_username', '=', $username);
         $srch->addCondition('attempt_time', '>=', date('Y-m-d H:i:s', strtotime("-5 minutes")));
-        $srch->addFld('COUNT(*) AS total');
+        $srch->addFld('COUNT(1) AS total');
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         $row = $db->fetch($rs);

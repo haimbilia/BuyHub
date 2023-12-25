@@ -939,7 +939,7 @@ class MyAppController extends FatController
             if (!empty($removeFlds)) {
                 $recordCountSrch->removeFld($removeFlds);
             }
-            $recordCountSrch->addFld('count(*) as totalRecords');
+            $recordCountSrch->addFld('count(1) as totalRecords');
             $recordCountSrch->doNotCalculateRecords();
             $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
             $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
@@ -976,7 +976,7 @@ class MyAppController extends FatController
             if (!empty($removeFlds)) {
                 $recordCountSrch->removeFld($removeFlds);
             }
-            $recordCountSrch->addFld('count(*) as totalRecords');
+            $recordCountSrch->addFld('count(1) as totalRecords');
             $recordCountSrch->doNotCalculateRecords();
             $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
             $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;

@@ -61,7 +61,7 @@ class AdminShopSearch extends SearchBase
             return [];
         }
         $shopReportObj = ShopReport::getSearchObject($this->langId);
-        $shopReportObj->addMultipleFields(array('sreport_shop_id', 'count(*) as numOfReports'));
+        $shopReportObj->addMultipleFields(array('sreport_shop_id', 'count(1) as numOfReports'));
         $shopReportObj->addDirectCondition('( sreport_shop_id  IN (' . implode(',', $shopIds) . '))');
         $shopReportObj->addGroupby('sreport_shop_id');
         $shopReportObj->doNotCalculateRecords();
@@ -83,7 +83,7 @@ class AdminShopSearch extends SearchBase
         $prodSrch->addCondition('product_active', '=', applicationConstants::ACTIVE);
         $prodSrch->addCondition('product_approved', '=', applicationConstants::YES);
         $prodSrch->addDirectCondition('( selprod_user_id  IN (' . implode(',', $shopUserIds) . '))');
-        $prodSrch->addMultipleFields(array('selprod_user_id', 'count(*) as numOfProducts'));
+        $prodSrch->addMultipleFields(array('selprod_user_id', 'count(1) as numOfProducts'));
         $prodSrch->addGroupby('selprod_user_id');
         $prodSrch->doNotCalculateRecords();
         $prodSrch->doNotLimitRecords();
@@ -102,7 +102,7 @@ class AdminShopSearch extends SearchBase
         $ratingSrch->joinSellerProducts();
         $ratingSrch->joinSelProdRating();
         $ratingSrch->addCondition('rt.ratingtype_type', '=', RatingType::TYPE_PRODUCT);
-        $ratingSrch->addMultipleFields(array('spreview_seller_user_id', 'count(*) as numOfReviews'));
+        $ratingSrch->addMultipleFields(array('spreview_seller_user_id', 'count(1) as numOfReviews'));
         $ratingSrch->addDirectCondition('( spreview_seller_user_id  IN (' . implode(',', $shopUserIds) . '))');
         $ratingSrch->addGroupby('spreview_seller_user_id');
         $ratingSrch->doNotCalculateRecords();

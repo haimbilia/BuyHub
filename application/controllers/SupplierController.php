@@ -567,7 +567,7 @@ class SupplierController extends MyAppController
 
         $srch->addGroupBy('faqcat_id');
         $srch->addMultipleFields(array('faqcat_name', 'faqcat_id'));
-        $srch->addFld('COUNT(*) AS faq_count');
+        $srch->addFld('COUNT(1) AS faq_count');
         if (isset($srchCondition)) {
             $srchCondition->remove();
         }

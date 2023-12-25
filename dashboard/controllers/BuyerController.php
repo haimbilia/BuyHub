@@ -264,7 +264,7 @@ class BuyerController extends BuyerBaseController
         }
 
         $opSrchObj = Orders::searchOrderProducts(['order_id' => $orderDetail['order_id']]);
-        $opSrchObj->addFld('count(*) as opCount');
+        $opSrchObj->addFld('count(1) as opCount');
         $opSrchObj->doNotCalculateRecords();
         $childOrderProductsCountData = FatApp::getDb()->fetch($opSrchObj->getResultSet());
         if (1 > $opId || 1 == $childOrderProductsCountData['opCount']) {
@@ -2020,6 +2020,7 @@ class BuyerController extends BuyerBaseController
 
         SelProdRating::updateSellerRating($sellerId);
         SelProdReview::updateSellerTotalReviews($sellerId);
+        SelProdReview::updateProductRating($productId);
 
         $spreviewId = $selProdReview->getMainTableRecordId();
 

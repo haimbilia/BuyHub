@@ -28,7 +28,7 @@ class BrandsController extends MyAppController
                 $productCustomSrchObj->joinFavouriteProducts(UserAuthentication::getLoggedUserId());
             }
 
-            $productCustomSrchObj->joinProductRating();
+            // $productCustomSrchObj->joinProductRating();
             $productCustomSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
             $productCustomSrchObj->addGroupBy('selprod_id');
 
@@ -36,7 +36,7 @@ class BrandsController extends MyAppController
                 array(
                     'product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
                     'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                    'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'ifnull(sq_sprating.prod_rating,0) prod_rating ', 'ifnull(sq_sprating.totReviews,0) totReviews', 'selprod_sold_count', 'selprod_min_order_qty','product_img_updated_on'
+                    'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'product_rating as prod_rating ', 'product_total_reviews as totReviews', 'selprod_sold_count', 'selprod_min_order_qty','product_img_updated_on'
                 )
             );
             if (UserAuthentication::isUserLogged()) {

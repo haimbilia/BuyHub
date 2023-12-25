@@ -11,6 +11,7 @@
 
 ## Enhancements:
     - Load all categories on ajax call instead of page load.
+    - Performance optimization to handle product ratings.
 
 ## Bug Fixes:
     - Bug-074802 - Omise Payment gateway deprecated issue.
@@ -20,3 +21,6 @@
     - Bug-077681 - The user can download the preview files but not able to preview within the system.
     - Bug-078138 - Product setup page gets distorted when the admin tries to paste the content in CMS editor (Firefox)
     - Bug-076927 - The shipping charges get refunded to the buyer even if the admin disabled return shipping charges to the customer setting
+
+## Hit URL:
+    - admin/patch-update/updateProductRating    

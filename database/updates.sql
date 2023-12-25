@@ -12,3 +12,11 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 ALTER TABLE `tbl_upc_codes` ADD INDEX(`upc_code`);
 ALTER TABLE `tbl_upc_codes` ADD INDEX(`upc_product_id`);
+
+ALTER TABLE `tbl_products` ADD `product_rating` FLOAT(10,2) NOT NULL AFTER `product_ship_package`, ADD `product_total_reviews` INT(11) NOT NULL AFTER `product_rating`;
+ALTER TABLE `tbl_product_category_relations` ADD INDEX( `pcr_parent_id`);
+ALTER TABLE `tbl_meta_tags` ADD INDEX( `meta_record_id`);
+ALTER TABLE `tbl_meta_tags` ADD INDEX( `meta_subrecord_id`);
+ALTER TABLE `tbl_url_rewrite` ADD INDEX( `urlrewrite_custom`);
+ALTER TABLE `tbl_url_rewrite` ADD INDEX( `urlrewrite_original`);
+ALTER TABLE `tbl_product_special_prices` ADD INDEX( `splprice_price`);

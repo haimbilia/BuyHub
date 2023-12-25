@@ -810,8 +810,8 @@ class HomeController extends MyAppController
                     $productSrchTempObj = clone $productSrchObj;
                     $productSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'selprod_id = ctr.ctr_record_id', 'ctr');
                     if (true === MOBILE_APP_API_CALL) {
-                        $productSrchTempObj->joinProductRating();
-                        $productSrchTempObj->addFld('IFNULL(prod_rating, 0) as prod_rating');
+                        // $productSrchTempObj->joinProductRating();
+                        $productSrchTempObj->addFld('product_rating as prod_rating');
                     }
 
                     $productSrchTempObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
@@ -1279,7 +1279,7 @@ class HomeController extends MyAppController
                     $faqCategorySearchObj->addMultipleFields($attr);
                     $faqCategorySearchObj->addOrder('ctr.ctr_display_order', 'ASC');
                     $faqCategorySearchObj->addGroupBy('faqcat_id');
-                    $faqCategorySearchObj->addFld('COUNT(*) AS faq_count');
+                    $faqCategorySearchObj->addFld('COUNT(1) AS faq_count');
                     $res = $faqCategorySearchObj->getResultSet();
                     $faqCats = $db->fetchAll($res);
                     if (empty($faqCats)) {
@@ -1516,8 +1516,8 @@ class HomeController extends MyAppController
         $db = FatApp::getDb();
         $productSrchSponObj = $this->getSponsoredProductsObj($productSrchObj);
         if (true === MOBILE_APP_API_CALL) {
-            $productSrchSponObj->joinProductRating();
-            $productSrchSponObj->addFld('IFNULL(prod_rating, 0) as prod_rating');
+            // $productSrchSponObj->joinProductRating();
+            $productSrchSponObj->addFld('product_rating as prod_rating');
         }
         $productSrchSponObj->doNotCalculateRecords();
         $productSrchSponObj->setPageSize($productPageSize);
@@ -1538,8 +1538,8 @@ class HomeController extends MyAppController
         $productSrchObj = $this->getProductSearchObj($loggedUserId);
 
         $productSrchSponObj = $this->getSponsoredProductsObj($productSrchObj);
-        $productSrchSponObj->joinProductRating();
-        $productSrchSponObj->addFld('IFNULL(prod_rating, 0) as prod_rating');
+        // $productSrchSponObj->joinProductRating();
+        $productSrchSponObj->addFld('product_rating as prod_rating');
         $productSrchSponObj->setPageNumber($page);
         $productSrchSponObj->setPageSize($pagesize);
         $sponsoredProds = FatApp::getDb()->fetchAll($productSrchSponObj->getResultSet());
@@ -1710,11 +1710,8 @@ class HomeController extends MyAppController
             $websiteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->siteLangId, FatUtility::VAR_STRING, '');
 
             $srch = new MetaTagSearch($this->siteLangId);
-            $cond = $srch->addCondition('meta_controller', '=', 'Home');
-            $cond->attachCondition('meta_controller', '=', '', 'OR');
-
-            $cond1 = $srch->addCondition('meta_action', '=', 'index');
-            $cond1->attachCondition('meta_action', '=', '', 'OR');
+            $srch->addCondition('meta_controller', '=', 'Home');
+            $srch->addCondition('meta_action', '=', 'index');
 
             // $srch->addOrder('meta_default', 'asc');
             $srch->doNotCalculateRecords();

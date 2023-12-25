@@ -150,7 +150,7 @@ class Navigation
         $srch = Product::getSearchObject();
         $srch->addCondition('product_approved', '=', Product::UNAPPROVED);
         $srch->addCondition('product_seller_id', '>', 0);
-        $srch->addMultipleFields(array('count(*) as countOfRec'));
+        $srch->addMultipleFields(array('count(1) as countOfRec'));
         $srch->doNotCalculateRecords();
         $srch->setPageSize(HtmlHelper::RECORD_COUNT_LIMIT);
         $selProdReqResult = $db->fetch($srch->getResultset());
