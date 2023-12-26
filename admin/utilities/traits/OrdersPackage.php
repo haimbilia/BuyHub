@@ -84,12 +84,14 @@ trait OrdersPackage
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'order_date_added');
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = 'order_date_added';
         }
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
+
         $srchFrm = $this->getSearchForm($fields);
         $postedData = FatApp::getPostedData();
         $post = $srchFrm->getFormDataFromArray($postedData);
@@ -105,7 +107,7 @@ trait OrdersPackage
         }
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
-            $srch->addKeywordSearch($keyword);
+            $srch->addKeywordSearch($keyword, $this->ordersType);
         }
 
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
@@ -164,6 +166,7 @@ trait OrdersPackage
         if ($this->ordersType == Orders::GIFT_CARD_TYPE) {
             $fieldsearch[] = 'ogcards_receiver_name';
             $fieldsearch[] = 'ogcards_receiver_email';
+            $fieldsearch[] = 'ogcards_status';
         }
 
         $srch->addMultipleFields($fieldsearch);

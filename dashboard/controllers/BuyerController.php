@@ -2998,6 +2998,12 @@ class BuyerController extends BuyerBaseController
 
     public function giftCards()
     {
+
+        $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
+        if ($isSplitPaymentMethod) {
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST'));
+            FatApp::redirectUser(UrlHelper::generateUrl('buyer', ''));
+        }
         $frm = $this->getGiftCardSearchForm($this->siteLangId);
         $this->set('frmSearch', $frm);
         $this->_template->render(true, true);
@@ -3007,6 +3013,12 @@ class BuyerController extends BuyerBaseController
     public function searchGiftCards()
     {
 
+
+        $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
+        if ($isSplitPaymentMethod) {
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST'));
+            FatApp::redirectUser(UrlHelper::generateUrl('buyer', ''));
+        }
         $frm = $this->getGiftCardSearchForm($this->siteLangId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -3068,6 +3080,7 @@ class BuyerController extends BuyerBaseController
 
     private function getGiftCardSearchForm($langId)
     {
+
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'total_record_count', '');
         $frm->addHiddenField('', 'page');
@@ -3083,14 +3096,21 @@ class BuyerController extends BuyerBaseController
 
     public function giftCardForm()
     {
+
+        $splitPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);
+        if (!empty($splitPaymentMethodsPlugins)) {
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST'));
+            FatApp::redirectUser(UrlHelper::generateUrl('buyer', ''));
+        }
         $this->set('form', $this->getForm());
         $this->set('currency',  Currency::getAttributesById(CommonHelper::getCurrencyId()));
-        $this->set('minAmount', FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT'));
+        $this->set('minAmount', FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT', FatUtility::VAR_FLOAT, 100));
         $this->_template->render(false, false);
     }
 
     private function getForm(): Form
     {
+
         $currency = Currency::getAttributesById(CommonHelper::getCurrencyId());
         $frm = new Form('frmAddMoney');
         $str = str_replace("{currency-code}", $currency['currency_code'], Labels::getLabel('LBL_ENTER_AMOUNT_({currency-code})'));
@@ -3103,23 +3123,28 @@ class BuyerController extends BuyerBaseController
 
     public function setupGiftCard()
     {
+
+        $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
+        if ($isSplitPaymentMethod) {
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST'));
+            FatApp::redirectUser(UrlHelper::generateUrl('buyer', ''));
+        }
         $frm = $this->getForm();
         if (!$post = $frm->getFormDataFromArray(FatApp::getPostedData())) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
-        $userObj = new User(UserAuthentication::getLoggedUserId());
-        $userData = $userObj->getUserInfo();
 
+        $userData = $this->userInfo;
+        $minAmount = FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT', FatUtility::VAR_FLOAT, 100);
         if ($post['ogcards_receiver_email'] == $userData['credential_email']) {
             FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST'));
         }
-        if (FatUtility::int($post['order_total_amount']) < FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT')) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST'));
+        if (FatUtility::int($post['order_total_amount']) < $minAmount) {
+            $str = str_replace("{min-amount}", $minAmount, Labels::getLabel('LBL_MOUNT_SHOULD_BE_GREATER_THEN_({min-amount})'));
+            FatUtility::dieJsonError($str);
         }
-
-        $languageRow = Language::getAttributesById($this->siteLangId);
-        $post['order_language_id'] = $languageRow['language_id'];
-        $post['order_language_code'] = $languageRow['language_code'];
+        $post['order_language_id'] = $this->siteLangId;
+        $post['order_language_code'] = CommonHelper::getLangCode();
         $order = new Orders(0);
         $orderId  = $order->placeGiftcardOrder($post);
         if (empty($orderId)) {

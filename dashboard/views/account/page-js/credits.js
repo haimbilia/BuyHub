@@ -100,8 +100,7 @@ $(function() {
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Account', 'reedemGiftcard'), fcom.frmData(frm), function(res) {
-            // $(document).trigger('close.facebox');
-            // document.location.reload();
+            document.location.reload();
         });
     };
 

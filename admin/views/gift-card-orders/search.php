@@ -7,6 +7,7 @@ if (!isset($tbody)) {
 
 $serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
 foreach ($arrListing as $sn => $row) {
+
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
 
@@ -29,7 +30,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'order_number':
-                $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('SubscriptionOrders', 'view', array($row['order_id']))), $row[$key], true);
+                $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('giftCardOrders', 'view', array($row['order_id']))), $row[$key], true);
                 break;
             case 'ogcards_receiver_name':
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);

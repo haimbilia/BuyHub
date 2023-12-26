@@ -43,11 +43,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                     'onclick' => "redeemGiftCard()",
                     'title' => Labels::getLabel('BTN_REDEEM_GIFT_CARD', $siteLangId)
                 ],
-                'label' => '<svg class="svg" width="18" height="18">
-                                        <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.actions.svg#add">
-                                        </use>
-                                    </svg><span>' . Labels::getLabel('BTN_REDEEM_GIFT_CARD', $siteLangId) . '</span>',
+                'label' => '<span>' . Labels::getLabel('BTN_REDEEM_GIFT_CARD', $siteLangId) . '</span>',
             ]
         ];
     }

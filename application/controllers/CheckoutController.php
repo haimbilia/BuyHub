@@ -2437,6 +2437,12 @@ class CheckoutController extends MyAppController
 
     public function giftCharge($order_id)
     {
+
+        $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
+        if ($isSplitPaymentMethod) {
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'giftCards', [], CONF_WEBROOT_DASHBOARD));
+        }
         $criteria = array('isUserLogged' => true);
         if (!$this->isEligibleForNextStep($criteria)) {
             $this->errMessage = !empty($this->errMessage) ? $this->errMessage : Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
@@ -2445,24 +2451,23 @@ class CheckoutController extends MyAppController
         $userId = UserAuthentication::getLoggedUserId();
         $userWalletBalance = User::getUserBalance($userId, true);
         /* Payment Methods[ */
-        $splitPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);
-        $regularPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_REGULAR_PAYMENT_METHOD, $this->siteLangId);
-        $paymentMethods = array_merge($splitPaymentMethodsPlugins, $regularPaymentMethodsPlugins);
+        $paymentMethods = Plugin::getDataByType(Plugin::TYPE_REGULAR_PAYMENT_METHOD, $this->siteLangId);
         /* ] */
         $canUseWallet = PaymentMethods::canUseWalletForPayment();
-        $orderData = array();
-        $srch = Orders::getSearchObject();
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $srch->addCondition('order_id', '=', $order_id);
-        $srch->addCondition('order_type', '=', Orders::GIFT_CARD_TYPE);
-        $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
-        $rs = $srch->getResultSet();
-        $orderData = FatApp::getDb()->fetch($rs);
-        if (!$orderData) {
-            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+        $orderData = Orders::getOrderPaymentStatus($order_id, Orders::GIFT_CARD_TYPE, Orders::ORDER_PAYMENT_PENDING);
+        if (empty($orderData)) {
+            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ORDER', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'giftCards', [], CONF_WEBROOT_DASHBOARD));
         }
-
+        foreach ($paymentMethods as $key => $paymeth) {
+            if (in_array($paymeth['plugin_code'], Plugin::PAY_LATER)) {
+                unset($paymentMethods[$key]);
+            }
+        }
+        if ($userWalletBalance <= 0 && empty($paymentMethods)) {
+            Message::addErrorMessage(Labels::getLabel('ERR_PAYMENT_METHOD_NOT_AVAILABLE', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'giftCards', [], CONF_WEBROOT_DASHBOARD));
+        }
         $walletPaymentForm = $this->getWalletPaymentForm($this->siteLangId);
         if ((FatUtility::convertToType($userWalletBalance, FatUtility::VAR_FLOAT) > 0)  && $orderData['order_net_amount'] > 0) {
             $walletPaymentForm->addFormTagAttribute('action', UrlHelper::generateUrl('WalletPay', 'Charge', array($order_id)));

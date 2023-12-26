@@ -3016,7 +3016,7 @@ class Orders extends MyAppModel
     {
 
         $amount = FatUtility::float($data['order_total_amount']);
-        $minamount =  FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT');
+        $minamount =  FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT', FatUtility::VAR_FLOAT, 100);
         if ($amount < $minamount) {
             $minamount = FatUtility::convertToType($minamount, FatUtility::VAR_FLOAT);
             $label = Labels::getLabel("LBL_MINIMUM_GIFT_CARD_{minamount}");
@@ -3087,5 +3087,19 @@ class Orders extends MyAppModel
         }
 
         return $this->orderId;
+    }
+
+
+    public static function getOrderPaymentStatus(int $order_id, int $orderType, int $orderStatus): array
+    {
+
+        $srch = Orders::getSearchObject();
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $srch->addCondition('order_id', '=', $order_id);
+        $srch->addCondition('order_type', '=', $orderType);
+        $srch->addCondition('order_payment_status', '=', 'mysql_func_' . $orderStatus, 'AND', true);
+        $rs = $srch->getResultSet();
+        return  FatApp::getDb()->fetch($rs);
     }
 }

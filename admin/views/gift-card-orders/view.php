@@ -1,4 +1,8 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+
+?>
+
 
 <main class="main">
     <div class="container">
@@ -36,7 +40,7 @@
                         </div>
 
                         <div class="card-table">
-                            <?php require_once(CONF_THEME_PATH . 'subscription-orders/payment-history.php'); ?>
+                            <?php require_once(CONF_THEME_PATH . 'gift-card-orders/payment-history.php'); ?>
                         </div>
                     </div>
                 <?php } ?>
@@ -100,6 +104,37 @@
                         </ul>
                     </div>
                 </div>
+
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-head-label">
+                            <h3 class="card-head-title">
+                                <?php echo Labels::getLabel('LBL_RECEIVER_INFORMATION', $siteLangId); ?>
+                            </h3>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-stats">
+                            <li class="list-stats-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_RECEIVER_NAME', $siteLangId); ?>:</span>
+                                <span class="value"><?php echo $order["ogcards_receiver_name"]; ?></span>
+                            </li>
+                            <li class="list-stats-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_RECEIVER_EMAIL', $siteLangId); ?>:</span>
+                                <span class="value"><?php echo $order["ogcards_receiver_email"]; ?></span>
+                            </li>
+                            <li class="list-stats-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_GIFT_CARD_USED', $siteLangId); ?>:</span>
+                                <span class="value"><?php echo (GiftCards::STATUS_USED == $order["ogcards_status"]) ? Labels::getLabel('LBL_YES', $siteLangId) : Labels::getLabel('LBL_NO', $siteLangId); ?></span>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
