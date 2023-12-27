@@ -15,6 +15,7 @@ ALTER TABLE `tbl_upc_codes` ADD INDEX(`upc_code`);
 ALTER TABLE `tbl_upc_codes` ADD INDEX(`upc_product_id`);
 
 ALTER TABLE `tbl_products` ADD `product_rating` FLOAT(10,2) NOT NULL AFTER `product_ship_package`, ADD `product_total_reviews` INT(11) NOT NULL AFTER `product_rating`;
+-- admin/PatchUpdate/updateProductRating------------
 ALTER TABLE `tbl_product_category_relations` ADD INDEX( `pcr_parent_id`);
 ALTER TABLE `tbl_meta_tags` ADD INDEX( `meta_record_id`);
 ALTER TABLE `tbl_meta_tags` ADD INDEX( `meta_subrecord_id`);
