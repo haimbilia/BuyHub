@@ -471,6 +471,17 @@ $(function () {
         /* Binding Feather Light gallery */
         bindFeatherLight();
         /* Binding Feather Light gallery */
+
+        let textArea = $('textarea');
+        if(textArea.length > 0) {
+            $.each(textArea, function (key, item) {
+                let id = $(item).attr('id');
+                let editorEle = $('#idContentWordoEdit_' + id);
+                if('undefined' != id && item.style.display == 'none' && 0 < editorEle.length) {
+                    editorEle.css('left', '0');
+                }
+            });
+        }
     });
 })();
 

@@ -72,6 +72,7 @@ $text_rewrite_url = 'Url Rewriting (mod_rewrite)';
 $text_fileinfo = 'FILEINFO';
 $calendar_info = 'Calendar';
 $bcmath_lbl = 'BCMath';
+$text_max_input_vars = "6. Please <b>update max_input_vars</b> size to <b>5000</b> in php.ini file.";
 
 
 $button_continue = 'Continue';
@@ -127,6 +128,10 @@ $bcmath = extension_loaded('bcmath');
             margin: 0;
             padding: 0;
         }
+        b {
+            font-weight: bold;
+        }
+
 
         *,
         h1,
@@ -917,6 +922,8 @@ $bcmath = extension_loaded('bcmath');
                     <p><?php echo $text_strict_trans_tables; ?>
                     </p>
                     <p><?php echo $text_composer; ?>
+                    </p>
+                    <p><?php echo $text_max_input_vars; ?>
                     </p>
                     <p><?php echo $text_note; ?>
                     </p>

@@ -18,3 +18,5 @@
     - Bug-076193 - The unlimited plan validity expires after 24 hours.
     - Bug-076198 - Unable to save downloadable file on new digital product.
     - Bug-077681 - The user can download the preview files but not able to preview within the system.
+    - Bug-078138 - Product setup page gets distorted when the admin tries to paste the content in CMS editor (Firefox)
+    - Bug-076927 - The shipping charges get refunded to the buyer even if the admin disabled return shipping charges to the customer setting

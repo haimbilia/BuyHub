@@ -898,35 +898,37 @@ class Importexport extends ImportexportCommon
                         $categoryId = $categoryData['prodcat_id'];
                     }
                 }
+                if ($this->isDefaultSheetData($langId)) {
+                    $prodCateObj = new ProductCategory($categoryId);
+                    if (applicationConstants::YES == $prodCatDataArr['prodcat_deleted']) {
+                        $childCats = $prodCateObj->getChildrens();
+                        if (1 < count($childCats)) {
+                            $errInSheet = true;
+                            $errMsg = Labels::getLabel("ERR_PLEASE_REMOVE_CHILD_CATEGORIES_FIRST.", $langId);
+                            CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
+                            continue;
+                        }
+                    }
 
-                $prodCateObj = new ProductCategory($categoryId);
-                $childCats = $prodCateObj->getChildrens();
-                if (1 < count($childCats)) {
-                    $errInSheet = true;
-                    $errMsg = Labels::getLabel("ERR_PLEASE_REMOVE_CHILD_CATEGORIES_FIRST.", $langId);
-                    CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
-                    continue;
-                }
+                    /* Sub-Categories have products[ */
+                    if (true === $prodCateObj->haveProducts(false)) {
+                        $errInSheet = true;
+                        $errMsg = Labels::getLabel("ERR_PRODUCTS_ARE_ASSOCIATED_WITH_ITS_CATEGORY/SUB-CATEGORIES_SO_WE_ARE_NOT_ABLE_TO_DELETE_THIS_CATEGORY.", $langId);
+                        CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
+                        continue;
+                    }
+                    /* ] */
 
-                /* Sub-Categories have products[ */
-                if (true === $prodCateObj->haveProducts(false)) {
-                    $errInSheet = true;
-                    $errMsg = Labels::getLabel("ERR_PRODUCTS_ARE_ASSOCIATED_WITH_ITS_CATEGORY/SUB-CATEGORIES_SO_WE_ARE_NOT_ABLE_TO_DELETE_THIS_CATEGORY.", $langId);
-                    CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
-                    continue;
-                }
-                /* ] */
-
-                if (!$this->isDefaultSheetData($langId)) {
-                    unset($prodCatDataArr['prodcat_parent']);
-                    unset($prodCatDataArr['prodcat_identifier']);
-                    unset($prodCatDataArr['prodcat_display_order']);
-                } else {
-                    if ($categoryId == $prodCatDataArr['prodcat_parent']) {
-                        $prodCatDataArr['prodcat_parent'] = 0;
+                    if (!$this->isDefaultSheetData($langId)) {
+                        unset($prodCatDataArr['prodcat_parent']);
+                        unset($prodCatDataArr['prodcat_identifier']);
+                        unset($prodCatDataArr['prodcat_display_order']);
+                    } else {
+                        if ($categoryId == $prodCatDataArr['prodcat_parent']) {
+                            $prodCatDataArr['prodcat_parent'] = 0;
+                        }
                     }
                 }
-
                 $prodCatDataArr['prodcat_status'] = applicationConstants::YES;
                 if (!empty($categoryData) && $categoryData['prodcat_id']) {
                     $where = array('smt' => 'prodcat_id = ?', 'vals' => array($categoryId));
@@ -937,13 +939,14 @@ class Importexport extends ImportexportCommon
                         $categoryId = $this->db->getInsertId();
                     }
                 }
-                $prodCat = new ProductCategory($categoryId);
-                if (applicationConstants::INACTIVE == $prodCatDataArr['prodcat_active']) {
-                    $prodCat->disableChildCategories();
-                } else {
-                    $prodCat->enableParentCategories();
+                if ($this->isDefaultSheetData($langId)) {
+                    $prodCat = new ProductCategory($categoryId);
+                    if (applicationConstants::INACTIVE == $prodCatDataArr['prodcat_active']) {
+                        $prodCat->disableChildCategories();
+                    } else {
+                        $prodCat->enableParentCategories();
+                    }
                 }
-
                 if (0 < $categoryId) {
                     /* Lang Data [*/
                     $langData = array(
@@ -3904,7 +3907,7 @@ class Importexport extends ImportexportCommon
     public function importSellerProdOptionData($csvFilePointer, $post, $langId, $userId = null)
     {
         FatApp::getDb()->query('delete t1 from tbl_seller_product_options t1 left join tbl_seller_products t2 on t2.selprod_id = t1.selprodoption_selprod_id where t2.selprod_id is null');
-        
+
         $rowIndex = 1;
         $optionIdentifierArr = array();
         $optionValueIndetifierArr = array();

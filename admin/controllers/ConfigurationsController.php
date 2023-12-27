@@ -812,8 +812,12 @@ class ConfigurationsController extends ListingBaseController
                 }
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_tax_will_be_applicable_after_discounts", $langId));
 
-                $fld = $frm->addCheckBox(Labels::getLabel("FRM_RETURN_SHIPPING_CHARGES_TO_CUSTOMER", $langId), 'CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', 1, array(), false, 0);
-                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_RETURN_SHIPPING_CHARGES_TO_CUSTOMER", $langId));
+
+                $splitPaymentMethodActive = Plugin::isActiveByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD);
+                if (!$splitPaymentMethodActive) {
+                    $fld = $frm->addCheckBox(Labels::getLabel("FRM_RETURN_SHIPPING_CHARGES_TO_CUSTOMER", $langId), 'CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', 1, array(), false, 0);
+                    HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_RETURN_SHIPPING_CHARGES_TO_CUSTOMER", $langId));
+                }
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_SHIPPED_BY_ADMIN_ONLY", $langId), 'CONF_SHIPPED_BY_ADMIN_ONLY', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_SHIPPING_CHARGES_MANGED_BY_ADMIN_ONLY", $langId));
