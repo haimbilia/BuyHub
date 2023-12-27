@@ -7,12 +7,12 @@ class AdsBatch extends MyAppModel
 
     public const DB_TBL_BATCH_PRODS = 'tbl_ads_batch_products';
     public const DB_TBL_BATCH_PRODS_PREFIX = 'abprod_';
-    
+
     public const STATUS_PENDING = 0;
     public const STATUS_PUBLISHED = 1;
     public const STATUS_DELETED = 2;
     public const STATUS_PARTIALLY_PENDING = 3;
-    
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -104,7 +104,7 @@ class AdsBatch extends MyAppModel
         $srch = new SearchBase(static::DB_TBL_BATCH_PRODS, 'abp');
         $srch->doNotCalculateRecords();
         $srch->addCondition(self::DB_TBL_BATCH_PRODS_PREFIX . 'adsbatch_id', '=', $adsBatchId);
-        $srch->addCondition(self::DB_TBL_BATCH_PRODS_PREFIX . 'selprod_id', '=', $selProdId);        
+        $srch->addCondition(self::DB_TBL_BATCH_PRODS_PREFIX . 'selprod_id', '=', $selProdId);
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         if (!$rs) {
@@ -127,9 +127,11 @@ class AdsBatch extends MyAppModel
         return true;
     }
 
-    public function getBatchDataForFeed(int $userId ,int $langId): array
-    {       
+    public function getBatchDataForFeed(int $userId, int $langId): array
+    {
         $srch = AdsBatch::getSearchObject(true);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
         $srch->addCondition(AdsBatch::DB_TBL_BATCH_PRODS_PREFIX . 'adsbatch_id', '=', $this->getMainTableRecordId());
         $srch->addCondition(AdsBatch::DB_TBL_PREFIX . 'user_id', '=', $userId);
         $srch->addMultipleFields(
@@ -149,15 +151,17 @@ class AdsBatch extends MyAppModel
                 'abprod_item_group_identifier',
                 'adsbatch_expired_on',
                 'abprod_cat_id',
+                'abprod_age_group',
                 '(CASE WHEN m.splprice_selprod_id IS NULL THEN 0 ELSE 1 END) AS special_price_found',
                 'COALESCE(m.splprice_price, selprod_price) AS theprice'
             ]
-        );       
+        );
         $productData = FatApp::getDb()->fetchAll($srch->getResultSet());
         if (empty($productData)) {
-            return [];            
+            return [];
         }
 
+        $conditionArr = Product::getConditionArr($langId);
         foreach ($productData as &$prodDetail) {
             $srch = new SearchBase(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'spo');
             $srch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', 'spo.selprodoption_optionvalue_id = ov.optionvalue_id', 'ov');
@@ -165,10 +169,10 @@ class AdsBatch extends MyAppModel
             $srch->joinTable(Option::DB_TBL, 'INNER JOIN', 'o.option_id = ov.optionvalue_option_id', 'o');
             $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'o.option_id = o_lang.optionlang_option_id AND o_lang.optionlang_lang_id = ' . $langId, 'o_lang');
             $srch->addMultipleFields(['optionvalue_identifier', 'option_is_color', 'option_name']);
-            $srch->addCondition('selprodoption_selprod_id', '=', $prodDetail['selprod_id']);          
+            $srch->addCondition('selprodoption_selprod_id', '=', $prodDetail['selprod_id']);
             $prodDetail['optionsData'] = FatApp::getDb()->fetchAll($srch->getResultSet());
-            $prodDetail['selprod_condition'] = (Product::getConditionArr($langId))[$prodDetail['selprod_condition']];
-            $prodDetail['selprod_stock'] = (0 < $prodDetail['selprod_stock'] ? "in stock" : 'out of stock');
+            $prodDetail['selprod_condition'] = $conditionArr[$prodDetail['selprod_condition']];
+            $prodDetail['selprod_stock'] = (0 < $prodDetail['selprod_stock'] ? "in_stock" : 'out_of_stock');
         }
         return $productData;
     }

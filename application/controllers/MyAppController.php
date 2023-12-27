@@ -4,7 +4,6 @@ class MyAppController extends FatController
 {
     public $app_user = ['temp_user_id' => 0];
     public $appToken = '';
-    protected $siteLangId;
     protected $cartItemsCount;
     protected $currencySymbol;
     protected $totalFavouriteItems;

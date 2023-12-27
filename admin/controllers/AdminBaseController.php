@@ -10,7 +10,6 @@ class AdminBaseController extends FatController
     protected $str_delete_record;
     protected $str_invalid_Action;
     protected $str_setup_successful;
-    protected $siteLangId;
     protected $nodes = [];
 
     public function __construct($action)

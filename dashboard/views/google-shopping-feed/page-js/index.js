@@ -70,19 +70,33 @@ $(document).ready(function () {
         if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(keyName, 'setupServiceAccountForm'), data, function (t) {
-
             location.reload();
         });
     }
 
-    publishBatch = function (adsBatchId) {
-        fcom.displayProcessing();
-        fcom.updateWithAjax(fcom.makeUrl(keyName, 'publishBatch', [adsBatchId]), '', function (t) {
-            if (t.status == 1) {
-                fcom.displaySuccessMessage(t.msg);
-            } else {
+    publishBatch = function (adsBatchId, download = 0) {
+        fcom.updateWithAjax(fcom.makeUrl(keyName, 'publishBatch', [adsBatchId, download]), '', function (t) {
+            if (t.status != 1) {
                 fcom.displayErrorMessage(t.msg);
+                return;
             }
+            fcom.displaySuccessMessage(t.msg);
+            searchRecords();
+            if (0 < download && 'undefined' != typeof t.redirect_url) {
+                setTimeout(() => {
+                    location.href = t.redirect_url;
+                }, 500);
+            }
+        });
+    }
+
+    downloadBatch = function (adsBatchId) {
+        fcom.updateWithAjax(fcom.makeUrl(keyName, 'publishBatch', [adsBatchId]), '', function (t) {
+            if (t.status != 1) {
+                fcom.displayErrorMessage(t.msg);
+                return;
+            }
+            fcom.displaySuccessMessage(t.msg);
             searchRecords();
         });
     }
