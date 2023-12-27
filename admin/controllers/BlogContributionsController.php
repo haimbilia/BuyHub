@@ -179,7 +179,7 @@ class BlogContributionsController extends ListingBaseController
         }
         /*
         ] */
-
+        CalculativeDataRecord::updateBlogContributionRequestCount();
         LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
     }
 

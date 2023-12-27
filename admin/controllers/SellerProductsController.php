@@ -414,7 +414,7 @@ class SellerProductsController extends ListingBaseController
                 }
             }
         }
-
+        CalculativeDataRecord::updateThresholdSelprodRequestCount();
         Product::updateMinPrices($productId);
 
         $this->set('recordId', $selProdId);

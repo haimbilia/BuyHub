@@ -160,7 +160,7 @@ class BlogCommentsController extends ListingBaseController
             $newData = FatApp::getDb()->fetch($srch->getResultSet());
             $this->sendEmail($newData);
         }
-
+        CalculativeDataRecord::updateBlogCommentRequestCount();
         LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
     }
 

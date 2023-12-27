@@ -1128,6 +1128,7 @@ class User extends MyAppModel
         /* [ */
 
         /* ] */
+        CalculativeDataRecord::updateSellerApprovalCount();
         return $supplier_request_id;
     }
 
@@ -1152,6 +1153,7 @@ class User extends MyAppModel
             $this->error = $this->db->getError();
             return false;
         }
+        CalculativeDataRecord::updateSellerApprovalCount();
         return true;
     }
 

@@ -1203,6 +1203,8 @@ class BuyerController extends BuyerBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
+        CalculativeDataRecord::updateOrderCancelRequestCount();
+
         /* send notification to admin */
         $notificationData = array(
             'notification_record_type' => Notification::TYPE_ORDER_CANCELATION,
@@ -1226,7 +1228,7 @@ class BuyerController extends BuyerBaseController
             $this->set('msg', $msg);
             $this->_template->render();
         }
-
+        
         FatUtility::dieJsonSuccess($msg);
         //$this->_template->render( false, false, 'json-success.php' );
     }
@@ -1544,6 +1546,7 @@ class BuyerController extends BuyerBaseController
             Message::addErrorMessage($message);
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'viewOrderReturnRequest', array($orrequest_id)));
         }
+        CalculativeDataRecord::updateOrderReturnRequestCount();
 
         /* email notification handling[ */
         $emailNotificationObj = new EmailHandler();
@@ -2325,6 +2328,7 @@ class BuyerController extends BuyerBaseController
         $orderObj = new Orders();
         $orderObj->addChildProductOrderHistory($opDetail['op_id'], $opDetail['order_language_id'], FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS"), Labels::getLabel('LBL_Buyer_Raised_Return_Request', $opDetail['order_language_id']), 1);
         /* ] */
+        CalculativeDataRecord::updateOrderReturnRequestCount();
 
         /* sending of email notification[ */
         $emailNotificationObj = new EmailHandler();

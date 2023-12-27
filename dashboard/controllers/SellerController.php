@@ -966,6 +966,7 @@ class SellerController extends SellerBaseController
         }
 
         $db->commitTransaction();
+        CalculativeDataRecord::updateOrderCancelRequestCount();
         $this->set('op_id', $op_id);
         $this->set('msg', Labels::getLabel('MSG_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -2982,7 +2983,7 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel($orrObj->getError(), $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrderReturnRequest', array($requestRow['orrequest_id'])));
         }
-
+        CalculativeDataRecord::updateOrderReturnRequestCount();
         /* Update To Shipping Service         
         $this->langId = $this->siteLangId;
         $this->returnShipment($requestRow['op_id'], $requestRow['orrequest_qty'], UrlHelper::generateUrl('Seller', 'viewOrderReturnRequest', array($requestRow['orrequest_id'])));
@@ -5872,5 +5873,6 @@ class SellerController extends SellerBaseController
         if (!$product->save()) {
             LibHelper::exitWithError($product->getError(), true);
         }
+        CalculativeDataRecord::updateSelprodRequestCount();
     }
 }

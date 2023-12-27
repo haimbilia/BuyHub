@@ -638,6 +638,7 @@ trait SellerProducts
         /* ] */
 
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
+        CalculativeDataRecord::updateThresholdSelprodRequestCount();
         Product::updateMinPrices($productId);
         $this->set('selprod_id', $selprod_id);
         $this->set('product_id', $productId);

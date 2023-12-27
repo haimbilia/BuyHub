@@ -693,10 +693,14 @@ class CustomProductsController extends ListingBaseController
             $db->rollbackTransaction();
             LibHelper::exitWithError(Labels::getLabel('ERR_EMAIL_COULD_NOT_BE_SENT', $this->siteLangId), true);
         }
+
+        CalculativeDataRecord::updateSelprodRequestCount();
+        CalculativeDataRecord::updateCustomCatalogCount();
+        $db->commitTransaction();
+        
         if ($status == ProductRequest::STATUS_APPROVED) {
             Product::updateMinPrices($product_id);
-        }
-        $db->commitTransaction();
+        }       
         $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->set('preq_id', $preqId);
         $this->_template->render(false, false, 'json-success.php');

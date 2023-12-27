@@ -500,7 +500,7 @@ class ProductsController extends ListingBaseController
             LibHelper::exitWithError($prodObj->getError(), true);
         }
         $recordId = $prodObj->getMainTableRecordId();
-
+        
         $this->setLangData($prodObj, [
             $prodObj::tblFld('name') => $post[$prodObj::tblFld('name')],
             $prodObj::tblFld('description') => $post[$prodObj::tblFld('description')],
@@ -631,6 +631,7 @@ class ProductsController extends ListingBaseController
             $prodObj->moveTempFiles($post['temp_product_id']);
         }
         $db->commitTransaction();
+        CalculativeDataRecord::updateSelprodRequestCount();
         $this->set('recordId', $recordId);
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
@@ -1597,5 +1598,6 @@ class ProductsController extends ListingBaseController
         if (!$this->modelObj->changeStatus($status)) {
             LibHelper::exitWithError($this->modelObj->getError(), true);
         }
+        CalculativeDataRecord::updateSelprodRequestCount();
     }
 }

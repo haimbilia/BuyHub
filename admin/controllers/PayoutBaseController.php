@@ -48,7 +48,7 @@ class PayoutBaseController extends PluginSettingController
                 array('utxn_comments' => $oldTrxComment . " (" . $comment . ")"),
                 array('smt' => 'utxn_withdrawal_id=?', 'vals' => array($recordId))
         );
-
+        CalculativeDataRecord::updateWithdrawalRequestCount();
         $this->set('msg', Labels::getLabel('ERR_PAYOUT_REQUEST_SENT_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -99,7 +99,7 @@ class PayoutBaseController extends PluginSettingController
                 $emailNotificationObj->sendTxnNotification($txnId, $this->siteLangId);
             }
         }
-                
+        CalculativeDataRecord::updateWithdrawalRequestCount();        
         $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }

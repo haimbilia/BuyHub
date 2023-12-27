@@ -218,6 +218,9 @@ class AccountController extends LoggedUserController
         }
 
         $db->commitTransaction();
+        if (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1)) {
+            CalculativeDataRecord::updateSellerApprovalCount();
+        }
         $this->set('supplier_request_id', $supplier_request_id);
         $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
@@ -802,7 +805,7 @@ class AccountController extends LoggedUserController
             $message = Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
-
+        CalculativeDataRecord::updateWithdrawalRequestCount();
         $this->set('msg', Labels::getLabel('MSG_Withdraw_request_placed_successfully', $this->siteLangId));
 
         if (true === MOBILE_APP_API_CALL) {
@@ -3019,6 +3022,7 @@ class AccountController extends LoggedUserController
             CommonHelper::redirectUserReferer();
         }
         /* ] */
+        CalculativeDataRecord::updateOrderReturnRequestCount();
         Message::addMessage(Labels::getLabel('MSG_YOUR_REQUEST_SENT', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
@@ -3203,6 +3207,7 @@ class AccountController extends LoggedUserController
         if (!$userReqObj->save()) {
             LibHelper::exitWithError($userReqObj->getError());
         }
+        CalculativeDataRecord::updateGdprRequestCount();
         $this->set('msg', Labels::getLabel('MSG_Request_sent_successfully', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();

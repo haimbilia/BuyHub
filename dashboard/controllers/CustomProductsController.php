@@ -349,6 +349,11 @@ class CustomProductsController extends SellerBaseController
         }
 
         $db->commitTransaction();
+        
+        if (ProductRequest::STATUS_PENDING == $requestStatus) {
+            CalculativeDataRecord::updateCustomCatalogCount();
+        }
+
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->set('msg', $this->str_setup_successful);

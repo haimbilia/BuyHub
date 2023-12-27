@@ -22,3 +22,9 @@ ALTER TABLE `tbl_meta_tags` ADD INDEX( `meta_subrecord_id`);
 ALTER TABLE `tbl_url_rewrite` ADD INDEX( `urlrewrite_custom`);
 ALTER TABLE `tbl_url_rewrite` ADD INDEX( `urlrewrite_original`);
 ALTER TABLE `tbl_product_special_prices` ADD INDEX( `splprice_price`);
+CREATE TABLE `tbl_calculative_data` (
+    `cd_key` INT NOT NULL,
+    `cd_type` INT NOT NULL,
+    `cd_value` VARCHAR(150) NOT NULL,
+    PRIMARY KEY (`cd_key`)
+) ENGINE = InnoDB;

@@ -396,6 +396,10 @@ class ProductCategoriesController extends ListingBaseController
             }
         }
 
+        if (0 < $prodCatReq && ProductCategory::REQUEST_PENDING == $post['prodcat_status']) {
+            CalculativeDataRecord::updateCategoryRequestCount();
+        }
+
         $prodCat = new ProductCategory($updateRecordId);
         $row = (array) $prodCat->getData(true, true);
         $this->set("row", $row);
@@ -602,7 +606,7 @@ class ProductCategoriesController extends ListingBaseController
         if (!$prodCat->save()) {
             LibHelper::exitWithError($prodCat->getError(), true);
         }
-
+        CalculativeDataRecord::updateCategoryRequestCount();
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }

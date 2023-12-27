@@ -412,7 +412,6 @@ class ProductsController extends SellerBaseController
 
 
         Tag::updateProductTagString($recordId);
-        Product::updateMinPrices($recordId);
         if ($isNewProduct) {
             $prodObj->moveTempFiles($post['temp_product_id']);
         }
@@ -429,6 +428,8 @@ class ProductsController extends SellerBaseController
         }
 
         $db->commitTransaction();
+        CalculativeDataRecord::updateSelprodRequestCount();
+        Product::updateMinPrices($recordId);
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->set('msg', $this->str_setup_successful);
@@ -877,7 +878,7 @@ class ProductsController extends SellerBaseController
             $this->nodes[] = array('title' => Labels::getLabel('LBL_CATALOG'), 'href' => UrlHelper::generateUrl("Seller", "catalog"));
             $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         } else {
-            $action = str_replace('-', '_', FatUtility::camel2dashed($action));            
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;

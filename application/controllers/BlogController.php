@@ -402,7 +402,7 @@ class BlogController extends MyAppController
         }
 
         $blogCommentId = $blogComment->getMainTableRecordId();
-
+        CalculativeDataRecord::updateBlogCommentRequestCount();
         $notificationData = array(
             'notification_record_type' => Notification::TYPE_BLOG,
             'notification_record_id' => $blogCommentId,
@@ -535,7 +535,7 @@ class BlogController extends MyAppController
             $this->setErrorAndRedirect($contribution->getError());
         }
         $contributionId = $contribution->getMainTableRecordId();
-
+        CalculativeDataRecord::updateBlogContributionRequestCount();
         $notificationData = array(
             'notification_record_type' => Notification::TYPE_BLOG,
             'notification_record_id' => $contributionId,

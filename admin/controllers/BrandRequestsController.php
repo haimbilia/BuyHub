@@ -248,6 +248,7 @@ class BrandRequestsController extends ListingBaseController
             $brand->rewriteUrl($post['urlrewrite_custom']);
         }
         /* ] */
+        CalculativeDataRecord::updateBrandRequestCount();
         Product::updateMinPrices(0, 0, $recordId);
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
@@ -524,7 +525,7 @@ class BrandRequestsController extends ListingBaseController
                 LibHelper::exitWithError(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
             }
         }
-
+        CalculativeDataRecord::updateBrandRequestCount();
         $this->set('msg', Labels::getLabel('MSG_BRAND_APPROVED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
