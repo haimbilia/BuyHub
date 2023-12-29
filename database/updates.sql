@@ -34,6 +34,7 @@ CREATE TABLE `tbl_rfq` (
   `rfq_id` int NOT NULL,
   `rfq_number` varchar(15) NOT NULL,
   `rfq_product_id` int NOT NULL,
+  `rfq_selprod_id` int NOT NULL,
   `rfq_selprod_code` varchar(100) NOT NULL,
   `rfq_title` varchar(150) NOT NULL,
   `rfq_user_id` int NOT NULL,
@@ -61,8 +62,7 @@ ALTER TABLE `tbl_rfq`
 
 CREATE TABLE `tbl_rfq_to_sellers` (
   `rfqts_rfq_id` int NOT NULL,
-  `rfqts_user_id` int NOT NULL COMMENT 'seller id',
-  `rfqts_selprod_id` int NOT NULL
+  `rfqts_user_id` int NOT NULL COMMENT 'seller id'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ALTER TABLE `tbl_rfq_to_sellers`
@@ -142,3 +142,7 @@ ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUE
 
 
 ALTER TABLE `tbl_addresses` ADD `addr_session_id` VARCHAR(150) NOT NULL AFTER `addr_record_id`;
+
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES 
+('CONF_RFQ_MODULE_TYPE', 1)
+ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);

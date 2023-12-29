@@ -334,7 +334,6 @@ class RequestForQuotesController extends ListingBaseController
         $rfq = new RequestForQuote($recordId);
         $data = [
             'rfqts_user_id' => $sellerId,
-            'rfqts_selprod_id' => $selProdId,
         ];
         if (false == $rfq->linkToSeller($data)) {
             $db->rollbackTransaction();

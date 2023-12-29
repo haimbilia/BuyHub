@@ -55,7 +55,7 @@ if (!$isUserLogged) {
     echo $frm->getFormTag();
     echo $frm->getFieldHtml('rfq_product_id');
     echo $frm->getFieldHtml('rfq_addr_id');
-    echo $frm->getFieldHtml('rfqts_selprod_id');
+    echo $frm->getFieldHtml('rfq_selprod_id');
     ?>
     <div class="request-quote">
         <?php if (!$isUserLogged) { ?>

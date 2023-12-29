@@ -443,7 +443,7 @@ class ProductSearch extends SearchBase
             if (isset($criteria['prodIds']) && 0 < count($criteria['prodIds'])) {
                 $joinCondition = ' and sprods.selprod_product_id IN (' . implode(",", $criteria['prodIds']) . ')';
             }
-
+            
             $this->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'p.product_id = sprods.selprod_product_id ' . $joinCondition . ' and selprod_active = ' . applicationConstants::ACTIVE . ' and selprod_deleted = ' . applicationConstants::NO, 'sprods');
             if ($this->langId) {
                 $this->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sprods.selprod_id = sprods_l.selprodlang_selprod_id AND sprods_l.selprodlang_lang_id = ' . $this->langId, 'sprods_l');

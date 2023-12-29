@@ -518,8 +518,8 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_HIDE_PRODUCT_PRICES", $langId), 'CONF_HIDE_PRICES', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_PRODUCT_PRICE_WILL_NOT_DISPLAY', $langId));
 
-                /* $typeArr = RequestForQuote::getTypeArr($langId);
-                $frm->addSelectBox(Labels::getLabel('FRM_RFQ_MODULE_TYPE', $langId), 'CONF_RFQ_MODULE_TYPE', $typeArr, RequestForQuote::TYPE_PRIVATE, array(), ''); */
+                $typeArr = RequestForQuote::getTypeArr($langId);
+                $frm->addSelectBox(Labels::getLabel('FRM_RFQ_MODULE_TYPE', $langId), 'CONF_RFQ_MODULE_TYPE', $typeArr, '', array(), '');
 
                 break;
             case Configurations::FORM_PRODUCT:

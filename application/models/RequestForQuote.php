@@ -10,6 +10,7 @@ class RequestForQuote extends MyAppModel
     public const FIELDS = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'number',
+        self::DB_TBL_PREFIX . 'selprod_id',
         self::DB_TBL_PREFIX . 'product_id',
         self::DB_TBL_PREFIX . 'title',
         self::DB_TBL_PREFIX . 'user_id',
@@ -32,8 +33,10 @@ class RequestForQuote extends MyAppModel
         self::DB_RFQS_PREFIX . 'selprod_id',
     ];
 
-    public const TYPE_PRIVATE = 0;
-    public const TYPE_PUBLIC = 1;
+    public const TYPE_INDIVIDUAL = 1;
+    public const TYPE_VARIANT = 2;
+    public const TYPE_CATALOG = 3;
+    public const TYPE_CUSTOM = 4;
 
     public const PENDING = 0;
     public const APPROVED = 1;
@@ -68,7 +71,6 @@ class RequestForQuote extends MyAppModel
         if (1 > $this->getMainTableRecordId()) {
             $data['rfq_number'] = $this->generateRfqNo();
         }
-        $data['rfq_type'] = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, RequestForQuote::TYPE_PRIVATE);
         $this->assignValues($data);
         if (!$this->save()) {
             $msg = $this->getError();
@@ -140,7 +142,7 @@ class RequestForQuote extends MyAppModel
             return false;
         }
 
-        if (!FatApp::getDb()->insertFromArray(self::DB_RFQ_TO_SELLERS, $data, true, array(), ['rfqts_selprod_id' => $data['rfqts_selprod_id']])) {
+        if (!FatApp::getDb()->insertFromArray(self::DB_RFQ_TO_SELLERS, $data, true, array(), $data)) {
             $this->error = FatApp::getDb()->getError();
             return false;
         }
@@ -244,8 +246,10 @@ class RequestForQuote extends MyAppModel
     public static function getTypeArr(int $langId): array
     {
         return [
-            self::TYPE_PRIVATE => Labels::getLabel('LBL_PRIVATE', $langId),
-            self::TYPE_PUBLIC => Labels::getLabel('LBL_PUBLIC', $langId),
+            self::TYPE_INDIVIDUAL => Labels::getLabel('LBL_INDIVIDUAL', $langId),
+            self::TYPE_VARIANT => Labels::getLabel('LBL_VARIANT', $langId),
+            self::TYPE_CATALOG => Labels::getLabel('LBL_CATALOG', $langId),
+            // self::TYPE_CUSTOM => Labels::getLabel('LBL_CUSTOM', $langId),
         ];
     }
 
@@ -299,7 +303,7 @@ class RequestForQuote extends MyAppModel
         }
 
         $srch = new SearchBase(self::DB_RFQ_TO_SELLERS);
-        $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'sp.selprod_id = rfqts_selprod_id', 'sp');
+        $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'sp.selprod_id = rfq_selprod_id', 'sp');
         $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'sp.selprod_code = sp1.selprod_code AND sp1.selprod_user_id = ' . $sellerId, 'sp1');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -336,9 +340,8 @@ class RequestForQuote extends MyAppModel
         }
 
         $prodSrch = new ProductSearch(CommonHelper::getLangId());
-        $prodSrch->setDefinedCriteria(criteria:['joinCredentials' => true]);
-        $prodSrch->joinTable(RequestForQuote::DB_RFQ_TO_SELLERS, 'INNER JOIN', 'rfqts_selprod_id = selprod_id', 'rfqs');
-        $prodSrch->joinTable(RequestForQuote::DB_TBL, 'INNER JOIN', 'rfqts_rfq_id = rfqts_rfq_id', 'rfq');
+        $prodSrch->setDefinedCriteria(criteria: ['joinCredentials' => true]);
+        $prodSrch->joinTable(RequestForQuote::DB_TBL, 'INNER JOIN', 'rfq_selprod_id = selprod_id', 'rfq');
         $prodSrch->joinShopSpecifics();
         $prodSrch->joinSellerProductSpecifics();
         $prodSrch->joinProductSpecifics();
@@ -522,11 +525,43 @@ class RequestForQuote extends MyAppModel
 
     public static function getSelprodId(int $rfqId): int
     {
-        $srch = new SearchBase(self::DB_RFQ_TO_SELLERS, 'rs');
-        $srch->addFld('rfqts_selprod_id as selprod_id');
-        $srch->addCondition('rfqts_rfq_id', '=', $rfqId);
+        return self::getAttributesById($rfqId, 'rfq_selprod_id');
+    }
+
+    public function bindRfqToSeller(int $prodId, string $selprodCode, int $sellerId): bool
+    {
+        if (1 > $this->getMainTableRecordId()) {
+            $this->error = Labels::getLabel('LBL_NO_RFQ_ID_GIVEN');
+            return false;
+        }
+
+        $rfqType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, self::TYPE_INDIVIDUAL);
+
+        if (self::TYPE_INDIVIDUAL == $rfqType) {
+            $data = [
+                'rfqts_user_id' => $sellerId,
+            ];
+            return $this->linkToSeller($data);
+        }
+
+        $srch = new ProductSearch();
         $srch->doNotCalculateRecords();
-        $row = FatApp::getDb()->fetch($srch->getResultSet());
-        return is_array($row) && isset($row['selprod_id']) ? $row['selprod_id'] : 0;
+        $srch->doNotLimitRecords();
+
+        $criteria['doNotJoinSpecialPrice'] = true;
+        if (self::TYPE_VARIANT == $rfqType) {
+            $srch->addCondition('selprod_code', 'LIKE', $selprodCode);
+        } else if (self::TYPE_CATALOG == $rfqType) {
+            $criteria['product_id'] = $prodId;
+        }
+
+        $srch->joinSellerProducts(criteria: $criteria);
+        $srch->joinSellers();
+        $srch->joinShops();
+        $srch->addGroupBy('selprod_user_id');
+        $srch->addFld($this->getMainTableRecordId() . ', selprod_user_id');
+        $sql = 'INSERT INTO ' . self::DB_RFQ_TO_SELLERS . ' ' . $srch->getQuery();
+        FatApp::getDb()->query($sql);
+        return true;
     }
 }

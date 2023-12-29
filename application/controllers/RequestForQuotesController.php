@@ -21,7 +21,7 @@ class RequestForQuotesController extends MyAppController
     {
         $isUserLogged = ($this->loggedUserId > 0) ? applicationConstants::YES : applicationConstants::NO;
         $frm = RequestForQuote::getForm($isUserLogged);
-        $frm->addHiddenField('', 'rfqts_selprod_id');
+        $frm->addHiddenField('', 'rfq_selprod_id');
         return $frm;
     }
 
@@ -108,7 +108,7 @@ class RequestForQuotesController extends MyAppController
 
         $frm = $this->getForm();
         $frm->fill([
-            'rfqts_selprod_id' => $selprodId,
+            'rfq_selprod_id' => $selprodId,
             'rfq_product_id' => $selprodData['selprod_product_id'],
             'rfq_addr_id' => $defaultAddress['addr_id'] ?? 0,
             'rfq_quantity' => $rfqQuat
@@ -153,7 +153,7 @@ class RequestForQuotesController extends MyAppController
 
     public function save()
     {
-        $email  = "";
+        $email = "";
         $isGuest = false;
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -165,7 +165,7 @@ class RequestForQuotesController extends MyAppController
             LibHelper::exitWithError(Labels::getLabel('ERR_DELIVERY_ADDRESS_IS_MANDATORY'), true);
         }
 
-        $selprodId = FatApp::getPostedData('rfqts_selprod_id', FatUtility::VAR_INT, 0);
+        $selprodId = FatApp::getPostedData('rfq_selprod_id', FatUtility::VAR_INT, 0);
         $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty'], applicationConstants::JOIN_INNER);
         if ($post['rfq_quantity'] < $selprodData['selprod_min_order_qty']) {
             $msg = Labels::getLabel('ERR_REQUIRED_QUANTITY_SHOULD_BE_GREATER_THAN_EQUAL_TO_{QTY}');
@@ -218,15 +218,11 @@ class RequestForQuotesController extends MyAppController
         }
         CalculativeDataRecord::updateRfqCount();
 
-        $rfqType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, RequestForQuote::TYPE_PRIVATE);
-        $data = [
-            'rfqts_user_id' => (RequestForQuote::TYPE_PUBLIC == $rfqType) ? 0 : $selprodData['selprod_user_id'],
-            'rfqts_selprod_id' => $post['rfqts_selprod_id'],
-        ];
-        if (false == $rfq->linkToSeller($data)) {
+        if (false == $rfq->bindRfqToSeller($selprodData['selprod_product_id'], $selprodData['selprod_code'], $selprodData['selprod_user_id'])) {
             $db->rollbackTransaction();
             LibHelper::exitWithError($rfq->getError(), true);
         }
+
         $fileAttached  = false;
         if (isset($_FILES['document']['tmp_name']) && is_uploaded_file($_FILES['document']['tmp_name'])) {
             $fileAttached = true;
@@ -321,176 +317,6 @@ class RequestForQuotesController extends MyAppController
         }
 
         AttachedFile::downloadAttachment($res['afile_physical_path'], $res['afile_name']);
-    }
-
-    public function saveMultiple()
-    {
-        $isGuest = false;
-        $email = "";
-        $db = FatApp::getDb();
-        $db->startTransaction();
-        $post = FatApp::getPostedData();
-        if (!isset($post['rfq_item']) || empty($post['rfq_item'])) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST'), true);
-        }
-
-        if (empty($post['rfq_addr_id'])) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_DELIVERY_ADDRESS_IS_MANDATORY'), true);
-        }
-
-        $sessionId = session_id();
-        if ($this->loggedUserId == 0) {
-            $authentication = new UserAuthentication();
-            if (!$authentication->guestLogin(FatApp::getPostedData('user_email'), FatApp::getPostedData('user_name'), $_SERVER['REMOTE_ADDR'], FatApp::getPostedData('user_phone'), FatApp::getPostedData('user_phone_dcode'))) {
-                LibHelper::exitWithError($authentication->getError(), true);
-            }
-            $this->loggedUserId = UserAuthentication::getLoggedUserId();
-            $isGuest = true;
-            $email = FatApp::getPostedData('user_email');
-        }
-        $user = new User($this->loggedUserId);
-        if (UserAuthentication::isGuestUserLogged()) {
-            $userInfo = $user->getUserInfo(['user_name', 'credential_username', 'credential_email', 'user_phone', 'user_phone_dcode'], true, false, joinUserCredentials: true);
-        } else {
-            $userInfo = $user->getUserInfo(['user_name', 'credential_username', 'credential_email', 'user_phone', 'user_phone_dcode'], joinUserCredentials: true);
-        }
-        if (false == $userInfo) {
-            $db->rollbackTransaction();
-        }
-
-        $data_to_be_save['addr_record_id'] = $this->loggedUserId;
-        $data_to_be_save['addr_session_id'] = '';
-
-        $addressObj = new TableRecord(Address::DB_TBL);
-        $addressObj->assignValues($data_to_be_save, true);
-        if (!$addressObj->update(['smt' => 'addr_session_id=?', 'vals' => [$sessionId]])) {
-            LibHelper::exitWithError($addressObj->getError(), true);
-        }
-
-        $rfqType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, RequestForQuote::TYPE_PRIVATE);
-        $errMsg = '';
-        $rfqPostedData = [];
-        $weightUnits =  applicationConstants::getWeightUnitsArr($this->siteLangId);
-        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['rfqRequest'] = [];
-        foreach ($post['rfq_item'] as $selprodId => $row) {
-            $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty'], applicationConstants::JOIN_INNER);
-            if ($row['rfq_quantity'] < $selprodData['selprod_min_order_qty']) {
-                $msg = Labels::getLabel('ERR_REQUIRED_QUANTITY_SHOULD_BE_GREATER_THAN_EQUAL_TO_{QTY}_FOR_{PROD-TITLE}');
-                if (!empty($errMsg)) {
-                    $errMsg .= ' | ';
-                }
-                $errMsg .= CommonHelper::replaceStringData($msg, ['{QTY}' => $selprodData['selprod_min_order_qty'], '{PROD-TITLE}' => $selprodData['selprod_title']]);
-            }
-
-            $options = SellerProduct::getSellerProductOptions($selprodId, true, $this->siteLangId);
-            if (!empty($options)) {
-                $options = implode(' | ', array_column($options, 'optionvalue_name'));
-            }
-            $row['rfq_title'] = ($selprodData['selprod_title'] . (!empty($options) ? ' | ' . $options : ''));
-            $row['rfq_selprod_code'] = $selprodData['selprod_code'];
-            $row['rfq_user_id'] = $this->loggedUserId;
-            $row['rfq_lang_id'] = $this->siteLangId;
-            $row['rfq_addr_id'] = $post['rfq_addr_id'];
-            $row['rfq_delivery_date'] = $post['rfq_delivery_date'];
-            $row['rfq_added_on'] = date('Y-m-d H:i:s');
-            $rfq = new RequestForQuote();
-            if (false == $rfq->add($row)) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($rfq->getError(), true);
-            }
-            $data = [
-                'rfqts_user_id' => (RequestForQuote::TYPE_PUBLIC == $rfqType) ? 0 : $selprodData['selprod_user_id'],
-                'rfqts_selprod_id' => $row['rfqts_selprod_id'],
-            ];
-            if (false == $rfq->linkToSeller($data)) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($rfq->getError(), true);
-            }
-            $fileAttached = false;
-            if (isset($_FILES['rfq_item']['tmp_name'][$selprodId]['document']) && is_uploaded_file($_FILES['rfq_item']['tmp_name'][$selprodId]['document'])) {
-                $fileHandlerObj = new AttachedFile();
-                $fileAttached = true;
-                if (false == $fileHandlerObj->saveAttachment(
-                    $_FILES['rfq_item']['tmp_name'][$selprodId]['document'],
-                    AttachedFile::FILETYPE_RFQ,
-                    $rfq->getMainTableRecordId(),
-                    0,
-                    $_FILES['rfq_item']['name'][$selprodId]['document'],
-                    -1,
-                    true,
-                    $this->siteLangId
-                )) {
-                    $fileAttached = false;
-                    $db->rollbackTransaction();
-                    LibHelper::exitWithError($fileHandlerObj->getError(), true);
-                }
-            }
-
-            $shopData = Shop::getAttributesByUserId($selprodData['selprod_user_id'], ['shop_name'], langId: $this->siteLangId);
-
-            $row['rfq_number'] = $rfq->getRfqNo();
-
-            $address = new Address($post['rfq_addr_id'], $this->siteLangId);
-            $address = $address->getData(Address::TYPE_USER, $this->loggedUserId);
-            $emailData = array_merge($selprodData, $shopData, $userInfo, $address, $row, ['rfq_id' => $rfq->getMainTableRecordId(), 'rfq_added_on' => date("d-m-Y")]);
-
-            $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['rfqRequest'][] = $emailData;
-
-            $product_option_info = "";
-            $selprodOption = SellerProduct::getSellerProductOptionsBySelProdCode($emailData['selprod_code'], $this->siteLangId);
-            $product_option_info  = "";
-            foreach ($selprodOption  as $options) {
-                $product_option_info .= $options['option_name'] . " : " . $options['optionvalue_name'] . " | ";
-            }
-            if (!empty(FatApp::getConfig('CONF_HUBSPOT_TOKEN_KEY', FatUtility::VAR_STRING, ''))) {
-                $rfqItemData[$selprodId] = array(
-                    'buyer_comment' => $emailData['rfq_description'], // multiple
-                    'description' => rtrim($product_option_info, " | "), // multiple
-                    'leadRfqNumber' => $emailData['rfq_number'], // multiple
-                    'product_name' => $emailData['selprod_title'], // multiple
-                    'unit_type' => $weightUnits[$emailData['rfq_quantity_unit']], // multiple
-                    'product_quantity' => $emailData['rfq_quantity'], // multiple
-                    'product_price' => 0, // multiple
-                    'attached_file_url' => ($fileAttached) ? UrlHelper::generateFullUrl('RequestForQuotes', 'downloadFile', array($emailData['rfq_id'])) : "", // multiple
-                    'product_option_info' => rtrim($product_option_info, " | "), // multiple
-
-                );
-            }
-            $emailHandler = new EmailHandler();
-            if (false === $emailHandler->sendNewRfqNotification($this->siteLangId, $emailData)) {
-                $msg = $emailHandler->getError();
-                $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY_SITE_ADMIN._NOTIFICATION_LOGGED_TO_SYSTEM.') : $msg;
-                LibHelper::exitWithError($msg, true);
-            }
-
-            $cartObj = new Cart($this->loggedUserId, $this->siteLangId, $this->app_user['temp_user_id']);
-            $cartObj->clear();
-            $cartObj->updateUserCart();
-            $db->commitTransaction();
-        }
-
-        if (!empty(FatApp::getConfig('CONF_HUBSPOT_TOKEN_KEY', FatUtility::VAR_STRING, ''))) {
-            $rfqPostedData = array(
-                'email' => $emailData['credential_email'],
-                'name' => $emailData['user_name'],
-                'phone' =>  ValidateElement::formatDialCode($emailData['user_phone_dcode']) . '' . $emailData['user_phone'],
-                'requestForQuote' => false,
-                'delivery_address' => $emailData['addr_title'] . ', ' . $emailData['addr_name'] . ', ' . $emailData['addr_address1'] . ', ' . $emailData['addr_address2'] . ', ' . $emailData['addr_city'] . ', ' . $emailData['state_name'] . ', ' . $emailData['country_name'] . ', ' . $emailData['addr_zip'] . ', ' . $emailData['addr_phone_dcode'] . ' ' . $emailData['addr_phone'],
-                'deal_amount' => 0,
-                'delivery_date' =>  $emailData['rfq_delivery_date'],
-                'rfqItemData' => $rfqItemData
-            );
-            $HubSpotApi = new HubSpotApi($rfqPostedData);
-            $HubSpotApi->run();
-        }
-
-        $errMsg = empty($errMsg) ? Labels::getLabel('MGS_REQUESTED_SUCCESSFULLY', $this->siteLangId) : $errMsg;
-        $this->set('verificationRequired', FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1));
-        $this->set('isGuest', $isGuest);
-        $this->set('email', $email);
-        $this->set('msg', $errMsg);
-        $this->set('redirectUrl', UrlHelper::generateUrl('Custom', 'rfqSuccessMultiple', [], CONF_WEBROOT_FRONTEND));
-        $this->_template->render(false, false, 'json-success.php');
     }
 
     public function addAddress()
