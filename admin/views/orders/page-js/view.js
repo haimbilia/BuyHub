@@ -134,7 +134,6 @@ $(document).on('change', '.downloadTypeJs', function () {
         fcom.ajax(fcom.makeUrl('Orders', 'getPayments', [orderId]), [], function (ans) {
             fcom.closeProcessing();
             fcom.removeLoader();
-            console.log(ans);
             if (0 < ans.status) {
                 $('.paymentListJs').html(ans.html);
             }
