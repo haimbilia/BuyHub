@@ -2,7 +2,6 @@
 
 class BadgeRequestsController extends ListingBaseController
 {
-
     protected string $pageKey = 'MANAGE_BADGE_REQUESTS';
     private array $recordData = [];
 

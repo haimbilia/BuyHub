@@ -5,6 +5,7 @@ class FatController
     protected $_controllerName;
     protected $_actionName;
     protected $_template;
+    protected $siteLangId;
 
     protected $_autoCreateModel = true;
 

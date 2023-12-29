@@ -292,6 +292,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
             if ($data === false) {
                 LibHelper::dieJsonError($this->str_invalid_request);
             }
+            $data['adsbatch_lang_id'] = $langId;
             $prodBatchAdsFrm->fill($data);
         }
 
@@ -544,6 +545,8 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
         $this->set('canEdit', $this->userPrivilege->canEditAdvertisementFeed(0, true));
+        $this->set('canView', $this->userPrivilege->canViewAdvertisementFeed(0, true));
+        $this->set('merchantId', $this->getUserMeta(self::KEY_NAME . '_merchantId'));
         $this->_template->render(false, false);
     }
 
@@ -722,7 +725,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
      * @param  int $adsBatchId
      * @return void
      */
-    public function publishBatch(int $adsBatchId)
+    public function publishBatch(int $adsBatchId, int $download = 0)
     {
         $this->userPrivilege->canEditAdvertisementFeed();
         $this->adsBatchId = $adsBatchId;
@@ -750,12 +753,12 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
 
         $data = [
             'batchId' => $this->adsBatchId,
+            'batchTitle' => AdsBatch::getAttributesById($this->adsBatchId, 'adsbatch_name'),
             'currency_code' => strtoupper(Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code')),
             'data' => $productData,
             'expire_on' => $expireOn,
         ];
-
-        $response = $this->googleShoppingFeed->publishBatch($data);
+        $response = $this->googleShoppingFeed->publishBatch($data, (0 < $download));
         if (false === $response['status'] || Plugin::RETURN_FALSE === $response['status']) {
             LibHelper::dieJsonError($this->googleShoppingFeed->getError());
         }
@@ -769,7 +772,30 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         if (false === AdsBatch::updateDetail($this->adsBatchId, $dataToUpdate)) {
             LibHelper::dieJsonError(Labels::getLabel("ERR_UNABLE_TO_UPDATE", $this->siteLangId));
         }
-        FatUtility::dieJsonSuccess($response['msg']);
+
+        if (true) {
+            $this->set('redirect_url', UrlHelper::generateUrl('GoogleShoppingFeed', 'downloadXmlFile', [$this->adsBatchId]));
+        }
+        $this->set('msg', $response['msg']);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function downloadXmlFile(int $batchId)
+    {
+        $title = AdsBatch::getAttributesById($batchId, 'adsbatch_name');
+        if (empty($title)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_FILE_NOT_FOUND', $this->siteLangId), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('GoogleShoppingFeed'));
+        }
+
+        $xmlFileName = $batchId . str_replace(' ', '_', strtolower($title)) . '.xml';
+        if (!file_exists(CONF_UPLOADS_PATH . $xmlFileName)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_FILE_NOT_FOUND', $this->siteLangId), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('GoogleShoppingFeed'));
+        }
+
+        AttachedFile::downloadAttachment($xmlFileName, $xmlFileName);
+        unlink(CONF_UPLOADS_PATH . $xmlFileName);
     }
 
     public function getBreadcrumbNodes($action)
