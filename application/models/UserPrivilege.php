@@ -38,6 +38,7 @@ class UserPrivilege
     public const SECTION_BADGES = 35;
     public const SECTION_BADGE_LINKS = 36;
     public const SECTION_MARKETPLACE_CHANNEL = 37;
+    public const SECTION_REQUEST_FOR_QUOTE = 38;
 
     public const MODULE_SHOP = 1;
     public const MODULE_ORDERS = 2;
@@ -142,6 +143,7 @@ class UserPrivilege
             static::SECTION_FINANCIAL_REPORT => Labels::getLabel('LBL_Financial_Report', $langId),
             static::SECTION_BADGES => Labels::getLabel('LBL_BADGES', $langId),
             static::SECTION_BADGE_LINKS => Labels::getLabel('LBL_BADGE_LINKS', $langId),
+            static::SECTION_REQUEST_FOR_QUOTE => Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $langId),
         );
         return $arr;
     }
@@ -961,5 +963,15 @@ class UserPrivilege
     public function canEditMarketplaceChannel($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_MARKETPLACE_CHANNEL, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewRequestForQuote($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_REQUEST_FOR_QUOTE, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditRequestForQuote($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_REQUEST_FOR_QUOTE, static::PRIVILEGE_WRITE, $returnResult);
     }
 }
