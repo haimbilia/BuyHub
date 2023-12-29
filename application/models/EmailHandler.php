@@ -2988,7 +2988,7 @@ class EmailHandler extends FatModel
     {
         $tpl = 'gdpr_request_status_update_notification_to_user';
         $reqData = UserGdprRequest::getAttributesById($reqId, array('ureq_user_id', 'ureq_type'));
-        if(UserGdprRequest::TYPE_DATA_REQUEST == $reqData['ureq_type']) {
+        if (UserGdprRequest::TYPE_DATA_REQUEST == $reqData['ureq_type']) {
             $tpl = 'gdpr_request_data_to_user';
         }
 
@@ -3200,6 +3200,63 @@ class EmailHandler extends FatModel
             $this->sendSms($tpl, $phone, $vars, $langId);
         }
 
+        return true;
+    }
+
+    public function sendNewRfqNotification($langId, $data)
+    {
+        $tpl = new FatTemplate('', '');
+        $tpl->set('data', $data);
+        $tpl->set('siteLangId', $langId);
+        $rfqTableFormat = $tpl->render(false, false, '_partial/emails/request-for-quote.php', true);
+
+        $vars = array('{rfq_table}' => $rfqTableFormat);
+
+        if (!$this->sendMailToAdminAndAdditionalEmails('NEW_RFQ', $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId)) {
+            return false;
+        }
+
+        $vars = array(
+            '{rfq_title}' => $data['rfq_title'],
+            '{rfq_number}' => $data['rfq_number'],
+            '{qty}' => $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true),
+        );
+        $this->sendSms('NEW_RFQ', ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
+        return true;
+    }
+
+    public function sendApprovalStatusRfqNotification($langId, $data)
+    {
+        $tpl = new FatTemplate('', '');
+        $tpl->set('data', $data);
+        $tpl->set('siteLangId', $langId);
+        $rfqTableFormat = $tpl->render(false, false, '_partial/emails/request-for-quote.php', true);
+        $approvalStatus = RequestForQuote::getApprovalStatusArr($langId)[$data['rfq_approved']] ?? '';
+        $vars = array(
+            '{user_name}' => $data['user_name'],
+            '{rfq_table}' => $rfqTableFormat,
+            '{approval_status}' => $approvalStatus,
+        );
+
+        if (!empty($data['credential_email'])) {
+            if (!(new FatMailer($langId, 'RFQ_APPROVAL'))
+                ->setTo($data['credential_email'])
+                ->setVariables($vars)
+                ->send()) {
+                return false;
+            }
+        }
+
+        if (!empty($data['user_phone']) && !empty($data['user_phone_dcode'])) {
+            $vars = array(
+                '{user_name}' => $data['user_name'],
+                '{rfq_title}' => $data['rfq_title'],
+                '{rfq_number}' => $data['rfq_number'],
+                '{qty}' => $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true),
+                '{approval_status}' => $approvalStatus,
+            );
+            $this->sendSms('RFQ_APPROVAL', ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'], $vars, $langId);
+        }
         return true;
     }
 }

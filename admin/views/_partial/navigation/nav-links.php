@@ -337,7 +337,49 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
             </div>
         </li>
     <?php } ?>
-
+    <?php
+    if (
+        $objPrivilege->canViewRequestForQuote(AdminAuthentication::getLoggedAdminId(), true)
+    ) {
+    ?>
+        <li class="menu-item dropdownJs">
+            <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" <?php if (!$quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#NAV_RFQ" <?php } ?> aria-expanded="true" aria-controls="collapseOne">
+                <span class="menu-icon">
+                    <svg class="svg" width="24" height="24">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-rfq">
+                        </use>
+                    </svg>
+                </span>
+                <span class="menu-title menuTitleJs"><?php echo Labels::getLabel('NAV_RFQ', $siteLangId); ?></span>
+                <?php if (!$quickSearch) { ?>
+                    <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
+                <?php } ?>
+            </button>
+            <div class="sidebar-dropdown-menu <?php echo $collapseClass; ?>" <?php if (!$quickSearch) { ?>id="NAV_RFQ" <?php } ?> aria-labelledby="" data-bs-parent="#sidebarNavLinks">
+                <ul class="nav nav-level">
+                    <?php if ($objPrivilege->canViewRequestForQuote(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["RequestForQuotes", "RfqOffers"]' href="<?php echo UrlHelper::generateUrl('RequestForQuotes'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <span class="nav_text navTextJs">
+                                    <?php
+                                    $menuLabel = Labels::getLabel('NAV_REQUEST_FOR_QUOTES', $siteLangId);
+                                    $menuLabel .= (!$quickSearch && $rfqCount ? ' (' . HtmlHelper::displayNumberWithPlus($rfqCount) . ')' : '');
+                                    echo $menuLabel;
+                                    ?>
+                                </span>
+                            </a>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </li>
+    <?php } ?>
     <?php
     if (
         $objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true) ||

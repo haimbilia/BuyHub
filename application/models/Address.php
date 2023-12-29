@@ -12,7 +12,7 @@ class Address extends MyAppModel
 
     public const ADDRESS_TYPE_BILLING = 1;
     public const ADDRESS_TYPE_SHIPPING = 2;
-    
+
     public const ADDRESS_TITLE_LENGTH = 20;
 
     private const GOOGLE_GEOCODE_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
@@ -73,9 +73,10 @@ class Address extends MyAppModel
      * @param  int $type
      * @param  string $recordId
      * @param  int $isDefault
+     * @param  string $sessionId
      * @return array
      */
-    public function getData(int $type, string $recordId, int $isDefault = 0, $joinTimeSlots = false): array
+    public function getData(int $type, string $recordId, int $isDefault = 0, $joinTimeSlots = false, $sessionId = ''): array
     {
         $srch = new AddressSearch($this->langId);
         $srch->joinCountry();
@@ -92,6 +93,11 @@ class Address extends MyAppModel
         if (0 < $isDefault) {
             $srch->addCondition(self::tblFld('is_default'), '=', $isDefault);
         }
+
+        if (0 < $sessionId && 1 > $recordId) {
+            $srch->addCondition(self::tblFld('session_id'), '=', $sessionId);
+        }
+        
         if ($recordId == 0) {
             $srch->addOrder(static::tblFld('id'), 'DESC');
         } else {

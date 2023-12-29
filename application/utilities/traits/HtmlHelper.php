@@ -21,7 +21,6 @@ class HtmlHelper
         $frm->addHtml('', 'btn_clear', self::addButtonHtml($lbl, 'button', 'btn_clear', $btnClass, 'clearSearch()'));
     }
 
-
     public static function formatFormFields(Form &$frm, $col = 12)
     {
         $frm->setCustomRendererClass('FormRendererBS');
@@ -388,5 +387,34 @@ class HtmlHelper
     public static function getModalStructure(string $id, string $title, string $body)
     {
         return '<div class="modal fade" id="' . $id . '" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-dialog-centered" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">' . $title . '</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div class="cms"><p>' . $body . '</p></div></div></div></div></div>';
+    }
+
+    /**
+     * Converts a date from yyyy-mm-dd[ hh:ii:ss] format (or any format supported by php DateTime) to format set with CONF_DATE_FORMAT and CONF_DATE_FORMAT_TIME if needed. Return Html.
+     * 
+     * @param string $dateTime   The date string to be displayed
+     * @param bool $showTime     If time is to be included
+     * @param bool $usetimezone  If to be converted to some timezone.
+     * @param bool $timezone     In which timezone to convert. Supports php timezone strings.
+     * @return string
+     */
+    public static function formatDateTime(string $dateTime, bool $showTime = false, bool $usetimezone = false, string $timezone = '')
+    {
+        if ('0000-00-00 00:00:00' ==  $dateTime || '0000-00-00' ==  $dateTime) {
+            return '<date>0000-00-00</date>';
+        }
+        $timezone = FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get());
+        $timeFormat = FatApp::getConfig('CONF_DATE_FORMAT_TIME', FatUtility::VAR_STRING, 'H:i');
+        $formattedDT = FatDate::format($dateTime, $showTime, $usetimezone, $timezone);
+
+        if (false === $showTime) {
+            return '<date>' . $formattedDT . '</date>';
+        }
+
+        $time = date($timeFormat, strtotime($dateTime));
+        $date = FatDate::format($dateTime, false, $usetimezone, $timezone);
+        return '<p class="date">' . $date . '
+                    <time datetime="' . $dateTime . '">' . $time . '</time>
+                </p>';
     }
 }

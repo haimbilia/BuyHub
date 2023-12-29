@@ -133,6 +133,7 @@ class AdminPrivilege
     public const SECTION_PAGES_LANGUAGE_DATA = 125;
     public const SECTION_CATEGORY_REQUEST = 126;
     public const SECTION_GETTING_STARTED = 127;
+    public const SECTION_REQUEST_FOR_QUOTE = 128;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -302,6 +303,7 @@ class AdminPrivilege
                 static::SECTION_SETTINGS => Labels::getLabel('NAV_SYSTEM_SETTINGS', $langId),
                 static::SECTION_PAGES_LANGUAGE_DATA => Labels::getLabel('NAV_PAGES_LANGUAGE_DATA_SETTINGS', $langId),
                 static::SECTION_GETTING_STARTED => Labels::getLabel('NAV_GETTING_STARTED', $langId),
+                static::SECTION_REQUEST_FOR_QUOTE => Labels::getLabel('NAV_REQUEST_FOR_QUOTES', $langId),
 
                 /* static::SECTION_Languages => Labels::getLabel('NAV_LANGUAGES',$langId),
                 static::SECTION_Languages => Labels::getLabel('NAV_ORDER_STATUS',$langId), */
@@ -1711,4 +1713,15 @@ class AdminPrivilege
     {
         return $this->checkPermission($adminId, static::SECTION_GETTING_STARTED, static::PRIVILEGE_READ, $returnResult);
     }
+    
+    public function canViewRequestForQuote($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_REQUEST_FOR_QUOTE, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditRequestForQuote($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_REQUEST_FOR_QUOTE, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
 }

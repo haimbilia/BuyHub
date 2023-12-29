@@ -30,7 +30,8 @@
                             </form>
                             <div class="settings-inner">
                                 <ul class="confTypesJs">
-                                    <?php foreach ($tabs as $formType => $tabName) {
+                                    <?php 
+                                    foreach ($tabs as $formType => $tabName) {
                                         $tabsId = 'tabJs-' . $formType;
                                     ?>
                                         <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $formType) ? 'is-active' : '' ?>" data-listType="<?php echo $formType; ?>">

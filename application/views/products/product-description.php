@@ -125,13 +125,19 @@
                                 </svg>
                             </button>
                         </div>
-
                     </div>
                 </div>
-                <?php if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
-                    echo $frmBuyProduct->getFieldHtml('btnAddToCart');
-                }
-                echo $frmBuyProduct->getFieldHtml('selprod_id'); ?>
+                <div class="buy-action">
+                    <?php if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
+                        echo $frmBuyProduct->getFieldHtml('btnAddToCart');
+                    }
+                    echo $frmBuyProduct->getFieldHtml('selprod_id');
+                    if (FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) { ?>
+                        <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
+                            <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
+                        </button>
+                    <?php } ?>
+                </div>
             <?php } ?>
             </form>
         <?php echo $frmBuyProduct->getExternalJs();
@@ -144,7 +150,7 @@
 
     if (strtotime($product['selprod_available_from']) > strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
         <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
-            <?php echo Labels::getLabel('LBL_Not_Available', $siteLangId); ?>
+            <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?>
         </button>
         <p class="form-text text-muted">
             <?php echo str_replace('{available-date}', FatDate::Format($product['selprod_available_from']), Labels::getLabel('LBL_This_item_will_be_available_from_{available-date}', $siteLangId)); ?>
