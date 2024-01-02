@@ -541,6 +541,10 @@ class ProductSearch extends SearchBase
             $shopCondition .= ' and shop.shop_id = ' . $shopId;
         }
 
+        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            $shopCondition .= ' and shop_has_valid_subscription = ' . applicationConstants::YES;
+        }
+
         $joinShopWithSubQuery = false;
         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
             $prodGeoCondition = FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0);

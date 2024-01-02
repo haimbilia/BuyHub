@@ -1039,6 +1039,8 @@ class Cronjob extends FatModel
         foreach ($result as $user) {
             $assignValues = ['user_has_valid_subscription' => applicationConstants::NO];
             FatApp::getDb()->updateFromArray(User::DB_TBL, $assignValues, array('smt' => 'user_id = ? ', 'vals' => array((int) $user['order_user_id'])));
+            $assignValues = ['shop_has_valid_subscription' => applicationConstants::NO];
+            FatApp::getDb()->updateFromArray(Shop::DB_TBL, $assignValues, array('smt' => 'shop_user_id = ? ', 'vals' => array((int) $user['seller_user_id'])));
         }
         echo 'Done';
     }
