@@ -218,7 +218,7 @@ class RequestForQuotesController extends MyAppController
         }
         CalculativeDataRecord::updateRfqCount();
 
-        if (false == $rfq->bindRfqToSeller($selprodData['selprod_product_id'], $selprodData['selprod_code'], $selprodData['selprod_user_id'])) {
+        if (false == $rfq->bindRfqToSeller($selprodData['selprod_id'], $selprodData['selprod_code'], $selprodData['selprod_user_id'])) {
             $db->rollbackTransaction();
             LibHelper::exitWithError($rfq->getError(), true);
         }

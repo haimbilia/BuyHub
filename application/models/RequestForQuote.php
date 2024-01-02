@@ -528,7 +528,7 @@ class RequestForQuote extends MyAppModel
         return self::getAttributesById($rfqId, 'rfq_selprod_id');
     }
 
-    public function bindRfqToSeller(int $prodId, string $selprodCode, int $sellerId): bool
+    public function bindRfqToSeller(int $selprodId, string $selprodCode, int $sellerId): bool
     {
         if (1 > $this->getMainTableRecordId()) {
             $this->error = Labels::getLabel('LBL_NO_RFQ_ID_GIVEN');
@@ -540,6 +540,7 @@ class RequestForQuote extends MyAppModel
         if (self::TYPE_INDIVIDUAL == $rfqType) {
             $data = [
                 'rfqts_user_id' => $sellerId,
+                'rfqts_selprod_id' => $selprodId,
             ];
             return $this->linkToSeller($data);
         }
@@ -547,19 +548,21 @@ class RequestForQuote extends MyAppModel
         $srch = new ProductSearch();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
+        $srch->addFld($this->getMainTableRecordId() . ', selprod_user_id');
 
         $criteria['doNotJoinSpecialPrice'] = true;
         if (self::TYPE_VARIANT == $rfqType) {
             $srch->addCondition('selprod_code', 'LIKE', $selprodCode);
+            $srch->addFld("selprod_id as rfqts_selprod_id");
         } else if (self::TYPE_CATALOG == $rfqType) {
+            $prodId = explode('_', $selprodCode)[0];
             $criteria['product_id'] = $prodId;
+            $srch->addFld("if(selprod_code like '" . $selprodCode . "',selprod_id,0) as rfqts_selprod_id");
         }
-
         $srch->joinSellerProducts(criteria: $criteria);
         $srch->joinSellers();
         $srch->joinShops();
         $srch->addGroupBy('selprod_user_id');
-        $srch->addFld($this->getMainTableRecordId() . ', selprod_user_id');
         $sql = 'INSERT INTO ' . self::DB_RFQ_TO_SELLERS . ' ' . $srch->getQuery();
         FatApp::getDb()->query($sql);
         return true;

@@ -339,7 +339,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
     <?php } ?>
     <?php
     if (
-        $objPrivilege->canViewRequestForQuote(AdminAuthentication::getLoggedAdminId(), true)
+        $objPrivilege->canViewRequestForQuote(AdminAuthentication::getLoggedAdminId(), true) && (FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0))
     ) {
     ?>
         <li class="menu-item dropdownJs">

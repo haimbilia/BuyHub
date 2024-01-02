@@ -62,8 +62,9 @@ ALTER TABLE `tbl_rfq`
 
 CREATE TABLE `tbl_rfq_to_sellers` (
   `rfqts_rfq_id` int NOT NULL,
-  `rfqts_user_id` int NOT NULL COMMENT 'seller id'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `rfqts_user_id` int NOT NULL COMMENT 'seller id',
+  `rfqts_selprod_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
 
 ALTER TABLE `tbl_rfq_to_sellers`
   ADD PRIMARY KEY (`rfqts_rfq_id`,`rfqts_user_id`);
