@@ -17,9 +17,8 @@ $(document).ready(function () {
     }
 
     bindSellerUserSelect2 = function (element, obj = []) {
-        /* RVSI */
-        /* let productId = $('input[name="rfq_product_id"]').val();
-        obj['product_id'] = productId; */
+        let productId = $('input[name="rfq_product_id"]').val();
+        obj['product_id'] = productId;
         let rfqId = $('input[name="rfq_id"]').val();
         obj['rfq_id'] = rfqId;
         select2(element, fcom.makeUrl(controllerName, 'getSellersByProductId'), obj);
@@ -32,6 +31,7 @@ $(document).ready(function () {
             $.ykmodal(ans.html, false, 'modal-lg');
         });
     };
+    
     assignSellerForm = function (rfqId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'assignSellerForm', [rfqId]), [], function (ans) {
             fcom.closeProcessing();

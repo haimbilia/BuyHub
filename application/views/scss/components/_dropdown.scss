@@ -272,3 +272,9 @@
     overflow-y: auto;
     max-height: 250px;
 }
+
+.btn-dropdown-content {
+    @include truncate(100%);
+    width: 100%;
+    display: block;
+}

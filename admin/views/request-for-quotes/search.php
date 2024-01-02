@@ -104,8 +104,10 @@ foreach ($arrListing as $sn => $row) {
 
 
                 if ($canEdit) {
-                    /* if (RequestForQuote::APPROVED == $row['rfq_approved']) {
-                        $data['dropdownButtons']['deleteButton'] = [];
+                    if (RequestForQuote::APPROVED == $row['rfq_approved']) {
+                        if (1 > $row['acceptedOffers']) {
+                            $data['dropdownButtons']['deleteButton'] = [];
+                        }
                         $data['dropdownButtons']['otherButtons'][] = [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
@@ -118,9 +120,6 @@ foreach ($arrListing as $sn => $row) {
                                             </use>
                                         </svg></i>' . Labels::getLabel('LBL_ASSIGN_SELLER', $siteLangId),
                         ];
-                    } */
-                    if (1 > $row['acceptedOffers']) {
-                        $data['deleteButton'] = [];
                     }
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);

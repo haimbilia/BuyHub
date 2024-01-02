@@ -144,5 +144,6 @@ ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUE
 ALTER TABLE `tbl_addresses` ADD `addr_session_id` VARCHAR(150) NOT NULL AFTER `addr_record_id`;
 
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES 
-('CONF_RFQ_MODULE_TYPE', 1)
+('CONF_RFQ_MODULE_TYPE', 1),
+('CONF_ENABLE_ADMIN_APPROVAL_ON_NEW_RFQ', 1)
 ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);

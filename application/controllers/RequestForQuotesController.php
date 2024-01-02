@@ -211,6 +211,7 @@ class RequestForQuotesController extends MyAppController
         $post['rfq_user_id'] = $this->loggedUserId;
         $post['rfq_lang_id'] = $this->siteLangId;
         $post['rfq_added_on'] = date('Y-m-d H:i:s');
+        $post['rfq_approved'] = FatApp::getConfig('CONF_ENABLE_ADMIN_APPROVAL_ON_NEW_RFQ', FatUtility::VAR_INT, applicationConstants::YES);
         $rfq = new RequestForQuote($recordId);
         if (false == $rfq->add($post)) {
             $db->rollbackTransaction();

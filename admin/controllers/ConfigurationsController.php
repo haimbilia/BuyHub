@@ -521,6 +521,16 @@ class ConfigurationsController extends ListingBaseController
                 $typeArr = RequestForQuote::getTypeArr($langId);
                 $frm->addSelectBox(Labels::getLabel('FRM_RFQ_MODULE_TYPE', $langId), 'CONF_RFQ_MODULE_TYPE', $typeArr, '', array(), '');
 
+                $fld = $frm->addCheckBox(
+                    Labels::getLabel("FRM_ENABLE_ADMIN_APPROVAL_ON_NEW_RFQ", $langId),
+                    'CONF_ENABLE_ADMIN_APPROVAL_ON_NEW_RFQ',
+                    1,
+                    array(),
+                    true,
+                    0
+                );
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_ADMIN_APPROVAL_IS_REQUIRED_FOR_NEW_RFQ.', $langId));
+
                 break;
             case Configurations::FORM_PRODUCT:
                 // $frm->addHtml('', 'Product', '<h3 class="form-section-head">' . Labels::getLabel('FRM_PRODUCT', $langId) . '</h3>');
