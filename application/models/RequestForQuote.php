@@ -302,7 +302,7 @@ class RequestForQuote extends MyAppModel
         }
 
         $srch = new SearchBase(self::DB_RFQ_TO_SELLERS);
-        $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'sp.selprod_id = rfq_selprod_id', 'sp');
+        $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'sp.selprod_id = rfqts_selprod_id', 'sp');
         $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'sp.selprod_code = sp1.selprod_code AND sp1.selprod_user_id = ' . $sellerId, 'sp1');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -340,7 +340,8 @@ class RequestForQuote extends MyAppModel
 
         $prodSrch = new ProductSearch(CommonHelper::getLangId());
         $prodSrch->setDefinedCriteria(criteria: ['joinCredentials' => true]);
-        $prodSrch->joinTable(RequestForQuote::DB_TBL, 'INNER JOIN', 'rfq_selprod_id = selprod_id', 'rfq');
+        $prodSrch->joinTable(RequestForQuote::DB_RFQ_TO_SELLERS, 'INNER JOIN', 'rfqts_selprod_id = selprod_id', 'rfqs');
+        $prodSrch->joinTable(RequestForQuote::DB_TBL, 'INNER JOIN', 'rfqts_rfq_id = rfqts_rfq_id', 'rfq');
         $prodSrch->joinShopSpecifics();
         $prodSrch->joinSellerProductSpecifics();
         $prodSrch->joinProductSpecifics();
@@ -523,7 +524,12 @@ class RequestForQuote extends MyAppModel
 
     public static function getSelprodId(int $rfqId): int
     {
-        return self::getAttributesById($rfqId, 'rfq_selprod_id');
+        $srch = new SearchBase(self::DB_RFQ_TO_SELLERS, 'rs');
+        $srch->addFld('rfqts_selprod_id as selprod_id');
+        $srch->addCondition('rfqts_rfq_id', '=', $rfqId);
+        $srch->doNotCalculateRecords();
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return is_array($row) && isset($row['selprod_id']) ? $row['selprod_id'] : 0;
     }
 
     public function bindRfqToSeller(int $selprodId, string $selprodCode, int $sellerId): bool

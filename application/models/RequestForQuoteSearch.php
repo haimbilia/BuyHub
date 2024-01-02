@@ -254,7 +254,7 @@ class RequestForQuoteSearch extends SearchBase
         if (false === $this->joinSellerTable) {
             trigger_error(Labels::getLabel('ERR_PLEASE_CALL_joinSellers_FIRST.'), E_USER_ERROR);
         }
-        $this->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'sp.selprod_id = rfq.rfq_selprod_id', 'sp');
+        $this->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'sp.selprod_id = rfq.rfqts_selprod_id', 'sp');
         if ($joinLangTable) {
             array_push($this->langTables, __FUNCTION__);
         }

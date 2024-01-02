@@ -149,4 +149,55 @@ INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES
 ('CONF_ENABLE_ADMIN_APPROVAL_ON_NEW_RFQ', 1)
 ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
 
+CREATE TABLE `tbl_rfq_offers` (
+  `offer_id` int NOT NULL,
+  `offer_rfq_id` int NOT NULL,
+  `offer_user_id` int NOT NULL COMMENT 'Primary Seller or Buyer Id',
+  `offer_user_type` int NOT NULL,
+  `offer_counter_offer_id` int NOT NULL,
+  `offer_quantity` int NOT NULL,
+  `offer_cost` float(10,2) NOT NULL,
+  `offer_price` float(10,2) NOT NULL,
+  `offer_shiprate_id` int NOT NULL,
+  `offer_negotiable` tinyint NOT NULL,
+  `offer_status` int NOT NULL,
+  `offer_comments` text NOT NULL,
+  `offer_expired_on` datetime NOT NULL,
+  `offer_added_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `offer_deleted` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE `tbl_rfq_latest_offers` (
+  `rlo_primary_offer_id` int NOT NULL,
+  `rlo_rfq_id` int NOT NULL,
+  `rlo_seller_user_id` int NOT NULL,
+  `rlo_seller_offer_id` int NOT NULL,
+  `rlo_buyer_offer_id` int NOT NULL,
+  `rlo_selprod_id` int NOT NULL,
+  `rlo_shipping_charges` decimal(10,2) NOT NULL,
+  `rlo_accepted_offer_id` int NOT NULL,
+  `rlo_status` int NOT NULL,
+  `rlo_deleted` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `tbl_rfq_latest_offers`
+ADD PRIMARY KEY (`rlo_primary_offer_id`);
+
+
+CREATE TABLE `tbl_rfq_offer_messages` (
+  `rom_id` int NOT NULL,
+  `rom_primary_offer_id` int NOT NULL,
+  `rom_user_type` tinyint NOT NULL,
+  `rom_message` text NOT NULL,
+  `rom_buyer_access` tinyint NOT NULL DEFAULT '1',
+  `rom_added_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `tbl_rfq_offer_messages`
+ADD PRIMARY KEY (`rom_id`);
+
+ALTER TABLE `tbl_rfq_offer_messages`
+MODIFY `rom_id` int NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `tbl_shops` ADD `shop_has_valid_subscription` TINYINT(4) NOT NULL AFTER `shop_total_reviews`;
