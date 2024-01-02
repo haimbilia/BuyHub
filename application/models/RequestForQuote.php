@@ -30,7 +30,6 @@ class RequestForQuote extends MyAppModel
     public const RFQ_TO_SUPPLIER_FIELDS = [
         self::DB_RFQS_PREFIX . 'rfq_id',
         self::DB_RFQS_PREFIX . 'user_id',
-        self::DB_RFQS_PREFIX . 'selprod_id',
     ];
 
     public const TYPE_INDIVIDUAL = 1;
@@ -499,8 +498,7 @@ class RequestForQuote extends MyAppModel
         }
 
         if (0 < $productId) {
-            /* RVSI */
-            // $srch->addCondition('sp.selprod_product_id', '=', $productId);
+            $srch->addCondition('sp.selprod_product_id', '=', $productId);
         }
 
         $srch->setPageNumber($page);

@@ -9,7 +9,7 @@ class RequestForQuotesController extends MyAppController
         if (1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
-        
+
         if (UserAuthentication::isUserLogged() && !User::isBuyer(true)) {
             $errMsg = Labels::getLabel('ERR_PLEASE_LOGIN_WITH_BUYER_ACCOUNT_TO_ADD_PRODUCTS_TO_CART', $this->siteLangId);
             LibHelper::exitWithError($errMsg, true, true);
@@ -206,11 +206,13 @@ class RequestForQuotesController extends MyAppController
         if (!empty($options)) {
             $options = implode(' | ', array_column($options, 'optionvalue_name'));
         }
+        $adminApproval = FatApp::getConfig('CONF_ENABLE_ADMIN_APPROVAL_ON_NEW_RFQ', FatUtility::VAR_INT, applicationConstants::YES);
         $post['rfq_title'] = ($selprodData['selprod_title'] . (!empty($options) ? ' | ' . $options : ''));
         $post['rfq_selprod_code'] = $selprodData['selprod_code'];
         $post['rfq_user_id'] = $this->loggedUserId;
         $post['rfq_lang_id'] = $this->siteLangId;
         $post['rfq_added_on'] = date('Y-m-d H:i:s');
+        $post['rfq_approved'] = (0 < $adminApproval ? applicationConstants::NO : applicationConstants::YES);
         $rfq = new RequestForQuote($recordId);
         if (false == $rfq->add($post)) {
             $db->rollbackTransaction();

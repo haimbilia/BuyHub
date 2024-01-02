@@ -251,8 +251,7 @@ class RequestForQuotesController extends ListingBaseController
     {
         $frm = new Form('frm');
         $frm->addHiddenField('', 'rfq_id');
-        /* RVSI */
-        /* $frm->addHiddenField('', 'rfq_product_id'); */
+        $frm->addHiddenField('', 'rfq_product_id');
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELLER'), 'rfqts_user_id', []);
         $fld->requirement->setRequired(true);
         return $frm;
