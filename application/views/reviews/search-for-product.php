@@ -43,13 +43,13 @@ if ($reviewsList) { ?>
                 </ul>
                 <div class="review-data">
                     <div class="cms">
-                        <h6><strong><?php echo $review['spreview_title']; ?></strong></h6>
+                        <h6><strong><?php echo htmlspecialchars($review['spreview_title']); ?></strong></h6>
                         <p class='lessText'>
-                            <?php echo CommonHelper::truncateCharacters($review['spreview_description'], 200, '', '', true); ?>
+                            <?php echo CommonHelper::truncateCharacters(htmlspecialchars($review['spreview_description']), 200, '', '', true); ?>
                         </p>
                         <?php if (strlen($review['spreview_description']) > 200) { ?>
                             <p class='moreText hidden'>
-                                <?php echo nl2br($review['spreview_description']); ?>
+                                <?php echo nl2br(htmlspecialchars($review['spreview_description'])); ?>
                             </p>
                             <a class="readMore link-underline" href="javascript:void(0);">
                                 <?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?> </a>
@@ -57,7 +57,7 @@ if ($reviewsList) { ?>
                     </div>
                 </div>
                 <div class="user-reviews-foot">
-                    <div class="reviews-by"><?php echo CommonHelper::displayName($review['user_name']); ?> | <span class="dated"><?php echo FatDate::format($review['spreview_posted_on']); ?></span>
+                    <div class="reviews-by"><?php echo CommonHelper::displayName(htmlentities($review['user_name'])); ?> | <span class="dated"><?php echo FatDate::format($review['spreview_posted_on']); ?></span>
                     </div>
                     <ul class="yes-no">
                         <li class="yes-no-item">
