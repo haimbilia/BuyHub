@@ -4,7 +4,7 @@
         <div class="descriptions" id="accordionExample">
             <?php
             $youtube_embed_code = '';
-            if(!empty($product["product_youtube_video"])){
+            if (!empty($product["product_youtube_video"])) {
                 $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]);
             }
             ?>
@@ -39,7 +39,7 @@
                                         <?php foreach ($speciGroup as $specification) { ?>
                                             <li class="list-specification-item">
                                                 <span class="label"><?php echo $specification['prodspec_name'] . ":"; ?></span>
-                                                <span class="value"><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
+                                                <span class="value"><?php echo CommonHelper::renderHtml($specification['prodspec_value']); ?>
                                                 </span>
                                             </li>
                                         <?php } ?>
@@ -65,7 +65,7 @@
                     <div id="description" class="collapse <?php echo (false === $firstIsVisible ? 'show' : ''); ?>" data-bs-parent="#accordionExample">
                         <div class="descriptions-data">
                             <div class="cms">
-                                <p><?php echo CommonHelper::renderHtml($product['product_description']); ?></p>
+                                <p><?php echo CommonHelper::renderHtml($product['product_description'], true); ?></p>
                             </div>
                         </div>
                     </div>
