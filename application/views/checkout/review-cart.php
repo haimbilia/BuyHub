@@ -28,18 +28,18 @@
                             <tr class="<?php echo (!$product['in_stock']) ? 'disabled' : '';
                                         echo ($product['is_digital_product']) ? 'digital_product_tab-js' : 'physical_product_tab-js'; ?>">
                                 <td>
-                                    <figure class="item__pic"><a href="<?php echo $productUrl; ?>"><img src="<?php echo $imageUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB); ?> alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>"></a></figure>
+                                    <figure class="item__pic"><a href="<?php echo $productUrl; ?>"><img src="<?php echo $imageUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB); ?> alt="<?php echo CommonHelper::renderHtml($product['product_name'], true); ?>" title="<?php echo CommonHelper::renderHtml($product['product_name'], true); ?>"></a></figure>
                                 </td>
                                 <td>
                                     <div class="product-profile-data">
-                                        <div class="item__category"><?php echo Labels::getLabel('LBL_Shop', $siteLangId) ?>: <span class="text--dark"><?php echo $product['shop_name']; ?></span></div>
-                                        <div class="title"><a title="<?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a></div>
+                                        <div class="item__category"><?php echo Labels::getLabel('LBL_Shop', $siteLangId) ?>: <span class="text--dark"><?php echo CommonHelper::renderHtml($product['shop_name'], true); ?></span></div>
+                                        <div class="title"><a title="<?php echo ($product['selprod_title']) ? CommonHelper::renderHtml($product['selprod_title'], true) : CommonHelper::renderHtml($product['product_name'], true); ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? CommonHelper::renderHtml($product['selprod_title'], true) : CommonHelper::renderHtml($product['product_name'], true); ?></a></div>
                                         <div class="options">
                                             <?php
                                             if (isset($product['options']) && count($product['options'])) {
                                                 foreach ($product['options'] as $option) { ?>
-                                                    <?php echo ' | ' . $option['option_name'] . ':'; ?>
-                                                    <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
+                                                    <?php echo ' | ' . CommonHelper::renderHtml($option['option_name'], true) . ':'; ?>
+                                                    <span class="text--dark"><?php echo CommonHelper::renderHtml($option['optionvalue_name'], true); ?></span>
                                             <?php
                                                 }
                                             } ?>

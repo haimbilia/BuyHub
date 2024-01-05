@@ -47,7 +47,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                     $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['shop_id']));
                     $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
-                    $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
+                    $productTitle =  ($product['selprod_title']) ? CommonHelper::renderHtml($product['selprod_title'], true) : CommonHelper::renderHtml($product['product_name'], true);
                 ?>
                     <li class="list-cart-item block-cart <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?> list-saved-later">
                         <div class="block-cart-img">
@@ -77,7 +77,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                     <div class="product-profile-data">
                                         <div class="item__category">
                                             <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
-                                                <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                                <span class="text--dark"><?php echo CommonHelper::renderHtml($product['shop_name'], true); ?></span>
                                             </a>
                                         </div>
                                         <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
@@ -89,7 +89,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                                         if (0 < $key) {
                                                             echo ' | ';
                                                         }
-                                                        echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
+                                                        echo CommonHelper::renderHtml($option['option_name'], true) . ':'; ?> <span class="text--dark"><?php echo CommonHelper::renderHtml($option['optionvalue_name'], true); ?></span>
                                                 <?php }
                                                 } ?>
                                             </p>
@@ -127,7 +127,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
             $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['shop_id']));
             $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
-            $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
+            $productTitle =  ($product['selprod_title']) ? CommonHelper::renderHtml($product['selprod_title'], true) : CommonHelper::renderHtml($product['product_name'], true);
 
         ?>
 
@@ -157,7 +157,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                             <div class="product-profile-data">
                                 <div class="item__category">
                                     <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
-                                        <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                        <span class="text--dark"><?php echo CommonHelper::renderHtml($product['shop_name'], true); ?></span>
                                     </a>
                                 </div>
                                 <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
@@ -176,7 +176,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                                 if (0 < $key) {
                                                     echo ' | ';
                                                 }
-                                                echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
+                                                echo CommonHelper::renderHtml($option['option_name'], true) . ':'; ?> <span class="text--dark"><?php echo CommonHelper::renderHtml($option['optionvalue_name'], true); ?></span>
                                         <?php }
                                         } ?>
                                     </p>
@@ -251,11 +251,11 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                 <script type="text/javascript">
                     productData.push({
                         item_id: "<?php echo $product['selprod_id']; ?>",
-                        item_name: "<?php echo $product['selprod_title']; ?>",
+                        item_name: "<?php echo CommonHelper::renderHtml($product['selprod_title'], true); ?>",
                         discount: "<?php echo ($product['selprod_price'] - $product['theprice']); ?>",
                         index: "<?php echo $product['selprod_id']; ?>",
-                        item_brand: "<?php echo $product['brand_name']; ?>",
-                        item_category: "<?php echo $product['prodcat_name']; ?>",
+                        item_brand: "<?php echo CommonHelper::renderHtml($product['brand_name'], true); ?>",
+                        item_category: "<?php echo CommonHelper::renderHtml($product['prodcat_name'], true); ?>",
                         price: "<?php echo $product['theprice']; ?>",
                         quantity: "<?php echo $product['quantity']; ?>"
                     })
@@ -300,7 +300,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 <div class="product-profile-data">
                                     <div class="item__category">
                                         <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
-                                            <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                            <span class="text--dark"><?php echo CommonHelper::renderHtml($product['shop_name'], true); ?></span>
                                         </a>
                                     </div>
                                     <a class="title" href="<?php echo $productUrl; ?>">
@@ -315,7 +315,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                                 if (0 < $key) {
                                                     echo ' | ';
                                                 }
-                                                echo $option['option_name'] . ':'; ?> <span class="text-muted"><?php echo $option['optionvalue_name']; ?></span>
+                                                echo CommonHelper::renderHtml($option['option_name'], true) . ':'; ?> <span class="text-muted"><?php echo CommonHelper::renderHtml($option['optionvalue_name'], true); ?></span>
                                         <?php }
                                         } ?>
                                     </div>
