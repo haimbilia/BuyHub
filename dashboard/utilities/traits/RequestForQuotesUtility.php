@@ -106,13 +106,27 @@ trait RequestForQuotesUtility
         $srch->setPageSize($pagesize);
         $arrListing = FatApp::getDb()->fetchAll($srch->getDataResultSet(), 'rfq_id');
         if (!empty($arrListing)) {
-            foreach ($arrListing as $key => $rfqVal) {
-                $arrListing[$key]['totalOffers'] = 0;
-                $arrListing[$key]['acceptedOffers'] = 0;
-                $arrListing[$key]['rejectedOffers'] = 0;
+            $rfqIds = array_keys($arrListing);
+            $srch = new SearchBase(RfqOffers::DB_RFQ_LATEST_OFFER, 'rlo');
+            if ($this->isSeller) {
+                $srch->joinTable(RfqOffers::DB_TBL, 'INNER JOIN', 'ro.offer_id = rlo_primary_offer_id AND offer_user_id = ' . $this->userId, 'ro');
+                $srch->addCondition('offer_user_id', '=', $this->userId);
+            }
+
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+            $srch->addCondition('rlo_rfq_id', 'IN', $rfqIds);
+            $srch->addGroupBy('rlo_rfq_id');
+            $srch->addCondition('rlo_deleted', '=', applicationConstants::NO);
+            $srch->addMultipleFields(['rlo_rfq_id', 'rlo_status', 'COUNT(rlo_rfq_id) as totalOffers', 'SUM(IF(rlo_status =' . RfqOffers::STATUS_REJECTED . ',1,0)) as rejectedOffers', 'SUM(IF(rlo_status =' . RfqOffers::STATUS_ACCEPTED . ',1,0)) as acceptedOffers']);
+            $arr = FatApp::getDb()->fetchAll($srch->getResultSet(), 'rlo_rfq_id');
+            foreach ($arr as $key => $rfqVal) {
+                $arrListing[$key]['totalOffers'] = $rfqVal['totalOffers'];
+                $arrListing[$key]['acceptedOffers'] = $rfqVal['acceptedOffers'];
+                $arrListing[$key]['rejectedOffers'] = $rfqVal['rejectedOffers'];
             }
         }
-        
+
         $this->set('arrListing', $arrListing);
         $this->set('postedData', $post);
         $this->set('pagesize', $pagesize);

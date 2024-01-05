@@ -1,0 +1,320 @@
+.rfq-product {
+	$selfHead: "";
+	$selfBody: "";
+	$selfFoot: "";
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+	box-shadow: $card-shadow;
+	background-color: $card-bg;
+	border-radius: $card-radius;
+	border: none;
+	margin-bottom: 20px;
+
+	&-body {
+		padding: 1rem;
+	}
+
+	.list-stats {
+		min-width: 0;
+
+		li {
+			padding: 0.5rem 0;
+		}
+	}
+
+	.rfq-info {
+		.h5 {
+			font-size: 1rem;
+		}
+	}
+}
+
+.plain-card {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+
+	&-media {
+		background-color: $bg-placeholder;
+		position: relative;
+		aspect-ratio: 1/1;
+		width: 100%;
+		overflow: hidden;
+	}
+
+	&-img {
+		object-fit: cover;
+	}
+
+	&-body {
+		padding: 1rem;
+	}
+
+	&-title {
+		margin-bottom: 1.5rem;
+		font-weight: $font-weight-bold;
+		font-size: 1.2rem;
+	}
+}
+
+.offers-card {
+	box-shadow: $card-shadow;
+	background-color: $card-bg;
+	border-radius: $card-radius;
+	border: none;
+
+	&+& {
+		margin-top: 1.5rem;
+	}
+
+	&-body {
+		display: flex;
+		flex-direction: row;
+		display: grid;
+
+		//  gap: 1rem;
+		@include media-breakpoint-up(lg) {
+			grid-template-columns: 38% 38% 1fr;
+		}
+	}
+
+	.list-stats-item .label {
+		margin-bottom: 0;
+	}
+}
+
+.offer-block {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	padding: 1.5rem;
+	display: flex;
+	flex-flow: column;
+	// justify-content: center;
+
+	&-head {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	&-body {
+		flex: 1;
+	}
+
+	&-foot {}
+
+	&+& {
+		@include media-breakpoint-up(lg) {
+			border-left: $border;
+		}
+	}
+
+	.h6 {
+		margin-bottom: 1.5rem;
+		font-size: 1rem;
+	}
+}
+
+.actions-block {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+
+	&-body {
+		flex: 1;
+		gap: 10px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	&-foot {
+		text-align: center;
+		display: flex;
+		gap: 1rem;
+
+		.link-underline {
+			color: $txt-gray;
+		}
+	}
+
+	.btn {
+		text-align: center;
+		border-width: 1px;
+		height: 40px;
+		line-height: 1;
+		padding: 0 1rem !important;
+
+		&-accept {
+			background-color: lighten($success-color, 40);
+			border-color: $success-color;
+			color: $success-color;
+
+			&:hover {
+				background-color: $success-color;
+				color: #fff;
+			}
+		}
+
+		&-reject {
+			background-color: lighten($danger-color, 35);
+			border-color: $danger-color;
+			color: $danger-color;
+
+			&:hover {
+				background-color: $danger-color;
+				color: #fff;
+			}
+		}
+	}
+}
+
+///
+///
+///
+.rfq-blocks {
+	display: flex;
+	flex-flow: column;
+	gap: 0.5rem;
+
+	&-head {
+		display: flex;
+		flex-direction: column;
+		// gap: 10px;
+		list-style: none;
+		flex: 1;
+		min-width: 100%;
+		margin-bottom: 1rem;
+
+		.h6 {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.date {
+			font-size: 0.7rem;
+			color: $txt-gray;
+		}
+	}
+
+	&-item {
+		//  border-radius: 50px;
+		//  border: $border;
+		//  padding: 4px 10px;
+		display: flex;
+		gap: 5px;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	&-actions {
+		margin-top: 1rem;
+		gap: 10px;
+		display: flex;
+	}
+
+	.value {
+		color: $txt-body;
+		font-weight: 600;
+		text-align: #{$end-direction};
+		margin-#{$start-direction}: auto;
+	}
+
+	.td-buyer {
+		&:hover {
+			background-color: $bg-gray;
+		}
+	}
+
+	.btn-comments {
+		height: auto;
+		padding: 0;
+	}
+}
+
+.table-rfq {
+	.last {
+		text-align: #{$end-direction};
+	}
+}
+
+.rfq-messages {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+
+	&-item {
+		list-style: none;
+
+		&.right {
+			justify-content: flex-end;
+
+			.rfq-messages-data {
+				background-color: $bg-gray;
+				margin-#{$start-direction}: auto;
+			}
+
+			.from {
+				justify-content: flex-end;
+			}
+		}
+	}
+
+	&-data {
+		background-color: $bg-gray;
+		border-radius: $radius;
+		padding: 1rem;
+		font-size: 0.85rem;
+		color: $txt-body;
+		width: fit-content;
+		word-break: break-word;
+	}
+
+	&-stats {
+		display: flex;
+		gap: 1rem;
+	}
+
+	.from {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 1rem 0;
+
+		.date {
+			font-size: 0.75rem;
+		}
+	}
+
+	.txt-accepted,
+	.txt-rejected {
+		font-size: 0.8rem;
+		border: solid 1px currentColor;
+		padding: 0.5rem 0.6rem;
+		border-radius: 40px;
+		background-color: #fff;
+	}
+
+	.txt-accepted {
+		color: $success-color;
+	}
+
+	.txt-rejected {
+		color: $danger-color;
+	}
+}
+
+.custom-pager {
+	padding: 1.5rem;
+	border-top: $border;
+	display: flex;
+	gap: 1rem;
+	justify-content: space-between;
+	background-color: $bg-white;
+}

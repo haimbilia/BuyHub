@@ -39,6 +39,7 @@ class UserPrivilege
     public const SECTION_BADGE_LINKS = 36;
     public const SECTION_MARKETPLACE_CHANNEL = 37;
     public const SECTION_REQUEST_FOR_QUOTE = 38;
+    public const SECTION_RFQ_OFFERS = 39;
 
     public const MODULE_SHOP = 1;
     public const MODULE_ORDERS = 2;
@@ -973,5 +974,15 @@ class UserPrivilege
     public function canEditRequestForQuote($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_REQUEST_FOR_QUOTE, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewRfqOffers($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_RFQ_OFFERS, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditRfqOffers($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_RFQ_OFFERS, static::PRIVILEGE_WRITE, $returnResult);
     }
 }

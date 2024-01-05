@@ -79,6 +79,7 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP = 65;
     public const FILETYPE_CATEGORY_THUMB = 66; /* Used in category detail page */
     public const FILETYPE_RFQ = 67;
+    public const FILETYPE_RFQ_OFFER_FILE = 68;
 
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;

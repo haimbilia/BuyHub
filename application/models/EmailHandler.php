@@ -3259,4 +3259,167 @@ class EmailHandler extends FatModel
         }
         return true;
     }
+    public function sendNewRfqOfferNotification($langId, $data)
+    {
+        $tpl = new FatTemplate('', '');
+        $tpl->set('data', $data);
+        $tpl->set('siteLangId', $langId);
+        $offerTableFormat = $tpl->render(false, false, '_partial/emails/new-rfq-offer.php', true);
+        $vars = array(
+            '{shop_name}' => $data['shop_name'],
+            '{user_name}' => $data['buyer_user_name'],
+            '{offer_table}' => $offerTableFormat,
+        );
+        if (!empty($data['buyer_credential_email'])) {
+            if (!(new FatMailer($langId, 'NEW_RFQ_OFFER'))
+                ->setTo($data['buyer_credential_email'])
+                ->setVariables($vars)
+                ->send()) {
+                return false;
+            }
+        }
+
+        if (!empty($data['buyer_phone']) && !empty($data['buyer_phone_dcode'])) {
+            $vars = array(
+                '{rfq_number}' => $data['rfq_number'],
+                '{shop_name}' => $data['shop_name'],
+                '{user_name}' => $data['buyer_user_name'],
+                '{qty}' => $data['offer_quantity'],
+                '{offer_price}' => CommonHelper::displayMoneyFormat($data['offer_price']),
+            );
+            $this->sendSms('NEW_RFQ_OFFER', ValidateElement::formatDialCode($data['buyer_phone_dcode']) . $data['buyer_phone'], $vars, $langId);
+        }
+        return true;
+    }
+
+    public function sendCounterRfqOfferNotification($langId, $data)
+    {
+        $tpl = new FatTemplate('', '');
+        $tpl->set('data', $data);
+        $tpl->set('siteLangId', $langId);
+        if ($data['isSeller']) {
+            $offerTableFormat = $tpl->render(false, false, '_partial/emails/counter-rfq-offer-seller.php', true);
+            $tpl = 'COUNTER_RFQ_OFFER_SELLER';
+            $phone = ValidateElement::formatDialCode($data['buyer_phone_dcode']) . $data['buyer_phone'];
+        } else {
+            $offerTableFormat = $tpl->render(false, false, '_partial/emails/counter-rfq-offer-buyer.php', true);
+            $tpl = 'COUNTER_RFQ_OFFER_BUYER';
+            $phone = ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE');
+        }
+        $vars = array(
+            '{shop_name}' => $data['shop_name'],
+            '{user_name}' => $data['buyer_user_name'],
+            '{offer_table}' => $offerTableFormat,
+        );
+
+        if ($data['isSeller']) {
+            if (!empty($data['buyer_credential_email'])) {
+                if (!(new FatMailer($langId, $tpl))
+                    ->setTo($data['buyer_credential_email'])
+                    ->setVariables($vars)
+                    ->send()) {
+                    return false;
+                }
+            }
+        } else {
+            if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId)) {
+                return false;
+            }
+        }
+
+        if (!empty($phone)) {
+            $vars = array(
+                '{rfq_number}' => $data['rfq_number'],
+                '{shop_name}' => $data['shop_name'],
+                '{user_name}' => $data['buyer_user_name'],
+                '{qty}' => ($data['isSeller']) ? $data['offer_quantity'] : $data['counter_offer_quantity'],
+                '{offer_price}' => ($data['isSeller']) ? CommonHelper::displayMoneyFormat($data['offer_price']) : CommonHelper::displayMoneyFormat($data['counter_offer_price']),
+            );
+            $this->sendSms($tpl, $phone, $vars, $langId);
+        }
+        return true;
+    }
+
+    public function sendRfqOfferActionNotification($langId, $data)
+    {
+        $tpl = new FatTemplate('', '');
+        $tpl->set('data', $data);
+        $tpl->set('siteLangId', $langId);
+        if ($data['isSeller']) {
+            $offerTableFormat = $tpl->render(false, false, '_partial/emails/rfq-offer-action-seller.php', true);
+            $tpl = 'RFQ_OFFER_ACTION_SELLER';
+            $phone = ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'];
+        } else {
+            $offerTableFormat = $tpl->render(false, false, '_partial/emails/rfq-offer-action-buyer.php', true);
+            $tpl = 'RFQ_OFFER_ACTION_BUYER';
+            $phone = ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE');
+        }
+        $offerStatusArr = RfqOffers::getStatusArr($langId);
+        $vars = array(
+            '{shop_name}' => $data['shop_name'],
+            '{user_name}' => $data['user_name'],
+            '{offer_status}' => $offerStatusArr[$data['offer_status']],
+            '{offer_table}' => $offerTableFormat,
+        );
+
+        if ($data['isSeller']) {
+            if (!empty($data['credential_email'])) {
+                if (!(new FatMailer($langId, $tpl))
+                    ->setTo($data['credential_email'])
+                    ->setVariables($vars)
+                    ->send()) {
+                    return false;
+                }
+            }
+        } else {
+            if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId)) {
+                return false;
+            }
+        }
+
+        if (!empty($phone)) {
+            $vars = array(
+                '{rfq_number}' => $data['rfq_number'],
+                '{shop_name}' => $data['shop_name'],
+                '{user_name}' => $data['user_name'],
+                '{offer_status}' => $offerStatusArr[$data['offer_status']],
+                '{qty}' => $data['offer_quantity'],
+                '{offer_price}' => CommonHelper::displayMoneyFormat($data['offer_price']),
+            );
+            $this->sendSms($tpl, $phone, $vars, $langId);
+        }
+        return true;
+    }
+
+    public function sendDeletionRfqNotification($langId, $data)
+    {
+        $tpl = new FatTemplate('', '');
+        $tpl->set('data', $data);
+        $tpl->set('siteLangId', $langId);
+        $rfqTableFormat = $tpl->render(false, false, '_partial/emails/request-for-quote.php', true);
+        $vars = array(
+            '{user_name}' => $data['user_name'],
+            '{rfq_table}' => $rfqTableFormat,
+        );
+
+        if (!empty($data['credential_email'])) {
+            if (!(new FatMailer($langId, 'RFQ_DELETION'))
+                ->setTo($data['credential_email'])
+                ->setVariables($vars)
+                ->send()) {
+                return false;
+            }
+        }
+
+        if (!empty($data['user_phone']) && !empty($data['user_phone_dcode'])) {
+            $vars = array(
+                '{user_name}' => $data['user_name'],
+                '{rfq_title}' => $data['rfq_title'],
+                '{rfq_number}' => $data['rfq_number'],
+                '{qty}' => $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true),
+            );
+            $this->sendSms('RFQ_DELETION', ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'], $vars, $langId);
+        }
+        return true;
+    }
 }

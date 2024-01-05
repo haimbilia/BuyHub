@@ -1624,4 +1624,15 @@ class SellerProduct extends MyAppModel
 
         return $validationArr;
     }
+
+    public static function getSellerProductIdByCode(string $selprod_code)
+    {
+        $srch = SellerProduct::getSearchObject();
+        $srch->addCondition('selprod_code', 'LIKE', $selprod_code);
+        $srch->addFld('selprod_id');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return is_array($row) && isset($row['selprod_id']) ? $row['selprod_id'] : 0;
+    }
 }

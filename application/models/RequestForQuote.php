@@ -557,11 +557,17 @@ class RequestForQuote extends MyAppModel
         $criteria['doNotJoinSpecialPrice'] = true;
         if (self::TYPE_VARIANT == $rfqType) {
             $srch->addCondition('selprod_code', 'LIKE', $selprodCode);
-            $srch->addFld("selprod_id as rfqts_selprod_id");
+            $srch->addFld("selprod_id as rfqts_selprod_id");            
         } else if (self::TYPE_CATALOG == $rfqType) {
             $prodId = explode('_', $selprodCode)[0];
             $criteria['product_id'] = $prodId;
-            $srch->addFld("if(selprod_code like '" . $selprodCode . "',selprod_id,0) as rfqts_selprod_id");
+            $sp = SellerProduct::getSearchObject();
+            $sp->addFld('sp.selprod_id');
+            $sp->doNotCalculateRecords();
+            $sp->doNotLimitRecords();
+            $sp->addCondition('sp.selprod_user_id', '=', 'mysql_func_sprods.selprod_user_id', 'AND ', true);
+            $sp->addCondition('sp.selprod_code', 'LIKE', $selprodCode);
+            $srch->addFld("(" . $sp->getQuery() . ") as rfqts_selprod_id");
         }
         $srch->joinSellerProducts(criteria: $criteria);
         $srch->joinSellers();

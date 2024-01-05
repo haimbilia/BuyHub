@@ -82,8 +82,8 @@ class RequestForQuoteSearch extends SearchBase
         if ($joinLatestOffers) {
             $this->joinTable('tbl_rfq_latest_offers', 'LEFT JOIN', 'rlo.rlo_rfq_id = rfq.rfq_id and rlo.rlo_primary_offer_id = ro.offer_primary_offer_id', 'rlo');
         }
-        $this->joinTable(User::DB_TBL, 'INNER JOIN', 'olu.user_id = rlo.rlo_linked_seller_id', 'olu');
-        $this->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'oluc.credential_user_id = rlo.rlo_linked_seller_id', 'oluc');
+        $this->joinTable(User::DB_TBL, 'INNER JOIN', 'olu.user_id = rlo.rlo_seller_user_id', 'olu');
+        $this->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'oluc.credential_user_id = rlo.rlo_seller_user_id', 'oluc');
     }
 
     /**
@@ -254,7 +254,7 @@ class RequestForQuoteSearch extends SearchBase
         if (false === $this->joinSellerTable) {
             trigger_error(Labels::getLabel('ERR_PLEASE_CALL_joinSellers_FIRST.'), E_USER_ERROR);
         }
-        $this->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'sp.selprod_id = rfq.rfqts_selprod_id', 'sp');
+        $this->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'sp.selprod_id = rfqts_selprod_id', 'sp');
         if ($joinLangTable) {
             array_push($this->langTables, __FUNCTION__);
         }
@@ -284,6 +284,32 @@ class RequestForQuoteSearch extends SearchBase
             $functionName = $joinFunctions . 'Lang';
             $this->$functionName();
         }
+    }
+
+    /**
+     * joinOffers
+     *
+     * @return void
+     */
+    public function joinOffers($latestOffer = false): void
+    {
+        if (true == $latestOffer) {
+            $this->joinLatestOffers();
+        } else {
+            $this->joinTable(RfqOffers::DB_TBL, 'LEFT JOIN', 'ro.offer_rfq_id = rfq.rfq_id', 'ro');
+        }
+    }
+
+    /**
+     * joinLatestOffers
+     *
+     * @return void
+     */
+    public function joinLatestOffers(): void
+    {
+        $this->joinTable('tbl_rfq_latest_offers', 'LEFT JOIN', 'rlo.rlo_rfq_id = rfq.rfq_id', 'rlo');
+        $this->joinTable(RfqOffers::DB_TBL, 'LEFT JOIN', 'ro.offer_id = rlo.rlo_seller_offer_id and ro.offer_deleted = ' . applicationConstants::NO, 'ro');
+        $this->joinTable(RfqOffers::DB_TBL, 'LEFT JOIN', 'roc.offer_id = rlo.rlo_buyer_offer_id and roc.offer_deleted = ' . applicationConstants::NO, 'roc');
     }
 
     /**

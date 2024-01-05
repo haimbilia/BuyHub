@@ -23,7 +23,10 @@ if (true === $addVerifiedBadge) {
                 </div>';
 }
 
-$username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['credential_username'] . ')' : $user['credential_username'];
+$credUserName = isset($user['credential_username']) && !empty($user['credential_username']) ? $user['credential_username'] : '';
+$username = !empty($user['user_name']) ? $user['user_name'] . (!empty($credUserName) ? ' (' . $credUserName . ')' : '') : $credUserName;
+$displayUsername = $displayUsername ?? true;
+$extraHtml = $extraHtml ?? '';
 ?>
 <div class="user-profile <?php echo $extraClass; ?>">
     <?php if ($displayProfileImage) {
@@ -40,15 +43,17 @@ $username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['cred
         </a>
     <?php } ?>
     <div class="user-profile_data">
-        <div class="verified-wrap">
-            <?php if (!empty($href) || !empty($onclick)) { ?>
-                <a class="<?php echo $userTitleClass; ?>" href="<?php echo $href; ?>" <?php echo $onclick; ?> title="<?php echo $title; ?>" data-bs-toggle="tooltip">
-                    <?php echo $username; ?>
-                </a>
-            <?php } else { ?>
-                <span class="<?php echo $userTitleClass; ?>"><?php echo $username; ?> </span>
-            <?php } ?>
-        </div>
+        <?php if ($displayUsername) { ?>
+            <div class="verified-wrap">
+                <?php if (!empty($href) || !empty($onclick)) { ?>
+                    <a class="<?php echo $userTitleClass; ?>" href="<?php echo $href; ?>" <?php echo $onclick; ?> title="<?php echo $title; ?>" data-bs-toggle="tooltip">
+                        <?php echo $username; ?>
+                    </a>
+                <?php } else { ?>
+                    <span class="<?php echo $userTitleClass; ?>"><?php echo $username; ?> </span>
+                <?php } ?>
+            </div>
+        <?php } ?>
 
         <?php if ($displayEmail) { ?>
             <span class="text-muted">
@@ -65,8 +70,18 @@ $username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['cred
         <?php } ?>
         <?php
         if (isset($user['extra_text']) || !empty($user['extra_text'])) {
-            echo '<span>' . $user['extra_text'] . '</span>';
+            if (is_array($user['extra_text'])) {
+                foreach ($user['extra_text'] as $d) {
+                    $class = $d['class'] ?? '';
+                    $text = $d['text'] ?? '';
+                    echo '<span class="' . $class . '">' . $text . '</span>';
+                }
+            } else {
+                $class = $user['extra_text_class'] ?? '';
+                echo '<span class="' . $class . '">' . $user['extra_text'] . '</span>';
+            }
         }
+        echo $extraHtml;
         ?>
     </div>
 </div>

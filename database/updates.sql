@@ -64,7 +64,7 @@ CREATE TABLE `tbl_rfq_to_sellers` (
   `rfqts_rfq_id` int NOT NULL,
   `rfqts_user_id` int NOT NULL COMMENT 'seller id',
   `rfqts_selprod_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ALTER TABLE `tbl_rfq_to_sellers`
   ADD PRIMARY KEY (`rfqts_rfq_id`,`rfqts_user_id`);
@@ -141,7 +141,6 @@ INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl
 ('RFQ_APPROVAL',1,'Request for Quote Approval','Dear {user_name},\r\nRFQ was received for {rfq_title} ({rfq_number}) with quantity {qty} has been {approval_status} by the Admin.\r\n\r\n{SITE_NAME} Team','[{\"title\":\"Buyer/Seller Name\", \"variable\":\"{user_name}\"},{\"title\":\"RFQ Title\", \"variable\":\"{rfq_title}\"}, {\"title\":\"Quantity\", \"variable\":\"{qty}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]',1)
 ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
 
-
 ALTER TABLE `tbl_addresses` ADD `addr_session_id` VARCHAR(150) NOT NULL AFTER `addr_record_id`;
 
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES 
@@ -152,6 +151,7 @@ ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
 
 CREATE TABLE `tbl_rfq_offers` (
   `offer_id` int NOT NULL,
+  `offer_primary_offer_id` INT NOT NULL,
   `offer_rfq_id` int NOT NULL,
   `offer_user_id` int NOT NULL COMMENT 'Primary Seller or Buyer Id',
   `offer_user_type` int NOT NULL,
@@ -168,6 +168,18 @@ CREATE TABLE `tbl_rfq_offers` (
   `offer_deleted` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+ALTER TABLE `tbl_rfq_offers`
+  ADD PRIMARY KEY (`offer_id`),
+  ADD UNIQUE KEY `offer` (`offer_rfq_id`,`offer_user_id`,`offer_counter_offer_id`,`offer_quantity`);
+
+ALTER TABLE `tbl_rfq_offers`
+  MODIFY `offer_id` int NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `tbl_rfq_offer_messages`
+ADD PRIMARY KEY (`rom_id`);
+
+ALTER TABLE `tbl_rfq_offer_messages`
+MODIFY `rom_id` int NOT NULL AUTO_INCREMENT;
 
 CREATE TABLE `tbl_rfq_latest_offers` (
   `rlo_primary_offer_id` int NOT NULL,
@@ -200,3 +212,183 @@ ADD PRIMARY KEY (`rom_id`);
 
 ALTER TABLE `tbl_rfq_offer_messages`
 MODIFY `rom_id` int NOT NULL AUTO_INCREMENT;
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES ('NEW_RFQ_OFFER', '1', 'New RFQ Offer', 'New RFQ Offer', '<table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+    <tbody>
+        <tr>
+            <td style="background:#fff;padding:20px 0 10px; text-align:center;">
+                <h4
+                    style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;">
+                </h4>
+                <h2 style="margin:0; font-size:34px; padding:0;">New RFQ Offer</h2>
+            </td>
+        </tr>
+        <tr>
+            <td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td style="padding:20px 0 30px;"><strong style="font-size:18px;color:#333;">Dear {user_name}
+                                </strong><br />
+                                A new offer received from {shop_name}.
+                                <br />
+                                Please find the RFQ offer information below.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 30px;">{offer_table}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>', '{shop_name} Seller`s Shop<br>\r\n{user_name} Buyer Name<br>\r\n{offer_table} Offer Information Table<br>\r\n{rfq_table} RFQ information table<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', '1')
+ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body);
+
+INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES 
+('NEW_RFQ_OFFER',1,'New RFQ Offer','Dear {user_name},\r\nA new offer on {rfq_number} received from {shop_name}.\r\nOffer Amount {offer_price} with Quantity {qty} \r\n\r\n{SITE_NAME} Team','[{\"title\":\"Seller`s Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"Buyer/Seller Name\", \"variable\":\"{user_name}\"},{\"title\":\"Offer Amount\", \"variable\":\"{offer_price}\"}, {\"title\":\"Quantity\", \"variable\":\"{qty}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]',1)
+ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES ('COUNTER_RFQ_OFFER_SELLER', '1', 'Counter RFQ Offer From Seller', 'Counter RFQ Offer From Seller', '<table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+    <tbody>
+        <tr>
+            <td style="background:#fff;padding:20px 0 10px; text-align:center;">
+                <h4
+                    style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;">
+                </h4>
+                <h2 style="margin:0; font-size:34px; padding:0;">Counter RFQ Offer Received From Seller</h2>
+            </td>
+        </tr>
+        <tr>
+            <td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td style="padding:20px 0 30px;"><strong style="font-size:18px;color:#333;">Dear {user_name}
+                                </strong><br />
+                                Counter offer received from {shop_name}.
+                                <br />
+                                Please find the RFQ offer information below.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 30px;">{offer_table}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>', '{shop_name} Seller`s Shop<br>\r\n{user_name} Buyer Name<br>\r\n{offer_table} Offer Information Table<br>\r\n{rfq_table} RFQ information table<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', '1')
+ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body);
+
+INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES 
+('COUNTER_RFQ_OFFER_SELLER',1,'Counter RFQ Offer From Seller','Dear {user_name},\r\nCounter offer on {rfq_number} received from {shop_name}.\r\nOffer Amount {offer_price} with Quantity {qty} \r\n\r\n{SITE_NAME} Team','[{\"title\":\"Seller`s Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"Buyer Name\", \"variable\":\"{user_name}\"},{\"title\":\"Offer Amount\", \"variable\":\"{offer_price}\"}, {\"title\":\"Quantity\", \"variable\":\"{qty}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]',1)
+ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES ('COUNTER_RFQ_OFFER_BUYER', '1', 'Counter RFQ Offer From Buyer', 'Counter RFQ Offer From Buyer', '<table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+    <tbody>
+        <tr>
+            <td style="background:#fff;padding:20px 0 10px; text-align:center;">
+                <h4
+                    style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;">
+                </h4>
+                <h2 style="margin:0; font-size:34px; padding:0;">Counter RFQ Offer Received From Buyer</h2>
+            </td>
+        </tr>
+        <tr>
+            <td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td style="padding:20px 0 30px;"><strong style="font-size:18px;color:#333;">Dear {shop_name} Seller,
+                                </strong><br />
+                                Counter offer received from {user_name}.
+                                <br />
+                                Please find the RFQ offer information below.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 30px;">{offer_table}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>', '{shop_name} Seller`s Shop<br>\r\n{user_name} Buyer Name<br>\r\n{offer_table} Offer Information Table<br>\r\n{rfq_table} RFQ information table<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', '1')
+ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body);
+
+INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES 
+('COUNTER_RFQ_OFFER_BUYER',1,'Counter RFQ Offer From Buyer','Dear {shop_name} Seller,\r\nCounter offer on {rfq_number} received from {user_name}.\r\nOffer Amount {offer_price} with Quantity {qty} \r\n\r\n{SITE_NAME} Team','[{\"title\":\"Seller`s Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"Buyer Name\", \"variable\":\"{user_name}\"},{\"title\":\"Offer Amount\", \"variable\":\"{offer_price}\"}, {\"title\":\"Quantity\", \"variable\":\"{qty}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]',1)
+ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES ('RFQ_OFFER_ACTION_SELLER', '1', 'RFQ Offer Action By Seller', 'RFQ Offer {offer_status} By Seller', '<table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+    <tbody>
+        <tr>
+            <td style="background:#fff;padding:20px 0 10px; text-align:center;">
+                <h4
+                    style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;">
+                </h4>
+                <h2 style="margin:0; font-size:34px; padding:0;">RFQ Offer {offer_status} By Seller</h2>
+            </td>
+        </tr>
+        <tr>
+            <td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td style="padding:20px 0 30px;"><strong style="font-size:18px;color:#333;">Dear {user_name},
+                                </strong><br />
+                                RFQ Offer {offer_status} By {shop_name} Seller
+                                <br />
+                                Please find the RFQ {offer_status} offer information below.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 30px;">{offer_table}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>', '{offer_status} Offer Status<br>\r\n{shop_name} Seller`s Shop<br>\r\n{user_name} Buyer Name<br>\r\n{offer_table} Offer Information Table<br>\r\n{rfq_table} RFQ information table<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', '1')
+ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body);
+
+INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES 
+('RFQ_OFFER_ACTION_SELLER',1,'RFQ Offer Action By Seller','Dear {user_name},\r\n{shop_name} seller has {offer_status} your offer for {rfq_number}.\r\nOffer Amount {offer_price} with Quantity {qty} \r\n\r\n{SITE_NAME} Team','[{\"title\":\"Offer Status\", \"variable\":\"{offer_status}\"},{\"title\":\"Seller`s Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"Buyer Name\", \"variable\":\"{user_name}\"},{\"title\":\"Offer Amount\", \"variable\":\"{offer_price}\"}, {\"title\":\"Quantity\", \"variable\":\"{qty}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]',1)
+ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES ('RFQ_OFFER_ACTION_BUYER', '1', 'RFQ Offer Action By Buyer', 'RFQ Offer {offer_status} By Buyer', '<table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+    <tbody>
+        <tr>
+            <td style="background:#fff;padding:20px 0 10px; text-align:center;">
+                <h4
+                    style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;">
+                </h4>
+                <h2 style="margin:0; font-size:34px; padding:0;">RFQ Offer {offer_status} By Buyer</h2>
+            </td>
+        </tr>
+        <tr>
+            <td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td style="padding:20px 0 30px;"><strong style="font-size:18px;color:#333;">Dear {shop_name} Seller,
+                                </strong><br />
+                                RFQ Offer {offer_status} By {user_name}
+                                <br />
+                                Please find the RFQ {offer_status} offer information below.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 30px;">{offer_table}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>', '{offer_status} Offer Status<br>\r\n{shop_name} Seller`s Shop<br>\r\n{user_name} Buyer Name<br>\r\n{offer_table} Offer Information Table<br>\r\n{rfq_table} RFQ information table<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', '1')
+ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body);
+
+INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES 
+('RFQ_OFFER_ACTION_BUYER',1,'RFQ Offer Action By Buyer','Dear {shop_name} Seller,\r\n{user_name} has {offer_status} your offer for {rfq_number}.\r\nOffer Amount {offer_price} with Quantity {qty} \r\n\r\n{SITE_NAME} Team','[{\"title\":\"Offer Status\", \"variable\":\"{offer_status}\"},{\"title\":\"Seller`s Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"Buyer Name\", \"variable\":\"{user_name}\"},{\"title\":\"Offer Amount\", \"variable\":\"{offer_price}\"}, {\"title\":\"Quantity\", \"variable\":\"{qty}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]',1)
+ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);

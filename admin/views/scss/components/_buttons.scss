@@ -9,131 +9,167 @@ $btn-padding: 0 1.25rem;
     border-radius: $common-radius !important;
     display: inline-flex;
     align-items: center;
+
     &:focus-visible {
         outline: 1px solid #000;
         box-shadow: none;
     }
+
     &:hover {
         outline: none !important;
     }
+
     //versions
     &-brand {
         // background-color: $brand-color;
         // color:  lighten($brand-color, 55%);
         @include bg-brand();
         border-color: $brand-color;
+
         &:hover {
             background-color: darken($brand-color, 5%);
             color: lighten($brand-color, 55%) !important;
         }
     }
+
     &-outline-brand {
         background: none;
         border-color: $brand-color;
         color: $brand-color;
+
         &:hover {
             background-color: darken($brand-color, 5%);
             color: lighten($brand-color, 55%) !important;
         }
     }
+
     &-light {
         background: $bg-gray;
         border-color: $bg-gray;
+
         &.loading {
             &:before {
                 border-color: $txt-body !important;
             }
         }
     }
+
     &-white {
         background: $bg-white;
         color: $txt-body;
     }
+
     &-outline-white {
         background: none;
         border-color: #fff;
         color: $txt-body;
     }
+
     &-gray {
         background: $bg-gray;
         border-color: $border-color;
         color: $txt-body;
     }
+
     &-outline-gray {
         background: none;
         border-color: $border-color;
         color: $txt-body;
     }
+
     &-block {
         display: block !important;
         width: 100% !important;
     }
+
     &-wide {
         padding-#{$start-direction}: 2rem;
         padding-#{$end-direction}: 2rem;
     }
+
     &-arrow {
         gap: 6px;
+
         .svg {
             width: 12px;
             height: 12px;
             margin-top: -4px;
         }
     }
+
     &-icon {
         gap: 6px;
+
         .svg {
             // width: 12px;
             // height: 12px;
             //margin-#{$end-direction}: 6px;
         }
     }
+
     &-link {
+        background-color: transparent;
+        border: none;
+        color: $brand-color;
+        text-align: inherit;
+        padding: 0;
+        margin: 0;
         text-decoration: none;
-        color: $txt-body;
         line-height: 2;
         font-weight: 600;
+
         .arrow {
             display: inline-block;
             transition: all 0.2s ease-in-out;
+
             .svg {
                 width: 12px;
                 height: 12px;
                 margin-#{$end-direction}: 5px;
             }
         }
+
         &:hover {
             box-shadow: none;
+
             .arrow {
                 transform: translateX(0.25rem * $transform-direction);
             }
         }
+
         &:focus {
             box-shadow: none;
         }
     }
+
     &-underline {
         text-decoration: underline;
     }
+
     &-add {
         display: flex;
         align-items: center;
+
         .icn {
             margin-#{$end-direction}: 8px;
+
             .svg {
                 width: 12px;
                 height: 12px;
             }
         }
     }
+
     &-input {
         background-color: $input-bg;
     }
+
     &.loading {
         color: transparent;
         display: flex;
         justify-content: center;
         align-items: center;
+
         &:before {
             width: 18px;
             height: 18px;
@@ -146,16 +182,20 @@ $btn-padding: 0 1.25rem;
             transform: rotate(0);
             animation: spin 0.6s linear infinite;
         }
+
         &:hover {
             color: transparent !important;
         }
     }
+
     .icn {
         .svg {
             width: 16px;
             height: 16px;
         }
-    } //size
+    }
+
+    //size
     &-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
@@ -174,9 +214,11 @@ $btn-padding: 0 1.25rem;
     justify-content: center;
     background-color: $bg-gray;
     border-radius: 50%;
+
     &:hover {
         background-color: darken($bg-gray, 05);
     }
+
     .svg {
         [dir="rtl"] & {
             transform: scaleX(-1);
@@ -198,6 +240,7 @@ a.link {
     background-repeat: no-repeat;
     background-size: 0% 1px;
     transition: background-size 0.3s;
+
     &:hover {
         text-decoration: none;
         background-size: 100% 1px;
@@ -213,6 +256,7 @@ a.link {
     transition: color 0.3s ease-in-out;
     display: flex;
     align-items: center;
+
     &:after {
         transition: all 0.5s ease;
         position: absolute;
@@ -224,6 +268,7 @@ a.link {
     &:hover {
         color: $brand-color;
         text-decoration: none;
+
         &:after {
             transition: all 0.5s ease;
             right: -1rem;
@@ -232,20 +277,24 @@ a.link {
         }
     }
 }
+
 .link-inline {
     display: inline-flex;
 }
+
 .link-text {
     display: inline-flex;
     align-items: center;
     font-size: 0.9rem;
     color: $brand-color !important;
     font-weight: 600;
+
     .icn {
         width: 12px;
         height: 12px;
         display: block;
         margin-#{$end-direction}: 8px;
+
         .svg {
             width: 100%;
             height: 100%;
@@ -263,7 +312,38 @@ a.link {
 .link-dotted {
     text-decoration: dotted underline;
     text-underline-offset: 4px;
+
     &:hover {
         color: $brand-color;
+    }
+}
+
+.link-underline {
+    padding: 0;
+    color: $brand-color;
+    position: relative;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    text-rendering: optimizeLegibility;
+    transition: color 0.3s ease-in-out;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 50% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    transition: background-size 0.3s;
+    text-decoration: none;
+    background-size: 100% 1px;
+    border: none;
+
+    &:hover,
+    &:focus {
+        color: currentColor;
+        text-decoration: none !important;
+        background-size: 95% 1px;
+    }
+
+    &-black {
+        color: $black;
     }
 }
