@@ -131,17 +131,25 @@ class CheckoutController extends MyAppController
                                 }
                             }
                         } else {
-                            $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
-                            $availableStock = $product['selprod_stock'] - $tempHoldStock;
+                            if (FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+                                $tempHoldStock = 0;
+                                $availableStock = $product['quantity'];
+                            } else {
+                                $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
+                                $availableStock = $product['selprod_stock'] - $tempHoldStock;
+                            }
+
                             $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
                             $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
-                            if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
-                                $key = false;
-                                $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId);
-                            } elseif ($product['selprod_min_order_qty'] > ($availableStock + $userTempHoldStock)) {
-                                $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_MIN_PURCHASE_QUANTITY_IS_HIGHER_THAN_AVAILABLE_STOCK_LIMIT._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
-                            } elseif ($product['selprod_min_order_qty'] > $userTempHoldStock) {
-                                $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_PURCHASE_QUANTITY_IS_LESS_THAN_MIN_PURCHASE_QUANTITY._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
+                            if (!isset($_SESSION['offer_checkout'])) {
+                                if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
+                                    $key = false;
+                                    $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId);
+                                } elseif ($product['selprod_min_order_qty'] > ($availableStock + $userTempHoldStock)) {
+                                    $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_MIN_PURCHASE_QUANTITY_IS_HIGHER_THAN_AVAILABLE_STOCK_LIMIT._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
+                                } elseif ($product['selprod_min_order_qty'] > $userTempHoldStock) {
+                                    $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_PURCHASE_QUANTITY_IS_LESS_THAN_MIN_PURCHASE_QUANTITY._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
+                                }
                             }
 
                             if (!empty($this->errMessage)) {
@@ -201,6 +209,10 @@ class CheckoutController extends MyAppController
 
     public function index($appParam = '', $appLang = '1', $appCurrency = '1')
     {
+        if (!isset($_SESSION['offer_checkout']) && FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            CommonHelper::redirectUserReferer();
+        }
+
         if ($appParam == 'api') {
             $langId = FatUtility::int($appLang);
             if (0 < $langId) {
@@ -1316,8 +1328,13 @@ class CheckoutController extends MyAppController
                     }
                 */
 
+                $ofrSelprodId = $_SESSION['offer_checkout']['selprod_id'] ?? 0;
+                $offerId = $_SESSION['offer_checkout']['offer_id'] ?? 0;
+                $offerId = ($productInfo['selprod_id'] == $ofrSelprodId) ? $offerId : 0;
+
                 $orderData['products'][CART::CART_KEY_PREFIX_PRODUCT . $productInfo['selprod_id']] = array(
                     'op_selprod_id' => $productInfo['selprod_id'],
+                    'op_offer_id' => $offerId,
                     'op_is_batch' => 0,
                     'op_selprod_user_id' => $productInfo['selprod_user_id'],
                     'op_selprod_code' => $productInfo['selprod_code'],

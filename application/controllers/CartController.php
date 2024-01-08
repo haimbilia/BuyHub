@@ -13,6 +13,10 @@ class CartController extends MyAppController
 
     public function index()
     {
+        if (!isset($_SESSION['offer_checkout']) && FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            CommonHelper::redirectUserReferer();
+        }
+
         $cartObj = new Cart();
         $cartObj->unsetCartCheckoutType();
         $cartObj->invalidateCheckoutType();
@@ -218,6 +222,13 @@ class CartController extends MyAppController
                 LibHelper::exitWithError($errMsg, true, true);
                 FatApp::redirectUser(UrlHelper::generateUrl());
             }
+        }
+
+        if (isset($_SESSION['offer_checkout'])) {
+            $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
+            $cartObj->clear(true);
+            $cartObj->updateUserCart();
+            unset($_SESSION['offer_checkout']);
         }
 
         $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
@@ -564,7 +575,7 @@ class CartController extends MyAppController
 
         $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
         $key = $post['key'];
-        
+
         if ('all' == $key) {
             $cartObj->clear(true);
             $cartObj->updateUserCart();
@@ -584,7 +595,7 @@ class CartController extends MyAppController
             $cartObj->removeCartDiscountCoupon();
         }
         $total = $cartObj->countProducts();
-        
+
         LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
 
         $this->set('msg', Labels::getLabel("MSG_ITEM_REMOVED_FROM_CART", $this->siteLangId));

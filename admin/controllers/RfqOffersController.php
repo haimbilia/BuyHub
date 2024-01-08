@@ -396,14 +396,15 @@ class RfqOffersController extends ListingBaseController
             if (1 > $recordId && false == RfqOffers::validateOfferRequest($post['offer_rfq_id'], $qty, $selectedSeller)) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_DUPLICATE_OFFER._YOU_CANNOT_PLACE_OFFER_WITH_THIS_QTY.'));
             }
+            $post['offer_status'] = RfqOffers::STATUS_OPEN;
         } else {
             $primaryOfferId = (int)RfqOffers::getAttributesById($counterOfferId, 'offer_primary_offer_id');
             $offerUserId = (int)RfqOffers::getAttributesById($primaryOfferId, 'offer_user_id');
+            $post['offer_status'] = RfqOffers::STATUS_COUNTERED;
         }
 
         $post['offer_user_type'] = User::USER_TYPE_SELLER;
         $post['offer_user_id'] = $offerUserId;
-        $post['offer_status'] = 0;
         $db = FatApp::getDb();
         $db->startTransaction();
 
@@ -419,11 +420,6 @@ class RfqOffersController extends ListingBaseController
             $primaryOfferId = $rfq->getMainTableRecordId();
             $rloStatus = RfqOffers::STATUS_OPEN;
         } else {
-            /* update offer status to countered In which we are placing the counter offer*/
-            $offerStatus = ['offer_status' => RfqOffers::STATUS_COUNTERED];
-            $where = array('smt' => 'offer_id = ?', 'vals' => array($counterOfferId));
-            $db->updateFromArray(RfqOffers::DB_TBL, $offerStatus, $where);
-
             /* updating RFQ status */
             $updateArray = array('rfq_status' => RequestForQuote::STATUS_OFFERED);
             $whr = array('smt' => 'rfq_id = ?', 'vals' => array($post['offer_rfq_id']));
@@ -445,6 +441,9 @@ class RfqOffersController extends ListingBaseController
         ];
         if (1 > $counterOfferId) {
             $data['rlo_seller_user_id'] = $selectedSeller;
+            
+            $selprodId = RequestForQuote::getSellerProductId($post['offer_rfq_id'], $selectedSeller);
+            $data['rlo_selprod_id'] = $selprodId;
         }
 
         if (false == $rfq->updateLatestOffer($data)) {

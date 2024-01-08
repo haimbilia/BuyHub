@@ -79,7 +79,6 @@ class Cart extends FatModel
             }
 
             $this->SYSTEM_ARR['cart'] = json_decode($row["usercart_details"], true);
-            // CommonHelper::printArray($this->SYSTEM_ARR['cart'], true);
             if (isset($this->SYSTEM_ARR['cart']['shopping_cart'])) {
                 $this->SYSTEM_ARR['shopping_cart'] = $this->SYSTEM_ARR['cart']['shopping_cart'];
                 unset($this->SYSTEM_ARR['cart']['shopping_cart']);
@@ -151,6 +150,11 @@ class Cart extends FatModel
         $prodgroup_id = FatUtility::int($prodgroup_id);
         $qty = FatUtility::int($qty);
         if ($selprod_id < 1 || $qty < 1) {
+            return false;
+        }
+
+        if (isset($_SESSION['offer_checkout']) && $_SESSION['offer_checkout']['selprod_id'] == $selprod_id) {
+            $this->error = Labels::getLabel('ERR_ALREADY_ADDED_FROM_OFFER');
             return false;
         }
 
@@ -491,6 +495,9 @@ class Cart extends FatModel
                         continue;
                     }
 
+                    $ofrSelprodId = $_SESSION['offer_checkout']['selprod_id'] ?? 0;
+                    $rfqOfferProd = (isset($_SESSION['offer_checkout']) && $ofrSelprodId == $sellerProductRow['selprod_id']);
+
                     $quantity = $sellerProductRow['quantity'];
                     $fulfilmentType = $this->fulfilmentType;
                     if (isset($this->SYSTEM_ARR['shopping_cart']['checkout_type'])) {
@@ -507,7 +514,7 @@ class Cart extends FatModel
                     $isOutOfMinOrderQty = ((int)($sellerProductRow['selprod_min_order_qty'] > $availableStock));
 
                     /* Has Stock */
-                    if ((!$sellerProductRow['in_stock'] && true === $this->isAnyOutOfStock) || 0 < $isOutOfMinOrderQty) {
+                    if (!$rfqOfferProd && ((!$sellerProductRow['in_stock'] && true === $this->isAnyOutOfStock) || 0 < $isOutOfMinOrderQty)) {
                         $this->isAnyOutOfStock = false;
                     }
                     /* Has Stock */
@@ -743,6 +750,18 @@ class Cart extends FatModel
 
         $productSelectedShippingMethodsArr = $this->getProductShippingMethod();
         foreach ($sellerProductRows as $key => $sellerProductRow) {
+            $rfqOfferProd = (isset($_SESSION['offer_checkout']) && $_SESSION['offer_checkout']['selprod_id'] == $sellerProductRow['selprod_id']);
+            if ($rfqOfferProd) {
+                $ofrTheprice = $_SESSION['offer_checkout']['offer_price'] ?? $sellerProductRow['theprice'];
+                $selprodPrice = $_SESSION['offer_checkout']['offer_price'] ?? $sellerProductRow['selprod_price'];
+                $ofrQuantity = $_SESSION['offer_checkout']['offer_quantity'] ?? $sellerProductRow['selprod_stock'];
+                $sellerProductRows[$key]['selprod_stock'] = $sellerProductRow['selprod_stock'] = $ofrQuantity;
+                $sellerProductRows[$key]['theprice'] =  $sellerProductRow['theprice'] = $ofrTheprice / $ofrQuantity;
+                $sellerProductRows[$key]['selprod_price'] = $sellerProductRow['selprod_price'] = $selprodPrice / $ofrQuantity;
+                $sellerProductRows[$key]['volume_discount'] = $sellerProductRow['volume_discount'] = 0;
+                $sellerProductRows[$key]['splprice_price'] = $sellerProductRow['splprice_price'] = 0;
+            }
+
             $quantity = ($cartData[$key] > $sellerProductRow['selprod_stock']) ? $sellerProductRow['selprod_stock'] : $cartData[$key];
             $sellerProductRows[$key]['actualPrice'] = $sellerProductRow['theprice'];
 
@@ -816,20 +835,22 @@ class Cart extends FatModel
             $sellerProductRows[$key]['volume_discount'] = 0;
             $sellerProductRows[$key]['volume_discount_percentage'] = 0;
             $sellerProductRows[$key]['volume_discount_total'] = 0;
-            $srch = new SellerProductVolumeDiscountSearch();
-            $srch->doNotCalculateRecords();
-            $srch->addCondition('voldiscount_selprod_id', '=', 'mysql_func_' . $sellerProductRow['selprod_id'], 'AND', true);
-            $srch->addCondition('voldiscount_min_qty', '<=', 'mysql_func_' . $quantity, 'AND', true);
-            $srch->addOrder('voldiscount_min_qty', 'DESC');
-            $srch->setPageSize(1);
-            $srch->addMultipleFields(array('voldiscount_percentage'));
-            $rs = $srch->getResultSet();
-            $volumeDiscountRow = FatApp::getDb()->fetch($rs);
-            if ($volumeDiscountRow) {
-                $volumeDiscount = $sellerProductRows[$key]['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
-                $sellerProductRows[$key]['volume_discount_percentage'] = $volumeDiscountRow['voldiscount_percentage'];
-                $sellerProductRows[$key]['volume_discount'] = $volumeDiscount;
-                $sellerProductRows[$key]['volume_discount_total'] = $volumeDiscount * $quantity;
+            if (!$rfqOfferProd) {
+                $srch = new SellerProductVolumeDiscountSearch();
+                $srch->doNotCalculateRecords();
+                $srch->addCondition('voldiscount_selprod_id', '=', 'mysql_func_' . $sellerProductRow['selprod_id'], 'AND', true);
+                $srch->addCondition('voldiscount_min_qty', '<=', 'mysql_func_' . $quantity, 'AND', true);
+                $srch->addOrder('voldiscount_min_qty', 'DESC');
+                $srch->setPageSize(1);
+                $srch->addMultipleFields(array('voldiscount_percentage'));
+                $rs = $srch->getResultSet();
+                $volumeDiscountRow = FatApp::getDb()->fetch($rs);
+                if ($volumeDiscountRow) {
+                    $volumeDiscount = $sellerProductRows[$key]['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
+                    $sellerProductRows[$key]['volume_discount_percentage'] = $volumeDiscountRow['voldiscount_percentage'];
+                    $sellerProductRows[$key]['volume_discount'] = $volumeDiscount;
+                    $sellerProductRows[$key]['volume_discount_total'] = $volumeDiscount * $quantity;
+                }
             }
             /* ] */
 
@@ -992,6 +1013,7 @@ class Cart extends FatModel
         if (false === $found) {
             $this->error = Labels::getLabel('ERR_INVALID_PRODUCT', $this->cart_lang_id);
         }
+        unset($_SESSION['offer_checkout']);
         return $found;
     }
 
@@ -1040,6 +1062,9 @@ class Cart extends FatModel
             if (is_array($cartProducts)) {
                 foreach ($cartProducts as $cartKey => $product) {
                     if (md5($product['key']) == $key) {
+                        if (isset($_SESSION['offer_checkout']) && $_SESSION['offer_checkout']['selprod_id'] == $product['selprod_id']) {
+                            continue;
+                        }
                         $found = true;
                         /* minimum quantity check[ */
                         $minimum_quantity = ($product['selprod_min_order_qty']) ? $product['selprod_min_order_qty'] : 1;
@@ -1267,7 +1292,6 @@ class Cart extends FatModel
     {
         $cartTotal = 0;
         $products = $this->getBasketProducts($this->cart_lang_id);
-        // CommonHelper::printArray($products); die;
         if (is_array($products) && count($products) > 0) {
             foreach ($products as $product) {
                 $cartTotal += $product['total'];
@@ -1818,6 +1842,7 @@ class Cart extends FatModel
         unset($_SESSION['shopping_cart']["order_id"]);
         unset($_SESSION['wallet_recharge_cart']["order_id"]);
         unset($_SESSION["order_id"]);
+        unset($_SESSION['offer_checkout']);
     }
 
     public static function setCartAttributes($userId = 0, $tempUserId = 0)
@@ -2030,7 +2055,7 @@ class Cart extends FatModel
                 $shipping->setSelectedShipping($this->selectedShippingService);
             }
 
-            $response =  $shipping->calculateCharges($physicalSelProdIdArr, $shippingAddressDetail, $productInfo);
+            $response =  $shipping->calculateCharges($physicalSelProdIdArr, $shippingAddressDetail, $productInfo, true);
             $shippedByArr = $response['data'];
         }
         /*Include digital products */

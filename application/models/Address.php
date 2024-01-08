@@ -83,7 +83,11 @@ class Address extends MyAppModel
         $srch->joinState();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addMultipleFields(array('addr.*', 'state_code', 'country_code', 'country_code_alpha3', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'));
+        $columns = array('addr.*', 'state_code', 'country_code', 'country_code_alpha3', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name');
+        if (Address::TYPE_USER == $type) {
+            $columns[] = 'addr_record_id as user_id';
+        }
+        $srch->addMultipleFields($columns);
         $srch->addCondition('country_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('state_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('addr_deleted', '=', applicationConstants::NO);

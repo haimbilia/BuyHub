@@ -10,6 +10,7 @@ class Shipping
     public const LEVEL_PRODUCT = 3;
 
     public const TYPE_MANUAL = -1;
+    public const TYPE_CUSTOM = 0;
     public const RATE_CACHE_KEY_NAME = "shipRateCache_";
     public const CARRIER_CACHE_KEY_NAME = "shipCarrierCache_";
 
@@ -299,9 +300,10 @@ class Shipping
      * @param  array $shippingAddressDetail
      * @param  array $productInfo
      * @param  array $physicalSelProdIdArr
+     * @param  bool $isAccepted
      * @return bool
      */
-    private function fetchShippingRatesFromApi(array $shippingAddressDetail, array $productInfo, array &$physicalSelProdIdArr): bool
+    private function fetchShippingRatesFromApi(array $shippingAddressDetail, array $productInfo, array &$physicalSelProdIdArr, bool $isAccepted = false): bool
     {
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
@@ -334,6 +336,21 @@ class Shipping
                 continue;
             }
 
+            $shippingLevel = self::LEVEL_PRODUCT;
+
+            $shippedBy = -1; /* admin shipping */
+            if (0 < $isProductShippedBySeller) {
+                $shippedBy = $product['shop_id'];
+            }
+
+            if (isset($shippingAddressDetail['user_id'])) {
+                $buyerId = $shippingAddressDetail['user_id'];
+                $shippingCost = $this->fetchCustomShippingRates($product['selprod_id'], $buyerId, $isAccepted);
+                if (!empty($shippingCost)) {
+                    $this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$product['shop_id']][$shippingCost['id']] = $shippingCost;
+                    continue;
+                }
+            }
             $shippingApiKey = get_class($shippingApiObj)::KEY_NAME;
 
             $cacheKey = self::CARRIER_CACHE_KEY_NAME . $this->langId . get_class($shippingApiObj) . ($isProductShippedBySeller ? $product['selprod_user_id'] : 0);
@@ -409,12 +426,7 @@ class Shipping
             }
             /* Retrieve Selected Shipping Service Detail. */
 
-            $shippingLevel = self::LEVEL_PRODUCT;
-
-            $shippedBy = -1; /* admin shipping */
-            if (0 < $isProductShippedBySeller) {
-                $shippedBy = $product['shop_id'];
-            }
+            
             $prodWeight = $product['product_weight'] * $product['quantity'];
             $productWeightClass = isset($weightUnitsArr[$product['product_weight_unit']]) ? $weightUnitsArr[$product['product_weight_unit']] : '';
             $productWeightInOunce = static::convertWeightInOunce($prodWeight, $productWeightClass);
@@ -641,19 +653,20 @@ class Shipping
      * @param  array $physicalSelProdIdArr
      * @param  array $shippingAddressDetail
      * @param  array $productInfo
+     * @param  bool $isAccepted
      * @return array
      */
-    public function calculateCharges(array $physicalSelProdIdArr, array $shippingAddressDetail, array $productInfo): array
+    public function calculateCharges(array $physicalSelProdIdArr, array $shippingAddressDetail, array $productInfo, bool $isAccepted = false): array
     {
         $shipToCountryId = isset($shippingAddressDetail['addr_country_id']) ? $shippingAddressDetail['addr_country_id'] : 0;
 
         $shipToStateId = isset($shippingAddressDetail['addr_state_id']) ? $shippingAddressDetail['addr_state_id'] : 0;
 
-        $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr);
+        $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr, $isAccepted);
         if (count($physicalSelProdIdArr)) {
             $this->selProdShipRates = $this->getSellerProductShippingRates($physicalSelProdIdArr, $shipToCountryId, $shipToStateId, $productInfo);
             if (!empty($this->selProdShipRates)) {
-                $this->fetchShippingRatesFromSystem($productInfo, $physicalSelProdIdArr);
+                $this->fetchShippingRatesFromSystem($productInfo, $physicalSelProdIdArr, $shippingAddressDetail, $isAccepted);
             }
         }
 

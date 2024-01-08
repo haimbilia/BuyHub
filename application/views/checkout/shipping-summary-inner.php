@@ -12,13 +12,15 @@
                     } ?>
                 </h5>
 
-                <div class="review-block-action" role="cell">
-                    <button class="link-underline" onClick="showAddressList()">
-                        <span>
-                            <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
-                        </span>
-                    </button>
-                </div>
+                <?php if (!isset($_SESSION['offer_checkout'])) { ?>
+                    <div class="review-block-action" role="cell">
+                        <button class="link-underline" onClick="showAddressList()">
+                            <span>
+                                <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
+                            </span>
+                        </button>
+                    </div>
+                <?php } ?>
             </div>
             <div class="review-block-body" role="cell">
                 <address class="address delivery-address">

@@ -18,16 +18,26 @@
                     <div class="offer-block-head">
                         <?php
                         $row['shop_updated_on'] = $row['rfq_added_on'];
-                        $row['shop_id'] = 0;
-                        $row['shop_name'] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId);
-                        $row['user_name'] = '';
-                        $row['extra_text'] = [
-                            [
-                                'class' => 'text-muted form-text',
-                                'text' => FatDate::format($row['offer_added_on'])
-                            ],
-                        ];
-                        $showAdminImage = true;
+                        $showAdminImage = false;
+                        if (1 > FatApp::getConfig('CONF_HIDE_SELLER_INFO', FatUtility::VAR_INT, 0)) {
+                            $row['extra_text'] = [
+                                [
+                                    'class' => 'text-muted form-text',
+                                    'text' => FatDate::format($row['offer_added_on'])
+                                ],
+                            ];
+                        } else {
+                            $row['shop_id'] = 0;
+                            $row['shop_name'] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId);
+                            $row['user_name'] = '';
+                            $row['extra_text'] = [
+                                [
+                                    'class' => 'text-muted form-text',
+                                    'text' => FatDate::format($row['offer_added_on'])
+                                ],
+                            ];
+                            $showAdminImage = true;
+                        }
 
                         $this->includeTemplate('_partial/shop/shop-info-card.php', ['shop' => $row, 'siteLangId' => $siteLangId, 'showAdminImage' => $showAdminImage], false);
                         ?>

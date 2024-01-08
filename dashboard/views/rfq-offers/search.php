@@ -300,7 +300,7 @@ if (count($arrListing) == 0) {
                         $offerStatusArr = [$row['offer_status'], $row['counter_offer_status']];
                         if (in_array(RfqOffers::STATUS_ACCEPTED, $offerStatusArr) && false == RfqOffers::isBought($row['rlo_accepted_offer_id'])) {
                             $offerId = RfqOffers::STATUS_ACCEPTED == $row['offer_status'] ? $row['offer_id'] : $row['counter_offer_id']; ?>
-                            <a class="btn btn-brand btn-icon" href="<?php echo UrlHelper::generateUrl('RfqOffers', 'checkout', [$row['rlo_accepted_offer_id']]); ?>" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_BUY_NOW', $siteLangId); ?>">
+                            <a class="btn btn-brand btn-icon" href="<?php echo UrlHelper::generateUrl('RfqOffers', 'checkout', [$row['rlo_selprod_id'], $row['rlo_accepted_offer_id']]); ?>" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_BUY_NOW', $siteLangId); ?>">
                                 <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#cart">
                                     </use>

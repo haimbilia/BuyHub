@@ -473,6 +473,8 @@ class UserAuthentication extends FatModel
         'user_ip'=>$ip
         ); */
 
+        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['acceptedOffers'] = RfqOffers::getAllAcceptedOffers($row['credential_user_id']);
+
         /* clear failed login attempt for the user [ */
         $this->clearFailedAttempt($ip, $username);
         /* ] */

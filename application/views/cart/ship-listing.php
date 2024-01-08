@@ -87,13 +87,15 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 </div>
                             </div>
                             <div class="block-cart-detail-bottom">
-                                <ul class="cart-action">
-                                    <li class="cart-action-item">
-                                        <button class="btn btn-link" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );">
-                                            <?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>
-                                        </button>
-                                    </li>
-                                </ul>
+                                <?php if (!isset($_SESSION['offer_checkout']) || $_SESSION['offer_checkout']['selprod_id'] != $product['selprod_id']) { ?>
+                                    <ul class="cart-action">
+                                        <li class="cart-action-item">
+                                            <button class="btn btn-link" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );">
+                                                <?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                <?php } ?>
                             </div>
                         </div>
                     </li>
@@ -162,21 +164,28 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         </div>
                         <div class="product-quantity">
                             <div class="quantity quantity-sm" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                <button class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>" type="button">
-                                    <svg class="svg" width="10" height="10">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                        </use>
-                                    </svg>
-                                </button>
-                                <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                    <input name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" class="qty-input cartQtyTextBox productQty-js" value="<?php echo $product['quantity']; ?>" type="text" />
-                                </div>
-                                <button class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'disabled' : ''; ?>">
-                                    <svg class="svg" width="10" height="10">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg>
-                                </button>
+                                <?php if (isset($_SESSION['offer_checkout']) && $_SESSION['offer_checkout']['selprod_id'] == $product['selprod_id']) { ?>
+                                    <div class="selected-qty">
+                                        <strong><?php echo Labels::getLabel('LBL_QTY_:') ?></strong>
+                                        <?php echo $product['quantity']; ?>
+                                    </div>
+                                <?php } else { ?>
+                                    <button class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>" type="button">
+                                        <svg class="svg" width="10" height="10">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                            </use>
+                                        </svg>
+                                    </button>
+                                    <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
+                                        <input name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" class="qty-input cartQtyTextBox productQty-js" value="<?php echo $product['quantity']; ?>" type="text" />
+                                    </div>
+                                    <button class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'disabled' : ''; ?>">
+                                        <svg class="svg" width="10" height="10">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                            </use>
+                                        </svg>
+                                    </button>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -212,11 +221,13 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                     } ?>
                                 </li>
                             <?php } ?>
-                            <li class="cart-action-item">
-                                <button class="btn btn-link" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );" title="<?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>">
-                                    <?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>
-                                </button>
-                            </li>
+                            <?php if (!isset($_SESSION['offer_checkout']) || $_SESSION['offer_checkout']['selprod_id'] != $product['selprod_id']) { ?>
+                                <li class="cart-action-item">
+                                    <button class="btn btn-link" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );" title="<?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>">
+                                        <?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>
+                                    </button>
+                                </li>
+                            <?php } ?>
                         </ul>
                         <?php if (0 >= $product['quantity']) { ?>
                             <p class="not-available-txt out-of-stock">

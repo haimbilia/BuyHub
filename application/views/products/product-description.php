@@ -128,15 +128,32 @@
                     </div>
                 </div>
                 <div class="buy-action">
-                    <?php if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
-                        echo $frmBuyProduct->getFieldHtml('btnAddToCart');
+                    <?php
+                    $acceptedOfferId = 0;
+                    if (FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+                        $acceptedOffers = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['acceptedOffers'] ?? [];
+                        $acceptedOfferId = $acceptedOffers[$product['selprod_id']]['accepted_offer_id'] ?? 0;
                     }
-                    echo $frmBuyProduct->getFieldHtml('selprod_id');
-                    if (FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) { ?>
-                        <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
-                            <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
-                        </button>
-                    <?php } ?>
+
+                    if (0 < $acceptedOfferId) { ?>
+                        <a class="btn btn-brand btn-block btn-rfq" href="<?php echo UrlHelper::generateUrl('RfqOffers', 'checkout', [$product['selprod_id'], $acceptedOfferId], CONF_WEBROOT_DASHBOARD); ?>" title="<?php echo Labels::getLabel('BTN_BUY_NOW'); ?>">
+                            <?php echo Labels::getLabel('BTN_BUY_NOW'); ?>
+                            <svg class="svg" width="20" height="20">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/procurenet/sprite.svg#icon-arrow-tr">
+                                </use>
+                            </svg>
+                        </a>
+                    <?php } else {
+                        if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
+                            echo $frmBuyProduct->getFieldHtml('btnAddToCart');
+                        }
+                        echo $frmBuyProduct->getFieldHtml('selprod_id');
+                        if (FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) { ?>
+                            <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
+                                <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
+                            </button>
+                    <?php }
+                    } ?>
                 </div>
             <?php } ?>
             </form>

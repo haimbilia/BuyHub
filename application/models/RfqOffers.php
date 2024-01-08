@@ -434,15 +434,15 @@ class RfqOffers extends MyAppModel
         $srch = new SearchBase(self::DB_RFQ_LATEST_OFFER, 'rlo');
         $srch->addCondition('rlo_status', '=', self::STATUS_ACCEPTED);
         $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'offer_id = rlo_seller_offer_id', 'ro');
-        $srch->joinTable(RequestForQuote::DB_RFQ_TO_SELLERS, 'INNER JOIN', 'rfqts_rfq_id = rlo_rfq_id AND rfqts_user_id = ro.offer_user_id', 'rts');
         $srch->joinTable(RequestForQuote::DB_TBL, 'INNER JOIN', 'rfq_id = rlo_rfq_id AND rfq_user_id = ' . $loggedUserId, 'rfq');
-        $srch->joinTable(OrderProduct::DB_TBL, 'LEFT JOIN', 'op.op_offer_id = rlo_accepted_offer_id', 'op');
+        $paidStatus = FatApp::getConfig('CONF_DEFAULT_PAID_ORDER_STATUS', FatUtility::VAR_INT, 0);
+        $srch->joinTable(OrderProduct::DB_TBL, 'LEFT JOIN', 'op.op_offer_id = rlo_accepted_offer_id AND op.op_selprod_id = rlo.rlo_selprod_id AND op.op_status_id = ' . $paidStatus, 'op');
         $srch->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'opayment_order_id = op.op_order_id', 'opay');
 
         $srch->addCondition('opayment_id', 'IS', 'mysql_func_NULL', 'AND', true);
 
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(['rfqts_selprod_id as selprod_id', 'rlo_primary_offer_id as primary_offer_id', 'rlo_accepted_offer_id as accepted_offer_id']);
+        $srch->addMultipleFields(['rlo_selprod_id as selprod_id', 'rlo_primary_offer_id as primary_offer_id', 'rlo_accepted_offer_id as accepted_offer_id']);
         return FatApp::getDb()->fetchAll($srch->getResultSet(), 'selprod_id');
     }
 
@@ -580,7 +580,7 @@ class RfqOffers extends MyAppModel
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $data = FatApp::getDb()->fetchAll($srch->getResultSet());
-        
+
         return [
             'pageCount' => $srch->pages(),
             'data' => $data
@@ -612,7 +612,7 @@ class RfqOffers extends MyAppModel
             $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
         }
-        
+
         $rfqId = FatApp::getPostedData('rfq_id', FatUtility::VAR_INT, 0);
         if (0 < $rfqId) {
             $srch->addCondition('rfqts_rfq_id', '=', $rfqId);

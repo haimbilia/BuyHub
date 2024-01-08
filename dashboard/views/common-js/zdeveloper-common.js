@@ -42,17 +42,19 @@ $(document).ready(function () {
         }
         showFormActionsBtns();
     });
-
-    $('[data-bs-toggle="popover"]').popover({
-        html: true,
-        content: function () {
-            var content = $(this).attr("data-popover-html");
-            if ('undefined' != typeof content) {
-                return $(content).html();
-            }
-            return $(this).attr("data-bs-content");
-        },
-    });
+    
+    if ('undefined' != typeof $.fn.popover) {
+        $('[data-bs-toggle="popover"]').popover({
+            html: true,
+            content: function () {
+                var content = $(this).attr("data-popover-html");
+                if ('undefined' != typeof content) {
+                    return $(content).html();
+                }
+                return $(this).attr("data-bs-content");
+            },
+        });
+    }
 
     /*  if (0 < $(".js-widget-scroll").length) {
          slickWidgetScroll();
@@ -120,9 +122,9 @@ checkEmpty = function (element) {
 };
 
 copyText = function (obj, applyToolTipInfo = true) {
-    if(applyToolTipInfo){
+    if (applyToolTipInfo) {
         var title = $(obj).data("title");
-    }else{
+    } else {
         var title = $(obj).attr("data-url");
     }
     if (!navigator.clipboard) {
@@ -1201,16 +1203,18 @@ $(document).ajaxComplete(function () {
     /* Bind Max Length validator. */
     bindMaxLengthValidator();
 
-    $('[data-bs-toggle="popover"]').popover({
-        html: true,
-        content: function () {
-            var content = $(this).attr("data-popover-html");
-            if ('undefined' != typeof content) {
-                return $(content).html();
-            }
-            return $(this).attr("data-bs-content");
-        },
-    });
+    if ('undefined' != typeof $.fn.popover) {
+        $('[data-bs-toggle="popover"]').popover({
+            html: true,
+            content: function () {
+                var content = $(this).attr("data-popover-html");
+                if ('undefined' != typeof content) {
+                    return $(content).html();
+                }
+                return $(this).attr("data-bs-content");
+            },
+        });
+    }
     /* Bind bootstrap tooltip with ajax elements. */
     $('[data-bs-toggle="tooltip"]').tooltip({
         trigger: 'hover'

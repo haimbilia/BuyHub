@@ -603,6 +603,11 @@ class CustomController extends MyAppController
             unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]);
         }
 
+        if (UserAuthentication::isUserLogged()) {
+            unset($_SESSION['offer_checkout']);
+            $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['acceptedOffers'] = RfqOffers::getAllAcceptedOffers(UserAuthentication::getLoggedUserId(true));
+        }
+
         $this->set('orderId', $orderId);
         $this->set('textMessage', $textMessage);
         $this->set('orderInfo', $orderInfo);

@@ -49,11 +49,16 @@ trait RfqOffersUtility
 
         $srch->addCondition('rfq_id', '=', $rfqId);
         $rfqData = (array)FatApp::getDb()->fetch($srch->getDataResultSet());
-
         if (empty($rfqData)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
+
+        if ($this->isSeller && empty($rfqData['rfqts_selprod_id'])) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ADD_INVENTORY_TO_OFFER.', $this->siteLangId), false, true);
+            CommonHelper::redirectUserReferer();
+        }
+
         $this->set('rfqData', $rfqData);
 
         $frm = $this->getSearchForm();
@@ -174,7 +179,7 @@ trait RfqOffersUtility
             array_push($counterOfferFlds, 'roc.' . $fld . ' as counter_' . $fld);
         }
 
-        $dbFlds = array_merge($flds, $counterOfferFlds, ['rlo_seller_user_id', 'ou.user_name', 'ouc.credential_email', 'ou.user_updated_on', 'ou.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'ous.shop_id', 'rlo_primary_offer_id', 'rfq_quantity_unit', 'rfq_added_on', 'rlo_shipping_charges', 'rlo_accepted_offer_id']);
+        $dbFlds = array_merge($flds, $counterOfferFlds, ['rlo_seller_user_id', 'ou.user_name', 'ouc.credential_email', 'ou.user_updated_on', 'ou.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'ous.shop_id', 'rlo_primary_offer_id', 'rfq_quantity_unit', 'rfq_added_on', 'rlo_shipping_charges', 'rlo_accepted_offer_id', 'rlo_selprod_id']);
         $srch->addMultipleFields($dbFlds);
 
         $sellerId = FatApp::getPostedData('offer_user_id', FatUtility::VAR_INT, 0);
@@ -336,7 +341,7 @@ trait RfqOffersUtility
                 LibHelper::exitWithError(Labels::getLabel('ERR_DUPLICATE_OFFER._YOU_CANNOT_PLACE_OFFER_WITH_THIS_QTY.'));
             }
         }
-        
+
         $negotiable = FatApp::getPostedData('offer_negotiable', FatUtility::VAR_INT, applicationConstants::NO);
         if ($this->isBuyer) {
             $negotiable = 1;
@@ -373,11 +378,14 @@ trait RfqOffersUtility
         if ($this->isSeller) {
             $shippingcharges = FatApp::getPostedData('rlo_shipping_charges', FatUtility::VAR_FLOAT, 0);
             $data['rlo_shipping_charges'] = $shippingcharges;
-        }
 
-        if ($this->isSeller) {
             $data['rlo_seller_offer_id'] = $rfq->getMainTableRecordId();
             $data['rlo_seller_user_id'] = UserAuthentication::getLoggedUserId();
+
+            if (1 > $counterOfferId) {
+                $selprodId = RequestForQuote::getSellerProductId($post['offer_rfq_id'], UserAuthentication::getLoggedUserId());
+                $data['rlo_selprod_id'] = $selprodId;
+            }
         } else {
             $data['rlo_buyer_offer_id'] = $rfq->getMainTableRecordId();
         }
@@ -674,43 +682,40 @@ trait RfqOffersUtility
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
     }
 
-    public function checkout(int $offerId)
+    public function checkout(int $selprodId, int $offerId)
     {
-        if (false === $this->isBuyer || 1 > $offerId) {
+        if (1 > $selprodId || false === $this->isBuyer || 1 > $offerId) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST'), false, true);
             CommonHelper::redirectUserReferer();
         }
 
         $srch = new SearchBase(RequestForQuote::DB_TBL, 'rfq');
-        $srch->joinTable(RfqOffers::DB_RFQ_LATEST_OFFER, 'INNER JOIN', 'rlo_rfq_id = rfq_id and rlo.rlo_accepted_offer_id = ' . $offerId, 'rlo');
+        $srch->joinTable(RfqOffers::DB_RFQ_LATEST_OFFER, 'INNER JOIN', 'rlo_rfq_id = rfq_id and rlo.rlo_accepted_offer_id = ' . $offerId . ' AND rlo.rlo_selprod_id = ' . $selprodId, 'rlo');
         $srch->joinTable(RfqOffers::DB_TBL, 'INNER JOIN', 'aOfr.offer_id = rlo.rlo_accepted_offer_id ', 'aOfr');
         $srch->joinTable(RfqOffers::DB_TBL, 'INNER JOIN', 'sOfr.offer_id = rlo.rlo_seller_offer_id ', 'sOfr');
-        /* This below line is used when multiple seller bind with RFQ and they have seller product.  */
-        // $srch->joinTable(RequestForQuote::DB_RFQ_TO_SELLERS, 'INNER JOIN', 'rfqts_rfq_id = rfq_id AND rfqts_user_id = sOfr.offer_user_id', 'rfqs');
-
-        /* For now only have single seller to bound with so no need to join with offer seller with rfq seller. (Because we use different seller as alias) */
-        $srch->joinTable(RequestForQuote::DB_RFQ_TO_SELLERS, 'INNER JOIN', 'rfqts_rfq_id = rfq_id', 'rfqs');
 
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $srch->addMultipleFields(['rfq.rfq_id', 'aOfr.offer_id', 'aOfr.offer_quantity', 'sOfr.offer_user_id as sellerId', 'rfqs.rfqts_selprod_id', 'rfq.rfq_addr_id', 'aOfr.offer_price', 'aOfr.offer_quantity', 'aOfr.offer_primary_offer_id', 'rlo_accepted_offer_id']);
+        $srch->addMultipleFields(['rfq.rfq_id', 'aOfr.offer_id', 'aOfr.offer_quantity', 'sOfr.offer_user_id as sellerId', 'rlo.rlo_selprod_id', 'rfq.rfq_addr_id', 'aOfr.offer_price', 'aOfr.offer_quantity', 'aOfr.offer_primary_offer_id', 'rlo_accepted_offer_id']);
         $srch->addCondition('rfq_user_id', '=', UserAuthentication::getLoggedUserId());
         $srch->addCondition('aOfr.offer_id', '=', 'mysql_func_' . $offerId, 'AND', true);
+        $srch->addCondition('rlo.rlo_selprod_id', '=', 'mysql_func_' . $selprodId, 'AND', true);
         $srch->addCondition('aOfr.offer_status', '=', RfqOffers::STATUS_ACCEPTED);
         $rfqOfferData = (array)FatApp::getDb()->fetch($srch->getResultSet());
+        
         if (empty($rfqOfferData)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST'), false, true);
             CommonHelper::redirectUserReferer();
         }
 
-        if (isset($rfqOfferData['rfqts_selprod_id']) && empty($rfqOfferData['rfqts_selprod_id'])) {
+        if (isset($rfqOfferData['rlo_selprod_id']) && empty($rfqOfferData['rlo_selprod_id'])) {
             LibHelper::exitWithError(Labels::getLabel('ERR_THE_SELLER_HAS_NOT_ADDED_ANY_INVENTORY_FOR_THIS_CATALOG_YET._WE_WILL_NOTIFY_YOU_ONCE_ADDED.'), false, true);
             CommonHelper::redirectUserReferer();
         }
 
         /* Update primary offer id. This will help when multiple offers accpted for same seller product.*/
-        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['acceptedOffers'][$rfqOfferData['rfqts_selprod_id']] = [
-            'selprod_id' => $rfqOfferData['rfqts_selprod_id'],
+        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['acceptedOffers'][$rfqOfferData['rlo_selprod_id']] = [
+            'selprod_id' => $rfqOfferData['rlo_selprod_id'],
             'primary_offer_id' => $rfqOfferData['offer_primary_offer_id'],
             'accepted_offer_id' => $rfqOfferData['rlo_accepted_offer_id'],
         ];
@@ -729,7 +734,7 @@ trait RfqOffersUtility
         $cartObj = new Cart(UserAuthentication::getLoggedUserId(), $this->siteLangId, $this->app_user['temp_user_id']);
         $cartObj->clear();
 
-        if (!$cartObj->add($rfqOfferData['rfqts_selprod_id'], $rfqOfferData['offer_quantity'])) {
+        if (!$cartObj->add($rfqOfferData['rlo_selprod_id'], $rfqOfferData['offer_quantity'])) {
             $db->rollbackTransaction();
             LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_ADD_ITEM_TO_THE_CART'), false, true);
             CommonHelper::redirectUserReferer();
@@ -740,7 +745,7 @@ trait RfqOffersUtility
             'rlo_accepted_offer_id' => $rfqOfferData['rlo_accepted_offer_id'],
             'offer_primary_offer_id' => $rfqOfferData['offer_primary_offer_id'],
             'rfq_id' => $rfqOfferData['rfq_id'],
-            'selprod_id' => $rfqOfferData['rfqts_selprod_id'],
+            'selprod_id' => $rfqOfferData['rlo_selprod_id'],
             'offer_price' => $rfqOfferData['offer_price'] * $rfqOfferData['offer_quantity'],
             'offer_quantity' => $rfqOfferData['offer_quantity'],
         ];
