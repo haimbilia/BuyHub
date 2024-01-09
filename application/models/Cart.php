@@ -159,8 +159,7 @@ class Cart extends FatModel
             $products = $this->getBasketProducts($this->cart_lang_id);
             $sellerUserId = SellerProduct::getAttributesById('selprod_id', 'selprod_user_id');
             if ($this->singleCartSellerId > 0 && $sellerUserId != $this->singleCartSellerId) {
-                Message::addErrorMessage(Labels::getLabel('ERR_KINDLY_EMPTY_YOUR_CART_TO_ADD_ITEM_FROM_OTHER_SELLER', $this->cart_lang_id));
-                return false;
+                $this->clear();
             }
         }
 
