@@ -53,7 +53,7 @@ class MyAppController extends FatController
             /* to keep track of temporary hold the product stock, update time in each row of tbl_product_stock_hold against current user[ */
             $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
             $cartObj->excludeTax();
-            $cartProducts = $cartObj->getBasketProducts($this->siteLangId);
+            $cartProducts = $cartObj->getBasketProducts($this->siteLangId, false);
             if ($cartProducts) {
                 foreach ($cartProducts as $product) {
                     $cartObj->updateTempStockHold($product['selprod_id'], $product['quantity']);
