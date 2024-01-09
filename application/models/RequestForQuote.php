@@ -44,7 +44,7 @@ class RequestForQuote extends MyAppModel
     public const STATUS_OPEN = 0;
     public const STATUS_OFFERED = 1;
     public const STATUS_ACCEPTED = 2;
-    public const STATUS_CANCELLED = 3;
+    public const STATUS_CLOSED = 3;
     public const STATUS_COMPLETED = 4;
 
     /**
@@ -231,7 +231,7 @@ class RequestForQuote extends MyAppModel
             self::STATUS_OPEN => Labels::getLabel('LBL_OPEN', $langId),
             self::STATUS_OFFERED => Labels::getLabel('LBL_OFFERED', $langId),
             self::STATUS_ACCEPTED => Labels::getLabel('LBL_ACCEPTED', $langId),
-            // self::STATUS_CANCELLED => Labels::getLabel('LBL_CANCELLED', $langId),
+            self::STATUS_CLOSED => Labels::getLabel('LBL_CLOSED', $langId),
             // self::STATUS_COMPLETED => Labels::getLabel('LBL_COMPLETED', $langId),
         ];
     }
@@ -395,7 +395,7 @@ class RequestForQuote extends MyAppModel
             case self::STATUS_COMPLETED:
                 return 'badge badge-brand';
                 break;
-            case self::STATUS_CANCELLED:
+            case self::STATUS_CLOSED:
                 return 'badge badge-danger';
                 break;
             case self::STATUS_OFFERED:

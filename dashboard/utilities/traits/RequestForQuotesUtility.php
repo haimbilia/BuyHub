@@ -191,4 +191,22 @@ trait RequestForQuotesUtility
         $json = RequestForQuote::getSellersByProductId($this->siteLangId);
         die(FatUtility::convertToJson($json));
     }
+    
+    public function closeRfq(int $rfqId)
+    {
+        if (1 > $rfqId || $this->isSeller) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $userId = RequestForQuote::getAttributesById($rfqId, 'rfq_user_id');
+        if ($userId != UserAuthentication::getLoggedUserId()) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $rfq = new RequestForQuote($rfqId);
+        if (false == $rfq->add(['rfq_status' => RequestForQuote::STATUS_CLOSED])) {
+            LibHelper::exitWithError($rfq->getError(), true);
+        }
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_CLOSED!', $this->siteLangId));
+    }
 }

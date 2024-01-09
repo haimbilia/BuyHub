@@ -4,13 +4,14 @@ $colWidthValuesDefault = $colWidthValuesDefault ?? 12;
 $formClassExtra = $formClassExtra ?? '';
 $displayFooterButtons = $displayFooterButtons ?? true;
 
+$callback = $callback ?? '';
 HtmlHelper::formatFormFields($frm, $colWidthValuesDefault);
 if (!$frm->getFormTagAttribute('data-onclear')) {
     $frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ')');
 }
 $frm->setFormTagAttribute('class', 'form modalFormJs '. $formClassExtra);
 if (!$frm->getFormTagAttribute('onsubmit')) {
-    $frm->setFormTagAttribute('onsubmit', 'saveRecord($("#' . $frm->getFormTagAttribute('id') . '")[0]); return(false);');
+    $frm->setFormTagAttribute('onsubmit', 'saveRecord($("#' . $frm->getFormTagAttribute('id') . '")[0], "' . $callback . '"); return(false);');
 }
 $fld = $frm->getField('auto_update_other_langs_data');
 if ($fld != null) {    

@@ -22,9 +22,11 @@ if (count($arrListing) == 0) {
                     </h6>
                     <?php
                     if ($expiredOn >= strtotime(date('Y-m-d')) && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) { ?>
-                        <?php if (($row['offer_negotiable'] == applicationConstants::YES && $row['offer_status'] == RfqOffers::STATUS_OPEN) || RfqOffers::STATUS_REJECTED == $row['counter_offer_status']) { ?>
+                        <?php if (RequestForQuote::STATUS_CLOSED != $row['rfq_status'] && (($row['offer_negotiable'] == applicationConstants::YES && $row['offer_status'] == RfqOffers::STATUS_OPEN) || RfqOffers::STATUS_REJECTED == $row['counter_offer_status'])) { ?>
                             <div class="offers-card-head-action">
-                                <button class="link-brand link-underline" onClick="counter(<?php echo $row['offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_COUNTER', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_REPLY'); ?></button>
+                                <button class="link-brand link-underline" onClick="counter(<?php echo $row['offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_COUNTER', $siteLangId); ?>">
+                                    <?php echo Labels::getLabel('LBL_REPLY'); ?>
+                                </button>
                             </div>
                     <?php }
                     } ?>
@@ -157,7 +159,7 @@ if (count($arrListing) == 0) {
                         <?php echo Labels::getLabel('LBL_BUYER_QUOTED_OFFER', $siteLangId); ?>
                         <span>(<?php echo $offersCountArr[$row['offer_primary_offer_id']]['buyerOffersCount'] ?? 0; ?> <?php echo Labels::getLabel('LBL_OFFERS', $siteLangId); ?>)</span>
                     </h6>
-                    <?php if (0 < $row['counter_offer_id'] && RfqOffers::STATUS_OPEN == $row['counter_offer_status'] && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) { ?>
+                    <?php if (0 < $row['counter_offer_id'] && RequestForQuote::STATUS_CLOSED != $row['rfq_status'] && RfqOffers::STATUS_OPEN == $row['counter_offer_status'] && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) { ?>
                         <div class="offer-block-head-action">
                             <button class="link-brand link-underline" onClick="editRecord(<?php echo $row['counter_offer_id']; ?>,<?php echo  $row['counter_offer_rfq_id']; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_EDIT', $siteLangId); ?>">
                                 <?php echo Labels::getLabel('LBL_EDIT'); ?>
@@ -194,7 +196,9 @@ if (count($arrListing) == 0) {
                                 <li class="offer-stats-item">
                                     <span class="label"><?php echo Labels::getLabel('LBL_QTY', $siteLangId); ?>:</span>
                                     <span class="value"><?php echo $row['counter_offer_quantity']; ?></span>
-                                </li> <li class="offer-stats-item"></li> <li class="offer-stats-item"></li>
+                                </li>
+                                <li class="offer-stats-item"></li>
+                                <li class="offer-stats-item"></li>
                                 <li class="offer-stats-item offer-stats-item-rtl">
                                     <span class="label">
                                         <?php

@@ -330,8 +330,6 @@ class RequestForQuotesController extends ListingBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_STATUS_IS_NOT_APPROVED'), true);
         }
 
-        /* RVSI */
-        $selProdId = 0;
         /* $selProdId = RequestForQuote::getSellerProductId($recordId, $sellerId);
         if (1 > $selProdId) {
             LibHelper::exitWithError(Labels::getLabel('LBL_SELLER_INVENTORY_NOT_FOUND_OF_THIS_SELLER.'), true);

@@ -455,13 +455,13 @@ class RfqOffers extends MyAppModel
     public static function isBought(int $acceptedOfferId): bool
     {
         $srch = OrderProduct::getSearchObject();
+        $srch->doNotCalculateRecords();
         $srch->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'opayment_order_id = op_order_id', 'opay');
         $srch->addCondition('opayment_id', 'IS NOT', 'mysql_func_NULL', 'AND', true);
         $srch->addCondition('opayment_txn_status', '=', Orders::ORDER_PAYMENT_PAID);
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
         $srch->addCondition('op_offer_id', '=', $acceptedOfferId);
         $srch->addFld('opayment_order_id');
+        $srch->setPageSize(1);
         $result = FatApp::getDb()->fetch($srch->getResultSet());
         return (is_array($result) && !empty($result));
     }

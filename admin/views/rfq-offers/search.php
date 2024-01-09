@@ -15,7 +15,7 @@ if (!isset($tbody)) {
                     <div class="offer-block-head">
                         <?php
                         $extraHtml = '';
-                        if ($canEdit && RfqOffers::STATUS_OPEN == $row['offer_status'] && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) {
+                        if ($canEdit && RequestForQuote::STATUS_CLOSED != $row['rfq_status'] && RfqOffers::STATUS_OPEN == $row['offer_status'] && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) {
                             $extraHtml = '<div class="offer-block-head-action">
                                 <button class="btn-link" onClick="editRecord(' . $row['offer_id'] . ',' .  $rfqId . ')" data-bs-toggle="tooltip" title="' . Labels::getLabel('LBL_EDIT', $siteLangId) . '">' . Labels::getLabel('LBL_EDIT') . '</button>
                             </div>';
@@ -108,10 +108,12 @@ if (!isset($tbody)) {
                         $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $buyerUser, 'siteLangId' => $siteLangId, 'onclick' => $onclick, 'title' => $title], false);
                         ?>
                         <?php if (0 < $row['counter_offer_id']) { ?>
-                            <?php if ($canEdit && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) {
+                            <?php if ($canEdit && RequestForQuote::STATUS_CLOSED != $row['rfq_status'] && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) {
                                 if (RfqOffers::STATUS_OPEN == $row['counter_offer_status'] && !in_array(RfqOffers::STATUS_REJECTED, [$row['offer_status'], $row['counter_offer_status']])) { ?>
                                     <div class="offer-block-head-action">
-                                        <button class="link-underline" onClick="counter(<?php echo $row['counter_offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_COUNTER', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_REPLY'); ?></button>
+                                        <button class="link-underline" onClick="counter(<?php echo $row['counter_offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_COUNTER', $siteLangId); ?>">
+                                            <?php echo Labels::getLabel('LBL_REPLY'); ?>
+                                        </button>
                                     </div>
                             <?php }
                             }

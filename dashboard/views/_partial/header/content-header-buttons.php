@@ -84,7 +84,7 @@ if ($canEdit) { ?>
                         $icon = isset($otherButtons['icon']) ? $otherButtons['icon'] : '';
                         $label = isset($otherButtons['label']) ? $otherButtons['label'] : ''; ?>
                         <li>
-                            <a href="<?php echo $href; ?>" class="<?php echo $class; ?>" <?php echo $onclick; ?> title="<?php echo $title; ?>">
+                            <a href="<?php echo $href; ?>" class="<?php echo $class; ?>" <?php echo $onclick; ?> title="<?php echo $title; ?>" data-bs-toggle='tooltip' data-placement='top'>
                                 <?php echo $icon . $label; ?>
                             </a>
                         </li>
@@ -101,7 +101,7 @@ if ($canEdit) { ?>
                             $icon = isset($attr['icon']) ? $attr['icon'] : '';
                             $label = isset($attr['label']) ? $attr['label'] : ''; ?>
                             <li>
-                                <a href="<?php echo $href; ?>" class="<?php echo $btnClass; ?>" <?php echo $onclick; ?> title="<?php echo $title; ?>">
+                                <a href="<?php echo $href; ?>" class="<?php echo $btnClass; ?>" <?php echo $onclick; ?> title="<?php echo $title; ?>" data-bs-toggle='tooltip' data-placement='top'>
                                     <?php echo $icon . $label; ?>
                                 </a>
                             </li>

@@ -23,7 +23,7 @@ trait RfqOffersUtility
         $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_approved']);
 
         if (false == $rfqData || $rfqData['rfq_approved'] != RequestForQuote::APPROVED) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_STATUS_IS_NOT_APPROVED'), false, true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_STATUS_IS_NOT_APPROVED', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
 
@@ -54,11 +54,6 @@ trait RfqOffersUtility
             CommonHelper::redirectUserReferer();
         }
 
-        if ($this->isSeller && empty($rfqData['rfqts_selprod_id'])) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ADD_INVENTORY_TO_OFFER.', $this->siteLangId), false, true);
-            CommonHelper::redirectUserReferer();
-        }
-
         $this->set('rfqData', $rfqData);
 
         $frm = $this->getSearchForm();
@@ -70,24 +65,24 @@ trait RfqOffersUtility
 
         $otherButtons = [];
         if ($this->isSeller && in_array($rfqData['rfq_status'], [RequestForQuote::STATUS_OPEN, RequestForQuote::STATUS_OFFERED])) {
-            $otherButtons[] = [
-                'attr' => [
-                    'class' => 'btn-brand btn-icon',
-                    'onclick' => 'addNew(' . $rfqId . ')',
-                    'title' => Labels::getLabel('LBL_NEW_RECORD', $this->siteLangId)
-                ],
-                'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
+            if (!empty($rfqData['rfqts_selprod_id'])) {
+                $otherButtons[] = [
+                    'attr' => [
+                        'class' => 'btn-brand btn-icon',
+                        'onclick' => 'addNew(' . $rfqId . ')',
+                        'title' => Labels::getLabel('LBL_NEW_RECORD', $this->siteLangId)
+                    ],
+                    'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
                             <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg#add'>
                             </use>
                         </svg>",
-                'label' => Labels::getLabel('LBL_NEW', $this->siteLangId)
-            ];
-
-            if (empty($rfqData['rfqts_selprod_id'])) {
+                    'label' => Labels::getLabel('LBL_NEW', $this->siteLangId)
+                ];
+            } else {
                 $otherButtons[] = [
                     'attr' => [
                         'onclick' => 'linkInventoryForm(' . $rfqId . ')',
-                        'class' => 'btn-outline-brand btn-icon',
+                        'class' => 'btn-brand btn-icon',
                         'title' => Labels::getLabel('LBL_INVENTORY_NOT_LINKED_WITH_THIS_RFQ!!', $this->siteLangId)
                     ],
                     'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
@@ -110,6 +105,22 @@ trait RfqOffersUtility
                     </svg>",
             'label' => Labels::getLabel('LBL_VIEW', $this->siteLangId)
         ];
+
+        if ($this->isBuyer && RequestForQuote::STATUS_CLOSED != $rfqData['rfq_status']) {
+            $otherButtons[] = [
+                'attr' => [
+                    'class' => 'btn-brand btn-icon',
+                    'onclick' => 'closeRfq(' . $rfqId . ')',
+                    'title' => Labels::getLabel('LBL_MARK_RFQ_AS_CLOSED!', $this->siteLangId)
+                ],
+                'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
+                            <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg#close'>
+                            </use>
+                        </svg>",
+                'label' => Labels::getLabel('LBL_CLOSE', $this->siteLangId)
+            ];
+
+        }
         $this->set("otherButtons", $otherButtons);
         $this->set("isSeller", $this->isSeller);
         $this->set("rfqStatusArr", RequestForQuote::getStatusArr($this->siteLangId));
@@ -179,7 +190,7 @@ trait RfqOffersUtility
             array_push($counterOfferFlds, 'roc.' . $fld . ' as counter_' . $fld);
         }
 
-        $dbFlds = array_merge($flds, $counterOfferFlds, ['rlo_seller_user_id', 'ou.user_name', 'ouc.credential_email', 'ou.user_updated_on', 'ou.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'ous.shop_id', 'rlo_primary_offer_id', 'rfq_quantity_unit', 'rfq_added_on', 'rlo_shipping_charges', 'rlo_accepted_offer_id', 'rlo_selprod_id']);
+        $dbFlds = array_merge($flds, $counterOfferFlds, ['rlo_seller_user_id', 'ou.user_name', 'ouc.credential_email', 'ou.user_updated_on', 'ou.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'ous.shop_id', 'rlo_primary_offer_id', 'rfq_status', 'rfq_quantity_unit', 'rfq_added_on', 'rlo_shipping_charges', 'rlo_accepted_offer_id', 'rlo_selprod_id']);
         $srch->addMultipleFields($dbFlds);
 
         $sellerId = FatApp::getPostedData('offer_user_id', FatUtility::VAR_INT, 0);
@@ -256,7 +267,7 @@ trait RfqOffersUtility
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $rfqOfferData = (array)RfqOffers::getAttributesById($recordId, RfqOffers::FIELDS);
         if (0 < $recordId && $rfqOfferData['offer_status'] != RfqOffers::STATUS_OPEN) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_INVALID_OFFER'), true);
+            LibHelper::exitWithError(Labels::getLabel('LBL_INVALID_OFFER', $this->siteLangId), true);
         }
 
         $frm = $this->getForm();
@@ -321,10 +332,10 @@ trait RfqOffersUtility
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
 
-        /* $rfqStatus = RequestForQuote::getAttributesById($post['offer_rfq_id'], 'rfq_status');
-        if (false === $rfqStatus || false === in_array($rfqStatus, [RequestForQuote::STATUS_OPEN, RequestForQuote::STATUS_OFFERED])) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
-        } */
+        $rfqStatus = RequestForQuote::getAttributesById($post['offer_rfq_id'], 'rfq_status');
+        if ($this->isSeller && (false === $rfqStatus || $rfqStatus == RequestForQuote::STATUS_CLOSED)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_IS_CLOSED_BY_BUYER', $this->siteLangId), true);
+        }
 
         $counterOfferId = FatApp::getPostedData('offer_counter_offer_id', FatUtility::VAR_INT, 0);
         if (1 > $post['offer_id'] && 0 < $counterOfferId) {
@@ -334,11 +345,17 @@ trait RfqOffersUtility
         }
 
         $recordId = FatApp::getPostedData('offer_id', FatUtility::VAR_INT, 0);
-
+        
+        $selprodId = 0;
         if (1 > $counterOfferId && $this->isSeller) {
+            $selprodId = RequestForQuote::getSellerProductId($post['offer_rfq_id'], UserAuthentication::getLoggedUserId());
+            if (1 > $selprodId) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_LINK_YOUR_INVENTORY_FIRST.', $this->siteLangId));
+            }
+
             $qty = FatApp::getPostedData('offer_quantity', FatUtility::VAR_INT, 0);
             if (1 > $recordId && false == RfqOffers::validateOfferRequest($post['offer_rfq_id'], $qty, UserAuthentication::getLoggedUserId())) {
-                LibHelper::exitWithError(Labels::getLabel('ERR_DUPLICATE_OFFER._YOU_CANNOT_PLACE_OFFER_WITH_THIS_QTY.'));
+                LibHelper::exitWithError(Labels::getLabel('ERR_DUPLICATE_OFFER._YOU_CANNOT_PLACE_OFFER_WITH_THIS_QTY.', $this->siteLangId));
             }
         }
 
@@ -383,7 +400,6 @@ trait RfqOffersUtility
             $data['rlo_seller_user_id'] = UserAuthentication::getLoggedUserId();
 
             if (1 > $counterOfferId) {
-                $selprodId = RequestForQuote::getSellerProductId($post['offer_rfq_id'], UserAuthentication::getLoggedUserId());
                 $data['rlo_selprod_id'] = $selprodId;
             }
         } else {
@@ -453,14 +469,14 @@ trait RfqOffersUtility
             if (1 > $counterOfferId) {
                 if (false === $emailHandler->sendNewRfqOfferNotification($this->siteLangId, $offerData)) {
                     $msg = $emailHandler->getError();
-                    $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.') : $msg;
+                    $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.', $this->siteLangId) : $msg;
                     LibHelper::exitWithError($msg, true);
                 }
             } else {
                 $offerData['isSeller'] = $this->isSeller;
                 if (false === $emailHandler->sendCounterRfqOfferNotification($this->siteLangId, $offerData)) {
                     $msg = $emailHandler->getError();
-                    $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.') : $msg;
+                    $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.', $this->siteLangId) : $msg;
                     LibHelper::exitWithError($msg, true);
                 }
             }
@@ -524,18 +540,18 @@ trait RfqOffersUtility
         $srch->addMultipleFields(['offer_id', 'offer_user_type', 'offer_primary_offer_id', 'rlo_status', 'offer_expired_on']);
         $offerData = (array)FatApp::getDB()->fetch($srch->getResultSet());
         if (empty($offerData) || User::USER_TYPE_BUYER == $offerData['offer_user_type']) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID'), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
 
         $expiredOn = $offerData['offer_expired_on'] != '0000-00-00 00:00:00' ? strtotime($offerData['offer_expired_on']) : '';
         if (!empty($expiredOn) && $expiredOn < strtotime(date('Y-m-d'))) {
-            $msg = Labels::getLabel('LBL_OFFER_EXPIRED!_YOU_ARE_NOT_ALLOWED_TO_ACCEPT/REJECT_THIS_OFFER_ANYMORE.');
+            $msg = Labels::getLabel('LBL_OFFER_EXPIRED!_YOU_ARE_NOT_ALLOWED_TO_ACCEPT/REJECT_THIS_OFFER_ANYMORE.', $this->siteLangId);
             LibHelper::exitWithError($msg, true);
         }
 
         if ($status == $offerData['rlo_status']) {
             $statusArr = RfqOffers::getStatusArr($this->siteLangId);
-            $msg = CommonHelper::replaceStringData(Labels::getLabel('LBL_THIS_OFFER_HAS_BEEN_ALREADY_{STATUS}'), [
+            $msg = CommonHelper::replaceStringData(Labels::getLabel('LBL_THIS_OFFER_HAS_BEEN_ALREADY_{STATUS}', $this->siteLangId), [
                 '{STATUS}' => $statusArr[$status]
             ]);
             LibHelper::exitWithError($msg, true);
@@ -556,7 +572,7 @@ trait RfqOffersUtility
         $srch->addMultipleFields(['offer_id', 'offer_user_type']);
         $offerData = (array)FatApp::getDB()->fetch($srch->getResultSet());
         if (empty($offerData) || User::USER_TYPE_SELLER == $offerData['offer_user_type']) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID'), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
     }
 
@@ -594,7 +610,7 @@ trait RfqOffersUtility
         $emailHandler = new EmailHandler();
         if (false === $emailHandler->sendRfqOfferActionNotification($this->siteLangId, $offerData)) {
             $msg = $emailHandler->getError();
-            $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.') : $msg;
+            $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.', $this->siteLangId) : $msg;
             LibHelper::exitWithError($msg, true);
         }
     }
@@ -648,7 +664,7 @@ trait RfqOffersUtility
         $this->sendOfferActionNotification($recordId, $rfqId);
 
         $db->commitTransaction();
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->siteLangId));
     }
 
     public function reject(int $recordId, int $rfqId)
@@ -679,13 +695,13 @@ trait RfqOffersUtility
 
         $this->sendOfferActionNotification($recordId, $rfqId);
 
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->siteLangId));
     }
 
     public function checkout(int $selprodId, int $offerId)
     {
         if (1 > $selprodId || false === $this->isBuyer || 1 > $offerId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST'), false, true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
 
@@ -702,14 +718,14 @@ trait RfqOffersUtility
         $srch->addCondition('rlo.rlo_selprod_id', '=', 'mysql_func_' . $selprodId, 'AND', true);
         $srch->addCondition('aOfr.offer_status', '=', RfqOffers::STATUS_ACCEPTED);
         $rfqOfferData = (array)FatApp::getDb()->fetch($srch->getResultSet());
-        
+
         if (empty($rfqOfferData)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST'), false, true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
 
         if (isset($rfqOfferData['rlo_selprod_id']) && empty($rfqOfferData['rlo_selprod_id'])) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_THE_SELLER_HAS_NOT_ADDED_ANY_INVENTORY_FOR_THIS_CATALOG_YET._WE_WILL_NOTIFY_YOU_ONCE_ADDED.'), false, true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_THE_SELLER_HAS_NOT_ADDED_ANY_INVENTORY_FOR_THIS_CATALOG_YET._WE_WILL_NOTIFY_YOU_ONCE_ADDED.', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
 
@@ -736,7 +752,7 @@ trait RfqOffersUtility
 
         if (!$cartObj->add($rfqOfferData['rlo_selprod_id'], $rfqOfferData['offer_quantity'])) {
             $db->rollbackTransaction();
-            LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_ADD_ITEM_TO_THE_CART'), false, true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_ADD_ITEM_TO_THE_CART', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
 
@@ -971,7 +987,7 @@ trait RfqOffersUtility
             case 'listing':
                 $this->nodes = [
                     [
-                        'title' => ($this->isSeller) ? Labels::getLabel("LBL_SELLER_REQUEST_FOR_QUOTES") : Labels::getLabel("LBL_REQUEST_FOR_QUOTES"),
+                        'title' => ($this->isSeller) ? Labels::getLabel("LBL_SELLER_REQUEST_FOR_QUOTES", $this->siteLangId) : Labels::getLabel("LBL_REQUEST_FOR_QUOTES", $this->siteLangId),
                         'href' => UrlHelper::generateUrl(($this->isSeller ? 'Seller' : '') . 'RequestForQuotes')
                     ],
                     ['title' => Labels::getLabel('LBL_OFFERS', $this->siteLangId)]

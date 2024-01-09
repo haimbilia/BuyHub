@@ -257,6 +257,19 @@
             }
         });
     }
+    
+    closeRfq = function (rfqId) {
+        if (!confirm(langLbl.areYouSure)) {
+            return false;
+        }
+        fcom.updateWithAjax(fcom.makeUrl('RequestForQuotes', "closeRfq", [rfqId]), '', function (t) {
+            fcom.closeProcessing();
+            fcom.removeLoader();
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        });
+    }
 })();
 
 $(document).ready(function () {
