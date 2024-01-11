@@ -3210,7 +3210,10 @@ class EmailHandler extends FatModel
         $tpl->set('siteLangId', $langId);
         $rfqTableFormat = $tpl->render(false, false, '_partial/emails/request-for-quote.php', true);
 
-        $vars = array('{rfq_table}' => $rfqTableFormat);
+        $vars = array(
+            '{rfq_table}' => $rfqTableFormat,
+            '{rfq_number}' => $data['rfq_number']
+        );
 
         if (!$this->sendMailToAdminAndAdditionalEmails('NEW_RFQ', $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId)) {
             return false;
@@ -3236,6 +3239,7 @@ class EmailHandler extends FatModel
             '{user_name}' => $data['user_name'],
             '{rfq_table}' => $rfqTableFormat,
             '{approval_status}' => $approvalStatus,
+            '{rfq_number}' => $data['rfq_number']
         );
 
         if (!empty($data['credential_email'])) {
@@ -3269,6 +3273,7 @@ class EmailHandler extends FatModel
             '{shop_name}' => $data['shop_name'],
             '{user_name}' => $data['buyer_user_name'],
             '{offer_table}' => $offerTableFormat,
+            '{rfq_number}' => $data['rfq_number']
         );
         if (!empty($data['buyer_credential_email'])) {
             if (!(new FatMailer($langId, 'NEW_RFQ_OFFER'))
@@ -3310,6 +3315,7 @@ class EmailHandler extends FatModel
             '{shop_name}' => $data['shop_name'],
             '{user_name}' => $data['buyer_user_name'],
             '{offer_table}' => $offerTableFormat,
+            '{rfq_number}' => $data['rfq_number']
         );
 
         if ($data['isSeller']) {
@@ -3360,6 +3366,7 @@ class EmailHandler extends FatModel
             '{user_name}' => $data['user_name'],
             '{offer_status}' => $offerStatusArr[$data['offer_status']],
             '{offer_table}' => $offerTableFormat,
+            '{rfq_number}' => $data['rfq_number']
         );
 
         if ($data['isSeller']) {
@@ -3400,6 +3407,7 @@ class EmailHandler extends FatModel
         $vars = array(
             '{user_name}' => $data['user_name'],
             '{rfq_table}' => $rfqTableFormat,
+            '{rfq_number}' => $data['rfq_number']
         );
 
         if (!empty($data['credential_email'])) {
