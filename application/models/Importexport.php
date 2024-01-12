@@ -908,16 +908,15 @@ class Importexport extends ImportexportCommon
                             CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
                             continue;
                         }
+                        /* Sub-Categories have products[ */
+                        if (true === $prodCateObj->haveProducts(false)) {
+                            $errInSheet = true;
+                            $errMsg = Labels::getLabel("ERR_PRODUCTS_ARE_ASSOCIATED_WITH_ITS_CATEGORY/SUB-CATEGORIES_SO_WE_ARE_NOT_ABLE_TO_DELETE_THIS_CATEGORY.", $langId);
+                            CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
+                            continue;
+                        }
+                        /* ] */
                     }
-
-                    /* Sub-Categories have products[ */
-                    if (true === $prodCateObj->haveProducts(false)) {
-                        $errInSheet = true;
-                        $errMsg = Labels::getLabel("ERR_PRODUCTS_ARE_ASSOCIATED_WITH_ITS_CATEGORY/SUB-CATEGORIES_SO_WE_ARE_NOT_ABLE_TO_DELETE_THIS_CATEGORY.", $langId);
-                        CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, $errMsg));
-                        continue;
-                    }
-                    /* ] */
 
                     if (!$this->isDefaultSheetData($langId)) {
                         unset($prodCatDataArr['prodcat_parent']);

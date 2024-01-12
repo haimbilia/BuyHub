@@ -66,24 +66,24 @@ if (isset($order)) {
         <?php } ?>
         <?php if (!empty($productTitle)) { ?>
             <div class="product-profile__title prodNameJs">
-                <a title="<?php echo $productTitle; ?>" href="<?php echo $prodUrl; ?>">
-                    <?php echo $productTitle . '<br>'; ?>
+                <a title="<?php echo CommonHelper::renderHtml($productTitle, true); ?>" href="<?php echo $prodUrl; ?>">
+                    <?php echo CommonHelper::renderHtml($productTitle, true) . '<br>'; ?>
                 </a>
             </div>
             <div class="product-profile__sub_title prodNameJs">
-                <?php echo $productName; ?>
+                <?php echo CommonHelper::renderHtml($productName, true); ?>
             </div>
         <?php } else { ?>
             <div class="product-profile__title prodNameJs">
-                <a title="<?php echo $productName; ?>" href="<?php echo $prodUrl; ?>">
-                    <?php echo $productName; ?>
+                <a title="<?php echo CommonHelper::renderHtml($productName, true); ?>" href="<?php echo $prodUrl; ?>">
+                    <?php echo CommonHelper::renderHtml($productName, true); ?>
                 </a>
             </div>
         <?php } ?>
         <?php if (!empty($brandName)) { ?>
             <div class="product-profile__brand">
                 <?php echo Labels::getLabel('Lbl_Brand', $siteLangId) ?>:
-                <?php echo $brandName; ?>
+                <?php echo CommonHelper::renderHtml($brandName, true); ?>
             </div>
         <?php } ?>
         <?php if (!empty($options)) { ?>

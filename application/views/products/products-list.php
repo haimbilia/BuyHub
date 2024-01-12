@@ -47,7 +47,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                             <?php } ?>
                             <div class="products-img">
                                 <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
-                                <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])) ?>">
+                                <a title="<?php echo CommonHelper::renderHtml($product['selprod_title'], true); ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])) ?>">
                                     <?php
                                     $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
                                     $pictureAttr = [
@@ -73,10 +73,10 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                         </div>
                         <div class="products-foot">
                             <div class="products-category">
-                                <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id'])); ?>"><?php echo html_entity_decode($product['prodcat_name'], ENT_QUOTES, 'UTF-8'); ?>
+                                <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id'])); ?>"><?php echo CommonHelper::renderHtml($product['prodcat_name'], true); ?>
                                 </a>
                             </div>
-                            <div class="products-title"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
+                            <div class="products-title"><a title="<?php echo CommonHelper::renderHtml($product['selprod_title'], true); ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr(CommonHelper::renderHtml($product['selprod_title'], true), 0, 50) . "..." : CommonHelper::renderHtml($product['selprod_title'], true); ?>
                                 </a></div>
                             <?php $this->includeTemplate('_partial/collection-product-price.php', array('product' => $product, 'siteLangId' => $siteLangId), false); ?>
                         </div>
