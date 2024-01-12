@@ -730,7 +730,6 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                 $('.optionForm-js .optionname--js, .optionForm-js .select2').hide();
 
                 var optionNameHtm = '<input disabled="disabled" name="optname" class="optionName-js" value="' + optionName + '">';
-                console.log(optionNameHtm);
                 $('.optionForm-js .optionname--js').parent().append(optionNameHtm);
                 tr.remove();
             }
