@@ -600,7 +600,7 @@ class CustomController extends MyAppController
         $orderInfo['orderProducts'] = $orderObj->getChildOrders(['order_id' => $orderInfo['order_id']], $orderInfo['order_type'], $orderInfo['order_language_id'], true);
 
         if (UserAuthentication::isGuestUserLogged()) {
-            unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]);
+            // unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]);
         }
 
         if (UserAuthentication::isUserLogged()) {
