@@ -69,7 +69,7 @@ trait RequestForQuotesUtility
         }
         $srch->joinBuyer();
         $srch->addMultipleFields([
-            'rfq_id', 'rfq_number', 'rfq_title', 'rfq_user_id', 'rfq_type', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_status', 'rfq_approved', 'rfq_added_on', 'rfq_delivery_date', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', '0 as totalOffers', '0 as rejectedOffers', '0 as acceptedOffers'
+            'rfq_id', 'rfq_selprod_id', 'rfq_number', 'rfq_title', 'rfq_user_id', 'rfq_type', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_status', 'rfq_approved', 'rfq_added_on', 'rfq_delivery_date', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', '0 as totalOffers', '0 as rejectedOffers', '0 as acceptedOffers'
         ]);
 
         $keyword = $post['keyword'];

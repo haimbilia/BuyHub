@@ -9,7 +9,11 @@
         <ul class="list-stats list-stats-double">
             <li class="list-stats-item list-stats-item-full">
                 <span class="label"><?php echo Labels::getLabel('LBL_PRODUCT', $siteLangId); ?>:</span>
-                <span class="value"><?php echo $rfqData['rfq_title']; ?></span>
+                <span class="value">
+                    <a href="<?php echo UrlHelper::generateUrl('Products', 'view', array($rfqData['rfq_selprod_id']), CONF_WEBROOT_FRONTEND); ?>">
+                        <?php echo $rfqData['rfq_title']; ?>
+                    </a>
+                </span>
             </li>
             <li class="list-stats-item">
                 <span class="label"><?php echo Labels::getLabel('LBL_REQUESTED_QUANTITY', $siteLangId); ?>:</span>

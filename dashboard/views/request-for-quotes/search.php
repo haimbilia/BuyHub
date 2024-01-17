@@ -20,8 +20,8 @@
                         break;
                     case 'rfq_title':
                         $htm = '<div>
-                                    <span>' . Labels::getLabel('LBL_TITLE') . ': ' . $row[$key] . '</span>
-                                    <span>' . Labels::getLabel('LBL_QTY') . ': ' . $row['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($siteLangId, $row['rfq_quantity_unit'], true) . '</span>
+                                    <span class="product-profile__title"><a href="' . UrlHelper::generateUrl('Products', 'view', array($row['rfq_selprod_id']), CONF_WEBROOT_FRONTEND) . '">' . Labels::getLabel('LBL_TITLE') . ': ' . $row[$key] . '</a></span>
+                                    <div>' . Labels::getLabel('LBL_QTY') . ': ' . $row['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($siteLangId, $row['rfq_quantity_unit'], true) . '</div>
                                 </div>';
                         $td->appendElement('plaintext', array(), $htm, true);
                         break;
