@@ -69,13 +69,24 @@ class AddressesController extends LoggedUserController
             $this->markAsDefault($addr_id);
         }
 
+        $getHtml = FatApp::getPostedData('getHtml', FatUtility::VAR_INT, 0);
+        if (0 < $getHtml && false === MOBILE_APP_API_CALL) {
+            $address = new Address();
+            $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
+            $this->set('addresses', $addresses);
+
+            $defaultAddress = current($addresses);
+            $this->set('defaultAddress', $defaultAddress);
+            $this->set('html', $this->_template->render(false, false, 'addresses/address-element.php', true));
+        }
+
         $this->set('msg', Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->set('data', array('addr_id' => $addr_id));
             $this->_template->render();
         }
         $this->set('addr_id', $addr_id);
-        $this->_template->render(false, false, 'json-success.php');
+        $this->_template->render(false, false, 'json-success.php', false, false);
     }
 
     public function setDefault()

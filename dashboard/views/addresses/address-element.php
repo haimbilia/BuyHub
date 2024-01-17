@@ -1,0 +1,1 @@
+<?php require CONF_FRONT_END_THEME_PATH . 'addresses/address-element.php';
