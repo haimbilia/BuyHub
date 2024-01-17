@@ -68,8 +68,6 @@ $vtype = $postedData['vtype'] ?? false;
                                 </a>
                             </div>
                             <?php $this->includeTemplate('_partial/collection-product-price.php', array('product' => $product, 'siteLangId' => $siteLangId), false); ?>
-
-
                         </div>
                     </div>
                 </div>

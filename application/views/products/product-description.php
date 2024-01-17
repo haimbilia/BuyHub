@@ -106,26 +106,32 @@
             $qtyFieldName =  $qtyField->getCaption();
             if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
                 <div class="options-block">
-                    <div class="options-block-head">
-                        <h6 class="h6"><?php echo $qtyFieldName; ?></h6>
-                        <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
-                            <button class="decrease decrease-js disabled" type="button">
-                                <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                    </use>
-                                </svg>
-                            </button>
-                            <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                    <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+                        <div class="options-block-head">
+                            <h6 class="h6"><?php echo $qtyFieldName; ?></h6>
+                            <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
+                                <button class="decrease decrease-js disabled" type="button">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                        </use>
+                                    </svg>
+                                </button>
+                                <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
+                                    <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                                </div>
+                                <button class="increase increase-js <?php echo $product['selprod_stock'] <= $product['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </button>
                             </div>
-                            <button class="increase increase-js <?php echo $product['selprod_stock'] <= $product['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
-                                <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                    </use>
-                                </svg>
-                            </button>
                         </div>
-                    </div>
+                    <?php } else { ?>
+                        <span class="d-none">
+                            <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                        </span>
+                    <?php } ?>
                 </div>
                 <div class="buy-action">
                     <?php
@@ -143,8 +149,11 @@
                                 </use>
                             </svg>
                         </a>
-                    <?php } else {
-                        if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
+                        <?php } else {
+                        if (
+                            strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d')) &&
+                            1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)
+                        ) {
                             echo $frmBuyProduct->getFieldHtml('btnAddToCart');
                         }
                         echo $frmBuyProduct->getFieldHtml('selprod_id');
@@ -190,7 +199,7 @@
     <?php } ?>
 
     <?php
-    if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>
+    if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
         <div class="side-blocks wholesale-slider">
             <h5 class="h5"><?php echo Labels::getLabel('LBL_WHOLESALE_PRICE_(PIECE)') ?></h5>
             <ul class="wholesale-slider">

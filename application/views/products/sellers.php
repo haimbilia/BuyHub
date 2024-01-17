@@ -83,7 +83,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                     <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
                                         <span class="text-danger"><?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?></span>
                                         <?php } else {
-                                        if (date('Y-m-d', strtotime($moresellers['selprod_available_from'])) <= FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d')) { ?>
+                                        if (date('Y-m-d', strtotime($moresellers['selprod_available_from'])) <= FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d') && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
                                             <button class="btn btn-outline-black btn-sm btnAddToCart--js" type="button" data-id="<?php echo $moresellers['selprod_id']; ?>" data-min-qty="<?php echo $moresellers['selprod_min_order_qty']; ?>">
                                                 <?php echo Labels::getLabel('LBL_Add_To_Cart', $siteLangId); ?>
                                             </button>

@@ -20,7 +20,7 @@ foreach ($sellers as $key => $sellerDetail) {
         <div class="sold-price"><?php echo CommonHelper::displayMoneyFormat($sellerDetail['theprice']); ?></div>
         <div class="sold-by">
             <span class="sold-by-txt"><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?></span>
-            <a class="sold-by-name" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($sellerDetail['shop_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
+            <a class="sold-by-name" href="<?php echo UrlHelper::generateFullUrl('Products', 'View', array($sellerDetail['selprod_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
                 <?php echo $sellerDetail['shop_name']; ?>
             </a>
         </div>
@@ -50,7 +50,7 @@ foreach ($sellers as $key => $sellerDetail) {
                 </div>
             </div>
         <?php }
-        if (false === $isActive) { ?>
+        if (false === $isActive && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
             <button class="btn btn-outline-black btn-sm btnAddToCart--js" data-id='<?php echo $sellerDetail['selprod_id']; ?>' data-min-qty="<?php echo $sellerDetail['selprod_min_order_qty']; ?>" type="button"><?php echo Labels::getLabel('BTN_ADD_TO_CART', $siteLangId); ?></button>
         <?php } ?>
     </li>

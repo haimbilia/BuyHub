@@ -47,12 +47,9 @@
         </div>
     </div>
     <?php $selprod_condition = true;  ?>
-    <div class="products-foot">
-        <div class="products-price">
-            <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true)); ?></span>
-            <?php if ($product['selprod_price'] > $product['theprice']) { ?>
-                <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'], true, false, true, false, false, true)); ?></del>
-            <?php } ?>
+    <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+        <div class="products-foot">
+            <?php require(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
         </div>
-    </div>
+    <?php } ?>
 </div>

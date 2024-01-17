@@ -68,17 +68,19 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                 <div class="product-profile">
                     <div class="product-profile-data">
                         <a class="title" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
-                        <div class="products-price">
-                            <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?></span>
-                            <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) { ?>
-                                <div class="products-price-off">(<?php echo Labels::getLabel('LBL_WITHOUT_TAXES', $siteLangId); ?>)</div>
-                            <?php } ?>
-                            <?php
-                            if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                                <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'])); ?></del>
-                                <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
-                            <?php } ?>
-                        </div>
+                        <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+                            <div class="products-price">
+                                <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?></span>
+                                <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) { ?>
+                                    <div class="products-price-off">(<?php echo Labels::getLabel('LBL_WITHOUT_TAXES', $siteLangId); ?>)</div>
+                                <?php } ?>
+                                <?php
+                                if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
+                                    <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'])); ?></del>
+                                    <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
+                                <?php } ?>
+                            </div>
+                        <?php } ?>
                         <div class="options">
                             <?php if (isset($product['options']) && count($product['options'])) {
                                 foreach ($product['options'] as $key => $option) {
