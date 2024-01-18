@@ -573,7 +573,12 @@ class RequestForQuote extends MyAppModel
         $srch->joinSellers();
         $srch->joinShops();
         $srch->addGroupBy('selprod_user_id');
-        $srch->addCondition('shop.shop_rfq_enabled', '=', applicationConstants::YES);
+
+        $moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
+        if (RequestForQuote::TYPE_INDIVIDUAL == $moduleType) {
+            $srch->addCondition('shop.shop_rfq_enabled', '=', applicationConstants::YES);
+        }
+        
         $sql = 'INSERT INTO ' . self::DB_RFQ_TO_SELLERS . ' ' . $srch->getQuery();
         FatApp::getDb()->query($sql);
         return true;
