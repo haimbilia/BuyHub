@@ -87,8 +87,9 @@ trait RequestForQuotesUtility
             if (RequestForQuote::STATUS_OPEN == $status) {
                 $srch->addCondition('rfq_status', '=', $status);
             } else {
-                /* $rfqOfferStatuses = RequestForQuote::getOfferStatusByRfqStatus($status);
-                $srch->addCondition('offer_status', 'IN', $rfqOfferStatuses); */
+                $rfqOfferStatuses = RequestForQuote::getOfferStatusByRfqStatus($status);
+                $srch->joinOffers();
+                $srch->addCondition('offer_status', 'IN', $rfqOfferStatuses);
             }
         }
 

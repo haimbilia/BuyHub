@@ -578,6 +578,26 @@ class RequestForQuote extends MyAppModel
         return true;
     }
 
+    public static function getOfferStatusByRfqStatus(int $rfqStatus): array
+    {
+        $arr = [
+            self::STATUS_OFFERED => [
+                RfqOffers::STATUS_OPEN
+            ],
+            self::STATUS_ACCEPTED => [
+                RfqOffers::STATUS_ACCEPTED
+            ],
+            self::STATUS_CLOSED => [
+                RfqOffers::STATUS_REJECTED
+            ],
+            self::STATUS_COMPLETED => [
+                RfqOffers::STATUS_ACCEPTED
+            ],
+        ];
+
+        return $arr[$rfqStatus] ?? [];
+    }
+
     public static function isEnabled(array $prodArr = []): bool
     {
         return (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0));
