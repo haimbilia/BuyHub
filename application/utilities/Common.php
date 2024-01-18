@@ -11,25 +11,11 @@ class Common
         $cartObj = new Cart();
         $cartObj->invalidateCheckoutType();
         $siteLangId = CommonHelper::getLangId();
-
-        /*
-        $loggedUserId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $loggedUserId = UserAuthentication::getLoggedUserId();
-        }       
-
-        $wislistPSrchObj = new UserWishListProductSearch();
-        $wislistPSrchObj->joinWishLists();
-        $wislistPSrchObj->doNotLimitRecords();
-        $wislistPSrchObj->addCondition('uwlist_user_id', '=', $loggedUserId);
-        $wislistPSrchObj->addGroupBy('uwlp_selprod_id');
-        $wislistPSrchObj->addMultipleFields(array('uwlp_uwlist_id'));
-        $rs = $wislistPSrchObj->getResultSet();
-        $totalWishListItems = $wislistPSrchObj->recordCount();
-        */
+        
         if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
             $cartObj->excludeTax();
         }
+        $cartObj->excludeOfferCheckoutItems();
         $productsArr = $cartObj->getProducts($siteLangId);
         $cartSummary = $cartObj->getCartFinancialSummary($siteLangId);
 
@@ -41,7 +27,6 @@ class Common
         $template->set('siteLangId', $siteLangId);
         $template->set('products', $productsArr);
         $template->set('cartSummary', $cartSummary);
-        //$template->set('totalWishListItems', $totalWishListItems);
         $template->set('totalCartItems', $cartObj->countProducts());
     }
 

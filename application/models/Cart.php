@@ -95,6 +95,7 @@ class Cart extends FatModel
         if (!isset($this->SYSTEM_ARR['shopping_cart']) || !is_array($this->SYSTEM_ARR['shopping_cart'])) {
             $this->SYSTEM_ARR['shopping_cart'] = array();
         }
+
         $this->cartCache = true;
         $this->pageType = $pageType;
         $this->discounts = [];
@@ -1777,6 +1778,10 @@ class Cart extends FatModel
     /* to keep track of temporary hold the product stock[ */
     public function updateTempStockHold($selprod_id, $quantity = 0, $prodgroup_id = 0)
     {
+        if (isset($_SESSION['offer_checkout']['selprod_id']) && $_SESSION['offer_checkout']['selprod_id'] == $selprod_id) {
+            $quantity = 0;
+        }
+
         $selprod_id = FatUtility::int($selprod_id);
         $quantity = FatUtility::int($quantity);
         $prodgroup_id = FatUtility::int($prodgroup_id);
@@ -2244,5 +2249,18 @@ class Cart extends FatModel
         $key = static::CART_KEY_PREFIX_PRODUCT . $selprod_id;
         $key = base64_encode(json_encode($key));
         return $this->SYSTEM_ARR['cart'][$key] ?? 0;
+    }
+
+    public function excludeOfferCheckoutItems()
+    {
+        /* Excluding offer checkout items from cart listing. */
+        if (isset($_SESSION['offer_checkout'])) {
+            $offerSelprodId = $_SESSION['offer_checkout']['selprod_id'] ?? 0;
+            if (0 < $offerSelprodId) {
+                $key = static::CART_KEY_PREFIX_PRODUCT . $offerSelprodId;
+                $key = base64_encode(json_encode($key));
+                unset($this->SYSTEM_ARR['cart'][$key]);
+            }
+        }
     }
 }
