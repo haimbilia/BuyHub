@@ -2444,10 +2444,11 @@ class SellerController extends SellerBaseController
 
         $shopObj = new Shop($shop_id);
         $shopObj->assignValues($post);
-
+        
         if (!$shopObj->save()) {
             FatUtility::dieJsonError($shopObj->getError());
         }
+
         $shop_id = $shopObj->getMainTableRecordId();
 
         $post['ss_shop_id'] = $shop_id;
@@ -3493,6 +3494,15 @@ class SellerController extends SellerBaseController
             HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_SELLER_SHIPPING.", $this->siteLangId));
             $fld->developerTags['noCaptionTag'] = false;
         }
+
+        if (
+            0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 
+            RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0)
+        ) {
+            $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_RFQ_MODULE", $this->siteLangId), 'shop_rfq_enabled', 1, array(), false, 0);
+            HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_MAKES_PRODUCTS_AVAILABLE_FOR_RFQ.', $this->siteLangId));
+        }
+
         $fld = $frm->addTextarea(Labels::getLabel("FRM_GOVERNMENT_INFORMATION_ON_INVOICES", $this->siteLangId), 'shop_invoice_codes');
         $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_INFORMATION_MANDATED_BY_THE_GOVERNMENT_ON_INVOICES.", $this->siteLangId) . "</span>";
 

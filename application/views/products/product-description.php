@@ -94,7 +94,7 @@
 
     <?php
     $acceptedOfferId = 0;
-    if (RequestForQuote::isEnabled($product)) {
+    if (RequestForQuote::isEnabled($product['shop_rfq_enabled'])) {
         $acceptedOffers = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['acceptedOffers'] ?? [];
         $acceptedOfferId = $acceptedOffers[$product['selprod_id']]['accepted_offer_id'] ?? 0;
     }
@@ -158,7 +158,7 @@
                             </svg>
                         </a>
                         <?php } else {
-                        if (RequestForQuote::isEnabled($product)) { ?>
+                        if (RequestForQuote::isEnabled($product['shop_rfq_enabled'])) { ?>
                             <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
                                 <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
                             </button>
@@ -171,7 +171,7 @@
     } else { ?>
         <div class="buy-action">
             <?php
-            if (!RequestForQuote::isEnabled($product)) { ?>
+            if (!RequestForQuote::isEnabled($product['shop_rfq_enabled'])) { ?>
                 <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
                     <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
                 </button>
@@ -190,7 +190,7 @@
                 </a>
                 <?php } else {
                 echo $frmBuyProduct->getFieldHtml('selprod_id');
-                if (RequestForQuote::isEnabled($product)) { ?>
+                if (RequestForQuote::isEnabled($product['shop_rfq_enabled'])) { ?>
                     <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
                         <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
                     </button>

@@ -5,6 +5,7 @@ if (!isset($tbody)) {
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
 $serialNo = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
+$moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
 foreach ($arrListing as $sn => $row) {
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
@@ -108,18 +109,20 @@ foreach ($arrListing as $sn => $row) {
                         if (1 > $row['acceptedOffers']) {
                             $data['dropdownButtons']['deleteButton'] = [];
                         }
-                        $data['dropdownButtons']['otherButtons'][] = [
-                            'attr' => [
-                                'href' => 'javascript:void(0)',
-                                'title' => Labels::getLabel('LBL_ASSIGN_SELLER', $siteLangId),
-                                'onclick' => "assignSellerForm(" . $row['rfq_id'] . ")"
-                            ],
-                            'label' => '<i class="icn"><svg class="svg" width="18" height="18">
+                        if (RequestForQuote::TYPE_INDIVIDUAL != $moduleType) {
+                            $data['dropdownButtons']['otherButtons'][] = [
+                                'attr' => [
+                                    'href' => 'javascript:void(0)',
+                                    'title' => Labels::getLabel('LBL_ASSIGN_SELLER', $siteLangId),
+                                    'onclick' => "assignSellerForm(" . $row['rfq_id'] . ")"
+                                ],
+                                'label' => '<i class="icn"><svg class="svg" width="18" height="18">
                                             <use
                                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#group-add">
                                             </use>
                                         </svg></i>' . Labels::getLabel('LBL_ASSIGN_SELLER', $siteLangId),
-                        ];
+                            ];
+                        }
                     }
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);

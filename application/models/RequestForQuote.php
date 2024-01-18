@@ -573,6 +573,7 @@ class RequestForQuote extends MyAppModel
         $srch->joinSellers();
         $srch->joinShops();
         $srch->addGroupBy('selprod_user_id');
+        $srch->addCondition('shop.shop_rfq_enabled', '=', applicationConstants::YES);
         $sql = 'INSERT INTO ' . self::DB_RFQ_TO_SELLERS . ' ' . $srch->getQuery();
         FatApp::getDb()->query($sql);
         return true;
@@ -598,8 +599,16 @@ class RequestForQuote extends MyAppModel
         return $arr[$rfqStatus] ?? [];
     }
 
-    public static function isEnabled(array $prodArr = []): bool
+    public static function isEnabled(int $shopRfqEnabled = 0): bool
     {
-        return (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0));
+        if (1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+            return false;
+        }
+
+        $moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
+        if (RequestForQuote::TYPE_INDIVIDUAL == $moduleType && applicationConstants::NO == $shopRfqEnabled) {
+            return false;
+        }
+        return true;
     }
 }
