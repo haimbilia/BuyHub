@@ -6,7 +6,7 @@ class RequestForQuotesController extends MyAppController
     {
         parent::__construct($action);
         $this->loggedUserId = UserAuthentication::getLoggedUserId(true);
-        if (1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+        if (!RequestForQuote::isEnabled()) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 

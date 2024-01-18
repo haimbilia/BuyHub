@@ -136,7 +136,7 @@
                 <div class="buy-action">
                     <?php
                     $acceptedOfferId = 0;
-                    if (FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+                    if (RequestForQuote::isEnabled($product)) {
                         $acceptedOffers = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['acceptedOffers'] ?? [];
                         $acceptedOfferId = $acceptedOffers[$product['selprod_id']]['accepted_offer_id'] ?? 0;
                     }
@@ -157,7 +157,7 @@
                             echo $frmBuyProduct->getFieldHtml('btnAddToCart');
                         }
                         echo $frmBuyProduct->getFieldHtml('selprod_id');
-                        if (FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) { ?>
+                        if (RequestForQuote::isEnabled($product)) { ?>
                             <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
                                 <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
                             </button>
@@ -165,13 +165,42 @@
                     } ?>
                 </div>
             <?php } ?>
-            </form>
-        <?php echo $frmBuyProduct->getExternalJs();
+        <?php echo '</form>' . $frmBuyProduct->getExternalJs();
         }
     } else { ?>
-        <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
-            <?php echo Labels::getLabel('LBL_Sold_Out', $siteLangId); ?>
-        </button>
+        <div class="buy-action">
+            <?php $acceptedOfferId = 0;
+            if (RequestForQuote::isEnabled($product)) {
+                $acceptedOffers = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['acceptedOffers'] ?? [];
+                $acceptedOfferId = $acceptedOffers[$product['selprod_id']]['accepted_offer_id'] ?? 0; ?>
+                <div class="divider mt-4"></div>
+            <?php } else { ?>
+                <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
+                    <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
+                </button>
+            <?php
+            }
+
+            if (0 < $acceptedOfferId) { ?>
+                <a class="btn btn-brand btn-block btn-rfq" href="<?php echo UrlHelper::generateUrl('RfqOffers', 'checkout', [$product['selprod_id'], $acceptedOfferId], CONF_WEBROOT_DASHBOARD); ?>" title="<?php echo Labels::getLabel('BTN_BUY_NOW'); ?>">
+                    <?php echo Labels::getLabel('BTN_BUY_NOW'); ?>
+                    <svg class="svg" width="20" height="20">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/procurenet/sprite.svg#icon-arrow-tr">
+                        </use>
+                    </svg>
+                </a>
+                <?php } else {
+                echo $frmBuyProduct->getFieldHtml('selprod_id');
+                if (RequestForQuote::isEnabled($product)) { ?>
+                    <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
+                        <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
+                    </button>
+                    <span class="d-none">
+                        <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                    </span>
+            <?php }
+            } ?>
+        </div>
     <?php }
 
     if (strtotime($product['selprod_available_from']) > strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>

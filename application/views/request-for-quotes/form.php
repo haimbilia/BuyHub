@@ -59,85 +59,75 @@ if (!$isUserLogged) {
     ?>
     <div class="request-quote">
         <?php if (!$isUserLogged) { ?>
-        <div class="request-quote__body">
-            <div class="g-checkout-form">
-                <h6 class="h6">
-                    <strong>
-                        <?php echo Labels::getLabel('LBL_Please_Fill_In_The_Details_To_Proceed_With_RFQ_Guest_Checkout.'); ?>
-                    </strong>
-                </h6>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <?php
-                            echo $frm->getFieldHtml('user_name');
-                            ?>
+            <div class="request-quote__body">
+                <div class="g-checkout-form">
+                    <h6 class="h6">
+                        <strong>
+                            <?php echo Labels::getLabel('LBL_PLEASE_FILL_IN_THE_DETAILS_TO_PROCEED_WITH_RFQ_GUEST_CHECKOUT.'); ?>
+                        </strong>
+                    </h6>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <?php echo $frm->getFieldHtml('user_name'); ?>
+                        </div>
+                        <div class="col-lg-6">
+                            <?php echo $frm->getFieldHtml('user_email'); ?>
+                        </div>
+                        <div class="col-lg-6">
+                            <?php echo $frm->getFieldHtml('user_phone'); ?>
+                        </div>
                     </div>
-                    <div class="col-lg-6">
-                        <?php
-                            echo $frm->getFieldHtml('user_email');
-                            ?>
-                    </div>
-                    <div class="col-lg-6">
-                        <?php
-                            echo $frm->getFieldHtml('user_phone');
-                            ?>
-                    </div>
-                </div>
 
+                </div>
             </div>
-        </div>
         <?php
         } ?>
         <div class="request-quote__head">
             <div class="quote">
                 <?php if (1 > FatApp::getConfig('CONF_HIDE_SELLER_INFO', FatUtility::VAR_INT, 0)) { ?>
-                <div class="quote-to">
-                    <span class="label"><?php echo Labels::getLabel('LBL_TO:'); ?></span>
-                    <div class="avatar">
-                        <div class="avatar-media">
-                            <?php
+                    <div class="quote-to">
+                        <span class="label"><?php echo Labels::getLabel('LBL_TO:'); ?></span>
+                        <div class="avatar">
+                            <div class="avatar-media">
+                                <?php
                                 $userImgUpdatedOn = User::getAttributesById($selprodData['shop_user_id'], 'user_updated_on');
                                 $uploadedTime = AttachedFile::setTimeParam($userImgUpdatedOn);
                                 $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_USER_PROFILE_IMAGE, $selprodData['shop_user_id']);
                                 $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($selprodData['shop_user_id'], ImageDimension::VIEW_THUMB, true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                 ?>
-                            <img src="<?php echo $profileImg; ?>" alt="<?php echo $selprodData['shop_user_name']; ?>">
+                                <img src="<?php echo $profileImg; ?>" alt="<?php echo $selprodData['shop_user_name']; ?>">
+                            </div>
+                            <div class="avatar-detail">
+                                <span class="title"><?php echo $selprodData['shop_user_name']; ?></span>
+                            </div>
                         </div>
-                        <div class="avatar-detail">
-                            <span class="title"><?php echo $selprodData['shop_user_name']; ?></span>
-                        </div>
-                    </div>
-                    <div class="quote-shop">
-
-                        <div class="shop-name"><?php echo $selprodData['shop_name']; ?></div>
-                        <?php if (0 < $shopRating || 0 < $totReviews) { ?>
-                        <div class="reviews">
-                            <?php if (0 < $shopRating) { ?>
-                            <div class="rating">
-                                <div class="rating-count"><?php echo round($shopRating, 1); ?></div>
-                                <div class="rating-stars">
-                                    <svg class="star svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                                        </use>
-                                    </svg>
+                        <div class="quote-shop">
+                            <div class="shop-name"><?php echo $selprodData['shop_name']; ?></div>
+                            <?php if (0 < $shopRating || 0 < $totReviews) { ?>
+                                <div class="reviews">
+                                    <?php if (0 < $shopRating) { ?>
+                                        <div class="rating">
+                                            <div class="rating-count"><?php echo round($shopRating, 1); ?></div>
+                                            <div class="rating-stars">
+                                                <svg class="star svg" width="16" height="16">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                    </use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                    <?php if (0 < $totReviews) { ?>
+                                        <div class="reviews-count">
+                                            <?php echo '(' . $totReviews . ' ' . Labels::getLabel("LBL_REVIEWS", $siteLangId) . ')'; ?>
+                                        </div>
+                                    <?php } ?>
                                 </div>
-                            </div>
-                            <?php } ?>
-                            <?php if (0 < $totReviews) { ?>
-                            <div class="reviews-count">
-                                <?php echo '(' . $totReviews . ' ' . Labels::getLabel("LBL_REVIEWS", $siteLangId) . ')'; ?>
-                            </div>
                             <?php } ?>
                         </div>
-                        <?php } ?>
                     </div>
-                </div>
-                <?php  } else {
-                ?>
-                <div class="divider">
-                </div>
-                <?php
-                } ?>
+                <?php } else { ?>
+                    <div class="divider"></div>
+                <?php } ?>
                 <div class="quote-for">
                     <div class="product-profile">
                         <div class="product-profile-thumbnail">
@@ -146,6 +136,11 @@ if (!$isUserLogged) {
                             $uploadedTime = AttachedFile::setTimeParam($selprodData['selprod_updated_on']);
                             $prodUrl = UrlHelper::generateUrl('Products', 'view', array($selprodId), CONF_WEBROOT_FRONTEND);
                             $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selprodData['selprod_product_id'], ImageDimension::VIEW_SMALL, $selprodId, 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                            
+                            $options = SellerProduct::getSellerProductOptions($selprodId, true, $siteLangId);
+                            if (!empty($options)) {
+                                $options = implode(' | ', array_column($options, 'optionvalue_name'));
+                            }
                             ?>
                             <a class="" href="<?php echo $prodUrl; ?>">
                                 <img src="<?php echo $imgSrc; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?> title="<?php echo $productTitle; ?>" alt="<?php echo $productTitle; ?>">
@@ -154,7 +149,7 @@ if (!$isUserLogged) {
 
                         <div class="product-profile-data">
                             <a class="title" href="<?php echo $prodUrl; ?>">
-                                <?php echo $productTitle; ?>
+                                <?php echo $productTitle . (!empty($options) ? ' | ' . $options : ''); ?>
                             </a>
                             <div class="product-profile-category">
                                 <?php echo $selprodData['brand_name']; ?>
@@ -175,39 +170,39 @@ if (!$isUserLogged) {
         </div>
         <div class="request-quote__body">
             <?php if (count($optionRows) > 0) { ?>
-            <div class="accordion-group">
-                <div class="accordion-group__head" data-bs-toggle="collapse" data-bs-target="#variants" aria-expanded="false" aria-controls="">
-                    <h6><?php echo Labels::getLabel('LBL_Product_variants'); ?></h6>
-                    <p>
-                        <?php echo Labels::getLabel('LBL_YOU_CAN_FILL_IN_THE_FOLLOWING_PRODUCT_ATTRIBUTES_TO_GET_A_QUOTATION_FROM_THE_SELLER_WITHIN_24_HOURS'); ?>
-                    </p>
-                </div>
+                <div class="accordion-group">
+                    <div class="accordion-group__head" data-bs-toggle="collapse" data-bs-target="#variants" aria-expanded="false" aria-controls="">
+                        <h6><?php echo Labels::getLabel('LBL_Product_variants'); ?></h6>
+                        <p>
+                            <?php echo Labels::getLabel('LBL_YOU_CAN_FILL_IN_THE_FOLLOWING_PRODUCT_ATTRIBUTES_TO_GET_A_QUOTATION_FROM_THE_SELLER_WITHIN_24_HOURS'); ?>
+                        </p>
+                    </div>
 
-                <div class="accordion-group__body  collapse" id="variants">
-                    <div class="row g-2">
-                        <?php
+                    <div class="accordion-group__body  collapse" id="variants">
+                        <div class="row g-2">
+                            <?php
                             foreach ($optionRows as $optionsList) { ?>
-                        <div class="col-xl-6">
-                            <div class="form-group form-floating">
-                                <select class="form-control" name="selprod_variants" onchange="requestForQuoteFn(this.value);">
-                                    <?php
+                                <div class="col-xl-6">
+                                    <div class="form-group form-floating">
+                                        <select class="form-control" name="selprod_variants" onchange="requestForQuoteFn(this.value);">
+                                            <?php
                                             foreach ($optionsList['values'] as $optVals) {
                                             ?>
-                                    <option <?php echo (in_array($optVals['optionvalue_id'], $selectedOptions)) ? 'selected' : ''; ?> value=" <?php echo $optVals['selprod_id']; ?>"><?php echo $optVals['optionvalue_name']; ?> </option>
-                                    <?php
+                                                <option <?php echo (in_array($optVals['optionvalue_id'], $selectedOptions)) ? 'selected' : ''; ?> value=" <?php echo $optVals['selprod_id']; ?>"><?php echo $optVals['optionvalue_name']; ?> </option>
+                                            <?php
                                             }
                                             ?>
-                                </select>
-                                <label class="form-floating-label"><?php echo $optionsList['option_name']; ?> </label>
-                            </div>
-                        </div>
-                        <?php
+                                        </select>
+                                        <label class="form-floating-label"><?php echo $optionsList['option_name']; ?> </label>
+                                    </div>
+                                </div>
+                            <?php
                             } ?>
+                        </div>
                     </div>
+
+
                 </div>
-
-
-            </div>
             <?php } ?>
             <div class="accordion-group">
                 <div class="accordion-group__head descHeadJs" data-bs-toggle="collapse" data-bs-target="#detailed" aria-expanded="true" aria-controls="">
@@ -259,9 +254,9 @@ if (!$isUserLogged) {
                                             <?php if ($addresses) {
                                                 require CONF_THEME_PATH . 'addresses/address-element.php';
                                             } else { ?>
-                                            <small class="color-light mb-2 mt-2 d-block">
-                                                <?php echo Labels::getLabel("LBL_YOU_HAVN'T_ADDED_DELIVERY_ADDRESS_YET", $siteLangId); ?>
-                                            </small>
+                                                <small class="color-light mb-2 mt-2 d-block">
+                                                    <?php echo Labels::getLabel("LBL_YOU_HAVN'T_ADDED_DELIVERY_ADDRESS_YET", $siteLangId); ?>
+                                                </small>
                                             <?php } ?>
                                         </div>
                                     </div>

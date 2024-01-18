@@ -557,7 +557,7 @@ class RequestForQuote extends MyAppModel
         $criteria['doNotJoinSpecialPrice'] = true;
         if (self::TYPE_VARIANT == $rfqType) {
             $srch->addCondition('selprod_code', 'LIKE', $selprodCode);
-            $srch->addFld("selprod_id as rfqts_selprod_id");            
+            $srch->addFld("selprod_id as rfqts_selprod_id");
         } else if (self::TYPE_CATALOG == $rfqType) {
             $prodId = explode('_', $selprodCode)[0];
             $criteria['product_id'] = $prodId;
@@ -576,5 +576,10 @@ class RequestForQuote extends MyAppModel
         $sql = 'INSERT INTO ' . self::DB_RFQ_TO_SELLERS . ' ' . $srch->getQuery();
         FatApp::getDb()->query($sql);
         return true;
+    }
+
+    public static function isEnabled(array $prodArr = []): bool
+    {
+        return (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0));
     }
 }
