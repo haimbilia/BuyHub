@@ -97,7 +97,7 @@
     flex-direction: column;
     width: 100%;
 
-    &_section~&_section {
+    &_section ~ &_section {
         margin-top: 3rem;
         // &:last-child {
         //     margin: 0;
@@ -376,7 +376,7 @@
                     opacity: 0;
                     z-index: -1;
 
-                    &:checked+.control-label {
+                    &:checked + .control-label {
                         background: $brand-color;
                         border-color: $brand-color;
                         color: $brand-color-inverse;
@@ -796,7 +796,7 @@
     margin-bottom: 1.5rem;
     font-size: 0.8125rem;
 
-    &+& {
+    & + & {
         margin-top: 3.5rem;
     }
 
@@ -866,7 +866,6 @@
     }
 
     .shipping-method {
-
         // position: absolute;
         // top: auto;
         // #{$end-direction}: 0;
@@ -1052,7 +1051,8 @@
         font-size: 1.5rem;
     }
 
-    &-body {}
+    &-body {
+    }
 
     .block-cart-detail-top {
         margin-bottom: 0;

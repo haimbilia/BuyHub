@@ -80,11 +80,24 @@ $action = strtolower($action); ?>
                 </li>
                 <?php if (FatApp::getConfig('CONF_ENABLE_REFERRER_MODULE', FatUtility::VAR_INT, 1)) { ?>
                     <li class="menu-sub-item navItemJs">
-                        <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'buyer' && $action == 'shareearn') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Share_and_Earn", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'shareEarn', [], CONF_WEBROOT_DASHBOARD); ?>">
+                        <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'buyer' && $action == 'shareEarn') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Share_and_Earn", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'shareEarn', [], CONF_WEBROOT_DASHBOARD); ?>">
                             <span class="menu-sub-title navTextJs"><?php echo Labels::getLabel("LBL_Share_and_Earn", $siteLangId); ?></span>
                         </a>
                     </li>
                 <?php } ?>
+                <?php
+                $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($siteLangId);
+                if (!$isSplitPaymentMethod) {
+                ?>
+                    <li class="menu-sub-item navItemJs">
+                        <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'buyer' && $action == 'giftcards') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_Gift_Cards", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'giftCards', [], CONF_WEBROOT_DASHBOARD); ?>">
+                            <span class="menu-sub-title navTextJs"><?php echo Labels::getLabel("LBL_Gift_Cards", $siteLangId); ?></span>
+                        </a>
+                    </li>
+                <?php
+                }
+                ?>
+
             </ul>
         </li>
     <?php } ?>

@@ -21,12 +21,18 @@ $fulfillmentType = $cartObj->getCartCheckoutType();
                     <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>">
                 </a>
                 <ul class="checkout-progress">
-                    <?php 
+                    <?php
                     if ('walletpay' == strtolower($controllerName) && 'recharge' == $action) { ?>
                         <li id="step1" class="checkout-progress-step  payment-js">
                             <?php echo Labels::getLabel('LBL_PAYMENT', $siteLangId); ?>
                         </li>
-                    <?php } else { ?>
+                    <?php } elseif ('checkout' == strtolower($controllerName) && 'giftCharge' == $action) {
+                    ?>
+                        <li id="step1" class="checkout-progress-step  payment-js">
+                            <?php echo Labels::getLabel('LBL_PAYMENT', $siteLangId); ?>
+                        </li>
+                    <?php
+                    } else { ?>
                         <li id="step1" class="checkout-progress-step checkoutNav-js">
                             <a href="<?php echo UrlHelper::generateUrl('Cart'); ?>">
                                 <?php echo Labels::getLabel('LBL_CART', $siteLangId); ?>

@@ -12,6 +12,7 @@ class ListingBaseController extends AdminBaseController
 
     public function __construct($action)
     {
+
         parent::__construct($action);
     }
 
@@ -48,7 +49,7 @@ class ListingBaseController extends AdminBaseController
             $recordCountSrch->getResultSet();
             $defaultRecordCount = $recordCountSrch->recordCount();
         }
-        
+
         $this->setPageRecord($defaultRecordCount, $pageSize, $page);
         $post['total_record_count'] = $defaultRecordCount;
     }

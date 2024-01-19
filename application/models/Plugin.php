@@ -168,7 +168,7 @@ class Plugin extends PluginCommon
             );
         }
         $srch->addOrder('plugin_display_order', 'ASC');
-        $srch->doNotCalculateRecords();      
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         $db = FatApp::getDb();
@@ -392,6 +392,16 @@ class Plugin extends PluginCommon
                 $error = $db->getError();
                 return false;
             }
+        }
+        return true;
+    }
+
+    public static function isSplitPaymentEnabled(int $langId): bool
+    {
+
+        $splitPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $langId);
+        if (empty($splitPaymentMethodsPlugins)) {
+            return false;
         }
         return true;
     }

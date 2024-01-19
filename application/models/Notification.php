@@ -22,6 +22,7 @@ class Notification extends MyAppModel
     public const TYPE_ORDER_RETURN_REQUEST_MESSAGE = 16;
     public const TYPE_BLOG = 17;
     public const TYPE_PRODUCT_CATEGORY = 18;
+    public const TYPE_REDEEM_GIFTCARD = 19;
 
     public const NEW_USER_REGISTERATION_NOTIFICATION = 1;
     public const NEW_SUPPLIER_REGISTERATION_NOTIFICATION = 2;

@@ -396,6 +396,22 @@ class AccountController extends LoggedUserController
         return $canAddMoneyToWallet;
     }
 
+
+    private function canRedeemGiftCard(): bool
+    {
+        $canRedeemGiftCard = false;
+        if (User::isAffiliate()) {
+            $canRedeemGiftCard = false;
+        } else {
+            $giftCard = GiftCards::getGiftCards(UserAuthentication::getLoggedUserId());
+
+            if (!empty($giftCard)) {
+                $canRedeemGiftCard = true;
+            }
+        }
+        return $canRedeemGiftCard;
+    }
+
     public function walletRechargeForm()
     {
         if (false === $this->canAddMoneyWallet()) {
@@ -430,6 +446,7 @@ class AccountController extends LoggedUserController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TRANSACTION_ID,_ORDER_ID_OR_COMMENT', $this->siteLangId));
         $this->set('accountSummary', $accountSummary);
         $this->set('canAddMoneyToWallet', $this->canAddMoneyWallet());
+        $this->set('canRedeemGiftCard', $this->canRedeemGiftCard());
         $this->_template->render();
     }
 
@@ -3817,5 +3834,33 @@ class AccountController extends LoggedUserController
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
+    }
+
+    public function redeemGiftCardForm()
+    {
+        $this->set('frm', $this->getGiftcardRedeemForm($this->siteLangId));
+        $this->_template->render(false, false);
+    }
+
+
+    private function getGiftcardRedeemForm($langId)
+    {
+        $frm = new Form('giftCardReeedem');
+        $frm->addTextBox('', 'giftcard_code');
+        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('BTN_REDEEM', $langId), 'submit', 'btn_submit', 'btn-apply'));
+        return $frm;
+    }
+
+    public function reedemGiftcard()
+    {
+        $frm = $this->getGiftcardRedeemForm($this->siteLangId);
+        if (!$post = $frm->getFormDataFromArray(FatApp::getPostedData())) {
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        }
+        $giftcard = new GiftCards();
+        if (!$giftcard->redeem($post['giftcard_code'], UserAuthentication::getLoggedUserId(), $this->siteLangId)) {
+            FatUtility::dieJsonError($giftcard->getError());
+        }
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_GIFTCARD_REDEEM_SUCCESSFULLY'));
     }
 }

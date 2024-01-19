@@ -56,6 +56,7 @@ class StripePayController extends PaymentController
 
     public function charge($orderId)
     {
+
         if (empty(trim($orderId))) {
             $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($message, FatUtility::isAjaxCall());
@@ -72,6 +73,7 @@ class StripePayController extends PaymentController
             $this->setErrorAndRedirect($message, FatUtility::isAjaxCall());
         }
 
+
         if (strlen(trim($this->settings['privateKey'])) > 0 && strlen(trim($this->settings['publishableKey'])) > 0) {
             if (strpos($this->settings['privateKey'], 'test') !== false || strpos($this->settings['publishableKey'], 'test') !== false) {
             }
@@ -82,6 +84,7 @@ class StripePayController extends PaymentController
 
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
+
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (array_key_exists($this->systemCurrencyCode, $this->minChargeAmountCurrencies())) {
@@ -90,6 +93,7 @@ class StripePayController extends PaymentController
                 $this->error = CommonHelper::replaceStringData(Labels::getLabel('ERR_MINIMUM_STRIPE_CHARGE_AMOUNT_IS_{MIN-AMOUNT}', $this->siteLangId), ['{MIN-AMOUNT}' => $stripeMinAmount]);
             }
         }
+
         $processRequest = false;
         if (!$orderInfo['id']) {
             $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
@@ -101,6 +105,7 @@ class StripePayController extends PaymentController
 
             if (!empty($postOrderId) && $orderId = $postOrderId) {
                 $charge = $this->stripeCreateSession($orderId);
+
                 if (isset($charge['id']) && !empty($charge['id'])) {
                     $json['redirectUrl'] = $charge['url'];
                     FatUtility::dieJsonSuccess($json);
@@ -111,6 +116,7 @@ class StripePayController extends PaymentController
             } else if (strtolower($_SERVER['REQUEST_METHOD']) == 'post' && !FatUtility::isAjaxCall()) {
                 $charge = $this->stripeCreateSession($orderId);
                 if (isset($charge['id']) && !empty($charge['id'])) {
+
                     FatApp::redirectUser($charge['url']);
                 } else {
                     $this->error = Labels::getLabel('MSG_UNABLE_TO_INITIALIZE_PAYMENT_REQUEST._PAYMENT_CANNOT_BE_COMPLETED.', $this->siteLangId);
@@ -123,6 +129,8 @@ class StripePayController extends PaymentController
             }
             $this->error = $message;
         }
+
+
         $this->set('paymentAmount', $paymentAmount);
         $this->set('orderInfo', $orderInfo);
         if ($this->error) {
@@ -172,6 +180,7 @@ class StripePayController extends PaymentController
 
     private function stripeCreateSession($orderId)
     {
+
         if (!$this->settings) {
             $this->error = Labels::getLabel('STRIPE_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId);
         }
@@ -194,7 +203,9 @@ class StripePayController extends PaymentController
         try {
             if (!empty(trim($this->settings['privateKey'])) && !empty(trim($this->settings['publishableKey']))) {
 
+
                 $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
+
                 $orderDetails = [
                     'order_id' => $orderId,
                     'customer_name' => $orderInfo['customer_name'],
@@ -233,6 +244,7 @@ class StripePayController extends PaymentController
                 return $charge->toArray();
             }
         } catch (Exception $e) {
+
             $this->error = $e->getMessage();
         }
 
