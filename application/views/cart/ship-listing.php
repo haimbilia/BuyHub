@@ -190,32 +190,32 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                     <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
                                 </button>
                             </li>
-                            <?php if ($showAddToFavorite) { ?>
-                                <li class="cart-action-item">
-                                    <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-                                        if (empty($product['ufp_id'])) {  ?>
-                                            <button class="btn btn-link" onClick="addToFavourite( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?> );" title="<?php echo Labels::getLabel('LBL_MOVE_TO_FAVOURITE', $siteLangId); ?>">
-                                                <?php echo Labels::getLabel('LBL_MOVE_TO_FAVOURITE', $siteLangId); ?>
-                                            </button>
-                                        <?php } else { ?>
-                                            <button class="btn btn-link" title="<?php echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId); ?>">
-                                                <?php echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId); ?>
-                                            </button>
-                                        <?php }
-                                    } else {
-                                        if (empty($product['is_in_any_wishlist'])) { ?>
-                                            <button class="btn btn-link" onClick="moveToWishlist( <?php echo $product['selprod_id']; ?>, event, '<?php echo md5($product['key']); ?>' );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
-                                                <?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>
-                                            </button>
-                                        <?php  } else { ?>
-                                            <button class="btn btn-link favourite wishListLink-Js is-active" data-id="<?php echo $product['selprod_id']; ?>" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);" title="<?php echo Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId); ?>">
-                                                <?php echo Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId); ?>
-                                            </button>
-                                    <?php }
-                                    } ?>
-                                </li>
-                            <?php } ?>
                             <?php if (!isset($_SESSION['offer_checkout']) || $_SESSION['offer_checkout']['selprod_id'] != $product['selprod_id']) { ?>
+                                <?php if ($showAddToFavorite) { ?>
+                                    <li class="cart-action-item">
+                                        <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+                                            if (empty($product['ufp_id'])) {  ?>
+                                                <button class="btn btn-link" onClick="addToFavourite( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?> );" title="<?php echo Labels::getLabel('LBL_MOVE_TO_FAVOURITE', $siteLangId); ?>">
+                                                    <?php echo Labels::getLabel('LBL_MOVE_TO_FAVOURITE', $siteLangId); ?>
+                                                </button>
+                                            <?php } else { ?>
+                                                <button class="btn btn-link" title="<?php echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId); ?>">
+                                                    <?php echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId); ?>
+                                                </button>
+                                            <?php }
+                                        } else {
+                                            if (empty($product['is_in_any_wishlist'])) { ?>
+                                                <button class="btn btn-link" onClick="moveToWishlist( <?php echo $product['selprod_id']; ?>, event, '<?php echo md5($product['key']); ?>' );" title="<?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>">
+                                                    <?php echo Labels::getLabel('LBL_Move_to_wishlist', $siteLangId); ?>
+                                                </button>
+                                            <?php  } else { ?>
+                                                <button class="btn btn-link favourite wishListLink-Js is-active" data-id="<?php echo $product['selprod_id']; ?>" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);" title="<?php echo Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId); ?>">
+                                                    <?php echo Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId); ?>
+                                                </button>
+                                        <?php }
+                                        } ?>
+                                    </li>
+                                <?php } ?>
                                 <li class="cart-action-item">
                                     <button class="btn btn-link" onClick="moveToSaveForLater( '<?php echo md5($product['key']); ?>',<?php echo $product['selprod_id']; ?>, <?php echo Shipping::FULFILMENT_SHIP; ?> );" title="<?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>">
                                         <?php echo Labels::getLabel('LBL_SAVE_FOR_LATER', $siteLangId); ?>
