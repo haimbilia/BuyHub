@@ -28,3 +28,5 @@ CREATE TABLE `tbl_calculative_data` (
     `cd_value` VARCHAR(150) NOT NULL,
     PRIMARY KEY (`cd_key`)
 ) ENGINE = InnoDB;
+
+ALTER TABLE `tbl_order_products` ADD `op_comments` VARCHAR(250) NOT NULL AFTER `op_rounding_off`;

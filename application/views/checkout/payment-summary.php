@@ -20,6 +20,13 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
     </div>
 <?php } else { ?>
     <div class="step">
+        <span class="d-none">
+            <?php if (isset($opComments) && !empty($opComments)) { 
+                foreach ($opComments as $opSelProdId => $comment) { ?>
+                    <textarea maxlength="255" class="d-none opCommentsJs" name="op_comments[<?php echo $opSelProdId; ?>]"><?php echo $comment; ?></textarea>
+                <?php } ?>
+            <?php }?>
+        </span>
         <?php if ($fulfillmentType == Shipping::FULFILMENT_SHIP && $shippingAddressId == $billingAddressId) { ?>
             <div class="step_section">
                 <div class="step_head">

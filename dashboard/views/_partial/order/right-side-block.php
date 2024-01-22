@@ -62,7 +62,7 @@ $totalSaving = $selProdTotalSpecialPrice + $discount + $volDiscount;
                         <?php }
                     }
                     if (true == $canViewTaxCharges && 0 < $totalTax) { ?>
-                       <li>
+                        <li>
                             <span class="lable"><?php echo Labels::getLabel('LBL_TAXABLE_AMOUNT', $siteLangId); ?> </span>
                             <span class="value"><?php echo CommonHelper::displayMoneyFormat($taxableAmount, true, false, true, false, true); ?></span>
                         </li>
@@ -239,6 +239,20 @@ $totalSaving = $selProdTotalSpecialPrice + $discount + $volDiscount;
                             <?php } ?>
                         </ul>
 
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+
+        <?php if (!empty($childOrderDetail['op_comments'])) { ?>
+            <div class="order-block">
+                <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block-comments" aria-expanded="false" aria-controls="order-block2">
+                    <?php echo Labels::getLabel('LBL_CUSTOMER_COMMENTS', $siteLangId); ?>
+                    <i class="dropdown-toggle-custom-arrow"></i>
+                </h4>
+                <div class="collapse" id="order-block-comments">
+                    <div class="order-block-data">
+                        <?php echo $childOrderDetail['op_comments']; ?>
                     </div>
                 </div>
             </div>
