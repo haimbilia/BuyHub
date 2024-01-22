@@ -681,6 +681,7 @@ class ProductsController extends MyAppController
             $frm->fill(array('selprod_id' => $selprod_id));
             $this->set('frmBuyProduct', $frm);
             $this->set('cartSellerId', $this->cartSellerId);
+            $this->set('cartHasProducts', $cartObj->hasProducts());
             /* ] */
 
             $optionSrchObj = new ProductSearch($this->siteLangId);
@@ -1007,7 +1008,6 @@ class ProductsController extends MyAppController
 
         if (false === MOBILE_APP_API_CALL) {
             $this->includeFeatherLight();
-            $this->set('cartHasProducts', $cartObj->hasProducts());
             $this->_template->addJs(['js/popper.min.js', 'js/slick.min.js', 'js/jquery.fancybox.min.js']);
         }
         $this->_template->render();
