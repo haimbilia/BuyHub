@@ -356,7 +356,6 @@ class BuyerController extends BuyerBaseController
         $arr = (true == $primaryOrderDisplay) ? [$childOrderDetail] : $childOrderDetail;
         $this->set('arr', $arr);
         $orderColorClasses =  OrderStatus::getOrderStatusColorClassArray();
-
         $frm = $this->getTransferBankForm($this->siteLangId, $orderId);
         $this->set('frm', $frm);
         $this->set('highlightEnabled', $highlightEnabled);

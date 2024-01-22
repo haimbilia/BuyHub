@@ -23,6 +23,7 @@ class Cart extends FatModel
     private $hasDigitalProduct = -1;
     private $isAnyOutOfStock = -1;
     private array $removedItems = [];
+    public int $singleCartSellerId = 0;
 
     public const DB_TBL = 'tbl_user_cart';
     public const DB_TBL_PREFIX = 'usercart_';
@@ -160,6 +161,14 @@ class Cart extends FatModel
         if (isset($_SESSION['offer_checkout']) && $_SESSION['offer_checkout']['selprod_id'] == $selprod_id) {
             $this->error = Labels::getLabel('ERR_ALREADY_ADDED_FROM_OFFER');
             return false;
+        }
+
+        if ($this->hasProducts() > 0 && FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0)) {
+            $this->getBasketProducts($this->cart_lang_id);
+            $sellerUserId = SellerProduct::getAttributesById($selprod_id, 'selprod_user_id');
+            if ($this->singleCartSellerId > 0 && $sellerUserId != $this->singleCartSellerId) {
+                $this->clear();
+            }
         }
 
         if ($qty > 0) {
@@ -330,6 +339,15 @@ class Cart extends FatModel
                     Message::addErrorMessage(Labels::getLabel('ERR_PRODUCT_NOT_AVAILABLE_OR_OUT_OF_STOCK_SO_REMOVED_FROM_CART_LISTING', $siteLangId));
                     $this->removeCartKey($key, $selprod_id, $quantity);
                     continue;
+                }
+
+                if (FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0)) {
+                    if ($this->singleCartSellerId > 0 && $this->singleCartSellerId != $sellerProductRow['selprod_user_id']) {
+                        $this->removeCartKey($key, $selprod_id, $quantity);
+                        continue;
+                    } else {
+                        $this->singleCartSellerId = $sellerProductRow['selprod_user_id'];
+                    }
                 }
 
                 $quantity = $sellerProductRow['quantity'];
@@ -1024,6 +1042,11 @@ class Cart extends FatModel
     public function getRemovedItems(): array
     {
         return $this->removedItems;
+    }
+
+    public function getSingleCartSellerId(): array
+    {
+        return $this->singleCartSellerId;
     }
 
     public function removeGroup($prodgroup_id)

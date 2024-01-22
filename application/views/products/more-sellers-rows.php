@@ -51,7 +51,7 @@ foreach ($sellers as $key => $sellerDetail) {
             </div>
         <?php }
         if (false === $isActive && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
-            <button class="btn btn-outline-black btn-sm btnAddToCart--js" data-id='<?php echo $sellerDetail['selprod_id']; ?>' data-min-qty="<?php echo $sellerDetail['selprod_min_order_qty']; ?>" type="button"><?php echo Labels::getLabel('BTN_ADD_TO_CART', $siteLangId); ?></button>
+            <button class="btn btn-outline-black btn-sm btnAddToCart--js" data-id='<?php echo $sellerDetail['selprod_id']; ?>' data-min-qty="<?php echo $sellerDetail['selprod_min_order_qty']; ?>" type="button" data-cart-has-product="<?php echo $sellerDetail['selprod_user_id'] != $cartSellerId && 0 < FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0); ?>"><?php echo Labels::getLabel('BTN_ADD_TO_CART', $siteLangId); ?></button>
         <?php } ?>
     </li>
 <?php $count++;

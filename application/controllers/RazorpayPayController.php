@@ -37,7 +37,7 @@ class RazorpayPayController extends PaymentController
             $this->setErrorAndRedirect($msg, FatUtility::isAjaxCall());
         }
 
-        $frm = $this->getPaymentForm($orderPaymentObj->getOrderNo());
+        $frm = $this->getPaymentForm($orderId);
         $this->set('frm', $frm);
 
         $cancelBtnUrl = CommonHelper::getPaymentCancelPageUrl();

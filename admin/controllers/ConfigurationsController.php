@@ -1641,6 +1641,9 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_HEADER_MEGA_MENU", $langId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_SINGLE_SELLER_CART", $langId), 'CONF_SINGLE_SELLER_CART', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+
                 $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_MAINTENANCE_TEXT', $this->siteLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->requirements()->setRequired(true);

@@ -4,6 +4,10 @@ header("Content-Security-Policy: frame-ancestors 'self'");
 header('X-Frame-Options: SAMEORIGIN');
 header("X-XSS-Protection: 1; mode=block");
 header("X-Content-Type-Options: nosniff");
+$host = isset ($_SERVER ['HTTP_HOST']) ? $_SERVER ['HTTP_HOST'] : '';
+if ($host == '' && isset ($_SERVER ['SERVER_NAME'])) {
+    $_SERVER['HTTP_HOST'] = $_SERVER ['SERVER_NAME'];
+}
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 define('HTTP_YOKART_PUBLIC', $protocol . $_SERVER['HTTP_HOST'] . rtrim(rtrim(dirname($_SERVER['SCRIPT_NAME']), 'install'), '/.\\') . '/');
 define('HTTP_YOKART', preg_replace('~/[^/]*/([^/]*)$~', '/\1', HTTP_YOKART_PUBLIC));
