@@ -1025,7 +1025,7 @@ class ProductsController extends MyAppController
         $this->cartSellerId = $cartObj->singleCartSellerId;
         $this->set('cartSellerId', $this->cartSellerId);
         $this->set('sellers', $moreSellers);
-        $this->set('hasProducts', $cartObj->hasProducts());
+        $this->set('cartHasProducts', $cartObj->hasProducts());
         $this->_template->render(false, false);
     }
 
