@@ -1024,6 +1024,7 @@ class ProductsController extends MyAppController
         $this->cartSellerId = $cartObj->singleCartSellerId;
         $this->set('cartSellerId', $this->cartSellerId);
         $this->set('sellers', $moreSellers);
+        $this->set('hasProducts', $cartObj->hasProducts());
         $this->_template->render(false, false);
     }
 
@@ -1501,10 +1502,11 @@ class ProductsController extends MyAppController
 
     private function getCartForm($formLangId)
     {
+        $cart = new Cart();
         $frm = new Form('frmBuyProduct', array('id' => 'frmBuyProduct'));
         $fld = $frm->addTextBox(Labels::getLabel('FRM_QUANTITY', $formLangId), 'quantity', 1);
         $fld->requirements()->setIntPositive();
-        $frm->addHTML('', 'btnAddToCart', '<button name="btnAddToCart" type="submit" id="btnAddToCart" class="btn btn-brand btn-block quickView add-to-cart add-to-cart--js" data-cart-has-product="' . ($this->sellerId != $this->cartSellerId && 0 < FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0)) . '"> ' . Labels::getLabel('BTN_ADD_TO_CART', $formLangId) . '</button>');
+        $frm->addHTML('', 'btnAddToCart', '<button name="btnAddToCart" type="submit" id="btnAddToCart" class="btn btn-brand btn-block quickView add-to-cart add-to-cart--js" data-cart-has-product="' . ($cart->hasProducts() && $this->sellerId != $this->cartSellerId && 0 < FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0)) . '"> ' . Labels::getLabel('BTN_ADD_TO_CART', $formLangId) . '</button>');
         $frm->addHiddenField('', 'selprod_id');
         return $frm;
     }
