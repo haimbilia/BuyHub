@@ -23,7 +23,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
         <span class="d-none">
             <?php if (isset($opComments) && !empty($opComments)) { 
                 foreach ($opComments as $opSelProdId => $comment) { ?>
-                    <textarea maxlength="255" class="d-none opCommentsJs" name="op_comments[<?php echo $opSelProdId; ?>]"><?php echo $comment; ?></textarea>
+                    <textarea maxlength="250" class="d-none opCommentsJs" name="op_comments[<?php echo $opSelProdId; ?>]"><?php echo $comment; ?></textarea>
                 <?php } ?>
             <?php }?>
         </span>
