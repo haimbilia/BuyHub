@@ -1007,6 +1007,7 @@ class ProductsController extends MyAppController
 
         if (false === MOBILE_APP_API_CALL) {
             $this->includeFeatherLight();
+            $this->set('cartHasProducts', $cartObj->hasProducts());
             $this->_template->addJs(['js/popper.min.js', 'js/slick.min.js', 'js/jquery.fancybox.min.js']);
         }
         $this->_template->render();
