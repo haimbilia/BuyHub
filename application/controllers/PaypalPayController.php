@@ -77,7 +77,7 @@ class PaypalPayController extends PaymentController
         }
         $this->_template->render(true, false);
     }
-    
+
     /**
      * createOrder
      *
@@ -86,11 +86,17 @@ class PaypalPayController extends PaymentController
      */
     public function createOrder($orderId)
     {
+        $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
+        $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
+        if (empty($orderInfo) || !isset($orderInfo["order_payment_status"]) || $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
+            $msg = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $this->setErrorAndRedirect($msg, true);
+        }
+
         if (false === $this->plugin->createOrder($orderId)) {
             $error = $this->plugin->getError();
             $msg = is_array($error) && isset($error['error']) ? $error['error'] . ' : ' . $error['error_description'] : $error;
-            $msg = is_array($msg) && isset($msg['message']) ? $msg['message'] : $msg;
-            $this->setErrorAndRedirect($msg, true);
+            LibHelper::exitWithError($msg, true);
         }
         $this->paymentInitiated($orderId);
         $order = $this->plugin->getResponse();
@@ -109,12 +115,12 @@ class PaypalPayController extends PaymentController
         if (false === $this->plugin->captureOrder($paypalOrderId)) {
             $error = $this->plugin->getError();
             $msg = is_array($error) && isset($error['error']) ? $error['error'] . ' : ' . $error['error_description'] : $error;
-            $this->setErrorAndRedirect($msg, true);
+            LibHelper::exitWithError($msg, true);
         }
         $order = $this->plugin->getResponse();
         echo json_encode($order->result, JSON_PRETTY_PRINT);
     }
-    
+
     /**
      * callback
      *
@@ -125,20 +131,33 @@ class PaypalPayController extends PaymentController
     {
         $post = FatApp::getPostedData();
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
-        if ('COMPLETED' != $post['status']) {         
+        if ('COMPLETED' != $post['status']) {
+            $status = $post['status'];
+            if (isset($post['error'])) {
+                $status = $post['error'] . ' : ' . ($post['error_description'] ?? Labels::getLabel('ERR_UNKNOWN_ERROR'));
+            } else if (isset($post['details'])) {
+                $status = ($post['name'] ?? Labels::getLabel('ERR_UNKNOWN_ERROR'));
+                if (is_array($post['details'])) {
+                    foreach ($post['details'] as $detail) {
+                        $status .= ': ' . ($detail['issue'] ?? Labels::getLabel('ERR_UNKNOWN_ERROR'))  . ' ( ' . $detail['description'] . ' ) <br>/n';
+                    }
+                }
+            } else {
+                $status = Labels::getLabel('ERR_UNKNOWN_ERROR');
+            }
             SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);
             $msg = Labels::getLabel("ERR_PAYMENT_FAILED_:_{STATUS}", $this->siteLangId);
-            $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $post['status']]);
+            $msg = CommonHelper::replaceStringData($msg, ['{STATUS}' => $status]);
             $orderPaymentObj->addOrderPaymentComments($msg);
             $this->setErrorAndRedirect($msg, true);
         }
-        
+
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         $paypalOrderId = $post['id'];
         $currencyCode = $orderInfo["order_currency_code"];
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
 
-        if (false === $this->plugin->validatePaymentRequest($paypalOrderId, $orderId, $currencyCode, $paymentAmount)) {
+        if (false === $this->plugin->validatePaymentRequest($paypalOrderId, $orderInfo['order_number'], $currencyCode, $paymentAmount)) {
             SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);
             FatUtility::dieJsonError($this->plugin->getError());
         }

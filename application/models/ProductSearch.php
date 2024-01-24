@@ -589,7 +589,7 @@ class ProductSearch extends SearchBase
                     }
 
                     if ($zipBased && array_key_exists('ykGeoZip', $this->geoAddress) && $this->geoAddress['ykGeoZip'] > 0) {
-                        $locCondition .= ' and shop.shop_postalcode = ' . $this->geoAddress['ykGeoZip'];
+                        $locCondition .= ' and shop.shop_postalcode = "' . $this->geoAddress['ykGeoZip'].'"';
                     }
 
                     if (true == $this->locationBasedInnerJoin) {
