@@ -909,6 +909,7 @@ class CheckoutController extends MyAppController
         $paymentMethods = array_merge($splitPaymentMethodsPlugins, $regularPaymentMethodsPlugins);
         /* ] */
 
+        $opComments = FatApp::getPostedData('op_comments');
         $orderData = array();
         /* add Order Data[ */
         if (true === MOBILE_APP_API_CALL) {
@@ -1370,6 +1371,7 @@ class CheckoutController extends MyAppController
                         'op_special_price' => ($cartProduct['selprod_price'] > $cartProduct['actualPrice']) ? $cartProduct['selprod_price'] - $cartProduct['actualPrice'] : 0,
                     ],
                     'op_rounding_off' => $cartProduct['rounding_off'],
+                    'op_comments' => $opComments[$productInfo['selprod_id']] ?? '',
                     'selprod_product_id' => $productInfo['selprod_product_id'],
                     'product_attachements_with_inventory' => $productInfo['product_attachements_with_inventory'],
                 );
@@ -1481,6 +1483,7 @@ class CheckoutController extends MyAppController
         $this->set('billingAddressArr', $billingAddressArr);
         $this->set('shippingAddressArr', $shippingAddressArr);
         $this->set('orderId', $order_id);
+        $this->set('opComments', $opComments);
 
         if (true === MOBILE_APP_API_CALL) {
             $this->set('products', $cartProducts);

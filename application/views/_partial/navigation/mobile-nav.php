@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<ul class="grouping grouping-level sidebarNavLinksJs" id="sidebarNavLinks">
+<ul class="grouping grouping-level grouping-level-1 sidebarNavLinksJs" id="sidebarNavLinks">
     <?php if (isset($headerNavigation) && count($headerNavigation)) {
         foreach ($headerNavigation as $nav) {
             if ($nav['pages']) {

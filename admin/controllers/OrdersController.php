@@ -64,7 +64,7 @@ class OrdersController extends ListingBaseController
                 'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
                 'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'ts.state_code', 'tc.country_code', 'op_rounding_off',
                 'op_shop_owner_phone_dcode', 'op_selprod_price', 'op_special_price', 'opshipping_by_seller_user_id', 'selprod_product_id', 'orderstatus_color_class', 'op_product_type', 'order_payment_status', 'plugin_code', 'opshipping_fulfillment_type', 'orderstatus_id', 'IFNULL(optosu.optsu_user_id, 0) as optsu_user_id', 'op_product_length',
-                'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_commission_charged', 'op_commission_percentage', 'op_refund_commission', 'op_tax_after_discount'
+                'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_commission_charged', 'op_commission_percentage', 'op_refund_commission', 'op_tax_after_discount', 'op_comments'
             )
         );
         $opSrch->addOrder('op_selprod_user_id');

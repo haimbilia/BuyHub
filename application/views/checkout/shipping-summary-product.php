@@ -55,7 +55,6 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                     ?>
                 </a>
             </div>
-
         </div>
         <div class="block-cart-detail">
             <div class="block-cart-detail-top">
@@ -100,6 +99,16 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                                 </use>
                             </svg>
                         </button>
+                    </div>
+                </div>
+            </div>
+            <div class="block-cart-detail-middle">
+                <div class="form">
+                    <div class="form-group">
+                        <label class="label">
+                            <?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId); ?>
+                        </label>
+                        <textarea maxlength="250" class="form-textarea form-control form-text-area opCommentsJs" placeholder="<?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId); ?>" name="op_comments[<?php echo $product['selprod_id']; ?>]" spellcheck="false"></textarea>
                     </div>
                 </div>
             </div>

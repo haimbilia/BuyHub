@@ -20,7 +20,7 @@ class Cart extends FatModel
     private $hasDigitalProduct = -1;
     private $isAnyOutOfStock = -1;
     private array $removedItems = [];
-    private $singleCartSellerId = 0;
+    public int $singleCartSellerId = 0;
 
     public const DB_TBL = 'tbl_user_cart';
     public const DB_TBL_PREFIX = 'usercart_';
@@ -156,8 +156,8 @@ class Cart extends FatModel
         }
 
         if ($this->hasProducts() > 0 && FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0)) {
-            $products = $this->getBasketProducts($this->cart_lang_id);
-            $sellerUserId = SellerProduct::getAttributesById('selprod_id', 'selprod_user_id');
+            $this->getBasketProducts($this->cart_lang_id);
+            $sellerUserId = SellerProduct::getAttributesById($selprod_id, 'selprod_user_id');
             if ($this->singleCartSellerId > 0 && $sellerUserId != $this->singleCartSellerId) {
                 $this->clear();
             }

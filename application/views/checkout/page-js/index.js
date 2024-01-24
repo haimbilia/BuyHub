@@ -446,9 +446,10 @@ $("document").ready(function () {
     loadPaymentSummary = function () {
         paymentSummaryAjax = 1;
         $(pageContent).prepend(fcom.getLoader(true));
+        var data = $(".opCommentsJs").serialize();
         fcom.ajax(
             fcom.makeUrl("Checkout", "PaymentSummary"),
-            '',
+            data,
             function (res) {
                 if (1 > res.status) {
                     loadShippingSummaryDiv();
