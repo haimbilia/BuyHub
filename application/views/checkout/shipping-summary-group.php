@@ -118,13 +118,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="block-cart-detail-middle">
-                    <div class="form">
-                        <div class="form-group">
-                            <label class="label">
+                <div class="block-cart-detail-middle accordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?php echo $product['selprod_id']; ?>" aria-expanded="false" aria-controls="collapse<?php echo $product['selprod_id']; ?>">
                                 <?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId); ?>
-                            </label>
-                            <textarea maxlength="250" class="form-textarea form-control form-text-area opCommentsJs" placeholder="<?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId); ?>" name="op_comments[<?php echo $product['selprod_id']; ?>]" spellcheck="false"></textarea>
+                            </button>
+                        </h2>
+                        <div id="collapse<?php echo $product['selprod_id']; ?>" class="accordion-collapse collapse form">
+                            <div class="accordion-body form-group">
+                                <textarea maxlength="250" class="form-textarea form-control form-text-area opCommentsJs" placeholder="<?php echo Labels::getLabel('LBL_WRITE_YOUR_COMMENTS', $siteLangId); ?>" name="op_comments[<?php echo $product['selprod_id']; ?>]" spellcheck="false"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
