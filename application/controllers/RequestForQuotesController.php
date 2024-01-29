@@ -6,7 +6,7 @@ class RequestForQuotesController extends MyAppController
     {
         parent::__construct($action);
         $this->loggedUserId = UserAuthentication::getLoggedUserId(true);
-        if (!RequestForQuote::isEnabled()) {
+        if (1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
@@ -175,7 +175,7 @@ class RequestForQuotesController extends MyAppController
 
         $moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
         $rfqEnabled = Shop::getAttributesByUserId($selprodData['selprod_user_id'], 'shop_rfq_enabled');
-        if (RequestForQuote::TYPE_INDIVIDUAL == $moduleType && (!is_array($rfqEnabled) || 1 > $rfqEnabled)) {
+        if (RequestForQuote::TYPE_INDIVIDUAL == $moduleType && 1 > $rfqEnabled) {
             LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_NOT_ENABLED_FOR_THIS_SHOP.'), true);
         }
 

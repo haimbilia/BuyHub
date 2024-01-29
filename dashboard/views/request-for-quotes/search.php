@@ -44,9 +44,10 @@
                         $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
                         $li = $ul->appendElement("li", ['class' => 'actions-item']);
                         $li->appendElement(
-                            'button',
+                            'a',
                             array(
-                                'class' => 'actions-link', 'type' => 'button',
+                                'class' => 'actions-link',
+                                'href' => 'javascript:void(0)',
                                 'onclick' => 'viewRfq("' . $row['rfq_id'] . '");',
                                 'title' => Labels::getLabel('LBL_VIEW', $siteLangId)
                             ),

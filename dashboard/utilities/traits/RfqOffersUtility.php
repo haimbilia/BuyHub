@@ -100,9 +100,9 @@ trait RfqOffersUtility
                 'title' => Labels::getLabel('LBL_VIEW_RFQ_INFORMATION', $this->siteLangId)
             ],
             'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
-                        <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg#view'>
-                        </use>
-                    </svg>",
+            <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg#view'>
+            </use>
+        </svg>",
             'label' => Labels::getLabel('LBL_VIEW', $this->siteLangId)
         ];
 
