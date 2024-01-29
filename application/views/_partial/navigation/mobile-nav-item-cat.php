@@ -3,7 +3,7 @@
 $href = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']));
 $childHtml = '';
 if (0 < count($link['children'])) {
-    $childHtml = $this->includeTemplate('_partial/navigation/mobile-nav-item-cat-level.php', ['prodcatId' => $link['prodcat_id'], 'children' => $link['children']], false, true);;
+    $childHtml = $this->includeTemplate('_partial/navigation/mobile-nav-item-cat-level.php', ['prodcatId' => $link['prodcat_id'], 'level' => 2, 'children' => $link['children']], false, true);;
 }
 $caption = $link['prodcat_name'];
 ?>

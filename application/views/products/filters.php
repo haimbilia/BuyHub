@@ -49,9 +49,9 @@ if (isset($prodcat_code)) {
             </div>
             <div class="sidebar-widget_body collapse show" id="category">
                 <?php if (!$shopCatFilters) { ?>
-                    <ul class="grouping grouping-level sidebarNavLinksJs">
+                    <ul class="grouping grouping-level grouping-level-1 sidebarNavLinksJs">
                         <?php
-                        foreach ($categoriesArr as $link) {
+                        foreach ($categoriesArr as  $link) {
                             $href = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']));
                             $OrgnavUrl = UrlHelper::generateUrl('category', 'view', array($link['prodcat_id']), '', false);
                             if (0 < count($link['children'])) {

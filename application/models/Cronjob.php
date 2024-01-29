@@ -1004,7 +1004,7 @@ class Cronjob extends FatModel
         return Labels::getLabel('MSG_UNABLE_TO_UPDATE_SITEMAP.');
     }
 
-    public function updateValidSubscription()
+    public static function updateValidSubscription()
     {
         if (1 > FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             echo 'Subscription settings not enabled.';

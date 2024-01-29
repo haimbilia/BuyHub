@@ -1,10 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<ul class="grouping grouping-level" id="level-cat-<?php echo $prodcatId; ?>">
+<ul class="grouping grouping-level grouping-level-<?php echo $level; ?>" id="level-cat-<?php echo $prodcatId; ?>">
     <?php foreach ($children as $child) {
         $href = UrlHelper::generateUrl('category', 'view', array($child['prodcat_id']));
         $childLevelHtml = '';
         if (0 < count($child['children'])) {
-            $childLevelHtml = $this->includeTemplate('_partial/navigation/mobile-nav-item-cat-level.php', ['prodcatId' => $child['prodcat_id'], 'children' => $child['children']], false, true);
+            $childLevelHtml = $this->includeTemplate('_partial/navigation/mobile-nav-item-cat-level.php', ['prodcatId' => $child['prodcat_id'], 'level' => ($level + 1), 'children' => $child['children']], false, true);
         }
         $caption = $child['prodcat_name'];
     ?>

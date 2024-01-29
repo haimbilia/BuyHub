@@ -46,7 +46,7 @@ You will require the following server specifications for setting up the Yokart s
 
 	- You are able to aceess the server using **SSH**.
 	- You have installed **Apache** , **MySql** and **PHP** on linux server.
-	- You have installed ioncube loader compatible to **Fatbit library v2.3**
+	- You have installed ioncube loader compatible to **Fatbit library v2.4**
 
 1. **Clone Yo!Kart**
 
@@ -69,7 +69,7 @@ You will require the following server specifications for setting up the Yokart s
 
     Download and install Fatbit library and unzip to library directory.
 
-		wget http://fatlib.4livedemo.com/download/v2.3/core.zip
+		wget http://fatlib.4livedemo.com/download/v2.4/core.zip
 		unzip core.zip -d library
 		rm core.zip
 

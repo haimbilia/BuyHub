@@ -333,9 +333,8 @@ class ProductCategory extends MyAppModel
         );
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addMultipleFields(['cr.pcr_prodcat_id', 'cr.pcr_parent_id']);
         $srch->addGroupBy('cr.pcr_parent_id');
-        $srch->addMultipleFields(array('c.prodcat_id', 'COALESCE(c_l.prodcat_name,c.prodcat_identifier ) as prodcat_name', 'substr(c.prodcat_code,1,6) AS prodrootcat_code',  'c_l.prodcat_content_block', 'c.prodcat_active', 'c.prodcat_parent', 'c.prodcat_code', 'c.prodcat_ordercode'));
+        $srch->addMultipleFields(array('cr.pcr_prodcat_id', 'cr.pcr_parent_id', 'c.prodcat_id', 'COALESCE(c_l.prodcat_name,c.prodcat_identifier ) as prodcat_name', 'substr(c.prodcat_code,1,6) AS prodrootcat_code',  'c_l.prodcat_content_block', 'c.prodcat_active', 'c.prodcat_parent', 'c.prodcat_code', 'c.prodcat_ordercode'));
 
         if ($excludeCatHavingNoProducts) {
             $prodSrchObj = new ProductSearch();

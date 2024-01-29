@@ -13,6 +13,10 @@ $(function () {
 		var data = $("#frmBuyProduct").serialize();
 		var selprod_id = $(this).attr('data-id');
 		var quantity = $(this).attr('data-min-qty');
+		var cartHasProducts = $(this).data('cartHasProduct');
+		if (0 < cartHasProducts && !confirm(langLbl.overwriteCartItems)) {
+			return false;
+		}
 		data = "selprod_id=" + selprod_id + "&quantity=" + quantity;
 		ykevents.addToCart();
 		fcom.updateWithAjax(fcom.makeUrl('cart', 'add'), data, function (ans) {

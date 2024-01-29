@@ -1,6 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $data['pageCount'] = 2;
 if (1 == $page) {
+    $data['cartHasProducts'] = $cartHasProducts;
+    $data['cartSellerId'] = $cartSellerId;
     $conditionArr = Product::getConditionArr($siteLangId);
     $product['selprod_condition_title'] = $conditionArr[$product['selprod_condition']] ?? '';
     $product['ribbons'] = $selProdRibbons;
