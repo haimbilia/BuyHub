@@ -742,6 +742,9 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_cancellation_age', $orderCancellationAgeUnReqFld);
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);
 
+        if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0) == RequestForQuote::TYPE_INDIVIDUAL) {
+            $frm->addCheckBox(Labels::getLabel('FRM_ENABLE_RFQ', $this->siteLangId), 'selprod_rfq_enabled', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        }
 
         $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH_INVENTORY', $this->siteLangId), 'selprod_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
 

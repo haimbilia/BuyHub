@@ -174,9 +174,9 @@ class RequestForQuotesController extends MyAppController
         }
 
         $moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
-        $rfqEnabled = Shop::getAttributesByUserId($selprodData['selprod_user_id'], 'shop_rfq_enabled');
-        if (RequestForQuote::TYPE_INDIVIDUAL == $moduleType && 1 > $rfqEnabled) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_NOT_ENABLED_FOR_THIS_SHOP.'), true);
+        $shopRfqEnabled = Shop::getAttributesByUserId($selprodData['selprod_user_id'], 'shop_rfq_enabled');
+        if (RequestForQuote::TYPE_INDIVIDUAL == $moduleType && 1 > $shopRfqEnabled && 1 > $selprodData['selprod_rfq_enabled']) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_NOT_ENABLED_FOR_THIS_SHOP_OR_PRODUCT.'), true);
         }
 
         $sessionId = session_id();

@@ -577,8 +577,9 @@ class RequestForQuote extends MyAppModel
         $moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
         if (RequestForQuote::TYPE_INDIVIDUAL == $moduleType) {
             $srch->addCondition('shop.shop_rfq_enabled', '=', applicationConstants::YES);
+            $srch->addCondition('sp.selprod_rfq_enabled', '=', applicationConstants::YES);
         }
-        
+
         $sql = 'INSERT INTO ' . self::DB_RFQ_TO_SELLERS . ' ' . $srch->getQuery();
         FatApp::getDb()->query($sql);
         return true;
@@ -604,16 +605,26 @@ class RequestForQuote extends MyAppModel
         return $arr[$rfqStatus] ?? [];
     }
 
-    public static function isEnabled(int $shopRfqEnabled = 0): bool
+    public static function isEnabled(int $shopRfqEnabled = 0, int $selProdRfqEnabled = 0): bool
     {
         if (1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
             return false;
         }
 
         $moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
-        if (RequestForQuote::TYPE_INDIVIDUAL == $moduleType && applicationConstants::NO == $shopRfqEnabled) {
+
+        if ($moduleType != RequestForQuote::TYPE_INDIVIDUAL) {
+            return true;
+        }
+
+        if (applicationConstants::NO == $shopRfqEnabled) {
             return false;
         }
+
+        if (applicationConstants::NO == $selProdRfqEnabled) {
+            return false;
+        }
+
         return true;
     }
 }

@@ -425,3 +425,5 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('APP_WRITE_COMMENT', 1, 'Write your Comment', 3)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+ALTER TABLE `tbl_seller_products` ADD `selprod_rfq_enabled` TINYINT(4) NOT NULL AFTER `selprod_urlrewrite_id`;

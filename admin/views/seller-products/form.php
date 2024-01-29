@@ -34,7 +34,7 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('selprod_price');
 
 $selPriceTitle = (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_THIS_PRICE_IS_INCLUDING_THE_TAX_RATES.', $siteLangId) : Labels::getLabel('LBL_THIS_PRICE_IS_EXCLUDING_THE_TAX_RATES.', $siteLangId);
-$selPriceTitle .= ' '.Labels::getLabel('LBL_MIN_SELLING_PRICE', $siteLangId).' '. CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true);
+$selPriceTitle .= ' ' . Labels::getLabel('LBL_MIN_SELLING_PRICE', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true);
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 HtmlHelper::addFieldLabelInfo($frm, 'selprod_price', $selPriceTitle);
 
@@ -95,6 +95,13 @@ if (null != $fld) {
     $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
 
+$fld = $frm->getField('selprod_rfq_enabled');
+HtmlHelper::configureSwitchForCheckbox($fld);
+if (null != $fld) {
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
+
 $fld = $frm->getField('selprod_cod_enabled');
 if (null != $fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -116,7 +123,7 @@ $fld = $frm->getField('selprod_track_inventory');
 HtmlHelper::configureSwitchForCheckbox($fld);
 $fld->developerTags['noCaptionTag'] = true;
 if (null != $fld) {
-    $fld->developerTags['colWidthValues'] = [null, '12', null, null];    
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
     $fld->addFieldtagAttribute('id', 'selprod_track_inventory');
 }
 
@@ -135,5 +142,6 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
             $(".selprod_cod_enabled_fld").hide();
         <?php } ?>
         $("#selprod_track_inventory").trigger('change');
+        var includeEditor = false;
     });
 </script>

@@ -128,21 +128,20 @@
     });
     let submitInterval;
     $(document).on("click", ".submitBtnJs", function () {
-
         if (submitInterval != undefined) {
             clearInterval(submitInterval);
             submitInterval = undefined;
         }
         submitInterval = setTimeout(function () {
             if ($('.' + $.ykmodal.element).hasClass("show")) {
-                var form = $('.' + $.ykmodal.element + ' form');
+                var form = $('.' + $.ykmodal.element + ' form');                
                 if (true === extendEditorJs) {
                     var onSubmit = form.attr('onsubmit');
                     if ('undefined' != typeof onSubmit) {
                         onSubmit = onSubmit.replace("return(false);", "");
                         eval(onSubmit);
                     }
-                } else {
+                } else {                   
                     form.submit();
                 }
             }

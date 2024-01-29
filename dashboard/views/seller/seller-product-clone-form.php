@@ -16,6 +16,13 @@ HtmlHelper::configureSwitchForCheckbox($fld);
 $fld->developerTags['noCaptionTag'] = true;
 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
+$rfqFld = $frm->getField('selprod_rfq_enabled');
+if ($rfqFld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $rfqFld->developerTags['noCaptionTag'] = true;
+    $rfqFld->developerTags['colWidthValues'] = [null, '12', null, null];
+}
+
 ?>
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Clone_Inventory', $siteLangId); ?></h5>

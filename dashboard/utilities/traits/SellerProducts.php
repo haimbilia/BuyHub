@@ -89,6 +89,7 @@ trait SellerProducts
                 'selprod_price',
                 'selprod_stock',
                 'selprod_track_inventory',
+                'selprod_rfq_enabled',
                 'selprod_threshold_stock_level',
                 'selprod_product_id',
                 'selprod_active',
@@ -548,6 +549,7 @@ trait SellerProducts
 
         $post['selprod_subtract_stock'] = FatApp::getPostedData('selprod_subtract_stock', FatUtility::VAR_INT, 0);
         $post['selprod_track_inventory'] = FatApp::getPostedData('selprod_track_inventory', FatUtility::VAR_INT, 0);
+        $post['selprod_rfq_enabled'] = FatApp::getPostedData('selprod_rfq_enabled', FatUtility::VAR_INT, 0);
 
         $keywordSlug = '';
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
@@ -2388,6 +2390,10 @@ trait SellerProducts
         $frm->addDateField(Labels::getLabel('FRM_DATE_AVAILABLE', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly'))->requirements()->setRequired();
 
         $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
+
+        if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0) == RequestForQuote::TYPE_INDIVIDUAL) {
+            $frm->addCheckBox(Labels::getLabel('FRM_ENABLE_RFQ', $this->siteLangId), 'selprod_rfq_enabled', 1, ['id' => 'selprod_rfq_enabled'], false, 0);
+        }
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId), 'selprod_return_age');
 
