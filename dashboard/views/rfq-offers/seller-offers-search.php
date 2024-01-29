@@ -141,11 +141,11 @@
                         <?php if (0 < $row['counter_offer_id']) {
                             if ($canEdit && RequestForQuote::STATUS_CLOSED != $row['rfq_status'] && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) {
                                 if (RfqOffers::STATUS_OPEN == $row['counter_offer_status'] && !in_array(RfqOffers::STATUS_REJECTED, [$row['offer_status'], $row['counter_offer_status']])) { ?>
-                                <div class="offer-block-head-action">
-                                    <button class="link-underline" onClick="counter(<?php echo $row['counter_offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_COUNTER', $siteLangId); ?>">
-                                        <?php echo Labels::getLabel('LBL_REPLY'); ?>
-                                    </button>
-                                </div>
+                                    <div class="offer-block-head-action">
+                                        <button class="link-underline" onClick="counter(<?php echo $row['counter_offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_COUNTER', $siteLangId); ?>">
+                                            <?php echo Labels::getLabel('LBL_REPLY'); ?>
+                                        </button>
+                                    </div>
                         <?php }
                             }
                         } ?>
@@ -288,8 +288,11 @@
         </div>
     <?php } ?>
     <?php if (empty($arrListing)) { ?>
-        <?php $this->includeTemplate('_partial/no-record-found.php'); ?>
-    <?php } ?>
+    <?php if (RequestForQuote::STATUS_CLOSED == $rfqData['rfq_status']) {
+            $message =   Labels::getLabel('MSG_RFQ_HAS_BEEN_CLOSED_BY_THE_BUYER', $siteLangId);
+        }
+        $this->includeTemplate('_partial/no-record-found.php', ['message' => $message]);
+    } ?>
 
     <?php
     $postedData['page'] = $page;

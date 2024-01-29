@@ -220,7 +220,7 @@ trait RfqOffersUtility
         if (!empty($primaryOfferIds)) {
             $offersCountArr =  RfqOffers::getOffersCountArr($primaryOfferIds);
         }
-
+        
         $this->set("arrListing", $arrListing);
         $this->set("offersCountArr", $offersCountArr);
         $this->set('postedData', $post);
@@ -231,6 +231,7 @@ trait RfqOffersUtility
 
         $tpl = 'rfq-offers/search.php';
         if ($this->isSeller) {
+            $this->set('rfqData',RequestForQuote::getAttributesById($rfqId,['rfq_status']));
             $tpl = 'rfq-offers/seller-offers-search.php';
         }
         if (true === MOBILE_APP_API_CALL) {
