@@ -119,7 +119,6 @@ trait RfqOffersUtility
                         </svg>",
                 'label' => Labels::getLabel('LBL_CLOSE', $this->siteLangId)
             ];
-
         }
         $this->set("otherButtons", $otherButtons);
         $this->set("isSeller", $this->isSeller);
@@ -345,7 +344,7 @@ trait RfqOffersUtility
         }
 
         $recordId = FatApp::getPostedData('offer_id', FatUtility::VAR_INT, 0);
-        
+
         $selprodId = 0;
         if (1 > $counterOfferId && $this->isSeller) {
             $selprodId = RequestForQuote::getSellerProductId($post['offer_rfq_id'], UserAuthentication::getLoggedUserId());
