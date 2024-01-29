@@ -30,3 +30,12 @@ CREATE TABLE `tbl_calculative_data` (
 ) ENGINE = InnoDB;
 
 ALTER TABLE `tbl_order_products` ADD `op_comments` VARCHAR(250) NOT NULL AFTER `op_rounding_off`;
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('APP_COMMENTS', 1, 'Comments', 3)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('APP_CART_EXISTING', 1, 'Do you want to replace existing shop items?', 3)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('APP_WRITE_COMMENT', 1, 'Write your Comment', 3)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
