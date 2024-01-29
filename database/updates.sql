@@ -174,11 +174,6 @@ ALTER TABLE `tbl_rfq_offers`
 ALTER TABLE `tbl_rfq_offers`
   MODIFY `offer_id` int NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `tbl_rfq_offer_messages`
-ADD PRIMARY KEY (`rom_id`);
-
-ALTER TABLE `tbl_rfq_offer_messages`
-MODIFY `rom_id` int NOT NULL AUTO_INCREMENT;
 
 CREATE TABLE `tbl_rfq_latest_offers` (
   `rlo_primary_offer_id` int NOT NULL,
@@ -395,7 +390,6 @@ ALTER TABLE `tbl_shops` ADD `shop_has_valid_subscription` TINYINT(4) NOT NULL AF
 
 ALTER TABLE `tbl_order_products` ADD `op_offer_id` INT NOT NULL AFTER `op_order_id`;
 ALTER TABLE `tbl_shops` ADD `shop_rfq_enabled` TINYINT NOT NULL AFTER `shop_has_valid_subscription`;
-
 
 /* GIFT CARDS */
 CREATE TABLE `tbl_order_gift_cards` ( 
