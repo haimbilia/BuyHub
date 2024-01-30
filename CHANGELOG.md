@@ -2,6 +2,11 @@
 
 > IOS/Android Buyer APP version : 2.0.1
 > System API version : 2.3
+
+## New Features : 
+    - Maintain Single seller products to buyer cart.
+    - Collect customer comments on order product while checkout.
+
 ## Known Issues and Problems :
 
     - Following is a list of known errors that don’t have a workaround. These issues will be fixed in the subsequent release. 
