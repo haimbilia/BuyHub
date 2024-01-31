@@ -1642,7 +1642,8 @@ class HomeController extends MyAppController
     {
         $data = [
             'CONF_ENABLE_GEO_LOCATION' => FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0),
-            'CONF_DEFAULT_CURRENCY_SEPARATOR' => FatApp::getConfig('CONF_DEFAULT_CURRENCY_SEPARATOR', FatUtility::VAR_STRING, '.')
+            'CONF_DEFAULT_CURRENCY_SEPARATOR' => FatApp::getConfig('CONF_DEFAULT_CURRENCY_SEPARATOR', FatUtility::VAR_STRING, '.'),
+            'CONF_SINGLE_SELLER_CART' => FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0)
         ];
 
         $data['languageLabels'] = [
