@@ -66,8 +66,12 @@ class ShippingProfileProductsController extends SellerBaseController {
     public function removeProduct($productId)
     {      
         $this->userPrivilege->canEditShippingProfiles(UserAuthentication::getLoggedUserId());
-        $prodSellerId = Product::getAttributesById($productId, 'product_seller_id');
-        if ($prodSellerId != $this->userParentId) {
+        $profSrch = ShippingProfileProduct::getSearchObject();
+        $profSrch->addCondition('shippro_product_id', '=', $productId);
+        $profSrch->addCondition('shippro_user_id', '=', $this->userParentId);
+        $proRs = $profSrch->getResultSet();
+        $profileData = FatApp::getDb()->fetch($proRs);
+        if (empty($profileData)) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
         $defaultProfileId = ShippingProfile::getDefaultProfileId($this->userParentId);
