@@ -615,7 +615,7 @@ class SellerController extends SellerBaseController
 
         $this->_template->addJs(array('js/jquery.datetimepicker.js'));
         $this->_template->addCss(array('css/jquery.datetimepicker.css'), false);
-        $this->_template->render(true, true);
+        $this->_template->render();
     }
 
     public function viewInvoice($op_id)
