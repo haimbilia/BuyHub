@@ -233,32 +233,32 @@ class ProductSearch extends SearchBase
         if (array_key_exists('shop_id', $criteria) && $criteria['shop_id'] > 0) {
             $shopId = FatUtility::int($criteria['shop_id']);
             $shopCondition .= ' and ts.shop_id = ' . $shopId;
-            $srch->addCondition('ts.shop_id', '=', 'mysql_func_' . $shopId, 'AND', true);
+            // $srch->addCondition('ts.shop_id', '=', 'mysql_func_' . $shopId, 'AND', true);
         }
 
         $shopCondition = '';
         if (array_key_exists('country_id', $criteria) && $criteria['country_id'] > 0) {
             $shopCondition .= ' and ts.shop_country_id = ' . FatUtility::int($criteria['country_id']);
-            $srch->addCondition('ts.shop_country_id', '=', 'mysql_func_' . FatUtility::int($criteria['country_id']), 'AND', true);
+            // $srch->addCondition('ts.shop_country_id', '=', 'mysql_func_' . FatUtility::int($criteria['country_id']), 'AND', true);
         }
 
         $shopCondition = '';
         if (array_key_exists('state_id', $criteria) && $criteria['state_id'] > 0) {
             $shopCondition .= ' and ts.shop_state_id = ' . FatUtility::int($criteria['state_id']);
-            $srch->addCondition('ts.shop_state_id', '=', 'mysql_func_' . FatUtility::int($criteria['state_id']), 'AND', true);
+            // $srch->addCondition('ts.shop_state_id', '=', 'mysql_func_' . FatUtility::int($criteria['state_id']), 'AND', true);
         }
 
         $productCondition = '';
         if (array_key_exists('brand_id', $criteria) && $criteria['brand_id'] > 0) {
             $brandId = FatUtility::int($criteria['brand_id']);
             $productCondition = ' and tp.product_brand_id = ' . $brandId;
-            $srch->addCondition('tp.product_brand_id', '=', 'mysql_func_' . $brandId, 'AND', true);
+            // $srch->addCondition('tp.product_brand_id', '=', 'mysql_func_' . $brandId, 'AND', true);
         }
 
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'tp.product_id = sprods.selprod_product_id AND tp.product_active = ' . applicationConstants::ACTIVE . ' and tp.product_deleted = ' . applicationConstants::NO . ' and tp.product_approved = ' . Product::APPROVED . $productCondition, 'tp');
         $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'tu.user_id = sprods.selprod_user_id AND tu.user_is_supplier = ' . applicationConstants::YES, 'tu');
         $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'tuc.credential_user_id = tu.user_id and tuc.credential_active = ' . applicationConstants::ACTIVE . ' and tuc.credential_verified = ' . applicationConstants::YES, 'tuc');
-        $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'ts.shop_user_id = tu.user_id and ts.shop_active = ' . applicationConstants::YES . ' AND ts.shop_supplier_display_status = ' . applicationConstants::YES . $shopCondition, 'ts');
+        $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'ts.shop_user_id = sprods.selprod_user_id and ts.shop_active = ' . applicationConstants::YES . ' AND ts.shop_supplier_display_status = ' . applicationConstants::YES . $shopCondition, 'ts');
         $srch->joinTable(Countries::DB_TBL, 'INNER JOIN', 'tcn.country_id = ts.shop_country_id and tcn.country_active = ' . applicationConstants::YES, 'tcn');
         $srch->joinTable(States::DB_TBL, 'INNER JOIN', 'tst.state_id = ts.shop_state_id and tst.state_active = ' . applicationConstants::YES, 'tst');
 
@@ -272,7 +272,7 @@ class ProductSearch extends SearchBase
         $srch->joinTable(ProductCategory::DB_TBL, 'INNER JOIN', 'tc.prodcat_id = tptc.ptc_prodcat_id and tc.prodcat_active = ' . applicationConstants::YES . ' and tc.prodcat_deleted = ' . applicationConstants::NO, 'tc');
         /*$srch->addMultipleFields(array('selprod_product_id','MIN(COALESCE(splprice_price, selprod_price)) AS theprice','(CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END) AS special_price_found'));*/
 
-        $srch->addMultipleFields(array('sprods.selprod_product_id', '(CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END) AS special_price_found'));
+        $srch->addMultipleFields(array('sprods.selprod_product_id', 'if(splprice_selprod_id IS NULL,0,1) AS special_price_found'));
 
         if (!empty($criteria['keyword'])) {
             /* $srch->addFld('if(sp_l.selprod_title LIKE ' . FatApp::getDb()->quoteVariable('%' . $criteria['keyword'] . '%') . ',  COALESCE(splprice_price, sprods.selprod_price), MIN(COALESCE(tsp.splprice_price, sprods.selprod_price)) ) as theprice'); */
@@ -410,7 +410,7 @@ class ProductSearch extends SearchBase
 
             $fields1 = array(
                 'sprods.*', 'm.*',
-                '(CASE WHEN m.splprice_selprod_id IS NULL THEN 0 ELSE 1 END) AS special_price_found',
+                'if(m.splprice_selprod_id IS NULL,0,1) AS special_price_found',
                 'COALESCE(m.splprice_price, selprod_price) AS theprice'
             );
             $srch->addMultipleFields(array_merge($fields1, $fields2));
@@ -589,7 +589,7 @@ class ProductSearch extends SearchBase
                     }
 
                     if ($zipBased && array_key_exists('ykGeoZip', $this->geoAddress) && $this->geoAddress['ykGeoZip'] > 0) {
-                        $locCondition .= ' and shop.shop_postalcode = ' . $this->geoAddress['ykGeoZip'];
+                        $locCondition .= ' and shop.shop_postalcode = "' . $this->geoAddress['ykGeoZip'].'"';
                     }
 
                     if (true == $this->locationBasedInnerJoin) {
@@ -644,12 +644,12 @@ class ProductSearch extends SearchBase
         $countryCondition = '';
         if ($isActive) {
             $countryCondition = ' and shop_country.country_active = ' . applicationConstants::ACTIVE;
-            $this->addCondition('shop_country.country_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+            // $this->addCondition('shop_country.country_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($countryId) {
             $countryCondition .= ' and shop_country.country_id = ' . $countryId;
-            $this->addCondition('shop_country.country_id', '=', 'mysql_func_' . $countryId, 'AND', true);
+            // $this->addCondition('shop_country.country_id', '=', 'mysql_func_' . $countryId, 'AND', true);
         }
 
         $this->joinTable(Countries::DB_TBL, 'INNER JOIN', 'shop.shop_country_id = shop_country.country_id' . $countryCondition, 'shop_country');
@@ -675,12 +675,12 @@ class ProductSearch extends SearchBase
         $stateCondition = '';
         if ($isActive) {
             $stateCondition = 'and shop_state.state_active = ' . applicationConstants::ACTIVE;
-            $this->addCondition('shop_state.state_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+            // $this->addCondition('shop_state.state_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($stateId) {
             $stateCondition .= ' and shop_state.state_id = ' . $stateId;
-            $this->addCondition('shop_state.state_id', '=', 'mysql_func_' . $stateId, 'AND', true);
+            // $this->addCondition('shop_state.state_id', '=', 'mysql_func_' . $stateId, 'AND', true);
         }
 
         $this->joinTable(States::DB_TBL, 'INNER JOIN', 'shop.shop_state_id = shop_state.state_id ' . $stateCondition, 'shop_state');
