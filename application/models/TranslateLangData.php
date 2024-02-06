@@ -27,7 +27,7 @@ class TranslateLangData
 
     private function getLangToCovert($toLangId, $fromLangId)
     {
-        $this->fromLangId = (0 < $fromLangId) ? $fromLangId : FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $this->fromLangId = (0 < $fromLangId) ? $fromLangId : FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
 
         $translateFromlang = strtolower(Language::getAttributesById($this->fromLangId, 'language_code'));
         $this->translateObj = new TranslateApi($translateFromlang);

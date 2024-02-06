@@ -1165,7 +1165,8 @@ class ProductCategory extends MyAppModel
         $prodCatId = FatUtility::int($post['prodcat_id']);
         unset($post['prodcat_id']);
 
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        // $siteDefaultLangId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
+        $siteDefaultLangId = CommonHelper::getDefaultFormLangId();
         if ($this->mainTableRecordId == 0) {
             $post['prodcat_display_order'] = $this->getMaxOrder($parentCatId);
         }
