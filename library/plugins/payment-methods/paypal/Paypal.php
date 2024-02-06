@@ -106,6 +106,7 @@ class Paypal extends PaymentMethodBase
         //=== Create New Order Request
         $request = new OrdersCreateRequest();
         $request->prefer("return=representation");
+        $request->headers["PayPal-Request-Id"] = md5($orderId);
 
         //=== Create Request Body
         $request->body = $this->buildRequestBody($orderId);

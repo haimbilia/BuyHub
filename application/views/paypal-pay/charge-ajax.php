@@ -7,6 +7,19 @@
     <script type="text/javascript" src="<?php echo $externalLibUrl; ?>"></script>
 <?php } ?>
 <script type="text/javascript">
+    // Your condition to check
+    var condition = false; // Set your condition here
+
+    // Function to handle the beforeunload event
+    function handleBeforeUnload(event) {
+        if (!condition) {
+            // Display confirmation dialog only if the condition is false
+            var message = langLbl.dontReloadPageWhilePayment;
+            event.returnValue = message; // Standard for most browsers
+            return message; // For some older browsers
+        }
+    }
+
     function loadPayPalButtons() {
         //=== Render paypal Buttons
         var errorOccurred = false;
@@ -42,7 +55,11 @@
             },
             //=== Call your server to save the transaction
             onApprove: function(data, actions) {
+                // Attach the event listener
+                window.addEventListener('beforeunload', handleBeforeUnload);
+
                 $(".Paypal-js").prepend(fcom.getLoader());
+                $("#paypal-buttons").html(langLbl.dontReloadPageWhilePayment);
                 $.ykmsg.info(langLbl.waitingForResponse, -1);
                 return fetch(fcom.makeUrl('PaypalPay', 'captureOrder', [data.orderID]), {
                     method: "POST",
@@ -64,6 +81,7 @@
                                 fcom.removeLoader();
                                 fcom.displayErrorMessage(resp.msg);
                             } else {
+                                condition = true;
                                 fcom.displaySuccessMessage(resp.msg);
                                 setTimeout(function() {
                                     window.location.href = resp.redirecUrl;
