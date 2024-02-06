@@ -59,7 +59,7 @@ FatApp::getDb()->logQueries(true,CONF_UPLOADS_PATH.'logQuery.txt'); */
 
 $_SESSION['WYSIWYGFileManagerRequirements'] = CONF_INSTALLATION_PATH . 'public/WYSIWYGFileManagerRequirements.php';
 if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
-    require_once CONF_INSTALLATION_PATH . 'library/aws/aws-autoloader.php';
+    require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
     AttachedFile::registerS3ClientStream();
 }
 define('SYSTEM_INIT', true);
