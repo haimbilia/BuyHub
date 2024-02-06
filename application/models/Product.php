@@ -1491,7 +1491,11 @@ class Product extends MyAppModel
         }
         $criteria['max_price'] = true;
         //$srch->setDefinedCriteria($join_price, 0, $criteria, true);
-        $srch->joinForPrice('', $criteria, true);
+        if(0 < $shop_id){
+            $srch->joinSellerProducts(0,'', $criteria, true);
+        }else{
+            $srch->joinForPrice('', $criteria, true);
+        }
         $srch->unsetDefaultLangForJoins();
         $srch->joinSellers();
         $srch->setGeoAddress();
