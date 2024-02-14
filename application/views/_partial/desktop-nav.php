@@ -7,7 +7,8 @@
                     <svg class="svg" width="16" height="16">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#hamburger-menu">
                         </use>
-                    </svg><span class="text-nowrap"><?php echo Labels::getLabel('NAV_ALL_CATEGORIES', $siteLangId); ?></span></button>
+                    </svg><span class="text-nowrap"><?php echo Labels::getLabel('NAV_ALL_CATEGORIES', $siteLangId); ?></span>
+                </button>
             </li>
             <?php
         }
