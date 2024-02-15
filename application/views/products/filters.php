@@ -57,7 +57,7 @@ if (isset($prodcat_code)) {
                             if (0 < count($link['children'])) {
                                 $href = '#';
                             }
-
+                            $selectorClass = 'filters';
                             require CONF_THEME_PATH . '_partial/navigation/mobile-nav-item-cat.php';
                         }
                         ?>
