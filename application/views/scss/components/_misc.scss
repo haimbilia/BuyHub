@@ -512,49 +512,48 @@ mark,
     }
 }
 
+ 
+ 
+//.dropdown-toggle-custom
 .dropdown-toggle-custom {
     text-align: #{$start-direction};
     cursor: pointer;
     position: relative;
     padding-#{$end-direction}: 2rem;
-
+  
     &-arrow {
+      position: absolute;
+      transform: translate(-6px, 0);
+      top: calc(50% - 4px);
+      #{$end-direction}: 0;
+  
+      &:after,
+      &:before {
+        content: "";
         position: absolute;
-        transform: translate(-6px, 0);
-        top: calc(50% - 4px);
-        #{$end-direction}: 0;
-
-        &:after,
+        background-color: currentColor;
+        width: 1px;
+        height: 9px;
+        transition: all 0.25s ease-in-out;
+      }
+      &:before {
+        transform: translate(-3px * $transform-direction, 0) rotate(-45deg);
+      }
+      &:after {
+        transform: translate(3px * $transform-direction, 0) rotate(45deg);
+      }
+      [aria-expanded="true"] & {
         &:before {
-            content: "";
-            position: absolute;
-            background-color: currentColor;
-            width: 1px;
-            height: 9px;
-            transition: all 0.25s ease-in-out;
+          transform: translate(-3px * $transform-direction, 0) rotate(45deg);
         }
-
-        &:before {
-            transform: translate(-3px * $transform-direction, 0) rotate(45deg);
-        }
-
+  
         &:after {
-            transform: translate(3px * $transform-direction, 0) rotate(-45deg);
+          transform: translate(3px * $transform-direction, 0) rotate(-45deg);
         }
+      }
     }
+  }
 
-    &:not(.show) {
-        .dropdown-toggle-custom-arrow {
-            &:before {
-                transform: translate(3px * $transform-direction, 0) rotate(45deg);
-            }
-
-            &:after {
-                transform: translate(-3px * $transform-direction, 0) rotate(-45deg);
-            }
-        }
-    }
-}
 
 .btn-dropdown {
     padding-#{$end-direction}: 3rem;
