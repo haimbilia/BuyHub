@@ -42,6 +42,16 @@
                         </a>
                     </li>
                 <?php } ?>
+                <?php if (User::canViewAffiliateTab()) { ?>
+                    <li class="dropdown-menu-item <?php echo ($activeTab == 'AFFILIATE') ? 'is-active' : ''; ?>">
+                        <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Affiliate'); ?>">
+                            <div class="meta-block">
+                                <span class="meta-img"><?php echo HtmlHelper::displayWordsFirstLetter($dashboardArr['AFFILIATE']); ?></span>
+                                <?php echo $dashboardArr['AFFILIATE']; ?>
+                            </div>
+                        </a>
+                    </li>
+                <?php } ?>
                 <?php if (User::canViewAdvertiserTab() && $userPrivilege->canViewPromotions(0, true)) { ?>
                     <li class="dropdown-menu-item <?php echo ($activeTab == 'Ad') ? 'is-active' : ''; ?>">
                         <a class="dropdown-menu-link" href="<?php echo UrlHelper::generateUrl('Advertiser'); ?>">
