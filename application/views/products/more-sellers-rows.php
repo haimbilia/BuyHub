@@ -17,7 +17,9 @@ foreach ($sellers as $key => $sellerDetail) {
     }
     ?>
     <li class="more-sellers-item <?php echo ($isActive ? 'is-active' : ''); ?>">
-        <div class="sold-price"><?php echo CommonHelper::displayMoneyFormat($sellerDetail['theprice']); ?></div>
+        <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+            <div class="sold-price"><?php echo CommonHelper::displayMoneyFormat($sellerDetail['theprice']); ?></div>
+        <?php } ?>
         <div class="sold-by">
             <span class="sold-by-txt"><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?></span>
             <a class="sold-by-name" href="<?php echo UrlHelper::generateFullUrl('Products', 'View', array($sellerDetail['selprod_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>">

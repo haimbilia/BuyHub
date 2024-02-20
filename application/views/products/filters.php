@@ -98,7 +98,7 @@ if (isset($prodcat_code)) {
     <?php } ?>
 
 
-    <?php if (isset($priceArr) && $priceArr) { ?>
+    <?php if (isset($priceArr) && $priceArr && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
         <div class="sidebar-widget">
             <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#price" aria-expanded="true">
                 <?php echo Labels::getLabel('LBL_Price', $siteLangId) . ' (' . (CommonHelper::getCurrencySymbolRight() ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft()) . ')'; ?>
@@ -123,11 +123,9 @@ if (isset($prodcat_code)) {
                             <div class="price-text-box input-group">
                                 <div class="input-group-prepend"><span class="input-group-text"><?php echo $symbol; ?></span></div>
                                 <input class="input-filter form-control" value="<?php echo ceil($priceArr['maxPrice']); ?>" data-defaultvalue="<?php echo $filterDefaultMaxValue; ?>" name="priceFilterMaxValue" type="text" id="priceFilterMaxValue">
-
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

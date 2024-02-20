@@ -27,6 +27,7 @@
     - Bug-078138 - Product setup page gets distorted when the admin tries to paste the content in CMS editor (Firefox)
     - Bug-076927 - The shipping charges get refunded to the buyer even if the admin disabled return shipping charges to the customer setting
     - Bug-080564 - Buy now button should not be there on the Detail page after offer acceptance.
+    - Bug-080559 - Hide price setting is not working properly
 
 ## Hit URL:
     - admin/patch-update/updateProductRating    

@@ -22,16 +22,17 @@ if (isset($products) && 0 < count($products)) {
                 </button>
             </li>
         <?php } ?>
-
-        <li title='<?php echo Labels::getLabel('LBL_MOVE_TO_CART', $siteLangId); ?>' data-bs-toggle="tooltip" data-placement="top">
-            <button class="btn btn-outline-gray btn-icon formActionBtn-js disabled" onclick="addSelectedToCart(event, <?php echo ($isWishList ? 1 : 0); ?>);">
-                <svg class="svg btn-icon-start" width="18" height="18">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#cart">
-                    </use>
-                </svg>
-                <span class="txt"><?php echo Labels::getLabel('LBL_CART', $siteLangId); ?></span>
-            </button>
-        </li>
+        <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+            <li title='<?php echo Labels::getLabel('LBL_MOVE_TO_CART', $siteLangId); ?>' data-bs-toggle="tooltip" data-placement="top">
+                <button class="btn btn-outline-gray btn-icon formActionBtn-js disabled" onclick="addSelectedToCart(event, <?php echo ($isWishList ? 1 : 0); ?>);">
+                    <svg class="svg btn-icon-start" width="18" height="18">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#cart">
+                        </use>
+                    </svg>
+                    <span class="txt"><?php echo Labels::getLabel('LBL_CART', $siteLangId); ?></span>
+                </button>
+            </li>
+        <?php } ?>
 
         <li title='<?php echo Labels::getLabel('LBL_REMOVE_FROM_LIST', $siteLangId); ?>' data-bs-toggle="tooltip" data-placement="top">
             <button class="btn btn-outline-gray btn-icon formActionBtn-js disabled" onclick="<?php echo $function; ?>">
