@@ -617,14 +617,6 @@ class RequestForQuote extends MyAppModel
             return true;
         }
 
-        if (applicationConstants::NO == $shopRfqEnabled) {
-            return false;
-        }
-
-        if (applicationConstants::NO == $selProdRfqEnabled) {
-            return false;
-        }
-
-        return true;
+        return (applicationConstants::YES == $shopRfqEnabled && applicationConstants::YES == $selProdRfqEnabled);
     }
 }
