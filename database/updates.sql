@@ -425,8 +425,10 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_type = VALU
 INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('APP_WRITE_COMMENT', 1, 'Write your Comment', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_type = VALUES(label_type);
+
 ALTER TABLE `tbl_seller_products` ADD `selprod_rfq_enabled` TINYINT(4) NOT NULL AFTER `selprod_urlrewrite_id`;
 
+INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('APP_LONG_MSG', 1, 'Your message is too long', 2),
 ('APP_EDIT_CHARACTERS', 1, 'Please edit it down to %s characters', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_type = VALUES(label_type);
