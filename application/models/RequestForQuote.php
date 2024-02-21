@@ -616,6 +616,10 @@ class RequestForQuote extends MyAppModel
         if ($moduleType != RequestForQuote::TYPE_INDIVIDUAL) {
             return true;
         }
+        
+        if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            return true;
+        }
 
         return (applicationConstants::YES == $shopRfqEnabled && applicationConstants::YES == $selProdRfqEnabled);
     }
