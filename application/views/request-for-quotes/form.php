@@ -84,7 +84,7 @@ if (!$isUserLogged) {
         } ?>
         <div class="request-quote__head">
             <div class="quote">
-                <?php if (1 > FatApp::getConfig('CONF_HIDE_SELLER_INFO', FatUtility::VAR_INT, 0) && RequestForQuote::TYPE_INDIVIDUAL != FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0)) { ?>
+                <?php if (1 > FatApp::getConfig('CONF_HIDE_SELLER_INFO', FatUtility::VAR_INT, 0) && RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0)) { ?>
                     <div class="quote-to">
                         <span class="label"><?php echo Labels::getLabel('LBL_TO:'); ?></span>
                         <div class="avatar">
