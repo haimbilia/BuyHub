@@ -84,7 +84,7 @@ if (!$isUserLogged) {
         } ?>
         <div class="request-quote__head">
             <div class="quote">
-                <?php if (1 > FatApp::getConfig('CONF_HIDE_SELLER_INFO', FatUtility::VAR_INT, 0)) { ?>
+                <?php if (1 > FatApp::getConfig('CONF_HIDE_SELLER_INFO', FatUtility::VAR_INT, 0) && RequestForQuote::TYPE_INDIVIDUAL != FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0)) { ?>
                     <div class="quote-to">
                         <span class="label"><?php echo Labels::getLabel('LBL_TO:'); ?></span>
                         <div class="avatar">
@@ -125,8 +125,6 @@ if (!$isUserLogged) {
                             <?php } ?>
                         </div>
                     </div>
-                <?php } else { ?>
-                    <div class="divider"></div>
                 <?php } ?>
                 <div class="quote-for">
                     <div class="product-profile">
@@ -180,8 +178,7 @@ if (!$isUserLogged) {
 
                     <div class="accordion-group__body  collapse" id="variants">
                         <div class="row g-2">
-                            <?php
-                            foreach ($optionRows as $optionsList) { ?>
+                            <?php foreach ($optionRows as $optionsList) { ?>
                                 <div class="col-xl-6">
                                     <div class="form-group form-floating">
                                         <select class="form-control" name="selprod_variants" onchange="requestForQuoteFn(this.value);">
@@ -196,8 +193,7 @@ if (!$isUserLogged) {
                                         <label class="form-floating-label"><?php echo $optionsList['option_name']; ?> </label>
                                     </div>
                                 </div>
-                            <?php
-                            } ?>
+                            <?php } ?>
                         </div>
                     </div>
 

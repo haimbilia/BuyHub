@@ -75,6 +75,9 @@ class RequestForQuotesController extends MyAppController
                 $optionValueSrch->addMultipleFields(array('COALESCE(product_name, product_identifier) as product_name', 'selprod_id', 'selprod_user_id', 'selprod_code', 'option_id', 'COALESCE(optionvalue_name,optionvalue_identifier) as optionvalue_name ', 'theprice', 'optionvalue_id', 'optionvalue_color_code'));
                 $optionValueSrch->addGroupBy('optionvalue_id');
                 $optionValueSrch->addOrder('optionvalue_display_order');
+                $optionValueSrch->addCondition('shop_rfq_enabled', '=', applicationConstants::YES);
+                $optionValueSrch->addCondition('selprod_rfq_enabled', '=', applicationConstants::YES);
+
                 $optionValueRs = $optionValueSrch->getResultSet();
                 if (true === MOBILE_APP_API_CALL) {
                     $optionValueRows = FatApp::getDb()->fetchAll($optionValueRs);
@@ -259,7 +262,7 @@ class RequestForQuotesController extends MyAppController
 
         $shopData = Shop::getAttributesByUserId($selprodData['selprod_user_id'], ['shop_name', 'shop_user_id'], langId: $this->siteLangId);
         $shopData['seller_id'] = $shopData['shop_user_id'];
-        
+
         $post['rfq_number'] = $rfq->getRfqNo();
         $emailData = array_merge($selprodData, $shopData, $userInfo, $address, $post, ['rfq_id' => $rfq->getMainTableRecordId(), 'rfq_added_on' => date("d-m-Y")]);
         $selprodOption = SellerProduct::getSellerProductOptionsBySelProdCode($emailData['selprod_code'], $this->siteLangId);
@@ -296,7 +299,7 @@ class RequestForQuotesController extends MyAppController
             $HubSpotApi = new HubSpotApi($rfqPostedData);
             $HubSpotApi->run();
         }
-        
+
         $emailHandler = new EmailHandler();
         if (false === $emailHandler->sendNewRfqNotification($this->siteLangId, $emailData)) {
             $msg = $emailHandler->getError();
