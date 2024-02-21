@@ -3201,7 +3201,6 @@ class EmailHandler extends FatModel
         return true;
     }
 
-
     public function sendNewRfqNotification($langId, $data)
     {
         $tpl = new FatTemplate('', '');
@@ -3502,7 +3501,6 @@ class EmailHandler extends FatModel
         }
         return true;
     }
-
 
     public function sendRedeemGiftCardNotification(array $card)
     {

@@ -257,8 +257,9 @@ class RequestForQuotesController extends MyAppController
         $address = new Address($post['rfq_addr_id'], $this->siteLangId);
         $address = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
 
-        $shopData = Shop::getAttributesByUserId($selprodData['selprod_user_id'], ['shop_name'], langId: $this->siteLangId);
-
+        $shopData = Shop::getAttributesByUserId($selprodData['selprod_user_id'], ['shop_name', 'shop_user_id'], langId: $this->siteLangId);
+        $shopData['seller_id'] = $shopData['shop_user_id'];
+        
         $post['rfq_number'] = $rfq->getRfqNo();
         $emailData = array_merge($selprodData, $shopData, $userInfo, $address, $post, ['rfq_id' => $rfq->getMainTableRecordId(), 'rfq_added_on' => date("d-m-Y")]);
         $selprodOption = SellerProduct::getSellerProductOptionsBySelProdCode($emailData['selprod_code'], $this->siteLangId);
@@ -295,11 +296,19 @@ class RequestForQuotesController extends MyAppController
             $HubSpotApi = new HubSpotApi($rfqPostedData);
             $HubSpotApi->run();
         }
+        
         $emailHandler = new EmailHandler();
         if (false === $emailHandler->sendNewRfqNotification($this->siteLangId, $emailData)) {
             $msg = $emailHandler->getError();
             $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY_SITE_ADMIN._NOTIFICATION_LOGGED_TO_SYSTEM.') : $msg;
             LibHelper::exitWithError($msg, true);
+        }
+        if (applicationConstants::YES == $post['rfq_approved']) {
+            if (false === $emailHandler->sendApprovalStatusRfqNotification($this->siteLangId, $emailData)) {
+                $msg = $emailHandler->getError();
+                $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY_SITE_ADMIN._NOTIFICATION_LOGGED_TO_SYSTEM.') : $msg;
+                LibHelper::exitWithError($msg, true);
+            }
         }
         $db->commitTransaction();
         $this->set('isGuest', $isGuest);

@@ -10,8 +10,8 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                             <td style="background-color: #' . FatApp::getConfig('CONF_EMAIL_TEMPLATE_COLOR_CODE' . $siteLangId, FatUtility::VAR_STRING, 'ff3a59') . ';padding: 10px 25px;">
                                 <table width="100%" border="0" cellpadding="0" cellspacing="0">                                                             
                                     <tr>
-                                        <td style="font-size: 14px;font-weight: $font-weight-boldest;color: #333;"></td>
-                                        <td style="font-size: 14px;font-weight: $font-weight-boldest;color: #333; text-align: right;">' . Labels::getLabel('LBL_REQUEST_DATE.', $siteLangId) . ' ' . FatDate::format($data['rfq_added_on']) . '</td>
+                                        <td style="font-size: 14px;font-weight: $font-weight-boldest;color: #fff;"></td>
+                                        <td style="font-size: 14px;font-weight: $font-weight-boldest;color: #fff; text-align: right;">' . Labels::getLabel('LBL_REQUEST_DATE.', $siteLangId) . ' ' . FatDate::format($data['rfq_added_on']) . '</td>
                                     </tr>
                                 </table>                                                          
                             </td>

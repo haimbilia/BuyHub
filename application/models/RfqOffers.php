@@ -298,12 +298,25 @@ class RfqOffers extends MyAppModel
      */
     public static function canBuyerReply(int $offerId): bool
     {
-        $offerInfo = RfqOffers::getAttributesById($offerId, ['offer_primary_offer_id', 'offer_negotiable', 'offer_status', 'offer_expired_on']);
+        $offerInfo = RfqOffers::getAttributesById($offerId, ['offer_primary_offer_id', 'offer_negotiable', 'offer_status', 'offer_expired_on', 'offer_user_type']);
         if (false == $offerInfo || $offerInfo['offer_negotiable'] == applicationConstants::NO) {
             return false;
         }
 
         if (!in_array($offerInfo['offer_status'], [RfqOffers::STATUS_OPEN])) {
+            if (RfqOffers::STATUS_COUNTERED == $offerInfo['offer_status']) {
+                $srch = new SearchBase(self::DB_RFQ_LATEST_OFFER, 'rlo');
+                $srch->addCondition('rlo_primary_offer_id', '=', $offerInfo['offer_primary_offer_id']);
+                $srch->doNotCalculateRecords();
+                $srch->addMultipleFields(['rlo_seller_offer_id', 'rlo_buyer_offer_id']);
+                $result = FatApp::getDb()->fetch($srch->getResultSet());
+                if (User::USER_TYPE_SELLER == $offerInfo['offer_user_type']) {
+                    return ($result['rlo_buyer_offer_id'] < $offerId);
+                } else {
+                    return ($result['rlo_seller_offer_id'] > $offerId);
+                }
+            }
+
             return false;
         }
 

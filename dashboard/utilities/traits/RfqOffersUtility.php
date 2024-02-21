@@ -189,7 +189,7 @@ trait RfqOffersUtility
             array_push($counterOfferFlds, 'roc.' . $fld . ' as counter_' . $fld);
         }
 
-        $dbFlds = array_merge($flds, $counterOfferFlds, ['rlo_seller_user_id', 'ou.user_name', 'ouc.credential_email', 'ou.user_updated_on', 'ou.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'ous.shop_id', 'rlo_primary_offer_id', 'rfq_status', 'rfq_quantity_unit', 'rfq_added_on', 'rlo_shipping_charges', 'rlo_accepted_offer_id', 'rlo_selprod_id']);
+        $dbFlds = array_merge($flds, $counterOfferFlds, ['rlo_seller_user_id', 'ou.user_name', 'ouc.credential_email', 'ou.user_updated_on', 'ou.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'ous.shop_id', 'rlo_primary_offer_id', 'rfq_status', 'rfq_quantity_unit', 'rfq_added_on', 'rlo_shipping_charges', 'rlo_accepted_offer_id', 'rlo_selprod_id', 'rlo_seller_offer_id', 'rlo_buyer_offer_id']);
         $srch->addMultipleFields($dbFlds);
 
         $sellerId = FatApp::getPostedData('offer_user_id', FatUtility::VAR_INT, 0);

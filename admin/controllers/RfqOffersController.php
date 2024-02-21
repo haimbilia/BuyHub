@@ -195,7 +195,7 @@ class RfqOffersController extends ListingBaseController
             array_push($counterOfferFlds, 'roc.' . $fld . ' as counter_' . $fld);
         }
 
-        $dbFlds = array_merge($flds, $counterOfferFlds, ['rlo_seller_user_id', 'olu.user_name', 'oluc.credential_email', 'olu.user_updated_on', 'olu.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'rlo_primary_offer_id', 'rfq_added_on', 'rfq_status', 'rfq_quantity_unit', 'rlo_shipping_charges', 'rlo_seller_user_id']);
+        $dbFlds = array_merge($flds, $counterOfferFlds, ['rlo_seller_user_id', 'olu.user_name', 'oluc.credential_email', 'olu.user_updated_on', 'olu.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'rlo_primary_offer_id', 'rfq_added_on', 'rfq_status', 'rfq_quantity_unit', 'rlo_shipping_charges', 'rlo_seller_user_id', 'rlo_seller_offer_id', 'rlo_buyer_offer_id']);
         $srch->addMultipleFields($dbFlds);
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
