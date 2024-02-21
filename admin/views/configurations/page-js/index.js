@@ -374,3 +374,23 @@ updateVerificationFile = function (inputBtn, fileType) {
         });
     }
 }
+
+$(document).on('change', 'input[name="CONF_HIDE_PRICES"]', function () {
+    if (this.checked) {
+        if (!$('input[name="CONF_RFQ_MODULE"]').is(":checked")) {
+            $(this).prop('checked', false);
+            alert(langLbl.enableRfqModule);
+            return false;
+        }
+    }
+});
+
+$(document).on('change', 'input[name="CONF_RFQ_MODULE"]', function () {
+    if (false == this.checked) {
+        if ($('input[name="CONF_HIDE_PRICES"]').is(":checked")) {
+            $(this).prop('checked', true);
+            alert(langLbl.disableHidePriceSettings);
+            return false;
+        }
+    }
+});

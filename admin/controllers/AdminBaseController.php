@@ -134,7 +134,6 @@ class AdminBaseController extends FatController
                     'lengthOf' => Labels::getLabel('VLBL_LENGTH_OF', $this->siteLangId),
                     'valueOf' => Labels::getLabel('VLBL_VALUE_OF', $this->siteLangId),
                     'mustBeBetween' => Labels::getLabel('VLBL_MUST_BE_BETWEEN', $this->siteLangId),
-                    'mustBeBetween' => Labels::getLabel('VLBL_MUST_BE_BETWEEN', $this->siteLangId),
                     'and' => Labels::getLabel('VLBL_AND', $this->siteLangId),
                     'pleaseSelect' => Labels::getLabel('VLBL_PLEASE_SELECT', $this->siteLangId),
                     'to' => Labels::getLabel('VLBL_TO', $this->siteLangId),
@@ -183,7 +182,6 @@ class AdminBaseController extends FatController
                     'dropFilesToUpload' => Labels::getLabel('MSG_DROP_FILES_HERE_TO_UPLOAD', $this->siteLangId),
                     'invalidUploadFileType' => Labels::getLabel('MSG_INVALID_FILE_TYPE._ONLY_{FILE-TYPE}_FILE_CAN_BE_UPLOADED', $this->siteLangId),
                     'clickToCopy' => Labels::getLabel('LBL_CLICK_TO_COPY', $this->siteLangId),
-                    'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
                     'confirmAsBuyer' => Labels::getLabel('LBL_DO_YOU_WANT_TO_MARK_THIS_USER_AS_BUYER?', $this->siteLangId),
                     'maxLengthValidator' => CommonHelper::replaceStringData(Labels::getLabel('FRM_USED_{charsTyped}_of_{charsTotal}_CHAR', $this->siteLangId), ["{charsTyped}" => "%charsTyped%", "{charsTotal}" => "%charsTotal%"]), /* Used By Maxlength bootstrap validator. */
                     'unread' => Labels::getLabel('LBL_UNREAD', $this->siteLangId),
@@ -194,6 +192,8 @@ class AdminBaseController extends FatController
                     'clickToHide' => Labels::getLabel('LBL_CLICK_TO_HIDE', $this->siteLangId),
                     'clickToExpand' => Labels::getLabel('LBL_CLICK_TO_EXPAND', $this->siteLangId),
                     'total' => Labels::getLabel('LBL_TOTAL', $this->siteLangId),
+                    'enableRfqModule' => Labels::getLabel('LBL_PLEASE_ENABLE_RFQ_MODULE_FIRST.', $this->siteLangId),
+                    'disableHidePriceSettings' => Labels::getLabel('LBL_PLEASE_DISABLE_HIDE_PRICE_SETTING_FIRST.', $this->siteLangId),
                 );
                 foreach ($languages as $val) {
                     if (empty($val)) {

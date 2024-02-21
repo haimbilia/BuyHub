@@ -143,6 +143,15 @@ class ConfigurationsController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
+
+        if (isset($post['CONF_RFQ_MODULE']) || isset($post['CONF_HIDE_PRICES'])) {
+            $rfqModule = isset($post['CONF_RFQ_MODULE']) ? $post['CONF_RFQ_MODULE'] : FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0);
+            $hidePrice = isset($post['CONF_HIDE_PRICES']) ? $post['CONF_HIDE_PRICES'] : FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0);
+            if (applicationConstants::INACTIVE == $rfqModule && applicationConstants::ACTIVE == $hidePrice) {
+                LibHelper::exitWithError(Labels::getLabel('LBL_RFQ_MODULE_SHOULD_BE_ENABLED_ALONG_WITH_HIDE_PRICE_SETTING.', $this->siteLangId), true);
+            }
+        }
+
         unset($post['form_type']);
         unset($post['btn_submit']);
         foreach ($this->serializeArrayValues as $val) {

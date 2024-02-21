@@ -28,6 +28,7 @@
     - Bug-076927 - The shipping charges get refunded to the buyer even if the admin disabled return shipping charges to the customer setting
     - Bug-080564 - Buy now button should not be there on the Detail page after offer acceptance.
     - Bug-080559 - Hide price setting is not working properly
+    - Bug-080573 - no option appears to purchase a product or place rfq on the detail page.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating    
