@@ -1,178 +1,183 @@
 .product-profile {
-    display: flex;
-    flex: 1;
-    gap: 1.5rem;
-    width: auto;
-    align-items: flex-start;
+  display: flex;
+  flex: 1;
+  gap: 1.5rem;
+  width: auto;
+  align-items: flex-start;
+  position: relative;
+
+  &-thumbnail {
     position: relative;
 
-    &-thumbnail {
-        position: relative;
-        margin-#{$end-direction}: 15px;
+    img {
+      min-width: 30px;
+      max-width: 80px;
+      border-radius: $common-radius;
+      //border: $border;
+      border: none;
 
-        img {
-            min-width: 30px;
-            max-width: 80px;
-            border-radius: $common-radius;
-            //border: $border;
-            border: none;
-
-            @include media-breakpoint-down(sm) {
-                max-width: 50px;
-            }
-        }
-    }
-
-    &-data {
-        display: flex;
-        flex: 1;
-        min-width: 0px;
-        flex-direction: column;
-
-        .title {
-            color: $txt-body;
-            font-weight: $font-weight-normal;
-            //font-size: 0.88rem;
-            margin-bottom: 10px;
-            // white-space: nowrap;
-            // overflow: hidden;
-            // text-overflow: ellipsis;
-        }
-
-        .products-price {
-            margin-bottom: 1rem;
-        }
-
-        .options {
-            font-size: 0.75rem;
-            color: $txt-gray;
-        }
-    }
-
-    &-btn {
-        margin-top: 5px;
-        font-size: 0.8rem;
-    }
-
-    &__pic {
-        background-color: $bg-placeholder;
-        aspect-ratio: 1/1;
-        flex: 0 0 50px;
+      @include media-breakpoint-down(sm) {
         max-width: 50px;
-        width: 50px;
-        border: $border;
-        border-radius: $common-radius;
-        margin: 0;
-        //margin-#{$end-direction}: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
+      }
+    }
+  }
 
-        img {}
+  &-data {
+    display: flex;
+    flex: 1;
+    min-width: 0px;
+    flex-direction: column;
 
-        &-seller {
-            flex: 0 0 100px;
-            max-width: 100px;
-            padding: 16px;
-        }
+    .title {
+      color: $txt-body;
+      font-weight: $font-weight-normal;
+      //font-size: 0.88rem;
+      margin-bottom: 10px;
+      // white-space: nowrap;
+      // overflow: hidden;
+      // text-overflow: ellipsis;
     }
 
-    &-free-size {
-        flex: auto;
-        max-width: none;
+    .products-price {
+      margin-bottom: 1rem;
     }
 
-    &__description {
-        font-size: 0.8rem;
-        // min-width: min-content;
-        min-width: 150px;
+    .options {
+      font-size: 0.75rem;
+      color: $txt-gray;
+    }
+  }
 
-        p {
-            margin: 3px 0;
-        }
+  &-btn {
+    margin-top: 5px;
+    font-size: 0.8rem;
+  }
+
+  &__pic {
+    background-color: $bg-placeholder;
+    aspect-ratio: 1/1;
+    flex: 0 0 50px;
+    max-width: 50px;
+    width: 50px;
+    border: $border;
+    border-radius: $common-radius;
+    margin: 0;
+    //margin-#{$end-direction}: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    img {
     }
 
-    &__title {
-        color: $txt-body;
-        margin: 0 0 4px 0;
-        font-weight: $font-weight-bold;
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        word-break: break-all;
-        word-break: break-word;
-        hyphens: auto;
+    &-seller {
+      flex: 0 0 100px;
+      max-width: 100px;
+      padding: 16px;
+    }
+  }
 
-        // white-space: nowrap;
-        // overflow: hidden;
-        // text-overflow: ellipsis;
-        a {
-            opacity: 1;
-            color: inherit;
-            font-weight: inherit;
+  &-free-size {
+    flex: auto;
+    max-width: none;
+  }
 
-            &:hover {
-                text-decoration: underline;
-            }
-        }
+  &__description {
+    font-size: 0.8rem;
+    // min-width: min-content;
+    min-width: 150px;
+
+    p {
+      margin: 3px 0;
+    }
+  }
+
+  &__title {
+    color: $txt-body;
+    margin: 0 0 4px 0;
+    font-weight: $font-weight-bold;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-all;
+    word-break: break-word;
+    hyphens: auto;
+
+    // white-space: nowrap;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+    a {
+      opacity: 1;
+      color: inherit;
+      font-weight: inherit;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__sub_title {
+    display: block;
+    opacity: 0.8;
+  }
+
+  &__brand {
+  }
+
+  &__location {
+    margin-bottom: 5px;
+
+    .svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &__category {
+    opacity: 0.8;
+  }
+
+  &__specification {
+    color: lighten($txt-body, 20%);
+  }
+
+  &__sold_by {
+  }
+
+  &__shipping {
+  }
+
+  &__sold_by {
+  }
+
+  &__shipping {
+  }
+
+  &__date {
+    display: block;
+    opacity: 0.6;
+  }
+
+  &__price {
+    font-weight: $font-weight-bold;
+
+    &_old {
+      color: $txt-gray;
+      font-weight: $font-weight-regular;
     }
 
-    &__sub_title {
-        display: block;
-        opacity: 0.8;
+    &_off {
+      font-weight: $font-weight-regular;
     }
+  }
 
-    &__brand {}
+  &__price_off {
+    color: $primary-color;
+  }
 
-    &__location {
-        margin-bottom: 5px;
-
-        .svg {
-            width: 14px;
-            height: 14px;
-        }
-    }
-
-    &__category {
-        opacity: 0.8;
-    }
-
-    &__specification {
-        color: lighten($txt-body, 20%);
-    }
-
-    &__sold_by {}
-
-    &__shipping {}
-
-    &__sold_by {}
-
-    &__shipping {}
-
-    &__date {
-        display: block;
-        opacity: 0.6;
-    }
-
-    &__price {
-        font-weight: $font-weight-bold;
-
-        &_old {
-            color: $txt-gray;
-            font-weight: $font-weight-regular;
-        }
-
-        &_off {
-            font-weight: $font-weight-regular;
-        }
-    }
-
-    &__price_off {
-        color: $primary-color;
-    }
-
-    .btn-close {
-        position: absolute;
-        #{$end-direction}: 0;
-    }
+  .btn-close {
+    position: absolute;
+    #{$end-direction}: 0;
+  }
 }
