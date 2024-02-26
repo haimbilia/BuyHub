@@ -77,6 +77,7 @@ $(function () {
                 pauseOnHover: false,
                 centerPadding: 0,
                 adaptiveHeight: true,
+                touchThreshold: 100,
                 responsive: _responsiveArray
             });
         });

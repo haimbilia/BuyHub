@@ -13,7 +13,7 @@
             <span class="grouping-section groupingSectionJs">
                 <a class="grouping-title groupingLinkJs" href="<?php echo $href; ?>" target="<?php echo $target; ?>"><?php echo $caption; ?></a>
                 <?php if (0 < count($child['children'])) { ?>
-                    <button class="grouping-arrow dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false" href="#navItem-<?php echo $child['nlink_id']; ?>" aria-controls="navItem-<?php echo $child['nlink_id']; ?>">
+                    <button class="grouping-arrow dropdown-toggle-custom collapseBtnJs collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#navItem-<?php echo $child['nlink_id']; ?>" aria-controls="navItem-<?php echo $child['nlink_id']; ?>">
                         <i class="grouping-arrow-icon dropdown-toggle-custom-arrow"></i>
                     </button>
                 <?php } ?>

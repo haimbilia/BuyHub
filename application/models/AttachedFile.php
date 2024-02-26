@@ -80,6 +80,7 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_CATEGORY_THUMB = 66; /* Used in category detail page */
     public const FILETYPE_RFQ = 67;
     public const FILETYPE_RFQ_OFFER_FILE = 68;
+    public const FILETYPE_SHIPPING_COMPANY_USER_DOCUMENT = 69;
 
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;
@@ -519,7 +520,7 @@ class AttachedFile extends MyAppModel
         return $this->saveAttachment($fl, $fileType, $recordId, $recordSubid, $name, $displayOrder, $uniqueRecord, $lang_id, $screen, $aspectRatio);
     }
 
-    public static function displayWebpImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
+    public static function displayWebpImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = false)
     {
         ob_end_clean();
         ini_set('memory_limit', '-1');
@@ -648,7 +649,7 @@ class AttachedFile extends MyAppModel
     }
 
     /* always call this function using image controller and pass relavant arguments. */
-    public static function displayImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
+    public static function displayImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = false)
     {
 
         if (substr($imageName, 0, 5) == 'webp/') {
@@ -1238,7 +1239,7 @@ class AttachedFile extends MyAppModel
         if (empty($dateTime)) {
             return;
         }
-        
+
         $time = strtotime($dateTime);
         if (0 < $time) {
             return '?t=' . $time;

@@ -357,7 +357,7 @@ class BlogController extends MyAppController
 
         if (false === MOBILE_APP_API_CALL) {
             $this->_template->addJs(array('js/masonry.pkgd.js'));
-            $this->_template->addJs(array('js/slick.js'));
+            $this->_template->addJs(array('js/slick.min.js'));
         }
         $this->_template->render(true, (!CommonHelper::isAppUser()));
     }

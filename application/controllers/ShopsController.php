@@ -22,7 +22,7 @@ class ShopsController extends MyAppController
         $params['featured'] = 1;
         $searchForm->fill($params);
         $this->set('searchForm', $searchForm);
-        $this->_template->addJs('js/slick.js');
+        $this->_template->addJs('js/slick.min.js');
         $this->set('geoLocation', FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')));
         $this->_template->render();
     }
@@ -485,7 +485,7 @@ class ShopsController extends MyAppController
         $searchFrm->fill($frmData);
         $this->set('frmProductSearch', $frm);
         $this->set('searchFrm', $searchFrm);
-        $this->_template->addJs('js/slick.js');
+        $this->_template->addJs('js/slick.min.js');
         $this->_template->addJs('js/shop-nav.js');
         $this->_template->addJs('js/jquery.colourbrightness.min.js');
         if (UserAuthentication::isUserLogged()) {

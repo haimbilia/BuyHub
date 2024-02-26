@@ -1007,9 +1007,9 @@ function markCatLinkActive() {
 			if (typeof attr !== 'undefined' && attr !== false) {
 				var href = attr.replace(/^\/|\/$/g, "");
 			}
-
 			if (uri == href) {
 				$(this).parent().addClass('active');
+				$(this).siblings('.collapseBtnJs').attr('aria-expanded', 'true');
 				if (0 < $(this).siblings().length) {
 					$(this).parent().siblings('.collapseJs').addClass('show');
 				}

@@ -36,7 +36,7 @@ if (isset($order)) {
     $prodUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONTEND);
     $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_MINI, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
-    $productName = html_entity_decode($product['product_name'], ENT_QUOTES, 'utf-8');
+    $productName = html_entity_decode($product['product_name'] ?? $product['product_identifier'], ENT_QUOTES, 'utf-8');
     $productTitle = html_entity_decode($product['selprod_title'], ENT_QUOTES, 'utf-8');
     $brandName = $product['brand_name'] ?? '';
     if (is_array($product['options']) && count($product['options'])) {

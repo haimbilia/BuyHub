@@ -177,6 +177,8 @@ class MyAppController extends FatController
                     'faqsSearchStringLengthMsg' => CommonHelper::replaceStringData(Labels::getLabel('LBL_TYPE_ATLEAST_{LEN}_CHARACTERS_TO_SEARCH_IN_FAQS.', $this->siteLangId), ['{LEN}' => Faq::FAQS_SEARCH_STRING_LENGTH]),
                     'overwriteCartItems' => Labels::getLabel('LBL_DO_YOU_WANT_TO_REPLACE_EXISTING_SHOP_ITEMS?', $this->siteLangId),
                     'maxLengthValidator' => CommonHelper::replaceStringData(Labels::getLabel('FRM_USED_{charsTyped}_of_{charsTotal}_CHAR', $this->siteLangId), ["{charsTyped}" => "%charsTyped%", "{charsTotal}" => "%charsTotal%"]), /* Used By Maxlength bootstrap validator. */
+                    'geoLocationNotSupported' => Labels::getLabel('FRM_GEO_LOCATION_NOT_SUPPORTED', $this->siteLangId),
+                    'dontReloadPageWhilePayment' => Labels::getLabel('FRM_PLEASE_DON`T_REFRESH/RELOAD_OR_HITTING_BACK_BUTTON_ON_THE_BROWSER._WE_ARE_PROCESSING_YOUR_TRANSACTION.', $this->siteLangId),
                 );
 
                 $languages = Language::getAllNames(false);
