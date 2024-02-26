@@ -558,8 +558,6 @@ class Shipping
      */
     private function fetchShippingRatesFromSystem(array $productInfo, array &$physicalSelProdIdArr, array $shippingAddressDetail = [], bool $isAccepted = false): bool
     {
-        $counter = [];
-
         foreach ($this->selProdShipRates as $rateId => $rates) {
             if (!empty($this->systemRatesToFetchSelprodIds) && !in_array($rates['selprod_id'], $this->systemRatesToFetchSelprodIds)) {
                 continue;
@@ -662,19 +660,33 @@ class Shipping
 
         $shipToStateId = isset($shippingAddressDetail['addr_state_id']) ? $shippingAddressDetail['addr_state_id'] : 0;
 
-        $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr, $isAccepted);
-        if (count($physicalSelProdIdArr)) {
-            $this->selProdShipRates = $this->getSellerProductShippingRates($physicalSelProdIdArr, $shipToCountryId, $shipToStateId, $productInfo);
-            if (!empty($this->selProdShipRates)) {
-                $this->fetchShippingRatesFromSystem($productInfo, $physicalSelProdIdArr, $shippingAddressDetail, $isAccepted);
+        $shippingCost = [];
+        if (isset($shippingAddressDetail['user_id']) && isset($_SESSION['offer_checkout'])) {
+            foreach ($productInfo as $selProdId => $product) {
+                $buyerId = $shippingAddressDetail['user_id'];
+                $shippingCost = $this->fetchCustomShippingRates($product['selprod_id'], $buyerId, $isAccepted);
+                if (!empty($shippingCost)) {
+                    $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['products'][$selProdId] = $productInfo[$selProdId];
+                    $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['shipping_options'][$selProdId] = [];
+                    $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['rates'][$selProdId] = [$shippingCost['id'] => $shippingCost];
+                }
             }
         }
 
-        /*Include Physical products whose shipping rates not defined */
-        foreach ($physicalSelProdIdArr as $selProdId) {
-            $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['products'][$selProdId] = $productInfo[$selProdId];
-            $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['shipping_options'][$selProdId] = [];
-            $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['rates'][$selProdId] = [];
+        if (empty($this->shippedByArr)) {
+            $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr, $isAccepted);
+            if (count($physicalSelProdIdArr)) {
+                $this->selProdShipRates = $this->getSellerProductShippingRates($physicalSelProdIdArr, $shipToCountryId, $shipToStateId, $productInfo);
+                if (!empty($this->selProdShipRates)) {
+                    $this->fetchShippingRatesFromSystem($productInfo, $physicalSelProdIdArr, $shippingAddressDetail, $isAccepted);
+                }
+            }
+            /*Include Physical products whose shipping rates not defined */
+            foreach ($physicalSelProdIdArr as $selProdId) {
+                $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['products'][$selProdId] = $productInfo[$selProdId];
+                $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['shipping_options'][$selProdId] = [];
+                $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['rates'][$selProdId] = [];
+            }
         }
 
         return $this->formatOutput(applicationConstants::SUCCESS, $this->shippedByArr);
