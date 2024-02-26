@@ -147,19 +147,27 @@ class RequestForQuote extends MyAppModel
         }
         return true;
     }
-
+    
     /**
      * getSellersByRecordId
      *
-     * @param int $recordId
+     * @param  int $recordId
+     * @param  bool $joinUserTable
      * @return array
      */
-    public static function getSellersByRecordId(int $recordId): array
+    public static function getSellersByRecordId(int $recordId, bool $joinUserTable = false): array
     {
         $srch = new SearchBase(self::DB_RFQ_TO_SELLERS);
         $srch->doNotCalculateRecords();
         $srch->addCondition('rfqts_rfq_id', '=', 'mysql_func_' . $recordId, 'AND', true);
-        $srch->addMultipleFields(self::RFQ_TO_SUPPLIER_FIELDS);
+        $attr = self::RFQ_TO_SUPPLIER_FIELDS;
+        if ($joinUserTable) {
+            $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'user_id = rfqts_user_id', 'u');
+            $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'credential_user_id = user_id', 'uc');
+            $attr[] = 'credential_email as shop_user_email';
+            $attr[] = 'user_name as shop_user_name';
+        }
+        $srch->addMultipleFields($attr);
         return (array)FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 

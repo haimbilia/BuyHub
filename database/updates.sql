@@ -433,3 +433,39 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ('APP_EDIT_CHARACTERS', 1, 'Please edit it down to %s characters', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_type = VALUES(label_type);
 
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES ('NEW_RFQ_ASSIGNED', '1', 'Request for New Quotation Assigned', 'Request for New Quotation Assigned', '<table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+    <tbody>
+        <tr>
+            <td style="background:#fff;padding:20px 0 10px; text-align:center;">
+                <h4
+                    style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;">
+                </h4>
+                <h2 style="margin:0; font-size:34px; padding:0;">Request for New Quotation Assigned</h2>
+            </td>
+        </tr>
+        <tr>
+            <td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td style="padding:20px 0 30px;"><strong style="font-size:18px;color:#333;">Dear {shop_user_name}
+                                </strong><br />
+                                A new request for quotation has been assigned to you
+                                <br />
+                                Please find the RFQ information below.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 30px;">{rfq_table}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>', '{rfq_table} RFQ information table<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', '1')
+ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body);
+
+INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES 
+('NEW_RFQ_ASSIGNED',1,'Request for New Quotation Assigned','Hello {shop_user_name},\r\nA new RFQ is assigned for {rfq_title} ({rfq_number}) with quantity {qty}.\r\n\r\n{SITE_NAME} Team','[{\"title\":\"RFQ Title\", \"variable\":\"{rfq_title}\"}, {\"title\":\"Quantity\", \"variable\":\"{qty}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]',1)
+ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);

@@ -249,6 +249,20 @@ class RequestForQuotesController extends ListingBaseController
                 $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.') : $msg;
                 LibHelper::exitWithError($msg, true);
             }
+
+            if (applicationConstants::YES == $approval) {
+                $sellers = RequestForQuote::getSellersByRecordId($recordId, true);
+                if (is_array($sellers) && !empty($sellers)) {
+                    foreach ($sellers as $sellerData) {
+                        $sellerData += $rfqData;
+                        if (false === $emailHandler->sendNewRfqAssignedNotification($this->siteLangId, $sellerData)) {
+                            // $msg = $emailHandler->getError();
+                            $msg = Labels::getLabel('ERR_UNABLE_TO_NOTIFY_SELLERS_FOR_NEW_RFQ_REQUEST.');
+                            LibHelper::exitWithError($msg, true);
+                        }
+                    }
+                }
+            }
         }
 
         $this->set('record_id', $rfq->getMainTableRecordId());

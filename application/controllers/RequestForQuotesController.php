@@ -169,16 +169,15 @@ class RequestForQuotesController extends MyAppController
         }
 
         $selprodId = FatApp::getPostedData('rfq_selprod_id', FatUtility::VAR_INT, 0);
-        $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty'], applicationConstants::JOIN_INNER);
+        $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty', 'selprod_rfq_enabled'], applicationConstants::JOIN_INNER);
         if ($post['rfq_quantity'] < $selprodData['selprod_min_order_qty']) {
             $msg = Labels::getLabel('ERR_REQUIRED_QUANTITY_SHOULD_BE_GREATER_THAN_EQUAL_TO_{QTY}');
             $msg = CommonHelper::replaceStringData($msg, ['{QTY}' => $selprodData['selprod_min_order_qty']]);
             LibHelper::exitWithError($msg, true);
         }
 
-        $moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
-        $shopRfqEnabled = Shop::getAttributesByUserId($selprodData['selprod_user_id'], 'shop_rfq_enabled');
-        if (RequestForQuote::TYPE_INDIVIDUAL == $moduleType && 1 > $shopRfqEnabled && 1 > $selprodData['selprod_rfq_enabled']) {
+        $shopRfqEnabled = Shop::getAttributesByUserId($selprodData['selprod_user_id'], 'shop_rfq_enabled');        
+        if (!RequestForQuote::isEnabled($shopRfqEnabled, $selprodData['selprod_rfq_enabled'])) {
             LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_NOT_ENABLED_FOR_THIS_SHOP_OR_PRODUCT.'), true);
         }
 
@@ -306,11 +305,24 @@ class RequestForQuotesController extends MyAppController
             $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY_SITE_ADMIN._NOTIFICATION_LOGGED_TO_SYSTEM.') : $msg;
             LibHelper::exitWithError($msg, true);
         }
-        if (applicationConstants::YES == $post['rfq_approved']) {
+
+        if (RequestForQuote::APPROVED == $post['rfq_approved']) {
             if (false === $emailHandler->sendApprovalStatusRfqNotification($this->siteLangId, $emailData)) {
                 $msg = $emailHandler->getError();
                 $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY_SITE_ADMIN._NOTIFICATION_LOGGED_TO_SYSTEM.') : $msg;
                 LibHelper::exitWithError($msg, true);
+            }
+
+            $sellers = RequestForQuote::getSellersByRecordId($rfq->getMainTableRecordId(), true);
+            if (is_array($sellers) && !empty($sellers)) {
+                foreach ($sellers as $sellerData) {
+                    $sellerData += $emailData;
+                    if (false === $emailHandler->sendNewRfqAssignedNotification($this->siteLangId, $sellerData)) {
+                        // $msg = $emailHandler->getError();
+                        $msg = Labels::getLabel('ERR_UNABLE_TO_NOTIFY_SELLERS_FOR_NEW_RFQ_REQUEST.');
+                        LibHelper::exitWithError($msg, true);
+                    }
+                }
             }
         }
         $db->commitTransaction();

@@ -3226,6 +3226,40 @@ class EmailHandler extends FatModel
         return true;
     }
 
+    public function sendNewRfqAssignedNotification($langId, $data)
+    {
+        $tpl = new FatTemplate('', '');
+        $tpl->set('data', $data);
+        $tpl->set('siteLangId', $langId);
+        $rfqTableFormat = $tpl->render(false, false, '_partial/emails/request-for-quote.php', true);
+
+        $vars = array(
+            '{rfq_table}' => $rfqTableFormat,
+            '{rfq_number}' => $data['rfq_number'],
+            '{shop_user_name}' => $data['shop_user_name']
+        );
+
+        if (!empty($data['shop_user_email'])) {
+            if (!(new FatMailer($langId, 'NEW_RFQ_ASSIGNED'))
+                ->setTo($data['shop_user_email'])
+                ->setVariables($vars)
+                ->send()) {
+                return false;
+            }
+        }
+
+        if (!empty($data['user_phone']) && !empty($data['user_phone_dcode'])) {
+            $vars = array(
+                '{shop_user_name}' => $data['shop_user_name'],
+                '{rfq_title}' => $data['rfq_title'],
+                '{rfq_number}' => $data['rfq_number'],
+                '{qty}' => $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true),
+            );
+            $this->sendSms('NEW_RFQ_ASSIGNED', ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'], $vars, $langId);
+        }
+        return true;
+    }
+
     public function sendApprovalStatusRfqNotification($langId, $data)
     {
         $tpl = new FatTemplate('', '');
