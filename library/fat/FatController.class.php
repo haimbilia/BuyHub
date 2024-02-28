@@ -1,5 +1,6 @@
 <?php
-class FatController
+
+class FatController extends stdClass
 {
     protected $_modelName;
     protected $_controllerName;

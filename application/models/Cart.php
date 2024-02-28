@@ -34,6 +34,10 @@ class Cart extends FatModel
     public const PAGE_TYPE_CHECKOUT = 2;
 
     public const CART_MAX_DISPLAY_QTY = 9;
+    public $cart_lang_id = 0;
+    public $cart_user_id = 0;
+    public $cart_id = 0;
+    public $cartSameSessionUser = 0;
 
     public function __construct($user_id = 0, $langId = 0, $tempCartUserId = 0, $pageType = 0)
     {

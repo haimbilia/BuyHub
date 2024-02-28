@@ -7,6 +7,8 @@ class OrderProductSearch extends SearchBase
     private $isOrderUserTableJoined;
     private $isShopJoined;
     private $commonLangId;
+    private $isOrderProductStatusJoined;
+    private $isShippingChargesTblJoined;
 
     public function __construct($langId = 0, $joinOrders = false, $joinOrderProductStatus = false, $deletedOrders = false)
     {

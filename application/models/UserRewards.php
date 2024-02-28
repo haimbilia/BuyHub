@@ -8,7 +8,6 @@ class UserRewards extends MyAppModel
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
     }
 
     public static function getSearchObject()
