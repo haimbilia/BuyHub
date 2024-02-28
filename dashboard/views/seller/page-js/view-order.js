@@ -75,8 +75,15 @@ $(document).ready(function () {
                 if ('' != t.tracking_number) {
                     $(form + ' .manualShippingJs').attr('data-fatreq', '{"required":false}');
                 }
-                updateStatus($(form)[0]);
+                if (orderShippedStatus == $(form + " .status-js").val()) {
+                    console.log("Updating local shipment status.");
+                    fcom.displayProcessing();
+                    setTimeout(() => {
+                        updateStatus($(form)[0]);
+                    }, 1000);
+                }
             } else {
+                console.error("'form.markAsShipped-js' Form Not Found");
                 window.location.reload();
             }
         });
