@@ -1,11 +1,11 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
-<?php
+<?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $frm->setFormTagAttribute('action', UrlHelper::generateUrl('TransferBankPay', 'send', array($orderInfo['id'])));
-$frm->setFormTagAttribute('class', 'form');
+$frm->setFormTagAttribute('class', 'form form--payment transferBankPaymentFormJs');
+$frm->setFormTagAttribute('style', 'display:none;');
 $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-12 col-xs-';
 $frm->developerTags['fld_default_col'] = 12;
 ?>
-<section class="payment-section">
+<section class="payment-section paymentSectionJs">
     <div class="payable-amount">
         <div class="payable-amount-head">
             <div class="payable-amount-logo">
@@ -106,11 +106,20 @@ $frm->developerTags['fld_default_col'] = 12;
                     </div>
                 </li>
             </ul>
-
+            <div class="my-3">
+                <?php echo HtmlHelper::configureSwitchForCheckboxStatic(
+                    'transfer_bank_pay_lator',
+                    applicationConstants::ACTIVE,
+                    'checked class="transferBankPayLaterJs"',
+                    Labels::getLabel('LBL_PAY_LATER', $siteLangId)
+                ); ?>
+                <span class="form-text text-muted">
+                    <?php echo Labels::getLabel('LBL_LEAVE_IT_ENABLED_IF_YOU_WANT_TO_PAY_LATER.'); ?>
+                </span>
+            </div>
             <?php
             if (!isset($error)) :
                 $frm->setFormTagAttribute('onsubmit', 'confirmPayment(this); return(false);');
-                $frm->setFormTagAttribute('class', 'form form--payment');
             ?>
                 <?php echo $frm->getFormTag(); ?>
                 <div class="payable-form-body">
@@ -154,7 +163,6 @@ $frm->developerTags['fld_default_col'] = 12;
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -170,11 +178,7 @@ $frm->developerTags['fld_default_col'] = 12;
                         </div>
                     </div>
                     <?php echo $frm->getFieldHtml('opayment_order_id'); ?>
-                    <?php echo $frm->getExternalJs(); ?>
-                <?php else : ?>
-                    <div class="alert alert-danger"><?php echo $error ?></div>
-                <?php endif; ?>
-                <div id="ajax_message"></div>
+                    <div id="ajax_message"></div>
                 </div>
                 <div class="payable-form-footer">
                     <div class="row">
@@ -197,14 +201,20 @@ $frm->developerTags['fld_default_col'] = 12;
                         </div>
                     </div>
                 </div>
-
-                </form>
-                <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
-                    <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
-                <?php } ?>
+                <?php echo '</form>' . $frm->getExternalJs(); ?>
+                <?php
+                /* When no form display. */
+                $btn->addFieldTagAttribute('class', 'btn btn-brand transferBankSubmitBtnJs');
+                $btn->addFieldTagAttribute('onclick', 'confirmPayment($("#' . $frm->getFormTagAttribute('id') . '")[0]); return false;');
+                echo $frm->getFieldHtml('btn_submit');
+                ?>
+            <?php else : ?>
+                <div class="alert alert-danger"><?php echo $error ?></div>
+            <?php endif; ?>
+            <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
+                <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
+            <?php } ?>
         </div>
-    </div>
-    </div>
     </div>
 </section>
 <?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
@@ -219,7 +229,11 @@ $frm->developerTags['fld_default_col'] = 12;
         $("input[type='submit']").val(langLbl.processing);
         var data = fcom.frmData(frm);
         var action = me.attr('action');
+        $('.paymentSectionJs').prepend(fcom.getLoader());
+        fcom.displayProcessing();
         fcom.ajax(action, data, function(t) {
+            fcom.removeLoader();
+            fcom.closeProcessing();
             try {
                 var json = $.parseJSON(t);
                 var el = $('#ajax_message');
@@ -234,4 +248,14 @@ $frm->developerTags['fld_default_col'] = 12;
             }
         });
     };
+
+    $(document).on('click', '.transferBankPayLaterJs', function() {
+        if ($(this).is(':checked')) {
+            $('.transferBankPaymentFormJs').slideUp();
+            $('.transferBankSubmitBtnJs').fadeIn();
+        } else {
+            $('.transferBankSubmitBtnJs').hide();
+            $('.transferBankPaymentFormJs').slideDown();
+        }
+    });
 </script>
