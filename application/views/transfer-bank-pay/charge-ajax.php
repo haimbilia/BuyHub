@@ -1,7 +1,7 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage'); ?>
-<?php
+<?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $frm->setFormTagAttribute('action', UrlHelper::generateUrl('TransferBankPay', 'send', array($orderInfo['id'])));
-$frm->setFormTagAttribute('class', 'form');
+$frm->setFormTagAttribute('class', 'form transferBankPaymentFormJs');
+$frm->setFormTagAttribute('style', 'display:none;');
 $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-12 col-xs-';
 $frm->developerTags['fld_default_col'] = 12;
 ?>
@@ -94,7 +94,17 @@ $frm->developerTags['fld_default_col'] = 12;
         </li>
     <?php } ?>
 </ul>
-
+<div class="my-3">
+    <?php echo HtmlHelper::configureSwitchForCheckboxStatic(
+        'transfer_bank_pay_lator',
+        applicationConstants::ACTIVE,
+        'checked class="transferBankPayLaterJs"',
+        Labels::getLabel('LBL_PAY_LATER', $siteLangId)
+    ); ?>
+    <span class="form-text text-muted">
+        <?php echo Labels::getLabel('LBL_LEAVE_IT_ENABLED_IF_YOU_WANT_TO_PAY_LATER.'); ?>
+    </span>
+</div>
 <?php if (!isset($error)) :
     $frm->setFormTagAttribute('onsubmit', 'confirmPayment(this); return(false);');
     $btn = $frm->getField('btn_submit');
@@ -102,6 +112,11 @@ $frm->developerTags['fld_default_col'] = 12;
     $btn->addFieldTagAttribute('data-processing-text', Labels::getLabel('LBL_PLEASE_WAIT..', $siteLangId));
     $btn->developerTags['noCaptionTag'] = true;
     echo $frm->getFormHtml();
+
+    /* When no form display. */
+    $btn->addFieldTagAttribute('class', 'btn btn-brand transferBankSubmitBtnJs');
+    $btn->addFieldTagAttribute('onclick', 'confirmPayment($("#' . $frm->getFormTagAttribute('id') . '")[0]); return false;');
+    echo $frm->getFieldHtml('btn_submit');
 else : ?>
     <div class="alert alert-danger"><?php echo $error ?></div>
 <?php endif; ?>
@@ -116,7 +131,11 @@ else : ?>
         $("input[type='submit']").val(langLbl.processing);
         var data = fcom.frmData(frm);
         var action = me.attr('action');
+        $('#payment').prepend(fcom.getLoader());
+        fcom.displayProcessing();
         fcom.ajax(action, data, function(t) {
+            fcom.removeLoader();
+            fcom.closeProcessing();
             try {
                 var json = $.parseJSON(t);
                 var el = $('#ajax_message');
@@ -131,4 +150,15 @@ else : ?>
             }
         });
     };
+
+
+    $(document).on('click', '.transferBankPayLaterJs', function() {
+        if ($(this).is(':checked')) {
+            $('.transferBankPaymentFormJs').slideUp();
+            $('.transferBankSubmitBtnJs').fadeIn();
+        } else {
+            $('.transferBankSubmitBtnJs').hide();
+            $('.transferBankPaymentFormJs').slideDown();
+        }
+    });
 </script>
