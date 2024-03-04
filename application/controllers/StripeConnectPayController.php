@@ -96,6 +96,7 @@ class StripeConnectPayController extends PaymentController
     {
         if (empty($this->orderInfo)) {
             $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
+            $orderPaymentObj->markUserIsGuest(UserAuthentication::isGuestUserLogged());
             $this->paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
             $this->orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         }
