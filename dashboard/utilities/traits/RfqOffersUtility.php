@@ -739,6 +739,15 @@ trait RfqOffersUtility
         $db = FatApp::getDb();
         $db->startTransaction();
 
+        $updateArray = array('addr_is_default' => 0);
+        $whr = array('smt' => 'addr_type = ? and addr_record_id = ?', 'vals' => array(Address::TYPE_USER, UserAuthentication::getLoggedUserId()));
+
+        if (!$db->updateFromArray(Address::DB_TBL, $updateArray, $whr)) {
+            $db->rollbackTransaction();
+            LibHelper::exitWithError($db->getError(), false, true);
+            CommonHelper::redirectUserReferer();
+        }
+
         $addr = new Address($rfqOfferData['rfq_addr_id']);
         $addr->assignValues(['addr_is_default' => applicationConstants::YES]);
         if (!$addr->save()) {

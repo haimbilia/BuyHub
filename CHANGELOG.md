@@ -29,6 +29,7 @@
     - Bug-080564 - Buy now button should not be there on the Detail page after offer acceptance.
     - Bug-080559 - Hide price setting is not working properly
     - Bug-080573 - no option appears to purchase a product or place rfq on the detail page.
+    - Bug-080931 - Shipping address is not similar to that of the defined address in the rfq form
 
 ## Hit URL:
     - admin/patch-update/updateProductRating    
