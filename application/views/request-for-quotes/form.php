@@ -203,16 +203,12 @@ if (!$isUserLogged) {
                                 <label class="form-label"><?php echo $optionsList['option_name']; ?> </label>
                                 <select class="form-control" name="selprod_variants"
                                     onchange="requestForQuoteFn(this.value);">
-                                    <?php
-                                            foreach ($optionsList['values'] as $optVals) {
-                                            ?>
+                                    <?php foreach ($optionsList['values'] as $optVals) { ?>
                                     <option
                                         <?php echo (in_array($optVals['optionvalue_id'], $selectedOptions)) ? 'selected' : ''; ?>
                                         value=" <?php echo $optVals['selprod_id']; ?>">
                                         <?php echo $optVals['optionvalue_name']; ?> </option>
-                                    <?php
-                                            }
-                                            ?>
+                                    <?php } ?>
                                 </select>
 
                             </div>

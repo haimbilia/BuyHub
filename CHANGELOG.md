@@ -31,6 +31,7 @@
     - Bug-080573 - no option appears to purchase a product or place rfq on the detail page.
     - Bug-080931 - Shipping address is not similar to that of the defined address in the rfq form
     - Bug-080934 - Multiple issues in email templates in case of rfq
+    - Bug-080917 - Variant selction does not appear properly
 
 ## Hit URL:
     - admin/patch-update/updateProductRating    

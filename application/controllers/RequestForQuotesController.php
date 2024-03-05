@@ -75,8 +75,11 @@ class RequestForQuotesController extends MyAppController
                 $optionValueSrch->addMultipleFields(array('COALESCE(product_name, product_identifier) as product_name', 'selprod_id', 'selprod_user_id', 'selprod_code', 'option_id', 'COALESCE(optionvalue_name,optionvalue_identifier) as optionvalue_name ', 'theprice', 'optionvalue_id', 'optionvalue_color_code'));
                 $optionValueSrch->addGroupBy('optionvalue_id');
                 $optionValueSrch->addOrder('optionvalue_display_order');
-                $optionValueSrch->addCondition('shop_rfq_enabled', '=', applicationConstants::YES);
-                $optionValueSrch->addCondition('selprod_rfq_enabled', '=', applicationConstants::YES);
+
+                if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0) && RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0)) {
+                    $optionValueSrch->addCondition('shop_rfq_enabled', '=', applicationConstants::YES);
+                    $optionValueSrch->addCondition('selprod_rfq_enabled', '=', applicationConstants::YES);
+                }
 
                 $optionValueRs = $optionValueSrch->getResultSet();
                 if (true === MOBILE_APP_API_CALL) {
@@ -131,7 +134,6 @@ class RequestForQuotesController extends MyAppController
         $this->set('selprodId', $selprodId);
         $this->set('isUserLogged', ($this->loggedUserId > 0) ? applicationConstants::YES : applicationConstants::NO);
         // $this->set('productCategories', $productCategories);
-        $this->set('optionRows', $optionRows);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
