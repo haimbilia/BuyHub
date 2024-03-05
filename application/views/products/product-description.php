@@ -180,7 +180,7 @@
                 <div class="divider mt-4"></div>
             <?php }
 
-            if (0 < $acceptedOfferId) { ?>
+            /* if (0 < $acceptedOfferId) { ?>
                 <a class="btn btn-brand btn-block btn-rfq" href="<?php echo UrlHelper::generateUrl('RfqOffers', 'checkout', [$product['selprod_id'], $acceptedOfferId], CONF_WEBROOT_DASHBOARD); ?>" title="<?php echo Labels::getLabel('BTN_BUY_NOW'); ?>">
                     <?php echo Labels::getLabel('BTN_BUY_NOW'); ?>
                     <svg class="svg" width="20" height="20">
@@ -188,7 +188,7 @@
                         </use>
                     </svg>
                 </a>
-                <?php } else {
+                <?php } else { */
                 echo $frmBuyProduct->getFieldHtml('selprod_id');
                 if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_rfq_enabled'])) { ?>
                     <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
@@ -197,7 +197,7 @@
                     <span class="d-none">
                         <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
                     </span>
-            <?php }
+            <?php //}
             } ?>
         </div>
     <?php }
