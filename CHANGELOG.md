@@ -32,6 +32,7 @@
     - Bug-080931 - Shipping address is not similar to that of the defined address in the rfq form
     - Bug-080934 - Multiple issues in email templates in case of rfq
     - Bug-080917 - Variant selction does not appear properly
+    - Bug-080895 - it still shows manageblity for Rfq on shop level and Inventory level on admin end.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating    

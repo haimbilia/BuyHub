@@ -89,15 +89,15 @@ if (null != $fld) {
 }
 
 $fld = $frm->getField('use_shop_policy');
-HtmlHelper::configureSwitchForCheckbox($fld);
 if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
     $fld->developerTags['noCaptionTag'] = true;
     $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
 
 $fld = $frm->getField('selprod_rfq_enabled');
-HtmlHelper::configureSwitchForCheckbox($fld);
 if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
     $fld->developerTags['noCaptionTag'] = true;
     $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
