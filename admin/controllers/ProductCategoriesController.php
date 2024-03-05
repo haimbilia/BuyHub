@@ -73,7 +73,7 @@ class ProductCategoriesController extends ListingBaseController
 
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         if (!empty($keyword)) {
-            $prodCatSrchObj = new ProductCategorySearch($this->siteLangId, false, false, false, true, true, -1);
+            $prodCatSrchObj = new ProductCategorySearch($this->siteLangId, false, true, false, true, true);
             $records = ProductCategory::getTreeArr($this->siteLangId, 0, false, $prodCatSrchObj, false, $keyword);
             $this->set("allOpen", true);
             $this->set("searchRequest", true);
