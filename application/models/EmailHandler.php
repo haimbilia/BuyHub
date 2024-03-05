@@ -3360,8 +3360,17 @@ class EmailHandler extends FatModel
                 }
             }
         } else {
-            if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId)) {
-                return false;
+            if (!empty($data['seller_email'])) {
+                if (!(new FatMailer($langId, $tpl))
+                    ->setTo($data['seller_email'])
+                    ->setVariables($vars)
+                    ->send()) {
+                    return false;
+                }
+            } else {
+                if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId)) {
+                    return false;
+                }
             }
         }
 
@@ -3411,8 +3420,17 @@ class EmailHandler extends FatModel
                 }
             }
         } else {
-            if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId)) {
-                return false;
+            if (!empty($data['seller_email'])) {
+                if (!(new FatMailer($langId, $tpl))
+                    ->setTo($data['seller_email'])
+                    ->setVariables($vars)
+                    ->send()) {
+                    return false;
+                }
+            } else {
+                if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId)) {
+                    return false;
+                }
             }
         }
 

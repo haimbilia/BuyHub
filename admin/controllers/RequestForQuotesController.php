@@ -487,7 +487,7 @@ class RequestForQuotesController extends ListingBaseController
             $emailHandler = new EmailHandler();
             if (false === $emailHandler->sendDeletionRfqNotification($this->siteLangId, $rfqData)) {
                 $msg = $emailHandler->getError();
-                $msg = empty($msg) ? Labels::getLabel('ERR_RECORD_DELTED_BUT_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.') : $msg;
+                $msg = empty($msg) ? Labels::getLabel('ERR_RECORD_DELETED_BUT_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.') : $msg;
                 LibHelper::exitWithError($msg, true);
             }
         }

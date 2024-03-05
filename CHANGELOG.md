@@ -30,6 +30,7 @@
     - Bug-080559 - Hide price setting is not working properly
     - Bug-080573 - no option appears to purchase a product or place rfq on the detail page.
     - Bug-080931 - Shipping address is not similar to that of the defined address in the rfq form
+    - Bug-080934 - Multiple issues in email templates in case of rfq
 
 ## Hit URL:
     - admin/patch-update/updateProductRating    

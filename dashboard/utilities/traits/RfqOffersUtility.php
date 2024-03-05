@@ -447,7 +447,7 @@ trait RfqOffersUtility
                 array_push($counterOfferFlds, 'roc.' . $fld . ' as counter_' . $fld);
             }
 
-            $dbFlds = array_merge($flds, $counterOfferFlds, ['rfq_title', 'rfq_number', 'rfq_added_on', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'rlo_primary_offer_id', 'selprod_id', 'selprod_product_id', 'selprod_updated_on', 'bu.user_phone_dcode as buyer_phone_dcode', 'bu.user_phone as buyer_phone']);
+            $dbFlds = array_merge($flds, $counterOfferFlds, ['rfq_title', 'rfq_number', 'rfq_added_on', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'rlo_primary_offer_id', 'selprod_id', 'selprod_product_id', 'selprod_updated_on', 'bu.user_phone_dcode as buyer_phone_dcode', 'bu.user_phone as buyer_phone', 'suc.credential_email as seller_email']);
 
             $srch = new RequestForQuoteSearch();
             $srch->doNotCalculateRecords();
@@ -457,6 +457,7 @@ trait RfqOffersUtility
             $srch->joinOfferPostedBySellerShop(true);
             $srch->joinTable(RequestForQuote::DB_RFQ_TO_SELLERS, 'INNER JOIN', 'rs.rfqts_rfq_id = rfq_id AND rs.rfqts_user_id = ' . $sellerId, 'rs');
             $srch->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'sp.selprod_id = rs.rfqts_selprod_id', 'sp');
+            $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'rs.rfqts_user_id = suc.credential_user_id', 'suc');
             $srch->addCondition('rlo.rlo_primary_offer_id', '=', $primaryOfferId);
             $srch->addCondition('rlo.rlo_seller_user_id', '=', $sellerId);
             $srch->addCondition('ro.offer_rfq_id', '=', $post['offer_rfq_id']);
@@ -582,6 +583,7 @@ trait RfqOffersUtility
         $srch->joinOffers();
         $srch->joinBuyer();
         $srch->joinSellers('INNER');
+        $srch->joinSellerUser();
         $srch->joinSellerProduct(true);
         $srch->joinSellerShop(true);
         $srch->addCondition('rfq_id', '=', $rfqId);
@@ -596,10 +598,11 @@ trait RfqOffersUtility
             'offer_status',
             'offer_comments',
             'offer_added_on',
-            'user_name',
-            'user_phone_dcode',
-            'user_phone',
-            'credential_email',
+            'bu.user_name',
+            'bu.user_phone_dcode',
+            'bu.user_phone',
+            'buc.credential_email',
+            'suc.credential_email as seller_email',
             'selprod_id',
             'selprod_product_id',
             'selprod_updated_on',
