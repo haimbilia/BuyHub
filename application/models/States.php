@@ -11,7 +11,6 @@ class States extends MyAppModel
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
     }
 
     public static function getSearchObject($isActive = true, $langId = 0)
@@ -99,6 +98,11 @@ class States extends MyAppModel
         if ('state_code' == $idCol) {
             $srch->addCondition('state_code', '!=', '');
         }
+
+        if(!in_array($idCol,['state_code','state_country_id','state_identifier','state_id'])){
+            $idCol = 'state_code';
+        }
+        
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addOrder('state_name', 'ASC');

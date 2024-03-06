@@ -3,6 +3,7 @@
 class OrderPayment extends Orders
 {
     protected $attributes;
+    private bool $userIsGuest = false;
 
     public function __construct($orderId = 0, $langId = 0)
     {
@@ -34,13 +35,22 @@ class OrderPayment extends Orders
     {
         return $this->attributes['plugin_code'];
     }
+    
+    public function markUserIsGuest(bool $flag = true)
+    {
+        $this->userIsGuest = $flag;
+    }
 
     public function getOrderPrimaryinfo()
     {
         $arrOrder = array();
         $orderInfo = $this->attributes;
         $userObj = new User($orderInfo["order_user_id"]);
-        $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_phone_dcode', 'user_phone'));
+
+        $checkActiveAndVerified = (false == $this->userIsGuest);
+        $attr = array('user_name', 'credential_email', 'user_phone_dcode', 'user_phone');
+        $userInfo = $userObj->getUserInfo($attr, $checkActiveAndVerified, $checkActiveAndVerified);
+        
         $addresses = $this->getOrderAddresses($orderInfo["order_id"]);
         $currencyArr = Currency::getCurrencyAssoc($this->orderLangId);
 

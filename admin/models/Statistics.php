@@ -8,6 +8,7 @@ class Statistics extends MyAppModel
     public const BY_LAST_3_MONTHS = 90;
     public const BY_THIS_YEAR = 365;
     public const BY_ALL = -1;
+    private $db = '';
 
     public function __construct()
     {
@@ -75,8 +76,6 @@ class Statistics extends MyAppModel
                 $srch->doNotLimitRecords();
                 $srch->addMultipleFields(array('count(product_id) as total_products'));
                 $rs = $srch->getResultSet();
-                $row = $this->db->fetch($rs);
-
                 return $this->db->fetch($rs);
                 break;
             case 'orders':

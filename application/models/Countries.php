@@ -11,7 +11,6 @@ class Countries extends MyAppModel
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
     }
 
     public static function getSearchObject(bool $isActive = true, int $langId = 0): object
@@ -83,6 +82,11 @@ class Countries extends MyAppModel
         $langId = FatUtility::int($langId);
 
         $srch = $this->searchCountriesObj($langId, $isActive);
+
+        if(!in_array($idCol,['country_id','country_code','country_code_alpha3'])){
+            $idCol = 'country_code';
+        }
+
         $srch->addMultipleFields(
             array(
                 $idCol,

@@ -7,6 +7,8 @@ class StripePayController extends PaymentController
 
     private $error = false;
     private $paymentUrl = '';
+    private $paymentAmount = 0;
+    private $orderInfo = [];
 
     public function __construct($action)
     {
@@ -81,24 +83,23 @@ class StripePayController extends PaymentController
         } else {
             $this->error = Labels::getLabel('STRIPE_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId);
         }
-
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
-        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
-
-        $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
+        $orderPaymentObj->markUserIsGuest(UserAuthentication::isGuestUserLogged());
+        $this->paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
+        $this->orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (array_key_exists($this->systemCurrencyCode, $this->minChargeAmountCurrencies())) {
             $stripeMinAmount = $this->minChargeAmountCurrencies()[$this->systemCurrencyCode];
-            if ($stripeMinAmount > $paymentAmount) {
+            if ($stripeMinAmount > $this->paymentAmount) {
                 $this->error = CommonHelper::replaceStringData(Labels::getLabel('ERR_MINIMUM_STRIPE_CHARGE_AMOUNT_IS_{MIN-AMOUNT}', $this->siteLangId), ['{MIN-AMOUNT}' => $stripeMinAmount]);
             }
         }
 
         $processRequest = false;
-        if (!$orderInfo['id']) {
+        if (!$this->orderInfo['id']) {
             $message = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             $this->setErrorAndRedirect($message, FatUtility::isAjaxCall());
-        } elseif ($orderInfo && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) {
+        } elseif ($this->orderInfo && $this->orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) {
             $frm = $this->getPaymentForm($orderId);
 
             $postOrderId = FatApp::getPostedData('orderId', FatUtility::VAR_STRING, '');
@@ -129,16 +130,15 @@ class StripePayController extends PaymentController
             }
             $this->error = $message;
         }
+        $this->set('paymentAmount', $this->paymentAmount);
+        $this->set('orderInfo', $this->orderInfo);
 
-
-        $this->set('paymentAmount', $paymentAmount);
-        $this->set('orderInfo', $orderInfo);
         if ($this->error) {
             $this->set('error', $this->error);
         }
 
         $cancelBtnUrl = CommonHelper::getPaymentCancelPageUrl();
-        if ($orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
+        if ($this->orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
             $cancelBtnUrl = CommonHelper::getPaymentFailurePageUrl();
         }
         $frm->fill(['orderId' => $orderId]);
@@ -185,9 +185,13 @@ class StripePayController extends PaymentController
             $this->error = Labels::getLabel('STRIPE_INVALID_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId);
         }
 
-        $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
-        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
-        $paymentAmount = $this->formatPayableAmount($paymentAmount);
+        if (1 > $this->paymentAmount || empty($this->orderInfo)) {
+            $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
+            $orderPaymentObj->markUserIsGuest(UserAuthentication::isGuestUserLogged());
+            $this->paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
+            $this->orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
+        }
+        $paymentAmount = $this->formatPayableAmount($this->paymentAmount);
 
         $stripe = array(
             'secret_key' => $this->settings['privateKey'],
@@ -203,13 +207,10 @@ class StripePayController extends PaymentController
         try {
             if (!empty(trim($this->settings['privateKey'])) && !empty(trim($this->settings['publishableKey']))) {
 
-
-                $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
-
                 $orderDetails = [
                     'order_id' => $orderId,
-                    'customer_name' => $orderInfo['customer_name'],
-                    'email' => $orderInfo['customer_email'],
+                    'customer_name' => $this->orderInfo['customer_name'],
+                    'email' => $this->orderInfo['customer_email'],
                     'description' => 'Order ' . $orderId,
                 ];
 
@@ -228,7 +229,7 @@ class StripePayController extends PaymentController
                             'quantity' => 1,
                         ],
                     ],
-                    'customer_email' => $orderInfo['customer_email'],
+                    'customer_email' => $this->orderInfo['customer_email'],
                     'metadata' => $orderDetails,
                     'expires_at' => time() + 3600,
                     'payment_intent_data' => [

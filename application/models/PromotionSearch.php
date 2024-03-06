@@ -3,6 +3,7 @@
 class PromotionSearch extends SearchBase
 {
     private $langId;
+    private $joinedUserWallet;
 
     public function __construct($langId = 0)
     {

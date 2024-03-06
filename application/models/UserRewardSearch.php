@@ -2,6 +2,7 @@
 
 class UserRewardSearch extends SearchBase
 {
+    private $langId = 0;
     public function __construct($langId = 0)
     {
         parent::__construct(UserRewards::DB_TBL, 'urp');

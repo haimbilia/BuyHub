@@ -11,6 +11,7 @@ class BlogPost extends MyAppModel
     public const REWRITE_URL_PREFIX = 'blog/post-detail/';
 
     private $db;
+    public $total_records;
 
     public function __construct($id = 0)
     {

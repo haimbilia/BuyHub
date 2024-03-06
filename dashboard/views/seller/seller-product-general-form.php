@@ -21,6 +21,8 @@ if (null != $autoUpdateFld) {
 $returnAgeFld = $frmSellerProduct->getField('selprod_return_age');
 $cancellationAgeFld = $frmSellerProduct->getField('selprod_cancellation_age');
 $returnAge = FatUtility::int($returnAgeFld->value);
+$returnAgeFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_IN_DAYS', $siteLangId) . ' </small>';
+$cancellationAgeFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $siteLangId) . ' </small>';
 $hidden = '';
 if ('' === $returnAgeFld->value || '' === $cancellationAgeFld->value) {
     $hidden = 'hidden';
