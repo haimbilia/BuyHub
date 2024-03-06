@@ -2,6 +2,7 @@
 require_once "config.php";
 Class Ykart_analytics
 {
+	public $analyticsApiConfig = '';
 	public function __construct($config = array()) 
 	{
 		global $analyticsApiConfig;
