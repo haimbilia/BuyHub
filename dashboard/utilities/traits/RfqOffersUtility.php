@@ -718,7 +718,7 @@ trait RfqOffersUtility
         $srch->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'opayment_order_id = op_order_id', 'opay');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $srch->addMultipleFields(['op_id', 'opayment_txn_status', 'opayment_method', 'rfq.rfq_id', 'aOfr.offer_id', 'aOfr.offer_quantity', 'sOfr.offer_user_id as sellerId', 'rfqs.rfqts_selprod_id', 'rfq.rfq_addr_id', 'aOfr.offer_price', 'aOfr.offer_quantity', 'aOfr.offer_primary_offer_id', 'rlo_accepted_offer_id']);
+        $srch->addMultipleFields(['op_id', 'opayment_txn_status', 'opayment_method', 'rfq.rfq_id', 'aOfr.offer_id', 'aOfr.offer_quantity', 'sOfr.offer_user_id as sellerId', 'rfqs.rfqts_selprod_id', 'rfq.rfq_addr_id', 'aOfr.offer_price', 'aOfr.offer_quantity', 'aOfr.offer_primary_offer_id', 'rlo_accepted_offer_id', 'rlo_selprod_id']);
         $srch->addCondition('rfq_user_id', '=', UserAuthentication::getLoggedUserId());
         $srch->addCondition('aOfr.offer_id', '=', 'mysql_func_' . $offerId, 'AND', true);
         $srch->addCondition('rlo.rlo_selprod_id', '=', 'mysql_func_' . $selprodId, 'AND', true);
