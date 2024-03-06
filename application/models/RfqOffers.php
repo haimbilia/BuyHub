@@ -460,21 +460,21 @@ class RfqOffers extends MyAppModel
     }
 
     /**
-     * isBought
-     *
-     * @param  int $acceptedOfferId
-     * @return bool
+     * Checks if the order with the given accepted offer ID has been paid for. 
+     * Joins with order payments table to check for non-null payment records.
+     * Returns true if a paid payment record exists for the order, false otherwise.
      */
     public static function isBought(int $acceptedOfferId): bool
     {
         $srch = OrderProduct::getSearchObject();
-        $srch->doNotCalculateRecords();
         $srch->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'opayment_order_id = op_order_id', 'opay');
         $srch->addCondition('opayment_id', 'IS NOT', 'mysql_func_NULL', 'AND', true);
-        $srch->addCondition('opayment_txn_status', '=', Orders::ORDER_PAYMENT_PAID);
+        $cnd = $srch->addCondition('opayment_txn_status', '=', Orders::ORDER_PAYMENT_PAID);
+        $cnd->attachCondition('opayment_method', 'LIKE', 'CashOnDelivery');
         $srch->addCondition('op_offer_id', '=', $acceptedOfferId);
-        $srch->addFld('opayment_order_id');
+        $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
+        $srch->addFld('opayment_order_id');
         $result = FatApp::getDb()->fetch($srch->getResultSet());
         return (is_array($result) && !empty($result));
     }

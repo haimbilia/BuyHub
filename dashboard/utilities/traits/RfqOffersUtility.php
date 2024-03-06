@@ -712,18 +712,26 @@ trait RfqOffersUtility
         $srch->joinTable(RfqOffers::DB_RFQ_LATEST_OFFER, 'INNER JOIN', 'rlo_rfq_id = rfq_id and rlo.rlo_accepted_offer_id = ' . $offerId . ' AND rlo.rlo_selprod_id = ' . $selprodId, 'rlo');
         $srch->joinTable(RfqOffers::DB_TBL, 'INNER JOIN', 'aOfr.offer_id = rlo.rlo_accepted_offer_id ', 'aOfr');
         $srch->joinTable(RfqOffers::DB_TBL, 'INNER JOIN', 'sOfr.offer_id = rlo.rlo_seller_offer_id ', 'sOfr');
+        $srch->joinTable(RequestForQuote::DB_RFQ_TO_SELLERS, 'INNER JOIN', 'rfqts_rfq_id = rfq_id', 'rfqs');
 
+        $srch->joinTable(OrderProduct::DB_TBL, 'LEFT JOIN', 'op_offer_id = aOfr.offer_id', 'op');
+        $srch->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'opayment_order_id = op_order_id', 'opay');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $srch->addMultipleFields(['rfq.rfq_id', 'aOfr.offer_id', 'aOfr.offer_quantity', 'sOfr.offer_user_id as sellerId', 'rlo.rlo_selprod_id', 'rfq.rfq_addr_id', 'aOfr.offer_price', 'aOfr.offer_quantity', 'aOfr.offer_primary_offer_id', 'rlo_accepted_offer_id']);
+        $srch->addMultipleFields(['op_id', 'opayment_txn_status', 'opayment_method', 'rfq.rfq_id', 'aOfr.offer_id', 'aOfr.offer_quantity', 'sOfr.offer_user_id as sellerId', 'rfqs.rfqts_selprod_id', 'rfq.rfq_addr_id', 'aOfr.offer_price', 'aOfr.offer_quantity', 'aOfr.offer_primary_offer_id', 'rlo_accepted_offer_id']);
         $srch->addCondition('rfq_user_id', '=', UserAuthentication::getLoggedUserId());
         $srch->addCondition('aOfr.offer_id', '=', 'mysql_func_' . $offerId, 'AND', true);
         $srch->addCondition('rlo.rlo_selprod_id', '=', 'mysql_func_' . $selprodId, 'AND', true);
-        $srch->addCondition('aOfr.offer_status', '=', RfqOffers::STATUS_ACCEPTED);
+        $srch->addCondition('aOfr.offer_status', '=', RfqOffers::STATUS_ACCEPTED);  
         $rfqOfferData = (array)FatApp::getDb()->fetch($srch->getResultSet());
 
         if (empty($rfqOfferData)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), false, true);
+            CommonHelper::redirectUserReferer();
+        }
+        
+        if (!empty($rfqOfferData['op_id']) && (Orders::ORDER_PAYMENT_PAID == $rfqOfferData['opayment_txn_status']) || 'CashOnDelivery' == $rfqOfferData['opayment_method']) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_ORDER_ALREADY_PLACED_FOR_THIS_OFFER.'), false, true);
             CommonHelper::redirectUserReferer();
         }
 
