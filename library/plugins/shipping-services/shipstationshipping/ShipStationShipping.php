@@ -1,8 +1,4 @@
-<?php
-
-use Aws\ClientSideMonitoring\Configuration;
-
-require_once dirname(__FILE__) . '/ShipStationFunctions.php';
+<?php require_once dirname(__FILE__) . '/ShipStationFunctions.php';
 
 class ShipStationShipping extends ShippingServicesBase
 {
@@ -24,6 +20,7 @@ class ShipStationShipping extends ShippingServicesBase
 
     private $resp;
     private $endpoint = '';
+    private $ssOrder = [];
     private $orderDetail = [];
     private $warehouseId = 0;
 
@@ -315,7 +312,16 @@ class ShipStationShipping extends ShippingServicesBase
 
         $this->setItem($this->orderDetail);
         $this->order['items'] = [$this->getItem()];
-        return $this->doRequest(self::REQUEST_CREATE_ORDER, $this->order); //Return bool
+        if (false == $this->doRequest(self::REQUEST_CREATE_ORDER, $this->order)) {
+            return false;
+        }
+        return $this->setSsOrder();
+    }
+
+    private function setSsOrder()
+    {
+        $this->ssOrder = $this->getResponse();
+        return true;
     }
 
     /**
@@ -325,7 +331,28 @@ class ShipStationShipping extends ShippingServicesBase
      */
     public function bindLabel(array $requestParam): bool
     {
-        return $this->doRequest(self::REQUEST_CREATE_LABEL, $requestParam); //Return bool
+        if (false == $this->doRequest(self::REQUEST_CREATE_LABEL, $requestParam)) {
+            return false;
+        }
+
+        $resp = $this->getResponse(false);
+        if (!empty($this->ssOrder)) {
+            if ($this->loadOrder($this->ssOrder['orderId'])) {
+                $ssOrderInfo = $this->getResponse();
+                if ('awaiting_shipment' != $ssOrderInfo['orderStatus']) {
+                    $updateData = [
+                        'orderId' => $ssOrderInfo['orderId'],
+                        'orderKey' => $ssOrderInfo['orderKey'],
+                        'orderNumber' => $ssOrderInfo['orderNumber'],
+                        'orderStatus'=> 'awaiting_shipment'
+                    ];
+                    $this->doRequest(self::REQUEST_CREATE_ORDER, $updateData);
+                }
+            }
+        }
+
+        $this->resp = $resp;
+        return true;
     }
 
     /**
