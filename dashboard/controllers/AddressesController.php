@@ -74,8 +74,13 @@ class AddressesController extends LoggedUserController
             $address = new Address();
             $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
             $this->set('addresses', $addresses);
-
-            $defaultAddress = current($addresses);
+            $defaultAddress = [];
+            foreach ($addresses as $address) {
+                if ($addr_id == $address['addr_id']) {
+                    $defaultAddress = $address;
+                    break;
+                }
+            }
             $this->set('defaultAddress', $defaultAddress);
             $this->set('html', $this->_template->render(false, false, 'addresses/address-element.php', true));
         }

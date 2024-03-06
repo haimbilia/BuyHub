@@ -19,7 +19,7 @@
     </a>
     <ul class="dropdown-menu addressListingJs dropdown-menu-addresses" data-form="<?php echo $formId; ?>" aria-labelledby="dropdownMenuButton1">
         <?php foreach ($addresses as $address) { ?>
-        <li class="dropdown-menu-item addressItemJs <?php echo ($address['addr_is_default'] == applicationConstants::YES) ? 'is-active' : ''; ?> " data-id="<?php echo $address['addr_id']; ?>">
+        <li class="dropdown-menu-item addressItemJs <?php echo ($defaultAddress['addr_id'] == $address['addr_id']) ? 'is-active' : ''; ?> " data-id="<?php echo $address['addr_id']; ?>">
             <span class="dropdown-menu-link">
                 <span class="dropdown-menu-option text-break addressItemContentJs">
                     <strong><?php echo $address['addr_name']; ?></strong> -
