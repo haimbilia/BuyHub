@@ -585,4 +585,16 @@ class PatchUpdateController extends ListingBaseController
         }
         echo 'Done';
     }
+
+    public function removeForeignKeyConstraint()
+    {
+        $qry = FatApp::getDb()->query("SELECT CONSTRAINT_NAME,TABLE_NAME,COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA = '" . CONF_DB_NAME . "' AND REFERENCED_TABLE_NAME IS NOT NULL");
+        $res = FatApp::getDb()->fetchAll($qry);
+        foreach ($res as $record) {
+            $qry = "ALTER TABLE " . $record['TABLE_NAME'] . " DROP FOREIGN KEY " . $record['COLUMN_NAME'];
+            FatApp::getDb()->query($qry);
+            echo $qry . '<br>';
+        }
+        echo "Done";
+    }
 }
