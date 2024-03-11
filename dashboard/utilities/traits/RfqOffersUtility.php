@@ -220,7 +220,7 @@ trait RfqOffersUtility
         if (!empty($primaryOfferIds)) {
             $offersCountArr =  RfqOffers::getOffersCountArr($primaryOfferIds);
         }
-        
+
         $this->set("arrListing", $arrListing);
         $this->set("offersCountArr", $offersCountArr);
         $this->set('postedData', $post);
@@ -228,10 +228,9 @@ trait RfqOffersUtility
         $this->set("statusArr", RfqOffers::getStatusArr($this->siteLangId));
         $this->set("rfqStatusArr", RequestForQuote::getStatusArr($this->siteLangId));
         $this->set("approvalStatusArr", RequestForQuote::getApprovalStatusArr($this->siteLangId));
-
+        $this->set('rfqStatus', RequestForQuote::getAttributesById($rfqId, 'rfq_status'));
         $tpl = 'rfq-offers/search.php';
         if ($this->isSeller) {
-            $this->set('rfqData',RequestForQuote::getAttributesById($rfqId,['rfq_status']));
             $tpl = 'rfq-offers/seller-offers-search.php';
         }
         if (true === MOBILE_APP_API_CALL) {
@@ -722,14 +721,14 @@ trait RfqOffersUtility
         $srch->addCondition('rfq_user_id', '=', UserAuthentication::getLoggedUserId());
         $srch->addCondition('aOfr.offer_id', '=', 'mysql_func_' . $offerId, 'AND', true);
         $srch->addCondition('rlo.rlo_selprod_id', '=', 'mysql_func_' . $selprodId, 'AND', true);
-        $srch->addCondition('aOfr.offer_status', '=', RfqOffers::STATUS_ACCEPTED);  
+        $srch->addCondition('aOfr.offer_status', '=', RfqOffers::STATUS_ACCEPTED);
         $rfqOfferData = (array)FatApp::getDb()->fetch($srch->getResultSet());
 
         if (empty($rfqOfferData)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
-        
+
         if (!empty($rfqOfferData['op_id']) && (Orders::ORDER_PAYMENT_PAID == $rfqOfferData['opayment_txn_status']) || 'CashOnDelivery' == $rfqOfferData['opayment_method']) {
             LibHelper::exitWithError(Labels::getLabel('ERR_ORDER_ALREADY_PLACED_FOR_THIS_OFFER.'), false, true);
             CommonHelper::redirectUserReferer();

@@ -217,6 +217,7 @@ class RfqOffersController extends ListingBaseController
         $this->set("statusArr", RfqOffers::getStatusArr($this->siteLangId));
         $this->set("rfqStatusArr", RequestForQuote::getStatusArr($this->siteLangId));
         $this->set("approvalStatusArr", RequestForQuote::getApprovalStatusArr($this->siteLangId));
+        $this->set('rfqStatus', RequestForQuote::getAttributesById($rfqId, 'rfq_status'));
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
     }
 
@@ -441,7 +442,7 @@ class RfqOffersController extends ListingBaseController
         ];
         if (1 > $counterOfferId) {
             $data['rlo_seller_user_id'] = $selectedSeller;
-            
+
             $selprodId = RequestForQuote::getSellerProductId($post['offer_rfq_id'], $selectedSeller);
             $data['rlo_selprod_id'] = $selprodId;
         }

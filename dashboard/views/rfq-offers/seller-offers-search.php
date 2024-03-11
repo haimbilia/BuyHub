@@ -289,7 +289,7 @@
     <?php } ?>
     <?php if (empty($arrListing)) { ?>
     <?php $message = Labels::getLabel('LBL_NO_RECORD_FOUND');
-        if (RequestForQuote::STATUS_CLOSED == $rfqData['rfq_status']) {
+        if (RequestForQuote::STATUS_CLOSED == $rfqStatus) {
             $message =   Labels::getLabel('MSG_RFQ_HAS_BEEN_CLOSED_BY_THE_BUYER', $siteLangId);
         }
         $this->includeTemplate('_partial/no-record-found.php', ['message' => $message]);

@@ -123,7 +123,7 @@ if (!isset($tbody)) {
                                 RfqOffers::STATUS_COUNTERED == $row['offer_status'] &&
                                 FatUtility::int($row['rlo_buyer_offer_id']) > FatUtility::int($row['rlo_seller_offer_id']) &&
                                 RequestForQuote::STATUS_CLOSED != $row['rfq_status'] &&
-                                !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']]) && 
+                                !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']]) &&
                                 !in_array(RfqOffers::STATUS_REJECTED, [$row['offer_status'], $row['counter_offer_status']])
                             );
                             if ($canEdit && $canReplyOffer) { ?>
@@ -239,6 +239,11 @@ if (!isset($tbody)) {
         </div>
     <?php } ?>
     <?php if (empty($arrListing)) { ?>
-        <?php $this->includeTemplate('_partial/no-record-found.php'); ?>
+        <?php
+        $message = '';
+        if (RequestForQuote::STATUS_CLOSED == $rfqStatus) {
+            $message =   Labels::getLabel('MSG_RFQ_HAS_BEEN_CLOSED_BY_THE_BUYER.', $siteLangId);
+        }
+        $this->includeTemplate('_partial/no-record-found.php', ['message' => $message]); ?>
     <?php } ?>
 </div>
