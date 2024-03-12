@@ -57,7 +57,7 @@ class ShipStationShipping extends ShippingServicesBase
      *
      * @return bool
      */
-    public function canGenerateLabelSeparately(): bool
+    public function canGenerateLabelFromShipment(): bool
     {
         return true;
     }
@@ -344,7 +344,7 @@ class ShipStationShipping extends ShippingServicesBase
                         'orderId' => $ssOrderInfo['orderId'],
                         'orderKey' => $ssOrderInfo['orderKey'],
                         'orderNumber' => $ssOrderInfo['orderNumber'],
-                        'orderStatus'=> 'awaiting_shipment'
+                        'orderStatus' => 'awaiting_shipment'
                     ];
                     $this->doRequest(self::REQUEST_CREATE_ORDER, $updateData);
                 }
@@ -535,9 +535,59 @@ class ShipStationShipping extends ShippingServicesBase
      * @param  array $requestParam
      * @return bool
      */
-    public function proceedToShipment(array $requestParam): bool
+    public function proceedToShipment(array &$requestParam): bool
     {
-        return $this->doRequest(self::REQUEST_MARK_AS_SHIPPED, $requestParam);
+        if (false === $this->addOrder($requestParam['op_id'])) {
+            LibHelper::dieJsonError($this->getError());
+        }
+        $order = $this->getResponse();
+
+        $shipmentApiOrderId = $order['orderId'];
+        $labelRequestParam = [
+            'orderId' => $order['orderId'],
+            'carrierCode' => $order['carrierCode'],
+            'serviceCode' => $order['serviceCode'],
+            'confirmation' => $order['confirmation'],
+            'shipDate' => date('Y-m-d'), // date('Y-m-d', strtotime('+7 day')),
+            'weight' => $order['weight'],
+            'dimensions' => $order['dimensions'],
+        ];
+
+        if (false === $this->bindLabel($labelRequestParam)) {
+            LibHelper::dieJsonError($this->getError());
+        }
+
+        $response = $this->getResponse(false);
+        $responseArr = json_decode($response, true);
+        $recordCol = ['opship_op_id' => $requestParam['op_id']];
+
+        $dataToSave = [
+            'opship_orderid' => $shipmentApiOrderId,
+            'opship_shipment_id' => $responseArr['shipmentId'],
+            'opship_tracking_number' => $responseArr['trackingNumber'],
+        ];
+
+        $db = FatApp::getDb();
+        if (!$db->insertFromArray(OrderProductShipment::DB_TBL, array_merge($recordCol, $dataToSave), false, array(), $dataToSave)) {
+            LibHelper::dieJsonError($db->getError());
+        }
+
+        $opObj = new OrderProduct($requestParam['op_id']);
+        if (false === $opObj->bindResponse(OrderProduct::RESPONSE_TYPE_SHIPMENT, $response)) {
+            LibHelper::dieJsonError($opObj->getError());
+        }
+
+        if (!empty($this->ssOrder)) {
+            if ($this->loadOrder($this->ssOrder['orderId'])) {
+                $ssOrderInfo = $this->getResponse();
+                $requestParam['orderId'] = $order['orderId'];
+                $requestParam['trackingNumber'] = $responseArr['trackingNumber'];
+                if ('awaiting_shipment' == $ssOrderInfo['orderStatus']) {
+                    return $this->doRequest(self::REQUEST_MARK_AS_SHIPPED, $requestParam);
+                }
+            }
+        }
+        return true;
     }
 
     /**

@@ -241,18 +241,18 @@ trait ShippingServices
 
         $this->validateShippingService($data);
 
-        if (empty($data["opship_orderid"]) && 'ShipStationShipping' == $this->shippingService->keyName) {
+        /* if (empty($data["opship_orderid"]) && 'ShipStationShipping' == $this->shippingService->keyName) {
             $msg = Labels::getLabel("MSG_MUST_GENERATE_LABEL_BEFORE_SHIPMENT", $this->langId);
             LibHelper::dieJsonError($msg);
-        }
+        } */
 
-        if ('ShipStationShipping' == $this->shippingService->keyName) {
+        /* if ('ShipStationShipping' == $this->shippingService->keyName) {
             $opshipmentId = $data["opship_orderid"];
         } else {
-            $opshipmentId = $data["opshipping_service_code"];
-        }
+        } */
+        $opshipmentId = $data["opshipping_service_code"];
 
-        if (method_exists($this->shippingService, 'loadOrder')) {
+        if (method_exists($this->shippingService, 'loadOrder') && 'ShipStationShipping' != $this->shippingService->keyName) {
             if (false === $this->shippingService->loadOrder($opshipmentId)) {
                 LibHelper::dieJsonError($this->shippingService->getError());
             }
@@ -284,7 +284,7 @@ trait ShippingServices
 
         $orderInfo = $this->shippingService->getResponse();
 
-        $trackingNumber = ('ShipStationShipping' == $this->shippingService->keyName) ? $data['opship_tracking_number'] : $orderInfo['tracking_code'];
+        $trackingNumber = ('ShipStationShipping' == $this->shippingService->keyName) ? $requestParam['trackingNumber'] : $orderInfo['tracking_code'];
         $updateData = [
             'opship_op_id' => $opId,
             'opship_order_number' => $orderInfo['orderNumber'],
