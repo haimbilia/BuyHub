@@ -171,7 +171,7 @@ if (!$isUserLogged) {
                             <label class="label">
                                 <?php echo Labels::getLabel('LBL_REQUIRED_QUANTITY'); ?>
                             </label>
-                            <div class="input-group">
+                            <div class="input-group groupFieldsJs">
                                 <?php echo $frm->getFieldHtml('rfq_quantity'); ?>
                                 <?php echo $frm->getFieldHtml('rfq_quantity_unit'); ?>
                             </div>

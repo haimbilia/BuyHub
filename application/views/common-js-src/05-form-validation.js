@@ -402,7 +402,11 @@
                             field.parent().after(errorlist.empty());
                         }
                         else {
-                            field.after(errorlist.empty());
+                            if (0 < field.parent().hasClass('groupFieldsJs')) {
+                                field.parent().after(errorlist.empty());
+                            } else {
+                                field.after(errorlist.empty());
+                            }
                         }
                         break;
                     case 0:
