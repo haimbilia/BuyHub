@@ -9,8 +9,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <div class="content-wrapper content-space">
     <?php
+    $closedLbl = (RequestForQuote::STATUS_CLOSED == $rfqData['rfq_status']) ? HtmlHelper::getStatusHtml(HtmlHelper::DANGER, Labels::getLabel('LBL_CLOSED')) : '';
     $data = [
-        'headingLabel' => $rfqData['rfq_title'] . ' ( ' . $rfqData['rfq_number'] . ' )',
+        'headingLabel' => $rfqData['rfq_title'] . ' ( ' . $rfqData['rfq_number'] . ' )' . $closedLbl,
         'siteLangId' => $siteLangId,
         'otherButtons' => $otherButtons,
         'headingBackButton' => [

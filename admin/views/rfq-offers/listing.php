@@ -28,7 +28,13 @@ $autoTableColumWidth = FatUtility::int(($autoTableColumWidth ?? 1)); ?>
                                     </div>
                                 </div>
                                 <div class="plain-card-body">
-                                    <h2 class="plain-card-title"><?php echo $rfqData['rfq_title'] . '<br> ( ' . $rfqData['rfq_number'] . ' )'; ?></h2>
+                                    <h2 class="plain-card-title">
+                                        <?php echo $rfqData['rfq_title'] . '<br> ( ' . $rfqData['rfq_number'] . ' )'; ?>
+                                        <?php if (RequestForQuote::STATUS_CLOSED == $rfqData['rfq_status']) {
+                                            echo HtmlHelper::getStatusHtml(HtmlHelper::DANGER, Labels::getLabel('LBL_CLOSED'));
+                                        } ?>
+                                    </h2>
+
                                     <?php if (!empty($rfqData['sellerProdOptions'])) { ?>
                                         <ul class="list-stats list-stats-popover">
                                             <?php foreach ($rfqData['sellerProdOptions'] as $option) { ?>
