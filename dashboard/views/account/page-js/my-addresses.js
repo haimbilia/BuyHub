@@ -53,7 +53,7 @@ $(document).ready(function () {
 	};
 
 	removeAddress = function (id) {
-		var agree = confirm(langLbl.confirmDelete);
+		var agree = confirm(langLbl.confirmDeleteAddress);
 		if (!agree) {
 			return false;
 		}
