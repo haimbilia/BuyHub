@@ -37,14 +37,18 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $htm, true);
                 break;
             case 'rfq_approved':
-                if (RequestForQuote::PENDING == $row[$key]) {
-                    $html = '<select class="form-select form-select-sm custom-select" onchange="approval(event, this, ' . $row['rfq_id'] . ', this.value)">
+                if (RequestForQuote::STATUS_CLOSED == $row['rfq_status']) {
+                    $html = HtmlHelper::getStatusHtml(HtmlHelper::DANGER, Labels::getLabel('LBL_CLOSED'));
+                } else {
+                    if (RequestForQuote::PENDING == $row[$key]) {
+                        $html = '<select class="form-select form-select-sm custom-select" onchange="approval(event, this, ' . $row['rfq_id'] . ', this.value)">
                                 <option value="' . RequestForQuote::PENDING . '" selected>' . $approvalStatusArr[RequestForQuote::PENDING] . '</option>
                                 <option value="' . RequestForQuote::APPROVED . '">' . $approvalStatusArr[RequestForQuote::APPROVED] . '</option>
                                 <option value="' . RequestForQuote::REJECTED . '">' . $approvalStatusArr[RequestForQuote::REJECTED] . '</option>
                             </select>';
-                } else {
-                    $html = '<span class="' . RequestForQuote::getApprovalStatusBadge($row[$key]) . '">' . $approvalStatusArr[$row[$key]] . '</span>';
+                    } else {
+                        $html = '<span class="' . RequestForQuote::getApprovalStatusBadge($row[$key]) . '">' . $approvalStatusArr[$row[$key]] . '</span>';
+                    }
                 }
                 $td->appendElement('plaintext', $tdAttr, $html, true);
                 break;

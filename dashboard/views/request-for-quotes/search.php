@@ -34,7 +34,11 @@
                         $td->appendElement('plaintext', [], $offerCount, true);
                         break;
                     case 'rfq_approved':
-                        $html = '<span class="' . RequestForQuote::getBadgeClass($row[$key]) . '">' . $approvalStatusArr[$row[$key]] . '</span>';
+                        if (RequestForQuote::STATUS_CLOSED == $row['rfq_status']) {
+                            $html = HtmlHelper::getStatusHtml(HtmlHelper::DANGER, Labels::getLabel('LBL_CLOSED'));
+                        } else {
+                            $html = '<span class="' . RequestForQuote::getBadgeClass($row[$key]) . '">' . $approvalStatusArr[$row[$key]] . '</span>';
+                        }
                         $td->appendElement('plaintext', array(), $html, true);
                         break;
                     case 'rfq_added_on':
