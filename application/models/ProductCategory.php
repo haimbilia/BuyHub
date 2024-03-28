@@ -1350,7 +1350,8 @@ class ProductCategory extends MyAppModel
 
         if (true === $includeSubCategoriesCount) {
             $srchRelation = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
-            $srchRelation->joinTable(static::DB_TBL, 'INNER JOIN', 'cr.pcr_prodcat_id = pccr.prodcat_id AND pccr.prodcat_deleted = 0', 'pccr');
+            $srchRelation->joinTable(static::DB_TBL, 'INNER JOIN', 'cr.pcr_prodcat_id = pccr.prodcat_id AND pccr.prodcat_deleted = 0 AND pccr.prodcat_status = 1', 'pccr');
+
             $srchRelation->addCondition('pcr_parent_id', '=', 'mysql_func_m.prodcat_id', 'AND', true);
             $srchRelation->addFld('(COUNT(pcr_prodcat_id) - 1) as subcategory_count');
 
