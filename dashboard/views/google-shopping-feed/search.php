@@ -95,6 +95,23 @@
                             'onclick' => "batchForm(" . $row['adsbatch_id'] . ", " . $row['adsbatch_lang_id'] . ")"
                         ];
 
+                        if (!empty($merchantId)) {
+                            $isPublished = (AdsBatch::STATUS_PUBLISHED == $row['adsbatch_status']);
+                            $title = ($isPublished) ? Labels::getLabel('LBL_RE_-_PUBLISH', $siteLangId) : Labels::getLabel('LBL_PUBLISH', $siteLangId);
+                            $data['otherButtons'][] = [
+                                'attr' => [
+                                    'href' => 'javascript:void(0)',
+                                    'onclick' => "publishBatch(" . $row['adsbatch_id'] . ")",
+                                    'title' => $title,
+                                ],
+                                'label' => '<svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#publish-rss">
+                                                </use>
+                                            </svg>'
+                            ];
+                        }
+
                         $data['otherButtons'][] = [
                             'attr' => [
                                 'href' => UrlHelper::generateUrl($keyName, 'bindProducts', [$row['adsbatch_id']]),
@@ -106,28 +123,11 @@
                                             </use>
                                         </svg>'
                         ];
-
-                        if (!empty($merchantId)) {
-                            $isPublished = (AdsBatch::STATUS_PUBLISHED == $row['adsbatch_status']);
-                            $title = ($isPublished) ? Labels::getLabel('LBL_RE_-_PUBLISH', $siteLangId) : Labels::getLabel('LBL_PUBLISH', $siteLangId);
-                            $data['dropdownButtons']['otherButtons'][] = [
-                                'attr' => [
-                                    'href' => 'javascript:void(0)',
-                                    'onclick' => "publishBatch(" . $row['adsbatch_id'] . ")",
-                                    'title' => $title,
-                                ],
-                                'label' => '<svg class="svg" width="18" height="18">
-                                                <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#publish-rss">
-                                                </use>
-                                            </svg>' . $title
-                            ];
-                        }
                     }
 
                     if ($canView) {
                         $title = Labels::getLabel('LBL_DOWNLOAD_XML_FILE', $siteLangId);
-                        $data['dropdownButtons']['otherButtons'][] = [
+                        $data['otherButtons'][] = [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => "publishBatch(" . $row['adsbatch_id'] . ", 1)",
@@ -137,19 +137,19 @@
                                             <use
                                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#icon-download">
                                             </use>
-                                        </svg>' . $title
+                                        </svg>'
                         ];
                     }
 
                     if ($canEdit && AdsBatch::STATUS_PENDING == $row['adsbatch_status']) {
-                        $data['dropdownButtons']['deleteButton'][] = [
+                        $data['deleteButton'][] = [
                             'onclick' => "deleteBatch(" . $row['adsbatch_id'] . ")"
                         ];
                     }
 
                     if (AdsBatch::STATUS_PUBLISHED == $row['adsbatch_status'] || AdsBatch::STATUS_PARTIALLY_PENDING == $row['adsbatch_status']) {
                         $title = Labels::getLabel('LBL_VIEW', $siteLangId);
-                        $data['dropdownButtons']['otherButtons'][] = [
+                        $data['otherButtons'][] = [
                             'attr' => [
                                 'href' => UrlHelper::generateUrl($keyName, 'viewProducts', [$row['adsbatch_id']]),
                                 'title' => $title,
@@ -158,7 +158,7 @@
                                             <use
                                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
                                             </use>
-                                        </svg>' . $title,
+                                        </svg>'
                         ];
                     }
                     $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
