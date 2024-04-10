@@ -1710,13 +1710,8 @@ class HomeController extends MyAppController
             $websiteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->siteLangId, FatUtility::VAR_STRING, '');
 
             $srch = new MetaTagSearch($this->siteLangId);
-            $cond = $srch->addCondition('meta_controller', '=', 'Home');
-            $cond->attachCondition('meta_controller', '=', '', 'OR');
-
-            $cond1 = $srch->addCondition('meta_action', '=', 'index');
-            $cond1->attachCondition('meta_action', '=', '', 'OR');
-
-            // $srch->addOrder('meta_default', 'asc');
+            $srch->addCondition('meta_controller', '=', 'Home');
+            $srch->addCondition('meta_action', '=', 'index');
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $srch->addMultipleFields(array(
