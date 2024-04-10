@@ -109,4 +109,24 @@ $(document).ready(function () {
         $(frm.page).val(page);
         searchRecords(frm);
     };
+
+    subUsersAccountList = function () {
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl(keyName, 'getSubUsersAccountList'), '', function (t) {
+            fcom.removeLoader();
+            fcom.closeProcessing();
+            $.ykmodal(t.html, true);
+        }, { fOutMode: 'json' });
+    }
+
+    selectSubAccount = function (merchantId) {
+        $.ykmodal(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl(keyName, 'updateMerchantId'), 'merchantId=' + merchantId, function (t) {
+            fcom.removeLoader();
+            $.ykmodal.close();
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        });
+    }
 })();

@@ -1713,8 +1713,6 @@ class HomeController extends MyAppController
             $srch = new MetaTagSearch($this->siteLangId);
             $srch->addCondition('meta_controller', '=', 'Home');
             $srch->addCondition('meta_action', '=', 'index');
-
-            // $srch->addOrder('meta_default', 'asc');
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $srch->addMultipleFields(array(
