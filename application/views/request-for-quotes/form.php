@@ -181,7 +181,9 @@ if (!$isUserLogged) {
             </div>
         </div>
         <div class="request-quote__body">
-            <?php if (count($optionRows) > 0) { ?>
+            <?php 
+            /* Not Required anymore. */
+            /* if (count($optionRows) > 0) { ?>
                 <div class="accordion-group">
                     <div class="accordion-group__head" data-bs-toggle="collapse" data-bs-target="#variants" aria-expanded="false" aria-controls="">
                         <h6><?php echo Labels::getLabel('LBL_Product_variants'); ?></h6>
@@ -209,7 +211,7 @@ if (!$isUserLogged) {
                         </div>
                     </div>
                 </div>
-            <?php } ?>
+            <?php } */ ?>
             <div class="accordion-group">
                 <div class="accordion-group__head descHeadJs" data-bs-toggle="collapse" data-bs-target="#detailed" aria-expanded="true" aria-controls="">
                     <h6>
