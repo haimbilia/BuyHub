@@ -1,5 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($shopFrm, 4);
 $shopFrm->setFormTagAttribute('onsubmit', 'setupShop(this); return(false);');
 $shopFrm->setFormTagAttribute('class', 'form form--horizontal');
