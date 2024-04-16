@@ -11,7 +11,7 @@ if ($controllerName == 'Products' && $actionName == 'view') {
 $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'direction="rtl" style="direction: rtl;"' : '';
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo strtolower(CommonHelper::getLangCode()); ?>" data-version="<?php echo CONF_WEB_APP_VERSION; ?>" data-theme="light" dir="<?php echo CommonHelper::getLayoutDirection(); ?>" prefix="og: http://ogp.me/ns#" <?php echo $additionalAttributes; ?> class="<?php echo $htmlClass; ?> <?php if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
+<html lang="<?php echo strtolower(CommonHelper::getLangCode()); ?>" data-version="<?php echo CONF_WEB_APP_VERSION; ?>" data-kit="F!YK" data-theme="light" dir="<?php echo CommonHelper::getLayoutDirection(); ?>" prefix="og: http://ogp.me/ns#" <?php echo $additionalAttributes; ?> class="<?php echo $htmlClass; ?> <?php if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
                                                                                                                                                                                                                                                                                                             echo "sticky-demo-header";
                                                                                                                                                                                                                                                                                                         } ?>">
 
@@ -24,6 +24,7 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
     <?php if (CommonHelper::demoUrl() && $controllerName != 'Home') { ?>
         <meta name="robots" content="noindex" />
     <?php } ?>
+    <!-- F!YK -->
     <!-- favicon ================================================== -->
     <meta name="theme-color" content="<?php echo FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59"); ?>">
     <meta name="msapplication-TileColor" content="#ffffff">

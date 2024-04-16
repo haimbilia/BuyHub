@@ -81,10 +81,12 @@ foreach ($shippingRates as $shippedBy => $shippedByItemArr) {
                                         }
                                     }
                                 }
+                                $plugin = new Plugin();
+                                $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
                                 $data['rates']['data'][] = [
                                     'title' => $shippingcharge['title'],
                                     'cost' => CommonHelper::displayMoneyFormat($shippingcharge['cost']),
-                                    'id' => $shippingcharge['id'],
+                                    'id' => (MOBILE_APP_API_CALL && ('ShipStationShipping' == $keyName)) ? $key : $shippingcharge['id'],
                                     'carrier_code' => $shippingcharge['carrier_code'],
                                     'service_code' => $key,
                                 ];
