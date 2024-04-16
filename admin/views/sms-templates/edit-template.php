@@ -40,11 +40,14 @@ $repVarArr = is_array($repVarArr) ? $repVarArr : [];
 if (!empty($repVarArr)) {
     $repVarHtml = '<ul class="click-to-copy">';
     foreach ($repVarArr as $val) {
+        if (!isset($val['variable'])) {
+            continue;
+        }
         $repVarHtml .= '<li title="' . Labels::getLabel('LBL_CLICK_TO_COPY', $siteLangId) . '" onclick="copyText(this, true);" data-bs-toggle="tooltip" data-placement="top">
             <div class="text">
                 <span>' . $val['title'] . '</span>
                 <span class="badge badge-info">
-                ' . $val['variable'] . '
+                ' . ($val['variable'] ?? '') . '
                 </span>
             </div>
         </li>';
