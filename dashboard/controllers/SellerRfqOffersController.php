@@ -113,8 +113,10 @@ class SellerRfqOffersController extends SellerBaseController
         if (1 > $rfqId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
+        $productId = RequestForQuote::getAttributesById($rfqId, 'rfq_product_id');
         $frm = $this->getLinkInventoryForm();
         $frm->fill(['rfqts_rfq_id' => $rfqId]);
+        $this->set('productId', $productId);
         $this->set('includeTabs', false);
         $this->set('rfqId', $rfqId);
         $this->set('frm', $frm);

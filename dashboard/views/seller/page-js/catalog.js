@@ -122,7 +122,7 @@ $(document).on('change', '#digitalFrmLangId,#digitalFrmdownloadType,#digitalFrmO
     }
 
     clearSearch = function () {
-        $('input[name="badge_id"], input[name="ribbon_id"], select[name="badge_name"], select[name="ribbon_name"]').val('').trigger('change');
+        $('input[name="badge_id"], input[name="ribbon_id"], select[name="badge_name"], select[name="ribbon_name"], input[name="product_id"]').val('').trigger('change');
         document.frmRecordSearch.reset();
         searchCatalogProducts(document.frmRecordSearch);
     };

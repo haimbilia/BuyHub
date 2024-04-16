@@ -9,5 +9,13 @@ $fld = $frm->getField('rfqts_selprod_id');
 $fld->addFieldTagAttribute('id', 'rfqSelprodIdJs');
 $fld->addFieldTagAttribute('placeholder', Labels::getLabel('FRM_SELECT_INVENTORY', $siteLangId));
 
+$icon = '<svg class="svg" width="18" height="18">
+            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+            </use>
+        </svg>';
+$lbl = Labels::getLabel('LBL_NOT_FOUND?', $siteLangId);
+$link = '<a class="btn btn-outline-brand btn-sm" href="' . UrlHelper::generateUrl('Seller', 'sellerProductForm', [$productId]) .'" >' . $icon . Labels::getLabel('LBL_ADD_INVENTORY', $siteLangId) . '</a>';
+$fld->htmlAfterField = '<div class="d-flex justify-content-between mt-3"><h6 class="text-muted">' . $lbl . '</h6>' . $link . '</div>';
+
 $formTitle = Labels::getLabel('LBL_LINK_INVENTORY', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
