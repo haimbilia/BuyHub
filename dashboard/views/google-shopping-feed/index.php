@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $this->includeTemplate('_partial/dashboardNavigation.php');
 $merchantId = isset($userData[$keyName . '_merchantId']) ? $userData[$keyName . '_merchantId'] : '';
+$aggregatorId = isset($userData[$keyName . '_aggregatorId']) ? $userData[$keyName . '_aggregatorId'] : '';
 $serviceAccInfo = isset($userData['service_account']) ? $userData['service_account'] : '';
 ?>
 
@@ -30,13 +31,25 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
                 <div class="card ">
                     <div class="card-head">
                         <h5 class="card-title">
-                            <?php if ($canEditAdvFeed) {
-                                if (!empty($merchantId)) {
-                                    echo Labels::getLabel('Lbl_MERCHANT_ID', $siteLangId) . ': ';
-                            ?>
-                                    <span class="badge bg-light text-dark"><?php echo $merchantId; ?></span>
+                            <?php
+                            if ($canEditAdvFeed) {
+                                if (!empty($aggregatorId)) { ?>
+                                    <div>
+                                        <?php echo Labels::getLabel('LBL_AGGREGATOR_ID', $siteLangId) . ': '; ?>
+                                        <span class="badge bg-light text-dark"><?php echo $aggregatorId; ?></span>
+                                        <span class="form-text text-muted">
+                                            <?php echo Labels::getLabel('LBL_MCA(MULTI-CLIENT_ACCOUNT)', $siteLangId); ?>
+                                        </span>
+                                    </div>
                                 <?php
-                                } else {
+                                }
+
+                                if (!empty($merchantId)) { ?>
+                                    <div>
+                                        <?php echo Labels::getLabel('Lbl_MERCHANT_ID', $siteLangId) . ': '; ?>
+                                        <span class="badge bg-light text-dark"><?php echo $merchantId; ?></span>
+                                    </div>
+                                <?php } else if (empty($aggregatorId)) {
                                     echo Labels::getLabel('Lbl_SETUP_MERCHANT_ACCOUNT', $siteLangId);
                                 } ?>
                             <?php } else {
@@ -46,15 +59,23 @@ $serviceAccInfo = isset($userData['service_account']) ? $userData['service_accou
                         <?php
                         if ($canEditAdvFeed) { ?>
                             <div class="card-head-toolbar">
-                                <?php if (empty($merchantId)) { ?>
+                                <?php if (empty($merchantId) && empty($aggregatorId)) { ?>
                                     <a class="btn btn-outline-gray btn-icon" href="<?php echo UrlHelper::generateUrl($keyName, 'getAccessToken'); ?>">
                                         <img class="svg" width="24" height="24" alt="" src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/social-icons/GoogleLogin.svg">
                                         <?php echo Labels::getLabel('LBL_SIGN_IN_WITH_GOOGLE', $siteLangId); ?>
                                     </a>
                                 <?php } else { ?>
-                                    <a class="btn btn-gray" href="javascript:void(0)" onclick="serviceAccountForm();" id="userAccInfoBtn">
-                                        <?php echo Labels::getLabel('Lbl_SERVICE_ACCOUNT_INFO', $siteLangId); ?>
-                                    </a>
+                                    <div>
+                                        <a class="btn btn-gray" href="javascript:void(0)" onclick="serviceAccountForm();" id="userAccInfoBtn">
+                                            <?php echo Labels::getLabel('Lbl_SERVICE_ACCOUNT_INFO', $siteLangId); ?>
+                                        </a>
+
+                                        <?php if (!empty($aggregatorId) && !empty($serviceAccInfo)) { ?>
+                                            <a class="btn btn-outline-gray" href="javascript:void(0)" onclick="subUsersAccountList();" id="subUsersAccListBtn" title="<?php echo Labels::getLabel('Lbl_PLESE_SELECT_MERCHANT_SUB_USER_ACCOUNT', $siteLangId); ?>" data-bs-toggle="tooltip">
+                                                <?php echo Labels::getLabel('Lbl_SELECT_SUB_USER_ACCOUNT', $siteLangId); ?>
+                                            </a>
+                                        <?php } ?>
+                                    </div>
                                 <?php } ?>
                             </div>
                         <?php } ?>
