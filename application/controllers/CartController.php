@@ -329,6 +329,10 @@ class CartController extends MyAppController
 
     public function addSelectedToCart()
     {
+        if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $message = Labels::getLabel('ERR_ITEM`S_ARE_NOT_AVAILALE_FOR_THE_CART', $this->siteLangId);
+            LibHelper::exitWithError($message, true);
+        }
         $selprod_id_arr = FatApp::getPostedData('selprod_id');
         $selprod_id_arr = !empty($selprod_id_arr) ? array_filter($selprod_id_arr) : array();
         if (!empty($selprod_id_arr) && is_array($selprod_id_arr)) {
