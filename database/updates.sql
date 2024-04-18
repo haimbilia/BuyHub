@@ -13,3 +13,10 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 ALTER TABLE `tbl_upc_codes` ADD INDEX(`upc_code`);
 ALTER TABLE `tbl_upc_codes` ADD INDEX(`upc_product_id`);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('FRM_AVAILABLE_FOR_CASH_ON_DELIVERY_(COD)', 1, 'Available for Cash on Delivery (COD) and Pay at Store', 1),
+('FRM_PRODUCT_AVAILABLE_FOR_CASH_ON_DELIVERY', 1, 'Activate this if the product is available for COD and Pay at Store.
+COD will work only if the fulfillment method is Shipping.
+Pay at Store will work only if the fulfillment method is Pickup.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
