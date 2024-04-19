@@ -34,6 +34,8 @@
     - Bug-080917 - Variant selction does not appear properly
     - Bug-080895 - it still shows manageblity for Rfq on shop level and Inventory level on admin end.
     - Bug-082740 - The 'Enable RFQ' toggle button continues to appear on the 'Inventory Setup' page of the seller, even though the seller has disabled the 'Enable RFQ Module' toggle button on the 'Shop Details' page.
+    - Bug-082748 - 'Available quantity' of a product decreases when RFQ order of the product is completed
+    - Bug-082754 - When the 'Available Quantity' is 0, the buyer is unable to place the RFQ order
 
 ## Hit URL:
     - admin/patch-update/updateProductRating    
