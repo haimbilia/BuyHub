@@ -1688,10 +1688,10 @@ class Orders extends MyAppModel
                 }
 
                 /* Not required to subtract stock for RFQ. */
-                if (isset($_SESSION['offer_checkout']['selprod_id']) && $_SESSION['offer_checkout']['selprod_id'] == $opSelprodId) {
+                if ((isset($_SESSION['offer_checkout']['selprod_id']) && $_SESSION['offer_checkout']['selprod_id'] == $opSelprodId) || 0 < $childOrderInfo['op_offer_id']) {
                     continue;
                 }
-                
+
                 /* Stock subtraction */
                 $db->query("UPDATE tbl_seller_products SET selprod_stock = (selprod_stock - " . (int) $childOrderInfo['op_qty'] . "),selprod_sold_count = (selprod_sold_count + " . (int) $childOrderInfo['op_qty'] . ") WHERE selprod_id = '" . (int) $opSelprodId . "' AND selprod_subtract_stock = '1'");
 
