@@ -103,7 +103,7 @@ class CheckoutController extends MyAppController
                     $cartProducts = $this->cartObj->getProducts($this->siteLangId);
                     //CommonHelper::printArray($cartProducts); exit;
                     foreach ($cartProducts as $product) {
-                        if (!$product['in_stock']) {
+                        if (!$product['in_stock'] && !isset($_SESSION['offer_checkout'])) {
                             $stock = false;
                             $key = false;
                             $this->errMessage = Labels::getLabel('ERR_PRODUCTS_ARE_OUT_OF_STOCK.', $this->siteLangId);

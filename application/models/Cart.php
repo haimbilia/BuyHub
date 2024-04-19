@@ -789,6 +789,7 @@ class Cart extends FatModel
             }
 
             $quantity = ($cartData[$key] > $sellerProductRow['selprod_stock']) ? $sellerProductRow['selprod_stock'] : $cartData[$key];
+            $quantity = (1 > $quantity) ? 1 : $quantity;
             $sellerProductRows[$key]['actualPrice'] = $sellerProductRow['theprice'];
 
             $extraData = [];
