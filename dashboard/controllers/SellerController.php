@@ -4210,6 +4210,7 @@ class SellerController extends SellerBaseController
     {
         /* Type is used when we called this form for custom catalog request with selprod data */
 
+        $shopDetails = Shop::getAttributesByUserId($this->userParentId, null, false);
         $defaultProductCond = '';
         $frm = new Form('frmSellerProduct');
 
@@ -4270,7 +4271,8 @@ class SellerController extends SellerBaseController
         if (
             0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 
             FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0) == RequestForQuote::TYPE_INDIVIDUAL &&
-            applicationConstants::NO == FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)
+            applicationConstants::NO == FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0) &&
+            applicationConstants::YES == $shopDetails['shop_rfq_enabled']
         ) {
             $frm->addCheckBox(Labels::getLabel('FRM_ENABLE_RFQ', $this->siteLangId), 'selprod_rfq_enabled', 1, ['id' => 'selprod_rfq_enabled'], false, 0);
         }
@@ -4333,7 +4335,6 @@ class SellerController extends SellerBaseController
                 $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
             }
 
-            $shopDetails = Shop::getAttributesByUserId($this->userParentId, null, false);
             $address = new Address(0, $this->siteLangId);
             $addresses = $address->getData(Address::TYPE_SHOP_PICKUP, $shopDetails['shop_id']);
 

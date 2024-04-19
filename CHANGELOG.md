@@ -33,6 +33,7 @@
     - Bug-080934 - Multiple issues in email templates in case of rfq
     - Bug-080917 - Variant selction does not appear properly
     - Bug-080895 - it still shows manageblity for Rfq on shop level and Inventory level on admin end.
+    - Bug-082740 - The 'Enable RFQ' toggle button continues to appear on the 'Inventory Setup' page of the seller, even though the seller has disabled the 'Enable RFQ Module' toggle button on the 'Shop Details' page.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating    
