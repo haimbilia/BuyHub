@@ -67,7 +67,7 @@ class SellerRfqOffersController extends SellerBaseController
             $page = 1;
         }
 
-        $selprodCode = RequestForQuote::getAttributesById($rfqId, ['rfq_selprod_code']);
+        $selprodCode = RequestForQuote::getAttributesById($rfqId, 'rfq_selprod_code');
 
         $srch = SellerProduct::getSearchObject($this->siteLangId);
         $srch->joinTable(RequestForQuote::DB_TBL, 'INNER JOIN', 'rfq.rfq_product_id = sp.selprod_product_id AND rfq.rfq_id = ' . $rfqId, 'rfq');
@@ -83,14 +83,13 @@ class SellerRfqOffersController extends SellerBaseController
         $srch->addOrder('selprod_active', 'DESC');
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('selprod_code', 'like', $selprodCode);
+        $srch->addCondition('selprod_code', 'LIKE', $selprodCode);
         $srch->addOrder('product_name');
         $srch->addMultipleFields(array('selprod_id as id', 'COALESCE(selprod_title ,product_name, product_identifier) as product_name'));
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $products = FatApp::getDb()->fetchAll($rs, 'id');
+        $products = FatApp::getDb()->fetchAll($srch->getResultSet(), 'id');
         $pageCount = $srch->pages();
         $json = array();
         foreach ($products as $key => $option) {
