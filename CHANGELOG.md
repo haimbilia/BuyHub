@@ -36,6 +36,7 @@
     - Bug-082740 - The 'Enable RFQ' toggle button continues to appear on the 'Inventory Setup' page of the seller, even though the seller has disabled the 'Enable RFQ Module' toggle button on the 'Shop Details' page.
     - Bug-082748 - 'Available quantity' of a product decreases when RFQ order of the product is completed
     - Bug-082754 - When the 'Available Quantity' is 0, the buyer is unable to place the RFQ order
+    - Bug-082765 - No validation message appears when buyer does not add Delivery Address on 'Request a quote' popup box.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating    

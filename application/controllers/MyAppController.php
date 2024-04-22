@@ -110,7 +110,6 @@ class MyAppController extends FatController
                     'lengthOf' => Labels::getLabel('VLBL_Length_of', $this->siteLangId),
                     'valueOf' => Labels::getLabel('VLBL_Value_of', $this->siteLangId),
                     'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->siteLangId),
-                    'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->siteLangId),
                     'and' => Labels::getLabel('VLBL_and', $this->siteLangId),
                     'pleaseSelect' => Labels::getLabel('VLBL_Please_select', $this->siteLangId),
                     'to' => Labels::getLabel('VLBL_to', $this->siteLangId),
@@ -179,6 +178,7 @@ class MyAppController extends FatController
                     'maxLengthValidator' => CommonHelper::replaceStringData(Labels::getLabel('FRM_USED_{charsTyped}_of_{charsTotal}_CHAR', $this->siteLangId), ["{charsTyped}" => "%charsTyped%", "{charsTotal}" => "%charsTotal%"]), /* Used By Maxlength bootstrap validator. */
                     'geoLocationNotSupported' => Labels::getLabel('FRM_GEO_LOCATION_NOT_SUPPORTED', $this->siteLangId),
                     'dontReloadPageWhilePayment' => Labels::getLabel('FRM_PLEASE_DON`T_REFRESH/RELOAD_OR_HITTING_BACK_BUTTON_ON_THE_BROWSER._WE_ARE_PROCESSING_YOUR_TRANSACTION.', $this->siteLangId),
+                    'deliveryAddressMandatory' => Labels::getLabel('ERR_DELIVERY_ADDRESS_IS_MANDATORY', $this->siteLangId),
                 );
 
                 $languages = Language::getAllNames(false);

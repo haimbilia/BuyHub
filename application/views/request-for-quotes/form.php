@@ -6,6 +6,9 @@ $frm->setFormTagAttribute('id', 'rfqJs');
 $frm->setFormTagAttribute('data-onclear', 'requestForQuoteFn(' . $selprodId . ')');
 $frm->setFormTagAttribute('onsubmit', 'saveRfq($("#rfqJs")); return(false);');
 
+$fld = $frm->getField('rfq_selprod_id');
+$fld->addFieldTagAttribute('class', 'selprodIdJs');
+
 $fld = $frm->getField('rfq_quantity');
 $fld->addFieldTagAttribute('class', 'form-control rfqQtyJs');
 
@@ -25,7 +28,7 @@ $fld->developerTags['col'] = 12;
 
 $fld = $frm->getField('rfq_addr_id');
 $fld->addFieldTagAttribute('class', 'addrIdJs');
-$fld->requirement->setRequired(true);
+// $fld->requirement->setRequired(true);
 
 $fld = $frm->getField('rfq_delivery_date');
 $fld->addFieldTagAttribute('placeholder', 'YYYY-MM-DD');
@@ -69,6 +72,7 @@ if (!$isUserLogged) {
                             <div class="form-group">
                                 <label class="label">
                                     <?php echo $frm->getField('user_name')->getCaption(); ?>
+                                    <span class="spn_must_field">*</span>
                                 </label>
                                 <?php echo $frm->getFieldHtml('user_name'); ?>
                             </div>
@@ -77,6 +81,7 @@ if (!$isUserLogged) {
                             <div class="form-group">
                                 <label class="label">
                                     <?php echo $frm->getField('user_email')->getCaption(); ?>
+                                    <span class="spn_must_field">*</span>
                                 </label>
                                 <?php echo $frm->getFieldHtml('user_email'); ?>
                             </div>
@@ -85,6 +90,7 @@ if (!$isUserLogged) {
                             <div class="form-group">
                                 <label class="label">
                                     <?php echo $frm->getField('user_phone')->getCaption(); ?>
+                                    <span class="spn_must_field">*</span>
                                 </label>
                                 <?php echo $frm->getFieldHtml('user_phone'); ?>
                             </div>
@@ -170,6 +176,7 @@ if (!$isUserLogged) {
                         <div class="qty-wrap">
                             <label class="label">
                                 <?php echo Labels::getLabel('LBL_REQUIRED_QUANTITY'); ?>
+                                <span class="spn_must_field">*</span>
                             </label>
                             <div class="input-group groupFieldsJs">
                                 <?php echo $frm->getFieldHtml('rfq_quantity'); ?>
@@ -181,7 +188,7 @@ if (!$isUserLogged) {
             </div>
         </div>
         <div class="request-quote__body">
-            <?php 
+            <?php
             /* Not Required anymore. */
             /* if (count($optionRows) > 0) { ?>
                 <div class="accordion-group">
@@ -215,7 +222,8 @@ if (!$isUserLogged) {
             <div class="accordion-group">
                 <div class="accordion-group__head descHeadJs" data-bs-toggle="collapse" data-bs-target="#detailed" aria-expanded="true" aria-controls="">
                     <h6>
-                        <?php echo Labels::getLabel('LBL_DETAILED_REQUIREMENTS_*'); ?>
+                        <?php echo Labels::getLabel('LBL_DETAILED_REQUIREMENTS'); ?>
+                        <span class="spn_must_field">*</span>
                     </h6>
                     <p>
                         <?php echo Labels::getLabel('LBL_QUOTE_DETAILED_DESCRIPTION'); ?>
