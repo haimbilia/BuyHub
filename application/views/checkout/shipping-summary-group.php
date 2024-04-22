@@ -121,6 +121,7 @@
                                 <div class="selected-qty">
                                     <strong><?php echo Labels::getLabel('LBL_QTY_:') ?></strong>
                                     <?php echo $product['quantity']; ?>
+                                    <?php echo $_SESSION['offer_checkout']['offer_quantity_unit']; ?>
                                 </div>
                             <?php } else { ?>
                                 <button class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>" type="button">

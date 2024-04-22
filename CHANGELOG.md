@@ -37,6 +37,7 @@
     - Bug-082748 - 'Available quantity' of a product decreases when RFQ order of the product is completed
     - Bug-082754 - When the 'Available Quantity' is 0, the buyer is unable to place the RFQ order
     - Bug-082765 - No validation message appears when buyer does not add Delivery Address on 'Request a quote' popup box.
+    - Bug-082762 - The unit of the ordered quantity should be displayed on the 'Your Shopping Bag' page of buyer
 
 ## Hit URL:
     - admin/patch-update/updateProductRating    

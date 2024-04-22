@@ -717,7 +717,7 @@ trait RfqOffersUtility
         $srch->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'opayment_order_id = op_order_id', 'opay');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $srch->addMultipleFields(['op_id', 'opayment_txn_status', 'opayment_method', 'rfq.rfq_id', 'aOfr.offer_id', 'aOfr.offer_quantity', 'sOfr.offer_user_id as sellerId', 'rfqs.rfqts_selprod_id', 'rfq.rfq_addr_id', 'aOfr.offer_price', 'aOfr.offer_quantity', 'aOfr.offer_primary_offer_id', 'rlo_accepted_offer_id', 'rlo_selprod_id']);
+        $srch->addMultipleFields(['op_id', 'opayment_txn_status', 'opayment_method', 'rfq.rfq_id', 'aOfr.offer_id', 'aOfr.offer_quantity', 'sOfr.offer_user_id as sellerId', 'rfqs.rfqts_selprod_id', 'rfq.rfq_addr_id', 'aOfr.offer_price', 'aOfr.offer_quantity', 'aOfr.offer_primary_offer_id', 'rlo_accepted_offer_id', 'rlo_selprod_id', 'rfq_quantity_unit']);
         $srch->addCondition('rfq_user_id', '=', UserAuthentication::getLoggedUserId());
         $srch->addCondition('aOfr.offer_id', '=', 'mysql_func_' . $offerId, 'AND', true);
         $srch->addCondition('rlo.rlo_selprod_id', '=', 'mysql_func_' . $selprodId, 'AND', true);
@@ -774,7 +774,7 @@ trait RfqOffersUtility
             LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_ADD_ITEM_TO_THE_CART', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
-
+        $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->siteLangId, true);
         $_SESSION['offer_checkout'] = [
             'offer_id' => $offerId,
             'rlo_accepted_offer_id' => $rfqOfferData['rlo_accepted_offer_id'],
@@ -783,6 +783,7 @@ trait RfqOffersUtility
             'selprod_id' => $rfqOfferData['rlo_selprod_id'],
             'offer_price' => $rfqOfferData['offer_price'] * $rfqOfferData['offer_quantity'],
             'offer_quantity' => $rfqOfferData['offer_quantity'],
+            'offer_quantity_unit' => $weightUnitsArr[$rfqOfferData['rfq_quantity_unit']],
         ];
         $db->commitTransaction();
         FatApp::redirectUser(UrlHelper::generateUrl('Cart', '', [], CONF_WEBROOT_FRONT_URL));
