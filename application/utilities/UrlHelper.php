@@ -14,11 +14,12 @@ class UrlHelper extends FatUtility
             $pageURL .= "s";
         }
         $pageURL .= "://";
-        if ($_SERVER["SERVER_PORT"] != "80") {
+       /*  if ($_SERVER["SERVER_PORT"] != "80") {
             $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"];
         } else {
             $pageURL .= $_SERVER["SERVER_NAME"];
-        }
+        } */
+        $pageURL .= $_SERVER["SERVER_NAME"];
         return $pageURL;
     }
 
