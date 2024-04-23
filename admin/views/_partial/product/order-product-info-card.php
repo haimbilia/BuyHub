@@ -6,12 +6,13 @@ if (isset($order['op_is_batch']) && $order['op_is_batch']) {
     $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($order['op_selprod_id'], $siteLangId, ImageDimension::VIEW_SMALL), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
     $imgOrgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($order['op_selprod_id'], $siteLangId, ImageDimension::VIEW_ORIGINAL), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
 } else {
+    $selprod_product_id = $order['selprod_product_id'] ?? 0;
     if (Product::verifyProductIsValid($order['op_selprod_id']) == true) {
         $prodUrl = UrlHelper::generateUrl('Products', 'view', array($order['op_selprod_id']), CONF_WEBROOT_FRONTEND);
     }
 
-    $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($order['selprod_product_id'], ImageDimension::VIEW_SMALL, $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
-    $imgOrgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($order['selprod_product_id'], ImageDimension::VIEW_ORIGINAL, $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
+    $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selprod_product_id, ImageDimension::VIEW_SMALL, $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
+    $imgOrgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selprod_product_id, ImageDimension::VIEW_ORIGINAL, $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
 }
 
 $options = $order['op_selprod_options'] ?? '';

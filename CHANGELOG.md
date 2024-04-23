@@ -26,6 +26,9 @@
     - Bug-077681 - The user can download the preview files but not able to preview within the system.
     - Bug-078138 - Product setup page gets distorted when the admin tries to paste the content in CMS editor (Firefox)
     - Bug-076927 - The shipping charges get refunded to the buyer even if the admin disabled return shipping charges to the customer setting
-
+    - Bug-080244 - Error occur on the My Offers page on the buyer dashboard in Arabic language.
+    - Bug-079388 - "Pay At Store" not working.
 ## Hit URL:
-    - admin/patch-update/updateProductRating    
+    - admin/patch-update/updateProductRating  
+    
+

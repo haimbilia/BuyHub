@@ -43,3 +43,10 @@ INSERT INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`
 ('APP_LONG_MSG', 1, 'Your message is too long', 2),
 ('APP_EDIT_CHARACTERS', 1, 'Please edit it down to %s characters', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption), label_type = VALUES(label_type);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('FRM_AVAILABLE_FOR_CASH_ON_DELIVERY_(COD)', 1, 'Available for Cash on Delivery (COD) and Pay at Store', 1),
+('FRM_PRODUCT_AVAILABLE_FOR_CASH_ON_DELIVERY', 1, 'Activate this if the product is available for COD and Pay at Store.
+COD will work only if the fulfillment method is Shipping.
+Pay at Store will work only if the fulfillment method is Pickup.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
