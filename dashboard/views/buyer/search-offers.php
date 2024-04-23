@@ -36,9 +36,9 @@
                         <span class="coupon__highlight"><?php echo Labels::getLabel('LBL_MIN_ORDER', $siteLangId); ?> : <?php echo CommonHelper::displayMoneyFormat($row['coupon_min_order_value']); ?></span>
                         <p> <span class="lessText">
                                 <?php echo CommonHelper::truncateCharacters($row['coupon_description'], 85, '', '', true);
-                                echo (strlen($row['coupon_description']) > 85) ? '..' : ''; ?>
+                                echo (strlen($row['coupon_description'] ?? '') > 85) ? '..' : ''; ?>
                             </span>
-                            <?php if (strlen($row['coupon_description']) > 85) {
+                            <?php if (strlen($row['coupon_description'] ?? '') > 85) {
                             ?>
                                 <span class="moreText" style="display:none;"><?php echo nl2br($row['coupon_description']); ?></span>
                                 <a class="readMore link-text" href="javascript:void(0);"> <?php echo Labels::getLabel('LBL_SHOW_MORE', $siteLangId); ?> </a>
