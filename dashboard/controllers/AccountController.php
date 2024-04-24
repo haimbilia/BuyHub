@@ -302,16 +302,18 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
 
-        if (empty($data['credential_password'])) {
-            $currentEncPassword = UserAuthentication::encryptPassword($post['current_password'], true);
-            if ($currentEncPassword !== $data['credential_password_old']) {
-                $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
-                FatUtility::dieJsonError($message);
-            }
-        } else {
-            if (false == password_verify($post['current_password'], $data['credential_password'])) {
-                $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
-                FatUtility::dieJsonError($message);
+        if (false == UserAuthentication::isGuestUserLogged()) {
+            if (empty($data['credential_password'])) {
+                $currentEncPassword = UserAuthentication::encryptPassword($post['current_password'], true);
+                if ($currentEncPassword !== $data['credential_password_old']) {
+                    $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
+                    FatUtility::dieJsonError($message);
+                }
+            } else {
+                if (false == password_verify($post['current_password'], $data['credential_password'])) {
+                    $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
+                    FatUtility::dieJsonError($message);
+                }
             }
         }
 
@@ -320,7 +322,20 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Password_changed_successfully', $this->siteLangId));
+
+        if (UserAuthentication::isGuestUserLogged()) {
+            $userObj = new User($this->userId);
+            $srch = $userObj->getUserSearchObj('uc.credential_active');
+            $data = FatApp::getDb()->fetch($srch->getResultSet());
+            $lbl = Labels::getLabel('MSG_PASSWORD_CHANGED_SUCCESSFULLY', $this->siteLangId);
+            if (0 == $data['credential_active']) {
+                $lbl = Labels::getLabel('MSG_PASSWORD_UPDATED_SUCCESSFULLY._BUT_ACCOUNT_YET_TO_BE_VERIFIED_BY_THE_SITE_ADMIN.', $this->siteLangId);
+            }
+            $this->set('msg', $lbl);
+        } else {
+            $this->set('msg', Labels::getLabel('MSG_PASSWORD_CHANGED_SUCCESSFULLY', $this->siteLangId));
+        }
+
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -923,7 +938,9 @@ class AccountController extends LoggedUserController
         $this->_template->addJs('js/cropper-main.js');
         $this->includeDateTimeFiles();
 
-        $data = User::getAttributesById($this->userId, array('user_preferred_dashboard', 'user_registered_initially_for', 'user_parent'));
+        $userObj = new User($this->userId);
+        $srch = $userObj->getUserSearchObj(array('user_preferred_dashboard', 'user_registered_initially_for', 'user_parent', 'uc.credential_active', 'uc.credential_verified'));
+        $data = FatApp::getDb()->fetch($srch->getResultSet());
         if ($data === false) {
             FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
         }
@@ -935,6 +952,7 @@ class AccountController extends LoggedUserController
 
         $payoutPlugins = Plugin::getNamesWithCode(Plugin::TYPE_PAYOUTS, $this->siteLangId);
 
+        $this->set('loggedUserInfo', $data);
         $this->set('userParentId', $data['user_parent']);
         $this->set('payouts', $payoutPlugins);
         $this->set('showSellerActivateButton', $showSellerActivateButton);
@@ -2872,11 +2890,14 @@ class AccountController extends LoggedUserController
     private function getChangePasswordForm()
     {
         $frm = new Form('changePwdFrm');
-        $curPwd = $frm->addPasswordField(
-            Labels::getLabel('FRM_CURRENT_PASSWORD', $this->siteLangId),
-            'current_password'
-        );
-        $curPwd->requirements()->setRequired();
+
+        if (false == UserAuthentication::isGuestUserLogged()) {
+            $curPwd = $frm->addPasswordField(
+                Labels::getLabel('FRM_CURRENT_PASSWORD', $this->siteLangId),
+                'current_password'
+            );
+            $curPwd->requirements()->setRequired();
+        }
 
         $newPwd = $frm->addPasswordField(
             Labels::getLabel('FRM_NEW_PASSWORD', $this->siteLangId),
@@ -3862,5 +3883,23 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($giftcard->getError());
         }
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_GIFTCARD_REDEEM_SUCCESSFULLY'));
+    }
+
+    public function guestActivate()
+    {
+        if (false == UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+
+        $userObj = new User($this->userId);
+        $srch = $userObj->getUserSearchObj(array('u.user_name', 'uc.credential_email as user_email'));
+        $data = FatApp::getDb()->fetch($srch->getResultSet());
+        if (empty($data)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_USER', $this->siteLangId), true);
+        }
+        if (false == $userObj->userEmailVerification($data, $this->siteLangId)) {
+            LibHelper::exitWithError($userObj->getError(), true);
+        }
+        FatUtility::dieJsonSuccess(Labels::getLabel("MSG_VERIFICATION_EMAIL_SENT!", $this->siteLangId));
     }
 }

@@ -1492,6 +1492,13 @@ class User extends MyAppModel
             return false;
         }
 
+        if (UserAuthentication::isGuestUserLogged()) {
+            $user = new self($userId);
+            $userdata = $user->getUserInfo('credential_email', false, false, true);
+            $authentication = new UserAuthentication();
+            $authentication->login($userdata['credential_email'], $password, $_SERVER['REMOTE_ADDR'], true, 0, 0, User::USER_TYPE_BUYER);
+        }
+
         return true;
     }
 
