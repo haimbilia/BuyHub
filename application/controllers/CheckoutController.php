@@ -210,7 +210,10 @@ class CheckoutController extends MyAppController
     public function index($appParam = '', $appLang = '1', $appCurrency = '1')
     {
         if (!isset($_SESSION['offer_checkout']) && FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_CHECKOUT_WITH_ACCEPTED_OFFER_ONLY.'), redirect:true);
+            $cartObj = new Cart();
+            $cartObj->clear();
+            $cartObj->updateUserCart();
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_CHECKOUT_WITH_ACCEPTED_OFFER_ONLY.'), redirect: true);
             CommonHelper::redirectUserReferer();
         }
 

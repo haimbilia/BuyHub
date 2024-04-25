@@ -1,7 +1,5 @@
 <?php
 
-use Google\Service\AnalyticsReporting\Resource\UserActivity;
-
 class Cart extends FatModel
 {
     private $products = array();
@@ -1917,7 +1915,7 @@ class Cart extends FatModel
                 }
             }
         }
-
+        
         $this->products = array();
         $this->basketProducts = [];
         $this->SYSTEM_ARR['cart'] = array();

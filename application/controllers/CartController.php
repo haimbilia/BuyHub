@@ -13,12 +13,14 @@ class CartController extends MyAppController
 
     public function index()
     {
+        $cartObj = new Cart();
         if (!isset($_SESSION['offer_checkout']) && FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $cartObj->clear();
+            $cartObj->updateUserCart();
             LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_CHECKOUT_WITH_ACCEPTED_OFFER_ONLY.'), redirect:true);
             CommonHelper::redirectUserReferer();
         }
 
-        $cartObj = new Cart();
         $cartObj->unsetCartCheckoutType();
         $cartObj->invalidateCheckoutType();
         $cartObj->removeProductShippingMethod();

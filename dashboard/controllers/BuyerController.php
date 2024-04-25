@@ -2716,6 +2716,11 @@ class BuyerController extends BuyerBaseController
 
     public function addItemsToCart($orderId)
     {
+        if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $message = Labels::getLabel('MSG_ITEMS_ARE_AVAILABLE_FOR_RFQ_ONLY', $this->siteLangId);
+            LibHelper::exitWithError($message, true);
+        }
+
         if (!$orderId) {
             $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
             LibHelper::exitWithError($message, true);
@@ -2755,7 +2760,7 @@ class BuyerController extends BuyerBaseController
         }
 
         if ($outOfStock) {
-            $message = Labels::getLabel('MSG_Product_not_available_or_out_of_stock_so_removed_from_cart_listing', $this->siteLangId);
+            $message = Labels::getLabel('MSG_PRODUCT_NOT_AVAILABLE_OR_OUT_OF_STOCK_SO_REMOVED_FROM_CART_LISTING', $this->siteLangId);
             LibHelper::exitWithError($message, true);
         }
 

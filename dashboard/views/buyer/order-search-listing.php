@@ -71,7 +71,7 @@
                                 $orderStatus .= " - " . $order['plugin_name'];
                             }
                         }
-                        
+
                         $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'badge-info';
                     }
 
@@ -80,10 +80,10 @@
                 case 'action':
                     $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
 
-                    $opCancelUrl = UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($order['op_id']));                          
+                    $opCancelUrl = UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($order['op_id']));
                     $datediff = time() - strtotime($order['order_date_added']);
                     $daysSpent = $datediff / (60 * 60 * 24);
-                    $returnAge = $order['op_selprod_return_age'];           
+                    $returnAge = $order['op_selprod_return_age'];
                     $li = $ul->appendElement("li");
                     $li->appendElement(
                         'a',
@@ -152,20 +152,22 @@
                         );
                     }
 
-                    $li = $ul->appendElement("li");
-                    $li->appendElement(
-                        'a',
-                        array(
-                            'href' => 'javascript:void(0)', 'onclick' => 'return addItemsToCart("' . $order['order_id'] . '");',
-                            'title' => Labels::getLabel('LBL_Re-Order', $siteLangId)
-                        ),
-                        '<svg class="svg" width="18" height="18">
-                        <use
-                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#cart">
-                        </use>
-                    </svg>',
-                        true
-                    );
+                    if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+                        $li = $ul->appendElement("li");
+                        $li->appendElement(
+                            'a',
+                            array(
+                                'href' => 'javascript:void(0)', 'onclick' => 'return addItemsToCart("' . $order['order_id'] . '");',
+                                'title' => Labels::getLabel('LBL_Re-Order', $siteLangId)
+                            ),
+                            '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#cart">
+                                </use>
+                            </svg>',
+                            true
+                        );
+                    }
 
                     if (!$order['order_deleted'] && !$order["order_payment_status"] && 'TransferBank' == $order['plugin_code']) {
                         $li = $ul->appendElement("li");

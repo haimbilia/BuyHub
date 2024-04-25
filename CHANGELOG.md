@@ -40,6 +40,7 @@
     - Bug-082762 - The unit of the ordered quantity should be displayed on the 'Your Shopping Bag' page of buyer
     - Bug-080244 - Error occur on the My Offers page on the buyer dashboard in Arabic language.
     - Bug-079388 - "Pay At Store" not working.
+    - Bug-082913 - Reorder functionality need to be managed properly.
 ## Hit URL:
     - admin/patch-update/updateProductRating  
     

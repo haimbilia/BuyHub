@@ -122,9 +122,11 @@ $cancelOrder = $cancelOrder ?? false;;
                             }
                         } else {
                             ?>
-                            <li class="dropdown-menu-item">
-                                <a class="dropdown-menu-link no-print" href="javascript:void(0)" onclick="return addItemsToCart('<?php echo $orderDetail['order_id']; ?>');"><?php echo Labels::getLabel('LBL_Buy_Again', $siteLangId); ?></a>
-                            </li>
+                            <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+                                <li class="dropdown-menu-item">
+                                    <a class="dropdown-menu-link no-print" href="javascript:void(0)" onclick="return addItemsToCart('<?php echo $orderDetail['order_id']; ?>');"><?php echo Labels::getLabel('LBL_Buy_Again', $siteLangId); ?></a>
+                                </li>
+                            <?php } ?>
                             <li class="dropdown-menu-item">
                                 <a class="dropdown-menu-link no-print" href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>" title="<?php echo Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId); ?>"><?php echo Labels::getLabel('LBL_ORDER_RECEIPT', $siteLangId); ?></a>
                             </li>
