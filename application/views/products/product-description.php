@@ -158,10 +158,10 @@
                             </svg>
                         </a>
                         <?php } else { */
-                        if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_rfq_enabled'])) { ?>
-                            <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
-                                <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
-                            </button>
+                    if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_rfq_enabled'])) { ?>
+                        <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
+                            <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
+                        </button>
                     <?php //}
                     } ?>
                 </div>
@@ -189,14 +189,14 @@
                     </svg>
                 </a>
                 <?php } else { */
-                echo $frmBuyProduct->getFieldHtml('selprod_id');
-                if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_rfq_enabled'])) { ?>
-                    <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
-                        <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
-                    </button>
-                    <span class="d-none">
-                        <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
-                    </span>
+            echo $frmBuyProduct->getFieldHtml('selprod_id');
+            if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_rfq_enabled'])) { ?>
+                <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
+                    <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
+                </button>
+                <span class="d-none">
+                    <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                </span>
             <?php //}
             } ?>
         </div>
@@ -272,41 +272,43 @@
                             </figure>
                             <div class="product-profile-data">
                                 <a class="title" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><?php echo $usproduct['selprod_title'] ?></a>
-
-                                <div class="products-price">
-                                    <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice'], true, false, true, false, false, true); ?>
-                                </div>
-                                <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                    <button class="decrease decrease-js disabled" type="button">
-                                        <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                            </use>
-                                        </svg>
-                                    </button>
-                                    <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                        <input type="text" value="<?php echo $usproduct['selprod_min_order_qty']; ?>" data-min-qty="<?php echo $usproduct['selprod_min_order_qty']; ?>" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
+                                <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+                                    <div class="products-price">
+                                        <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice'], true, false, true, false, false, true); ?>
                                     </div>
-                                    <button class="increase increase-js <?php echo $usproduct['selprod_stock'] <= $usproduct['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
-                                        <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                            </use>
-                                        </svg>
-                                    </button>
-                                </div>
+                                    <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                        <button class="decrease decrease-js disabled" type="button">
+                                            <svg class="svg" width="16" height="16">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                </use>
+                                            </svg>
+                                        </button>
+                                        <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                            <input type="text" value="<?php echo $usproduct['selprod_min_order_qty']; ?>" data-min-qty="<?php echo $usproduct['selprod_min_order_qty']; ?>" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
+                                        </div>
+                                        <button class="increase increase-js <?php echo $usproduct['selprod_stock'] <= $usproduct['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
+                                            <svg class="svg" width="16" height="16">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                </use>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                <?php } ?>
                             </div>
                             <?php if ($usproduct['selprod_stock'] <= 0) { ?>
                                 <div class="out-of-stock-txt">
                                     <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
                                 </div>
-                            <?php  } ?>
+                            <?php } ?>
                         </div>
-                        <label class="checkbox">
-                            <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?> type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" name="check_addons" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                        </label>
+                        <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+                            <label class="checkbox">
+                                <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?> type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" name="check_addons" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                            </label>
+                        <?php } ?>
                     </li>
                 <?php } ?>
             </ul>
-
         </div>
     <?php } ?>
 </div>
