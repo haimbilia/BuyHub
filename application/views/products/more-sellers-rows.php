@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $count = 1;
 $shopTotalReviews = $shopTotalReviews ?? 0;
+$displaySellerId = $displaySellerId ?? 0;
 foreach ($sellers as $key => $sellerDetail) {
     $isActive = array_key_exists('isActive', $sellerDetail) && true === $sellerDetail['isActive'];
     if ($count > Product::VIEW_MORE_SELLER_COUNT) { ?>
@@ -22,9 +23,15 @@ foreach ($sellers as $key => $sellerDetail) {
         <?php } ?>
         <div class="sold-by">
             <span class="sold-by-txt"><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?></span>
-            <a class="sold-by-name" href="<?php echo UrlHelper::generateFullUrl('Products', 'View', array($sellerDetail['selprod_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
-                <?php echo $sellerDetail['shop_name']; ?>
-            </a>
+            <?php if ($displaySellerId == $sellerDetail['selprod_user_id']) { ?>
+                <a class="sold-by-name" href="<?php echo UrlHelper::generateFullUrl('Shops', 'View', array($sellerDetail['shop_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
+                    <?php echo $sellerDetail['shop_name']; ?>
+                </a>
+            <?php } else { ?>
+                <a class="sold-by-name" href="<?php echo UrlHelper::generateFullUrl('Products', 'View', array($sellerDetail['selprod_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
+                    <?php echo $sellerDetail['shop_name']; ?>
+                </a>
+            <?php } ?>
         </div>
         <?php
         $badgesArr = Badge::getShopBadges($siteLangId, [$sellerDetail['shop_id']]);

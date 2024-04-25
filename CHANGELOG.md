@@ -41,6 +41,7 @@
     - Bug-080244 - Error occur on the My Offers page on the buyer dashboard in Arabic language.
     - Bug-079388 - "Pay At Store" not working.
     - Bug-082913 - Reorder functionality need to be managed properly.
+    - Bug-082875 - Shop name does not direct the user to shop detail page
 ## Hit URL:
     - admin/patch-update/updateProductRating  
     
