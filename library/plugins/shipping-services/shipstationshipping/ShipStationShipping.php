@@ -331,6 +331,9 @@ class ShipStationShipping extends ShippingServicesBase
      */
     public function bindLabel(array $requestParam): bool
     {
+        if (!isset($requestParam['advancedOptions'])) {
+            $requestParam['advancedOptions'] = ['warehouseId' => $this->getWarehouseId()];
+        }
         if (false == $this->doRequest(self::REQUEST_CREATE_LABEL, $requestParam)) {
             return false;
         }
@@ -344,7 +347,8 @@ class ShipStationShipping extends ShippingServicesBase
                         'orderId' => $ssOrderInfo['orderId'],
                         'orderKey' => $ssOrderInfo['orderKey'],
                         'orderNumber' => $ssOrderInfo['orderNumber'],
-                        'orderStatus' => 'awaiting_shipment'
+                        'orderStatus' => 'awaiting_shipment',
+                        'advancedOptions' => ['warehouseId' => $this->getWarehouseId()]
                     ];
                     $this->doRequest(self::REQUEST_CREATE_ORDER, $updateData);
                 }
