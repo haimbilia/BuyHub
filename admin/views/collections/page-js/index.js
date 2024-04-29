@@ -99,10 +99,10 @@ $(document).on('change', '.prefDimensionsJs', function () {
             type: 'POST',
             data: { collection_id, record_id, fIsAjax: 1 }
         });
-        
+
         try {
             response = JSON.parse(response);
-        } catch (e) {}
+        } catch (e) { }
 
         if ('undefined' != response.status && 0 == response.status) {
             fcom.displayErrorMessage(response.msg);
@@ -374,5 +374,25 @@ $(document).on('change', '.prefDimensionsJs', function () {
                 recordForm(t.recordId, frm.collection_type.value);
             }
         });
+    };
+
+    editLangData = function (recordId, langId, autoFillLangData = 0) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+        fcom.resetEditorInstance();
+        data = "recordId=" + recordId + "&langId=" + langId;
+        var isPopupView = ($.ykmodal.isAdded() && !$.ykmodal.isSideBarView());
+
+        $.ykmodal(fcom.getLoader(), isPopupView);
+        fcom.updateWithAjax(
+            fcom.makeUrl(controllerName, "langForm", [autoFillLangData]),
+            data,
+            function (t) {
+                fcom.closeProcessing();
+                $.ykmodal(t.html, isPopupView, "modal-dialog-vertical-md");
+                fcom.removeLoader();
+            }
+        );
     };
 })();

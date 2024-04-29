@@ -223,6 +223,18 @@ class HomeController extends MyAppController
                     }
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout4;
                     break;
+                case Collections::TYPE_CATEGORY_LAYOUT7:
+                    $homePageCatLayout7 = CacheHelper::get('homePageCatLayout7' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageCatLayout7) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $tpl->set('`displayProductNotAvailableLable`', $displayProductNotAvailableLable);
+                        $homePageCatLayout7 = $tpl->render(false, false, '_partial/collection/category-layout-7.php', true, true);
+                        CacheHelper::create('homePageCatLayout7' . $collection['collection_id'] . $cacheKey, $homePageCatLayout7, CacheHelper::TYPE_COLLECTIONS);
+                    }
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout7;
+                    break;
                 case Collections::TYPE_SHOP_LAYOUT1:
                     $homePageShopLayout1 = CacheHelper::get('homePageShopLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageShopLayout1) {
@@ -291,17 +303,24 @@ class HomeController extends MyAppController
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageFaqLayout1;
                     break;
                 case Collections::TYPE_TESTIMONIAL_LAYOUT1:
+                case Collections::TYPE_TESTIMONIAL_LAYOUT2:
                     $homePageTestimonialLayout1 = CacheHelper::get('homePageTestimonialLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageTestimonialLayout1) {
                         $tpl = new FatTemplate('', '');
                         $tpl->set('siteLangId', $this->siteLangId);
                         $tpl->set('collection', $collection);
-                        $homePageTestimonialLayout1 = $tpl->render(false, false, '_partial/collection/testimonial-layout-1.php', true, true);
+                        $viewFile = '_partial/collection/testimonial-layout-1.php';
+                        if (Collections::TYPE_TESTIMONIAL_LAYOUT2 == $collection['collection_layout_type']) {
+                            $viewFile = '_partial/collection/testimonial-layout-2.php';
+                        }
+                        $homePageTestimonialLayout1 = $tpl->render(false, false, $viewFile, true, true);
                         CacheHelper::create('homePageTestimonialLayout1' . $collection['collection_id'] . $cacheKey, $homePageTestimonialLayout1, CacheHelper::TYPE_COLLECTIONS);
                     }
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageTestimonialLayout1;
                     break;
+                    break;
                 case Collections::TYPE_CONTENT_BLOCK_LAYOUT1:
+                case Collections::TYPE_CONTENT_BLOCK_LAYOUT2:
                     $homePageContentBlockLayout1 = CacheHelper::get('homePageContentBlockLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageContentBlockLayout1) {
                         $tpl = new FatTemplate('', '');
@@ -892,7 +911,7 @@ class HomeController extends MyAppController
                     /* ] */
                     $collections[$ind] = $collection;
                     $counter = 0;
-                    if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT2, Collections::TYPE_CATEGORY_LAYOUT3, Collections::TYPE_CATEGORY_LAYOUT5, Collections::TYPE_CATEGORY_LAYOUT6])) {
+                    if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT2, Collections::TYPE_CATEGORY_LAYOUT3, Collections::TYPE_CATEGORY_LAYOUT5, Collections::TYPE_CATEGORY_LAYOUT6, Collections::TYPE_CATEGORY_LAYOUT7])) {
                         while ($catData = $db->fetch($rs)) {
                             if (true === MOBILE_APP_API_CALL) {
                                 $imgUpdatedOn = ProductCategory::getAttributesById($catData['prodcat_id'], 'prodcat_updated_on');
@@ -907,18 +926,20 @@ class HomeController extends MyAppController
 
                                 $collections[$ind]['categories'][$counter] = $catData;
                             } else {
-                                /* fetch Sub-Categories[ */
-                                $subCategorySrch = clone $productCatSrchObj;
-                                $subCategorySrch->doNotCalculateRecords();
-                                //$subCategorySrch->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
-                                //$subCategorySrch->addCondition('prodcat_id', '=', $catData['prodcat_id']);
-                                $subCategorySrch->addCondition('prodcat_parent', '=', $catData['prodcat_id']);
-                                $subCategorySrch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
-                                //$subCategorySrch->addOrder('ctr.ctr_record_id', 'ASC');
-                                $subCategorySrch->setPageSize(5);
-                                $subCatRs = $subCategorySrch->getResultSet();
-                                $subCategories = $db->fetchAll($subCatRs, 'prodcat_id');
-
+                                $subCategories = [];
+                                if (Collections::TYPE_CATEGORY_LAYOUT7 != $collection['collection_layout_type']) {
+                                    /* fetch Sub-Categories[ */
+                                    $subCategorySrch = clone $productCatSrchObj;
+                                    $subCategorySrch->doNotCalculateRecords();
+                                    //$subCategorySrch->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
+                                    //$subCategorySrch->addCondition('prodcat_id', '=', $catData['prodcat_id']);
+                                    $subCategorySrch->addCondition('prodcat_parent', '=', $catData['prodcat_id']);
+                                    $subCategorySrch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+                                    //$subCategorySrch->addOrder('ctr.ctr_record_id', 'ASC');
+                                    $subCategorySrch->setPageSize(5);
+                                    $subCatRs = $subCategorySrch->getResultSet();
+                                    $subCategories = $db->fetchAll($subCatRs, 'prodcat_id');
+                                }
                                 $collections[$ind]['categories'][$catData['prodcat_id']] = $catData;
                                 $collections[$ind]['categories'][$catData['prodcat_id']]['subCategories'] = $subCategories;
 
@@ -1357,6 +1378,9 @@ class HomeController extends MyAppController
                             $collections[$i]['pendingForReviews'] = $pendingForReviews;
                         }
                     }
+                    break;
+                case Collections::COLLECTION_TYPE_CONTENT_BLOCK:
+                    $collections[$i] = $collection;
                     break;
             }
             $i++;

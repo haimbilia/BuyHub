@@ -1,70 +1,76 @@
 .section {
     padding: calc(1rem + 2.5vw) 0;
-
     @include media-breakpoint-down(sm) {
-        padding: calc(1rem + 3vw) 0;
+      padding: calc(1rem + 3vw) 0;
     }
-
     &-head {
-        width: 100%;
-        margin-bottom: 1.2rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        //flex-direction: column;
-        flex-wrap: wrap;
-        overflow: auto;
-
-        @include media-breakpoint-up(lg) {
-            flex-direction: row;
-            margin-bottom: 2.5rem;
-        }
-
-        &-center {
-            justify-content: center;
-            text-align: center;
-        }
-    }
-
-    &-heading {
-        color: $txt-body;
-        display: inline-block;
-
-        h1,
-        h2,
-        h3,
-        h4 {
-            font-weight: $font-weight-normal;
-        }
-
-        h1,
-        h2 {
-            font-size: clamp(1.2rem, 2vw, 3rem);
-
-            >span {
-                display: block;
-                font-size: 0.875rem;
-                text-align: center;
-            }
-
-            .search-results {
-                font-size: 2rem;
-                display: inline-block;
-            }
-        }
-
-        p {
-            font-size: 1rem;
-            font-weight: $font-weight-regular;
-        }
-    }
-
-    &-action {
-        // overflow: auto;
-    }
-
-    &-foot {
+      width: 100%;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      //flex-direction: column;
+      flex-wrap: wrap;
+      overflow: auto;
+  
+      @include media-breakpoint-up(lg) {
+        flex-direction: row;
+        margin-bottom: 2.5rem;
+      }
+      &-space {
+        align-items: normal;
+        flex-wrap: inherit;
+        gap: 2rem;
+      }
+  
+      &-center {
+        justify-content: center;
         text-align: center;
-        margin-top: 1.5rem;
+      }
     }
-}
+  
+    &-heading {
+      color: currentColor;
+      display: inline-block;
+  
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-weight: $font-weight-normal;
+      }
+  
+      h1,
+      h2 {
+        max-inline-size: 50ch;
+        text-wrap: balance;
+        font-size: clamp(1.2rem, 2.5vw, 3.5rem);
+  
+        > span {
+          display: block;
+          font-size: 0.875rem;
+          text-align: center;
+        }
+  
+        .search-results {
+          font-size: 2rem;
+          display: inline-block;
+        }
+      }
+  
+      p {
+        font-size: 1rem;
+        font-weight: $font-weight-regular;
+      }
+    }
+  
+    &-action {
+      // overflow: auto;
+    }
+  
+    &-foot {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+  }

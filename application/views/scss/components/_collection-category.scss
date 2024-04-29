@@ -377,3 +377,191 @@
         margin: 0;
     }
 }
+
+// Dev
+.category-number {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+
+    &-item {
+        padding-#{$start-direction}: 16px;
+        position: relative;
+
+        &::before {
+            background-color: $border-color;
+            border-radius: 2px;
+            content: "";
+            display: inline-block;
+            height: 86%;
+            left: 0;
+            position: absolute;
+            top: 50%;
+
+            transform: translateY(-50%);
+            width: 4px;
+        }
+
+        .number {
+            color: $txt-brand;
+            font-size: 2.5rem;
+            font-weight: $font-weight-bold;
+            letter-spacing: -0.73px;
+            line-height: 44px;
+        }
+
+        p {
+            white-space: nowrap;
+            font-size: 1rem;
+            color: $txt-gray;
+            margin: 0;
+            padding: 0;
+        }
+    }
+}
+
+.industry-carousal {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 4rem;
+
+    .slick-list {
+        overflow: hidden;
+        mask: linear-gradient(90deg,
+                transparent,
+                white 20%,
+                white 80%,
+                transparent);
+    }
+
+    .slick-arrow {
+        width: 48px;
+        min-width: 48px;
+        height: 48px;
+        background-color: transparent;
+        border: none;
+        transition: all 0.2s ease-in-out;
+        position: absolute;
+        //top: calc(50% - 24px);
+        // transform: none;
+        z-index: 1;
+        text-indent: -999999px;
+        font-size: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:before {
+            content: "";
+            display: inline-block;
+            border-#{$end-direction}: 2px solid black;
+            border-bottom: 2px solid black;
+            width: 24px;
+            height: 24px;
+        }
+
+        &.slick-prev {
+            #{$start-direction}: 0;
+
+            @include media-breakpoint-up(xl) {
+                // #{$start-direction}: -10px;
+            }
+
+            &:before {
+                transform: rotate(136deg * $transform-direction);
+                margin-right: -7px;
+            }
+        }
+
+        &.slick-next {
+            #{$end-direction}: 0;
+
+            @include media-breakpoint-up(xl) {
+                // #{$end-direction}: -10px;
+            }
+
+            &:before {
+                margin-left: -7px;
+                transform: rotate(-45deg * $transform-direction);
+            }
+        }
+    }
+
+    &-item {
+        display: block;
+    }
+
+    &-link {
+        background-color: #f3f4f5;
+        padding: 1rem;
+        margin: 1rem auto;
+        display: block;
+        width: 140px;
+        height: 140px;
+        border-radius: 100%;
+        box-shadow: none;
+        position: relative;
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border-radius: 100%;
+        }
+
+        &:before {
+            border: 2px solid transparent;
+        }
+
+        &::after {
+            border: 0 solid transparent;
+        }
+
+        &:hover {
+            color: currentColor;
+            text-decoration: none;
+
+            &::before {
+                border-top-color: $brand-color;
+                border-right-color: $brand-color;
+                border-bottom-color: $brand-color;
+                transition: border-top-color 0.15s linear,
+                    border-right-color 0.15s linear 0.1s,
+                    border-bottom-color 0.15s linear 0.2s;
+            }
+
+            &::after {
+                border-top: 2px solid$brand-color;
+                border-left-width: 2px;
+                border-right-width: 2px;
+                transform: rotate(270deg);
+                transition: transform 0.4s linear 0s, border-left-width 0s linear 0.35s,
+                    -webkit-transform 0.4s linear 0s;
+            }
+        }
+    }
+
+    &-icon {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    &-block {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    &-name {
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+}

@@ -50,3 +50,6 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 COD will work only if the fulfillment method is Shipping.
 Pay at Store will work only if the fulfillment method is Pickup.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+ALTER TABLE `tbl_collections` CHANGE `collection_identifier` `collection_identifier` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+

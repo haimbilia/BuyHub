@@ -42,6 +42,7 @@ class Collections extends MyAppModel
     public const TYPE_CATEGORY_LAYOUT4 = 23;
     public const TYPE_CATEGORY_LAYOUT5 = 26; /* Applicable For Apps only. */
     public const TYPE_CATEGORY_LAYOUT6 = 27; /* Applicable For Apps only. */
+    public const TYPE_CATEGORY_LAYOUT7 = 32;
 
     public const TYPE_SHOP_LAYOUT1 = 6;
     public const TYPE_SHOP_LAYOUT2 = 22;
@@ -60,7 +61,9 @@ class Collections extends MyAppModel
 
     public const TYPE_FAQ_LAYOUT1 = 14;
     public const TYPE_TESTIMONIAL_LAYOUT1 = 15;
+    public const TYPE_TESTIMONIAL_LAYOUT2 = 30;
     public const TYPE_CONTENT_BLOCK_LAYOUT1 = 16;
+    public const TYPE_CONTENT_BLOCK_LAYOUT2 = 31;
     public const TYPE_PENDING_REVIEWS1 = 17; /* Applicable For Apps only. */
     // public const TYPE_FAQ_CATEGORY_LAYOUT1 = 18; /* Applicable For Apps only. */
     public const TYPE_HERO_SLIDES_LAYOUT1 = 25;
@@ -76,6 +79,7 @@ class Collections extends MyAppModel
     public const LIMIT_CATEGORY_LAYOUT4 = 4;
     public const LIMIT_CATEGORY_LAYOUT5 = 5;
     public const LIMIT_CATEGORY_LAYOUT6 = 4;
+    public const LIMIT_CATEGORY_LAYOUT7 = 20;
     public const LIMIT_SHOP_LAYOUT1 = 4;
     public const LIMIT_SHOP_LAYOUT2 = 3;
     public const LIMIT_BRAND_LAYOUT1 = 5;
@@ -131,11 +135,13 @@ class Collections extends MyAppModel
         self::TYPE_CATEGORY_LAYOUT2,
         self::TYPE_CATEGORY_LAYOUT3,
         self::TYPE_CATEGORY_LAYOUT4,
+        self::TYPE_CATEGORY_LAYOUT7,
         self::TYPE_BRAND_LAYOUT2,
         self::TYPE_SHOP_LAYOUT2,
         self::TYPE_PRODUCT_LAYOUT3,
         self::TYPE_FAQ_LAYOUT1,
         self::TYPE_TESTIMONIAL_LAYOUT1,
+        self::TYPE_TESTIMONIAL_LAYOUT2,
         self::TYPE_BLOG_LAYOUT1,
     ];
 
@@ -176,8 +182,6 @@ class Collections extends MyAppModel
                 'c_l'
             );
         }
-
-        $srch->addCondition('collection_type', '!=', self::COLLECTION_TYPE_CONTENT_BLOCK);
 
         return $srch;
     }
@@ -244,6 +248,7 @@ class Collections extends MyAppModel
             self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_CATEGORY_LAYOUT2', $langId),
             self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_CATEGORY_LAYOUT3', $langId),
             self::TYPE_CATEGORY_LAYOUT4 => Labels::getLabel('LBL_CATEGORY_LAYOUT4', $langId),
+            self::TYPE_CATEGORY_LAYOUT7 => Labels::getLabel('LBL_CATEGORY_LAYOUT7', $langId),
             self::TYPE_CATEGORY_LAYOUT5 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT5', $langId),
             self::TYPE_CATEGORY_LAYOUT6 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT6', $langId),
             self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_SHOP_LAYOUT1', $langId),
@@ -259,7 +264,9 @@ class Collections extends MyAppModel
             // self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
             self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ_LAYOUT1', $langId),
             self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT1', $langId),
+            self::TYPE_TESTIMONIAL_LAYOUT2 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT2', $langId),
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_CONTENT_BLOCK_LAYOUT1', $langId),
+            self::TYPE_CONTENT_BLOCK_LAYOUT2 => Labels::getLabel('LBL_CONTENT_BLOCK_LAYOUT2', $langId),
             self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
             // self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORIES', $langId),
         ];
@@ -297,7 +304,8 @@ class Collections extends MyAppModel
                 self::TYPE_CATEGORY_LAYOUT4 => Labels::getLabel('LBL_CATEGORY_LAYOUT4', $langId),
                 self::TYPE_CATEGORY_LAYOUT5 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT5', $langId),
                 self::TYPE_CATEGORY_LAYOUT6 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT6', $langId),
-            ],            
+                self::TYPE_CATEGORY_LAYOUT7 => Labels::getLabel('LBL_CATEGORY_LAYOUT7', $langId),
+            ],
             self::COLLECTION_TYPE_PRODUCT => [
                 self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
                 self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_PRODUCT_LAYOUT2', $langId),
@@ -316,7 +324,8 @@ class Collections extends MyAppModel
                 self::TYPE_SPONSORED_SHOP_LAYOUT => Labels::getLabel('LBL_SPONSORED_SHOPS', $langId),
             ],
             self::COLLECTION_TYPE_TESTIMONIAL => [
-                self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_TESTIMONIAL', $langId),
+                self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT1', $langId),
+                self::TYPE_TESTIMONIAL_LAYOUT2 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT2', $langId),
             ],
             self::COLLECTION_TYPE_FAQ => [
                 self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ', $langId),
@@ -326,10 +335,11 @@ class Collections extends MyAppModel
             ], 
             self::COLLECTION_TYPE_REVIEWS => [
                 self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
-            ]
+            ]*/
             self::COLLECTION_TYPE_CONTENT_BLOCK => [
-                self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_Content_Block', $langId),
-            ] */
+                self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_Content_Block1', $langId),
+                self::TYPE_CONTENT_BLOCK_LAYOUT2 => Labels::getLabel('LBL_Content_Block2', $langId)
+            ]
         ];
     }
 
@@ -374,7 +384,7 @@ class Collections extends MyAppModel
                     'width' => 920,
                     'height' => 690
                 ],
-                
+
                 applicationConstants::SCREEN_IPAD => [
                     'width' => 660,
                     'height' => 198
@@ -383,7 +393,7 @@ class Collections extends MyAppModel
                     'width' => 640,
                     'height' => 360
                 ],
-               
+
             ],
             /* self::TYPE_BANNER_LAYOUT3 => [
                 applicationConstants::SCREEN_DESKTOP => [
@@ -431,7 +441,9 @@ class Collections extends MyAppModel
             self::TYPE_FAQ_LAYOUT1 => 'Faq-Layout-1.png',
             // self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'Faq-Layout-1.png',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'Testimonial-layout-1.png',
+            self::TYPE_TESTIMONIAL_LAYOUT2 => 'Testimonial-layout-2.png',
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => 'Content-Block-layout-1.png',
+            self::TYPE_CONTENT_BLOCK_LAYOUT2 => 'Content-Block-layout-2.png',
             self::TYPE_PENDING_REVIEWS1 => 'Pending-Reviews-1.png',
         ];
     }
@@ -998,6 +1010,7 @@ class Collections extends MyAppModel
             self::TYPE_CATEGORY_LAYOUT4 => 'category-layout-4',
             self::TYPE_CATEGORY_LAYOUT5 => 'category-layout-5',
             self::TYPE_CATEGORY_LAYOUT6 => 'category-layout-6',
+            self::TYPE_CATEGORY_LAYOUT7 => 'category-layout-7',
             self::TYPE_SHOP_LAYOUT1 => 'shop-layout-1',
             self::TYPE_SHOP_LAYOUT2 => 'shop-layout-2',
             self::TYPE_BRAND_LAYOUT1 => 'brand-layout-1',
@@ -1011,7 +1024,9 @@ class Collections extends MyAppModel
             // self::TYPE_BANNER_LAYOUT3 => 'banner-layout-3',
             self::TYPE_FAQ_LAYOUT1 => 'faq-layout-1',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'testimonial-layout-1',
+            self::TYPE_TESTIMONIAL_LAYOUT2 => 'testimonial-layout-2',
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => 'content-block-layout-1',
+            self::TYPE_CONTENT_BLOCK_LAYOUT2 => 'content-block-layout-2',
             self::TYPE_PENDING_REVIEWS1 => 'pending-reviews-1',
             // self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'faq-category-layout-1',
         ];

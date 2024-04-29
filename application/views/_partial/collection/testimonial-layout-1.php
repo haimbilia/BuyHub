@@ -49,7 +49,7 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
     <?php if (1 < count($collection['testimonials'])) { ?>
         <script>
             $(function() {
-                $(".js-slider-testimonials").slick({
+                $(".js-slider-testimonials").not('.slick-initialized').slick({
                     rtl: ('rtl' == langLbl.layoutDirection),
                     slidesToShow: 1,
                     dots: false,

@@ -258,7 +258,7 @@ class CollectionsController extends ListingBaseController
                 break;
             case Collections::TYPE_PRODUCT_LAYOUT4:
                 return Collections::LIMIT_PRODUCT_LAYOUT4;
-                break;    
+                break;
             case Collections::TYPE_CATEGORY_LAYOUT1:
                 return Collections::LIMIT_CATEGORY_LAYOUT1;
                 break;
@@ -270,13 +270,16 @@ class CollectionsController extends ListingBaseController
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT4:
                 return Collections::LIMIT_CATEGORY_LAYOUT4;
-                break;    
+                break;
             case Collections::TYPE_CATEGORY_LAYOUT5:
                 return Collections::LIMIT_CATEGORY_LAYOUT5;
-                break;    
+                break;
             case Collections::TYPE_CATEGORY_LAYOUT6:
                 return Collections::LIMIT_CATEGORY_LAYOUT6;
-                break;    
+                break;
+            case Collections::TYPE_CATEGORY_LAYOUT7:
+                return Collections::LIMIT_CATEGORY_LAYOUT7;
+                break;
             case Collections::TYPE_SHOP_LAYOUT1:
                 return Collections::LIMIT_SHOP_LAYOUT1;
                 break;
@@ -320,7 +323,7 @@ class CollectionsController extends ListingBaseController
             $maxDisplayOrder = Collections::getMaxDisplayOrder();
             $post['collection_display_order'] = $maxDisplayOrder + 1;
         }
-        
+
         $collection = new Collections($recordId);
         $collection->assignValues($post);
         if (!$collection->save()) {
@@ -361,6 +364,11 @@ class CollectionsController extends ListingBaseController
         $productTypeLayoutArr = Collections::getTypeSpecificLayouts($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_Collection_Layout_Type', $this->siteLangId), 'collection_layout_type', $productTypeLayoutArr[$type], $layoutType, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'collection_name');
+
+        if (Collections::COLLECTION_TYPE_CONTENT_BLOCK == $type) {
+            $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $this->siteLangId), 'collection_description');
+        }
+
         if ($type == Collections::COLLECTION_TYPE_BANNER) {
             $frm->addTextBox(Labels::getLabel('FRM_PROMOTION_COST', $this->siteLangId), 'blocation_promotion_cost');
         }
@@ -391,7 +399,10 @@ class CollectionsController extends ListingBaseController
         }
 
         $this->setLangTemplateData();
-        $langFrm = $this->getLangForm($recordId, $langId);
+
+        $data = Collections::getAttributesById($recordId, ['collection_type', 'collection_layout_type']);
+                            
+        $langFrm = $this->getLangForm($recordId, $langId, $data['collection_type']);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId, CommonHelper::getDefaultFormLangId());
@@ -403,7 +414,6 @@ class CollectionsController extends ListingBaseController
             $langData = (array) $this->modelObj::getAttributesByLangId($langId, $recordId);
         }
 
-        $data = Collections::getAttributesById($recordId, ['collection_type', 'collection_layout_type']);
         $langData += $data;
         $langFrm->fill($langData);
 
@@ -420,7 +430,7 @@ class CollectionsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    protected function getLangForm($recordId = 0, $langId = 0)
+    protected function getLangForm($recordId = 0, $langId = 0, $type = 0)
     {
         $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
@@ -432,6 +442,10 @@ class CollectionsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
 
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'collection_name');
+
+        if (Collections::COLLECTION_TYPE_CONTENT_BLOCK == $type) {
+            $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $this->siteLangId), 'collection_description');
+        }
 
         return $frm;
     }
@@ -508,6 +522,11 @@ class CollectionsController extends ListingBaseController
         $this->setFormTitle($collectionType, $data['collection_layout_type']);
 
         $frm = $this->getRecordsForm($recordId, $collectionType);
+        if (Collections::TYPE_CATEGORY_LAYOUT7 == $data['collection_layout_type']) {
+            $fld = $frm->getField('collection_records[]');
+            $lbl = CommonHelper::replaceStringData(Labels::getLabel('LBL_BIND_ATLEAST_{LIMIT}_RECORDS_FOR_BETTER_COLLECTION_VIEW'), ['{LIMIT}' => Collections::LIMIT_CATEGORY_LAYOUT7]);
+            $fld->htmlAfterField = '<span class="form-text text-muted">' . $lbl . '</span>';
+        }
 
         $this->set('recordId', $recordId);
         $this->set('collection_type', $collectionType);
@@ -1119,7 +1138,7 @@ class CollectionsController extends ListingBaseController
         $this->setFormTitle($type, $layoutType, 'collectionForm(' . $type . ', ' . $layoutType . ', ' . $collectionId . ');');
         $bannerDimensiomns = ImageDimension::getBannerData('', $layoutType);
         $frm = $this->getBannerMediaForm($recordId);
-        $frm->fill(['collection_id' => $collectionId]);        
+        $frm->fill(['collection_id' => $collectionId]);
         $this->set('bannerDimensiomns', $bannerDimensiomns);
         $this->set('collectionId', $collectionId);
         $this->set('recordId', $recordId);
@@ -1154,7 +1173,7 @@ class CollectionsController extends ListingBaseController
         if (in_array($this->collectionDetails['collection_layout_type'], Collections::COLLECTIONS_FOR_APP_ONLY)) {
             unset($screenArr[applicationConstants::SCREEN_DESKTOP]);
         }
-        
+
         $frm->addSelectBox(Labels::getLabel("FRM_DEVICE", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
         $frm->addHtml('', 'banner', '');
 
