@@ -28,6 +28,8 @@
     - Bug-076927 - The shipping charges get refunded to the buyer even if the admin disabled return shipping charges to the customer setting
     - Bug-080244 - Error occur on the My Offers page on the buyer dashboard in Arabic language.
     - Bug-079388 - "Pay At Store" not working.
+    - Bug-072665 - Product specification special character issue
+
 ## Hit URL:
     - admin/patch-update/updateProductRating  
     
