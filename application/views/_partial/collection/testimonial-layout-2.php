@@ -12,13 +12,16 @@
                 </div>
             </div>
             <div class="section-body">
-                <div class="testimonials-layout-2 <?php echo (1 < count($collection['testimonials'])) ? 'sliderTestimonialsjs' : ''; ?>" data-slides="3,3,1,1" aria-label="carousel">
+                <div class="testimonials-layout-2 <?php echo (1 < count($collection['testimonials'])) ? 'sliderTestimonialsjs' : ''; ?>"
+                    data-slides="3,3,1,1" aria-label="carousel">
                     <?php foreach ($collection['testimonials'] as $testimonial) {
                         $uploadedTime = AttachedFile::setTimeParam($testimonial['testimonial_added_on']); ?>
                         <div class="item">
                             <div class="testimonial-card">
                                 <div class="testimonial-card-head">
-                                    <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $siteLangId, ImageDimension::VIEW_MEDIUM)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $testimonial['testimonial_user_name']; ?>" title="<?php echo $testimonial['testimonial_user_name']; ?>" decoding="async">
+                                    <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'testimonial', array($testimonial['testimonial_id'], $siteLangId, ImageDimension::VIEW_MEDIUM)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                                        alt="<?php echo $testimonial['testimonial_user_name']; ?>"
+                                        title="<?php echo $testimonial['testimonial_user_name']; ?>" decoding="async">
                                 </div>
                                 <div class="testimonial-card-body">
                                     <p>
@@ -40,37 +43,36 @@
     </section>
     <?php if (1 < count($collection['testimonials'])) { ?>
         <script>
-            $(function() {
+            $(function () {
                 $(".sliderTestimonialsjs").not('.slick-initialized').slick({
                     rtl: ('rtl' == langLbl.layoutDirection),
+                    draggable: true,
                     slidesToShow: 4,
                     dots: false,
                     arrows: true,
-                    swipe: true,
-                    //  infinite: true,
-                    swipeToSlide: true,
-                    adaptiveHeight: true,
+                    prevArrow: '<button class="slick-arrow slick-prev"><span></span> </button>',
+                    nextArrow: '<button class="slick-arrow slick-next"><span></span> </button>',
                     responsive: [{
-                            breakpoint: 1199,
-                            settings: {
-                                slidesToShow: 2,
-                                slidesToScroll: 1,
-                            }
-                        },
-                        {
-                            breakpoint: 1023,
-                            settings: {
-                                slidesToShow: 2,
-                                slidesToScroll: 2
-                            }
-                        },
-                        {
-                            breakpoint: 480,
-                            settings: {
-                                slidesToShow: 1,
-                                slidesToScroll: 1
-                            }
+                        breakpoint: 1199,
+                        settings: {
+                            slidesToShow: 4,
+                            slidesToScroll: 1,
                         }
+                    },
+                    {
+                        breakpoint: 1023,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 2
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
                     ]
                 });
             });
