@@ -143,6 +143,8 @@ class Collections extends MyAppModel
         self::TYPE_TESTIMONIAL_LAYOUT1,
         self::TYPE_TESTIMONIAL_LAYOUT2,
         self::TYPE_BLOG_LAYOUT1,
+        self::TYPE_CONTENT_BLOCK_LAYOUT1,
+        self::TYPE_CONTENT_BLOCK_LAYOUT2,
     ];
 
     /**
