@@ -275,6 +275,7 @@ class CollectionsController extends ListingBaseController
                 return Collections::LIMIT_CATEGORY_LAYOUT4;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT5:
+            case Collections::TYPE_CATEGORY_LAYOUT8:
                 return Collections::LIMIT_CATEGORY_LAYOUT5;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT6:

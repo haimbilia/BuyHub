@@ -44,6 +44,7 @@ class Collections extends MyAppModel
     public const TYPE_CATEGORY_LAYOUT5 = 26; /* Applicable For Apps only. */
     public const TYPE_CATEGORY_LAYOUT6 = 27; /* Applicable For Apps only. */
     public const TYPE_CATEGORY_LAYOUT7 = 32;
+    public const TYPE_CATEGORY_LAYOUT8 = 34;
 
     public const TYPE_SHOP_LAYOUT1 = 6;
     public const TYPE_SHOP_LAYOUT2 = 22;
@@ -138,6 +139,7 @@ class Collections extends MyAppModel
         self::TYPE_CATEGORY_LAYOUT3,
         self::TYPE_CATEGORY_LAYOUT4,
         self::TYPE_CATEGORY_LAYOUT7,
+        self::TYPE_CATEGORY_LAYOUT8,
         self::TYPE_BRAND_LAYOUT2,
         self::TYPE_SHOP_LAYOUT2,
         self::TYPE_PRODUCT_LAYOUT3,
@@ -257,6 +259,7 @@ class Collections extends MyAppModel
             self::TYPE_CATEGORY_LAYOUT7 => Labels::getLabel('LBL_CATEGORY_LAYOUT7', $langId),
             self::TYPE_CATEGORY_LAYOUT5 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT5', $langId),
             self::TYPE_CATEGORY_LAYOUT6 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT6', $langId),
+            self::TYPE_CATEGORY_LAYOUT8 => Labels::getLabel('LBL_CATEGORY_LAYOUT8', $langId),
             self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_SHOP_LAYOUT1', $langId),
             self::TYPE_SHOP_LAYOUT2 => Labels::getLabel('LBL_SHOP_LAYOUT2', $langId),
             self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_BRAND_LAYOUT1', $langId),
@@ -311,6 +314,7 @@ class Collections extends MyAppModel
                 self::TYPE_CATEGORY_LAYOUT5 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT5', $langId),
                 self::TYPE_CATEGORY_LAYOUT6 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT6', $langId),
                 self::TYPE_CATEGORY_LAYOUT7 => Labels::getLabel('LBL_CATEGORY_LAYOUT7', $langId),
+                self::TYPE_CATEGORY_LAYOUT8 => Labels::getLabel('LBL_CATEGORY_LAYOUT8', $langId),
             ],
             self::COLLECTION_TYPE_PRODUCT => [
                 self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
@@ -1020,6 +1024,7 @@ class Collections extends MyAppModel
             self::TYPE_CATEGORY_LAYOUT5 => 'category-layout-5',
             self::TYPE_CATEGORY_LAYOUT6 => 'category-layout-6',
             self::TYPE_CATEGORY_LAYOUT7 => 'category-layout-7',
+            self::TYPE_CATEGORY_LAYOUT8 => 'category-layout-8',
             self::TYPE_SHOP_LAYOUT1 => 'shop-layout-1',
             self::TYPE_SHOP_LAYOUT2 => 'shop-layout-2',
             self::TYPE_BRAND_LAYOUT1 => 'brand-layout-1',

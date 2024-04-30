@@ -24,14 +24,14 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
             </div>
             <div class="tab-content" role="tabpanel">
                 <?php $j = 0;
+                $dataDisplayCount = (Collections::TYPE_CATEGORY_LAYOUT8 == $collection['collection_layout_type']) ? '5' : '4';
                 foreach ($collection['categories'] as $key => $category) {
                     $j++;
                 ?>
                     <div class="tab-pane fade category-product-layout-1  <?php echo 1 == $j ? 'show active' : ''; ?>" id="tb-<?php echo $key . "-" . $collection['collection_id']; ?>">
-                        <div class="product-listing" data-view="4">
+                        <div class="product-listing" data-view="<?php echo $dataDisplayCount; ?>">
                             <?php
                             $tRightRibbons = $category['tRightRibbons'];
-
                             $i = 1;
                             foreach ($category['products'] as $key => $product) {
 
