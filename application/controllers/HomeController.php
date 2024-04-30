@@ -213,6 +213,7 @@ class HomeController extends MyAppController
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout3;
                     break;
                 case Collections::TYPE_CATEGORY_LAYOUT4:
+                case Collections::TYPE_CATEGORY_LAYOUT8:
                     $homePageCatLayout4 = CacheHelper::get('homePageCatLayout4' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageCatLayout4) {
                         $tpl = new FatTemplate('', '');
@@ -959,7 +960,7 @@ class HomeController extends MyAppController
                             /* ] */
                             $counter++;
                         }
-                    } else if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT1, Collections::TYPE_CATEGORY_LAYOUT4])) {
+                    } else if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT1, Collections::TYPE_CATEGORY_LAYOUT4, Collections::TYPE_CATEGORY_LAYOUT8])) {
                         while ($catData = $db->fetch($rs)) {
                             /* fetch Product data[ */
                             $productShopSrchTempObj = clone $productSrchObj;
@@ -967,7 +968,13 @@ class HomeController extends MyAppController
                             $productShopSrchTempObj->addCondition('prodcat_id', '=', $catData['prodcat_id']);
                             //$productShopSrchTempObj->addOrder('in_stock', 'DESC');
                             $productShopSrchTempObj->addGroupBy('selprod_product_id');
-                            $limit = ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT1) ? Collections::LIMIT_CATEGORY_LAYOUT1_PRODUCT : Collections::LIMIT_CATEGORY_LAYOUT4;
+
+                            $limit = Collections::LIMIT_CATEGORY_LAYOUT4;
+                            if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT1) {
+                                $limit = Collections::LIMIT_CATEGORY_LAYOUT1_PRODUCT;
+                            } else if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT8) {
+                                $limit = Collections::LIMIT_CATEGORY_LAYOUT5;
+                            }
                             $productShopSrchTempObj->setPageSize($limit);
                             if (CommonHelper::demoUrl(true)) {
                                 $productShopSrchTempObj->addOrder('product_featured', 'DESC');
