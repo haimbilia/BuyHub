@@ -1,0 +1,109 @@
+//security-floor
+.security-floor {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #000;
+  background-position: center;
+  margin: auto;
+  overflow: hidden;
+  width: 100%;
+  color: #fff;
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.33);
+  }
+  .container {
+    position: relative;
+    z-index: 2;
+  }
+
+  &-card {
+    backdrop-filter: blur(50px);
+    background: hsla(0, 0%, 100%, 0.11);
+    border-radius: 20px;
+    font-size: 1rem;
+    overflow: hidden;
+    padding: 1.5rem;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    //align-items: normal;
+    gap: 1rem;
+    flex-direction: column;
+    @include media-breakpoint-up(lg) {
+      padding: 3rem;
+    }
+    &:first-child {
+      @include media-breakpoint-down(lg) {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  &-tag {
+    font-size: 0.85rem;
+    font-weight: $font-weight-bold;
+  }
+
+  &-icon {
+    max-width: 200px;
+  }
+
+  &-desc {
+    font-size: 1rem;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 1rem;
+  }
+}
+// Dev
+.category-number {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  @include media-breakpoint-up(lg) {
+    gap: 3rem;
+  }
+
+  &-item {
+    padding-#{$start-direction}: 16px;
+    position: relative;
+
+    &::before {
+      background-color: $border-color;
+      border-radius: 2px;
+      content: "";
+      display: inline-block;
+      height: 86%;
+      left: 0;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+    }
+
+    .number {
+      color: $txt-brand;
+      font-size: 2.5rem;
+      font-weight: $font-weight-bold;
+      letter-spacing: -0.73px;
+      line-height: 44px;
+    }
+
+    p {
+      white-space: nowrap;
+      font-size: 1rem;
+      color: $txt-gray;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
