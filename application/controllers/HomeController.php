@@ -127,6 +127,7 @@ class HomeController extends MyAppController
                     }
                     break;
                 case Collections::TYPE_PRODUCT_LAYOUT1:
+                case Collections::TYPE_PRODUCT_LAYOUT6:
                     $homePageProdLayout1 = CacheHelper::get('homePageProdLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageProdLayout1) {
                         $tpl = new FatTemplate('', '');

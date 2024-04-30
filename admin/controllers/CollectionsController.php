@@ -259,6 +259,9 @@ class CollectionsController extends ListingBaseController
             case Collections::TYPE_PRODUCT_LAYOUT4:
                 return Collections::LIMIT_PRODUCT_LAYOUT4;
                 break;
+            case Collections::TYPE_PRODUCT_LAYOUT6:
+                return Collections::LIMIT_PRODUCT_LAYOUT6;
+                break;
             case Collections::TYPE_CATEGORY_LAYOUT1:
                 return Collections::LIMIT_CATEGORY_LAYOUT1;
                 break;
@@ -401,7 +404,7 @@ class CollectionsController extends ListingBaseController
         $this->setLangTemplateData();
 
         $data = Collections::getAttributesById($recordId, ['collection_type', 'collection_layout_type']);
-                            
+
         $langFrm = $this->getLangForm($recordId, $langId, $data['collection_type']);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
