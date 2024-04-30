@@ -16,6 +16,7 @@
                     <div class="layout-data collapse" id="collectionType<?php echo $type; ?>">
                         <?php
                         $appOnlyCollections = Collections::COLLECTIONS_FOR_APP_ONLY;
+                        $webOnlyCollections = Collections::COLLECTIONS_NOT_FOR_APP;
                         foreach ($layouts as $layoutId => $layout) {
                             $appClass = in_array($layoutId, $appOnlyCollections) ? 'app-only' : '';
                         ?>
@@ -24,6 +25,12 @@
                                     <div class="<?php echo $appClass; ?>">
                                         <svg class="svg" width="14" height="14">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg#mobile"></use>
+                                        </svg>
+                                    </div>
+                                <?php  } else if (in_array($layoutId, $webOnlyCollections)) { ?>
+                                    <div class="<?php echo $appClass; ?>">
+                                        <svg class="svg" width="14" height="14">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg#web"></use>
                                         </svg>
                                     </div>
                                 <?php  } ?>
