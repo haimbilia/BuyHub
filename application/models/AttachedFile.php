@@ -286,7 +286,7 @@ class AttachedFile extends MyAppModel
             }
         }
 
-        return FatApp::getDb()->fetchAll($srch->getResultSet(), 'afile_id');
+        return FatApp::getDb()->fetchAll($tmpSrch->getResultSet(), 'afile_id');
     }
 
     public static function getAttachment($fileType, $recordId, $recordSubid = 0, $langId = 0, $displayUniversalImage = true, $screen = 0)
