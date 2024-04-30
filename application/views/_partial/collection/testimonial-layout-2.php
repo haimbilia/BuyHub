@@ -50,6 +50,8 @@
                     slidesToShow: 4,
                     dots: false,
                     arrows: true,
+                    infinite: false,
+
                     prevArrow: '<button class="slick-arrow slick-prev"><span></span> </button>',
                     nextArrow: '<button class="slick-arrow slick-next"><span></span> </button>',
                     responsive: [{
@@ -74,6 +76,8 @@
                         }
                     }
                     ]
+                }).on('setPosition', function (event, slick) {
+                    slick.$slides.css('height', slick.$slideTrack.height() + 'px');
                 });
             });
         </script>

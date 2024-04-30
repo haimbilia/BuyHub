@@ -168,11 +168,12 @@
     gap: 1rem;
     padding: 2rem 1rem;
     margin: 0 0.5rem;
-    height: inherit;
+    // height: inherit;
     align-items: center;
     text-align: center;
     max-width: 400px;
     transition: all 0.5s ease-in-out;
+    height: 100%;
 
     @include media-breakpoint-down(sm) {
       border: none;
