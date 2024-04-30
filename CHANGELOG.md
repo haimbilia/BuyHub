@@ -13,7 +13,6 @@
         - Change in minimum selling price when reconfigured by Admin
         - Safari and IE 11 do not support our CSS. More info can be found at https://developer.microsoft.com/en-us/microsoft-edge/platform/status/csslevel3attrfunction/
         - System does not support Zero decimal currency while checking out with stripe
-
 ## Enhancements:
     - Load all categories on ajax call instead of page load.
     - Performance optimization to handle product ratings.
@@ -43,6 +42,7 @@
     - Bug-082913 - Reorder functionality need to be managed properly.
     - Bug-082875 - Shop name does not direct the user to shop detail page
     - Bug-082874 - Price still appears for when hide price is enabled on system level
+    - Bug-072665 - Product specification special character issue
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
