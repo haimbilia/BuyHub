@@ -12,6 +12,8 @@
                     <?php
                     $i = 1;
                     foreach ($collection['categories'] as $category) {
+                        $rootParentId = FatUtility::int(current(explode('_', $category['prodcat_code'])));
+                        $rootParentId = (1 > $rootParentId) ? $category['prodcat_id'] : $rootParentId;
                         if (1 == $i) { ?>
                             <div class="industry-carousal-item">
                             <?php } ?>
@@ -20,7 +22,7 @@
                             $afile_lang_id = 0;
                             $afile_id = 0;
                             $uploadedTime = '';
-                            $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $category['prodcat_id']);
+                            $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $rootParentId);
                             if (!empty($image)) {
                                 $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                                 $afile_record_id = $image['afile_record_id'];
