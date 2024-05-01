@@ -77,8 +77,7 @@ class HomeController extends MyAppController
             $displayProductNotAvailableLable = true;
         }
 
-        $this->_template->addJs('js/slick.min.js');
-        $this->_template->addJs('js/slick-carousels.js');
+        $this->_template->addJs(['js/slick.min.js', 'js/slick-carousels.js']);
         $geoAddress = Address::getYkGeoData();
         $cacheKey = $this->siteLangId . '-' . CommonHelper::getCurrencyId() . '-' . serialize($geoAddress);
         $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);

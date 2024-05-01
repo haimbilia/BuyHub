@@ -1020,35 +1020,30 @@ function markCatLinkActive() {
 }
 
 function requestForQuoteFn(selprodId) {
-	if (1 > selprodId) {
-		$.ykmodal.close();
-		$('#sideQuoteJs').modal('show');
-	} else {
-		let rfqQuat = $('.productQty-js').val();
-		fcom.displayProcessing();
-		fcom.ajax(fcom.makeUrl("RequestForQuotes", "form"), 'selprodId=' + selprodId + '&rfqQuat=' + rfqQuat,
-			function (res) {
-				fcom.closeProcessing();
-				if (!res.status) {
-					if (typeof res.displayLoginForm != 'undefined' && res.displayLoginForm == 1) {
-						loginPopUpBox(true);
-						return;
-					}
-					fcom.displayErrorMessage(res.msg);
+	let rfqQuat = $('.productQty-js').val();
+	fcom.displayProcessing();
+	fcom.ajax(fcom.makeUrl("RequestForQuotes", "form"), 'selprodId=' + selprodId + '&rfqQuat=' + rfqQuat,
+		function (res) {
+			fcom.closeProcessing();
+			if (!res.status) {
+				if (typeof res.displayLoginForm != 'undefined' && res.displayLoginForm == 1) {
+					loginPopUpBox(true);
+					return;
 				}
-				var date = new Date();
-				date.setDate(date.getDate() + 1);
-				$.ykmodal.element = 'modalRfqJS';
-				$.ykmodal(res.html, true, 'modal-lg modal-dialog-scrollable', "modalRfqJS", "", true, 'data-bs-backdrop="static" data-bs-keyboard="false"');
-				$(".rfqDeliveryDateJs").datepicker("option", {
-					minDate: date,
-					onClose: function () {
-						$(".modalRfqJS").focus();
-					}
-				});
-			}, { 'fOutMode': 'json' }
-		);
-	}
+				fcom.displayErrorMessage(res.msg);
+			}
+			var date = new Date();
+			date.setDate(date.getDate() + 1);
+			$.ykmodal.element = 'modalRfqJS';
+			$.ykmodal(res.html, true, 'modal-lg modal-dialog-scrollable', "modalRfqJS", "", true, 'data-bs-backdrop="static" data-bs-keyboard="false"');
+			$(".rfqDeliveryDateJs").datepicker("option", {
+				minDate: date,
+				onClose: function () {
+					$(".modalRfqJS").focus();
+				}
+			});
+		}, { 'fOutMode': 'json' }
+	);
 }
 
 function saveRfq(frm) {
@@ -1073,7 +1068,7 @@ function saveRfq(frm) {
 
 	var data = new FormData();
 	data.append('fIsAjax', 1);
-	frm.find('select,input[type=hidden],input[type=text],textarea').each(function () {
+	frm.find('select,input[type=hidden],input[type=text],input[type=search],textarea').each(function () {
 		data.append(this.name, $(this).val());
 	});
 

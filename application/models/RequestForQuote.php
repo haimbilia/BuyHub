@@ -147,7 +147,7 @@ class RequestForQuote extends MyAppModel
         }
         return true;
     }
-    
+
     /**
      * getSellersByRecordId
      *
@@ -261,9 +261,10 @@ class RequestForQuote extends MyAppModel
     }
 
     /**
-     * getForm
+     * Generates a form for a Request for Quote (RFQ) with fields for the user's name, email, phone number, quantity, unit, expected delivery date, and comments for the seller.
      *
-     * @return Form
+     * @param bool $isUserLogged Whether the user is logged in or not
+     * @return Form The generated form
      */
     public static function getForm($isUserLogged = true): Form
     {
@@ -625,7 +626,7 @@ class RequestForQuote extends MyAppModel
         if ($moduleType != RequestForQuote::TYPE_INDIVIDUAL) {
             return true;
         }
-        
+
         if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
             return true;
         }

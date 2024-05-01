@@ -20,12 +20,15 @@ if (UserAuthentication::isUserLogged()) {
         $dashboardUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
         $dashboardOrgUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
     }
-    if (!$userActiveTab) {        
+    if (!$userActiveTab) {
         $dashboardUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
         $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
     }
-}
-if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
+} ?>
+<button class="btn btn-outline-brand btn-sm btn-rfq" type="button" onclick="requestForQuoteFn(0);">
+    <?php echo Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $siteLangId); ?>
+</button>
+<?php if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
     if (!UserAuthentication::isUserLogged()) {
         if (UserAuthentication::isGuestUserLogged()) { ?>
             <li class="quick-nav-item item-desktop">

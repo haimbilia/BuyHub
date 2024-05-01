@@ -104,7 +104,7 @@
                                         <span class="cart-qty">
                                             <?php
                                             $cartObj = new Cart();
-                                            $qty = (Cart::CART_MAX_DISPLAY_QTY < $cartObj->countProducts()) ? Cart::CART_MAX_DISPLAY_QTY . '+' : $cartObj->countProducts(); 
+                                            $qty = (Cart::CART_MAX_DISPLAY_QTY < $cartObj->countProducts()) ? Cart::CART_MAX_DISPLAY_QTY . '+' : $cartObj->countProducts();
                                             $qty = FatUtility::int($qty) - (isset($_SESSION['offer_checkout']) ? 1 : 0);
                                             echo (0 > $qty ? 0 : $qty);
                                             ?>
@@ -149,7 +149,6 @@
                             </svg>
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>

@@ -47,7 +47,15 @@ if (!$isUserLogged) {
     $fld->addFieldTagAttribute('data-parent-attrs', json_encode([
         'class' => 'phonenumber--js from-group--phonefield'
     ]));
-} ?>
+} 
+
+$fld = $frm->getField('rfq_title');
+if (1 > $selprodId && null != $fld) {
+    $fld->addFieldTagAttribute('style', 'width:100%; z-index:999;');
+    $fld->addFieldTagAttribute('placeholder',  Labels::getLabel('LBL_TYPE_HERE..', $siteLangId));
+    $fld->addFieldTagAttribute('id', 'rfqItemNameJs');
+}
+?>
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_REQUEST_A_QUOTE'); ?></h5>
 </div>
@@ -102,7 +110,7 @@ if (!$isUserLogged) {
         } ?>
         <div class="request-quote__head">
             <div class="quote">
-                <?php if (1 > FatApp::getConfig('CONF_HIDE_SELLER_INFO', FatUtility::VAR_INT, 0) && RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0)) { ?>
+                <?php if (1 > FatApp::getConfig('CONF_HIDE_SELLER_INFO', FatUtility::VAR_INT, 0) && RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0) && 0 < $selprodId) { ?>
                     <div class="quote-to">
                         <span class="label"><?php echo Labels::getLabel('LBL_TO:'); ?></span>
                         <div class="avatar">
@@ -146,31 +154,43 @@ if (!$isUserLogged) {
                 <?php } ?>
                 <div class="quote-for">
                     <div class="product-profile">
-                        <div class="product-profile-thumbnail">
-                            <?php
-                            $productTitle = $selprodData['selprod_title'];
-                            $uploadedTime = AttachedFile::setTimeParam($selprodData['selprod_updated_on']);
-                            $prodUrl = UrlHelper::generateUrl('Products', 'view', array($selprodId), CONF_WEBROOT_FRONTEND);
-                            $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selprodData['selprod_product_id'], ImageDimension::VIEW_SMALL, $selprodId, 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        <?php if (0 < $selprodId) { ?>
+                            <div class="product-profile-thumbnail">
+                                <?php
+                                $productTitle = $selprodData['selprod_title'];
+                                $uploadedTime = AttachedFile::setTimeParam($selprodData['selprod_updated_on']);
+                                $prodUrl = UrlHelper::generateUrl('Products', 'view', array($selprodId), CONF_WEBROOT_FRONTEND);
+                                $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selprodData['selprod_product_id'], ImageDimension::VIEW_SMALL, $selprodId, 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
-                            $options = SellerProduct::getSellerProductOptions($selprodId, true, $siteLangId);
-                            if (!empty($options)) {
-                                $options = implode(' | ', array_column($options, 'optionvalue_name'));
-                            }
-                            ?>
-                            <a class="" href="<?php echo $prodUrl; ?>">
-                                <img src="<?php echo $imgSrc; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?> title="<?php echo $productTitle; ?>" alt="<?php echo $productTitle; ?>">
-                            </a>
-                        </div>
-
-                        <div class="product-profile-data">
-                            <a class="title" href="<?php echo $prodUrl; ?>">
-                                <?php echo $productTitle . (!empty($options) ? ' | ' . $options : ''); ?>
-                            </a>
-                            <div class="product-profile-category">
-                                <?php echo $selprodData['brand_name']; ?>
+                                $options = SellerProduct::getSellerProductOptions($selprodId, true, $siteLangId);
+                                if (!empty($options)) {
+                                    $options = implode(' | ', array_column($options, 'optionvalue_name'));
+                                }
+                                ?>
+                                <a class="" href="<?php echo $prodUrl; ?>">
+                                    <img src="<?php echo $imgSrc; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?> title="<?php echo $productTitle; ?>" alt="<?php echo $productTitle; ?>">
+                                </a>
                             </div>
-                        </div>
+
+                            <div class="product-profile-data">
+                                <a class="title" href="<?php echo $prodUrl; ?>">
+                                    <?php echo $productTitle . (!empty($options) ? ' | ' . $options : ''); ?>
+                                </a>
+                                <div class="product-profile-category">
+                                    <?php echo $selprodData['brand_name']; ?>
+                                </div>
+                            </div>
+                        <?php } else { ?>
+                            <div class="product-profile-data">
+                                <div class="form-group">
+                                    <label class="label">
+                                        <?php echo $frm->getField('rfq_title')->getCaption(); ?>
+                                        <span class="spn_must_field">*</span>
+                                    </label>
+                                    <?php echo $frm->getFieldHtml('rfq_title'); ?>
+                                </div>
+                            </div>
+                        <?php } ?>
                     </div>
                     <div class="quote-for-qty">
                         <div class="qty-wrap">
@@ -188,37 +208,6 @@ if (!$isUserLogged) {
             </div>
         </div>
         <div class="request-quote__body">
-            <?php
-            /* Not Required anymore. */
-            /* if (count($optionRows) > 0) { ?>
-                <div class="accordion-group">
-                    <div class="accordion-group__head" data-bs-toggle="collapse" data-bs-target="#variants" aria-expanded="false" aria-controls="">
-                        <h6><?php echo Labels::getLabel('LBL_Product_variants'); ?></h6>
-                        <p>
-                            <?php echo Labels::getLabel('LBL_YOU_CAN_FILL_IN_THE_FOLLOWING_PRODUCT_ATTRIBUTES_TO_GET_A_QUOTATION_FROM_THE_SELLER_WITHIN_24_HOURS'); ?>
-                        </p>
-                    </div>
-
-                    <div class="accordion-group__body  collapse" id="variants">
-                        <div class="row g-2">
-                            <?php foreach ($optionRows as $optionsList) { ?>
-                                <div class="col-xl-6">
-                                    <div class="form-group">
-                                        <label class="form-label"><?php echo $optionsList['option_name']; ?> </label>
-                                        <select class="form-control" name="selprod_variants" onchange="requestForQuoteFn(this.value);">
-                                            <?php foreach ($optionsList['values'] as $optVals) { ?>
-                                                <option <?php echo (in_array($optVals['optionvalue_id'], $selectedOptions)) ? 'selected' : ''; ?> value=" <?php echo $optVals['selprod_id']; ?>">
-                                                    <?php echo $optVals['optionvalue_name']; ?> </option>
-                                            <?php } ?>
-                                        </select>
-
-                                    </div>
-                                </div>
-                            <?php } ?>
-                        </div>
-                    </div>
-                </div>
-            <?php } */ ?>
             <div class="accordion-group">
                 <div class="accordion-group__head descHeadJs" data-bs-toggle="collapse" data-bs-target="#detailed" aria-expanded="true" aria-controls="">
                     <h6>
@@ -236,18 +225,13 @@ if (!$isUserLogged) {
                                 <div class="field-set">
                                     <div class="caption-wraper d-flex justify-content-between align-items-center">
                                         <label class="field_label">
-                                            <?php
-
-                                            $fld = $frm->getField('rfq_delivery_date');
+                                            <?php $fld = $frm->getField('rfq_delivery_date');
                                             echo $fld->getCaption(); ?>
                                         </label>
                                     </div>
                                     <div class="field-wraper">
                                         <div class="field_cover">
-                                            <?php
-                                            echo $frm->getFieldHtml('rfq_delivery_date');
-
-                                            ?>
+                                            <?php echo $frm->getFieldHtml('rfq_delivery_date'); ?>
                                         </div>
                                     </div>
                                 </div>
@@ -283,9 +267,7 @@ if (!$isUserLogged) {
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                                <?php
-                                echo $frm->getFieldHtml('rfq_description');
-                                ?>
+                                <?php echo $frm->getFieldHtml('rfq_description'); ?>
                             </div>
                         </div>
                     </div>
@@ -303,3 +285,37 @@ if (!$isUserLogged) {
         </button>
     </div>
 </div>
+
+<?php if (1 > $selprodId) { ?>
+    <script>
+        var selector = $("#rfqItemNameJs");
+        if (0 < selector.length) {
+            selector.autocomplete({
+                'classes': {
+                    "ui-autocomplete": "custom-ui-autocomplete z-index-9999"
+                },
+                'source': function(request, response) {
+                    $.ajax({
+                        url: fcom.makeUrl('RequestForQuotes', 'searchItemAutoComplete'),
+                        data: {
+                            keyword: request['term'],
+                            fIsAjax: 1
+                        },
+                        dataType: 'json',
+                        type: 'post',
+                        success: function(json) {
+                            response($.map(json['results'], function(item) {
+                                console.log(item);
+                                return {
+                                    label: item['text'],
+                                    value: item['text'],
+                                    id: item['id']
+                                };
+                            }));
+                        },
+                    });
+                }
+            });
+        }
+    </script>
+<?php } ?>

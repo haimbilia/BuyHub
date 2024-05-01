@@ -44,7 +44,7 @@
                         </div>
                         <ul class="completed-detail">
                             <li class="completed-detail-item">
-                                <h4><?php echo Labels::getLabel('LBL_PRODUCT', $siteLangId); ?>:</h4>
+                                <h4><?php echo Labels::getLabel('LBL_RFQ_FOR', $siteLangId); ?>:</h4>
                                 <p><?php echo $rfqData['rfq_title']; ?></p>
                             </li>
                             <li class="completed-detail-item">
