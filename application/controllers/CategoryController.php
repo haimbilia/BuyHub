@@ -192,7 +192,7 @@ class CategoryController extends MyAppController
 
     public function icon($catId, $langId = 0, $sizeType = '')
     {
-        $default_image = 'logo_default.svg';
+        $default_image = 'no_image.jpg';
         $catId = FatUtility::int($catId);
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $catId, 0, $langId);

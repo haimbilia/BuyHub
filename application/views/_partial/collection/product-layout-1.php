@@ -15,7 +15,10 @@
                     </div>
                 </div>
             </div>
-            <div class="product-layout-1 product-listing js-carousel" id="product-listing-<?php echo $collection['collection_id']; ?>" data-slides="4,3,2,2" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <?php 
+            $slidesCount = (Collections::TYPE_PRODUCT_LAYOUT6 == $collection['collection_layout_type']) ? '6,3,2,2' : '4,3,2,2';
+            ?>
+            <div class="product-layout-1 product-listing js-carousel" id="product-listing-<?php echo $collection['collection_id']; ?>" data-slides="<?php echo $slidesCount; ?>" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tRightRibbons = $collection['tRightRibbons'];
                 foreach ($collection['products'] as $product) {
