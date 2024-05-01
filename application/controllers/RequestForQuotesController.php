@@ -22,8 +22,7 @@ class RequestForQuotesController extends MyAppController
         $isUserLogged = ($this->loggedUserId > 0) ? applicationConstants::YES : applicationConstants::NO;
         $frm = RequestForQuote::getForm($isUserLogged);
         if (1 > $selprodId) {
-            $fld = $frm->addRequiredField(Labels::getLabel('LBL_RFQ_TITLE'), 'rfq_title');
-            $fld->overrideFldType('search');
+            $frm->addRequiredField(Labels::getLabel('LBL_LOOKING_FOR'), 'rfq_title');
         }
         $frm->addHiddenField('', 'rfq_selprod_id');
         return $frm;

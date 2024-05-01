@@ -57,11 +57,15 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), HtmlHelper::formatDateTime($row[$key]), true);
                 break;
             case 'credential_username':
+                $global = '';
+                if (1 > $row['rfq_product_id'] && 1 > $row['rfq_selprod_id']) {
+                    $global = HtmlHelper::getStatusHtml(HtmlHelper::WARNING, Labels::getLabel('LBL_GLOBAL'));
+                }
                 $href = "javascript:void(0)";
                 $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
                 $htm = '<div class="rfq-info">
-                            <span>' . Labels::getLabel('LBL_RFQ_NO.') . ': ' . $row['rfq_number'] . '</span>
-                            <span>' . Labels::getLabel('LBL_TITLE') . ': ' . $row['rfq_title'] . '</span>
+                            <span>' . Labels::getLabel('LBL_RFQ_NO.') . ': ' . $row['rfq_number'] . '' . $global . '</span><br>
+                            <span>' . Labels::getLabel('LBL_TITLE') . ': ' . $row['rfq_title'] . '</span><br>
                             <span>' . Labels::getLabel('LBL_QTY') . ': ' . $row['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($siteLangId, $row['rfq_quantity_unit'], true) . '</span>
                         </div>';
                 $str = $this->includeTemplate('_partial/user/user-info-card.php', [

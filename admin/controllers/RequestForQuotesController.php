@@ -95,6 +95,12 @@ class RequestForQuotesController extends ListingBaseController
         $dbFlds = array_merge(RequestForQuote::FIELDS, ['buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', '0 as totalOffers', '0 as rejectedOffers', '0 as acceptedOffers']);
         $srch->addMultipleFields($dbFlds);
 
+        $rfqType = $post['rfq_type'];
+        if (0 < $rfqType) {
+            $srch->addCondition('rfq_selprod_id', '=', 0);
+            $srch->addCondition('rfq_product_id', '=', 0);
+        }
+
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cond = $srch->addCondition('rfq_title', 'like', '%' . $keyword . '%');
@@ -384,6 +390,11 @@ class RequestForQuotesController extends ListingBaseController
 
         $statusArr = RequestForQuote::getStatusArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'rfq_status', $statusArr);
+        
+        $frm->addSelectBox(Labels::getLabel('FRM_RFQ_TYPE', $this->siteLangId), 'rfq_type', [
+            0 => Labels::getLabel('LBL_STANDARD', $this->siteLangId),
+            1 => Labels::getLabel('LBL_GLOBAL', $this->siteLangId),
+        ]);
 
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
