@@ -44,7 +44,7 @@ $action = strtolower($action); ?>
                 </a>
             </li>
             <li class="menu-sub-item navItemJs">
-                <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'requestforquotes' && ($action == 'index')) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_REQUEST_FOR_QUOTES", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('RequestForQuotes', '', [], CONF_WEBROOT_DASHBOARD); ?>">
+                <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && (($controller == 'requestforquotes' && $action == 'index') || ($controller == 'rfqoffers' && $action == 'listing'))) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_REQUEST_FOR_QUOTES", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('RequestForQuotes', '', [], CONF_WEBROOT_DASHBOARD); ?>">
                     <span class="menu-sub-title navTextJs"><?php echo Labels::getLabel("LBL_REQUEST_FOR_QUOTES", $siteLangId); ?></span>
                 </a>
             </li>

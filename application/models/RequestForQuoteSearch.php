@@ -24,10 +24,10 @@ class RequestForQuoteSearch extends SearchBase
      * @param  int $langId
      * @return void
      */
-    public function setDefaultJoins(int $langId = 0)
+    public function setDefaultJoins(int $langId = 0, string $defaultJoinType = 'INNER'): void
     {
-        $this->joinSellers('INNER');
-        $this->joinProduct((0 < $langId));
+        $this->joinSellers($defaultJoinType);
+        $this->joinProduct((0 < $langId), $defaultJoinType);
         $this->joinBuyer();
         $this->joinSellerShop((0 < $langId));
         $this->joinSellerProduct((0 < $langId));
@@ -42,9 +42,9 @@ class RequestForQuoteSearch extends SearchBase
      * @param  bool $joinLangTable
      * @return void
      */
-    public function joinProduct(bool $joinLangTable = false): void
+    public function joinProduct(bool $joinLangTable = false, string $joinType = 'INNER'): void
     {
-        $this->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = rfq_product_id', 'p');
+        $this->joinTable(Product::DB_TBL, $joinType . ' JOIN', 'p.product_id = rfq_product_id', 'p');
         if ($joinLangTable) {
             array_push($this->langTables, __FUNCTION__);
         }

@@ -33,8 +33,8 @@ $(document).ready(function () {
 		searchRecords(frm);
 	};
 
-	viewRfq = function (rfqId) {
-		fcom.updateWithAjax(fcom.makeUrl(controllerName, 'view', [rfqId]), [], function (ans) {
+	viewRfq = function (rfqId, rfqPlacementType) {
+		fcom.updateWithAjax(fcom.makeUrl(controllerName, 'view', [rfqId]), 'rfq_placement_type=' + rfqPlacementType, function (ans) {
 			fcom.closeProcessing();
 			fcom.removeLoader();
 			$.ykmodal(ans.html, false, 'modal-lg');

@@ -80,11 +80,21 @@
         });
     }
 
-    accept = function (offerId, rfqId) {
+    buyerAcceptance = function (offerId, rfqId) {
         if (!confirm(langLbl.areYouSure)) {
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, "accept", [offerId, rfqId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "buyerAcceptance", [offerId, rfqId]), '', function (t) {
+            fcom.closeProcessing();
+            searchRecords(document.frmRecordSearch);
+        });
+    }
+    
+    sellerAcceptance = function (offerId, rfqId) {
+        if (!confirm(langLbl.areYouSure)) {
+            return false;
+        }
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "sellerAcceptance", [offerId, rfqId]), '', function (t) {
             fcom.closeProcessing();
             searchRecords(document.frmRecordSearch);
         });

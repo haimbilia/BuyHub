@@ -308,8 +308,8 @@ if (count($arrListing) == 0) {
                 <div class="offer-block actions-block">
                     <div class="actions-block-body">
                         <?php if ($expiredOn >= strtotime(date('Y-m-d')) && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) { ?>
-                            <?php if (in_array($row['offer_status'], [RfqOffers::STATUS_OPEN, RfqOffers::STATUS_COUNTERED])) { ?>
-                                <button class="btn btn-accept btn-icon" onClick="accept(<?php echo $row['offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_ACCEPT_SELLER_OFFER', $siteLangId); ?>">
+                            <?php if (in_array($row['offer_status'], [RfqOffers::STATUS_OPEN, RfqOffers::STATUS_COUNTERED]) && 0 == $row['rlo_buyer_acceptance']) { ?>
+                                <button class="btn btn-accept btn-icon" onClick="buyerAcceptance(<?php echo $row['offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_ACCEPT_SELLER_OFFER', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#accept">
                                         </use>
@@ -317,7 +317,7 @@ if (count($arrListing) == 0) {
                                 </button>
                             <?php }
 
-                            if (!in_array($row['offer_status'], [RfqOffers::STATUS_ACCEPTED, RfqOffers::STATUS_REJECTED])) { ?>
+                            if (!in_array($row['offer_status'], [RfqOffers::STATUS_ACCEPTED, RfqOffers::STATUS_REJECTED]) && 0 == $row['rlo_buyer_acceptance']) { ?>
                                 <button class="btn btn-reject btn-icon" onClick="reject(<?php echo $row['offer_id']; ?>,<?php echo $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_REJECT_SELLER_OFFER', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#reject">
@@ -329,7 +329,7 @@ if (count($arrListing) == 0) {
 
                         <?php
                         $offerStatusArr = [$row['offer_status'], $row['counter_offer_status']];
-                        if (in_array(RfqOffers::STATUS_ACCEPTED, $offerStatusArr) && false == RfqOffers::isBought($row['rlo_accepted_offer_id'])) {
+                        if (in_array(RfqOffers::STATUS_ACCEPTED, $offerStatusArr) && false == RfqOffers::isBought($row['rlo_accepted_offer_id']) && 1 == $row['rlo_buyer_acceptance'] && 1 == $row['rlo_seller_acceptance']) {
                             $offerId = RfqOffers::STATUS_ACCEPTED == $row['offer_status'] ? $row['offer_id'] : $row['counter_offer_id']; ?>
                             <a class="btn btn-brand btn-icon" href="<?php echo UrlHelper::generateUrl('RfqOffers', 'checkout', [$row['rlo_selprod_id'], $row['rlo_accepted_offer_id']]); ?>" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_BUY_NOW', $siteLangId); ?>">
                                 <svg class="svg" width="16" height="16">
@@ -338,6 +338,15 @@ if (count($arrListing) == 0) {
                                 </svg>
                                 <?php echo Labels::getLabel('LBL_BUY_NOW'); ?>
                             </a>
+                        <?php } else if (1 == $row['rlo_buyer_acceptance'] && 0 == $row['rlo_seller_acceptance']) { ?>
+                            <button class="btn btn-brand btn-icon" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_NOT_AVAILABLE_TO_PLACE_ORDER_YET', $siteLangId); ?>" disabled>
+                                <svg class="svg" width="16" height="16">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#cart">
+                                    </use>
+                                </svg>
+                                <?php echo Labels::getLabel('LBL_BUY_NOW'); ?>
+                            </button>
+                            <div class="form-text text-muted"><?php echo Labels::getLabel('LBL_SELLER_HAS_NOT_LINKED_INVENTORY_WITH_THIS_OFFER_YET.'); ?></div>
                         <?php } ?>
 
                         <button class="btn btn-outline-gray btn-icon" onclick="view(<?php echo $rfqId; ?>, <?php echo $row['rlo_primary_offer_id']; ?>)">

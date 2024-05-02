@@ -7,6 +7,9 @@ class RfqOffers extends MyAppModel
     public const DB_RFQ_LATEST_OFFER = 'tbl_rfq_latest_offers';
     public const DB_RLO_PREFIX = 'rlo_';
     public const DB_RO_MESSAGES = 'tbl_rfq_offer_messages';
+
+    public const SELLER_ACCEPTANCE = 1;
+    public const BUYER_ACCEPTANCE = 2;
     public int $messageId;
 
     public const FIELDS = [
@@ -600,21 +603,31 @@ class RfqOffers extends MyAppModel
         ];
     }
 
-    public static function getSellers(): array
+    public static function getSellers(int $langId = 0, int $isGlobal = 0): array
     {
+        $isGlobal = FatApp::getPostedData('isGlobal', FatUtility::VAR_INT, 0);
+        $langId = 1 > $langId ? CommonHelper::getLangId() : $langId;
         $srch = User::getSearchObject(true);
         $srch->addCondition('user_is_supplier', '=', applicationConstants::YES);
         $srch->addCondition('credential_active', '=', applicationConstants::YES);
         $srch->addCondition('credential_verified', '=', applicationConstants::YES);
-        $srch->joinTable(RequestForQuote::DB_RFQ_TO_SELLERS, 'INNER JOIN', 'rfqts_user_id = user_id', 'rfqts');
-        $srch->joinTable(RequestForQuote::DB_TBL, 'INNER JOIN', 'rfqts_rfq_id = rfq_id', 'rfq');
-        $srch->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'selprod_user_id = rfqts_user_id AND selprod_code LIKE rfq_selprod_code', 'sp');
+        if (0 < $isGlobal) {
+            $srch->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'selprod_user_id = user_id', 'sp');
+        } else {
+            $srch->joinTable(RequestForQuote::DB_RFQ_TO_SELLERS, 'INNER JOIN', 'rfqts_user_id = user_id', 'rfqts');
+            $srch->joinTable(RequestForQuote::DB_TBL, 'INNER JOIN', 'rfqts_rfq_id = rfq_id', 'rfq');
+            $srch->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'selprod_user_id = rfqts_user_id AND selprod_code LIKE rfq_selprod_code', 'sp');
+        }
+        $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'shop_user_id = selprod_user_id', 'shop');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shoplang_shop_id = shop_id AND shoplang_lang_id = ' . $langId, 'shop_l');
+        $srch->addCondition('shop_active', '=', applicationConstants::ACTIVE);
 
         $attr = [
             'user_name',
             'user_id',
             'credential_email',
             'selprod_code',
+            'COALESCE(shop_name, shop_identifier) AS shop_name',
         ];
         $srch->addOrder('user_name', 'ASC');
         $srch->addMultipleFields($attr);
@@ -627,7 +640,7 @@ class RfqOffers extends MyAppModel
         }
 
         $rfqId = FatApp::getPostedData('rfq_id', FatUtility::VAR_INT, 0);
-        if (0 < $rfqId) {
+        if (0 < $rfqId && 1 > $isGlobal) {
             $srch->addCondition('rfqts_rfq_id', '=', $rfqId);
         }
         $srch->addCondition('selprod_code', 'IS NOT', 'mysql_func_NULL', 'AND', true);
@@ -639,7 +652,7 @@ class RfqOffers extends MyAppModel
         );
 
         foreach ($users as $key => $user) {
-            $name = $user['user_name'] . ' (' . $user['credential_email'] . ')';
+            $name = $user['user_name'] . ' (' . $user['shop_name'] . ')';
             $json['results'][] = array(
                 'id' => $key,
                 'text' => strip_tags(html_entity_decode($name, ENT_QUOTES, 'UTF-8'))

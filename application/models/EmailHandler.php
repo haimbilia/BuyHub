@@ -3387,7 +3387,7 @@ class EmailHandler extends FatModel
         return true;
     }
 
-    public function sendRfqOfferActionNotification($langId, $data)
+    public function sendRfqOfferActionNotification($langId, $data, $acceptance = 0)
     {
         $tpl = new FatTemplate('', '');
         $tpl->set('data', $data);
@@ -3401,6 +3401,11 @@ class EmailHandler extends FatModel
             $tpl = 'RFQ_OFFER_ACTION_BUYER';
             $phone = ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE');
         }
+
+        if (0 < $acceptance) {
+            $data['offer_status'] = RfqOffers::STATUS_ACCEPTED;
+        }
+
         $offerStatusArr = RfqOffers::getStatusArr($langId);
         $vars = array(
             '{shop_name}' => $data['shop_name'],

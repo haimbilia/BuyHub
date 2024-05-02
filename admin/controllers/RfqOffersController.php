@@ -42,7 +42,7 @@ class RfqOffersController extends ListingBaseController
             CommonHelper::redirectUserReferer();
         }
 
-        $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_approved']);
+        $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_approved', 'rfq_selprod_id', 'rfq_product_id']);
 
         if (false == $rfqData || $rfqData['rfq_approved'] != RequestForQuote::APPROVED) {
             LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_STATUS_IS_NOT_APPROVED'), false, true);
@@ -278,7 +278,7 @@ class RfqOffersController extends ListingBaseController
         $this->checkEditPrivilege();
 
         $rfqId = FatApp::getPostedData('rfqId', FatUtility::VAR_INT, 0);
-        $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_id', 'rfq_product_id', 'rfq_quantity', 'rfq_quantity_unit']);
+        $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_id', 'rfq_selprod_id', 'rfq_product_id', 'rfq_quantity', 'rfq_quantity_unit']);
         if (!$rfqData) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -341,6 +341,9 @@ class RfqOffersController extends ListingBaseController
         }
         $frm->fill($data);
 
+        $isGlobal = ((1 > $rfqData['rfq_selprod_id'] && 1 > $rfqData['rfq_product_id']) ? 1 : 0);
+
+        $this->set('isGlobal', $isGlobal);
         $this->set('frm', $frm);
         $this->set('rfqId', $rfqId);
         $this->set('rfq_quantity_unit', $qtyUnit);

@@ -32,7 +32,7 @@ class RequestForQuotesController extends MyAppController
     {
         $selprodId = FatApp::getPostedData('selprodId', FatUtility::VAR_INT, 0);
         $post = FatApp::getPostedData();
-        $rfqQuat = (isset($post['rfqQuat']) && $post['rfqQuat'] > 0) ? $post['rfqQuat'] : 1;
+        $rfqQuat = FatUtility::int(($post['rfqQuat'] ?? 1)); 
         if (0 < $selprodId) {
             $selprodData = $this->getProductDetail($selprodId);
             if (!$selprodData) {
@@ -120,7 +120,7 @@ class RequestForQuotesController extends MyAppController
             'rfq_selprod_id' => $selprodId,
             'rfq_product_id' => $selprodData['selprod_product_id'] ?? 0,
             'rfq_addr_id' => $defaultAddress['addr_id'] ?? 0,
-            'rfq_quantity' => $rfqQuat
+            'rfq_quantity' => (1 > $rfqQuat ? 1 : $rfqQuat)
         ]);
         $this->set('frm', $frm);
         $shop_rating = 0;

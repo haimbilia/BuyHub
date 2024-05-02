@@ -188,6 +188,7 @@ if (1 > $selprodId && null != $fld) {
                                         <span class="spn_must_field">*</span>
                                     </label>
                                     <?php echo $frm->getFieldHtml('rfq_title'); ?>
+                                    <span class="form-text text-muted"><?php echo Labels::getLabel('LBL_YOU_CAN_SELECT_FROM_THE_SUGGUESTION_LIST_AS_WELL.'); ?></span>
                                 </div>
                             </div>
                         <?php } ?>

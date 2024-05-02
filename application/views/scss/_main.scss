@@ -102,6 +102,7 @@
 @import "components/alert";
 @import "components/misc";
 @import "components/system-messages";
+@import "components/requestquote";
 
 
 //vendors
@@ -138,6 +139,3 @@
 @import "pages/testimonials";
 @import "pages/sitemap";
 @import "pages/order-completed";
-
-// Request for quotes(RFQ)
-@import "components/requestquote";

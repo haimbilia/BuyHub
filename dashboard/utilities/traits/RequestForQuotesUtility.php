@@ -21,7 +21,12 @@ trait RequestForQuotesUtility
 
     public function index()
     {
-        $frm = $this->getSearchForm($this->siteLangId);
+        $funcName = $this->get('funcName') ?? __FUNCTION__;
+        $placementType = (__FUNCTION__ == $funcName ? RequestForQuote::PLACEMENT_TYPE_STANDARD : RequestForQuote::PLACEMENT_TYPE_GLOBAL);
+        $frm = $this->getSearchForm($funcName);
+        if ($this->isSeller) {
+            $frm->fill(['rfq_placement_type' => $placementType]);
+        }
         $this->set('frmSearch', $frm);
 
         $keys = $this->getRequestForQuotesCols();
@@ -30,6 +35,7 @@ trait RequestForQuotesUtility
         $this->set('sortKeys', $keys);
         $this->set('sortBy', Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId));
         $this->set('sortKey', 'rfq_added_on');
+
         $this->_template->addJs(['request-for-quotes/page-js/index.js']);
         $this->_template->render(true, true, 'request-for-quotes/index.php');
     }
@@ -39,6 +45,11 @@ trait RequestForQuotesUtility
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'pageSize');
+        if ($this->isSeller) {
+            $frm->addHiddenField('', 'rfq_placement_type');
+        } else {
+            $frm->addSelectBox(Labels::getLabel('FRM_RFQ_PLACEMENT_TYPE', $this->siteLangId), 'rfq_placement_type', RequestForQuote::getPlacementType($this->siteLangId));
+        }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD'), 'keyword', '');
         $fld->overrideFldType('search');
 
@@ -69,8 +80,15 @@ trait RequestForQuotesUtility
         }
         $srch->joinBuyer();
         $srch->addMultipleFields([
-            'rfq_id', 'rfq_selprod_id', 'rfq_number', 'rfq_title', 'rfq_user_id', 'rfq_type', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_status', 'rfq_approved', 'rfq_added_on', 'rfq_delivery_date', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', '0 as totalOffers', '0 as rejectedOffers', '0 as acceptedOffers'
+            'rfq_id', 'rfq_selprod_id', 'rfq_number', 'rfq_title', 'rfq_selprod_id', 'rfq_product_id', 'rfq_user_id', 'rfq_type', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_status', 'rfq_approved', 'rfq_added_on', 'rfq_delivery_date', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', '0 as totalOffers', '0 as rejectedOffers', '0 as acceptedOffers'
         ]);
+
+        $rfqPlacementType = $post['rfq_placement_type'];
+        if (0 < $rfqPlacementType) {
+            $opr = RequestForQuote::PLACEMENT_TYPE_GLOBAL == $rfqPlacementType ? '=' : '>';
+            $srch->addCondition('rfq_selprod_id', $opr, 0);
+            $srch->addCondition('rfq_product_id', $opr, 0);
+        }
 
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
@@ -94,7 +112,9 @@ trait RequestForQuotesUtility
         }
 
         if ($this->isSeller) {
-            $srch->addCondition('rfqts_user_id', '=', $this->userId);
+            if (RequestForQuote::PLACEMENT_TYPE_STANDARD == $rfqPlacementType) {
+                $srch->addCondition('rfqts_user_id', '=', $this->userId);
+            }
         } else {
             $srch->addCondition('rfq_user_id', '=', $this->userId);
         }
@@ -128,11 +148,13 @@ trait RequestForQuotesUtility
             }
         }
 
+        $this->set('rfqPlacementType', $rfqPlacementType);
         $this->set('arrListing', $arrListing);
         $this->set('postedData', $post);
         $this->set('pagesize', $pagesize);
         $this->set("approvalStatusArr", RequestForQuote::getApprovalStatusArr($this->siteLangId));
         $this->set("statusArr", RequestForQuote::getStatusArr($this->siteLangId));
+        $this->set("isBuyer", $this->isBuyer);
         $this->set("isSeller", $this->isSeller);
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
@@ -146,6 +168,9 @@ trait RequestForQuotesUtility
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
+
+        $rfqPlacementType = FatApp::getPostedData('rfq_placement_type', FatUtility::VAR_INT, 0);
+
         $srch = new RequestForQuoteSearch();
         $srch->joinBuyer();
         $srch->joinBuyerAddress($this->siteLangId);
@@ -157,8 +182,10 @@ trait RequestForQuotesUtility
 
         $srch->addCondition('rfq_id', '=', $recordId);
         if ($this->isSeller) {
-            $srch->joinSellers('INNER');
-            $srch->addCondition('rfqts_user_id', '=', $this->userId);
+            if (RequestForQuote::PLACEMENT_TYPE_STANDARD == $rfqPlacementType) {
+                $srch->joinSellers('INNER');
+                $srch->addCondition('rfqts_user_id', '=', $this->userId);
+            }
         } else {
             $srch->addCondition('rfq_user_id', '=', $this->userId);
         }
@@ -192,7 +219,7 @@ trait RequestForQuotesUtility
         $json = RequestForQuote::getSellersByProductId($this->siteLangId);
         die(FatUtility::convertToJson($json));
     }
-    
+
     public function closeRfq(int $rfqId)
     {
         if (1 > $rfqId || $this->isSeller) {
@@ -209,5 +236,22 @@ trait RequestForQuotesUtility
             LibHelper::exitWithError($rfq->getError(), true);
         }
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_CLOSED!', $this->siteLangId));
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $this->nodes = [
+                    ['title' => Labels::getLabel("LBL_REQUEST_FOR_QUOTES", $this->siteLangId)]
+                ];
+                break;
+            case 'global':
+                $this->nodes = [
+                    ['title' => Labels::getLabel("LBL_GLOBAL_REQUEST_FOR_QUOTES", $this->siteLangId)]
+                ];
+                break;
+        }
+        return $this->nodes;
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+use Abraham\TwitterOAuth\Request;
+
 class RequestForQuotesController extends ListingBaseController
 {
     protected string $modelClass = 'RequestForQuote';
@@ -95,10 +98,11 @@ class RequestForQuotesController extends ListingBaseController
         $dbFlds = array_merge(RequestForQuote::FIELDS, ['buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', '0 as totalOffers', '0 as rejectedOffers', '0 as acceptedOffers']);
         $srch->addMultipleFields($dbFlds);
 
-        $rfqType = $post['rfq_type'];
-        if (0 < $rfqType) {
-            $srch->addCondition('rfq_selprod_id', '=', 0);
-            $srch->addCondition('rfq_product_id', '=', 0);
+        $rfqPlacementType = $post['rfq_placement_type'];
+        if (0 < $rfqPlacementType) {
+            $opr = RequestForQuote::PLACEMENT_TYPE_GLOBAL == $rfqPlacementType ? '=' : '>';
+            $srch->addCondition('rfq_selprod_id', $opr, 0);
+            $srch->addCondition('rfq_product_id', $opr, 0);
         }
 
         $keyword = $post['keyword'];
@@ -237,12 +241,14 @@ class RequestForQuotesController extends ListingBaseController
             LibHelper::exitWithError($rfq->getError(), true);
         }
 
+
+
         CalculativeDataRecord::updateRfqCount();
 
         $attr = [
             'rfq_title', 'rfq_number', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_delivery_date', 'rfq_description', 'rfq_added_on', 'ba.*', 'selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'shop_name', 'bu.user_name', 'buc.credential_username', 'buc.credential_email', 'bu.user_phone_dcode', 'bu.user_phone', 'rfqts_user_id as seller_id', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'
         ];
-        $rfqData = $rfq->get($this->siteLangId, $attr);
+        $rfqData = $rfq->get($this->siteLangId, $attr, 'LEFT');
         if (empty($rfqData)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST'), true);
         }
@@ -391,10 +397,7 @@ class RequestForQuotesController extends ListingBaseController
         $statusArr = RequestForQuote::getStatusArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'rfq_status', $statusArr);
         
-        $frm->addSelectBox(Labels::getLabel('FRM_RFQ_TYPE', $this->siteLangId), 'rfq_type', [
-            0 => Labels::getLabel('LBL_STANDARD', $this->siteLangId),
-            1 => Labels::getLabel('LBL_GLOBAL', $this->siteLangId),
-        ]);
+        $frm->addSelectBox(Labels::getLabel('FRM_RFQ_PLACEMENT_TYPE', $this->siteLangId), 'rfq_placement_type', RequestForQuote::getPlacementType($this->siteLangId));
 
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
@@ -493,7 +496,7 @@ class RequestForQuotesController extends ListingBaseController
         $attr = [
             'rfq_title', 'rfq_number', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_delivery_date', 'rfq_description', 'rfq_added_on', 'ba.*', 'selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'shop_name', 'bu.user_name', 'buc.credential_username', 'buc.credential_email', 'bu.user_phone_dcode', 'bu.user_phone', 'rfqts_user_id as seller_id', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'
         ];
-        $rfqData = $rfq->get($this->siteLangId, $attr);
+        $rfqData = $rfq->get($this->siteLangId, $attr, 'LEFT');
         if (!empty($rfqData)) {
             $emailHandler = new EmailHandler();
             if (false === $emailHandler->sendDeletionRfqNotification($this->siteLangId, $rfqData)) {

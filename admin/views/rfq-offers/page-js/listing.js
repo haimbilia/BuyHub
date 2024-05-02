@@ -13,6 +13,7 @@
         obj['product_id'] = productId; */
         let rfqId = $('input[name="offer_rfq_id"]').val();
         obj['rfq_id'] = rfqId;
+        /* isGlobal variable declared inside form */
         select2(element, fcom.makeUrl('RfqOffers', 'getSellers'), obj);
     }
 

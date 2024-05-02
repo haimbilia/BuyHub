@@ -19,8 +19,16 @@
                         $td->appendElement('plaintext', array(), $sr_no);
                         break;
                     case 'rfq_title':
+                        $url = 0 < $row['rfq_selprod_id'] ? UrlHelper::generateUrl('Products', 'view', array($row['rfq_selprod_id']), CONF_WEBROOT_FRONTEND) : 'javascript:void(0)';
+                        $global = '';
+                        if (1 > $row['rfq_product_id'] && 1 > $row['rfq_selprod_id']) {
+                            $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel('LBL_GLOBAL'));
+                        }
                         $htm = '<div>
-                                    <span class="product-profile__title"><a href="' . UrlHelper::generateUrl('Products', 'view', array($row['rfq_selprod_id']), CONF_WEBROOT_FRONTEND) . '">' . Labels::getLabel('LBL_TITLE') . ': ' . $row[$key] . '</a></span>
+                                    <span class="product-profile__title">
+                                        <a href="' . $url . '">' . Labels::getLabel('LBL_TITLE') . ': ' . $row[$key] . '</a>
+                                    </span>
+                                    ' . $global . '
                                     <div>' . Labels::getLabel('LBL_QTY') . ': ' . $row['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($siteLangId, $row['rfq_quantity_unit'], true) . '</div>
                                 </div>';
                         $td->appendElement('plaintext', array(), $htm, true);
@@ -52,7 +60,7 @@
                             array(
                                 'class' => 'actions-link',
                                 'href' => 'javascript:void(0)',
-                                'onclick' => 'viewRfq("' . $row['rfq_id'] . '");',
+                                'onclick' => 'viewRfq("' . $row['rfq_id'] . '", ' . $rfqPlacementType . ');',
                                 'title' => Labels::getLabel('LBL_VIEW', $siteLangId)
                             ),
                             '<svg class="svg" width="18" height="18">
@@ -64,12 +72,13 @@
                         );
 
                         if ($row['rfq_approved'] == RequestForQuote::APPROVED) {
+                            $action = RequestForQuote::PLACEMENT_TYPE_GLOBAL == $rfqPlacementType ? 'globalListing' : 'listing';
                             $li = $ul->appendElement("li", ['class' => 'actions-item']);
                             $li->appendElement(
                                 'a',
                                 array(
                                     'class' => 'actions-link',
-                                    'href' => UrlHelper::generateUrl(($isSeller ? 'Seller' : '') . 'RfqOffers', 'listing', [$row['rfq_id']]),
+                                    'href' => UrlHelper::generateUrl(($isSeller ? 'Seller' : '') . 'RfqOffers', $action, [$row['rfq_id']]),
                                     'title' => Labels::getLabel('LBL_OFFERS', $siteLangId)
                                 ),
                                 '<svg class="svg" width="18" height="18">

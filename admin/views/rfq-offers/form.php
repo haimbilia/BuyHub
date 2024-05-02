@@ -40,7 +40,9 @@ $colWidthValuesDefault = 6;
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script>
     $(document).ready(function() {
-        getSellersSelect2("sellerJs");
+        getSellersSelect2("sellerJs", {
+            'isGlobal': <?php echo $isGlobal; ?>
+        });
         var date = new Date();
         date.setDate(date.getDate() + 1);
         $('.fldDateJs').datepicker('option', {

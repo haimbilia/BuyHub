@@ -46,6 +46,8 @@ class RequestForQuote extends MyAppModel
     public const STATUS_ACCEPTED = 2;
     public const STATUS_CLOSED = 3;
     public const STATUS_COMPLETED = 4;
+    public const PLACEMENT_TYPE_STANDARD = 1;
+    public const PLACEMENT_TYPE_GLOBAL = 2;
 
     /**
      * __construct
@@ -172,25 +174,24 @@ class RequestForQuote extends MyAppModel
     }
 
     /**
-     * get
+     * Retrieves a request for quote record with the specified ID, along with the specified fields.
      *
-     * @param  int $langId
-     * @param  array $fields
-     * @return array
+     * @param int $langId The language ID to use for retrieving localized labels.
+     * @param array $fields An optional array of fields to retrieve. If empty, the default fields will be used.
+     * @param string $defaultJoinType The default join type to use when setting up the search query.
+     * @return array An array containing the requested request for quote record data.
      */
-    public function get(int $langId, array $fields = []): array
+    public function get(int $langId, array $fields = [], string $defaultJoinType = 'INNER'): array
     {
         if (1 > $this->getMainTableRecordId()) {
             return [];
         }
 
         $fields = !empty($fields) ? $fields : self::FIELDS;
-
         $srch = new RequestForQuoteSearch();
-        $srch->setDefaultJoins($langId);
+        $srch->setDefaultJoins($langId, $defaultJoinType);
         $srch->addMultipleFields($fields);
         $srch->addCondition('rfq_id', '=', $this->getMainTableRecordId());
-
         return (array)FatApp::getDb()->fetch($srch->getDataResultSet());
     }
 
@@ -632,5 +633,13 @@ class RequestForQuote extends MyAppModel
         }
 
         return (applicationConstants::YES == $shopRfqEnabled && applicationConstants::YES == $selProdRfqEnabled);
+    }
+
+    public static function getPlacementType(int $langId): array
+    {
+        return [
+            self::PLACEMENT_TYPE_STANDARD => Labels::getLabel('LBL_STANDARD', $langId),
+            self::PLACEMENT_TYPE_GLOBAL => Labels::getLabel('LBL_GLOBAL', $langId),
+        ];
     }
 }

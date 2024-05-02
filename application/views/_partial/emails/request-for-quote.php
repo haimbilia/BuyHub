@@ -27,9 +27,20 @@ if (isset($data['addr_zip']) &&  $data['addr_zip'] != '') {
 if (isset($data['addr_phone']) &&  $data['addr_phone'] != '') {
     $shippingInfo .=  Labels::getLabel('LBL_Phone:', $siteLangId) . ValidateElement::formatDialCode($data['addr_phone_dcode']) . $data['addr_phone'];
 }
-$uploadedTime = AttachedFile::setTimeParam($data['selprod_updated_on']);
-$prodUrl = UrlHelper::generateFullUrl('Products', 'view', array($data['selprod_id']), CONF_WEBROOT_FRONTEND);
-$imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($data['selprod_product_id'], ImageDimension::VIEW_SMALL, $data['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+$prodUrl = 'javascript:void(0)';
+$productId = 0;
+$selProdId = 0;
+$uploadedTime = '';
+$shopName = '';
+if (isset($data['selprod_id']) && 0 < $data['selprod_id']) {
+    $uploadedTime = AttachedFile::setTimeParam($data['selprod_updated_on']);
+    $prodUrl = UrlHelper::generateFullUrl('Products', 'view', array($data['selprod_id']), CONF_WEBROOT_FRONTEND);
+    $productId = $data['selprod_product_id'];
+    $selProdId = $data['selprod_id'];
+    $shopName = $data["shop_name"];
+}
+$imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, ImageDimension::VIEW_SMALL, $selProdId, 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
 $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="font-size: 14px;background: #f2f2f2;font-family: Arial, sans-serif;">
             <tr>
@@ -60,9 +71,9 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                                                 </td>
                                                                 <td style="padding: 10px;">
                                                                     <a href="' . $prodUrl . '" style="color: #555555;font-size: 14px;font-weight: $font-weight-bold;text-decoration: none;">' . $data['rfq_title'] . '</a>';
-                                                                    
+
                                                                     if (RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0)) {
-                                                                        $str .= '<div style="color: #555555;font-size: 14px;font-weight: $font-weight-bold;">' . Labels::getLabel('Lbl_By', $siteLangId) . ':' . $data["shop_name"] . '</div>';
+                                                                        $str .= '<div style="color: #555555;font-size: 14px;font-weight: $font-weight-bold;">' . Labels::getLabel('Lbl_By', $siteLangId) . ':' . $shopName . '</div>';
                                                                     }
                                                         $str .= '</td>
                                                             </tr>
