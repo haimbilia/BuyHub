@@ -2,11 +2,11 @@
 <?php if (isset($collection['categories']) && count($collection['categories'])) { ?>
     <section class="section" data-collection="collection-categories">
         <div class="container">
-            <div class="section-head section-head-center">
+            <?php /*?><div class="section-head section-head-center">
                 <div class="section-heading">
                     <h2><?php echo $collection['collection_name']; ?></h2>
                 </div>
-            </div>
+            </div> <?php */ ?>
             <div class="section-body">
                 <div class="industry-carousal industryCarousalJs">
                     <?php
