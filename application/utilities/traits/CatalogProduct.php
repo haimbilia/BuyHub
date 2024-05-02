@@ -27,7 +27,8 @@ trait CatalogProduct
             $fld->addFieldTagAttribute('disabled', 'disabled');
         }
 
-        $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_TYPE', $langId), 'product_type', $productTypeArr, $productType);
+        //$fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_TYPE', $langId), 'product_type', $productTypeArr, $productType);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_TYPE', $langId), 'product_type', $productTypeArr, $productType, [], '');
         $fld->requirements()->setRequired();
 
         if (0 == $isRequested) {
@@ -41,9 +42,12 @@ trait CatalogProduct
         }
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $langId), 'ptc_prodcat_id', []);
         $fld->requirements()->setRequired();
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_MODEL', $langId), 'product_model');
-        if (FatApp::getConfig("CONF_PRODUCT_MODEL_MANDATORY", FatUtility::VAR_INT, 1)) {
-            $fld->requirements()->setRequired();
+
+        if ($productType != Product::PRODUCT_TYPE_SERVICE) {
+            $fld = $frm->addTextBox(Labels::getLabel('FRM_MODEL', $langId), 'product_model');
+            if (FatApp::getConfig("CONF_PRODUCT_MODEL_MANDATORY", FatUtility::VAR_INT, 1)) {
+                $fld->requirements()->setRequired();
+            }
         }
         $fld = $frm->addFloatField(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE', $langId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'product_min_selling_price', '');
         $fld->requirements()->setRange('0.01', '99999999.99');
@@ -62,7 +66,8 @@ trait CatalogProduct
         $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_TAGS', $langId), 'product_tags');
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_TAX_CATEGORY', $langId), 'ptt_taxcat_id', []);
         $fld->requirements()->setRequired();
-        if (0 == $isRequested) {
+
+        if (0 == $isRequested && $productType != Product::PRODUCT_TYPE_SERVICE) {
             $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY_OF_ORIGIN', $langId), 'ps_from_country_id', []);
         }
         if ($productType == Product::PRODUCT_TYPE_DIGITAL) {
@@ -70,26 +75,29 @@ trait CatalogProduct
             $fld->requirements()->setRequired();
         } else {
             $fld = $frm->addCheckBox(Labels::getLabel('FRM_AVAILABLE_FOR_CASH_ON_DELIVERY_(COD)', $langId), 'product_cod_enabled', 1, array(), false, 0);
-            $fulFillmentArr = Shipping::getFulFillmentArr($langId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
-            $fld = $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $langId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('FRM_SELECT', $langId));
-            $fld->requirements()->setRequired();
-            if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
-                $shipPackArr = ShippingPackage::getNames();
-                $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PACKAGE', $langId), 'product_ship_package', $shipPackArr, '', [], Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
-            }
+            if ($productType != Product::PRODUCT_TYPE_SERVICE) {
+                $fulFillmentArr = Shipping::getFulFillmentArr($langId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
+                $fld = $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $langId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('FRM_SELECT', $langId));
+                $fld->requirements()->setRequired();
 
-            if (FatApp::getConfig("CONF_PRODUCT_WEIGHT_ENABLE", FatUtility::VAR_INT, 1)) {
-                $weightUnitsArr = applicationConstants::getWeightUnitsArr($langId);
-                $frm->addSelectBox(Labels::getLabel('FRM_WEIGHT_UNIT', $langId), 'product_weight_unit', $weightUnitsArr, '', [], Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
+                if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
+                    $shipPackArr = ShippingPackage::getNames();
+                    $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PACKAGE', $langId), 'product_ship_package', $shipPackArr, '', [], Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
+                }
 
-                $weightFld = $frm->addFloatField(Labels::getLabel('FRM_WEIGHT', $langId), 'product_weight', '0.00');
-                $weightFld->requirements()->setRequired(true);
-                $weightFld->requirements()->setFloatPositive();
-                $weightFld->requirements()->setRange('0.01', '9999999999');
-            }
+                if (FatApp::getConfig("CONF_PRODUCT_WEIGHT_ENABLE", FatUtility::VAR_INT, 1)) {
+                    $weightUnitsArr = applicationConstants::getWeightUnitsArr($langId);
+                    $frm->addSelectBox(Labels::getLabel('FRM_WEIGHT_UNIT', $langId), 'product_weight_unit', $weightUnitsArr, '', [], Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
 
-            if (0 == $isRequested) {
-                $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', [], '', [], '');
+                    $weightFld = $frm->addFloatField(Labels::getLabel('FRM_WEIGHT', $langId), 'product_weight', '0.00');
+                    $weightFld->requirements()->setRequired(true);
+                    $weightFld->requirements()->setFloatPositive();
+                    $weightFld->requirements()->setRange('0.01', '9999999999');
+                }
+
+                if (0 == $isRequested) {
+                    $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', [], '', [], '');
+                }
             }
         }
 

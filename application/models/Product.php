@@ -50,6 +50,7 @@ class Product extends MyAppModel
 
     public const PRODUCT_TYPE_PHYSICAL = 1;
     public const PRODUCT_TYPE_DIGITAL = 2;
+    public const PRODUCT_TYPE_SERVICE = 3;
 
     public const APPROVED = 1;
     public const UNAPPROVED = 0;
@@ -314,7 +315,8 @@ class Product extends MyAppModel
         }
         return array(
             self::PRODUCT_TYPE_PHYSICAL => Labels::getLabel('LBL_PHYSICAL', $langId),
-            self::PRODUCT_TYPE_DIGITAL => Labels::getLabel('LBL_DIGITAL', $langId)
+            self::PRODUCT_TYPE_DIGITAL => Labels::getLabel('LBL_DIGITAL', $langId),
+            self::PRODUCT_TYPE_SERVICE => Labels::getLabel('LBL_SERVICE', $langId),
         );
     }
 
@@ -1491,9 +1493,9 @@ class Product extends MyAppModel
         }
         $criteria['max_price'] = true;
         //$srch->setDefinedCriteria($join_price, 0, $criteria, true);
-        if(0 < $shop_id){
-            $srch->joinSellerProducts(0,'', $criteria, true);
-        }else{
+        if (0 < $shop_id) {
+            $srch->joinSellerProducts(0, '', $criteria, true);
+        } else {
             $srch->joinForPrice('', $criteria, true);
         }
         $srch->unsetDefaultLangForJoins();
@@ -1571,7 +1573,7 @@ class Product extends MyAppModel
             $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
             $srch->addMultipleFields(['COALESCE(prod_rating,0) prod_rating', 'COALESCE(totReviews,0) totReviews']);
         }
-     
+
         if (array_key_exists('category', $criteria)) {
             $srch->addCategoryCondition($criteria['category']);
         }

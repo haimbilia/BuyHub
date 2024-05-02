@@ -2189,7 +2189,7 @@ class CheckoutController extends MyAppController
 
             foreach ($pickupOptions[$pickUpBy]['products'] as $pickupProduct) {
                 foreach ($cartProducts as $cartKey => $cartval) {
-                    if ($cartval['selprod_id'] != $pickupProduct['selprod_id'] || $cartval['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                    if ($cartval['selprod_id'] != $pickupProduct['selprod_id'] || in_array($cartval['product_type'], [Product::PRODUCT_TYPE_DIGITAL, Product::PRODUCT_TYPE_SERVICE])) {
                         continue;
                     }
                     /* get Product Data[ */
