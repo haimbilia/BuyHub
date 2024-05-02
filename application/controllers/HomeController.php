@@ -319,7 +319,6 @@ class HomeController extends MyAppController
                     }
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageTestimonialLayout1;
                     break;
-                    break;
                 case Collections::TYPE_CONTENT_BLOCK_LAYOUT1:
                 case Collections::TYPE_CONTENT_BLOCK_LAYOUT2:
                     $homePageContentBlockLayout1 = CacheHelper::get('homePageContentBlockLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
@@ -463,37 +462,6 @@ class HomeController extends MyAppController
         $this->set('redirectUrl', $redirectUrl);
         $this->_template->render(false, false, 'json-success.php');
     }
-
-    /*  public function setAppData()
-    {
-        if (false === MOBILE_APP_API_CALL) {
-            LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
-        }
-        $values = [];
-
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
-        if (0 < $langId) {
-            $languages = Language::getAllNames();
-            if (array_key_exists($langId, $languages)) {
-                $values['uauth_lang_id'] = $langId;
-            }
-        }
-
-        $currencyId = FatApp::getPostedData('currencyId', FatUtility::VAR_INT, FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1));
-        if (0 < $currencyId) {
-            $currencies = Currency::getCurrencyAssoc($this->siteLangId);
-            if (array_key_exists($currencyId, $currencies)) {
-                $values['uauth_currency_id'] = $currencyId;
-            }
-        }
-
-        $where = array('smt' => 'uauth_token = ?', 'vals' => [$this->appToken]);
-        if (FatApp::getDb()->updateFromArray(UserAuthentication::DB_TBL_USER_AUTH, $values, $where)) {
-            LibHelper::dieJsonSuccess(Labels::getLabel('MSG_UPDATED_SUCCESSFULLY', $this->siteLangId));
-        }
-        LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
-    } */
-
 
     /**
      * currencies : Used for APPs
@@ -705,7 +673,7 @@ class HomeController extends MyAppController
 
         $productCatSrchObj = ProductCategory::getSearchObject(false, $langId);
         $productCatSrchObj->addOrder('m.prodcat_active', 'DESC');
-        $productCatSrchObj->addMultipleFields(array('prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_description'));
+        $productCatSrchObj->addMultipleFields(array('prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_description','prodcat_code'));
 
         $collectionObj = new CollectionSearch();
         $collectionObj->joinCollectionRecords();
@@ -1369,8 +1337,8 @@ class HomeController extends MyAppController
                     break;
 
                 case Collections::COLLECTION_TYPE_REVIEWS:
-                    $collections[$i] = $collection;
-                    $collections[$i]['pendingForReviews'] = array();
+                    $collections[$ind] = $collection;
+                    $collections[$ind]['pendingForReviews'] = array();
                     $loggedUserId = UserAuthentication::getLoggedUserId(true);
                     if (0 < $loggedUserId && (FatApp::getConfig('CONF_ALLOW_REVIEWS', FatUtility::VAR_INT, 0))) {
                         $pendingForReviews = OrderProduct::pendingForReviews($loggedUserId, $this->siteLangId);
@@ -1382,12 +1350,12 @@ class HomeController extends MyAppController
                                 }
                                 $orderProduct['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($orderProduct['selprod_product_id'], ImageDimension::VIEW_THUMB, $orderProduct['op_selprod_id'], 0, $this->siteLangId));
                             }
-                            $collections[$i]['pendingForReviews'] = $pendingForReviews;
+                            $collections[$ind]['pendingForReviews'] = $pendingForReviews;
                         }
                     }
                     break;
                 case Collections::COLLECTION_TYPE_CONTENT_BLOCK:
-                    $collections[$i] = $collection;
+                    $collections[$ind] = $collection;
                     break;
             }
             $i++;
