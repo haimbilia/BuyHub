@@ -35,10 +35,12 @@
                             <span class="lable"><?php echo Labels::getLabel('LBL_Brand', $siteLangId); ?></span>
                             <span class="value"><?php echo ($product['brand_name']) ? $product['brand_name'] : Labels::getLabel('LBL_N/A', $siteLangId); ?></span>
                         </li>
-                        <li class="list-stats-item">
-                            <span class="lable"><?php echo Labels::getLabel('LBL_Product_Model', $siteLangId); ?></span>
-                            <span class="value"><?php echo $product['product_model']; ?></span>
-                        </li>
+                        <?php if ($product['product_type'] != Product::PRODUCT_TYPE_SERVICE) { ?>
+                            <li class="list-stats-item">
+                                <span class="lable"><?php echo Labels::getLabel('LBL_Product_Model', $siteLangId); ?></span>
+                                <span class="value"><?php echo $product['product_model']; ?></span>
+                            </li>
+                        <?php } ?>
                         <li class="list-stats-item">
                             <span class="lable"><?php echo Labels::getLabel('LBL_Minimum_Selling_Price', $siteLangId); ?></span>
                             <span class="value"><?php echo CommonHelper::displayMoneyFormat($product['product_min_selling_price']); ?></span>

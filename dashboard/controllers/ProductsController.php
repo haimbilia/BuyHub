@@ -764,7 +764,7 @@ class ProductsController extends SellerBaseController
             $frm->removeField($fld);
         }
 
-        if ($productType != Product::PRODUCT_TYPE_DIGITAL) {
+        if (!in_array($productType, [Product::PRODUCT_TYPE_DIGITAL, Product::PRODUCT_TYPE_SERVICE])) {
             $fulfillmentType = -1;
             $shipBySeller = Product::isProductShippedBySeller($recordId, $this->userParentId, $this->userParentId);
 

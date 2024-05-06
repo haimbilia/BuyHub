@@ -2250,6 +2250,10 @@ class Orders extends MyAppModel
                 $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS", FatUtility::VAR_INT, 0));
                 $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS", FatUtility::VAR_INT, 0));
                 break;
+            case Product::PRODUCT_TYPE_SERVICE:
+                $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
+                $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0));
+                break;
             case Product::PRODUCT_TYPE_PHYSICAL:
                 $processingStatuses = array_diff((array) $processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0));
                 break;

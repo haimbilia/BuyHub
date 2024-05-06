@@ -69,12 +69,12 @@ if ($isDefaultLayout  == applicationConstants::NO && count($images)) {
 
                     var sort = mysortarr.join('-');
                     var lang_id = $('.language-js').val();
-                    var product_id = $('#image_record_id').val();
+                    var record_id = $('#image_record_id').val();
                     var option_id = $('#image_option_id').val();
                     var option_id = $('#image_option_id').val();
                     var file_type = $('#image_file_type').val();
                     fcom.updateWithAjax(fcom.makeUrl('products', 'setImageOrder'), {
-                        product_id,
+                        record_id,
                         file_type,
                         ids: sort
                     }, function (t) {fcom.displaySuccessMessage(t.msg)});

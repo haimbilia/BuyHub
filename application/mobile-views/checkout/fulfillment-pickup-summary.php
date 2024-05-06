@@ -38,7 +38,7 @@ foreach ($shippingRates as $pickUpBy => $levelItems) {
         $digiProductData = current($levelItems['digital_products']);
         foreach ($levelItems['digital_products'] as $product) {
             $productItems[$pickUpBy . '-' . Product::PRODUCT_TYPE_DIGITAL]['title'] = (0 < $pickUpBy) ? $digiProductData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, '');;
-            
+
             $product['productUrl'] = UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id']));
             $product['shopUrl'] = UrlHelper::generateFullUrl('Shops', 'View', array($product['shop_id']));
             $product['imageUrl'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
