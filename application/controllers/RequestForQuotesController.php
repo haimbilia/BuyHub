@@ -42,7 +42,7 @@ class RequestForQuotesController extends MyAppController
 
             $frm->addSelectBox(Labels::getLabel('LBL_CATEGORY'), 'rfq_prodcat_id', []);
             $frm->addRequiredField(Labels::getLabel('LBL_LOOKING_FOR'), 'rfq_title');
-            $frm->addSelectBox(Labels::getLabel('LBL_SELLER'), 'rfqts_user_id', []);
+            $frm->addSelectBox(Labels::getLabel('LBL_SELLER'), 'rfqts_user_id[]', [], '', [], '');
         }
         $frm->addHiddenField('', 'rfq_selprod_id');
         return $frm;
@@ -248,8 +248,8 @@ class RequestForQuotesController extends MyAppController
             $post['rfq_selprod_code'] = $selprodData['selprod_code'];
         }
 
-        $sellerId = FatApp::getPostedData('rfqts_user_id', FatUtility::VAR_INT, 0);
-        if (1 > $sellerId && 1 > $selprodId) {
+        $sellerIdArr = FatApp::getPostedData('rfqts_user_id', FatUtility::VAR_INT, 0);
+        if (empty($sellerIdArr) && 1 > $selprodId) {
             $post['rfq_visibility_type'] = RequestForQuote::VISIBILITY_TYPE_OPEN;
         }
 
@@ -267,14 +267,16 @@ class RequestForQuotesController extends MyAppController
         CalculativeDataRecord::updateRfqCount();
 
         /* When buyer wants to bind with specific seller. */
-        if (0 < $sellerId) {
-            $rfqToSeller = [
-                'rfqts_rfq_id' => $rfq->getMainTableRecordId(),
-                'rfqts_user_id' => $sellerId
-            ];
-            if (!FatApp::getDb()->insertFromArray(RequestForQuote::DB_RFQ_TO_SELLERS, $rfqToSeller, true, array(), $rfqToSeller)) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError(FatApp::getDb()->getError(), true);
+        if (0 < $sellerIdArr) {
+            foreach ($sellerIdArr as $sellerId) {
+                $rfqToSeller = [
+                    'rfqts_rfq_id' => $rfq->getMainTableRecordId(),
+                    'rfqts_user_id' => $sellerId
+                ];
+                if (!FatApp::getDb()->insertFromArray(RequestForQuote::DB_RFQ_TO_SELLERS, $rfqToSeller, true, array(), $rfqToSeller)) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError(FatApp::getDb()->getError(), true);
+                }
             }
         }
 

@@ -57,8 +57,9 @@ if (1 > $selprodId && null != $fld) {
     $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_YOU_CAN_SELECT_FROM_THE_SUGGUESTION_LIST_AS_WELL.') . '</span>';
 }
 
-$fld = $frm->getField('rfqts_user_id');
+$fld = $frm->getField('rfqts_user_id[]');
 if (1 > $selprodId && null != $fld) {
+    $fld->addFieldTagAttribute('multiple', 'multiple');
     $fld->addFieldTagAttribute('style', 'width:100%;');
     $fld->addFieldTagAttribute('id', 'sellerNameJs');
     $fld->addFieldTagAttribute('placeholder',  Labels::getLabel('LBL_SELECT_SELLER', $siteLangId));
@@ -224,7 +225,7 @@ if (null != $fld) {
                         <div class="row">
                             <?php echo HtmlHelper::getFieldHtml($frm, 'rfq_product_type', 3); ?>
                             <?php echo HtmlHelper::getFieldHtml($frm, 'rfq_seller_linking_type', 2); ?>
-                            <?php echo HtmlHelper::getFieldHtml($frm, 'rfqts_user_id', 7); ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'rfqts_user_id[]', 7); ?>
                         </div>
                         <div class="row">
                             <?php echo HtmlHelper::getFieldHtml($frm, 'rfq_prodcat_id', 8); ?>
@@ -373,34 +374,11 @@ if (null != $fld) {
         });
 
         if (0 < sellerNameSelector.length) {
-            sellerNameSelector.select2({
-                tags: true,
-                closeOnSelect: true,
-                allowClear: true,
-                dir: langLbl.layoutDirection,
-                placeholder: sellerNameSelector.attr('placeholder'),
-                dropdownParent: sellerNameSelector.closest('form'),
-                ajax: {
-                    url: fcom.makeUrl('RequestForQuotes', 'getSellers'),
-                    dataType: 'json',
-                    delay: 250,
-                    method: 'post',
-                    data: function(params) {
-                        return {
-                            keyword: params.term,
-                            rfq_seller_linking_type: $('.sellerLinkingJs:checked').val()
-                        };
-                    },
-                    processResults: function(data, params) {
-                        return {
-                            results: data.results
-                        };
-                    },
-                    cache: true
-                },
-                minimumInputLength: 0,
+            select2('sellerNameJs', fcom.makeUrl('RequestForQuotes', 'getSellers'), function() {
+                return {
+                    rfq_seller_linking_type: $('.sellerLinkingJs:checked').val()
+                };
             });
-
 
             var sellerLinkingType = $('.sellerLinkingJs').val();
             if (SELLER_LINKING_OPEN == sellerLinkingType) {

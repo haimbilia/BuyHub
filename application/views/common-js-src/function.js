@@ -1067,10 +1067,18 @@ function saveRfq(frm) {
 
 	var data = new FormData();
 	data.append('fIsAjax', 1);
-	frm.find('select,input[type=hidden],input[type=text],input[type=search],textarea').each(function () {
-		data.append(this.name, $(this).val());
-	});
 
+	frm.find('select,input[type=hidden],input[type=text],input[type=search],textarea').each(function () {
+		var isMultiple = $(this).attr('multiple');
+		var eleName = this.name;
+		if (typeof isMultiple !== 'undefined' && isMultiple !== false) {
+			$(this).find('option:selected').each(function (i) {
+				data.append(eleName, $(this).val());
+			});
+		} else {
+			data.append(eleName, $(this).val());
+		}
+	});
 	frm.find('input[type=file]').each(function (i, v) {
 		data.append(v.name, v.files[0]);
 	});

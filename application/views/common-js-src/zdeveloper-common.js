@@ -2105,3 +2105,120 @@ $(document).ready(function () {
 $(document).ajaxComplete(function () {
 	bindMaxLengthValidator();
 });
+
+/*
+expected response
+{
+  "results": [
+	{
+	  "id": 1,
+	  "text": "Option 1"
+	},
+	{
+	  "id": 2,
+	  "text": "Option 2"
+	}
+  ],
+  "pageCount" : 3 
+}
+
+postdata object| callback function like {record:1}
+*/
+select2 = function (
+	elmId,
+	url,
+	postdata = {},
+	callbackOnSelect = "",
+	callbackOnUnSelect = "",
+	processResultsCallback = "",
+	data = [],
+) {
+	let ele = $("#" + elmId);
+	if (1 > ele.length) {
+		return false;
+	}
+
+	var obj = ele.closest('form').length ? ele.closest('form') : null;
+	ele.select2({
+		dropdownParent: ele.data('dropdownparent-id') ? $('#' + ele.data('dropdownparent-id')) : obj,
+		closeOnSelect: ele.data("closeOnSelect") || true,
+		data: data,
+		/*dir: layoutDirection,*/
+		allowClear: ele.data("allowClear") || true,
+		placeholder: ele.attr("placeholder") || "",
+		ajax: {
+			url: url,
+			dataType: "json",
+			delay: 250,
+			method: "post",
+			data: function (params) {
+				return $.extend(
+					{
+						keyword: params.term, // search term
+						page: params.page,
+						fIsAjax: 1,
+						fOutMode: 'json'
+					},
+					("function" == typeof postdata ? postdata(ele) : postdata)
+				);
+			},
+			processResults: function (data, params) {
+				if (1 > data.status) {
+					fcom.displayErrorMessage(data.msg);
+				}
+				params.page = params.page || 1;
+				data.pageCount = data.pageCount || 1;
+				if ("function" == typeof processResultsCallback) {
+					return processResultsCallback(data, params, ele);
+				}
+				return {
+					results: data.results,
+					pagination: {
+						more: params.page < data.pageCount,
+					},
+				};
+			},
+			cache: true,
+		},
+		minimumInputLength: 0,
+		dropdownPosition: "below",
+	}).on("select2:selecting", function (e) {
+		if ("function" == typeof callbackOnSelect) {
+			callbackOnSelect(e);
+		}
+	}).on("select2:unselecting", function (e) {
+		if ("function" == typeof callbackOnUnSelect) {
+			callbackOnUnSelect(e);
+		}
+	}).on('select2:open', function (e) {
+		if (ele.attr('multiple') == undefined) {
+			$('#select2-' + elmId + '-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-single")
+		} else {
+			$('#select2-' + elmId + '-results').closest('.select2-dropdown').addClass("custom-select2 custom-select2-multiple");
+		}
+	});
+
+	var select2Selector = ele.data("select2");
+	var elementName = ele.attr('name').replace('[]', '');
+	select2Selector.$container.addClass("custom-select2");
+
+	if ('undefined' != typeof (select2Selector.dropdown)) {
+		$(select2Selector.dropdown.$search).attr({ 'name': elementName + '-select2', 'autocomplete': 'no' });
+	}
+
+	if ('undefined' != typeof (select2Selector.selection)) {
+		$(select2Selector.selection.$search).attr({ 'name': elementName + '-select2', 'autocomplete': 'no' });
+	}
+
+	if (0 < ele.closest(".advancedSearchJs").length || 0 < ele.closest(".form-group").length) {
+		select2Selector.$container.addClass("custom-select2-width");
+	}
+
+
+	if (ele.attr('multiple') != undefined) {
+		select2Selector.$container.addClass("custom-select2 custom-select2-multiple");
+	} else {
+		select2Selector.$container.addClass("custom-select2 custom-select2-single");
+	}
+	$("." + $.ykmodal.element).removeAttr("tabindex");
+};
