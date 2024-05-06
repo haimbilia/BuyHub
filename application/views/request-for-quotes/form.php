@@ -54,6 +54,7 @@ if (1 > $selprodId && null != $fld) {
     $fld->addFieldTagAttribute('style', 'z-index:999;');
     $fld->addFieldTagAttribute('placeholder',  Labels::getLabel('LBL_TYPE_HERE..', $siteLangId));
     $fld->addFieldTagAttribute('id', 'rfqItemNameJs');
+    $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_YOU_CAN_SELECT_FROM_THE_SUGGUESTION_LIST_AS_WELL.') . '</span>';
 }
 
 $fld = $frm->getField('rfqts_user_id');
@@ -61,6 +62,7 @@ if (1 > $selprodId && null != $fld) {
     $fld->addFieldTagAttribute('style', 'width:100%;');
     $fld->addFieldTagAttribute('id', 'sellerNameJs');
     $fld->addFieldTagAttribute('placeholder',  Labels::getLabel('LBL_SELECT_SELLER', $siteLangId));
+    $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_YOU_CAN_SELECT_SELLER_TO_WHOM_YOU_WANT_CONNECT_WITH.') . '</span>';
 }
 
 $fld = $frm->getField('rfq_prodcat_id');
@@ -68,11 +70,17 @@ if (1 > $selprodId && null != $fld) {
     $fld->addFieldTagAttribute('style', 'width:100%;');
     $fld->addFieldTagAttribute('id', 'categoryJs');
     $fld->addFieldTagAttribute('placeholder',  Labels::getLabel('LBL_SELECT_CATEGORY', $siteLangId));
+    $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('LBL_RFQ_ITEM_CATEGROY.') . '</span>';
 }
 
 $fld = $frm->getField('rfq_seller_linking_type');
 if (1 > $selprodId && null != $fld) {
     $fld->addFieldTagAttribute('class', 'sellerLinkingJs');
+}
+
+$fld = $frm->getField('rfq_product_type');
+if (null != $fld) {
+    $fld->addFieldTagAttribute('id', 'rfqProductTypeJs');
 }
 ?>
 <div class="modal-header">
@@ -172,8 +180,8 @@ if (1 > $selprodId && null != $fld) {
                     </div>
                 <?php } ?>
                 <div class="quote-for">
-                    <div class="product-profile">
-                        <?php if (0 < $selprodId) { ?>
+                    <?php if (0 < $selprodId) { ?>
+                        <div class="product-profile">
                             <div class="product-profile-thumbnail">
                                 <?php
                                 $productTitle = $selprodData['selprod_title'];
@@ -199,56 +207,46 @@ if (1 > $selprodId && null != $fld) {
                                     <?php echo $selprodData['brand_name']; ?>
                                 </div>
                             </div>
-                        <?php } else { ?>
-                            <div class="row">
-                                <?php echo HtmlHelper::getFieldHtml($frm, 'rfq_seller_linking_type', '12'); ?>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo $frm->getField('rfqts_user_id')->getCaption(); ?>
-                                        </label>
-                                        <?php echo $frm->getFieldHtml('rfqts_user_id'); ?>
-                                        <span class="form-text text-muted"><?php echo Labels::getLabel('LBL_YOU_CAN_SELECT_SELLER_TO_WHOM_YOU_WANT_CONNECT_WITH.'); ?></span>
-                                    </div>
+                        </div>
+                        <div class="quote-for-qty">
+                            <div class="qty-wrap">
+                                <label class="label">
+                                    <?php echo Labels::getLabel('LBL_REQUIRED_QUANTITY'); ?>
+                                    <span class="spn_must_field">*</span>
+                                </label>
+                                <div class="input-group groupFieldsJs">
+                                    <?php echo $frm->getFieldHtml('rfq_quantity'); ?>
+                                    <?php echo $frm->getFieldHtml('rfq_quantity_unit'); ?>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo $frm->getField('rfq_prodcat_id')->getCaption(); ?>
-                                        </label>
-                                        <?php echo $frm->getFieldHtml('rfq_prodcat_id'); ?>
-                                        <span class="form-text text-muted"><?php echo Labels::getLabel('LBL_RFQ_ITEM_CATEGROY.'); ?></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo $frm->getField('rfq_title')->getCaption(); ?>
-                                            <span class="spn_must_field">*</span>
-                                        </label>
-                                        <?php echo $frm->getFieldHtml('rfq_title'); ?>
-                                        <span class="form-text text-muted"><?php echo Labels::getLabel('LBL_YOU_CAN_SELECT_FROM_THE_SUGGUESTION_LIST_AS_WELL.'); ?></span>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
-                    <div class="quote-for-qty">
-                        <div class="qty-wrap">
-                            <label class="label">
-                                <?php echo Labels::getLabel('LBL_REQUIRED_QUANTITY'); ?>
-                                <span class="spn_must_field">*</span>
-                            </label>
-                            <div class="input-group groupFieldsJs">
-                                <?php echo $frm->getFieldHtml('rfq_quantity'); ?>
-                                <?php echo $frm->getFieldHtml('rfq_quantity_unit'); ?>
                             </div>
                         </div>
-                    </div>
+                    <?php } else { ?>
+                        <div class="row">
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'rfq_product_type', 3); ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'rfq_seller_linking_type', 2); ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'rfqts_user_id', 7); ?>
+                        </div>
+                        <div class="row">
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'rfq_prodcat_id', 8); ?>
+                            <div class="col-md-4">
+                                <div class="quote-for-qty">
+                                    <div class="qty-wrap">
+                                        <label class="label">
+                                            <?php echo Labels::getLabel('LBL_REQUIRED_QUANTITY'); ?>
+                                            <span class="spn_must_field">*</span>
+                                        </label>
+                                        <div class="input-group groupFieldsJs">
+                                            <?php echo $frm->getFieldHtml('rfq_quantity'); ?>
+                                            <?php echo $frm->getFieldHtml('rfq_quantity_unit'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'rfq_title', 12); ?>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
@@ -345,6 +343,7 @@ if (1 > $selprodId && null != $fld) {
                         url: fcom.makeUrl('RequestForQuotes', 'searchItemAutoComplete'),
                         data: {
                             keyword: request['term'],
+                            rfq_product_type: $('#rfqProductTypeJs').val(),
                             fIsAjax: 1
                         },
                         dataType: 'json',

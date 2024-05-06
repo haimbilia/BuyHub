@@ -56,6 +56,14 @@ $autoTableColumWidth = FatUtility::int(($autoTableColumWidth ?? 1)); ?>
                                     <div class="collapse" id="rfq-info-block">
                                         <ul class="list-stats list-stats-popover">
                                             <li class="list-stats-item">
+                                                <span class="lable"><?php echo Labels::getLabel('LBL_PRODUCT_TYPE', $siteLangId); ?></span>
+                                                <span class="value"><?php echo Product::getProductTypes($siteLangId)[$rfqData['rfq_product_type']] ?? Labels::getLabel('LBL_N/A', $siteLangId);; ?></span>
+                                            </li>
+                                            <li class="list-stats-item">
+                                                <span class="lable"><?php echo Labels::getLabel('LBL_CATEGORY', $siteLangId); ?></span>
+                                                <span class="value"><?php echo $rfqData['prodcat_name']; ?></span>
+                                            </li>
+                                            <li class="list-stats-item">
                                                 <span class="lable"><?php echo Labels::getLabel('LBL_QTY', $siteLangId); ?></span>
                                                 <span class="value"><?php echo $rfqData['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq_quantity_unit'], true); ?></span>
                                             </li>

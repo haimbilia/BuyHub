@@ -7,12 +7,18 @@
 <div class="modal-body form-edit layoutsJs">
     <div class="form-edit-body loaderContainerJs">
         <ul class="list-stats list-stats-double">
+            <?php if (!empty($rfqData['rfq_product_type'])) { ?>
+                <li class="list-stats-item">
+                    <span class="lable"><?php echo Labels::getLabel('LBL_PRODUCT_TYPE', $siteLangId); ?>:</span>
+                    <span class="value"><?php echo Product::getProductTypes($siteLangId)[$rfqData['rfq_product_type']] ?? Labels::getLabel('LBL_N/A', $siteLangId);; ?></span>
+                </li>
+            <?php } ?>
             <li class="list-stats-item list-stats-item-full">
                 <span class="lable"><?php echo Labels::getLabel('LBL_PRODUCT', $siteLangId); ?>:</span>
                 <span class="value"><?php echo $rfqData['rfq_title']; ?></span>
             </li>
             <?php if (!empty($rfqData['prodcat_name'])) { ?>
-                <li class="list-stats-item list-stats-item-full">
+                <li class="list-stats-item">
                     <span class="lable"><?php echo Labels::getLabel('LBL_CATEGORY', $siteLangId); ?>:</span>
                     <span class="value"><?php echo $rfqData['prodcat_name']; ?></span>
                 </li>

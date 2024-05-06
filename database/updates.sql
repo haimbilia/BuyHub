@@ -530,3 +530,5 @@ ALTER TABLE `tbl_rfq_latest_offers` ADD `rlo_seller_acceptance` TINYINT NOT NULL
 ALTER TABLE `tbl_rfq` ADD `rfq_visibility_type` TINYINT NOT NULL DEFAULT '2' AFTER `rfq_lang_id`;
 UPDATE `tbl_rfq` SET `rfq_visibility_type`='1' WHERE `rfq_selprod_id` = 0 AND `rfq_product_id` = 0;
 ALTER TABLE `tbl_rfq` ADD `rfq_prodcat_id` INT NOT NULL AFTER `rfq_title`;
+ALTER TABLE `tbl_rfq` ADD `rfq_product_type` TINYINT NOT NULL AFTER `rfq_number`;
+

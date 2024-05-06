@@ -10,9 +10,11 @@ class RequestForQuote extends MyAppModel
     public const FIELDS = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'number',
-        self::DB_TBL_PREFIX . 'selprod_id',
+        self::DB_TBL_PREFIX . 'product_type',
         self::DB_TBL_PREFIX . 'product_id',
+        self::DB_TBL_PREFIX . 'selprod_id',
         self::DB_TBL_PREFIX . 'title',
+        self::DB_TBL_PREFIX . 'prodcat_id',
         self::DB_TBL_PREFIX . 'user_id',
         self::DB_TBL_PREFIX . 'type',
         self::DB_TBL_PREFIX . 'quantity',

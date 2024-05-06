@@ -22,6 +22,10 @@ class RequestForQuotesController extends MyAppController
         $isUserLogged = ($this->loggedUserId > 0) ? applicationConstants::YES : applicationConstants::NO;
         $frm = RequestForQuote::getForm($isUserLogged);
         if (1 > $selprodId) {
+            $productTypeArr = Product::getProductTypes($this->siteLangId);
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_TYPE', $this->siteLangId), 'rfq_product_type', $productTypeArr, Product::PRODUCT_TYPE_PHYSICAL, [], '');
+            $fld->requirements()->setRequired();
+
             $sellerLinkingTypeArr = RequestForQuote::getSellerLinkingTypeArr($this->siteLangId);
             if (False == UserAuthentication::isUserLogged()) {
                 unset($sellerLinkingTypeArr[RequestForQuote::SELLER_LINKING_FAVOURITE]);
@@ -501,6 +505,11 @@ class RequestForQuotesController extends MyAppController
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
             $cnd->attachCondition('product_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+        }
+
+        $rfqProductType = FatApp::getPostedData('rfq_product_type', FatUtility::VAR_INT, 0);
+        if (0 < $rfqProductType) {
+            $srch->addCondition('product_type', '=', $rfqProductType);
         }
 
         $srch->addMultipleFields(array('selprod_id as id', 'COALESCE(selprod_title ,product_name, product_identifier) as name'));

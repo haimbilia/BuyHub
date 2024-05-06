@@ -1,7 +1,4 @@
 <?php
-
-use Abraham\TwitterOAuth\Request;
-
 trait RfqOffersUtility
 {
     public $isSeller = false;
@@ -960,8 +957,9 @@ trait RfqOffersUtility
         $srch->joinBuyerAddress($this->siteLangId);
         $srch->joinCountry(true);
         $srch->joinState(true);
+        $srch->joinRfqCategory(true);
 
-        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name']);
+        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name']);
         $srch->addMultipleFields($dbFlds);
 
         if ($this->isSeller) {

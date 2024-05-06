@@ -1,7 +1,4 @@
 <?php
-
-use Abraham\TwitterOAuth\Request;
-
 class RequestForQuotesController extends ListingBaseController
 {
     protected string $modelClass = 'RequestForQuote';

@@ -60,8 +60,9 @@ class RfqOffersController extends ListingBaseController
         $srch->joinBuyerAddress($this->siteLangId);
         $srch->joinCountry(true);
         $srch->joinState(true);
+        $srch->joinRfqCategory(true);
 
-        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username', 'buc.credential_email', 'bu.user_id as user_id', 'bu.user_updated_on', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'rfq.rfq_product_id', 'rfq_selprod_code']);
+        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username', 'buc.credential_email', 'bu.user_id as user_id', 'bu.user_updated_on', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'rfq.rfq_product_id', 'rfq_selprod_code', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name']);
         $srch->addMultipleFields($dbFlds);
 
         $srch->addCondition('rfq_id', '=', $rfqId);
