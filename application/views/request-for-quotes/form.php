@@ -47,13 +47,32 @@ if (!$isUserLogged) {
     $fld->addFieldTagAttribute('data-parent-attrs', json_encode([
         'class' => 'phonenumber--js from-group--phonefield'
     ]));
-} 
+}
 
 $fld = $frm->getField('rfq_title');
 if (1 > $selprodId && null != $fld) {
-    $fld->addFieldTagAttribute('style', 'width:100%; z-index:999;');
+    $fld->addFieldTagAttribute('style', 'z-index:999;');
     $fld->addFieldTagAttribute('placeholder',  Labels::getLabel('LBL_TYPE_HERE..', $siteLangId));
     $fld->addFieldTagAttribute('id', 'rfqItemNameJs');
+}
+
+$fld = $frm->getField('rfqts_user_id');
+if (1 > $selprodId && null != $fld) {
+    $fld->addFieldTagAttribute('style', 'width:100%;');
+    $fld->addFieldTagAttribute('id', 'sellerNameJs');
+    $fld->addFieldTagAttribute('placeholder',  Labels::getLabel('LBL_SELECT_SELLER', $siteLangId));
+}
+
+$fld = $frm->getField('rfq_prodcat_id');
+if (1 > $selprodId && null != $fld) {
+    $fld->addFieldTagAttribute('style', 'width:100%;');
+    $fld->addFieldTagAttribute('id', 'categoryJs');
+    $fld->addFieldTagAttribute('placeholder',  Labels::getLabel('LBL_SELECT_CATEGORY', $siteLangId));
+}
+
+$fld = $frm->getField('rfq_seller_linking_type');
+if (1 > $selprodId && null != $fld) {
+    $fld->addFieldTagAttribute('class', 'sellerLinkingJs');
 }
 ?>
 <div class="modal-header">
@@ -181,14 +200,39 @@ if (1 > $selprodId && null != $fld) {
                                 </div>
                             </div>
                         <?php } else { ?>
-                            <div class="product-profile-data">
-                                <div class="form-group">
-                                    <label class="label">
-                                        <?php echo $frm->getField('rfq_title')->getCaption(); ?>
-                                        <span class="spn_must_field">*</span>
-                                    </label>
-                                    <?php echo $frm->getFieldHtml('rfq_title'); ?>
-                                    <span class="form-text text-muted"><?php echo Labels::getLabel('LBL_YOU_CAN_SELECT_FROM_THE_SUGGUESTION_LIST_AS_WELL.'); ?></span>
+                            <div class="row">
+                                <?php echo HtmlHelper::getFieldHtml($frm, 'rfq_seller_linking_type', '12'); ?>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php echo $frm->getField('rfqts_user_id')->getCaption(); ?>
+                                        </label>
+                                        <?php echo $frm->getFieldHtml('rfqts_user_id'); ?>
+                                        <span class="form-text text-muted"><?php echo Labels::getLabel('LBL_YOU_CAN_SELECT_SELLER_TO_WHOM_YOU_WANT_CONNECT_WITH.'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php echo $frm->getField('rfq_prodcat_id')->getCaption(); ?>
+                                        </label>
+                                        <?php echo $frm->getFieldHtml('rfq_prodcat_id'); ?>
+                                        <span class="form-text text-muted"><?php echo Labels::getLabel('LBL_RFQ_ITEM_CATEGROY.'); ?></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php echo $frm->getField('rfq_title')->getCaption(); ?>
+                                            <span class="spn_must_field">*</span>
+                                        </label>
+                                        <?php echo $frm->getFieldHtml('rfq_title'); ?>
+                                        <span class="form-text text-muted"><?php echo Labels::getLabel('LBL_YOU_CAN_SELECT_FROM_THE_SUGGUESTION_LIST_AS_WELL.'); ?></span>
+                                    </div>
                                 </div>
                             </div>
                         <?php } ?>
@@ -289,9 +333,10 @@ if (1 > $selprodId && null != $fld) {
 
 <?php if (1 > $selprodId) { ?>
     <script>
-        var selector = $("#rfqItemNameJs");
-        if (0 < selector.length) {
-            selector.autocomplete({
+        var SELLER_LINKING_OPEN = '<?php echo RequestForQuote::SELLER_LINKING_OPEN; ?>';
+        var rfqItemNameSelector = $("#rfqItemNameJs");
+        if (0 < rfqItemNameSelector.length) {
+            rfqItemNameSelector.autocomplete({
                 'classes': {
                     "ui-autocomplete": "custom-ui-autocomplete z-index-9999"
                 },
@@ -306,7 +351,6 @@ if (1 > $selprodId && null != $fld) {
                         type: 'post',
                         success: function(json) {
                             response($.map(json['results'], function(item) {
-                                console.log(item);
                                 return {
                                     label: item['text'],
                                     value: item['text'],
@@ -316,6 +360,85 @@ if (1 > $selprodId && null != $fld) {
                         },
                     });
                 }
+            });
+        }
+
+        var sellerNameSelector = $("#sellerNameJs");
+        $(document).on('change', '.sellerLinkingJs', function() {
+            if (SELLER_LINKING_OPEN == $(this).val()) {
+                sellerNameSelector.select2('val', '');
+                sellerNameSelector.val('').attr('disabled', 'disabled');
+            } else {
+                sellerNameSelector.removeAttr('disabled');
+            }
+        });
+
+        if (0 < sellerNameSelector.length) {
+            sellerNameSelector.select2({
+                tags: true,
+                closeOnSelect: true,
+                allowClear: true,
+                dir: langLbl.layoutDirection,
+                placeholder: sellerNameSelector.attr('placeholder'),
+                dropdownParent: sellerNameSelector.closest('form'),
+                ajax: {
+                    url: fcom.makeUrl('RequestForQuotes', 'getSellers'),
+                    dataType: 'json',
+                    delay: 250,
+                    method: 'post',
+                    data: function(params) {
+                        return {
+                            keyword: params.term,
+                            rfq_seller_linking_type: $('.sellerLinkingJs:checked').val()
+                        };
+                    },
+                    processResults: function(data, params) {
+                        return {
+                            results: data.results
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 0,
+            });
+
+
+            var sellerLinkingType = $('.sellerLinkingJs').val();
+            if (SELLER_LINKING_OPEN == sellerLinkingType) {
+                sellerNameSelector.select2('val', '');
+                sellerNameSelector.val('').attr('disabled', 'disabled');
+            }
+        }
+
+
+        var categorySelector = $("#categoryJs");
+        if (0 < categorySelector.length) {
+            categorySelector.select2({
+                tags: true,
+                closeOnSelect: true,
+                allowClear: true,
+                dir: langLbl.layoutDirection,
+                placeholder: categorySelector.attr('placeholder'),
+                dropdownParent: categorySelector.closest('form'),
+                ajax: {
+                    url: fcom.makeUrl('Products', 'linksAutocomplete'),
+                    dataType: 'json',
+                    delay: 250,
+                    method: 'post',
+                    data: function(params) {
+                        return {
+                            keyword: params.term,
+                            langId: <?php echo $siteLangId; ?>
+                        };
+                    },
+                    processResults: function(data, params) {
+                        return {
+                            results: data.results
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 0,
             });
         }
     </script>

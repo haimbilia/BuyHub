@@ -515,4 +515,72 @@ class Shop extends MyAppModel
 
         return 0;
     }
+
+    public static function getSellersAutocomplete(int $langId, bool $favouriteOnly = false, int $userId = 0)
+    {
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = 1 > $page ? 1 : $page;
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, 10);
+
+        /* SubQuery, Shop have products[ */
+        $prodShopSrch = new ProductSearch($langId);
+        $prodShopSrch->addMultipleFields(array('distinct(shop_id)'));
+        $prodShopSrch->setGeoAddress();
+        $prodShopSrch->setDefinedCriteria();
+        $prodShopSrch->validateAndJoinDeliveryLocation();
+        $prodShopSrch->joinProductToCategory();
+        $prodShopSrch->doNotCalculateRecords();
+        $prodShopSrch->doNotLimitRecords();
+        $prodShopSrch->joinSellerSubscription($langId, true);
+        $prodShopSrch->addSubscriptionValidCondition();
+        /* ] */
+
+        $srch = new ShopSearch($langId);
+        $srch->setDefinedCriteria($langId);
+        $srch->joinShopCountry();
+        $srch->joinShopState();
+        $srch->joinSellerSubscription();
+        $srch->joinTable('(' . $prodShopSrch->getQuery() . ')', 'INNER JOIN', 'temp.shop_id = s.shop_id', 'temp');
+
+
+        $keyword = FatApp::getPostedData('keyword', null, '');
+        if (!empty($keyword)) {
+            $cond = $srch->addCondition('u_cred.credential_username', 'like', '%' . $keyword . '%');
+            $cond->attachCondition('u_cred.credential_email', 'like', '%' . $keyword . '%', 'OR');
+            $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
+            $cond->attachCondition('s_l.shop_name', 'like', '%' . $keyword . '%');
+            $cond->attachCondition('s.shop_identifier', 'like', '%' . $keyword . '%');
+        }
+
+        if ($favouriteOnly) {
+            $srch->joinTable(Shop::DB_TBL_SHOP_FAVORITE, 'INNER JOIN', 's.shop_id = ufs.ufs_shop_id AND ufs.ufs_user_id = ' . $userId, 'ufs');
+        }
+
+        $flds = [
+            's.shop_id', 'shop_user_id', 'user_name', 'IFNULL(shop_name, shop_identifier) as shop_name'
+        ];
+        $srch->addMultipleFields($flds);
+        $srch->addGroupBy('s.shop_id');
+        $srch->doNotCalculateRecords();
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->addOrder('shop_created_on');
+        $shopRs = $srch->getResultSet();
+        $result = FatApp::getDb()->fetchAll($shopRs, 'shop_id');
+        $allShops = array(
+            'pageCount' => $srch->pages(),
+            'results' => []
+        );
+
+        foreach ($result as $shop) {
+            $name = $shop['user_name'] . ' (' . $shop['shop_name'] . ')';
+            $allShops['results'][] = array(
+                'id' => $shop['shop_user_id'],
+                'text' => strip_tags(html_entity_decode($name, ENT_QUOTES, 'UTF-8'))
+            );
+        }
+
+        return $allShops;
+    }
 }

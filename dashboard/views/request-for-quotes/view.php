@@ -15,6 +15,12 @@
                     </a>
                 </span>
             </li>
+            <?php if (!empty($rfqData['prodcat_name'])) { ?>
+                <li class="list-stats-item list-stats-item-full">
+                    <span class="lable"><?php echo Labels::getLabel('LBL_CATEGORY', $siteLangId); ?>:</span>
+                    <span class="value"><?php echo $rfqData['prodcat_name']; ?></span>
+                </li>
+            <?php } ?>
             <li class="list-stats-item">
                 <span class="label"><?php echo Labels::getLabel('LBL_REQUESTED_QUANTITY', $siteLangId); ?>:</span>
                 <span class="value"><?php echo $rfqData['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq_quantity_unit'], true); ?></span>

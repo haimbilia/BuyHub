@@ -71,14 +71,14 @@ class RequestForQuoteSearch extends SearchBase
         $this->joinTable(User::DB_TBL, 'INNER JOIN', 'ou.user_id = ro.offer_user_id', 'ou');
         $this->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'ouc.credential_user_id = ro.offer_user_id', 'ouc');
     }
-        
+
     /**
      * joinOfferLinkedSeller
      *
      * @return void
      */
     public function joinOfferLinkedSeller($joinLatestOffers = false): void
-    {        
+    {
         if ($joinLatestOffers) {
             $this->joinTable('tbl_rfq_latest_offers', 'LEFT JOIN', 'rlo.rlo_rfq_id = rfq.rfq_id and rlo.rlo_primary_offer_id = ro.offer_primary_offer_id', 'rlo');
         }
@@ -270,6 +270,32 @@ class RequestForQuoteSearch extends SearchBase
         $this->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT JOIN', 'sp_l.selprodlang_selprod_id = sp.selprod_id and sp_l.selprodlang_lang_id = ' . $this->langId, 'sp_l');
     }
 
+
+    /**
+     * Joins the product category table to the RFQ query.
+     *
+     * @param bool $joinLangTable Whether to also join the language table for the product category.
+     * @return void
+     */
+    public function joinRfqCategory(bool $joinLangTable = false): void
+    {
+        $this->joinTable(ProductCategory::DB_TBL, 'LEFT JOIN', 'pdc.prodcat_id = rfq_prodcat_id', 'pdc');
+        if ($joinLangTable) {
+            array_push($this->langTables, __FUNCTION__);
+        }
+    }
+
+    /**
+     * Joins the product category language table to the query.
+     *
+     * This method joins the `ProductCategory::DB_TBL_LANG` table to the query using a LEFT JOIN. The join condition matches the `prodcatlang_prodcat_id` column in the language table to the `prodcat_id` column in the main product category table, and also filters the language table to only the specified `$this->langId`.
+     *
+     * @return void
+     */
+    public function joinRfqCategoryLang(): void
+    {
+        $this->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT JOIN', 'pdc_l.prodcatlang_prodcat_id = pdc.prodcat_id and pdc_l.prodcatlang_lang_id = ' . $this->langId, 'pdc_l');
+    }
 
     /**
      * joinLangTables

@@ -526,3 +526,7 @@ ON DUPLICATE KEY UPDATE collection_name = VALUES(collection_name), collection_de
 
 
 ALTER TABLE `tbl_rfq_latest_offers` ADD `rlo_seller_acceptance` TINYINT NOT NULL AFTER `rlo_accepted_offer_id`, ADD `rlo_buyer_acceptance` TINYINT NOT NULL AFTER `rlo_seller_acceptance`;
+
+ALTER TABLE `tbl_rfq` ADD `rfq_visibility_type` TINYINT NOT NULL DEFAULT '2' AFTER `rfq_lang_id`;
+UPDATE `tbl_rfq` SET `rfq_visibility_type`='1' WHERE `rfq_selprod_id` = 0 AND `rfq_product_id` = 0;
+ALTER TABLE `tbl_rfq` ADD `rfq_prodcat_id` INT NOT NULL AFTER `rfq_title`;

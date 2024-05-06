@@ -67,7 +67,7 @@ class SellerRfqOffersController extends SellerBaseController
             $page = 1;
         }
 
-        $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_selprod_code', 'rfq_selprod_id', 'rfq_product_id']);
+        $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_selprod_code', 'rfq_selprod_id', 'rfq_product_id', 'rfq_visibility_type']);
         $selprodCode = $rfqData['rfq_selprod_code'];
 
         $srch = SellerProduct::getSearchObject($this->siteLangId);

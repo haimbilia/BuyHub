@@ -21,6 +21,7 @@ class RequestForQuote extends MyAppModel
         self::DB_TBL_PREFIX . 'description',
         self::DB_TBL_PREFIX . 'addr_id',
         self::DB_TBL_PREFIX . 'lang_id',
+        self::DB_TBL_PREFIX . 'visibility_type',
         self::DB_TBL_PREFIX . 'status',
         self::DB_TBL_PREFIX . 'approved',
         self::DB_TBL_PREFIX . 'added_on',
@@ -46,8 +47,13 @@ class RequestForQuote extends MyAppModel
     public const STATUS_ACCEPTED = 2;
     public const STATUS_CLOSED = 3;
     public const STATUS_COMPLETED = 4;
-    public const PLACEMENT_TYPE_STANDARD = 1;
-    public const PLACEMENT_TYPE_GLOBAL = 2;
+
+    public const VISIBILITY_TYPE_OPEN = 1;
+    public const VISIBILITY_TYPE_CLOSED = 2;
+    
+    public const SELLER_LINKING_OPEN = 1;
+    public const SELLER_LINKING_FAVOURITE = 2;
+    public const SELLER_LINKING_ANY = 3;
 
     /**
      * __construct
@@ -635,11 +641,20 @@ class RequestForQuote extends MyAppModel
         return (applicationConstants::YES == $shopRfqEnabled && applicationConstants::YES == $selProdRfqEnabled);
     }
 
-    public static function getPlacementType(int $langId): array
+    public static function getVisibilityTypeArr(int $langId): array
     {
         return [
-            self::PLACEMENT_TYPE_STANDARD => Labels::getLabel('LBL_STANDARD', $langId),
-            self::PLACEMENT_TYPE_GLOBAL => Labels::getLabel('LBL_GLOBAL', $langId),
+            self::VISIBILITY_TYPE_OPEN => Labels::getLabel('LBL_OPEN', $langId),
+            self::VISIBILITY_TYPE_CLOSED => Labels::getLabel('LBL_CLOSED', $langId),
+        ];
+    }
+    
+    public static function getSellerLinkingTypeArr(int $langId): array
+    {
+        return [
+            self::SELLER_LINKING_OPEN => Labels::getLabel('LBL_OPEN', $langId),
+            self::SELLER_LINKING_FAVOURITE => Labels::getLabel('LBL_FAVOURITE', $langId),
+            self::SELLER_LINKING_ANY => Labels::getLabel('LBL_ANY', $langId),
         ];
     }
 }

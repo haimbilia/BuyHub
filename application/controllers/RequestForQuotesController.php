@@ -22,7 +22,23 @@ class RequestForQuotesController extends MyAppController
         $isUserLogged = ($this->loggedUserId > 0) ? applicationConstants::YES : applicationConstants::NO;
         $frm = RequestForQuote::getForm($isUserLogged);
         if (1 > $selprodId) {
+            $sellerLinkingTypeArr = RequestForQuote::getSellerLinkingTypeArr($this->siteLangId);
+            if (False == UserAuthentication::isUserLogged()) {
+                unset($sellerLinkingTypeArr[RequestForQuote::SELLER_LINKING_FAVOURITE]);
+            }
+
+            $frm->addRadioButtons(
+                Labels::getLabel("FRM_SELLER_LINKING", $this->siteLangId),
+                'rfq_seller_linking_type',
+                $sellerLinkingTypeArr,
+                RequestForQuote::SELLER_LINKING_OPEN,
+                array('class' => 'list-radio'),
+                array('class' => '')
+            );
+
+            $frm->addSelectBox(Labels::getLabel('LBL_CATEGORY'), 'rfq_prodcat_id', []);
             $frm->addRequiredField(Labels::getLabel('LBL_LOOKING_FOR'), 'rfq_title');
+            $frm->addSelectBox(Labels::getLabel('LBL_SELLER'), 'rfqts_user_id', []);
         }
         $frm->addHiddenField('', 'rfq_selprod_id');
         return $frm;
@@ -32,7 +48,7 @@ class RequestForQuotesController extends MyAppController
     {
         $selprodId = FatApp::getPostedData('selprodId', FatUtility::VAR_INT, 0);
         $post = FatApp::getPostedData();
-        $rfqQuat = FatUtility::int(($post['rfqQuat'] ?? 1)); 
+        $rfqQuat = FatUtility::int(($post['rfqQuat'] ?? 1));
         if (0 < $selprodId) {
             $selprodData = $this->getProductDetail($selprodId);
             if (!$selprodData) {
@@ -227,11 +243,18 @@ class RequestForQuotesController extends MyAppController
             $post['rfq_title'] = ($selprodData['selprod_title'] . (!empty($options) ? ' | ' . $options : ''));
             $post['rfq_selprod_code'] = $selprodData['selprod_code'];
         }
+
+        $sellerId = FatApp::getPostedData('rfqts_user_id', FatUtility::VAR_INT, 0);
+        if (1 > $sellerId && 1 > $selprodId) {
+            $post['rfq_visibility_type'] = RequestForQuote::VISIBILITY_TYPE_OPEN;
+        }
+
         $adminApproval = FatApp::getConfig('CONF_ENABLE_ADMIN_APPROVAL_ON_NEW_RFQ', FatUtility::VAR_INT, applicationConstants::YES);
         $post['rfq_user_id'] = $this->loggedUserId;
         $post['rfq_lang_id'] = $this->siteLangId;
         $post['rfq_added_on'] = date('Y-m-d H:i:s');
         $post['rfq_approved'] = (0 < $adminApproval ? applicationConstants::NO : applicationConstants::YES);
+        $post['rfq_prodcat_id'] = FatApp::getPostedData('rfq_prodcat_id', FatUtility::VAR_INT, 0);
         $rfq = new RequestForQuote($recordId);
         if (false == $rfq->add($post)) {
             $db->rollbackTransaction();
@@ -239,6 +262,17 @@ class RequestForQuotesController extends MyAppController
         }
         CalculativeDataRecord::updateRfqCount();
 
+        /* When buyer wants to bind with specific seller. */
+        if (0 < $sellerId) {
+            $rfqToSeller = [
+                'rfqts_rfq_id' => $rfq->getMainTableRecordId(),
+                'rfqts_user_id' => $sellerId
+            ];
+            if (!FatApp::getDb()->insertFromArray(RequestForQuote::DB_RFQ_TO_SELLERS, $rfqToSeller, true, array(), $rfqToSeller)) {
+                $db->rollbackTransaction();
+                LibHelper::exitWithError(FatApp::getDb()->getError(), true);
+            }
+        }
 
         if (0 < $selprodId) {
             if (false == $rfq->bindRfqToSeller($selprodData['selprod_id'], $selprodData['selprod_code'], $selprodData['selprod_user_id'])) {
@@ -487,5 +521,13 @@ class RequestForQuotesController extends MyAppController
             );
         }
         die(json_encode(['results' => $json]));
+    }
+
+    public function getSellers()
+    {
+        $isFavourite = FatApp::getPostedData('rfq_seller_linking_type', FatUtility::VAR_INT, RequestForQuote::SELLER_LINKING_OPEN);
+        $isFavourite = (RequestForQuote::SELLER_LINKING_FAVOURITE == $isFavourite);
+        $json = Shop::getSellersAutocomplete($this->siteLangId, $isFavourite, $this->loggedUserId);
+        die(FatUtility::convertToJson($json));
     }
 }

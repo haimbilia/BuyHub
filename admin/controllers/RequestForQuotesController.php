@@ -98,11 +98,9 @@ class RequestForQuotesController extends ListingBaseController
         $dbFlds = array_merge(RequestForQuote::FIELDS, ['buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', '0 as totalOffers', '0 as rejectedOffers', '0 as acceptedOffers']);
         $srch->addMultipleFields($dbFlds);
 
-        $rfqPlacementType = $post['rfq_placement_type'];
-        if (0 < $rfqPlacementType) {
-            $opr = RequestForQuote::PLACEMENT_TYPE_GLOBAL == $rfqPlacementType ? '=' : '>';
-            $srch->addCondition('rfq_selprod_id', $opr, 0);
-            $srch->addCondition('rfq_product_id', $opr, 0);
+        $rfqVisibilityType = $post['rfq_visibility_type'];
+        if (0 < $rfqVisibilityType) {
+            $srch->addCondition('rfq_visibility_type', '=', $rfqVisibilityType);
         }
 
         $keyword = $post['keyword'];
@@ -180,8 +178,9 @@ class RequestForQuotesController extends ListingBaseController
         $srch->joinBuyerAddress($this->siteLangId);
         $srch->joinCountry(true);
         $srch->joinState(true);
+        $srch->joinRfqCategory(true);
 
-        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name']);
+        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name']);
         $srch->addMultipleFields($dbFlds);
 
         $srch->addCondition('rfq_id', '=', $recordId);
@@ -396,8 +395,8 @@ class RequestForQuotesController extends ListingBaseController
 
         $statusArr = RequestForQuote::getStatusArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'rfq_status', $statusArr);
-        
-        $frm->addSelectBox(Labels::getLabel('FRM_RFQ_PLACEMENT_TYPE', $this->siteLangId), 'rfq_placement_type', RequestForQuote::getPlacementType($this->siteLangId));
+
+        $frm->addSelectBox(Labels::getLabel('FRM_RFQ_VISIBILITY_TYPE', $this->siteLangId), 'rfq_visibility_type', RequestForQuote::getVisibilityTypeArr($this->siteLangId));
 
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);

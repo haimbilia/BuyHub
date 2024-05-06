@@ -3,7 +3,6 @@
     <?php $count = 1;
     foreach ($arrListing as $sn => $row) {
         $expiredOn = $row['offer_expired_on'] != '0000-00-00 00:00:00' ? strtotime($row['offer_expired_on']) : time();
-        $isGlobal = (1 > $row['rfq_selprod_id'] && 1 > $row['rfq_product_id']);
     ?>
         <div class="offers-card">
             <div class="offers-card-body">
@@ -236,9 +235,9 @@
                     <div class="actions-block-body">
                         <?php if ($canEdit && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) { ?>
                             <?php
-                                $counterOfferId = FatUtility::int($row['counter_offer_id']);
-                                $counterOfferId = 1 > $counterOfferId ? $row['offer_id'] : $counterOfferId;
-                                if (in_array($row['counter_offer_status'], [RfqOffers::STATUS_OPEN, RfqOffers::STATUS_COUNTERED]) && 1 > $row['rlo_seller_acceptance']) { ?>
+                            $counterOfferId = FatUtility::int($row['counter_offer_id']);
+                            $counterOfferId = 1 > $counterOfferId ? $row['offer_id'] : $counterOfferId;
+                            if (in_array($row['counter_offer_status'], [RfqOffers::STATUS_OPEN, RfqOffers::STATUS_COUNTERED]) && 1 > $row['rlo_seller_acceptance']) { ?>
                                 <button class="btn btn-accept btn-icon" onClick="sellerAcceptance(<?php echo $counterOfferId; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_ACCEPT_BUYER_OFFER', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#accept">

@@ -21,8 +21,8 @@
                     case 'rfq_title':
                         $url = 0 < $row['rfq_selprod_id'] ? UrlHelper::generateUrl('Products', 'view', array($row['rfq_selprod_id']), CONF_WEBROOT_FRONTEND) : 'javascript:void(0)';
                         $global = '';
-                        if (1 > $row['rfq_product_id'] && 1 > $row['rfq_selprod_id']) {
-                            $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel('LBL_GLOBAL'));
+                        if (RequestForQuote::VISIBILITY_TYPE_OPEN == $row['rfq_visibility_type']) {
+                            $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel('LBL_OPEN'));
                         }
                         $htm = '<div>
                                     <span class="product-profile__title">
@@ -60,34 +60,53 @@
                             array(
                                 'class' => 'actions-link',
                                 'href' => 'javascript:void(0)',
-                                'onclick' => 'viewRfq("' . $row['rfq_id'] . '", ' . $rfqPlacementType . ');',
+                                'onclick' => 'viewRfq("' . $row['rfq_id'] . '", ' . $visibilityType . ');',
                                 'title' => Labels::getLabel('LBL_VIEW', $siteLangId)
                             ),
                             '<svg class="svg" width="18" height="18">
-                            <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
-                            </use>
-                        </svg>',
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                </use>
+                            </svg>',
                             true
                         );
 
                         if ($row['rfq_approved'] == RequestForQuote::APPROVED) {
-                            $action = RequestForQuote::PLACEMENT_TYPE_GLOBAL == $rfqPlacementType ? 'globalListing' : 'listing';
-                            $li = $ul->appendElement("li", ['class' => 'actions-item']);
-                            $li->appendElement(
-                                'a',
-                                array(
-                                    'class' => 'actions-link',
-                                    'href' => UrlHelper::generateUrl(($isSeller ? 'Seller' : '') . 'RfqOffers', $action, [$row['rfq_id']]),
-                                    'title' => Labels::getLabel('LBL_OFFERS', $siteLangId)
-                                ),
-                                '<svg class="svg" width="18" height="18">
-                            <use
-                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#list">
-                            </use>
-                        </svg>',
-                                true
-                            );
+                            if ($isBuyer || $userParentId == $row['rfqts_user_id'] || RequestForQuote::STATUS_CLOSED == $row['rfq_status']) {
+                                $action = RequestForQuote::VISIBILITY_TYPE_OPEN == $visibilityType ? 'globalListing' : 'listing';
+                                $li = $ul->appendElement("li", ['class' => 'actions-item']);
+                                $li->appendElement(
+                                    'a',
+                                    array(
+                                        'class' => 'actions-link',
+                                        'href' => UrlHelper::generateUrl(($isSeller ? 'Seller' : '') . 'RfqOffers', $action, [$row['rfq_id']]),
+                                        'title' => Labels::getLabel('LBL_OFFERS', $siteLangId)
+                                    ),
+                                    '<svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#list">
+                                    </use>
+                                </svg>',
+                                    true
+                                );
+                            } else if ($isSeller && RequestForQuote::STATUS_OPEN == $row['rfq_status']) {
+                                $li = $ul->appendElement("li", ['class' => 'actions-item']);
+                                $li->appendElement(
+                                    'a',
+                                    array(
+                                        'class' => 'actions-link',
+                                        'href' => 'javascript:void(0)',
+                                        'onclick' => 'assignToMe("' . $row['rfq_id'] . '");',
+                                        'title' => Labels::getLabel('LBL_ASSIGN_TO_ME', $siteLangId)
+                                    ),
+                                    '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                        </use>
+                                    </svg>',
+                                    true
+                                );
+                            }
                         }
                         break;
                     default:

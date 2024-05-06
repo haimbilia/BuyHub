@@ -58,8 +58,8 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'credential_username':
                 $global = '';
-                if (1 > $row['rfq_product_id'] && 1 > $row['rfq_selprod_id']) {
-                    $global = HtmlHelper::getStatusHtml(HtmlHelper::WARNING, Labels::getLabel('LBL_GLOBAL'));
+                if (RequestForQuote::VISIBILITY_TYPE_OPEN == $row['rfq_visibility_type']) {
+                    $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel('LBL_OPEN'));
                 }
                 $href = "javascript:void(0)";
                 $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');

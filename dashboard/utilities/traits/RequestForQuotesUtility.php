@@ -22,10 +22,10 @@ trait RequestForQuotesUtility
     public function index()
     {
         $funcName = $this->get('funcName') ?? __FUNCTION__;
-        $placementType = (__FUNCTION__ == $funcName ? RequestForQuote::PLACEMENT_TYPE_STANDARD : RequestForQuote::PLACEMENT_TYPE_GLOBAL);
-        $frm = $this->getSearchForm($funcName);
+        $placementType = (__FUNCTION__ == $funcName ? RequestForQuote::VISIBILITY_TYPE_CLOSED : RequestForQuote::VISIBILITY_TYPE_OPEN);
+        $frm = $this->getSearchForm();
         if ($this->isSeller) {
-            $frm->fill(['rfq_placement_type' => $placementType]);
+            $frm->fill(['rfq_visibility_type' => $placementType]);
         }
         $this->set('frmSearch', $frm);
 
@@ -46,9 +46,9 @@ trait RequestForQuotesUtility
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'pageSize');
         if ($this->isSeller) {
-            $frm->addHiddenField('', 'rfq_placement_type');
+            $frm->addHiddenField('', 'rfq_visibility_type');
         } else {
-            $frm->addSelectBox(Labels::getLabel('FRM_RFQ_PLACEMENT_TYPE', $this->siteLangId), 'rfq_placement_type', RequestForQuote::getPlacementType($this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_RFQ_VISIBILITY_TYPE', $this->siteLangId), 'rfq_visibility_type', RequestForQuote::getVisibilityTypeArr($this->siteLangId));
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD'), 'keyword', '');
         $fld->overrideFldType('search');
@@ -80,14 +80,12 @@ trait RequestForQuotesUtility
         }
         $srch->joinBuyer();
         $srch->addMultipleFields([
-            'rfq_id', 'rfq_selprod_id', 'rfq_number', 'rfq_title', 'rfq_selprod_id', 'rfq_product_id', 'rfq_user_id', 'rfq_type', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_status', 'rfq_approved', 'rfq_added_on', 'rfq_delivery_date', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', '0 as totalOffers', '0 as rejectedOffers', '0 as acceptedOffers'
+            'rfq_id', 'rfq_selprod_id', 'rfq_number', 'rfq_title', 'rfq_selprod_id', 'rfq_visibility_type', 'rfq_product_id', 'rfq_user_id', 'rfq_type', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_status', 'rfq_approved', 'rfq_added_on', 'rfq_delivery_date', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', '0 as totalOffers', '0 as rejectedOffers', '0 as acceptedOffers', 'rfqts_user_id'
         ]);
 
-        $rfqPlacementType = $post['rfq_placement_type'];
-        if (0 < $rfqPlacementType) {
-            $opr = RequestForQuote::PLACEMENT_TYPE_GLOBAL == $rfqPlacementType ? '=' : '>';
-            $srch->addCondition('rfq_selprod_id', $opr, 0);
-            $srch->addCondition('rfq_product_id', $opr, 0);
+        $visibilityType = $post['rfq_visibility_type'];
+        if (0 < $visibilityType) {
+            $srch->addCondition('rfq_visibility_type', '=', $visibilityType);
         }
 
         $keyword = $post['keyword'];
@@ -112,8 +110,8 @@ trait RequestForQuotesUtility
         }
 
         if ($this->isSeller) {
-            if (RequestForQuote::PLACEMENT_TYPE_STANDARD == $rfqPlacementType) {
-                $srch->addCondition('rfqts_user_id', '=', $this->userId);
+            if (RequestForQuote::VISIBILITY_TYPE_CLOSED == $visibilityType) {
+                $srch->addCondition('rfqts_user_id', '=', $this->userParentId);
             }
         } else {
             $srch->addCondition('rfq_user_id', '=', $this->userId);
@@ -130,8 +128,8 @@ trait RequestForQuotesUtility
             $rfqIds = array_keys($arrListing);
             $srch = new SearchBase(RfqOffers::DB_RFQ_LATEST_OFFER, 'rlo');
             if ($this->isSeller) {
-                $srch->joinTable(RfqOffers::DB_TBL, 'INNER JOIN', 'ro.offer_id = rlo_primary_offer_id AND offer_user_id = ' . $this->userId, 'ro');
-                $srch->addCondition('offer_user_id', '=', $this->userId);
+                $srch->joinTable(RfqOffers::DB_TBL, 'INNER JOIN', 'ro.offer_id = rlo_primary_offer_id AND offer_user_id = ' . $this->userParentId, 'ro');
+                $srch->addCondition('offer_user_id', '=', $this->userParentId);
             }
 
             $srch->doNotCalculateRecords();
@@ -148,7 +146,7 @@ trait RequestForQuotesUtility
             }
         }
 
-        $this->set('rfqPlacementType', $rfqPlacementType);
+        $this->set('visibilityType', $visibilityType);
         $this->set('arrListing', $arrListing);
         $this->set('postedData', $post);
         $this->set('pagesize', $pagesize);
@@ -156,6 +154,7 @@ trait RequestForQuotesUtility
         $this->set("statusArr", RequestForQuote::getStatusArr($this->siteLangId));
         $this->set("isBuyer", $this->isBuyer);
         $this->set("isSeller", $this->isSeller);
+        $this->set("userParentId", $this->userParentId);
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -169,22 +168,23 @@ trait RequestForQuotesUtility
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $rfqPlacementType = FatApp::getPostedData('rfq_placement_type', FatUtility::VAR_INT, 0);
+        $visibilityType = FatApp::getPostedData('rfq_visibility_type', FatUtility::VAR_INT, 0);
 
         $srch = new RequestForQuoteSearch();
         $srch->joinBuyer();
         $srch->joinBuyerAddress($this->siteLangId);
         $srch->joinCountry(true);
         $srch->joinState(true);
+        $srch->joinRfqCategory(true);
 
-        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name']);
+        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name']);
         $srch->addMultipleFields($dbFlds);
 
         $srch->addCondition('rfq_id', '=', $recordId);
         if ($this->isSeller) {
-            if (RequestForQuote::PLACEMENT_TYPE_STANDARD == $rfqPlacementType) {
+            if (RequestForQuote::VISIBILITY_TYPE_CLOSED == $visibilityType) {
                 $srch->joinSellers('INNER');
-                $srch->addCondition('rfqts_user_id', '=', $this->userId);
+                $srch->addCondition('rfqts_user_id', '=', $this->userParentId);
             }
         } else {
             $srch->addCondition('rfq_user_id', '=', $this->userId);

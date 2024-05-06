@@ -1058,7 +1058,6 @@ function saveRfq(frm) {
 
 	let addrId = $('.addrIdJs', frm).val();
 	if ('undefined' == typeof addrId || '' == addrId || '0' == addrId) {
-		console.log($('.selprodIdJs', frm).val());
 		addAddress($('.selprodIdJs', frm).val());
 		fcom.displayErrorMessage(langLbl.deliveryAddressMandatory);
 		return false;
