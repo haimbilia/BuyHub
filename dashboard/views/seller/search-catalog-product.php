@@ -64,6 +64,9 @@
                     case 'product_active':
                         $td->appendElement('span', array('class' => 'badge badge-inline ' . $activeInactiveClassArr[$row[$key]]), $activeInactiveArr[$row[$key]] . '<br>', true);
                         break;
+                    case 'product_model':
+                        $td->appendElement('plaintext', array(), $row[$key], true);
+                        break;
                     case 'product_shipped_by':
                         $str = Labels::getLabel('LBL_N/A', $siteLangId);
                         if (!$row['product_seller_id'] && !in_array($row['product_type'], [Product::PRODUCT_TYPE_DIGITAL, Product::PRODUCT_TYPE_SERVICE])) {

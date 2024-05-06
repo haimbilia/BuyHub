@@ -236,17 +236,19 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                 </div>
             <?php } ?>
             <div class="row">
-                <div class="selprod_cod_enabled_fld col-md-6">
-                    <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_cod_enabled')->getCaption(); ?></label>
-                        </div>
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_cod_enabled'); ?>
+                <?php if ($product_type != Product::PRODUCT_TYPE_SERVICE) { ?>
+                    <div class="selprod_cod_enabled_fld col-md-6">
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_cod_enabled')->getCaption(); ?></label>
+                            </div>
+                            <div class="field-wraper">
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_cod_enabled'); ?>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL && !empty($shipBySeller)) { ?>
+                <?php }
+                if ($product_type == Product::PRODUCT_TYPE_PHYSICAL && !empty($shipBySeller)) { ?>
                     <div class="selprod_fulfillment_type_fld col-md-6">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_fulfillment_type')->getCaption(); ?></label>
@@ -284,11 +286,12 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                                     <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_Selling_Price', $siteLangId); ?>
                                         <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo $selPriceTitle; ?>"></i>
                                     </th>
-                                    <th style="min-width:100px;">
-                                        <?php echo Labels::getLabel('LBL_Quantity', $siteLangId); ?>
-                                        <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_MAX_QUANTITY_CAN_BE_SET_UPTO_{MAX-RANGE}.'), ['{MAX-RANGE}' => SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY]); ?>"></i>
-                                    </th>
                                     <?php if ($product_type != Product::PRODUCT_TYPE_SERVICE) { ?>
+                                        <th style="min-width:100px;">
+                                            <?php echo Labels::getLabel('LBL_Quantity', $siteLangId); ?>
+                                            <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_MAX_QUANTITY_CAN_BE_SET_UPTO_{MAX-RANGE}.'), ['{MAX-RANGE}' => SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY]); ?>"></i>
+                                        </th>
+
                                         <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
                                             <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
                                         </th>
@@ -315,9 +318,10 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                                             </td>
                                             <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_price' . $optionKey . ']'); ?>
                                             </td>
-                                            <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_stock' . $optionKey . ']'); ?>
-                                            </td>
                                             <?php if ($product_type != Product::PRODUCT_TYPE_SERVICE) { ?>
+                                                <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_stock' . $optionKey . ']'); ?>
+                                                </td>
+
                                                 <td class="optionFld-js fldSku"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_sku' . $optionKey . ']'); ?>
                                                 </td>
                                             <?php } ?>
@@ -341,9 +345,10 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                                         </td>
                                         <td><?php echo $frmSellerProduct->getFieldHtml('selprod_price'); ?>
                                         </td>
-                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_stock'); ?>
-                                        </td>
                                         <?php if ($product_type != Product::PRODUCT_TYPE_SERVICE) { ?>
+                                            <td><?php echo $frmSellerProduct->getFieldHtml('selprod_stock'); ?>
+                                            </td>
+
                                             <td><?php echo $frmSellerProduct->getFieldHtml('selprod_sku'); ?>
                                             </td>
                                         <?php } ?>

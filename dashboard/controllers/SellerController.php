@@ -4291,19 +4291,20 @@ class SellerController extends SellerBaseController
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);
 
         if ($type != 'CUSTOM_CATALOG') {
-            $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
-            $codFld = $frm->addSelectBox(Labels::getLabel('FRM_AVAILABLE_FOR_COD', $this->siteLangId), 'selprod_cod_enabled', $yesNoArr, '0', array(), '');
+            if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+                $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
+                $codFld = $frm->addSelectBox(Labels::getLabel('FRM_AVAILABLE_FOR_COD', $this->siteLangId), 'selprod_cod_enabled', $yesNoArr, '0', array(), '');
 
-            $paymentMethod = new PaymentMethods();
-            if (!$paymentMethod->cashOnDeliveryIsActive() || $productData['product_cod_enabled'] != applicationConstants::YES) {
-                $codFld->addFieldTagAttribute('disabled', 'disabled');
-                if ($productData['product_cod_enabled'] != applicationConstants::YES) {
-                    $codFld->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PRODUCT', $this->siteLangId) . '</span>';
-                } else {
-                    $codFld->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $this->siteLangId) . '</span>';
+                $paymentMethod = new PaymentMethods();
+                if (!$paymentMethod->cashOnDeliveryIsActive() || $productData['product_cod_enabled'] != applicationConstants::YES) {
+                    $codFld->addFieldTagAttribute('disabled', 'disabled');
+                    if ($productData['product_cod_enabled'] != applicationConstants::YES) {
+                        $codFld->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PRODUCT', $this->siteLangId) . '</span>';
+                    } else {
+                        $codFld->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $this->siteLangId) . '</span>';
+                    }
                 }
             }
-
 
             $shipBySeller = Product::isProductShippedBySeller($product_id, $productData['product_seller_id'], UserAuthentication::getLoggedUserId());
             // $shipBySeller = SellerProduct::prodShipByseller($product_id);

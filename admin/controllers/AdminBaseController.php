@@ -653,11 +653,11 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
         if (isset($productData['product_min_selling_price'])) {
             $fld->requirements()->setRange($productData['product_min_selling_price'], 99999999.99);
         }
-
-        $fld = $frm->addIntegerField(Labels::getLabel('FRM_AVAILABLE_QUANTITY', $this->siteLangId), 'selprod_stock');
-        $fld->requirements()->setPositive();
-
+        
         if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+            $fld = $frm->addIntegerField(Labels::getLabel('FRM_AVAILABLE_QUANTITY', $this->siteLangId), 'selprod_stock');
+            $fld->requirements()->setPositive();
+
             $fld_sku = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'selprod_sku');
             if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
                 $fld_sku->requirements()->setRequired();

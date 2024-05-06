@@ -74,8 +74,8 @@ trait CatalogProduct
             $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', $this->siteLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($langId), applicationConstants::NO);
             $fld->requirements()->setRequired();
         } else {
-            $fld = $frm->addCheckBox(Labels::getLabel('FRM_AVAILABLE_FOR_CASH_ON_DELIVERY_(COD)', $langId), 'product_cod_enabled', 1, array(), false, 0);
             if ($productType != Product::PRODUCT_TYPE_SERVICE) {
+                $fld = $frm->addCheckBox(Labels::getLabel('FRM_AVAILABLE_FOR_CASH_ON_DELIVERY_(COD)', $langId), 'product_cod_enabled', 1, array(), false, 0);
                 $fulFillmentArr = Shipping::getFulFillmentArr($langId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
                 $fld = $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $langId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('FRM_SELECT', $langId));
                 $fld->requirements()->setRequired();
