@@ -405,26 +405,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
             </td>
         </tr>
         <tr>
-            <td>
-                <table width="100%" border="0" cellpadding="0" cellspacing="0">
-                    <?php $shopCodes = $childOrder['shop_invoice_codes'];
-                    $codesArr = explode("\n", $shopCodes); ?>
-                    <tbody>
-                        <?php $count = 1; ?>
-                        <tr>
-                            <?php foreach ($codesArr as $code) { ?>
-                                <td style="<?php echo ($count % 2 == 0) ? 'text-align: right;' : ''; ?> font-weight: 700;"><?php echo $code; ?></td>
-                            <?php
-                                if ($count % 2 == 0) {
-                                    echo '</tr><tr>';
-                                }
-                                $count++;
-                            } ?>
-
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
+            <td><?php echo nl2br($childOrder['shop_invoice_codes']); ?></td>
         </tr>
     </tbody>
 </table>
