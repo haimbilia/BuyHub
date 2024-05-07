@@ -43,6 +43,7 @@
     - Bug-082875 - Shop name does not direct the user to shop detail page
     - Bug-082874 - Price still appears for when hide price is enabled on system level
     - Bug-072665 - Product specification special character issue
+    - Bug-083140 - The same setting appears twice under the product settings
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
