@@ -59,7 +59,7 @@ $border: solid 1px $border-color;
 $border-black: solid 1px #000;
 $border-light: solid 1px lighten($border-color, 5);
 $border-transparent: solid 1px transparent;
-
+$focus-outline: 1px solid #888;
 
 //outline
 $outline: solid 1px $border-color;

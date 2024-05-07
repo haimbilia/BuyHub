@@ -51,10 +51,10 @@ if ($isWishList) {
                                 ?>
                             </div>
                             <div class="featured-item__foot">
-                                <div class="featured_footer mt-3">
+                                <div class="featured_footer">
                                     <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && round($shop['shopRating']) > 0) { ?>
                                         <div class="products__rating">
-                                            <svg class="svg">
+                                            <svg class="svg" width="16" height="16">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                                                 </use>
                                             </svg>
