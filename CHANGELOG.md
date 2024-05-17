@@ -21,3 +21,4 @@
     - Bug-076927 - The shipping charges get refunded to the buyer even if the admin disabled return shipping charges to the customer setting
     - Bug-080244 - Error occur on the My Offers page on the buyer dashboard in Arabic language.
     - Bug-079388 - "Pay At Store" not working.
+    - Bug-083721 - Depraction appears when the guest user tries to place a GDPRrequest
