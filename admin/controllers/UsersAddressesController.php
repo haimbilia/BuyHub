@@ -76,9 +76,7 @@ class UsersAddressesController extends ListingBaseController
         $srch = new AddressSearch($this->siteLangId);
         $srch->joinUser();
         $srch->joinCountry();
-        $srch->joinState();
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
+        $srch->joinState();        
         $srch->addCondition('country_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addCondition('state_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addCondition('user_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
