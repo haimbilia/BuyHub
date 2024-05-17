@@ -28,6 +28,7 @@
     - Bug-080244 - Error occur on the My Offers page on the buyer dashboard in Arabic language.
     - Bug-079388 - "Pay At Store" not working.
     - Bug-072665 - Product specification special character issue
+    - Bug-083721 - Depraction appears when the guest user tries to place a GDPRrequest
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
