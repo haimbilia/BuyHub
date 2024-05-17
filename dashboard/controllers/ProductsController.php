@@ -568,9 +568,10 @@ class ProductsController extends SellerBaseController
     public function setImageOrder()
     {
         $this->checkEditPrivilege();
+        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
+        $fileType = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
+        
         $post = FatApp::getPostedData();
-        $recordId = FatUtility::int($post['record_id']);
-        $fileType = FatUtility::int($post['file_type']);
         $imageIds = explode('-', $post['ids']);
         $count = 1;
         foreach ($imageIds as $row) {

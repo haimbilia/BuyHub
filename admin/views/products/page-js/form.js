@@ -373,7 +373,7 @@
                         record_id,
                         file_type,
                         ids: sort
-                    });
+                    }, function(){fcom.closeProcessing();});
                 }
             }).disableSelection();
 

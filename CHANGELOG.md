@@ -44,6 +44,7 @@
     - Bug-082874 - Price still appears for when hide price is enabled on system level
     - Bug-072665 - Product specification special character issue
     - Bug-083140 - The same setting appears twice under the product settings
+    - Bug-083245 - Services: A warning appears when the seller/admin tries to update the media sequence using drag and drop.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

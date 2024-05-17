@@ -264,8 +264,9 @@ var advanceMedia = false; /* open via advance media*/
         }
         $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl('Products', "imageForm", [recordId, tempProductId]), '', function(t) {
+            fcom.removeLoader();
+            fcom.closeProcessing();
             $.ykmodal(t.html);
-
             loadImageOptions();
             var fileType = $('#image_file_type').val();
             var recordId = $('#image_record_id').val();

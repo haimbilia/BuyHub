@@ -235,6 +235,8 @@ var advanceMedia = false; /* open via advance media*/
             }
         }
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "customProductImageForm", [recordId, tempProductId]), '', function (t) {
+            fcom.removeLoader();
+            fcom.closeProcessing();
             isImageUploadByPopUp = true;
             $.ykmodal(t.html);
             loadImageOptions();
@@ -290,7 +292,7 @@ var advanceMedia = false; /* open via advance media*/
                         record_id,
                         file_type,
                         ids: sort
-                    });
+                    }, function(){fcom.closeProcessing();});
                 }
             }).disableSelection();
         });
