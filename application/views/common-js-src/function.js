@@ -1047,13 +1047,6 @@ function requestForQuoteFn(selprodId) {
 }
 
 function saveRfq(frm) {
-	let desc = $('textarea[name="rfq_description"]', frm).val();
-	if ('undefined' == typeof desc || '' == desc) {
-		$(frm).find('.descHeadJs').attr('aria-expanded', 'true');
-		$(frm).find('.descHeadJs').removeClass('collapsed');
-		$(frm).find('.descBodyJs').addClass('show');
-	}
-
 	if (!$(frm).validate()) { return; }
 
 	let addrId = $('.addrIdJs', frm).val();
@@ -1122,14 +1115,6 @@ function saveRfq(frm) {
 }
 
 function saveMultipleRfq(frm) {
-	$(".descriptionJS").each(function () {
-		let desc = $(frm).find('textarea').val();
-		if ('undefined' == typeof desc || '' == desc) {
-			$(frm).find('.descHeadJs').attr('aria-expanded', 'true');
-			$(frm).find('.descHeadJs').removeClass('collapsed');
-			$(frm).find('.descBodyJs').addClass('show');
-		}
-	});
 	if (!$(frm).validate()) { return; }
 	let addrId = $('.addrIdJs', frm).val();
 	if ('undefined' == typeof addrId || '' == addrId || '0' == addrId) {
