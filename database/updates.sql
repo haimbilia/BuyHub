@@ -50,3 +50,7 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 COD will work only if the fulfillment method is Shipping.
 Pay at Store will work only if the fulfillment method is Pickup.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('ERR_PACKAGE_SUPPORT_MAXIMUM_UP_TO_{PROD-CNT}_PRODUCTS_AND_{INV-CNT}_INVENTORIES._MARK_ALL_THE_INVENTORIES_INACTIVE', 1, 'This package support maximum up to 5 products and 10 inventories. Please mark all the inventories as inactive before buying a plan. Then you can re-activate them again.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
